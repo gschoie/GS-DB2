@@ -83,6 +83,10 @@ jobs:
             cp ../hhiun_board_report.html _site/hhiun_board_report.html
           fi
 
+      - name: 배포 안전망 검사
+        working-directory: telegram_research_dashboard
+        run: python verify_static_output.py _site/index.html
+
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
