@@ -5,8 +5,8 @@ on:
   push:
     branches: ["main"]
   schedule:
-    # 매일 한국시간 오전 7시 20분
-    - cron: "20 22 * * *"
+    # 매일 한국시간 오전 8시 30분
+    - cron: "30 23 * * *"
 
 permissions:
   contents: read
