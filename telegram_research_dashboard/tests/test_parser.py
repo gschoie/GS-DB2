@@ -103,6 +103,13 @@ https://example.com/defense"""
         enrich_news_item(item, lambda _url: None)
         self.assertEqual(item["title"], "기사 제목 미확인")
 
+    def test_alias_is_normalized_even_when_article_fetch_fails(self):
+        item = parse_news_items("삼성重 최성안 부회장, 자사주 1만주 매입…책임경영 의지\nhttps://buly.kr/example")[0]
+        item["company_name"], item["companies"] = None, []
+        enrich_news_item(item, lambda _url: None)
+        self.assertEqual(item["company_name"], "삼성중공업")
+        self.assertEqual(item["companies"], ["삼성중공업"])
+
     def test_comment_title_is_replaced_and_company_comes_from_article_body(self):
         item = parse_news_items("오오..\nhttps://example.com/article")[0]
         enrich_news_item(item, lambda _url: {

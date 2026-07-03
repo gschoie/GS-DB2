@@ -124,6 +124,15 @@ def enrich_news_item(item: dict, metadata_fetcher=fetch_article_metadata) -> dic
     if not item.get("article_url"):
         return item
     needs_fetch = item.get("title") in TITLE_PLACEHOLDERS or not item.get("company_name")
+    # 단축 URL·차단된 사이트처럼 원문을 열지 못하더라도 현재 저장된 제목의
+    # 약칭(KAI, 삼성重 등)은 먼저 표준 기업명으로 정규화한다.
+    existing_companies = ([] if item.get("title") in TITLE_PLACEHOLDERS
+                          else extract_companies(item.get("title", "")))
+    if existing_companies:
+        item["companies"] = existing_companies
+        item["company_name"] = ", ".join(existing_companies)
+        item["confidence"] = 0.85
+        item["needs_review"] = 0
     if not needs_fetch:
         return item
     fetched = metadata_fetcher(item["article_url"])
