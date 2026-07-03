@@ -116,10 +116,10 @@ def refresh_messages(messages):
 
 def is_report(m):
     t=m['text']
-    has_official_marker=bool(re.search(r'보고서\s*원문|Compliance Notice|컴플라이언스|Rationale:\s*보고서',t,re.I))
-    has_buly_link=any('buly.kr/' in (u or '').lower() for u in m.get('links',[]))
+    has_report_original=bool(re.search(r'보고서\s*원문',t,re.I))
+    has_compliance=bool(re.search(r'컴플라이언스|Compliance(?:\s*Notice)?',t,re.I))
     is_daily=bool(re.search(r'데일리\s*(NEWS|뉴스)|Daily Morning Brief',t[:180],re.I))
-    return has_official_marker and has_buly_link and not is_daily
+    return has_report_original and has_compliance and not is_daily
 
 def analyst_sector(t):
     head=t[:350]
