@@ -22,9 +22,9 @@ def pdf_text(source_url, cache):
     cached=cache.get(source_url)
     if cached:return cached
     result={'status':'failed','final_url':source_url,'text':'','error':''}
-    for attempt in range(3):
+    for attempt in range(2):
         try:
-            r=requests.get(source_url,headers=UA,timeout=(15,45),allow_redirects=True)
+            r=requests.get(source_url,headers=UA,timeout=(8,20),allow_redirects=True)
             r.raise_for_status()
             if len(r.content)>20_000_000:raise ValueError('PDF exceeds 20MB')
             text='\n'.join(page.extract_text() or '' for page in PdfReader(BytesIO(r.content)).pages)
@@ -36,7 +36,7 @@ def pdf_text(source_url, cache):
             break
         except Exception as e:
             result['error']=f'{type(e).__name__}: {e}'[:240]
-            if attempt<2:time.sleep(1.5*(attempt+1))
+            if attempt<1:time.sleep(1.5)
     cache[source_url]=result
     return result
 
@@ -237,7 +237,8 @@ def analyze(messages, pdf_since='2026-06'):
     cache=json.loads(PDF_CACHE.read_text(encoding='utf-8')) if PDF_CACHE.exists() else {}
     cache_changed=False
     reports=[]
-    for m in sorted((x for x in messages if is_report(x)),key=lambda x:x['date']):
+    pdf_started=time.monotonic();pdf_budget_seconds=300
+    for m in sorted((x for x in messages if is_report(x)),key=lambda x:x['date'],reverse=True):
         t=m['text']; analyst,sector=analyst_sector(t); company,code=company_name(t); dt=datetime.fromisoformat(m['date'])
         month=dt.strftime('%Y-%m');is_industry=company in ('산업/기타',sector) or bool(re.search(r'\((?:Overweight|Neutral|Underweight)\)',t[:300],re.I))
         source=source_link(m);analysis_text=t;analysis_source='텔레그램 요약';final_url=source;pdf_error=''
@@ -245,16 +246,18 @@ def analyze(messages, pdf_since='2026-06'):
                  'valuation':detail_lines(t,r'Valuation|밸류에이션|적정주가\s*산출|PER|PBR|EV/EBITDA|WACC|DCF|적용\s*(?:배수|멀티플)',4),
                  'earnings_changes':detail_lines(t,r'(?:실적|이익|매출|영업이익|EPS)\s*(?:추정|전망|상향|하향)|추정치\s*(?:상향|하향)',4),
                  'preferred_stocks':top_pick_lines(t)}
-        if month>=pdf_since:
+        if month>=pdf_since and (source in cache or time.monotonic()-pdf_started<pdf_budget_seconds):
             was_cached=source in cache;p=pdf_text(source,cache);cache_changed=cache_changed or not was_cached
             final_url=p['final_url'];pdf_error=p['error']
             if p['status']=='pdf':
                 analysis_text=p['text'];analysis_source='PDF 원문 분석';details=pdf_details(analysis_text,is_industry)
+        elif month>=pdf_since:
+            pdf_error='PDF 처리 시간 한도 초과 — 텔레그램 요약 사용'
         changes=tp_changes(analysis_text,company)
         reports.append({'id':m['id'],'date':dt.date().isoformat(),'month':month,'analyst':analyst,'sector':sector,'company':company,'code':code,'report_type':'산업자료' if is_industry else '기업자료','opinion':opinion(analysis_text) or opinion(t),'top_picks':details['preferred_stocks'],'preferred_stocks':details['preferred_stocks'],'tp_changes':changes,'tp_raises':[x for x in changes if x['direction']=='상향'],'pitch':details['pitch'],'industry_conclusion':details['conclusion'] if is_industry else '','report_conclusion':details['conclusion'],'valuation':details['valuation'],'earnings_changes':details['earnings_changes'],'analysis_source':analysis_source,'pdf_url':final_url,'pdf_error':pdf_error,'title':clean(t.split('▶')[0])[:240],'summary':clean(t)[:900],'post_url':m['post_url'],'source_url':source})
     if cache_changed:
         PDF_CACHE.write_text(json.dumps(cache,ensure_ascii=False,separators=(',',':')),encoding='utf-8')
-    return reports
+    return sorted(reports,key=lambda x:(x['date'],x['id']))
 
 def monthly_summary(reports):
     grouped=defaultdict(lambda:defaultdict(lambda:{'sectors':set(),'opinions':[],'top_picks':[],'tp_changes':[],'reports':[]}))
