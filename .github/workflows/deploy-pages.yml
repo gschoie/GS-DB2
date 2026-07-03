@@ -28,6 +28,7 @@ jobs:
           python-version: "3.12"
 
       - name: 이전 수집 데이터 복원
+        if: github.event_name != 'push'
         uses: actions/cache@v4
         with:
           path: |
