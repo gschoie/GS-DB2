@@ -66,6 +66,10 @@ jobs:
         run: |
           python build_daol_tone_dashboard.py --refresh
 
+      - name: 저장 원문 전체 재분류
+        working-directory: telegram_research_dashboard
+        run: python rebuild_parsed_data.py
+
       - name: 링크 기사 제목 및 기업 보강
         working-directory: telegram_research_dashboard
         run: python enrich_link_news.py --limit 5000 --all
