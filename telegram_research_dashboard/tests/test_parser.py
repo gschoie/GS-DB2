@@ -137,9 +137,15 @@ https://example.com/defense"""
 🎴 조선/기계/방산 | 최광식 | DAOL투자증권"""
         item = parse_news_items(text)[0]
         self.assertEqual(item["title"], "인도네시아 KF-21 공동 생산 철회, 한국으로부터 직접 도입 가능성 제기")
-        self.assertEqual(item["company_name"], "KAI")
+        self.assertEqual(item["company_name"], "한국항공우주")
         self.assertEqual(item["publisher"], "EurAsian Times")
         self.assertNotIn("최광식", item["title"])
+
+    def test_company_aliases_use_canonical_korean_names(self):
+        kai = parse_news_items("KAI, KF-21 양산 확대\nhttps://example.com/kai")[0]
+        samsung = parse_news_items("삼성重 최성안 부회장, 자사주 1만주 매입…책임경영 의지\nhttps://example.com/shi")[0]
+        self.assertEqual(kai["company_name"], "한국항공우주")
+        self.assertEqual(samsung["company_name"], "삼성중공업")
 
 
 if __name__ == "__main__":
