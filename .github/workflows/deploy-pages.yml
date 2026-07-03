@@ -34,6 +34,7 @@ jobs:
             telegram_research_dashboard/data/dashboard.db
             telegram_research_dashboard/data/daol_messages.json
             telegram_research_dashboard/data/daol_tone_history.json
+            telegram_research_dashboard/data/daol_pdf_text_cache.json
             telegram_research_dashboard/data/hhiun_snapshot.json
           key: dashboard-db-${{ github.run_id }}
           restore-keys: |
@@ -59,7 +60,7 @@ jobs:
       - name: DAOL 톤 데이터 갱신
         working-directory: telegram_research_dashboard
         run: |
-          python -m pip install requests beautifulsoup4 lxml pycryptodome
+          python -m pip install requests beautifulsoup4 lxml pycryptodome pypdf
           python build_daol_tone_dashboard.py --refresh
 
       - name: 링크 기사 제목 및 기업 보강

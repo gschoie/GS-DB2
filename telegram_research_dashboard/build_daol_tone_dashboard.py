@@ -1,19 +1,75 @@
 import argparse, html, json, re, time
+from io import BytesIO
 from collections import defaultdict
 from datetime import datetime, timezone, timedelta
 from pathlib import Path
 import requests
 from bs4 import BeautifulSoup
+from pypdf import PdfReader
 
 ROOT=Path(__file__).resolve().parent
 DATA_DIR=ROOT/'data'
 CACHE=DATA_DIR
 MSG_FILE=DATA_DIR/'daol_messages.json'
+PDF_CACHE=DATA_DIR/'daol_pdf_text_cache.json'
 HISTORY=ROOT/'data'/'daol_tone_history.json'
 OUT=ROOT/'daol_research_tone.html'
 UA={'User-Agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/126 Safari/537.36'}
 
 def clean(s): return re.sub(r'\s+',' ',s or '').strip()
+
+def pdf_text(source_url, cache):
+    cached=cache.get(source_url)
+    if cached:return cached
+    result={'status':'failed','final_url':source_url,'text':'','error':''}
+    for attempt in range(3):
+        try:
+            r=requests.get(source_url,headers=UA,timeout=(15,45),allow_redirects=True)
+            r.raise_for_status()
+            if len(r.content)>20_000_000:raise ValueError('PDF exceeds 20MB')
+            text='\n'.join(page.extract_text() or '' for page in PdfReader(BytesIO(r.content)).pages)
+            text=re.sub(r'[ \t]+',' ',text);text=re.sub(r'\n{3,}','\n\n',text).strip()
+            if len(text)<300:raise ValueError('PDF text is empty or scanned')
+            result={'status':'pdf','final_url':r.url,'text':text,'error':''};break
+        except ValueError as e:
+            result['error']=f'{type(e).__name__}: {e}'[:240]
+            break
+        except Exception as e:
+            result['error']=f'{type(e).__name__}: {e}'[:240]
+            if attempt<2:time.sleep(1.5*(attempt+1))
+    cache[source_url]=result
+    return result
+
+def detail_lines(t, pattern, limit=6):
+    chunks=re.split(r'\n+|(?<=[.!?])\s+|(?=[▶■●◆])',t or '')
+    out=[]
+    for chunk in chunks:
+        x=clean(chunk)
+        if 18<=len(x)<=700 and re.search(pattern,x,re.I):out.append(x[:650])
+    return list(dict.fromkeys(out))[:limit]
+
+def heading_excerpt(t, heading_pattern, max_chars=1400):
+    m=re.search(heading_pattern,t or '',re.I)
+    if not m:return ''
+    excerpt=(t or '')[m.end():m.end()+max_chars*2]
+    excerpt=re.split(r'\n\s*(?:II|III|IV|V|[2-9])\s*[.]|\n\s*Focus Chart',excerpt,maxsplit=1,flags=re.I)[0]
+    return clean(excerpt)[:max_chars]
+
+def pdf_details(t, is_industry):
+    pitch=extract_section(t,r'(?:Pitch|투자\s*포인트|Investment\s*Point)')
+    if not pitch:
+        xs=detail_lines(t,r'Pitch|투자\s*포인트|매수\s*근거',4);pitch=' '.join(xs)[:1200]
+    if not pitch:pitch=heading_excerpt(t,r'(?:I[.]\s*)?(?:Summary\s*&\s*Focus Chart|Summary|핵심\s*요약)',1200)
+    if not pitch:
+        xs=detail_lines(t,r'전망|판단|예상|매수|투자\s*기회|모멘텀',4);pitch=' '.join(xs)[:1200]
+    conclusions=detail_lines(t,r'결론|투자전략|투자의견|전망|핵심\s*요약',5)
+    valuation=detail_lines(t,r'Valuation|밸류에이션|적정주가\s*산출|목표주가\s*산출|PER|PBR|EV/EBITDA|WACC|DCF|적용\s*(?:배수|멀티플)',6)
+    earnings=detail_lines(t,r'(?:실적|이익|매출|영업이익|EPS)\s*(?:추정|전망|예상|상향|하향)|추정치\s*(?:상향|하향)',6)
+    preferred=detail_lines(t,r'최선호주|차선호주|Top[ -]?Pick|탑픽|선호주|선호\s*의견',5)
+    conclusion=' '.join(conclusions)[:1400]
+    if not conclusion and pitch:conclusion=pitch[:900]
+    return {'pitch':pitch,'conclusion':conclusion,
+            'valuation':valuation,'earnings_changes':earnings,'preferred_stocks':preferred}
 
 def bootstrap_messages(days=130):
     DATA_DIR.mkdir(parents=True,exist_ok=True)
@@ -177,13 +233,27 @@ def source_link(m):
     preferred=[u for u in m.get('links',[]) if any(x in u for x in ['buly.kr','bit.ly','daolfn','daolsecurities'])]
     return preferred[-1] if preferred else m['post_url']
 
-def analyze(messages):
+def analyze(messages, pdf_since='2026-06'):
+    cache=json.loads(PDF_CACHE.read_text(encoding='utf-8')) if PDF_CACHE.exists() else {}
+    cache_changed=False
     reports=[]
     for m in sorted((x for x in messages if is_report(x)),key=lambda x:x['date']):
         t=m['text']; analyst,sector=analyst_sector(t); company,code=company_name(t); dt=datetime.fromisoformat(m['date'])
-        is_industry=company in ('산업/기타',sector) or bool(re.search(r'\((?:Overweight|Neutral|Underweight)\)',t[:300],re.I))
-        changes=tp_changes(t,company)
-        reports.append({'id':m['id'],'date':dt.date().isoformat(),'month':dt.strftime('%Y-%m'),'analyst':analyst,'sector':sector,'company':company,'code':code,'report_type':'산업자료' if is_industry else '기업자료','opinion':opinion(t),'top_picks':top_pick_lines(t),'tp_changes':changes,'tp_raises':[x for x in changes if x['direction']=='상향'],'pitch':report_pitch(t),'industry_conclusion':industry_conclusion(t) if is_industry else '','title':clean(t.split('▶')[0])[:240],'summary':clean(t)[:900],'post_url':m['post_url'],'source_url':source_link(m)})
+        month=dt.strftime('%Y-%m');is_industry=company in ('산업/기타',sector) or bool(re.search(r'\((?:Overweight|Neutral|Underweight)\)',t[:300],re.I))
+        source=source_link(m);analysis_text=t;analysis_source='텔레그램 요약';final_url=source;pdf_error=''
+        details={'pitch':report_pitch(t),'conclusion':industry_conclusion(t) if is_industry else '',
+                 'valuation':detail_lines(t,r'Valuation|밸류에이션|적정주가\s*산출|PER|PBR|EV/EBITDA|WACC|DCF|적용\s*(?:배수|멀티플)',4),
+                 'earnings_changes':detail_lines(t,r'(?:실적|이익|매출|영업이익|EPS)\s*(?:추정|전망|상향|하향)|추정치\s*(?:상향|하향)',4),
+                 'preferred_stocks':top_pick_lines(t)}
+        if month>=pdf_since:
+            was_cached=source in cache;p=pdf_text(source,cache);cache_changed=cache_changed or not was_cached
+            final_url=p['final_url'];pdf_error=p['error']
+            if p['status']=='pdf':
+                analysis_text=p['text'];analysis_source='PDF 원문 분석';details=pdf_details(analysis_text,is_industry)
+        changes=tp_changes(analysis_text,company)
+        reports.append({'id':m['id'],'date':dt.date().isoformat(),'month':month,'analyst':analyst,'sector':sector,'company':company,'code':code,'report_type':'산업자료' if is_industry else '기업자료','opinion':opinion(analysis_text) or opinion(t),'top_picks':details['preferred_stocks'],'preferred_stocks':details['preferred_stocks'],'tp_changes':changes,'tp_raises':[x for x in changes if x['direction']=='상향'],'pitch':details['pitch'],'industry_conclusion':details['conclusion'] if is_industry else '','report_conclusion':details['conclusion'],'valuation':details['valuation'],'earnings_changes':details['earnings_changes'],'analysis_source':analysis_source,'pdf_url':final_url,'pdf_error':pdf_error,'title':clean(t.split('▶')[0])[:240],'summary':clean(t)[:900],'post_url':m['post_url'],'source_url':source})
+    if cache_changed:
+        PDF_CACHE.write_text(json.dumps(cache,ensure_ascii=False,separators=(',',':')),encoding='utf-8')
     return reports
 
 def monthly_summary(reports):
@@ -219,10 +289,10 @@ function render(){const q=$('#q').value.toLowerCase(),mo=$('#month').value,an=$(
     OUT.write_text(template.replace('__PAYLOAD__',payload),encoding='utf-8')
 
 def main():
-    ap=argparse.ArgumentParser();ap.add_argument('--refresh',action='store_true');ap.add_argument('--backfill-days',type=int,default=0);args=ap.parse_args()
+    ap=argparse.ArgumentParser();ap.add_argument('--refresh',action='store_true');ap.add_argument('--backfill-days',type=int,default=0);ap.add_argument('--pdf-since',default='2026-06');args=ap.parse_args()
     messages=bootstrap_messages(args.backfill_days) if args.backfill_days else (json.loads(MSG_FILE.read_text(encoding='utf-8')) if MSG_FILE.exists() else bootstrap_messages())
     if args.refresh:messages=refresh_messages(messages)
-    reports=analyze(messages);months=monthly_summary(reports)
+    reports=analyze(messages,args.pdf_since);months=monthly_summary(reports)
     HISTORY.parent.mkdir(exist_ok=True);data={'generated_at':datetime.now(timezone.utc).isoformat(),'source':'https://t.me/daolresearch','report_count':len(reports),'months':months}
     HISTORY.write_text(json.dumps(data,ensure_ascii=False,indent=2),encoding='utf-8');render(data)
     print(json.dumps({'html':str(OUT),'history':str(HISTORY),'reports':len(reports),'months':[x['month'] for x in months]},ensure_ascii=False))
