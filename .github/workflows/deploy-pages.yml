@@ -49,6 +49,9 @@ jobs:
           tar --no-same-permissions --no-overwrite-dir -xzf dashboard-app.tar.gz -C telegram_research_dashboard
           fi
 
+      - name: Python 패키지 준비
+        run: python -m pip install requests beautifulsoup4 lxml pycryptodome pypdf telethon
+
       - name: 공개 텔레그램 최신 글 수집
         if: github.event_name == 'schedule'
         working-directory: telegram_research_dashboard
@@ -61,7 +64,6 @@ jobs:
         if: github.event_name != 'push'
         working-directory: telegram_research_dashboard
         run: |
-          python -m pip install requests beautifulsoup4 lxml pycryptodome pypdf
           python build_daol_tone_dashboard.py --refresh
 
       - name: 링크 기사 제목 및 기업 보강
