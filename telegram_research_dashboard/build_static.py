@@ -5,8 +5,10 @@ from __future__ import annotations
 import json
 import os
 import shutil
+from collections import Counter
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
+from urllib.request import Request, urlopen
 
 from db import connect, initialize
 
@@ -17,6 +19,23 @@ OUTPUT = Path(os.getenv("DASHBOARD_OUTPUT", ROOT.parent / "GS_최광식_리서�
 
 def records(conn, sql: str) -> list[dict]:
     return [dict(row) for row in conn.execute(sql).fetchall()]
+
+
+def previous_payload() -> dict:
+    """캐시 일부가 유실되면 현재 배포본의 정상 섹션을 보존한다."""
+    try:
+        request = Request(
+            "https://gschoie.github.io/GS-output-dashboard/",
+            headers={"User-Agent": "GSResearchDashboard/1.0", "Cache-Control": "no-cache"},
+        )
+        with urlopen(request, timeout=30) as response:
+            html = response.read().decode("utf-8", errors="replace")
+        marker = "window.__DASHBOARD_DATA__="
+        start = html.index(marker) + len(marker)
+        end = html.index(";</script>", start)
+        return json.loads(html[start:end])
+    except (OSError, ValueError, json.JSONDecodeError):
+        return {}
 
 
 def build() -> Path:
@@ -59,6 +78,21 @@ def build() -> Path:
                 """SELECT c.name FROM news_companies nc JOIN companies c ON c.id=nc.company_id
                    WHERE nc.news_id=? ORDER BY c.name""", (article["id"],)
             )]
+
+    if not reports:
+        prior = previous_payload()
+        reports = prior.get("reports") or []
+        if reports:
+            summary["reports"] = len(reports)
+            summary["upgrades"] = sum(r.get("target_change") == "상향" for r in reports)
+            print(f"현재 배포본에서 보고서 {len(reports):,}건 보존")
+
+    # 기업 선택 목록도 현재 보고서와 새 뉴스에서 다시 계산해 KAI 표기를 남기지 않는다.
+    canonical = lambda name: "한국항공우주" if name == "KAI" else name
+    company_counts = Counter(canonical(name) for item in reports + news for name in item.get("company_names", []) if name)
+    companies = [{"name": name, "mentions": count} for name, count in sorted(company_counts.items(), key=lambda x: (-x[1], x[0]))]
+    report_counts = Counter(canonical(name) for item in reports if item.get("report_type") != "위클리" for name in item.get("company_names", []) if name)
+    report_companies = [{"name": name, "mentions": count} for name, count in sorted(report_counts.items(), key=lambda x: (-x[1], x[0]))]
 
     tone_path = ROOT / "data" / "daol_tone_history.json"
     tone = json.loads(tone_path.read_text(encoding="utf-8")) if tone_path.exists() else {"months": [], "report_count": 0}
