@@ -58,12 +58,14 @@ jobs:
           python public_importer.py --channel https://t.me/HI_GS --pages "$PAGES"
 
       - name: DAOL 톤 데이터 갱신
+        if: github.event_name != 'push'
         working-directory: telegram_research_dashboard
         run: |
           python -m pip install requests beautifulsoup4 lxml pycryptodome pypdf
           python build_daol_tone_dashboard.py --refresh
 
       - name: 링크 기사 제목 및 기업 보강
+        if: github.event_name != 'push'
         working-directory: telegram_research_dashboard
         run: python enrich_link_news.py --limit 5000 --all
 
