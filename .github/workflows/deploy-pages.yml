@@ -81,9 +81,6 @@ jobs:
         run: |
           python build_hhiun_report.py
           python build_static.py
-          if [ -f ../hhiun_board_report.html ]; then
-            cp ../hhiun_board_report.html _site/hhiun_board_report.html
-          fi
 
       - name: 검증된 완성본 준비
         if: github.event_name == 'push'
@@ -91,6 +88,9 @@ jobs:
         run: |
           mkdir -p _site
           cp prebuilt/index.html _site/index.html
+          if [ -f static/hhiun_board_report.html ]; then
+            cp static/hhiun_board_report.html _site/hhiun_board_report.html
+          fi
 
       - name: 배포 안전망 검사
         working-directory: telegram_research_dashboard
