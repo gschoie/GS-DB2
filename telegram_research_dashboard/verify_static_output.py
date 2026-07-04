@@ -53,8 +53,10 @@ def main():
         "published reports menu": r'id="reports"',
         "news archive menu": r'id="news"',
         "press coverage menu": r'id="press"',
-        "DAOL research tone menu": r'id="tone"',
-        "GEMS menu": r'<span>GEMS</span>',
+        "DAOL research tone menu": r'data-view="tone"',
+        "GEMS menu": r'<span>GEMS-광</span>',
+        "관리 menu": r'<span>관리</span>',
+        "util links menu": r'<span>유틸\.링크</span>',
         "collapsed analyst report details": r'<details><summary>이달 발간 자료',
     }
     for label, pattern in required_patterns.items():
