@@ -54,6 +54,7 @@ def main():
         "news archive menu": r'id="news"',
         "press coverage menu": r'id="press"',
         "DAOL research tone menu": r'data-view="tone"',
+        "automation menu": r'<span>업무자동화</span>',
         "GEMS menu": r'<span>GEMS-광</span>',
         "관리 menu": r'<span>관리</span>',
         "util links menu": r'<span>유틸\.링크</span>',
