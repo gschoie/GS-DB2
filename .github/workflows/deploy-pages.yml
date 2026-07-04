@@ -28,6 +28,7 @@ jobs:
           python-version: "3.12"
 
       - name: 이전 수집 데이터 복원
+        if: github.event_name != 'push'
         uses: actions/cache@v4
         with:
           path: |
@@ -50,6 +51,7 @@ jobs:
           fi
 
       - name: Python 패키지 준비
+        if: github.event_name != 'push'
         run: python -m pip install requests beautifulsoup4 lxml pycryptodome pypdf telethon
 
       - name: 공개 텔레그램 최신 글 수집
@@ -67,14 +69,17 @@ jobs:
           python build_daol_tone_dashboard.py --refresh
 
       - name: 저장 원문 전체 재분류
+        if: github.event_name != 'push'
         working-directory: telegram_research_dashboard
         run: python rebuild_parsed_data.py
 
       - name: 링크 기사 제목 및 기업 보강
+        if: github.event_name != 'push'
         working-directory: telegram_research_dashboard
         run: python enrich_link_news.py --limit 5000 --all
 
       - name: 배포용 HTML 생성
+        if: github.event_name != 'push'
         working-directory: telegram_research_dashboard
         env:
           DASHBOARD_OUTPUT: _site/index.html
@@ -84,6 +89,13 @@ jobs:
           if [ -f ../hhiun_board_report.html ]; then
             cp ../hhiun_board_report.html _site/hhiun_board_report.html
           fi
+
+      - name: 검증된 완성본 준비
+        if: github.event_name == 'push'
+        working-directory: telegram_research_dashboard
+        run: |
+          mkdir -p _site
+          cp prebuilt/index.html _site/index.html
 
       - name: 배포 안전망 검사
         working-directory: telegram_research_dashboard
