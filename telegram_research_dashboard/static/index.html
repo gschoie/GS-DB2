@@ -12,9 +12,14 @@
     <nav>
       <button class="nav active" data-view="overview">⌂ <span>오늘의 요약</span></button>
       <button class="nav" data-view="reports">▤ <span>발간 보고서</span></button>
-      <button class="nav" data-view="news">⌁ <span>뉴스 아카이브</span></button>
-      <button class="nav" data-view="press">▦ <span>┗보도기사 W취합</span></button>
-      <button class="nav" data-view="union-board">⚓ <span>현중 노조게시판</span></button>
+      <details class="nav-group" open>
+        <summary>📚 <span>뉴스</span></summary>
+        <div class="nav-submenu">
+          <button class="nav" data-view="news">⌁ 뉴스 아카이브</button>
+          <button class="nav" data-view="press">▦ ┗보도기사 W취합</button>
+          <button class="nav" data-view="union-board">⚓ 현중 노조게시판</button>
+        </div>
+      </details>
       <details class="nav-group">
         <summary>🦿 <span>업무자동화</span></summary>
         <div class="nav-submenu">
