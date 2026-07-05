@@ -11,6 +11,7 @@ from pathlib import Path
 from urllib.request import Request, urlopen
 
 from db import connect, initialize
+from parser import APPROVED_COMPANIES
 
 
 ROOT = Path(__file__).resolve().parent
@@ -87,11 +88,19 @@ def build() -> Path:
             summary["upgrades"] = sum(r.get("target_change") == "상향" for r in reports)
             print(f"현재 배포본에서 보고서 {len(reports):,}건 보존")
 
-    # 기업 선택 목록도 현재 보고서와 새 뉴스에서 다시 계산해 KAI 표기를 남기지 않는다.
-    canonical = lambda name: "한국항공우주" if name == "KAI" else name
-    company_counts = Counter(canonical(name) for item in reports + news for name in item.get("company_names", []) if name)
+    # 표시용 기업명은 승인된 상장사 화이트리스트로만 남긴다(파서 폴백 노이즈 제거).
+    # KAI·현대마린엔진 같은 구명칭은 표준명으로 통일한 뒤 필터링한다.
+    aliases = {"KAI": "한국항공우주", "현대마린엔진": "HD현대마린엔진"}
+    canonical = lambda name: aliases.get(name, name)
+    approved = set(APPROVED_COMPANIES)
+    for item in reports + news:
+        kept = [n for n in dict.fromkeys(canonical(name) for name in item.get("company_names", []) if name) if n in approved]
+        item["company_names"] = kept
+        item["companies_label"] = ", ".join(kept) if kept else None
+        item["company_name"] = item["companies_label"]
+    company_counts = Counter(name for item in reports + news for name in item["company_names"])
     companies = [{"name": name, "mentions": count} for name, count in sorted(company_counts.items(), key=lambda x: (-x[1], x[0]))]
-    report_counts = Counter(canonical(name) for item in reports if item.get("report_type") != "위클리" for name in item.get("company_names", []) if name)
+    report_counts = Counter(name for item in reports if item.get("report_type") != "위클리" for name in item["company_names"])
     report_companies = [{"name": name, "mentions": count} for name, count in sorted(report_counts.items(), key=lambda x: (-x[1], x[0]))]
 
     tone_path = ROOT / "data" / "daol_tone_history.json"
