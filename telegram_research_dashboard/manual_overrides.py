@@ -18,3 +18,17 @@ TITLE_COMPANY_OVERRIDES: dict[str, list[str]] = {
     # 삼성重 = 삼성중공업 (최성안 부회장 자사주 매입)
     "삼성重 최성안 부회장, 자사주 1만주 매입…책임경영 의지": ["삼성중공업"],
 }
+
+# 기사 URL → 표준 기업명 리스트 (제목이 바뀌어도 안정적으로 매칭된다)
+URL_COMPANY_OVERRIDES: dict[str, list[str]] = {
+    # 본문 주체는 엔진 메이커. 요약이 지주사(HD현대)만 잡아 놓쳤다.
+    "https://buly.kr/APxMDmu": ["HD현대마린엔진", "한화엔진"],
+    # 군산조선소를 넘긴 주체는 HD현대중공업 (본문에 제이오션·HJ중공업도 언급되나 주체 아님)
+    "https://buly.kr/4bkLqrJ": ["HD현대중공업"],
+    # 삼성重 = 삼성중공업 (자사주 매입)
+    "https://buly.kr/AlmsBOC": ["삼성중공업"],
+}
+
+# 기사 URL → 내 코멘트 (자동 backfill이 놓치거나 직접 고칠 코멘트를 여기에 추가)
+URL_COMMENT_OVERRIDES: dict[str, str] = {
+}

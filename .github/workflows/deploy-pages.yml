@@ -73,6 +73,11 @@ jobs:
         working-directory: telegram_research_dashboard
         run: python enrich_link_news.py --limit 5000 --all
 
+      - name: 내 코멘트 backfill 및 기사 제목 정리
+        if: github.event_name != 'push'
+        working-directory: telegram_research_dashboard
+        run: python backfill_comments.py
+
       - name: 수동 기업 교정 적용
         if: github.event_name != 'push'
         working-directory: telegram_research_dashboard

@@ -19,7 +19,7 @@ INDUSTRIES = ("조선", "방산", "기계", "해양", "LNG", "가스선", "컨�
 KNOWN_COMPANIES = (
     "HD한국조선해양", "HD현대중공업", "HD현대미포", "HD현대", "한화오션",
     "한화에어로스페이스", "한화시스템", "현대로템", "한국항공우주",
-    "LIG넥스원", "LIG D&A", "풍산", "HJ중공업", "K조선", "현대마린엔진",
+    "LIG넥스원", "LIG D&A", "풍산", "HJ중공업", "K조선", "HD현대마린엔진", "현대마린엔진",
     "HD건설기계", "삼성중공업", "두산에너빌리티", "제이오션중공업", "대한항공",
     "두산밥캣", "HD현대건설기계", "HD현대인프라코어",
     "한국카본", "STX엔진", "한화엔진", "HD현대마린솔루션", "SNT다이내믹스",
@@ -36,11 +36,26 @@ CHANNEL_SIGNATURE_RE = re.compile(
 )
 PUBLISHER_RE = re.compile(r"(?:출처|Source)\s*[:：]\s*\[?([^\]\n]+)", re.I)
 PUBLISHER_DOMAINS = {
-    "yna.co.kr": "연합뉴스", "news1.kr": "뉴스1", "theguru.co.kr": "더구루",
+    "yna.co.kr": "연합뉴스", "yonhapnewstv.co.kr": "연합뉴스TV", "news1.kr": "뉴스1",
+    "newsis.com": "뉴시스", "theguru.co.kr": "더구루",
     "hankyung.com": "한국경제", "mk.co.kr": "매일경제", "sedaily.com": "서울경제",
     "edaily.co.kr": "이데일리", "mt.co.kr": "머니투데이", "fnnews.com": "파이낸셜뉴스",
-    "chosun.com": "조선일보", "joongang.co.kr": "중앙일보", "donga.com": "동아일보",
+    "chosun.com": "조선일보", "biz.chosun.com": "조선비즈", "joongang.co.kr": "중앙일보",
+    "donga.com": "동아일보", "hani.co.kr": "한겨레", "khan.co.kr": "경향신문",
+    "hankookilbo.com": "한국일보", "seoul.co.kr": "서울신문", "kmib.co.kr": "국민일보",
+    "munhwa.com": "문화일보", "segye.com": "세계일보", "kukinews.com": "쿠키뉴스",
+    "asiae.co.kr": "아시아경제", "heraldcorp.com": "헤럴드경제", "ajunews.com": "아주경제",
+    "etnews.com": "전자신문", "dt.co.kr": "디지털타임스", "zdnet.co.kr": "ZDNet Korea",
+    "inews24.com": "아이뉴스24", "businesspost.co.kr": "비즈니스포스트", "thebell.co.kr": "더벨",
+    "biz.heraldcorp.com": "헤럴드경제", "wowtv.co.kr": "한국경제TV", "newspim.com": "뉴스핌",
+    "moneys.co.kr": "머니S", "dailian.co.kr": "데일리안", "pinpointnews.co.kr": "핀포인트뉴스",
+    "g-enews.com": "글로벌이코노믹", "ekn.kr": "에너지경제", "e2news.com": "이투뉴스",
+    "sisajournal.com": "시사저널", "ceoscoredaily.com": "CEO스코어데일리",
+    "econovill.com": "이코노믹리뷰", "econonews.co.kr": "이코노뉴스",
     "eurasiantimes.com": "EurAsian Times", "reuters.com": "Reuters",
+    "tradewinds.com": "TradeWinds", "tradewindsnews.com": "TradeWinds",
+    "upstreamonline.com": "Upstream", "defensenews.com": "Defense News",
+    "janes.com": "Janes", "navalnews.com": "Naval News", "bloomberg.com": "Bloomberg",
 }
 
 

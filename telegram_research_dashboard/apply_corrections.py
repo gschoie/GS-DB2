@@ -10,7 +10,9 @@ from __future__ import annotations
 from db import connect, initialize
 from parser import extract_companies
 from telegram_importer import link_companies
-from manual_overrides import TITLE_COMPANY_OVERRIDES
+from manual_overrides import (
+    TITLE_COMPANY_OVERRIDES, URL_COMPANY_OVERRIDES, URL_COMMENT_OVERRIDES,
+)
 
 
 def merge_kai(conn) -> int:
@@ -62,19 +64,28 @@ def reextract_aliases(conn) -> int:
     return changed
 
 
+def _assign(conn, news_id: int, names: list[str]) -> None:
+    conn.execute(
+        "UPDATE news_articles SET company_name=?,confidence=0.95,needs_review=0 WHERE id=?",
+        (", ".join(names), news_id),
+    )
+    conn.execute("DELETE FROM news_companies WHERE news_id=?", (news_id,))
+    link_companies(conn, "news_companies", "news_id", news_id, names)
+
+
 def apply_title_overrides(conn) -> int:
-    """제목 기준 수동 교정을 반영한다."""
+    """제목·URL 기준 수동 교정을 반영한다."""
     changed = 0
     for title, names in TITLE_COMPANY_OVERRIDES.items():
-        rows = conn.execute("SELECT id FROM news_articles WHERE title=?", (title,)).fetchall()
-        for row in rows:
-            conn.execute(
-                "UPDATE news_articles SET company_name=?,confidence=0.95,needs_review=0 WHERE id=?",
-                (", ".join(names), row["id"]),
-            )
-            conn.execute("DELETE FROM news_companies WHERE news_id=?", (row["id"],))
-            link_companies(conn, "news_companies", "news_id", row["id"], names)
+        for row in conn.execute("SELECT id FROM news_articles WHERE title=?", (title,)).fetchall():
+            _assign(conn, row["id"], names)
             changed += 1
+    for url, names in URL_COMPANY_OVERRIDES.items():
+        for row in conn.execute("SELECT id FROM news_articles WHERE article_url=?", (url,)).fetchall():
+            _assign(conn, row["id"], names)
+            changed += 1
+    for url, comment in URL_COMMENT_OVERRIDES.items():
+        conn.execute("UPDATE news_articles SET comment=? WHERE article_url=?", (comment, url))
     return changed
 
 

@@ -26,3 +26,6 @@ def initialize() -> None:
         columns = {row[1] for row in conn.execute("PRAGMA table_info(reports)")}
         if "weekly_folder" not in columns:
             conn.execute("ALTER TABLE reports ADD COLUMN weekly_folder TEXT")
+        news_columns = {row[1] for row in conn.execute("PRAGMA table_info(news_articles)")}
+        if "comment" not in news_columns:
+            conn.execute("ALTER TABLE news_articles ADD COLUMN comment TEXT")

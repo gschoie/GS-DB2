@@ -10,7 +10,7 @@ from html.parser import HTMLParser
 from urllib.parse import urljoin, urlparse
 from urllib.request import HTTPRedirectHandler, Request, build_opener
 
-from parser import extract_companies
+from parser import extract_companies, PUBLISHER_DOMAINS
 
 
 TITLE_PLACEHOLDERS = {"기사 제목 미확인", "제목 미확인"}
@@ -92,6 +92,7 @@ def fetch_article_metadata(url: str, timeout: int = 10) -> dict | None:
         )
         with build_opener(SafeRedirectHandler()).open(request, timeout=timeout) as response:
             content_type = response.headers.get_content_type()
+            final_url = response.geturl()
             if content_type not in {"text/html", "application/xhtml+xml"}:
                 return None
             raw = response.read(MAX_HTML_BYTES + 1)
@@ -109,7 +110,8 @@ def fetch_article_metadata(url: str, timeout: int = 10) -> dict | None:
         body = SCRIPT_STYLE_RE.sub(" ", body)
         body = html.unescape(re.sub(r"<[^>]+>", " ", body))
         body = re.sub(r"\s+", " ", body)[:50_000]
-        return {"title": title, "description": description, "text": body} if title else None
+        return {"title": title, "description": description, "text": body,
+                "final_url": final_url, "site_name": parser.meta.get("og:site_name")}
     except (OSError, ValueError, UnicodeError):
         return None
 
@@ -117,6 +119,25 @@ def fetch_article_metadata(url: str, timeout: int = 10) -> dict | None:
 def fetch_article_title(url: str, timeout: int = 10) -> str | None:
     metadata = fetch_article_metadata(url, timeout)
     return metadata["title"] if metadata else None
+
+
+# og:site_name이 매체명이 아니라 포털/집계 이름이면 버린다.
+GENERIC_SITE_NAMES = {"네이버", "네이버 뉴스", "naver", "daum", "다음", "다음뉴스", "google"}
+
+
+def publisher_from(meta: dict | None, original_url: str | None) -> str | None:
+    """단축·집계 링크를 따라간 최종 URL에서 실제 언론사명을 뽑는다."""
+    if not meta:
+        return None
+    final = meta.get("final_url") or original_url or ""
+    host = (urlparse(final).hostname or "").casefold().removeprefix("www.").removeprefix("m.")
+    for domain, name in PUBLISHER_DOMAINS.items():
+        if host == domain or host.endswith("." + domain):
+            return name
+    site = (meta.get("site_name") or "").strip()
+    if site and 2 <= len(site) <= 30 and site.casefold() not in GENERIC_SITE_NAMES:
+        return site
+    return host or None
 
 
 def enrich_news_item(item: dict, metadata_fetcher=fetch_article_metadata) -> dict:

@@ -5,27 +5,41 @@ from __future__ import annotations
 import argparse
 from concurrent.futures import ThreadPoolExecutor
 
-from article_metadata import TITLE_PLACEHOLDERS, enrich_news_item, fetch_article_metadata
+from article_metadata import (
+    TITLE_PLACEHOLDERS, enrich_news_item, fetch_article_metadata, publisher_from,
+)
 from db import connect, initialize
 from telegram_importer import link_companies
+
+
+# publisher를 다시 확인해야 하는(단축·집계) 호스트
+STALE_PUBLISHERS = ("buly.kr", "bit.ly", "bitly.ws", "tinyurl.com", "han.gl", "url.kr", "me2.do")
+# 언론 기사가 아니라 원문 추적이 의미 없는 호스트
+NON_ARTICLE_FILTER = """n.article_url NOT LIKE 'https://t.me/%' AND n.article_url NOT LIKE 'http://t.me/%'
+                    AND n.article_url NOT LIKE '%cafe.naver.com/%' AND n.article_url NOT LIKE '%dart.fss.or.kr%'
+                    AND n.article_url NOT LIKE '%youtu.be/%' AND n.article_url NOT LIKE '%youtube.com/%'
+                    AND n.article_url NOT LIKE '%finance.naver.com%'"""
 
 
 def run(limit: int, force_all: bool = False) -> tuple[int, int]:
     initialize()
     placeholders = tuple(TITLE_PLACEHOLDERS)
-    scope = "1=1" if force_all else """(n.title IN (?,?) OR COALESCE(n.company_name,'')=''
-                    OR NOT EXISTS (SELECT 1 FROM news_companies nc WHERE nc.news_id=n.id))"""
+    stale = "(" + " OR ".join(f"n.publisher='{host}'" for host in STALE_PUBLISHERS) + ")"
+    scope = "1=1" if force_all else f"""(n.title IN (?,?) OR COALESCE(n.company_name,'')=''
+                    OR NOT EXISTS (SELECT 1 FROM news_companies nc WHERE nc.news_id=n.id)
+                    OR n.publisher IS NULL OR {stale})"""
     attempts = "1=1" if force_all else "(a.news_id IS NULL OR a.attempted_at < datetime('now','-30 days'))"
-    sql = f"""SELECT n.id,n.title,n.article_url,n.event_type,n.summary,n.confidence,n.needs_review
+    sql = f"""SELECT n.id,n.title,n.article_url,n.event_type,n.summary,n.confidence,n.needs_review,
+                     n.company_name,n.publisher
              FROM news_articles n
              LEFT JOIN article_metadata_attempts a ON a.news_id=n.id
-             WHERE n.article_url IS NOT NULL
+             WHERE n.article_url IS NOT NULL AND {NON_ARTICLE_FILTER}
                AND {scope} AND {attempts}
              ORDER BY CASE WHEN a.news_id IS NULL THEN 0 ELSE 1 END,n.id DESC LIMIT ?"""
     checked = updated = 0
     with connect() as conn:
         rows = conn.execute(sql, (limit,) if force_all else (*placeholders, limit)).fetchall()
-        with ThreadPoolExecutor(max_workers=min(8, max(1, len(rows)))) as executor:
+        with ThreadPoolExecutor(max_workers=min(12, max(1, len(rows)))) as executor:
             metadata = list(executor.map(fetch_article_metadata, (row["article_url"] for row in rows)))
         for row, fetched in zip(rows, metadata):
             checked += 1
@@ -40,17 +54,22 @@ def run(limit: int, force_all: bool = False) -> tuple[int, int]:
             )
             if item["title"] in TITLE_PLACEHOLDERS:
                 continue
+            # 새 추출이 비면 기존 기업 배정을 지우지 않는다.
+            company_name = item["company_name"] or row["company_name"]
+            publisher = publisher_from(fetched, row["article_url"]) or row["publisher"]
+            needs_review = 0 if company_name else item["needs_review"]
             conn.execute(
-                """UPDATE news_articles SET title=?,company_name=?,summary=?,confidence=?,needs_review=?
+                """UPDATE news_articles SET title=?,company_name=?,publisher=?,summary=?,confidence=?,needs_review=?
                    WHERE id=?""",
-                (item["title"], item["company_name"], item["summary"], item["confidence"],
-                 item["needs_review"], row["id"]),
+                (item["title"], company_name, publisher, item["summary"], item["confidence"],
+                 needs_review, row["id"]),
             )
-            conn.execute("DELETE FROM news_companies WHERE news_id=?", (row["id"],))
-            link_companies(conn, "news_companies", "news_id", row["id"], item["companies"])
+            if item["companies"]:
+                conn.execute("DELETE FROM news_companies WHERE news_id=?", (row["id"],))
+                link_companies(conn, "news_companies", "news_id", row["id"], item["companies"])
             updated += 1
         conn.commit()
-    print(f"링크 기사 제목 보강: {updated:,}/{checked:,}건")
+    print(f"링크 기사 보강: {updated:,}/{checked:,}건")
     return checked, updated
 
 

@@ -51,6 +51,7 @@ CREATE TABLE IF NOT EXISTS news_articles (
   sentiment TEXT NOT NULL DEFAULT '중립',
   importance TEXT NOT NULL DEFAULT '보통',
   summary TEXT,
+  comment TEXT,
   confidence REAL NOT NULL DEFAULT 0.5,
   needs_review INTEGER NOT NULL DEFAULT 1,
   UNIQUE(message_id, source_index)
