@@ -1,7 +1,54 @@
 import unittest
 
 from article_metadata import enrich_news_item
-from parser import classify, parse_news, parse_news_items, parse_report
+from parser import classify, extract_companies, identify_companies, parse_news, parse_news_items, parse_report
+
+
+class ForeignCompanyClassificationTest(unittest.TestCase):
+    def test_weapon_systems_map_to_listed_companies(self):
+        cases = {
+            "Indonesia Pulls Out Of KF-21 Co-Production": "한국항공우주",
+            "Poland receives first batch of K9 howitzers": "한화에어로스페이스",
+            "Norway signs K2 tank deal": "현대로템",
+            "Malaysia orders more FA-50 light fighters": "한국항공우주",
+            "Philippines eyes T-50 trainer jets": "한국항공우주",
+            "Saudi Arabia in talks for M-SAM air defense": "LIG D&A",
+            "Poland to buy Chunmoo MLRS": "한화에어로스페이스",
+        }
+        for text, company in cases.items():
+            with self.subTest(text=text):
+                self.assertIn(company, identify_companies(text))
+
+    def test_english_company_names_map_to_korean(self):
+        cases = {
+            "Hanwha Aerospace wins export order": "한화에어로스페이스",
+            "Hyundai Rotem unveils new platform": "현대로템",
+            "LIG Nex1 secures missile contract": "LIG넥스원",
+            "Korea Aerospace Industries expands line": "한국항공우주",
+            "Hanwha Ocean lands FLNG deal": "한화오션",
+        }
+        for text, company in cases.items():
+            with self.subTest(text=text):
+                self.assertIn(company, identify_companies(text))
+
+    def test_short_codes_do_not_false_match(self):
+        # K21 보병전투차, AK9, K-9 없이 붙은 토큰은 무기체계로 오탐하면 안 된다.
+        for text in ("K21 IFV was displayed", "The AK9 rifle jammed", "K200 series update"):
+            with self.subTest(text=text):
+                self.assertEqual(identify_companies(text), [])
+
+    def test_korean_name_wins_over_foreign_fallback(self):
+        # 한국 정식사명이 있으면 무기체계 폴백은 개입하지 않는다.
+        result = identify_companies("한화오션이 K9 관련 부품을 공급한다")
+        self.assertEqual(result, ["한화오션"])
+
+
+class ParserForeignRegressionTest(unittest.TestCase):
+    def test_summary_post_with_wrong_title_still_tags_from_body(self):
+        body = """방산 🛫 Indonesia Pulls Out Of KF-21 Co-Production, Could Acquire Jets Directly From South Korea
+출처: EurAsian Times"""
+        self.assertIn("한국항공우주", extract_companies(body))
+
 
 
 class ParserTest(unittest.TestCase):

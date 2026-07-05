@@ -51,6 +51,31 @@ COMPANY_ALIASES = {
     "보라매": "한국항공우주",
     "삼성重": "삼성중공업",
 }
+# 외신·영문 기사용: 무기체계 코드로 한국 상장사를 역추적한다.
+# K2·K9처럼 짧은 코드는 앞뒤가 영숫자가 아닐 때만 매칭해 오탐(K21, AK9 등)을 막는다.
+WEAPON_SYSTEM_ALIASES = {
+    r"KF-?21": "한국항공우주",
+    r"FA-?50": "한국항공우주",
+    r"T-?50": "한국항공우주",
+    r"K9": "한화에어로스페이스",
+    r"MLRS": "한화에어로스페이스",
+    r"MRLS": "한화에어로스페이스",
+    r"K2": "현대로템",
+    r"M-?SAM": "LIG D&A",
+}
+# 외신에 나오는 영문 사명 → 한국 상장사.
+ENGLISH_COMPANY_ALIASES = {
+    "hanwha aerospace": "한화에어로스페이스",
+    "hanwha systems": "한화시스템",
+    "hanwha ocean": "한화오션",
+    "korea aerospace industries": "한국항공우주",
+    "hyundai rotem": "현대로템",
+    "lig nex1": "LIG넥스원",
+    "samsung heavy": "삼성중공업",
+    "hyundai heavy": "HD현대중공업",
+    "poongsan": "풍산",
+    "korea shipbuilding": "HD한국조선해양",
+}
 CHANNEL_SIGNATURE_RE = re.compile(
     r"(?:조선\s*/\s*기계\s*/\s*방산.*최광식|최광식.*(?:DAOL|다올).*투자증권)", re.I
 )
@@ -108,17 +133,38 @@ def _price(match: re.Match[str] | None) -> int | None:
     return int(match.group(1).replace(",", "")) if match else None
 
 
-def extract_companies(text: str) -> list[str]:
-    found = [name for name in KNOWN_COMPANIES if name.casefold() in text.casefold()]
-    found.extend(company for alias, company in COMPANY_ALIASES.items() if alias.casefold() in text.casefold())
+def _dedupe_companies(found: list[str]) -> list[str]:
+    # 긴 정식 명칭을 우선해 HD현대와 HD현대중공업의 중복을 피한다.
+    ordered = sorted(dict.fromkeys(found), key=len, reverse=True)
+    selected: list[str] = []
+    for name in ordered:
+        if not any(name in longer for longer in selected):
+            selected.append(name)
+    return selected
+
+
+def identify_companies(text: str) -> list[str]:
+    """한국 정식사명·별칭으로 먼저 식별하고, 실패하면 외신 무기체계/영문 사명으로 역추적한다.
+
+    대괄호·해시태그 같은 노이즈 폴백은 쓰지 않으므로 제목뿐 아니라 본문에 적용해도 안전하다.
+    """
+    lowered = text.casefold()
+    found = [name for name in KNOWN_COMPANIES if name.casefold() in lowered]
+    found.extend(company for alias, company in COMPANY_ALIASES.items() if alias.casefold() in lowered)
     if found:
-        # 긴 정식 명칭을 우선해 HD현대와 HD현대중공업의 중복을 피한다.
-        found.sort(key=len, reverse=True)
-        selected = []
-        for name in found:
-            if not any(name in longer for longer in selected):
-                selected.append(name)
-        return selected
+        return _dedupe_companies(found)
+    # 외신 폴백: 한국 사명이 안 잡힐 때만 무기체계/영문 사명으로 분류한다.
+    foreign = [company for phrase, company in ENGLISH_COMPANY_ALIASES.items() if phrase in lowered]
+    for pattern, company in WEAPON_SYSTEM_ALIASES.items():
+        if re.search(rf"(?<![A-Za-z0-9])(?:{pattern})(?![A-Za-z0-9])", text, re.I):
+            foreign.append(company)
+    return _dedupe_companies(foreign)
+
+
+def extract_companies(text: str) -> list[str]:
+    identified = identify_companies(text)
+    if identified:
+        return identified
     patterns = (
         r"\[([가-힣A-Za-z0-9&. ]{2,30})\]",
         r"(?:기업|종목)\s*[:：]\s*([가-힣A-Za-z0-9&. ]{2,30})",
