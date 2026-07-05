@@ -31,11 +31,27 @@ class ForeignCompanyClassificationTest(unittest.TestCase):
             with self.subTest(text=text):
                 self.assertIn(company, identify_companies(text))
 
-    def test_short_codes_do_not_false_match(self):
-        # K21 보병전투차, AK9, K-9 없이 붙은 토큰은 무기체계로 오탐하면 안 된다.
-        for text in ("K21 IFV was displayed", "The AK9 rifle jammed", "K200 series update"):
+    def test_weapon_system_variants_map_to_listed_companies(self):
+        cases = {
+            "South Korea K9MH Mobile Howitzer raises fire rate": "한화에어로스페이스",
+            "Poland receives first K2PL tanks": "현대로템",
+            "Estonia orders more K239 Chunmoo systems": "한화에어로스페이스",
+            "Poland becomes a rocket manufacturer — Homar-K signed": "한화에어로스페이스",
+            "Australia selects Redback IFV": "한화에어로스페이스",
+            "천궁-II 이라크 수출 본격 협의": "LIG D&A",
+            "KAI Surion helicopter fleet grows": "한국항공우주",
+        }
+        for text, company in cases.items():
             with self.subTest(text=text):
-                self.assertEqual(identify_companies(text), [])
+                self.assertIn(company, identify_companies(text))
+
+    def test_short_codes_do_not_false_match(self):
+        # K21 보병전투차, AK9, K200, K239는 K2/K9 자주포·전차로 오탐하면 안 된다.
+        self.assertEqual(identify_companies("K21 IFV was displayed"), [])
+        self.assertEqual(identify_companies("The AK9 rifle jammed"), [])
+        self.assertEqual(identify_companies("K200 series update"), [])
+        # K239는 K2(현대로템)가 아니라 천무(한화에어로스페이스)로만 잡혀야 한다.
+        self.assertEqual(identify_companies("K239 launcher trial"), ["한화에어로스페이스"])
 
     def test_korean_name_wins_over_foreign_fallback(self):
         # 한국 정식사명이 있으면 무기체계 폴백은 개입하지 않는다.
