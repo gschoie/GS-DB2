@@ -60,6 +60,7 @@
           <a href="https://notebooklm.google.com/notebook/8801c401-d016-4bc2-8c1b-3f205fa66de8" target="_blank" rel="noopener">트레이딩.아이디어 트래킹</a>
           <a href="https://gemini.google.com/gem/faaa023705b8" target="_blank" rel="noopener">재무제표.점검</a>
           <a href="https://gemini.google.com/gem/a7f3fb1d0136" target="_blank" rel="noopener">답안한 애널 찾기</a>
+          <button class="nav" data-view="tasklist">🗒 요청 체크</button>
         </div>
       </details>
       <details class="nav-group">
@@ -149,6 +150,20 @@
         <span id="tone-status">대기 중</span>
       </div>
       <div id="tone-content"></div>
+    </section>
+
+    <section id="tasklist" class="view">
+      <div class="archive-intro"><div><p class="eyebrow">TEAM CHECK</p><h2>애널리스트 요청 체크</h2></div><p>외근 중 메신저 응답을 체크·비고로 정리합니다. 이 기기(브라우저)에 저장됩니다.</p></div>
+      <div class="task-toolbar">
+        <label>항목<select id="task-item"></select></label>
+        <span id="task-date" class="task-date"></span>
+        <span id="task-summary" class="task-summary"></span>
+        <button id="task-copy" type="button">요약 복사</button>
+        <button id="task-reset" type="button">이 항목 초기화</button>
+        <button id="task-export" type="button">내보내기</button>
+        <label class="task-import">불러오기<input id="task-import" type="file" accept=".json,application/json"></label>
+      </div>
+      <section class="panel"><div id="task-table"></div></section>
     </section>
   </main>
   <script src="/app.js"></script>
