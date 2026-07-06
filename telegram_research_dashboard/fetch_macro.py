@@ -23,9 +23,8 @@ UA = {"User-Agent": "Mozilla/5.0 (compatible; GSResearchDashboard/1.0)"}
 
 NAVER_GLOBAL_ECON = "https://news.naver.com/breakingnews/section/101/262"
 # Gemini '오늘의 핵심요약'을 붙여둔 공개 구글 문서(내보내기 txt) URL.
-# 예: https://docs.google.com/document/d/<DOC_ID>/export?format=txt
-# 비어 있으면 핵심요약은 건너뛴다.
-DAILY_BRIEF_DOC_URL = ""
+# 문서를 '링크가 있는 모든 사용자(보기)'로 공개해야 읽힌다. 비어 있으면 건너뛴다.
+DAILY_BRIEF_DOC_URL = "https://docs.google.com/document/d/1qEwmvA0MUiXDBu32b3IjnrmsX7BGKCkZiGBUNORJCXo/export?format=txt"
 
 
 def _fetch(url: str, timeout: int = 20) -> str:
@@ -56,16 +55,26 @@ def naver_global_top(limit: int = 5) -> list[dict]:
 
 
 def daily_brief() -> str:
-    """공개 구글 문서에서 '오늘의 핵심요약' 섹션만 뽑는다."""
+    """공개 구글 문서에서 '핵심요약' 내용을 뽑는다.
+
+    - '핵심요약'이 들어간 헤딩이 있으면 그 섹션(다음 번호 섹션 전까지)만.
+    - 그런 헤딩이 없으면 제목 한 줄을 뺀 본문 전체를 요약으로 본다.
+    - 제목만 있고 본문이 없으면 빈 값(배너 숨김).
+    """
     if not DAILY_BRIEF_DOC_URL:
         return ""
-    text = _fetch(DAILY_BRIEF_DOC_URL)
-    # '1. 오늘의 핵심요약' 또는 '오늘의 핵심요약' 헤딩부터 다음 번호 섹션 전까지
+    text = _fetch(DAILY_BRIEF_DOC_URL).replace("﻿", "").strip()
+    lines = [line for line in text.splitlines() if line.strip()]
     match = re.search(
-        r"(?:^|\n)\s*(?:\d+\.\s*)?오늘의\s*핵심\s*요약\s*[\n:]+(.*?)(?=\n\s*\d+\.\s|\Z)",
+        r"(?:^|\n)[^\n]*핵심\s*요약[^\n]*\n+(.*?)(?=\n\s*\d+[.)]\s|\Z)",
         text, re.S,
     )
-    body = (match.group(1) if match else "").strip()
+    if match and match.group(1).strip():
+        body = match.group(1).strip()
+    elif len(lines) > 1:
+        body = "\n".join(lines[1:]).strip()  # 제목 줄 제외 전체
+    else:
+        body = ""  # 제목만 있고 아직 내용 없음
     return re.sub(r"\n{3,}", "\n\n", body)[:2000]
 
 
