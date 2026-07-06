@@ -105,9 +105,11 @@ def build() -> Path:
 
     tone_path = ROOT / "data" / "daol_tone_history.json"
     tone = json.loads(tone_path.read_text(encoding="utf-8")) if tone_path.exists() else {"months": [], "report_count": 0}
+    union_path = ROOT / "data" / "hhiun_top.json"
+    union = json.loads(union_path.read_text(encoding="utf-8")) if union_path.exists() else {"monthly": []}
     payload = json.dumps(
         {"summary": summary, "reports": reports, "news": news, "companies": companies,
-         "reportCompanies": report_companies, "tone": tone},
+         "reportCompanies": report_companies, "tone": tone, "union": union},
         ensure_ascii=False, separators=(",", ":"),
     ).replace("</", "<\\/").replace("\u2028", "\\u2028").replace("\u2029", "\\u2029")
     html = (ROOT / "static" / "index.html").read_text(encoding="utf-8")

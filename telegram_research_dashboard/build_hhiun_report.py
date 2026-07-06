@@ -21,6 +21,7 @@ from Crypto.Util.Padding import unpad
 ROOT = Path(__file__).resolve().parent
 OUTPUT = ROOT / "static" / "hhiun_board_report.html"
 SNAPSHOT = ROOT / "data" / "hhiun_snapshot.json"
+HHIUN_TOP = ROOT / "data" / "hhiun_top.json"
 BASE = "http://www.hhiun.or.kr"
 BOARD = f"{BASE}/index.php?mid=FreeBoard"
 KST = timezone(timedelta(hours=9))
@@ -242,6 +243,15 @@ def main() -> None:
     SNAPSHOT.write_text(json.dumps({
         "captured_at": NOW.isoformat(),
         "posts": {p["id"]: {"views": p["views"], "comments": p["comments"]} for p in posts},
+    }, ensure_ascii=False), encoding="utf-8")
+    # 대시보드 '오늘의 요약'에서 읽어갈 월간 TOP15 요약(제목·주목도·조회·댓글·링크).
+    HHIUN_TOP.write_text(json.dumps({
+        "captured_at": NOW.isoformat(),
+        "monthly": [{
+            "rank": index, "title": post["title"], "url": post["url"],
+            "score": round(post["score"], 1), "views": post["views"],
+            "comments": post["comments"], "published": post["published"].isoformat(),
+        } for index, post in enumerate(monthly, 1)],
     }, ensure_ascii=False), encoding="utf-8")
     print(f"현중 노조게시판 보고서 생성: {OUTPUT}")
 
