@@ -46,6 +46,7 @@ function miniRow(lead,body,href){return `<a class="mini-row" href="${esc(href||'
 function overviewNews(n){return miniRow(`<small>${esc(fmtDate(n.posted_at))}</small>`,`<div class="mini-head"><b>${esc(n.companies_label||n.company_name||'기업 미확인')}</b></div><p>${esc(n.title)}</p>`,n.article_url||n.source_url)}
 function overviewTone(r){const op=r.opinion&&!['명시 없음',''].includes(r.opinion)?`<span class="tag">${esc(r.opinion)}</span>`:'';const up=(r.tp_changes||[]).some(x=>x.direction==='상향')?'<span class="tag up">TP▲</span>':'';const label=r.company&&r.company!=='산업/기타'?r.company:(r.sector||'산업');return miniRow(`<small>${esc(String(r.date||'').slice(5))}</small>`,`<div class="mini-head"><b>${esc(label)}</b> <span class="mini-sub">${esc(r.analyst||'')}</span>${op}${up}</div><p>${esc(r.title||'')}</p>`,r.source_url||r.pdf_url||r.post_url)}
 function overviewUnion(p){return miniRow(`<b class="rk">${p.rank}</b>`,`<p class="mini-title">${esc(p.title)}</p><small>주목도 ${p.score} · 조회 ${Number(p.views).toLocaleString()} · 댓글 ${p.comments}</small>`,p.url)}
+function overviewMacro(x,i){return miniRow(`<b class="rk">${i+1}</b>`,`<p class="mini-title">${esc(x.title)}</p>`,x.url)}
 async function load(){
  const reportQs=new URLSearchParams({q:state.q,company:state.reportCompany,type:state.reportType,weekly:state.weeklyFolder});
  const newsQs=new URLSearchParams({q:state.q,company:state.newsCompany});
@@ -62,6 +63,9 @@ async function load(){
  if($('#tone-latest'))$('#tone-latest').innerHTML=toneLatest.slice(0,6).map(overviewTone).join('')||'<p class="empty">톤 데이터가 없습니다.</p>';
  const unionTop=window.__DASHBOARD_DATA__?.union?.monthly||[];
  if($('#union-top'))$('#union-top').innerHTML=unionTop.slice(0,6).map(overviewUnion).join('')||'<p class="empty">노조게시판 데이터가 없습니다.</p>';
+ const macro=window.__DASHBOARD_DATA__?.macro||{};
+ if($('#macro-global'))$('#macro-global').innerHTML=(macro.global_economy||[]).slice(0,5).map(overviewMacro).join('')||'<p class="empty">매크로 데이터가 없습니다.</p>';
+ const brief=$('#daily-brief');if(brief){if(macro.daily_brief){brief.hidden=false;brief.innerHTML=`<div class="brief-head"><small>GEMINI · 오늘의 핵심요약</small></div><div class="brief-body">${esc(macro.daily_brief).replace(/\n/g,'<br>')}</div>`}else brief.hidden=true}
  const archive=news.reduce((all,n)=>{const d=new Date(n.posted_at),y=String(d.getFullYear()),m=`${String(d.getMonth()+1).padStart(2,'0')}월`;all[y]??={};all[y][m]??=[];all[y][m].push(n);return all},{});
  const years=Object.entries(archive).sort(([a],[b])=>b.localeCompare(a));
  $('#news-list').innerHTML=years.map(([year,months],yi)=>{const count=Object.values(months).reduce((sum,list)=>sum+list.length,0);return `<details class="year-group" ${yi===0?'open':''}><summary><span>${year}년</span><em>${count.toLocaleString()}건</em></summary><div class="year-content">${Object.entries(months).sort(([a],[b])=>b.localeCompare(a)).map(([month,list],mi)=>`<details class="month-group" ${yi===0&&mi===0?'open':''}><summary class="month-divider"><h3>${month}</h3><span>${list.length}건</span></summary>${newsTable(list)}</details>`).join('')}</div></details>`}).join('')||'<p class="empty">조건에 맞는 뉴스가 없습니다.</p>';
