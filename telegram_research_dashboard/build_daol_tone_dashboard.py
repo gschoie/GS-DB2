@@ -3,9 +3,8 @@ from io import BytesIO
 from collections import defaultdict
 from datetime import datetime, timezone, timedelta
 from pathlib import Path
-import requests
-from bs4 import BeautifulSoup
-from pypdf import PdfReader
+# requests / bs4 / pypdf 는 네트워크·PDF 처리에만 필요하므로 각 함수 안에서 지연 임포트한다.
+# (is_report 등 순수 로직은 표준 라이브러리만으로 임포트되어 테스트가 가볍다.)
 
 ROOT=Path(__file__).resolve().parent
 DATA_DIR=ROOT/'data'
@@ -19,6 +18,8 @@ UA={'User-Agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 C
 def clean(s): return re.sub(r'\s+',' ',s or '').strip()
 
 def pdf_text(source_url, cache):
+    import requests
+    from pypdf import PdfReader
     cached=cache.get(source_url)
     if cached:return cached
     result={'status':'failed','final_url':source_url,'text':'','error':''}
@@ -72,6 +73,8 @@ def pdf_details(t, is_industry):
             'valuation':valuation,'earnings_changes':earnings,'preferred_stocks':preferred}
 
 def bootstrap_messages(days=130):
+    import requests
+    from bs4 import BeautifulSoup
     DATA_DIR.mkdir(parents=True,exist_ok=True)
     session=requests.Session();session.headers.update(UA)
     cutoff=datetime.now(timezone.utc)-timedelta(days=days); before=None; by_id={}
@@ -96,6 +99,8 @@ def bootstrap_messages(days=130):
     return out
 
 def refresh_messages(messages):
+    import requests
+    from bs4 import BeautifulSoup
     session=requests.Session();session.headers.update(UA)
     by_id={int(x['id']):x for x in messages}; after=max(by_id,default=0)
     while after:
@@ -114,12 +119,21 @@ def refresh_messages(messages):
     MSG_FILE.write_text(json.dumps(out,ensure_ascii=False,indent=2),encoding='utf-8')
     return out
 
+REPORT_LINK_HINTS=('buly.kr','bit.ly','daolfn','daolsecurities')
+
+def has_report_link(m):
+    return any(any(h in (u or '') for h in REPORT_LINK_HINTS) for u in m.get('links',[]))
+
 def is_report(m):
     t=m['text']
+    is_daily=bool(re.search(r'데일리\s*(NEWS|뉴스)|Daily Morning Brief',t[:180],re.I))
+    if is_daily:return False
     has_report_original=bool(re.search(r'보고서\s*원문',t,re.I))
     has_compliance=bool(re.search(r'컴플라이언스|Compliance(?:\s*Notice)?',t,re.I))
-    is_daily=bool(re.search(r'데일리\s*(NEWS|뉴스)|Daily Morning Brief',t[:180],re.I))
-    return has_report_original and has_compliance and not is_daily
+    if has_report_original and has_compliance:return True
+    # 주간 시황(위클리/주시뉴스)은 컴플라이언스 문구 없이 < ☞ bit.ly/DOS... > 리포트 링크만 붙는다.
+    is_weekly=bool(re.search(r'주시\s*뉴스|Weekly',t,re.I))
+    return is_weekly and has_report_link(m)
 
 def analyst_sector(t):
     head=t[:350]
@@ -233,11 +247,11 @@ def source_link(m):
     preferred=[u for u in m.get('links',[]) if any(x in u for x in ['buly.kr','bit.ly','daolfn','daolsecurities'])]
     return preferred[-1] if preferred else m['post_url']
 
-def analyze(messages, pdf_since='2026-06'):
+def analyze(messages, pdf_since='2025-05'):
     cache=json.loads(PDF_CACHE.read_text(encoding='utf-8')) if PDF_CACHE.exists() else {}
     cache_changed=False
     reports=[]
-    pdf_started=time.monotonic();pdf_budget_seconds=300
+    pdf_started=time.monotonic();pdf_budget_seconds=900
     for m in sorted((x for x in messages if is_report(x)),key=lambda x:x['date'],reverse=True):
         t=m['text']; analyst,sector=analyst_sector(t); company,code=company_name(t); dt=datetime.fromisoformat(m['date'])
         month=dt.strftime('%Y-%m');is_industry=company in ('산업/기타',sector) or bool(re.search(r'\((?:Overweight|Neutral|Underweight)\)',t[:300],re.I))
@@ -292,7 +306,7 @@ function render(){const q=$('#q').value.toLowerCase(),mo=$('#month').value,an=$(
     OUT.write_text(template.replace('__PAYLOAD__',payload),encoding='utf-8')
 
 def main():
-    ap=argparse.ArgumentParser();ap.add_argument('--refresh',action='store_true');ap.add_argument('--backfill-days',type=int,default=0);ap.add_argument('--pdf-since',default='2026-06');args=ap.parse_args()
+    ap=argparse.ArgumentParser();ap.add_argument('--refresh',action='store_true');ap.add_argument('--backfill-days',type=int,default=0);ap.add_argument('--pdf-since',default='2025-05');args=ap.parse_args()
     messages=bootstrap_messages(args.backfill_days) if args.backfill_days else (json.loads(MSG_FILE.read_text(encoding='utf-8')) if MSG_FILE.exists() else bootstrap_messages())
     if args.refresh:messages=refresh_messages(messages)
     reports=analyze(messages,args.pdf_since);months=monthly_summary(reports)
