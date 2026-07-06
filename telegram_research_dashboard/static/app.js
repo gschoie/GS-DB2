@@ -53,7 +53,6 @@ async function load(){
  const [sum,reports,news,companies,reportCompanies,weeklyReports]=await Promise.all([json('/api/summary'),json('/api/reports?'+reportQs),json('/api/news?'+newsQs),json('/api/companies'),json('/api/report-companies'),json('/api/reports?type=위클리')]);
  state.reports=reports;state.news=news;state.companies=companies;state.reportCompanies=reportCompanies;
  $('#press-start').value=state.pressStart;$('#press-end').value=state.pressEnd;
- $('#stat-reports').textContent=sum.reports;$('#stat-news').textContent=sum.news;$('#stat-upgrades').textContent=sum.upgrades;$('#stat-reviews').textContent=sum.reviews;
  $('#updated-at').textContent=sum.updated_at?new Intl.DateTimeFormat('ko-KR',{year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit'}).format(new Date(sum.updated_at)):'미확인';
  $('#weekly-all-count').textContent=`${weeklyReports.length}건`;$('#weekly-daol-count').textContent=`${weeklyReports.filter(r=>r.weekly_folder==='다올선박').length}건`;$('#weekly-kis-count').textContent=`${weeklyReports.filter(r=>r.weekly_folder==='한투시절').length}건`;$('#weekly-hi-count').textContent=`${weeklyReports.filter(r=>r.weekly_folder==='하이투자증권시절').length}건`;
  $('#latest-reports').innerHTML=reports.slice(0,5).map(reportRow).join('')||'<p class="empty">수집된 보고서가 없습니다.</p>';
@@ -65,7 +64,7 @@ async function load(){
  if($('#union-top'))$('#union-top').innerHTML=unionTop.slice(0,6).map(overviewUnion).join('')||'<p class="empty">노조게시판 데이터가 없습니다.</p>';
  const macro=window.__DASHBOARD_DATA__?.macro||{};
  if($('#macro-global'))$('#macro-global').innerHTML=(macro.global_economy||[]).slice(0,5).map(overviewMacro).join('')||'<p class="empty">매크로 데이터가 없습니다.</p>';
- const brief=$('#daily-brief');if(brief){if(macro.daily_brief){brief.hidden=false;brief.innerHTML=`<div class="brief-head"><small>GEMINI · 오늘의 핵심요약</small></div><div class="brief-body">${esc(macro.daily_brief).replace(/\n/g,'<br>')}</div>`}else brief.hidden=true}
+ const brief=$('#daily-brief');if(brief){const gm='https://gemini.google.com/app/dc1cee4fd9194007?usp=sharing';const body=macro.daily_brief?esc(macro.daily_brief).replace(/\n/g,'<br>'):'<span class="brief-empty">아직 핵심요약이 없습니다. GMN.글로벌방산 문서에 붙여넣으면 여기 표시됩니다.</span>';brief.innerHTML=`<div class="brief-head"><small>GEMINI · 오늘의 핵심요약</small><a href="${gm}" target="_blank" rel="noopener">Gemini 열기 →</a></div><div class="brief-body">${body}</div>`}
  const archive=news.reduce((all,n)=>{const d=new Date(n.posted_at),y=String(d.getFullYear()),m=`${String(d.getMonth()+1).padStart(2,'0')}월`;all[y]??={};all[y][m]??=[];all[y][m].push(n);return all},{});
  const years=Object.entries(archive).sort(([a],[b])=>b.localeCompare(a));
  $('#news-list').innerHTML=years.map(([year,months],yi)=>{const count=Object.values(months).reduce((sum,list)=>sum+list.length,0);return `<details class="year-group" ${yi===0?'open':''}><summary><span>${year}년</span><em>${count.toLocaleString()}건</em></summary><div class="year-content">${Object.entries(months).sort(([a],[b])=>b.localeCompare(a)).map(([month,list],mi)=>`<details class="month-group" ${yi===0&&mi===0?'open':''}><summary class="month-divider"><h3>${month}</h3><span>${list.length}건</span></summary>${newsTable(list)}</details>`).join('')}</div></details>`}).join('')||'<p class="empty">조건에 맞는 뉴스가 없습니다.</p>';
