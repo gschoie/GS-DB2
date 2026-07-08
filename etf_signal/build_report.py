@@ -37,6 +37,15 @@ def num(v):
     cls = "pos" if v > 0 else ("neg" if v < 0 else "mut")
     return f'<span class="{cls}">{sign}{abs(v):,}</span>'
 
+def name_link(s):
+    """ETF 이름을 네이버 금융 해당 종목 차트로 연결한다."""
+    name = esc(s["name"])
+    code = str(s.get("code") or "")
+    if not code:
+        return name
+    return (f'<a class="etf-link" href="https://finance.naver.com/item/fchart.naver?code={esc(code)}"'
+            f' target="_blank" rel="noopener">{name}</a>')
+
 def build(payload):
     sig = payload["signals"]
     scanned = len(sig)
@@ -52,7 +61,7 @@ def build(payload):
             rs = " · ".join(reasons(s)) or "신호 발생"
             alert_cards += f'''
       <article class="alert-card">
-        <div class="ac-head"><b>{esc(s["name"])}</b><small>{esc(s["group"])} · {s["close"]:,}원</small></div>
+        <div class="ac-head"><b>{name_link(s)}</b><small>{esc(s["group"])} · {s["close"]:,}원</small></div>
         <p>{esc(rs)}</p>
         <div class="ac-meta">ADX {s["adx"]} · %K {s["k"]}/{s["d"]} · {flow_badge(s["flow"])}</div>
       </article>'''
@@ -72,7 +81,7 @@ def build(payload):
         cls = "hl" if s["alert"] else ("dim" if not s["liquid"] else "")
         trs += f'''
       <tr class="{cls}">
-        <td class="etf"><b>{esc(s["name"])}</b><small>{esc(s["group"])}</small></td>
+        <td class="etf"><b>{name_link(s)}</b><small>{esc(s["group"])}</small></td>
         <td class="r">{s["close"]:,}</td>
         <td class="c">{s["adx"]}<small class="di">{s["pdi"]}/{s["ndi"]}</small></td>
         <td class="c">{trend_badge(s)}</td>
@@ -125,6 +134,8 @@ td.c{{text-align:center}}td.r{{text-align:right;font-family:Georgia}}
 tbody tr:hover{{background:#fafbf8}}tbody tr.hl{{background:#fbfdf4}}
 tbody tr.hl:hover{{background:#f6faea}}tbody tr.dim td{{color:#98a09a}}
 .etf b{{font-size:13px;display:block}}.etf small{{color:var(--muted);font-size:10px}}
+.etf-link{{color:inherit;text-decoration:none;border-bottom:1px solid transparent}}
+.etf-link:hover{{color:#286342;border-bottom-color:#286342}}
 .di{{display:block;color:#9aa19d;font-size:10px;font-family:Georgia}}
 .badge{{display:inline-block;border-radius:11px;padding:3px 9px;font-size:10px;font-weight:700;white-space:nowrap}}
 .b-buy{{background:#e3f3e7;color:#286342}}.b-warn{{background:#fff1cf;color:#765c19}}
