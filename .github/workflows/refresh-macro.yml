@@ -1,0 +1,71 @@
+name: 네이버 매크로 2시간 갱신
+
+# 오늘의 요약 상단 '네이버 글로벌경제 Top5'만 2시간마다 새로 긁어 재배포한다.
+# 뉴스/톤 파이프라인은 건드리지 않고, 캐시된 데이터로 사이트를 통째로 다시 빌드한다.
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 */2 * * *"   # 2시간마다(UTC 정각)
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: 이전 수집 데이터 복원(읽기 전용)
+        uses: actions/cache/restore@v4
+        with:
+          path: |
+            telegram_research_dashboard/data/dashboard.db
+            telegram_research_dashboard/data/daol_messages.json
+            telegram_research_dashboard/data/daol_tone_history.json
+            telegram_research_dashboard/data/daol_pdf_text_cache.json
+            telegram_research_dashboard/data/hhiun_snapshot.json
+            telegram_research_dashboard/data/macro.json
+          key: dashboard-db-${{ github.run_id }}
+          restore-keys: |
+            dashboard-db-
+
+      - name: 매크로 데이터 수집 (네이버 글로벌경제 Top5)
+        working-directory: telegram_research_dashboard
+        run: python fetch_macro.py
+
+      - name: 배포용 HTML 생성 (fresh, prebuilt 덮어쓰기 없음)
+        working-directory: telegram_research_dashboard
+        env:
+          DASHBOARD_OUTPUT: _site/index.html
+        run: python build_static.py
+
+      - name: 배포 안전망 검사
+        working-directory: telegram_research_dashboard
+        run: python verify_static_output.py _site/index.html
+
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: telegram_research_dashboard/_site
+
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: GitHub Pages 배포
+        id: deployment
+        uses: actions/deploy-pages@v4
