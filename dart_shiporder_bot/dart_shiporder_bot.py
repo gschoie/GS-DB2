@@ -112,18 +112,21 @@ def parse_disclosure(rcp: str) -> dict:
 
 
 def build_message(d: dict, comment: str = "") -> str:
+    # caption은 parse_mode=HTML로 전송하므로 동적 텍스트는 이스케이프한다.
+    esc = htmllib.escape
     price = d["amount"] / d["ships"] / d["fx"] / 1_000_000  # 척당, 백만달러
     delivery = f"{d['end_year']}년 {d['end_month']}월 납기"
     lines = [
-        f"🔧 {d['company']}, {d['ship_type']} {d['ships']}척 수주",
+        f"<b>「{esc(d['company'])}, {esc(d['ship_type'])} {d['ships']}척 수주」</b>",
         f"💲 {delivery}, 신조선가 {price:.1f}백만달러",
-        f"☞ {d['main']}",
+        f"☞ {esc(d['main'])}",
         "",
         SIGNATURE,
     ]
     comment = (comment or "").strip()
     if comment:
-        lines += ["", comment if comment.startswith("❗") else f"❗ {comment}"]
+        comment = comment if comment.startswith("❗") else f"❗ {comment}"
+        lines += ["", esc(comment)]
     return "\n".join(lines)
 
 
@@ -198,7 +201,8 @@ def _multipart(fields: dict, file_field: str, file_path: Path) -> tuple[bytes, s
 def send_photo(image: Path, caption: str) -> None:
     token = os.environ["TELEGRAM_BOT_TOKEN"]
     chat_id = os.environ["TELEGRAM_CHAT_ID"]
-    body, content_type = _multipart({"chat_id": chat_id, "caption": caption}, "photo", image)
+    body, content_type = _multipart(
+        {"chat_id": chat_id, "caption": caption, "parse_mode": "HTML"}, "photo", image)
     request = urllib.request.Request(
         f"https://api.telegram.org/bot{token}/sendPhoto",
         data=body, headers={"Content-Type": content_type},
