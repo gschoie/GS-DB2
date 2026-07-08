@@ -24,17 +24,16 @@ jobs:
         with:
           python-version: "3.12"
 
-      - name: 이전 수집 데이터 복원
+      # PDF 파싱 캐시만 복원한다. dashboard.db·daol_messages·tone은 커밋된 정상본을 그대로 쓴다
+      # (캐시의 빈 DB로 덮어써서 리포트가 8건으로 떨어지는 문제 방지).
+      - name: PDF 파싱 캐시 복원
         uses: actions/cache@v4
         with:
           path: |
-            telegram_research_dashboard/data/dashboard.db
-            telegram_research_dashboard/data/daol_messages.json
-            telegram_research_dashboard/data/daol_tone_history.json
             telegram_research_dashboard/data/daol_pdf_text_cache.json
-            telegram_research_dashboard/data/hhiun_snapshot.json
-          key: dashboard-db-${{ github.run_id }}
+          key: daol-pdf-cache-${{ github.run_id }}
           restore-keys: |
+            daol-pdf-cache-
             dashboard-db-
 
       - name: Python 패키지 준비
