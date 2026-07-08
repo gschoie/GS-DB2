@@ -42,21 +42,6 @@ jobs:
           restore-keys: |
             dashboard-db-
 
-      - name: 이전 수집 데이터 복원 (push · 읽기 전용)
-        if: github.event_name == 'push'
-        uses: actions/cache/restore@v4
-        with:
-          path: |
-            telegram_research_dashboard/data/dashboard.db
-            telegram_research_dashboard/data/daol_messages.json
-            telegram_research_dashboard/data/daol_tone_history.json
-            telegram_research_dashboard/data/daol_pdf_text_cache.json
-            telegram_research_dashboard/data/hhiun_snapshot.json
-            telegram_research_dashboard/data/macro.json
-          key: dashboard-db-push-${{ github.run_id }}
-          restore-keys: |
-            dashboard-db-
-
       - name: 파이프라인 계약 테스트
         working-directory: telegram_research_dashboard
         run: python -m unittest discover -s tests -p "test_*.py" -v
@@ -113,9 +98,10 @@ jobs:
           python build_hhiun_report.py
           python build_static.py
 
-      - name: 배포용 HTML 생성 (push · 캐시 최신 데이터로 재빌드)
-        # push에서도 얼어붙은 prebuilt 대신, 매일 스케줄이 채운 캐시(dashboard.db·톤·매크로)로
+      - name: 배포용 HTML 생성 (push · 커밋된 데이터로 재빌드)
+        # push에서도 얼어붙은 prebuilt 대신, 리포지토리에 커밋된 최신 데이터(dashboard.db·톤)로
         # 다시 빌드한다. 텔레그램 수집 등 무거운 단계는 건너뛰고 build_static만 돌린다(표준 라이브러리).
+        # → static/app.js 등 코드 변경도 prebuilt 재생성 없이 바로 반영된다.
         if: github.event_name == 'push'
         working-directory: telegram_research_dashboard
         env:
