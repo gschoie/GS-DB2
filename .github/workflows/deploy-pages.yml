@@ -106,6 +106,9 @@ jobs:
           if [ -f static/hhiun_board_report.html ]; then
             cp static/hhiun_board_report.html _site/hhiun_board_report.html
           fi
+          if [ -f static/etf_signal_report.html ]; then
+            cp static/etf_signal_report.html _site/etf_signal_report.html
+          fi
 
       - name: 배포 안전망 검사
         working-directory: telegram_research_dashboard
