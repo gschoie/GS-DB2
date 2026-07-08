@@ -1,0 +1,46 @@
+name: DART ShipOrder Bot
+
+# 조선 수주공시(단일판매·공급계약체결) URL을 넣고 Run 하면
+# 공시 화면을 캡처(형광펜)하고 선종/척수/납기/신조선가를 계산해 텔레그램에 보낸다.
+on:
+  workflow_dispatch:
+    inputs:
+      dart_url:
+        description: "DART 수주공시 URL 또는 rcpNo (예: https://dart.fss.or.kr/dsaf001/main.do?rcpNo=20260708800164)"
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: dart-shiporder-bot
+  cancel-in-progress: false
+
+jobs:
+  run-bot:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install dependencies
+        working-directory: dart_shiporder_bot
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          python -m playwright install --with-deps chromium
+
+      - name: Run DART ship-order bot
+        working-directory: dart_shiporder_bot
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: python dart_shiporder_bot.py --url "${{ inputs.dart_url }}"
