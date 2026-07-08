@@ -99,15 +99,21 @@ function renderTaskList(desired){fillTaskItems(desired);const st=taskLoad()[task
  $('#task-date').textContent=new Intl.DateTimeFormat('ko-KR',{year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date());renderTaskSummary()}
 function taskUpdate(name,field,value){const s=taskLoad(),it=taskCurrentItem();(s[it]=s[it]||{})[name]=s[it][name]||{};s[it][name][field]=value;taskSave(s);renderTaskSummary()}
 function view(id){$$('.view,.nav').forEach(x=>x.classList.remove('active'));$('#'+id).classList.add('active');$(`.nav[data-view="${id}"]`).classList.add('active');$('#page-title').textContent={overview:'오늘의 리서치 흐름',reports:'발간 보고서',news:'뉴스 아카이브',press:'보도기사 취합','union-board':'현중 노조게시판',tone:'DAOL 리서치 톤',tasklist:'수명 피드백 확인',dart:'조선 수주공시 → 텔레'}[id];if(id==='overview')fetchLiveMacro();if(id==='tone')loadTone(true);if(id==='union-board')loadUnionBoard();if(id==='tasklist'){renderTaskList();taskPull().then(ok=>{if(ok)renderTaskList()})}}
-const DART_ENDPOINT='https://script.google.com/macros/s/AKfycbzybp0b1W0wr9n2bfQsF1xblsaLdlu9oRtfH7xkbQrRYLaRpCwemhFRVLbk3rGnIO4zdQ/exec';
+const DISPATCH_ENDPOINT='https://script.google.com/macros/s/AKfycbzybp0b1W0wr9n2bfQsF1xblsaLdlu9oRtfH7xkbQrRYLaRpCwemhFRVLbk3rGnIO4zdQ/exec';
+async function dispatchWorkflow(payload,status,btn){
+ if(status)status.textContent='요청 중…';if(btn)btn.disabled=true;
+ try{await fetch(DISPATCH_ENDPOINT,{method:'POST',body:JSON.stringify(payload)});return true;}
+ catch(e){if(status)status.textContent='실패: '+e.message;return false;}
+ finally{if(btn)btn.disabled=false}}
 async function dispatchDart(){
  const url=($('#dart-url')?.value||'').trim(),comment=($('#dart-comment')?.value||'').trim(),status=$('#dart-status'),btn=$('#dart-send');
  if(!/dart\.fss\.or\.kr|rcpNo=|^\d{10,}$/.test(url)){status.textContent='⚠ DART 공시 링크를 넣어주세요';return}
- btn.disabled=true;status.textContent='전송 중…';
- try{await fetch(DART_ENDPOINT,{method:'POST',body:JSON.stringify({dart_url:url,comment})});
-   status.textContent='✅ 요청됨 — 1~2분 뒤 텔레그램 확인';$('#dart-url').value='';$('#dart-comment').value='';}
- catch(e){status.textContent='실패: '+e.message}
- finally{btn.disabled=false}}
+ if(await dispatchWorkflow({workflow:'dart',dart_url:url,comment},status,btn)){
+   status.textContent='✅ 요청됨 — 1~2분 뒤 텔레그램 확인';$('#dart-url').value='';$('#dart-comment').value='';}}
+async function dispatchTone(){
+ const btn=$('#tone-server-refresh'),status=$('#tone-status');
+ if(await dispatchWorkflow({workflow:'tone'},status,btn))
+   status.textContent='✅ 톤 갱신 요청됨 — 몇 분 뒤 새로고침';}
 $$('.nav').forEach(b=>b.onclick=()=>view(b.dataset.view));$$('[data-go]').forEach(b=>b.onclick=()=>view(b.dataset.go));
 let timer;$('#search').oninput=e=>{clearTimeout(timer);timer=setTimeout(()=>{state.q=e.target.value;load()},250)};
 $('#report-company').onchange=e=>{state.reportCompany=e.target.value;load()};
@@ -118,6 +124,7 @@ $('#union-board-refresh').onclick=loadUnionBoard;
 $('#union-board-file').onchange=e=>{const file=e.target.files?.[0];if(!file)return;const frame=$('#union-board-frame');if(frame.dataset.objectUrl)URL.revokeObjectURL(frame.dataset.objectUrl);const url=URL.createObjectURL(file);frame.dataset.objectUrl=url;frame.src=url;$('#union-board-status').textContent=`${file.name} · ${(file.size/1024).toFixed(1)}KB`};
 $('#tone-refresh').onclick=()=>loadTone(true);
 $('#dart-send')?.addEventListener('click',dispatchDart);
+$('#tone-server-refresh')?.addEventListener('click',dispatchTone);
 $('#tone-search').oninput=e=>{state.toneQ=e.target.value;renderTone()};
 $('#tone-month').onchange=e=>{state.toneMonth=e.target.value;renderTone()};
 $('#tone-analyst').onchange=e=>{state.toneAnalyst=e.target.value;renderTone()};
