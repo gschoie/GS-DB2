@@ -44,7 +44,7 @@
           <a href="https://gemini.google.com/gem/7a05ed301b3e?usp=sharing" target="_blank" rel="noopener">📋 한국기사.요약-텔레</a>
           <a href="https://gemini.google.com/gem/33cb689860fb" target="_blank" rel="noopener">🎬 방산.너튜브 요약</a>
           <a href="https://gemini.google.com/gem/6de4c11680fc" target="_blank" rel="noopener">🔰 해외방산뉴스.요약-텔레</a>
-          <a href="https://github.com/gschoie/GS-output-dashboard/actions/workflows/dart-shiporder-bot.yml" target="_blank" rel="noopener">🚢 조선.수주공시-텔레</a>
+          <button class="nav" data-view="dart">🚢 조선.수주공시-텔레</button>
           <div class="nav-sep"></div>
           <a href="https://gemini.google.com/gem/7567970d123e?usp=sharing" target="_blank" rel="noopener">🚢 TW번역</a>
           <a href="https://gemini.google.com/gem/1GASJ9mrURAWeW65vYlPeDgpOuzlTmDOa?usp=sharing" target="_blank" rel="noopener">⏩ 더.축약</a>
@@ -171,6 +171,20 @@
         <label class="task-import">불러오기<input id="task-import" type="file" accept=".json,application/json"></label>
       </div>
       <section class="panel"><div id="task-table"></div></section>
+    </section>
+
+    <section id="dart" class="view">
+      <div class="archive-intro"><div><p class="eyebrow">DART · SHIP ORDER</p><h2>조선 수주공시 → 텔레그램</h2></div><p>DART 수주공시 링크를 붙여넣고 전송하면, 캡처·형광펜·신조선가 카드가 채널로 자동 발송됩니다. (외근·아이폰용)</p></div>
+      <div class="dart-form">
+        <label>DART 공시 링크
+          <input id="dart-url" type="url" inputmode="url" autocapitalize="off" autocomplete="off" placeholder="https://dart.fss.or.kr/dsaf001/main.do?rcpNo=...">
+        </label>
+        <label>내 코멘트 <small>(선택 — 카드 맨 아래 ❗로 붙음)</small>
+          <textarea id="dart-comment" rows="3" placeholder="예) 글로벌오퍼레이션 93백만달러면 아주 좋은 가격!"></textarea>
+        </label>
+        <button id="dart-send" type="button">🚀 전송</button>
+        <span id="dart-status" class="dart-status"></span>
+      </div>
     </section>
   </main>
   <script src="/app.js"></script>
