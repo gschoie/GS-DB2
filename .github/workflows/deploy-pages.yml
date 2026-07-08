@@ -37,7 +37,23 @@ jobs:
             telegram_research_dashboard/data/daol_tone_history.json
             telegram_research_dashboard/data/daol_pdf_text_cache.json
             telegram_research_dashboard/data/hhiun_snapshot.json
+            telegram_research_dashboard/data/macro.json
           key: dashboard-db-${{ github.run_id }}
+          restore-keys: |
+            dashboard-db-
+
+      - name: 이전 수집 데이터 복원 (push · 읽기 전용)
+        if: github.event_name == 'push'
+        uses: actions/cache/restore@v4
+        with:
+          path: |
+            telegram_research_dashboard/data/dashboard.db
+            telegram_research_dashboard/data/daol_messages.json
+            telegram_research_dashboard/data/daol_tone_history.json
+            telegram_research_dashboard/data/daol_pdf_text_cache.json
+            telegram_research_dashboard/data/hhiun_snapshot.json
+            telegram_research_dashboard/data/macro.json
+          key: dashboard-db-push-${{ github.run_id }}
           restore-keys: |
             dashboard-db-
 
@@ -97,30 +113,18 @@ jobs:
           python build_hhiun_report.py
           python build_static.py
 
-      - name: 검증된 완성본 준비
+      - name: 배포용 HTML 생성 (push · 캐시 최신 데이터로 재빌드)
+        # push에서도 얼어붙은 prebuilt 대신, 매일 스케줄이 채운 캐시(dashboard.db·톤·매크로)로
+        # 다시 빌드한다. 텔레그램 수집 등 무거운 단계는 건너뛰고 build_static만 돌린다(표준 라이브러리).
         if: github.event_name == 'push'
         working-directory: telegram_research_dashboard
-        run: |
-          mkdir -p _site
-          cp prebuilt/index.html _site/index.html
-          if [ -f static/hhiun_board_report.html ]; then
-            cp static/hhiun_board_report.html _site/hhiun_board_report.html
-          fi
-          if [ -f static/etf_signal_report.html ]; then
-            cp static/etf_signal_report.html _site/etf_signal_report.html
-          fi
-          if [ -f static/consensus_revision.html ]; then
-            cp static/consensus_revision.html _site/consensus_revision.html
-          fi
+        env:
+          DASHBOARD_OUTPUT: _site/index.html
+        run: python build_static.py
 
       - name: 배포 안전망 검사
         working-directory: telegram_research_dashboard
-        run: |
-          # push는 커밋된 완성본(prebuilt)을 쓰고, 스케줄·수동실행은 갓 빌드한 _site를 그대로 배포한다.
-          if [ "${{ github.event_name }}" = "push" ] && [ -f prebuilt/index.html ]; then
-            cp prebuilt/index.html _site/index.html
-          fi
-          python verify_static_output.py _site/index.html
+        run: python verify_static_output.py _site/index.html
 
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
