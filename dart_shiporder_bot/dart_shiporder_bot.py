@@ -135,6 +135,27 @@ HIGHLIGHT_JS = """
 }
 """
 
+# 공시 본문 표(계약금액·종료일이 모두 든 가장 작은 table)의 영역만 잘라낸다.
+CLIP_JS = """
+() => {
+  const keys = ['계약금액', '종료일'];
+  const tables = [...document.querySelectorAll('table')]
+    .filter(t => keys.every(k => (t.textContent || '').includes(k)));
+  if (!tables.length) return null;
+  tables.sort((a, b) => {
+    const ra = a.getBoundingClientRect(), rb = b.getBoundingClientRect();
+    return ra.width * ra.height - rb.width * rb.height;
+  });
+  const r = tables[0].getBoundingClientRect(), pad = 6;
+  return {
+    x: Math.max(0, r.left + window.scrollX - pad),
+    y: Math.max(0, r.top + window.scrollY - pad),
+    width: Math.ceil(r.width + pad * 2),
+    height: Math.ceil(r.height + pad * 2)
+  };
+}
+"""
+
 
 def capture(d: dict) -> Path:
     OUTPUT_DIR.mkdir(exist_ok=True)
@@ -150,7 +171,11 @@ def capture(d: dict) -> Path:
         ).new_page()
         page.goto(d["viewer"], wait_until="networkidle", timeout=60_000)
         page.evaluate(HIGHLIGHT_JS, targets)
-        page.screenshot(path=str(path), full_page=True)
+        rect = page.evaluate(CLIP_JS)
+        if rect and rect["width"] > 60 and rect["height"] > 40:
+            page.screenshot(path=str(path), clip=rect)  # 공시 표만 딱 캡처
+        else:
+            page.screenshot(path=str(path), full_page=True)
         browser.close()
     return path
 
