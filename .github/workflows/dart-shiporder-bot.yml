@@ -9,6 +9,11 @@ on:
         description: "DART 수주공시 URL 또는 rcpNo (예: https://dart.fss.or.kr/dsaf001/main.do?rcpNo=20260708800164)"
         required: true
         type: string
+      comment:
+        description: "내 코멘트 (선택 — 카드 맨 아래에 ❗로 붙습니다)"
+        required: false
+        type: string
+        default: ""
 
 permissions:
   contents: read
@@ -43,4 +48,5 @@ jobs:
         env:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          DART_COMMENT: ${{ inputs.comment }}
         run: python dart_shiporder_bot.py --url "${{ inputs.dart_url }}"

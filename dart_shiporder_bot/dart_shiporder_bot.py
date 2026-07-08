@@ -111,15 +111,20 @@ def parse_disclosure(rcp: str) -> dict:
     }
 
 
-def build_message(d: dict) -> str:
+def build_message(d: dict, comment: str = "") -> str:
     price = d["amount"] / d["ships"] / d["fx"] / 1_000_000  # 척당, 백만달러
     delivery = f"{d['end_year']}년 {d['end_month']}월 납기"
-    return (
-        f"🔧 {d['company']}, {d['ship_type']} {d['ships']}척 수주\n"
-        f"💲 {delivery}, 신조선가 {price:.1f}백만달러\n"
-        f"☞ {d['main']}\n\n"
-        f"{SIGNATURE}"
-    )
+    lines = [
+        f"🔧 {d['company']}, {d['ship_type']} {d['ships']}척 수주",
+        f"💲 {delivery}, 신조선가 {price:.1f}백만달러",
+        f"☞ {d['main']}",
+        "",
+        SIGNATURE,
+    ]
+    comment = (comment or "").strip()
+    if comment:
+        lines += ["", comment if comment.startswith("❗") else f"❗ {comment}"]
+    return "\n".join(lines)
 
 
 # ────────────────────────── 캡처(형광펜) ──────────────────────────
@@ -204,9 +209,9 @@ def send_photo(image: Path, caption: str) -> None:
         raise SystemExit(f"텔레그램 전송 실패: {result}")
 
 
-def run(url_or_rcp: str, dry: bool = False) -> None:
+def run(url_or_rcp: str, comment: str = "", dry: bool = False) -> None:
     d = parse_disclosure(rcp_no(url_or_rcp))
-    message = build_message(d)
+    message = build_message(d, comment)
     print(message, flush=True)
     image = capture(d)
     print(f"캡처: {image}", flush=True)
@@ -220,8 +225,9 @@ def run(url_or_rcp: str, dry: bool = False) -> None:
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="DART 조선 수주공시 → 텔레그램 카드")
     parser.add_argument("--url", default=os.getenv("DART_URL", ""), help="DART 공시 URL 또는 rcpNo")
+    parser.add_argument("--comment", default=os.getenv("DART_COMMENT", ""), help="카드 하단에 붙일 내 코멘트")
     parser.add_argument("--dry-run", action="store_true", help="텔레그램 전송 없이 메시지·캡처만")
     args = parser.parse_args()
     if not args.url:
         sys.exit("DART URL(--url 또는 env DART_URL)이 필요합니다.")
-    run(args.url, args.dry_run)
+    run(args.url, args.comment, args.dry_run)
