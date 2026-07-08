@@ -135,6 +135,21 @@ HIGHLIGHT_JS = """
 }
 """
 
+# 공시 표를 흰 여백 div로 감싸 캡처 시 약간의 여백이 생기게 한다.
+WRAP_JS = """
+() => {
+  const table = [...document.querySelectorAll('table')].find(t => (t.textContent || '').includes('계약금액'));
+  if (!table) return false;
+  const wrap = document.createElement('div');
+  wrap.id = '__cap_wrap';
+  wrap.style.cssText = 'display:inline-block;padding:14px;background:#ffffff';
+  table.parentNode.insertBefore(wrap, table);
+  wrap.appendChild(table);
+  return true;
+}
+"""
+
+
 def capture(d: dict) -> Path:
     OUTPUT_DIR.mkdir(exist_ok=True)
     path = OUTPUT_DIR / f"dart_{d['rcp']}.png"
@@ -149,9 +164,11 @@ def capture(d: dict) -> Path:
         ).new_page()
         page.goto(d["viewer"], wait_until="networkidle", timeout=60_000)
         page.evaluate(HIGHLIGHT_JS, targets)
-        table = page.locator("table").filter(has_text="계약금액").first  # 공시 폼 표 1개
+        target = ("#__cap_wrap" if page.evaluate(WRAP_JS)
+                  else "table")  # 여백 래퍼가 붙으면 그걸, 아니면 표를
+        table = page.locator(target).filter(has_text="계약금액").first if target == "table" else page.locator(target)
         try:
-            table.screenshot(path=str(path))  # 표 요소만 딱 캡처 (페이지 여백 없음)
+            table.screenshot(path=str(path))  # 표 + 약간의 흰 여백만 캡처
         except Exception:
             page.screenshot(path=str(path), full_page=True)
         browser.close()
