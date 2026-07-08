@@ -47,8 +47,9 @@ function overviewNews(n){return miniRow(`<small>${esc(fmtDate(n.posted_at))}</sm
 function overviewTone(r){const op=r.opinion&&!['명시 없음',''].includes(r.opinion)?`<span class="tag">${esc(r.opinion)}</span>`:'';const up=(r.tp_changes||[]).some(x=>x.direction==='상향')?'<span class="tag up">TP▲</span>':'';const label=r.company&&r.company!=='산업/기타'?r.company:(r.sector||'산업');return miniRow(`<small>${esc(String(r.date||'').slice(5))}</small>`,`<div class="mini-head"><b>${esc(label)}</b> <span class="mini-sub">${esc(r.analyst||'')}</span>${op}${up}</div><p>${esc(r.title||'')}</p>`,r.source_url||r.pdf_url||r.post_url)}
 function overviewUnion(p){return miniRow(`<b class="rk">${p.rank}</b>`,`<p class="mini-title">${esc(p.title)}</p><small>주목도 ${p.score} · 조회 ${Number(p.views).toLocaleString()} · 댓글 ${p.comments}</small>`,p.url)}
 function overviewMacro(x,i){return miniRow(`<b class="rk">${i+1}</b>`,`<p class="mini-title">${esc(x.title)}</p>`,x.url)}
-const MACRO_ENDPOINT='';/* 네이버 Top5 JSON을 주는 GAS 웹앱 URL. 비어 있으면 배포 데이터만 사용 */
-async function fetchLiveMacro(){if(!MACRO_ENDPOINT)return;try{const r=await fetch(MACRO_ENDPOINT,{cache:'no-store'});if(!r.ok)return;const d=await r.json();const items=d.global_economy||d.items||[];if(items.length&&$('#macro-global'))$('#macro-global').innerHTML=items.slice(0,5).map(overviewMacro).join('')}catch{}}
+const MACRO_ENDPOINT='https://script.google.com/macros/s/AKfycbxNClBzJoE35VSwcCNgMEJ_PvFCBphH87g4gq7xDiGXhO5x-fd-IMpNL6Ly0oURJzEN/exec';/* 네이버 Top5 실시간 JSON(GAS). 비면 배포 데이터만 사용 */
+const decodeEnt=s=>{const t=document.createElement('textarea');t.innerHTML=s||'';return t.value};
+async function fetchLiveMacro(){if(!MACRO_ENDPOINT)return;try{const r=await fetch(MACRO_ENDPOINT,{cache:'no-store'});if(!r.ok)return;const d=await r.json();const items=(d.global_economy||d.items||[]).map(x=>({title:decodeEnt(x.title),url:x.url}));if(items.length&&$('#macro-global'))$('#macro-global').innerHTML=items.slice(0,5).map(overviewMacro).join('')}catch{}}
 async function load(){
  const reportQs=new URLSearchParams({q:state.q,company:state.reportCompany,type:state.reportType,weekly:state.weeklyFolder});
  const newsQs=new URLSearchParams({q:state.q,company:state.newsCompany});
