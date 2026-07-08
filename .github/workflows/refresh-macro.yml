@@ -14,7 +14,8 @@ permissions:
 
 concurrency:
   group: pages
-  cancel-in-progress: true
+  # 전체 파이프라인(deploy-pages)이 돌고 있으면 취소하지 말고 대기한다.
+  cancel-in-progress: false
 
 jobs:
   build:
