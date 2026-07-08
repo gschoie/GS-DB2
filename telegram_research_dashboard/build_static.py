@@ -129,6 +129,9 @@ def build() -> Path:
     etf_report = ROOT / "static" / "etf_signal_report.html"
     if etf_report.exists():
         shutil.copy2(etf_report, OUTPUT.parent / "etf_signal_report.html")
+    consensus_report = ROOT / "static" / "consensus_revision.html"
+    if consensus_report.exists():
+        shutil.copy2(consensus_report, OUTPUT.parent / "consensus_revision.html")
     if tone_path.exists():
         (OUTPUT.parent / "daol_tone_history.json").write_text(
             json.dumps(tone, ensure_ascii=False, separators=(",", ":")), encoding="utf-8"

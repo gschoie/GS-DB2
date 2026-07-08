@@ -1,0 +1,4 @@
+# 실행 로그는 커밋하지 않음 (DB/universe.json은 누적을 위해 커밋함)
+data/run_*.log
+__pycache__/
+*.pyc

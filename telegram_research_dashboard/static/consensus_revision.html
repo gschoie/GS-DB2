@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>KOSPI200 컨센 리비전</title>
+<style>
+:root{--bg:#f6f7f9;--card:#fff;--ink:#1a1d21;--muted:#6b7280;--line:#e5e7eb;
+--up:#0ca30c;--down:#d03b3b;--accent:#185fa5}
+@media(prefers-color-scheme:dark){:root{--bg:#141516;--card:#1d1e1f;--ink:#f2f2f0;
+--muted:#9a9a92;--line:#2f3032}}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);
+font-family:-apple-system,"Segoe UI","Malgun Gothic",sans-serif;line-height:1.5;
+-webkit-font-smoothing:antialiased}
+.wrap{max-width:960px;margin:0 auto;padding:24px 18px 60px}
+h1{font-size:20px;font-weight:600;margin:0 0 2px}
+.sub{color:var(--muted);font-size:13px}
+.status{display:flex;flex-wrap:wrap;gap:8px 18px;align-items:center;
+background:var(--card);border:1px solid var(--line);border-radius:12px;
+padding:12px 16px;margin:14px 0 22px;font-size:13px}
+.status b{font-weight:600}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px;margin-bottom:26px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+.card .lab{font-size:12px;color:var(--muted);margin-bottom:8px}
+.card .nums{display:flex;gap:14px;align-items:baseline;font-size:22px;font-weight:600}
+.up{color:var(--up)}.down{color:var(--down)}
+.bar{display:flex;height:5px;border-radius:3px;overflow:hidden;margin:10px 0 5px;background:var(--line)}
+.bar i{display:block}.bar .iu{background:var(--up)}.bar .id{background:var(--down)}
+.tiny{font-size:11px;color:var(--muted)}
+h2{font-size:15px;font-weight:600;margin:26px 0 10px}
+table{width:100%;border-collapse:collapse;font-size:13px;background:var(--card);
+border:1px solid var(--line);border-radius:12px;overflow:hidden}
+th,td{padding:7px 12px;text-align:right;border-bottom:1px solid var(--line)}
+th:first-child,td:first-child{text-align:left}
+th{color:var(--muted);font-weight:500;font-size:12px;background:transparent}
+tr:last-child td{border-bottom:0}
+.pos{color:var(--up);font-weight:600}.neg{color:var(--down);font-weight:600}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media(max-width:640px){.grid2{grid-template-columns:1fr}}
+.note{background:var(--card);border:1px dashed var(--line);border-radius:12px;
+padding:14px 16px;color:var(--muted);font-size:13px;margin:8px 0 24px}
+.mvrow{display:grid;grid-template-columns:130px 1fr 62px;align-items:center;gap:8px;
+font-size:12.5px;margin:3px 0}
+.mvbar{height:16px;border-radius:3px}
+</style></head><body><div class="wrap">
+<h1>KOSPI200 영업이익 컨센 리비전</h1>
+<div class="sub" id="sub"></div>
+<div class="status" id="status"></div>
+<div id="body"></div>
+<div class="tiny" style="margin-top:30px">단위: 억원 · 출처: 네이버 금융 컨센서스 · 매주 금요일 갱신</div>
+</div>
+<script>
+var D={"snapshot_date": "2026-07-06", "base_date": null, "universe": 199, "covered": 181, "missing": 18, "has_revision": false, "horizons": [{"label": "이번분기", "period": "2026.06", "count": 179, "up": 0, "down": 0, "flat": 0, "top_up": [], "top_down": [], "level_top": [{"code": "005930", "name": "삼성전자", "curr": 850494.0, "base": null, "wow": null}, {"code": "000660", "name": "SK하이닉스", "curr": 648227.0, "base": null, "wow": null}, {"code": "402340", "name": "SK스퀘어", "curr": 99084.0, "base": null, "wow": null}, {"code": "005380", "name": "현대차", "curr": 31627.0, "base": null, "wow": null}, {"code": "000270", "name": "기아", "curr": 27876.0, "base": null, "wow": null}, {"code": "105560", "name": "KB금융", "curr": 25205.0, "base": null, "wow": null}, {"code": "034730", "name": "SK", "curr": 24552.0, "base": null, "wow": null}, {"code": "055550", "name": "신한지주", "curr": 22230.0, "base": null, "wow": null}, {"code": "267250", "name": "HD현대", "curr": 20915.0, "base": null, "wow": null}, {"code": "015760", "name": "한국전력", "curr": 19122.0, "base": null, "wow": null}]}, {"label": "2026E", "period": "2026.12", "count": 179, "up": 0, "down": 0, "flat": 0, "top_up": [], "top_down": [], "level_top": [{"code": "005930", "name": "삼성전자", "curr": 3742869.5, "base": null, "wow": null}, {"code": "000660", "name": "SK하이닉스", "curr": 2753991.7, "base": null, "wow": null}, {"code": "402340", "name": "SK스퀘어", "curr": 430391.9, "base": null, "wow": null}, {"code": "005380", "name": "현대차", "curr": 118832.8, "base": null, "wow": null}, {"code": "000270", "name": "기아", "curr": 101573.0, "base": null, "wow": null}, {"code": "034730", "name": "SK", "curr": 98678.4, "base": null, "wow": null}, {"code": "015760", "name": "한국전력", "curr": 97617.5, "base": null, "wow": null}, {"code": "105560", "name": "KB금융", "curr": 92326.8, "base": null, "wow": null}, {"code": "267250", "name": "HD현대", "curr": 90457.4, "base": null, "wow": null}, {"code": "055550", "name": "신한지주", "curr": 76847.1, "base": null, "wow": null}]}, {"label": "2027E", "period": "2027.12", "count": 178, "up": 0, "down": 0, "flat": 0, "top_up": [], "top_down": [], "level_top": [{"code": "005930", "name": "삼성전자", "curr": 5264743.6, "base": null, "wow": null}, {"code": "000660", "name": "SK하이닉스", "curr": 4062358.0, "base": null, "wow": null}, {"code": "402340", "name": "SK스퀘어", "curr": 541747.7, "base": null, "wow": null}, {"code": "015760", "name": "한국전력", "curr": 134651.3, "base": null, "wow": null}, {"code": "005380", "name": "현대차", "curr": 133309.8, "base": null, "wow": null}, {"code": "034730", "name": "SK", "curr": 115192.0, "base": null, "wow": null}, {"code": "000270", "name": "기아", "curr": 112196.6, "base": null, "wow": null}, {"code": "267250", "name": "HD현대", "curr": 99220.4, "base": null, "wow": null}, {"code": "105560", "name": "KB금융", "curr": 94131.9, "base": null, "wow": null}, {"code": "055550", "name": "신한지주", "curr": 81755.1, "base": null, "wow": null}]}]};
+function fmt(n){return n==null?'-':Math.round(n).toLocaleString('ko-KR')}
+function pct(w){if(w==null)return'<span class="tiny">신규</span>';
+ var c=w>0?'pos':(w<0?'neg':'');var s=(w>0?'+':'')+w.toFixed(1)+'%';return'<span class="'+c+'">'+s+'</span>'}
+document.getElementById('sub').textContent =
+ D.has_revision ? (D.base_date+' → '+D.snapshot_date+' 전주 대비') : (D.snapshot_date+' 기준 · 첫 스냅샷');
+document.getElementById('status').innerHTML =
+ '<span>📅 기준일 <b>'+D.snapshot_date+'</b></span>'+
+ '<span>🎯 유니버스 <b>'+D.universe+'</b>종목</span>'+
+ '<span>✅ 컨센 확보 <b>'+D.covered+'</b> · 없음 '+D.missing+'</span>'+
+ (D.has_revision?'':'<span>🔹 리비전은 다음 주부터</span>');
+
+var out='';
+if(!D.has_revision){
+ out+='<div class="note">첫 스냅샷이라 전주 대비 변동(▲▼)은 아직 없습니다. '+
+      '다음 주 금요일 두 번째 스냅샷부터 리비전이 표시됩니다. 아래는 현재 컨센 레벨(영업이익 상위)입니다.</div>';
+ D.horizons.forEach(function(h){
+   out+='<h2>'+h.label+' ('+h.period+') · 영업이익 컨센 상위</h2><table>'+
+        '<tr><th>종목</th><th>영업이익</th></tr>';
+   h.level_top.forEach(function(d){out+='<tr><td>'+d.name+'</td><td>'+fmt(d.curr)+'</td></tr>'});
+   out+='</table>';
+ });
+}else{
+ out+='<div class="cards">';
+ D.horizons.forEach(function(h){
+   var tot=h.up+h.down+h.flat||1;
+   out+='<div class="card"><div class="lab">'+h.label+' ('+h.period+')</div>'+
+     '<div class="nums"><span class="up">'+h.up+' ▲</span><span class="down">'+h.down+' ▼</span></div>'+
+     '<div class="bar"><i class="iu" style="width:'+(h.up/tot*100)+'%"></i>'+
+     '<i class="id" style="width:'+(h.down/tot*100)+'%"></i></div>'+
+     '<div class="tiny">보합 '+h.flat+' · 평가 '+(h.up+h.down+h.flat)+'종목</div></div>';
+ });
+ out+='</div>';
+ D.horizons.forEach(function(h){
+   out+='<h2>'+h.label+' ('+h.period+') · 전주 대비 영업이익 컨센 변동</h2><div class="grid2">';
+   [['▲ 상향 Top',h.top_up],['▼ 하향 Top',h.top_down]].forEach(function(g){
+     out+='<table><tr><th>'+g[0]+'</th><th>전주</th><th>현재</th><th>변동</th></tr>';
+     g[1].forEach(function(d){out+='<tr><td>'+d.name+'</td><td>'+fmt(d.base)+
+       '</td><td>'+fmt(d.curr)+'</td><td>'+pct(d.wow)+'</td></tr>'});
+     out+='</table>';
+   });
+   out+='</div>';
+ });
+}
+document.getElementById('body').innerHTML=out;
+</script></body></html>

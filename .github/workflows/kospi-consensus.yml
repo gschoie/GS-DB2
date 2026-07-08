@@ -1,0 +1,55 @@
+name: KOSPI200 컨센 트래킹
+
+# 매주 금요일 한국시간 17:00 (장마감 후): KOSPI200 영업이익 컨센 스냅샷 → 리비전 페이지 → 배포
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 8 * * 5"   # 08:00 UTC 금요일 = 한국 17:00
+
+permissions:
+  contents: write   # 갱신된 DB/HTML 커밋·푸시 → deploy-pages 트리거
+
+concurrency:
+  group: kospi-consensus
+  cancel-in-progress: false
+
+jobs:
+  snapshot:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: 패키지 설치
+        working-directory: kospi_consensus
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          python -m playwright install --with-deps chromium
+
+      - name: 주간 컨센 스냅샷 (KOSPI200)
+        working-directory: kospi_consensus
+        run: python run_snapshot.py --refresh-universe
+
+      - name: 리비전 페이지 생성 (대시보드 static)
+        working-directory: kospi_consensus
+        run: python build_static.py
+
+      - name: 커밋 및 푸시 (→ Pages 재배포)
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add kospi_consensus/data/consensus.db \
+                  kospi_consensus/data/universe.json \
+                  telegram_research_dashboard/static/consensus_revision.html
+          if git diff --cached --quiet; then
+            echo "변경 없음 — 커밋 생략"
+          else
+            git commit -m "chore(consensus): 주간 컨센 스냅샷 $(date -u +%Y-%m-%d)"
+            git push
+          fi
