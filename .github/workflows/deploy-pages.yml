@@ -110,7 +110,8 @@ jobs:
       - name: 배포 안전망 검사
         working-directory: telegram_research_dashboard
         run: |
-          if [ -f prebuilt/index.html ]; then
+          # push는 커밋된 완성본(prebuilt)을 쓰고, 스케줄·수동실행은 갓 빌드한 _site를 그대로 배포한다.
+          if [ "${{ github.event_name }}" = "push" ] && [ -f prebuilt/index.html ]; then
             cp prebuilt/index.html _site/index.html
           fi
           python verify_static_output.py _site/index.html
