@@ -44,19 +44,20 @@ jobs:
           ETF_REPORT_OUT: ../telegram_research_dashboard/static/etf_signal_report.html
         run: python build_report.py
 
-      - name: 텔레그램 알림 (새 신호 있을 때만 · ETF 전용 봇)
-        continue-on-error: true   # 알림 실패해도 리포트 커밋/배포는 진행
+      - name: 텔레그램 알림 (수동 🔄이면 신호 없어도 확인메시지 · ETF 전용 봇)
         working-directory: etf_signal
         env:
           TELEGRAM_BOT_TOKEN: ${{ secrets.ETF_TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.ETF_TELEGRAM_CHAT_ID }}
-        run: python etf_telegram.py
+        # 수동 실행(🔄 ETF 갱신)이면 --force 로 신호가 없어도 확인 메시지를 보낸다.
+        # 전송 결과는 telegram_status.json 에 남아 커밋되므로 원인 진단 가능.
+        run: python etf_telegram.py ${{ github.event_name == 'workflow_dispatch' && '--force' || '' }}
 
       - name: 신호판 커밋 및 푸시 (→ Pages 재배포)
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add telegram_research_dashboard/static/etf_signal_report.html etf_signal/signals.json
+          git add telegram_research_dashboard/static/etf_signal_report.html etf_signal/signals.json etf_signal/telegram_status.json
           if git diff --cached --quiet; then
             echo "변경 없음 — 커밋 생략"
           else
