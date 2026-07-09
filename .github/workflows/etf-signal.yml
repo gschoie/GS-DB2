@@ -44,11 +44,11 @@ jobs:
           ETF_REPORT_OUT: ../telegram_research_dashboard/static/etf_signal_report.html
         run: python build_report.py
 
-      - name: 텔레그램 알림 (수동 🔄이면 신호 없어도 확인메시지 · ETF 전용 봇)
+      - name: 텔레그램 알림 (수동 🔄이면 신호 없어도 확인메시지 · DART봇과 동일 채널)
         working-directory: etf_signal
         env:
-          TELEGRAM_BOT_TOKEN: ${{ secrets.ETF_TELEGRAM_BOT_TOKEN }}
-          TELEGRAM_CHAT_ID: ${{ secrets.ETF_TELEGRAM_CHAT_ID }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
         # 수동 실행(🔄 ETF 갱신)이면 --force 로 신호가 없어도 확인 메시지를 보낸다.
         # 전송 결과는 telegram_status.json 에 남아 커밋되므로 원인 진단 가능.
         run: python etf_telegram.py ${{ github.event_name == 'workflow_dispatch' && '--force' || '' }}
