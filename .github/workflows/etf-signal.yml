@@ -60,5 +60,6 @@ jobs:
             echo "변경 없음 — 커밋 생략"
           else
             git commit -m "chore(etf): 신호 갱신 $(date -u +%Y-%m-%d)"
-            git push
+            git pull --rebase origin main
+            git push origin HEAD:main
           fi
