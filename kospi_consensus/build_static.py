@@ -1,42 +1,45 @@
 # -*- coding: utf-8 -*-
-"""SQLite 스냅샷 → 자체 완결형 'consensus_revision.html' 생성.
+"""SQLite 스냅샷 → 'consensus_revision.html' + 'consensus_full.xlsx' 생성.
 
-기존 GS Research Desk 대시보드의 etf_signal_report.html 패턴을 따른다.
-출력: telegram_research_dashboard/static/consensus_revision.html
-      (메인 build_static.py가 Pages 루트로 복사)
+- 화면: (리비전 주) 어닝 변화 큰 순 상위 20 · (첫 주) 컨센 레벨 상위 20
+- 전체 종목 데이터는 엑셀 다운로드 버튼으로 제공
+출력: telegram_research_dashboard/static/{consensus_revision.html, consensus_full.xlsx}
 """
 import json
 import os
 import sys
 from collections import Counter
 
+import openpyxl
+from openpyxl.styles import Font, PatternFill
+
 import db
 
 sys.stdout.reconfigure(encoding="utf-8")
 
 BASE = os.path.dirname(os.path.abspath(__file__))
-OUTPUT = os.path.normpath(os.path.join(
-    BASE, "..", "telegram_research_dashboard", "static", "consensus_revision.html"))
+STATIC = os.path.normpath(os.path.join(BASE, "..", "telegram_research_dashboard", "static"))
+OUT_HTML = os.path.join(STATIC, "consensus_revision.html")
+OUT_XLSX = os.path.join(STATIC, "consensus_full.xlsx")
 
-# 표시 대상 호라이즌 (라벨, kind, period 결정 방식)
+# (라벨, kind, 고정 period, 내부 키) — 앞 3개는 화면 탭, 4개 모두 엑셀
 HORIZONS = [
-    ("이번분기", "quarter", None),   # period = 최신 스냅샷 최빈 분기
-    ("2026E", "annual", "2026.12"),
-    ("2027E", "annual", "2027.12"),
+    ("이번분기", "quarter", None, "q"),
+    ("2026E", "annual", "2026.12", "a26"),
+    ("2027E", "annual", "2027.12", "a27"),
+    ("2028E", "annual", "2028.12", "a28"),
 ]
+PAGE_KEYS = ["q", "a26", "a27"]
 
 
 def dominant_quarter(con, snap):
     rows = con.execute(
         "SELECT period FROM consensus_snapshots WHERE snapshot_date=? AND kind='quarter'",
         (snap,)).fetchall()
-    if not rows:
-        return None
-    return Counter(r[0] for r in rows).most_common(1)[0][0]
+    return Counter(r[0] for r in rows).most_common(1)[0][0] if rows else None
 
 
 def series(con, snap, base, kind, period):
-    """해당 호라이즌의 종목별 현재/전주 영업이익 + 변동률."""
     cur = {r["code"]: (r["name"], r["op_profit"]) for r in con.execute(
         "SELECT code,name,op_profit FROM consensus_snapshots "
         "WHERE snapshot_date=? AND kind=? AND period=? AND op_profit IS NOT NULL",
@@ -47,64 +50,122 @@ def series(con, snap, base, kind, period):
             "SELECT code,op_profit FROM consensus_snapshots "
             "WHERE snapshot_date=? AND kind=? AND period=? AND op_profit IS NOT NULL",
             (base, kind, period))}
-    out = []
+    out = {}
     for code, (name, curr) in cur.items():
         b = prev.get(code)
         wow = ((curr - b) / abs(b) * 100.0) if (b not in (None, 0)) else None
-        out.append({"code": code, "name": name, "curr": curr, "base": b, "wow": wow})
+        out[code] = {"code": code, "name": name, "curr": curr, "base": b, "wow": wow}
     return out
+
+
+def compact(d):
+    return {"code": d["code"], "name": d["name"], "curr": d["curr"],
+            "base": d["base"], "wow": d["wow"]}
 
 
 def build():
     con = db.connect()
     dates = db.snapshot_dates(con)
     if not dates:
-        print("스냅샷이 없습니다. 먼저 run_snapshot.py를 실행하세요.")
+        print("스냅샷이 없습니다. run_snapshot.py 먼저 실행.")
         return
     snap = dates[-1]
     base = dates[-2] if len(dates) >= 2 else None
+    qp = dominant_quarter(con, snap)
+
+    maps, periods = {}, {}
+    for label, kind, period, key in HORIZONS:
+        p = period or qp
+        periods[key] = p
+        maps[key] = series(con, snap, base, kind, p)
+
+    names = {}
+    for key in maps:
+        for code, d in maps[key].items():
+            names[code] = d["name"]
 
     uni = con.execute("SELECT COUNT(*) FROM universe WHERE snapshot_date=?", (snap,)).fetchone()[0]
-    covered = con.execute(
-        "SELECT COUNT(DISTINCT code) FROM consensus_snapshots "
-        "WHERE snapshot_date=? AND op_profit IS NOT NULL", (snap,)).fetchone()[0]
+    covered = len(names)
 
-    horizons = []
-    for label, kind, period in HORIZONS:
-        p = period or dominant_quarter(con, snap)
-        data = series(con, snap, base, kind, p)
+    # 전체 종목 행 (엑셀용)
+    stocks = []
+    for code in sorted(names):
+        row = {"code": code, "name": names[code]}
+        for key in ("q", "a26", "a27", "a28"):
+            d = maps[key].get(code)
+            row[key] = d["curr"] if d else None
+            row[key + "_b"] = d["base"] if d else None
+            row[key + "_w"] = d["wow"] if d else None
+        stocks.append(row)
+    write_excel(stocks, snap, base, periods)
+
+    # 화면용 호라이즌 (상위 20)
+    page_hz = []
+    labels = {k: l for l, _, _, k in HORIZONS}
+    for key in PAGE_KEYS:
+        data = list(maps[key].values())
         rated = [d for d in data if d["wow"] is not None]
         up = sum(1 for d in rated if d["wow"] > 0.05)
         down = sum(1 for d in rated if d["wow"] < -0.05)
         flat = len(rated) - up - down
-        rated.sort(key=lambda d: d["wow"], reverse=True)
-        # 리비전이 없으면(첫 주) 현재 레벨 상위로 대체 표시
-        level_top = sorted(data, key=lambda d: d["curr"], reverse=True)[:10]
-        horizons.append({
-            "label": label, "period": p, "count": len(data),
+        movers = sorted(rated, key=lambda d: abs(d["wow"]), reverse=True)[:20]
+        levels = sorted(data, key=lambda d: d["curr"], reverse=True)[:20]
+        page_hz.append({
+            "label": labels[key], "period": periods[key], "key": key,
             "up": up, "down": down, "flat": flat,
-            "top_up": rated[:8], "top_down": rated[-8:][::-1] if rated else [],
-            "level_top": level_top,
+            "movers": [compact(d) for d in movers],
+            "levels": [compact(d) for d in levels],
         })
 
     payload = {
         "snapshot_date": snap, "base_date": base,
         "universe": uni, "covered": covered, "missing": uni - covered,
-        "has_revision": base is not None,
-        "horizons": horizons,
+        "has_revision": base is not None, "horizons": page_hz,
     }
-    html = render(payload)
-    os.makedirs(os.path.dirname(OUTPUT), exist_ok=True)
-    with open(OUTPUT, "w", encoding="utf-8") as f:
-        f.write(html)
+    os.makedirs(STATIC, exist_ok=True)
+    with open(OUT_HTML, "w", encoding="utf-8") as f:
+        f.write(_TEMPLATE.replace("__DATA__", json.dumps(payload, ensure_ascii=False).replace("</", "<\\/")))
     con.close()
-    mode = "리비전" if base else "베이스라인(첫 주)"
-    print(f"생성 완료 [{mode}]: {OUTPUT}")
+    print(f"생성 완료 [{'리비전' if base else '베이스라인'}]: {OUT_HTML}\n            엑셀: {OUT_XLSX}")
 
 
-def render(p):
-    data_json = json.dumps(p, ensure_ascii=False).replace("</", "<\\/")
-    return _TEMPLATE.replace("__DATA__", data_json)
+def write_excel(stocks, snap, base, periods):
+    wb = openpyxl.Workbook()
+    ws = wb.active
+    ws.title = "컨센"
+    labels = [("q", "이번분기"), ("a26", "2026E"), ("a27", "2027E"), ("a28", "2028E")]
+    header = ["종목코드", "종목명"]
+    cols = []  # (row_key or callable)
+    for key, lab in labels:
+        per = periods.get(key, "")
+        header.append(f"{lab}({per}) 영업이익")
+        cols.append(("v", key))
+        if base:
+            header += [f"{lab} 전주", f"{lab} 변동%"]
+            cols += [("b", key), ("w", key)]
+    ws.append([f"KOSPI200 영업이익 컨센 · 기준일 {snap}" + (f" · 전주 {base}" if base else " · 첫 스냅샷")])
+    ws.append(header)
+    for st in stocks:
+        r = [st["code"], st["name"]]
+        for typ, key in cols:
+            if typ == "v":
+                r.append(st[key])
+            elif typ == "b":
+                r.append(st[key + "_b"])
+            else:
+                w = st[key + "_w"]
+                r.append(round(w, 1) if w is not None else None)
+        ws.append(r)
+    # 스타일
+    ws["A1"].font = Font(bold=True, size=12)
+    for c in ws[2]:
+        c.font = Font(bold=True)
+        c.fill = PatternFill("solid", fgColor="E8EEF5")
+    ws.freeze_panes = "A3"
+    widths = [10, 16] + [15] * (len(header) - 2)
+    for i, w in enumerate(widths, 1):
+        ws.column_dimensions[openpyxl.utils.get_column_letter(i)].width = w
+    wb.save(OUT_XLSX)
 
 
 _TEMPLATE = r"""<!doctype html>
@@ -117,91 +178,87 @@ _TEMPLATE = r"""<!doctype html>
 @media(prefers-color-scheme:dark){:root{--bg:#141516;--card:#1d1e1f;--ink:#f2f2f0;
 --muted:#9a9a92;--line:#2f3032}}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);
-font-family:-apple-system,"Segoe UI","Malgun Gothic",sans-serif;line-height:1.5;
--webkit-font-smoothing:antialiased}
-.wrap{max-width:960px;margin:0 auto;padding:24px 18px 60px}
-h1{font-size:20px;font-weight:600;margin:0 0 2px}
-.sub{color:var(--muted);font-size:13px}
-.status{display:flex;flex-wrap:wrap;gap:8px 18px;align-items:center;
-background:var(--card);border:1px solid var(--line);border-radius:12px;
-padding:12px 16px;margin:14px 0 22px;font-size:13px}
+font-family:-apple-system,"Segoe UI","Malgun Gothic",sans-serif;line-height:1.5}
+.wrap{max-width:820px;margin:0 auto;padding:24px 18px 60px}
+h1{font-size:20px;font-weight:600;margin:0 0 2px}.sub{color:var(--muted);font-size:13px}
+.status{display:flex;flex-wrap:wrap;gap:8px 16px;align-items:center;background:var(--card);
+border:1px solid var(--line);border-radius:12px;padding:12px 16px;margin:14px 0 16px;font-size:13px}
 .status b{font-weight:600}
-.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px;margin-bottom:26px}
-.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
-.card .lab{font-size:12px;color:var(--muted);margin-bottom:8px}
-.card .nums{display:flex;gap:14px;align-items:baseline;font-size:22px;font-weight:600}
+.dl{display:inline-flex;align-items:center;gap:6px;background:var(--accent);color:#fff;
+text-decoration:none;font-size:13px;font-weight:600;padding:9px 15px;border-radius:9px;margin-bottom:22px}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin-bottom:22px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:13px 15px}
+.card .lab{font-size:12px;color:var(--muted);margin-bottom:7px}
+.card .nums{display:flex;gap:14px;align-items:baseline;font-size:21px;font-weight:600}
 .up{color:var(--up)}.down{color:var(--down)}
-.bar{display:flex;height:5px;border-radius:3px;overflow:hidden;margin:10px 0 5px;background:var(--line)}
+.bar{display:flex;height:5px;border-radius:3px;overflow:hidden;margin:9px 0 4px;background:var(--line)}
 .bar i{display:block}.bar .iu{background:var(--up)}.bar .id{background:var(--down)}
 .tiny{font-size:11px;color:var(--muted)}
-h2{font-size:15px;font-weight:600;margin:26px 0 10px}
+.tabs{display:flex;gap:6px;margin:6px 0 12px}
+.tab{border:1px solid var(--line);background:var(--card);color:var(--ink);font-size:13px;
+padding:7px 14px;border-radius:8px;cursor:pointer}
+.tab.on{background:var(--accent);color:#fff;border-color:var(--accent);font-weight:600}
 table{width:100%;border-collapse:collapse;font-size:13px;background:var(--card);
 border:1px solid var(--line);border-radius:12px;overflow:hidden}
 th,td{padding:7px 12px;text-align:right;border-bottom:1px solid var(--line)}
-th:first-child,td:first-child{text-align:left}
-th{color:var(--muted);font-weight:500;font-size:12px;background:transparent}
-tr:last-child td{border-bottom:0}
+th:nth-child(2),td:nth-child(2){text-align:left}
+th:first-child,td:first-child{text-align:center;color:var(--muted);width:34px}
+th{color:var(--muted);font-weight:500;font-size:12px}tr:last-child td{border-bottom:0}
 .pos{color:var(--up);font-weight:600}.neg{color:var(--down);font-weight:600}
-.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-@media(max-width:640px){.grid2{grid-template-columns:1fr}}
 .note{background:var(--card);border:1px dashed var(--line);border-radius:12px;
-padding:14px 16px;color:var(--muted);font-size:13px;margin:8px 0 24px}
-.mvrow{display:grid;grid-template-columns:130px 1fr 62px;align-items:center;gap:8px;
-font-size:12.5px;margin:3px 0}
-.mvbar{height:16px;border-radius:3px}
+padding:14px 16px;color:var(--muted);font-size:13px;margin-bottom:18px}
 </style></head><body><div class="wrap">
 <h1>KOSPI200 영업이익 컨센 리비전</h1>
 <div class="sub" id="sub"></div>
 <div class="status" id="status"></div>
-<div id="body"></div>
-<div class="tiny" style="margin-top:30px">단위: 억원 · 출처: 네이버 금융 컨센서스 · 매주 금요일 갱신</div>
+<a class="dl" href="consensus_full.xlsx" download>📥 전체 종목 엑셀 다운로드</a>
+<div id="cards"></div>
+<div class="tabs" id="tabs"></div>
+<div id="tbl"></div>
+<div class="tiny" style="margin-top:26px">단위: 억원 · 출처: 네이버 금융 컨센서스 · 매주 금요일 갱신</div>
 </div>
 <script>
-var D=__DATA__;
+var D=__DATA__, sel=0;
 function fmt(n){return n==null?'-':Math.round(n).toLocaleString('ko-KR')}
 function pct(w){if(w==null)return'<span class="tiny">신규</span>';
- var c=w>0?'pos':(w<0?'neg':'');var s=(w>0?'+':'')+w.toFixed(1)+'%';return'<span class="'+c+'">'+s+'</span>'}
+ var c=w>0?'pos':(w<0?'neg':'');return'<span class="'+c+'">'+(w>0?'+':'')+w.toFixed(1)+'%</span>'}
 document.getElementById('sub').textContent =
- D.has_revision ? (D.base_date+' → '+D.snapshot_date+' 전주 대비') : (D.snapshot_date+' 기준 · 첫 스냅샷');
+ D.has_revision?(D.base_date+' → '+D.snapshot_date+' 전주 대비'):(D.snapshot_date+' 기준 · 첫 스냅샷');
 document.getElementById('status').innerHTML =
  '<span>📅 기준일 <b>'+D.snapshot_date+'</b></span>'+
- '<span>🎯 유니버스 <b>'+D.universe+'</b>종목</span>'+
- '<span>✅ 컨센 확보 <b>'+D.covered+'</b> · 없음 '+D.missing+'</span>'+
- (D.has_revision?'':'<span>🔹 리비전은 다음 주부터</span>');
+ '<span>🎯 유니버스 <b>'+D.universe+'</b></span>'+
+ '<span>✅ 컨센 확보 <b>'+D.covered+'</b> · 없음 '+D.missing+'</span>';
 
-var out='';
-if(!D.has_revision){
- out+='<div class="note">첫 스냅샷이라 전주 대비 변동(▲▼)은 아직 없습니다. '+
-      '다음 주 금요일 두 번째 스냅샷부터 리비전이 표시됩니다. 아래는 현재 컨센 레벨(영업이익 상위)입니다.</div>';
- D.horizons.forEach(function(h){
-   out+='<h2>'+h.label+' ('+h.period+') · 영업이익 컨센 상위</h2><table>'+
-        '<tr><th>종목</th><th>영업이익</th></tr>';
-   h.level_top.forEach(function(d){out+='<tr><td>'+d.name+'</td><td>'+fmt(d.curr)+'</td></tr>'});
-   out+='</table>';
- });
+if(D.has_revision){
+ var ch='<div class="cards">';
+ D.horizons.forEach(function(h){var t=h.up+h.down+h.flat||1;
+  ch+='<div class="card"><div class="lab">'+h.label+' ('+h.period+')</div>'+
+   '<div class="nums"><span class="up">'+h.up+' ▲</span><span class="down">'+h.down+' ▼</span></div>'+
+   '<div class="bar"><i class="iu" style="width:'+(h.up/t*100)+'%"></i>'+
+   '<i class="id" style="width:'+(h.down/t*100)+'%"></i></div>'+
+   '<div class="tiny">보합 '+h.flat+' · 평가 '+(h.up+h.down+h.flat)+'</div></div>';});
+ document.getElementById('cards').innerHTML=ch+'</div>';
 }else{
- out+='<div class="cards">';
- D.horizons.forEach(function(h){
-   var tot=h.up+h.down+h.flat||1;
-   out+='<div class="card"><div class="lab">'+h.label+' ('+h.period+')</div>'+
-     '<div class="nums"><span class="up">'+h.up+' ▲</span><span class="down">'+h.down+' ▼</span></div>'+
-     '<div class="bar"><i class="iu" style="width:'+(h.up/tot*100)+'%"></i>'+
-     '<i class="id" style="width:'+(h.down/tot*100)+'%"></i></div>'+
-     '<div class="tiny">보합 '+h.flat+' · 평가 '+(h.up+h.down+h.flat)+'종목</div></div>';
- });
- out+='</div>';
- D.horizons.forEach(function(h){
-   out+='<h2>'+h.label+' ('+h.period+') · 전주 대비 영업이익 컨센 변동</h2><div class="grid2">';
-   [['▲ 상향 Top',h.top_up],['▼ 하향 Top',h.top_down]].forEach(function(g){
-     out+='<table><tr><th>'+g[0]+'</th><th>전주</th><th>현재</th><th>변동</th></tr>';
-     g[1].forEach(function(d){out+='<tr><td>'+d.name+'</td><td>'+fmt(d.base)+
-       '</td><td>'+fmt(d.curr)+'</td><td>'+pct(d.wow)+'</td></tr>'});
-     out+='</table>';
-   });
-   out+='</div>';
- });
+ document.getElementById('cards').innerHTML='<div class="note">첫 스냅샷이라 전주 대비 변동(▲▼)은 '+
+  '다음 주 금요일 두 번째 스냅샷부터 표시됩니다. 아래는 현재 컨센 레벨 상위 20이며, 전체 종목은 엑셀에서 확인하세요.</div>';
 }
-document.getElementById('body').innerHTML=out;
+var tabs='';D.horizons.forEach(function(h,i){tabs+='<button class="tab'+(i===0?' on':'')+'" data-i="'+i+'">'+h.label+'</button>'});
+document.getElementById('tabs').innerHTML=tabs;
+document.querySelectorAll('.tab').forEach(function(b){b.onclick=function(){
+ sel=+b.dataset.i;document.querySelectorAll('.tab').forEach(function(x){x.classList.remove('on')});
+ b.classList.add('on');draw()}});
+function draw(){var h=D.horizons[sel],rows,head,out;
+ if(D.has_revision){rows=h.movers;
+  out='<table><tr><th>#</th><th>종목 · '+h.label+' 변화 큰 순</th><th>전주</th><th>현재</th><th>변동</th></tr>';
+  rows.forEach(function(d,i){out+='<tr><td>'+(i+1)+'</td><td>'+d.name+'</td><td>'+fmt(d.base)+
+   '</td><td>'+fmt(d.curr)+'</td><td>'+pct(d.wow)+'</td></tr>'});
+ }else{rows=h.levels;
+  out='<table><tr><th>#</th><th>종목 · '+h.label+' 컨센 상위</th><th>영업이익</th></tr>';
+  rows.forEach(function(d,i){out+='<tr><td>'+(i+1)+'</td><td>'+d.name+'</td><td>'+fmt(d.curr)+'</td></tr>'});
+ }
+ document.getElementById('tbl').innerHTML=out+'</table>';
+}
+draw();
 </script></body></html>"""
 
 

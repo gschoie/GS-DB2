@@ -1,5 +1,6 @@
 requests
 pandas
 lxml
+openpyxl
 playwright
 greenlet==3.1.1   # Python 3.13에서 3.5.x DLL 로드 실패 → 3.1.1 고정 필요
