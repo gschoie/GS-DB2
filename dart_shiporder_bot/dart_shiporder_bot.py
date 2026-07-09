@@ -83,13 +83,23 @@ def parse_disclosure(rcp: str) -> dict:
 
     company = grab(r"([가-힣A-Za-z0-9]+)\s*/\s*단일판매")
     amount = grab(r"계약금액\s*\(원\)\s*([\d,]+)", cast=lambda s: int(s.replace(",", "")))
-    fx = grab(r"매매기준환율\s*\(?@?\s*([\d,.]+)\s*/\s*\$", cast=lambda s: float(s.replace(",", "")))
+    # 환율 표기는 공시마다 다르다: "매매기준환율(@1,531.8/$)" / "USD 1 = 1,526.60원" 등
+    fx_str = None
+    for _p in (r"USD\s*1\s*=\s*([\d,.]+)\s*원",
+               r"1\s*USD\s*=?\s*([\d,.]+)\s*원",
+               r"매매기준환율\s*\(?@?\s*([\d,.]+)\s*/\s*\$",
+               r"환율[^0-9]{0,25}?([\d,]{2,}\.\d+)\s*원",
+               r"환율[^0-9]{0,25}?@?\s*([\d,.]+)\s*/\s*\$"):
+        _m = re.search(_p, text)
+        if _m:
+            fx_str = _m.group(1)
+            break
+    fx = float(fx_str.replace(",", "")) if fx_str else None
     end = re.search(r"종료일\s*(\d{4})-(\d{2})-(\d{2})", text)
-    ship = re.search(r"([가-힣A-Za-z]*선)\s*(\d+)\s*척", text)
+    ship = re.search(r"([가-힣A-Za-z0-9/·]*선)\s*(\d+)\s*척", text)  # P/C선·LNG선 등 슬래시 허용
     counterparty = grab(r"계약상대\s*(.+?)\s*회사와의")
     end_str = grab(r"종료일\s*(\d{4}-\d{2}-\d{2})")
     amount_str = grab(r"계약금액\s*\(원\)\s*([\d,]+)")
-    fx_str = grab(r"매매기준환율\s*\(?@?\s*([\d,.]+)\s*/\s*\$")
 
     missing = [k for k, v in {"회사명": company, "계약금액": amount, "환율": fx,
                               "종료일": end, "선종/척수": ship}.items() if not v]
