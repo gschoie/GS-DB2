@@ -72,8 +72,8 @@
       <details class="nav-group">
         <summary>📈 <span>투자</span></summary>
         <div class="nav-submenu">
-          <a href="etf_signal_report.html" target="_blank" rel="noopener">📡 ETF/섹터 신호 포착</a>
-          <a href="consensus_revision.html" target="_blank" rel="noopener">📊 코스피200.컨센.추적</a>
+          <button class="nav" data-view="etf">📡 ETF/섹터 신호 포착</button>
+          <button class="nav" data-view="consensus">📊 코스피200.컨센.추적</button>
         </div>
       </details>
       <details class="nav-group">
@@ -192,6 +192,16 @@
         <button id="dart-send" type="button">🚀 전송</button>
         <span id="dart-status" class="dart-status"></span>
       </div>
+    </section>
+
+    <section id="etf" class="view">
+      <div class="archive-intro"><div><p class="eyebrow">INVEST · SIGNAL</p><h2>ETF/섹터 신호 포착</h2></div><a class="panel-more" href="etf_signal_report.html" target="_blank" rel="noopener">새 창으로 ↗</a></div>
+      <iframe id="etf-frame" class="union-board-frame" title="ETF/섹터 신호 포착" loading="lazy"></iframe>
+    </section>
+
+    <section id="consensus" class="view">
+      <div class="archive-intro"><div><p class="eyebrow">INVEST · CONSENSUS</p><h2>코스피200 컨센서스 추적</h2></div><a class="panel-more" href="consensus_revision.html" target="_blank" rel="noopener">새 창으로 ↗</a></div>
+      <iframe id="consensus-frame" class="union-board-frame" title="코스피200 컨센서스 추적" loading="lazy"></iframe>
     </section>
   </main>
   <script src="/app.js"></script>
