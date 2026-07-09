@@ -44,11 +44,12 @@ jobs:
           ETF_REPORT_OUT: ../telegram_research_dashboard/static/etf_signal_report.html
         run: python build_report.py
 
-      - name: 텔레그램 알림 (새 신호 있을 때만)
+      - name: 텔레그램 알림 (새 신호 있을 때만 · ETF 전용 봇)
+        continue-on-error: true   # 알림 실패해도 리포트 커밋/배포는 진행
         working-directory: etf_signal
         env:
-          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
-          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.ETF_TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.ETF_TELEGRAM_CHAT_ID }}
         run: python etf_telegram.py
 
       - name: 신호판 커밋 및 푸시 (→ Pages 재배포)
