@@ -82,6 +82,8 @@ def parse_disclosure(rcp: str) -> dict:
         return cast(m.group(group)) if m else None
 
     company = grab(r"([가-힣A-Za-z0-9]+)\s*/\s*단일판매")
+    contract_name = grab(r"체결계약명\s*(.+?)\s*2\.\s*계약내역")  # 예: "선박용 엔진"
+    sales_ratio = grab(r"매출액대비\s*\(%\)\s*([\d.]+)")  # 최근매출액 대비 %
     amount = grab(r"계약금액\s*\(원\)\s*([\d,]+)", cast=lambda s: int(s.replace(",", "")))
     # 환율 표기는 공시마다 다르다: "매매기준환율(@1,531.8/$)" / "USD 1 = 1,526.60원" 등
     fx_str = None
@@ -101,20 +103,30 @@ def parse_disclosure(rcp: str) -> dict:
     end_str = grab(r"종료일\s*(\d{4}-\d{2}-\d{2})")
     amount_str = grab(r"계약금액\s*\(원\)\s*([\d,]+)")
 
-    missing = [k for k, v in {"회사명": company, "계약금액": amount, "환율": fx,
-                              "종료일": end, "선종/척수": ship}.items() if not v]
+    # 조선 수주(○○선 N척)면 신조선가 카드, 아니면(엔진·기자재 등) 일반 수주 카드
+    is_ship = ship is not None
+    required = {"회사명": company, "계약금액": amount, "종료일": end}
+    if is_ship:
+        required.update({"환율": fx, "선종/척수": ship})
+    missing = [k for k, v in required.items() if not v]
     if missing:
         raise SystemExit(f"공시에서 다음 항목을 찾지 못했습니다: {', '.join(missing)}")
 
-    ship_type, ships = ship.group(1), int(ship.group(2))
+    ship_type, ships = (ship.group(1), int(ship.group(2))) if is_ship else (None, None)
+    if is_ship:
+        hl = [amount_str, end_str, fx_str, f"{ship_type} {ships}척", ship_type]
+    else:
+        hl = [amount_str, end_str, fx_str, contract_name]
     return {
         "rcp": rcp, "dcm": dcm,
-        "company": company, "ship_type": ship_type, "ships": ships,
+        "company": company, "is_ship": is_ship,
+        "ship_type": ship_type, "ships": ships,
+        "contract_name": (contract_name or "").strip(), "sales_ratio": sales_ratio,
         "amount": amount, "fx": fx,
         "end_year": end.group(1), "end_month": int(end.group(2)),
         "counterparty": (counterparty or "").strip(" -"),
         # 형광펜용 원문 문자열
-        "hl": [s for s in (amount_str, end_str, fx_str, f"{ship_type} {ships}척", ship_type) if s],
+        "hl": [s for s in hl if s],
         "amount_str": amount_str,
         "viewer": VIEWER_URL.format(rcp=rcp, dcm=dcm),
         "main": MAIN_URL.format(rcp=rcp),
@@ -124,11 +136,21 @@ def parse_disclosure(rcp: str) -> dict:
 def build_message(d: dict, comment: str = "") -> str:
     # caption은 parse_mode=HTML로 전송하므로 동적 텍스트는 이스케이프한다.
     esc = htmllib.escape
-    price = d["amount"] / d["ships"] / d["fx"] / 1_000_000  # 척당, 백만달러
     delivery = f"{d['end_year']}년 {d['end_month']}월 납기"
+    if d["is_ship"]:
+        price = d["amount"] / d["ships"] / d["fx"] / 1_000_000  # 척당, 백만달러
+        title = f"「{esc(d['company'])}, {esc(d['ship_type'])} {d['ships']}척 수주」"
+        second = f"💲 {delivery}, 신조선가 {price:.1f}백만달러"
+    else:
+        # 엔진·기자재 등 척수 없는 수주 → 계약금액(억원) + 납기 카드
+        eok = d["amount"] / 100_000_000
+        name = esc(d["contract_name"]) if d["contract_name"] else "수주"
+        title = f"「{esc(d['company'])}, {name} {eok:,.0f}억원 수주」"
+        ratio = f" (최근 매출액 대비 {d['sales_ratio']}%)" if d.get("sales_ratio") else ""
+        second = f"💲 {delivery}{ratio}"
     lines = [
-        f"<b>「{esc(d['company'])}, {esc(d['ship_type'])} {d['ships']}척 수주」</b>",
-        f"💲 {delivery}, 신조선가 {price:.1f}백만달러",
+        f"<b>{title}</b>",
+        second,
         f"☞ {esc(d['main'])}",
         "",
         SIGNATURE,
