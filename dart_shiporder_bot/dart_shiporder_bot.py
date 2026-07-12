@@ -133,9 +133,11 @@ def parse_disclosure(rcp: str) -> dict:
     }
 
 
-def build_message(d: dict, comment: str = "") -> str:
-    # caption은 parse_mode=HTML로 전송하므로 동적 텍스트는 이스케이프한다.
-    esc = htmllib.escape
+def build_message(d: dict, comment: str = "", html: bool = False) -> str:
+    # html=True: 봇 caption(parse_mode=HTML)용 — 동적 텍스트 이스케이프 + <b> 굵게.
+    # html=False: 채널에 직접 붙여넣기용 평문 — 태그 없이 그대로 보이게.
+    esc = htmllib.escape if html else (lambda s: s)
+    bold = (lambda s: f"<b>{s}</b>") if html else (lambda s: s)
     delivery = f"{d['end_year']}년 {d['end_month']}월 납기"
     if d["is_ship"]:
         price = d["amount"] / d["ships"] / d["fx"] / 1_000_000  # 척당, 백만달러
@@ -149,7 +151,7 @@ def build_message(d: dict, comment: str = "") -> str:
         ratio = f" (최근 매출액 대비 {d['sales_ratio']}%)" if d.get("sales_ratio") else ""
         second = f"💲 {delivery}{ratio}"
     lines = [
-        f"<b>{title}</b>",
+        bold(title),
         second,
         f"☞ {esc(d['main'])}",
         "",
@@ -247,7 +249,7 @@ def send_photo(image: Path, caption: str) -> None:
 
 def run(url_or_rcp: str, comment: str = "", dry: bool = False) -> None:
     d = parse_disclosure(rcp_no(url_or_rcp))
-    message = build_message(d, comment)
+    message = build_message(d, comment, html=True)  # 봇 caption(HTML)으로 전송
     print(message, flush=True)
     image = capture(d)
     print(f"캡처: {image}", flush=True)
@@ -255,14 +257,16 @@ def run(url_or_rcp: str, comment: str = "", dry: bool = False) -> None:
         print("[dry-run] 텔레그램 전송 생략")
         return
     send_photo(image, message)
-    print("텔레그램 전송 완료", flush=True)
+    print("텔레그램 전송 완료 → 공개채널 https://t.me/HI_GS", flush=True)
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="DART 조선 수주공시 → 텔레그램 카드")
+    parser = argparse.ArgumentParser(
+        description="DART 조선 수주공시 → 공개채널(t.me/HI_GS)에 사진+캡션 카드로 바로 전송")
     parser.add_argument("--url", default=os.getenv("DART_URL", ""), help="DART 공시 URL 또는 rcpNo")
     parser.add_argument("--comment", default=os.getenv("DART_COMMENT", ""), help="카드 하단에 붙일 내 코멘트")
-    parser.add_argument("--dry-run", action="store_true", help="텔레그램 전송 없이 메시지·캡처만")
+    parser.add_argument("--dry-run", action="store_true",
+                        help="(테스트) 전송 없이 메시지·캡처만 만들어 확인")
     args = parser.parse_args()
     if not args.url:
         sys.exit("DART URL(--url 또는 env DART_URL)이 필요합니다.")

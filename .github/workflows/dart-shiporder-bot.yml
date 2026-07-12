@@ -13,10 +13,10 @@ on:
         description: "보낼 채널"
         required: true
         type: choice
-        default: "비공개(미리보기)"
+        default: "공개채널"
         options:
-          - "비공개(미리보기)"
           - "공개채널"
+          - "비공개(미리보기)"
       comment:
         description: "내 코멘트 (선택 — 카드 맨 아래에 ❗로 붙습니다)"
         required: false
