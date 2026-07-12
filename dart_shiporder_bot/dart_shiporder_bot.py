@@ -63,6 +63,23 @@ def clean(doc: str) -> str:
     return htmllib.unescape(re.sub(r"\s+", " ", re.sub(r"<[^>]+>", " ", doc))).strip()
 
 
+def eok_prefix(amount_str: str) -> str:
+    """계약금액 원문 문자열에서 '억원 단위까지'에 해당하는 앞부분만 반환.
+    예: '115,823,400,000'(=1,158억) → '115,8'  (형광펜을 억 자리까지만 칠하기 위함)."""
+    digits = amount_str.replace(",", "")
+    keep = len(digits) - 8  # 1억=10^8 이상 자릿수 개수
+    if keep <= 0:
+        return amount_str  # 1억 미만이면 전체
+    count, out = 0, []
+    for ch in amount_str:
+        out.append(ch)
+        if ch.isdigit():
+            count += 1
+            if count == keep:
+                break
+    return "".join(out)
+
+
 def parse_disclosure(rcp: str) -> dict:
     main = fetch(MAIN_URL.format(rcp=rcp))
     candidates = [n for n in dict.fromkeys(re.findall(r"'(\d{6,10})'", main)) if n != rcp]
@@ -102,6 +119,9 @@ def parse_disclosure(rcp: str) -> dict:
     counterparty = grab(r"계약상대\s*(.+?)\s*회사와의")
     end_str = grab(r"종료일\s*(\d{4}-\d{2}-\d{2})")
     amount_str = grab(r"계약금액\s*\(원\)\s*([\d,]+)")
+    amount_eok = eok_prefix(amount_str) if amount_str else None  # 억 자리까지만 형광펜
+    region = grab(r"공급지역\s*(.+?)\s*5\s*\.\s*계약기간")  # 예: '아시아 지역'
+    region = region.strip() if region else None
 
     # 조선 수주(○○선 N척)면 신조선가 카드, 아니면(엔진·기자재 등) 일반 수주 카드
     is_ship = ship is not None
@@ -113,10 +133,13 @@ def parse_disclosure(rcp: str) -> dict:
         raise SystemExit(f"공시에서 다음 항목을 찾지 못했습니다: {', '.join(missing)}")
 
     ship_type, ships = (ship.group(1), int(ship.group(2))) if is_ship else (None, None)
+    # 형광펜(부분 하이라이트) 대상: 계약금액은 '억 자리까지'(amount_eok)만,
+    # 환율·종료일·체결계약명·판매공급지역, 조선이면 선종/척수까지. (계약상대는 셀 단위로 별도 처리)
+    hl = [amount_eok, end_str, contract_name, fx_str]
+    if region and region not in ("-", ""):
+        hl.append(region)
     if is_ship:
-        hl = [amount_str, end_str, fx_str, f"{ship_type} {ships}척", ship_type]
-    else:
-        hl = [amount_str, end_str, fx_str, contract_name]
+        hl += [f"{ship_type} {ships}척", ship_type]
     return {
         "rcp": rcp, "dcm": dcm,
         "company": company, "is_ship": is_ship,
@@ -128,6 +151,8 @@ def parse_disclosure(rcp: str) -> dict:
         # 형광펜용 원문 문자열
         "hl": [s for s in hl if s],
         "amount_str": amount_str,
+        "amount_eok": amount_eok,
+        "region": region,
         "viewer": VIEWER_URL.format(rcp=rcp, dcm=dcm),
         "main": MAIN_URL.format(rcp=rcp),
     }
@@ -165,15 +190,59 @@ def build_message(d: dict, comment: str = "", html: bool = False) -> str:
 
 
 # ────────────────────────── 캡처(형광펜) ──────────────────────────
+# 텍스트 노드에서 '대상 문자열만' 골라 <span>으로 감싸 부분 하이라이트한다.
+# (셀 전체가 아니라 '115,8'·'1,504.20' 같은 값만 칠하려는 것)
 HIGHLIGHT_JS = """
 (targets) => {
-  const paint = (el) => { el.style.backgroundColor = '#fff35a'; el.style.fontWeight = '700'; };
-  for (const t of targets) {
-    if (!t) continue;
-    const it = document.evaluate(`//*[not(*)][contains(normalize-space(.), ${JSON.stringify(t)})]`,
-      document, null, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null);
-    for (let i = 0; i < it.snapshotLength; i++) paint(it.snapshotItem(i));
+  const STYLE = 'background-color:#fff35a;font-weight:700;';
+  const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, null);
+  const nodes = [];
+  while (walker.nextNode()) {
+    const n = walker.currentNode;
+    if (n.nodeValue && n.nodeValue.trim()) nodes.push(n);
   }
+  for (const node of nodes) {
+    const text = node.nodeValue;
+    for (const t of targets) {
+      if (!t) continue;
+      const idx = text.indexOf(t);
+      if (idx < 0) continue;
+      const span = document.createElement('span');
+      span.setAttribute('style', STYLE);
+      span.textContent = text.slice(idx, idx + t.length);
+      const frag = document.createDocumentFragment();
+      const before = text.slice(0, idx), after = text.slice(idx + t.length);
+      if (before) frag.appendChild(document.createTextNode(before));
+      frag.appendChild(span);
+      if (after) frag.appendChild(document.createTextNode(after));
+      node.parentNode.replaceChild(frag, node);
+      break;  // 이 노드는 처리 완료
+    }
+  }
+}
+"""
+
+# 계약상대 값 셀을 통째로 칠한다 — 이름이 있으면 이름, 없으면 '-'라도 칠하기 위함.
+COUNTERPARTY_JS = """
+() => {
+  const norm = s => (s || '').replace(/\\s+/g, '');
+  const cells = [...document.querySelectorAll('td,th')];
+  const label = cells.find(c => {
+    const t = norm(c.textContent);
+    return t.includes('계약상대') && !t.includes('회사와의') && t.length <= 10;
+  });
+  if (!label) return false;
+  const row = label.closest('tr');
+  if (!row) return false;
+  const kids = [...row.children];
+  const i = kids.indexOf(label);
+  let painted = false;
+  for (let j = i + 1; j < kids.length; j++) {
+    const el = kids[j];
+    el.setAttribute('style', (el.getAttribute('style') || '') + ';background-color:#fff35a;font-weight:700;');
+    painted = true;
+  }
+  return painted;
 }
 """
 
@@ -196,8 +265,8 @@ def capture(d: dict) -> Path:
     OUTPUT_DIR.mkdir(exist_ok=True)
     path = OUTPUT_DIR / f"dart_{d['rcp']}.png"
     targets = list(d["hl"])
-    if d["amount"] < HIGHLIGHT_MIN_EOK * 100_000_000 and d["amount_str"] in targets:
-        targets.remove(d["amount_str"])  # 억원 미만이면 계약금액 형광펜 제외
+    if d["amount"] < HIGHLIGHT_MIN_EOK * 100_000_000 and d["amount_eok"] in targets:
+        targets.remove(d["amount_eok"])  # 억원 미만이면 계약금액 형광펜 제외
     with sync_playwright() as pw:
         browser = pw.chromium.launch(headless=True)
         page = browser.new_context(
@@ -206,6 +275,7 @@ def capture(d: dict) -> Path:
         ).new_page()
         page.goto(d["viewer"], wait_until="networkidle", timeout=60_000)
         page.evaluate(HIGHLIGHT_JS, targets)
+        page.evaluate(COUNTERPARTY_JS)  # 계약상대 값 셀 형광펜(있으면 이름, 없으면 '-')
         target = ("#__cap_wrap" if page.evaluate(WRAP_JS)
                   else "table")  # 여백 래퍼가 붙으면 그걸, 아니면 표를
         table = page.locator(target).filter(has_text="계약금액").first if target == "table" else page.locator(target)
