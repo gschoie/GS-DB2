@@ -41,6 +41,8 @@ jobs:
             telegram_research_dashboard/data/daol_tone_history.json
             telegram_research_dashboard/data/daol_pdf_text_cache.json
             telegram_research_dashboard/data/hhiun_snapshot.json
+            telegram_research_dashboard/data/hhiun_top.json
+            telegram_research_dashboard/static/hhiun_board_report.html
             telegram_research_dashboard/data/macro.json
           key: dashboard-db-${{ github.run_id }}
           restore-keys: |

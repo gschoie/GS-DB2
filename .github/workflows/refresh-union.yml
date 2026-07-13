@@ -1,8 +1,7 @@
-name: 뉴스 아카이브만 갱신
+name: 노조게시판만 갱신
 
-# 뉴스.아카이브만 다시 수집·반영하는 경량 워크플로.
-# 전체 파이프라인(deploy-pages)과 달리 DAOL 톤·매크로·노조 재수집은 건너뛴다.
-# (build_static 은 톤/매크로/노조를 '있으면 읽고 없으면 기본값'으로 처리하므로 안전)
+# 현중 노조게시판(hhiun)만 다시 수집·반영하는 경량 워크플로.
+# 뉴스/톤/매크로 재수집은 건너뛰고 build_hhiun_report + build_static만 돌린다.
 on:
   workflow_dispatch:
 
@@ -18,13 +17,16 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
 
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
+          cache: pip
 
+      # 뉴스/톤/매크로/노조 기존 데이터 복원(build_static이 그대로 굽고, 노조만 새로 씀)
       - name: 이전 수집 데이터 복원
         uses: actions/cache@v4
         with:
@@ -46,28 +48,13 @@ jobs:
         run: python -m unittest discover -s tests -p "test_*.py" -v
 
       - name: Python 패키지 준비
-        run: python -m pip install requests beautifulsoup4 lxml
+        run: python -m pip install requests beautifulsoup4 lxml pycryptodome
 
-      - name: 공개 텔레그램 최신 글 수집 (뉴스)
+      - name: 현중 노조게시판 수집
         working-directory: telegram_research_dashboard
-        # 날짜 기반 증분 수집(2주 안전창). 최근 2주만 재확인 → 전체 이력 크롤 안 함.
-        run: python public_importer.py --channel https://t.me/HI_GS --pages 120 --since-days 14
+        run: python build_hhiun_report.py
 
-      # (제거) 전체 재분류: 새 메시지는 import 때 이미 완전 파싱됨 → 매 run 전체 재파싱은 낭비.
-
-      - name: 링크 기사 제목 및 기업 보강
-        working-directory: telegram_research_dashboard
-        run: python enrich_link_news.py --limit 5000 --all
-
-      - name: 내 코멘트 backfill 및 기사 제목 정리
-        working-directory: telegram_research_dashboard
-        run: python backfill_comments.py
-
-      - name: 수동 기업 교정 적용
-        working-directory: telegram_research_dashboard
-        run: python apply_corrections.py
-
-      - name: 배포용 HTML 생성 (뉴스만 갱신 · 톤/매크로는 기존 데이터 유지)
+      - name: 배포용 HTML 생성 (노조만 갱신 · 뉴스/톤은 기존 데이터 유지)
         working-directory: telegram_research_dashboard
         env:
           DASHBOARD_OUTPUT: _site/index.html
