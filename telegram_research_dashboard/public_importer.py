@@ -12,6 +12,7 @@ import time
 from datetime import datetime, timedelta, timezone
 from html.parser import HTMLParser
 from types import SimpleNamespace
+import urllib.error
 from urllib.parse import urlparse
 from urllib.request import Request, urlopen
 
@@ -76,8 +77,17 @@ def fetch_page(channel: str, before: int | None) -> str:
     if before:
         url += f"?before={before}"
     request = Request(url, headers={"User-Agent": "Mozilla/5.0 ResearchDashboard/1.0"})
-    with urlopen(request, timeout=30) as response:
-        return response.read().decode("utf-8", errors="replace")
+    # 러너의 일시적 DNS/네트워크 오류(예: Name or service not known)에 죽지 않도록 재시도한다.
+    last_error: Exception | None = None
+    for attempt in range(4):
+        try:
+            with urlopen(request, timeout=30) as response:
+                return response.read().decode("utf-8", errors="replace")
+        except (urllib.error.URLError, OSError) as exc:
+            last_error = exc
+            print(f"  ⚠ 요청 실패({attempt + 1}/4) {url}: {exc} — 재시도", flush=True)
+            time.sleep(3 * (attempt + 1))
+    raise last_error
 
 
 def parse_page(source: str) -> list[SimpleNamespace]:
