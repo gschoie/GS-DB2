@@ -115,7 +115,10 @@ def parse_disclosure(rcp: str) -> dict:
             break
     fx = float(fx_str.replace(",", "")) if fx_str else None
     end = re.search(r"종료일\s*(\d{4})-(\d{2})-(\d{2})", text)
-    ship = re.search(r"([가-힣A-Za-z0-9/·]*선)\s*(\d+)\s*척", text)  # P/C선·LNG선 등 슬래시 허용
+    # 선종/척수: 체결계약명(예 'VLAC 3척'·'LNG운반선 2척')의 'N척'을 우선 파싱한다.
+    # '선'으로 끝나지 않는 영문 약어 선종(VLAC·VLCC·VLGC 등)도 잡도록 '척' 기준으로 인식.
+    ship = (re.search(r"([A-Za-z가-힣0-9/·\-]+)\s*(\d+)\s*척", contract_name or "")
+            or re.search(r"([A-Za-z가-힣0-9/·\-]+)\s*(\d+)\s*척", text))
     counterparty = grab(r"계약상대\s*(.+?)\s*회사와의")
     end_str = grab(r"종료일\s*(\d{4}-\d{2}-\d{2})")
     amount_str = grab(r"계약금액\s*\(원\)\s*([\d,]+)")
