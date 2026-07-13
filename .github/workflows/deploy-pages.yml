@@ -30,23 +30,32 @@ jobs:
         with:
           python-version: "3.12"
 
-      - name: 이전 수집 데이터 복원
-        # push에서도 복원한다: 스케줄이 캐시에 쌓은 최신 뉴스를 push가 옛 커밋 DB로
-        # 덮어 배포하던 문제를 막는다(캐시 DB = 사실상 단일 진실원본).
-        uses: actions/cache@v4
+      # 캐시를 뉴스DB/노조 둘로 분리한다. 복원은 모든 run이 읽기전용으로(restore),
+      # 저장은 그 데이터를 실제로 갱신하는 run만(save). → push·refresh-union 같은
+      # 비수집 run이 stale DB로 뉴스 캐시를 덮어써 07-08로 리버트되던 문제를 근절.
+      - name: 뉴스DB 캐시 복원
+        uses: actions/cache/restore@v4
         with:
           path: |
             telegram_research_dashboard/data/dashboard.db
             telegram_research_dashboard/data/daol_messages.json
             telegram_research_dashboard/data/daol_tone_history.json
             telegram_research_dashboard/data/daol_pdf_text_cache.json
+            telegram_research_dashboard/data/macro.json
+          key: newsdb-${{ github.run_id }}
+          restore-keys: |
+            newsdb-
+
+      - name: 노조 캐시 복원
+        uses: actions/cache/restore@v4
+        with:
+          path: |
             telegram_research_dashboard/data/hhiun_snapshot.json
             telegram_research_dashboard/data/hhiun_top.json
             telegram_research_dashboard/static/hhiun_board_report.html
-            telegram_research_dashboard/data/macro.json
-          key: dashboard-db-${{ github.run_id }}
+          key: hhiun-${{ github.run_id }}
           restore-keys: |
-            dashboard-db-
+            hhiun-
 
       - name: 파이프라인 계약 테스트
         working-directory: telegram_research_dashboard
@@ -116,6 +125,19 @@ jobs:
       - name: 배포 안전망 검사
         working-directory: telegram_research_dashboard
         run: python verify_static_output.py _site/index.html
+
+      # 뉴스/톤/매크로를 실제로 수집한 run(비 push)만 뉴스DB 캐시를 저장한다.
+      - name: 뉴스DB 캐시 저장 (수집 run만)
+        if: github.event_name != 'push'
+        uses: actions/cache/save@v4
+        with:
+          path: |
+            telegram_research_dashboard/data/dashboard.db
+            telegram_research_dashboard/data/daol_messages.json
+            telegram_research_dashboard/data/daol_tone_history.json
+            telegram_research_dashboard/data/daol_pdf_text_cache.json
+            telegram_research_dashboard/data/macro.json
+          key: newsdb-${{ github.run_id }}
 
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3

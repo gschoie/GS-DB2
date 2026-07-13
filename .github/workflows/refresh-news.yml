@@ -25,21 +25,29 @@ jobs:
         with:
           python-version: "3.12"
 
-      - name: 이전 수집 데이터 복원
-        uses: actions/cache@v4
+      - name: 뉴스DB 캐시 복원
+        uses: actions/cache/restore@v4
         with:
           path: |
             telegram_research_dashboard/data/dashboard.db
             telegram_research_dashboard/data/daol_messages.json
             telegram_research_dashboard/data/daol_tone_history.json
             telegram_research_dashboard/data/daol_pdf_text_cache.json
+            telegram_research_dashboard/data/macro.json
+          key: newsdb-${{ github.run_id }}
+          restore-keys: |
+            newsdb-
+
+      - name: 노조 캐시 복원(읽기전용 · 노조는 안 건드림)
+        uses: actions/cache/restore@v4
+        with:
+          path: |
             telegram_research_dashboard/data/hhiun_snapshot.json
             telegram_research_dashboard/data/hhiun_top.json
             telegram_research_dashboard/static/hhiun_board_report.html
-            telegram_research_dashboard/data/macro.json
-          key: dashboard-db-${{ github.run_id }}
+          key: hhiun-${{ github.run_id }}
           restore-keys: |
-            dashboard-db-
+            hhiun-
 
       - name: 파이프라인 계약 테스트
         working-directory: telegram_research_dashboard
@@ -76,6 +84,17 @@ jobs:
       - name: 배포 안전망 검사
         working-directory: telegram_research_dashboard
         run: python verify_static_output.py _site/index.html
+
+      - name: 뉴스DB 캐시 저장
+        uses: actions/cache/save@v4
+        with:
+          path: |
+            telegram_research_dashboard/data/dashboard.db
+            telegram_research_dashboard/data/daol_messages.json
+            telegram_research_dashboard/data/daol_tone_history.json
+            telegram_research_dashboard/data/daol_pdf_text_cache.json
+            telegram_research_dashboard/data/macro.json
+          key: newsdb-${{ github.run_id }}
 
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
