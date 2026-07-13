@@ -48,9 +48,8 @@ jobs:
 
       - name: 공개 텔레그램 최신 글 수집 (뉴스)
         working-directory: telegram_research_dashboard
-        # 수동 뉴스 갱신은 항상 최신 20페이지만 긁는다(전체 이력 크롤 금지 → 빠르게).
-        # 전체 이력이 필요한 콜드스타트는 deploy-pages(전체 파이프라인)가 담당한다.
-        run: python public_importer.py --channel https://t.me/HI_GS --pages 20
+        # 날짜 기반 증분 수집(2주 안전창). 최근 2주만 재확인 → 전체 이력 크롤 안 함.
+        run: python public_importer.py --channel https://t.me/HI_GS --pages 120 --since-days 14
 
       - name: 저장 원문 전체 재분류
         working-directory: telegram_research_dashboard

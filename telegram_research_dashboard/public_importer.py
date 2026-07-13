@@ -9,7 +9,7 @@ import argparse
 import html
 import re
 import time
-from datetime import datetime
+from datetime import datetime, timedelta, timezone
 from html.parser import HTMLParser
 from types import SimpleNamespace
 from urllib.parse import urlparse
@@ -100,14 +100,28 @@ def parse_page(source: str) -> list[SimpleNamespace]:
     return messages
 
 
-def sync(channel_value: str, pages: int) -> None:
+def sync(channel_value: str, pages: int, since_days: int = 14) -> None:
+    """최신 글부터 과거로 페이징하며 DB에 병합(중복 제거)한다.
+
+    since_days>0 이면 'DB의 최신 글 날짜 − since_days' 시점까지만 되돌아간다(2주 안전창).
+    → 그 이전은 이미 DB에 있으므로 전체 이력을 다시 긁지 않아 빠르고, 최근 구간은
+      매번 재확인하므로 누락/수정도 보정된다. pages 는 안전 상한(0=상한 없음).
+    """
     initialize()
     channel = normalize_channel(channel_value)
-    before = None
-    seen_ids: set[int] = set()
-    total = 0
-    page = 0
     with connect() as conn:
+        cutoff = None
+        if since_days > 0:
+            row = conn.execute(
+                "SELECT MAX(posted_at) FROM telegram_messages WHERE channel_id=?", (channel,)
+            ).fetchone()
+            if row and row[0]:
+                cutoff = datetime.fromisoformat(row[0]).astimezone(timezone.utc) - timedelta(days=since_days)
+                print(f"증분 기준(2주 안전창): {cutoff.date()} 이후만 수집")
+        before = None
+        seen_ids: set[int] = set()
+        total = 0
+        page = 0
         while pages == 0 or page < pages:
             batch = parse_page(fetch_page(channel, before))
             fresh = [message for message in batch if message.id not in seen_ids]
@@ -118,12 +132,15 @@ def sync(channel_value: str, pages: int) -> None:
                 seen_ids.add(message.id)
                 total += 1
             conn.commit()
-            oldest = min(message.id for message in fresh)
-            if before == oldest:
-                break
-            before = oldest
+            oldest_id = min(message.id for message in fresh)
+            oldest_date = min(message.date for message in fresh).astimezone(timezone.utc)
             page += 1
-            print(f"{page}페이지 · 누적 {total:,}개")
+            print(f"{page}페이지 · 누적 {total:,}개 · 최고참 {oldest_date.date()}")
+            if cutoff is not None and oldest_date <= cutoff:
+                break  # 2주 안전창보다 과거까지 왔으면 중단(그 이전은 이미 DB에 있음)
+            if before == oldest_id:
+                break
+            before = oldest_id
             time.sleep(0.4)
     print(f"@{channel} 공개채널 동기화 완료: {total:,}개 메시지")
 
@@ -133,7 +150,9 @@ if __name__ == "__main__":
     import os
     cli = argparse.ArgumentParser()
     cli.add_argument("--channel", default=os.getenv("TELEGRAM_CHANNEL", "https://t.me/HI_GS"))
-    cli.add_argument("--pages", type=int, default=5, help="가져올 페이지 수. 0이면 가능한 과거 기록 전체")
+    cli.add_argument("--pages", type=int, default=0, help="안전 상한 페이지 수. 0이면 상한 없음(날짜창으로 중단)")
+    cli.add_argument("--since-days", type=int, default=14,
+                     help="DB 최신글에서 이 일수만큼 이전까지 재수집(2주 안전창). 0이면 날짜창 비활성")
     args = cli.parse_args()
-    sync(args.channel, args.pages)
+    sync(args.channel, args.pages, args.since_days)
 

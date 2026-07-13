@@ -17,7 +17,8 @@ permissions:
 
 concurrency:
   group: pages
-  cancel-in-progress: true
+  # 취소 대신 대기(false): push가 진행 중인 스케줄 수집을 취소해 뉴스가 유실되던 문제 방지
+  cancel-in-progress: false
 
 jobs:
   build:
@@ -30,7 +31,8 @@ jobs:
           python-version: "3.12"
 
       - name: 이전 수집 데이터 복원
-        if: github.event_name != 'push'
+        # push에서도 복원한다: 스케줄이 캐시에 쌓은 최신 뉴스를 push가 옛 커밋 DB로
+        # 덮어 배포하던 문제를 막는다(캐시 DB = 사실상 단일 진실원본).
         uses: actions/cache@v4
         with:
           path: |
@@ -55,10 +57,9 @@ jobs:
       - name: 공개 텔레그램 최신 글 수집
         if: github.event_name != 'push'
         working-directory: telegram_research_dashboard
-        shell: bash
-        run: |
-          if [ -f data/dashboard.db ]; then PAGES=5; else PAGES=0; fi
-          python public_importer.py --channel https://t.me/HI_GS --pages "$PAGES"
+        # 날짜 기반 증분 수집(2주 안전창) — 최근 2주는 매번 재확인, 그 이전은 이미 DB에 있어 스킵.
+        # --pages 120 은 안전 상한(콜드스타트·이상시 무한 크롤 방지).
+        run: python public_importer.py --channel https://t.me/HI_GS --pages 120 --since-days 14
 
       - name: DAOL 톤 데이터 갱신
         if: github.event_name != 'push'
