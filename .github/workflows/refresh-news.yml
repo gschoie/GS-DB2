@@ -51,9 +51,7 @@ jobs:
         # 날짜 기반 증분 수집(2주 안전창). 최근 2주만 재확인 → 전체 이력 크롤 안 함.
         run: python public_importer.py --channel https://t.me/HI_GS --pages 120 --since-days 14
 
-      - name: 저장 원문 전체 재분류
-        working-directory: telegram_research_dashboard
-        run: python rebuild_parsed_data.py
+      # (제거) 전체 재분류: 새 메시지는 import 때 이미 완전 파싱됨 → 매 run 전체 재파싱은 낭비.
 
       - name: 링크 기사 제목 및 기업 보강
         working-directory: telegram_research_dashboard

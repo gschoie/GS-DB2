@@ -68,10 +68,9 @@ jobs:
         run: |
           python build_daol_tone_dashboard.py --refresh
 
-      - name: 저장 원문 전체 재분류
-        if: github.event_name != 'push'
-        working-directory: telegram_research_dashboard
-        run: python rebuild_parsed_data.py
+      # (제거) 전체 재분류: 새 메시지는 import 때 이미 완전 파싱되므로 매 run 전체 재파싱
+      # (~4,900개 × 느린 파서 = 40분+)은 낭비다. 파서 규칙을 바꾼 뒤에만 수동으로
+      # `python rebuild_parsed_data.py` 를 돌린다.
 
       - name: 링크 기사 제목 및 기업 보강
         if: github.event_name != 'push'
