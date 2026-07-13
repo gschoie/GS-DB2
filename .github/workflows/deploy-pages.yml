@@ -57,9 +57,10 @@ jobs:
       - name: 공개 텔레그램 최신 글 수집
         if: github.event_name != 'push'
         working-directory: telegram_research_dashboard
-        # 날짜 기반 증분 수집(2주 안전창) — 최근 2주는 매번 재확인, 그 이전은 이미 DB에 있어 스킵.
+        # 날짜 기반 증분 수집. 3시간마다(하루 7회) 도는 자동 갱신이라 3일 재확인이면
+        # 겹침이 충분해 누락 0이고, 매번 재긁는 페이지가 적어 빠르다. (수동 🔄뉴스갱신은 2주창)
         # --pages 120 은 안전 상한(콜드스타트·이상시 무한 크롤 방지).
-        run: python public_importer.py --channel https://t.me/HI_GS --pages 120 --since-days 14
+        run: python public_importer.py --channel https://t.me/HI_GS --pages 120 --since-days 3
 
       - name: DAOL 톤 데이터 갱신
         if: github.event_name != 'push'
