@@ -15,10 +15,9 @@ permissions:
   pages: write
   id-token: write
 
-concurrency:
-  group: pages
-  # 취소 대신 대기(false): push가 진행 중인 스케줄 수집을 취소해 뉴스가 유실되던 문제 방지
-  cancel-in-progress: false
+# 주의: concurrency를 워크플로 전체에 걸면, group을 공유하는 여러 워크플로(deploy-pages·
+# refresh-news·refresh-union)가 서로의 '대기 중' run을 취소해 수집/캐시저장이 유실된다.
+# → concurrency는 Pages 배포 직렬화를 위해 deploy 잡에만 건다(빌드는 취소 없이 완주).
 
 jobs:
   build:
@@ -150,6 +149,9 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     needs: build
+    concurrency:
+      group: pages
+      cancel-in-progress: false
     steps:
       - name: GitHub Pages 배포
         id: deployment
