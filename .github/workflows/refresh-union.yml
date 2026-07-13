@@ -39,6 +39,7 @@ jobs:
           key: newsdb-${{ github.run_id }}
           restore-keys: |
             newsdb-
+            dashboard-db-
 
       - name: 노조 캐시 복원
         uses: actions/cache/restore@v4
