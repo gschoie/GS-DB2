@@ -4,6 +4,9 @@ name: 노조게시판만 갱신
 # 뉴스/톤/매크로 재수집은 건너뛰고 build_hhiun_report + build_static만 돌린다.
 on:
   workflow_dispatch:
+  schedule:
+    # 하루 2회 노조게시판 수집 — KST 09:20, 21:20 (UTC 00:20, 12:20)
+    - cron: "20 0,12 * * *"
 
 permissions:
   contents: read

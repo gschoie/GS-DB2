@@ -99,9 +99,9 @@ jobs:
         working-directory: telegram_research_dashboard
         env:
           DASHBOARD_OUTPUT: _site/index.html
-        run: |
-          python build_hhiun_report.py
-          python build_static.py
+        # 노조게시판(build_hhiun) 수집은 여기서 빼고 별도 refresh-union 워크플로가 하루 2회만 돌린다.
+        # 캐시로 복원된 hhiun_top.json 을 build_static 이 그대로 구우므로 대시보드엔 항상 표시된다.
+        run: python build_static.py
 
       - name: 배포용 HTML 생성 (push · 커밋된 데이터로 재빌드)
         # push에서도 얼어붙은 prebuilt 대신, 리포지토리에 커밋된 최신 데이터(dashboard.db·톤)로
