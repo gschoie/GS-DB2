@@ -118,6 +118,10 @@ async function dispatchEtf(){
  const btn=$('#etf-refresh'),status=$('#etf-status');
  if(await dispatchWorkflow({workflow:'etf'},status,btn))
    status.textContent='✅ ETF 스캔 요청됨 — 몇 분 뒤 새로고침';}
+async function dispatchNews(){
+ const btn=$('#news-refresh'),status=$('#news-status');
+ if(await dispatchWorkflow({workflow:'news'},status,btn))
+   status.textContent='✅ 뉴스 갱신 요청됨 — 몇 분 뒤 새로고침';}
 $$('.nav').forEach(b=>b.onclick=()=>view(b.dataset.view));$$('[data-go]').forEach(b=>b.onclick=()=>view(b.dataset.go));
 let timer;$('#search').oninput=e=>{clearTimeout(timer);timer=setTimeout(()=>{state.q=e.target.value;load()},250)};
 $('#report-company').onchange=e=>{state.reportCompany=e.target.value;load()};
@@ -130,6 +134,7 @@ $('#tone-refresh').onclick=()=>loadTone(true);
 $('#dart-send')?.addEventListener('click',dispatchDart);
 $('#tone-server-refresh')?.addEventListener('click',dispatchTone);
 $('#etf-refresh')?.addEventListener('click',dispatchEtf);
+$('#news-refresh')?.addEventListener('click',dispatchNews);
 $('#tone-search').oninput=e=>{state.toneQ=e.target.value;renderTone()};
 $('#tone-month').onchange=e=>{state.toneMonth=e.target.value;renderTone()};
 $('#tone-analyst').onchange=e=>{state.toneAnalyst=e.target.value;renderTone()};
