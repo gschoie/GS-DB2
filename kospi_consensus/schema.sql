@@ -24,3 +24,12 @@ CREATE TABLE IF NOT EXISTS universe (
   name          TEXT NOT NULL,
   PRIMARY KEY (snapshot_date, code)
 );
+
+-- 스냅샷 시점 종가 (주가 변동폭 계산용)
+CREATE TABLE IF NOT EXISTS stock_prices (
+  snapshot_date TEXT NOT NULL,
+  code          TEXT NOT NULL,
+  price_date    TEXT,          -- 실제 종가 기준일 (YYYY-MM-DD)
+  close         REAL,          -- 종가 (원)
+  PRIMARY KEY (snapshot_date, code)
+);

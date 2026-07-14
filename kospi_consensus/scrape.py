@@ -5,7 +5,9 @@
 - 연간 2026E/2027E/2028E: 종목분석>컨센서스 탭(c1050001) 헤드리스 렌더링
   ("주가 & 컨센서스" 재무연월 그리드 값이 JS로 수초 뒤 주입되므로 등장까지 폴링)
 """
+import datetime as dt
 import io
+import json as _json
 import re
 
 import pandas as pd
@@ -15,6 +17,8 @@ UA = ("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
       "(KHTML, like Gecko) Chrome/120.0 Safari/537.36")
 
 QUARTER_API = "https://m.stock.naver.com/api/stock/{code}/finance/quarter"
+PRICE_API = ("https://api.finance.naver.com/siseJson.naver?symbol={code}"
+             "&requestType=1&startTime={s}&endTime={e}&timeframe=day")
 CONSENSUS_URL = "https://navercomp.wisereport.co.kr/company/c1050001.aspx?cmp_cd={code}&cn="
 
 # 그리드 값이 채워질 때까지 대기: 재무연월 테이블에 콤마숫자가 등장하면 준비 완료
@@ -67,6 +71,28 @@ def fetch_quarter(code, session=None):
         "op_profit": val("영업이익"),
         "net_profit": val("당기순이익") or val("당기순이익(지배)"),
     }
+
+
+def fetch_close(code, on_date=None, session=None):
+    """on_date(또는 오늘) 이하 최근 거래일의 종가. dict{price_date, close} 또는 None."""
+    s = session or requests
+    end = on_date or dt.date.today()
+    if isinstance(end, str):
+        end = dt.date.fromisoformat(end)
+    start = end - dt.timedelta(days=14)
+    u = PRICE_API.format(code=code, s=start.strftime("%Y%m%d"), e=end.strftime("%Y%m%d"))
+    try:
+        txt = s.get(u, headers={"User-Agent": UA, "Referer": "https://finance.naver.com/"},
+                    timeout=10).text.strip()
+        rows = _json.loads(txt.replace("'", '"'))
+    except Exception:
+        return None
+    data = [r for r in rows[1:] if r and r[4] not in (None, "", 0)]
+    if not data:
+        return None
+    last = data[-1]
+    d = str(last[0])
+    return {"price_date": f"{d[:4]}-{d[4:6]}-{d[6:8]}", "close": float(last[4])}
 
 
 def scrape_annual(page, code, timeout_ms=20000):

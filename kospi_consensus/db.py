@@ -34,6 +34,26 @@ def upsert_consensus(con, snapshot_date, code, name, kind, period,
     )
 
 
+def upsert_price(con, snapshot_date, code, price_date, close):
+    con.execute(
+        """
+        INSERT INTO stock_prices (snapshot_date, code, price_date, close)
+        VALUES (?, ?, ?, ?)
+        ON CONFLICT(snapshot_date, code) DO UPDATE SET
+            price_date = excluded.price_date,
+            close      = excluded.close
+        """,
+        (snapshot_date, code, price_date, close),
+    )
+
+
+def price_map(con, snapshot_date):
+    """해당 스냅샷의 code→close dict."""
+    return {r["code"]: r["close"] for r in con.execute(
+        "SELECT code, close FROM stock_prices WHERE snapshot_date=? AND close IS NOT NULL",
+        (snapshot_date,))}
+
+
 def upsert_universe(con, snapshot_date, code, name):
     con.execute(
         """

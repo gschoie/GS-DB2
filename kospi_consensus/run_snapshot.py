@@ -66,6 +66,10 @@ def run(limit=None, snapshot_date=None, refresh_universe=False, delay=0.3):
             if not q and not annual:
                 fail += 1
 
+            pr = scrape.fetch_close(code, session=session)
+            if pr:
+                db.upsert_price(con, snap, code, pr["price_date"], pr["close"])
+
             con.commit()
             e_years = ",".join(r["period"][:4] for r in annual) or "-"
             print(f"[{i}/{total}] {name}({code})  Q={q['period'] if q else '-'}  "
