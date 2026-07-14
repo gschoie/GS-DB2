@@ -1,6 +1,6 @@
 name: ETF 섹터 신호
 
-# 매일 한국시간 오전 10시: 49개 ETF 스캔 → HTML 신호판 + 텔레그램 알림 → 배포
+# 매일 한국시간 오전 10시: 55개 ETF 스캔 → HTML 신호판 + 텔레그램 알림 → 배포
 on:
   workflow_dispatch:
   schedule:
@@ -31,7 +31,7 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: 49개 ETF 스캔
+      - name: 55개 ETF 스캔
         working-directory: etf_signal
         env:
           KIS_APP_KEY: ${{ secrets.KIS_APP_KEY }}
