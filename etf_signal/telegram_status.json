@@ -1,5 +1,5 @@
 {
-  "when_utc": "2026-07-13 04:31:44Z",
+  "when_utc": "2026-07-14 03:13:42Z",
   "ok": true,
   "note": "alert_sent",
   "chat_id_tail": "5171",
@@ -7,7 +7,7 @@
   "response": {
     "ok": true,
     "result": {
-      "message_id": 751,
+      "message_id": 801,
       "from": {
         "id": 8917880759,
         "is_bot": true,
@@ -21,8 +21,8 @@
         "username": "gschoie",
         "type": "private"
       },
-      "date": 1783917103,
-      "text": "📡 ETF/섹터 신호 · 2026-07-10 (전일 확정)\n\n★ 오늘 새 신호 14개\n\n🟢 KODEX 반도체 · 반도체/AI/로봇\n   Stochastic 과매도 반등·골든크로스\n   ADX 22.1 · %K 11.7/10.8 · 수급 중립\n\n🟢 KODEX AI반도체TOP2플러스 · 반도체/AI/로봇\n   Stochastic 과매도 반등·골든크로스\n   ADX 24.0 · %K 10.1/9.4 · 수급 중립\n\n🟢 KODEX 로봇액티브 · 반도체/AI/로봇\n   Stochastic 과매도 반등·골든크로스\n   ADX 31.2 · %K 10.9/10.3 · 수급 중립\n\n🟢 TIGER 인터넷TOP10 · 반도체/AI/로봇\n   Stochastic 과매도 반등·골든크로스 · 외인·기관 동반 순매수\n   ADX 31.3 · %K 14.7/9.9 · 외인·기관 쌍끌이\n\n🟢 TIGER 2차전지TOP10 · 2차전지\n   Stochastic 과매도 반등·골든크로스\n   ADX 35.2 · %K 10.1/8.0 · 수급 중립\n\n🟢 KODEX 에너지화학 · 철강/소재/화학\n   Stochastic 과매도 반등·골든크로스 · 외인·기관 동반 순매수\n   ADX 36.6 · %K 18.1/17.1 · 외인·기관 쌍끌이\n\n🟢 KODEX 바이오 · 바이오/헬스케어\n   Stochastic 과매도 반등·골든크로스\n   ADX 34.6 · %K 13.6/13.2 · 수급 중립\n\n🟢 KODEX 건설 · 건설/운송\n   Stochastic 과매도 반등·골든크로스\n   ADX 17.0 · %K 20.3/19.4 · 수급 중립\n\n🟢 TIGER 200 건설 · 건설/운송\n   Stochastic 과매도 반등·골든크로스\n   ADX 19.1 · %K 13.1/12.3 · 수급 중립\n\n🟢 KODEX 신재생에너지액티브 · 신재생/수소/기후\n   Stochastic 과매도 반등·골든크로스 · 외인·기관 동반 순매수\n   ADX 27.5 · %K 13.7/8.9 · 외인·기관 쌍끌이\n\n🟢 KODEX 은행 · 금융\n   ＋DI가 −DI 상향돌파·추세전환 · 외인·기관 동반 순매수\n   ADX 12.9 · %K 78.5/80.3 · 외인·기관 쌍끌이\n\n🟢 TIGER 지주회사 · 금융\n   Stochastic 과매도 반등·골든크로스 · 외인·기관 동반 순매수\n   ADX 24.3 · %K 17.3/14.5 · 외인·기관 쌍끌이\n\n🟢 SOL 조선기자재 · 조선\n   Stochastic 과매도 반등·골든크로스 · 외인·기관 동반 순매수\n   ADX 25.6 · %K 13.2/9.7 · 외인·기관 쌍끌이\n\n🟢 KODEX 삼성그룹 · 배당/그룹\n   Stochastic 과매도 반등·골든크로스\n   ADX 22.7 · %K 10.3/9.6 · 수급 중립\n\n전체 신호판 › 대시보드\n🎴 GS Research Desk · ETF/섹터 신호",
+      "date": 1783998822,
+      "text": "📡 ETF/섹터 신호 · 2026-07-13 (전일 확정)\n\n★ 오늘 새 신호 4개\n\n🟢 TIGER 현대차그룹플러스 · 자동차\n   Stochastic 과매도 반등·골든크로스\n   ADX 27.4 · %K 21.6/21.3 · 수급 중립\n\n🟢 RISE 수소경제테마 · 신재생/수소/기후\n   Stochastic 과매도 반등·골든크로스\n   ADX 33.3 · %K 16.1/12.8 · 수급 중립\n\n🟢 KODEX 방산TOP10 · 방산\n   Stochastic 과매도 반등·골든크로스\n   ADX 21.3 · %K 18.8/18.5 · 수급 중립\n\n🟢 SOL 조선TOP3플러스 · 조선\n   Stochastic 과매도 반등·골든크로스\n   ADX 18.5 · %K 9.9/7.9 · 수급 중립\n\n전체 신호판 › 대시보드\n🎴 GS Research Desk · ETF/섹터 신호",
       "entities": [
         {
           "offset": 0,
@@ -31,81 +31,31 @@
         },
         {
           "offset": 45,
-          "length": 2,
+          "length": 1,
           "type": "bold"
         },
         {
-          "offset": 53,
-          "length": 9,
-          "type": "bold"
-        },
-        {
-          "offset": 141,
-          "length": 18,
-          "type": "bold"
-        },
-        {
-          "offset": 237,
-          "length": 11,
-          "type": "bold"
-        },
-        {
-          "offset": 327,
+          "offset": 52,
           "length": 14,
           "type": "bold"
         },
         {
-          "offset": 438,
-          "length": 15,
-          "type": "bold"
-        },
-        {
-          "offset": 526,
+          "offset": 139,
           "length": 11,
           "type": "bold"
         },
         {
-          "offset": 634,
-          "length": 9,
+          "offset": 229,
+          "length": 13,
           "type": "bold"
         },
         {
-          "offset": 721,
-          "length": 8,
+          "offset": 314,
+          "length": 13,
           "type": "bold"
         },
         {
-          "offset": 804,
-          "length": 12,
-          "type": "bold"
-        },
-        {
-          "offset": 891,
-          "length": 15,
-          "type": "bold"
-        },
-        {
-          "offset": 1003,
-          "length": 8,
-          "type": "bold"
-        },
-        {
-          "offset": 1097,
-          "length": 10,
-          "type": "bold"
-        },
-        {
-          "offset": 1198,
-          "length": 9,
-          "type": "bold"
-        },
-        {
-          "offset": 1297,
-          "length": 10,
-          "type": "bold"
-        },
-        {
-          "offset": 1387,
+          "offset": 403,
           "length": 4,
           "type": "text_link",
           "url": "https://gschoie.github.io/GS-output-dashboard/etf_signal_report.html"
