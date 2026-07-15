@@ -1,5 +1,5 @@
 {
-  "when_utc": "2026-07-14 03:58:17Z",
+  "when_utc": "2026-07-15 03:59:18Z",
   "ok": true,
   "note": "alert_sent",
   "chat_id_tail": "5171",
@@ -7,7 +7,7 @@
   "response": {
     "ok": true,
     "result": {
-      "message_id": 802,
+      "message_id": 849,
       "from": {
         "id": 8917880759,
         "is_bot": true,
@@ -21,8 +21,8 @@
         "username": "gschoie",
         "type": "private"
       },
-      "date": 1784001497,
-      "text": "📡 ETF/섹터 신호 · 2026-07-13 (전일 확정)\n\n★ 오늘 새 신호 4개\n\n🟢 TIGER 현대차그룹플러스 · 자동차\n   Stochastic 과매도 반등·골든크로스\n   ADX 27.4 · %K 21.6/21.3 · 수급 중립\n\n🟢 RISE 수소경제테마 · 신재생/수소/기후\n   Stochastic 과매도 반등·골든크로스\n   ADX 33.3 · %K 16.1/12.8 · 수급 중립\n\n🟢 KODEX 방산TOP10 · 방산\n   Stochastic 과매도 반등·골든크로스\n   ADX 21.3 · %K 18.8/18.5 · 수급 중립\n\n🟢 SOL 조선TOP3플러스 · 조선\n   Stochastic 과매도 반등·골든크로스\n   ADX 18.5 · %K 9.9/7.9 · 수급 중립\n\n전체 신호판 › 대시보드\n🎴 GS Research Desk · ETF/섹터 신호",
+      "date": 1784087957,
+      "text": "📡 ETF/섹터 신호 · 2026-07-14 (전일 확정)\n\n★ 오늘 새 신호 3개\n\n🟢 SOL 자동차TOP3플러스 · 자동차\n   Stochastic 과매도 반등·골든크로스\n   ADX 22.1 · %K 13.6/12.1 · 수급 중립\n\n🟢 KoAct 바이오헬스케어액티브 · 바이오/헬스케어\n   Stochastic 과매도 반등·골든크로스\n   ADX 20.8 · %K 11.8/10.4 · 수급 중립\n\n🟢 TIME K바이오액티브 · 바이오/헬스케어\n   Stochastic 과매도 반등·골든크로스 · 외인·기관 동반 순매수\n   ADX 31.6 · %K 11.3/9.9 · 외인·기관 쌍끌이\n\n전체 신호판 › 대시보드\n🎴 GS Research Desk · ETF/섹터 신호",
       "entities": [
         {
           "offset": 0,
@@ -41,21 +41,16 @@
         },
         {
           "offset": 139,
-          "length": 11,
+          "length": 16,
           "type": "bold"
         },
         {
-          "offset": 229,
-          "length": 13,
+          "offset": 233,
+          "length": 12,
           "type": "bold"
         },
         {
-          "offset": 314,
-          "length": 13,
-          "type": "bold"
-        },
-        {
-          "offset": 403,
+          "offset": 347,
           "length": 4,
           "type": "text_link",
           "url": "https://gschoie.github.io/GS-output-dashboard/etf_signal_report.html"
