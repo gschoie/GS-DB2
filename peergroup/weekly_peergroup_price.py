@@ -404,9 +404,14 @@ def main():
 
         format_index_holiday = workbook.add_format({
             'bg_color': '#D9E1F2', 'font_color': '#666666',
-            'num_format': '0.00', 'font_name': 'Malgun Gothic',
+            'num_format': '#,##0.0', 'font_name': 'Malgun Gothic',
             'font_size': 10
         })
+
+        # 숫자 서식: 주가데이터(한국 #,##0 / 해외 #,##0.0), INDEX(#,##0.0)
+        fmt_price_kr = workbook.add_format({'num_format': '#,##0'})
+        fmt_price_ov = workbook.add_format({'num_format': '#,##0.0'})
+        fmt_index_num = workbook.add_format({'num_format': '#,##0.0'})
 
         format_cache = {}
         def get_cell_format(bg_color, align, is_bold, num_format, font_color, top_b, bottom_b, left_b, right_b):
@@ -558,12 +563,14 @@ def main():
         ws2.set_column('N:N', 9)
 
         ws1.set_column('A:A', 14)
-        for i in range(len(df_history.columns)):
-            ws1.set_column(i+1, i+1, 14)
+        for i, col in enumerate(df_history.columns):
+            ticker = col.rsplit("(", 1)[-1].rstrip(")")  # "이름(티커)" → 티커
+            is_kr = ticker.endswith((".KS", ".KQ"))       # 한국거래소(KOSPI/KOSDAQ)
+            ws1.set_column(i + 1, i + 1, 14, fmt_price_kr if is_kr else fmt_price_ov)
 
         # 3번 시트: 7개 주요 종목 INDEX 차트
         ws3.set_column('A:A', 14)
-        ws3.set_column(1, max(1, len(df_index.columns)), 18)
+        ws3.set_column(1, max(1, len(df_index.columns)), 18, fmt_index_num)
         ws3.freeze_panes(1, 1)
 
         # 휴장일 보정 셀만 회색으로 표시합니다.
@@ -592,7 +599,7 @@ def main():
 
         # 4번 시트: 그룹 구성 종목의 동일가중 평균 INDEX 차트
         ws4.set_column('A:A', 14)
-        ws4.set_column(1, max(1, len(df_group_index.columns)), 18)
+        ws4.set_column(1, max(1, len(df_group_index.columns)), 18, fmt_index_num)
         ws4.freeze_panes(1, 1)
         chart4 = workbook.add_chart({'type': 'line'})
         for group_name in df_group_index.columns:
