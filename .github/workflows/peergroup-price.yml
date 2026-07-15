@@ -1,0 +1,36 @@
+name: 피어그룹 주가 (글로벌)
+
+# 수동 실행 전용. Actions에서 "Run workflow"를 누르면:
+#   야후파이낸스 수집 → 엑셀(글로벌_주가_변동률_모니터링_최종.xlsx) 생성 → 아티팩트 업로드.
+# 로그는 실행 페이지에서 실시간으로 보이고, 끝나면 ✓/✗ 로 완료 알림이 온다.
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: 패키지 설치
+        run: python -m pip install --upgrade pip yfinance pandas xlsxwriter numpy
+
+      - name: 피어그룹 엑셀 생성 (야후 수집 → xlsx)
+        working-directory: peergroup
+        run: python weekly_peergroup_price.py
+
+      - name: 엑셀 아티팩트 업로드
+        uses: actions/upload-artifact@v4
+        with:
+          name: 피어그룹-주가-엑셀
+          path: peergroup/글로벌_주가_변동률_모니터링_최종.xlsx
+          if-no-files-found: error
