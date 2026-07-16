@@ -1,5 +1,5 @@
 {
-  "when_utc": "2026-07-15 03:59:18Z",
+  "when_utc": "2026-07-16 02:22:07Z",
   "ok": true,
   "note": "alert_sent",
   "chat_id_tail": "5171",
@@ -7,7 +7,7 @@
   "response": {
     "ok": true,
     "result": {
-      "message_id": 849,
+      "message_id": 897,
       "from": {
         "id": 8917880759,
         "is_bot": true,
@@ -21,8 +21,8 @@
         "username": "gschoie",
         "type": "private"
       },
-      "date": 1784087957,
-      "text": "📡 ETF/섹터 신호 · 2026-07-14 (전일 확정)\n\n★ 오늘 새 신호 3개\n\n🟢 SOL 자동차TOP3플러스 · 자동차\n   Stochastic 과매도 반등·골든크로스\n   ADX 22.1 · %K 13.6/12.1 · 수급 중립\n\n🟢 KoAct 바이오헬스케어액티브 · 바이오/헬스케어\n   Stochastic 과매도 반등·골든크로스\n   ADX 20.8 · %K 11.8/10.4 · 수급 중립\n\n🟢 TIME K바이오액티브 · 바이오/헬스케어\n   Stochastic 과매도 반등·골든크로스 · 외인·기관 동반 순매수\n   ADX 31.6 · %K 11.3/9.9 · 외인·기관 쌍끌이\n\n전체 신호판 › 대시보드\n🎴 GS Research Desk · ETF/섹터 신호",
+      "date": 1784168527,
+      "text": "📡 ETF/섹터 신호 · 2026-07-15 (전일 확정)\n\n★ 오늘 새 신호 4개\n\n🟢 KODEX 바이오 · 바이오/헬스케어\n   Stochastic 과매도 반등·골든크로스\n   ADX 35.6 · %K 16.9/13.9 · 수급 중립\n\n🟢 KODEX 헬스케어 · 바이오/헬스케어\n   Stochastic 과매도 반등·골든크로스\n   ADX 33.4 · %K 15.0/12.1 · 수급 중립\n\n🟢 TIGER 차이나CSI300 · 해외지수\n   ＋DI가 −DI 상향돌파·추세전환\n   ADX 24.8 · %K 11.1/9.9 · 수급 중립\n\n🟢 TIGER 차이나항셍테크 · 해외지수\n   ＋DI가 −DI 상향돌파·추세전환\n   ADX 15.6 · %K 62.5/68.0 · 수급 중립\n\n전체 신호판 › 대시보드\n🎴 GS Research Desk · ETF/섹터 신호",
       "entities": [
         {
           "offset": 0,
@@ -36,21 +36,26 @@
         },
         {
           "offset": 52,
-          "length": 14,
+          "length": 9,
           "type": "bold"
         },
         {
           "offset": 139,
-          "length": 16,
+          "length": 10,
           "type": "bold"
         },
         {
-          "offset": 233,
-          "length": 12,
+          "offset": 227,
+          "length": 15,
           "type": "bold"
         },
         {
-          "offset": 347,
+          "offset": 310,
+          "length": 13,
+          "type": "bold"
+        },
+        {
+          "offset": 398,
           "length": 4,
           "type": "text_link",
           "url": "https://gschoie.github.io/GS-output-dashboard/etf_signal_report.html"
