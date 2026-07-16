@@ -65,22 +65,29 @@ def price_date_of(con, date):
     return r["price_date"] if r else None
 
 
-def iso_week(date_str):
+def report_week(date_str):
+    """주간 버킷을 '화~월'로 잡아 그 주의 시작 화요일(정렬 가능한 키)을 반환.
+
+    정기 실행은 금요일이지만, 주말에 안 돌고 월요일 아침에 지각 실행할 수 있다.
+    화~월로 묶으면 그 금요일과 다음 월요일이 같은 주가 되어(둘 다 시작 화요일이 같음)
+    지각분이 새 주가 아니라 '그 주 최신'으로 처리된다.
+    """
     y, m, d = map(int, date_str.split("-"))
-    iy, iw, _ = dt.date(y, m, d).isocalendar()
-    return iy, iw
+    dd = dt.date(y, m, d)
+    start = dd - dt.timedelta(days=(dd.weekday() - 1) % 7)   # weekday: Mon=0..Sun=6, 직전(포함) 화요일
+    return start.isoformat()
 
 
 def weekly_endpoints(dates):
     """오름차순 스냅샷 날짜 → (이번주 최신, 전주 최신).
 
-    각 ISO 주(월~일)에서 가장 늦게 찍힌 날짜를 그 주 대표로 보고,
+    각 주(화~월)에서 가장 늦게 찍힌 날짜를 그 주 대표로 보고,
     데이터가 있는 최근 두 주를 비교 대상으로 돌려준다. 같은 주에 여러 번
     돌려도 마지막(가장 늦은) 실행분만 그 주 값으로 쓰인다.
     """
     latest_of_week = {}
     for d in dates:                 # dates 오름차순 → 같은 주는 뒤 날짜가 덮어써 대표가 됨
-        latest_of_week[iso_week(d)] = d
+        latest_of_week[report_week(d)] = d
     weeks = sorted(latest_of_week)
     snap = latest_of_week[weeks[-1]]
     base = latest_of_week[weeks[-2]] if len(weeks) >= 2 else None
