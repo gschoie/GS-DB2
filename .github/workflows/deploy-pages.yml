@@ -23,9 +23,9 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v6
         with:
           python-version: "3.12"
 
@@ -33,7 +33,7 @@ jobs:
       # 저장은 그 데이터를 실제로 갱신하는 run만(save). → push·refresh-union 같은
       # 비수집 run이 stale DB로 뉴스 캐시를 덮어써 07-08로 리버트되던 문제를 근절.
       - name: 뉴스DB 캐시 복원
-        uses: actions/cache/restore@v4
+        uses: actions/cache/restore@v5
         with:
           path: |
             telegram_research_dashboard/data/dashboard.db
@@ -47,7 +47,7 @@ jobs:
             dashboard-db-
 
       - name: 노조 캐시 복원
-        uses: actions/cache/restore@v4
+        uses: actions/cache/restore@v5
         with:
           path: |
             telegram_research_dashboard/data/hhiun_snapshot.json
@@ -129,7 +129,7 @@ jobs:
       # 뉴스/톤/매크로를 실제로 수집한 run(비 push)만 뉴스DB 캐시를 저장한다.
       - name: 뉴스DB 캐시 저장 (수집 run만)
         if: github.event_name != 'push'
-        uses: actions/cache/save@v4
+        uses: actions/cache/save@v5
         with:
           path: |
             telegram_research_dashboard/data/dashboard.db
@@ -139,8 +139,8 @@ jobs:
             telegram_research_dashboard/data/macro.json
           key: newsdb-${{ github.run_id }}
 
-      - uses: actions/configure-pages@v5
-      - uses: actions/upload-pages-artifact@v3
+      - uses: actions/configure-pages@v6
+      - uses: actions/upload-pages-artifact@v5
         with:
           path: telegram_research_dashboard/_site
 
@@ -156,4 +156,4 @@ jobs:
     steps:
       - name: GitHub Pages 배포
         id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v5

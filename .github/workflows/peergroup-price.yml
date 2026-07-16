@@ -14,9 +14,9 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v6
         with:
           python-version: "3.12"
           cache: pip
@@ -29,7 +29,7 @@ jobs:
         run: python weekly_peergroup_price.py
 
       - name: 엑셀 아티팩트 업로드
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: 피어그룹-주가-엑셀
           path: peergroup/글로벌_주가_변동률_모니터링_최종.xlsx
