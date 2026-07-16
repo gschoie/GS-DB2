@@ -147,11 +147,20 @@ TARGET_COMPANIES = [
 
 OUTPUT_FILE = "글로벌_주가_변동률_모니터링_최종.xlsx"
 
-# 3번 시트 차트에 표시할 종목
+# 3번 시트 차트에 표시할 종목 + 선 서식(사용자가 편집한 엑셀 차트에서 추출한 값)
 INDEX_CHART_COMPANIES = [
     "HD현대중공업", "HD한국조선해양", "삼성중공업", "한화오션",
     "한화엔진", "HD현대마린엔진", "HD현대마린솔루션",
 ]
+INDEX_CHART_STYLE = {
+    "HD현대중공업":     {"color": "#D9D9D9", "width": 1.5},
+    "HD한국조선해양":   {"color": "#9CC2E5", "width": 1.5},
+    "삼성중공업":       {"color": "#AA875E", "width": 1.5},
+    "한화오션":         {"color": "#000000", "width": 1.0},
+    "한화엔진":         {"color": "#D2C0AA", "width": 1.0, "dash": "dash"},
+    "HD현대마린엔진":   {"color": "#595959", "width": 1.5, "dash": "dash"},
+    "HD현대마린솔루션": {"color": "#7F7F7F", "width": 1.0},
+}
 
 # 4번 시트 그룹 구성: 필요할 때 회사명만 추가/삭제하면 됩니다.
 INDEX_GROUPS = {
@@ -161,12 +170,18 @@ INDEX_GROUPS = {
     "한국 엔진사": ["HD현대마린엔진", "한화엔진", "STX엔진"],
 }
 
-# 그룹 평균 차트 색상 (사용자가 편집한 차트 스타일 기준)
+# 그룹 평균 차트 색상·선두께 (사용자가 편집한 엑셀 차트에서 추출한 값)
 GROUP_CHART_COLORS = {
-    "한국 조선사": "#B08A56",  # 황갈색
+    "한국 조선사": "#AA875E",  # 황갈색
     "중국 조선사": "#000000",  # 검정
-    "일본 조선사": "#8C8C8C",  # 회색
-    "한국 엔진사": "#2F66B3",  # 파랑
+    "일본 조선사": "#818181",  # 회색
+    "한국 엔진사": "#2A5CAA",  # 파랑
+}
+GROUP_CHART_WIDTHS = {
+    "한국 조선사": 1.5,
+    "중국 조선사": 1.5,
+    "일본 조선사": 1.0,
+    "한국 엔진사": 1.0,
 }
 
 # =========================================================================
@@ -376,8 +391,9 @@ def main():
 
     with pd.ExcelWriter(OUTPUT_FILE, engine='xlsxwriter') as writer:
         df_history.to_excel(writer, sheet_name="주가데이터")
-        df_index.to_excel(writer, sheet_name="1년 INDEX")
-        df_group_index.to_excel(writer, sheet_name="그룹 평균 INDEX")
+        # INDEX 2개 시트는 1행을 비워 그 위에 차트를 얹는다(startrow=1 → 헤더=2행, 데이터=3행부터)
+        df_index.to_excel(writer, sheet_name="1년 INDEX", startrow=1)
+        df_group_index.to_excel(writer, sheet_name="그룹 평균 INDEX", startrow=1)
 
         workbook = writer.book
         ws1 = writer.sheets["주가데이터"]
@@ -568,76 +584,96 @@ def main():
             is_kr = ticker.endswith((".KS", ".KQ"))       # 한국거래소(KOSPI/KOSDAQ)
             ws1.set_column(i + 1, i + 1, 14, fmt_price_kr if is_kr else fmt_price_ov)
 
-        # 3번 시트: 7개 주요 종목 INDEX 차트
+        # 3번 시트: 7개 주요 종목 INDEX 차트 (1행 비우고 상단에 배치)
         ws3.set_column('A:A', 14)
         ws3.set_column(1, max(1, len(df_index.columns)), 18, fmt_index_num)
-        ws3.freeze_panes(1, 1)
+        ws3.set_row(0, 195.75)          # 1행: 차트 자리(빈칸·고정 높이)
+        ws3.freeze_panes(2, 1)          # 헤더(2행)까지 고정 → B3
 
-        # 휴장일 보정 셀만 회색으로 표시합니다.
-        for row_num, (_, mask_row) in enumerate(index_holiday_mask.iterrows(), start=1):
+        # 휴장일 보정 셀만 회색으로 표시(데이터가 3행부터이므로 start=2)
+        for row_num, (_, mask_row) in enumerate(index_holiday_mask.iterrows(), start=2):
             for col_num, is_holiday in enumerate(mask_row, start=1):
                 if is_holiday:
-                    ws3.write_number(row_num, col_num, float(df_index.iloc[row_num - 1, col_num - 1]), format_index_holiday)
+                    ws3.write_number(row_num, col_num, float(df_index.iloc[row_num - 2, col_num - 1]), format_index_holiday)
 
         chart3 = workbook.add_chart({'type': 'line'})
+        idx_first, idx_last = 2, len(df_index) + 1   # 0-index: 데이터 3행~ = 2 ~ len+1
         for company_name in INDEX_CHART_COMPANIES:
             hist_col = name_to_hist_col.get(company_name)
             if hist_col in df_index.columns:
                 col_num = df_index.columns.get_loc(hist_col) + 1
+                st = INDEX_CHART_STYLE.get(company_name, {"color": "#7F7F7F", "width": 1.0})
+                line = {'color': st['color'], 'width': st['width']}
+                if st.get('dash'):
+                    line['dash_type'] = st['dash']
                 chart3.add_series({
                     'name': company_name,
-                    'categories': ['1년 INDEX', 1, 0, len(df_index), 0],
-                    'values': ['1년 INDEX', 1, col_num, len(df_index), col_num],
-                    'line': {'width': 1.75},
+                    'categories': ['1년 INDEX', idx_first, 0, idx_last, 0],
+                    'values': ['1년 INDEX', idx_first, col_num, idx_last, col_num],
+                    'line': line,
                 })
-        chart3.set_title({'name': '주요 조선·엔진 기업 INDEX (1년 전=100)'})
-        chart3.set_x_axis({'name': '날짜', 'date_axis': True, 'num_format': 'yyyy-mm'})
-        chart3.set_y_axis({'name': 'INDEX', 'major_gridlines': {'visible': True}})
+        # 사용자 편집 서식: 제목없음 · X축 yy.mm 3개월 · Y축 격자숨김 · 범례 아래 · 흰 플롯영역
+        chart3.set_x_axis({
+            'date_axis': True, 'num_format': r'yy\.mm',
+            'major_unit': 3, 'major_unit_type': 'months',
+            'major_gridlines': {'visible': False},
+            'line': {'color': '#7F7F7F', 'width': 0.75},
+        })
+        chart3.set_y_axis({
+            'num_format': '#,##0',
+            'major_gridlines': {'visible': False},
+            'line': {'color': '#7F7F7F', 'width': 0.75},
+        })
         chart3.set_legend({'position': 'bottom'})
-        chart3.set_size({'width': 1100, 'height': 520})
-        ws3.insert_chart(len(df_index) + 3, 0, chart3)
+        chart3.set_chartarea({'border': {'none': True}, 'fill': {'none': True}})
+        chart3.set_plotarea({'fill': {'color': '#FFFFFF'}, 'border': {'none': True}})
+        chart3.set_size({'width': 434, 'height': 208})
+        ws3.insert_chart(0, 1, chart3)   # B1(1행)에 배치
 
-        # 4번 시트: 그룹 구성 종목의 동일가중 평균 INDEX 차트
+        # 4번 시트: 그룹 평균 INDEX 차트 (1행 비우고 상단에 배치)
         ws4.set_column('A:A', 14)
         ws4.set_column(1, max(1, len(df_group_index.columns)), 18, fmt_index_num)
-        ws4.freeze_panes(1, 1)
+        ws4.set_row(0, 178.5)           # 1행: 차트 자리
+        ws4.freeze_panes(2, 1)
         chart4 = workbook.add_chart({'type': 'line'})
+        grp_first, grp_last = 2, len(df_group_index) + 1
         for group_name in df_group_index.columns:
             col_num = df_group_index.columns.get_loc(group_name) + 1
             chart4.add_series({
                 'name': group_name,
-                'categories': ['그룹 평균 INDEX', 1, 0, len(df_group_index), 0],
-                'values': ['그룹 평균 INDEX', 1, col_num, len(df_group_index), col_num],
+                'categories': ['그룹 평균 INDEX', grp_first, 0, grp_last, 0],
+                'values': ['그룹 평균 INDEX', grp_first, col_num, grp_last, col_num],
                 'line': {
                     'color': GROUP_CHART_COLORS.get(group_name, '#666666'),
-                    'width': 2.25,
+                    'width': GROUP_CHART_WIDTHS.get(group_name, 1.0),
                 },
             })
-        # 사용자가 편집한 예시처럼 제목 없이, 범례는 위쪽에 두고
-        # 흰 배경·무격자·가로로 긴 형태로 표시합니다.
-        chart4.set_chartarea({'fill': {'color': '#FFFFFF'}, 'border': {'none': True}})
+        # 사용자 편집 서식: 제목없음 · 흰배경 · X축 yy.mm 3개월·라벨 아래 · Y축 80~300 20단위 · 범례 위
+        chart4.set_chartarea({'border': {'none': True}, 'fill': {'none': True}})
         chart4.set_plotarea({'fill': {'color': '#FFFFFF'}, 'border': {'none': True}})
         chart4.set_x_axis({
             'date_axis': True,
-            'num_format': 'yyyy-mm',
-            'major_unit': 2,
+            'num_format': r'yy\.mm',
+            'major_unit': 3,
             'major_unit_type': 'months',
             'major_gridlines': {'visible': False},
-            'line': {'color': '#000000'},
+            'line': {'color': '#7F7F7F', 'width': 0.75},
             'label_position': 'low',
         })
         chart4.set_y_axis({
             'min': 80,
+            'max': 300,
             'major_unit': 20,
+            'num_format': '#,##0',
             'major_gridlines': {'visible': False},
-            'line': {'color': '#000000'},
+            'line': {'color': '#7F7F7F', 'width': 0.75},
         })
         chart4.set_legend({
             'position': 'top',
             'font': {'name': 'Malgun Gothic', 'size': 10, 'color': '#000000'},
         })
-        chart4.set_size({'width': 1100, 'height': 420})
-        ws4.insert_chart(len(df_group_index) + 3, 0, chart4)
+        chart4.set_size({'width': 434, 'height': 208})
+        ws4.insert_chart(0, 1, chart4)
 
         # =====================================================================
         # 5번 시트: P-P (Peer-to-Peer) — 두 기준일 사이 등락 비교
