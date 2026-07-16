@@ -22,13 +22,8 @@ import universe
 sys.stdout.reconfigure(encoding="utf-8")
 
 
-def week_monday(d=None):
-    d = d or dt.date.today()
-    return (d - dt.timedelta(days=d.weekday())).isoformat()
-
-
 def run(limit=None, snapshot_date=None, refresh_universe=False, delay=0.3):
-    snap = snapshot_date or week_monday()
+    snap = snapshot_date or dt.date.today().isoformat()   # 실제 실행일로 저장 (주별 대표는 build_static이 선택)
     uni = universe.load_or_crawl(refresh=refresh_universe)
     items = list(uni.items())
     if limit:

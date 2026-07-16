@@ -5,6 +5,7 @@
 - 전체 종목 데이터는 엑셀 다운로드 버튼으로 제공
 출력: telegram_research_dashboard/static/{consensus_revision.html, consensus_full.xlsx}
 """
+import datetime as dt
 import json
 import os
 import sys
@@ -64,14 +65,35 @@ def price_date_of(con, date):
     return r["price_date"] if r else None
 
 
+def iso_week(date_str):
+    y, m, d = map(int, date_str.split("-"))
+    iy, iw, _ = dt.date(y, m, d).isocalendar()
+    return iy, iw
+
+
+def weekly_endpoints(dates):
+    """오름차순 스냅샷 날짜 → (이번주 최신, 전주 최신).
+
+    각 ISO 주(월~일)에서 가장 늦게 찍힌 날짜를 그 주 대표로 보고,
+    데이터가 있는 최근 두 주를 비교 대상으로 돌려준다. 같은 주에 여러 번
+    돌려도 마지막(가장 늦은) 실행분만 그 주 값으로 쓰인다.
+    """
+    latest_of_week = {}
+    for d in dates:                 # dates 오름차순 → 같은 주는 뒤 날짜가 덮어써 대표가 됨
+        latest_of_week[iso_week(d)] = d
+    weeks = sorted(latest_of_week)
+    snap = latest_of_week[weeks[-1]]
+    base = latest_of_week[weeks[-2]] if len(weeks) >= 2 else None
+    return snap, base
+
+
 def build():
     con = db.connect()
     dates = db.snapshot_dates(con)
     if not dates:
         print("스냅샷이 없습니다. run_snapshot.py 먼저 실행.")
         return
-    snap = dates[-1]
-    base = dates[-2] if len(dates) >= 2 else None
+    snap, base = weekly_endpoints(dates)   # 주(월~일)별 최신 스냅샷 → 최근 두 주 비교
     qp = dominant_quarter(con, snap)
 
     psnap = db.price_map(con, snap)
@@ -120,8 +142,8 @@ def build():
         up = sum(1 for d in rated if d["wow"] > 0.05)
         down = sum(1 for d in rated if d["wow"] < -0.05)
         flat = len(rated) - up - down
-        movers = sorted(rated, key=lambda d: abs(d["wow"]), reverse=True)[:20]
-        levels = sorted(data, key=lambda d: d["curr"], reverse=True)[:20]
+        movers = sorted(rated, key=lambda d: abs(d["wow"]), reverse=True)[:30]
+        levels = sorted(data, key=lambda d: d["curr"], reverse=True)[:30]
         page_hz.append({
             "label": labels[key], "period": periods[key], "key": key,
             "up": up, "down": down, "flat": flat,
@@ -231,6 +253,7 @@ th,td{padding:7px 11px;text-align:right;border-bottom:1px solid var(--line);whit
 th:nth-child(2),td:nth-child(2){text-align:left}
 th:first-child,td:first-child{text-align:center;color:var(--muted);width:30px}
 th{color:var(--muted);font-weight:500;font-size:12px}tr:last-child td{border-bottom:0}
+th.sortable{cursor:pointer;user-select:none}th.sortable:hover{color:var(--ink)}
 .pos{color:var(--up);font-weight:600}.neg{color:var(--down);font-weight:600}
 .note{background:var(--card);border:1px dashed var(--line);border-radius:12px;
 padding:14px 16px;color:var(--muted);font-size:13px;margin-bottom:18px}
@@ -267,29 +290,42 @@ if(D.has_revision){
    '<div class="tiny">보합 '+h.flat+' · 평가 '+(h.up+h.down+h.flat)+'</div></div>';});
  document.getElementById('cards').innerHTML=ch+'</div>';
  document.getElementById('foot').innerHTML='컨센 변동 = 전주 대비 영업이익 컨센 변화율 · '+
-  '주가 변동 = 종가 '+(D.price_date_base||'')+' → '+(D.price_date_snap||'')+' · 변화 큰 순 상위 20 · 전체는 엑셀';
+  '주가 변동 = 종가 '+(D.price_date_base||'')+' → '+(D.price_date_snap||'')+' · 변화 큰 순 상위 30 · 열 제목 클릭 정렬 · 전체는 엑셀';
 }else{
  document.getElementById('cards').innerHTML='<div class="note">첫 스냅샷이라 전주 대비 변동은 '+
-  '다음 스냅샷부터 표시됩니다. 아래는 현재 컨센 레벨 상위 20이며, 전체 종목은 엑셀에서 확인하세요.</div>';
+  '다음 스냅샷부터 표시됩니다. 아래는 현재 컨센 레벨 상위 30이며, 전체 종목은 엑셀에서 확인하세요.</div>';
 }
 var tabs='';D.horizons.forEach(function(h,i){tabs+='<button class="tab'+(i===0?' on':'')+'" data-i="'+i+'">'+h.label+'</button>'});
 document.getElementById('tabs').innerHTML=tabs;
 document.querySelectorAll('.tab').forEach(function(b){b.onclick=function(){
  sel=+b.dataset.i;document.querySelectorAll('.tab').forEach(function(x){x.classList.remove('on')});
  b.classList.add('on');draw()}});
-function draw(){var h=D.horizons[sel],out;
+var sortKey=null, sortDir=-1;   // sortKey=null → 서버 순서(변화 큰 순)
+function sortRows(rows){
+ if(sortKey==null)return rows;
+ return rows.slice().sort(function(a,b){var x=a[sortKey],y=b[sortKey];
+  if(x==null&&y==null)return 0;if(x==null)return 1;if(y==null)return -1;   // 값 없는 종목은 뒤로
+  return typeof x==='string'?sortDir*x.localeCompare(y,'ko'):sortDir*(x-y)});
+}
+function arrow(k){return sortKey===k?(sortDir<0?' ▼':' ▲'):''}
+function draw(){var h=D.horizons[sel],tbl=document.getElementById('tbl'),out;
  if(D.has_revision){
-  out='<table><tr><th>#</th><th>종목 · '+h.label+' 변화 큰 순</th>'+
-   '<th>컨센 전주<br><span class="tiny">'+md(D.base_date)+'</span></th>'+
-   '<th>컨센 현재<br><span class="tiny">'+md(D.snapshot_date)+'</span></th>'+
-   '<th>컨센 변동</th><th>주가 변동</th></tr>';
-  h.movers.forEach(function(d,i){out+='<tr><td>'+(i+1)+'</td><td>'+d.name+'</td><td>'+fmt(d.base)+
-   '</td><td>'+fmt(d.curr)+'</td><td>'+pct(d.wow)+'</td><td>'+pct(d.pwow)+'</td></tr>'});
+  var cols=[['name','종목',''],['base','컨센 전주',md(D.base_date)],
+   ['curr','컨센 현재',md(D.snapshot_date)],['wow','컨센 변동',''],['pwow','주가 변동','']];
+  out='<table><tr><th>#</th>';
+  cols.forEach(function(c){out+='<th class="sortable" data-k="'+c[0]+'">'+c[1]+
+   (c[2]?'<br><span class="tiny">'+c[2]+'</span>':'')+arrow(c[0])+'</th>'});
+  out+='</tr>';
+  sortRows(h.movers).forEach(function(d,i){out+='<tr><td>'+(i+1)+'</td><td>'+d.name+'</td><td>'+
+   fmt(d.base)+'</td><td>'+fmt(d.curr)+'</td><td>'+pct(d.wow)+'</td><td>'+pct(d.pwow)+'</td></tr>'});
+  tbl.innerHTML=out+'</table>';
+  tbl.querySelectorAll('th.sortable').forEach(function(th){th.onclick=function(){
+   var k=th.dataset.k;if(sortKey===k){sortDir=-sortDir}else{sortKey=k;sortDir=k==='name'?1:-1}draw()}});
  }else{
   out='<table><tr><th>#</th><th>종목 · '+h.label+' 컨센 상위</th><th>영업이익</th></tr>';
   h.levels.forEach(function(d,i){out+='<tr><td>'+(i+1)+'</td><td>'+d.name+'</td><td>'+fmt(d.curr)+'</td></tr>'});
+  tbl.innerHTML=out+'</table>';
  }
- document.getElementById('tbl').innerHTML=out+'</table>';
 }
 draw();
 </script></body></html>"""
