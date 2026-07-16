@@ -142,13 +142,17 @@ def build():
         up = sum(1 for d in rated if d["wow"] > 0.05)
         down = sum(1 for d in rated if d["wow"] < -0.05)
         flat = len(rated) - up - down
-        movers = sorted(rated, key=lambda d: abs(d["wow"]), reverse=True)[:30]
-        levels = sorted(data, key=lambda d: d["curr"], reverse=True)[:30]
+        # 전체 종목을 다 실어 보낸다(클라이언트가 30/전체 토글·열 정렬). 기본 순서는
+        # 리비전이면 변화 큰 순(무평가는 뒤), 첫 스냅샷이면 컨센 레벨 순.
+        if base:
+            ordered = sorted(rated, key=lambda d: abs(d["wow"]), reverse=True) + \
+                      [d for d in data if d["wow"] is None]
+        else:
+            ordered = sorted(data, key=lambda d: d["curr"], reverse=True)
         page_hz.append({
             "label": labels[key], "period": periods[key], "key": key,
             "up": up, "down": down, "flat": flat,
-            "movers": [compact(d) for d in movers],
-            "levels": [compact(d) for d in levels],
+            "rows": [compact(d) for d in ordered],
         })
 
     payload = {
@@ -254,6 +258,10 @@ th:nth-child(2),td:nth-child(2){text-align:left}
 th:first-child,td:first-child{text-align:center;color:var(--muted);width:30px}
 th{color:var(--muted);font-weight:500;font-size:12px}tr:last-child td{border-bottom:0}
 th.sortable{cursor:pointer;user-select:none}th.sortable:hover{color:var(--ink)}
+a.stk{color:var(--ink);text-decoration:none;border-bottom:1px dotted var(--muted)}
+a.stk:hover{color:var(--accent);border-color:var(--accent)}
+.lim{margin:0 0 10px;border:1px solid var(--line);background:var(--card);color:var(--accent);
+font-size:12px;font-weight:600;padding:6px 12px;border-radius:8px;cursor:pointer}
 .pos{color:var(--up);font-weight:600}.neg{color:var(--down);font-weight:600}
 .note{background:var(--card);border:1px dashed var(--line);border-radius:12px;
 padding:14px 16px;color:var(--muted);font-size:13px;margin-bottom:18px}
@@ -290,7 +298,7 @@ if(D.has_revision){
    '<div class="tiny">보합 '+h.flat+' · 평가 '+(h.up+h.down+h.flat)+'</div></div>';});
  document.getElementById('cards').innerHTML=ch+'</div>';
  document.getElementById('foot').innerHTML='컨센 변동 = 전주 대비 영업이익 컨센 변화율 · '+
-  '주가 변동 = 종가 '+(D.price_date_base||'')+' → '+(D.price_date_snap||'')+' · 변화 큰 순 상위 30 · 열 제목 클릭 정렬 · 전체는 엑셀';
+  '주가 변동 = 종가 '+(D.price_date_base||'')+' → '+(D.price_date_snap||'')+' · 기본 상위 30(전체 보기·열 제목 클릭 정렬 가능) · 종목명 클릭 시 네이버 차트';
 }else{
  document.getElementById('cards').innerHTML='<div class="note">첫 스냅샷이라 전주 대비 변동은 '+
   '다음 스냅샷부터 표시됩니다. 아래는 현재 컨센 레벨 상위 30이며, 전체 종목은 엑셀에서 확인하세요.</div>';
@@ -300,7 +308,11 @@ document.getElementById('tabs').innerHTML=tabs;
 document.querySelectorAll('.tab').forEach(function(b){b.onclick=function(){
  sel=+b.dataset.i;document.querySelectorAll('.tab').forEach(function(x){x.classList.remove('on')});
  b.classList.add('on');draw()}});
-var sortKey=null, sortDir=-1;   // sortKey=null → 서버 순서(변화 큰 순)
+var sortKey=null, sortDir=-1, showAll=false;   // sortKey=null → 서버 순서(기본 정렬)
+var TOP=30;
+function mmdd(s){return s?s.slice(5).replace('-','/'):''}   // 'YYYY-MM-DD' → 'MM/DD'
+function nameCell(d){return '<a class="stk" href="https://finance.naver.com/item/fchart.naver?code='+
+ d.code+'" target="_blank" rel="noopener">'+d.name+'</a>'}
 function sortRows(rows){
  if(sortKey==null)return rows;
  return rows.slice().sort(function(a,b){var x=a[sortKey],y=b[sortKey];
@@ -309,23 +321,28 @@ function sortRows(rows){
 }
 function arrow(k){return sortKey===k?(sortDir<0?' ▼':' ▲'):''}
 function draw(){var h=D.horizons[sel],tbl=document.getElementById('tbl'),out;
+ var all=h.rows||[],rows=sortRows(all),shown=showAll?rows:rows.slice(0,TOP);
+ var toggle=all.length>TOP?'<button class="lim" id="limtog">'+
+  (showAll?'상위 '+TOP+'만 보기':'전체 '+all.length+'개 보기')+'</button>':'';
+ var cols;
  if(D.has_revision){
-  var cols=[['name','종목',''],['base','컨센 전주',md(D.base_date)],
-   ['curr','컨센 현재',md(D.snapshot_date)],['wow','컨센 변동',''],['pwow','주가 변동','']];
-  out='<table><tr><th>#</th>';
-  cols.forEach(function(c){out+='<th class="sortable" data-k="'+c[0]+'">'+c[1]+
-   (c[2]?'<br><span class="tiny">'+c[2]+'</span>':'')+arrow(c[0])+'</th>'});
-  out+='</tr>';
-  sortRows(h.movers).forEach(function(d,i){out+='<tr><td>'+(i+1)+'</td><td>'+d.name+'</td><td>'+
-   fmt(d.base)+'</td><td>'+fmt(d.curr)+'</td><td>'+pct(d.wow)+'</td><td>'+pct(d.pwow)+'</td></tr>'});
-  tbl.innerHTML=out+'</table>';
-  tbl.querySelectorAll('th.sortable').forEach(function(th){th.onclick=function(){
-   var k=th.dataset.k;if(sortKey===k){sortDir=-sortDir}else{sortKey=k;sortDir=k==='name'?1:-1}draw()}});
+  cols=[['name','종목',''],['base','컨센 전주',mmdd(D.base_date)],['curr','컨센 현재',mmdd(D.snapshot_date)],
+   ['wow','컨센 변화',mmdd(D.base_date)+'-'+mmdd(D.snapshot_date)],
+   ['pwow','주가 변동',mmdd(D.price_date_base)+'-'+mmdd(D.price_date_snap)]];
  }else{
-  out='<table><tr><th>#</th><th>종목 · '+h.label+' 컨센 상위</th><th>영업이익</th></tr>';
-  h.levels.forEach(function(d,i){out+='<tr><td>'+(i+1)+'</td><td>'+d.name+'</td><td>'+fmt(d.curr)+'</td></tr>'});
-  tbl.innerHTML=out+'</table>';
+  cols=[['name','종목',''],['curr','영업이익',mmdd(D.snapshot_date)]];
  }
+ out=toggle+'<table><tr><th>#</th>';
+ cols.forEach(function(c){out+='<th class="sortable" data-k="'+c[0]+'">'+c[1]+
+  (c[2]?'<br><span class="tiny">'+c[2]+'</span>':'')+arrow(c[0])+'</th>'});
+ out+='</tr>';
+ shown.forEach(function(d,i){out+='<tr><td>'+(i+1)+'</td><td>'+nameCell(d)+'</td>'+
+  (D.has_revision?'<td>'+fmt(d.base)+'</td><td>'+fmt(d.curr)+'</td><td>'+pct(d.wow)+'</td><td>'+pct(d.pwow)+'</td>'
+                 :'<td>'+fmt(d.curr)+'</td>')+'</tr>'});
+ tbl.innerHTML=out+'</table>';
+ var lt=document.getElementById('limtog');if(lt)lt.onclick=function(){showAll=!showAll;draw()};
+ tbl.querySelectorAll('th.sortable').forEach(function(th){th.onclick=function(){
+  var k=th.dataset.k;if(sortKey===k){sortDir=-sortDir}else{sortKey=k;sortDir=k==='name'?1:-1}draw()}});
 }
 draw();
 </script></body></html>"""
