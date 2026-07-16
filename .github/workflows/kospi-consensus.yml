@@ -52,5 +52,12 @@ jobs:
             echo "변경 없음 — 커밋 생략"
           else
             git commit -m "chore(consensus): 주간 컨센 스냅샷 $(date -u +%Y-%m-%d)"
-            git push
+            # 스크랩이 ~10분 걸려 그 사이 main이 앞서가면 push가 non-fast-forward로 거부된다.
+            # 재기반(rebase) 후 재시도해 동시 커밋과 충돌해도 안전하게 반영한다.
+            for i in 1 2 3 4 5; do
+              git push origin HEAD:main && { echo "push 성공"; break; }
+              echo "원격이 앞서감 — 재기반 후 재시도 ($i/5)"
+              git pull --rebase --autostash origin main || exit 1
+              sleep 3
+            done
           fi
