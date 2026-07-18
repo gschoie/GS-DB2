@@ -1,6 +1,7 @@
 {
   "date": "2026-07-18",
-  "fetched_at": "2026-07-18 14:37",
+  "fetched_at": "2026-07-18 17:34",
+  "base_date": "2026-07-16",
   "source": "naver_top10",
   "etfs": {
     "385720": {
@@ -80,7 +81,8 @@
         }
       ],
       "group": "TIME(구 TIMEFOLIO)",
-      "label": "TIME 코스피액티브"
+      "label": "TIME 코스피액티브",
+      "base_date": "2026-07-16"
     },
     "0162Y0": {
       "name": "TIME 코스닥액티브",
@@ -159,7 +161,8 @@
         }
       ],
       "group": "TIME(구 TIMEFOLIO)",
-      "label": "TIME 코스닥액티브"
+      "label": "TIME 코스닥액티브",
+      "base_date": "2026-07-16"
     },
     "426020": {
       "name": "TIME 미국S&P500액티브",
@@ -238,7 +241,8 @@
         }
       ],
       "group": "TIME(구 TIMEFOLIO)",
-      "label": "TIME 미국S&P500액티브"
+      "label": "TIME 미국S&P500액티브",
+      "base_date": "2026-07-16"
     },
     "426030": {
       "name": "TIME 미국나스닥100액티브",
@@ -317,7 +321,8 @@
         }
       ],
       "group": "TIME(구 TIMEFOLIO)",
-      "label": "TIME 미국나스닥100액티브"
+      "label": "TIME 미국나스닥100액티브",
+      "base_date": "2026-07-16"
     },
     "441800": {
       "name": "TIME Korea플러스배당액티브",
@@ -396,7 +401,8 @@
         }
       ],
       "group": "TIME(구 TIMEFOLIO)",
-      "label": "TIME Korea플러스배당액티브"
+      "label": "TIME Korea플러스배당액티브",
+      "base_date": "2026-07-16"
     },
     "463050": {
       "name": "TIME K바이오액티브",
@@ -475,7 +481,8 @@
         }
       ],
       "group": "TIME(구 TIMEFOLIO)",
-      "label": "TIME K바이오액티브"
+      "label": "TIME K바이오액티브",
+      "base_date": "2026-07-16"
     },
     "410870": {
       "name": "TIME K컬처액티브",
@@ -554,7 +561,8 @@
         }
       ],
       "group": "TIME(구 TIMEFOLIO)",
-      "label": "TIME K컬처액티브"
+      "label": "TIME K컬처액티브",
+      "base_date": "2026-07-16"
     },
     "456600": {
       "name": "TIME 글로벌AI인공지능액티브",
@@ -633,7 +641,8 @@
         }
       ],
       "group": "TIME(구 TIMEFOLIO)",
-      "label": "TIME 글로벌AI인공지능액티브"
+      "label": "TIME 글로벌AI인공지능액티브",
+      "base_date": "2026-07-16"
     },
     "0036D0": {
       "name": "TIME 미국배당다우존스액티브",
@@ -712,7 +721,8 @@
         }
       ],
       "group": "TIME(구 TIMEFOLIO)",
-      "label": "TIME 미국배당다우존스액티브"
+      "label": "TIME 미국배당다우존스액티브",
+      "base_date": "2026-07-16"
     },
     "0163Y0": {
       "name": "KoAct 코스닥액티브",
@@ -791,7 +801,8 @@
         }
       ],
       "group": "KoAct",
-      "label": "KoAct 코스닥액티브"
+      "label": "KoAct 코스닥액티브",
+      "base_date": "2026-07-16"
     },
     "462900": {
       "name": "KoAct 바이오헬스케어액티브",
@@ -870,7 +881,8 @@
         }
       ],
       "group": "KoAct",
-      "label": "KoAct 바이오헬스케어액티브"
+      "label": "KoAct 바이오헬스케어액티브",
+      "base_date": "2026-07-16"
     },
     "476850": {
       "name": "KoAct 배당성장액티브",
@@ -949,7 +961,8 @@
         }
       ],
       "group": "KoAct",
-      "label": "KoAct 배당성장액티브"
+      "label": "KoAct 배당성장액티브",
+      "base_date": "2026-07-16"
     },
     "471040": {
       "name": "KoAct 글로벌AI&로봇액티브",
@@ -1028,7 +1041,8 @@
         }
       ],
       "group": "KoAct",
-      "label": "KoAct 글로벌AI&로봇액티브"
+      "label": "KoAct 글로벌AI&로봇액티브",
+      "base_date": "2026-07-16"
     },
     "445290": {
       "name": "KODEX 로봇액티브",
@@ -1107,7 +1121,8 @@
         }
       ],
       "group": "KODEX",
-      "label": "KODEX 로봇액티브"
+      "label": "KODEX 로봇액티브",
+      "base_date": "2026-07-16"
     },
     "441640": {
       "name": "KODEX 미국배당커버드콜액티브",
@@ -1186,7 +1201,8 @@
         }
       ],
       "group": "KODEX",
-      "label": "KODEX 미국배당커버드콜액티브"
+      "label": "KODEX 미국배당커버드콜액티브",
+      "base_date": "2026-07-16"
     },
     "471780": {
       "name": "TIGER 코리아테크액티브",
@@ -1265,7 +1281,8 @@
         }
       ],
       "group": "TIGER",
-      "label": "TIGER 코리아테크액티브"
+      "label": "TIGER 코리아테크액티브",
+      "base_date": "2026-07-16"
     },
     "472150": {
       "name": "TIGER 배당커버드콜액티브",
@@ -1344,7 +1361,8 @@
         }
       ],
       "group": "TIGER",
-      "label": "TIGER 배당커버드콜액티브"
+      "label": "TIGER 배당커버드콜액티브",
+      "base_date": "2026-07-16"
     },
     "365040": {
       "name": "TIGER AI코리아그로스액티브",
@@ -1423,7 +1441,8 @@
         }
       ],
       "group": "TIGER",
-      "label": "TIGER AI코리아그로스액티브"
+      "label": "TIGER AI코리아그로스액티브",
+      "base_date": "2026-07-16"
     },
     "387280": {
       "name": "TIGER 퓨처모빌리티액티브",
@@ -1502,7 +1521,8 @@
         }
       ],
       "group": "TIGER",
-      "label": "TIGER 퓨처모빌리티액티브"
+      "label": "TIGER 퓨처모빌리티액티브",
+      "base_date": "2026-07-16"
     },
     "444200": {
       "name": "SOL 코리아메가테크액티브",
@@ -1581,7 +1601,8 @@
         }
       ],
       "group": "SOL",
-      "label": "SOL 코리아메가테크액티브"
+      "label": "SOL 코리아메가테크액티브",
+      "base_date": "2026-07-16"
     },
     "481180": {
       "name": "SOL 미국AI소프트웨어",
@@ -1660,7 +1681,8 @@
         }
       ],
       "group": "SOL",
-      "label": "SOL 미국AI소프트웨어액티브"
+      "label": "SOL 미국AI소프트웨어액티브",
+      "base_date": "2026-07-16"
     }
   },
   "errors": []

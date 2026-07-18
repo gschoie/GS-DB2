@@ -15,6 +15,9 @@ fetch_holdings.py  →  detect_changes.py  →  build_report.py  →  telegram_n
   계약수(stockCount)·비중(etfWeight). requests로 CI 안전.
 - 한계: **Top10만** 제공(11위 이하 꼬리·완전 신규편입은 미포착). KRX 전체 PDF는 WAF 차단.
   해외종목 보유 ETF는 종목명·계약수만 제공(비중 '-').
+- **구성 기준일**: CU당 구성종목은 KRX 장마감 기준일이 붙는다(예: 월요일 아침엔 아직 금요일치).
+  `finance.naver.com/item/coinfo.naver?code=` 페이지에서 기준일을 파싱해 스냅샷·리포트·텔레그램에 표기.
+  전일과 기준일이 같으면(=새 구성 미반영) 리포트에 경고 배너 표시(`same_base`).
 - 향후: 운용사(삼성/미래에셋/타임폴리오/신한) 전체 PDF 컬렉터로 교체·보강 가능. 스냅샷/감지/리포트
   구조는 소스와 무관하게 동일.
 

@@ -97,8 +97,15 @@ def build():
         prevtxt = esc(ch["prev_date"])
 
     thr = ch.get("thresholds", {"weight_pp_min": 1.0, "weight_pp_big": 5.0, "share_pct_min": 30})
+    base = esc(ch.get("base_date") or "—")
+    prevbase = esc(ch.get("prev_base_date") or "—")
+    banner = ""
+    if ch.get("same_base"):
+        banner = ('<div class="banner">⚠ 직전 실행과 <b>구성 기준일이 동일</b>합니다 '
+                  f'({base} · KRX 장마감). 아직 새 구성이 반영되지 않아 변화가 없을 수 있습니다.</div>')
     return TEMPLATE.format(
         gen=esc(ch["generated_at"]), date=esc(ch["date"]), prev=prevtxt,
+        base=base, prevbase=prevbase, banner=banner,
         universe=s["universe"], changed=s["etfs_changed"],
         new=s["new_total"], moves=s["moves_total"], gone=s["gone_total"],
         body=body, current=current_holdings_block(snap),
@@ -143,6 +150,7 @@ h2{{font:600 18px Georgia,"Noto Serif KR",serif;margin:30px 0 12px}}
 .lnk:hover{{color:#286342;border-bottom-color:#286342}}
 .pos{{color:#286342}}.neg{{color:#a43c31}}
 .none{{color:#445049;background:#fff;border:1px solid var(--line);padding:26px;text-align:center;font-size:14px}}
+.banner{{margin:14px 0 0;background:#fff8e6;border:1px solid #e7d9a8;color:#7a5f1a;padding:11px 15px;font-size:12px;border-radius:6px}}
 .legend{{margin:16px 0 0;color:var(--muted);font-size:11px;line-height:1.85;background:#fff;border:1px solid var(--line);padding:14px 16px}}
 .legend b{{color:#445049}}
 .cur{{margin-top:26px;background:#fff;border:1px solid var(--line)}}
@@ -158,8 +166,10 @@ td{{border-bottom:1px solid #eef1ec;padding:9px 12px;font-size:12px;vertical-ali
 </style></head><body>
 <p class="eyebrow">ACTIVE ETF · HOLDINGS</p>
 <h1>액티브 ETF 구성 변화</h1>
-<p class="sub">생성 <b>{gen}</b> · 기준일 <b>{date}</b> vs 전일 <b>{prev}</b><br>
+<p class="sub">생성 <b>{gen}</b> · 실행일 {date}<br>
+구성 기준일 <b>{base}</b> (KRX 장마감) · 비교 <b>{prevbase} → {base}</b><br>
 매일 구성종목(Top10)을 스냅샷하고, <b>주가 효과와 CU 자금유출입을 제거</b>해 운용사가 실제로 사고판 것만 잡아냅니다.</p>
+{banner}
 
 <section class="stats">
   <article><small>유니버스</small><strong>{universe}</strong></article>

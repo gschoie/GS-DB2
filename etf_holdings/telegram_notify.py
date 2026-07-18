@@ -56,7 +56,8 @@ def build_message(ch):
         return None
     etfs = ch["etfs"]
     s = ch["summary"]
-    head = [f"<b>🧩 액티브 ETF 구성 변화</b> · {esc(ch['date'])} (전일 대비)", "",
+    base = ch.get("base_date") or "—"
+    head = [f"<b>🧩 액티브 ETF 구성 변화</b> · 구성 기준일 {esc(base)} (KRX 장마감)", "",
             f"변화 ETF <b>{s['etfs_changed']}</b>개 · 진입 {s['new_total']}·이탈 {s['gone_total']}·실매매 {s['moves_total']}", ""]
     blocks = [etf_block(e) for e in etfs[:MAX_ETFS]]
     if len(etfs) > MAX_ETFS:
@@ -66,8 +67,9 @@ def build_message(ch):
 
 
 def heartbeat_message(ch):
+    base = ch.get("base_date") or "—"
     return "\n".join([
-        f"<b>🧩 액티브 ETF 구성 변화</b> · {esc(ch['date'])}", "",
+        f"<b>🧩 액티브 ETF 구성 변화</b> · 구성 기준일 {esc(base)}", "",
         "오늘 유의미한 구성 변화 없음 ✅ (수동 갱신 확인)", "",
         f'전체 › <a href="{DASH_URL}">대시보드</a>', SIGNATURE])
 

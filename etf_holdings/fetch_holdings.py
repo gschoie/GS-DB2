@@ -21,6 +21,12 @@ KST = timezone(timedelta(hours=9))
 API = "https://m.stock.naver.com/api/stock/{code}/etfAnalysis"
 H = {"User-Agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 16_0 like Mac OS X) AppleWebKit/605",
      "Referer": "https://m.stock.naver.com/"}
+# CU당 구성종목 '기준일'(KRX 장마감 기준)은 데스크톱 coinfo 페이지에만 노출됨
+COINFO = "https://finance.naver.com/item/coinfo.naver?code={code}"
+H_PC = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/126",
+        "Referer": "https://finance.naver.com/"}
+import re as _re
+_BASE_RE = _re.compile(r"(\d{4})\.(\d{2})\.(\d{2})\s*<span>\s*기준")
 
 
 def load_universe():
@@ -40,6 +46,20 @@ def _num(s):
         return float(t)
     except ValueError:
         return 0.0
+
+
+def fetch_base_date(code, tries=2):
+    """CU당 구성종목 기준일(YYYY-MM-DD). 못 구하면 ''."""
+    for k in range(tries):
+        try:
+            r = requests.get(COINFO.format(code=code), headers=H_PC, timeout=15)
+            r.encoding = "euc-kr"
+            m = _BASE_RE.search(r.text)
+            return f"{m.group(1)}-{m.group(2)}-{m.group(3)}" if m else ""
+        except Exception:
+            if k == tries - 1:
+                return ""
+            time.sleep(0.5)
 
 
 def fetch_one(code, tries=3):
@@ -79,15 +99,21 @@ def snapshot(date=None):
             rec = fetch_one(u["code"])
             rec["group"] = u["group"]
             rec["label"] = u["name"]                      # 우리 유니버스 표기(신뢰)
+            rec["base_date"] = fetch_base_date(u["code"])  # CU 구성종목 기준일
             etfs[u["code"]] = rec
-            print(f"  [{i}/{len(uni)}] OK {u['name']}  Top{len(rec['holdings'])}")
+            print(f"  [{i}/{len(uni)}] OK {u['name']}  Top{len(rec['holdings'])}  기준 {rec['base_date'] or '?'}")
         except Exception as e:
             errs.append({"name": u["name"], "code": u["code"], "err": str(e)[:120]})
             print(f"  [{i}/{len(uni)}] ERR {u['name']}: {str(e)[:80]}")
         time.sleep(0.12)
+    # 대표 기준일 = ETF들 중 가장 흔한 기준일(보통 전 종목 동일)
+    from collections import Counter
+    bds = Counter(e["base_date"] for e in etfs.values() if e.get("base_date"))
+    base_date = bds.most_common(1)[0][0] if bds else ""
     payload = {
         "date": date,
         "fetched_at": datetime.now(KST).strftime("%Y-%m-%d %H:%M"),
+        "base_date": base_date,                            # CU 구성종목 기준일(KRX 장마감)
         "source": "naver_top10",
         "etfs": etfs,
         "errors": errs,

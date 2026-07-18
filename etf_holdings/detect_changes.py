@@ -114,7 +114,7 @@ def detect():
 
     if len(dates) < 2:
         payload = {"date": today_date, "prev_date": None, "generated_at": generated,
-                   "first_run": True, "etfs": [],
+                   "base_date": today.get("base_date", ""), "first_run": True, "etfs": [],
                    "summary": {"etfs_changed": 0, "new_total": 0, "gone_total": 0,
                                "moves_total": 0, "universe": len(today["etfs"])}}
         _save(payload)
@@ -143,8 +143,12 @@ def detect():
     etfs_out.sort(key=lambda e: (len(e["new"]) + len(e["gone"])) * 10
                   + sum(1 for m in e["moves"] if m["headline"]) * 5 + len(e["moves"]),
                   reverse=True)
+    today_base = today.get("base_date", "")
+    prev_base = prev.get("base_date", "")
     payload = {
         "date": today_date, "prev_date": prev_date, "generated_at": generated,
+        "base_date": today_base, "prev_base_date": prev_base,
+        "same_base": bool(today_base and today_base == prev_base),
         "first_run": False, "etfs": etfs_out,
         "thresholds": {"weight_pp_min": WEIGHT_PP_MIN, "weight_pp_big": WEIGHT_PP_BIG,
                        "share_pct_min": SHARE_PCT_MIN},
