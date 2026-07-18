@@ -34,8 +34,16 @@ fetch_holdings.py  →  detect_changes.py  →  build_report.py  →  telegram_n
 - "TIME 미국나스닥100 = TIMEFOLIO 미국나스닥100"(426030) 동일상품 → 1건으로 통합.
 - active=0 6종은 네이버 표기 확인 필요(테크핵심소재·미국빅테크·미국주식성장·차이나전기차·K이노베이션·Fn성장).
 
+## 실행 타이밍 — 기준일 워처 (watch.py)
+CU 구성종목 기준일이 **몇 시에 갱신되는지 고정돼 있지 않아**(KRX 장마감 기준 → 보통 저녁 예상),
+고정 시각 대신 **매시간(KST 09~21시) 가벼운 워처**로 대표 ETF 기준일만 확인(요청 1번)하고,
+`state.json`의 마지막 처리 기준일보다 **넘어갔을 때만** 전체 파이프라인을 1회 실행한다.
+- `python watch.py check` → `should_run` 판정(GITHUB_OUTPUT). `WATCH_FORCE=1`이면 강제.
+- `python watch.py commit` → 실행 성공 후 최신 스냅샷 기준일을 `state.json`에 저장.
+- 실제 갱신 시각은 Actions 런 기록으로 드러나므로, 파악되면 cron 창을 좁혀 idle 런을 줄이면 된다.
+
 ## 배포 (GitHub Actions)
-`.github/workflows/etf-holdings.yml` — 매일 KST 18:00 자동 + 수동(workflow_dispatch).
+`.github/workflows/etf-holdings.yml` — 매시간 KST 09~21시(월~금) 워처 + 수동(workflow_dispatch).
 - 텔레그램: `ETF_TELEGRAM_BOT_TOKEN` / `ETF_TELEGRAM_CHAT_ID` (ETF섹터와 **동일 봇**).
 - 스냅샷을 커밋해야 다음날 비교가 되므로 `snapshots/`도 함께 커밋한다.
 - 봇 커밋은 on:push를 안 걸므로, 3시간 주기 deploy-pages 스케줄이 리포트를 반영.
