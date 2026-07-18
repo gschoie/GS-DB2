@@ -6,7 +6,9 @@ name: 액티브 ETF 매매동향
 on:
   workflow_dispatch:
   schedule:
-    - cron: "0 0 * * *"   # 00:00 UTC = 한국 09:00
+    - cron: "0 0 * * 1-5"   # 00:00 UTC = 한국 09:00, 월~금(영업일)만
+    # 주말은 제외. 공휴일은 cron으로 못 거르지만, 휴장일엔 PDF가 안 바뀌어
+    # 스냅샷이 직전 영업일과 동일 → 오탐 없음(중복 스냅샷만 생김).
 
 permissions:
   contents: write   # 스냅샷/리포트 커밋 → deploy-pages(3시간 스케줄)가 반영
