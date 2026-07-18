@@ -22,6 +22,8 @@ BASE = os.path.dirname(os.path.abspath(__file__))
 STATIC = os.path.normpath(os.path.join(BASE, "..", "telegram_research_dashboard", "static"))
 OUT_HTML = os.path.join(STATIC, "consensus_revision.html")
 OUT_XLSX = os.path.join(STATIC, "consensus_full.xlsx")
+SECTORS_PATH = os.path.join(BASE, "sectors.json")   # 코드→섹터(세부업종) 매핑
+MAX_PERIODS = 10                                     # 화면 주차 이동 최대 비교주 수
 
 HORIZONS = [
     ("이번분기", "quarter", None, "q"),
@@ -78,20 +80,73 @@ def report_week(date_str):
     return start.isoformat()
 
 
-def weekly_endpoints(dates):
-    """오름차순 스냅샷 날짜 → (이번주 최신, 전주 최신).
+def weekly_reps(dates):
+    """오름차순 스냅샷 날짜 → 주(화~월)별 대표(그 주 최신) 날짜 리스트(오름차순).
 
-    각 주(화~월)에서 가장 늦게 찍힌 날짜를 그 주 대표로 보고,
-    데이터가 있는 최근 두 주를 비교 대상으로 돌려준다. 같은 주에 여러 번
-    돌려도 마지막(가장 늦은) 실행분만 그 주 값으로 쓰인다.
+    같은 주에 여러 번 돌려도 마지막(가장 늦은) 실행분만 그 주 대표로 쓰인다.
+    연속한 두 대표가 곧 '전주 → 이번주' 비교쌍이 된다.
     """
     latest_of_week = {}
     for d in dates:                 # dates 오름차순 → 같은 주는 뒤 날짜가 덮어써 대표가 됨
         latest_of_week[report_week(d)] = d
-    weeks = sorted(latest_of_week)
-    snap = latest_of_week[weeks[-1]]
-    base = latest_of_week[weeks[-2]] if len(weeks) >= 2 else None
-    return snap, base
+    return [latest_of_week[w] for w in sorted(latest_of_week)]
+
+
+def load_sectors():
+    try:
+        with open(SECTORS_PATH, encoding="utf-8") as f:
+            return json.load(f)
+    except FileNotFoundError:
+        return {}
+
+
+def build_period(con, snap, base, sectors):
+    """한 비교주(전주 base → 이번주 snap)의 화면 payload(호라이즌별 전체 종목)."""
+    qp = dominant_quarter(con, snap)
+    psnap = db.price_map(con, snap)
+    pbase = db.price_map(con, base) if base else {}
+
+    def pwow(code):
+        a, b = psnap.get(code), pbase.get(code)
+        return ((a - b) / b * 100.0) if (a and b) else None
+
+    periods = {}
+    maps = {}
+    for label, kind, period, key in HORIZONS:
+        p = period or qp
+        periods[key] = p
+        maps[key] = series(con, snap, base, kind, p)
+
+    names = {}
+    for key in maps:
+        for code, d in maps[key].items():
+            names[code] = d["name"]
+    uni = con.execute("SELECT COUNT(*) FROM universe WHERE snapshot_date=?", (snap,)).fetchone()[0]
+
+    def compact(d):
+        return {"code": d["code"], "name": d["name"], "sec": sectors.get(d["code"], "기타"),
+                "curr": d["curr"], "base": d["base"], "wow": d["wow"], "pwow": pwow(d["code"])}
+
+    hz = []
+    labels = {k: l for l, _, _, k in HORIZONS}
+    for key in PAGE_KEYS:
+        data = list(maps[key].values())
+        rated = [d for d in data if d["wow"] is not None]
+        up = sum(1 for d in rated if d["wow"] > 0.05)
+        down = sum(1 for d in rated if d["wow"] < -0.05)
+        flat = len(rated) - up - down
+        if base:
+            ordered = sorted(rated, key=lambda d: abs(d["wow"]), reverse=True) + \
+                      [d for d in data if d["wow"] is None]
+        else:
+            ordered = sorted(data, key=lambda d: d["curr"], reverse=True)
+        hz.append({"label": labels[key], "period": periods[key], "key": key,
+                   "up": up, "down": down, "flat": flat,
+                   "rows": [compact(d) for d in ordered]})
+    return {"snapshot_date": snap, "base_date": base,
+            "price_date_snap": price_date_of(con, snap),
+            "price_date_base": price_date_of(con, base) if base else None,
+            "universe": uni, "covered": len(names), "horizons": hz}
 
 
 def build():
@@ -100,9 +155,13 @@ def build():
     if not dates:
         print("스냅샷이 없습니다. run_snapshot.py 먼저 실행.")
         return
-    snap, base = weekly_endpoints(dates)   # 주(월~일)별 최신 스냅샷 → 최근 두 주 비교
-    qp = dominant_quarter(con, snap)
+    sectors = load_sectors()
+    reps = weekly_reps(dates)
+    snap = reps[-1]
+    base = reps[-2] if len(reps) >= 2 else None
 
+    # --- 엑셀: 최신 주 기준 전체 종목(a28 포함) ---
+    qp = dominant_quarter(con, snap)
     psnap = db.price_map(con, snap)
     pbase = db.price_map(con, base) if base else {}
 
@@ -115,16 +174,10 @@ def build():
         p = period or qp
         periods[key] = p
         maps[key] = series(con, snap, base, kind, p)
-
     names = {}
     for key in maps:
         for code, d in maps[key].items():
             names[code] = d["name"]
-
-    uni = con.execute("SELECT COUNT(*) FROM universe WHERE snapshot_date=?", (snap,)).fetchone()[0]
-    covered = len(names)
-
-    # 전체 종목 (엑셀)
     stocks = []
     for code in sorted(names):
         row = {"code": code, "name": names[code],
@@ -137,43 +190,21 @@ def build():
         stocks.append(row)
     write_excel(stocks, snap, base, periods)
 
-    def compact(d):
-        return {"code": d["code"], "name": d["name"], "curr": d["curr"],
-                "base": d["base"], "wow": d["wow"], "pwow": pwow(d["code"])}
+    # --- 화면: 최근 여러 주 비교(주차 이동 ◀▶) ---
+    if len(reps) == 1:
+        pairs = [(reps[0], None)]
+    else:
+        pairs = [(reps[i], reps[i - 1]) for i in range(len(reps) - 1, 0, -1)][:MAX_PERIODS]
+    periods_payload = [build_period(con, s, b, sectors) for s, b in pairs]
+    sec_list = sorted({r["sec"] for pp in periods_payload for h in pp["horizons"] for r in h["rows"]})
 
-    page_hz = []
-    labels = {k: l for l, _, _, k in HORIZONS}
-    for key in PAGE_KEYS:
-        data = list(maps[key].values())
-        rated = [d for d in data if d["wow"] is not None]
-        up = sum(1 for d in rated if d["wow"] > 0.05)
-        down = sum(1 for d in rated if d["wow"] < -0.05)
-        flat = len(rated) - up - down
-        # 전체 종목을 다 실어 보낸다(클라이언트가 30/전체 토글·열 정렬). 기본 순서는
-        # 리비전이면 변화 큰 순(무평가는 뒤), 첫 스냅샷이면 컨센 레벨 순.
-        if base:
-            ordered = sorted(rated, key=lambda d: abs(d["wow"]), reverse=True) + \
-                      [d for d in data if d["wow"] is None]
-        else:
-            ordered = sorted(data, key=lambda d: d["curr"], reverse=True)
-        page_hz.append({
-            "label": labels[key], "period": periods[key], "key": key,
-            "up": up, "down": down, "flat": flat,
-            "rows": [compact(d) for d in ordered],
-        })
-
-    payload = {
-        "snapshot_date": snap, "base_date": base,
-        "price_date_snap": price_date_of(con, snap),
-        "price_date_base": price_date_of(con, base) if base else None,
-        "universe": uni, "covered": covered, "missing": uni - covered,
-        "has_revision": base is not None, "horizons": page_hz,
-    }
+    payload = {"has_revision": base is not None,
+               "periods": periods_payload, "sectors": sec_list}
     os.makedirs(STATIC, exist_ok=True)
     with open(OUT_HTML, "w", encoding="utf-8") as f:
         f.write(_TEMPLATE.replace("__DATA__", json.dumps(payload, ensure_ascii=False).replace("</", "<\\/")))
     con.close()
-    print(f"생성 완료 [{'리비전' if base else '베이스라인'}]: {OUT_HTML}\n            엑셀: {OUT_XLSX}")
+    print(f"생성 완료 [{len(periods_payload)}개 비교주 · {'리비전' if base else '베이스라인'}]: {OUT_HTML}\n            엑셀: {OUT_XLSX}")
 
 
 def write_excel(stocks, snap, base, periods):
@@ -261,14 +292,21 @@ padding:7px 14px;border-radius:8px;cursor:pointer}
 table{width:100%;border-collapse:collapse;font-size:13px;background:var(--card);
 border:1px solid var(--line);border-radius:12px;overflow:hidden;min-width:560px}
 th,td{padding:7px 11px;text-align:right;border-bottom:1px solid var(--line);white-space:nowrap}
-th:nth-child(2),td:nth-child(2){text-align:left}
 th:first-child,td:first-child{text-align:center;color:var(--muted);width:30px}
+th.l,td.l{text-align:left}td.sec{color:var(--muted);font-size:12px}
 th{color:var(--muted);font-weight:500;font-size:12px}tr:last-child td{border-bottom:0}
 th.sortable{cursor:pointer;user-select:none}th.sortable:hover{color:var(--ink)}
 a.stk{color:var(--ink);text-decoration:none;border-bottom:1px dotted var(--muted)}
 a.stk:hover{color:var(--accent);border-color:var(--accent)}
 .lim{margin:0 0 10px;border:1px solid var(--line);background:var(--card);color:var(--accent);
 font-size:12px;font-weight:600;padding:6px 12px;border-radius:8px;cursor:pointer}
+.wknav{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:2px 0 16px}
+.wkbtn{border:1px solid var(--line);background:var(--card);color:var(--ink);font-size:13px;
+font-weight:600;padding:7px 13px;border-radius:8px;cursor:pointer}
+.wkbtn:disabled{opacity:.38;cursor:default}.wklab{font-size:14px;font-weight:600}
+.ctlbar{margin:2px 0 10px}.ctllab{font-size:12px;color:var(--muted)}
+.secfil{font-size:13px;color:var(--ink);background:var(--card);border:1px solid var(--line);
+border-radius:8px;padding:6px 10px;margin-left:6px}
 .pos{color:var(--up);font-weight:600}.neg{color:var(--down);font-weight:600}
 .note{background:var(--card);border:1px dashed var(--line);border-radius:12px;
 padding:14px 16px;color:var(--muted);font-size:13px;margin-bottom:18px}
@@ -277,46 +315,21 @@ padding:14px 16px;color:var(--muted);font-size:13px;margin-bottom:18px}
 <div class="sub" id="sub"></div>
 <div class="status" id="status"></div>
 <a class="dl" href="consensus_full.xlsx" download>📥 전체 종목 엑셀 다운로드</a>
+<div class="wknav" id="wknav"></div>
 <div id="cards"></div>
 <div class="tabs" id="tabs"></div>
+<div class="ctlbar" id="ctlbar"></div>
 <div class="tblwrap"><div id="tbl"></div></div>
 <div class="tiny" id="foot" style="margin-top:14px"></div>
 </div>
 <script>
-var D=__DATA__, sel=0;
+var D=__DATA__;
+var pi=0, sel=0, sortKey=null, sortDir=-1, showAll=false, secFilter='', TOP=30;
+function P(){return D.periods[pi]}
+function $(id){return document.getElementById(id)}
 function fmt(n){return n==null?'-':Math.round(n).toLocaleString('ko-KR')}
 function pct(w){if(w==null)return'<span class="tiny">-</span>';
  var c=w>0?'pos':(w<0?'neg':'');return'<span class="'+c+'">'+(w>0?'+':'')+w.toFixed(1)+'%</span>'}
-function md(s){return s?s.slice(5):''}
-document.getElementById('sub').textContent =
- D.has_revision?('전주 '+D.base_date+' → 현재 '+D.snapshot_date):(D.snapshot_date+' 기준 · 첫 스냅샷');
-document.getElementById('status').innerHTML =
- '<span>📅 기준일 <b>'+D.snapshot_date+'</b></span>'+
- '<span>🎯 유니버스 <b>'+D.universe+'</b></span>'+
- '<span>✅ 컨센 확보 <b>'+D.covered+'</b> · 없음 '+D.missing+'</span>';
-
-if(D.has_revision){
- var ch='<div class="cards">';
- D.horizons.forEach(function(h){var t=h.up+h.down+h.flat||1;
-  ch+='<div class="card"><div class="lab">'+h.label+' ('+h.period+')</div>'+
-   '<div class="nums"><span class="up">'+h.up+' ▲</span><span class="down">'+h.down+' ▼</span></div>'+
-   '<div class="bar"><i class="iu" style="width:'+(h.up/t*100)+'%"></i>'+
-   '<i class="id" style="width:'+(h.down/t*100)+'%"></i></div>'+
-   '<div class="tiny">보합 '+h.flat+' · 평가 '+(h.up+h.down+h.flat)+'</div></div>';});
- document.getElementById('cards').innerHTML=ch+'</div>';
- document.getElementById('foot').innerHTML='컨센 변동 = 전주 대비 영업이익 컨센 변화율 · '+
-  '주가 변동 = 종가 '+(D.price_date_base||'')+' → '+(D.price_date_snap||'')+' · 기본 상위 30(전체 보기·열 제목 클릭 정렬 가능) · 종목명 클릭 시 네이버 차트';
-}else{
- document.getElementById('cards').innerHTML='<div class="note">첫 스냅샷이라 전주 대비 변동은 '+
-  '다음 스냅샷부터 표시됩니다. 아래는 현재 컨센 레벨 상위 30이며, 전체 종목은 엑셀에서 확인하세요.</div>';
-}
-var tabs='';D.horizons.forEach(function(h,i){tabs+='<button class="tab'+(i===0?' on':'')+'" data-i="'+i+'">'+h.label+'</button>'});
-document.getElementById('tabs').innerHTML=tabs;
-document.querySelectorAll('.tab').forEach(function(b){b.onclick=function(){
- sel=+b.dataset.i;document.querySelectorAll('.tab').forEach(function(x){x.classList.remove('on')});
- b.classList.add('on');draw()}});
-var sortKey=null, sortDir=-1, showAll=false;   // sortKey=null → 서버 순서(기본 정렬)
-var TOP=30;
 function mmdd(s){return s?s.slice(5).replace('-','/'):''}   // 'YYYY-MM-DD' → 'MM/DD'
 function nameCell(d){return '<a class="stk" href="https://finance.naver.com/item/fchart.naver?code='+
  d.code+'" target="_blank" rel="noopener">'+d.name+'</a>'}
@@ -327,31 +340,76 @@ function sortRows(rows){
   return typeof x==='string'?sortDir*x.localeCompare(y,'ko'):sortDir*(x-y)});
 }
 function arrow(k){return sortKey===k?(sortDir<0?' ▼':' ▲'):''}
-function draw(){var h=D.horizons[sel],tbl=document.getElementById('tbl'),out;
- var all=h.rows||[],rows=sortRows(all),shown=showAll?rows:rows.slice(0,TOP);
+
+function renderNav(){   // 주차 이동 ◀▶ (비교주가 2개 이상일 때만)
+ var n=D.periods.length, p=P(), el=$('wknav');
+ if(n<2){el.innerHTML='';return}
+ var older=pi<n-1, newer=pi>0;
+ el.innerHTML='<button class="wkbtn" id="wkprev"'+(older?'':' disabled')+'>◀ 이전주</button>'+
+  '<span class="wklab">전주 '+p.base_date+' → 현재 '+p.snapshot_date+'</span>'+
+  '<button class="wkbtn" id="wknext"'+(newer?'':' disabled')+'>다음주 ▶</button>'+
+  '<span class="tiny">'+(pi+1)+'/'+n+'</span>';
+ if(older)$('wkprev').onclick=function(){pi++;render()};
+ if(newer)$('wknext').onclick=function(){pi--;render()};
+}
+function renderTop(){
+ var p=P();
+ $('sub').textContent=D.has_revision?('전주 '+p.base_date+' → 현재 '+p.snapshot_date):(p.snapshot_date+' 기준 · 첫 스냅샷');
+ $('status').innerHTML='<span>📅 기준일 <b>'+p.snapshot_date+'</b></span>'+
+  '<span>🎯 유니버스 <b>'+p.universe+'</b></span>'+
+  '<span>✅ 컨센 확보 <b>'+p.covered+'</b> · 없음 '+(p.universe-p.covered)+'</span>';
+ if(D.has_revision){
+  var ch='<div class="cards">';
+  p.horizons.forEach(function(h){var t=h.up+h.down+h.flat||1;
+   ch+='<div class="card"><div class="lab">'+h.label+' ('+h.period+')</div>'+
+    '<div class="nums"><span class="up">'+h.up+' ▲</span><span class="down">'+h.down+' ▼</span></div>'+
+    '<div class="bar"><i class="iu" style="width:'+(h.up/t*100)+'%"></i>'+
+    '<i class="id" style="width:'+(h.down/t*100)+'%"></i></div>'+
+    '<div class="tiny">보합 '+h.flat+' · 평가 '+(h.up+h.down+h.flat)+'</div></div>';});
+  $('cards').innerHTML=ch+'</div>';
+  $('foot').innerHTML='컨센 변화 = 전주 대비 영업이익 컨센 변화율 · 주가 변동 = 종가 '+
+   (p.price_date_base||'')+' → '+(p.price_date_snap||'')+' · 기본 상위 30(전체 보기·열 제목 클릭 정렬) · 섹터 필터/정렬 · 종목명 클릭 시 네이버 차트';
+ }else{
+  $('cards').innerHTML='<div class="note">첫 스냅샷이라 전주 대비 변동은 다음 스냅샷부터 표시됩니다. 아래는 현재 컨센 레벨이며, 전체 종목은 엑셀에서 확인하세요.</div>';
+  $('foot').innerHTML='';
+ }
+}
+function renderCtl(){   // 섹터 필터 (한 번만)
+ var opts='<option value="">전체 섹터</option>';
+ D.sectors.forEach(function(s){opts+='<option value="'+s+'"'+(s===secFilter?' selected':'')+'>'+s+'</option>'});
+ $('ctlbar').innerHTML='<label class="ctllab">섹터 <select class="secfil" id="secfil">'+opts+'</select></label>';
+ $('secfil').onchange=function(){secFilter=this.value;draw()};
+}
+function draw(){
+ var p=P(), h=p.horizons[sel], rev=D.has_revision, tbl=$('tbl');
+ var all=(h.rows||[]).filter(function(d){return !secFilter||d.sec===secFilter});
+ var rows=sortRows(all), shown=showAll?rows:rows.slice(0,TOP);
  var toggle=all.length>TOP?'<button class="lim" id="limtog">'+
   (showAll?'상위 '+TOP+'만 보기':'전체 '+all.length+'개 보기')+'</button>':'';
- var cols;
- if(D.has_revision){
-  cols=[['name','종목',''],['base','컨센 전주',mmdd(D.base_date)],['curr','컨센 현재',mmdd(D.snapshot_date)],
-   ['wow','컨센 변화',mmdd(D.base_date)+'-'+mmdd(D.snapshot_date)],
-   ['pwow','주가 변동',mmdd(D.price_date_base)+'-'+mmdd(D.price_date_snap)]];
- }else{
-  cols=[['name','종목',''],['curr','영업이익',mmdd(D.snapshot_date)]];
- }
- out=toggle+'<table><tr><th>#</th>';
- cols.forEach(function(c){out+='<th class="sortable" data-k="'+c[0]+'">'+c[1]+
+ var cols=rev?
+  [['sec','섹터','','l'],['name','종목','','l'],['base','컨센 전주',mmdd(p.base_date),''],
+   ['curr','컨센 현재',mmdd(p.snapshot_date),''],['wow','컨센 변화',mmdd(p.base_date)+'-'+mmdd(p.snapshot_date),''],
+   ['pwow','주가 변동',mmdd(p.price_date_base)+'-'+mmdd(p.price_date_snap),'']]:
+  [['sec','섹터','','l'],['name','종목','','l'],['curr','영업이익',mmdd(p.snapshot_date),'']];
+ var out=toggle+'<table><tr><th>#</th>';
+ cols.forEach(function(c){out+='<th class="sortable '+(c[3]||'')+'" data-k="'+c[0]+'">'+c[1]+
   (c[2]?'<br><span class="tiny">'+c[2]+'</span>':'')+arrow(c[0])+'</th>'});
  out+='</tr>';
- shown.forEach(function(d,i){out+='<tr><td>'+(i+1)+'</td><td>'+nameCell(d)+'</td>'+
-  (D.has_revision?'<td>'+fmt(d.base)+'</td><td>'+fmt(d.curr)+'</td><td>'+pct(d.wow)+'</td><td>'+pct(d.pwow)+'</td>'
-                 :'<td>'+fmt(d.curr)+'</td>')+'</tr>'});
+ shown.forEach(function(d,i){out+='<tr><td>'+(i+1)+'</td><td class="l sec">'+d.sec+'</td><td class="l">'+nameCell(d)+'</td>'+
+  (rev?'<td>'+fmt(d.base)+'</td><td>'+fmt(d.curr)+'</td><td>'+pct(d.wow)+'</td><td>'+pct(d.pwow)+'</td>':'<td>'+fmt(d.curr)+'</td>')+'</tr>'});
+ if(!shown.length)out+='<tr><td colspan="'+(cols.length+1)+'" style="text-align:center;padding:18px" class="tiny">해당 섹터 종목이 없습니다</td></tr>';
  tbl.innerHTML=out+'</table>';
- var lt=document.getElementById('limtog');if(lt)lt.onclick=function(){showAll=!showAll;draw()};
+ var lt=$('limtog');if(lt)lt.onclick=function(){showAll=!showAll;draw()};
  tbl.querySelectorAll('th.sortable').forEach(function(th){th.onclick=function(){
-  var k=th.dataset.k;if(sortKey===k){sortDir=-sortDir}else{sortKey=k;sortDir=k==='name'?1:-1}draw()}});
+  var k=th.dataset.k;if(sortKey===k){sortDir=-sortDir}else{sortKey=k;sortDir=(k==='name'||k==='sec')?1:-1}draw()}});
 }
-draw();
+function render(){renderNav();renderTop();draw()}
+var tabs='';P().horizons.forEach(function(h,i){tabs+='<button class="tab'+(i===0?' on':'')+'" data-i="'+i+'">'+h.label+'</button>'});
+$('tabs').innerHTML=tabs;
+document.querySelectorAll('.tab').forEach(function(b){b.onclick=function(){
+ sel=+b.dataset.i;document.querySelectorAll('.tab').forEach(function(x){x.classList.remove('on')});b.classList.add('on');draw()}});
+renderCtl();
+render();
 </script></body></html>"""
 
 
