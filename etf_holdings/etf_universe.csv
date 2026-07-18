@@ -1,0 +1,28 @@
+group,name,code,active,note
+TIME(구 TIMEFOLIO),TIME 코스피액티브,385720,1,구 TIMEFOLIO 코스피액티브
+TIME(구 TIMEFOLIO),TIME 코스닥액티브,0162Y0,1,구 TIMEFOLIO 코스닥액티브
+TIME(구 TIMEFOLIO),TIME 미국S&P500액티브,426020,1,구 TIMEFOLIO
+TIME(구 TIMEFOLIO),TIME 미국나스닥100액티브,426030,1,TIMEFOLIO 미국나스닥100과 동일상품(중복 통합)
+TIME(구 TIMEFOLIO),TIME Korea플러스배당액티브,441800,1,
+TIME(구 TIMEFOLIO),TIME K바이오액티브,463050,1,구 TIMEFOLIO K바이오액티브
+TIME(구 TIMEFOLIO),TIME K컬처액티브,410870,1,구 TIMEFOLIO K컬처액티브
+TIME(구 TIMEFOLIO),TIME 글로벌AI인공지능액티브,456600,1,구 TIMEFOLIO
+TIME(구 TIMEFOLIO),TIME 미국배당다우존스액티브,0036D0,1,구 TIMEFOLIO
+KoAct,KoAct 코스닥액티브,0163Y0,1,
+KoAct,KoAct 바이오헬스케어액티브,462900,1,
+KoAct,KoAct 배당성장액티브,476850,1,
+KoAct,KoAct 글로벌AI&로봇액티브,471040,1,
+KODEX,KODEX 로봇액티브,445290,1,
+KODEX,KODEX 미국배당커버드콜액티브,441640,1,
+TIGER,TIGER 코리아테크액티브,471780,1,
+TIGER,TIGER 배당커버드콜액티브,472150,1,
+TIGER,TIGER AI코리아그로스액티브,365040,1,
+TIGER,TIGER 퓨처모빌리티액티브,387280,1,
+SOL,SOL 코리아메가테크액티브,444200,1,
+SOL,SOL 미국AI소프트웨어액티브,481180,1,
+KoAct,KoAct 테크핵심소재액티브,482030,0,확인필요:네이버명 'KoAct 반도체&2차전지핵심소재액티브'
+KoAct,KoAct 미국주식성장액티브,0015B0,0,확인필요:네이버명 'KoAct 미국나스닥성장기업액티브'
+KoAct,KoAct 미국빅테크액티브,,0,확인필요:네이버에 KoAct 미국빅테크 없음(위 미국나스닥성장기업과 동일?)
+TIME(구 TIMEFOLIO),TIMEFOLIO 차이나전기차액티브,,0,확인필요:네이버에 없음(폐지/개명 추정)
+KODEX,KODEX K-이노베이션액티브,,0,확인필요:KODEX엔 없음. 'TIME K이노베이션(385710)' 또는 'KODEX 코리아혁신성장(373490)'?
+KODEX,KODEX Fn성장액티브,,0,확인필요:네이버에 없음. 'KODEX 코리아혁신성장(373490)'?

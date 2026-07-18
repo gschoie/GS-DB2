@@ -1,0 +1,68 @@
+name: 액티브 ETF 매매동향
+
+# 매일 한국시간 18:00: 액티브 ETF 구성종목(Top10) 스냅샷 → 전일 대비 변화 감지
+# → HTML 리포트 + 텔레그램 알림(ETF섹터와 동일 봇) → 커밋(스냅샷 보존) → 배포
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 9 * * *"   # 09:00 UTC = 한국 18:00 (장 마감·정산 이후)
+
+permissions:
+  contents: write   # 스냅샷/리포트 커밋 → deploy-pages(3시간 스케줄)가 반영
+
+concurrency:
+  group: etf-holdings
+  cancel-in-progress: false
+
+jobs:
+  track:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: 패키지 설치
+        working-directory: etf_holdings
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: 구성종목 스냅샷 수집
+        working-directory: etf_holdings
+        run: python fetch_holdings.py
+
+      - name: 전일 대비 변화 감지
+        working-directory: etf_holdings
+        run: python detect_changes.py
+
+      - name: HTML 리포트 생성 (대시보드 static)
+        working-directory: etf_holdings
+        env:
+          ETF_HOLDINGS_OUT: ../telegram_research_dashboard/static/etf_holdings_report.html
+        run: python build_report.py
+
+      - name: 텔레그램 알림 (ETF섹터와 동일 봇 · 수동 실행이면 확인메시지)
+        working-directory: etf_holdings
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.ETF_TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.ETF_TELEGRAM_CHAT_ID }}
+        run: python telegram_notify.py ${{ github.event_name == 'workflow_dispatch' && '--force' || '' }}
+
+      - name: 스냅샷·리포트 커밋 및 푸시 (→ Pages 재배포)
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add telegram_research_dashboard/static/etf_holdings_report.html \
+                  etf_holdings/snapshots etf_holdings/changes.json etf_holdings/telegram_status.json
+          if git diff --cached --quiet; then
+            echo "변경 없음 — 커밋 생략"
+          else
+            git commit -m "chore(holdings): 액티브 ETF 매매동향 갱신 $(date -u +%Y-%m-%d)"
+            git pull --rebase origin main
+            git push origin HEAD:main
+          fi

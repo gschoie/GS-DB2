@@ -1,0 +1,5 @@
+.env
+__pycache__/
+*.pyc
+# 로컬 dev 리포트(배포본은 telegram_research_dashboard/static/에 생성)
+etf_holdings_report.html
