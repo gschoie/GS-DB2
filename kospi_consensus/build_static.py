@@ -332,6 +332,8 @@ overflow:hidden;vertical-align:middle}
 .modetog button{border:0;background:var(--card);color:var(--ink);font-size:12px;font-weight:600;
 padding:6px 13px;cursor:pointer}.modetog button.on{background:var(--accent);color:#fff}
 td.sec .secpick{cursor:pointer}td.sec .secpick:hover{color:var(--accent);text-decoration:underline}
+.clrfil{margin-left:8px;border:1px solid var(--line);background:var(--card);color:var(--down);
+font-size:12px;font-weight:600;padding:6px 11px;border-radius:8px;cursor:pointer}
 .pos{color:var(--up);font-weight:600}.neg{color:var(--down);font-weight:600}
 .note{background:var(--card);border:1px dashed var(--line);border-radius:12px;
 padding:14px 16px;color:var(--muted);font-size:13px;margin-bottom:18px}
@@ -407,10 +409,12 @@ function renderTop(){
 function renderCtl(){   // 섹터 필터 + 기준(주간/3개월) 토글
  var opts='<option value="">전체 섹터</option>';
  D.sectors.forEach(function(s){opts+='<option value="'+s+'"'+(s===secFilter?' selected':'')+'>'+s+'</option>'});
+ var clr=secFilter?'<button class="clrfil" id="clrfil">✕ 전체 보기</button>':'';
  var tog=D.has_revision?'<span class="modetog"><button data-m="wk"'+(MODE==='wk'?' class="on"':'')+'>주간</button>'+
   '<button data-m="3m"'+(MODE==='3m'?' class="on"':'')+'>3개월</button></span>':'';
- $('ctlbar').innerHTML='<label class="ctllab">섹터 <select class="secfil" id="secfil">'+opts+'</select></label>'+tog;
- $('secfil').onchange=function(){secFilter=this.value;draw()};
+ $('ctlbar').innerHTML='<label class="ctllab">섹터 <select class="secfil" id="secfil">'+opts+'</select></label>'+clr+tog;
+ $('secfil').onchange=function(){secFilter=this.value;renderCtl();draw()};
+ var cf=$('clrfil');if(cf)cf.onclick=function(){secFilter='';renderCtl();draw()};
  document.querySelectorAll('.modetog button').forEach(function(b){b.onclick=function(){MODE=b.dataset.m;sortKey=null;render()}});
 }
 function draw(){
@@ -438,7 +442,7 @@ function draw(){
  tbl.innerHTML=out+'</table>';
  var lt=$('limtog');if(lt)lt.onclick=function(){showAll=!showAll;draw()};
  tbl.querySelectorAll('.secpick').forEach(function(el){el.onclick=function(){
-  secFilter=el.dataset.s;var sf=$('secfil');if(sf)sf.value=secFilter;draw()}});
+  secFilter=(secFilter===el.dataset.s)?'':el.dataset.s;renderCtl();draw()}});   // 같은 섹터 재클릭=해제
  tbl.querySelectorAll('th.sortable').forEach(function(th){th.onclick=function(){
   var k=th.dataset.k;if(sortKey===k){sortDir=-sortDir}else{sortKey=k;sortDir=(k==='name'||k==='sec')?1:-1}draw()}});
 }
