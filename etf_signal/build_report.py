@@ -31,6 +31,10 @@ def trend_badge(s):
         return f'<span class="badge b-down">▽ 하락</span>'
     return f'<span class="badge b-mut">– 중립</span>'
 
+def sv(v):
+    """정렬용 data-v: None은 nan으로(항상 맨 아래로 밀림)."""
+    return "nan" if v is None else v
+
 def num(v):
     if v is None: return '<span class="mut">–</span>'
     sign = "+" if v > 0 else ("" if v == 0 else "−")
@@ -79,18 +83,22 @@ def build(payload):
         if s["stoch_oversold"]: stoch_ev = '<span class="mini gold">과매도반등</span>'
         elif s["ev_stoch"]: stoch_ev = '<span class="mini gold">골든</span>'
         cls = "hl" if s["alert"] else ("dim" if not s["liquid"] else "")
+        # 정렬용 원시값(표시값이 아닌 실제 숫자/랭크)
+        tr_rank = 2 if s["up_trend"] else (0 if s["pdi"] < s["ndi"] else 1)
+        fl_rank = {"쌍끌이": 3, "중립": 2, "수급없음": 1, "개인몰림": 0}.get(s["flow"], 2)
+        fg_rank = (2 if s["alert"] else 0) + (0 if s["liquid"] else -1)
         trs += f'''
       <tr class="{cls}">
-        <td class="etf"><b>{name_link(s)}</b><small>{esc(s["group"])}</small></td>
-        <td class="r">{s["close"]:,}</td>
-        <td class="c">{s["adx"]}<small class="di">{s["pdi"]}/{s["ndi"]}</small></td>
-        <td class="c">{trend_badge(s)}</td>
-        <td class="c">{s["k"]}/{s["d"]} {stoch_ev}</td>
-        <td class="c">{flow_badge(s["flow"])}</td>
-        <td class="r">{num(s["for5"])}</td>
-        <td class="r">{num(s["org5"])}</td>
-        <td class="r">{num(s["ind5"])}</td>
-        <td class="c flags">{flag}</td>
+        <td class="etf" data-v="{esc(s["name"])}"><b>{name_link(s)}</b><small>{esc(s["group"])}</small></td>
+        <td class="r" data-v="{s["close"]}">{s["close"]:,}</td>
+        <td class="c" data-v="{s["adx"]}">{s["adx"]}<small class="di">{s["pdi"]}/{s["ndi"]}</small></td>
+        <td class="c" data-v="{tr_rank}">{trend_badge(s)}</td>
+        <td class="c" data-v="{s["k"]}">{s["k"]}/{s["d"]} {stoch_ev}</td>
+        <td class="c" data-v="{fl_rank}">{flow_badge(s["flow"])}</td>
+        <td class="r" data-v="{sv(s["for5"])}">{num(s["for5"])}</td>
+        <td class="r" data-v="{sv(s["org5"])}">{num(s["org5"])}</td>
+        <td class="r" data-v="{sv(s["ind5"])}">{num(s["ind5"])}</td>
+        <td class="c flags" data-v="{fg_rank}">{flag}</td>
       </tr>'''
 
     return TEMPLATE.format(
@@ -129,6 +137,10 @@ table{{width:100%;min-width:900px;border-collapse:collapse}}
 th{{background:#f5f7f3;border-bottom:1px solid #cfd5cf;color:#68736d;font-size:10px;
 font-weight:700;letter-spacing:.04em;text-align:left;padding:11px 12px;white-space:nowrap}}
 th.c{{text-align:center}}th.r{{text-align:right}}
+th.sortable{{cursor:pointer;user-select:none}}th.sortable:hover{{color:#2c3a34}}
+th.sortable::after{{content:"⇅";opacity:.32;font-size:9px;margin-left:4px;font-weight:400}}
+th.sortable[data-dir=asc]::after{{content:"▲";opacity:.85}}
+th.sortable[data-dir=desc]::after{{content:"▼";opacity:.85}}
 td{{border-bottom:1px solid #eef1ec;padding:10px 12px;font-size:13px;vertical-align:middle}}
 td.c{{text-align:center}}td.r{{text-align:right;font-family:Georgia}}
 tbody tr:hover{{background:#fafbf8}}tbody tr.hl{{background:#fbfdf4}}
@@ -168,9 +180,9 @@ ADX(추세) + Stochastic Slow(타이밍) + 수급(외인·기관·개인 5일 �
 <h2>전체 신호판 ({scanned})</h2>
 <div class="tablewrap"><table>
 <thead><tr>
-<th>ETF</th><th class="r">종가</th><th class="c">ADX<br>+DI/−DI</th><th class="c">추세</th>
-<th class="c">%K/%D</th><th class="c">수급</th>
-<th class="r">외인5D</th><th class="r">기관5D</th><th class="r">개인5D</th><th class="c">플래그</th>
+<th data-type="text">ETF</th><th class="r" data-type="num">종가</th><th class="c" data-type="num">ADX<br>+DI/−DI</th><th class="c" data-type="num">추세</th>
+<th class="c" data-type="num">%K/%D</th><th class="c" data-type="num">수급</th>
+<th class="r" data-type="num">외인5D</th><th class="r" data-type="num">기관5D</th><th class="r" data-type="num">개인5D</th><th class="c" data-type="num">플래그</th>
 </tr></thead>
 <tbody>{rows}</tbody>
 </table></div>
@@ -179,8 +191,48 @@ ADX(추세) + Stochastic Slow(타이밍) + 수급(외인·기관·개인 5일 �
 <b>추세</b> +DI&gt;−DI &amp; ADX&gt;20 = 상승추세 · <b>과매도반등</b> Stochastic %K가 %D를 20 이하에서 상향돌파 ·
 <b>쌍끌이</b> 외인+기관 5일 동반 순매수 · <b>개인몰림</b> 개인만 순매수(외인·기관 이탈) = 경계 ·
 <b>★알림</b> 오늘 새 골든크로스 + 개인몰림 아님 + 20일 거래대금 5억↑<br>
-수급 단위: 억원 · 매매가 아닌 <b>참고용 신호</b>입니다.
+수급 단위: 억원 · 매매가 아닌 <b>참고용 신호</b>입니다.<br>
+<b>정렬</b> 헤더를 클릭하면 해당 열 기준으로 정렬(다시 클릭 시 오름/내림 전환). 값 없음(–)은 항상 맨 아래.
 </p>
+<script>
+(function(){{
+  var table = document.querySelector('table');
+  if(!table) return;
+  var tbody = table.tBodies[0];
+  var ths = table.tHead.rows[0].cells;
+  var cur = -1, dir = 1;
+  function val(td, type){{
+    var v = td.getAttribute('data-v');
+    if(type === 'num'){{
+      var n = parseFloat(v);
+      return isNaN(n) ? null : n;
+    }}
+    return (v || td.textContent).trim().toLowerCase();
+  }}
+  Array.prototype.forEach.call(ths, function(th, i){{
+    var type = th.getAttribute('data-type');
+    if(!type) return;
+    th.classList.add('sortable');
+    th.addEventListener('click', function(){{
+      dir = (cur === i) ? -dir : 1;
+      cur = i;
+      Array.prototype.forEach.call(ths, function(x){{ x.removeAttribute('data-dir'); }});
+      th.setAttribute('data-dir', dir > 0 ? 'asc' : 'desc');
+      var rows = Array.prototype.slice.call(tbody.rows);
+      rows.sort(function(a, b){{
+        var av = val(a.cells[i], type), bv = val(b.cells[i], type);
+        if(av === null && bv === null) return 0;
+        if(av === null) return 1;   // 값 없음은 방향과 무관하게 맨 아래
+        if(bv === null) return -1;
+        if(av < bv) return -dir;
+        if(av > bv) return dir;
+        return 0;
+      }});
+      rows.forEach(function(r){{ tbody.appendChild(r); }});
+    }});
+  }});
+}})();
+</script>
 </body></html>"""
 
 if __name__ == "__main__":
