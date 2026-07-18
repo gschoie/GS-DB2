@@ -135,6 +135,16 @@ async function dispatchPressData(){
  const btn=$('#press-data-refresh'),status=$('#press-data-status');
  if(await dispatchWorkflow({workflow:'news'},status,btn))
    status.textContent='✅ 뉴스 수집 요청됨 — 몇 분 뒤 새로고침하면 반영';}
+function openGcal(e){
+ // 아이폰/아이패드: 네이티브 캘린더 앱 대신 Chrome으로 연다(googlechromes:// 스킴).
+ // PC는 기본 동작(새 탭)으로 그대로 둔다.
+ if(/iPhone|iPod|iPad/i.test(navigator.userAgent)){
+   e.preventDefault();
+   window.location.href='googlechromes://calendar.google.com/calendar/u/0/r';
+   return false;
+ }
+ return true;
+}
 async function dispatchConsensus(){
  const btn=$('#consensus-refresh'),status=$('#consensus-status');
  if(await dispatchWorkflow({workflow:'consensus'},status,btn))
