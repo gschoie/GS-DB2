@@ -61,21 +61,40 @@ def etf_card(e):
     return f'<article class="ecard">{"".join(parts)}</article>'
 
 
+def _bar_rows(holdings, mode):
+    """엑셀 데이터막대 스타일. mode='weight'(비중%) 또는 'shares'(계약수)."""
+    pairs = [(h, h["weight"] if mode == "weight" else h["shares"]) for h in holdings]
+    mx = max((v for _, v in pairs), default=0) or 1
+    out = []
+    for h, v in pairs:
+        w = max(2.0, v / mx * 100)                    # 최소 2% 폭으로 보이게
+        label = f"{v:.2f}%" if mode == "weight" else f"{int(v):,}주"
+        out.append(
+            f'<div class="hbar"><span class="hn" title="{esc(h["name"])}">{esc(h["name"])}</span>'
+            f'<span class="htrack"><span class="hfill" style="width:{w:.1f}%"></span></span>'
+            f'<span class="hv">{label}</span></div>')
+    return "".join(out)
+
+
 def current_holdings_block(snap):
-    """접이식: 유니버스 전체의 현재 Top10 보유."""
-    rows = []
+    """접이식: 유니버스 전체(21개) 현재 Top10 보유를 비율 막대로."""
+    blocks = []
     for code, e in snap["etfs"].items():
         hs = e.get("holdings", [])
         if not hs:
             continue
-        cells = " ".join(
-            f'<span class="hchip">{esc(h["name"])}'
-            f'{" "+format(h["weight"],".1f")+"%" if h["weight"] else ""}</span>' for h in hs)
-        rows.append(f'<tr><td class="etfname"><b>{esc(e.get("label", e.get("name","")))}</b>'
-                    f'<small>{esc(e.get("group",""))}</small></td><td>{cells}</td></tr>')
-    return ("<details class=\"cur\"><summary>전체 유니버스 현재 보유(Top10) 펼치기</summary>"
-            "<div class=\"tablewrap\"><table><thead><tr><th>ETF</th><th>구성종목(Top10)</th></tr></thead>"
-            f"<tbody>{''.join(rows)}</tbody></table></div></details>")
+        has_w = any(h["weight"] > 0 for h in hs)
+        mode = "weight" if has_w else "shares"
+        if has_w:
+            summ = f'Top10 합계 {sum(h["weight"] for h in hs):.1f}%'
+        else:
+            summ = '해외·비중 미제공 <span class="ov">(계약수 비율)</span>'
+        blocks.append(
+            f'<div class="hcard"><div class="hh"><b>{esc(e.get("label", e.get("name","")))}</b>'
+            f'<small>{esc(e.get("group",""))} · {summ}</small></div>'
+            f'<div class="hbars">{_bar_rows(hs, mode)}</div></div>')
+    return (f'<details class="cur" open><summary>전체 유니버스 현재 보유(Top10) · {len(blocks)}개 · 비율 막대</summary>'
+            f'<div class="hgrid">{"".join(blocks)}</div></details>')
 
 
 def build():
@@ -153,14 +172,19 @@ h2{{font:600 18px Georgia,"Noto Serif KR",serif;margin:30px 0 12px}}
 .banner{{margin:14px 0 0;background:#fff8e6;border:1px solid #e7d9a8;color:#7a5f1a;padding:11px 15px;font-size:12px;border-radius:6px}}
 .legend{{margin:16px 0 0;color:var(--muted);font-size:11px;line-height:1.85;background:#fff;border:1px solid var(--line);padding:14px 16px}}
 .legend b{{color:#445049}}
-.cur{{margin-top:26px;background:#fff;border:1px solid var(--line)}}
-.cur summary{{cursor:pointer;padding:14px 16px;font-size:12px;font-weight:700;color:#445049}}
-.tablewrap{{overflow-x:auto}}table{{width:100%;border-collapse:collapse}}
-th{{background:#f5f7f3;border-bottom:1px solid #cfd5cf;color:#68736d;font-size:10px;font-weight:700;
-text-align:left;padding:10px 12px}}
-td{{border-bottom:1px solid #eef1ec;padding:9px 12px;font-size:12px;vertical-align:top}}
-.etfname b{{display:block;font-size:12px}}.etfname small{{color:var(--muted);font-size:10px}}
-.hchip{{display:inline-block;font-size:11px;padding:2px 7px;margin:2px;border-radius:9px;background:#f2f5f0}}
+.cur{{margin-top:26px}}
+.cur>summary{{cursor:pointer;padding:14px 16px;font-size:12px;font-weight:700;color:#445049;background:#fff;border:1px solid var(--line)}}
+.hgrid{{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:12px;margin-top:12px}}
+.hcard{{background:#fff;border:1px solid var(--line);padding:12px 14px}}
+.hh{{display:flex;justify-content:space-between;align-items:baseline;gap:8px;margin-bottom:9px;flex-wrap:wrap}}
+.hh b{{font-size:13px}}.hh small{{color:var(--muted);font-size:10px}}
+.ov{{color:#9a7d2e}}
+.hbars{{display:flex;flex-direction:column;gap:3px}}
+.hbar{{display:grid;grid-template-columns:92px 1fr 54px;align-items:center;gap:8px;font-size:11px}}
+.hn{{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:#2c3a34}}
+.htrack{{background:#eef1ec;border-radius:3px;height:13px;overflow:hidden}}
+.hfill{{display:block;height:100%;background:linear-gradient(90deg,#286342,#4b8b62);border-radius:3px}}
+.hv{{text-align:right;color:#61706a;font-family:Georgia;white-space:nowrap}}
 @media(max-width:620px){{body{{padding:20px 12px 50px}}.stats{{grid-template-columns:1fr 1fr}}
 .cards{{grid-template-columns:1fr}}}}
 </style></head><body>
