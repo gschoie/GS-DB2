@@ -86,6 +86,12 @@ jobs:
         run: |
           python build_daol_tone_dashboard.py --refresh
 
+      # 톤 히스토리에서 섹터 콜라보 레이더를 재생성한다 (네트워크 없음, 수 초 소요).
+      # push/workflow_run 배포에서도 커밋된 히스토리로 항상 다시 만든다.
+      - name: 섹터 콜라보 레이더 갱신
+        working-directory: telegram_research_dashboard
+        run: python build_daol_collab_radar.py
+
       # (제거) 전체 재분류: 새 메시지는 import 때 이미 완전 파싱되므로 매 run 전체 재파싱
       # (~4,900개 × 느린 파서 = 40분+)은 낭비다. 파서 규칙을 바꾼 뒤에만 수동으로
       # `python rebuild_parsed_data.py` 를 돌린다.

@@ -43,6 +43,11 @@ jobs:
         working-directory: telegram_research_dashboard
         run: python build_daol_tone_dashboard.py --refresh
 
+      # 갱신된 톤 히스토리에서 섹터 콜라보 레이더를 재생성한다 (네트워크 없음).
+      - name: 섹터 콜라보 레이더 갱신
+        working-directory: telegram_research_dashboard
+        run: python build_daol_collab_radar.py
+
       - name: 배포용 HTML 생성 (fresh, prebuilt 덮어쓰기 없음)
         working-directory: telegram_research_dashboard
         env:

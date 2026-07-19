@@ -135,6 +135,9 @@ def build() -> Path:
     consensus_report = ROOT / "static" / "consensus_revision.html"
     if consensus_report.exists():
         shutil.copy2(consensus_report, OUTPUT.parent / "consensus_revision.html")
+    collab_report = ROOT / "static" / "daol_collab_radar.html"
+    if collab_report.exists():
+        shutil.copy2(collab_report, OUTPUT.parent / "daol_collab_radar.html")
     consensus_xlsx = ROOT / "static" / "consensus_full.xlsx"
     if consensus_xlsx.exists():
         shutil.copy2(consensus_xlsx, OUTPUT.parent / "consensus_full.xlsx")
