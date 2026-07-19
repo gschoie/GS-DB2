@@ -3,12 +3,13 @@
 1) KAI → 한국항공우주 통합 (companies 테이블 병합 + 뉴스/보고서 재연결)
 2) 별칭 기사 재추출 (삼성重·KF-21·보라매 등 파서 별칭을 표준 기업명으로)
 3) manual_overrides.TITLE_COMPANY_OVERRIDES 반영 (의미상 교정)
+4) 기업 미연결 보고서 백필 (구사명 별칭 포함 재추출 — 옛 아카이브 자가치유)
 """
 
 from __future__ import annotations
 
 from db import connect, initialize
-from parser import extract_companies
+from parser import extract_companies, identify_companies
 from telegram_importer import link_companies
 from manual_overrides import (
     TITLE_COMPANY_OVERRIDES, URL_COMPANY_OVERRIDES, URL_COMMENT_OVERRIDES,
@@ -89,14 +90,39 @@ def apply_title_overrides(conn) -> int:
     return changed
 
 
+def backfill_report_companies(conn) -> int:
+    """기업 링크가 없는 보고서를 본문에서 다시 추출해 연결한다.
+
+    파서 사전이 늘어날 때마다(구사명 별칭 등) 옛 보고서가 자동으로 따라붙는다.
+    위클리는 여러 기업이 스치는 뉴스 다이제스트라 링크 노이즈만 생기므로 제외한다.
+    """
+    rows = conn.execute(
+        "SELECT r.id, m.text FROM reports r JOIN telegram_messages m ON m.id=r.message_id "
+        "WHERE r.report_type!='위클리' "
+        "AND NOT EXISTS(SELECT 1 FROM report_companies rc WHERE rc.report_id=r.id)"
+    ).fetchall()
+    changed = 0
+    for row in rows:
+        names = identify_companies(row["text"])
+        if not names:
+            continue
+        conn.execute(
+            "UPDATE reports SET company_name=? WHERE id=?", (", ".join(names), row["id"])
+        )
+        link_companies(conn, "report_companies", "report_id", row["id"], names)
+        changed += 1
+    return changed
+
+
 def run() -> None:
     initialize()
     with connect() as conn:
         merged = merge_kai(conn)
         aliased = reextract_aliases(conn)
         overridden = apply_title_overrides(conn)
+        backfilled = backfill_report_companies(conn)
         conn.commit()
-    print(f"KAI 병합: {merged}건 · 별칭 재추출: {aliased:,}건 · 수동 교정: {overridden}건")
+    print(f"KAI 병합: {merged}건 · 별칭 재추출: {aliased:,}건 · 수동 교정: {overridden}건 · 보고서 기업 백필: {backfilled}건")
 
 
 if __name__ == "__main__":

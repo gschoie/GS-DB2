@@ -58,6 +58,26 @@ class ForeignCompanyClassificationTest(unittest.TestCase):
         result = identify_companies("한화오션이 K9 관련 부품을 공급한다")
         self.assertEqual(result, ["한화오션"])
 
+    def test_legacy_company_names_map_to_current_listed_names(self):
+        # 개명 전 구사명이 담긴 과거 보고서도 현재 상장사명으로 연결된다.
+        cases = {
+            "현대미포조선 3Q19 리뷰": "HD현대미포",
+            "대우조선해양 3Q21 리뷰: LNG선 단납기 슬롯 프리미엄": "한화오션",
+            "두산인프라코어: 중국 탈피": "HD현대인프라코어",
+            "HSD엔진: 기다리던 흑전": "한화엔진",
+            "두산엔진: 가벼워진 엔진": "한화엔진",
+            "한진중공업: 독자생존에 성공한다면": "HJ중공업",
+            "삼강엠앤티: 2021 수주를 주목": "SK오션플랜트",
+            "현대일렉트릭 서프라이즈": "HD현대일렉트릭",
+            "두산중공업: 연말 수주": "두산에너빌리티",
+            "세진중공업: 쇼티지에서 비롯된 호실적": "세진중공업",
+            "현대중공업 그룹 사업계획 컨퍼런스콜 후기": "HD현대중공업",
+            "한국조선해양 중간지주 밸류에이션": "HD한국조선해양",
+        }
+        for text, company in cases.items():
+            with self.subTest(text=text):
+                self.assertIn(company, identify_companies(text))
+
 
 class ParserForeignRegressionTest(unittest.TestCase):
     def test_summary_post_with_wrong_title_still_tags_from_body(self):
