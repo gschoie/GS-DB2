@@ -140,7 +140,7 @@ function openGcal(e){
  // PC는 기본 동작(새 탭)으로 그대로 둔다.
  if(/iPhone|iPod|iPad/i.test(navigator.userAgent)){
    e.preventDefault();
-   window.location.href='googlechromes://calendar.google.com/calendar/u/0/r';
+   window.location.href='googlechromes://calendar.google.com/calendar/u/0/r/week';
    return false;
  }
  return true;
