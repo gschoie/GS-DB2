@@ -47,7 +47,7 @@ def reextract_aliases(conn) -> int:
     rows = conn.execute(
         "SELECT id,title FROM news_articles "
         "WHERE title LIKE '%KAI%' OR title LIKE '%KF-21%' OR title LIKE '%KF21%' "
-        "OR title LIKE '%보라매%' OR title LIKE '%삼성重%'"
+        "OR title LIKE '%보라매%' OR title LIKE '%삼성重%' OR title LIKE '%고스트로보틱스%'"
     ).fetchall()
     changed = 0
     for row in rows:

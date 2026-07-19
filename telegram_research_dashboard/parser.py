@@ -50,6 +50,7 @@ COMPANY_ALIASES = {
     "KF21": "한국항공우주",
     "보라매": "한국항공우주",
     "삼성重": "삼성중공업",
+    "고스트로보틱스": "LIG D&A",  # LIG D&A 자회사 (사족보행 로봇 비전 60)
 }
 # 외신·영문 기사용: 무기체계 코드로 한국 상장사를 역추적한다.
 # K2·K9처럼 짧은 코드는 앞뒤가 영숫자가 아닐 때만 매칭해 오탐(K21, AK9, K239 등)을 막되,
@@ -84,6 +85,7 @@ ENGLISH_COMPANY_ALIASES = {
     "korea aerospace industries": "한국항공우주",
     "hyundai rotem": "현대로템",
     "lig nex1": "LIG넥스원",
+    "ghost robotics": "LIG D&A",
     "samsung heavy": "삼성중공업",
     "hyundai heavy": "HD현대중공업",
     "poongsan": "풍산",

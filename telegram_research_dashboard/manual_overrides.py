@@ -27,6 +27,8 @@ URL_COMPANY_OVERRIDES: dict[str, list[str]] = {
     "https://buly.kr/4bkLqrJ": ["HD현대중공업"],
     # 삼성重 = 삼성중공업 (자사주 매입)
     "https://buly.kr/AlmsBOC": ["삼성중공업"],
+    # 고스트로보틱스(LIG D&A 자회사) 비전 60 대만 양산 — 제목에 LIG가 없어 파서가 놓쳤다.
+    "https://www.theguru.co.kr/mobile/article.html?no=104144": ["LIG D&A"],
 }
 
 # 기사 URL → 내 코멘트 (자동 backfill이 놓치거나 직접 고칠 코멘트를 여기에 추가)
