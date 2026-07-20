@@ -1,10 +1,17 @@
 {
-  "date": "2026-07-18",
-  "prev_date": null,
-  "generated_at": "2026-07-18 17:35",
-  "base_date": "2026-07-16",
-  "first_run": true,
+  "date": "2026-07-20",
+  "prev_date": "2026-07-18",
+  "generated_at": "2026-07-20 18:58",
+  "base_date": "2026-07-20",
+  "prev_base_date": "2026-07-16",
+  "same_base": false,
+  "first_run": false,
   "etfs": [],
+  "thresholds": {
+    "weight_pp_min": 1.0,
+    "weight_pp_big": 5.0,
+    "share_pct_min": 30.0
+  },
   "summary": {
     "etfs_changed": 0,
     "new_total": 0,
