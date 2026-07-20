@@ -9,7 +9,7 @@
 from __future__ import annotations
 
 from db import connect, initialize
-from parser import extract_companies, identify_companies
+from parser import APPROVED_COMPANIES, extract_companies, identify_companies
 from telegram_importer import link_companies
 from manual_overrides import (
     TITLE_COMPANY_OVERRIDES, URL_COMPANY_OVERRIDES, URL_COMMENT_OVERRIDES,
@@ -91,24 +91,35 @@ def apply_title_overrides(conn) -> int:
 
 
 def backfill_report_companies(conn) -> int:
-    """기업 링크가 없는 보고서를 본문에서 다시 추출해 연결한다.
+    """승인 기업 링크가 하나도 없는 보고서를 본문에서 다시 추출해 연결한다.
 
-    파서 사전이 늘어날 때마다(구사명 별칭 등) 옛 보고서가 자동으로 따라붙는다.
-    위클리는 여러 기업이 스치는 뉴스 다이제스트라 링크 노이즈만 생기므로 제외한다.
+    링크가 아예 없는 보고서뿐 아니라, 옛 파서 폴백이 남긴 노이즈 태그(비승인
+    기업명)만 달린 보고서도 대상이다. 파서 사전이 늘어날 때마다(구사명 별칭 등)
+    옛 보고서가 자동으로 따라붙는다. 위클리는 여러 기업이 스치는 뉴스
+    다이제스트라 링크 노이즈만 생기므로 제외한다.
     """
+    # build_static 표시 규칙과 동일하게, 표준명으로 통일하면 승인되는 구명칭도 인정한다.
+    canonical = {"KAI": "한국항공우주", "현대마린엔진": "HD현대마린엔진"}
+    approved = set(APPROVED_COMPANIES)
     rows = conn.execute(
-        "SELECT r.id, m.text FROM reports r JOIN telegram_messages m ON m.id=r.message_id "
-        "WHERE r.report_type!='위클리' "
-        "AND NOT EXISTS(SELECT 1 FROM report_companies rc WHERE rc.report_id=r.id)"
+        "SELECT r.id, m.text, COALESCE((SELECT group_concat(c.name, char(1)) "
+        "FROM report_companies rc JOIN companies c ON c.id=rc.company_id "
+        "WHERE rc.report_id=r.id), '') linked "
+        "FROM reports r JOIN telegram_messages m ON m.id=r.message_id "
+        "WHERE r.report_type!='위클리'"
     ).fetchall()
     changed = 0
     for row in rows:
+        linked = [name for name in row["linked"].split("\x01") if name]
+        if any(canonical.get(name, name) in approved for name in linked):
+            continue
         names = identify_companies(row["text"])
-        if not names:
+        if not names or set(names) == set(linked):
             continue
         conn.execute(
             "UPDATE reports SET company_name=? WHERE id=?", (", ".join(names), row["id"])
         )
+        conn.execute("DELETE FROM report_companies WHERE report_id=?", (row["id"],))
         link_companies(conn, "report_companies", "report_id", row["id"], names)
         changed += 1
     return changed

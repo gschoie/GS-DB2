@@ -112,7 +112,9 @@ def fetch_article_metadata(url: str, timeout: int = 10) -> dict | None:
         body = re.sub(r"\s+", " ", body)[:50_000]
         return {"title": title, "description": description, "text": body,
                 "final_url": final_url, "site_name": parser.meta.get("og:site_name")}
-    except (OSError, ValueError, UnicodeError):
+    except Exception:
+        # 원문 하나가 이상 응답(BadStatusLine·IncompleteRead 등 HTTPException 계열 포함)을
+        # 보내도 수집 파이프라인 전체가 죽으면 안 된다. 실패는 None으로 보고 넘어간다.
         return None
 
 
