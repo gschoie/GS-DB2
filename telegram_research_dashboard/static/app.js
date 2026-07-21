@@ -102,7 +102,13 @@ function view(id){$$('.view,.nav').forEach(x=>x.classList.remove('active'));$('#
 const DISPATCH_ENDPOINT='https://script.google.com/macros/s/AKfycbzybp0b1W0wr9n2bfQsF1xblsaLdlu9oRtfH7xkbQrRYLaRpCwemhFRVLbk3rGnIO4zdQ/exec';
 async function dispatchWorkflow(payload,status,btn){
  if(status)status.textContent='요청 중…';if(btn)btn.disabled=true;
- try{await fetch(DISPATCH_ENDPOINT,{method:'POST',body:JSON.stringify(payload)});return true;}
+ try{
+  const r=await fetch(DISPATCH_ENDPOINT,{method:'POST',body:JSON.stringify(payload)});
+  // GAS 프록시는 실패 시 {ok:false,code,wf}를 돌려준다(매핑 없는 workflow는 dart로 폴백돼 422).
+  try{const d=await r.json();
+   if(d&&d.ok===false){if(status)status.textContent=`⚠ 서버 거절 ${d.code||'?'} (${d.wf||'?'}) — GAS 프록시 매핑 확인 필요`;return false;}
+  }catch{}
+  return true;}
  catch(e){if(status)status.textContent='실패: '+e.message;return false;}
  finally{if(btn)btn.disabled=false}}
 async function dispatchDart(){
