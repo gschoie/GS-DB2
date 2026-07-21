@@ -130,6 +130,55 @@ http://bit.ly/example
         self.assertEqual(result["companies"], [])
         self.assertEqual(result["report_type"], "산업분석")
 
+    def test_target_price_in_manwon_units(self):
+        # "적정주가 104만원", "TP 3.5만원" 같은 만원 단위 표기를 원 단위로 환산한다.
+        result = parse_report("[HD현대중공업]\n적정PER 23배로 적정주가 104만원으로 상향\n보고서")
+        self.assertEqual(result["target_price"], 1_040_000)
+        self.assertEqual(result["target_change"], "상향")
+        result = parse_report("[두산밥캣]\n커버리지 개시: 적정주가 6.6만원\n보고서")
+        self.assertEqual(result["target_price"], 66_000)
+        # 단위가 깨져 1,000원 미만이 되는 오파싱은 TP로 저장하지 않는다.
+        self.assertIsNone(parse_report("[테스트전자]\n목표주가 45 언급\n보고서")["target_price"])
+
+    def test_bundle_report_splits_company_sections(self):
+        # 산업자료 + 기업 리뷰 2개가 한 텔레그램 글에 묶인 형식 (2026-07-21 엔진2사)
+        text = """⚙️ #엔진2사 「엔진 초호황!, 주가는 반토막?」
+☞ https://bit.ly/ENGINE2Q26PRE
+▶️ Issue: 주가 낙폭 너무 큰 엔진2사 강력 추천. 2Q26 및 하반기 프리뷰
+▶️ Pitch
+- 강력 매수 기회
+▶️ 한화엔진 「중국 없이도 벌써 1.4조원 수주. 올해 신기록 경신 확실시」
+> TP: 91,000원으로 19% 하향
+> 수주: 1.43조원으로 작년의 1.77조원을 넘기는 추세
+▶️ HD현대마린엔진 「심하다, 계열사 없이 중국으로만도 벌써 작년 수주 넘김」
+> TP: 144,000원 견지. 상승여력 무려 172%
+---------------------------------------------------------------
+🎴 조선/기계/방산 | 최광식 | DAOL투자증권
+✅ 컴플라이언스 승인을 득한 보고서입니다."""
+        result = parse_report(text)
+        self.assertEqual(result["report_type"], "산업분석")
+        # 엄브렐러 행에는 서로 다른 기업의 TP가 섞여 남지 않는다.
+        self.assertIsNone(result["target_price"])
+        sections = result["sections"]
+        self.assertEqual([s["company"] for s in sections], ["한화엔진", "HD현대마린엔진"])
+        self.assertEqual(sections[0]["target_price"], 91000)
+        self.assertEqual(sections[0]["target_change"], "하향")
+        self.assertEqual(sections[1]["target_price"], 144000)
+        self.assertEqual(sections[1]["target_change"], "유지")
+
+    def test_single_company_title_stays_company_report_despite_peer_mentions(self):
+        # 제목 해시태그가 기업 하나면 본문에 피어(HD현대 등)가 언급돼도 기업분석이다.
+        text = """🚢 #한국카본 「방산 양산, SUPER+ 개시, SB 등 호재 가득」
+▶️ Pitch:
+> NO96 Super+ 수주로 삼성과 HD현대만의 Q를 돌파
+- 적정주가 61,000원으로 +7% 상향
+✅ 컴플라이언스 승인을 득한 보고서입니다."""
+        result = parse_report(text)
+        self.assertEqual(result["report_type"], "기업분석")
+        self.assertEqual(result["target_price"], 61000)
+        self.assertEqual(result["target_change"], "상향")
+        self.assertEqual(result["sections"], [])
+
     def test_weekly_folders_follow_brokerage_markers(self):
         cases = (
             ("⚓ 주시뉴스\nhttp://bit.ly/DOS700\nDAOL투자증권 최광식", "다올선박"),

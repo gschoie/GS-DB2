@@ -20,9 +20,11 @@ CREATE TABLE IF NOT EXISTS companies (
   industry TEXT
 );
 
+-- message_id는 UNIQUE가 아니다: 묶음 보고서(산업 + 기업 리뷰 N개)는
+-- 메시지 하나가 산업 엄브렐러 행 + 기업별 행 여러 개로 저장된다.
 CREATE TABLE IF NOT EXISTS reports (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
-  message_id INTEGER NOT NULL UNIQUE REFERENCES telegram_messages(id) ON DELETE CASCADE,
+  message_id INTEGER NOT NULL REFERENCES telegram_messages(id) ON DELETE CASCADE,
   title TEXT NOT NULL,
   report_type TEXT NOT NULL DEFAULT '기업분석',
   weekly_folder TEXT,
@@ -77,6 +79,7 @@ CREATE TABLE IF NOT EXISTS article_metadata_attempts (
 
 CREATE INDEX IF NOT EXISTS idx_messages_posted_at ON telegram_messages(posted_at DESC);
 CREATE INDEX IF NOT EXISTS idx_reports_company ON reports(company_name);
+CREATE INDEX IF NOT EXISTS idx_reports_message ON reports(message_id);
 CREATE INDEX IF NOT EXISTS idx_news_company ON news_articles(company_name);
 CREATE INDEX IF NOT EXISTS idx_report_companies_company ON report_companies(company_id);
 CREATE INDEX IF NOT EXISTS idx_news_companies_company ON news_companies(company_id);

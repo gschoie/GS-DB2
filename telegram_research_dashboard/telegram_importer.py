@@ -12,6 +12,11 @@ from article_metadata import TITLE_PLACEHOLDERS, enrich_news_item
 from db import connect, initialize
 from parser import classify, extract_companies, parse_news_items, parse_report
 
+REPORT_INSERT_SQL = """INSERT INTO reports(message_id,title,report_type,weekly_folder,company_name,securities_firm,analyst,opinion,target_price,
+   previous_target_price,target_change,original_url,confidence,needs_review)
+   VALUES(:message_id,:title,:report_type,:weekly_folder,:company_name,:securities_firm,:analyst,:opinion,:target_price,:previous_target_price,
+   :target_change,:original_url,:confidence,:needs_review)"""
+
 
 def load_dotenv() -> None:
     path = os.path.join(os.path.dirname(__file__), ".env")
@@ -68,15 +73,21 @@ def store_message(conn, channel_id: str, message) -> bool:
     if kind == "report":
         data = parse_report(text)
         companies = data.pop("companies")
-        report_cursor = conn.execute(
-            """INSERT INTO reports(message_id,title,report_type,weekly_folder,company_name,securities_firm,analyst,opinion,target_price,
-               previous_target_price,target_change,original_url,confidence,needs_review)
-               VALUES(:message_id,:title,:report_type,:weekly_folder,:company_name,:securities_firm,:analyst,:opinion,:target_price,:previous_target_price,
-               :target_change,:original_url,:confidence,:needs_review)
-               """,
-            {"message_id": row["id"], **data},
-        )
+        sections = data.pop("sections")
+        report_cursor = conn.execute(REPORT_INSERT_SQL, {"message_id": row["id"], **data})
         link_companies(conn, "report_companies", "report_id", report_cursor.lastrowid, companies)
+        # 묶음 보고서(산업 + 기업 리뷰 N개)는 산업 엄브렐러 외에 기업별 '기업분석' 행을 함께 만든다.
+        # PDF를 열지 않고 텔레그램 본문의 `▶️ 기업명 「부제」` 섹션만으로 분리한다.
+        for section in sections:
+            child = dict(
+                data, title=section["title"], report_type="기업분석", weekly_folder=None,
+                company_name=section["company"], opinion=section["opinion"],
+                target_price=section["target_price"],
+                previous_target_price=section["previous_target_price"],
+                target_change=section["target_change"],
+            )
+            child_cursor = conn.execute(REPORT_INSERT_SQL, {"message_id": row["id"], **child})
+            link_companies(conn, "report_companies", "report_id", child_cursor.lastrowid, [section["company"]])
     elif kind == "news":
         for source_index, data in enumerate(parse_news_items(text)):
             cached_title = cached_titles.get(data.get("article_url"))

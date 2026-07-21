@@ -5,11 +5,15 @@ from __future__ import annotations
 import re
 from urllib.parse import urlparse
 
+# 파싱 규칙을 바꿀 때마다 +1 한다. CI가 이 값을 DB의 PRAGMA user_version과 비교해
+# 파서가 바뀐 첫 수집 런에서만 전체 재분류를 자동으로 돌린다(rebuild_parsed_data.py --if-parser-changed).
+PARSER_VERSION = 2
+
 
 # 텔레그램에서 URL 뒤에 공백 없이 붙인 한글 코멘트까지 링크로 먹지 않는다.
 URL_RE = re.compile(r"https?://[A-Za-z0-9._~:/?#@!$&'*+,;=%-]+")
-PRICE_RE = re.compile(r"(?:목표주가|TP)\s*[:：]?\s*([0-9,]+)\s*원?", re.I)
-PREVIOUS_PRICE_RE = re.compile(r"(?:기존|종전)\s*(?:목표주가|TP)?\s*[:：]?\s*([0-9,]+)\s*원?", re.I)
+PRICE_RE = re.compile(r"(?:목표주가|적정주가|TP)\s*[:：]?\s*([0-9][0-9,]*(?:\.[0-9]+)?)\s*(만)?\s*원?", re.I)
+PREVIOUS_PRICE_RE = re.compile(r"(?:기존|종전)\s*(?:목표주가|적정주가|TP)?\s*[:：]?\s*([0-9][0-9,]*(?:\.[0-9]+)?)\s*(만)?\s*원?", re.I)
 OPINION_RE = re.compile(r"(?:투자의견|의견)\s*[:：]?\s*([A-Za-z가-힣 ]{2,16})", re.I)
 REPORT_WORDS = ("목표주가", "투자의견", "리포트", "보고서", "기업분석", "산업분석")
 REPORT_MARKERS = ("컴플라이언스 승인을 득한 보고서", "컴플 보고서")
@@ -162,7 +166,13 @@ def _first_line(text: str) -> str:
 
 
 def _price(match: re.Match[str] | None) -> int | None:
-    return int(match.group(1).replace(",", "")) if match else None
+    if not match:
+        return None
+    value = float(match.group(1).replace(",", ""))
+    if match.group(2):  # "적정주가 104만원", "TP 3.5만원" 같은 만원 단위 표기
+        value *= 10_000
+    # 커버리지 상장사 TP가 1,000원 밑일 수 없다 — 단위가 깨진 오파싱은 버린다.
+    return int(value) if value >= 1_000 else None
 
 
 def _dedupe_companies(found: list[str]) -> list[str]:
@@ -219,6 +229,69 @@ def _company(text: str) -> str | None:
     return ", ".join(companies) if companies else None
 
 
+# 묶음 보고서(산업 + 기업 리뷰 N개)의 기업 섹션 헤더: `▶️ 한화엔진 「부제」`
+SECTION_HEADER_RE = re.compile(r"^\s*[▶►]️?\s*(.+?)\s*$", re.M)
+SECTION_COMPANY_RE = re.compile(r"^([가-힣A-Za-z0-9&. ]{2,30}?)\s*(「[^」]+」)")
+
+
+def canonical_company(name: str) -> str | None:
+    name = name.strip()
+    if name in KNOWN_COMPANIES:
+        return name
+    return COMPANY_ALIASES.get(name)
+
+
+def _infer_change(target: int | None, previous: int | None,
+                  source: str, matches: list[re.Match[str]]) -> str:
+    if target and previous:
+        return "상향" if target > previous else "하향" if target < previous else "유지"
+    if not target:
+        return "미확인"
+    # `TP: 91,000원으로 19% 하향`, `TP: 144,000원 견지`처럼 TP 줄의 서술어로 방향을 읽는다.
+    line_end = source.find("\n", matches[-1].end())
+    tp_line = source[matches[-1].start():line_end if line_end != -1 else len(source)]
+    if "상향" in tp_line:
+        return "상향"
+    if "하향" in tp_line:
+        return "하향"
+    if any(word in tp_line for word in ("견지", "유지", "동결")):
+        return "유지"
+    return "신규/미확인"
+
+
+def split_company_sections(text: str) -> list[dict]:
+    """`▶️ 기업명 「부제」` 헤더 기준으로 묶음 보고서를 기업별 섹션으로 나눈다.
+
+    PDF를 열지 않아도 텔레그램 본문만으로 기업분석 분리가 가능하도록
+    섹션 안의 TP·방향·투자의견까지 같이 읽는다. 섹션이 2개 이상일 때만
+    묶음으로 본다(1개면 사실상 단일 기업 보고서라 분리 이득이 없다).
+    """
+    headers = list(SECTION_HEADER_RE.finditer(text))
+    sections = []
+    for index, header in enumerate(headers):
+        title_match = SECTION_COMPANY_RE.match(header.group(1))
+        company = canonical_company(title_match.group(1)) if title_match else None
+        if not company:
+            continue
+        end = headers[index + 1].start() if index + 1 < len(headers) else len(text)
+        body = text[header.start():end]
+        footer = re.search(r"^-{5,}", body, re.M)
+        if footer:
+            body = body[:footer.start()]
+        target_matches = list(PRICE_RE.finditer(body))
+        target = _price(target_matches[-1]) if target_matches else None
+        previous = _price(PREVIOUS_PRICE_RE.search(body))
+        opinion = OPINION_RE.search(body)
+        sections.append({
+            "company": company,
+            "title": f"{company} {title_match.group(2)}",
+            "opinion": opinion.group(1).strip() if opinion else None,
+            "target_price": target, "previous_target_price": previous,
+            "target_change": _infer_change(target, previous, body, target_matches),
+        })
+    return sections if len(sections) >= 2 else []
+
+
 def classify(text: str) -> str:
     if any(marker in text for marker in REPORT_MARKERS):
         return "report"
@@ -233,16 +306,12 @@ def classify(text: str) -> str:
 
 
 def parse_report(text: str) -> dict:
+    sections = split_company_sections(text)
     target_matches = list(PRICE_RE.finditer(text))
     # "기존 목표주가 → 목표주가" 형식에서는 마지막 값을 현재 TP로 본다.
     target = _price(target_matches[-1]) if target_matches else None
     previous = _price(PREVIOUS_PRICE_RE.search(text))
-    if target and previous:
-        change = "상향" if target > previous else "하향" if target < previous else "유지"
-    elif target:
-        change = "신규/미확인"
-    else:
-        change = "미확인"
+    change = _infer_change(target, previous, text, target_matches)
     opinion = OPINION_RE.search(text)
     urls = URL_RE.findall(text)
     companies = extract_companies(text)
@@ -260,6 +329,7 @@ def parse_report(text: str) -> dict:
     analyst = "최광식" if "최광식" in text else None
     if WEEKLY_RE.search(text):
         report_type = "위클리"
+        sections = []
         if "한국투자증권" in text or "kiss" in lowered:
             weekly_folder = "한투시절"
         elif "하이투자증권" in text or "hi투자증권" in lowered:
@@ -267,11 +337,24 @@ def parse_report(text: str) -> dict:
         else:
             weekly_folder = "다올선박"
     else:
-        report_type = "산업분석" if (len(companies) > 1 or not company and any(word in text for word in ("조선", "방산", "기계"))) else "기업분석"
         weekly_folder = None
+        title_companies = identify_companies(_first_line(text))
+        if sections:
+            # 기업 섹션이 여럿이면 산업 엄브렐러로 두고, 기업별 행은 섹션이 맡는다.
+            report_type = "산업분석"
+        elif len(title_companies) == 1:
+            # 제목(해시태그)에 기업이 하나면 본문에 피어가 언급돼도 기업분석이다.
+            report_type = "기업분석"
+        else:
+            report_type = "산업분석" if (len(companies) > 1 or not company and any(word in text for word in ("조선", "방산", "기계"))) else "기업분석"
+    if sections:
+        # 엄브렐러 행에 서로 다른 기업의 TP가 섞여 남지 않게 비운다. TP는 섹션 행이 가진다.
+        target = previous = None
+        change = "미확인"
+        confidence = 0.9
     return {
         "title": _first_line(text), "company_name": company,
-        "companies": companies,
+        "companies": companies, "sections": sections,
         "securities_firm": firm, "analyst": analyst, "report_type": report_type,
         "weekly_folder": weekly_folder,
         "opinion": opinion.group(1).strip() if opinion else None,

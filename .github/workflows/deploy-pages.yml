@@ -92,9 +92,12 @@ jobs:
         working-directory: telegram_research_dashboard
         run: python build_daol_collab_radar.py
 
-      # (제거) 전체 재분류: 새 메시지는 import 때 이미 완전 파싱되므로 매 run 전체 재파싱
-      # (~4,900개 × 느린 파서 = 40분+)은 낭비다. 파서 규칙을 바꾼 뒤에만 수동으로
-      # `python rebuild_parsed_data.py` 를 돌린다.
+      # 전체 재분류는 파서 버전(parser.PARSER_VERSION)이 캐시 DB의 기록과 다를 때만 돈다.
+      # 평상시엔 수 초 만에 생략되고, 파서 규칙을 바꾼 뒤 첫 수집 런에서 한 번만 40분+ 소요.
+      - name: 파서 변경 시 전체 재분류 (1회성)
+        if: github.event_name != 'push' && github.event_name != 'workflow_run'
+        working-directory: telegram_research_dashboard
+        run: python rebuild_parsed_data.py --if-parser-changed
 
       - name: 링크 기사 제목 및 기업 보강
         if: github.event_name != 'push' && github.event_name != 'workflow_run'
