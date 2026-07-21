@@ -123,6 +123,11 @@ def build() -> Path:
         f"<script>window.__DASHBOARD_DATA__={payload};</script>\n<script>{javascript}</script>",
     )
     OUTPUT.write_text(html, encoding="utf-8")
+    # 데이터가 HTML에 통째로 박히는 구조라 오래 열어둔 탭은 옛 데이터를 계속 보여준다.
+    # 열린 탭이 새 배포를 감지할 수 있게 빌드 시각만 담은 작은 파일을 함께 배포한다.
+    (OUTPUT.parent / "version.json").write_text(
+        json.dumps({"updated_at": summary["updated_at"]}), encoding="utf-8"
+    )
     union_report = ROOT / "static" / "hhiun_board_report.html"
     if union_report.exists():
         shutil.copy2(union_report, OUTPUT.parent / "hhiun_board_report.html")
