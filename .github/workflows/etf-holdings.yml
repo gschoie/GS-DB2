@@ -7,7 +7,7 @@ name: 액티브 ETF 매매동향
 on:
   workflow_dispatch:
   schedule:
-    - cron: "0 0-12 * * 1-5"   # UTC 00~12시 매시 = KST 09~21시, 월~금
+    - cron: "17 0-12 * * 1-5"  # UTC 00~12시 매시 17분 = KST 09~21시, 월~금 (정각은 GitHub 혼잡으로 자주 스킵됨)
 
 permissions:
   contents: write
