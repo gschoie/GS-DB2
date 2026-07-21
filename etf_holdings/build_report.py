@@ -104,20 +104,21 @@ def build():
     snap = json.load(open(snaps[-1], encoding="utf-8")) if snaps else {"etfs": {}}
 
     s = ch["summary"]
+    base = esc(ch.get("base_date") or "—")
+    prevbase = esc(ch.get("prev_base_date") or "—")
     if ch.get("first_run"):
         body = ('<div class="none">첫 스냅샷을 저장했습니다. '
                 '<b>내일부터</b> 전일 대비 구성 변화를 감지합니다.</div>')
         prevtxt = "—"
     elif not ch["etfs"]:
-        body = '<div class="none">오늘은 유의미한 구성 변화가 없습니다. ✅</div>'
+        body = (f'<div class="none">오늘(<b>{prevbase} → {base}</b> 기준일 비교)은 '
+                '유의미한 구성 변화가 없습니다. ✅</div>')
         prevtxt = esc(ch["prev_date"])
     else:
         body = '<div class="cards">' + "".join(etf_card(e) for e in ch["etfs"]) + '</div>'
         prevtxt = esc(ch["prev_date"])
 
     thr = ch.get("thresholds", {"weight_pp_min": 1.0, "weight_pp_big": 5.0, "share_pct_min": 30})
-    base = esc(ch.get("base_date") or "—")
-    prevbase = esc(ch.get("prev_base_date") or "—")
     banner = ""
     if ch.get("same_base"):
         banner = ('<div class="banner">⚠ 직전 실행과 <b>구성 기준일이 동일</b>합니다 '

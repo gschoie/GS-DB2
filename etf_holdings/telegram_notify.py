@@ -68,9 +68,10 @@ def build_message(ch):
 
 def heartbeat_message(ch):
     base = ch.get("base_date") or "—"
+    prevbase = ch.get("prev_base_date") or "—"
     return "\n".join([
         f"<b>🧩 액티브 ETF 구성 변화</b> · 구성 기준일 {esc(base)}", "",
-        "오늘 유의미한 구성 변화 없음 ✅ (수동 갱신 확인)", "",
+        f"오늘({esc(prevbase)} → {esc(base)}) 유의미한 구성 변화 없음 ✅ (수동 갱신 확인)", "",
         f'전체 › <a href="{DASH_URL}">대시보드</a>', SIGNATURE])
 
 
