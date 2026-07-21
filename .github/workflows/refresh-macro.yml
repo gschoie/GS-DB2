@@ -27,7 +27,10 @@ jobs:
         with:
           python-version: "3.12"
 
-      - name: 이전 수집 데이터 복원(읽기 전용)
+      # 주의: 캐시가 newsdb-/hhiun- 둘로 분리된 뒤에도 이 워크플로만 옛 dashboard-db- 키로
+      # 복원하고 있었다. 그 키는 더 이상 저장되지 않아 07-13 시점에 얼어붙었고, 2시간마다
+      # 그 냉동 DB로 사이트를 통째로 되돌려 배포했다. 반드시 deploy-pages와 같은 키 순서로 복원할 것.
+      - name: 뉴스DB 캐시 복원(읽기 전용)
         uses: actions/cache/restore@v5
         with:
           path: |
@@ -35,11 +38,22 @@ jobs:
             telegram_research_dashboard/data/daol_messages.json
             telegram_research_dashboard/data/daol_tone_history.json
             telegram_research_dashboard/data/daol_pdf_text_cache.json
-            telegram_research_dashboard/data/hhiun_snapshot.json
             telegram_research_dashboard/data/macro.json
-          key: dashboard-db-${{ github.run_id }}
+          key: newsdb-${{ github.run_id }}
           restore-keys: |
+            newsdb-
             dashboard-db-
+
+      - name: 노조 캐시 복원(읽기 전용)
+        uses: actions/cache/restore@v5
+        with:
+          path: |
+            telegram_research_dashboard/data/hhiun_snapshot.json
+            telegram_research_dashboard/data/hhiun_top.json
+            telegram_research_dashboard/static/hhiun_board_report.html
+          key: hhiun-${{ github.run_id }}
+          restore-keys: |
+            hhiun-
 
       - name: 매크로 데이터 수집 (네이버 글로벌경제 Top5)
         working-directory: telegram_research_dashboard
