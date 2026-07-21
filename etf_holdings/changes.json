@@ -1,22 +1,279 @@
 {
-  "date": "2026-07-20",
-  "prev_date": "2026-07-18",
-  "generated_at": "2026-07-20 18:58",
-  "base_date": "2026-07-20",
-  "prev_base_date": "2026-07-16",
+  "date": "2026-07-21",
+  "prev_date": "2026-07-20",
+  "generated_at": "2026-07-21 11:21",
+  "base_date": "",
+  "prev_base_date": "2026-07-20",
   "same_base": false,
   "first_run": false,
-  "etfs": [],
+  "etfs": [
+    {
+      "code": "426030",
+      "label": "TIME 미국나스닥100액티브",
+      "group": "TIME(구 TIMEFOLIO)",
+      "flow_factor": 0.9884,
+      "new": [
+        {
+          "key": "APPLE INC",
+          "name": "APPLE INC",
+          "code": "",
+          "weight": 0.0,
+          "shares": 63.0
+        },
+        {
+          "key": "COINBASE GLOBAL INC -CLASS A",
+          "name": "COINBASE GLOBAL INC -CLASS A",
+          "code": "",
+          "weight": 0.0,
+          "shares": 97.0
+        }
+      ],
+      "gone": [
+        {
+          "key": "DELL TECHNOLOGIES -C",
+          "name": "DELL TECHNOLOGIES -C",
+          "code": "",
+          "weight_prev": 0.0,
+          "shares_prev": 66.0
+        },
+        {
+          "key": "MARVELL TECHNOLOGY INC",
+          "name": "MARVELL TECHNOLOGY INC",
+          "code": "",
+          "weight_prev": 0.0,
+          "shares_prev": 87.0
+        }
+      ],
+      "moves": [
+        {
+          "key": "NVIDIA CORP",
+          "name": "NVIDIA CORP",
+          "code": "",
+          "shares_now": 240.0,
+          "shares_prev": 177.0,
+          "active_share_pct": 37.2,
+          "active_weight_pp": null,
+          "weight_now": 0.0,
+          "weight_prev": 0.0,
+          "headline": false
+        },
+        {
+          "key": "ROBINHOOD MARKETS INC - A",
+          "name": "ROBINHOOD MARKETS INC - A",
+          "code": "",
+          "shares_now": 234.0,
+          "shares_prev": 176.0,
+          "active_share_pct": 34.5,
+          "active_weight_pp": null,
+          "weight_now": 0.0,
+          "weight_prev": 0.0,
+          "headline": false
+        }
+      ],
+      "has_weight": false
+    },
+    {
+      "code": "385720",
+      "label": "TIME 코스피액티브",
+      "group": "TIME(구 TIMEFOLIO)",
+      "flow_factor": 1.0,
+      "new": [
+        {
+          "key": "071050",
+          "name": "한국금융지주",
+          "code": "071050",
+          "weight": 2.19,
+          "shares": 249.0
+        }
+      ],
+      "gone": [
+        {
+          "key": "004170",
+          "name": "신세계",
+          "code": "004170",
+          "weight_prev": 2.28,
+          "shares_prev": 100.0
+        }
+      ],
+      "moves": [],
+      "has_weight": true
+    },
+    {
+      "code": "0162Y0",
+      "label": "TIME 코스닥액티브",
+      "group": "TIME(구 TIMEFOLIO)",
+      "flow_factor": 1.0,
+      "new": [
+        {
+          "key": "420770",
+          "name": "기가비스",
+          "code": "420770",
+          "weight": 2.38,
+          "shares": 59.0
+        }
+      ],
+      "gone": [
+        {
+          "key": "240810",
+          "name": "원익IPS",
+          "code": "240810",
+          "weight_prev": 2.5,
+          "shares_prev": 69.0
+        }
+      ],
+      "moves": [],
+      "has_weight": true
+    },
+    {
+      "code": "410870",
+      "label": "TIME K컬처액티브",
+      "group": "TIME(구 TIMEFOLIO)",
+      "flow_factor": 1.0,
+      "new": [
+        {
+          "key": "041510",
+          "name": "에스엠",
+          "code": "041510",
+          "weight": 4.34,
+          "shares": 600.0
+        }
+      ],
+      "gone": [
+        {
+          "key": "023530",
+          "name": "롯데쇼핑",
+          "code": "023530",
+          "weight_prev": 4.31,
+          "shares_prev": 300.0
+        }
+      ],
+      "moves": [],
+      "has_weight": true
+    },
+    {
+      "code": "462900",
+      "label": "KoAct 바이오헬스케어액티브",
+      "group": "KoAct",
+      "flow_factor": 1.0,
+      "new": [
+        {
+          "key": "214450",
+          "name": "파마리서치",
+          "code": "214450",
+          "weight": 4.46,
+          "shares": 90.0
+        }
+      ],
+      "gone": [
+        {
+          "key": "476830",
+          "name": "알지노믹스",
+          "code": "476830",
+          "weight_prev": 4.43,
+          "shares_prev": 986.0
+        }
+      ],
+      "moves": [],
+      "has_weight": true
+    },
+    {
+      "code": "387280",
+      "label": "TIGER 퓨처모빌리티액티브",
+      "group": "TIGER",
+      "flow_factor": 1.0,
+      "new": [
+        {
+          "key": "005930",
+          "name": "삼성전자",
+          "code": "005930",
+          "weight": 3.09,
+          "shares": 13.0
+        }
+      ],
+      "gone": [
+        {
+          "key": "011070",
+          "name": "LG이노텍",
+          "code": "011070",
+          "weight_prev": 3.09,
+          "shares_prev": 5.0
+        }
+      ],
+      "moves": [],
+      "has_weight": true
+    },
+    {
+      "code": "444200",
+      "label": "SOL 코리아메가테크액티브",
+      "group": "SOL",
+      "flow_factor": 1.0,
+      "new": [
+        {
+          "key": "012330",
+          "name": "현대모비스",
+          "code": "012330",
+          "weight": 2.4,
+          "shares": 110.0
+        }
+      ],
+      "gone": [
+        {
+          "key": "267260",
+          "name": "HD현대일렉트릭",
+          "code": "267260",
+          "weight_prev": 2.42,
+          "shares_prev": 69.0
+        }
+      ],
+      "moves": [],
+      "has_weight": true
+    },
+    {
+      "code": "471040",
+      "label": "KoAct 글로벌AI&로봇액티브",
+      "group": "KoAct",
+      "flow_factor": 1.0051,
+      "new": [],
+      "gone": [],
+      "moves": [
+        {
+          "key": "000660",
+          "name": "SK하이닉스",
+          "code": "000660",
+          "shares_now": 16.0,
+          "shares_prev": 26.0,
+          "active_share_pct": -38.8,
+          "active_weight_pp": null,
+          "weight_now": 0.0,
+          "weight_prev": 0.0,
+          "headline": false
+        },
+        {
+          "key": "005930",
+          "name": "삼성전자",
+          "code": "005930",
+          "shares_now": 123.0,
+          "shares_prev": 188.0,
+          "active_share_pct": -34.9,
+          "active_weight_pp": null,
+          "weight_now": 0.0,
+          "weight_prev": 0.0,
+          "headline": false
+        }
+      ],
+      "has_weight": false
+    }
+  ],
   "thresholds": {
     "weight_pp_min": 1.0,
     "weight_pp_big": 5.0,
     "share_pct_min": 30.0
   },
   "summary": {
-    "etfs_changed": 0,
-    "new_total": 0,
-    "gone_total": 0,
-    "moves_total": 0,
+    "etfs_changed": 8,
+    "new_total": 8,
+    "gone_total": 8,
+    "moves_total": 4,
     "universe": 21
   }
 }
