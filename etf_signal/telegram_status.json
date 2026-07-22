@@ -1,8 +1,44 @@
 {
-  "when_utc": "2026-07-21 04:17:40Z",
+  "when_utc": "2026-07-22 03:21:34Z",
   "ok": true,
-  "note": "no_alert_skip",
+  "note": "forced_heartbeat",
   "chat_id_tail": "5171",
   "token_set": true,
-  "response": null
+  "response": {
+    "ok": true,
+    "result": {
+      "message_id": 1181,
+      "from": {
+        "id": 8917880759,
+        "is_bot": true,
+        "first_name": "GS.매크로_공부/섹터ETF_포착",
+        "username": "gs_macro_bot"
+      },
+      "chat": {
+        "id": 279385171,
+        "first_name": "광식",
+        "last_name": "최",
+        "username": "gschoie",
+        "type": "private"
+      },
+      "date": 1784690494,
+      "text": "📡 ETF/섹터 신호 · 2026-07-21 (전일 확정)\n\n오늘 새 신호 없음 ✅ (수동 갱신 확인)\n\n전체 신호판 › 대시보드\n🎴 GS Research Desk · ETF/섹터 신호",
+      "entities": [
+        {
+          "offset": 0,
+          "length": 12,
+          "type": "bold"
+        },
+        {
+          "offset": 69,
+          "length": 4,
+          "type": "text_link",
+          "url": "https://gschoie.github.io/GS-output-dashboard/etf_signal_report.html"
+        }
+      ],
+      "link_preview_options": {
+        "is_disabled": true
+      }
+    }
+  }
 }
