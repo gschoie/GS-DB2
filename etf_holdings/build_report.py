@@ -119,6 +119,9 @@ def build():
         prevtxt = esc(ch["prev_date"])
 
     thr = ch.get("thresholds", {"weight_pp_min": 1.0, "weight_pp_big": 5.0, "share_pct_min": 30})
+    # 섹션 제목용 날짜(YY/MM/DD) — 구성 기준일 우선, 없으면 실행일
+    raw = ch.get("base_date") or ch.get("date") or ""
+    h2d = f"{raw[2:4]}/{raw[5:7]}/{raw[8:10]}" if len(raw) == 10 else "—"
     banner = ""
     if ch.get("same_base"):
         banner = ('<div class="banner">⚠ 직전 실행과 <b>구성 기준일이 동일</b>합니다 '
@@ -128,7 +131,7 @@ def build():
         base=base, prevbase=prevbase, banner=banner,
         universe=s["universe"], changed=s["etfs_changed"],
         new=s["new_total"], moves=s["moves_total"], gone=s["gone_total"],
-        body=body, current=current_holdings_block(snap),
+        body=body, h2d=esc(h2d), current=current_holdings_block(snap),
         wmin=thr["weight_pp_min"], wbig=thr["weight_pp_big"], spct=thr["share_pct_min"],
     )
 
@@ -203,7 +206,7 @@ h2{{font:600 18px Georgia,"Noto Serif KR",serif;margin:30px 0 12px}}
   <article><small>실매매(리밸런싱)</small><strong>{moves}</strong></article>
 </section>
 
-<h2>오늘의 구성 변화</h2>
+<h2>오늘({h2d})의 구성 변화</h2>
 {body}
 
 <div class="legend">
