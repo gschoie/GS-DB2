@@ -1,13 +1,13 @@
 const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
 const dateValue=d=>`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
 const today=new Date(),weekAgo=new Date(today);weekAgo.setDate(today.getDate()-7);
-const state={q:'',reportCompany:'',newsCompany:'',reportType:'',weeklyFolder:'',pressStart:dateValue(weekAgo),pressEnd:dateValue(today),pressRows:[],reports:[],news:[],companies:[],reportCompanies:[],tone:null,toneQ:'',toneMonth:'',toneAnalyst:''};
+const state={q:'',reportCompany:'',newsCompany:'',newsQ:'',reportType:'',weeklyFolder:'',pressStart:dateValue(weekAgo),pressEnd:dateValue(today),pressRows:[],reports:[],news:[],companies:[],reportCompanies:[],tone:null,toneQ:'',toneMonth:'',toneAnalyst:''};
 const fmtDate=s=>new Intl.DateTimeFormat('ko-KR',{year:'2-digit',month:'2-digit',day:'2-digit'}).format(new Date(s));
 const won=n=>n?`${Number(n).toLocaleString()}원`:'—';
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 function localData(url){
  const data=window.__DASHBOARD_DATA__;if(!data)return null;
- const [path,raw='']=url.split('?'),params=new URLSearchParams(raw),q=(params.get('q')||'').toLocaleLowerCase(),company=params.get('company')||'',type=params.get('type')||'',weekly=params.get('weekly')||'';
+ const [path,raw='']=url.split('?'),params=new URLSearchParams(raw),q=(params.get('q')||'').toLocaleLowerCase(),nq=(params.get('nq')||'').toLocaleLowerCase(),company=params.get('company')||'',type=params.get('type')||'',weekly=params.get('weekly')||'';
  if(path==='/api/summary')return data.summary;
  if(path==='/api/companies')return data.companies;
  if(path==='/api/report-companies')return data.reportCompanies;
@@ -15,9 +15,11 @@ function localData(url){
  return source.filter(item=>{
    const haystack=`${item.title||''} ${item.companies_label||item.company_name||''}`.toLocaleLowerCase();
    const searchMatch=!q||haystack.includes(q),companyMatch=!company||(item.company_names||[]).includes(company);
+   // 뉴스 키워드 검색(nq)은 제목·기업·코멘트·요약·언론사에 텔레그램 원문(newsTexts)까지 뒤진다 ("페루", "MLRS" 같은 본문 키워드용).
+   const nqMatch=path!=='/api/news'||!nq||`${haystack} ${item.comment||''} ${item.summary||''} ${item.publisher||''} ${(data.newsTexts||{})[item.message_id]||''}`.toLocaleLowerCase().includes(nq);
    const typeMatch=path!=='/api/reports'||!type||item.report_type===type;
    const weeklyMatch=path!=='/api/reports'||!weekly||item.weekly_folder===weekly;
-   return searchMatch&&companyMatch&&typeMatch&&weeklyMatch;
+   return searchMatch&&companyMatch&&nqMatch&&typeMatch&&weeklyMatch;
  });
 }
 async function json(url){const local=localData(url);if(local!==null)return local;const r=await fetch(url);if(!r.ok)throw new Error(r.status);return r.json()}
@@ -52,7 +54,7 @@ const decodeEnt=s=>{const t=document.createElement('textarea');t.innerHTML=s||''
 async function fetchLiveMacro(){if(!MACRO_ENDPOINT)return;try{const r=await fetch(MACRO_ENDPOINT,{cache:'no-store'});if(!r.ok)return;const d=await r.json();const items=(d.global_economy||d.items||[]).map(x=>({title:decodeEnt(x.title),url:x.url}));if(items.length&&$('#macro-global'))$('#macro-global').innerHTML=items.slice(0,5).map(overviewMacro).join('')}catch{}}
 async function load(){
  const reportQs=new URLSearchParams({q:state.q,company:state.reportCompany,type:state.reportType,weekly:state.weeklyFolder});
- const newsQs=new URLSearchParams({q:state.q,company:state.newsCompany});
+ const newsQs=new URLSearchParams({q:state.q,nq:state.newsQ,company:state.newsCompany});
  const [sum,reports,news,companies,reportCompanies,weeklyReports]=await Promise.all([json('/api/summary'),json('/api/reports?'+reportQs),json('/api/news?'+newsQs),json('/api/companies'),json('/api/report-companies'),json('/api/reports?type=위클리')]);
  state.reports=reports;state.news=news;state.companies=companies;state.reportCompanies=reportCompanies;
  $('#press-start').value=state.pressStart;$('#press-end').value=state.pressEnd;
@@ -71,7 +73,7 @@ async function load(){
  const brief=$('#daily-brief');if(brief){const gm='https://gemini.google.com/app/dc1cee4fd9194007?usp=sharing';const body=macro.daily_brief?esc(macro.daily_brief).replace(/\n/g,'<br>'):'<span class="brief-empty">아직 핵심요약이 없습니다. GMN.글로벌방산 문서에 붙여넣으면 여기 표시됩니다.</span>';brief.innerHTML=`<div class="brief-head"><small>GEMINI · 오늘의 핵심요약</small><a href="${gm}" target="_blank" rel="noopener">Gemini 열기 →</a></div><div class="brief-body">${body}</div>`}
  const archive=news.reduce((all,n)=>{const d=new Date(n.posted_at),y=String(d.getFullYear()),m=`${String(d.getMonth()+1).padStart(2,'0')}월`;all[y]??={};all[y][m]??=[];all[y][m].push(n);return all},{});
  const years=Object.entries(archive).sort(([a],[b])=>b.localeCompare(a));
- $('#news-list').innerHTML=years.map(([year,months],yi)=>{const count=Object.values(months).reduce((sum,list)=>sum+list.length,0);return `<details class="year-group" ${yi===0?'open':''}><summary><span>${year}년</span><em>${count.toLocaleString()}건</em></summary><div class="year-content">${Object.entries(months).sort(([a],[b])=>b.localeCompare(a)).map(([month,list],mi)=>`<details class="month-group" ${yi===0&&mi===0?'open':''}><summary class="month-divider"><h3>${month}</h3><span>${list.length}건</span></summary>${newsTable(list)}</details>`).join('')}</div></details>`}).join('')||'<p class="empty">조건에 맞는 뉴스가 없습니다.</p>';
+ $('#news-list').innerHTML=years.map(([year,months],yi)=>{const count=Object.values(months).reduce((sum,list)=>sum+list.length,0);return `<details class="year-group" ${yi===0||state.newsQ?'open':''}><summary><span>${year}년</span><em>${count.toLocaleString()}건</em></summary><div class="year-content">${Object.entries(months).sort(([a],[b])=>b.localeCompare(a)).map(([month,list],mi)=>`<details class="month-group" ${(yi===0&&mi===0)||state.newsQ?'open':''}><summary class="month-divider"><h3>${month}</h3><span>${list.length}건</span></summary>${newsTable(list)}</details>`).join('')}</div></details>`}).join('')||'<p class="empty">조건에 맞는 뉴스가 없습니다.</p>';
  const sortKo=list=>[...list].sort((a,b)=>a.name.localeCompare(b.name,'ko'));
  const reportOptions='<option value="">모든 기업</option>'+sortKo(reportCompanies).map(c=>`<option ${state.reportCompany===c.name?'selected':''}>${esc(c.name)}</option>`).join('');
  const newsOptions='<option value="">모든 기업</option>'+sortKo(companies).map(c=>`<option ${state.newsCompany===c.name?'selected':''}>${esc(c.name)}</option>`).join('');
@@ -164,6 +166,7 @@ $$('.nav').forEach(b=>b.onclick=()=>view(b.dataset.view));$$('[data-go]').forEac
 let timer;$('#search').oninput=e=>{clearTimeout(timer);timer=setTimeout(()=>{state.q=e.target.value;load()},250)};
 $('#report-company').onchange=e=>{state.reportCompany=e.target.value;load()};
 $('#news-company').onchange=e=>{state.newsCompany=e.target.value;load()};
+let newsTimer;$('#news-search').oninput=e=>{clearTimeout(newsTimer);newsTimer=setTimeout(()=>{state.newsQ=e.target.value.trim();load()},250)};
 $('#press-refresh').onclick=renderPressTable;
 $('#press-start').onchange=renderPressTable;
 $('#press-end').onchange=renderPressTable;

@@ -47,10 +47,12 @@ class Handler(BaseHTTPRequestHandler):
 
     def api(self, path: str, query: dict):
         search = query.get("q", [""])[0].strip()
+        news_search = query.get("nq", [""])[0].strip()
         company = query.get("company", [""])[0].strip()
         report_type = query.get("type", [""])[0].strip()
         weekly_folder = query.get("weekly", [""])[0].strip()
         like = f"%{search}%"
+        news_like = f"%{news_search}%"
         company_like = f"%{company}%"
         if path == "/api/summary":
             stats = rows("""SELECT
@@ -89,8 +91,11 @@ class Handler(BaseHTTPRequestHandler):
                   WHERE nc.news_id=n.id AND c.name LIKE ?))
                 AND (?='' OR EXISTS(SELECT 1 FROM news_companies nc JOIN companies c ON c.id=nc.company_id
                   WHERE nc.news_id=n.id AND c.name=?))
+                AND (?='' OR n.title LIKE ? OR m.text LIKE ? OR COALESCE(n.comment,'') LIKE ?
+                  OR COALESCE(n.publisher,'') LIKE ?)
                 ORDER BY m.posted_at DESC LIMIT 20000""",
-                (like, like, like, like, company, company))
+                (like, like, like, like, company, company,
+                 news_search, news_like, news_like, news_like, news_like))
             return self.send_json(data)
         if path == "/api/companies":
             return self.send_json(rows("""SELECT c.name,COUNT(*) mentions FROM (

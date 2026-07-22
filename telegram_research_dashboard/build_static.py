@@ -103,6 +103,12 @@ def build() -> Path:
     report_counts = Counter(name for item in reports if item.get("report_type") != "위클리" for name in item["company_names"])
     report_companies = [{"name": name, "mentions": count} for name, count in sorted(report_counts.items(), key=lambda x: (-x[1], x[0]))]
 
+    # 뉴스 키워드 검색(nq)용 텔레그램 원문. 메시지 단위로 중복 제거해 임베드한다(약 +2MB).
+    with connect() as conn:
+        news_texts = {str(row["id"]): row["text"] for row in conn.execute(
+            "SELECT id,text FROM telegram_messages "
+            "WHERE id IN (SELECT DISTINCT message_id FROM news_articles)")}
+
     tone_path = ROOT / "data" / "daol_tone_history.json"
     tone = json.loads(tone_path.read_text(encoding="utf-8")) if tone_path.exists() else {"months": [], "report_count": 0}
     union_path = ROOT / "data" / "hhiun_top.json"
@@ -111,7 +117,8 @@ def build() -> Path:
     macro = json.loads(macro_path.read_text(encoding="utf-8")) if macro_path.exists() else {}
     payload = json.dumps(
         {"summary": summary, "reports": reports, "news": news, "companies": companies,
-         "reportCompanies": report_companies, "tone": tone, "union": union, "macro": macro},
+         "reportCompanies": report_companies, "newsTexts": news_texts,
+         "tone": tone, "union": union, "macro": macro},
         ensure_ascii=False, separators=(",", ":"),
     ).replace("</", "<\\/").replace("\u2028", "\\u2028").replace("\u2029", "\\u2029")
     html = (ROOT / "static" / "index.html").read_text(encoding="utf-8")
