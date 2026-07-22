@@ -130,6 +130,17 @@ http://bit.ly/example
         self.assertEqual(result["companies"], [])
         self.assertEqual(result["report_type"], "산업분석")
 
+    def test_lig_full_name_maps_to_lig_dna_and_is_company_report(self):
+        # 2026-07-22 LIG 2Q26 프리뷰: 제목 해시태그가 정식 풀네임이라 별칭 매핑이 필요했다.
+        text = """🏹 #LIG디펜스앤에어로스페이스 「끝나지 않는 전쟁. 계속 덧붙는 CAPEX」
+☞ https://bit.ly/LIGDA2Q26PRE
+▶️ Issue: 2Q26 프리뷰. 최근 CAPEX 계획 정리. 선호주로 상향
+✅ 컴플라이언스 승인을 득한 보고서입니다."""
+        self.assertEqual(classify(text), "report")
+        result = parse_report(text)
+        self.assertEqual(result["companies"], ["LIG D&A"])
+        self.assertEqual(result["report_type"], "기업분석")
+
     def test_target_price_in_manwon_units(self):
         # "적정주가 104만원", "TP 3.5만원" 같은 만원 단위 표기를 원 단위로 환산한다.
         result = parse_report("[HD현대중공업]\n적정PER 23배로 적정주가 104만원으로 상향\n보고서")

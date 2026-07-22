@@ -7,7 +7,7 @@ from urllib.parse import urlparse
 
 # 파싱 규칙을 바꿀 때마다 +1 한다. CI가 이 값을 DB의 PRAGMA user_version과 비교해
 # 파서가 바뀐 첫 수집 런에서만 전체 재분류를 자동으로 돌린다(rebuild_parsed_data.py --if-parser-changed).
-PARSER_VERSION = 2
+PARSER_VERSION = 3
 
 
 # 텔레그램에서 URL 뒤에 공백 없이 붙인 한글 코멘트까지 링크로 먹지 않는다.
@@ -51,6 +51,8 @@ APPROVED_COMPANIES = [
     "세진중공업", "HD현대일렉트릭", "SK오션플랜트",
 ]
 COMPANY_ALIASES = {
+    "LIG디펜스앤에어로스페이스": "LIG D&A",
+    "LIG디앤에이": "LIG D&A",
     "KAI": "한국항공우주",
     "KF-21": "한국항공우주",
     "KF21": "한국항공우주",
