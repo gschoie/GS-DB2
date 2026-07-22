@@ -132,6 +132,11 @@ async function dispatchNews(){
  const btn=$('#news-refresh'),status=$('#news-status');
  if(await dispatchWorkflow({workflow:'news'},status,btn))
    status.textContent='✅ 뉴스 갱신 요청됨 — 몇 분 뒤 새로고침';}
+async function dispatchReports(){
+ // 발간 보고서만 초경량 갱신(refresh-reports.yml). 뉴스 보강·톤·매크로는 건너뜀.
+ const btn=$('#reports-refresh'),status=$('#reports-status');
+ if(await dispatchWorkflow({workflow:'reports'},status,btn))
+   status.textContent='✅ 보고서 갱신 요청됨 — 2~3분 뒤 새로고침';}
 async function dispatchUnion(){
  const btn=$('#union-refresh'),status=$('#union-refresh-status');
  if(await dispatchWorkflow({workflow:'union'},status,btn))
@@ -172,6 +177,7 @@ $('#tone-server-refresh')?.addEventListener('click',dispatchTone);
 $('#etf-refresh')?.addEventListener('click',dispatchEtf);
 $('#holdings-refresh')?.addEventListener('click',dispatchHoldings);
 $('#news-refresh')?.addEventListener('click',dispatchNews);
+$('#reports-refresh')?.addEventListener('click',dispatchReports);
 $('#union-refresh')?.addEventListener('click',dispatchUnion);
 $('#consensus-refresh')?.addEventListener('click',dispatchConsensus);
 $('#tone-search').oninput=e=>{state.toneQ=e.target.value;renderTone()};

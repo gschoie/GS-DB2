@@ -131,7 +131,7 @@
     </section>
 
     <section id="reports" class="view">
-      <div class="toolbar"><div><button class="chip active" data-type="">전체</button><button class="chip" data-type="기업분석">기업분석</button><button class="chip" data-type="산업분석">산업분석</button><button class="chip" data-type="위클리">위클리</button></div><select id="report-company"><option value="">모든 기업</option></select></div>
+      <div class="toolbar"><div><button class="chip active" data-type="">전체</button><button class="chip" data-type="기업분석">기업분석</button><button class="chip" data-type="산업분석">산업분석</button><button class="chip" data-type="위클리">위클리</button></div><div class="etf-actions"><select id="report-company"><option value="">모든 기업</option></select><button id="reports-refresh" class="refresh-btn" type="button" title="발간 보고서만 빠르게 다시 수집·반영합니다 (뉴스 보강·톤·매크로는 건너뜀, 보통 2~3분).">🔄 보고서 갱신</button><span id="reports-status" class="task-sync"></span></div></div>
       <div id="weekly-folders" class="weekly-folders" hidden><button class="folder active" data-weekly=""><span>▤</span><b>전체 위클리</b><small id="weekly-all-count"></small></button><button class="folder" data-weekly="다올선박"><span>▤</span><b>다올선박</b><small id="weekly-daol-count"></small></button><button class="folder" data-weekly="한투시절"><span>▤</span><b>한투시절</b><small id="weekly-kis-count"></small></button><button class="folder" data-weekly="하이투자증권시절"><span>▤</span><b>하이투자증권시절</b><small id="weekly-hi-count"></small></button></div>
       <section class="panel"><div id="report-table"></div></section>
     </section>
