@@ -1,44 +1,8 @@
 {
-  "when_utc": "2026-07-22 03:31:34Z",
+  "when_utc": "2026-07-22 06:45:35Z",
   "ok": true,
-  "note": "forced_heartbeat",
+  "note": "no_change_skip",
   "chat_id_tail": "5171",
   "token_set": true,
-  "response": {
-    "ok": true,
-    "result": {
-      "message_id": 1182,
-      "from": {
-        "id": 8917880759,
-        "is_bot": true,
-        "first_name": "GS.매크로_공부/섹터ETF_포착",
-        "username": "gs_macro_bot"
-      },
-      "chat": {
-        "id": 279385171,
-        "first_name": "광식",
-        "last_name": "최",
-        "username": "gschoie",
-        "type": "private"
-      },
-      "date": 1784691094,
-      "text": "🧩 액티브 ETF 구성 변화 · 구성 기준일 —\n\n오늘(2026-07-21 → —) 유의미한 구성 변화 없음 ✅ (수동 갱신 확인)\n\n전체 › 대시보드\n🎴 GS Research Desk · 액티브 ETF 트래커",
-      "entities": [
-        {
-          "offset": 0,
-          "length": 16,
-          "type": "bold"
-        },
-        {
-          "offset": 81,
-          "length": 4,
-          "type": "text_link",
-          "url": "https://gschoie.github.io/GS-output-dashboard/etf_holdings_report.html"
-        }
-      ],
-      "link_preview_options": {
-        "is_disabled": true
-      }
-    }
-  }
+  "response": null
 }
