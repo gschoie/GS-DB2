@@ -70,7 +70,10 @@ jobs:
 
       - name: Python 패키지 준비
         if: github.event_name != 'push' && github.event_name != 'workflow_run'
-        run: python -m pip install requests beautifulsoup4 lxml pycryptodome pypdf telethon
+        run: |
+          python -m pip install requests beautifulsoup4 lxml pycryptodome pypdf telethon pypdfium2 pytesseract
+          # 이미지형 PDF(2025년 시절) 표지에서 적정주가를 읽기 위한 OCR
+          sudo apt-get update -qq && sudo apt-get install -y -qq tesseract-ocr tesseract-ocr-kor
 
       - name: 공개 텔레그램 최신 글 수집
         if: github.event_name != 'push' && github.event_name != 'workflow_run'
@@ -113,6 +116,13 @@ jobs:
         if: github.event_name != 'push' && github.event_name != 'workflow_run'
         working-directory: telegram_research_dashboard
         run: python apply_corrections.py
+
+      # 텔레그램 본문에 TP가 없는 기업분석 보고서는 PDF 표지에서 적정주가를 읽어 채운다
+      # (2025년 이후, 이미지형 PDF는 OCR). 재분류/재수집이 지운 값도 여기서 다시 채워진다.
+      - name: 보고서 TP 보강 (PDF 표지·OCR)
+        if: github.event_name != 'push' && github.event_name != 'workflow_run'
+        working-directory: telegram_research_dashboard
+        run: python enrich_report_tp.py
 
       - name: 매크로 데이터 수집 (글로벌경제 · 핵심요약)
         if: github.event_name != 'push' && github.event_name != 'workflow_run'

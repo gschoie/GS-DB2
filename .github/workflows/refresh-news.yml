@@ -73,6 +73,16 @@ jobs:
         working-directory: telegram_research_dashboard
         run: python apply_corrections.py
 
+      - name: TP 보강 패키지 준비 (PDF·OCR)
+        run: |
+          python -m pip install -q pypdf pycryptodome pypdfium2 pytesseract
+          sudo apt-get update -qq && sudo apt-get install -y -qq tesseract-ocr tesseract-ocr-kor
+
+      # 재수집이 최근 2주 보고서 행을 다시 만들며 TP 보강값을 지우므로 여기서 복원한다.
+      - name: 보고서 TP 보강 (PDF 표지·OCR)
+        working-directory: telegram_research_dashboard
+        run: python enrich_report_tp.py --budget-seconds 300
+
       - name: 배포용 HTML 생성 (뉴스만 갱신 · 톤/매크로는 기존 데이터 유지)
         working-directory: telegram_research_dashboard
         env:

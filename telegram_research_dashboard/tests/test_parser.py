@@ -1,7 +1,33 @@
 import unittest
 
 from article_metadata import enrich_news_item
+from enrich_report_tp import extract_tp
 from parser import classify, extract_companies, identify_companies, parse_news, parse_news_items, parse_report
+
+
+class PdfTargetPriceTest(unittest.TestCase):
+    def test_cover_box_with_direction(self):
+        # DAOL 표지 박스: 현재 / 직전 / 변동
+        text = """BUY \n \n \n 현재 직전 변동 \n투자의견 BUY BUY 유지 \n적정주가 980,000 1,100,000 하향 \nEarnings"""
+        found = extract_tp(text)
+        self.assertEqual(found["target_price"], 980_000)
+        self.assertEqual(found["previous_target_price"], 1_100_000)
+        self.assertEqual(found["target_change"], "하향")
+        self.assertTrue(found["confident"])
+
+    def test_cover_box_hold(self):
+        text = "투자의견 BUY BUY 유지 \n적정주가 61,000 61,000 유지 \nEarnings"
+        found = extract_tp(text)
+        self.assertEqual(found["target_price"], 61_000)
+        self.assertEqual(found["target_change"], "유지")
+
+    def test_fallback_single_mention(self):
+        found = extract_tp("Fig. 1: 적정주가 98만원… 본문 뒤쪽 표 적정주가 980,000 산출")
+        self.assertEqual(found["target_price"], 980_000)
+        self.assertFalse(found["confident"])
+
+    def test_no_tp_returns_none(self):
+        self.assertIsNone(extract_tp("산업 전망 자료라 목표주가 표기가 없다"))
 
 
 class ForeignCompanyClassificationTest(unittest.TestCase):
