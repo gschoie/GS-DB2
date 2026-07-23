@@ -220,7 +220,8 @@ def build():
     for code in sorted(names):
         um = umeta.get(code, {})
         row = {"code": code, "name": names[code],
-               "mkt": um.get("mkt"), "grp": ",".join(um.get("groups", [])),
+               "mkt": um.get("mkt"), "sec": sectors.get(code, "기타"),
+               "grp": ",".join(um.get("groups", [])),
                "pcur": psnap.get(code), "pbase": pbase.get(code), "pw": pwow(code)}
         for key in ("q", "a26", "a27", "a28"):
             d = maps[key].get(code)
@@ -254,7 +255,7 @@ def write_excel(stocks, snap, base, periods):
     ws = wb.active
     ws.title = "컨센"
     labels = [("q", "이번분기"), ("a26", "2026E"), ("a27", "2027E"), ("a28", "2028E")]
-    header = ["종목코드", "종목명", "시장", "그룹"]
+    header = ["종목코드", "종목명", "시장", "섹터", "그룹"]
     cols = []
     for key, lab in labels:
         per = periods.get(key, "")
@@ -274,7 +275,7 @@ def write_excel(stocks, snap, base, periods):
     ws.append([title])
     ws.append(header)
     for st in stocks:
-        r = [st["code"], st["name"], st.get("mkt"), st.get("grp")]
+        r = [st["code"], st["name"], st.get("mkt"), st.get("sec"), st.get("grp")]
         for typ, key in cols:
             if typ == "v":
                 r.append(st[key])
@@ -295,7 +296,7 @@ def write_excel(stocks, snap, base, periods):
         c.font = Font(bold=True)
         c.fill = PatternFill("solid", fgColor="E8EEF5")
     ws.freeze_panes = "A3"
-    widths = [10, 16, 8, 22] + [15] * (len(header) - 4)
+    widths = [10, 16, 8, 14, 22] + [15] * (len(header) - 5)
     for i, w in enumerate(widths, 1):
         ws.column_dimensions[openpyxl.utils.get_column_letter(i)].width = w
     wb.save(OUT_XLSX)
