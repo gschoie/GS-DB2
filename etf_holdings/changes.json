@@ -1,8 +1,8 @@
 {
   "date": "2026-07-23",
   "prev_date": "2026-07-22",
-  "generated_at": "2026-07-23 10:34",
-  "base_date": "",
+  "generated_at": "2026-07-23 15:43",
+  "base_date": "2026-07-23",
   "prev_base_date": "2026-07-22",
   "same_base": false,
   "first_run": false,
@@ -13,13 +13,6 @@
       "group": "KoAct",
       "flow_factor": 1.0,
       "new": [
-        {
-          "key": "Robinhood Markets Inc",
-          "name": "Robinhood Markets Inc",
-          "code": "",
-          "weight": 0.0,
-          "shares": 345.0
-        },
         {
           "key": "108490",
           "name": "로보티즈",
@@ -33,16 +26,16 @@
           "code": "277810",
           "weight": 0.0,
           "shares": 28.0
+        },
+        {
+          "key": "Robinhood Markets Inc",
+          "name": "Robinhood Markets Inc",
+          "code": "",
+          "weight": 0.0,
+          "shares": 345.0
         }
       ],
       "gone": [
-        {
-          "key": "Applied Optoelectronics Inc",
-          "name": "Applied Optoelectronics Inc",
-          "code": "",
-          "weight_prev": 0.0,
-          "shares_prev": 208.0
-        },
         {
           "key": "ADVANCED MICRO DEVICES",
           "name": "ADVANCED MICRO DEVICES",
@@ -56,6 +49,13 @@
           "code": "",
           "weight_prev": 0.0,
           "shares_prev": 203.0
+        },
+        {
+          "key": "Applied Optoelectronics Inc",
+          "name": "Applied Optoelectronics Inc",
+          "code": "",
+          "weight_prev": 0.0,
+          "shares_prev": 208.0
         }
       ],
       "moves": [],
