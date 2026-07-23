@@ -1,8 +1,89 @@
 {
-  "when_utc": "2026-07-22 06:45:35Z",
+  "when_utc": "2026-07-23 01:34:18Z",
   "ok": true,
-  "note": "no_change_skip",
+  "note": "change_sent",
   "chat_id_tail": "5171",
   "token_set": true,
-  "response": null
+  "response": {
+    "ok": true,
+    "result": {
+      "message_id": 1231,
+      "from": {
+        "id": 8917880759,
+        "is_bot": true,
+        "first_name": "GS.매크로_공부/섹터ETF_포착",
+        "username": "gs_macro_bot"
+      },
+      "chat": {
+        "id": 279385171,
+        "first_name": "광식",
+        "last_name": "최",
+        "username": "gschoie",
+        "type": "private"
+      },
+      "date": 1784770457,
+      "text": "🧩 액티브 ETF 구성 변화 · 구성 기준일 — (KRX 장마감)\n\n변화 ETF 8개 · 진입 9·이탈 9·실매매 1\n\n🟢 KoAct 글로벌AI&로봇액티브 · KoAct\n   ⊕ 진입: Robinhood Markets Inc, 로보티즈, 레인보우로보틱스\n   ⊖ 이탈: Applied Optoelectronics Inc, ADVANCED MICRO DEVICES, DATADOG INC - CLASS A\n🟢 TIME 코스피액티브 · TIME(구 TIMEFOLIO)\n   ⊕ 진입: 신세계\n   ⊖ 이탈: 한국금융지주\n🟢 TIME 코스닥액티브 · TIME(구 TIMEFOLIO)\n   ⊕ 진입: 알테오젠\n   ⊖ 이탈: 기가비스\n🟢 TIME 미국S&P500액티브 · TIME(구 TIMEFOLIO)\n   ⊕ 진입: BANK OF AMERICA CORP\n   ⊖ 이탈: SOUTHWEST AIRLINES CO\n🟢 TIME Korea플러스배당액티브 · TIME(구 TIMEFOLIO)\n   ⊕ 진입: SK\n   ⊖ 이탈: SK스퀘어\n🟢 TIME K컬처액티브 · TIME(구 TIMEFOLIO)\n   ⊕ 진입: 롯데쇼핑\n   ⊖ 이탈: 에스엠\n🟢 KODEX 미국배당커버드콜액티브 · KODEX\n   ⊕ 진입: State Street Consumer Discretionary Sect\n   ⊖ 이탈: FREEPORT-MCMORAN INC\n🟢 KoAct 바이오헬스케어액티브 · KoAct\n   ▽ 리가켐바이오 계약수 −29% · 비중 −2.0%p\n\n전체 상세 › 대시보드\n🎴 GS Research Desk · 액티브 ETF 트래커",
+      "entities": [
+        {
+          "offset": 0,
+          "length": 16,
+          "type": "bold"
+        },
+        {
+          "offset": 46,
+          "length": 1,
+          "type": "bold"
+        },
+        {
+          "offset": 71,
+          "length": 17,
+          "type": "bold"
+        },
+        {
+          "offset": 231,
+          "length": 11,
+          "type": "bold"
+        },
+        {
+          "offset": 295,
+          "length": 11,
+          "type": "bold"
+        },
+        {
+          "offset": 358,
+          "length": 16,
+          "type": "bold"
+        },
+        {
+          "offset": 459,
+          "length": 18,
+          "type": "bold"
+        },
+        {
+          "offset": 528,
+          "length": 11,
+          "type": "bold"
+        },
+        {
+          "offset": 590,
+          "length": 17,
+          "type": "bold"
+        },
+        {
+          "offset": 699,
+          "length": 16,
+          "type": "bold"
+        },
+        {
+          "offset": 766,
+          "length": 4,
+          "type": "text_link",
+          "url": "https://gschoie.github.io/GS-output-dashboard/etf_holdings_report.html"
+        }
+      ],
+      "link_preview_options": {
+        "is_disabled": true
+      }
+    }
+  }
 }

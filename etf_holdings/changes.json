@@ -1,22 +1,256 @@
 {
-  "date": "2026-07-22",
-  "prev_date": "2026-07-21",
-  "generated_at": "2026-07-22 15:45",
-  "base_date": "2026-07-22",
-  "prev_base_date": "2026-07-21",
+  "date": "2026-07-23",
+  "prev_date": "2026-07-22",
+  "generated_at": "2026-07-23 10:34",
+  "base_date": "",
+  "prev_base_date": "2026-07-22",
   "same_base": false,
   "first_run": false,
-  "etfs": [],
+  "etfs": [
+    {
+      "code": "471040",
+      "label": "KoAct 글로벌AI&로봇액티브",
+      "group": "KoAct",
+      "flow_factor": 1.0,
+      "new": [
+        {
+          "key": "Robinhood Markets Inc",
+          "name": "Robinhood Markets Inc",
+          "code": "",
+          "weight": 0.0,
+          "shares": 345.0
+        },
+        {
+          "key": "108490",
+          "name": "로보티즈",
+          "code": "108490",
+          "weight": 0.0,
+          "shares": 59.0
+        },
+        {
+          "key": "277810",
+          "name": "레인보우로보틱스",
+          "code": "277810",
+          "weight": 0.0,
+          "shares": 28.0
+        }
+      ],
+      "gone": [
+        {
+          "key": "Applied Optoelectronics Inc",
+          "name": "Applied Optoelectronics Inc",
+          "code": "",
+          "weight_prev": 0.0,
+          "shares_prev": 208.0
+        },
+        {
+          "key": "ADVANCED MICRO DEVICES",
+          "name": "ADVANCED MICRO DEVICES",
+          "code": "",
+          "weight_prev": 0.0,
+          "shares_prev": 161.0
+        },
+        {
+          "key": "DATADOG INC - CLASS A",
+          "name": "DATADOG INC - CLASS A",
+          "code": "",
+          "weight_prev": 0.0,
+          "shares_prev": 203.0
+        }
+      ],
+      "moves": [],
+      "has_weight": false
+    },
+    {
+      "code": "385720",
+      "label": "TIME 코스피액티브",
+      "group": "TIME(구 TIMEFOLIO)",
+      "flow_factor": 1.0,
+      "new": [
+        {
+          "key": "004170",
+          "name": "신세계",
+          "code": "004170",
+          "weight": 2.14,
+          "shares": 100.0
+        }
+      ],
+      "gone": [
+        {
+          "key": "071050",
+          "name": "한국금융지주",
+          "code": "071050",
+          "weight_prev": 2.19,
+          "shares_prev": 249.0
+        }
+      ],
+      "moves": [],
+      "has_weight": true
+    },
+    {
+      "code": "0162Y0",
+      "label": "TIME 코스닥액티브",
+      "group": "TIME(구 TIMEFOLIO)",
+      "flow_factor": 1.0,
+      "new": [
+        {
+          "key": "196170",
+          "name": "알테오젠",
+          "code": "196170",
+          "weight": 2.3,
+          "shares": 30.0
+        }
+      ],
+      "gone": [
+        {
+          "key": "420770",
+          "name": "기가비스",
+          "code": "420770",
+          "weight_prev": 2.38,
+          "shares_prev": 59.0
+        }
+      ],
+      "moves": [],
+      "has_weight": true
+    },
+    {
+      "code": "426020",
+      "label": "TIME 미국S&P500액티브",
+      "group": "TIME(구 TIMEFOLIO)",
+      "flow_factor": 1.0,
+      "new": [
+        {
+          "key": "BANK OF AMERICA CORP",
+          "name": "BANK OF AMERICA CORP",
+          "code": "",
+          "weight": 0.0,
+          "shares": 48.0
+        }
+      ],
+      "gone": [
+        {
+          "key": "SOUTHWEST AIRLINES CO",
+          "name": "SOUTHWEST AIRLINES CO",
+          "code": "",
+          "weight_prev": 0.0,
+          "shares_prev": 45.0
+        }
+      ],
+      "moves": [],
+      "has_weight": false
+    },
+    {
+      "code": "441800",
+      "label": "TIME Korea플러스배당액티브",
+      "group": "TIME(구 TIMEFOLIO)",
+      "flow_factor": 1.0,
+      "new": [
+        {
+          "key": "034730",
+          "name": "SK",
+          "code": "034730",
+          "weight": 3.18,
+          "shares": 30.0
+        }
+      ],
+      "gone": [
+        {
+          "key": "402340",
+          "name": "SK스퀘어",
+          "code": "402340",
+          "weight_prev": 3.29,
+          "shares_prev": 16.0
+        }
+      ],
+      "moves": [],
+      "has_weight": true
+    },
+    {
+      "code": "410870",
+      "label": "TIME K컬처액티브",
+      "group": "TIME(구 TIMEFOLIO)",
+      "flow_factor": 1.0,
+      "new": [
+        {
+          "key": "023530",
+          "name": "롯데쇼핑",
+          "code": "023530",
+          "weight": 4.34,
+          "shares": 300.0
+        }
+      ],
+      "gone": [
+        {
+          "key": "041510",
+          "name": "에스엠",
+          "code": "041510",
+          "weight_prev": 4.34,
+          "shares_prev": 600.0
+        }
+      ],
+      "moves": [],
+      "has_weight": true
+    },
+    {
+      "code": "441640",
+      "label": "KODEX 미국배당커버드콜액티브",
+      "group": "KODEX",
+      "flow_factor": 1.0,
+      "new": [
+        {
+          "key": "State Street Consumer Discretionary Sect",
+          "name": "State Street Consumer Discretionary Sect",
+          "code": "",
+          "weight": 0.0,
+          "shares": 65.0
+        }
+      ],
+      "gone": [
+        {
+          "key": "FREEPORT-MCMORAN INC",
+          "name": "FREEPORT-MCMORAN INC",
+          "code": "",
+          "weight_prev": 0.0,
+          "shares_prev": 76.0
+        }
+      ],
+      "moves": [],
+      "has_weight": false
+    },
+    {
+      "code": "462900",
+      "label": "KoAct 바이오헬스케어액티브",
+      "group": "KoAct",
+      "flow_factor": 1.0172,
+      "new": [],
+      "gone": [],
+      "moves": [
+        {
+          "key": "141080",
+          "name": "리가켐바이오",
+          "code": "141080",
+          "shares_now": 363.0,
+          "shares_prev": 501.0,
+          "active_share_pct": -28.8,
+          "active_weight_pp": -2.02,
+          "weight_now": 5.37,
+          "weight_prev": 7.38,
+          "headline": false
+        }
+      ],
+      "has_weight": true
+    }
+  ],
   "thresholds": {
     "weight_pp_min": 1.0,
     "weight_pp_big": 5.0,
     "share_pct_min": 30.0
   },
   "summary": {
-    "etfs_changed": 0,
-    "new_total": 0,
-    "gone_total": 0,
-    "moves_total": 0,
+    "etfs_changed": 8,
+    "new_total": 9,
+    "gone_total": 9,
+    "moves_total": 1,
     "universe": 21
   }
 }
