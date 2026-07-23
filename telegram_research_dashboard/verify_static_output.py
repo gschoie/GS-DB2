@@ -55,7 +55,8 @@ def main():
         "press coverage menu": r'id="press"',
         "DAOL research tone menu": r'data-view="tone"',
         "automation menu": r'<span>업무자동화</span>',
-        "GEMS menu": r'<span>GEMS-광</span>',
+        # 메뉴 라벨은 자주 바뀌므로 'GEMS'가 들어간 그룹이 있는지만 확인한다(이름 변경에 안 깨지게).
+        "GEMS menu": r'<span>[^<]*GEMS[^<]*</span>',
         "관리 menu": r'<span>관리</span>',
         "util links menu": r'<span>유틸\.링크</span>',
         "collapsed analyst report details": r'<details><summary>이달 발간 자료',
