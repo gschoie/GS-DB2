@@ -14,6 +14,11 @@ def connect():
     con.row_factory = sqlite3.Row
     with open(SCHEMA_PATH, encoding="utf-8") as f:
         con.executescript(f.read())
+    # 기존 DB 마이그레이션: universe 신규 컬럼(market/groups/status)
+    ucols = {r[1] for r in con.execute("PRAGMA table_info(universe)")}
+    for c in ("market", "groups", "status"):
+        if c not in ucols:
+            con.execute(f"ALTER TABLE universe ADD COLUMN {c} TEXT")
     return con
 
 
@@ -54,13 +59,18 @@ def price_map(con, snapshot_date):
         (snapshot_date,))}
 
 
-def upsert_universe(con, snapshot_date, code, name):
+def upsert_universe(con, snapshot_date, code, name, market=None, groups=None, status=None):
     con.execute(
         """
-        INSERT INTO universe (snapshot_date, code, name) VALUES (?, ?, ?)
-        ON CONFLICT(snapshot_date, code) DO UPDATE SET name = excluded.name
+        INSERT INTO universe (snapshot_date, code, name, market, groups, status)
+        VALUES (?, ?, ?, ?, ?, ?)
+        ON CONFLICT(snapshot_date, code) DO UPDATE SET
+            name   = excluded.name,
+            market = excluded.market,
+            groups = excluded.groups,
+            status = excluded.status
         """,
-        (snapshot_date, code, name),
+        (snapshot_date, code, name, market, groups, status),
     )
 
 

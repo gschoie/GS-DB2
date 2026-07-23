@@ -101,6 +101,21 @@ def load_sectors():
         return {}
 
 
+def load_universe_meta():
+    """code → {mkt(시장), groups[...], cov(커버리지 여부)}. universe.json 기반."""
+    try:
+        with open(os.path.join(BASE, "data", "universe.json"), encoding="utf-8") as f:
+            u = json.load(f)
+    except FileNotFoundError:
+        return {}
+    out = {}
+    for code, v in u.items():
+        if isinstance(v, dict):
+            g = v.get("groups", [])
+            out[code] = {"mkt": v.get("market"), "groups": g, "cov": "커버리지" in g}
+    return out
+
+
 def three_month_ref(snap, reps, months=MONTHS3):
     """snap보다 앞선 rep 중 'snap - months*30일'에 가장 가까운 날짜.
 
@@ -122,7 +137,7 @@ def _counts(vals):
     return up, down, len(rated) - up - down
 
 
-def build_period(con, snap, base, ref3, sectors):
+def build_period(con, snap, base, ref3, sectors, umeta):
     """한 비교주: 전주(base)와 3개월전(ref3) 두 기준 대비 값을 함께 담는다."""
     qp = dominant_quarter(con, snap)
     psnap = db.price_map(con, snap)
@@ -149,7 +164,10 @@ def build_period(con, snap, base, ref3, sectors):
         rows = []
         for code, d in sw.items():
             d3 = s3.get(code)
+            um = umeta.get(code, {})
             rows.append({"code": code, "name": d["name"], "sec": sectors.get(code, "기타"),
+                         "mkt": um.get("mkt"), "cov": bool(um.get("cov")),
+                         "grp": ",".join(um.get("groups", [])),
                          "curr": d["curr"], "base": d["base"], "wow": d["wow"], "pwow": pw(pbase, code),
                          "base3": d3["base"] if d3 else None, "wow3": d3["wow"] if d3 else None,
                          "pwow3": pw(pref3, code)})
@@ -175,6 +193,7 @@ def build():
         print("스냅샷이 없습니다. run_snapshot.py 먼저 실행.")
         return
     sectors = load_sectors()
+    umeta = load_universe_meta()
     reps = weekly_reps(dates)
     snap = reps[-1]
     base = reps[-2] if len(reps) >= 2 else None
@@ -199,7 +218,9 @@ def build():
             names[code] = d["name"]
     stocks = []
     for code in sorted(names):
+        um = umeta.get(code, {})
         row = {"code": code, "name": names[code],
+               "mkt": um.get("mkt"), "grp": ",".join(um.get("groups", [])),
                "pcur": psnap.get(code), "pbase": pbase.get(code), "pw": pwow(code)}
         for key in ("q", "a26", "a27", "a28"):
             d = maps[key].get(code)
@@ -214,12 +235,13 @@ def build():
         pairs = [(reps[0], None)]
     else:
         pairs = [(reps[i], reps[i - 1]) for i in range(len(reps) - 1, 0, -1)][:MAX_PERIODS]
-    periods_payload = [build_period(con, s, b, three_month_ref(s, reps), sectors)
+    periods_payload = [build_period(con, s, b, three_month_ref(s, reps), sectors, umeta)
                        for s, b in pairs]
     sec_list = sorted({r["sec"] for pp in periods_payload for h in pp["horizons"] for r in h["rows"]})
 
     payload = {"has_revision": base is not None,
-               "periods": periods_payload, "sectors": sec_list}
+               "periods": periods_payload, "sectors": sec_list,
+               "groups": ["KOSPI200", "KOSDAQ50", "커버리지"], "markets": ["코스피", "코스닥"]}
     os.makedirs(STATIC, exist_ok=True)
     with open(OUT_HTML, "w", encoding="utf-8") as f:
         f.write(_TEMPLATE.replace("__DATA__", json.dumps(payload, ensure_ascii=False).replace("</", "<\\/")))
@@ -232,7 +254,7 @@ def write_excel(stocks, snap, base, periods):
     ws = wb.active
     ws.title = "컨센"
     labels = [("q", "이번분기"), ("a26", "2026E"), ("a27", "2027E"), ("a28", "2028E")]
-    header = ["종목코드", "종목명"]
+    header = ["종목코드", "종목명", "시장", "그룹"]
     cols = []
     for key, lab in labels:
         per = periods.get(key, "")
@@ -247,11 +269,12 @@ def write_excel(stocks, snap, base, periods):
         header += ["전주 종가", "주가변동%"]
         cols += [("pb", None), ("pw", None)]
 
-    title = f"KOSPI200 영업이익 컨센 · 기준일 {snap}" + (f" · 전주 {base}" if base else " · 첫 스냅샷")
+    title = (f"영업이익 컨센(KOSPI200·KOSDAQ50·커버리지) · 기준일 {snap}"
+             + (f" · 전주 {base}" if base else " · 첫 스냅샷"))
     ws.append([title])
     ws.append(header)
     for st in stocks:
-        r = [st["code"], st["name"]]
+        r = [st["code"], st["name"], st.get("mkt"), st.get("grp")]
         for typ, key in cols:
             if typ == "v":
                 r.append(st[key])
@@ -272,7 +295,7 @@ def write_excel(stocks, snap, base, periods):
         c.font = Font(bold=True)
         c.fill = PatternFill("solid", fgColor="E8EEF5")
     ws.freeze_panes = "A3"
-    widths = [10, 16] + [15] * (len(header) - 2)
+    widths = [10, 16, 8, 22] + [15] * (len(header) - 4)
     for i, w in enumerate(widths, 1):
         ws.column_dimensions[openpyxl.utils.get_column_letter(i)].width = w
     wb.save(OUT_XLSX)
@@ -337,8 +360,15 @@ font-size:12px;font-weight:600;padding:6px 11px;border-radius:8px;cursor:pointer
 .pos{color:var(--up);font-weight:600}.neg{color:var(--down);font-weight:600}
 .note{background:var(--card);border:1px dashed var(--line);border-radius:12px;
 padding:14px 16px;color:var(--muted);font-size:13px;margin-bottom:18px}
+td.mktc{text-align:center}
+.mkt-kp,.mkt-kq{font-size:10px;font-weight:600;padding:2px 6px;border-radius:6px;white-space:nowrap}
+.mkt-kp{color:#185fa5;background:rgba(24,95,165,.12)}
+.mkt-kq{color:#b0700a;background:rgba(176,112,10,.14)}
+.covstar{color:#e0a400;font-size:11px}
+.grpfil{font-size:13px;color:var(--ink);background:var(--card);border:1px solid var(--line);
+border-radius:8px;padding:6px 10px;margin-left:6px}
 </style></head><body><div class="wrap">
-<h1>KOSPI200 영업이익 컨센 리비전</h1>
+<h1>영업이익 컨센 리비전 <span class="tiny" style="font-weight:400">KOSPI200 · KOSDAQ50 · 리서치커버리지</span></h1>
 <div class="sub" id="sub"></div>
 <div class="status" id="status"></div>
 <a class="dl" href="consensus_full.xlsx" download>📥 전체 종목 엑셀 다운로드</a>
@@ -351,7 +381,7 @@ padding:14px 16px;color:var(--muted);font-size:13px;margin-bottom:18px}
 </div>
 <script>
 var D=__DATA__;
-var pi=0, sel=0, sortKey=null, sortDir=-1, showAll=false, secFilter='', MODE='wk', TOP=30;
+var pi=0, sel=0, sortKey=null, sortDir=-1, showAll=false, secFilter='', grpFilter='', MODE='wk', TOP=30;
 function P(){return D.periods[pi]}
 function $(id){return document.getElementById(id)}
 function m3(){return MODE==='3m'}
@@ -361,7 +391,8 @@ function pct(w){if(w==null)return'<span class="tiny">-</span>';
  var c=w>0?'pos':(w<0?'neg':'');return'<span class="'+c+'">'+(w>0?'+':'')+w.toFixed(1)+'%</span>'}
 function mmdd(s){return s?s.slice(5).replace('-','/'):''}   // 'YYYY-MM-DD' → 'MM/DD'
 function nameCell(d){return '<a class="stk" href="https://finance.naver.com/item/fchart.naver?code='+
- d.code+'" target="_blank" rel="noopener">'+d.name+'</a>'}
+ d.code+'" target="_blank" rel="noopener">'+d.name+'</a>'+(d.cov?' <span class="covstar" title="리서치 커버리지">★</span>':'')}
+function mktBadge(m){return m?'<span class="'+(m==='코스닥'?'mkt-kq':'mkt-kp')+'">'+m+'</span>':''}
 function sortRows(rows){
  if(sortKey==null){var kk=chgField();   // 기본: 선택 기준(주간/3개월) 변화 큰 순
   return rows.slice().sort(function(a,b){var x=a[kk],y=b[kk];
@@ -406,35 +437,40 @@ function renderTop(){
   $('foot').innerHTML='';
  }
 }
-function renderCtl(){   // 섹터 필터 + 기준(주간/3개월) 토글
+function renderCtl(){   // 그룹/섹터 필터 + 기준(주간/3개월) 토글
+ var gopts='<option value="">전체 그룹</option>';
+ (D.groups||[]).forEach(function(g){gopts+='<option value="'+g+'"'+(g===grpFilter?' selected':'')+'>'+g+'</option>'});
  var opts='<option value="">전체 섹터</option>';
  D.sectors.forEach(function(s){opts+='<option value="'+s+'"'+(s===secFilter?' selected':'')+'>'+s+'</option>'});
- var clr=secFilter?'<button class="clrfil" id="clrfil">✕ 전체 보기</button>':'';
+ var clr=(secFilter||grpFilter)?'<button class="clrfil" id="clrfil">✕ 필터 해제</button>':'';
  var tog=D.has_revision?'<span class="modetog"><button data-m="wk"'+(MODE==='wk'?' class="on"':'')+'>주간</button>'+
   '<button data-m="3m"'+(MODE==='3m'?' class="on"':'')+'>3개월</button></span>':'';
- $('ctlbar').innerHTML='<label class="ctllab">섹터 <select class="secfil" id="secfil">'+opts+'</select></label>'+clr+tog;
+ $('ctlbar').innerHTML='<label class="ctllab">그룹 <select class="grpfil" id="grpfil">'+gopts+'</select></label>'+
+  '<label class="ctllab" style="margin-left:6px">섹터 <select class="secfil" id="secfil">'+opts+'</select></label>'+clr+tog;
+ $('grpfil').onchange=function(){grpFilter=this.value;renderCtl();draw()};
  $('secfil').onchange=function(){secFilter=this.value;renderCtl();draw()};
- var cf=$('clrfil');if(cf)cf.onclick=function(){secFilter='';renderCtl();draw()};
+ var cf=$('clrfil');if(cf)cf.onclick=function(){secFilter='';grpFilter='';renderCtl();draw()};
  document.querySelectorAll('.modetog button').forEach(function(b){b.onclick=function(){MODE=b.dataset.m;sortKey=null;render()}});
 }
 function draw(){
  var p=P(), h=p.horizons[sel], rev=D.has_revision, M=m3(), tbl=$('tbl');
- var all=(h.rows||[]).filter(function(d){return !secFilter||d.sec===secFilter});
+ var all=(h.rows||[]).filter(function(d){return (!secFilter||d.sec===secFilter)&&(!grpFilter||(d.grp||'').indexOf(grpFilter)>=0)});
  var rows=sortRows(all), shown=showAll?rows:rows.slice(0,TOP);
  var toggle=all.length>TOP?'<button class="lim" id="limtog">'+
   (showAll?'상위 '+TOP+'만 보기':'전체 '+all.length+'개 보기')+'</button>':'';
  var bK=M?'base3':'base', cK=M?'wow3':'wow', pK=M?'pwow3':'pwow';
  var bLab=M?'3개월전 컨센':'컨센 전주', bDate=M?p.ref3_date:p.base_date, pbDate=M?p.price_date_ref3:p.price_date_base;
  var cols=rev?
-  [['sec','섹터','','l'],['name','종목','','l'],[bK,bLab,mmdd(bDate),''],
+  [['mkt','시장','','mktc'],['sec','섹터','','l'],['name','종목','','l'],[bK,bLab,mmdd(bDate),''],
    ['curr','컨센 현재',mmdd(p.snapshot_date),''],[cK,'컨센 변화',mmdd(bDate)+'-'+mmdd(p.snapshot_date),''],
    [pK,'주가 변동',mmdd(pbDate)+'-'+mmdd(p.price_date_snap),'']]:
-  [['sec','섹터','','l'],['name','종목','','l'],['curr','영업이익',mmdd(p.snapshot_date),'']];
+  [['mkt','시장','','mktc'],['sec','섹터','','l'],['name','종목','','l'],['curr','영업이익',mmdd(p.snapshot_date),'']];
  var out=toggle+'<table><tr><th>#</th>';
  cols.forEach(function(c){out+='<th class="sortable '+(c[3]||'')+'" data-k="'+c[0]+'">'+c[1]+
   (c[2]?'<br><span class="tiny">'+c[2]+'</span>':'')+arrow(c[0])+'</th>'});
  out+='</tr>';
  shown.forEach(function(d,i){out+='<tr><td>'+(i+1)+'</td>'+
+  '<td class="mktc">'+mktBadge(d.mkt)+'</td>'+
   '<td class="l sec"><span class="secpick" data-s="'+d.sec+'">'+d.sec+'</span></td>'+
   '<td class="l">'+nameCell(d)+'</td>'+
   (rev?'<td>'+fmt(d[bK])+'</td><td>'+fmt(d.curr)+'</td><td>'+pct(d[cK])+'</td><td>'+pct(d[pK])+'</td>':'<td>'+fmt(d.curr)+'</td>')+'</tr>'});

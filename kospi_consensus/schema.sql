@@ -17,11 +17,14 @@ CREATE TABLE IF NOT EXISTS consensus_snapshots (
 CREATE INDEX IF NOT EXISTS idx_cs_series ON consensus_snapshots(code, kind, period, snapshot_date);
 CREATE INDEX IF NOT EXISTS idx_cs_date   ON consensus_snapshots(snapshot_date);
 
--- 유니버스 스냅샷 (주차별 KOSPI200 구성종목 기록)
+-- 유니버스 스냅샷 (주차별 구성종목: KOSPI200 + KOSDAQ50 + 리서치커버리지)
 CREATE TABLE IF NOT EXISTS universe (
   snapshot_date TEXT NOT NULL,
   code          TEXT NOT NULL,
   name          TEXT NOT NULL,
+  market        TEXT,          -- 코스피 | 코스닥
+  groups        TEXT,          -- 쉼표구분: KOSPI200,KOSDAQ50,커버리지
+  status        TEXT,          -- 커버리지 상태(유지/신규 등)
   PRIMARY KEY (snapshot_date, code)
 );
 

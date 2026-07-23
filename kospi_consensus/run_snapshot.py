@@ -43,8 +43,12 @@ def run(limit=None, snapshot_date=None, refresh_universe=False, delay=0.3):
         )
         page = ctx.new_page()
 
-        for i, (code, name) in enumerate(items, 1):
-            db.upsert_universe(con, snap, code, name)
+        for i, (code, meta) in enumerate(items, 1):
+            name = meta["name"] if isinstance(meta, dict) else meta
+            db.upsert_universe(con, snap, code, name,
+                               meta.get("market") if isinstance(meta, dict) else None,
+                               ",".join(meta.get("groups", [])) if isinstance(meta, dict) else None,
+                               meta.get("status") if isinstance(meta, dict) else None)
 
             q = scrape.fetch_quarter(code, session)
             if q and q["op_profit"] is not None:
