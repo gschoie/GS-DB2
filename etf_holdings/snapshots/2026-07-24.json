@@ -1,0 +1,1689 @@
+{
+  "date": "2026-07-24",
+  "fetched_at": "2026-07-24 15:42",
+  "base_date": "2026-07-24",
+  "source": "naver_top10",
+  "etfs": {
+    "385720": {
+      "name": "TIME 코스피액티브",
+      "nav": 26657.74,
+      "market_value": "3,599억",
+      "holdings": [
+        {
+          "key": "000660",
+          "code": "000660",
+          "name": "SK하이닉스",
+          "shares": 340.0,
+          "weight": 24.47
+        },
+        {
+          "key": "005930",
+          "code": "005930",
+          "name": "삼성전자",
+          "shares": 2201.0,
+          "weight": 22.29
+        },
+        {
+          "key": "003230",
+          "code": "003230",
+          "name": "삼양식품",
+          "shares": 110.0,
+          "weight": 4.65
+        },
+        {
+          "key": "105560",
+          "code": "105560",
+          "name": "KB금융",
+          "shares": 590.0,
+          "weight": 3.9
+        },
+        {
+          "key": "006400",
+          "code": "006400",
+          "name": "삼성SDI",
+          "shares": 213.0,
+          "weight": 3.73
+        },
+        {
+          "key": "402340",
+          "code": "402340",
+          "name": "SK스퀘어",
+          "shares": 80.0,
+          "weight": 3.66
+        },
+        {
+          "key": "278470",
+          "code": "278470",
+          "name": "에이피알",
+          "shares": 248.0,
+          "weight": 3.44
+        },
+        {
+          "key": "000150",
+          "code": "000150",
+          "name": "두산",
+          "shares": 53.0,
+          "weight": 2.54
+        },
+        {
+          "key": "034730",
+          "code": "034730",
+          "name": "SK",
+          "shares": 100.0,
+          "weight": 2.46
+        },
+        {
+          "key": "071050",
+          "code": "071050",
+          "name": "한국금융지주",
+          "shares": 249.0,
+          "weight": 2.07
+        }
+      ],
+      "group": "TIME(구 TIMEFOLIO)",
+      "label": "TIME 코스피액티브",
+      "base_date": "2026-07-24"
+    },
+    "0162Y0": {
+      "name": "TIME 코스닥액티브",
+      "nav": 7304.35,
+      "market_value": "2,320억",
+      "holdings": [
+        {
+          "key": "095610",
+          "code": "095610",
+          "name": "테스",
+          "shares": 190.0,
+          "weight": 8.02
+        },
+        {
+          "key": "036930",
+          "code": "036930",
+          "name": "주성엔지니어링",
+          "shares": 130.0,
+          "weight": 5.84
+        },
+        {
+          "key": "214450",
+          "code": "214450",
+          "name": "파마리서치",
+          "shares": 35.0,
+          "weight": 3.45
+        },
+        {
+          "key": "064290",
+          "code": "064290",
+          "name": "인텍플러스",
+          "shares": 298.0,
+          "weight": 2.93
+        },
+        {
+          "key": "089970",
+          "code": "089970",
+          "name": "브이엠",
+          "shares": 130.0,
+          "weight": 2.91
+        },
+        {
+          "key": "222800",
+          "code": "222800",
+          "name": "심텍",
+          "shares": 99.0,
+          "weight": 2.67
+        },
+        {
+          "key": "319660",
+          "code": "319660",
+          "name": "피에스케이",
+          "shares": 60.0,
+          "weight": 2.58
+        },
+        {
+          "key": "196170",
+          "code": "196170",
+          "name": "알테오젠",
+          "shares": 30.0,
+          "weight": 2.52
+        },
+        {
+          "key": "290650",
+          "code": "290650",
+          "name": "엘앤씨바이오",
+          "shares": 140.0,
+          "weight": 2.42
+        },
+        {
+          "key": "031980",
+          "code": "031980",
+          "name": "피에스케이홀딩스",
+          "shares": 70.0,
+          "weight": 2.32
+        }
+      ],
+      "group": "TIME(구 TIMEFOLIO)",
+      "label": "TIME 코스닥액티브",
+      "base_date": "2026-07-24"
+    },
+    "426020": {
+      "name": "TIME 미국S&P500액티브",
+      "nav": 33756.46,
+      "market_value": "3,977억",
+      "holdings": [
+        {
+          "key": "NVIDIA CORP",
+          "code": "",
+          "name": "NVIDIA CORP",
+          "shares": 126.0,
+          "weight": 0.0
+        },
+        {
+          "key": "NEXTERA ENERGY INC",
+          "code": "",
+          "name": "NEXTERA ENERGY INC",
+          "shares": 89.0,
+          "weight": 0.0
+        },
+        {
+          "key": "APPLE INC",
+          "code": "",
+          "name": "APPLE INC",
+          "shares": 77.0,
+          "weight": 0.0
+        },
+        {
+          "key": "ALPHABET INC-CL A",
+          "code": "",
+          "name": "ALPHABET INC-CL A",
+          "shares": 76.0,
+          "weight": 0.0
+        },
+        {
+          "key": "COCA-COLA CO/THE",
+          "code": "",
+          "name": "COCA-COLA CO/THE",
+          "shares": 71.0,
+          "weight": 0.0
+        },
+        {
+          "key": "AMAZON.COM INC",
+          "code": "",
+          "name": "AMAZON.COM INC",
+          "shares": 62.0,
+          "weight": 0.0
+        },
+        {
+          "key": "ROBINHOOD MARKETS INC - A",
+          "code": "",
+          "name": "ROBINHOOD MARKETS INC - A",
+          "shares": 54.0,
+          "weight": 0.0
+        },
+        {
+          "key": "JOHNSON & JOHNSON",
+          "code": "",
+          "name": "JOHNSON & JOHNSON",
+          "shares": 49.0,
+          "weight": 0.0
+        },
+        {
+          "key": "VERIZON COMMUNICATIONS INC",
+          "code": "",
+          "name": "VERIZON COMMUNICATIONS INC",
+          "shares": 49.0,
+          "weight": 0.0
+        },
+        {
+          "key": "BANK OF AMERICA CORP",
+          "code": "",
+          "name": "BANK OF AMERICA CORP",
+          "shares": 48.0,
+          "weight": 0.0
+        }
+      ],
+      "group": "TIME(구 TIMEFOLIO)",
+      "label": "TIME 미국S&P500액티브",
+      "base_date": "2026-07-24"
+    },
+    "426030": {
+      "name": "TIME 미국나스닥100액티브",
+      "nav": 49434.54,
+      "market_value": "2조 5,183억",
+      "holdings": [
+        {
+          "key": "INTEL CORP",
+          "code": "",
+          "name": "INTEL CORP",
+          "shares": 256.0,
+          "weight": 0.0
+        },
+        {
+          "key": "NVIDIA CORP",
+          "code": "",
+          "name": "NVIDIA CORP",
+          "shares": 239.0,
+          "weight": 0.0
+        },
+        {
+          "key": "ROBINHOOD MARKETS INC - A",
+          "code": "",
+          "name": "ROBINHOOD MARKETS INC - A",
+          "shares": 233.0,
+          "weight": 0.0
+        },
+        {
+          "key": "COINBASE GLOBAL INC -CLASS A",
+          "code": "",
+          "name": "COINBASE GLOBAL INC -CLASS A",
+          "shares": 96.0,
+          "weight": 0.0
+        },
+        {
+          "key": "APPLIED OPTOELECTRONICS INC",
+          "code": "",
+          "name": "APPLIED OPTOELECTRONICS INC",
+          "shares": 95.0,
+          "weight": 0.0
+        },
+        {
+          "key": "CREDO TECHNOLOGY GROUP HOLDI",
+          "code": "",
+          "name": "CREDO TECHNOLOGY GROUP HOLDI",
+          "shares": 88.0,
+          "weight": 0.0
+        },
+        {
+          "key": "SK HYNIX INC-ADR",
+          "code": "",
+          "name": "SK HYNIX INC-ADR",
+          "shares": 82.0,
+          "weight": 0.0
+        },
+        {
+          "key": "APPLE INC",
+          "code": "",
+          "name": "APPLE INC",
+          "shares": 63.0,
+          "weight": 0.0
+        },
+        {
+          "key": "LAM RESEARCH CORP",
+          "code": "",
+          "name": "LAM RESEARCH CORP",
+          "shares": 63.0,
+          "weight": 0.0
+        },
+        {
+          "key": "ADVANCED MICRO DEVICES",
+          "code": "",
+          "name": "ADVANCED MICRO DEVICES",
+          "shares": 61.0,
+          "weight": 0.0
+        }
+      ],
+      "group": "TIME(구 TIMEFOLIO)",
+      "label": "TIME 미국나스닥100액티브",
+      "base_date": "2026-07-24"
+    },
+    "441800": {
+      "name": "TIME Korea플러스배당액티브",
+      "nav": 30335.72,
+      "market_value": "7,867억",
+      "holdings": [
+        {
+          "key": "000660",
+          "code": "000660",
+          "name": "SK하이닉스",
+          "shares": 63.0,
+          "weight": 19.93
+        },
+        {
+          "key": "005930",
+          "code": "005930",
+          "name": "삼성전자",
+          "shares": 304.0,
+          "weight": 13.53
+        },
+        {
+          "key": "039490",
+          "code": "039490",
+          "name": "키움증권",
+          "shares": 89.0,
+          "weight": 4.61
+        },
+        {
+          "key": "003230",
+          "code": "003230",
+          "name": "삼양식품",
+          "shares": 24.0,
+          "weight": 4.46
+        },
+        {
+          "key": "005940",
+          "code": "005940",
+          "name": "NH투자증권",
+          "shares": 900.0,
+          "weight": 4.45
+        },
+        {
+          "key": "005830",
+          "code": "005830",
+          "name": "DB손해보험",
+          "shares": 150.0,
+          "weight": 4.09
+        },
+        {
+          "key": "138040",
+          "code": "138040",
+          "name": "메리츠금융지주",
+          "shares": 200.0,
+          "weight": 3.84
+        },
+        {
+          "key": "071050",
+          "code": "071050",
+          "name": "한국금융지주",
+          "shares": 90.0,
+          "weight": 3.29
+        },
+        {
+          "key": "034730",
+          "code": "034730",
+          "name": "SK",
+          "shares": 30.0,
+          "weight": 3.24
+        },
+        {
+          "key": "016360",
+          "code": "016360",
+          "name": "삼성증권",
+          "shares": 180.0,
+          "weight": 3.11
+        }
+      ],
+      "group": "TIME(구 TIMEFOLIO)",
+      "label": "TIME Korea플러스배당액티브",
+      "base_date": "2026-07-24"
+    },
+    "463050": {
+      "name": "TIME K바이오액티브",
+      "nav": 12160.45,
+      "market_value": "2,249억",
+      "holdings": [
+        {
+          "key": "068270",
+          "code": "068270",
+          "name": "셀트리온",
+          "shares": 495.0,
+          "weight": 14.02
+        },
+        {
+          "key": "196170",
+          "code": "196170",
+          "name": "알테오젠",
+          "shares": 219.0,
+          "weight": 11.04
+        },
+        {
+          "key": "207940",
+          "code": "207940",
+          "name": "삼성바이오로직스",
+          "shares": 40.0,
+          "weight": 9.07
+        },
+        {
+          "key": "128940",
+          "code": "128940",
+          "name": "한미약품",
+          "shares": 120.0,
+          "weight": 7.68
+        },
+        {
+          "key": "226950",
+          "code": "226950",
+          "name": "올릭스",
+          "shares": 348.0,
+          "weight": 6.51
+        },
+        {
+          "key": "141080",
+          "code": "141080",
+          "name": "리가켐바이오",
+          "shares": 299.0,
+          "weight": 5.0
+        },
+        {
+          "key": "237690",
+          "code": "237690",
+          "name": "에스티팜",
+          "shares": 250.0,
+          "weight": 4.85
+        },
+        {
+          "key": "347850",
+          "code": "347850",
+          "name": "디앤디파마텍",
+          "shares": 296.0,
+          "weight": 3.12
+        },
+        {
+          "key": "298380",
+          "code": "298380",
+          "name": "에이비엘바이오",
+          "shares": 250.0,
+          "weight": 3.06
+        },
+        {
+          "key": "068760",
+          "code": "068760",
+          "name": "셀트리온제약",
+          "shares": 399.0,
+          "weight": 2.56
+        }
+      ],
+      "group": "TIME(구 TIMEFOLIO)",
+      "label": "TIME K바이오액티브",
+      "base_date": "2026-07-24"
+    },
+    "410870": {
+      "name": "TIME K컬처액티브",
+      "nav": 9712.81,
+      "market_value": "104억",
+      "holdings": [
+        {
+          "key": "003230",
+          "code": "003230",
+          "name": "삼양식품",
+          "shares": 60.0,
+          "weight": 6.96
+        },
+        {
+          "key": "145020",
+          "code": "145020",
+          "name": "휴젤",
+          "shares": 250.0,
+          "weight": 6.21
+        },
+        {
+          "key": "278470",
+          "code": "278470",
+          "name": "에이피알",
+          "shares": 150.0,
+          "weight": 5.71
+        },
+        {
+          "key": "263750",
+          "code": "263750",
+          "name": "펄어비스",
+          "shares": 1592.0,
+          "weight": 5.61
+        },
+        {
+          "key": "214450",
+          "code": "214450",
+          "name": "파마리서치",
+          "shares": 150.0,
+          "weight": 5.55
+        },
+        {
+          "key": "036570",
+          "code": "036570",
+          "name": "NC",
+          "shares": 230.0,
+          "weight": 5.32
+        },
+        {
+          "key": "352820",
+          "code": "352820",
+          "name": "하이브",
+          "shares": 240.0,
+          "weight": 5.21
+        },
+        {
+          "key": "483650",
+          "code": "483650",
+          "name": "달바글로벌",
+          "shares": 200.0,
+          "weight": 4.94
+        },
+        {
+          "key": "041510",
+          "code": "041510",
+          "name": "에스엠",
+          "shares": 600.0,
+          "weight": 4.41
+        },
+        {
+          "key": "069960",
+          "code": "069960",
+          "name": "현대백화점",
+          "shares": 300.0,
+          "weight": 4.31
+        }
+      ],
+      "group": "TIME(구 TIMEFOLIO)",
+      "label": "TIME K컬처액티브",
+      "base_date": "2026-07-24"
+    },
+    "456600": {
+      "name": "TIME 글로벌AI인공지능액티브",
+      "nav": 61534.66,
+      "market_value": "2조 2,626억",
+      "holdings": [
+        {
+          "key": "0043Y0",
+          "code": "0043Y0",
+          "name": "TIME 차이나AI테크액티브",
+          "shares": 1538.0,
+          "weight": 0.0
+        },
+        {
+          "key": "MURATA MANUFACTURING CO LTD",
+          "code": "",
+          "name": "MURATA MANUFACTURING CO LTD",
+          "shares": 450.0,
+          "weight": 0.0
+        },
+        {
+          "key": "INTEL CORP",
+          "code": "",
+          "name": "INTEL CORP",
+          "shares": 359.0,
+          "weight": 0.0
+        },
+        {
+          "key": "ALIBABA GROUP HOLDING-SP ADR",
+          "code": "",
+          "name": "ALIBABA GROUP HOLDING-SP ADR",
+          "shares": 267.0,
+          "weight": 0.0
+        },
+        {
+          "key": "SERVICENOW INC",
+          "code": "",
+          "name": "SERVICENOW INC",
+          "shares": 177.0,
+          "weight": 0.0
+        },
+        {
+          "key": "PDD HOLDINGS INC",
+          "code": "",
+          "name": "PDD HOLDINGS INC",
+          "shares": 170.0,
+          "weight": 0.0
+        },
+        {
+          "key": "KIOXIA HOLDINGS CORP",
+          "code": "",
+          "name": "KIOXIA HOLDINGS CORP",
+          "shares": 162.0,
+          "weight": 0.0
+        },
+        {
+          "key": "NVIDIA CORP",
+          "code": "",
+          "name": "NVIDIA CORP",
+          "shares": 151.0,
+          "weight": 0.0
+        },
+        {
+          "key": "SK HYNIX INC-ADR",
+          "code": "",
+          "name": "SK HYNIX INC-ADR",
+          "shares": 146.0,
+          "weight": 0.0
+        },
+        {
+          "key": "EBAY INC",
+          "code": "",
+          "name": "EBAY INC",
+          "shares": 121.0,
+          "weight": 0.0
+        }
+      ],
+      "group": "TIME(구 TIMEFOLIO)",
+      "label": "TIME 글로벌AI인공지능액티브",
+      "base_date": "2026-07-24"
+    },
+    "0036D0": {
+      "name": "TIME 미국배당다우존스액티브",
+      "nav": 13058.64,
+      "market_value": "659억",
+      "holdings": [
+        {
+          "key": "COMCAST CORP-CLASS A",
+          "code": "",
+          "name": "COMCAST CORP-CLASS A",
+          "shares": 416.0,
+          "weight": 0.0
+        },
+        {
+          "key": "FORD MOTOR CO",
+          "code": "",
+          "name": "FORD MOTOR CO",
+          "shares": 408.0,
+          "weight": 0.0
+        },
+        {
+          "key": "VERIZON COMMUNICATIONS INC",
+          "code": "",
+          "name": "VERIZON COMMUNICATIONS INC",
+          "shares": 367.0,
+          "weight": 0.0
+        },
+        {
+          "key": "BRISTOL-MYERS SQUIBB CO",
+          "code": "",
+          "name": "BRISTOL-MYERS SQUIBB CO",
+          "shares": 226.0,
+          "weight": 0.0
+        },
+        {
+          "key": "COCA-COLA CO/THE",
+          "code": "",
+          "name": "COCA-COLA CO/THE",
+          "shares": 221.0,
+          "weight": 0.0
+        },
+        {
+          "key": "ABBOTT LABORATORIES",
+          "code": "",
+          "name": "ABBOTT LABORATORIES",
+          "shares": 202.0,
+          "weight": 0.0
+        },
+        {
+          "key": "ALTRIA GROUP INC",
+          "code": "",
+          "name": "ALTRIA GROUP INC",
+          "shares": 185.0,
+          "weight": 0.0
+        },
+        {
+          "key": "SLB LTD",
+          "code": "",
+          "name": "SLB LTD",
+          "shares": 179.0,
+          "weight": 0.0
+        },
+        {
+          "key": "MERCK & CO. INC.",
+          "code": "",
+          "name": "MERCK & CO. INC.",
+          "shares": 154.0,
+          "weight": 0.0
+        },
+        {
+          "key": "CONOCOPHILLIPS",
+          "code": "",
+          "name": "CONOCOPHILLIPS",
+          "shares": 135.0,
+          "weight": 0.0
+        }
+      ],
+      "group": "TIME(구 TIMEFOLIO)",
+      "label": "TIME 미국배당다우존스액티브",
+      "base_date": "2026-07-24"
+    },
+    "0163Y0": {
+      "name": "KoAct 코스닥액티브",
+      "nav": 8841.54,
+      "market_value": "4,056억",
+      "holdings": [
+        {
+          "key": "095610",
+          "code": "095610",
+          "name": "테스",
+          "shares": 223.0,
+          "weight": 7.77
+        },
+        {
+          "key": "058470",
+          "code": "058470",
+          "name": "리노공업",
+          "shares": 398.0,
+          "weight": 6.65
+        },
+        {
+          "key": "031980",
+          "code": "031980",
+          "name": "피에스케이홀딩스",
+          "shares": 168.0,
+          "weight": 4.6
+        },
+        {
+          "key": "222800",
+          "code": "222800",
+          "name": "심텍",
+          "shares": 180.0,
+          "weight": 4.0
+        },
+        {
+          "key": "196170",
+          "code": "196170",
+          "name": "알테오젠",
+          "shares": 56.0,
+          "weight": 3.88
+        },
+        {
+          "key": "214450",
+          "code": "214450",
+          "name": "파마리서치",
+          "shares": 44.0,
+          "weight": 3.58
+        },
+        {
+          "key": "043260",
+          "code": "043260",
+          "name": "성호전자",
+          "shares": 787.0,
+          "weight": 3.43
+        },
+        {
+          "key": "356860",
+          "code": "356860",
+          "name": "티엘비",
+          "shares": 449.0,
+          "weight": 3.37
+        },
+        {
+          "key": "080220",
+          "code": "080220",
+          "name": "제주반도체",
+          "shares": 160.0,
+          "weight": 2.93
+        },
+        {
+          "key": "183300",
+          "code": "183300",
+          "name": "코미코",
+          "shares": 171.0,
+          "weight": 2.65
+        }
+      ],
+      "group": "KoAct",
+      "label": "KoAct 코스닥액티브",
+      "base_date": "2026-07-24"
+    },
+    "462900": {
+      "name": "KoAct 바이오헬스케어액티브",
+      "nav": 13630.03,
+      "market_value": "3,592억",
+      "holdings": [
+        {
+          "key": "196170",
+          "code": "196170",
+          "name": "알테오젠",
+          "shares": 204.0,
+          "weight": 9.17
+        },
+        {
+          "key": "237690",
+          "code": "237690",
+          "name": "에스티팜",
+          "shares": 514.0,
+          "weight": 8.89
+        },
+        {
+          "key": "226950",
+          "code": "226950",
+          "name": "올릭스",
+          "shares": 511.0,
+          "weight": 8.53
+        },
+        {
+          "key": "298380",
+          "code": "298380",
+          "name": "에이비엘바이오",
+          "shares": 755.0,
+          "weight": 8.23
+        },
+        {
+          "key": "068270",
+          "code": "068270",
+          "name": "셀트리온",
+          "shares": 318.0,
+          "weight": 8.03
+        },
+        {
+          "key": "128940",
+          "code": "128940",
+          "name": "한미약품",
+          "shares": 111.0,
+          "weight": 6.34
+        },
+        {
+          "key": "347850",
+          "code": "347850",
+          "name": "디앤디파마텍",
+          "shares": 625.0,
+          "weight": 5.87
+        },
+        {
+          "key": "141080",
+          "code": "141080",
+          "name": "리가켐바이오",
+          "shares": 363.0,
+          "weight": 5.42
+        },
+        {
+          "key": "009420",
+          "code": "009420",
+          "name": "한올바이오파마",
+          "shares": 659.0,
+          "weight": 4.8
+        },
+        {
+          "key": "214450",
+          "code": "214450",
+          "name": "파마리서치",
+          "shares": 90.0,
+          "weight": 4.75
+        }
+      ],
+      "group": "KoAct",
+      "label": "KoAct 바이오헬스케어액티브",
+      "base_date": "2026-07-24"
+    },
+    "476850": {
+      "name": "KoAct 배당성장액티브",
+      "nav": 22434.74,
+      "market_value": "964억",
+      "holdings": [
+        {
+          "key": "005935",
+          "code": "005935",
+          "name": "삼성전자우",
+          "shares": 1344.0,
+          "weight": 22.9
+        },
+        {
+          "key": "000660",
+          "code": "000660",
+          "name": "SK하이닉스",
+          "shares": 120.0,
+          "weight": 20.53
+        },
+        {
+          "key": "329180",
+          "code": "329180",
+          "name": "HD현대중공업",
+          "shares": 89.0,
+          "weight": 3.95
+        },
+        {
+          "key": "105560",
+          "code": "105560",
+          "name": "KB금융",
+          "shares": 203.0,
+          "weight": 3.19
+        },
+        {
+          "key": "402340",
+          "code": "402340",
+          "name": "SK스퀘어",
+          "shares": 29.0,
+          "weight": 3.16
+        },
+        {
+          "key": "071050",
+          "code": "071050",
+          "name": "한국금융지주",
+          "shares": 148.0,
+          "weight": 2.92
+        },
+        {
+          "key": "009150",
+          "code": "009150",
+          "name": "삼성전기",
+          "shares": 22.0,
+          "weight": 2.84
+        },
+        {
+          "key": "009540",
+          "code": "009540",
+          "name": "HD한국조선해양",
+          "shares": 57.0,
+          "weight": 1.94
+        },
+        {
+          "key": "039490",
+          "code": "039490",
+          "name": "키움증권",
+          "shares": 61.0,
+          "weight": 1.71
+        },
+        {
+          "key": "267250",
+          "code": "267250",
+          "name": "HD현대",
+          "shares": 78.0,
+          "weight": 1.61
+        }
+      ],
+      "group": "KoAct",
+      "label": "KoAct 배당성장액티브",
+      "base_date": "2026-07-24"
+    },
+    "471040": {
+      "name": "KoAct 글로벌AI&로봇액티브",
+      "nav": 30767.45,
+      "market_value": "2,735억",
+      "holdings": [
+        {
+          "key": "005930",
+          "code": "005930",
+          "name": "삼성전자",
+          "shares": 123.0,
+          "weight": 0.0
+        },
+        {
+          "key": "000660",
+          "code": "000660",
+          "name": "SK하이닉스",
+          "shares": 16.0,
+          "weight": 0.0
+        },
+        {
+          "key": "009150",
+          "code": "009150",
+          "name": "삼성전기",
+          "shares": 19.0,
+          "weight": 0.0
+        },
+        {
+          "key": "095610",
+          "code": "095610",
+          "name": "테스",
+          "shares": 101.0,
+          "weight": 0.0
+        },
+        {
+          "key": "277810",
+          "code": "277810",
+          "name": "레인보우로보틱스",
+          "shares": 28.0,
+          "weight": 0.0
+        },
+        {
+          "key": "108490",
+          "code": "108490",
+          "name": "로보티즈",
+          "shares": 59.0,
+          "weight": 0.0
+        },
+        {
+          "key": "356860",
+          "code": "356860",
+          "name": "티엘비",
+          "shares": 88.0,
+          "weight": 0.0
+        },
+        {
+          "key": "INTEL Corp",
+          "code": "",
+          "name": "INTEL Corp",
+          "shares": 528.0,
+          "weight": 0.0
+        },
+        {
+          "key": "Robinhood Markets Inc",
+          "code": "",
+          "name": "Robinhood Markets Inc",
+          "shares": 340.0,
+          "weight": 0.0
+        },
+        {
+          "key": "Snowflake Inc   - CL A",
+          "code": "",
+          "name": "Snowflake Inc   - CL A",
+          "shares": 305.0,
+          "weight": 0.0
+        }
+      ],
+      "group": "KoAct",
+      "label": "KoAct 글로벌AI&로봇액티브",
+      "base_date": "2026-07-24"
+    },
+    "445290": {
+      "name": "KODEX 로봇액티브",
+      "nav": 31105.53,
+      "market_value": "9,966억",
+      "holdings": [
+        {
+          "key": "005930",
+          "code": "005930",
+          "name": "삼성전자",
+          "shares": 542.0,
+          "weight": 9.41
+        },
+        {
+          "key": "012330",
+          "code": "012330",
+          "name": "현대모비스",
+          "shares": 248.0,
+          "weight": 8.36
+        },
+        {
+          "key": "108490",
+          "code": "108490",
+          "name": "로보티즈",
+          "shares": 563.0,
+          "weight": 7.84
+        },
+        {
+          "key": "277810",
+          "code": "277810",
+          "name": "레인보우로보틱스",
+          "shares": 234.0,
+          "weight": 7.64
+        },
+        {
+          "key": "066570",
+          "code": "066570",
+          "name": "LG전자",
+          "shares": 592.0,
+          "weight": 7.14
+        },
+        {
+          "key": "307950",
+          "code": "307950",
+          "name": "현대오토에버",
+          "shares": 210.0,
+          "weight": 5.81
+        },
+        {
+          "key": "035420",
+          "code": "035420",
+          "name": "NAVER",
+          "shares": 410.0,
+          "weight": 5.8
+        },
+        {
+          "key": "005380",
+          "code": "005380",
+          "name": "현대차",
+          "shares": 190.0,
+          "weight": 5.28
+        },
+        {
+          "key": "454910",
+          "code": "454910",
+          "name": "두산로보틱스",
+          "shares": 1102.0,
+          "weight": 4.95
+        },
+        {
+          "key": "000660",
+          "code": "000660",
+          "name": "SK하이닉스",
+          "shares": 35.0,
+          "weight": 4.32
+        }
+      ],
+      "group": "KODEX",
+      "label": "KODEX 로봇액티브",
+      "base_date": "2026-07-24"
+    },
+    "441640": {
+      "name": "KODEX 미국배당커버드콜액티브",
+      "nav": 13057.0,
+      "market_value": "1조 6,667억",
+      "holdings": [
+        {
+          "key": "AMPLIFY CWP ENHANCED DIVIDEND",
+          "code": "",
+          "name": "AMPLIFY CWP ENHANCED DIVIDEND",
+          "shares": 1422.0,
+          "weight": 0.0
+        },
+        {
+          "key": "VANGUARD S&P 500 ETF",
+          "code": "",
+          "name": "VANGUARD S&P 500 ETF",
+          "shares": 187.0,
+          "weight": 0.0
+        },
+        {
+          "key": "COCA-COLA CO/THE",
+          "code": "",
+          "name": "COCA-COLA CO/THE",
+          "shares": 81.0,
+          "weight": 0.0
+        },
+        {
+          "key": "TJX COMPANIES INC",
+          "code": "",
+          "name": "TJX COMPANIES INC",
+          "shares": 72.0,
+          "weight": 0.0
+        },
+        {
+          "key": "WAL-MART STORES INC",
+          "code": "",
+          "name": "WAL-MART STORES INC",
+          "shares": 69.0,
+          "weight": 0.0
+        },
+        {
+          "key": "State Street Consumer Discretionary Sect",
+          "code": "",
+          "name": "State Street Consumer Discretionary Sect",
+          "shares": 66.0,
+          "weight": 0.0
+        },
+        {
+          "key": "MERCK & CO. INC.",
+          "code": "",
+          "name": "MERCK & CO. INC.",
+          "shares": 65.0,
+          "weight": 0.0
+        },
+        {
+          "key": "CHEVRON CORP",
+          "code": "",
+          "name": "CHEVRON CORP",
+          "shares": 58.0,
+          "weight": 0.0
+        },
+        {
+          "key": "VERIZON COMMUNICATIONS INC",
+          "code": "",
+          "name": "VERIZON COMMUNICATIONS INC",
+          "shares": 57.0,
+          "weight": 0.0
+        },
+        {
+          "key": "ARCHER-DANIELS-MIDLAND CO",
+          "code": "",
+          "name": "ARCHER-DANIELS-MIDLAND CO",
+          "shares": 57.0,
+          "weight": 0.0
+        }
+      ],
+      "group": "KODEX",
+      "label": "KODEX 미국배당커버드콜액티브",
+      "base_date": "2026-07-24"
+    },
+    "471780": {
+      "name": "TIGER 코리아테크액티브",
+      "nav": 36570.15,
+      "market_value": "2,482억",
+      "holdings": [
+        {
+          "key": "005930",
+          "code": "005930",
+          "name": "삼성전자",
+          "shares": 374.0,
+          "weight": 27.61
+        },
+        {
+          "key": "000660",
+          "code": "000660",
+          "name": "SK하이닉스",
+          "shares": 43.0,
+          "weight": 22.56
+        },
+        {
+          "key": "009150",
+          "code": "009150",
+          "name": "삼성전기",
+          "shares": 28.0,
+          "weight": 11.09
+        },
+        {
+          "key": "353200",
+          "code": "353200",
+          "name": "대덕전자",
+          "shares": 129.0,
+          "weight": 4.35
+        },
+        {
+          "key": "319660",
+          "code": "319660",
+          "name": "피에스케이",
+          "shares": 99.0,
+          "weight": 4.25
+        },
+        {
+          "key": "095610",
+          "code": "095610",
+          "name": "테스",
+          "shares": 98.0,
+          "weight": 4.13
+        },
+        {
+          "key": "222800",
+          "code": "222800",
+          "name": "심텍",
+          "shares": 115.0,
+          "weight": 3.09
+        },
+        {
+          "key": "131290",
+          "code": "131290",
+          "name": "티에스이",
+          "shares": 45.0,
+          "weight": 2.95
+        },
+        {
+          "key": "089970",
+          "code": "089970",
+          "name": "브이엠",
+          "shares": 132.0,
+          "weight": 2.95
+        },
+        {
+          "key": "031980",
+          "code": "031980",
+          "name": "피에스케이홀딩스",
+          "shares": 80.0,
+          "weight": 2.65
+        }
+      ],
+      "group": "TIGER",
+      "label": "TIGER 코리아테크액티브",
+      "base_date": "2026-07-24"
+    },
+    "472150": {
+      "name": "TIGER 배당커버드콜액티브",
+      "nav": 22101.61,
+      "market_value": "2조 1,695억",
+      "holdings": [
+        {
+          "key": "000660",
+          "code": "000660",
+          "name": "SK하이닉스",
+          "shares": 29.0,
+          "weight": 25.19
+        },
+        {
+          "key": "005930",
+          "code": "005930",
+          "name": "삼성전자",
+          "shares": 193.0,
+          "weight": 23.59
+        },
+        {
+          "key": "102110",
+          "code": "102110",
+          "name": "TIGER 200",
+          "shares": 150.0,
+          "weight": 7.69
+        },
+        {
+          "key": "005935",
+          "code": "005935",
+          "name": "삼성전자우",
+          "shares": 73.0,
+          "weight": 6.31
+        },
+        {
+          "key": "0104N0",
+          "code": "0104N0",
+          "name": "TIGER 200타겟위클리커버드콜",
+          "shares": 280.0,
+          "weight": 2.78
+        },
+        {
+          "key": "402340",
+          "code": "402340",
+          "name": "SK스퀘어",
+          "shares": 5.0,
+          "weight": 2.76
+        },
+        {
+          "key": "009150",
+          "code": "009150",
+          "name": "삼성전기",
+          "shares": 3.0,
+          "weight": 1.97
+        },
+        {
+          "key": "010120",
+          "code": "010120",
+          "name": "LS ELECTRIC",
+          "shares": 16.0,
+          "weight": 1.62
+        },
+        {
+          "key": "105560",
+          "code": "105560",
+          "name": "KB금융",
+          "shares": 20.0,
+          "weight": 1.6
+        },
+        {
+          "key": "005380",
+          "code": "005380",
+          "name": "현대차",
+          "shares": 8.0,
+          "weight": 1.56
+        }
+      ],
+      "group": "TIGER",
+      "label": "TIGER 배당커버드콜액티브",
+      "base_date": "2026-07-24"
+    },
+    "365040": {
+      "name": "TIGER AI코리아그로스액티브",
+      "nav": 37307.24,
+      "market_value": "741억",
+      "holdings": [
+        {
+          "key": "005930",
+          "code": "005930",
+          "name": "삼성전자",
+          "shares": 3885.0,
+          "weight": 28.03
+        },
+        {
+          "key": "000660",
+          "code": "000660",
+          "name": "SK하이닉스",
+          "shares": 468.0,
+          "weight": 24.0
+        },
+        {
+          "key": "402340",
+          "code": "402340",
+          "name": "SK스퀘어",
+          "shares": 80.0,
+          "weight": 2.61
+        },
+        {
+          "key": "005380",
+          "code": "005380",
+          "name": "현대차",
+          "shares": 161.0,
+          "weight": 1.86
+        },
+        {
+          "key": "373220",
+          "code": "373220",
+          "name": "LG에너지솔루션",
+          "shares": 188.0,
+          "weight": 1.75
+        },
+        {
+          "key": "009150",
+          "code": "009150",
+          "name": "삼성전기",
+          "shares": 44.0,
+          "weight": 1.7
+        },
+        {
+          "key": "034020",
+          "code": "034020",
+          "name": "두산에너빌리티",
+          "shares": 587.0,
+          "weight": 1.15
+        },
+        {
+          "key": "012450",
+          "code": "012450",
+          "name": "한화에어로스페이스",
+          "shares": 39.0,
+          "weight": 1.0
+        },
+        {
+          "key": "316140",
+          "code": "316140",
+          "name": "우리금융지주",
+          "shares": 1148.0,
+          "weight": 0.95
+        },
+        {
+          "key": "000270",
+          "code": "000270",
+          "name": "기아",
+          "shares": 236.0,
+          "weight": 0.94
+        }
+      ],
+      "group": "TIGER",
+      "label": "TIGER AI코리아그로스액티브",
+      "base_date": "2026-07-24"
+    },
+    "387280": {
+      "name": "TIGER 퓨처모빌리티액티브",
+      "nav": 11471.54,
+      "market_value": "142억",
+      "holdings": [
+        {
+          "key": "012330",
+          "code": "012330",
+          "name": "현대모비스",
+          "shares": 20.0,
+          "weight": 9.13
+        },
+        {
+          "key": "006400",
+          "code": "006400",
+          "name": "삼성SDI",
+          "shares": 21.0,
+          "weight": 8.54
+        },
+        {
+          "key": "373220",
+          "code": "373220",
+          "name": "LG에너지솔루션",
+          "shares": 25.0,
+          "weight": 7.58
+        },
+        {
+          "key": "009150",
+          "code": "009150",
+          "name": "삼성전기",
+          "shares": 6.0,
+          "weight": 7.57
+        },
+        {
+          "key": "000660",
+          "code": "000660",
+          "name": "SK하이닉스",
+          "shares": 4.0,
+          "weight": 6.69
+        },
+        {
+          "key": "086280",
+          "code": "086280",
+          "name": "현대글로비스",
+          "shares": 33.0,
+          "weight": 5.88
+        },
+        {
+          "key": "108490",
+          "code": "108490",
+          "name": "로보티즈",
+          "shares": 31.0,
+          "weight": 5.85
+        },
+        {
+          "key": "005380",
+          "code": "005380",
+          "name": "현대차",
+          "shares": 15.0,
+          "weight": 5.64
+        },
+        {
+          "key": "307950",
+          "code": "307950",
+          "name": "현대오토에버",
+          "shares": 15.0,
+          "weight": 5.62
+        },
+        {
+          "key": "005930",
+          "code": "005930",
+          "name": "삼성전자",
+          "shares": 13.0,
+          "weight": 3.06
+        }
+      ],
+      "group": "TIGER",
+      "label": "TIGER 퓨처모빌리티액티브",
+      "base_date": "2026-07-24"
+    },
+    "444200": {
+      "name": "SOL 코리아메가테크액티브",
+      "nav": 47645.14,
+      "market_value": "5,090억",
+      "holdings": [
+        {
+          "key": "005930",
+          "code": "005930",
+          "name": "삼성전자",
+          "shares": 2265.0,
+          "weight": 25.55
+        },
+        {
+          "key": "000660",
+          "code": "000660",
+          "name": "SK하이닉스",
+          "shares": 226.0,
+          "weight": 18.12
+        },
+        {
+          "key": "035720",
+          "code": "035720",
+          "name": "카카오",
+          "shares": 3094.0,
+          "weight": 4.8
+        },
+        {
+          "key": "009150",
+          "code": "009150",
+          "name": "삼성전기",
+          "shares": 75.0,
+          "weight": 4.54
+        },
+        {
+          "key": "005380",
+          "code": "005380",
+          "name": "현대차",
+          "shares": 232.0,
+          "weight": 4.19
+        },
+        {
+          "key": "012450",
+          "code": "012450",
+          "name": "한화에어로스페이스",
+          "shares": 103.0,
+          "weight": 4.12
+        },
+        {
+          "key": "034020",
+          "code": "034020",
+          "name": "두산에너빌리티",
+          "shares": 1347.0,
+          "weight": 4.12
+        },
+        {
+          "key": "018260",
+          "code": "018260",
+          "name": "삼성에스디에스",
+          "shares": 364.0,
+          "weight": 3.32
+        },
+        {
+          "key": "000270",
+          "code": "000270",
+          "name": "기아",
+          "shares": 452.0,
+          "weight": 2.83
+        },
+        {
+          "key": "267260",
+          "code": "267260",
+          "name": "HD현대일렉트릭",
+          "shares": 69.0,
+          "weight": 2.51
+        }
+      ],
+      "group": "SOL",
+      "label": "SOL 코리아메가테크액티브",
+      "base_date": "2026-07-24"
+    },
+    "481180": {
+      "name": "SOL 미국AI소프트웨어",
+      "nav": 14416.18,
+      "market_value": "1,218억",
+      "holdings": [
+        {
+          "key": "Palantir Technologies Inc",
+          "code": "",
+          "name": "Palantir Technologies Inc",
+          "shares": 420.0,
+          "weight": 0.0
+        },
+        {
+          "key": "ORACLE",
+          "code": "",
+          "name": "ORACLE",
+          "shares": 290.0,
+          "weight": 0.0
+        },
+        {
+          "key": "ServiceNow Inc",
+          "code": "",
+          "name": "ServiceNow Inc",
+          "shares": 285.0,
+          "weight": 0.0
+        },
+        {
+          "key": "Crowdstrike Holdings Inc",
+          "code": "",
+          "name": "Crowdstrike Holdings Inc",
+          "shares": 208.0,
+          "weight": 0.0
+        },
+        {
+          "key": "SAP SE",
+          "code": "",
+          "name": "SAP SE",
+          "shares": 201.0,
+          "weight": 0.0
+        },
+        {
+          "key": "salesforce Inc",
+          "code": "",
+          "name": "salesforce Inc",
+          "shares": 181.0,
+          "weight": 0.0
+        },
+        {
+          "key": "Fortinet Inc",
+          "code": "",
+          "name": "Fortinet Inc",
+          "shares": 160.0,
+          "weight": 0.0
+        },
+        {
+          "key": "Palo Alto Networks Inc",
+          "code": "",
+          "name": "Palo Alto Networks Inc",
+          "shares": 146.0,
+          "weight": 0.0
+        },
+        {
+          "key": "MICROSOFT",
+          "code": "",
+          "name": "MICROSOFT",
+          "shares": 133.0,
+          "weight": 0.0
+        },
+        {
+          "key": "ADOBE SYSTEMS INC",
+          "code": "",
+          "name": "ADOBE SYSTEMS INC",
+          "shares": 112.0,
+          "weight": 0.0
+        }
+      ],
+      "group": "SOL",
+      "label": "SOL 미국AI소프트웨어액티브",
+      "base_date": "2026-07-24"
+    }
+  },
+  "errors": []
+}
