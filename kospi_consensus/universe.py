@@ -97,15 +97,31 @@ def load_or_crawl(refresh=False):
 
     반환: {code: {name, market, groups, status}}
     """
+    def _cached():
+        if os.path.exists(CACHE):
+            with open(CACHE, encoding="utf-8") as f:
+                return json.load(f)
+        return {}
+
     if not refresh and os.path.exists(CACHE):
-        with open(CACHE, encoding="utf-8") as f:
-            data = json.load(f)
+        data = _cached()
         # 구버전 캐시(code→name) 자동 재구성
         if data and isinstance(next(iter(data.values())), str):
             data = build_universe()
             save(data)
         return data
-    uni = build_universe()
+
+    # refresh: 크롤 시도. 네이버가 클라우드 IP를 막으면 크롤이 예외/빈값이 되는데,
+    # 그때 크래시하지 말고 직전 캐시(마지막 정상 유니버스)로 폴백한다.
+    try:
+        uni = build_universe()
+    except Exception as e:
+        print(f"⚠ 유니버스 크롤 실패({e}) → 캐시 사용")
+        uni = {}
+    cached = _cached()
+    if len(uni) < 150 and len(cached) > len(uni):
+        print(f"⚠ 크롤 {len(uni)}종목(부족) → 캐시 {len(cached)}종목 사용")
+        return cached
     if uni:
         save(uni)
     return uni
