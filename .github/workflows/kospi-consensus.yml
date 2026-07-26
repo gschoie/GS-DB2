@@ -16,7 +16,7 @@ concurrency:
 jobs:
   snapshot:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 35   # 네이버가 클라우드 IP를 스로틀하면 스크랩이 느려짐 → 완주 여지 확보
     steps:
       - uses: actions/checkout@v5
 
