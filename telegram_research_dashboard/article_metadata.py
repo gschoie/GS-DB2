@@ -6,8 +6,9 @@ import html
 import ipaddress
 import re
 import socket
+from base64 import b64decode
 from html.parser import HTMLParser
-from urllib.parse import urljoin, urlparse
+from urllib.parse import unquote, urljoin, urlparse
 from urllib.request import HTTPRedirectHandler, Request, build_opener
 
 from parser import extract_companies, PUBLISHER_DOMAINS
@@ -15,6 +16,33 @@ from parser import extract_companies, PUBLISHER_DOMAINS
 
 TITLE_PLACEHOLDERS = {"기사 제목 미확인", "제목 미확인"}
 MAX_HTML_BYTES = 1_500_000
+# 단축링크 서비스가 (주로 CI IP 차단·rate-limit 시) 리다이렉트 대신 자기 랜딩 페이지를
+# 200으로 돌려주면 그 제목("URL Shortener … | TinyURL")이 기사 제목으로 저장돼버린다.
+# 최종 URL이 단축 도메인에 머물러 있거나 제목이 랜딩/봇차단 문구면 수집 실패로 취급한다.
+SHORTENER_HOSTS = {"tinyurl.com", "buly.kr", "bit.ly", "bitly.ws", "han.gl", "url.kr", "me2.do"}
+JUNK_TITLE_RE = re.compile(
+    r"url shortener|tinyurl|bitly|branded short links|just a moment|attention required"
+    r"|access denied|captcha|robot check|verify you are",
+    re.I,
+)
+# TinyURL은 봇으로 판단한 요청을 301 대신 preview 페이지(200)로 보낸다. 목적지는
+# "Redirecting to <URL>" 텍스트 또는 externalPageData의 original(base64·URL인코딩) 필드에 있다.
+SHORTENER_REDIRECT_RE = re.compile(r"Redirecting to (https?://[^\s\"'<>]+)", re.I)
+SHORTENER_ORIGINAL_RE = re.compile(r"original(?:\\u0022|[\"']):(?:\\u0022|[\"'])([A-Za-z0-9+/=]{8,})")
+
+
+def _shortener_destination(source: str) -> str | None:
+    """단축링크 랜딩/프리뷰 페이지에서 목적지 URL을 찾는다."""
+    match = SHORTENER_REDIRECT_RE.search(source)
+    if match:
+        return html.unescape(match.group(1))
+    match = SHORTENER_ORIGINAL_RE.search(source)
+    if match:
+        try:
+            return unquote(b64decode(match.group(1)).decode("utf-8"))
+        except (ValueError, UnicodeDecodeError):
+            return None
+    return None
 META_TITLE_RE = re.compile(
     r"<meta\b[^>]*(?:property|name)=[\"'](?:og:title|twitter:title)[\"'][^>]*content=[\"']([^\"']+)",
     re.I,
@@ -78,7 +106,7 @@ def _clean_title(value: str) -> str | None:
     return value[:240] if len(value) >= 4 else None
 
 
-def fetch_article_metadata(url: str, timeout: int = 10) -> dict | None:
+def fetch_article_metadata(url: str, timeout: int = 10, _shortener_hop: bool = False) -> dict | None:
     """원문 HTML에서 제목과 기업 판별용 본문 텍스트를 반환한다."""
     try:
         _validate_public_url(url)
@@ -104,6 +132,12 @@ def fetch_article_metadata(url: str, timeout: int = 10) -> dict | None:
         parser.feed(source)
         raw_title = parser.meta.get("og:title") or parser.meta.get("twitter:title") or "".join(parser.title_parts)
         title = _clean_title(raw_title)
+        final_host = (urlparse(final_url).hostname or "").casefold().removeprefix("www.")
+        if final_host in SHORTENER_HOSTS or (title and JUNK_TITLE_RE.search(title)):
+            destination = _shortener_destination(source)
+            if destination and not _shortener_hop:
+                return fetch_article_metadata(destination, timeout, _shortener_hop=True)
+            return None
         description = _clean_title(parser.meta.get("og:description", "")) or ""
         body_match = BODY_RE.search(source)
         body = body_match.group(1) if body_match else source

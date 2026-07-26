@@ -6,7 +6,7 @@ import argparse
 from concurrent.futures import ThreadPoolExecutor
 
 from article_metadata import (
-    TITLE_PLACEHOLDERS, enrich_news_item, fetch_article_metadata, publisher_from,
+    JUNK_TITLE_RE, TITLE_PLACEHOLDERS, enrich_news_item, fetch_article_metadata, publisher_from,
 )
 from db import connect, initialize
 from telegram_importer import link_companies
@@ -38,6 +38,13 @@ def run(limit: int, force_all: bool = False) -> tuple[int, int]:
              ORDER BY CASE WHEN a.news_id IS NULL THEN 0 ELSE 1 END,n.id DESC LIMIT ?"""
     checked = updated = 0
     with connect() as conn:
+        # 과거에 저장돼버린 단축링크 랜딩/봇차단 제목은 placeholder로 되돌려 재수집 대상으로 만든다.
+        junk_ids = [row["id"] for row in conn.execute(
+            "SELECT id,title FROM news_articles WHERE title IS NOT NULL") if JUNK_TITLE_RE.search(row["title"])]
+        if junk_ids:
+            conn.executemany("UPDATE news_articles SET title='기사 제목 미확인',summary=NULL WHERE id=?",
+                             [(i,) for i in junk_ids])
+            print(f"단축링크 랜딩 제목 리셋: {len(junk_ids):,}건")
         rows = conn.execute(sql, (limit,) if force_all else (*placeholders, limit)).fetchall()
         with ThreadPoolExecutor(max_workers=min(12, max(1, len(rows)))) as executor:
             metadata = list(executor.map(fetch_article_metadata, (row["article_url"] for row in rows)))
