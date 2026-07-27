@@ -1,9 +1,9 @@
 {
-  "date": "2026-07-24",
-  "prev_date": "2026-07-23",
-  "generated_at": "2026-07-24 15:42",
-  "base_date": "2026-07-24",
-  "prev_base_date": "2026-07-23",
+  "date": "2026-07-27",
+  "prev_date": "2026-07-24",
+  "generated_at": "2026-07-27 12:25",
+  "base_date": "",
+  "prev_base_date": "2026-07-24",
   "same_base": false,
   "first_run": false,
   "etfs": [
@@ -14,20 +14,46 @@
       "flow_factor": 1.0,
       "new": [
         {
-          "key": "071050",
-          "name": "한국금융지주",
-          "code": "071050",
-          "weight": 2.07,
-          "shares": 249.0
+          "key": "017670",
+          "name": "SK텔레콤",
+          "code": "017670",
+          "weight": 2.33,
+          "shares": 584.0
         }
       ],
       "gone": [
         {
-          "key": "004170",
-          "name": "신세계",
-          "code": "004170",
-          "weight_prev": 2.14,
-          "shares_prev": 100.0
+          "key": "071050",
+          "name": "한국금융지주",
+          "code": "071050",
+          "weight_prev": 2.07,
+          "shares_prev": 249.0
+        }
+      ],
+      "moves": [],
+      "has_weight": true
+    },
+    {
+      "code": "0162Y0",
+      "label": "TIME 코스닥액티브",
+      "group": "TIME(구 TIMEFOLIO)",
+      "flow_factor": 1.0,
+      "new": [
+        {
+          "key": "277810",
+          "name": "레인보우로보틱스",
+          "code": "277810",
+          "weight": 3.14,
+          "shares": 25.0
+        }
+      ],
+      "gone": [
+        {
+          "key": "031980",
+          "name": "피에스케이홀딩스",
+          "code": "031980",
+          "weight_prev": 2.32,
+          "shares_prev": 70.0
         }
       ],
       "moves": [],
@@ -40,19 +66,19 @@
       "flow_factor": 1.0,
       "new": [
         {
-          "key": "041510",
-          "name": "에스엠",
-          "code": "041510",
-          "weight": 4.41,
-          "shares": 600.0
+          "key": "001040",
+          "name": "CJ",
+          "code": "001040",
+          "weight": 4.18,
+          "shares": 300.0
         }
       ],
       "gone": [
         {
-          "key": "023530",
-          "name": "롯데쇼핑",
-          "code": "023530",
-          "weight_prev": 4.34,
+          "key": "069960",
+          "name": "현대백화점",
+          "code": "069960",
+          "weight_prev": 4.31,
           "shares_prev": 300.0
         }
       ],
@@ -66,20 +92,20 @@
       "flow_factor": 1.0,
       "new": [
         {
-          "key": "183300",
-          "name": "코미코",
-          "code": "183300",
-          "weight": 2.65,
-          "shares": 171.0
+          "key": "319660",
+          "name": "피에스케이",
+          "code": "319660",
+          "weight": 2.58,
+          "shares": 73.0
         }
       ],
       "gone": [
         {
-          "key": "319660",
-          "name": "피에스케이",
-          "code": "319660",
-          "weight_prev": 2.7,
-          "shares_prev": 73.0
+          "key": "183300",
+          "name": "코미코",
+          "code": "183300",
+          "weight_prev": 2.65,
+          "shares_prev": 171.0
         }
       ],
       "moves": [],
@@ -92,20 +118,20 @@
       "flow_factor": 1.0,
       "new": [
         {
-          "key": "267250",
-          "name": "HD현대",
-          "code": "267250",
-          "weight": 1.61,
-          "shares": 78.0
+          "key": "078930",
+          "name": "GS",
+          "code": "078930",
+          "weight": 2.3,
+          "shares": 256.0
         }
       ],
       "gone": [
         {
-          "key": "383220",
-          "name": "F&F",
-          "code": "383220",
-          "weight_prev": 1.81,
-          "shares_prev": 264.0
+          "key": "039490",
+          "name": "키움증권",
+          "code": "039490",
+          "weight_prev": 1.71,
+          "shares_prev": 61.0
         }
       ],
       "moves": [],
@@ -118,46 +144,46 @@
       "flow_factor": 1.0,
       "new": [
         {
-          "key": "010120",
-          "name": "LS ELECTRIC",
-          "code": "010120",
-          "weight": 1.62,
-          "shares": 16.0
+          "key": "086790",
+          "name": "하나금융지주",
+          "code": "086790",
+          "weight": 1.66,
+          "shares": 26.0
         }
       ],
       "gone": [
         {
-          "key": "086790",
-          "name": "하나금융지주",
-          "code": "086790",
-          "weight_prev": 1.62,
-          "shares_prev": 26.0
+          "key": "005380",
+          "name": "현대차",
+          "code": "005380",
+          "weight_prev": 1.56,
+          "shares_prev": 8.0
         }
       ],
       "moves": [],
       "has_weight": true
     },
     {
-      "code": "444200",
-      "label": "SOL 코리아메가테크액티브",
-      "group": "SOL",
+      "code": "365040",
+      "label": "TIGER AI코리아그로스액티브",
+      "group": "TIGER",
       "flow_factor": 1.0,
       "new": [
         {
-          "key": "267260",
-          "name": "HD현대일렉트릭",
-          "code": "267260",
-          "weight": 2.51,
-          "shares": 69.0
+          "key": "207940",
+          "name": "삼성바이오로직스",
+          "code": "207940",
+          "weight": 0.95,
+          "shares": 22.0
         }
       ],
       "gone": [
         {
-          "key": "012330",
-          "name": "현대모비스",
-          "code": "012330",
-          "weight_prev": 2.48,
-          "shares_prev": 110.0
+          "key": "000270",
+          "name": "기아",
+          "code": "000270",
+          "weight_prev": 0.94,
+          "shares_prev": 236.0
         }
       ],
       "moves": [],
@@ -170,9 +196,9 @@
     "share_pct_min": 30.0
   },
   "summary": {
-    "etfs_changed": 6,
-    "new_total": 6,
-    "gone_total": 6,
+    "etfs_changed": 7,
+    "new_total": 7,
+    "gone_total": 7,
     "moves_total": 0,
     "universe": 21
   }
