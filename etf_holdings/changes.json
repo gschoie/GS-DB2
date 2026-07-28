@@ -1,38 +1,12 @@
 {
-  "date": "2026-07-27",
-  "prev_date": "2026-07-24",
-  "generated_at": "2026-07-27 16:56",
-  "base_date": "2026-07-27",
-  "prev_base_date": "2026-07-24",
+  "date": "2026-07-28",
+  "prev_date": "2026-07-27",
+  "generated_at": "2026-07-28 15:44",
+  "base_date": "2026-07-28",
+  "prev_base_date": "2026-07-27",
   "same_base": false,
   "first_run": false,
   "etfs": [
-    {
-      "code": "385720",
-      "label": "TIME 코스피액티브",
-      "group": "TIME(구 TIMEFOLIO)",
-      "flow_factor": 1.0,
-      "new": [
-        {
-          "key": "017670",
-          "name": "SK텔레콤",
-          "code": "017670",
-          "weight": 2.33,
-          "shares": 584.0
-        }
-      ],
-      "gone": [
-        {
-          "key": "071050",
-          "name": "한국금융지주",
-          "code": "071050",
-          "weight_prev": 2.07,
-          "shares_prev": 249.0
-        }
-      ],
-      "moves": [],
-      "has_weight": true
-    },
     {
       "code": "0162Y0",
       "label": "TIME 코스닥액티브",
@@ -40,20 +14,20 @@
       "flow_factor": 1.0,
       "new": [
         {
-          "key": "277810",
-          "name": "레인보우로보틱스",
-          "code": "277810",
-          "weight": 3.14,
-          "shares": 25.0
+          "key": "086520",
+          "name": "에코프로",
+          "code": "086520",
+          "weight": 2.59,
+          "shares": 110.0
         }
       ],
       "gone": [
         {
-          "key": "031980",
-          "name": "피에스케이홀딩스",
-          "code": "031980",
-          "weight_prev": 2.32,
-          "shares_prev": 70.0
+          "key": "290650",
+          "name": "엘앤씨바이오",
+          "code": "290650",
+          "weight_prev": 2.36,
+          "shares_prev": 140.0
         }
       ],
       "moves": [],
@@ -66,19 +40,19 @@
       "flow_factor": 1.0,
       "new": [
         {
-          "key": "001040",
-          "name": "CJ",
-          "code": "001040",
-          "weight": 4.18,
+          "key": "069960",
+          "name": "현대백화점",
+          "code": "069960",
+          "weight": 4.16,
           "shares": 300.0
         }
       ],
       "gone": [
         {
-          "key": "069960",
-          "name": "현대백화점",
-          "code": "069960",
-          "weight_prev": 4.31,
+          "key": "001040",
+          "name": "CJ",
+          "code": "001040",
+          "weight_prev": 4.18,
           "shares_prev": 300.0
         }
       ],
@@ -92,46 +66,20 @@
       "flow_factor": 1.0,
       "new": [
         {
-          "key": "319660",
-          "name": "피에스케이",
-          "code": "319660",
-          "weight": 2.58,
-          "shares": 73.0
-        }
-      ],
-      "gone": [
-        {
           "key": "183300",
           "name": "코미코",
           "code": "183300",
-          "weight_prev": 2.65,
-          "shares_prev": 171.0
-        }
-      ],
-      "moves": [],
-      "has_weight": true
-    },
-    {
-      "code": "476850",
-      "label": "KoAct 배당성장액티브",
-      "group": "KoAct",
-      "flow_factor": 1.0,
-      "new": [
-        {
-          "key": "078930",
-          "name": "GS",
-          "code": "078930",
-          "weight": 2.3,
-          "shares": 256.0
+          "weight": 2.6,
+          "shares": 171.0
         }
       ],
       "gone": [
         {
-          "key": "039490",
-          "name": "키움증권",
-          "code": "039490",
-          "weight_prev": 1.71,
-          "shares_prev": 61.0
+          "key": "319660",
+          "name": "피에스케이",
+          "code": "319660",
+          "weight_prev": 2.58,
+          "shares_prev": 73.0
         }
       ],
       "moves": [],
@@ -144,49 +92,82 @@
       "flow_factor": 1.0,
       "new": [
         {
-          "key": "086790",
-          "name": "하나금융지주",
-          "code": "086790",
-          "weight": 1.66,
-          "shares": 26.0
+          "key": "005380",
+          "name": "현대차",
+          "code": "005380",
+          "weight": 1.54,
+          "shares": 8.0
         }
       ],
       "gone": [
         {
-          "key": "005380",
-          "name": "현대차",
-          "code": "005380",
+          "key": "010120",
+          "name": "LS ELECTRIC",
+          "code": "010120",
           "weight_prev": 1.56,
-          "shares_prev": 8.0
+          "shares_prev": 16.0
         }
       ],
       "moves": [],
       "has_weight": true
     },
     {
-      "code": "365040",
-      "label": "TIGER AI코리아그로스액티브",
-      "group": "TIGER",
-      "flow_factor": 1.0,
-      "new": [
+      "code": "463050",
+      "label": "TIME K바이오액티브",
+      "group": "TIME(구 TIMEFOLIO)",
+      "flow_factor": 1.0479,
+      "new": [],
+      "gone": [],
+      "moves": [
         {
-          "key": "207940",
-          "name": "삼성바이오로직스",
-          "code": "207940",
-          "weight": 0.95,
-          "shares": 22.0
+          "key": "068270",
+          "name": "셀트리온",
+          "code": "068270",
+          "shares_now": 329.0,
+          "shares_prev": 495.0,
+          "active_share_pct": -36.6,
+          "active_weight_pp": -4.98,
+          "weight_now": 9.62,
+          "weight_prev": 14.47,
+          "headline": false
+        },
+        {
+          "key": "298380",
+          "name": "에이비엘바이오",
+          "code": "298380",
+          "shares_now": 340.0,
+          "shares_prev": 250.0,
+          "active_share_pct": 29.8,
+          "active_weight_pp": 1.04,
+          "weight_now": 4.04,
+          "weight_prev": 2.98,
+          "headline": false
+        },
+        {
+          "key": "226950",
+          "name": "올릭스",
+          "code": "226950",
+          "shares_now": 412.0,
+          "shares_prev": 348.0,
+          "active_share_pct": 13.0,
+          "active_weight_pp": 1.13,
+          "weight_now": 7.66,
+          "weight_prev": 6.27,
+          "headline": false
+        },
+        {
+          "key": "141080",
+          "name": "리가켐바이오",
+          "code": "141080",
+          "shares_now": 368.0,
+          "shares_prev": 299.0,
+          "active_share_pct": 17.4,
+          "active_weight_pp": 1.06,
+          "weight_now": 5.88,
+          "weight_prev": 4.73,
+          "headline": false
         }
       ],
-      "gone": [
-        {
-          "key": "000270",
-          "name": "기아",
-          "code": "000270",
-          "weight_prev": 0.94,
-          "shares_prev": 236.0
-        }
-      ],
-      "moves": [],
       "has_weight": true
     }
   ],
@@ -196,10 +177,10 @@
     "share_pct_min": 30.0
   },
   "summary": {
-    "etfs_changed": 7,
-    "new_total": 7,
-    "gone_total": 7,
-    "moves_total": 0,
+    "etfs_changed": 5,
+    "new_total": 4,
+    "gone_total": 4,
+    "moves_total": 4,
     "universe": 21
   }
 }

@@ -1,5 +1,5 @@
 {
-  "when_utc": "2026-07-27 07:56:35Z",
+  "when_utc": "2026-07-28 06:44:44Z",
   "ok": true,
   "note": "change_sent",
   "chat_id_tail": "5171",
@@ -7,7 +7,7 @@
   "response": {
     "ok": true,
     "result": {
-      "message_id": 1432,
+      "message_id": 1481,
       "from": {
         "id": 8917880759,
         "is_bot": true,
@@ -21,8 +21,8 @@
         "username": "gschoie",
         "type": "private"
       },
-      "date": 1785138995,
-      "text": "🧩 액티브 ETF 구성 변화 · 구성 기준일 2026-07-27 (KRX 장마감)\n\n변화 ETF 7개 · 진입 7·이탈 7·실매매 0\n\n🟢 TIME 코스피액티브 · TIME(구 TIMEFOLIO)\n   ⊕ 진입: SK텔레콤\n   ⊖ 이탈: 한국금융지주\n🟢 TIME 코스닥액티브 · TIME(구 TIMEFOLIO)\n   ⊕ 진입: 레인보우로보틱스\n   ⊖ 이탈: 피에스케이홀딩스\n🟢 TIME K컬처액티브 · TIME(구 TIMEFOLIO)\n   ⊕ 진입: CJ\n   ⊖ 이탈: 현대백화점\n🟢 KoAct 코스닥액티브 · KoAct\n   ⊕ 진입: 피에스케이\n   ⊖ 이탈: 코미코\n🟢 KoAct 배당성장액티브 · KoAct\n   ⊕ 진입: GS\n   ⊖ 이탈: 키움증권\n🟢 TIGER 배당커버드콜액티브 · TIGER\n   ⊕ 진입: 하나금융지주\n   ⊖ 이탈: 현대차\n🟢 TIGER AI코리아그로스액티브 · TIGER\n   ⊕ 진입: 삼성바이오로직스\n   ⊖ 이탈: 기아\n\n전체 상세 › 대시보드\n🎴 GS Research Desk · 액티브 ETF 트래커",
+      "date": 1785221084,
+      "text": "🧩 액티브 ETF 구성 변화 · 구성 기준일 2026-07-28 (KRX 장마감)\n\n변화 ETF 5개 · 진입 4·이탈 4·실매매 4\n\n🟢 TIME 코스닥액티브 · TIME(구 TIMEFOLIO)\n   ⊕ 진입: 에코프로\n   ⊖ 이탈: 엘앤씨바이오\n🟢 TIME K컬처액티브 · TIME(구 TIMEFOLIO)\n   ⊕ 진입: 현대백화점\n   ⊖ 이탈: CJ\n🟢 KoAct 코스닥액티브 · KoAct\n   ⊕ 진입: 코미코\n   ⊖ 이탈: 피에스케이\n🟢 TIGER 배당커버드콜액티브 · TIGER\n   ⊕ 진입: 현대차\n   ⊖ 이탈: LS ELECTRIC\n🟢 TIME K바이오액티브 · TIME(구 TIMEFOLIO)\n   ▽ 셀트리온 계약수 −37% · 비중 −5.0%p\n   ▲ 에이비엘바이오 계약수 +30% · 비중 +1.0%p\n   ▲ 올릭스 계약수 +13% · 비중 +1.1%p\n   ▲ 리가켐바이오 계약수 +17% · 비중 +1.1%p\n\n전체 상세 › 대시보드\n🎴 GS Research Desk · 액티브 ETF 트래커",
       "entities": [
         {
           "offset": 0,
@@ -40,37 +40,27 @@
           "type": "bold"
         },
         {
-          "offset": 146,
+          "offset": 145,
           "length": 11,
           "type": "bold"
         },
         {
-          "offset": 217,
-          "length": 11,
-          "type": "bold"
-        },
-        {
-          "offset": 279,
+          "offset": 207,
           "length": 12,
           "type": "bold"
         },
         {
-          "offset": 331,
-          "length": 13,
-          "type": "bold"
-        },
-        {
-          "offset": 382,
+          "offset": 259,
           "length": 15,
           "type": "bold"
         },
         {
-          "offset": 438,
-          "length": 17,
+          "offset": 320,
+          "length": 12,
           "type": "bold"
         },
         {
-          "offset": 503,
+          "offset": 490,
           "length": 4,
           "type": "text_link",
           "url": "https://gschoie.github.io/GS-output-dashboard/etf_holdings_report.html"
