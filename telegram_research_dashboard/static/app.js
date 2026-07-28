@@ -85,11 +85,13 @@ async function load(){
 }
 function loadUnionBoard(){const frame=$('#union-board-frame'),status=$('#union-board-status');status.textContent='최신 보고서를 불러오는 중';frame.onload=()=>status.textContent='현중 노조게시판 분석 보고서';frame.onerror=()=>status.textContent='hhiun_board_report.html 파일을 확인해 주세요';frame.src=`hhiun_board_report.html?t=${Date.now()}`}
 const TASK_ROSTER=[['팀장',['최광식','이준범']],['지속가능(Sustainability)',['박영도','김지원','이정우','김진영']],['지능화(Intelligence)',['유지웅','고영민','김혜영','김연미','김상혁']],['휴먼/생체(Human)',['이지수','박종현']],['FDA',['이다연','임도영','박소현','한수빈']]];
-const TASK_ITEMS_DEFAULT=['근태입력','휴가계획','자료제출','컴플라이언스','기타'],TASK_KEY='hi_tasklist_v1',TASK_ITEMS_KEY='hi_tasklist_items_v1';
+const TASK_ITEMS_DEFAULT=['근태입력','휴가계획','자료제출','컴플라이언스','기타'],TASK_KEY='hi_tasklist_v1',TASK_ITEMS_KEY='hi_tasklist_items_v1',TASK_LAST_KEY='hi_tasklist_last_v1';
 const TASK_ENDPOINT='https://script.google.com/macros/s/AKfycbwTX-Ld-ayqHgi97S0QiMYPsHfb2cjNwy66FyDYU6GBrS0kOgMH8KE220GPy3KRxcT3/exec';let taskPushT;
 function taskItems(){try{const a=JSON.parse(localStorage.getItem(TASK_ITEMS_KEY));if(Array.isArray(a)&&a.length)return a}catch{}return TASK_ITEMS_DEFAULT.slice()}
 function saveItems(a){try{localStorage.setItem(TASK_ITEMS_KEY,JSON.stringify(a))}catch{}taskPush()}
-function fillTaskItems(desired){const sel=$('#task-item');if(!sel)return;const items=taskItems(),cur=items.includes(desired)?desired:(items.includes(sel.value)?sel.value:items[0]);sel.innerHTML=items.map(x=>`<option ${x===cur?'selected':''}>${esc(x)}</option>`).join('')}
+function fillTaskItems(desired){const sel=$('#task-item');if(!sel)return;const items=taskItems();let last=null;try{last=localStorage.getItem(TASK_LAST_KEY)}catch{}
+ // 항목 우선순위: 명시 지정 > 화면에서 고른 값 > 마지막 사용 항목(재방문 시 근태입력으로 리셋 방지) > 첫 항목
+ const cur=items.includes(desired)?desired:(items.includes(sel.value)?sel.value:(items.includes(last)?last:items[0]));sel.innerHTML=items.map(x=>`<option ${x===cur?'selected':''}>${esc(x)}</option>`).join('');try{localStorage.setItem(TASK_LAST_KEY,cur)}catch{}}
 const taskAllNames=()=>TASK_ROSTER.flatMap(([,ns])=>ns);
 function taskLoad(){try{return JSON.parse(localStorage.getItem(TASK_KEY))||{}}catch{return{}}}
 function taskSave(s){try{localStorage.setItem(TASK_KEY,JSON.stringify(s))}catch{}taskPush()}
