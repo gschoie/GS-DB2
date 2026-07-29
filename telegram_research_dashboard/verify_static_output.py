@@ -34,11 +34,13 @@ def main():
     reports = data.get("reports") or []
     news = data.get("news") or []
     tone = data.get("tone") or {}
+    tone2 = data.get("tone2") or {}
 
     checks = {
         "published reports": (len(reports), minimum_reports),
         "news archive": (len(news), minimum_news),
         "DAOL research tone": (int(tone.get("report_count") or 0), minimum_tone),
+        "DAOL research tone v2": (int(tone2.get("report_count") or 0), minimum_tone),
     }
     for label, (actual, minimum) in checks.items():
         if actual < minimum:
@@ -59,7 +61,8 @@ def main():
         "GEMS menu": r'<span>[^<]*GEMS[^<]*</span>',
         "관리 menu": r'<span>관리</span>',
         "util links menu": r'<span>유틸\.링크</span>',
-        "collapsed analyst report details": r'<details><summary>이달 발간 자료',
+        "tone v2 sector-analyst table": r'tone-table',
+        "tone v2 drill-down modal": r'id="tone-modal"',
     }
     for label, pattern in required_patterns.items():
         if not re.search(pattern, html):

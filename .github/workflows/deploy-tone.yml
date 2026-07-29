@@ -31,6 +31,7 @@ jobs:
         with:
           path: |
             telegram_research_dashboard/data/daol_pdf_text_cache.json
+            telegram_research_dashboard/data/daol_ai_analysis.json
           key: daol-pdf-cache-${{ github.run_id }}
           restore-keys: |
             daol-pdf-cache-
@@ -42,6 +43,15 @@ jobs:
       - name: DAOL 톤 데이터 갱신
         working-directory: telegram_research_dashboard
         run: python build_daol_tone_dashboard.py --refresh
+
+      # 수동 실행은 백필 용도로 예산을 크게 잡는다(무료 티어 한도 소진 시 자동 중단·캐시 저장).
+      - name: DAOL 톤 AI 분석 (증분)
+        working-directory: telegram_research_dashboard
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          AI_MAX_REPORTS: "200"
+        run: python ai_report_analyzer.py
 
       # 갱신된 톤 히스토리에서 섹터 콜라보 레이더를 재생성한다 (네트워크 없음).
       - name: 섹터 콜라보 레이더 갱신

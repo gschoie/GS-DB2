@@ -30,6 +30,7 @@ jobs:
             telegram_research_dashboard/data/daol_messages.json
             telegram_research_dashboard/data/daol_tone_history.json
             telegram_research_dashboard/data/daol_pdf_text_cache.json
+            telegram_research_dashboard/data/daol_ai_analysis.json
             telegram_research_dashboard/data/macro.json
           key: newsdb-${{ github.run_id }}
           restore-keys: |
@@ -101,6 +102,7 @@ jobs:
             telegram_research_dashboard/data/daol_messages.json
             telegram_research_dashboard/data/daol_tone_history.json
             telegram_research_dashboard/data/daol_pdf_text_cache.json
+            telegram_research_dashboard/data/daol_ai_analysis.json
             telegram_research_dashboard/data/macro.json
           key: newsdb-${{ github.run_id }}
 
