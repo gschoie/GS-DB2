@@ -93,6 +93,8 @@
           <button class="nav" data-view="holdings">🧩 액티브ETF.매매동향</button>
           <button class="nav" data-view="consensus">📊 코스피200.컨센.추적</button>
           <a href="https://finance.naver.com/mystock/summary.naver" target="_blank" rel="noopener" onclick="if(/iPhone|iPad|iPod/.test(navigator.userAgent)){window.location.href='googlechromes://finance.naver.com/mystock/summary.naver';return false;}">🖥️ 네이버 전광판</a>
+          <div class="nav-sep"></div>
+          <a href="https://gemini.google.com/gem/1oIQLXDDosu7gZD41hsLLRXiDPYgZnD3H?usp=sharing" target="_blank" rel="noopener">🗣️ 이쁘게.말하기</a>
         </div>
       </details>
       <details class="nav-group">
@@ -172,16 +174,18 @@
     </section>
 
     <section id="tone" class="view">
-      <div class="archive-intro"><div><p class="eyebrow">DAOL MONTHLY RESEARCH</p><h2>월별 애널리스트·섹터 리서치 종합</h2></div><p>최신 월 우선 · 발간 자료, Pitch, 산업 결론, TP 변경과 섹터 선호주를 한 번에 봅니다.</p></div>
+      <div class="archive-intro"><div><p class="eyebrow">DAOL RESEARCH TONE</p><h2>섹터·애널리스트 톤 보드</h2></div><p>산업의견 · AI 톤(확신도) · TP 변경과 배경 4분류 · 투자포인트 변화. 기업/산업을 누르면 히스토리 타임라인이 열립니다.</p></div>
       <div class="tone-toolbar">
         <input id="tone-search" placeholder="애널리스트·섹터·종목 검색">
-        <select id="tone-month"><option value="">전체 월</option></select>
+        <select id="tone-sector"><option value="">전체 섹터</option></select>
         <select id="tone-analyst"><option value="">전체 애널리스트</option></select>
         <button id="tone-refresh" type="button">새로고침</button>
-        <button id="tone-server-refresh" class="refresh-btn" type="button" title="다올리서치 채널을 다시 수집해 톤 데이터를 갱신합니다 (자동 실행, 몇 분 소요).">🔄 톤 데이터 갱신(자동)</button>
+        <button id="tone-server-refresh" class="refresh-btn" type="button" title="다올리서치 채널을 다시 수집하고 AI 톤 분석까지 갱신합니다 (자동 실행, 몇 분 소요).">🔄 톤 데이터 갱신(자동)</button>
         <span id="tone-status">대기 중</span>
       </div>
+      <div id="tone-events"></div>
       <div id="tone-content"></div>
+      <div id="tone-modal" class="tone-modal" hidden><div class="tone-modal-box"><button id="tone-modal-close" class="tone-modal-close" type="button" aria-label="닫기">×</button><div id="tone-modal-body"></div></div></div>
     </section>
 
     <section id="collab" class="view">
