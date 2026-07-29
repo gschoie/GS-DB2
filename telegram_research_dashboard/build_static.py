@@ -163,9 +163,6 @@ def build() -> Path:
     consensus_xlsx = ROOT / "static" / "consensus_full.xlsx"
     if consensus_xlsx.exists():
         shutil.copy2(consensus_xlsx, OUTPUT.parent / "consensus_full.xlsx")
-    fx_xlsx = ROOT / "static" / "BOK_exchange_rates.xlsx"
-    if fx_xlsx.exists():
-        shutil.copy2(fx_xlsx, OUTPUT.parent / "BOK_exchange_rates.xlsx")
     if tone_path.exists():
         (OUTPUT.parent / "daol_tone_history.json").write_text(
             json.dumps(tone, ensure_ascii=False, separators=(",", ":")), encoding="utf-8"
