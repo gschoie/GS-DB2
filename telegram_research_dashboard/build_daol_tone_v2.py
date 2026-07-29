@@ -68,11 +68,19 @@ def merge_report(report, ai_entry):
             scope = '기업자료'
         elif ai['report_scope'] == '산업' and not report.get('code'):
             scope = '산업자료'
+    # 애널 귀속 표기는 행에 애널명이 따로 있어 중복 — 세 가지 형태를 잘라낸다.
+    #  ① 꼬리 "…]/다올 건설·부동산 박영도"  ② 대괄호 안 "｜다올 금융 김지원 ☎…"
+    #  ③ 선두 "[다올투자증권 반도체 고영민]" (단, ｜로 주제가 이어지는 콜라보 헤더는 유지)
+    title = report.get('title') or ''
+    title = re.sub(r'\s*/\s*다올.*$', '', title)
+    title = re.sub(r'\s*[｜|]\s*다올[^\]｜|]*', '', title)
+    title = re.sub(r'^\[다올(?:투자증권)?[^\]｜|]*\]\s*', '', title)
+    title = re.sub(r'\s+', ' ', title).strip()
     record = {
         'id': str(report['id']), 'date': report['date'], 'month': report['month'],
         'analyst': report['analyst'], 'sector': report['sector'],
         'company': company, 'code': code, 'report_type': scope,
-        'title': report.get('title') or '', 'post_url': report.get('post_url') or '',
+        'title': title, 'post_url': report.get('post_url') or '',
         'pdf_url': report.get('pdf_url') or report.get('source_url') or '',
         'opinion': (ai and ai['opinion'] not in ('', '없음') and ai['opinion']) or report.get('opinion') or '',
         'ai': bool(ai),
@@ -141,8 +149,9 @@ def timeline_events(key, name, timeline):
                 'report_id': record['id'], 'source': record['post_url']}
         tp = record.get('tp_event')
         if tp and tp['direction'] in ('상향', '하향'):
+            reasons = '·'.join(tp['reasons'])
             events.append({**base, 'type': f"TP {tp['direction']}",
-                           'detail': f"{tp['display']} · {'·'.join(tp['reasons'])}".strip(' ·'),
+                           'detail': f"{tp['display']} ← {reasons}" if reasons else tp['display'],
                            'evidence': tp['evidence']})
         if record['opinion'] and prev.get('opinion') and record['opinion'] != prev['opinion']:
             events.append({**base, 'type': '의견 변경',
@@ -240,9 +249,23 @@ def build():
     events = sorted([e for e in all_events if e['date'] >= recent_cut],
                     key=lambda x: x['date'], reverse=True)[:200]
 
+    # 이벤트 피드 오른쪽 열: 변경 없이 TP를 유지(또는 신규 제시)한 보고서.
+    steady = []
+    for r in records:
+        tp = r.get('tp_event')
+        if not tp or tp['direction'] not in ('유지', '신규') or r['date'] < recent_cut: continue
+        display = tp['display'] or (f"{int(tp['value']):,}원" if tp['value'] else '')
+        if display and tp['direction'] not in display: display += f" ({tp['direction']})"
+        steady.append({'date': r['date'], 'company_key': company_key(r)[0],
+                       'company': r['company'] or f"{r['sector']} 산업", 'analyst': r['analyst'],
+                       'sector': r['sector'], 'report_id': r['id'], 'source': r['post_url'],
+                       'type': 'TP 유지' if tp['direction'] == '유지' else '신규 커버',
+                       'detail': display or 'TP 표기 없음', 'evidence': tp['evidence']})
+    steady = sorted(steady, key=lambda x: x['date'], reverse=True)[:200]
+
     data = {'generated_at': datetime.now(timezone.utc).isoformat(),
             'report_count': len(records), 'ai_analyzed': sum(1 for r in records if r['ai']),
-            'sectors': sectors, 'companies': companies, 'events': events}
+            'sectors': sectors, 'companies': companies, 'events': events, 'steady': steady}
     OUT.write_text(json.dumps(data, ensure_ascii=False, separators=(',', ':')), encoding='utf-8')
     print(json.dumps({'out': str(OUT), 'reports': len(records), 'ai': data['ai_analyzed'],
                       'companies': len(companies), 'events': len(events)}, ensure_ascii=False))
