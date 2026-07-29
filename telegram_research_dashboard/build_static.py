@@ -109,18 +109,8 @@ def build() -> Path:
             "SELECT id,text FROM telegram_messages "
             "WHERE id IN (SELECT DISTINCT message_id FROM news_articles)")}
 
-    tone_path = ROOT / "data" / "daol_tone_history.json"
-    tone = json.loads(tone_path.read_text(encoding="utf-8")) if tone_path.exists() else {"months": [], "report_count": 0}
-    # 톤 v2(섹터-애널 표·타임라인·이벤트)는 캐시 복원된 히스토리+AI 분석에서 항상 재생성한다
-    # (네트워크 없음, 1초 미만). 실패해도 배포는 계속 — 이전 파일 또는 빈 데이터로 폴백.
-    tone2_path = ROOT / "data" / "daol_tone_v2.json"
-    try:
-        import build_daol_tone_v2
-        tone2 = build_daol_tone_v2.build()
-    except Exception as exc:  # noqa: BLE001
-        print(f"::warning::톤 v2 재생성 실패, 기존 파일 사용: {exc}")
-        tone2 = json.loads(tone2_path.read_text(encoding="utf-8")) if tone2_path.exists() else {
-            "sectors": [], "companies": {}, "events": [], "report_count": 0}
+    # DAOL 리서치 톤은 별도 리포(gschoie/daol-research-tone)로 독립 — 화면은 iframe,
+    # overview 패널은 그쪽 tone_summary.json을 런타임에 가져온다(여기 임베드 없음).
     union_path = ROOT / "data" / "hhiun_top.json"
     union = json.loads(union_path.read_text(encoding="utf-8")) if union_path.exists() else {"monthly": []}
     macro_path = ROOT / "data" / "macro.json"
@@ -128,7 +118,7 @@ def build() -> Path:
     payload = json.dumps(
         {"summary": summary, "reports": reports, "news": news, "companies": companies,
          "reportCompanies": report_companies, "newsTexts": news_texts,
-         "tone": tone, "tone2": tone2, "union": union, "macro": macro},
+         "union": union, "macro": macro},
         ensure_ascii=False, separators=(",", ":"),
     ).replace("</", "<\\/").replace("\u2028", "\\u2028").replace("\u2029", "\\u2029")
     html = (ROOT / "static" / "index.html").read_text(encoding="utf-8")
@@ -157,20 +147,9 @@ def build() -> Path:
     consensus_report = ROOT / "static" / "consensus_revision.html"
     if consensus_report.exists():
         shutil.copy2(consensus_report, OUTPUT.parent / "consensus_revision.html")
-    collab_report = ROOT / "static" / "daol_collab_radar.html"
-    if collab_report.exists():
-        shutil.copy2(collab_report, OUTPUT.parent / "daol_collab_radar.html")
     consensus_xlsx = ROOT / "static" / "consensus_full.xlsx"
     if consensus_xlsx.exists():
         shutil.copy2(consensus_xlsx, OUTPUT.parent / "consensus_full.xlsx")
-    if tone_path.exists():
-        (OUTPUT.parent / "daol_tone_history.json").write_text(
-            json.dumps(tone, ensure_ascii=False, separators=(",", ":")), encoding="utf-8"
-        )
-    # 톤 화면의 '새로고침' 버튼이 배포본 갱신 없이 최신 데이터를 다시 읽을 수 있게 별도 파일로도 배포.
-    (OUTPUT.parent / "daol_tone_v2.json").write_text(
-        json.dumps(tone2, ensure_ascii=False, separators=(",", ":")), encoding="utf-8"
-    )
     print(f"생성 완료: {OUTPUT} ({OUTPUT.stat().st_size / 1024 / 1024:.1f} MB)")
     return OUTPUT
 

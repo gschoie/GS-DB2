@@ -29,18 +29,14 @@ def main():
 
     minimum_reports = int(os.getenv("MIN_DASHBOARD_REPORTS", "500"))
     minimum_news = int(os.getenv("MIN_DASHBOARD_NEWS", "5000"))
-    minimum_tone = int(os.getenv("MIN_DAOL_TONE_REPORTS", "500"))
     summary = data.get("summary") or {}
     reports = data.get("reports") or []
     news = data.get("news") or []
-    tone = data.get("tone") or {}
-    tone2 = data.get("tone2") or {}
 
+    # DAOL 리서치 톤은 별도 리포(daol-research-tone)로 독립 — 임베드 검사 없음(iframe 연동).
     checks = {
         "published reports": (len(reports), minimum_reports),
         "news archive": (len(news), minimum_news),
-        "DAOL research tone": (int(tone.get("report_count") or 0), minimum_tone),
-        "DAOL research tone v2": (int(tone2.get("report_count") or 0), minimum_tone),
     }
     for label, (actual, minimum) in checks.items():
         if actual < minimum:
@@ -61,8 +57,7 @@ def main():
         "GEMS menu": r'<span>[^<]*GEMS[^<]*</span>',
         "관리 menu": r'<span>관리</span>',
         "util links menu": r'<span>유틸\.링크</span>',
-        "tone v2 sector-analyst table": r'tone-table',
-        "tone v2 drill-down modal": r'id="tone-modal"',
+        "tone iframe view": r'id="tone-frame"',
     }
     for label, pattern in required_patterns.items():
         if not re.search(pattern, html):
@@ -74,7 +69,6 @@ def main():
     print("Deployment safety checks passed")
     print(f"- Published reports: {len(reports):,}")
     print(f"- News archive: {len(news):,}")
-    print(f"- DAOL research tone: {tone.get('report_count', 0):,}")
     print(f"- HTML size: {target.stat().st_size:,} bytes")
 
 

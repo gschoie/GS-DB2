@@ -44,10 +44,7 @@ jobs:
         with:
           path: |
             telegram_research_dashboard/data/dashboard.db
-            telegram_research_dashboard/data/daol_messages.json
-            telegram_research_dashboard/data/daol_tone_history.json
             telegram_research_dashboard/data/daol_pdf_text_cache.json
-            telegram_research_dashboard/data/daol_ai_analysis.json
             telegram_research_dashboard/data/macro.json
           key: newsdb-${{ github.run_id }}
           restore-keys: |
@@ -83,30 +80,6 @@ jobs:
         # 겹침이 충분해 누락 0이고, 매번 재긁는 페이지가 적어 빠르다. (수동 🔄뉴스갱신은 2주창)
         # --pages 120 은 안전 상한(콜드스타트·이상시 무한 크롤 방지).
         run: python public_importer.py --channel https://t.me/HI_GS --pages 120 --since-days 3
-
-      - name: DAOL 톤 데이터 갱신
-        if: github.event_name != 'push' && github.event_name != 'workflow_run'
-        working-directory: telegram_research_dashboard
-        run: |
-          python build_daol_tone_dashboard.py --refresh
-
-      # 리포트 1건당 LLM 구조화 분석(톤·TP사유·실적·투자포인트). 결과는 daol_ai_analysis.json
-      # 캐시에 누적되어 이미 분석한 리포트는 재호출하지 않는다. 키가 없으면 조용히 건너뛴다.
-      # 하루 7회 × 35건 = 245건/일로 Gemini 무료 티어 일일 한도(250) 안에서 백필이 진행된다.
-      - name: DAOL 톤 AI 분석 (증분)
-        if: github.event_name != 'push' && github.event_name != 'workflow_run'
-        working-directory: telegram_research_dashboard
-        env:
-          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-          AI_MAX_REPORTS: "35"
-        run: python ai_report_analyzer.py
-
-      # 톤 히스토리에서 섹터 콜라보 레이더를 재생성한다 (네트워크 없음, 수 초 소요).
-      # push/workflow_run 배포에서도 커밋된 히스토리로 항상 다시 만든다.
-      - name: 섹터 콜라보 레이더 갱신
-        working-directory: telegram_research_dashboard
-        run: python build_daol_collab_radar.py
 
       # 전체 재분류는 파서 버전(parser.PARSER_VERSION)이 캐시 DB의 기록과 다를 때만 돈다.
       # 평상시엔 수 초 만에 생략되고, 파서 규칙을 바꾼 뒤 첫 수집 런에서 한 번만 40분+ 소요.
@@ -172,10 +145,7 @@ jobs:
         with:
           path: |
             telegram_research_dashboard/data/dashboard.db
-            telegram_research_dashboard/data/daol_messages.json
-            telegram_research_dashboard/data/daol_tone_history.json
             telegram_research_dashboard/data/daol_pdf_text_cache.json
-            telegram_research_dashboard/data/daol_ai_analysis.json
             telegram_research_dashboard/data/macro.json
           key: newsdb-${{ github.run_id }}
 

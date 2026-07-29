@@ -21,8 +21,14 @@ import re
 import time
 from io import BytesIO
 
-from build_daol_tone_dashboard import PDF_CACHE, UA
+from pathlib import Path
+
 from db import connect, initialize
+
+# 톤 트래커가 daol-research-tone 리포로 독립하면서, 여기서 쓰던 PDF 캐시 경로와
+# UA를 직접 정의한다(과거엔 build_daol_tone_dashboard에서 임포트).
+PDF_CACHE = Path(__file__).resolve().parent / 'data' / 'daol_pdf_text_cache.json'
+UA = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/126 Safari/537.36'}
 
 # 표지 박스: `적정주가 980,000 1,100,000 하향` / 신규 커버리지는 직전값이 없을 수 있다.
 COVER_RE = re.compile(
