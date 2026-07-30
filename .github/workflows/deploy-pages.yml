@@ -115,6 +115,28 @@ jobs:
         working-directory: telegram_research_dashboard
         run: python fetch_macro.py
 
+      # ── 배포 레이스 방지 ──
+      # 예약 런은 수집에 20분+ 걸려, 시작 시점 커밋의 낡은 코드로 그 사이 완료된
+      # push 배포(최신 코드)를 덮어쓸 수 있다(2026-07-29 실제 발생: 8c290ab push
+      # 배포 완료 27초 뒤, 14:27에 시작된 a4c8d9d 예약 런이 덮어씀).
+      # concurrency group=pages는 배포를 직렬화할 뿐 순서를 보장하지 않으므로,
+      # 빌드 직전에 origin/main이 앞서 있으면 '코드'(*.py·static)만 최신으로 당겨
+      # 방금 수집한 데이터 위에 재빌드한다. → 남는 레이스 창이 20분 → 1~2분으로 준다.
+      # data/* 와 캐시로 복원된 static/hhiun_board_report.html 은 리포지토리 버전이
+      # 더 낡으므로 건드리지 않는다(나머지 static/*.html 봇 산출물은 커밋되므로 OK).
+      - name: 최신 코드 동기화 (배포 레이스 방지)
+        run: |
+          git fetch --quiet --depth=1 origin main
+          latest=$(git rev-parse FETCH_HEAD)
+          current=$(git rev-parse HEAD)
+          if [ "$latest" != "$current" ]; then
+            echo "::notice::main 전진 감지(${current:0:7} → ${latest:0:7}) — 코드 파일을 최신으로 동기화해 빌드"
+            git checkout "$latest" -- \
+              'telegram_research_dashboard/*.py' \
+              'telegram_research_dashboard/static/' \
+              ':(exclude)telegram_research_dashboard/static/hhiun_board_report.html'
+          fi
+
       - name: 배포용 HTML 생성
         if: github.event_name != 'push' && github.event_name != 'workflow_run'
         working-directory: telegram_research_dashboard
