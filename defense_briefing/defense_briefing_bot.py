@@ -3,9 +3,9 @@
 
 매일 아침(KST 06시 목표) 실행되어:
   1. yfinance로 글로벌 방산주 시세(종가·등락률·시총)를 확정 조회하고
-  2. Claude API(web_search)로 지난 24시간 방산 뉴스를 수집·분석해 리포트를 작성한 뒤
+  2. Gemini API(Google 검색 그라운딩)로 지난 24시간 방산 뉴스를 수집·분석해 리포트를 작성한 뒤
   3. 텔레그램(GS K-Defence NEWS | gs_analyst_bot)으로 발송하고
-  4. 대시보드 static/defense_briefing/YYYY-MM-DD.html 로 날짜별 아카이브를 남긴다.
+  4. 대시보드 static/defense_daily/YYYY-MM-DD.html 로 날짜별 아카이브를 남긴다.
 
 시세를 코드로 확정하는 이유: LLM 웹검색만으로 종가·등락률을 찾으면 숫자가
 틀리거나 전일 데이터를 가져오는 경우가 잦다. 시세표를 컨텍스트로 주고
@@ -25,7 +25,8 @@ from zoneinfo import ZoneInfo
 
 import requests
 import yfinance as yf
-from anthropic import Anthropic
+from google import genai
+from google.genai import types as genai_types
 
 KST = ZoneInfo("Asia/Seoul")
 ROOT = Path(__file__).resolve().parent
@@ -35,8 +36,7 @@ DASH_STATIC = ROOT.parent / "telegram_research_dashboard" / "static"
 ARCHIVE_DIR = DASH_STATIC / "defense_daily"
 INDEX_PAGE = DASH_STATIC / "defense_briefing_report.html"
 
-MODEL = os.environ.get("CLAUDE_MODEL", "claude-opus-5")
-MAX_WEB_SEARCHES = int(os.environ.get("MAX_WEB_SEARCHES", "12"))
+MODEL = os.environ.get("GEMINI_MODEL", "gemini-2.5-flash")
 
 # (티커, 표기명, 국가, 섹터) — 섹터: 항공우주/지상무기/미사일·방공/해군·조선/전자·센서/종합/엔진·부품/ETF
 UNIVERSE = [
@@ -175,31 +175,52 @@ SYSTEM_PROMPT = """당신은 글로벌 방산 섹터를 담당하는 증권사 �
 
 
 def generate_report(price_table: str, now: datetime) -> str:
-    client = Anthropic()
+    client = genai.Client()  # GEMINI_API_KEY 환경변수 사용
     update_time = now.strftime("%Y-%m-%d %H:00")
     system = SYSTEM_PROMPT.replace("{UPDATE_TIME}", update_time)
     user = (
         f"현재 시각(KST): {now.strftime('%Y-%m-%d %H:%M')}\n"
         f"오늘의 확정 시세표 (각 시장의 최근 종가 기준, 등락률은 직전 거래일 대비):\n\n"
         f"{price_table}\n\n"
-        "위 시세표와 지난 24시간 웹검색 결과를 바탕으로 글로벌 방산 데일리 브리핑을 작성해 주세요."
+        "위 시세표와 지난 24시간 구글 검색 결과를 바탕으로 글로벌 방산 데일리 브리핑을 작성해 주세요."
     )
-    with client.messages.stream(
-        model=MODEL,
-        max_tokens=32000,
-        system=system,
-        tools=[{"type": "web_search_20260209", "name": "web_search", "max_uses": MAX_WEB_SEARCHES}],
-        messages=[{"role": "user", "content": user}],
-    ) as stream:
-        response = stream.get_final_message()
-    if response.stop_reason == "refusal":
-        raise RuntimeError(f"Claude가 요청을 거절했습니다: {response.stop_details}")
-    report = "".join(b.text for b in response.content if b.type == "text")
-    u = response.usage
-    print(f"[Claude] in={u.input_tokens} out={u.output_tokens} stop={response.stop_reason}")
-    if not report.strip():
-        raise RuntimeError("Claude 응답에 텍스트가 없습니다")
-    return report.strip()
+    config = genai_types.GenerateContentConfig(
+        system_instruction=system,
+        tools=[genai_types.Tool(google_search=genai_types.GoogleSearch())],
+        temperature=0.3,
+        max_output_tokens=16384,
+    )
+    response = None
+    for attempt in range(3):  # 무료 티어 429/503 대비 재시도
+        try:
+            response = client.models.generate_content(model=MODEL, contents=user, config=config)
+            if response.text and response.text.strip():
+                break
+            print(f"[Gemini] 빈 응답 (시도 {attempt + 1})", file=sys.stderr)
+        except Exception as e:
+            print(f"[Gemini 오류] 시도 {attempt + 1}: {e}", file=sys.stderr)
+        time.sleep(30 * (attempt + 1))
+    else:
+        raise RuntimeError("Gemini 호출 3회 모두 실패")
+    report = response.text.strip()
+    um = getattr(response, "usage_metadata", None)
+    if um:
+        print(f"[Gemini] in={um.prompt_token_count} out={um.candidates_token_count}")
+
+    # 검색 그라운딩 출처를 리포트 말미에 덧붙인다 (본문 인라인 링크는 모델 재량이라 보강용)
+    try:
+        gm = response.candidates[0].grounding_metadata
+        seen, links = set(), []
+        for chunk in (gm.grounding_chunks or []):
+            web = getattr(chunk, "web", None)
+            if web and web.uri and web.uri not in seen:
+                seen.add(web.uri)
+                links.append(f"- [{web.title or '출처'}]({web.uri})")
+        if links:
+            report += "\n\n## 참고 출처\n" + "\n".join(links[:15])
+    except Exception:
+        pass
+    return report
 
 
 # ── 마크다운 → 텔레그램 HTML / 웹페이지 HTML ──────────────────────────────
@@ -338,7 +359,7 @@ def write_archive(md_report: str, now: datetime) -> None:
 <title>글로벌 방산 브리핑 {date_str}</title><style>{PAGE_CSS}</style></head>
 <body><div class="wrap">
 <h1>🌍 글로벌 방산 데일리 브리핑</h1>
-<div class="meta">기준: {now.strftime('%Y-%m-%d %H:00')} KST · 생성: Claude({MODEL}) + yfinance 확정 시세</div>
+<div class="meta">기준: {now.strftime('%Y-%m-%d %H:00')} KST · 생성: Gemini({MODEL}) + yfinance 확정 시세</div>
 {body}
 </div></body></html>"""
     (ARCHIVE_DIR / f"{date_str}.html").write_text(page, encoding="utf-8")
