@@ -23,6 +23,10 @@ from datetime import datetime, timedelta
 from pathlib import Path
 from zoneinfo import ZoneInfo
 
+import urllib.parse
+import xml.etree.ElementTree as ET
+from email.utils import parsedate_to_datetime
+
 import requests
 import yfinance as yf
 from google import genai
@@ -151,15 +155,78 @@ def price_table_text(rows: list[dict]) -> str:
     return "\n".join(lines)
 
 
+# ── 구글뉴스 RSS 수집 (지난 24시간) ──────────────────────────────────────
+# Gemini 검색 그라운딩만으로는 최신성이 보장되지 않아(옛 사건을 새 뉴스처럼 서술),
+# 실제 24시간 내 기사 목록을 코드로 수집해 유일한 뉴스 근거로 제공한다.
+
+NEWS_QUERIES = [
+    # (query, hl, gl, ceid)
+    ('"defense industry" OR "defence industry" when:1d', "en-US", "US", "US:en"),
+    ('(Lockheed OR RTX OR "Northrop Grumman" OR "General Dynamics" OR "L3Harris" '
+     'OR "Huntington Ingalls" OR Boeing) defense when:1d', "en-US", "US", "US:en"),
+    ('(Rheinmetall OR "BAE Systems" OR Leonardo OR Thales OR Saab OR Hensoldt '
+     'OR Kongsberg OR "Rolls-Royce" OR Renk OR "Dassault Aviation") when:1d', "en-US", "US", "US:en"),
+    ('("defense budget" OR "arms export" OR "defense contract" OR NATO OR missile) when:1d',
+     "en-US", "US", "US:en"),
+    ('(Elbit OR "Mitsubishi Heavy" OR "Kawasaki Heavy" OR IHI) defense when:1d',
+     "en-US", "US", "US:en"),
+    ("한화에어로스페이스 OR LIG넥스원 OR 한국항공우주 OR 한화오션 OR 현대로템 "
+     "OR 한화시스템 OR HD현대중공업 OR 방산수출 when:1d", "ko", "KR", "KR:ko"),
+]
+
+
+def fetch_news(now: datetime, max_items: int = 60) -> list[dict]:
+    """구글뉴스 RSS에서 지난 ~30시간 기사만 수집해 최신순으로 반환."""
+    cutoff = now - timedelta(hours=30)
+    items, seen = [], set()
+    for query, hl, gl, ceid in NEWS_QUERIES:
+        url = ("https://news.google.com/rss/search?q=" + urllib.parse.quote(query)
+               + f"&hl={hl}&gl={gl}&ceid={ceid}")
+        try:
+            resp = requests.get(url, timeout=20, headers={"User-Agent": "Mozilla/5.0"})
+            resp.raise_for_status()
+            root = ET.fromstring(resp.content)
+        except Exception as e:
+            print(f"[RSS 실패] {query[:40]}...: {e}", file=sys.stderr)
+            continue
+        for item in root.iter("item"):
+            title = (item.findtext("title") or "").strip()
+            link = (item.findtext("link") or "").strip()
+            source = (item.findtext("source") or "").strip()
+            pub_raw = item.findtext("pubDate") or ""
+            try:
+                pub = parsedate_to_datetime(pub_raw).astimezone(KST)
+            except Exception:
+                continue
+            key = re.sub(r"\W+", "", title.lower())[:80]
+            if not title or pub < cutoff or key in seen:
+                continue
+            seen.add(key)
+            items.append({"title": title, "link": link, "source": source, "pub": pub})
+        time.sleep(0.5)
+    items.sort(key=lambda x: x["pub"], reverse=True)
+    return items[:max_items]
+
+
+def news_list_text(items: list[dict]) -> str:
+    lines = []
+    for it in items:
+        lines.append(f"- [{it['pub']:%m/%d %H:%M} KST] {it['title']} ({it['source']}) {it['link']}")
+    return "\n".join(lines)
+
+
 SYSTEM_PROMPT = """당신은 글로벌 방산 섹터를 담당하는 증권사 리서치 어시스턴트(RA)입니다.
 매일 아침 한국의 방산 담당 애널리스트에게 보내는 데일리 브리핑을 작성합니다.
 
-[필수 원칙]
-- 제공된 시세표가 종가·등락률·시총의 확정 데이터입니다. 주가 수치는 반드시 이 표의 값을 사용하고, 웹검색으로 찾은 주가 수치로 대체하지 마세요.
-- 웹검색은 지난 24시간(최대 48시간) 뉴스 수집에 사용하세요: 전쟁·지정학 긴장, 국방예산, 무기 도입·수출 계약, 대형 수주·취소, 실적 발표·가이던스, 생산 차질, 공급망, M&A, 규제·수출승인, 주요 프로그램 일정·시험·양산·인도.
-- 수치·계약금액·수량·일정·등락률을 우선 제시하고, 사실과 해석을 구분하세요.
-- 확인되지 않은 보도·루머는 "[미확인]"으로 표시하세요.
-- 뉴스 항목마다 출처 매체명과 원문 링크를 마크다운 링크로 붙이세요.
+[필수 원칙 — 최신성이 가장 중요합니다]
+- 제공된 시세표가 종가·등락률·시총의 확정 데이터입니다. 주가 수치는 반드시 이 표의 값을 사용하세요.
+- **뉴스 사실관계는 반드시 함께 제공되는 [지난 24시간 뉴스 목록]에 있는 기사만 근거로 쓰세요.** 목록에 없는 사건을 당신의 기억(학습 데이터)에서 꺼내 새 뉴스처럼 쓰는 것을 절대 금지합니다. 과거의 계약·수주·프로그램 소식(예: 수년 전 체결된 계약)을 오늘 뉴스처럼 서술하면 안 됩니다.
+- 각 이슈에는 뉴스 목록에 표기된 보도 시각(월/일)을 함께 적으세요.
+- **등락 원인을 설명할 근거 기사가 목록에 없으면 원인을 지어내지 말고 "관련 공시·뉴스 미확인 (수급 요인 추정)"이라고 쓰세요.** 그럴듯한 서사를 만드는 것보다 모른다고 쓰는 것이 훨씬 낫습니다.
+- 구글 검색 도구는 목록에 있는 기사의 세부내용(계약금액·수량 등) 확인 용도로만 보조적으로 쓰세요.
+- 관심 이슈: 전쟁·지정학 긴장, 국방예산, 무기 도입·수출 계약, 대형 수주·취소, 실적 발표·가이던스, 생산 차질, 공급망, M&A, 규제·수출승인, 주요 프로그램 일정·시험·양산·인도.
+- 수치·계약금액·수량·일정·등락률을 우선 제시하고, 사실과 해석을 구분하세요. 확인되지 않은 보도·루머는 "[미확인]" 표시.
+- 뉴스 항목마다 출처 매체명과 원문 링크(목록의 URL 그대로)를 마크다운 링크로 붙이세요.
 - 한국어로 간결하게 작성하되, 기업명·무기체계명은 공식 영문명을 병기하세요.
 - 동일 뉴스 반복 금지. 주가에 실제 영향을 준 이슈 중심으로.
 
@@ -174,15 +241,18 @@ SYSTEM_PROMPT = """당신은 글로벌 방산 섹터를 담당하는 증권사 �
 굵은 강조는 **텍스트**, 링크는 [매체명](URL) 형식의 마크다운을 사용하세요. 마크다운 표(|---|)와 HTML 태그는 사용하지 마세요."""
 
 
-def generate_report(price_table: str, now: datetime) -> str:
+def generate_report(price_table: str, news_text: str, now: datetime) -> str:
     client = genai.Client()  # GEMINI_API_KEY 환경변수 사용
     update_time = now.strftime("%Y-%m-%d %H:00")
     system = SYSTEM_PROMPT.replace("{UPDATE_TIME}", update_time)
     user = (
-        f"현재 시각(KST): {now.strftime('%Y-%m-%d %H:%M')}\n"
-        f"오늘의 확정 시세표 (각 시장의 최근 종가 기준, 등락률은 직전 거래일 대비):\n\n"
+        f"현재 시각(KST): {now.strftime('%Y-%m-%d %H:%M')}\n\n"
+        f"[확정 시세표] (각 시장의 최근 종가 기준, 등락률은 직전 거래일 대비):\n"
         f"{price_table}\n\n"
-        "위 시세표와 지난 24시간 구글 검색 결과를 바탕으로 글로벌 방산 데일리 브리핑을 작성해 주세요."
+        f"[지난 24시간 뉴스 목록] (구글뉴스 RSS 수집 — 뉴스 사실관계는 이 목록만 근거로 사용):\n"
+        f"{news_text}\n\n"
+        "위 시세표와 뉴스 목록을 바탕으로 글로벌 방산 데일리 브리핑을 작성해 주세요. "
+        "목록에 없는 사건을 새 뉴스처럼 쓰지 마세요."
     )
     config = genai_types.GenerateContentConfig(
         system_instruction=system,
@@ -269,12 +339,36 @@ def split_chunks(text: str, limit: int = 3900) -> list[str]:
     return chunks
 
 
-def send_telegram(md_report: str) -> None:
+def extract_summary(md: str) -> str:
+    """서두 + 첫 섹션(오늘의 핵심 요약)만 잘라낸다. 두 번째 헤딩부터 제외."""
+    out, headings = [], 0
+    for line in md.splitlines():
+        if re.match(r"^#{1,6}\s", line.strip()):
+            headings += 1
+            if headings >= 2:
+                break
+        out.append(line)
+    return "\n".join(out).strip()
+
+
+def send_telegram(md_report: str, now: datetime) -> None:
     token = os.environ["TELEGRAM_BOT_TOKEN"]
     chat_id = os.environ["TELEGRAM_CHAT_ID"]
-    body = to_telegram_html(md_report)
-    header = "🌍 <b>글로벌 방산 데일리 브리핑</b>\n"
-    chunks = split_chunks(header + body)
+    mode = os.environ.get("TELEGRAM_MODE", "summary")  # summary | full
+    base_url = os.environ.get("DASHBOARD_BASE_URL",
+                              "https://gschoie.github.io/GS-output-dashboard")
+    date_str = now.strftime("%Y-%m-%d")
+    # 텔레그램은 텍스트라 가독성이 떨어지므로 기본은 핵심 요약만 보내고
+    # 표·색상이 있는 대시보드 날짜 페이지로 링크한다.
+    md_body = md_report if mode == "full" else extract_summary(md_report)
+    body = to_telegram_html(md_body)
+    header = f"🌍 <b>글로벌 방산 데일리 브리핑</b> | {date_str}\n"
+    footer = ""
+    if mode != "full":
+        footer = (f'\n\n📊 <a href="{base_url}/defense_daily/{date_str}.html">'
+                  "전체 브리핑 보기 (주가표·섹터별·투자 시사점)</a>\n"
+                  "<i>발송 직후엔 반영 중일 수 있어요 — 2~3분 뒤 열어주세요</i>")
+    chunks = split_chunks(header + body + footer)
     total = len(chunks)
     for i, chunk in enumerate(chunks, 1):
         suffix = f"\n\n({i}/{total})" if total > 1 else ""
@@ -320,31 +414,65 @@ b,strong{color:#f0f4fa}
 ul{margin:6px 0;padding-left:22px}
 p{margin:8px 0}
 hr{border:none;border-top:1px solid #223046;margin:20px 0}
+table.ptab{border-collapse:collapse;width:100%;margin:12px 0;font-size:13.5px}
+.ptab td{border-bottom:1px solid #1d2838;padding:7px 9px;text-align:left;vertical-align:top}
+.ptab tr:first-child td{color:#8b96a8;font-size:12.5px;border-bottom:1px solid #2c3a52}
+.ptab tr:hover td{background:#131a26}
+.up{color:#ff6b6b;font-weight:600}
+.down{color:#5b9dff;font-weight:600}
 """
+
+PCT_RE = re.compile(r"(?<![\w.%])([+-]\d+(?:\.\d+)?%)")
+
+
+def colorize(html_text: str) -> str:
+    """등락률(+/-x.xx%)에 상승 빨강·하락 파랑 색상 적용 (웹페이지 전용)."""
+    return PCT_RE.sub(
+        lambda m: f'<span class="{"up" if m.group(1).startswith("+") else "down"}">{m.group(1)}</span>',
+        html_text)
 
 
 def report_to_page_html(md: str) -> str:
-    """마크다운 리포트를 아카이브 페이지 본문 HTML로 변환."""
-    out, in_list = [], False
+    """마크다운 리포트를 아카이브 페이지 본문 HTML로 변환.
+
+    'A | B | C | D | ...' 형태(4개 열 이상)의 연속 줄은 표로 렌더링하고,
+    등락률에는 색상을 입힌다.
+    """
+    out, in_list, table_rows = [], False, []
+
+    def flush_table():
+        if table_rows:
+            out.append('<div style="overflow-x:auto"><table class="ptab">')
+            for cells in table_rows:
+                out.append("<tr>" + "".join(f"<td>{c}</td>" for c in cells) + "</tr>")
+            out.append("</table></div>")
+            table_rows.clear()
+
     for raw in md.splitlines():
         s = raw.strip()
         m = re.match(r"^(#{1,6})\s+(.*)", s)
+        is_table_row = s.count(" | ") >= 3 and not m
         if in_list and not s.startswith(("- ", "* ")):
             out.append("</ul>")
             in_list = False
+        if not is_table_row:
+            flush_table()
         if not s:
             continue
         if m:
-            out.append(f"<h2>{md_inline(m.group(2))}</h2>")
+            out.append(f"<h2>{colorize(md_inline(m.group(2)))}</h2>")
+        elif is_table_row:
+            table_rows.append([colorize(md_inline(c.strip())) for c in s.split(" | ")])
         elif s.startswith(("- ", "* ")):
             if not in_list:
                 out.append("<ul>")
                 in_list = True
-            out.append(f"<li>{md_inline(s[2:])}</li>")
+            out.append(f"<li>{colorize(md_inline(s[2:]))}</li>")
         elif s in ("---", "***"):
             out.append("<hr>")
         else:
-            out.append(f"<p>{md_inline(s)}</p>")
+            out.append(f"<p>{colorize(md_inline(s))}</p>")
+    flush_table()
     if in_list:
         out.append("</ul>")
     return "\n".join(out)
@@ -363,6 +491,8 @@ def write_archive(md_report: str, now: datetime) -> None:
 {body}
 </div></body></html>"""
     (ARCHIVE_DIR / f"{date_str}.html").write_text(page, encoding="utf-8")
+    # 마크다운 원문도 보관 — 렌더러 개선 시 과거분 재생성용
+    (ARCHIVE_DIR / f"{date_str}.md").write_text(md_report, encoding="utf-8")
     print(f"[아카이브] {date_str}.html 생성")
     write_index()
 
@@ -413,9 +543,13 @@ def main() -> None:
     if ok < len(rows) * 0.5:
         raise RuntimeError("시세 조회 성공률이 50% 미만 — Yahoo 차단 가능성, 중단")
     table = price_table_text(rows)
-    report = generate_report(table, now)
+    news = fetch_news(now)
+    print(f"[뉴스] 지난 24시간 기사 {len(news)}건 수집")
+    if len(news) < 5:
+        print("[경고] 뉴스 수집이 5건 미만 — RSS 차단 가능성", file=sys.stderr)
+    report = generate_report(table, news_list_text(news), now)
     write_archive(report, now)
-    send_telegram(report)
+    send_telegram(report, now)
     print("=== 완료 ===")
 
 
