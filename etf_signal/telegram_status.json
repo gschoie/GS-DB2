@@ -1,5 +1,5 @@
 {
-  "when_utc": "2026-07-29 04:12:57Z",
+  "when_utc": "2026-07-30 01:16:49Z",
   "ok": true,
   "note": "alert_sent",
   "chat_id_tail": "5171",
@@ -7,11 +7,11 @@
   "response": {
     "ok": true,
     "result": {
-      "message_id": 1518,
+      "message_id": 1567,
       "from": {
         "id": 8917880759,
         "is_bot": true,
-        "first_name": "GS.매크로_공부/섹터ETF_포착",
+        "first_name": "GS.매크로_공부/투자들",
         "username": "gs_macro_bot"
       },
       "chat": {
@@ -21,8 +21,8 @@
         "username": "gschoie",
         "type": "private"
       },
-      "date": 1785298376,
-      "text": "📡 ETF/섹터 신호 · 2026-07-28 (전일 확정)\n\n★ 오늘 새 신호 1개\n\n🟢 TIGER 차이나항셍테크 · 해외지수\n   Stochastic 과매도 반등·골든크로스\n   ADX 12.7 · %K 18.8/17.1 · 수급 중립\n\n전체 신호판 › 대시보드\n🎴 GS Research Desk · ETF/섹터 신호",
+      "date": 1785374209,
+      "text": "📡 ETF/섹터 신호 · 2026-07-29 (전일 확정)\n\n★ 오늘 새 신호 2개\n\n🟢 TIGER 차이나항셍테크 · 해외지수\n   ＋DI가 −DI 상향돌파·추세전환\n   ADX 11.9 · %K 31.2/23.0 · 수급 중립\n\n🟢 TIGER 일본니케이225 · 해외지수\n   Stochastic 과매도 반등·골든크로스\n   ADX 19.7 · %K 8.1/7.8 · 수급 중립\n\n전체 신호판 › 대시보드\n🎴 GS Research Desk · ETF/섹터 신호",
       "entities": [
         {
           "offset": 0,
@@ -40,7 +40,12 @@
           "type": "bold"
         },
         {
-          "offset": 145,
+          "offset": 134,
+          "length": 14,
+          "type": "bold"
+        },
+        {
+          "offset": 226,
           "length": 4,
           "type": "text_link",
           "url": "https://gschoie.github.io/GS-output-dashboard/etf_signal_report.html"
