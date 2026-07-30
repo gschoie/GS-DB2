@@ -2,6 +2,7 @@ import json
 import os
 import re
 import sys
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 
@@ -46,6 +47,18 @@ def main():
         fail("Published report summary does not match the report list")
     if int(summary.get("news") or 0) != len(news):
         fail("News summary does not match the news list")
+
+    # 신선도 검사: 캐시 유실·임포터 고장으로 옛 DB가 빌드되면 배포 전에 여기서 막는다.
+    # (2026-07-21 냉동 캐시 재배포, 2026-07-30 커밋DB 폴백 → 7/8 리버트 사고의 재발 방지)
+    max_stale_days = int(os.getenv("MAX_NEWS_STALE_DAYS", "5"))
+    latest = max((n.get("posted_at") or "" for n in news), default="")
+    if latest:
+        latest_at = datetime.fromisoformat(latest)
+        age = datetime.now(timezone.utc) - latest_at.astimezone(timezone.utc)
+        if age > timedelta(days=max_stale_days):
+            fail(f"Latest news is {age.days} days old ({latest}); build looks stale — refusing to deploy")
+    else:
+        fail("News items have no posted_at; cannot verify freshness")
 
     required_patterns = {
         "published reports menu": r'id="reports"',

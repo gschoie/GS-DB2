@@ -46,10 +46,12 @@ jobs:
             telegram_research_dashboard/data/dashboard.db
             telegram_research_dashboard/data/daol_pdf_text_cache.json
             telegram_research_dashboard/data/macro.json
-          key: newsdb-${{ github.run_id }}
+          key: newsdb2-${{ github.run_id }}
+          # newsdb2-: 2026-07-30 캐시 오염 사고(복원 미스→커밋DB 폴백→오염 저장) 후 새 네임스페이스.
+          # 오염된 newsdb-* 를 다시 집지 않도록 프리픽스 폴백을 제거하고, 마지막 정상 캐시만 부트스트랩 고정.
           restore-keys: |
-            newsdb-
-            dashboard-db-
+            newsdb2-
+            newsdb-30460946028
 
       - name: 노조 캐시 복원
         uses: actions/cache/restore@v5
@@ -108,6 +110,10 @@ jobs:
       - name: 보고서 TP 보강 (PDF 표지·OCR)
         if: github.event_name != 'push' && github.event_name != 'workflow_run'
         working-directory: telegram_research_dashboard
+        # 2026-07-30: 이 단계가 행에 걸려 수집 런이 2~3시간 잠기는 사고 → 상한을 두고,
+        # TP 보강은 부가 기능이므로 실패해도 나머지 파이프라인(빌드·배포)은 계속 간다.
+        timeout-minutes: 20
+        continue-on-error: true
         run: python enrich_report_tp.py
 
       - name: 매크로 데이터 수집 (글로벌경제 · 핵심요약)
@@ -169,7 +175,7 @@ jobs:
             telegram_research_dashboard/data/dashboard.db
             telegram_research_dashboard/data/daol_pdf_text_cache.json
             telegram_research_dashboard/data/macro.json
-          key: newsdb-${{ github.run_id }}
+          key: newsdb2-${{ github.run_id }}
 
       - uses: actions/configure-pages@v6
       - uses: actions/upload-pages-artifact@v5

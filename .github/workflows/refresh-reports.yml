@@ -32,10 +32,11 @@ jobs:
             telegram_research_dashboard/data/daol_tone_history.json
             telegram_research_dashboard/data/daol_pdf_text_cache.json
             telegram_research_dashboard/data/macro.json
-          key: newsdb-${{ github.run_id }}
+          key: newsdb2-${{ github.run_id }}
+          # newsdb2-: 2026-07-30 캐시 오염 사고 후 새 네임스페이스(오염 newsdb-* 격리, 정상 캐시 부트스트랩).
           restore-keys: |
-            newsdb-
-            dashboard-db-
+            newsdb2-
+            newsdb-30460946028
 
       - name: 노조 캐시 복원(읽기전용 · 노조는 안 건드림)
         uses: actions/cache/restore@v5
@@ -76,6 +77,8 @@ jobs:
       # 재수집이 최근 2주 행을 다시 만들며 지운 TP도 여기서 복원된다(캐시 히트라 수 초).
       - name: 보고서 TP 보강 (PDF 표지·OCR)
         working-directory: telegram_research_dashboard
+        timeout-minutes: 20
+        continue-on-error: true
         run: python enrich_report_tp.py --budget-seconds 300
 
       - name: 배포용 HTML 생성 (보고서만 갱신 · 톤/매크로/노조는 기존 데이터 유지)
@@ -97,7 +100,7 @@ jobs:
             telegram_research_dashboard/data/daol_tone_history.json
             telegram_research_dashboard/data/daol_pdf_text_cache.json
             telegram_research_dashboard/data/macro.json
-          key: newsdb-${{ github.run_id }}
+          key: newsdb2-${{ github.run_id }}
 
       - uses: actions/configure-pages@v6
       - uses: actions/upload-pages-artifact@v5
