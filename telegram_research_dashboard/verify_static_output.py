@@ -65,11 +65,11 @@ def main():
         "news archive menu": r'id="news"',
         "press coverage menu": r'id="press"',
         "DAOL research tone menu": r'data-view="tone"',
-        "automation menu": r'<span>업무자동화</span>',
-        # 메뉴 라벨은 자주 바뀌므로 'GEMS'가 들어간 그룹이 있는지만 확인한다(이름 변경에 안 깨지게).
+        # 그룹 라벨은 자주 바뀌므로 핵심 키워드가 들어간 그룹이 있는지만 확인한다(이름 변경에 안 깨지게).
+        "automation menu": r'<span>[^<]*업무[^<]*</span>',
         "GEMS menu": r'<span>[^<]*GEMS[^<]*</span>',
-        "관리 menu": r'<span>관리</span>',
-        "util links menu": r'<span>유틸\.링크</span>',
+        "관리 menu": r'<span>[^<]*관리[^<]*</span>',
+        "util links menu": r'<span>[^<]*유틸[^<]*</span>',
         "tone iframe view": r'id="tone-frame"',
     }
     for label, pattern in required_patterns.items():
