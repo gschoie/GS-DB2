@@ -32,7 +32,7 @@ GitHub Actions cron 지연(5~15분)은 슬롯 경계를 넉넉히 잡아 흡수�
 - `scrape.py` → `data/history.json` (60일 보관, 장중 곡선은 5일)
 - `build_report.py` → `../telegram_research_dashboard/static/market_flow_report.html`
   (표준 라이브러리 + 인라인 SVG, 외부 의존 없음)
-- `telegram_send.py` — gs_macro_get 봇 발송. 시크릿: `MACRO_TELEGRAM_BOT_TOKEN`, `MACRO_TELEGRAM_CHAT_ID`
+- `telegram_send.py` — gs_macro_get 봇 발송. 시크릿: `market_flow_TELEGRAM_BOT_TOKEN`, `market_flow_TELEGRAM_CHAT_ID`
 
 배포는 커밋 → `deploy-pages.yml`의 workflow_run("시장 수급 동향")이 이어받는다.
 대시보드에서는 📈 투자 → 💹 시장.수급.동향 (iframe).

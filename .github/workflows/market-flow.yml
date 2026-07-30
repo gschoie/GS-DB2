@@ -46,8 +46,8 @@ jobs:
       - name: 텔레그램 발송 (gs_macro_get)
         working-directory: market_flow
         env:
-          TELEGRAM_BOT_TOKEN: ${{ secrets.MACRO_TELEGRAM_BOT_TOKEN }}
-          TELEGRAM_CHAT_ID: ${{ secrets.MACRO_TELEGRAM_CHAT_ID }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.market_flow_TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.market_flow_TELEGRAM_CHAT_ID }}
         run: python telegram_send.py
 
       - name: 커밋 및 푸시 (→ Pages 재배포)
