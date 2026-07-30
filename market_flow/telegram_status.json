@@ -1,0 +1,69 @@
+{
+  "when_utc": "2026-07-30 10:30:18Z",
+  "ok": true,
+  "note": "sent",
+  "chat_id_tail": "5171",
+  "token_set": true,
+  "response": {
+    "ok": true,
+    "result": {
+      "message_id": 1595,
+      "from": {
+        "id": 8917880759,
+        "is_bot": true,
+        "first_name": "GS.매크로_공부/투자들",
+        "username": "gs_macro_bot"
+      },
+      "chat": {
+        "id": 279385171,
+        "first_name": "광식",
+        "last_name": "최",
+        "username": "gschoie",
+        "type": "private"
+      },
+      "date": 1785407417,
+      "text": "💹 시장 수급 · 7/30(목) 16:40 · 확정\nKOSPI 5,593.56 🔻1.23%\n\n개인 -14,309억\n외국인 +13,280억\n기관 +805억\n\n프로그램 +12,122억 = 차익 -1,425 · 비차익 +13,546\n\n상세 차트 › 대시보드\n🎴 GS Research Desk · 시장 수급",
+      "entities": [
+        {
+          "offset": 3,
+          "length": 5,
+          "type": "bold"
+        },
+        {
+          "offset": 36,
+          "length": 8,
+          "type": "bold"
+        },
+        {
+          "offset": 57,
+          "length": 8,
+          "type": "bold"
+        },
+        {
+          "offset": 70,
+          "length": 8,
+          "type": "bold"
+        },
+        {
+          "offset": 82,
+          "length": 5,
+          "type": "bold"
+        },
+        {
+          "offset": 94,
+          "length": 8,
+          "type": "bold"
+        },
+        {
+          "offset": 138,
+          "length": 4,
+          "type": "text_link",
+          "url": "https://gschoie.github.io/GS-output-dashboard/market_flow_report.html"
+        }
+      ],
+      "link_preview_options": {
+        "is_disabled": true
+      }
+    }
+  }
+}
