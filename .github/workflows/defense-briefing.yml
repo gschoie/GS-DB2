@@ -1,0 +1,67 @@
+name: 글로벌 방산 브리핑
+
+# 매일 아침 KST 06시경 글로벌 방산 데일리 브리핑을 생성해
+# 텔레그램(GS K-Defence NEWS)으로 쏘고, 날짜별 아카이브를 대시보드에 커밋한다.
+# 시세는 yfinance로 확정 조회, 뉴스 수집·작성은 Claude API(web_search).
+on:
+  workflow_dispatch:
+  schedule:
+    # UTC 20:40 = KST 05:40. GitHub 큐 지연(보통 5~30분)을 감안하면 실발송 ~06시.
+    - cron: "40 20 * * *"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: defense-briefing
+  cancel-in-progress: false
+
+jobs:
+  brief:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: 패키지 설치
+        working-directory: defense_briefing
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: 브리핑 생성·발송
+        working-directory: defense_briefing
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.KDEF_TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.KDEF_TELEGRAM_CHAT_ID }}
+        run: python defense_briefing_bot.py
+
+      # 아카이브 커밋 → deploy-pages가 workflow_run으로 이어서 재배포한다.
+      # (봇 GITHUB_TOKEN push는 on:push를 트리거하지 않으므로 workflow_run 필수)
+      - name: 아카이브 커밋 및 푸시
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add telegram_research_dashboard/static/defense_daily \
+                  telegram_research_dashboard/static/defense_briefing_report.html
+          if git diff --cached --quiet; then
+            echo "변경 없음 — 커밋 생략"
+            exit 0
+          fi
+          git commit -m "chore(defense): 글로벌 방산 브리핑 $(TZ=Asia/Seoul date +%Y-%m-%d)"
+          # 실행 중 main이 앞서가면 rebase 후 재시도 (최대 5회)
+          for i in 1 2 3 4 5; do
+            if git push origin HEAD:main; then
+              exit 0
+            fi
+            git pull --rebase --autostash origin main
+            sleep 5
+          done
+          echo "push 실패" >&2
+          exit 1

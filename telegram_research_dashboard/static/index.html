@@ -63,6 +63,8 @@
       <details class="nav-group" open>
         <summary>🕊️ <span>광.전보 w/ GEMS</span></summary>
         <div class="nav-submenu">
+          <button class="nav" data-view="defense">🌍 글로벌 방산.브리핑</button>
+          <div class="nav-sep"></div>
           <a href="https://gemini.google.com/gem/7a05ed301b3e?usp=sharing" target="_blank" rel="noopener">📋 한국기사.요약-텔레</a>
           <div class="nav-sep"></div>
           <a href="https://gemini.google.com/gem/1otqJGM0XCwFyIGg8kfpRH9RwE1Z29YAK?usp=sharing" target="_blank" rel="noopener">🗞️ 외신 번역/요약/전문</a>
@@ -237,6 +239,11 @@
     <section id="flow" class="view">
       <div class="archive-intro"><div><p class="eyebrow">INVEST · FLOW</p><h2>시장 수급 동향</h2></div><div class="etf-actions"><button id="flow-refresh" class="refresh-btn" type="button" title="정해진 시간(10:00/13:00/15:40/16:40) 외에 지금 수급을 다시 수집합니다 (자동 실행, 몇 분 소요).">🔄 수급 갱신</button><span id="flow-status" class="task-sync"></span><a class="panel-more" href="market_flow_report.html" target="_blank" rel="noopener">새 창으로 ↗</a></div></div>
       <iframe id="flow-frame" class="union-board-frame" title="시장 수급 동향" loading="lazy"></iframe>
+    </section>
+
+    <section id="defense" class="view">
+      <div class="archive-intro"><div><p class="eyebrow">GLOBAL DEFENSE · DAILY</p><h2>글로벌 방산 데일리 브리핑</h2></div><div class="etf-actions"><span>매일 아침 6시경 Claude가 지난 24시간 글로벌 방산 뉴스·주가를 정리해 텔레그램(GS K-Defence NEWS)으로 발송하고 날짜별로 쌓입니다.</span><a class="panel-more" href="defense_briefing_report.html" target="_blank" rel="noopener">새 창으로 ↗</a></div></div>
+      <iframe id="defense-frame" class="union-board-frame" title="글로벌 방산 데일리 브리핑" loading="lazy"></iframe>
     </section>
 
     <section id="consensus" class="view">

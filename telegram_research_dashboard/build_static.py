@@ -153,6 +153,12 @@ def build() -> Path:
     consensus_xlsx = ROOT / "static" / "consensus_full.xlsx"
     if consensus_xlsx.exists():
         shutil.copy2(consensus_xlsx, OUTPUT.parent / "consensus_full.xlsx")
+    defense_index = ROOT / "static" / "defense_briefing_report.html"
+    if defense_index.exists():
+        shutil.copy2(defense_index, OUTPUT.parent / "defense_briefing_report.html")
+    defense_dir = ROOT / "static" / "defense_daily"
+    if defense_dir.is_dir():
+        shutil.copytree(defense_dir, OUTPUT.parent / "defense_daily", dirs_exist_ok=True)
     print(f"생성 완료: {OUTPUT} ({OUTPUT.stat().st_size / 1024 / 1024:.1f} MB)")
     return OUTPUT
 
