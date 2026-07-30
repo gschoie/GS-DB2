@@ -41,6 +41,7 @@ ARCHIVE_DIR = DASH_STATIC / "defense_daily"
 INDEX_PAGE = DASH_STATIC / "defense_briefing_report.html"
 
 MODEL = os.environ.get("GEMINI_MODEL", "gemini-2.5-flash")
+LAST_USED_MODEL = MODEL  # 폴백 시 실제 사용 모델로 갱신됨
 
 # (티커, 표기명, 국가, 섹터) — 섹터: 항공우주/지상무기/미사일·방공/해군·조선/전자·센서/종합/엔진·부품/ETF
 UNIVERSE = [
@@ -260,18 +261,27 @@ def generate_report(price_table: str, news_text: str, now: datetime) -> str:
         temperature=0.3,
         max_output_tokens=16384,
     )
-    response = None
-    for attempt in range(3):  # 무료 티어 429/503 대비 재시도
-        try:
-            response = client.models.generate_content(model=MODEL, contents=user, config=config)
-            if response.text and response.text.strip():
-                break
-            print(f"[Gemini] 빈 응답 (시도 {attempt + 1})", file=sys.stderr)
-        except Exception as e:
-            print(f"[Gemini 오류] 시도 {attempt + 1}: {e}", file=sys.stderr)
-        time.sleep(30 * (attempt + 1))
-    else:
-        raise RuntimeError("Gemini 호출 3회 모두 실패")
+    # 1순위 모델(보통 pro) 실패 시 flash로 폴백 — 무료 티어 쿼터로 브리핑이 끊기지 않게
+    models = list(dict.fromkeys([MODEL, "gemini-2.5-flash"]))
+    response, used_model = None, None
+    for model in models:
+        for attempt in range(2):  # 429/503 대비 재시도
+            try:
+                response = client.models.generate_content(model=model, contents=user, config=config)
+                if response.text and response.text.strip():
+                    used_model = model
+                    break
+                print(f"[Gemini:{model}] 빈 응답 (시도 {attempt + 1})", file=sys.stderr)
+            except Exception as e:
+                print(f"[Gemini:{model} 오류] 시도 {attempt + 1}: {e}", file=sys.stderr)
+            time.sleep(30 * (attempt + 1))
+        if used_model:
+            break
+    if not used_model:
+        raise RuntimeError("Gemini 호출 모두 실패 (pro·flash 폴백 포함)")
+    print(f"[Gemini] 사용 모델: {used_model}")
+    global LAST_USED_MODEL
+    LAST_USED_MODEL = used_model
     report = response.text.strip()
     um = getattr(response, "usage_metadata", None)
     if um:
@@ -487,7 +497,7 @@ def write_archive(md_report: str, now: datetime) -> None:
 <title>글로벌 방산 브리핑 {date_str}</title><style>{PAGE_CSS}</style></head>
 <body><div class="wrap">
 <h1>🌍 글로벌 방산 데일리 브리핑</h1>
-<div class="meta">기준: {now.strftime('%Y-%m-%d %H:00')} KST · 생성: Gemini({MODEL}) + yfinance 확정 시세</div>
+<div class="meta">기준: {now.strftime('%Y-%m-%d %H:00')} KST · 생성: Gemini({LAST_USED_MODEL}) + 구글뉴스 RSS + yfinance 확정 시세</div>
 {body}
 </div></body></html>"""
     (ARCHIVE_DIR / f"{date_str}.html").write_text(page, encoding="utf-8")

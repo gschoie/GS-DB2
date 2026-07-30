@@ -38,7 +38,8 @@ jobs:
         working-directory: defense_briefing
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-          GEMINI_MODEL: gemini-2.5-flash
+          # pro가 품질이 좋음(하루 1회라 무료 티어 내). 쿼터 초과 시 flash로 자동 폴백.
+          GEMINI_MODEL: gemini-2.5-pro
           TELEGRAM_BOT_TOKEN: ${{ secrets.KDEF_TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.KDEF_TELEGRAM_CHAT_ID }}
         run: python defense_briefing_bot.py
