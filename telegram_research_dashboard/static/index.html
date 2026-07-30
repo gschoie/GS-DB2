@@ -92,6 +92,7 @@
         <div class="nav-submenu">
           <button class="nav" data-view="etf">📡 ETF/섹터 신호 포착</button>
           <button class="nav" data-view="holdings">🧩 액티브ETF.매매동향</button>
+          <button class="nav" data-view="flow">💹 시장.수급.동향</button>
           <button class="nav" data-view="consensus">📊 코스피200.컨센.추적</button>
           <a href="https://finance.naver.com/mystock/summary.naver" target="_blank" rel="noopener" onclick="if(/iPhone|iPad|iPod/.test(navigator.userAgent)){window.location.href='googlechromes://finance.naver.com/mystock/summary.naver';return false;}">🖥️ 네이버 전광판</a>
         </div>
@@ -231,6 +232,11 @@
     <section id="holdings" class="view">
       <div class="archive-intro"><div><p class="eyebrow">ACTIVE ETF · HOLDINGS</p><h2>액티브 ETF 구성 변화</h2></div><div class="etf-actions"><button id="holdings-refresh" class="refresh-btn" type="button" title="액티브 ETF 구성종목을 다시 스냅샷해 전일 대비 변화를 갱신합니다 (자동 실행, 몇 분 소요).">🔄 구성 갱신</button><span id="holdings-status" class="task-sync"></span><a class="panel-more" href="etf_holdings_report.html" target="_blank" rel="noopener">새 창으로 ↗</a></div></div>
       <iframe id="holdings-frame" class="union-board-frame" title="액티브 ETF 구성 변화" loading="lazy"></iframe>
+    </section>
+
+    <section id="flow" class="view">
+      <div class="archive-intro"><div><p class="eyebrow">INVEST · FLOW</p><h2>시장 수급 동향</h2></div><div class="etf-actions"><a class="panel-more" href="market_flow_report.html" target="_blank" rel="noopener">새 창으로 ↗</a></div></div>
+      <iframe id="flow-frame" class="union-board-frame" title="시장 수급 동향" loading="lazy"></iframe>
     </section>
 
     <section id="consensus" class="view">

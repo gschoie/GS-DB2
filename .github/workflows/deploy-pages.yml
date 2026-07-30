@@ -7,7 +7,7 @@ on:
   # 봇(GITHUB_TOKEN)이 스냅샷을 push하면 on:push가 안 걸리므로(무한루프 방지 정책),
   # 컨센 워크플로 완료 이벤트로 배포를 잇는다. workflow_run은 토큰 제약을 우회한다.
   workflow_run:
-    workflows: ["KOSPI200 컨센 트래킹"]
+    workflows: ["KOSPI200 컨센 트래킹", "시장 수급 동향"]
     types: [completed]
   schedule:
     # 한국시간 06·09·12·15·18·21·24시 (3시간 간격, 하루 7회) 자동 갱신.

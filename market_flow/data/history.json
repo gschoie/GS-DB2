@@ -1,0 +1,1306 @@
+{
+ "days": {
+  "2026-07-30": {
+   "kospi": {
+    "close": 5593.56,
+    "chg_pct": -1.23
+   },
+   "slots": {
+    "1640": {
+     "individual": -14309,
+     "foreign": 13280,
+     "institution": 805,
+     "arb": -1425,
+     "nonarb": 13546,
+     "program": 12122,
+     "time": "19:15",
+     "kospi": 5593.56,
+     "chg_pct": -1.23
+    }
+   },
+   "confirmed": {
+    "investor": {
+     "individual": -14309,
+     "foreign": 13280,
+     "inst_total": 805,
+     "fin_invest": -2713,
+     "insurance": 1053,
+     "asset_mgmt": -1371,
+     "bank": -164,
+     "other_fin": 199,
+     "pension": 3802,
+     "other_corp": 224
+    },
+    "program": {
+     "arb_buy": 3324,
+     "arb_sell": 4749,
+     "arb_net": -1425,
+     "nonarb_buy": 143283,
+     "nonarb_sell": 129737,
+     "nonarb_net": 13546,
+     "total_buy": 146607,
+     "total_sell": 134486,
+     "total_net": 12121
+    }
+   },
+   "curve": {
+    "investor": [
+     [
+      "09:10",
+      -3778,
+      2531,
+      1132
+     ],
+     [
+      "09:20",
+      -4556,
+      2048,
+      2357
+     ],
+     [
+      "09:30",
+      -5179,
+      1888,
+      3145
+     ],
+     [
+      "09:40",
+      -5414,
+      2195,
+      3037
+     ],
+     [
+      "09:50",
+      -7361,
+      3058,
+      4213
+     ],
+     [
+      "10:00",
+      -8236,
+      3380,
+      4833
+     ],
+     [
+      "10:10",
+      -10773,
+      3744,
+      7109
+     ],
+     [
+      "10:20",
+      -11373,
+      4487,
+      6942
+     ],
+     [
+      "10:30",
+      -12129,
+      4637,
+      7519
+     ],
+     [
+      "10:40",
+      -15483,
+      4351,
+      11159
+     ],
+     [
+      "10:50",
+      -17025,
+      4811,
+      12206
+     ],
+     [
+      "11:00",
+      -17522,
+      4935,
+      12572
+     ],
+     [
+      "11:10",
+      -18343,
+      4853,
+      13497
+     ],
+     [
+      "11:20",
+      -19689,
+      5699,
+      14021
+     ],
+     [
+      "11:30",
+      -19576,
+      5761,
+      13890
+     ],
+     [
+      "11:40",
+      -19671,
+      5844,
+      13905
+     ],
+     [
+      "11:50",
+      -19003,
+      5751,
+      13306
+     ],
+     [
+      "12:00",
+      -18436,
+      6201,
+      12247
+     ],
+     [
+      "12:10",
+      -18081,
+      6417,
+      11733
+     ],
+     [
+      "12:20",
+      -17474,
+      6437,
+      11090
+     ],
+     [
+      "12:30",
+      -16823,
+      6158,
+      10656
+     ],
+     [
+      "12:40",
+      -16129,
+      5720,
+      10415
+     ],
+     [
+      "12:50",
+      -15982,
+      5374,
+      10609
+     ],
+     [
+      "13:00",
+      -15398,
+      5582,
+      9866
+     ],
+     [
+      "13:10",
+      -15399,
+      5970,
+      9410
+     ],
+     [
+      "13:20",
+      -15450,
+      6692,
+      8801
+     ],
+     [
+      "13:30",
+      -15364,
+      6776,
+      8594
+     ],
+     [
+      "13:40",
+      -15120,
+      6869,
+      8186
+     ],
+     [
+      "13:50",
+      -14811,
+      6934,
+      7759
+     ],
+     [
+      "14:00",
+      -14619,
+      7018,
+      7440
+     ],
+     [
+      "14:10",
+      -14670,
+      7207,
+      7297
+     ],
+     [
+      "14:20",
+      -14916,
+      7170,
+      7522
+     ],
+     [
+      "14:30",
+      -15006,
+      7335,
+      7434
+     ],
+     [
+      "14:40",
+      -14883,
+      7391,
+      7300
+     ],
+     [
+      "14:50",
+      -15550,
+      7771,
+      7552
+     ],
+     [
+      "15:00",
+      -15070,
+      7856,
+      7013
+     ],
+     [
+      "15:10",
+      -15112,
+      8138,
+      6748
+     ],
+     [
+      "15:20",
+      -14862,
+      8555,
+      6036
+     ],
+     [
+      "15:30",
+      -14833,
+      8583,
+      6007
+     ]
+    ],
+    "program": [
+     [
+      "09:10",
+      654,
+      1281,
+      1935
+     ],
+     [
+      "09:20",
+      726,
+      494,
+      1220
+     ],
+     [
+      "09:30",
+      846,
+      557,
+      1403
+     ],
+     [
+      "09:40",
+      839,
+      267,
+      1106
+     ],
+     [
+      "09:50",
+      944,
+      -76,
+      868
+     ],
+     [
+      "10:00",
+      972,
+      -32,
+      940
+     ],
+     [
+      "10:10",
+      1062,
+      -178,
+      884
+     ],
+     [
+      "10:20",
+      1180,
+      848,
+      2028
+     ],
+     [
+      "10:30",
+      1279,
+      2183,
+      3462
+     ],
+     [
+      "10:40",
+      1611,
+      3275,
+      4886
+     ],
+     [
+      "10:50",
+      1770,
+      4013,
+      5783
+     ],
+     [
+      "11:00",
+      1883,
+      3806,
+      5689
+     ],
+     [
+      "11:10",
+      1848,
+      3716,
+      5564
+     ],
+     [
+      "11:20",
+      1933,
+      4115,
+      6048
+     ],
+     [
+      "11:30",
+      1805,
+      4264,
+      6069
+     ],
+     [
+      "11:40",
+      1790,
+      4093,
+      5883
+     ],
+     [
+      "11:50",
+      1553,
+      4079,
+      5632
+     ],
+     [
+      "12:00",
+      1404,
+      4483,
+      5887
+     ],
+     [
+      "12:10",
+      1294,
+      4663,
+      5957
+     ],
+     [
+      "12:20",
+      1087,
+      4657,
+      5744
+     ],
+     [
+      "12:30",
+      824,
+      4779,
+      5603
+     ],
+     [
+      "12:40",
+      646,
+      4893,
+      5539
+     ],
+     [
+      "12:50",
+      601,
+      4964,
+      5565
+     ],
+     [
+      "13:00",
+      425,
+      5454,
+      5879
+     ],
+     [
+      "13:10",
+      380,
+      6264,
+      6644
+     ],
+     [
+      "13:20",
+      206,
+      6914,
+      7120
+     ],
+     [
+      "13:30",
+      262,
+      6882,
+      7144
+     ],
+     [
+      "13:40",
+      228,
+      7018,
+      7246
+     ],
+     [
+      "13:50",
+      156,
+      7014,
+      7170
+     ],
+     [
+      "14:00",
+      48,
+      7117,
+      7165
+     ],
+     [
+      "14:10",
+      -56,
+      7371,
+      7315
+     ],
+     [
+      "14:20",
+      -44,
+      7514,
+      7470
+     ],
+     [
+      "14:30",
+      -190,
+      7870,
+      7680
+     ],
+     [
+      "14:40",
+      -153,
+      7991,
+      7838
+     ],
+     [
+      "14:50",
+      -241,
+      8565,
+      8324
+     ],
+     [
+      "15:00",
+      -583,
+      8487,
+      7904
+     ],
+     [
+      "15:10",
+      -626,
+      8857,
+      8231
+     ],
+     [
+      "15:20",
+      -714,
+      9058,
+      8344
+     ],
+     [
+      "15:30",
+      -996,
+      11981,
+      10985
+     ]
+    ]
+   }
+  },
+  "2026-07-29": {
+   "confirmed": {
+    "investor": {
+     "individual": -19701,
+     "foreign": -12502,
+     "inst_total": 31769,
+     "fin_invest": 18563,
+     "insurance": 1260,
+     "asset_mgmt": 8639,
+     "bank": -126,
+     "other_fin": 53,
+     "pension": 3381,
+     "other_corp": 434
+    },
+    "program": {
+     "arb_buy": 6129,
+     "arb_sell": 2571,
+     "arb_net": 3558,
+     "nonarb_buy": 162482,
+     "nonarb_sell": 161055,
+     "nonarb_net": 1427,
+     "total_buy": 168611,
+     "total_sell": 163626,
+     "total_net": 4985
+    }
+   }
+  },
+  "2026-07-28": {
+   "confirmed": {
+    "investor": {
+     "individual": 43152,
+     "foreign": -45009,
+     "inst_total": 1830,
+     "fin_invest": 6947,
+     "insurance": 213,
+     "asset_mgmt": -6301,
+     "bank": -184,
+     "other_fin": -10,
+     "pension": 1165,
+     "other_corp": 26
+    },
+    "program": {
+     "arb_buy": 4583,
+     "arb_sell": 1027,
+     "arb_net": 3556,
+     "nonarb_buy": 102802,
+     "nonarb_sell": 132340,
+     "nonarb_net": -29539,
+     "total_buy": 107385,
+     "total_sell": 133367,
+     "total_net": -25983
+    }
+   }
+  },
+  "2026-07-27": {
+   "confirmed": {
+    "investor": {
+     "individual": 19788,
+     "foreign": -28811,
+     "inst_total": 8595,
+     "fin_invest": 4691,
+     "insurance": 614,
+     "asset_mgmt": 4089,
+     "bank": -70,
+     "other_fin": -5,
+     "pension": -724,
+     "other_corp": 427
+    },
+    "program": {
+     "arb_buy": 2469,
+     "arb_sell": 1838,
+     "arb_net": 631,
+     "nonarb_buy": 72828,
+     "nonarb_sell": 99410,
+     "nonarb_net": -26582,
+     "total_buy": 75297,
+     "total_sell": 101248,
+     "total_net": -25951
+    }
+   }
+  },
+  "2026-07-24": {
+   "confirmed": {
+    "investor": {
+     "individual": 51782,
+     "foreign": -32683,
+     "inst_total": -19514,
+     "fin_invest": -8740,
+     "insurance": -1753,
+     "asset_mgmt": -9393,
+     "bank": 12,
+     "other_fin": 33,
+     "pension": 326,
+     "other_corp": 416
+    },
+    "program": {
+     "arb_buy": 1889,
+     "arb_sell": 6337,
+     "arb_net": -4448,
+     "nonarb_buy": 86822,
+     "nonarb_sell": 112459,
+     "nonarb_net": -25637,
+     "total_buy": 88711,
+     "total_sell": 118796,
+     "total_net": -30085
+    }
+   }
+  },
+  "2026-07-23": {
+   "confirmed": {
+    "investor": {
+     "individual": -22077,
+     "foreign": 21359,
+     "inst_total": 976,
+     "fin_invest": -10139,
+     "insurance": 261,
+     "asset_mgmt": 10118,
+     "bank": 43,
+     "other_fin": -49,
+     "pension": 741,
+     "other_corp": -257
+    },
+    "program": {
+     "arb_buy": 4043,
+     "arb_sell": 4471,
+     "arb_net": -428,
+     "nonarb_buy": 96503,
+     "nonarb_sell": 78502,
+     "nonarb_net": 18001,
+     "total_buy": 100546,
+     "total_sell": 82973,
+     "total_net": 17573
+    }
+   }
+  },
+  "2026-07-22": {
+   "confirmed": {
+    "investor": {
+     "individual": -12176,
+     "foreign": 26211,
+     "inst_total": -13963,
+     "fin_invest": -9758,
+     "insurance": 162,
+     "asset_mgmt": -3670,
+     "bank": -3,
+     "other_fin": 12,
+     "pension": -706,
+     "other_corp": -72
+    },
+    "program": {
+     "arb_buy": 5089,
+     "arb_sell": 5077,
+     "arb_net": 12,
+     "nonarb_buy": 103896,
+     "nonarb_sell": 88653,
+     "nonarb_net": 15243,
+     "total_buy": 108985,
+     "total_sell": 93730,
+     "total_net": 15255
+    }
+   }
+  },
+  "2026-07-21": {
+   "confirmed": {
+    "investor": {
+     "individual": -16421,
+     "foreign": 2952,
+     "inst_total": 13744,
+     "fin_invest": 8891,
+     "insurance": 1157,
+     "asset_mgmt": 3158,
+     "bank": 4,
+     "other_fin": -66,
+     "pension": 600,
+     "other_corp": -275
+    },
+    "program": {
+     "arb_buy": 6034,
+     "arb_sell": 3009,
+     "arb_net": 3024,
+     "nonarb_buy": 85044,
+     "nonarb_sell": 76566,
+     "nonarb_net": 8479,
+     "total_buy": 91078,
+     "total_sell": 79575,
+     "total_net": 11503
+    }
+   }
+  },
+  "2026-07-20": {
+   "confirmed": {
+    "investor": {
+     "individual": 3490,
+     "foreign": 5198,
+     "inst_total": -9235,
+     "fin_invest": -4931,
+     "insurance": 584,
+     "asset_mgmt": -5576,
+     "bank": -7,
+     "other_fin": -48,
+     "pension": 743,
+     "other_corp": 547
+    },
+    "program": {
+     "arb_buy": 4735,
+     "arb_sell": 3643,
+     "arb_net": 1091,
+     "nonarb_buy": 103297,
+     "nonarb_sell": 96526,
+     "nonarb_net": 6771,
+     "total_buy": 108032,
+     "total_sell": 100169,
+     "total_net": 7862
+    }
+   }
+  },
+  "2026-07-16": {
+   "confirmed": {
+    "investor": {
+     "individual": 36647,
+     "foreign": -13665,
+     "inst_total": -23831,
+     "fin_invest": -15258,
+     "insurance": -545,
+     "asset_mgmt": -8648,
+     "bank": 6,
+     "other_fin": 24,
+     "pension": 592,
+     "other_corp": 849
+    },
+    "program": {
+     "arb_buy": 3707,
+     "arb_sell": 6034,
+     "arb_net": -2327,
+     "nonarb_buy": 103149,
+     "nonarb_sell": 113833,
+     "nonarb_net": -10684,
+     "total_buy": 106856,
+     "total_sell": 119867,
+     "total_net": -13011
+    }
+   }
+  },
+  "2026-07-15": {
+   "confirmed": {
+    "investor": {
+     "individual": -24666,
+     "foreign": 23031,
+     "inst_total": 1992,
+     "fin_invest": -8431,
+     "insurance": -421,
+     "asset_mgmt": 10538,
+     "bank": 39,
+     "other_fin": 62,
+     "pension": 205,
+     "other_corp": -357
+    },
+    "program": {
+     "arb_buy": 1973,
+     "arb_sell": 3465,
+     "arb_net": -1492,
+     "nonarb_buy": 134593,
+     "nonarb_sell": 116389,
+     "nonarb_net": 18204,
+     "total_buy": 136566,
+     "total_sell": 119854,
+     "total_net": 16712
+    }
+   }
+  },
+  "2026-07-14": {
+   "confirmed": {
+    "investor": {
+     "individual": -41411,
+     "foreign": 9565,
+     "inst_total": 32117,
+     "fin_invest": 18926,
+     "insurance": 1508,
+     "asset_mgmt": 11264,
+     "bank": -344,
+     "other_fin": -106,
+     "pension": 868,
+     "other_corp": -271
+    },
+    "program": {
+     "arb_buy": 7713,
+     "arb_sell": 3137,
+     "arb_net": 4576,
+     "nonarb_buy": 157450,
+     "nonarb_sell": 151419,
+     "nonarb_net": 6031,
+     "total_buy": 165163,
+     "total_sell": 154556,
+     "total_net": 10607
+    }
+   }
+  },
+  "2026-07-13": {
+   "confirmed": {
+    "investor": {
+     "individual": 38869,
+     "foreign": -16705,
+     "inst_total": -22338,
+     "fin_invest": -328,
+     "insurance": 67,
+     "asset_mgmt": -21361,
+     "bank": -562,
+     "other_fin": 508,
+     "pension": -662,
+     "other_corp": 175
+    },
+    "program": {
+     "arb_buy": 4868,
+     "arb_sell": 3692,
+     "arb_net": 1176,
+     "nonarb_buy": 120079,
+     "nonarb_sell": 138973,
+     "nonarb_net": -18894,
+     "total_buy": 124947,
+     "total_sell": 142665,
+     "total_net": -17718
+    }
+   }
+  },
+  "2026-07-10": {
+   "confirmed": {
+    "investor": {
+     "individual": -7805,
+     "foreign": -3228,
+     "inst_total": 11314,
+     "fin_invest": 11349,
+     "insurance": 579,
+     "asset_mgmt": -1498,
+     "bank": 69,
+     "other_fin": 460,
+     "pension": 355,
+     "other_corp": -282
+    },
+    "program": {
+     "arb_buy": 5125,
+     "arb_sell": 4166,
+     "arb_net": 959,
+     "nonarb_buy": 108373,
+     "nonarb_sell": 109415,
+     "nonarb_net": -1042,
+     "total_buy": 113498,
+     "total_sell": 113581,
+     "total_net": -83
+    }
+   }
+  },
+  "2026-07-09": {
+   "confirmed": {
+    "investor": {
+     "individual": -13278,
+     "foreign": 1343,
+     "inst_total": 12884,
+     "fin_invest": 2822,
+     "insurance": 950,
+     "asset_mgmt": 7921,
+     "bank": 1,
+     "other_fin": 454,
+     "pension": 736,
+     "other_corp": -950
+    },
+    "program": {
+     "arb_buy": 8264,
+     "arb_sell": 8682,
+     "arb_net": -418,
+     "nonarb_buy": 125064,
+     "nonarb_sell": 112605,
+     "nonarb_net": 12459,
+     "total_buy": 133328,
+     "total_sell": 121287,
+     "total_net": 12041
+    }
+   }
+  },
+  "2026-07-08": {
+   "confirmed": {
+    "investor": {
+     "individual": -358,
+     "foreign": 3437,
+     "inst_total": -3552,
+     "fin_invest": 1605,
+     "insurance": 477,
+     "asset_mgmt": -5050,
+     "bank": -56,
+     "other_fin": 423,
+     "pension": -950,
+     "other_corp": 473
+    },
+    "program": {
+     "arb_buy": 7329,
+     "arb_sell": 6275,
+     "arb_net": 1054,
+     "nonarb_buy": 133440,
+     "nonarb_sell": 125437,
+     "nonarb_net": 8003,
+     "total_buy": 140769,
+     "total_sell": 131712,
+     "total_net": 9057
+    }
+   }
+  },
+  "2026-07-07": {
+   "confirmed": {
+    "investor": {
+     "individual": 31359,
+     "foreign": -29172,
+     "inst_total": -3108,
+     "fin_invest": 4356,
+     "insurance": 437,
+     "asset_mgmt": -8590,
+     "bank": -57,
+     "other_fin": 462,
+     "pension": 285,
+     "other_corp": 921
+    },
+    "program": {
+     "arb_buy": 6249,
+     "arb_sell": 3911,
+     "arb_net": 2338,
+     "nonarb_buy": 111027,
+     "nonarb_sell": 135657,
+     "nonarb_net": -24629,
+     "total_buy": 117276,
+     "total_sell": 139568,
+     "total_net": -22291
+    }
+   }
+  },
+  "2026-07-06": {
+   "confirmed": {
+    "investor": {
+     "individual": 26829,
+     "foreign": -13144,
+     "inst_total": -14618,
+     "fin_invest": -14299,
+     "insurance": -129,
+     "asset_mgmt": -516,
+     "bank": 126,
+     "other_fin": 538,
+     "pension": -338,
+     "other_corp": 933
+    },
+    "program": {
+     "arb_buy": 2984,
+     "arb_sell": 4955,
+     "arb_net": -1972,
+     "nonarb_buy": 86242,
+     "nonarb_sell": 98085,
+     "nonarb_net": -11842,
+     "total_buy": 89226,
+     "total_sell": 103040,
+     "total_net": -13814
+    }
+   }
+  },
+  "2026-07-03": {
+   "confirmed": {
+    "investor": {
+     "individual": -22942,
+     "foreign": -21750,
+     "inst_total": 44079,
+     "fin_invest": 30153,
+     "insurance": 1040,
+     "asset_mgmt": 11761,
+     "bank": 149,
+     "other_fin": 413,
+     "pension": 563,
+     "other_corp": 614
+    },
+    "program": {
+     "arb_buy": 9650,
+     "arb_sell": 6303,
+     "arb_net": 3347,
+     "nonarb_buy": 128167,
+     "nonarb_sell": 140881,
+     "nonarb_net": -12714,
+     "total_buy": 137817,
+     "total_sell": 147184,
+     "total_net": -9367
+    }
+   }
+  },
+  "2026-07-02": {
+   "confirmed": {
+    "investor": {
+     "individual": 62413,
+     "foreign": -43706,
+     "inst_total": -20825,
+     "fin_invest": -3928,
+     "insurance": 556,
+     "asset_mgmt": -17424,
+     "bank": 9,
+     "other_fin": 457,
+     "pension": -495,
+     "other_corp": 2118
+    },
+    "program": {
+     "arb_buy": 11313,
+     "arb_sell": 6454,
+     "arb_net": 4859,
+     "nonarb_buy": 147407,
+     "nonarb_sell": 174713,
+     "nonarb_net": -27306,
+     "total_buy": 158720,
+     "total_sell": 181167,
+     "total_net": -22447
+    }
+   }
+  },
+  "2026-07-01": {
+   "confirmed": {
+    "investor": {
+     "individual": 17370,
+     "foreign": -17028,
+     "inst_total": -700,
+     "fin_invest": -983,
+     "insurance": 482,
+     "asset_mgmt": 1457,
+     "bank": 49,
+     "other_fin": 472,
+     "pension": -2177,
+     "other_corp": 359
+    },
+    "program": {
+     "arb_buy": 2942,
+     "arb_sell": 4362,
+     "arb_net": -1420,
+     "nonarb_buy": 120265,
+     "nonarb_sell": 134880,
+     "nonarb_net": -14615,
+     "total_buy": 123207,
+     "total_sell": 139242,
+     "total_net": -16035
+    }
+   }
+  },
+  "2026-06-30": {
+   "confirmed": {
+    "investor": {
+     "individual": 8401,
+     "foreign": -37992,
+     "inst_total": 29332,
+     "fin_invest": 16121,
+     "insurance": 925,
+     "asset_mgmt": 12623,
+     "bank": 14,
+     "other_fin": 43,
+     "pension": -394,
+     "other_corp": 259
+    },
+    "program": {
+     "arb_buy": 5455,
+     "arb_sell": 4649,
+     "arb_net": 805,
+     "nonarb_buy": 142380,
+     "nonarb_sell": 170271,
+     "nonarb_net": -27891,
+     "total_buy": 147835,
+     "total_sell": 174920,
+     "total_net": -27086
+    }
+   }
+  },
+  "2026-06-29": {
+   "confirmed": {
+    "investor": {
+     "individual": 45975,
+     "foreign": -77332,
+     "inst_total": 29327,
+     "fin_invest": 30270,
+     "insurance": 40,
+     "asset_mgmt": -1419,
+     "bank": -112,
+     "other_fin": -33,
+     "pension": 581,
+     "other_corp": 2030
+    },
+    "program": {
+     "arb_buy": 11641,
+     "arb_sell": 8255,
+     "arb_net": 3386,
+     "nonarb_buy": 124106,
+     "nonarb_sell": 175614,
+     "nonarb_net": -51508,
+     "total_buy": 135747,
+     "total_sell": 183869,
+     "total_net": -48122
+    }
+   }
+  },
+  "2026-06-26": {
+   "confirmed": {
+    "investor": {
+     "individual": 81919,
+     "foreign": -42906,
+     "inst_total": -41224,
+     "fin_invest": -19935,
+     "insurance": -302,
+     "asset_mgmt": -20491,
+     "bank": -11,
+     "other_fin": -3,
+     "pension": -482,
+     "other_corp": 2211
+    },
+    "program": {
+     "arb_buy": 5645,
+     "arb_sell": 9524,
+     "arb_net": -3879,
+     "nonarb_buy": 143986,
+     "nonarb_sell": 169688,
+     "nonarb_net": -25701,
+     "total_buy": 149631,
+     "total_sell": 179212,
+     "total_net": -29580
+    }
+   }
+  },
+  "2026-06-25": {
+   "confirmed": {
+    "investor": {
+     "individual": -24136,
+     "foreign": -8754,
+     "inst_total": 33244,
+     "fin_invest": 24024,
+     "insurance": -1082,
+     "asset_mgmt": 10293,
+     "bank": 62,
+     "other_fin": -29,
+     "pension": -25,
+     "other_corp": -354
+    },
+    "program": {
+     "arb_buy": 5909,
+     "arb_sell": 7282,
+     "arb_net": -1373,
+     "nonarb_buy": 164169,
+     "nonarb_sell": 148746,
+     "nonarb_net": 15424,
+     "total_buy": 170078,
+     "total_sell": 156028,
+     "total_net": 14051
+    }
+   }
+  },
+  "2026-06-24": {
+   "confirmed": {
+    "investor": {
+     "individual": 26312,
+     "foreign": -46546,
+     "inst_total": 19095,
+     "fin_invest": 17479,
+     "insurance": -103,
+     "asset_mgmt": 1524,
+     "bank": 27,
+     "other_fin": 37,
+     "pension": 131,
+     "other_corp": 1138
+    },
+    "program": {
+     "arb_buy": 7969,
+     "arb_sell": 11603,
+     "arb_net": -3634,
+     "nonarb_buy": 152115,
+     "nonarb_sell": 179703,
+     "nonarb_net": -27588,
+     "total_buy": 160084,
+     "total_sell": 191306,
+     "total_net": -31222
+    }
+   }
+  },
+  "2026-06-23": {
+   "confirmed": {
+    "investor": {
+     "individual": 85910,
+     "foreign": -42047,
+     "inst_total": -44760,
+     "fin_invest": -20908,
+     "insurance": -1018,
+     "asset_mgmt": -19662,
+     "bank": -165,
+     "other_fin": -69,
+     "pension": -2937,
+     "other_corp": 898
+    },
+    "program": {
+     "arb_buy": 4062,
+     "arb_sell": 4997,
+     "arb_net": -935,
+     "nonarb_buy": 157991,
+     "nonarb_sell": 203839,
+     "nonarb_net": -45848,
+     "total_buy": 162053,
+     "total_sell": 208836,
+     "total_net": -46783
+    }
+   }
+  },
+  "2026-06-22": {
+   "confirmed": {
+    "investor": {
+     "individual": 21506,
+     "foreign": -25466,
+     "inst_total": 3034,
+     "fin_invest": 4859,
+     "insurance": -860,
+     "asset_mgmt": 1038,
+     "bank": -19,
+     "other_fin": -150,
+     "pension": -1834,
+     "other_corp": 926
+    },
+    "program": {
+     "arb_buy": 4930,
+     "arb_sell": 5349,
+     "arb_net": -419,
+     "nonarb_buy": 109564,
+     "nonarb_sell": 134644,
+     "nonarb_net": -25080,
+     "total_buy": 114494,
+     "total_sell": 139993,
+     "total_net": -25499
+    }
+   }
+  },
+  "2026-06-19": {
+   "confirmed": {
+    "investor": {
+     "individual": 16478,
+     "foreign": -3555,
+     "inst_total": -12244,
+     "fin_invest": -1994,
+     "insurance": -2537,
+     "asset_mgmt": -2489,
+     "bank": 42,
+     "other_fin": 1,
+     "pension": -5267,
+     "other_corp": -679
+    },
+    "program": {
+     "arb_buy": 7477,
+     "arb_sell": 4478,
+     "arb_net": 2999,
+     "nonarb_buy": 224990,
+     "nonarb_sell": 234947,
+     "nonarb_net": -9957,
+     "total_buy": 232467,
+     "total_sell": 239425,
+     "total_net": -6958
+    }
+   }
+  },
+  "2026-06-18": {
+   "confirmed": {
+    "investor": {
+     "individual": -4156,
+     "foreign": 12776,
+     "inst_total": -7682,
+     "fin_invest": 1577,
+     "insurance": -1530,
+     "asset_mgmt": -3851,
+     "bank": 80,
+     "other_fin": -37,
+     "pension": -3921,
+     "other_corp": -938
+    },
+    "program": {
+     "arb_buy": 8346,
+     "arb_sell": 8731,
+     "arb_net": -386,
+     "nonarb_buy": 147552,
+     "nonarb_sell": 156935,
+     "nonarb_net": -9383,
+     "total_buy": 155898,
+     "total_sell": 165666,
+     "total_net": -9769
+    }
+   }
+  }
+ },
+ "updated_kst": "2026-07-30 19:16"
+}

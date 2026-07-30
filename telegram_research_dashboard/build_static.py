@@ -147,6 +147,9 @@ def build() -> Path:
     consensus_report = ROOT / "static" / "consensus_revision.html"
     if consensus_report.exists():
         shutil.copy2(consensus_report, OUTPUT.parent / "consensus_revision.html")
+    flow_report = ROOT / "static" / "market_flow_report.html"
+    if flow_report.exists():
+        shutil.copy2(flow_report, OUTPUT.parent / "market_flow_report.html")
     consensus_xlsx = ROOT / "static" / "consensus_full.xlsx"
     if consensus_xlsx.exists():
         shutil.copy2(consensus_xlsx, OUTPUT.parent / "consensus_full.xlsx")

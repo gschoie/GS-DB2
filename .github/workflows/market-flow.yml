@@ -1,0 +1,64 @@
+name: 시장 수급 동향
+
+# 하루 4회(평일, KST): 10:00 / 13:00 / 15:40(마감 잠정) / 16:40(확정)
+# NAVER 증권에서 KOSPI 투자자별·프로그램 수급을 수집 → 리포트 → 텔레그램(gs_macro_get)
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 1 * * 1-5"    # 01:00 UTC = KST 10:00
+    - cron: "0 4 * * 1-5"    # 04:00 UTC = KST 13:00
+    - cron: "40 6 * * 1-5"   # 06:40 UTC = KST 15:40
+    - cron: "40 7 * * 1-5"   # 07:40 UTC = KST 16:40
+
+permissions:
+  contents: write   # history.json·리포트 HTML 커밋 → deploy-pages(workflow_run) 재배포
+
+concurrency:
+  group: market-flow
+  cancel-in-progress: false
+
+jobs:
+  snapshot:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: 패키지 설치
+        working-directory: market_flow
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: 수급 스냅샷 수집 (휴장일이면 자동 생략)
+        working-directory: market_flow
+        run: python scrape.py
+
+      - name: 리포트 HTML 생성
+        working-directory: market_flow
+        run: python build_report.py
+
+      - name: 텔레그램 발송 (gs_macro_get)
+        working-directory: market_flow
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.MACRO_TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.MACRO_TELEGRAM_CHAT_ID }}
+        run: python telegram_send.py
+
+      - name: 커밋 및 푸시 (→ Pages 재배포)
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add market_flow/data telegram_research_dashboard/static/market_flow_report.html market_flow/telegram_status.json
+          if git diff --cached --quiet; then
+            echo "변경 없음(휴장일 등) — 커밋 생략"
+          else
+            git commit -m "chore(flow): 수급 스냅샷 $(TZ=Asia/Seoul date +%m-%d\ %H:%M)"
+            git pull --rebase origin main
+            git push origin HEAD:main
+          fi
