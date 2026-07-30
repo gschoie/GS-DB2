@@ -26,17 +26,15 @@ jobs:
       - name: 뉴스DB 캐시 복원
         uses: actions/cache/restore@v5
         with:
+          # 주의: 캐시 '버전'은 path 목록의 해시다. 다른 워크플로(deploy-pages 등)와 목록이
+          # 다르면 같은 키라도 절대 매칭되지 않는다(2026-07-30 사고 원인). 반드시 3개로 통일.
           path: |
             telegram_research_dashboard/data/dashboard.db
-            telegram_research_dashboard/data/daol_messages.json
-            telegram_research_dashboard/data/daol_tone_history.json
             telegram_research_dashboard/data/daol_pdf_text_cache.json
             telegram_research_dashboard/data/macro.json
           key: newsdb2-${{ github.run_id }}
-          # newsdb2-: 2026-07-30 캐시 오염 사고 후 새 네임스페이스(오염 newsdb-* 격리, 정상 캐시 부트스트랩).
           restore-keys: |
             newsdb2-
-            newsdb-30460946028
 
       - name: 노조 캐시 복원(읽기전용 · 노조는 안 건드림)
         uses: actions/cache/restore@v5
@@ -94,10 +92,9 @@ jobs:
       - name: 뉴스DB 캐시 저장
         uses: actions/cache/save@v5
         with:
+          # path 목록은 복원 단계·다른 워크플로와 반드시 동일해야 한다(버전 해시 일치).
           path: |
             telegram_research_dashboard/data/dashboard.db
-            telegram_research_dashboard/data/daol_messages.json
-            telegram_research_dashboard/data/daol_tone_history.json
             telegram_research_dashboard/data/daol_pdf_text_cache.json
             telegram_research_dashboard/data/macro.json
           key: newsdb2-${{ github.run_id }}

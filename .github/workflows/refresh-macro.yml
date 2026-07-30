@@ -38,10 +38,10 @@ jobs:
             telegram_research_dashboard/data/daol_pdf_text_cache.json
             telegram_research_dashboard/data/macro.json
           key: newsdb2-${{ github.run_id }}
-          # newsdb2-: 2026-07-30 캐시 오염 사고 후 새 네임스페이스(오염 newsdb-* 격리, 정상 캐시 부트스트랩).
+          # newsdb2-: 2026-07-30 캐시 오염 사고 후 새 네임스페이스. path 목록이 버전 해시라
+          # 5개 워크플로 모두 동일해야 함(다르면 조용한 복원 미스).
           restore-keys: |
             newsdb2-
-            newsdb-30460946028
 
       - name: 노조 캐시 복원(읽기 전용)
         uses: actions/cache/restore@v5
