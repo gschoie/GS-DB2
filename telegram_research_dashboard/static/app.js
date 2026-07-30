@@ -162,6 +162,10 @@ async function dispatchConsensus(){
  const btn=$('#consensus-refresh'),status=$('#consensus-status');
  if(await dispatchWorkflow({workflow:'consensus'},status,btn))
    status.textContent='✅ 컨센 스냅샷 요청됨 — 몇 분 뒤 새로고침';}
+async function dispatchFlow(){
+ const btn=$('#flow-refresh'),status=$('#flow-status');
+ if(await dispatchWorkflow({workflow:'flow'},status,btn))
+   status.textContent='✅ 수급 수집 요청됨 — 몇 분 뒤 새로고침';}
 $$('.nav').forEach(b=>b.onclick=()=>view(b.dataset.view));$$('[data-go]').forEach(b=>b.onclick=()=>view(b.dataset.go));
 let timer;$('#search').oninput=e=>{clearTimeout(timer);timer=setTimeout(()=>{state.q=e.target.value;load()},250)};
 $('#report-company').onchange=e=>{state.reportCompany=e.target.value;load()};
@@ -181,6 +185,7 @@ $('#news-refresh')?.addEventListener('click',dispatchNews);
 $('#reports-refresh')?.addEventListener('click',dispatchReports);
 $('#union-refresh')?.addEventListener('click',dispatchUnion);
 $('#consensus-refresh')?.addEventListener('click',dispatchConsensus);
+$('#flow-refresh')?.addEventListener('click',dispatchFlow);
 $('#task-item')?.addEventListener('change',()=>renderTaskList());
 $('#task-add')?.addEventListener('click',()=>{const name=(prompt('추가할 항목 이름')||'').trim();if(!name)return;const items=taskItems();if(items.includes(name)){alert('이미 있는 항목입니다.');return}items.push(name);saveItems(items);renderTaskList(name)});
 $('#task-rename')?.addEventListener('click',()=>{const items=taskItems(),cur=taskCurrentItem(),name=(prompt('항목 이름 변경',cur)||'').trim();if(!name||name===cur)return;if(items.includes(name)){alert('이미 있는 항목입니다.');return}items[items.indexOf(cur)]=name;saveItems(items);const s=taskLoad();if(s[cur]){s[name]=s[cur];delete s[cur];taskSave(s)}renderTaskList(name)});
