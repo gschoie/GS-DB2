@@ -1328,31 +1328,42 @@
      "time": "15:45",
      "kospi": 6595.45,
      "chg_pct": 17.91
+    },
+    "1640": {
+     "individual": -82840,
+     "foreign": 72410,
+     "institution": 11503,
+     "arb": -8127,
+     "nonarb": 51036,
+     "program": 42908,
+     "time": "18:27",
+     "kospi": 6595.45,
+     "chg_pct": 17.91
     }
    },
    "confirmed": {
     "investor": {
-     "individual": -82609,
-     "foreign": 72201,
-     "inst_total": 11469,
-     "fin_invest": -6403,
+     "individual": -82840,
+     "foreign": 72410,
+     "inst_total": 11503,
+     "fin_invest": -6663,
      "insurance": -1071,
-     "asset_mgmt": 16989,
+     "asset_mgmt": 17194,
      "bank": -35,
-     "other_fin": 342,
+     "other_fin": 431,
      "pension": 1647,
-     "other_corp": -1061
+     "other_corp": -1073
     },
     "program": {
      "arb_buy": 1502,
      "arb_sell": 9629,
      "arb_net": -8127,
-     "nonarb_buy": 216751,
-     "nonarb_sell": 165765,
-     "nonarb_net": 50986,
-     "total_buy": 218253,
-     "total_sell": 175394,
-     "total_net": 42859
+     "nonarb_buy": 216917,
+     "nonarb_sell": 165881,
+     "nonarb_net": 51036,
+     "total_buy": 218419,
+     "total_sell": 175510,
+     "total_net": 42909
     }
    },
    "curve": {
@@ -1831,5 +1842,5 @@
    }
   }
  },
- "updated_kst": "2026-07-31 15:45"
+ "updated_kst": "2026-07-31 18:27"
 }
