@@ -5,6 +5,10 @@ name: 뉴스 아카이브만 갱신
 # (build_static 은 톤/매크로/노조를 '있으면 읽고 없으면 기본값'으로 처리하므로 안전)
 on:
   workflow_dispatch:
+    inputs:
+      since_days:
+        description: "재수집 일수 (기본 14 · 과거 답글 오염 정리 시 120 등으로 크게)"
+        default: "14"
 
 permissions:
   contents: read
@@ -55,8 +59,8 @@ jobs:
 
       - name: 공개 텔레그램 최신 글 수집 (뉴스)
         working-directory: telegram_research_dashboard
-        # 날짜 기반 증분 수집(2주 안전창). 최근 2주만 재확인 → 전체 이력 크롤 안 함.
-        run: python public_importer.py --channel https://t.me/HI_GS --pages 120 --since-days 14
+        # 날짜 기반 증분 수집(기본 2주 안전창). since_days 입력으로 과거까지 재수집 가능.
+        run: python public_importer.py --channel https://t.me/HI_GS --pages 120 --since-days ${{ github.event.inputs.since_days || '14' }}
 
       # (제거) 전체 재분류: 새 메시지는 import 때 이미 완전 파싱됨 → 매 run 전체 재파싱은 낭비.
 
