@@ -224,7 +224,7 @@ SYSTEM_PROMPT = """당신은 글로벌 방산 섹터를 담당하는 증권사 �
 - **뉴스 사실관계는 반드시 함께 제공되는 [지난 24시간 뉴스 목록]에 있는 기사만 근거로 쓰세요.** 목록에 없는 사건을 당신의 기억(학습 데이터)에서 꺼내 새 뉴스처럼 쓰는 것을 절대 금지합니다. 과거의 계약·수주·프로그램 소식(예: 수년 전 체결된 계약)을 오늘 뉴스처럼 서술하면 안 됩니다.
 - 각 이슈에는 뉴스 목록에 표기된 보도 시각(월/일)을 함께 적으세요.
 - **등락 원인을 설명할 근거 기사가 목록에 없으면 원인을 지어내지 말고 "관련 공시·뉴스 미확인 (수급 요인 추정)"이라고 쓰세요.** 그럴듯한 서사를 만드는 것보다 모른다고 쓰는 것이 훨씬 낫습니다.
-- 구글 검색 도구는 목록에 있는 기사의 세부내용(계약금액·수량 등) 확인 용도로만 보조적으로 쓰세요.
+- **최종 리포트 본문만 출력하세요.** 계획, 사고 과정, 분석 메모, tool_code, 코드 블록 등을 절대 출력하지 마세요. 응답의 첫 글자는 반드시 서두 문장("글로벌 방산 업종에서...")으로 시작해야 합니다.
 - 관심 이슈: 전쟁·지정학 긴장, 국방예산, 무기 도입·수출 계약, 대형 수주·취소, 실적 발표·가이던스, 생산 차질, 공급망, M&A, 규제·수출승인, 주요 프로그램 일정·시험·양산·인도.
 - 수치·계약금액·수량·일정·등락률을 우선 제시하고, 사실과 해석을 구분하세요. 확인되지 않은 보도·루머는 "[미확인]" 표시.
 - **뉴스의 함의를 끝까지 해석하세요.** 특히 경쟁 수주 결과: 어떤 회사가 우선협상자·낙찰자로 선정됐다는 뉴스는 경쟁했던 다른 기업(특히 한국 기업)의 탈락을 의미할 수 있습니다. 예: "캐나다 잠수함 사업 TKMS 선정" = 경쟁하던 한화오션(Hanwha Ocean)의 탈락 → 해당 기업에 부정적 이슈로 명시. 수혜 기업과 피해 기업을 모두 짚으세요.
@@ -243,6 +243,28 @@ SYSTEM_PROMPT = """당신은 글로벌 방산 섹터를 담당하는 증권사 �
 굵은 강조는 **텍스트**, 링크는 [매체명](URL) 형식의 마크다운을 사용하세요. 마크다운 표(|---|)와 HTML 태그는 사용하지 마세요."""
 
 
+REPORT_OPENER = "글로벌 방산 업종에서 지난 24시간"
+
+
+def clean_report(text: str) -> str:
+    """모델이 사고 과정·계획·tool_code를 본문 앞에 누출했을 때 최종 리포트만 남긴다.
+
+    2026-08-01 실제 발생: gemini-2.5-pro가 146줄짜리 작업 메모를 리포트 앞에 출력.
+    필수 서두 문장을 앵커로 그 앞을 전부 잘라낸다.
+    """
+    idx = text.find(REPORT_OPENER)
+    if idx > 0:
+        print(f"[정리] 리포트 앞 사고 과정 누출 {idx}자 제거")
+        return text[idx:].strip()
+    if idx == 0:
+        return text.strip()
+    idx = text.find("## 오늘의 핵심 요약")
+    if idx > 0:
+        print("[정리] 서두 문장 없음 — 핵심 요약 헤딩부터 절단", file=sys.stderr)
+        return text[idx:].strip()
+    return text.strip()
+
+
 def generate_report(price_table: str, news_text: str, now: datetime) -> str:
     client = genai.Client()  # GEMINI_API_KEY 환경변수 사용
     update_time = now.strftime("%Y-%m-%d %H:00")
@@ -256,9 +278,11 @@ def generate_report(price_table: str, news_text: str, now: datetime) -> str:
         "위 시세표와 뉴스 목록을 바탕으로 글로벌 방산 데일리 브리핑을 작성해 주세요. "
         "목록에 없는 사건을 새 뉴스처럼 쓰지 마세요."
     )
+    # google_search 툴은 제거 — 그라운딩이 옛 사건을 끌어오거나(07-30),
+    # 모델이 tool_code/사고 과정을 본문에 누출하는(08-01) 원인이었다.
+    # 뉴스 근거는 RSS 목록이 전담한다.
     config = genai_types.GenerateContentConfig(
         system_instruction=system,
-        tools=[genai_types.Tool(google_search=genai_types.GoogleSearch())],
         temperature=0.3,
         max_output_tokens=16384,
     )
@@ -283,7 +307,7 @@ def generate_report(price_table: str, news_text: str, now: datetime) -> str:
     print(f"[Gemini] 사용 모델: {used_model}")
     global LAST_USED_MODEL
     LAST_USED_MODEL = used_model
-    report = response.text.strip()
+    report = clean_report(response.text.strip())
     um = getattr(response, "usage_metadata", None)
     if um:
         print(f"[Gemini] in={um.prompt_token_count} out={um.candidates_token_count}")
