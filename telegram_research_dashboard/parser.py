@@ -7,7 +7,7 @@ from urllib.parse import parse_qs, urlparse
 
 # 파싱 규칙을 바꿀 때마다 +1 한다. CI가 이 값을 DB의 PRAGMA user_version과 비교해
 # 파서가 바뀐 첫 수집 런에서만 전체 재분류를 자동으로 돌린다(rebuild_parsed_data.py --if-parser-changed).
-PARSER_VERSION = 5
+PARSER_VERSION = 6
 
 
 # 텔레그램에서 URL 뒤에 공백 없이 붙인 한글 코멘트까지 링크로 먹지 않는다.
@@ -30,7 +30,7 @@ KNOWN_COMPANIES = (
     "대한조선", "엠앤씨솔루션", "삼양컴텍", "쎄트렉아이", "동성화인텍",
     "현대힘스", "케이프", "성광벤드", "태광", "화인베스틸", "한라IMS",
     "오리엔탈정공", "하이록코리아", "대동", "웨이브일렉트로닉스", "에스엔시스",
-    "세진중공업", "HD현대일렉트릭", "SK오션플랜트",
+    "세진중공업", "HD현대일렉트릭", "SK오션플랜트", "한화필리조선",
 )
 
 # 드롭다운·기업명 라벨·Most Mentioned에 노출할 '실제 상장사' 화이트리스트.
@@ -49,6 +49,8 @@ APPROVED_COMPANIES = [
     "케이프", "성광벤드", "태광", "화인베스틸", "한라IMS", "오리엔탈정공",
     "하이록코리아", "대동", "웨이브일렉트로닉스", "에스엔시스",
     "세진중공업", "HD현대일렉트릭", "SK오션플랜트",
+    # 비상장 자회사지만 별도 태그로 노출한다 (미국 필라델피아 조선소, 한화시스템 산하)
+    "한화필리조선",
 ]
 COMPANY_ALIASES = {
     "LIG디펜스앤에어로스페이스": "LIG D&A",
@@ -74,7 +76,12 @@ COMPANY_ALIASES = {
     "삼강엠앤티": "SK오션플랜트",
     "두산중공업": "두산에너빌리티",
     "엠엔씨솔루션": "엠앤씨솔루션",    # 오탈자 표기 통일
+    "필리조선": "한화필리조선",        # "필리조선소" 표기 포함
+    "필리 조선소": "한화필리조선",
+    "Philly Shipyard": "한화필리조선",
 }
+# 비상장 자회사 → 상장 모회사. 자회사가 태깅되면 모회사도 함께 행에 남긴다.
+SUBSIDIARY_PARENTS = {"한화필리조선": "한화시스템"}
 # 외신·영문 기사용: 무기체계 코드로 한국 상장사를 역추적한다.
 # K2·K9처럼 짧은 코드는 앞뒤가 영숫자가 아닐 때만 매칭해 오탐(K21, AK9, K239 등)을 막되,
 # K9MH·K2PL 같은 변형 접미사(대문자 1~3자 + 숫자)는 같은 체계로 인정한다.
@@ -243,6 +250,14 @@ def _dedupe_companies(found: list[str]) -> list[str]:
     return selected
 
 
+def _with_parents(names: list[str]) -> list[str]:
+    for name in list(names):
+        parent = SUBSIDIARY_PARENTS.get(name)
+        if parent and parent not in names:
+            names.append(parent)
+    return names
+
+
 def identify_companies(text: str) -> list[str]:
     """한국 정식사명·별칭으로 먼저 식별하고, 실패하면 외신 무기체계/영문 사명으로 역추적한다.
 
@@ -252,13 +267,13 @@ def identify_companies(text: str) -> list[str]:
     found = [name for name in KNOWN_COMPANIES if name.casefold() in lowered]
     found.extend(company for alias, company in COMPANY_ALIASES.items() if alias.casefold() in lowered)
     if found:
-        return _dedupe_companies(found)
+        return _with_parents(_dedupe_companies(found))
     # 외신 폴백: 한국 사명이 안 잡힐 때만 무기체계/영문 사명으로 분류한다.
     foreign = [company for phrase, company in ENGLISH_COMPANY_ALIASES.items() if phrase in lowered]
     for pattern, company in WEAPON_SYSTEM_ALIASES.items():
         if re.search(rf"(?<![A-Za-z0-9])(?:{pattern})(?![A-Za-z0-9])", text, re.I):
             foreign.append(company)
-    return _dedupe_companies(foreign)
+    return _with_parents(_dedupe_companies(foreign))
 
 
 def extract_companies(text: str) -> list[str]:

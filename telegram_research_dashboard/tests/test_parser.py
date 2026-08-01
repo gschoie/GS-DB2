@@ -80,6 +80,16 @@ class ForeignCompanyClassificationTest(unittest.TestCase):
         # K239는 K2(현대로템)가 아니라 천무(한화에어로스페이스)로만 잡혀야 한다.
         self.assertEqual(identify_companies("K239 launcher trial"), ["한화에어로스페이스"])
 
+    def test_hanwha_philly_tags_subsidiary_and_parent(self):
+        # 한화필리조선(미국 필라델피아 조선소, 한화시스템 산하)은 자회사 태그 + 모회사 동시 태깅.
+        for text in ("한화필리조선, 미 해군 함정 MRO 수주",
+                     "필리조선소서 첫 건조 선박 진수",
+                     "Hanwha Philly Shipyard delivers first LNG carrier"):
+            with self.subTest(text=text):
+                found = identify_companies(text)
+                self.assertIn("한화필리조선", found)
+                self.assertIn("한화시스템", found)
+
     def test_korean_name_wins_over_foreign_fallback(self):
         # 한국 정식사명이 있으면 무기체계 폴백은 개입하지 않는다.
         result = identify_companies("한화오션이 K9 관련 부품을 공급한다")
