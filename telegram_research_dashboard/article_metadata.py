@@ -11,10 +11,23 @@ from html.parser import HTMLParser
 from urllib.parse import unquote, urljoin, urlparse
 from urllib.request import HTTPRedirectHandler, Request, build_opener
 
-from parser import extract_companies, PUBLISHER_DOMAINS
+from parser import extract_companies, HANGUL_RE, PUBLISHER_DOMAINS
 
 
 TITLE_PLACEHOLDERS = {"기사 제목 미확인", "제목 미확인"}
+
+
+def should_replace_title(current: str | None, fetched: str | None) -> bool:
+    """원문에서 가져온 제목으로 기존 제목을 교체해도 되는지 판단한다.
+
+    한국어 제목(외신의 번역 헤드라인 등)을 영문 원제로 되돌려버리면 안 된다 —
+    외신 공유는 '한국어 번역=제목, 영어 원제=코멘트'가 규칙이다.
+    """
+    if not fetched or fetched in TITLE_PLACEHOLDERS:
+        return False
+    if not current or current in TITLE_PLACEHOLDERS:
+        return True
+    return not (HANGUL_RE.search(current) and not HANGUL_RE.search(fetched))
 MAX_HTML_BYTES = 1_500_000
 # 단축링크 서비스가 (주로 CI IP 차단·rate-limit 시) 리다이렉트 대신 자기 랜딩 페이지를
 # 200으로 돌려주면 그 제목("URL Shortener … | TinyURL")이 기사 제목으로 저장돼버린다.
@@ -205,8 +218,9 @@ def enrich_news_item(item: dict, metadata_fetcher=fetch_article_metadata) -> dic
         companies = extract_companies(fetched.get("description", ""))
     if not companies:
         companies = extract_companies(fetched.get("text", ""))
-    item["title"] = title
-    item["summary"] = title
+    if should_replace_title(item.get("title"), title):
+        item["title"] = title
+        item["summary"] = title
     item["companies"] = companies
     item["company_name"] = ", ".join(companies) if companies else None
     item["confidence"] = 0.85 if companies else 0.65

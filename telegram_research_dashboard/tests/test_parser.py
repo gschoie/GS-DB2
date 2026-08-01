@@ -368,6 +368,49 @@ https://finance.naver.com/item/main.nhn?code=439260"""
         self.assertEqual(samsung["company_name"], "삼성중공업")
 
 
+class BilingualForeignNewsTest(unittest.TestCase):
+    # 외신 공유(같은 이모지 프리픽스의 영어 원제 + 한국어 번역 쌍):
+    # 제목 = 한국어 번역, 내 코멘트 = 영어 원제 (2026-07-21 필리핀 MRF 건).
+    TEXT = """✈️ Philippines Looking At 5 Fighter Jet Suppliers For Air Defense Modernization
+✈️ 필리핀, 공군 현대화 추진 위해 5개 전투기 공급업체 검토
+필리핀 국방부(DND), 다목적 전투기(MRF) 도입 사업 관련 5개 공급 후보업체 검토 중
+주요 후보 기종으로 한국 KAI KF-21 보라매, 스웨덴 사브 JAS-39 그리펜 언급
+https://example.com/philippines-mrf"""
+
+    def test_title_is_korean_headline(self):
+        items = parse_news_items(self.TEXT)
+        self.assertEqual(len(items), 1)
+        self.assertEqual(items[0]["title"], "필리핀, 공군 현대화 추진 위해 5개 전투기 공급업체 검토")
+
+    def test_comment_is_english_headline(self):
+        self.assertEqual(extract_comment(self.TEXT),
+                         "Philippines Looking At 5 Fighter Jet Suppliers For Air Defense Modernization")
+
+    def test_marker_opinion_appends_after_english_headline(self):
+        text = self.TEXT + "\n🎴 KF-21 수출 가즈아"
+        self.assertEqual(extract_comment(text),
+                         "Philippines Looking At 5 Fighter Jet Suppliers For Air Defense Modernization\nKF-21 수출 가즈아")
+
+    def test_enrich_keeps_korean_title_over_english_fetched(self):
+        item = parse_news_items(self.TEXT)[0]
+        item["companies"], item["company_name"] = [], None
+        enrich_news_item(item, lambda _url: {
+            "title": "Philippines Looking At 5 Fighter Jet Suppliers",
+            "text": "The KF-21 Boramae from Korea Aerospace Industries is a candidate.",
+        })
+        self.assertEqual(item["title"], "필리핀, 공군 현대화 추진 위해 5개 전투기 공급업체 검토")
+        self.assertEqual(item["company_name"], "한국항공우주")
+
+
+class DartBotShareTest(unittest.TestCase):
+    def test_dart_alert_title_and_date_are_not_a_comment(self):
+        # DART 알림봇 포맷(공시제목+링크+날짜)이 코멘트로 오인되던 회귀 (2026-07-27 한화에어로 건).
+        text = """(유가)한화에어로스페이스 - 투자판단관련주요경영사항
+http://dart.fss.or.kr/api/link.jsp?rcpNo=20260727800020
+2026-07-27"""
+        self.assertIsNone(extract_comment(text))
+
+
 class ExtractCommentTest(unittest.TestCase):
     # GEM 요약 공유: •/❗️는 기사 요약, 내 의견은 🎴 이후에만 있다 (2026-08-01 수빅 진수 건 회귀).
     GEM_TEXT = """[HD현대중공업 필리핀, 수빅 첫 건조선 진수…현지 고용 4000명 창출]

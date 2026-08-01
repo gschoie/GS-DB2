@@ -146,6 +146,31 @@ def is_channel_signature(value: str | None) -> bool:
     return bool(value and CHANNEL_SIGNATURE_RE.search(value))
 
 
+HANGUL_RE = re.compile(r"[가-힣]")
+# 줄 앞의 이모지·기호 장식(✈️ 🚀 > 등). 단어문자·한글·대괄호류가 나오면 멈춘다.
+LEADING_DECOR_RE = re.compile(r"^[^\w가-힣\[「]*")
+
+
+def bilingual_headline_pair(text: str) -> tuple[str, str] | None:
+    """외신 공유의 '영어 원제 + 한국어 번역' 헤드라인 쌍을 찾는다.
+
+    형식: 같은 이모지 프리픽스를 단 연속 두 줄(첫 줄 영어, 둘째 줄 한국어 번역).
+    이때 제목은 한국어 번역, '내 코멘트'는 영어 원제가 된다.
+    """
+    lines = [line.strip() for line in text.splitlines() if line.strip()]
+    if len(lines) < 2 or URL_RE.search(lines[0]) or URL_RE.search(lines[1]):
+        return None
+    prefix_first = LEADING_DECOR_RE.match(lines[0]).group(0).strip()
+    prefix_second = LEADING_DECOR_RE.match(lines[1]).group(0).strip()
+    english = LEADING_DECOR_RE.sub("", lines[0]).strip()
+    korean = LEADING_DECOR_RE.sub("", lines[1]).strip()
+    if not english or not korean or not prefix_first or prefix_first != prefix_second:
+        return None
+    if HANGUL_RE.search(english) or not HANGUL_RE.search(korean):
+        return None
+    return english, korean
+
+
 def unwrap_google_redirect(url: str) -> str:
     """구글 앱 공유가 링크를 google.com/search?q=<원래URL>(또는 /url?q=)로 감싼 것을 벗긴다.
 
@@ -400,6 +425,8 @@ def parse_report(text: str) -> dict:
 def parse_news(text: str) -> dict:
     urls = [url for url in map(unwrap_google_redirect, URL_RE.findall(text)) if is_article_url(url)]
     article_url = urls[0] if urls else None
+    pair = bilingual_headline_pair(text)
+    headline = pair[1] if pair else _first_line(text)
     companies = extract_companies(text)
     company = ", ".join(companies) if companies else None
     event_map = {
@@ -410,10 +437,10 @@ def parse_news(text: str) -> dict:
     event_type = next((kind for kind, words in event_map.items() if any(w in text for w in words)), "기타")
     confidence = 0.75 if company and urls else 0.55
     return {
-        "title": _first_line(text), "company_name": company, "companies": companies,
+        "title": headline, "company_name": company, "companies": companies,
         "publisher": extract_publisher(text, article_url),
         "article_url": article_url, "event_type": event_type,
-        "summary": _first_line(text), "confidence": confidence,
+        "summary": headline, "confidence": confidence,
         "needs_review": int(confidence < 0.8),
     }
 
@@ -422,6 +449,7 @@ def parse_news_items(text: str) -> list[dict]:
     """데일리뉴스 묶음에서 제목/URL 쌍을 분리한다. 단독 기사도 한 항목으로 반환한다."""
     lines = [line.strip(" \t•>") for line in text.splitlines()]
     items = []
+    pair = bilingual_headline_pair(text)
     current_industry = None
     for index, line in enumerate(lines):
         if line in INDUSTRIES:
@@ -451,12 +479,15 @@ def parse_news_items(text: str) -> list[dict]:
                 if candidate and not URL_RE.search(candidate):
                     title = candidate
                     break
+        if pair:
+            # 외신 공유(영어 원제 + 한국어 번역 쌍): 제목은 한국어 번역이 맡는다.
+            title = pair[1]
         title = title or "기사 제목 미확인"
         for url in urls:
             parsed = parse_news(f"{title}\n{url}")
             parsed["industry"] = current_industry
             parsed["publisher"] = extract_publisher(text, url)
-            companies = extract_companies(title)
+            companies = extract_companies("\n".join(pair) if pair else title)
             parsed["companies"] = companies
             parsed["company_name"] = ", ".join(companies) if companies else None
             items.append(parsed)
