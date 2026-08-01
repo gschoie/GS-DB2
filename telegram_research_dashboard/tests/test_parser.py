@@ -317,6 +317,33 @@ https://example.com/defense"""
         self.assertEqual(item["publisher"], "EurAsian Times")
         self.assertNotIn("최광식", item["title"])
 
+    def test_channel_self_link_does_not_create_duplicate_row(self):
+        # 2026-07-30 더구루 요약글: 서명의 t.me/HI_GS 셀프링크가 두 번째 행을 만들어
+        # 같은 뉴스가 아카이브에 2개 찍히던 회귀 (제목 보강 시 채널명이 제목이 되기도 함).
+        text = """[HD건설기계, '19조 인도시장' 공략 속도…콜카타 부품거점 새단장]
+• HD건설기계 인도법인이 콜카타 부품 유통센터를 확장 개소함
+https://www.theguru.co.kr/news/article.html?no=105099
+─────────────────────
+🎴 오오~ 언제 1위가 되었니!?
+DAOL 조선/기계/방산 | 최광식
+https://t.me/HI_GS"""
+        items = parse_news_items(text)
+        self.assertEqual(len(items), 1)
+        self.assertTrue(items[0]["article_url"].startswith("https://www.theguru.co.kr"))
+        self.assertNotIn("최광식", items[0]["title"])
+
+    def test_npay_stock_link_in_earnings_forward_is_ignored(self):
+        # 실적속보 포워딩 글의 Npay 증권 종목 링크가 'OO - Npay 증권' 쓰레기 행을 만들던 회귀.
+        text = """2026.07.30 10:59:08
+기업명: 대한조선(시가총액: 1조 8,378억) A439260
+보고서명: 연결재무제표기준영업(잠정)실적(공정공시)
+매출액 : 3,544억(예상치 : 3,304억)
+https://dart.fss.or.kr/dsaf001/main.do?rcpNo=20260730800238
+https://finance.naver.com/item/main.nhn?code=439260"""
+        items = parse_news_items(text)
+        self.assertEqual(len(items), 1)
+        self.assertTrue(items[0]["article_url"].startswith("https://dart.fss.or.kr"))
+
     def test_company_aliases_use_canonical_korean_names(self):
         kai = parse_news_items("KAI, KF-21 양산 확대\nhttps://example.com/kai")[0]
         samsung = parse_news_items("삼성重 최성안 부회장, 자사주 1만주 매입…책임경영 의지\nhttps://example.com/shi")[0]

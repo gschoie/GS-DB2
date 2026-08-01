@@ -7,7 +7,7 @@ from urllib.parse import urlparse
 
 # 파싱 규칙을 바꿀 때마다 +1 한다. CI가 이 값을 DB의 PRAGMA user_version과 비교해
 # 파서가 바뀐 첫 수집 런에서만 전체 재분류를 자동으로 돌린다(rebuild_parsed_data.py --if-parser-changed).
-PARSER_VERSION = 3
+PARSER_VERSION = 4
 
 
 # 텔레그램에서 URL 뒤에 공백 없이 붙인 한글 코멘트까지 링크로 먹지 않는다.
@@ -144,6 +144,22 @@ PUBLISHER_DOMAINS = {
 
 def is_channel_signature(value: str | None) -> bool:
     return bool(value and CHANNEL_SIGNATURE_RE.search(value))
+
+
+def is_article_url(url: str) -> bool:
+    """뉴스 행이 되면 안 되는 부속 링크를 거른다.
+
+    - t.me/telegram.me: 메시지 서명의 채널 셀프링크. 행으로 만들면 같은 뉴스가 중복되고,
+      제목 보강이 t.me 페이지 제목(=채널명 'DAOL 조선/기계/방산 | 최광식')을 물어온다.
+    - finance.naver.com/item/…: 실적속보 포워딩에 딸려오는 Npay 증권 종목 링크.
+    """
+    parsed = urlparse(url)
+    host = (parsed.hostname or "").casefold().removeprefix("www.").removeprefix("m.")
+    if host in ("t.me", "telegram.me"):
+        return False
+    if host == "finance.naver.com" and parsed.path.startswith("/item/"):
+        return False
+    return True
 
 
 def extract_publisher(text: str, url: str | None = None) -> str | None:
@@ -367,7 +383,7 @@ def parse_report(text: str) -> dict:
 
 
 def parse_news(text: str) -> dict:
-    urls = URL_RE.findall(text)
+    urls = [url for url in URL_RE.findall(text) if is_article_url(url)]
     article_url = urls[0] if urls else None
     companies = extract_companies(text)
     company = ", ".join(companies) if companies else None
@@ -396,7 +412,7 @@ def parse_news_items(text: str) -> list[dict]:
         if line in INDUSTRIES:
             current_industry = line
             continue
-        urls = URL_RE.findall(line)
+        urls = [url for url in URL_RE.findall(line) if is_article_url(url)]
         if not urls:
             continue
         title = None
