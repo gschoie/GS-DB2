@@ -333,6 +333,22 @@ https://t.me/HI_GS"""
         self.assertTrue(items[0]["article_url"].startswith("https://www.theguru.co.kr"))
         self.assertNotIn("최광식", items[0]["title"])
 
+    def test_google_search_wrapped_links_are_unwrapped(self):
+        # 2026-06-30 구글 앱 공유 회귀: 모든 링크가 google.com/search?q=<원래URL>로 감싸져
+        # 서명 셀프링크가 'Google Search / 기업 미확인' 행이 되고 기사 링크도 구글로 남았다.
+        text = """> 방산 🛫 Indonesia Pulls Out Of KF-21 Co-Production, Could Acquire Jets Directly From South Korea: Reports
+> 인도네시아 KF-21 공동 생산 철회, 한국으로부터 직접 도입 가능성 제기
+출처: EurAsian Times
+링크: [https://www.eurasiantimes.com/kf21](https://www.google.com/search?q=https%3A%2F%2Fwww.eurasiantimes.com%2Fkf21)
+* 인도네시아 국방부 대변인, 공동 생산 계획 중단 공식화
+🎴 아쉽다...
+https://www.google.com/search?q=https%3A%2F%2Ft.me%2FHI_GS"""
+        items = parse_news_items(text)
+        self.assertEqual(len(items), 1)
+        self.assertEqual(items[0]["article_url"], "https://www.eurasiantimes.com/kf21")
+        self.assertEqual(items[0]["title"], "인도네시아 KF-21 공동 생산 철회, 한국으로부터 직접 도입 가능성 제기")
+        self.assertEqual(items[0]["company_name"], "한국항공우주")
+
     def test_npay_stock_link_in_earnings_forward_is_ignored(self):
         # 실적속보 포워딩 글의 Npay 증권 종목 링크가 'OO - Npay 증권' 쓰레기 행을 만들던 회귀.
         text = """2026.07.30 10:59:08

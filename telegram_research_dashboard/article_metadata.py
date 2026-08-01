@@ -22,7 +22,9 @@ MAX_HTML_BYTES = 1_500_000
 SHORTENER_HOSTS = {"tinyurl.com", "buly.kr", "bit.ly", "bitly.ws", "han.gl", "url.kr", "me2.do"}
 JUNK_TITLE_RE = re.compile(
     r"url shortener|tinyurl|bitly|branded short links|just a moment|attention required"
-    r"|access denied|captcha|robot check|verify you are",
+    r"|access denied|captcha|robot check|verify you are"
+    # 구글 검색/뉴스 리다이렉트가 안 풀리고 구글 자체 페이지가 열린 경우 (앵커드 완전일치만)
+    r"|^google\s*(?:search|news|뉴스)$|^before you continue",
     re.I,
 )
 # TinyURL은 봇으로 판단한 요청을 301 대신 preview 페이지(200)로 보낸다. 목적지는

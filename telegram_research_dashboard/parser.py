@@ -3,11 +3,11 @@
 from __future__ import annotations
 
 import re
-from urllib.parse import urlparse
+from urllib.parse import parse_qs, urlparse
 
 # 파싱 규칙을 바꿀 때마다 +1 한다. CI가 이 값을 DB의 PRAGMA user_version과 비교해
 # 파서가 바뀐 첫 수집 런에서만 전체 재분류를 자동으로 돌린다(rebuild_parsed_data.py --if-parser-changed).
-PARSER_VERSION = 4
+PARSER_VERSION = 5
 
 
 # 텔레그램에서 URL 뒤에 공백 없이 붙인 한글 코멘트까지 링크로 먹지 않는다.
@@ -144,6 +144,21 @@ PUBLISHER_DOMAINS = {
 
 def is_channel_signature(value: str | None) -> bool:
     return bool(value and CHANNEL_SIGNATURE_RE.search(value))
+
+
+def unwrap_google_redirect(url: str) -> str:
+    """구글 앱 공유가 링크를 google.com/search?q=<원래URL>(또는 /url?q=)로 감싼 것을 벗긴다.
+
+    감싼 채 두면 보강이 구글 페이지를 열어 제목이 'Google Search'가 되고,
+    구글로 감싸진 t.me 셀프링크는 is_article_url 필터도 통과해버린다.
+    """
+    parsed = urlparse(url)
+    host = (parsed.hostname or "").casefold().removeprefix("www.")
+    if (host == "google.com" or host.endswith(".google.com")) and parsed.path in ("/search", "/url"):
+        inner = parse_qs(parsed.query).get("q", [""])[0]
+        if inner.startswith(("http://", "https://")):
+            return inner
+    return url
 
 
 def is_article_url(url: str) -> bool:
@@ -383,7 +398,7 @@ def parse_report(text: str) -> dict:
 
 
 def parse_news(text: str) -> dict:
-    urls = [url for url in URL_RE.findall(text) if is_article_url(url)]
+    urls = [url for url in map(unwrap_google_redirect, URL_RE.findall(text)) if is_article_url(url)]
     article_url = urls[0] if urls else None
     companies = extract_companies(text)
     company = ", ".join(companies) if companies else None
@@ -412,7 +427,9 @@ def parse_news_items(text: str) -> list[dict]:
         if line in INDUSTRIES:
             current_industry = line
             continue
-        urls = [url for url in URL_RE.findall(line) if is_article_url(url)]
+        urls = list(dict.fromkeys(
+            url for url in map(unwrap_google_redirect, URL_RE.findall(line)) if is_article_url(url)
+        ))
         if not urls:
             continue
         title = None
