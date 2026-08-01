@@ -1,9 +1,12 @@
+import sqlite3
 import unittest
+from pathlib import Path
 
 from article_metadata import enrich_news_item
-from backfill_comments import extract_comment
+from backfill_comments import extract_comment, merge_reply_comments
 from enrich_report_tp import extract_tp
 from parser import classify, extract_companies, identify_companies, parse_news, parse_news_items, parse_report
+from public_importer import parse_page
 
 
 class PdfTargetPriceTest(unittest.TestCase):
@@ -467,6 +470,42 @@ https://example.com/c
 
 
 COMMENT_MARKER_LINE = "🎴"
+
+
+class ReplyCommentTest(unittest.TestCase):
+    # 2026-07-28 회귀: 답글의 원글 인용 미리보기가 본문에 섞여 '기사 제목 미확인' 행이 되고,
+    # 늦게 단 코멘트("단가가 나오는 걸…")가 원글 행에 연결되지 않았다.
+    REPLY_BLOCK = """<div class="tgme_widget_message_wrap js-widget_message_wrap">
+<div class="tgme_widget_message" data-post="HI_GS/6783">
+<a class="tgme_widget_message_reply user-color-default" href="https://t.me/HI_GS/6782" ">
+<div class="tgme_widget_message_author accent_color"><span dir="auto">DAOL</span></div>
+<div class="tgme_widget_message_text js-message_reply_text" dir="auto">원글 요약 미리보기 링크: https://en.defence…</div>
+</a>
+<div class="tgme_widget_message_text js-message_text" dir="auto">단가가 나오는 걸 보면은 계약을 하기는 하나 보다</div>
+<time datetime="2026-07-28T06:40:00+00:00"></time>
+</div></div>"""
+
+    def test_reply_preview_is_excluded_and_target_id_extracted(self):
+        messages = parse_page(self.REPLY_BLOCK)
+        self.assertEqual(len(messages), 1)
+        self.assertEqual(messages[0].message, "단가가 나오는 걸 보면은 계약을 하기는 하나 보다")
+        self.assertEqual(messages[0].reply_to_msg_id, 6782)
+
+    def test_reply_comment_merges_into_target_news_row_idempotently(self):
+        conn = sqlite3.connect(":memory:")
+        conn.row_factory = sqlite3.Row
+        conn.executescript((Path(__file__).resolve().parent.parent / "schema.sql").read_text(encoding="utf-8"))
+        conn.execute("""INSERT INTO telegram_messages(id,channel_id,message_id,posted_at,text)
+                        VALUES(1,'HI_GS',6782,'2026-07-28T06:39:38+00:00',
+                               '기사 제목\nhttps://en.defence-ua.com/a')""")
+        conn.execute("""INSERT INTO telegram_messages(id,channel_id,message_id,posted_at,text,reply_to_message_id)
+                        VALUES(2,'HI_GS',6783,'2026-07-28T06:40:00+00:00',
+                               '단가가 나오는 걸 보면은 계약을 하기는 하나 보다',6782)""")
+        conn.execute("INSERT INTO news_articles(id,message_id,source_index,title) VALUES(10,1,0,'기사 제목')")
+        for _ in range(2):  # 두 번 돌려도 중복 누적되지 않는다
+            merge_reply_comments(conn)
+        comment = conn.execute("SELECT comment FROM news_articles WHERE id=10").fetchone()["comment"]
+        self.assertEqual(comment, "단가가 나오는 걸 보면은 계약을 하기는 하나 보다")
 
 
 if __name__ == "__main__":

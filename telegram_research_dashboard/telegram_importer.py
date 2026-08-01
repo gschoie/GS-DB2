@@ -49,13 +49,15 @@ def store_message(conn, channel_id: str, message) -> bool:
     edited_at = message.edit_date.astimezone(timezone.utc).isoformat() if message.edit_date else None
     public_name = channel_id.lstrip("@")
     source_url = None if public_name.lstrip("-").isdigit() else f"https://t.me/{public_name}/{message.id}"
+    reply_to = getattr(message, "reply_to_msg_id", None)
     cursor = conn.execute(
-        """INSERT INTO telegram_messages(channel_id,message_id,posted_at,edited_at,text,source_url,media_type)
-           VALUES(?,?,?,?,?,?,?) ON CONFLICT(channel_id,message_id) DO UPDATE SET
+        """INSERT INTO telegram_messages(channel_id,message_id,posted_at,edited_at,text,source_url,media_type,reply_to_message_id)
+           VALUES(?,?,?,?,?,?,?,?) ON CONFLICT(channel_id,message_id) DO UPDATE SET
            posted_at=excluded.posted_at, edited_at=excluded.edited_at, text=excluded.text,
-           source_url=excluded.source_url,media_type=excluded.media_type""",
+           source_url=excluded.source_url,media_type=excluded.media_type,
+           reply_to_message_id=excluded.reply_to_message_id""",
         (channel_id, message.id, posted_at, edited_at, text, source_url,
-         type(message.media).__name__ if message.media else None),
+         type(message.media).__name__ if message.media else None, reply_to),
     )
     row = conn.execute(
         "SELECT id FROM telegram_messages WHERE channel_id=? AND message_id=?", (channel_id, message.id)

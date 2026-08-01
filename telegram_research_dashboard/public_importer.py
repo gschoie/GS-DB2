@@ -22,6 +22,8 @@ from telegram_importer import load_dotenv, store_message
 
 POST_RE = re.compile(r'data-post="([^"/]+)/([0-9]+)"')
 DATETIME_RE = re.compile(r'<time[^>]+datetime="([^"]+)"')
+# 답글의 원글 링크: <a class="tgme_widget_message_reply …" href="https://t.me/<채널>/<번호>"
+REPLY_RE = re.compile(r'class="tgme_widget_message_reply[^"]*"\s+href="[^"]*/([0-9]+)"')
 BLOCK_RE = re.compile(
     r'(<div class="tgme_widget_message_wrap[^>]*>.*?)(?=<div class="tgme_widget_message_wrap|<div class="tgme_widget_message_centered|\Z)',
     re.S,
@@ -38,7 +40,9 @@ class MessageTextParser(HTMLParser):
     def handle_starttag(self, tag, attrs):
         values = dict(attrs)
         classes = values.get("class", "").split()
-        if tag == "div" and "tgme_widget_message_text" in classes:
+        # js-message_reply_text는 답글에 붙는 원글 인용 미리보기 — 본문이 아니므로 제외한다.
+        # (섞으면 원글 요약과 잘린 URL("https://en.defence…")이 답글 텍스트에 들어간다.)
+        if tag == "div" and "tgme_widget_message_text" in classes and "js-message_reply_text" not in classes:
             self.capture = True
             self.depth = 1
             return
@@ -102,10 +106,12 @@ def parse_page(source: str) -> list[SimpleNamespace]:
         text = parser.text()
         if not text:
             continue
+        reply = REPLY_RE.search(block)
         messages.append(SimpleNamespace(
             id=int(post.group(2)), message=text,
             date=datetime.fromisoformat(stamp.group(1).replace("Z", "+00:00")),
             edit_date=None, media=None,
+            reply_to_msg_id=int(reply.group(1)) if reply else None,
         ))
     return messages
 

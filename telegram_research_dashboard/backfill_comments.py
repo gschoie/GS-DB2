@@ -53,6 +53,34 @@ def extract_comment(text: str) -> str | None:
     return "\n".join(lines)[:1000]
 
 
+def merge_reply_comments(conn) -> int:
+    """답글로 늦게 단 코멘트를 원글 뉴스 행의 comment에 병합한다.
+
+    원문에서 매번 다시 계산하므로 여러 번 실행해도 중복 누적되지 않는다.
+    """
+    rows = conn.execute(
+        """SELECT n.id AS news_id, t.text AS target_text, r.text AS reply_text
+           FROM telegram_messages r
+           JOIN telegram_messages t ON t.channel_id = r.channel_id AND t.message_id = r.reply_to_message_id
+           JOIN news_articles n ON n.message_id = t.id AND n.source_index = 0
+           WHERE r.reply_to_message_id IS NOT NULL AND r.text != ''
+           ORDER BY r.posted_at"""
+    ).fetchall()
+    grouped: dict[int, dict] = {}
+    for row in rows:
+        cleaned = "\n".join(_clean_lines(row["reply_text"].splitlines())).removeprefix(COMMENT_MARKER).strip()
+        if not cleaned:
+            continue
+        entry = grouped.setdefault(row["news_id"], {"target_text": row["target_text"], "replies": []})
+        if cleaned not in entry["replies"]:
+            entry["replies"].append(cleaned)
+    for news_id, entry in grouped.items():
+        base = extract_comment(entry["target_text"] or "")
+        comment = "\n".join(part for part in (base, *entry["replies"]) if part)[:1000]
+        conn.execute("UPDATE news_articles SET comment=? WHERE id=?", (comment, news_id))
+    return len(grouped)
+
+
 def _clean_lines(raw_lines: list[str]) -> list[str]:
     lines = []
     for raw in raw_lines:
@@ -91,8 +119,9 @@ def run() -> int:
                 retitled += 1
             conn.execute("UPDATE news_articles SET comment=?,title=? WHERE id=?", (comment, title, row["id"]))
             updated += 1
+        merged = merge_reply_comments(conn)
         conn.commit()
-    print(f"코멘트 backfill: {updated:,}건 (제목 교체 {retitled:,}건)")
+    print(f"코멘트 backfill: {updated:,}건 (제목 교체 {retitled:,}건, 답글 병합 {merged:,}건)")
     return updated
 
 

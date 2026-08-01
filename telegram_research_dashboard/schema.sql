@@ -9,6 +9,8 @@ CREATE TABLE IF NOT EXISTS telegram_messages (
   text TEXT NOT NULL DEFAULT '',
   source_url TEXT,
   media_type TEXT,
+  -- 같은 채널 내 답글의 원글 message_id. 답글로 늦게 단 코멘트를 원글 뉴스 행에 병합할 때 쓴다.
+  reply_to_message_id INTEGER,
   imported_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
   UNIQUE(channel_id, message_id)
 );

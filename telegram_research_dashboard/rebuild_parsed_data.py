@@ -17,7 +17,7 @@ def rebuild(only_if_parser_changed: bool = False) -> None:
             print(f"파서 v{PARSER_VERSION} 그대로 — 전체 재분류 생략")
             return
         messages = conn.execute(
-            "SELECT channel_id,message_id,posted_at,edited_at,text FROM telegram_messages ORDER BY id"
+            "SELECT channel_id,message_id,posted_at,edited_at,text,reply_to_message_id FROM telegram_messages ORDER BY id"
         ).fetchall()
         for index, row in enumerate(messages, 1):
             message = SimpleNamespace(
@@ -26,6 +26,7 @@ def rebuild(only_if_parser_changed: bool = False) -> None:
                 date=datetime.fromisoformat(row["posted_at"]),
                 edit_date=datetime.fromisoformat(row["edited_at"]) if row["edited_at"] else None,
                 media=None,
+                reply_to_msg_id=row["reply_to_message_id"],
             )
             store_message(conn, row["channel_id"], message)
             if index % 500 == 0:

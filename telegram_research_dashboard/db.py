@@ -29,6 +29,9 @@ def initialize() -> None:
         news_columns = {row[1] for row in conn.execute("PRAGMA table_info(news_articles)")}
         if "comment" not in news_columns:
             conn.execute("ALTER TABLE news_articles ADD COLUMN comment TEXT")
+        message_columns = {row[1] for row in conn.execute("PRAGMA table_info(telegram_messages)")}
+        if "reply_to_message_id" not in message_columns:
+            conn.execute("ALTER TABLE telegram_messages ADD COLUMN reply_to_message_id INTEGER")
         _allow_multiple_reports_per_message(conn)
 
 
