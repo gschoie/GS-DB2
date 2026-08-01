@@ -8,11 +8,17 @@ enrich로 기사 제목을 실제 제목으로 바꾼 뒤 실행하는 것을 �
 
 from __future__ import annotations
 
+import re
 from concurrent.futures import ThreadPoolExecutor
 
 from article_metadata import fetch_article_metadata, TITLE_PLACEHOLDERS
 from db import connect, initialize
 from parser import URL_RE, DAILY_NEWS_RE, WEEKLY_RE, is_channel_signature
+
+# GEM 요약 공유 형식: [제목] + • 불릿 요약 + ❗️ 한줄 평 + ───── + 🎴 내 의견(스포일러).
+# •/❗️ 줄은 기사 내용 요약이지 내 코멘트가 아니다 — 내 의견은 🎴 이후에만 있다.
+COMMENT_MARKER = "🎴"
+SEPARATOR_RE = re.compile(r"^[─━―—=＝_\-]{4,}$")
 
 
 def extract_comment(text: str) -> str | None:
@@ -21,14 +27,24 @@ def extract_comment(text: str) -> str | None:
     urls = [u for u in URL_RE.findall(text) if "t.me/" not in u and "telegram.me/" not in u]
     if len(urls) != 1:  # 링크가 정확히 하나인 단발성 공유만 코멘트로 본다
         return None
+    raw_lines = text.splitlines()
+    # 🎴 줄부터가 내 의견이다. 단 채널 서명(🎴 조선/기계/방산 | 최광식 …)은 의견이 아니다.
+    marker_index = next((index for index, raw in enumerate(raw_lines)
+                         if COMMENT_MARKER in raw and not is_channel_signature(raw)), None)
+    if marker_index is None and any(raw.lstrip().startswith(("•", "❗")) for raw in raw_lines):
+        return None  # 요약만 있고 🎴 의견이 없는 GEM 공유
+    selected = raw_lines[marker_index:] if marker_index is not None else raw_lines
     lines = []
-    for raw in text.splitlines():
+    for raw in selected:
         line = raw.strip(" -•>\t")
         if (not line or line.startswith("http") or URL_RE.search(line)
-                or is_channel_signature(line)
+                or is_channel_signature(line) or SEPARATOR_RE.match(line)
                 or line.startswith(("출처:", "출처 ", "* 위 내용", "위 내용은"))):
             continue
         lines.append(line)
+    if marker_index is not None:
+        comment = "\n".join(lines).removeprefix(COMMENT_MARKER).strip()
+        return comment[:1000] or None
     if len(lines) < 2:  # 한 줄뿐이면 기사 헤드라인일 가능성이 커 코멘트로 보지 않는다
         return None
     return "\n".join(lines)[:1000]

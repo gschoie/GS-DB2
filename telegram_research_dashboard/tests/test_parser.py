@@ -1,6 +1,7 @@
 import unittest
 
 from article_metadata import enrich_news_item
+from backfill_comments import extract_comment
 from enrich_report_tp import extract_tp
 from parser import classify, extract_companies, identify_companies, parse_news, parse_news_items, parse_report
 
@@ -349,6 +350,54 @@ https://finance.naver.com/item/main.nhn?code=439260"""
         samsung = parse_news_items("삼성重 최성안 부회장, 자사주 1만주 매입…책임경영 의지\nhttps://example.com/shi")[0]
         self.assertEqual(kai["company_name"], "한국항공우주")
         self.assertEqual(samsung["company_name"], "삼성중공업")
+
+
+class ExtractCommentTest(unittest.TestCase):
+    # GEM 요약 공유: •/❗️는 기사 요약, 내 의견은 🎴 이후에만 있다 (2026-08-01 수빅 진수 건 회귀).
+    GEM_TEXT = """[HD현대중공업 필리핀, 수빅 첫 건조선 진수…현지 고용 4000명 창출]
+• HD현대중공업 필리핀 법인이 수빅만 조선소에서 첫 건조 선박 '오리온 제이드' 진수 완료
+• 2025년 9월 착공한 4척 건조 프로그램 중 첫 번째 선박으로 길이 250m·폭 42m 규모
+❗️ 수빅 조선소 재가동을 통한 대형 선박 건조 역량 입증 및 현지 고용·산업 협력 강화
+https://example.com/article
+─────────────────────
+🎴 와우~ 4월에 갔을때, 3월 기준 2,150명이었는데!! 가즈아~ 10척, 매출 1조원 +
+DAOL 조선/기계/방산 | 최광식
+https://t.me/HI_GS"""
+
+    def test_gem_summary_is_not_my_comment(self):
+        comment = extract_comment(self.GEM_TEXT)
+        self.assertEqual(comment, "와우~ 4월에 갔을때, 3월 기준 2,150명이었는데!! 가즈아~ 10척, 매출 1조원 +")
+
+    def test_gem_share_without_marker_has_no_comment(self):
+        text = "\n".join(line for line in self.GEM_TEXT.splitlines() if COMMENT_MARKER_LINE not in line)
+        self.assertIsNone(extract_comment(text))
+
+    def test_multiline_opinion_after_marker(self):
+        text = """[기사 제목]
+• 요약 한 줄
+https://example.com/a
+🎴 오오~ 언제 1위가 되었니!? 다시 출장 가보고 싶다. 인도...
+HD가 조선+건기 묶어서 함 가보면 좋겠건만"""
+        self.assertEqual(extract_comment(text),
+                         "오오~ 언제 1위가 되었니!? 다시 출장 가보고 싶다. 인도...\nHD가 조선+건기 묶어서 함 가보면 좋겠건만")
+
+    def test_plain_share_keeps_legacy_comment_heuristic(self):
+        text = """삼성重 이 계약 눈여겨봐야 한다
+초대형 컨테이너선 발주 사이클이 돌아오는 신호
+https://example.com/b"""
+        self.assertEqual(extract_comment(text),
+                         "삼성重 이 계약 눈여겨봐야 한다\n초대형 컨테이너선 발주 사이클이 돌아오는 신호")
+
+    def test_signature_card_emoji_is_not_an_opinion(self):
+        # 보고서 서명 "🎴 조선/기계/방산 | 최광식 | DAOL투자증권"의 🎴는 의견 마커가 아니다.
+        text = """한화오션 수주 코멘트
+낙폭 과대라 본다
+https://example.com/c
+🎴 조선/기계/방산 | 최광식 | DAOL투자증권"""
+        self.assertEqual(extract_comment(text), "한화오션 수주 코멘트\n낙폭 과대라 본다")
+
+
+COMMENT_MARKER_LINE = "🎴"
 
 
 if __name__ == "__main__":
