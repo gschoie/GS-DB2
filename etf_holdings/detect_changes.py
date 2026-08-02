@@ -104,6 +104,42 @@ def diff_etf(prev, now):
             "has_weight": has_w}
 
 
+def compare(prev, now, prev_date, now_date, generated=""):
+    """두 스냅샷(dict)을 비교해 changes payload를 만든다. 리포트의 과거일 재계산에도 사용."""
+    etfs_out = []
+    n_new = n_gone = n_moves = 0
+    for code, now_rec in now["etfs"].items():
+        prev_rec = prev["etfs"].get(code)
+        if not prev_rec:
+            continue
+        d = diff_etf(prev_rec, now_rec)
+        if not (d["new"] or d["gone"] or d["moves"]):
+            continue
+        n_new += len(d["new"]); n_gone += len(d["gone"]); n_moves += len(d["moves"])
+        etfs_out.append({
+            "code": code, "label": now_rec.get("label", now_rec.get("name", "")),
+            "group": now_rec.get("group", ""), **d,
+        })
+
+    # 변화 큰 ETF 먼저
+    etfs_out.sort(key=lambda e: (len(e["new"]) + len(e["gone"])) * 10
+                  + sum(1 for m in e["moves"] if m["headline"]) * 5 + len(e["moves"]),
+                  reverse=True)
+    today_base = now.get("base_date", "")
+    prev_base = prev.get("base_date", "")
+    return {
+        "date": now_date, "prev_date": prev_date, "generated_at": generated,
+        "base_date": today_base, "prev_base_date": prev_base,
+        "same_base": bool(today_base and today_base == prev_base),
+        "first_run": False, "etfs": etfs_out,
+        "thresholds": {"weight_pp_min": WEIGHT_PP_MIN, "weight_pp_big": WEIGHT_PP_BIG,
+                       "share_pct_min": SHARE_PCT_MIN},
+        "summary": {"etfs_changed": len(etfs_out), "new_total": n_new,
+                    "gone_total": n_gone, "moves_total": n_moves,
+                    "universe": len(now["etfs"])},
+    }
+
+
 def detect():
     dates = _snap_dates()
     generated = datetime.now(KST).strftime("%Y-%m-%d %H:%M")
@@ -123,39 +159,10 @@ def detect():
 
     prev_date, prev_path = dates[-2]
     prev = _load(prev_path)
-
-    etfs_out = []
-    n_new = n_gone = n_moves = 0
-    for code, now_rec in today["etfs"].items():
-        prev_rec = prev["etfs"].get(code)
-        if not prev_rec:
-            continue
-        d = diff_etf(prev_rec, now_rec)
-        if not (d["new"] or d["gone"] or d["moves"]):
-            continue
-        n_new += len(d["new"]); n_gone += len(d["gone"]); n_moves += len(d["moves"])
-        etfs_out.append({
-            "code": code, "label": now_rec.get("label", now_rec.get("name", "")),
-            "group": now_rec.get("group", ""), **d,
-        })
-
-    # 변화 큰 ETF 먼저
-    etfs_out.sort(key=lambda e: (len(e["new"]) + len(e["gone"])) * 10
-                  + sum(1 for m in e["moves"] if m["headline"]) * 5 + len(e["moves"]),
-                  reverse=True)
-    today_base = today.get("base_date", "")
-    prev_base = prev.get("base_date", "")
-    payload = {
-        "date": today_date, "prev_date": prev_date, "generated_at": generated,
-        "base_date": today_base, "prev_base_date": prev_base,
-        "same_base": bool(today_base and today_base == prev_base),
-        "first_run": False, "etfs": etfs_out,
-        "thresholds": {"weight_pp_min": WEIGHT_PP_MIN, "weight_pp_big": WEIGHT_PP_BIG,
-                       "share_pct_min": SHARE_PCT_MIN},
-        "summary": {"etfs_changed": len(etfs_out), "new_total": n_new,
-                    "gone_total": n_gone, "moves_total": n_moves,
-                    "universe": len(today["etfs"])},
-    }
+    payload = compare(prev, today, prev_date, today_date, generated)
+    etfs_out = payload["etfs"]
+    n_new, n_gone = payload["summary"]["new_total"], payload["summary"]["gone_total"]
+    n_moves = payload["summary"]["moves_total"]
     _save(payload)
     print(f"변화 감지: {today_date} vs {prev_date} · 변화ETF {len(etfs_out)}개 "
           f"(신규 {n_new}·이탈 {n_gone}·실매매 {n_moves}) → changes.json")

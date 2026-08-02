@@ -4,6 +4,7 @@
 출력: ../telegram_research_dashboard/static/market_flow_report.html
 (MARKET_FLOW_OUT 환경변수로 재지정 가능)
 외부 라이브러리 없이 표준 라이브러리 + 인라인 SVG로만 그린다. 단위: 억원.
+과거 일자도 ◀▶ 네비게이션으로 조회 가능 (최근 MAX_DAYS일 임베드).
 """
 import json
 import os
@@ -20,6 +21,7 @@ KST = dt.timezone(dt.timedelta(hours=9))
 SLOT_LABEL = {"1000": "10:00", "1300": "13:00",
               "1540": "15:40 잠정", "1640": "16:40 확정"}
 WD = "월화수목금토일"
+MAX_DAYS = 30  # 네비게이션으로 볼 수 있는 과거 일수(페이지 용량 상한)
 
 C_IND, C_FRN, C_INST = "#7f8792", "#d64545", "#3b6fd4"
 C_ARB, C_NONARB, C_TOTAL = "#e0902f", "#2fa170", "#666e78"
@@ -159,13 +161,13 @@ def build_signals(today, prev_slot_snap):
     return sig
 
 
-def build():
-    hist = json.loads(HISTORY.read_text(encoding="utf-8"))
+def render_day(hist, all_dates, i):
+    """all_dates[i] 하루치 본문 HTML (네비게이션으로 교체되는 부분)."""
     days = hist["days"]
-    dates = sorted(days)
-    today_key = dates[-1]
-    today = days[today_key]
-    t_date = dt.date.fromisoformat(today_key)
+    dkey = all_dates[i]
+    today = days[dkey]
+    is_latest = i == len(all_dates) - 1
+    t_date = dt.date.fromisoformat(dkey)
     kospi = today.get("kospi", {})
     slots = today.get("slots", {})
     slot_keys = [k for k in ("1000", "1300", "1540", "1640") if k in slots]
@@ -181,6 +183,10 @@ def build():
     for label, key, color in rows_def:
         tds = "".join(cell(slots[k].get(key)) for k in slot_keys)
         body += (f'<tr><th style="border-left:3px solid {color}">{label}</th>{tds}</tr>')
+    if not slot_keys:
+        snap_table = '<p class="na">장중 스냅샷 데이터 없음</p>'
+    else:
+        snap_table = f'<table><thead><tr><th></th>{head}</tr></thead><tbody>{body}</tbody></table>'
     conf_note = ""
     if conf_inv and conf_prg:
         conf_note = (f'<p class="note">일별 확정(거래소): 개인 {fmt(conf_inv["individual"])} · '
@@ -188,15 +194,17 @@ def build():
                      f'프로그램 {fmt(conf_prg["total_net"])} '
                      f'(차익 {fmt(conf_prg["arb_net"])} · 비차익 {fmt(conf_prg["nonarb_net"])})</p>')
 
-    # ── 장중 곡선 ──
+    # ── 장중 곡선 (해당 일자 것만 — 최신 페이지에 한해 최근 보유일 폴백) ──
     curve = today.get("curve") or {}
-    curve_day = today_key
-    if not curve:  # 오늘 곡선이 아직 없으면 최근 곡선 보유일로 폴백
-        for d in reversed(dates):
+    curve_day = dkey
+    if not curve and is_latest:
+        for d in reversed(all_dates):
             if days[d].get("curve"):
                 curve, curve_day = days[d]["curve"], d
                 break
-    inv_chart = prg_chart = '<p class="na">장중 곡선 데이터 없음</p>'
+    no_curve = ('<p class="na">장중 곡선 데이터 없음'
+                + ('' if is_latest else ' (장중 곡선은 최근 5일만 보관)') + '</p>')
+    inv_chart = prg_chart = no_curve
     if curve:
         ic = curve.get("investor", [])
         pc = curve.get("program", [])
@@ -207,8 +215,9 @@ def build():
                                 ("비차익", C_NONARB, [(r[0], r[2]) for r in pc]),
                                 ("전체", C_TOTAL, [(r[0], r[3]) for r in pc])])
 
-    # ── 최근 20일 확정 ──
-    conf_days = [(d, days[d]["confirmed"]) for d in dates if days[d].get("confirmed")]
+    # ── 해당 일자 기준 최근 20일 확정 ──
+    upto = all_dates[:i + 1]
+    conf_days = [(d, days[d]["confirmed"]) for d in upto if days[d].get("confirmed")]
     last20 = conf_days[-20:]
     bars = bar_chart([(d, c["investor"]["individual"], c["investor"]["foreign"],
                        c["investor"]["inst_total"]) for d, c in last20 if "investor" in c])
@@ -248,8 +257,60 @@ def build():
     chg = kospi.get("chg_pct", 0)
     chg_cls = "pos" if chg > 0 else "neg" if chg < 0 else ""
     arrow = "▲" if chg > 0 else "▼" if chg < 0 else "–"
+    close = kospi.get("close")
+    if isinstance(close, (int, float)):
+        kospi_html = f'KOSPI {close:,} <span class="{chg_cls}">{arrow} {abs(chg)}%</span>'
+    else:
+        kospi_html = 'KOSPI <span class="na">지수 데이터 없음</span>'
     latest_label = SLOT_LABEL.get(slot_keys[-1], "-") if slot_keys else "-"
     updated = hist.get("updated_kst", "")
+    upd_txt = f" · 갱신 {updated} KST" if is_latest and updated else ""
+    sig_title = "🧭 오늘의 해석" if is_latest else "🧭 당일 해석"
+
+    return f"""
+<p class="sub">{t_date.month}/{t_date.day}({WD[t_date.weekday()]}) · 최근 스냅샷 {latest_label}{upd_txt}
+ · 단위 억원</p>
+<p class="kospi">{kospi_html}</p>
+
+<h2>{sig_title}</h2>
+<div class="card"><ul class="signals">{sig_html}</ul></div>
+
+<h2>📸 시점별 스냅샷 <span class="na" style="font-weight:400;font-size:12px">(잠정치, 억원)</span></h2>
+<div class="card scroll">{snap_table}{conf_note}</div>
+
+<h2>📈 장중 누적 흐름 — 투자자별 <span class="na" style="font-weight:400;font-size:12px">({curve_day})</span></h2>
+<div class="card">{inv_chart}</div>
+<h2>⚙️ 장중 누적 흐름 — 프로그램 <span class="na" style="font-weight:400;font-size:12px">({curve_day})</span></h2>
+<div class="card">{prg_chart}</div>
+
+<h2>📅 최근 20일 일별 순매수 (확정)</h2>
+<div class="chips">{chips}</div>
+<p class="note">최근 {n20}영업일 누적 순매수 ({dkey} 기준)</p>
+<div class="card">{bars}</div>
+
+<h2>🏦 기관 세부 — 최근 5일 (확정, 억원)</h2>
+<div class="card scroll"><table>
+<thead><tr><th>날짜</th>{det_head}</tr></thead><tbody>{det_body}</tbody></table></div>
+"""
+
+
+def build():
+    hist = json.loads(HISTORY.read_text(encoding="utf-8"))
+    days = hist["days"]
+    all_dates = sorted(days)
+    nav_dates = all_dates[-MAX_DAYS:]
+    pages = {d: render_day(hist, all_dates, all_dates.index(d)) for d in nav_dates}
+
+    date_opts = []
+    for d in nav_dates:
+        t = dt.date.fromisoformat(d)
+        label = f"{t.month}/{t.day}({WD[t.weekday()]})"
+        if d == nav_dates[-1]:
+            label += " · 최신"
+        date_opts.append(f'<option value="{d}">{label}</option>')
+
+    pages_json = json.dumps(pages, ensure_ascii=False).replace("</", "<\\/")
+    dates_json = json.dumps(nav_dates)
 
     html = f"""<!DOCTYPE html>
 <html lang="ko"><head><meta charset="utf-8">
@@ -288,39 +349,55 @@ border-radius:8px;padding:8px 10px;display:flex;flex-direction:column}}
 .signals{{margin:6px 0;padding-left:20px}} .signals li{{margin:3px 0}}
 .scroll{{overflow-x:auto}}
 footer{{margin-top:28px;font-size:11.5px;color:var(--muted)}}
+.nav{{display:flex;align-items:center;gap:8px;margin:10px 0 4px;position:sticky;top:0;
+background:var(--bg);padding:6px 0;z-index:5}}
+.nav button{{background:var(--card);color:var(--fg);border:1px solid var(--line);
+border-radius:8px;padding:6px 14px;font-size:14px;cursor:pointer;line-height:1}}
+.nav button:disabled{{opacity:.35;cursor:default}}
+.nav button:not(:disabled):hover{{border-color:var(--muted)}}
+.nav select{{background:var(--card);color:var(--fg);border:1px solid var(--line);
+border-radius:8px;padding:6px 8px;font-size:13px;flex:0 1 auto}}
+.nav .hint{{margin-left:auto;font-size:11.5px;color:var(--muted)}}
 </style></head><body><div class="wrap">
 <h1>💹 시장 수급 동향 <span style="font-weight:400;font-size:13px">KOSPI</span></h1>
-<p class="sub">{t_date.month}/{t_date.day}({WD[t_date.weekday()]}) · 최근 스냅샷 {latest_label}
- · 갱신 {updated} KST · 단위 억원</p>
-<p class="kospi">KOSPI {kospi.get("close", "–"):,} <span class="{chg_cls}">{arrow} {abs(chg)}%</span></p>
-
-<h2>🧭 오늘의 해석</h2>
-<div class="card"><ul class="signals">{sig_html}</ul></div>
-
-<h2>📸 시점별 스냅샷 <span class="na" style="font-weight:400;font-size:12px">(잠정치, 억원)</span></h2>
-<div class="card scroll"><table>
-<thead><tr><th></th>{head}</tr></thead><tbody>{body}</tbody></table>{conf_note}</div>
-
-<h2>📈 장중 누적 흐름 — 투자자별 <span class="na" style="font-weight:400;font-size:12px">({curve_day})</span></h2>
-<div class="card">{inv_chart}</div>
-<h2>⚙️ 장중 누적 흐름 — 프로그램 <span class="na" style="font-weight:400;font-size:12px">({curve_day})</span></h2>
-<div class="card">{prg_chart}</div>
-
-<h2>📅 최근 20일 일별 순매수 (확정)</h2>
-<div class="chips">{chips}</div>
-<p class="note">최근 {n20}영업일 누적 순매수</p>
-<div class="card">{bars}</div>
-
-<h2>🏦 기관 세부 — 최근 5일 (확정, 억원)</h2>
-<div class="card scroll"><table>
-<thead><tr><th>날짜</th>{det_head}</tr></thead><tbody>{det_body}</tbody></table></div>
+<div class="nav">
+<button id="btn-prev" title="이전 영업일 (←)">◀</button>
+<select id="sel-date">{"".join(date_opts)}</select>
+<button id="btn-next" title="다음 영업일 (→)">▶</button>
+<span class="hint">← → 키로도 이동</span>
+</div>
+<div id="day"></div>
 
 <footer>데이터: NAVER 증권(투자자별·프로그램 매매동향) · 장중 수치는 거래소 잠정치로 확정치와 다를 수 있음
- · 하루 4회 자동 갱신(10:00 / 13:00 / 15:40 / 16:40 KST) · GS Research Desk</footer>
-</div></body></html>"""
+ · 하루 4회 자동 갱신(10:00 / 13:00 / 15:40 / 16:40 KST) · 과거 {len(nav_dates)}영업일 조회 가능 · GS Research Desk</footer>
+</div>
+<script>
+var PAGES = {pages_json};
+var DATES = {dates_json};
+var idx = DATES.length - 1;
+var sel = document.getElementById("sel-date");
+var prev = document.getElementById("btn-prev");
+var next = document.getElementById("btn-next");
+function show(i) {{
+  idx = Math.max(0, Math.min(i, DATES.length - 1));
+  document.getElementById("day").innerHTML = PAGES[DATES[idx]];
+  sel.value = DATES[idx];
+  prev.disabled = idx === 0;
+  next.disabled = idx === DATES.length - 1;
+}}
+prev.addEventListener("click", function () {{ show(idx - 1); }});
+next.addEventListener("click", function () {{ show(idx + 1); }});
+sel.addEventListener("change", function () {{ show(DATES.indexOf(sel.value)); }});
+document.addEventListener("keydown", function (e) {{
+  if (e.key === "ArrowLeft") show(idx - 1);
+  else if (e.key === "ArrowRight") show(idx + 1);
+}});
+show(idx);
+</script>
+</body></html>"""
     OUT.parent.mkdir(parents=True, exist_ok=True)
     OUT.write_text(html, encoding="utf-8")
-    print(f"리포트 생성: {OUT} ({OUT.stat().st_size/1024:.0f} KB)")
+    print(f"리포트 생성: {OUT} ({OUT.stat().st_size/1024:.0f} KB, {len(nav_dates)}일 임베드)")
 
 
 if __name__ == "__main__":

@@ -1,7 +1,10 @@
 # -*- coding: utf-8 -*-
-"""changes.json + 최신 스냅샷 → etf_holdings_report.html (GS Research Desk 톤, 자기완결).
+"""changes.json + 스냅샷 히스토리 → etf_holdings_report.html (GS Research Desk 톤, 자기완결).
+과거 일자 변화는 스냅샷 쌍으로 재계산해 ◀▶ 네비게이션으로 조회 (최근 MAX_DAYS일 임베드).
 출력 경로: 환경변수 ETF_HOLDINGS_OUT (없으면 HERE/etf_holdings_report.html)."""
-import os, sys, json, glob, html
+import os, sys, json, glob, html, datetime
+
+import detect_changes as dc
 
 try:
     sys.stdout.reconfigure(encoding="utf-8")
@@ -11,6 +14,8 @@ except Exception:
 HERE = os.path.dirname(os.path.abspath(__file__))
 SNAP_DIR = os.path.join(HERE, "snapshots")
 OUT = os.environ.get("ETF_HOLDINGS_OUT", os.path.join(HERE, "etf_holdings_report.html"))
+MAX_DAYS = 20  # 네비게이션으로 볼 수 있는 과거 일수(페이지 용량 상한)
+WD = "월화수목금토일"
 
 
 def esc(s):
@@ -76,8 +81,8 @@ def _bar_rows(holdings, mode):
     return "".join(out)
 
 
-def current_holdings_block(snap):
-    """접이식: 유니버스 전체(21개) 현재 Top10 보유를 비율 막대로."""
+def current_holdings_block(snap, day_label):
+    """접이식: 유니버스 전체(21개) 해당일 Top10 보유를 비율 막대로."""
     blocks = []
     for code, e in snap["etfs"].items():
         hs = e.get("holdings", [])
@@ -93,45 +98,102 @@ def current_holdings_block(snap):
             f'<div class="hcard"><div class="hh"><b>{esc(e.get("label", e.get("name","")))}</b>'
             f'<small>{esc(e.get("group",""))} · {summ}</small></div>'
             f'<div class="hbars">{_bar_rows(hs, mode)}</div></div>')
-    return (f'<details class="cur" open><summary>전체 유니버스 현재 보유(Top10) · {len(blocks)}개 · 비율 막대</summary>'
+    return (f'<details class="cur" open><summary>전체 유니버스 {esc(day_label)} 보유(Top10) · {len(blocks)}개 · 비율 막대</summary>'
             f'<div class="hgrid">{"".join(blocks)}</div></details>')
+
+
+def day_html(ch, snap, is_latest):
+    """하루치 본문(네비게이션으로 교체되는 부분)."""
+    s = ch["summary"]
+    base = esc(ch.get("base_date") or "—")
+    prevbase = esc(ch.get("prev_base_date") or "—")
+    if not ch["etfs"]:
+        body = (f'<div class="none">이 날(<b>{prevbase} → {base}</b> 기준일 비교)은 '
+                '유의미한 구성 변화가 없습니다. ✅</div>')
+    else:
+        body = '<div class="cards">' + "".join(etf_card(e) for e in ch["etfs"]) + '</div>'
+
+    raw = ch.get("base_date") or ch.get("date") or ""
+    h2d = f"{raw[2:4]}/{raw[5:7]}/{raw[8:10]}" if len(raw) == 10 else "—"
+    banner = ""
+    if is_latest and ch.get("same_base"):
+        banner = ('<div class="banner">⚠ 직전 실행과 <b>구성 기준일이 동일</b>합니다 '
+                  f'({base} · KRX 장마감). 아직 새 구성이 반영되지 않아 변화가 없을 수 있습니다.</div>')
+    gen = esc(ch.get("generated_at") or "")
+    gen_txt = f'생성 <b>{gen}</b> · ' if gen else ''
+    title = "오늘" if is_latest else "당일"
+
+    return f"""
+<p class="sub">{gen_txt}실행일 {esc(ch["date"])}<br>
+구성 기준일 <b>{base}</b> (KRX 장마감) · 비교 <b>{prevbase} → {base}</b><br>
+매일 구성종목(Top10)을 스냅샷하고, <b>주가 효과와 CU 자금유출입을 제거</b>해 운용사가 실제로 사고판 것만 잡아냅니다.</p>
+{banner}
+
+<section class="stats">
+  <article><small>유니버스</small><strong>{s["universe"]}</strong></article>
+  <article><small>변화 ETF</small><strong class="g">{s["etfs_changed"]}</strong></article>
+  <article><small>Top10 신규 진입</small><strong class="g">{s["new_total"]}</strong></article>
+  <article><small>실매매(리밸런싱)</small><strong>{s["moves_total"]}</strong></article>
+</section>
+
+<h2>{title}({esc(h2d)})의 구성 변화</h2>
+{body}
+
+{current_holdings_block(snap, h2d)}
+"""
 
 
 def build():
     with open(os.path.join(HERE, "changes.json"), encoding="utf-8") as f:
         ch = json.load(f)
     snaps = sorted(glob.glob(os.path.join(SNAP_DIR, "*.json")))
-    snap = json.load(open(snaps[-1], encoding="utf-8")) if snaps else {"etfs": {}}
-
-    s = ch["summary"]
-    base = esc(ch.get("base_date") or "—")
-    prevbase = esc(ch.get("prev_base_date") or "—")
-    if ch.get("first_run"):
-        body = ('<div class="none">첫 스냅샷을 저장했습니다. '
-                '<b>내일부터</b> 전일 대비 구성 변화를 감지합니다.</div>')
-        prevtxt = "—"
-    elif not ch["etfs"]:
-        body = (f'<div class="none">오늘(<b>{prevbase} → {base}</b> 기준일 비교)은 '
-                '유의미한 구성 변화가 없습니다. ✅</div>')
-        prevtxt = esc(ch["prev_date"])
-    else:
-        body = '<div class="cards">' + "".join(etf_card(e) for e in ch["etfs"]) + '</div>'
-        prevtxt = esc(ch["prev_date"])
+    snap_list = [(os.path.splitext(os.path.basename(p))[0], p) for p in snaps]
 
     thr = ch.get("thresholds", {"weight_pp_min": 1.0, "weight_pp_big": 5.0, "share_pct_min": 30})
-    # 섹션 제목용 날짜(YY/MM/DD) — 구성 기준일 우선, 없으면 실행일
-    raw = ch.get("base_date") or ch.get("date") or ""
-    h2d = f"{raw[2:4]}/{raw[5:7]}/{raw[8:10]}" if len(raw) == 10 else "—"
-    banner = ""
-    if ch.get("same_base"):
-        banner = ('<div class="banner">⚠ 직전 실행과 <b>구성 기준일이 동일</b>합니다 '
-                  f'({base} · KRX 장마감). 아직 새 구성이 반영되지 않아 변화가 없을 수 있습니다.</div>')
+
+    if len(snap_list) < 2:
+        # 첫 실행 — 비교할 과거가 없음: 단일 안내 페이지
+        pages = {ch["date"]: ('<div class="none">첫 스냅샷을 저장했습니다. '
+                              '<b>내일부터</b> 전일 대비 구성 변화를 감지합니다.</div>')}
+        nav_dates = [ch["date"]]
+    else:
+        pair_dates = [d for d, _ in snap_list][1:]          # 비교 가능한 실행일들
+        nav_dates = pair_dates[-MAX_DAYS:]
+        pages = {}
+        cache = {}
+
+        def load(path):
+            if path not in cache:
+                with open(path, encoding="utf-8") as f:
+                    cache[path] = json.load(f)
+            return cache[path]
+
+        for i, (d, path) in enumerate(snap_list):
+            if d not in nav_dates:
+                continue
+            prev_date, prev_path = snap_list[i - 1]
+            payload = dc.compare(load(prev_path), load(path), prev_date, d)
+            if d == ch.get("date"):                          # 최신일은 실제 실행 기록 사용
+                payload = ch
+            pages[d] = day_html(payload, load(path), is_latest=(d == nav_dates[-1]))
+
+    date_opts = []
+    for d in nav_dates:
+        try:
+            t = datetime.date.fromisoformat(d)
+            label = f"{t.month}/{t.day}({WD[t.weekday()]})"
+        except ValueError:
+            label = d
+        if d == nav_dates[-1]:
+            label += " · 최신"
+        date_opts.append(f'<option value="{d}">{label}</option>')
+
+    pages_json = json.dumps(pages, ensure_ascii=False).replace("</", "<\\/")
+    dates_json = json.dumps(nav_dates)
+
     return TEMPLATE.format(
-        gen=esc(ch["generated_at"]), date=esc(ch["date"]), prev=prevtxt,
-        base=base, prevbase=prevbase, banner=banner,
-        universe=s["universe"], changed=s["etfs_changed"],
-        new=s["new_total"], moves=s["moves_total"], gone=s["gone_total"],
-        body=body, h2d=esc(h2d), current=current_holdings_block(snap),
+        nav_opts="".join(date_opts), pages_json=pages_json, dates_json=dates_json,
+        ndays=len(nav_dates),
         wmin=thr["weight_pp_min"], wbig=thr["weight_pp_big"], spct=thr["share_pct_min"],
     )
 
@@ -189,25 +251,27 @@ h2{{font:600 18px Georgia,"Noto Serif KR",serif;margin:30px 0 12px}}
 .htrack{{background:#eef1ec;border-radius:3px;height:13px;overflow:hidden}}
 .hfill{{display:block;height:100%;background:linear-gradient(90deg,#286342,#4b8b62);border-radius:3px}}
 .hv{{text-align:right;color:#61706a;font-family:Georgia;white-space:nowrap}}
+.nav{{display:flex;align-items:center;gap:8px;margin:16px 0 0;position:sticky;top:0;
+background:var(--bg);padding:8px 0;z-index:5}}
+.nav button{{background:var(--card);color:var(--ink);border:1px solid var(--line);
+padding:7px 15px;font-size:13px;cursor:pointer;line-height:1}}
+.nav button:disabled{{opacity:.35;cursor:default}}
+.nav button:not(:disabled):hover{{border-color:#758079}}
+.nav select{{background:var(--card);color:var(--ink);border:1px solid var(--line);
+padding:7px 9px;font-size:12px}}
+.nav .hint{{margin-left:auto;font-size:10px;color:#9aa19d}}
 @media(max-width:620px){{body{{padding:20px 12px 50px}}.stats{{grid-template-columns:1fr 1fr}}
 .cards{{grid-template-columns:1fr}}}}
 </style></head><body>
 <p class="eyebrow">ACTIVE ETF · HOLDINGS</p>
 <h1>액티브 ETF 구성 변화</h1>
-<p class="sub">생성 <b>{gen}</b> · 실행일 {date}<br>
-구성 기준일 <b>{base}</b> (KRX 장마감) · 비교 <b>{prevbase} → {base}</b><br>
-매일 구성종목(Top10)을 스냅샷하고, <b>주가 효과와 CU 자금유출입을 제거</b>해 운용사가 실제로 사고판 것만 잡아냅니다.</p>
-{banner}
-
-<section class="stats">
-  <article><small>유니버스</small><strong>{universe}</strong></article>
-  <article><small>변화 ETF</small><strong class="g">{changed}</strong></article>
-  <article><small>Top10 신규 진입</small><strong class="g">{new}</strong></article>
-  <article><small>실매매(리밸런싱)</small><strong>{moves}</strong></article>
-</section>
-
-<h2>오늘({h2d})의 구성 변화</h2>
-{body}
+<div class="nav">
+<button id="btn-prev" title="이전 일자 (←)">◀</button>
+<select id="sel-date">{nav_opts}</select>
+<button id="btn-next" title="다음 일자 (→)">▶</button>
+<span class="hint">← → 키로도 이동 · 과거 {ndays}일 조회</span>
+</div>
+<div id="day"></div>
 
 <div class="legend">
 <b>어떻게 읽나</b> · <b>계약수 ±%</b>는 CU 자금유출입(설정·환매)을 정규화해 뺀 <b>순수 매매</b> 강도 —
@@ -217,9 +281,30 @@ h2{{font:600 18px Georgia,"Noto Serif KR",serif;margin:30px 0 12px}}
 <b>한계</b> · 소스(네이버)는 상위 10종목만 제공 → 11위 이하 꼬리 종목 움직임과 '완전 신규 편입'은 잡히지 않을 수 있습니다(향후 운용사 전체 PDF로 확장 예정).
 </div>
 
-{current}
-
 <p style="margin-top:30px;color:#9aa19d;font-size:11px">🎴 GS Research Desk · 액티브 ETF 포트폴리오 트래커</p>
+<script>
+var PAGES = {pages_json};
+var DATES = {dates_json};
+var idx = DATES.length - 1;
+var sel = document.getElementById("sel-date");
+var prev = document.getElementById("btn-prev");
+var next = document.getElementById("btn-next");
+function show(i) {{
+  idx = Math.max(0, Math.min(i, DATES.length - 1));
+  document.getElementById("day").innerHTML = PAGES[DATES[idx]];
+  sel.value = DATES[idx];
+  prev.disabled = idx === 0;
+  next.disabled = idx === DATES.length - 1;
+}}
+prev.addEventListener("click", function () {{ show(idx - 1); }});
+next.addEventListener("click", function () {{ show(idx + 1); }});
+sel.addEventListener("change", function () {{ show(DATES.indexOf(sel.value)); }});
+document.addEventListener("keydown", function (e) {{
+  if (e.key === "ArrowLeft") show(idx - 1);
+  else if (e.key === "ArrowRight") show(idx + 1);
+}});
+show(idx);
+</script>
 </body></html>"""
 
 
