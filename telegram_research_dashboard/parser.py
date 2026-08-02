@@ -7,7 +7,7 @@ from urllib.parse import parse_qs, urlparse
 
 # 파싱 규칙을 바꿀 때마다 +1 한다. CI가 이 값을 DB의 PRAGMA user_version과 비교해
 # 파서가 바뀐 첫 수집 런에서만 전체 재분류를 자동으로 돌린다(rebuild_parsed_data.py --if-parser-changed).
-PARSER_VERSION = 7
+PARSER_VERSION = 8
 
 # 뉴스 공유 글의 기사 제목은 「제목」 꼴로 감싸 두는 게 채널 관례다. ❗️ 줄은
 # AI가 뽑은 핵심 문구지 제목이 아니므로 제목 후보에서 뺀다.
@@ -57,6 +57,7 @@ APPROVED_COMPANIES = [
     "한화필리조선",
 ]
 COMPANY_ALIASES = {
+    "한화에어로": "한화에어로스페이스",   # 기사 제목의 축약 표기
     "LIG디펜스앤에어로스페이스": "LIG D&A",
     "LIG디앤에이": "LIG D&A",
     "KAI": "한국항공우주",
@@ -105,6 +106,7 @@ WEAPON_SYSTEM_ALIASES = {
     r"MLRS": "한화에어로스페이스",
     r"MRLS": "한화에어로스페이스",
     r"Redback|레드백": "한화에어로스페이스",
+    r"아리온스멧|Arion-?SMET": "한화에어로스페이스",  # 다목적무인차량(UGV)
     # 방공 천궁 / M-SAM
     r"M-?SAM": "LIG D&A",
     r"천궁|Cheongung": "LIG D&A",
