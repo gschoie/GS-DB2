@@ -96,7 +96,7 @@ def day_html(payload, is_latest):
         fg_rank = (2 if s["alert"] else 0) + (0 if s["liquid"] else -1)
         trs += f'''
       <tr class="{cls}">
-        <td class="etf" data-v="{esc(s["name"])}"><b>{name_link(s)}</b><small>{esc(s["group"])}</small></td>
+        <td class="etf" data-v="{esc(s["name"])}"><div class="etf-row"><b>{name_link(s)}</b><button class="btn-chart" data-code="{esc(s.get("code") or "")}" title="최근 120거래일 가격 · 신호 발생 시점">추세</button></div><small>{esc(s["group"])}</small></td>
         <td class="r" data-v="{s["close"]}">{s["close"]:,}</td>
         <td class="c" data-v="{s["adx"]}">{s["adx"]}<small class="di">{s["pdi"]}/{s["ndi"]}</small></td>
         <td class="c" data-v="{tr_rank}">{trend_badge(s)}</td>
@@ -135,16 +135,19 @@ ADX(추세) + Stochastic Slow(타이밍) + 수급(외인·기관·개인 5일 �
 
 
 def archive(payload):
-    """signals.json을 history/{asof}.json으로 보관 (같은 기준일은 최신으로 덮어씀)."""
+    """signals.json을 history/{asof}.json으로 보관 (같은 기준일은 최신으로 덮어씀).
+    차트용 history 시계열은 용량이 커서 아카이브에서는 뺀다(차트는 항상 최신 데이터로 표시)."""
     sig = payload.get("signals") or []
     if not sig:
         return
     asof = sig[0].get("asof") or ""
     if len(asof) != 10:
         return
+    slim = dict(payload)
+    slim["signals"] = [{k: v for k, v in s.items() if k != "history"} for s in sig]
     os.makedirs(HIST_DIR, exist_ok=True)
     with open(os.path.join(HIST_DIR, f"{asof}.json"), "w", encoding="utf-8") as f:
-        json.dump(payload, f, ensure_ascii=False)
+        json.dump(slim, f, ensure_ascii=False)
 
 
 def build(payload):
@@ -179,8 +182,17 @@ def build(payload):
     pages_json = json.dumps(pages, ensure_ascii=False).replace("</", "<\\/")
     dates_json = json.dumps(nav_dates)
 
+    # 차트 데이터: 최신 payload의 history만 사용(과거 일자 조회 중에도 차트는 최신 시계열)
+    charts = {}
+    for s in payload.get("signals") or []:
+        h = s.get("history")
+        if h and s.get("code"):
+            charts[s["code"]] = {"name": s["name"], **h}
+    charts_json = json.dumps(charts, ensure_ascii=False).replace("</", "<\\/")
+
     return TEMPLATE.format(nav_opts="".join(date_opts), pages_json=pages_json,
-                           dates_json=dates_json, ndays=len(nav_dates))
+                           dates_json=dates_json, ndays=len(nav_dates),
+                           charts_json=charts_json)
 
 TEMPLATE = """<!doctype html><html lang="ko"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -243,6 +255,25 @@ padding:7px 15px;font-size:13px;cursor:pointer;line-height:1}}
 .nav select{{background:var(--card);color:var(--ink);border:1px solid var(--line);
 padding:7px 9px;font-size:12px}}
 .nav .hint{{margin-left:auto;font-size:10px;color:#9aa19d}}
+.etf-row{{display:flex;align-items:center;justify-content:space-between;gap:8px}}
+.btn-chart{{background:#eef3ec;color:#3d554a;border:1px solid #d3dcd2;border-radius:10px;
+padding:2px 8px;font-size:10px;font-weight:700;cursor:pointer;white-space:nowrap;line-height:1.5}}
+.btn-chart:hover{{background:#e3f3e7;border-color:#8fae9c;color:#286342}}
+#modal-bg{{display:none;position:fixed;inset:0;background:rgba(23,33,29,.45);z-index:50;
+align-items:center;justify-content:center;padding:20px}}
+.modal{{background:#fff;border:1px solid var(--line);max-width:780px;width:100%;
+padding:18px 22px 16px;box-shadow:0 12px 40px rgba(23,33,29,.22)}}
+.modal-head{{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin-bottom:10px}}
+.modal-head b{{font:600 16px Georgia,"Noto Serif KR",serif}}
+#modal-x{{background:none;border:none;font-size:18px;color:#8b918e;cursor:pointer;line-height:1}}
+#modal-x:hover{{color:#17211d}}
+.chart{{width:100%;height:auto;display:block}}
+.grid{{stroke:#e9ede7;stroke-width:1}}
+.ax{{font:10px Georgia;fill:#8b918e}}
+.pline{{fill:none;stroke:#173f35;stroke-width:1.6}}
+.mk-t{{fill:#2e7d4f;cursor:help}}.mk-s{{fill:#c98a1e;cursor:help}}
+.chart-legend{{margin:10px 0 0;font-size:11px;color:var(--muted)}}
+.chart-legend .lg-t{{color:#2e7d4f}}.chart-legend .lg-s{{color:#c98a1e}}
 @media(max-width:620px){{body{{padding:20px 12px 50px}}.stats{{grid-template-columns:1fr 1fr}}
 table{{min-width:760px}}}}
 </style></head><body>
@@ -261,8 +292,14 @@ table{{min-width:760px}}}}
 <b>쌍끌이</b> 외인+기관 5일 동반 순매수 · <b>개인몰림</b> 개인만 순매수(외인·기관 이탈) = 경계 ·
 <b>★알림</b> 오늘 새 골든크로스 + 개인몰림 아님 + 20일 거래대금 5억↑<br>
 수급 단위: 억원 · 매매가 아닌 <b>참고용 신호</b>입니다.<br>
-<b>정렬</b> 헤더를 클릭하면 해당 열 기준으로 정렬(다시 클릭 시 오름/내림 전환). 값 없음(–)은 항상 맨 아래.
+<b>정렬</b> 헤더를 클릭하면 해당 열 기준으로 정렬(다시 클릭 시 오름/내림 전환). 값 없음(–)은 항상 맨 아래.<br>
+<b>추세 버튼</b> 종목별 최근 120거래일 가격 차트와 과거 신호 발생 시점(▲ 추세 골든크로스 · ● 과매도 반등)을 보여줍니다.
 </p>
+
+<div id="modal-bg"><div class="modal">
+<div class="modal-head"><b id="modal-title"></b><button id="modal-x" title="닫기 (Esc)">✕</button></div>
+<div id="modal-body"></div>
+</div></div>
 <script>
 function initSort(){{
   var table = document.querySelector('#day table');
@@ -323,6 +360,66 @@ document.addEventListener("keydown", function (e) {{
   else if (e.key === "ArrowRight") show(idx + 1);
 }});
 show(idx);
+
+/* ── 종목별 시계열 신호 차트 (추세 버튼 → 모달) ── */
+var CHARTS = {charts_json};
+var mbg = document.getElementById('modal-bg');
+document.addEventListener('click', function (e) {{
+  var b = e.target.closest ? e.target.closest('.btn-chart') : null;
+  if (b) openChart(b.getAttribute('data-code'));
+}});
+mbg.addEventListener('click', function (e) {{ if (e.target === mbg) closeChart(); }});
+document.getElementById('modal-x').addEventListener('click', closeChart);
+document.addEventListener('keydown', function (e) {{ if (e.key === 'Escape') closeChart(); }});
+function closeChart() {{ mbg.style.display = 'none'; }}
+function openChart(code) {{
+  var c = CHARTS[code];
+  var title = document.getElementById('modal-title');
+  var body = document.getElementById('modal-body');
+  if (!c) {{
+    title.textContent = '시계열 데이터 없음';
+    body.innerHTML = '<p class="none">아직 이력이 없습니다. 다음 스캔(매일 오전 10시)부터 차트가 표시됩니다.</p>';
+  }} else {{
+    title.textContent = c.name + ' · 최근 ' + c.dates.length + '거래일 (' + c.dates[0] + ' ~ ' + c.dates[c.dates.length - 1] + ')';
+    body.innerHTML = renderChart(c);
+  }}
+  mbg.style.display = 'flex';
+}}
+function renderChart(c) {{
+  var W = 700, H = 310, L = 56, R = 14, T = 18, B = 34;
+  var n = c.close.length;
+  var mn = Math.min.apply(null, c.close), mx = Math.max.apply(null, c.close);
+  if (mx === mn) mx = mn + 1;
+  var pad = (mx - mn) * 0.07; mn -= pad; mx += pad;
+  function X(i) {{ return L + (W - L - R) * (n <= 1 ? 0 : i / (n - 1)); }}
+  function Y(v) {{ return T + (H - T - B) * (1 - (v - mn) / (mx - mn)); }}
+  var pts = '';
+  for (var i = 0; i < n; i++) pts += (i ? ' ' : '') + X(i).toFixed(1) + ',' + Y(c.close[i]).toFixed(1);
+  var s = '<svg viewBox="0 0 ' + W + ' ' + H + '" class="chart" role="img">';
+  for (var g = 0; g <= 4; g++) {{
+    var v = mn + (mx - mn) * g / 4, y = Y(v).toFixed(1);
+    s += '<line x1="' + L + '" y1="' + y + '" x2="' + (W - R) + '" y2="' + y + '" class="grid"/>';
+    s += '<text x="' + (L - 6) + '" y="' + (+y + 3) + '" class="ax" text-anchor="end">' + Math.round(v).toLocaleString() + '</text>';
+  }}
+  var step = Math.max(1, Math.round(n / 6));
+  for (var i = 0; i < n; i += step)
+    s += '<text x="' + X(i).toFixed(1) + '" y="' + (H - 10) + '" class="ax" text-anchor="middle">' + c.dates[i].slice(5) + '</text>';
+  s += '<polyline points="' + pts + '" class="pline"/>';
+  (c.t || []).forEach(function (i) {{
+    var x = X(i).toFixed(1), y = Y(c.close[i]);
+    s += '<path d="M' + x + ' ' + (y + 6).toFixed(1) + ' l5 9 h-10 z" class="mk-t">' +
+         '<title>' + c.dates[i] + ' · 추세 골든크로스(+DI가 −DI 상향돌파) · ' + c.close[i].toLocaleString() + '원</title></path>';
+  }});
+  (c.s || []).forEach(function (i) {{
+    var x = X(i).toFixed(1), y = Y(c.close[i]);
+    s += '<circle cx="' + x + '" cy="' + (y - 10).toFixed(1) + '" r="4.5" class="mk-s">' +
+         '<title>' + c.dates[i] + ' · 과매도 반등(Stochastic 골든크로스) · ' + c.close[i].toLocaleString() + '원</title></circle>';
+  }});
+  s += '</svg>';
+  s += '<p class="chart-legend"><span class="lg-t">▲</span> 추세 골든크로스(+DI가 −DI 상향돌파, 라인 아래) · ' +
+       '<span class="lg-s">●</span> 과매도 반등(Stochastic %K↑%D, 라인 위) · 마커에 마우스를 올리면 날짜·가격 표시</p>';
+  return s;
+}}
 </script>
 </body></html>"""
 

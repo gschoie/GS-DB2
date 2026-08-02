@@ -107,6 +107,24 @@ def stoch_slow(df, n=14, k=3, d=3):
     slowk = (100*(df["c"]-ll)/(hh-ll)).rolling(k).mean()
     return slowk, slowk.rolling(d).mean()
 
+HIST_N = 120  # 차트용 이력 봉 수
+
+def build_history(px, pdi, ndi, sk, sd, n=HIST_N):
+    """차트용 시계열: 최근 n봉의 (날짜, 종가)와 과거 신호 발생 위치.
+    t = +DI가 -DI 상향돌파(추세 골든크로스), s = 과매도권 Stochastic 골든크로스.
+    scan_one의 ev_trend/stoch_oversold(마지막 2봉 비교)를 전 구간에 벡터로 적용한 것."""
+    ev_t = (pdi > ndi) & (pdi.shift(1) <= ndi.shift(1))
+    ev_s = (sk > sd) & (sk.shift(1) <= sd.shift(1)) & (sk.shift(1) < 25)
+    m = min(len(px), n)
+    t_tail = ev_t.iloc[-m:].reset_index(drop=True)
+    s_tail = ev_s.iloc[-m:].reset_index(drop=True)
+    return {
+        "dates": [d.strftime("%Y-%m-%d") for d in px["date"].iloc[-m:]],
+        "close": [int(v) for v in px["c"].iloc[-m:]],
+        "t": [int(i) for i in t_tail.index[t_tail]],
+        "s": [int(i) for i in s_tail.index[s_tail]],
+    }
+
 def load_universe():
     rows = []
     with open(os.path.join(HERE, "etf_universe.csv"), encoding="utf-8-sig") as f:
@@ -150,6 +168,7 @@ def scan_one(u):
         "flow": flow,
         # 알림감: 오늘 골든(추세 or 과매도-스토캐스틱) + 개인몰림 아님 + 유동성 OK
         "alert": bool((ev_trend or stoch_oversold) and flow != "개인몰림" and turnover >= LIQ_MIN_EOK),
+        "history": build_history(px, pdi, ndi, sk, sd),
     }
 
 def scan_all():
