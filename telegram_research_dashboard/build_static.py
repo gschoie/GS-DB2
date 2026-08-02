@@ -115,10 +115,23 @@ def build() -> Path:
     union = json.loads(union_path.read_text(encoding="utf-8")) if union_path.exists() else {"monthly": []}
     macro_path = ROOT / "data" / "macro.json"
     macro = json.loads(macro_path.read_text(encoding="utf-8")) if macro_path.exists() else {}
+    # 방산 데일리 브리핑: static/defense_daily/<날짜>.md 최신본에서 위 2꼭지
+    # (인트로 + '오늘의 핵심 요약')만 잘라 overview 카드에 굽는다. 두 번째 '## '(주요 주가 동향) 직전까지.
+    defense_brief = {}
+    ddir = ROOT / "static" / "defense_daily"
+    md_files = sorted(ddir.glob("*.md")) if ddir.is_dir() else []
+    if md_files:
+        latest = md_files[-1]
+        md_lines = latest.read_text(encoding="utf-8").splitlines()
+        heads = [i for i, line in enumerate(md_lines) if line.startswith("## ")]
+        end = heads[1] if len(heads) >= 2 else len(md_lines)
+        summary_md = "\n".join(md_lines[:end]).strip()
+        if summary_md:
+            defense_brief = {"date": latest.stem, "summary": summary_md}
     payload = json.dumps(
         {"summary": summary, "reports": reports, "news": news, "companies": companies,
          "reportCompanies": report_companies, "newsTexts": news_texts,
-         "union": union, "macro": macro},
+         "union": union, "macro": macro, "defenseBrief": defense_brief},
         ensure_ascii=False, separators=(",", ":"),
     ).replace("</", "<\\/").replace("\u2028", "\\u2028").replace("\u2029", "\\u2029")
     html = (ROOT / "static" / "index.html").read_text(encoding="utf-8")
