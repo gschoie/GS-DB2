@@ -1,5 +1,5 @@
 {
-  "when_utc": "2026-07-31 07:18:14Z",
+  "when_utc": "2026-08-02 22:43:45Z",
   "ok": true,
   "note": "change_sent",
   "chat_id_tail": "5171",
@@ -7,12 +7,12 @@
   "response": {
     "ok": true,
     "result": {
-      "message_id": 1618,
+      "message_id": 2,
       "from": {
-        "id": 8917880759,
+        "id": 8875725998,
         "is_bot": true,
-        "first_name": "GS.매크로_공부/투자들",
-        "username": "gs_macro_bot"
+        "first_name": "GB Investing Signal",
+        "username": "gs_invest_signal_bot"
       },
       "chat": {
         "id": 279385171,
@@ -21,8 +21,8 @@
         "username": "gschoie",
         "type": "private"
       },
-      "date": 1785482293,
-      "text": "🧩 액티브 ETF 구성 변화 · 구성 기준일 2026-07-31 (KRX 장마감)\n\n변화 ETF 6개 · 진입 6·이탈 6·실매매 0\n\n🟢 TIME 코스닥액티브 · TIME(구 TIMEFOLIO)\n   ⊕ 진입: 지엔씨에너지\n   ⊖ 이탈: 피에스케이\n🟢 KoAct 코스닥액티브 · KoAct\n   ⊕ 진입: 에이비엘바이오\n   ⊖ 이탈: 피에스케이\n🟢 KoAct 배당성장액티브 · KoAct\n   ⊕ 진입: 한화에어로스페이스\n   ⊖ 이탈: HD현대\n🟢 KODEX 로봇액티브 · KODEX\n   ⊕ 진입: 삼성에스디에스\n   ⊖ 이탈: 에스피지\n🟢 TIGER 퓨처모빌리티액티브 · TIGER\n   ⊕ 진입: HL만도\n   ⊖ 이탈: 삼성전자\n🟢 SOL 코리아메가테크액티브 · SOL\n   ⊕ 진입: HD한국조선해양\n   ⊖ 이탈: 현대모비스\n\n전체 상세 › 대시보드\n🎴 GS Research Desk · 액티브 ETF 트래커",
+      "date": 1785710625,
+      "text": "🧩 액티브 ETF 구성 변화 · 구성 기준일 2026-07-31 (KRX 장마감)\n\n변화 ETF 9개 · 진입 11·이탈 11·실매매 3\n\n🟢 TIME K컬처액티브 · TIME(구 TIMEFOLIO)\n   ⊕ 진입: CJ, JYP Ent.\n   ⊖ 이탈: 달바글로벌, 에이피알\n   ▲ 삼양식품 계약수 +29% · 비중 +1.8%p\n   ▲ 휴젤 계약수 +25% · 비중 +1.2%p\n🟢 TIME 코스피액티브 · TIME(구 TIMEFOLIO)\n   ⊕ 진입: 한국금융지주, 신한지주\n   ⊖ 이탈: 두산, SK\n   ▽ SK스퀘어 계약수 −38% · 비중 −1.2%p\n🟢 TIME 코스닥액티브 · TIME(구 TIMEFOLIO)\n   ⊕ 진입: 심텍\n   ⊖ 이탈: 엘앤씨바이오\n🟢 KoAct 코스닥액티브 · KoAct\n   ⊕ 진입: 제주반도체\n   ⊖ 이탈: 에이비엘바이오\n🟢 KoAct 배당성장액티브 · KoAct\n   ⊕ 진입: HD현대\n   ⊖ 이탈: HD한국조선해양\n🟢 KoAct 글로벌AI&로봇액티브 · KoAct\n   ⊕ 진입: 에스피지\n   ⊖ 이탈: Snowflake Inc   - CL A\n🟢 KODEX 로봇액티브 · KODEX\n   ⊕ 진입: 에스피지\n   ⊖ 이탈: 삼성에스디에스\n🟢 TIGER 코리아테크액티브 · TIGER\n   ⊕ 진입: 삼화콘덴서\n   ⊖ 이탈: 올릭스\n🟢 TIGER 퓨처모빌리티액티브 · TIGER\n   ⊕ 진입: 삼성전자\n   ⊖ 이탈: HL만도\n\n전체 상세 › 대시보드\n🎴 GS Research Desk · 액티브 ETF 트래커",
       "entities": [
         {
           "offset": 0,
@@ -35,37 +35,52 @@
           "type": "bold"
         },
         {
-          "offset": 80,
+          "offset": 82,
           "length": 11,
           "type": "bold"
         },
         {
-          "offset": 146,
+          "offset": 220,
+          "length": 11,
+          "type": "bold"
+        },
+        {
+          "offset": 325,
+          "length": 11,
+          "type": "bold"
+        },
+        {
+          "offset": 388,
           "length": 12,
           "type": "bold"
         },
         {
-          "offset": 202,
+          "offset": 444,
           "length": 13,
           "type": "bold"
         },
         {
-          "offset": 260,
+          "offset": 501,
+          "length": 17,
+          "type": "bold"
+        },
+        {
+          "offset": 576,
           "length": 11,
           "type": "bold"
         },
         {
-          "offset": 314,
-          "length": 15,
-          "type": "bold"
-        },
-        {
-          "offset": 369,
+          "offset": 630,
           "length": 14,
           "type": "bold"
         },
         {
-          "offset": 432,
+          "offset": 684,
+          "length": 15,
+          "type": "bold"
+        },
+        {
+          "offset": 745,
           "length": 4,
           "type": "text_link",
           "url": "https://gschoie.github.io/GS-output-dashboard/etf_holdings_report.html"
