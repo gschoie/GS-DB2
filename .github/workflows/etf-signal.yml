@@ -57,7 +57,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add telegram_research_dashboard/static/etf_signal_report.html etf_signal/signals.json etf_signal/telegram_status.json
+          git add telegram_research_dashboard/static/etf_signal_report.html etf_signal/signals.json etf_signal/history etf_signal/telegram_status.json
           if git diff --cached --quiet; then
             echo "변경 없음 — 커밋 생략"
           else

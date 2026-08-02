@@ -14,7 +14,8 @@ except Exception:
 HERE = os.path.dirname(os.path.abspath(__file__))
 SNAP_DIR = os.path.join(HERE, "snapshots")
 OUT = os.environ.get("ETF_HOLDINGS_OUT", os.path.join(HERE, "etf_holdings_report.html"))
-MAX_DAYS = 20  # 네비게이션으로 볼 수 있는 과거 일수(페이지 용량 상한)
+MAX_DAYS = 20   # 네비게이션으로 볼 수 있는 과거 일수(페이지 용량 상한)
+MAX_WEEKS = 12  # 주간 누적 모드에서 볼 수 있는 과거 주수
 WD = "월화수목금토일"
 
 
@@ -102,13 +103,14 @@ def current_holdings_block(snap, day_label):
             f'<div class="hgrid">{"".join(blocks)}</div></details>')
 
 
-def day_html(ch, snap, is_latest):
-    """하루치 본문(네비게이션으로 교체되는 부분)."""
+def day_html(ch, snap, is_latest, period_label=None):
+    """하루치(또는 주간 누적) 본문(네비게이션으로 교체되는 부분)."""
     s = ch["summary"]
     base = esc(ch.get("base_date") or "—")
     prevbase = esc(ch.get("prev_base_date") or "—")
+    span = "이 주" if period_label else "이 날"
     if not ch["etfs"]:
-        body = (f'<div class="none">이 날(<b>{prevbase} → {base}</b> 기준일 비교)은 '
+        body = (f'<div class="none">{span}(<b>{prevbase} → {base}</b> 기준일 비교)은 '
                 '유의미한 구성 변화가 없습니다. ✅</div>')
     else:
         body = '<div class="cards">' + "".join(etf_card(e) for e in ch["etfs"]) + '</div>'
@@ -116,15 +118,20 @@ def day_html(ch, snap, is_latest):
     raw = ch.get("base_date") or ch.get("date") or ""
     h2d = f"{raw[2:4]}/{raw[5:7]}/{raw[8:10]}" if len(raw) == 10 else "—"
     banner = ""
-    if is_latest and ch.get("same_base"):
+    if is_latest and not period_label and ch.get("same_base"):
         banner = ('<div class="banner">⚠ 직전 실행과 <b>구성 기준일이 동일</b>합니다 '
                   f'({base} · KRX 장마감). 아직 새 구성이 반영되지 않아 변화가 없을 수 있습니다.</div>')
     gen = esc(ch.get("generated_at") or "")
     gen_txt = f'생성 <b>{gen}</b> · ' if gen else ''
-    title = "오늘" if is_latest else "당일"
+    if period_label:
+        title = f"주간({period_label}) 누적"
+        first_line = f'주간 누적 비교 — 전주 마지막 스냅샷과 이 주 마지막 스냅샷의 차이'
+    else:
+        title = "오늘" if is_latest else "당일"
+        first_line = f'{gen_txt}실행일 {esc(ch["date"])}'
 
     return f"""
-<p class="sub">{gen_txt}실행일 {esc(ch["date"])}<br>
+<p class="sub">{first_line}<br>
 구성 기준일 <b>{base}</b> (KRX 장마감) · 비교 <b>{prevbase} → {base}</b><br>
 매일 구성종목(Top10)을 스냅샷하고, <b>주가 효과와 CU 자금유출입을 제거</b>해 운용사가 실제로 사고판 것만 잡아냅니다.</p>
 {banner}
@@ -136,11 +143,17 @@ def day_html(ch, snap, is_latest):
   <article><small>실매매(리밸런싱)</small><strong>{s["moves_total"]}</strong></article>
 </section>
 
-<h2>{title}({esc(h2d)})의 구성 변화</h2>
+<h2>{title + " 구성 변화" if period_label else title + "(" + esc(h2d) + ")의 구성 변화"}</h2>
 {body}
 
 {current_holdings_block(snap, h2d)}
 """
+
+
+def _opt(d, label, latest):
+    if latest:
+        label += " · 최신"
+    return f'<option value="{d}">{label}</option>'
 
 
 def build():
@@ -151,49 +164,77 @@ def build():
 
     thr = ch.get("thresholds", {"weight_pp_min": 1.0, "weight_pp_big": 5.0, "share_pct_min": 30})
 
+    cache = {}
+
+    def load(path):
+        if path not in cache:
+            with open(path, encoding="utf-8") as f:
+                cache[path] = json.load(f)
+        return cache[path]
+
+    def dlabel(d):
+        try:
+            t = datetime.date.fromisoformat(d)
+            return f"{t.month}/{t.day}({WD[t.weekday()]})"
+        except ValueError:
+            return d
+
+    # ── 일별 ──
     if len(snap_list) < 2:
         # 첫 실행 — 비교할 과거가 없음: 단일 안내 페이지
-        pages = {ch["date"]: ('<div class="none">첫 스냅샷을 저장했습니다. '
-                              '<b>내일부터</b> 전일 대비 구성 변화를 감지합니다.</div>')}
-        nav_dates = [ch["date"]]
+        day_pages = {ch["date"]: ('<div class="none">첫 스냅샷을 저장했습니다. '
+                                  '<b>내일부터</b> 전일 대비 구성 변화를 감지합니다.</div>')}
+        day_dates = [ch["date"]]
     else:
         pair_dates = [d for d, _ in snap_list][1:]          # 비교 가능한 실행일들
-        nav_dates = pair_dates[-MAX_DAYS:]
-        pages = {}
-        cache = {}
-
-        def load(path):
-            if path not in cache:
-                with open(path, encoding="utf-8") as f:
-                    cache[path] = json.load(f)
-            return cache[path]
-
+        day_dates = pair_dates[-MAX_DAYS:]
+        day_pages = {}
         for i, (d, path) in enumerate(snap_list):
-            if d not in nav_dates:
+            if d not in day_dates:
                 continue
             prev_date, prev_path = snap_list[i - 1]
             payload = dc.compare(load(prev_path), load(path), prev_date, d)
             if d == ch.get("date"):                          # 최신일은 실제 실행 기록 사용
                 payload = ch
-            pages[d] = day_html(payload, load(path), is_latest=(d == nav_dates[-1]))
+            day_pages[d] = day_html(payload, load(path), is_latest=(d == day_dates[-1]))
+    day_opts = "".join(_opt(d, dlabel(d), d == day_dates[-1]) for d in day_dates)
 
-    date_opts = []
-    for d in nav_dates:
+    # ── 주간 누적: 전주 마지막 스냅샷 → 이 주 마지막 스냅샷 ──
+    weeks = {}
+    for i, (d, _) in enumerate(snap_list):
         try:
-            t = datetime.date.fromisoformat(d)
-            label = f"{t.month}/{t.day}({WD[t.weekday()]})"
+            y, w, _dow = datetime.date.fromisoformat(d).isocalendar()
         except ValueError:
-            label = d
-        if d == nav_dates[-1]:
-            label += " · 최신"
-        date_opts.append(f'<option value="{d}">{label}</option>')
+            continue
+        weeks.setdefault((y, w), []).append(i)
+    week_pages, week_dates, week_opts = {}, [], []
+    for (y, w), idxs in sorted(weeks.items())[-MAX_WEEKS:]:
+        last_i = idxs[-1]
+        base_i = idxs[0] - 1 if idxs[0] > 0 else idxs[0]     # 전주 마지막(없으면 주 첫 스냅샷)
+        if base_i == last_i:
+            continue
+        bdate, bpath = snap_list[base_i]
+        ndate, npath = snap_list[last_i]
+        payload = dc.compare(load(bpath), load(npath), bdate, ndate)
+        t0, t1 = datetime.date.fromisoformat(bdate), datetime.date.fromisoformat(ndate)
+        label = f"{t0.month}/{t0.day}→{t1.month}/{t1.day}"
+        week_pages[ndate] = day_html(payload, load(npath), is_latest=False,
+                                     period_label=label)
+        week_dates.append(ndate)
+        week_opts.append((ndate, f"{label} 주간"))
+    if not week_pages:
+        week_pages = {"-": '<div class="none">주간 비교를 위한 스냅샷이 아직 부족합니다.</div>'}
+        week_dates, week_opts = ["-"], [("-", "데이터 부족")]
+    week_opts_html = "".join(_opt(d, l, d == week_dates[-1]) for d, l in week_opts)
 
-    pages_json = json.dumps(pages, ensure_ascii=False).replace("</", "<\\/")
-    dates_json = json.dumps(nav_dates)
+    def j(v):
+        return json.dumps(v, ensure_ascii=False).replace("</", "<\\/")
 
     return TEMPLATE.format(
-        nav_opts="".join(date_opts), pages_json=pages_json, dates_json=dates_json,
-        ndays=len(nav_dates),
+        day_opts_json=j(day_opts), day_pages_json=j(day_pages), day_dates_json=j(day_dates),
+        week_opts_json=j(week_opts_html), week_pages_json=j(week_pages),
+        week_dates_json=j(week_dates),
+        ndays=len(day_dates), nweeks=len(week_dates),
         wmin=thr["weight_pp_min"], wbig=thr["weight_pp_big"], spct=thr["share_pct_min"],
     )
 
@@ -260,16 +301,21 @@ padding:7px 15px;font-size:13px;cursor:pointer;line-height:1}}
 .nav select{{background:var(--card);color:var(--ink);border:1px solid var(--line);
 padding:7px 9px;font-size:12px}}
 .nav .hint{{margin-left:auto;font-size:10px;color:#9aa19d}}
+.mode{{display:inline-flex;border:1px solid var(--line);margin-right:4px}}
+.mode button{{border:0;background:var(--card);color:#61706a;padding:7px 13px;
+font-size:12px;font-weight:700;cursor:pointer}}
+.mode button.on{{background:var(--green);color:#fff}}
 @media(max-width:620px){{body{{padding:20px 12px 50px}}.stats{{grid-template-columns:1fr 1fr}}
 .cards{{grid-template-columns:1fr}}}}
 </style></head><body>
 <p class="eyebrow">ACTIVE ETF · HOLDINGS</p>
 <h1>액티브 ETF 구성 변화</h1>
 <div class="nav">
-<button id="btn-prev" title="이전 일자 (←)">◀</button>
-<select id="sel-date">{nav_opts}</select>
-<button id="btn-next" title="다음 일자 (→)">▶</button>
-<span class="hint">← → 키로도 이동 · 과거 {ndays}일 조회</span>
+<span class="mode"><button id="md-daily" class="on">일별</button><button id="md-weekly">주간 누적</button></span>
+<button id="btn-prev" title="이전 (←)">◀</button>
+<select id="sel-date"></select>
+<button id="btn-next" title="다음 (→)">▶</button>
+<span class="hint">← → 키로도 이동 · 일별 {ndays}일 / 주간 {nweeks}주 조회</span>
 </div>
 <div id="day"></div>
 
@@ -283,27 +329,42 @@ padding:7px 9px;font-size:12px}}
 
 <p style="margin-top:30px;color:#9aa19d;font-size:11px">🎴 GS Research Desk · 액티브 ETF 포트폴리오 트래커</p>
 <script>
-var PAGES = {pages_json};
-var DATES = {dates_json};
-var idx = DATES.length - 1;
+var MODES = {{
+  daily:  {{ pages: {day_pages_json},  dates: {day_dates_json},  opts: {day_opts_json} }},
+  weekly: {{ pages: {week_pages_json}, dates: {week_dates_json}, opts: {week_opts_json} }}
+}};
+var mode = "daily";
+var idx = 0;
 var sel = document.getElementById("sel-date");
 var prev = document.getElementById("btn-prev");
 var next = document.getElementById("btn-next");
+var mdD = document.getElementById("md-daily");
+var mdW = document.getElementById("md-weekly");
 function show(i) {{
-  idx = Math.max(0, Math.min(i, DATES.length - 1));
-  document.getElementById("day").innerHTML = PAGES[DATES[idx]];
-  sel.value = DATES[idx];
+  var M = MODES[mode];
+  idx = Math.max(0, Math.min(i, M.dates.length - 1));
+  document.getElementById("day").innerHTML = M.pages[M.dates[idx]];
+  sel.value = M.dates[idx];
   prev.disabled = idx === 0;
-  next.disabled = idx === DATES.length - 1;
+  next.disabled = idx === M.dates.length - 1;
 }}
+function setMode(m) {{
+  mode = m;
+  mdD.className = m === "daily" ? "on" : "";
+  mdW.className = m === "weekly" ? "on" : "";
+  sel.innerHTML = MODES[m].opts;
+  show(MODES[m].dates.length - 1);
+}}
+mdD.addEventListener("click", function () {{ setMode("daily"); }});
+mdW.addEventListener("click", function () {{ setMode("weekly"); }});
 prev.addEventListener("click", function () {{ show(idx - 1); }});
 next.addEventListener("click", function () {{ show(idx + 1); }});
-sel.addEventListener("change", function () {{ show(DATES.indexOf(sel.value)); }});
+sel.addEventListener("change", function () {{ show(MODES[mode].dates.indexOf(sel.value)); }});
 document.addEventListener("keydown", function (e) {{
   if (e.key === "ArrowLeft") show(idx - 1);
   else if (e.key === "ArrowRight") show(idx + 1);
 }});
-show(idx);
+setMode("daily");
 </script>
 </body></html>"""
 

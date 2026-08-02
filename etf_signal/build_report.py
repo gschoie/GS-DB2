@@ -1,8 +1,13 @@
 # -*- coding: utf-8 -*-
-"""signals.json → etf_signal_report.html (GS Research Desk 톤 매칭, 자기완결 HTML)."""
-import os, json, html
+"""signals.json → etf_signal_report.html (GS Research Desk 톤 매칭, 자기완결 HTML).
+매 실행 시 signals.json을 history/{asof}.json으로 아카이브하고,
+과거 일자를 ◀▶ 네비게이션으로 조회 (최근 MAX_DAYS일 임베드)."""
+import os, json, glob, html, datetime
 
 HERE = os.path.dirname(os.path.abspath(__file__))
+HIST_DIR = os.path.join(HERE, "history")
+MAX_DAYS = 15  # 네비게이션으로 볼 수 있는 과거 일수(페이지 용량 상한)
+WD = "월화수목금토일"
 
 def esc(s): return html.escape(str(s))
 
@@ -50,13 +55,15 @@ def name_link(s):
     return (f'<a class="etf-link" href="https://finance.naver.com/item/fchart.naver?code={esc(code)}"'
             f' target="_blank" rel="noopener">{name}</a>')
 
-def build(payload):
+def day_html(payload, is_latest):
+    """하루치 본문(네비게이션으로 교체되는 부분)."""
     sig = payload["signals"]
     scanned = len(sig)
     alerts = [s for s in sig if s["alert"]]
     n_buy = sum(1 for s in sig if s["flow"] == "쌍끌이")
     n_warn = sum(1 for s in sig if s["flow"] == "개인몰림")
     asof = sig[0]["asof"] if sig else "—"
+    title = "오늘의 알림" if is_latest else "당일 알림"
 
     # 알림 카드
     alert_cards = ""
@@ -70,7 +77,7 @@ def build(payload):
         <div class="ac-meta">ADX {s["adx"]} · %K {s["k"]}/{s["d"]} · {flow_badge(s["flow"])}</div>
       </article>'''
     else:
-        alert_cards = '<p class="none">오늘 새로 뜬 신호가 없습니다. (조정·횡보 국면일 가능성)</p>'
+        alert_cards = '<p class="none">이날 새로 뜬 신호가 없습니다. (조정·횡보 국면일 가능성)</p>'
 
     # 전체 표 — 알림 우선, 이후 스캔순
     rows_sorted = sorted(enumerate(sig), key=lambda x: (not x[1]["alert"], x[0]))
@@ -101,11 +108,79 @@ def build(payload):
         <td class="c flags" data-v="{fg_rank}">{flag}</td>
       </tr>'''
 
-    return TEMPLATE.format(
-        gen=esc(payload["generated_at"]), asof=esc(asof),
-        scanned=scanned, n_alert=len(alerts), n_buy=n_buy, n_warn=n_warn,
-        alert_cards=alert_cards, rows=trs,
-    )
+    return f"""
+<p class="sub">생성 <b>{esc(payload["generated_at"])}</b> · 신호 기준일(전일 확정) <b>{esc(asof)}</b><br>
+ADX(추세) + Stochastic Slow(타이밍) + 수급(외인·기관·개인 5일 순매수, 억원). 신호는 장중 흔들림을 피해 <b>전일 확정 종가</b>로 계산.</p>
+
+<section class="stats">
+  <article><small>스캔 종목</small><strong>{scanned}</strong></article>
+  <article><small>{"오늘" if is_latest else "당일"} 알림</small><strong class="g">{len(alerts)}</strong></article>
+  <article><small>외인·기관 쌍끌이</small><strong class="g">{n_buy}</strong></article>
+  <article><small>개인몰림 경계</small><strong class="w">{n_warn}</strong></article>
+</section>
+
+<h2>{title} <small style="font:400 12px Inter;color:#8b918e">— 새로 뜬 골든크로스 · 개인몰림 제외 · 유동성 확보 종목</small></h2>
+<div class="alerts">{alert_cards}</div>
+
+<h2>전체 신호판 ({scanned})</h2>
+<div class="tablewrap"><table>
+<thead><tr>
+<th data-type="text">ETF</th><th class="r" data-type="num">종가</th><th class="c" data-type="num">ADX<br>+DI/−DI</th><th class="c" data-type="num">추세</th>
+<th class="c" data-type="num">%K/%D</th><th class="c" data-type="num">수급</th>
+<th class="r" data-type="num">외인5D</th><th class="r" data-type="num">기관5D</th><th class="r" data-type="num">개인5D</th><th class="c" data-type="num">플래그</th>
+</tr></thead>
+<tbody>{trs}</tbody>
+</table></div>
+"""
+
+
+def archive(payload):
+    """signals.json을 history/{asof}.json으로 보관 (같은 기준일은 최신으로 덮어씀)."""
+    sig = payload.get("signals") or []
+    if not sig:
+        return
+    asof = sig[0].get("asof") or ""
+    if len(asof) != 10:
+        return
+    os.makedirs(HIST_DIR, exist_ok=True)
+    with open(os.path.join(HIST_DIR, f"{asof}.json"), "w", encoding="utf-8") as f:
+        json.dump(payload, f, ensure_ascii=False)
+
+
+def build(payload):
+    archive(payload)
+    hist = {}
+    for p in sorted(glob.glob(os.path.join(HIST_DIR, "*.json"))):
+        d = os.path.splitext(os.path.basename(p))[0]
+        hist[d] = p
+    nav_dates = sorted(hist)[-MAX_DAYS:]
+    if not nav_dates:  # history가 없으면 현재 payload 단독
+        sig = payload.get("signals") or []
+        d = sig[0]["asof"] if sig else "—"
+        nav_dates = [d]
+        pages = {d: day_html(payload, True)}
+    else:
+        pages = {}
+        for d in nav_dates:
+            with open(hist[d], encoding="utf-8") as f:
+                pages[d] = day_html(json.load(f), is_latest=(d == nav_dates[-1]))
+
+    date_opts = []
+    for d in nav_dates:
+        try:
+            t = datetime.date.fromisoformat(d)
+            label = f"{t.month}/{t.day}({WD[t.weekday()]})"
+        except ValueError:
+            label = d
+        if d == nav_dates[-1]:
+            label += " · 최신"
+        date_opts.append(f'<option value="{d}">{label}</option>')
+
+    pages_json = json.dumps(pages, ensure_ascii=False).replace("</", "<\\/")
+    dates_json = json.dumps(nav_dates)
+
+    return TEMPLATE.format(nav_opts="".join(date_opts), pages_json=pages_json,
+                           dates_json=dates_json, ndays=len(nav_dates))
 
 TEMPLATE = """<!doctype html><html lang="ko"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -159,33 +234,27 @@ tbody tr.hl:hover{{background:#f6faea}}tbody tr.dim td{{color:#98a09a}}
 .lowliq{{display:inline-block;margin-left:5px;color:#9a8650;font-size:9px;border:1px solid #e0d8bf;border-radius:4px;padding:1px 4px}}
 .legend{{margin-top:14px;color:var(--muted);font-size:11px;line-height:1.9}}
 .legend b{{color:#445049}}
+.nav{{display:flex;align-items:center;gap:8px;margin:16px 0 0;position:sticky;top:0;
+background:var(--bg);padding:8px 0;z-index:5}}
+.nav button{{background:var(--card);color:var(--ink);border:1px solid var(--line);
+padding:7px 15px;font-size:13px;cursor:pointer;line-height:1}}
+.nav button:disabled{{opacity:.35;cursor:default}}
+.nav button:not(:disabled):hover{{border-color:#758079}}
+.nav select{{background:var(--card);color:var(--ink);border:1px solid var(--line);
+padding:7px 9px;font-size:12px}}
+.nav .hint{{margin-left:auto;font-size:10px;color:#9aa19d}}
 @media(max-width:620px){{body{{padding:20px 12px 50px}}.stats{{grid-template-columns:1fr 1fr}}
 table{{min-width:760px}}}}
 </style></head><body>
 <p class="eyebrow">ETF · SECTOR SIGNAL</p>
 <h1>ETF/섹터 신호 포착</h1>
-<p class="sub">생성 <b>{gen}</b> · 신호 기준일(전일 확정) <b>{asof}</b><br>
-ADX(추세) + Stochastic Slow(타이밍) + 수급(외인·기관·개인 5일 순매수, 억원). 신호는 장중 흔들림을 피해 <b>전일 확정 종가</b>로 계산.</p>
-
-<section class="stats">
-  <article><small>스캔 종목</small><strong>{scanned}</strong></article>
-  <article><small>오늘 알림</small><strong class="g">{n_alert}</strong></article>
-  <article><small>외인·기관 쌍끌이</small><strong class="g">{n_buy}</strong></article>
-  <article><small>개인몰림 경계</small><strong class="w">{n_warn}</strong></article>
-</section>
-
-<h2>오늘의 알림 <small style="font:400 12px Inter;color:#8b918e">— 새로 뜬 골든크로스 · 개인몰림 제외 · 유동성 확보 종목</small></h2>
-<div class="alerts">{alert_cards}</div>
-
-<h2>전체 신호판 ({scanned})</h2>
-<div class="tablewrap"><table>
-<thead><tr>
-<th data-type="text">ETF</th><th class="r" data-type="num">종가</th><th class="c" data-type="num">ADX<br>+DI/−DI</th><th class="c" data-type="num">추세</th>
-<th class="c" data-type="num">%K/%D</th><th class="c" data-type="num">수급</th>
-<th class="r" data-type="num">외인5D</th><th class="r" data-type="num">기관5D</th><th class="r" data-type="num">개인5D</th><th class="c" data-type="num">플래그</th>
-</tr></thead>
-<tbody>{rows}</tbody>
-</table></div>
+<div class="nav">
+<button id="btn-prev" title="이전 기준일 (←)">◀</button>
+<select id="sel-date">{nav_opts}</select>
+<button id="btn-next" title="다음 기준일 (→)">▶</button>
+<span class="hint">← → 키로도 이동 · 과거 {ndays}일 조회</span>
+</div>
+<div id="day"></div>
 
 <p class="legend">
 <b>추세</b> +DI&gt;−DI &amp; ADX&gt;20 = 상승추세 · <b>과매도반등</b> Stochastic %K가 %D를 20 이하에서 상향돌파 ·
@@ -195,8 +264,8 @@ ADX(추세) + Stochastic Slow(타이밍) + 수급(외인·기관·개인 5일 �
 <b>정렬</b> 헤더를 클릭하면 해당 열 기준으로 정렬(다시 클릭 시 오름/내림 전환). 값 없음(–)은 항상 맨 아래.
 </p>
 <script>
-(function(){{
-  var table = document.querySelector('table');
+function initSort(){{
+  var table = document.querySelector('#day table');
   if(!table) return;
   var tbody = table.tBodies[0];
   var ths = table.tHead.rows[0].cells;
@@ -231,7 +300,29 @@ ADX(추세) + Stochastic Slow(타이밍) + 수급(외인·기관·개인 5일 �
       rows.forEach(function(r){{ tbody.appendChild(r); }});
     }});
   }});
-}})();
+}}
+var PAGES = {pages_json};
+var DATES = {dates_json};
+var idx = DATES.length - 1;
+var sel = document.getElementById("sel-date");
+var prev = document.getElementById("btn-prev");
+var next = document.getElementById("btn-next");
+function show(i) {{
+  idx = Math.max(0, Math.min(i, DATES.length - 1));
+  document.getElementById("day").innerHTML = PAGES[DATES[idx]];
+  sel.value = DATES[idx];
+  prev.disabled = idx === 0;
+  next.disabled = idx === DATES.length - 1;
+  initSort();
+}}
+prev.addEventListener("click", function () {{ show(idx - 1); }});
+next.addEventListener("click", function () {{ show(idx + 1); }});
+sel.addEventListener("change", function () {{ show(DATES.indexOf(sel.value)); }});
+document.addEventListener("keydown", function (e) {{
+  if (e.key === "ArrowLeft") show(idx - 1);
+  else if (e.key === "ArrowRight") show(idx + 1);
+}});
+show(idx);
 </script>
 </body></html>"""
 
