@@ -7,7 +7,11 @@ from urllib.parse import parse_qs, urlparse
 
 # 파싱 규칙을 바꿀 때마다 +1 한다. CI가 이 값을 DB의 PRAGMA user_version과 비교해
 # 파서가 바뀐 첫 수집 런에서만 전체 재분류를 자동으로 돌린다(rebuild_parsed_data.py --if-parser-changed).
-PARSER_VERSION = 6
+PARSER_VERSION = 7
+
+# 뉴스 공유 글의 기사 제목은 「제목」 꼴로 감싸 두는 게 채널 관례다. ❗️ 줄은
+# AI가 뽑은 핵심 문구지 제목이 아니므로 제목 후보에서 뺀다.
+CORNER_TITLE_RE = re.compile(r"「([^」\n]{4,180})」")
 
 
 # 텔레그램에서 URL 뒤에 공백 없이 붙인 한글 코멘트까지 링크로 먹지 않는다.
@@ -442,6 +446,9 @@ def parse_news(text: str) -> dict:
     article_url = urls[0] if urls else None
     pair = bilingual_headline_pair(text)
     headline = pair[1] if pair else _first_line(text)
+    corner = CORNER_TITLE_RE.search(headline or "")
+    if corner:
+        headline = corner.group(1).strip()
     companies = extract_companies(text)
     company = ", ".join(companies) if companies else None
     event_map = {
@@ -482,12 +489,18 @@ def parse_news_items(text: str) -> list[dict]:
             if (candidate and not URL_RE.search(candidate) and candidate not in INDUSTRIES
                     and not DAILY_NEWS_RE.search(candidate) and "다올투자증권" not in candidate
                     and not is_channel_signature(candidate)
-                    and not candidate.startswith(("출처:", "출처 ", "* 위 내용", "위 내용은"))):
+                    and not candidate.startswith(("출처:", "출처 ", "* 위 내용", "위 내용은", "❗", "URL:", "URL "))):
                 candidates.append(candidate)
+        corner = next((match.group(1).strip() for candidate in candidates
+                       if (match := CORNER_TITLE_RE.search(candidate))), None)
+        if corner is None:
+            # 「제목」이 URL보다 멀리(글 맨 위) 있는 단건 공유 글: 메시지 전체에서 첫 「…」를 쓴다.
+            message_corner = CORNER_TITLE_RE.search(text)
+            corner = message_corner.group(1).strip() if message_corner else None
         bracketed = next((candidate for candidate in candidates
                           if candidate.startswith("[") and candidate.endswith("]")
                           and candidate not in ("[TradeWinds]", "[Upstream]")), None)
-        title = bracketed or (candidates[0] if candidates else None)
+        title = corner or bracketed or (candidates[0] if candidates else None)
         if title is None:
             for following in range(index + 1, min(len(lines), index + 4)):
                 candidate = lines[following]
@@ -510,6 +523,13 @@ def parse_news_items(text: str) -> list[dict]:
         parsed = parse_news(text)
         parsed["industry"] = next((name for name in INDUSTRIES if name in text), None)
         items.append(parsed)
+    # 단건 공유 글은 제목(「…」)에 기업명이 없는 경우가 많다 — 본문 전체에서 다시 찾는다.
+    # (묶음 데일리뉴스는 항목 간 오염을 막기 위해 제목 범위 추출을 유지)
+    if len(items) == 1 and not items[0]["companies"]:
+        companies = extract_companies(text)
+        if companies:
+            items[0]["companies"] = companies
+            items[0]["company_name"] = ", ".join(companies)
     # 같은 URL이 본문에 반복된 경우 한 번만 저장한다.
     unique = []
     seen = set()
