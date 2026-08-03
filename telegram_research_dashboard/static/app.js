@@ -109,7 +109,7 @@ function renderTaskList(desired){fillTaskItems(desired);const st=taskLoad()[task
  $('#task-table').innerHTML=`<table class="task-table"><thead><tr><th>이름</th><th>완료</th><th>응답내용</th><th>비고</th></tr></thead><tbody>${body}</tbody></table>`;
  $('#task-date').textContent=new Intl.DateTimeFormat('ko-KR',{year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date());renderTaskSummary()}
 function taskUpdate(name,field,value){const s=taskLoad(),it=taskCurrentItem();(s[it]=s[it]||{})[name]=s[it][name]||{};s[it][name][field]=value;taskSave(s);renderTaskSummary()}
-function view(id){$$('.view,.nav').forEach(x=>x.classList.remove('active'));$('#'+id).classList.add('active');$(`.nav[data-view="${id}"]`).classList.add('active');$('#page-title').textContent={overview:'오늘의 리서치 흐름',reports:'발간 보고서',news:'뉴스.아카이브',press:'보도기사 취합','union-board':'현중 노조게시판',tone:'DAOL 리서치 톤',collab:'섹터 콜라보 레이더',tasklist:'수명 피드백 확인',dart:'조선 수주공시 → 텔레',etf:'ETF/섹터 신호 포착',holdings:'액티브 ETF 구성 변화',flow:'시장 수급 동향',consensus:'코스피200 컨센서스 추적',defense:'글로벌 방산 데일리 브리핑'}[id];if(id==='overview')fetchLiveMacro();if(id==='press'){state.pressCompany='';renderPressTable()}if(id==='tone')loadToneFrame();if(id==='union-board')loadUnionBoard();if(id==='tasklist'){renderTaskList();taskPull().then(ok=>{if(ok)renderTaskList()})}if(id==='etf'){const f=$('#etf-frame');if(!f.getAttribute('src'))f.src='etf_signal_report.html?t='+Date.now()}if(id==='holdings'){const f=$('#holdings-frame');if(!f.getAttribute('src'))f.src='etf_holdings_report.html?t='+Date.now()}if(id==='flow'){const f=$('#flow-frame');if(!f.getAttribute('src'))f.src='market_flow_report.html?t='+Date.now()}if(id==='consensus'){const f=$('#consensus-frame');if(!f.getAttribute('src'))f.src='consensus_revision.html?t='+Date.now()}if(id==='defense'){const f=$('#defense-frame');if(!f.getAttribute('src'))f.src='defense_briefing_report.html?t='+Date.now()}if(id==='collab'){const f=$('#collab-frame');if(!f.getAttribute('src'))f.src=TONE_SITE+'daol_collab_radar.html?t='+Date.now()}}
+function view(id){$$('.view,.nav').forEach(x=>x.classList.remove('active'));$('#'+id).classList.add('active');$(`.nav[data-view="${id}"]`).classList.add('active');$('#page-title').textContent={overview:'오늘의 리서치 흐름',reports:'발간 보고서',news:'뉴스.아카이브',press:'보도기사 취합','union-board':'현중 노조게시판',tone:'DAOL 리서치 톤',collab:'섹터 콜라보 레이더',tasklist:'수명 피드백 확인',dart:'조선 수주공시 → 텔레',etf:'ETF/섹터 신호 포착',holdings:'액티브 ETF 구성 변화',flow:'시장 수급 동향',consensus:'코스피200 컨센서스 추적',defense:'글로벌 방산 데일리 브리핑',remember:'리멤버 → Notion 기록'}[id];if(id==='overview')fetchLiveMacro();if(id==='press'){state.pressCompany='';renderPressTable()}if(id==='tone')loadToneFrame();if(id==='union-board')loadUnionBoard();if(id==='tasklist'){renderTaskList();taskPull().then(ok=>{if(ok)renderTaskList()})}if(id==='etf'){const f=$('#etf-frame');if(!f.getAttribute('src'))f.src='etf_signal_report.html?t='+Date.now()}if(id==='holdings'){const f=$('#holdings-frame');if(!f.getAttribute('src'))f.src='etf_holdings_report.html?t='+Date.now()}if(id==='flow'){const f=$('#flow-frame');if(!f.getAttribute('src'))f.src='market_flow_report.html?t='+Date.now()}if(id==='consensus'){const f=$('#consensus-frame');if(!f.getAttribute('src'))f.src='consensus_revision.html?t='+Date.now()}if(id==='defense'){const f=$('#defense-frame');if(!f.getAttribute('src'))f.src='defense_briefing_report.html?t='+Date.now()}if(id==='collab'){const f=$('#collab-frame');if(!f.getAttribute('src'))f.src=TONE_SITE+'daol_collab_radar.html?t='+Date.now()}}
 const DISPATCH_ENDPOINT='https://script.google.com/macros/s/AKfycbzybp0b1W0wr9n2bfQsF1xblsaLdlu9oRtfH7xkbQrRYLaRpCwemhFRVLbk3rGnIO4zdQ/exec';
 async function dispatchWorkflow(payload,status,btn){
  if(status)status.textContent='요청 중…';if(btn)btn.disabled=true;
@@ -127,6 +127,26 @@ async function dispatchDart(){
  if(!/dart\.fss\.or\.kr|rcpNo=|^\d{10,}$/.test(url)){status.textContent='⚠ DART 공시 링크를 넣어주세요';return}
  if(await dispatchWorkflow({workflow:'dart',dart_url:url,comment},status,btn)){
    status.textContent='✅ 요청됨 — 1~2분 뒤 텔레그램 확인';$('#dart-url').value='';$('#dart-comment').value='';}}
+const REMEMBER_ENDPOINT='';/* 리멤버→Notion GAS 웹앱 /exec URL (gas/remember_notion.gs). 비면 화면의 ⚙️ 연결 설정(localStorage) 사용 */
+const REMEMBER_EP_KEY='remember_endpoint_v1';
+function rememberEndpoint(){if(REMEMBER_ENDPOINT)return REMEMBER_ENDPOINT;try{return localStorage.getItem(REMEMBER_EP_KEY)||''}catch{return''}}
+async function sendRemember(){
+ const text=($('#remember-text')?.value||'').trim(),status=$('#remember-status'),btn=$('#remember-send'),box=$('#remember-result');
+ if(!text){status.textContent='⚠ 기억할 내용을 입력해 주세요';return}
+ const ep=rememberEndpoint();
+ if(!ep){status.textContent='⚠ 아래 ⚙️ 연결 설정에서 GAS 웹앱 URL을 먼저 저장해 주세요';const st=$('#remember-setup');if(st)st.open=true;return}
+ status.textContent='AI 정리 + Notion 저장 중… (10초 안팎)';btn.disabled=true;box.hidden=true;
+ try{
+  const r=await fetch(ep,{method:'POST',body:JSON.stringify({text})});
+  const d=await r.json();
+  if(!d.ok)throw new Error(d.error||'저장 실패');
+  status.textContent=d.ai?'✅ 저장 완료 (AI 정리)':'✅ 저장 완료 (원문 기반 — GEMINI_API_KEY 미설정)';
+  const bullets=(d.bullets||[]).map(b=>`  • ${esc(b)}`).join('\n');
+  const tags=(d.tags||[]).length?`\n- 태그: ${esc(d.tags.join(', '))}`:'';
+  box.innerHTML=`📌 [GS_WRITING / 리멤버] 신규 페이지 생성 완료\n\n■ 페이지 제목: ${esc(d.title||'')}\n■ 생성 경로: GS_WRITING &gt; 리멤버 &gt; ${esc(d.title||'')}\n\n■ 본문 내용:\n- 입력 날짜: ${esc(d.date||'')}${tags}\n- 주요 내용:\n${bullets}`+(d.url?`\n\n<a href="${esc(d.url)}" target="_blank" rel="noopener">Notion에서 열기 ↗</a>`:'');
+  box.hidden=false;$('#remember-text').value='';
+ }catch(e){status.textContent='실패: '+e.message}
+ finally{btn.disabled=false}}
 async function dispatchEtf(){
  const btn=$('#etf-refresh'),status=$('#etf-status');
  if(await dispatchWorkflow({workflow:'etf'},status,btn))
@@ -187,6 +207,9 @@ $('#press-export').onclick=exportPressExcel;
 $('#union-board-refresh').onclick=loadUnionBoard;
 $('#union-board-file').onchange=e=>{const file=e.target.files?.[0];if(!file)return;const frame=$('#union-board-frame');if(frame.dataset.objectUrl)URL.revokeObjectURL(frame.dataset.objectUrl);const url=URL.createObjectURL(file);frame.dataset.objectUrl=url;frame.src=url;$('#union-board-status').textContent=`${file.name} · ${(file.size/1024).toFixed(1)}KB`};
 $('#dart-send')?.addEventListener('click',dispatchDart);
+$('#remember-send')?.addEventListener('click',sendRemember);
+$('#remember-endpoint-save')?.addEventListener('click',()=>{const v=($('#remember-endpoint')?.value||'').trim();if(!/^https:\/\/script\.google\.com\/.+\/exec$/.test(v)){alert('GAS 웹앱 /exec URL 형식이 아닙니다.');return}try{localStorage.setItem(REMEMBER_EP_KEY,v)}catch{}$('#remember-status').textContent='☁ URL 저장됨 — 이제 기록할 수 있습니다';const st=$('#remember-setup');if(st)st.open=false});
+{const _rep=$('#remember-endpoint');if(_rep)_rep.value=rememberEndpoint();}
 $('#etf-refresh')?.addEventListener('click',dispatchEtf);
 $('#holdings-refresh')?.addEventListener('click',dispatchHoldings);
 $('#news-refresh')?.addEventListener('click',dispatchNews);

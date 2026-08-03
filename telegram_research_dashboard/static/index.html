@@ -103,6 +103,7 @@
         <div class="nav-submenu">
           <a href="https://calendar.google.com/calendar/u/0/r/week" target="_blank" rel="noopener" onclick="return openGcal(event)">📅 구칼</a>
           <a href="https://www.notion.com" target="_blank" rel="noopener">📝 Notion</a>
+          <button class="nav" data-view="remember">┗💿 리멤버.기록</button>
           <details class="nav-subgroup">
             <summary>🤖 AI</summary>
             <div class="nav-submenu-2">
@@ -229,6 +230,25 @@
         </label>
         <button id="dart-send" type="button">🚀 전송</button>
         <span id="dart-status" class="dart-status"></span>
+      </div>
+    </section>
+
+    <section id="remember" class="view">
+      <div class="archive-intro"><div><p class="eyebrow">NOTION · REMEMBER</p><h2>리멤버 → Notion 기록</h2></div><div class="etf-actions"><span>기억할 내용을 적으면 AI가 제목·개조식으로 정리해 GS_WRITING &gt; 리멤버 아래 새 페이지로 저장합니다.</span><a class="panel-more" href="https://www.notion.so/3ad57951c40c80128a6ec5d826196836" target="_blank" rel="noopener">💿 리멤버 열기 ↗</a></div></div>
+      <div class="dart-form">
+        <label>기억할 내용
+          <textarea id="remember-text" rows="8" placeholder="예) 스터디까페 정기권은 매월 5일 갱신, 관리자 문의는 010-…&#10;문장·메모를 자유롭게 적으면 제목과 개조식 정리는 AI가 합니다."></textarea>
+        </label>
+        <button id="remember-send" type="button">💿 Notion에 기록</button>
+        <span id="remember-status" class="dart-status"></span>
+        <div id="remember-result" class="remember-result" hidden></div>
+        <details id="remember-setup">
+          <summary>⚙️ 연결 설정 (최초 1회)</summary>
+          <label>리멤버 GAS 웹앱 /exec URL <small>(gas/remember_notion.gs 배포 후 붙여넣기)</small>
+            <input id="remember-endpoint" type="url" inputmode="url" autocapitalize="off" autocomplete="off" placeholder="https://script.google.com/macros/s/…/exec">
+          </label>
+          <button id="remember-endpoint-save" type="button">URL 저장</button>
+        </details>
       </div>
     </section>
 
