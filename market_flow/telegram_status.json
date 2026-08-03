@@ -1,8 +1,69 @@
 {
-  "when_utc": "2026-08-02 22:43:10Z",
+  "when_utc": "2026-08-03 01:37:11Z",
   "ok": true,
-  "note": "skip_holiday",
+  "note": "sent",
   "chat_id_tail": "5171",
   "token_set": true,
-  "response": null
+  "response": {
+    "ok": true,
+    "result": {
+      "message_id": 6,
+      "from": {
+        "id": 8875725998,
+        "is_bot": true,
+        "first_name": "GB Investing Signal",
+        "username": "gs_invest_signal_bot"
+      },
+      "chat": {
+        "id": 279385171,
+        "first_name": "광식",
+        "last_name": "최",
+        "username": "gschoie",
+        "type": "private"
+      },
+      "date": 1785721031,
+      "text": "💹 시장 수급 · 8/3(월) 10:00\nKOSPI 6,257.46 🔻5.12%\n\n개인 +23,105억\n외국인 -15,604억\n기관 -8,038억\n\n프로그램 -13,129억 = 차익 +259 · 비차익 -13,389\n\n상세 차트 › 대시보드\n🎴 GS Research Desk · 시장 수급",
+      "entities": [
+        {
+          "offset": 3,
+          "length": 5,
+          "type": "bold"
+        },
+        {
+          "offset": 30,
+          "length": 8,
+          "type": "bold"
+        },
+        {
+          "offset": 51,
+          "length": 8,
+          "type": "bold"
+        },
+        {
+          "offset": 64,
+          "length": 8,
+          "type": "bold"
+        },
+        {
+          "offset": 76,
+          "length": 7,
+          "type": "bold"
+        },
+        {
+          "offset": 90,
+          "length": 8,
+          "type": "bold"
+        },
+        {
+          "offset": 132,
+          "length": 4,
+          "type": "text_link",
+          "url": "https://gschoie.github.io/GS-output-dashboard/market_flow_report.html"
+        }
+      ],
+      "link_preview_options": {
+        "is_disabled": true
+      }
+    }
+  }
 }

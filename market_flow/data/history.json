@@ -1840,7 +1840,51 @@
      ]
     ]
    }
+  },
+  "2026-08-03": {
+   "kospi": {
+    "close": 6257.46,
+    "chg_pct": -5.12
+   },
+   "slots": {
+    "1000": {
+     "individual": 23105,
+     "foreign": -15604,
+     "institution": -8038,
+     "arb": 259,
+     "nonarb": -13389,
+     "program": -13129,
+     "time": "10:37",
+     "kospi": 6257.46,
+     "chg_pct": -5.12
+    }
+   },
+   "confirmed": {
+    "investor": {
+     "individual": 23680,
+     "foreign": -15764,
+     "inst_total": -8466,
+     "fin_invest": -8569,
+     "insurance": 203,
+     "asset_mgmt": 953,
+     "bank": 14,
+     "other_fin": 79,
+     "pension": -1145,
+     "other_corp": 550
+    },
+    "program": {
+     "arb_buy": 1131,
+     "arb_sell": 872,
+     "arb_net": 259,
+     "nonarb_buy": 34291,
+     "nonarb_sell": 47862,
+     "nonarb_net": -13572,
+     "total_buy": 35422,
+     "total_sell": 48734,
+     "total_net": -13313
+    }
+   }
   }
  },
- "updated_kst": "2026-07-31 19:13"
+ "updated_kst": "2026-08-03 10:37"
 }
