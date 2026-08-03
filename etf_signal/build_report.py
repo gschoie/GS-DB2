@@ -72,7 +72,7 @@ def day_html(payload, is_latest):
             rs = " · ".join(reasons(s)) or "신호 발생"
             alert_cards += f'''
       <article class="alert-card">
-        <div class="ac-head"><b>{name_link(s)}</b><small>{esc(s["group"])} · {s["close"]:,}원</small></div>
+        <div class="ac-head"><span class="ac-title"><b>{name_link(s)}</b><button class="btn-chart" data-code="{esc(s.get("code") or "")}" title="최근 120거래일 가격 · 신호 발생 시점">추세</button></span><small>{esc(s["group"])} · {s["close"]:,}원</small></div>
         <p>{esc(rs)}</p>
         <div class="ac-meta">ADX {s["adx"]} · %K {s["k"]}/{s["d"]} · {flow_badge(s["flow"])}</div>
       </article>'''
@@ -215,6 +215,7 @@ h2{{font:600 18px Georgia,"Noto Serif KR",serif;margin:30px 0 12px}}
 .alerts{{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px}}
 .alert-card{{background:#fff;border:1px solid var(--line);border-left:4px solid var(--green);padding:15px 17px}}
 .ac-head{{display:flex;justify-content:space-between;align-items:baseline;gap:10px}}
+.ac-title{{display:inline-flex;align-items:center;gap:8px}}
 .ac-head b{{font-size:15px}}.ac-head small{{color:var(--muted);font-size:11px;white-space:nowrap}}
 .alert-card p{{margin:9px 0;font-size:13px;color:#2c3a34;line-height:1.5}}
 .ac-meta{{font-size:11px;color:var(--muted);display:flex;gap:8px;align-items:center;flex-wrap:wrap}}
