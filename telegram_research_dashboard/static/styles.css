@@ -52,3 +52,8 @@
 
 .remember-result{white-space:pre-wrap;border:1px solid rgba(148,163,184,.35);border-radius:12px;padding:14px 16px;margin-top:12px;font-size:13px;line-height:1.65;max-width:720px}
 .remember-result a{font-weight:600}
+
+.remember-previews{display:flex;flex-wrap:wrap;gap:10px;margin:2px 0 6px}
+.remember-previews .rp{position:relative;display:inline-block}
+.remember-previews img{width:84px;height:84px;object-fit:cover;border-radius:10px;border:1px solid rgba(148,163,184,.35);display:block}
+.remember-previews .rp button{position:absolute;top:-7px;right:-7px;width:20px;height:20px;line-height:18px;padding:0;border-radius:50%;border:1px solid rgba(148,163,184,.5);background:#1e293b;color:#e2e8f0;font-size:12px;cursor:pointer}

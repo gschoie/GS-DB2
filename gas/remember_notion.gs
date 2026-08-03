@@ -1,10 +1,11 @@
 /** =====================================================================
  * 리멤버 → Notion 기록기 (Google Apps Script 웹앱)
  * ---------------------------------------------------------------------
- * 대시보드의 "💿 리멤버.기록" 뷰가 이 웹앱으로 POST {text:"..."} 를 보내면
+ * 대시보드의 "💿 리멤버.기록" 뷰가 이 웹앱으로 POST {text, images[]} 를 보내면
  *  1) Gemini(flash-lite, 무료)로 제목·개조식 요약·태그를 구조화하고 (실패 시 휴리스틱)
- *  2) Notion API로 GS_WRITING > 리멤버 DB에 새 페이지를 만든 뒤
- *  3) {ok, title, bullets, tags, date, url} 을 돌려준다.
+ *  2) 사진(base64)이 있으면 Notion 파일 업로드 API로 올린 뒤
+ *  3) Notion API로 GS_WRITING > 리멤버 DB에 새 페이지를 만들고
+ *  4) {ok, title, bullets, tags, date, url, imgOk, imgFail} 을 돌려준다.
  *
  * [설치 — 1회]
  *  1. https://www.notion.so/profile/integrations 에서 내부 통합(Internal) 생성
@@ -19,6 +20,8 @@
  *  6. 배포 → 새 배포 → 유형 "웹 앱": 실행 계정 "나", 액세스 "모든 사용자" → /exec URL 복사
  *  7. 대시보드 "💿 리멤버.기록" 뷰의 ⚙️ 연결 설정에 URL 저장
  *     (여러 기기에서 쓰려면 static/app.js 의 REMEMBER_ENDPOINT 상수에 넣고 커밋)
+ *
+ * [코드 수정 후] 배포 → 배포 관리 → ✏️ → 버전 "새 버전" → 배포 (URL은 그대로 유지됨)
  * ===================================================================== */
 
 const NOTION_DB_ID = '3ad57951c40c80128a6ec5d826196836'; // GS_WRITING > 💿 리멤버 (구 리멤버2026)
@@ -31,12 +34,21 @@ function doPost(e) {
   try {
     const body = JSON.parse((e.postData && e.postData.contents) || '{}');
     const text = String(body.text || '').trim();
-    if (!text) return json_({ ok: false, error: '내용이 비어 있습니다.' });
+    const images = Array.isArray(body.images) ? body.images.slice(0, 8) : [];
+    if (!text && !images.length) return json_({ ok: false, error: '내용이 비어 있습니다.' });
 
     const date = Utilities.formatDate(new Date(), 'Asia/Seoul', 'yyyy-MM-dd');
-    const s = structure_(text);
-    const page = createNotionPage_(s, text, date);
-    return json_({ ok: true, title: s.title, bullets: s.bullets, tags: s.tags, ai: s.ai, date: date, url: page.url || '' });
+    const s = text ? structure_(text) : { title: '사진 기록 ' + date, bullets: [], tags: [], ai: false };
+
+    // 사진 업로드 (한 장 실패해도 나머지는 계속)
+    const token = notionToken_();
+    const imgIds = []; let imgFail = 0;
+    images.forEach(function (img) {
+      try { imgIds.push(uploadImage_(img, token)); } catch (err) { imgFail++; }
+    });
+
+    const page = createNotionPage_(s, text, date, imgIds, token);
+    return json_({ ok: true, title: s.title, bullets: s.bullets, tags: s.tags, ai: s.ai, date: date, url: page.url || '', imgOk: imgIds.length, imgFail: imgFail });
   } catch (err) {
     return json_({ ok: false, error: String(err) });
   }
@@ -44,6 +56,12 @@ function doPost(e) {
 
 function json_(o) {
   return ContentService.createTextOutput(JSON.stringify(o)).setMimeType(ContentService.MimeType.JSON);
+}
+
+function notionToken_() {
+  const token = PropertiesService.getScriptProperties().getProperty('NOTION_TOKEN');
+  if (!token) throw new Error('스크립트 속성 NOTION_TOKEN 이 없습니다.');
+  return token;
 }
 
 /* ---------- 1) 구조화: Gemini 우선, 실패 시 휴리스틱 폴백 ---------- */
@@ -90,20 +108,46 @@ function structure_(text) {
   return { title: title, bullets: bullets, tags: [], ai: false };
 }
 
-/* ---------- 2) Notion 페이지 생성 ---------- */
-function createNotionPage_(s, rawText, date) {
-  const token = PropertiesService.getScriptProperties().getProperty('NOTION_TOKEN');
-  if (!token) throw new Error('스크립트 속성 NOTION_TOKEN 이 없습니다.');
+/* ---------- 2) 사진 업로드 (Notion File Upload API) ----------
+ * img: {name, type, data(base64)} — 대시보드가 긴 변 1600px JPEG로 축소해 보냄.
+ * 무료 워크스페이스는 파일당 5MiB 제한이라 축소본이면 충분하다. */
+function uploadImage_(img, token) {
+  const name = String(img.name || 'photo.jpg');
+  const type = String(img.type || 'image/jpeg');
+  const create = UrlFetchApp.fetch('https://api.notion.com/v1/file_uploads', {
+    method: 'post', contentType: 'application/json', muteHttpExceptions: true,
+    headers: { Authorization: 'Bearer ' + token, 'Notion-Version': NOTION_VERSION },
+    payload: JSON.stringify({ mode: 'single_part', filename: name, content_type: type }),
+  });
+  if (create.getResponseCode() !== 200) throw new Error('upload-create ' + create.getResponseCode() + ': ' + create.getContentText().slice(0, 200));
+  const up = JSON.parse(create.getContentText());
 
+  const blob = Utilities.newBlob(Utilities.base64Decode(String(img.data || '')), type, name);
+  const send = UrlFetchApp.fetch('https://api.notion.com/v1/file_uploads/' + up.id + '/send', {
+    method: 'post', muteHttpExceptions: true,
+    headers: { Authorization: 'Bearer ' + token, 'Notion-Version': NOTION_VERSION },
+    payload: { file: blob }, // multipart/form-data 자동 구성
+  });
+  if (send.getResponseCode() !== 200) throw new Error('upload-send ' + send.getResponseCode() + ': ' + send.getContentText().slice(0, 200));
+  return up.id;
+}
+
+/* ---------- 3) Notion 페이지 생성 ---------- */
+function createNotionPage_(s, rawText, date, imgIds, token) {
   const children = [para_('입력 날짜: ' + date, true)];
   s.bullets.forEach(function (b) {
     children.push({ object: 'block', type: 'bulleted_list_item', bulleted_list_item: { rich_text: rt_(b) } });
   });
-  children.push({ object: 'block', type: 'divider', divider: {} });
-  children.push({
-    object: 'block', type: 'toggle',
-    toggle: { rich_text: rt_('원문'), children: chunk_(rawText).map(function (c) { return para_(c); }) },
+  (imgIds || []).forEach(function (id) {
+    children.push({ object: 'block', type: 'image', image: { type: 'file_upload', file_upload: { id: id } } });
   });
+  if (rawText) {
+    children.push({ object: 'block', type: 'divider', divider: {} });
+    children.push({
+      object: 'block', type: 'toggle',
+      toggle: { rich_text: rt_('원문'), children: chunk_(rawText).map(function (c) { return para_(c); }) },
+    });
+  }
 
   const payload = {
     parent: { database_id: NOTION_DB_ID },
@@ -137,8 +181,12 @@ function chunk_(t) {
   return out;
 }
 
-/* 편집기에서 1회 실행: 권한 승인 + Notion 연결 확인용 */
+/* 편집기에서 1회 실행: 권한 승인 + Notion 연결/사진 업로드 확인용 */
 function testRemember() {
-  const e = { postData: { contents: JSON.stringify({ text: '리멤버 기록기 테스트입니다.\n첫 배포 승인용 실행 — 확인 후 Notion에서 지워도 됩니다.' }) } };
+  const tinyPng = 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==';
+  const e = { postData: { contents: JSON.stringify({
+    text: '리멤버 기록기 테스트입니다.\n첫 배포 승인용 실행 — 확인 후 Notion에서 지워도 됩니다.',
+    images: [{ name: 'test.png', type: 'image/png', data: tinyPng }],
+  }) } };
   Logger.log(doPost(e).getContent());
 }
