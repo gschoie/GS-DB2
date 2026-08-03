@@ -127,7 +127,7 @@ async function dispatchDart(){
  if(!/dart\.fss\.or\.kr|rcpNo=|^\d{10,}$/.test(url)){status.textContent='⚠ DART 공시 링크를 넣어주세요';return}
  if(await dispatchWorkflow({workflow:'dart',dart_url:url,comment},status,btn)){
    status.textContent='✅ 요청됨 — 1~2분 뒤 텔레그램 확인';$('#dart-url').value='';$('#dart-comment').value='';}}
-const REMEMBER_ENDPOINT='';/* 리멤버→Notion GAS 웹앱 /exec URL (gas/remember_notion.gs). 비면 화면의 ⚙️ 연결 설정(localStorage) 사용 */
+const REMEMBER_ENDPOINT='https://script.google.com/macros/s/AKfycbyerXB4W9QaOQJ_ZADATF5FadRtDiSQlT_LAWxPblYQ39bHjmE4LegFhfSb47n4aTj1/exec';/* 리멤버→Notion GAS 웹앱 (gas/remember_notion.gs). 비면 화면의 ⚙️ 연결 설정(localStorage) 사용 */
 const REMEMBER_EP_KEY='remember_endpoint_v1';
 function rememberEndpoint(){if(REMEMBER_ENDPOINT)return REMEMBER_ENDPOINT;try{return localStorage.getItem(REMEMBER_EP_KEY)||''}catch{return''}}
 const REMEMBER_IMGS=[];/* {name,type,data(base64)} — 전송 전 대기 중인 사진 */
