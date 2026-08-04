@@ -2383,8 +2383,8 @@
   },
   "2026-08-04": {
    "kospi": {
-    "close": 6347.2,
-    "chg_pct": 1.43
+    "close": 6358.95,
+    "chg_pct": 1.62
    },
    "slots": {
     "1000": {
@@ -2419,31 +2419,42 @@
      "time": "15:29",
      "kospi": 6347.2,
      "chg_pct": 1.43
+    },
+    "1640": {
+     "individual": 8187,
+     "foreign": -3716,
+     "institution": -5385,
+     "arb": -1499,
+     "nonarb": -2571,
+     "program": -4070,
+     "time": "18:24",
+     "kospi": 6358.95,
+     "chg_pct": 1.62
     }
    },
    "confirmed": {
     "investor": {
-     "individual": 7536,
-     "foreign": -2824,
-     "inst_total": -5612,
-     "fin_invest": -2326,
-     "insurance": 201,
-     "asset_mgmt": -4245,
+     "individual": 8187,
+     "foreign": -3716,
+     "inst_total": -5385,
+     "fin_invest": -1584,
+     "insurance": 574,
+     "asset_mgmt": -4948,
      "bank": -120,
-     "other_fin": 231,
-     "pension": 646,
-     "other_corp": 900
+     "other_fin": 227,
+     "pension": 466,
+     "other_corp": 914
     },
     "program": {
      "arb_buy": 3256,
-     "arb_sell": 4398,
-     "arb_net": -1142,
-     "nonarb_buy": 79502,
-     "nonarb_sell": 81847,
-     "nonarb_net": -2345,
-     "total_buy": 82758,
-     "total_sell": 86245,
-     "total_net": -3487
+     "arb_sell": 4755,
+     "arb_net": -1499,
+     "nonarb_buy": 90036,
+     "nonarb_sell": 92608,
+     "nonarb_net": -2571,
+     "total_buy": 93292,
+     "total_sell": 97363,
+     "total_net": -4070
     }
    },
    "curve": {
@@ -2914,13 +2925,13 @@
      ],
      [
       "15:30",
-      -1142,
-      -2345,
-      -3487
+      -1414,
+      -2761,
+      -4175
      ]
     ]
    }
   }
  },
- "updated_kst": "2026-08-04 15:29"
+ "updated_kst": "2026-08-04 18:24"
 }
