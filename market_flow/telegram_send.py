@@ -63,6 +63,16 @@ def build_message():
     lines += [line("개인", "individual"), line("외국인", "foreign"), line("기관", "institution"), ""]
     lines.append(f"프로그램 <b>{fmt(s['program'])}억</b> = "
                  f"차익 {fmt(s['arb'])} · 비차익 {fmt(s['nonarb'])}")
+    fut = day.get("confirmed", {}).get("futures")
+    fut_curve = (day.get("curve") or {}).get("futures")
+    unit = hist.get("futures_unit", "계약")
+    if fut:
+        lines.append(f"K200선물 외인 <b>{fmt(fut['foreign'])}{unit}</b> · "
+                     f"기관 {fmt(fut['inst_total'])}{unit}")
+    elif fut_curve:
+        last = fut_curve[-1]
+        lines.append(f"K200선물 외인 <b>{fmt(last[2])}{unit}</b> · "
+                     f"기관 {fmt(last[3])}{unit} <i>(장중 {last[0]})</i>")
     if prev:
         lines.append(f"<i>( ) 안은 {SLOT_LABEL[keys[-2]].split(' ')[0]} 대비 증감</i>")
     lines += ["", f'상세 차트 › <a href="{DASH_URL}">대시보드</a>', SIGNATURE]
