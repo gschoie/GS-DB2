@@ -1,5 +1,5 @@
 {
-  "when_utc": "2026-08-04 06:44:29Z",
+  "when_utc": "2026-08-05 02:44:40Z",
   "ok": true,
   "note": "change_sent",
   "chat_id_tail": "5171",
@@ -7,7 +7,7 @@
   "response": {
     "ok": true,
     "result": {
-      "message_id": 23,
+      "message_id": 28,
       "from": {
         "id": 8875725998,
         "is_bot": true,
@@ -21,8 +21,8 @@
         "username": "gschoie",
         "type": "private"
       },
-      "date": 1785825869,
-      "text": "🧩 액티브 ETF 구성 변화 · 구성 기준일 2026-08-04 (KRX 장마감)\n\n변화 ETF 8개 · 진입 6·이탈 6·실매매 7\n\n🟢 TIME 미국S&P500액티브 · TIME(구 TIMEFOLIO)\n   ⊕ 진입: INTEL CORP\n   ⊖ 이탈: VERIZON COMMUNICATIONS INC\n🟢 TIME 미국나스닥100액티브 · TIME(구 TIMEFOLIO)\n   ⊕ 진입: COREWEAVE INC-CL A\n   ⊖ 이탈: ADVANCED MICRO DEVICES\n🟢 TIME Korea플러스배당액티브 · TIME(구 TIMEFOLIO)\n   ⊕ 진입: 하나금융지주\n   ⊖ 이탈: NH투자증권\n🟢 TIME 글로벌AI인공지능액티브 · TIME(구 TIMEFOLIO)\n   ⊕ 진입: 삼성전기\n   ⊖ 이탈: EBAY INC\n🟢 TIGER 퓨처모빌리티액티브 · TIGER\n   ⊕ 진입: HL만도\n   ⊖ 이탈: 삼성전자\n🟢 SOL 코리아메가테크액티브 · SOL\n   ⊕ 진입: 현대모비스\n   ⊖ 이탈: HD한국조선해양\n🟢 KoAct 글로벌AI&로봇액티브 · KoAct\n   ▲ 삼성전자 계약수 +143%\n   ▲ 테스 계약수 +122%\n   ▲ SK하이닉스 계약수 +107%\n   ▲ 삼성전기 계약수 +69%\n🟢 TIME K바이오액티브 · TIME(구 TIMEFOLIO)\n   ▲ 셀트리온 계약수 +49% · 비중 +3.7%p\n   ▽ 한미약품 계약수 −29% · 비중 −2.0%p\n   ▽ 올릭스 계약수 −22% · 비중 −1.7%p\n\n전체 상세 › 대시보드\n🎴 GS Research Desk · 액티브 ETF 트래커",
+      "date": 1785897880,
+      "text": "🧩 액티브 ETF 구성 변화 · 구성 기준일 — (KRX 장마감)\n\n변화 ETF 9개 · 진입 9·이탈 9·실매매 6\n\n🟢 TIME 코스닥액티브 · TIME(구 TIMEFOLIO)\n   ⊕ 진입: 미코\n   ⊖ 이탈: 파마리서치\n   ▲ 지엔씨에너지 계약수 +61% · 비중 +1.8%p\n   ▽ 알테오젠 계약수 −25% · 비중 −1.7%p\n   ▲ 심텍 계약수 +50% · 비중 +1.2%p\n🟢 TIME 코스피액티브 · TIME(구 TIMEFOLIO)\n   ⊕ 진입: 삼성전기\n   ⊖ 이탈: 한국금융지주\n   ▲ 삼성전자 계약수 +11% · 비중 +1.6%p\n🟢 TIME 미국나스닥100액티브 · TIME(구 TIMEFOLIO)\n   ⊕ 진입: NEBIUS GROUP NV\n   ⊖ 이탈: MICROSOFT CORP\n   ▲ APPLIED OPTOELECTRONICS INC 계약수 +35%\n🟢 KODEX 미국배당커버드콜액티브 · KODEX\n   ⊕ 진입: APPLE Inc\n   ⊖ 이탈: State Street Consumer Discretionary Sect\n   ▽ COCA-COLA CO/THE 계약수 −32%\n🟢 TIME K컬처액티브 · TIME(구 TIMEFOLIO)\n   ⊕ 진입: 실리콘투\n   ⊖ 이탈: JYP Ent.\n🟢 TIME 글로벌AI인공지능액티브 · TIME(구 TIMEFOLIO)\n   ⊕ 진입: AMAZON.COM INC\n   ⊖ 이탈: SERVICENOW INC\n🟢 KoAct 코스닥액티브 · KoAct\n   ⊕ 진입: 에이비엘바이오\n   ⊖ 이탈: 제주반도체\n🟢 KoAct 글로벌AI&로봇액티브 · KoAct\n   ⊕ 진입: Furukawa Electric Co Ltd\n   ⊖ 이탈: Robinhood Markets Inc\n🟢 TIGER 배당커버드콜액티브 · TIGER\n   ⊕ 진입: LS ELECTRIC\n   ⊖ 이탈: 현대차\n\n전체 상세 › 대시보드\n🎴 GS Research Desk · 액티브 ETF 트래커",
       "entities": [
         {
           "offset": 0,
@@ -30,52 +30,62 @@
           "type": "bold"
         },
         {
-          "offset": 55,
+          "offset": 46,
           "length": 1,
           "type": "bold"
         },
         {
-          "offset": 80,
+          "offset": 71,
+          "length": 11,
+          "type": "bold"
+        },
+        {
+          "offset": 226,
+          "length": 11,
+          "type": "bold"
+        },
+        {
+          "offset": 322,
           "length": 16,
           "type": "bold"
         },
         {
-          "offset": 176,
-          "length": 16,
-          "type": "bold"
-        },
-        {
-          "offset": 276,
-          "length": 18,
-          "type": "bold"
-        },
-        {
-          "offset": 350,
+          "offset": 453,
           "length": 17,
           "type": "bold"
         },
         {
-          "offset": 423,
-          "length": 15,
+          "offset": 582,
+          "length": 11,
           "type": "bold"
         },
         {
-          "offset": 478,
-          "length": 14,
-          "type": "bold"
-        },
-        {
-          "offset": 535,
+          "offset": 649,
           "length": 17,
           "type": "bold"
         },
         {
-          "offset": 643,
+          "offset": 696,
+          "length": 10,
+          "type": "url"
+        },
+        {
+          "offset": 738,
           "length": 12,
           "type": "bold"
         },
         {
-          "offset": 777,
+          "offset": 794,
+          "length": 17,
+          "type": "bold"
+        },
+        {
+          "offset": 888,
+          "length": 15,
+          "type": "bold"
+        },
+        {
+          "offset": 955,
           "length": 4,
           "type": "text_link",
           "url": "https://gschoie.github.io/GS-output-dashboard/etf_holdings_report.html"
