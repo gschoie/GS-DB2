@@ -130,3 +130,35 @@ a.rep-title:hover{color:#386453;text-decoration:underline}
 .todo-del{border:0;background:none;color:#b7bdb8;font-size:15px;cursor:pointer;padding:2px 6px;flex:none}
 .todo-del:hover{color:var(--red)}
 @media(max-width:620px){.todo-form{flex-wrap:wrap}.todo-form input{flex:100%}}
+
+/* ── TO-DO 확장: 그룹 섹션 + 이미지 첨부/라이트박스 ── */
+.todo-form select{border:1px solid #cfd6d0;border-radius:8px;padding:0 10px;font:13px inherit;color:var(--ink);background:#fbfcfa;max-width:160px}
+.todo-form select:focus{outline:0;border-color:#a9c3b6;background:#fff}
+.todo-ghost{background:#fff!important;color:var(--green)!important;border:1px solid var(--green)!important}
+.todo-attach{display:grid;place-items:center;border:1px solid #cfd6d0;border-radius:8px;background:#fbfcfa;padding:0 12px;font-size:16px;cursor:pointer}
+.todo-attach:hover{background:#fff;border-color:#a9c3b6}
+#todo-previews{margin:-4px 0 12px}
+#todo-previews:empty{display:none}
+.todo-group{border:1px solid #e6eae4;border-radius:7px;margin-bottom:10px;background:#fff}
+.todo-group:last-child{margin-bottom:0}
+.todo-group>summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:9px;padding:11px 12px;background:#f6f8f5;border-radius:7px;font-weight:700;font-size:13px;color:#2c463d}
+.todo-group>summary::-webkit-details-marker{display:none}
+.todo-group>summary:before{content:'▾';color:#79837e;font-size:11px}
+.todo-group:not([open])>summary:before{content:'▸'}
+.todo-group[open]>summary{border-bottom:1px solid #eef1ec;border-radius:7px 7px 0 0}
+.todo-group>summary em{font:normal 11px Georgia;color:var(--muted)}
+.todo-g-tools{margin-left:auto;display:flex;gap:2px}
+.todo-g-tools button{border:0;background:none;color:#9aa39e;font-size:12px;cursor:pointer;padding:3px 6px}
+.todo-g-tools .todo-g-ren:hover{color:var(--green)}
+.todo-g-tools .todo-g-del:hover{color:var(--red)}
+.todo-group .todo-row{padding-left:12px;padding-right:10px}
+.todo-group .todo-row:last-child{border-bottom:0}
+.todo-empty{padding:16px}
+.todo-thumbs{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px}
+.todo-thumb{width:46px;height:46px;object-fit:cover;border-radius:6px;border:1px solid var(--line);cursor:zoom-in;display:block}
+.todo-thumb:hover{border-color:var(--green)}
+.todo-row.done .todo-thumb{opacity:.5}
+#todo-lightbox{position:fixed;inset:0;z-index:300;display:none;place-items:center;padding:26px;background:rgba(10,18,15,.85);cursor:zoom-out}
+#todo-lightbox.on{display:grid}
+#todo-lightbox img{max-width:min(94vw,1200px);max-height:92vh;border-radius:8px;box-shadow:0 12px 44px rgba(0,0,0,.55);background:#fff}
+@media(max-width:620px){.todo-form select{max-width:110px}}

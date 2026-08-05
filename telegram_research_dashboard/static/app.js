@@ -168,9 +168,9 @@ function fillTaskItems(desired){const sel=$('#task-item');if(!sel)return;const i
 const taskAllNames=()=>TASK_ROSTER.flatMap(([,ns])=>ns);
 function taskLoad(){try{return JSON.parse(localStorage.getItem(TASK_KEY))||{}}catch{return{}}}
 function taskSave(s){try{localStorage.setItem(TASK_KEY,JSON.stringify(s))}catch{}taskPush()}
-function taskBundle(){return{data:taskLoad(),items:taskItems(),todos:todoLoad()}}
+function taskBundle(){return{data:taskLoad(),items:taskItems(),todos:todoLoad(),todoGroups:todoGroups()}}
 function taskPush(statusSel){if(!TASK_ENDPOINT)return;clearTimeout(taskPushT);const status=$(statusSel||'#task-sync');if(status)status.textContent='저장 중…';taskPushT=setTimeout(()=>{fetch(TASK_ENDPOINT,{method:'POST',body:JSON.stringify(taskBundle())}).then(()=>{if(status)status.textContent='☁ 동기화됨'}).catch(()=>{if(status)status.textContent='이 기기에만 저장(동기화 실패)'})},600)}
-async function taskPull(){if(!TASK_ENDPOINT)return false;const status=$('#task-sync');if(status)status.textContent='불러오는 중…';try{const r=await fetch(TASK_ENDPOINT,{cache:'no-store'});if(!r.ok)throw 0;const b=await r.json()||{};const remoteData=b.data&&typeof b.data==='object'?b.data:{};if(!Object.keys(remoteData).length&&Object.keys(taskLoad()).length){taskPush();if(status)status.textContent='☁ 이 기기 데이터 업로드됨';return false}if(b.data)localStorage.setItem(TASK_KEY,JSON.stringify(b.data));if(Array.isArray(b.items)&&b.items.length)localStorage.setItem(TASK_ITEMS_KEY,JSON.stringify(b.items));if(Array.isArray(b.todos))localStorage.setItem(TODO_KEY,JSON.stringify(b.todos));if(status)status.textContent='☁ 동기화됨';return true}catch{if(status)status.textContent='이 기기에만 저장(동기화 실패)'}return false}
+async function taskPull(){if(!TASK_ENDPOINT)return false;const status=$('#task-sync');if(status)status.textContent='불러오는 중…';try{const r=await fetch(TASK_ENDPOINT,{cache:'no-store'});if(!r.ok)throw 0;const b=await r.json()||{};const remoteData=b.data&&typeof b.data==='object'?b.data:{};if(!Object.keys(remoteData).length&&Object.keys(taskLoad()).length){taskPush();if(status)status.textContent='☁ 이 기기 데이터 업로드됨';return false}if(b.data)localStorage.setItem(TASK_KEY,JSON.stringify(b.data));if(Array.isArray(b.items)&&b.items.length)localStorage.setItem(TASK_ITEMS_KEY,JSON.stringify(b.items));if(Array.isArray(b.todos))localStorage.setItem(TODO_KEY,JSON.stringify(b.todos));if(Array.isArray(b.todoGroups))localStorage.setItem(TODO_GROUPS_KEY,JSON.stringify(b.todoGroups));if(status)status.textContent='☁ 동기화됨';return true}catch{if(status)status.textContent='이 기기에만 저장(동기화 실패)'}return false}
 function taskCurrentItem(){return $('#task-item')?.value||taskItems()[0]}
 function renderTaskSummary(){const st=taskLoad()[taskCurrentItem()]||{},names=taskAllNames(),pending=names.filter(n=>!st[n]?.done);$('#task-summary').innerHTML=`완료 <b>${names.length-pending.length}</b> / ${names.length}`+(pending.length?` · 미응답: ${esc(pending.join(', '))}`:' · 전원 완료 🎉')}
 let taskSortByName=false;
@@ -183,18 +183,47 @@ function renderTaskList(desired){fillTaskItems(desired);const st=taskLoad()[task
  $('#task-table').innerHTML=`<table class="task-table"><thead><tr><th class="task-sort" style="cursor:pointer;user-select:none" title="클릭하면 이름순 ↔ 팀 순서로 전환">이름 ${taskSortByName?'▲':'⇅'}</th><th>완료</th><th>응답내용</th><th>비고</th></tr></thead><tbody>${body}</tbody></table>`;
  $('#task-date').textContent=new Intl.DateTimeFormat('ko-KR',{year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date());renderTaskSummary()}
 function taskUpdate(name,field,value){const s=taskLoad(),it=taskCurrentItem();(s[it]=s[it]||{})[name]=s[it][name]||{};s[it][name][field]=value;taskSave(s);renderTaskSummary()}
-/* ── TO-DO: 한 줄 할 일 + 체크 + 등록시각. 수명 피드백과 같은 GAS 번들(todos 필드)로 동기화 ── */
-const TODO_KEY='hi_todo_v1';
+/* ── TO-DO: 한 줄 할 일 + 체크 + 등록시각 + 이미지 첨부 + 그룹. 수명 피드백과 같은 GAS 번들(todos·todoGroups 필드)로 동기화 ── */
+const TODO_KEY='hi_todo_v1',TODO_GROUPS_KEY='hi_todo_groups_v1',TODO_IMG_MAX=4;/* 동기화 저장소 한도(실측 500KB) 보호 — 항목당 사진 4장 */
 function todoLoad(){try{const a=JSON.parse(localStorage.getItem(TODO_KEY));if(Array.isArray(a))return a}catch{}return[]}
 function todoSave(a){try{localStorage.setItem(TODO_KEY,JSON.stringify(a))}catch{}taskPush('#todo-sync');renderTodo()}
+function todoGroups(){try{const a=JSON.parse(localStorage.getItem(TODO_GROUPS_KEY));if(Array.isArray(a))return a.filter(x=>typeof x==='string'&&x.trim())}catch{}return[]}
+function todoGroupsStore(a){try{localStorage.setItem(TODO_GROUPS_KEY,JSON.stringify(a))}catch{}}
 const todoFmt=ts=>new Intl.DateTimeFormat('ko-KR',{month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',hour12:false}).format(new Date(ts));
-function renderTodo(){const box=$('#todo-list');if(!box)return;const a=todoLoad();
- box.innerHTML=a.length?a.map((t,i)=>`<div class="todo-row${t.done?' done':''}" data-i="${i}"><input type="checkbox" ${t.done?'checked':''}><span class="todo-text">${esc(t.text)}</span><span class="todo-ts"${t.doneTs?` title="완료 ${todoFmt(t.doneTs)}"`:''}>${todoFmt(t.ts)}</span><button class="todo-del" type="button" title="삭제">✕</button></div>`).join(''):'<p class="empty">할 일을 한 줄 적고 ＋추가를 누르세요.</p>'}
-function todoAdd(){const inp=$('#todo-input'),text=(inp?.value||'').trim();if(!text)return;const a=todoLoad();a.unshift({text,ts:Date.now(),done:false});todoSave(a);inp.value='';inp.focus()}
+function todoShrink(file){/* 첨부 이미지: 긴 변 720px·JPEG 0.7 data URL로 압축(동기화 번들 용량 보호) */
+ return new Promise((res,rej)=>{const url=URL.createObjectURL(file),img=new Image();
+  img.onload=()=>{try{const M=720,s=Math.min(1,M/Math.max(img.width,img.height)),w=Math.max(1,Math.round(img.width*s)),h=Math.max(1,Math.round(img.height*s)),c=document.createElement('canvas');c.width=w;c.height=h;c.getContext('2d').drawImage(img,0,0,w,h);URL.revokeObjectURL(url);res(c.toDataURL('image/jpeg',.7))}catch(e){rej(e)}};
+  img.onerror=()=>{URL.revokeObjectURL(url);rej(new Error('decode fail'))};img.src=url})}
+const TODO_PEND=[];/* 추가 전 대기 중인 사진 data URL */
+function renderTodoPend(){const box=$('#todo-previews');if(!box)return;box.innerHTML=TODO_PEND.map((d,i)=>`<span class="rp"><img src="${d}" alt="첨부 대기 사진"><button type="button" data-rmimg="${i}" title="제거">×</button></span>`).join('')}
+async function addTodoImgs(files){const status=$('#todo-sync');
+ for(const f of Array.from(files||[])){if(TODO_PEND.length>=TODO_IMG_MAX){if(status)status.textContent=`⚠ 사진은 항목당 ${TODO_IMG_MAX}장까지`;break}
+  try{TODO_PEND.push(await todoShrink(f))}catch{if(status)status.textContent=`⚠ ${f.name||'이미지'} 은 읽지 못해 건너뜀`}}
+ renderTodoPend()}
+function todoLightbox(src){let ov=$('#todo-lightbox');
+ if(!ov){ov=document.createElement('div');ov.id='todo-lightbox';ov.innerHTML='<img alt="첨부 사진 크게 보기">';ov.onclick=()=>ov.classList.remove('on');document.body.appendChild(ov);
+  document.addEventListener('keydown',e=>{if(e.key==='Escape')ov.classList.remove('on')})}
+ ov.querySelector('img').src=src;ov.classList.add('on')}
+function fillTodoGroups(){const sel=$('#todo-group');if(!sel)return;const cur=sel.value;
+ sel.innerHTML='<option value="">기본</option>'+todoGroups().map(g=>`<option value="${esc(g)}"${g===cur?' selected':''}>${esc(g)}</option>`).join('')}
+function renderTodo(){const box=$('#todo-list');if(!box)return;fillTodoGroups();const a=todoLoad(),groups=todoGroups();
+ if(!a.length&&!groups.length){box.innerHTML='<p class="empty">할 일을 한 줄 적고 ＋추가를 누르세요.</p>';return}
+ const row=(t,i)=>{const imgs=(t.imgs||[]).map((d,k)=>`<img class="todo-thumb" src="${d}" alt="첨부 ${k+1}" title="클릭하면 크게 보기">`).join('');
+  return `<div class="todo-row${t.done?' done':''}" data-i="${i}"><input type="checkbox" ${t.done?'checked':''}><span class="todo-text">${esc(t.text)}${imgs?`<span class="todo-thumbs">${imgs}</span>`:''}</span><span class="todo-ts"${t.doneTs?` title="완료 ${todoFmt(t.doneTs)}"`:''}>${todoFmt(t.ts)}</span><button class="todo-del" type="button" title="삭제">✕</button></div>`};
+ const names=['기본',...groups],buckets=Object.fromEntries(names.map(n=>[n,[]]));
+ a.forEach((t,i)=>{buckets[t.group&&names.includes(t.group)?t.group:'기본'].push([t,i])});
+ box.innerHTML=names.map(n=>{const list=buckets[n],undone=list.filter(([t])=>!t.done).length;
+  const tools=n==='기본'?'':`<span class="todo-g-tools"><button type="button" class="todo-g-ren" data-g="${esc(n)}" title="그룹 이름 변경">✎</button><button type="button" class="todo-g-del" data-g="${esc(n)}" title="그룹 삭제 (항목은 기본으로 이동)">✕</button></span>`;
+  return `<details class="todo-group" open><summary><span>${esc(n)}</span><em>${undone}/${list.length}</em>${tools}</summary>${list.map(([t,i])=>row(t,i)).join('')||'<p class="empty todo-empty">이 그룹에 할 일이 없습니다.</p>'}</details>`}).join('')}
+function todoAdd(){const inp=$('#todo-input'),text=(inp?.value||'').trim();if(!text&&!TODO_PEND.length)return;
+ const a=todoLoad(),g=$('#todo-group')?.value||'',t={text:text||'(사진 메모)',ts:Date.now(),done:false};
+ if(g)t.group=g;if(TODO_PEND.length)t.imgs=TODO_PEND.slice();
+ a.unshift(t);TODO_PEND.length=0;renderTodoPend();todoSave(a);inp.value='';inp.focus()}
 async function todoPull(){if(!TASK_ENDPOINT)return false;const status=$('#todo-sync');if(status)status.textContent='불러오는 중…';try{const r=await fetch(TASK_ENDPOINT,{cache:'no-store'});if(!r.ok)throw 0;const b=await r.json()||{};
+ if(Array.isArray(b.todoGroups))todoGroupsStore(b.todoGroups);
  if(Array.isArray(b.todos)){localStorage.setItem(TODO_KEY,JSON.stringify(b.todos));if(status)status.textContent='☁ 동기화됨';return true}
  // 서버 번들에 아직 todos가 없으면 이 기기 목록을 올려 시드한다
- if(todoLoad().length)taskPush('#todo-sync');else if(status)status.textContent='☁ 동기화';return false}catch{if(status)status.textContent='이 기기에만 저장(동기화 실패)'}return false}
+ if(todoLoad().length||todoGroups().length)taskPush('#todo-sync');else if(status)status.textContent='☁ 동기화';return false}catch{if(status)status.textContent='이 기기에만 저장(동기화 실패)'}return false}
 function view(id){$$('.view,.nav').forEach(x=>x.classList.remove('active'));$('#'+id).classList.add('active');$(`.nav[data-view="${id}"]`).classList.add('active');$('#page-title').textContent={todo:'TO-DO 체크리스트',overview:'오늘의 리서치 흐름',reports:'발간 보고서',news:'뉴스.아카이브',press:'보도기사 취합','union-board':'현중 노조게시판',tone:'DAOL 리서치 톤',collab:'섹터 콜라보 레이더',tasklist:'수명 피드백 확인',dart:'조선 수주공시 → 텔레',etf:'ETF/섹터 신호 포착',holdings:'액티브 ETF 구성 변화',flow:'시장 수급 동향',consensus:'코스피200 컨센서스 추적',defense:'글로벌 방산 데일리 브리핑',remember:'리멤버 → Notion 기록',mzdiary:'MZ일기 · 잔고/매매노트'}[id];if(id==='overview')fetchLiveMacro();if(id==='press'){state.pressCompany='';renderPressTable()}if(id==='tone')loadToneFrame();if(id==='union-board')loadUnionBoard();if(id==='tasklist'){renderTaskList();taskPull().then(ok=>{if(ok)renderTaskList()})}if(id==='todo'){renderTodo();todoPull().then(ok=>{if(ok)renderTodo()})}if(id==='etf'){const f=$('#etf-frame');if(!f.getAttribute('src'))f.src='etf_signal_report.html?t='+Date.now()}if(id==='holdings'){const f=$('#holdings-frame');if(!f.getAttribute('src'))f.src='etf_holdings_report.html?t='+Date.now()}if(id==='flow'){const f=$('#flow-frame');if(!f.getAttribute('src'))f.src='market_flow_report.html?t='+Date.now()}if(id==='consensus'){const f=$('#consensus-frame');if(!f.getAttribute('src'))f.src='consensus_revision.html?t='+Date.now()}if(id==='defense'){const f=$('#defense-frame');if(!f.getAttribute('src'))f.src='defense_briefing_report.html?t='+Date.now()}if(id==='collab'){const f=$('#collab-frame');if(!f.getAttribute('src'))f.src=TONE_SITE+'daol_collab_radar.html?t='+Date.now()}}
 const DISPATCH_ENDPOINT='https://script.google.com/macros/s/AKfycbzybp0b1W0wr9n2bfQsF1xblsaLdlu9oRtfH7xkbQrRYLaRpCwemhFRVLbk3rGnIO4zdQ/exec';
 async function dispatchWorkflow(payload,status,btn){
@@ -350,9 +379,18 @@ $('#consensus-refresh')?.addEventListener('click',dispatchConsensus);
 $('#flow-refresh')?.addEventListener('click',dispatchFlow);
 $('#todo-add')?.addEventListener('click',todoAdd);
 $('#todo-input')?.addEventListener('keydown',e=>{if(e.key==='Enter')todoAdd()});
+// 클립보드 이미지 붙여넣기(Ctrl+V) → 첨부 대기열로
+$('#todo-input')?.addEventListener('paste',e=>{const files=[...(e.clipboardData?.items||[])].filter(it=>it.type&&it.type.startsWith('image/')).map(it=>it.getAsFile()).filter(Boolean);if(!files.length)return;e.preventDefault();addTodoImgs(files)});
+$('#todo-photos')?.addEventListener('change',e=>{addTodoImgs(e.target.files);e.target.value=''});
+$('#todo-previews')?.addEventListener('click',e=>{const b=e.target.closest('[data-rmimg]');if(!b)return;TODO_PEND.splice(+b.dataset.rmimg,1);renderTodoPend()});
+$('#todo-group-add')?.addEventListener('click',()=>{const name=(prompt('추가할 그룹 이름')||'').trim();if(!name)return;const g=todoGroups();if(name==='기본'||g.includes(name)){alert('이미 있는 그룹입니다.');return}g.push(name);todoGroupsStore(g);taskPush('#todo-sync');renderTodo();const sel=$('#todo-group');if(sel)sel.value=name});
 $('#todo-clear-done')?.addEventListener('click',()=>{const a=todoLoad(),done=a.filter(t=>t.done).length;if(!done){alert('체크된 항목이 없습니다.');return}if(!confirm(`체크된 ${done}개 항목을 삭제할까요?`))return;todoSave(a.filter(t=>!t.done))});
 $('#todo-list')?.addEventListener('change',e=>{const row=e.target.closest('.todo-row');if(!row||e.target.type!=='checkbox')return;const a=todoLoad(),t=a[+row.dataset.i];if(!t)return;t.done=e.target.checked;if(t.done)t.doneTs=Date.now();else delete t.doneTs;todoSave(a)});
-$('#todo-list')?.addEventListener('click',e=>{const del=e.target.closest('.todo-del');if(!del)return;const row=del.closest('.todo-row'),a=todoLoad(),t=a[+row.dataset.i];if(!t)return;if(!confirm(`삭제할까요? — ${t.text}`))return;a.splice(+row.dataset.i,1);todoSave(a)});
+$('#todo-list')?.addEventListener('click',e=>{
+ const th=e.target.closest('.todo-thumb');if(th){todoLightbox(th.src);return}
+ const ren=e.target.closest('.todo-g-ren');if(ren){e.preventDefault();const cur=ren.dataset.g,name=(prompt('그룹 이름 변경',cur)||'').trim();if(!name||name===cur)return;const g=todoGroups();if(name==='기본'||g.includes(name)){alert('이미 있는 그룹입니다.');return}g[g.indexOf(cur)]=name;todoGroupsStore(g);todoSave(todoLoad().map(t=>t.group===cur?{...t,group:name}:t));const sel=$('#todo-group');if(sel)sel.value=name;return}
+ const gd=e.target.closest('.todo-g-del');if(gd){e.preventDefault();const cur=gd.dataset.g;if(!confirm(`[${cur}] 그룹을 삭제할까요? 그룹의 할 일은 기본으로 이동합니다.`))return;todoGroupsStore(todoGroups().filter(x=>x!==cur));todoSave(todoLoad().map(t=>{if(t.group!==cur)return t;const{group,...rest}=t;return rest}));return}
+ const del=e.target.closest('.todo-del');if(!del)return;const row=del.closest('.todo-row'),a=todoLoad(),t=a[+row.dataset.i];if(!t)return;if(!confirm(`삭제할까요? — ${t.text}`))return;a.splice(+row.dataset.i,1);todoSave(a)});
 $('#task-item')?.addEventListener('change',()=>renderTaskList());
 $('#task-add')?.addEventListener('click',()=>{const name=(prompt('추가할 항목 이름')||'').trim();if(!name)return;const items=taskItems();if(items.includes(name)){alert('이미 있는 항목입니다.');return}items.push(name);saveItems(items);renderTaskList(name)});
 $('#task-rename')?.addEventListener('click',()=>{const items=taskItems(),cur=taskCurrentItem(),name=(prompt('항목 이름 변경',cur)||'').trim();if(!name||name===cur)return;if(items.includes(name)){alert('이미 있는 항목입니다.');return}items[items.indexOf(cur)]=name;saveItems(items);const s=taskLoad();if(s[cur]){s[name]=s[cur];delete s[cur]}if(Array.isArray(s.__archived)){const i=s.__archived.indexOf(cur);if(i>-1)s.__archived[i]=name}taskSave(s);renderTaskList(name)});
