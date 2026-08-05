@@ -254,7 +254,7 @@ async function sendMzDiary(){
   const stocks=(d.stocks||[]).length?`\n- 종목: ${esc(d.stocks.join(', '))}`:'';
   const nums=[d.balance!=null?`잔고 ${Number(d.balance).toLocaleString('ko-KR')}원`:'',d.returnPct!=null?`수익률 ${d.returnPct}%`:''].filter(Boolean).join(' · ');
   const photos=d.imgOk?`\n- 사진: ${d.imgOk}장 첨부`:'';
-  box.innerHTML=`📌 [MZ일기 / 잔고·매매노트] 신규 페이지 생성 완료\n\n■ 페이지 제목: ${esc(d.title||'')}\n■ 생성 경로: MZ일기 &gt; 잔고·매매노트 &gt; ${esc(d.title||'')}\n\n■ 본문 내용:\n- 입력 날짜: ${esc(d.date||'')}${nums?`\n- ${esc(nums)} (캡처에서 AI 판독)`:''}${stocks}${photos}${bullets?`\n- 주요 내용:\n${bullets}`:''}`+(d.url?`\n\n<a href="${esc(d.url)}" target="_blank" rel="noopener">Notion에서 열기 ↗</a>`:'');
+  box.innerHTML=`📌 [MZ일기] 신규 페이지 생성 완료\n\n■ 페이지 제목: ${esc(d.title||'')}\n■ 생성 경로: MZ일기 &gt; ${esc(d.title||'')}\n\n■ 본문 내용:\n- 입력 날짜: ${esc(d.date||'')}${nums?`\n- ${esc(nums)} (캡처에서 AI 판독)`:''}${stocks}${photos}${bullets?`\n- 주요 내용:\n${bullets}`:''}`+(d.url?`\n\n<a href="${esc(d.url)}" target="_blank" rel="noopener">Notion에서 열기 ↗</a>`:'');
   box.hidden=false;$('#mzdiary-note').value='';MZDIARY_IMGS.length=0;renderMzdiaryPreviews();const fi=$('#mzdiary-photos');if(fi)fi.value='';
  }catch(e){status.textContent='실패: '+e.message}
  finally{btn.disabled=false}}
