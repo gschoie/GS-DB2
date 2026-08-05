@@ -89,6 +89,91 @@ def line_chart(series, width=760, height=250, unit="억원"):
             f'<svg viewBox="0 0 {width} {height}" role="img">{"".join(g)}</svg>')
 
 
+def nice_max(m):
+    """m 이상인 '깔끔한' 상한(1/2/2.5/5 × 10^k)."""
+    m = max(m, 1)
+    e = 10 ** (len(str(int(m))) - 1)
+    for f in (1, 2, 2.5, 5, 10):
+        if f * e >= m:
+            v = f * e
+            return int(v) if float(v).is_integer() else v
+    return 10 * e
+
+
+def combo_chart(rows, color, line_unit, width=760, height=250):
+    """현물(바, 좌축 억원) vs 선물(라인, 우축) 이중축 차트.
+    rows: [(date, spot_v, fut_v), …] — 두 축 모두 0 중심 대칭이라 0선을 공유한다."""
+    rows = [r for r in rows if r[1] is not None and r[2] is not None]
+    if not rows:
+        return '<p class="na">현물·선물 동시 확정 데이터 없음</p>'
+    pad_l, pad_r, pad_t, pad_b = 64, 64, 14, 30
+    sm = nice_max(max(abs(v) for _, v, _ in rows))
+    fm = nice_max(max(abs(v) for _, _, v in rows))
+    iw, ih = width - pad_l - pad_r, height - pad_t - pad_b
+    gw = iw / len(rows)
+    bw = min(gw * 0.5, 14)
+
+    def Y(v, m):
+        return pad_t + (1 - (v + m) / (2 * m)) * ih
+
+    g = []
+    for frac in (-1, -0.5, 0, 0.5, 1):
+        y = pad_t + (1 - (frac + 1) / 2) * ih
+        g.append(f'<line x1="{pad_l}" y1="{y:.1f}" x2="{width-pad_r}" y2="{y:.1f}" '
+                 f'class="grid{" zero" if frac == 0 else ""}"/>'
+                 f'<text x="{pad_l-6}" y="{y+3.5:.1f}" class="tick" '
+                 f'text-anchor="end">{frac*sm:,.0f}</text>'
+                 f'<text x="{width-pad_r+6}" y="{y+3.5:.1f}" class="tick" '
+                 f'text-anchor="start">{frac*fm:,.0f}</text>')
+    y0 = Y(0, sm)
+    pts = []
+    for i, (d, sv, fv) in enumerate(rows):
+        cx = pad_l + gw * i + gw / 2
+        ys = Y(sv, sm)
+        g.append(f'<rect x="{cx-bw/2:.1f}" y="{min(ys, y0):.1f}" width="{bw:.1f}" '
+                 f'height="{abs(ys-y0):.1f}" fill="{color}" fill-opacity=".4" rx="1"/>')
+        pts.append((cx, Y(fv, fm)))
+        if i % 2 == (len(rows) - 1) % 2:
+            g.append(f'<text x="{cx:.1f}" y="{height-8}" class="tick" '
+                     f'text-anchor="middle">{d[5:].replace("-", "/")}</text>')
+    poly = " ".join(f"{x:.1f},{y:.1f}" for x, y in pts)
+    g.append(f'<polyline points="{poly}" fill="none" stroke="{color}" '
+             f'stroke-width="2.2" stroke-linejoin="round"/>')
+    g += [f'<circle cx="{x:.1f}" cy="{y:.1f}" r="2.6" fill="{color}"/>' for x, y in pts]
+    legend = (f'<span style="color:{color};opacity:.65">■ 현물 순매수 (좌축·억원)</span> · '
+              f'<span style="color:{color}">●━ 선물 순매수 (우축·{line_unit})</span>')
+    return (f'<div class="legend">{legend}</div>'
+            f'<svg viewBox="0 0 {width} {height}" role="img">{"".join(g)}</svg>')
+
+
+def fut_snapshot(day):
+    """당일 K200 선물 순매수 (확정 우선, 없으면 장중 곡선 마지막 점).
+    반환: ({individual, foreign, inst}, 출처라벨) 또는 (None, None)"""
+    f = day.get("confirmed", {}).get("futures")
+    if f:
+        return ({"individual": f.get("individual"), "foreign": f.get("foreign"),
+                 "inst": f.get("inst_total")}, "확정")
+    c = (day.get("curve") or {}).get("futures")
+    if c:
+        last = c[-1]
+        return ({"individual": last[1], "foreign": last[2], "inst": last[3]},
+                f"장중 {last[0]}")
+    return None, None
+
+
+def fut_quadrant(spot, fut):
+    """현물·선물 방향 조합 → (조합라벨, 해석, css클래스)"""
+    if spot is None or fut is None:
+        return None
+    if spot >= 0 and fut >= 0:
+        return ("현·선물 동반 매수", "방향성 강세 베팅", "pos")
+    if spot >= 0 > fut:
+        return ("현물 매수 · 선물 매도", "헤지 동반 — 상승 신뢰 제한", "")
+    if spot < 0 <= fut:
+        return ("현물 매도 · 선물 매수", "숏커버/반등 베팅 성격", "")
+    return ("현·선물 동반 매도", "리스크 오프 압력", "neg")
+
+
 def bar_chart(days, width=760, height=240):
     """최근 20일 개인/외인/기관 일별 순매수 그룹 바차트. days: [(date, ind, frn, inst), …]"""
     if not days:
@@ -130,7 +215,7 @@ def bar_chart(days, width=760, height=240):
             f'<svg viewBox="0 0 {width} {height}" role="img">{"".join(g)}</svg>')
 
 
-def build_signals(today, prev_slot_snap):
+def build_signals(today, prev_slot_snap, fut=None, fut_src="", fut_unit="계약"):
     """룰 기반 한줄 해석 목록."""
     slots = today.get("slots", {})
     latest = None
@@ -143,6 +228,17 @@ def build_signals(today, prev_slot_snap):
     sig = []
     frn, ind, inst = latest["foreign"], latest["individual"], latest["institution"]
     arb, nonarb, prog = latest["arb"], latest["nonarb"], latest["program"]
+    if fut and fut.get("foreign") is not None and abs(fut["foreign"]) >= 800:
+        ff = fut["foreign"]
+        tail = f"(선물 {fmt(ff)}{fut_unit}·{fut_src})"
+        if frn > 0 and ff > 0:
+            sig.append(f"외국인 현·선물 동반 매수 {tail} — 방향성 강세 베팅")
+        elif frn > 0 > ff:
+            sig.append(f"외국인 현물 매수·선물 매도 {tail} — 헤지 동반, 지수 상단 제한 가능")
+        elif frn < 0 < ff:
+            sig.append(f"외국인 현물 매도·선물 매수 {tail} — 숏커버/반등 베팅 성격")
+        elif frn < 0 and ff < 0:
+            sig.append(f"외국인 현·선물 동반 매도 {tail} — 리스크 오프 압력")
     if frn > 0 and arb > 0:
         sig.append("외국인 현물 매수 + 차익 프로그램 매수 — 베이시스 개선 동반 상승 압력")
     elif frn > 0 > prog:
@@ -187,12 +283,17 @@ def render_day(hist, all_dates, i):
         snap_table = '<p class="na">장중 스냅샷 데이터 없음</p>'
     else:
         snap_table = f'<table><thead><tr><th></th>{head}</tr></thead><tbody>{body}</tbody></table>'
+    fut_unit = hist.get("futures_unit", "계약")
+    conf_fut = conf.get("futures")
     conf_note = ""
     if conf_inv and conf_prg:
+        fut_seg = (f' / K200선물 외인 {fmt(conf_fut["foreign"])}{fut_unit}'
+                   if conf_fut else "")
         conf_note = (f'<p class="note">일별 확정(거래소): 개인 {fmt(conf_inv["individual"])} · '
                      f'외국인 {fmt(conf_inv["foreign"])} · 기관 {fmt(conf_inv["inst_total"])} / '
                      f'프로그램 {fmt(conf_prg["total_net"])} '
-                     f'(차익 {fmt(conf_prg["arb_net"])} · 비차익 {fmt(conf_prg["nonarb_net"])})</p>')
+                     f'(차익 {fmt(conf_prg["arb_net"])} · 비차익 {fmt(conf_prg["nonarb_net"])})'
+                     f'{fut_seg}</p>')
 
     # ── 장중 곡선 (해당 일자 것만 — 최신 페이지에 한해 최근 보유일 폴백) ──
     curve = today.get("curve") or {}
@@ -214,6 +315,17 @@ def render_day(hist, all_dates, i):
         prg_chart = line_chart([("차익", C_ARB, [(r[0], r[1]) for r in pc]),
                                 ("비차익", C_NONARB, [(r[0], r[2]) for r in pc]),
                                 ("전체", C_TOTAL, [(r[0], r[3]) for r in pc])])
+    fut_curve_html = ""
+    fc = curve.get("futures")
+    if fc:
+        fut_curve_html = (
+            f'<h2>🎯 장중 누적 흐름 — K200 선물 <span class="na" '
+            f'style="font-weight:400;font-size:12px">({curve_day} · {fut_unit})</span></h2>'
+            '<div class="card">'
+            + line_chart([("개인", C_IND, [(r[0], r[1]) for r in fc]),
+                          ("외국인", C_FRN, [(r[0], r[2]) for r in fc]),
+                          ("기관", C_INST, [(r[0], r[3]) for r in fc])], unit=fut_unit)
+            + '</div>')
 
     # ── 해당 일자 기준 최근 20일 확정 ──
     upto = all_dates[:i + 1]
@@ -249,9 +361,55 @@ def render_day(hist, all_dates, i):
         tds = "".join(cell(c["investor"].get(k)) for k, _ in detail_cols)
         det_body += f'<tr><th>{d[5:]}</th>{tds}</tr>'
 
+    # ── 현·선물 흐름 (K200 선물) ──
+    fut_now, fut_src = fut_snapshot(today)
+    both = [(d, c["investor"], c["futures"]) for d, c in conf_days
+            if "investor" in c and "futures" in c][-20:]
+    snap_latest = slots[slot_keys[-1]] if slot_keys else {}
+    spot_f = conf_inv["foreign"] if conf_inv else snap_latest.get("foreign")
+    spot_i = conf_inv["inst_total"] if conf_inv else snap_latest.get("institution")
+
+    def quad_card(name, color, spot, futv):
+        q = fut_quadrant(spot, futv)
+        if q is None:
+            return ""
+        combo, desc, cls = q
+        return (f'<div class="chip" style="border-top:3px solid {color}">'
+                f'<span>{name} · 현물 {fmt(spot)}억 / 선물 {fmt(futv)}{fut_unit}</span>'
+                f'<b class="{cls}" style="font-size:14px">{combo}</b>'
+                f'<span>{desc}</span></div>')
+
+    if fut_now or both:
+        quads = ""
+        if fut_now:
+            quads = (quad_card("외국인", C_FRN, spot_f, fut_now["foreign"])
+                     + quad_card("기관", C_INST, spot_i, fut_now["inst"]))
+            quads = (f'<div class="chips">{quads}</div>'
+                     f'<p class="note">선물 수치 기준: {fut_src} · 단위 {fut_unit}</p>') if quads else ""
+        fut_cum_f = sum(f["foreign"] for _, _, f in both)
+        fut_cum_i = sum(f["inst_total"] for _, _, f in both)
+        cum_note = (f'<p class="note">최근 {len(both)}영업일 누적 선물 순매수: '
+                    f'외국인 {fmt(fut_cum_f)}{fut_unit} · 기관 {fmt(fut_cum_i)}{fut_unit}</p>'
+                    if both else "")
+        frn_combo = combo_chart([(d, inv["foreign"], f["foreign"])
+                                 for d, inv, f in both], C_FRN, fut_unit)
+        inst_combo = combo_chart([(d, inv["inst_total"], f["inst_total"])
+                                  for d, inv, f in both], C_INST, fut_unit)
+        fut_section = f"""
+<h2>🔀 현·선물 흐름 <span class="na" style="font-weight:400;font-size:12px">(K200 선물 · {fut_unit})</span></h2>
+{quads}
+<div class="card"><p class="ctitle" style="color:{C_FRN}">외국인 — 현물 vs 선물</p>{frn_combo}</div>
+<div class="card"><p class="ctitle" style="color:{C_INST}">기관 — 현물 vs 선물</p>{inst_combo}</div>
+{cum_note}"""
+    else:
+        fut_section = ('<h2>🔀 현·선물 흐름 <span class="na" style="font-weight:400;'
+                       'font-size:12px">(K200 선물)</span></h2><div class="card">'
+                       '<p class="na">선물 데이터 수집 대기 중 — 다음 수집 사이클부터 표시</p></div>'
+                       if is_latest else "")
+
     # ── 시그널 ──
     prev_snap = slots[slot_keys[-2]] if len(slot_keys) >= 2 else None
-    sig = build_signals(today, prev_snap)
+    sig = build_signals(today, prev_snap, fut_now, fut_src, fut_unit)
     sig_html = "".join(f"<li>{s}</li>" for s in sig) or "<li>특이 신호 없음</li>"
 
     chg = kospi.get("chg_pct", 0)
@@ -282,6 +440,8 @@ def render_day(hist, all_dates, i):
 <div class="card">{inv_chart}</div>
 <h2>⚙️ 장중 누적 흐름 — 프로그램 <span class="na" style="font-weight:400;font-size:12px">({curve_day})</span></h2>
 <div class="card">{prg_chart}</div>
+{fut_curve_html}
+{fut_section}
 
 <h2>📅 최근 20일 일별 순매수 (확정)</h2>
 <div class="chips">{chips}</div>
@@ -346,6 +506,7 @@ svg{{width:100%;height:auto;display:block}}
 border-radius:8px;padding:8px 10px;display:flex;flex-direction:column}}
 .chip span{{font-size:12px;color:var(--muted)}} .chip b{{font-size:16px}}
 .note{{font-size:12.5px;color:var(--muted);margin:6px 2px}}
+.ctitle{{font-size:13px;font-weight:600;margin:0 0 6px}}
 .signals{{margin:6px 0;padding-left:20px}} .signals li{{margin:3px 0}}
 .scroll{{overflow-x:auto}}
 footer{{margin-top:28px;font-size:11.5px;color:var(--muted)}}
@@ -368,7 +529,7 @@ border-radius:8px;padding:6px 8px;font-size:13px;flex:0 1 auto}}
 </div>
 <div id="day"></div>
 
-<footer>데이터: NAVER 증권(투자자별·프로그램 매매동향) · 장중 수치는 거래소 잠정치로 확정치와 다를 수 있음
+<footer>데이터: NAVER 증권(투자자별·프로그램·K200선물 매매동향) · 장중 수치는 거래소 잠정치로 확정치와 다를 수 있음
  · 하루 4회 자동 갱신(10:00 / 13:00 / 15:40 / 16:40 KST) · 과거 {len(nav_dates)}영업일 조회 가능 · GS Research Desk</footer>
 </div>
 <script>
