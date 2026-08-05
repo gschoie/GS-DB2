@@ -56,7 +56,8 @@ function repRank(r,key){const t=r.tone||{};
 function reportTableRow(r){const t=r.tone||{},kind=r.report_type||'기업분석';
  const kindCell=kind==='위클리'?`<span class="rep-kind strat">위클리</span>${r.weekly_folder?`<div class="rep-sub">${esc(r.weekly_folder)}</div>`:''}`:kind==='산업분석'?'<span class="rep-kind ind">산업</span>':'<span class="rep-kind co">기업</span>';
  const names=(r.company_names?.length?r.company_names:String(r.companies_label||r.company_name||'').split(',').map(s=>s.trim())).filter(Boolean);
- const company=names.map(n=>`<button type="button" class="company-chip" data-company="${esc(n)}" title="${esc(n)} 자료만 모아보기">${esc(n)}</button>`).join('')||'<span class="no-link">—</span>';
+ // 위클리는 거의 전 커버리지가 언급돼 기업 칩이 노이즈 — 표기 생략.
+ const company=kind==='위클리'?'<span class="no-link">—</span>':names.map(n=>`<button type="button" class="company-chip" data-company="${esc(n)}" title="${esc(n)} 자료만 모아보기">${esc(n)}</button>`).join('')||'<span class="no-link">—</span>';
  const dir=r.target_change,cls=dir==='상향'?'up':dir==='하향'?'down':'';
  let tp='<span class="no-link">—</span>';
  if(r.target_price){const prev=r.previous_target_price>=1000&&r.previous_target_price!==r.target_price?`<small>직전 ${Number(r.previous_target_price).toLocaleString()}</small>`:'';
