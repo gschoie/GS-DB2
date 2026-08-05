@@ -3,10 +3,10 @@
 
 하루 4회(10:00 / 13:00 / 15:40잠정 / 16:40확정 KST) GitHub Actions로 실행.
  - 매 실행: 시세 메인페이지의 투자자 잠정치(개인/외국인/기관) + 프로그램(차익/비차익/전체) 스냅샷
- - 매 실행: 일별 확정치 백필(투자자별·프로그램, 최근 3페이지 ≈ 30영업일)
- - 15:40/16:40 실행: 시간대별 누적 곡선(투자자·프로그램)을 10분 간격으로 샘플링해 저장
+ - 매 실행: 일별 확정치 백필(투자자별·프로그램·K200선물, 최근 3페이지 ≈ 30영업일)
+ - 15:40/16:40 실행: 시간대별 누적 곡선(투자자·프로그램·선물)을 10분 간격으로 샘플링해 저장
 휴장일(모바일API localTradedAt 날짜 ≠ 오늘)은 아무것도 쓰지 않고 종료한다.
-단위: 억원.
+단위: 현물·프로그램 억원, 선물은 페이지 표기 단위(보통 계약)를 futures_unit에 기록.
 """
 import json
 import re
@@ -118,6 +118,29 @@ def parse_date(s):
     return f"20{m.group(1)}-{m.group(2)}-{m.group(3)}"
 
 
+def detect_unit(soup):
+    """페이지 본문에서 '단위 : 계약/억원' 표기를 찾는다."""
+    m = re.search(r"단위\s*[:：]?\s*(계약|억원|백만원|천주)",
+                  soup.get_text(" ", strip=True))
+    return m.group(1) if m else None
+
+
+def futures_daily(bizdate, pages=3):
+    """KOSPI200 선물 투자자별 일별 순매수 (sosok=03, 코스피 탭과 동일 템플릿).
+    반환: ({date: {INV_COLS…}}, 단위문자열)"""
+    out, unit = {}, None
+    for page in range(1, pages + 1):
+        soup = get_html(f"{BASE}/investorDealTrendDay.naver"
+                        f"?bizdate={bizdate}&sosok=03&page={page}")
+        if unit is None:
+            unit = detect_unit(soup)
+        for head, nums in _table_rows(soup, 10):
+            d = parse_date(head)
+            if d:
+                out.setdefault(d, dict(zip(INV_COLS, nums)))
+    return out, unit or "계약"
+
+
 def daily_confirmed(bizdate, pages=3):
     """일별 확정: 투자자별(10칸) + 프로그램(9칸). {date: {"investor":…, "program":…}}"""
     out = {}
@@ -136,15 +159,17 @@ def daily_confirmed(bizdate, pages=3):
     return out
 
 
-def intraday_curve(bizdate, kind, max_pages=45):
+def intraday_curve(bizdate, kind, max_pages=45, sosok=None):
     """시간대별 누적치(분 단위)를 전 페이지 수집 후 10분 간격으로 샘플링.
     kind: "investor"(10칸 → 개인/외인/기관만) 또는 "program"(9칸 → 차익순/비차익순/전체순)
+    sosok="03"이면 K200 선물 탭.
     반환: [["HH:MM", a, b, c], …] (시간 오름차순)"""
     url = f"{BASE}/{'investorDealTrendTime' if kind == 'investor' else 'programDealTrendTime'}.naver"
     ncols = 10 if kind == "investor" else 9
+    extra = f"&sosok={sosok}" if sosok else ""
     by_time = {}
     for page in range(1, max_pages + 1):
-        soup = get_html(f"{url}?bizdate={bizdate}&page={page}")
+        soup = get_html(f"{url}?bizdate={bizdate}&page={page}{extra}")
         rows = _table_rows(soup, ncols)
         if not rows:
             break
@@ -244,14 +269,41 @@ def main():
             n_new += 1
     print(f"일별 확정 백필: {len(confirmed)}일 수신, {n_new}일 갱신")
 
+    # K200 선물 일별 백필 (실패해도 본 파이프라인은 유지)
+    try:
+        fut, fut_unit = futures_daily(bizdate)
+        # sosok 미적용으로 현물과 같은 표가 오면(2일 이상 완전 일치) 오염 방지 위해 생략
+        dup = sum(1 for d, v in fut.items()
+                  if hist["days"].get(d, {}).get("confirmed", {}).get("investor") == v)
+        if fut and dup >= 2:
+            print(f"⚠️ 선물 응답이 현물 확정치와 동일({dup}일) — sosok 미적용 의심, 저장 생략")
+        else:
+            hist["futures_unit"] = fut_unit
+            n_fut = 0
+            for d, v in fut.items():
+                rec = hist["days"].setdefault(d, {})
+                if "futures" not in rec.get("confirmed", {}) or d == today:
+                    rec.setdefault("confirmed", {})["futures"] = v
+                    n_fut += 1
+            print(f"선물 일별 백필: {len(fut)}일 수신, {n_fut}일 갱신 (단위: {fut_unit})")
+    except Exception as e:
+        print(f"⚠️ 선물 일별 수집 실패(리포트에는 해당 섹션만 비표시): {e}")
+
     # 마감 이후 실행이면 장중 곡선 저장
     if slot in ("1540", "1640"):
         day["curve"] = {
             "investor": intraday_curve(bizdate, "investor"),
             "program": intraday_curve(bizdate, "program"),
         }
+        try:
+            fc = intraday_curve(bizdate, "investor", sosok="03")
+            if fc:
+                day["curve"]["futures"] = fc
+        except Exception as e:
+            print(f"⚠️ 선물 장중 곡선 수집 실패: {e}")
         print(f"장중 곡선: investor {len(day['curve']['investor'])}점, "
-              f"program {len(day['curve']['program'])}점")
+              f"program {len(day['curve']['program'])}점, "
+              f"futures {len(day['curve'].get('futures', []))}점")
 
     save_history(hist)
     write_meta(True, slot=slot)

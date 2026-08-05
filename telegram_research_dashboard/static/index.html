@@ -10,6 +10,7 @@
   <aside class="sidebar">
     <div class="brand"><span>GS</span><div>최광식의 작업들<small>RESEARCH ARCHIVE</small></div></div>
     <nav>
+      <button class="nav" data-view="todo">✅ <span>TO-DO</span></button>
       <button class="nav active" data-view="overview">⌂ <span>오늘의 요약</span></button>
       <button class="nav" data-view="tone">🎯 <span>DAOL 리서치 톤</span></button>
       <details class="nav-group">
@@ -95,6 +96,8 @@
           <button class="nav" data-view="holdings">🧩 액티브ETF.매매동향</button>
           <button class="nav" data-view="flow">💹 시장.수급.동향</button>
           <button class="nav" data-view="consensus">📊 코스피200.컨센.추적</button>
+          <div class="nav-sep"></div>
+          <button class="nav" data-view="mzdiary">📈 MZ일기</button>
           <a href="https://finance.naver.com/mystock/summary.naver" target="_blank" rel="noopener" onclick="if(/iPhone|iPad|iPod/.test(navigator.userAgent)){window.location.href='googlechromes://finance.naver.com/mystock/summary.naver';return false;}">🖥️ 네이버 전광판</a>
         </div>
       </details>
@@ -140,6 +143,16 @@
       <div><p class="eyebrow">MARKET INTELLIGENCE</p><h1 id="page-title">오늘의 리서치 흐름</h1></div>
       <div class="header-tools"><div class="search-wrap"><span>⌕</span><input id="search" placeholder="기업, 보고서, 키워드 검색"></div><a class="refresh-btn" href="https://github.com/gschoie/GS-output-dashboard/actions/workflows/deploy-pages.yml" target="_blank" rel="noopener" title="새 창에서 GitHub Actions가 열립니다. 'Run workflow'를 눌러 최신 데이터로 갱신하세요.">🔄 데이터 갱신</a><div class="update-meta"><span></span>최종 업데이트 <strong id="updated-at">확인 중</strong></div></div>
     </header>
+
+    <section id="todo" class="view">
+      <div class="archive-intro"><div><p class="eyebrow">TO-DO</p><h2>할 일 체크리스트</h2></div><p>한 줄씩 적고 완료하면 체크 — 등록 시각이 함께 기록됩니다. <span id="todo-sync" class="task-sync">☁ 동기화</span></p></div>
+      <div class="todo-form">
+        <input id="todo-input" type="text" placeholder="예) 수명 피드백 확인" autocomplete="off">
+        <button id="todo-add" type="button">＋ 추가</button>
+        <button id="todo-clear-done" type="button" title="체크된 항목을 모두 삭제합니다">완료항목 정리</button>
+      </div>
+      <section class="panel"><div id="todo-list"></div></section>
+    </section>
 
     <section id="overview" class="view active">
       <div id="daily-brief" class="brief-card"></div>
@@ -255,6 +268,29 @@
             <input id="remember-endpoint" type="url" inputmode="url" autocapitalize="off" autocomplete="off" placeholder="https://script.google.com/macros/s/…/exec">
           </label>
           <button id="remember-endpoint-save" type="button">URL 저장</button>
+        </details>
+      </div>
+    </section>
+
+    <section id="mzdiary" class="view">
+      <div class="archive-intro"><div><p class="eyebrow">NOTION · MZ DIARY</p><h2>MZ일기 → 잔고·매매노트 기록</h2></div><div class="etf-actions"><span>잔고·수익률 캡처 사진과 매매노트를 올리면 AI가 정리해 MZ일기 바로 밑에 새 페이지로 저장합니다.</span><a class="panel-more" href="https://www.notion.so/3b357951c40c80208e07cacce843cfef" target="_blank" rel="noopener">📈 MZ일기 열기 ↗</a></div></div>
+      <div class="dart-form">
+        <label>잔고·수익률 캡처 사진 <small>(선택 — 최대 5장, 자동으로 축소해 올립니다. AI가 캡처에서 잔고·수익률 숫자도 읽어 기록합니다)</small>
+          <input id="mzdiary-photos" type="file" accept="image/*" multiple>
+        </label>
+        <div id="mzdiary-previews" class="remember-previews"></div>
+        <label>매매노트 <small>(선택 — 그때 시장 분위기 | 나의 판단)</small>
+          <textarea id="mzdiary-note" rows="8" placeholder="예) 시장 분위기: 금리 인하 기대로 반도체 강세, 코스피 사상 최고치 근접&#10;나의 판단: 삼성전자 10주 71,300원 매수 — 조정 오면 분할로 더 담을 계획&#10;자유롭게 적으면 제목·개조식 정리와 종목 태그는 AI가 합니다."></textarea>
+        </label>
+        <button id="mzdiary-send" type="button">📔 Notion에 기록</button>
+        <span id="mzdiary-status" class="dart-status"></span>
+        <div id="mzdiary-result" class="remember-result" hidden></div>
+        <details id="mzdiary-setup">
+          <summary>⚙️ 연결 설정 (최초 1회)</summary>
+          <label>MZ일기 GAS 웹앱 /exec URL <small>(gas/mz_diary_notion.gs 배포 후 붙여넣기)</small>
+            <input id="mzdiary-endpoint" type="url" inputmode="url" autocapitalize="off" autocomplete="off" placeholder="https://script.google.com/macros/s/…/exec">
+          </label>
+          <button id="mzdiary-endpoint-save" type="button">URL 저장</button>
         </details>
       </div>
     </section>

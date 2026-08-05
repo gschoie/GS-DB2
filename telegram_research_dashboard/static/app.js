@@ -168,9 +168,9 @@ function fillTaskItems(desired){const sel=$('#task-item');if(!sel)return;const i
 const taskAllNames=()=>TASK_ROSTER.flatMap(([,ns])=>ns);
 function taskLoad(){try{return JSON.parse(localStorage.getItem(TASK_KEY))||{}}catch{return{}}}
 function taskSave(s){try{localStorage.setItem(TASK_KEY,JSON.stringify(s))}catch{}taskPush()}
-function taskBundle(){return{data:taskLoad(),items:taskItems()}}
-function taskPush(){if(!TASK_ENDPOINT)return;clearTimeout(taskPushT);const status=$('#task-sync');if(status)status.textContent='저장 중…';taskPushT=setTimeout(()=>{fetch(TASK_ENDPOINT,{method:'POST',body:JSON.stringify(taskBundle())}).then(()=>{if(status)status.textContent='☁ 동기화됨'}).catch(()=>{if(status)status.textContent='이 기기에만 저장(동기화 실패)'})},600)}
-async function taskPull(){if(!TASK_ENDPOINT)return false;const status=$('#task-sync');if(status)status.textContent='불러오는 중…';try{const r=await fetch(TASK_ENDPOINT,{cache:'no-store'});if(!r.ok)throw 0;const b=await r.json()||{};const remoteData=b.data&&typeof b.data==='object'?b.data:{};if(!Object.keys(remoteData).length&&Object.keys(taskLoad()).length){taskPush();if(status)status.textContent='☁ 이 기기 데이터 업로드됨';return false}if(b.data)localStorage.setItem(TASK_KEY,JSON.stringify(b.data));if(Array.isArray(b.items)&&b.items.length)localStorage.setItem(TASK_ITEMS_KEY,JSON.stringify(b.items));if(status)status.textContent='☁ 동기화됨';return true}catch{if(status)status.textContent='이 기기에만 저장(동기화 실패)'}return false}
+function taskBundle(){return{data:taskLoad(),items:taskItems(),todos:todoLoad()}}
+function taskPush(statusSel){if(!TASK_ENDPOINT)return;clearTimeout(taskPushT);const status=$(statusSel||'#task-sync');if(status)status.textContent='저장 중…';taskPushT=setTimeout(()=>{fetch(TASK_ENDPOINT,{method:'POST',body:JSON.stringify(taskBundle())}).then(()=>{if(status)status.textContent='☁ 동기화됨'}).catch(()=>{if(status)status.textContent='이 기기에만 저장(동기화 실패)'})},600)}
+async function taskPull(){if(!TASK_ENDPOINT)return false;const status=$('#task-sync');if(status)status.textContent='불러오는 중…';try{const r=await fetch(TASK_ENDPOINT,{cache:'no-store'});if(!r.ok)throw 0;const b=await r.json()||{};const remoteData=b.data&&typeof b.data==='object'?b.data:{};if(!Object.keys(remoteData).length&&Object.keys(taskLoad()).length){taskPush();if(status)status.textContent='☁ 이 기기 데이터 업로드됨';return false}if(b.data)localStorage.setItem(TASK_KEY,JSON.stringify(b.data));if(Array.isArray(b.items)&&b.items.length)localStorage.setItem(TASK_ITEMS_KEY,JSON.stringify(b.items));if(Array.isArray(b.todos))localStorage.setItem(TODO_KEY,JSON.stringify(b.todos));if(status)status.textContent='☁ 동기화됨';return true}catch{if(status)status.textContent='이 기기에만 저장(동기화 실패)'}return false}
 function taskCurrentItem(){return $('#task-item')?.value||taskItems()[0]}
 function renderTaskSummary(){const st=taskLoad()[taskCurrentItem()]||{},names=taskAllNames(),pending=names.filter(n=>!st[n]?.done);$('#task-summary').innerHTML=`완료 <b>${names.length-pending.length}</b> / ${names.length}`+(pending.length?` · 미응답: ${esc(pending.join(', '))}`:' · 전원 완료 🎉')}
 let taskSortByName=false;
@@ -183,7 +183,19 @@ function renderTaskList(desired){fillTaskItems(desired);const st=taskLoad()[task
  $('#task-table').innerHTML=`<table class="task-table"><thead><tr><th class="task-sort" style="cursor:pointer;user-select:none" title="클릭하면 이름순 ↔ 팀 순서로 전환">이름 ${taskSortByName?'▲':'⇅'}</th><th>완료</th><th>응답내용</th><th>비고</th></tr></thead><tbody>${body}</tbody></table>`;
  $('#task-date').textContent=new Intl.DateTimeFormat('ko-KR',{year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date());renderTaskSummary()}
 function taskUpdate(name,field,value){const s=taskLoad(),it=taskCurrentItem();(s[it]=s[it]||{})[name]=s[it][name]||{};s[it][name][field]=value;taskSave(s);renderTaskSummary()}
-function view(id){$$('.view,.nav').forEach(x=>x.classList.remove('active'));$('#'+id).classList.add('active');$(`.nav[data-view="${id}"]`).classList.add('active');$('#page-title').textContent={overview:'오늘의 리서치 흐름',reports:'발간 보고서',news:'뉴스.아카이브',press:'보도기사 취합','union-board':'현중 노조게시판',tone:'DAOL 리서치 톤',collab:'섹터 콜라보 레이더',tasklist:'수명 피드백 확인',dart:'조선 수주공시 → 텔레',etf:'ETF/섹터 신호 포착',holdings:'액티브 ETF 구성 변화',flow:'시장 수급 동향',consensus:'코스피200 컨센서스 추적',defense:'글로벌 방산 데일리 브리핑',remember:'리멤버 → Notion 기록'}[id];if(id==='overview')fetchLiveMacro();if(id==='press'){state.pressCompany='';renderPressTable()}if(id==='tone')loadToneFrame();if(id==='union-board')loadUnionBoard();if(id==='tasklist'){renderTaskList();taskPull().then(ok=>{if(ok)renderTaskList()})}if(id==='etf'){const f=$('#etf-frame');if(!f.getAttribute('src'))f.src='etf_signal_report.html?t='+Date.now()}if(id==='holdings'){const f=$('#holdings-frame');if(!f.getAttribute('src'))f.src='etf_holdings_report.html?t='+Date.now()}if(id==='flow'){const f=$('#flow-frame');if(!f.getAttribute('src'))f.src='market_flow_report.html?t='+Date.now()}if(id==='consensus'){const f=$('#consensus-frame');if(!f.getAttribute('src'))f.src='consensus_revision.html?t='+Date.now()}if(id==='defense'){const f=$('#defense-frame');if(!f.getAttribute('src'))f.src='defense_briefing_report.html?t='+Date.now()}if(id==='collab'){const f=$('#collab-frame');if(!f.getAttribute('src'))f.src=TONE_SITE+'daol_collab_radar.html?t='+Date.now()}}
+/* ── TO-DO: 한 줄 할 일 + 체크 + 등록시각. 수명 피드백과 같은 GAS 번들(todos 필드)로 동기화 ── */
+const TODO_KEY='hi_todo_v1';
+function todoLoad(){try{const a=JSON.parse(localStorage.getItem(TODO_KEY));if(Array.isArray(a))return a}catch{}return[]}
+function todoSave(a){try{localStorage.setItem(TODO_KEY,JSON.stringify(a))}catch{}taskPush('#todo-sync');renderTodo()}
+const todoFmt=ts=>new Intl.DateTimeFormat('ko-KR',{month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',hour12:false}).format(new Date(ts));
+function renderTodo(){const box=$('#todo-list');if(!box)return;const a=todoLoad();
+ box.innerHTML=a.length?a.map((t,i)=>`<div class="todo-row${t.done?' done':''}" data-i="${i}"><input type="checkbox" ${t.done?'checked':''}><span class="todo-text">${esc(t.text)}</span><span class="todo-ts"${t.doneTs?` title="완료 ${todoFmt(t.doneTs)}"`:''}>${todoFmt(t.ts)}</span><button class="todo-del" type="button" title="삭제">✕</button></div>`).join(''):'<p class="empty">할 일을 한 줄 적고 ＋추가를 누르세요.</p>'}
+function todoAdd(){const inp=$('#todo-input'),text=(inp?.value||'').trim();if(!text)return;const a=todoLoad();a.unshift({text,ts:Date.now(),done:false});todoSave(a);inp.value='';inp.focus()}
+async function todoPull(){if(!TASK_ENDPOINT)return false;const status=$('#todo-sync');if(status)status.textContent='불러오는 중…';try{const r=await fetch(TASK_ENDPOINT,{cache:'no-store'});if(!r.ok)throw 0;const b=await r.json()||{};
+ if(Array.isArray(b.todos)){localStorage.setItem(TODO_KEY,JSON.stringify(b.todos));if(status)status.textContent='☁ 동기화됨';return true}
+ // 서버 번들에 아직 todos가 없으면 이 기기 목록을 올려 시드한다
+ if(todoLoad().length)taskPush('#todo-sync');else if(status)status.textContent='☁ 동기화';return false}catch{if(status)status.textContent='이 기기에만 저장(동기화 실패)'}return false}
+function view(id){$$('.view,.nav').forEach(x=>x.classList.remove('active'));$('#'+id).classList.add('active');$(`.nav[data-view="${id}"]`).classList.add('active');$('#page-title').textContent={todo:'TO-DO 체크리스트',overview:'오늘의 리서치 흐름',reports:'발간 보고서',news:'뉴스.아카이브',press:'보도기사 취합','union-board':'현중 노조게시판',tone:'DAOL 리서치 톤',collab:'섹터 콜라보 레이더',tasklist:'수명 피드백 확인',dart:'조선 수주공시 → 텔레',etf:'ETF/섹터 신호 포착',holdings:'액티브 ETF 구성 변화',flow:'시장 수급 동향',consensus:'코스피200 컨센서스 추적',defense:'글로벌 방산 데일리 브리핑',remember:'리멤버 → Notion 기록',mzdiary:'MZ일기 · 잔고/매매노트'}[id];if(id==='overview')fetchLiveMacro();if(id==='press'){state.pressCompany='';renderPressTable()}if(id==='tone')loadToneFrame();if(id==='union-board')loadUnionBoard();if(id==='tasklist'){renderTaskList();taskPull().then(ok=>{if(ok)renderTaskList()})}if(id==='todo'){renderTodo();todoPull().then(ok=>{if(ok)renderTodo()})}if(id==='etf'){const f=$('#etf-frame');if(!f.getAttribute('src'))f.src='etf_signal_report.html?t='+Date.now()}if(id==='holdings'){const f=$('#holdings-frame');if(!f.getAttribute('src'))f.src='etf_holdings_report.html?t='+Date.now()}if(id==='flow'){const f=$('#flow-frame');if(!f.getAttribute('src'))f.src='market_flow_report.html?t='+Date.now()}if(id==='consensus'){const f=$('#consensus-frame');if(!f.getAttribute('src'))f.src='consensus_revision.html?t='+Date.now()}if(id==='defense'){const f=$('#defense-frame');if(!f.getAttribute('src'))f.src='defense_briefing_report.html?t='+Date.now()}if(id==='collab'){const f=$('#collab-frame');if(!f.getAttribute('src'))f.src=TONE_SITE+'daol_collab_radar.html?t='+Date.now()}}
 const DISPATCH_ENDPOINT='https://script.google.com/macros/s/AKfycbzybp0b1W0wr9n2bfQsF1xblsaLdlu9oRtfH7xkbQrRYLaRpCwemhFRVLbk3rGnIO4zdQ/exec';
 async function dispatchWorkflow(payload,status,btn){
  if(status)status.textContent='요청 중…';if(btn)btn.disabled=true;
@@ -230,6 +242,33 @@ async function sendRemember(){
   const photos=d.imgOk?`\n- 사진: ${d.imgOk}장 첨부`:'';
   box.innerHTML=`📌 [GS_WRITING / 리멤버] 신규 페이지 생성 완료\n\n■ 페이지 제목: ${esc(d.title||'')}\n■ 생성 경로: GS_WRITING &gt; 리멤버 &gt; ${esc(d.title||'')}\n\n■ 본문 내용:\n- 입력 날짜: ${esc(d.date||'')}${tags}${photos}\n- 주요 내용:\n${bullets}`+(d.url?`\n\n<a href="${esc(d.url)}" target="_blank" rel="noopener">Notion에서 열기 ↗</a>`:'');
   box.hidden=false;$('#remember-text').value='';REMEMBER_IMGS.length=0;renderRememberPreviews();const fi=$('#remember-photos');if(fi)fi.value='';
+ }catch(e){status.textContent='실패: '+e.message}
+ finally{btn.disabled=false}}
+const MZDIARY_ENDPOINT='https://script.google.com/macros/s/AKfycbzUhUwvnhmiz2qQz4NkJpSQgh2BuOpWcS7yPOXqQrBUFN40f6eIJW5i9Y_DV0gz3RekGQ/exec';/* MZ일기→Notion GAS 웹앱 (gas/mz_diary_notion.gs). 비면 화면의 ⚙️ 연결 설정(localStorage) 사용 */
+const MZDIARY_EP_KEY='mzdiary_endpoint_v1';
+function mzdiaryEndpoint(){if(MZDIARY_ENDPOINT)return MZDIARY_ENDPOINT;try{return localStorage.getItem(MZDIARY_EP_KEY)||''}catch{return''}}
+const MZDIARY_IMGS=[];/* {name,type,data(base64)} — 전송 전 대기 중인 잔고·수익률 캡처 */
+function renderMzdiaryPreviews(){const box=$('#mzdiary-previews');if(!box)return;box.innerHTML=MZDIARY_IMGS.map((im,i)=>`<span class="rp"><img src="data:${im.type};base64,${im.data}" alt="${esc(im.name)}" title="${esc(im.name)}"><button type="button" data-rmimg="${i}" title="제거">×</button></span>`).join('')}
+async function addMzdiaryPhotos(files){const status=$('#mzdiary-status');for(const f of Array.from(files||[])){if(MZDIARY_IMGS.length>=5){status.textContent='⚠ 사진은 최대 5장까지';break}
+  try{MZDIARY_IMGS.push(await shrinkImage(f))}catch{status.textContent=`⚠ ${f.name||'사진'} 은 읽지 못해 건너뜀`}}
+ renderMzdiaryPreviews()}
+async function sendMzDiary(){
+ const note=($('#mzdiary-note')?.value||'').trim(),status=$('#mzdiary-status'),btn=$('#mzdiary-send'),box=$('#mzdiary-result');
+ if(!note&&!MZDIARY_IMGS.length){status.textContent='⚠ 잔고·수익률 캡처를 첨부하거나 매매노트를 입력해 주세요';return}
+ const ep=mzdiaryEndpoint();
+ if(!ep){status.textContent='⚠ 아래 ⚙️ 연결 설정에서 GAS 웹앱 URL을 먼저 저장해 주세요';const st=$('#mzdiary-setup');if(st)st.open=true;return}
+ status.textContent=MZDIARY_IMGS.length?`AI 정리 + 사진 ${MZDIARY_IMGS.length}장 업로드 중… (사진 장수에 따라 수십 초)`:'AI 정리 + Notion 저장 중… (10초 안팎)';btn.disabled=true;box.hidden=true;
+ try{
+  const r=await fetch(ep,{method:'POST',body:JSON.stringify({note,images:MZDIARY_IMGS})});
+  const d=await r.json();
+  if(!d.ok)throw new Error(d.error||'저장 실패');
+  status.textContent=(d.ai?'✅ 저장 완료 (AI 정리)':'✅ 저장 완료')+(d.imgFail?` · ⚠ 사진 ${d.imgFail}장 실패`:'');
+  const bullets=(d.bullets||[]).map(b=>`  • ${esc(b)}`).join('\n');
+  const stocks=(d.stocks||[]).length?`\n- 종목: ${esc(d.stocks.join(', '))}`:'';
+  const nums=[d.balance!=null?`잔고 ${Number(d.balance).toLocaleString('ko-KR')}원`:'',d.returnPct!=null?`수익률 ${d.returnPct}%`:''].filter(Boolean).join(' · ');
+  const photos=d.imgOk?`\n- 사진: ${d.imgOk}장 첨부`:'';
+  box.innerHTML=`📌 [MZ일기] 신규 페이지 생성 완료\n\n■ 페이지 제목: ${esc(d.title||'')}\n■ 생성 경로: MZ일기 &gt; ${esc(d.title||'')}\n\n■ 본문 내용:\n- 입력 날짜: ${esc(d.date||'')}${nums?`\n- ${esc(nums)} (캡처에서 AI 판독)`:''}${stocks}${photos}${bullets?`\n- 주요 내용:\n${bullets}`:''}`+(d.url?`\n\n<a href="${esc(d.url)}" target="_blank" rel="noopener">Notion에서 열기 ↗</a>`:'');
+  box.hidden=false;$('#mzdiary-note').value='';MZDIARY_IMGS.length=0;renderMzdiaryPreviews();const fi=$('#mzdiary-photos');if(fi)fi.value='';
  }catch(e){status.textContent='실패: '+e.message}
  finally{btn.disabled=false}}
 async function dispatchEtf(){
@@ -297,6 +336,11 @@ $('#remember-photos')?.addEventListener('change',e=>{addRememberPhotos(e.target.
 $('#remember-previews')?.addEventListener('click',e=>{const b=e.target.closest('[data-rmimg]');if(!b)return;REMEMBER_IMGS.splice(+b.dataset.rmimg,1);renderRememberPreviews()});
 $('#remember-endpoint-save')?.addEventListener('click',()=>{const v=($('#remember-endpoint')?.value||'').trim();if(!/^https:\/\/script\.google\.com\/.+\/exec$/.test(v)){alert('GAS 웹앱 /exec URL 형식이 아닙니다.');return}try{localStorage.setItem(REMEMBER_EP_KEY,v)}catch{}$('#remember-status').textContent='☁ URL 저장됨 — 이제 기록할 수 있습니다';const st=$('#remember-setup');if(st)st.open=false});
 {const _rep=$('#remember-endpoint');if(_rep)_rep.value=rememberEndpoint();}
+$('#mzdiary-send')?.addEventListener('click',sendMzDiary);
+$('#mzdiary-photos')?.addEventListener('change',e=>{addMzdiaryPhotos(e.target.files);e.target.value=''});
+$('#mzdiary-previews')?.addEventListener('click',e=>{const b=e.target.closest('[data-rmimg]');if(!b)return;MZDIARY_IMGS.splice(+b.dataset.rmimg,1);renderMzdiaryPreviews()});
+$('#mzdiary-endpoint-save')?.addEventListener('click',()=>{const v=($('#mzdiary-endpoint')?.value||'').trim();if(!/^https:\/\/script\.google\.com\/.+\/exec$/.test(v)){alert('GAS 웹앱 /exec URL 형식이 아닙니다.');return}try{localStorage.setItem(MZDIARY_EP_KEY,v)}catch{}$('#mzdiary-status').textContent='☁ URL 저장됨 — 이제 기록할 수 있습니다';const st=$('#mzdiary-setup');if(st)st.open=false});
+{const _mep=$('#mzdiary-endpoint');if(_mep)_mep.value=mzdiaryEndpoint();}
 $('#etf-refresh')?.addEventListener('click',dispatchEtf);
 $('#holdings-refresh')?.addEventListener('click',dispatchHoldings);
 $('#news-refresh')?.addEventListener('click',dispatchNews);
@@ -304,6 +348,11 @@ $('#reports-refresh')?.addEventListener('click',dispatchReports);
 $('#union-refresh')?.addEventListener('click',dispatchUnion);
 $('#consensus-refresh')?.addEventListener('click',dispatchConsensus);
 $('#flow-refresh')?.addEventListener('click',dispatchFlow);
+$('#todo-add')?.addEventListener('click',todoAdd);
+$('#todo-input')?.addEventListener('keydown',e=>{if(e.key==='Enter')todoAdd()});
+$('#todo-clear-done')?.addEventListener('click',()=>{const a=todoLoad(),done=a.filter(t=>t.done).length;if(!done){alert('체크된 항목이 없습니다.');return}if(!confirm(`체크된 ${done}개 항목을 삭제할까요?`))return;todoSave(a.filter(t=>!t.done))});
+$('#todo-list')?.addEventListener('change',e=>{const row=e.target.closest('.todo-row');if(!row||e.target.type!=='checkbox')return;const a=todoLoad(),t=a[+row.dataset.i];if(!t)return;t.done=e.target.checked;if(t.done)t.doneTs=Date.now();else delete t.doneTs;todoSave(a)});
+$('#todo-list')?.addEventListener('click',e=>{const del=e.target.closest('.todo-del');if(!del)return;const row=del.closest('.todo-row'),a=todoLoad(),t=a[+row.dataset.i];if(!t)return;if(!confirm(`삭제할까요? — ${t.text}`))return;a.splice(+row.dataset.i,1);todoSave(a)});
 $('#task-item')?.addEventListener('change',()=>renderTaskList());
 $('#task-add')?.addEventListener('click',()=>{const name=(prompt('추가할 항목 이름')||'').trim();if(!name)return;const items=taskItems();if(items.includes(name)){alert('이미 있는 항목입니다.');return}items.push(name);saveItems(items);renderTaskList(name)});
 $('#task-rename')?.addEventListener('click',()=>{const items=taskItems(),cur=taskCurrentItem(),name=(prompt('항목 이름 변경',cur)||'').trim();if(!name||name===cur)return;if(items.includes(name)){alert('이미 있는 항목입니다.');return}items[items.indexOf(cur)]=name;saveItems(items);const s=taskLoad();if(s[cur]){s[name]=s[cur];delete s[cur]}if(Array.isArray(s.__archived)){const i=s.__archived.indexOf(cur);if(i>-1)s.__archived[i]=name}taskSave(s);renderTaskList(name)});
