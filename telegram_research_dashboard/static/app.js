@@ -236,7 +236,7 @@ const MZDIARY_EP_KEY='mzdiary_endpoint_v1';
 function mzdiaryEndpoint(){if(MZDIARY_ENDPOINT)return MZDIARY_ENDPOINT;try{return localStorage.getItem(MZDIARY_EP_KEY)||''}catch{return''}}
 const MZDIARY_IMGS=[];/* {name,type,data(base64)} — 전송 전 대기 중인 잔고·수익률 캡처 */
 function renderMzdiaryPreviews(){const box=$('#mzdiary-previews');if(!box)return;box.innerHTML=MZDIARY_IMGS.map((im,i)=>`<span class="rp"><img src="data:${im.type};base64,${im.data}" alt="${esc(im.name)}" title="${esc(im.name)}"><button type="button" data-rmimg="${i}" title="제거">×</button></span>`).join('')}
-async function addMzdiaryPhotos(files){const status=$('#mzdiary-status');for(const f of Array.from(files||[])){if(MZDIARY_IMGS.length>=8){status.textContent='⚠ 사진은 최대 8장까지';break}
+async function addMzdiaryPhotos(files){const status=$('#mzdiary-status');for(const f of Array.from(files||[])){if(MZDIARY_IMGS.length>=5){status.textContent='⚠ 사진은 최대 5장까지';break}
   try{MZDIARY_IMGS.push(await shrinkImage(f))}catch{status.textContent=`⚠ ${f.name||'사진'} 은 읽지 못해 건너뜀`}}
  renderMzdiaryPreviews()}
 async function sendMzDiary(){
