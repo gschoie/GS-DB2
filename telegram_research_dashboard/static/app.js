@@ -182,7 +182,7 @@ function renderTaskList(desired){fillTaskItems(desired);const st=taskLoad()[task
  $('#task-table').innerHTML=`<table class="task-table"><thead><tr><th class="task-sort" style="cursor:pointer;user-select:none" title="클릭하면 이름순 ↔ 팀 순서로 전환">이름 ${taskSortByName?'▲':'⇅'}</th><th>완료</th><th>응답내용</th><th>비고</th></tr></thead><tbody>${body}</tbody></table>`;
  $('#task-date').textContent=new Intl.DateTimeFormat('ko-KR',{year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date());renderTaskSummary()}
 function taskUpdate(name,field,value){const s=taskLoad(),it=taskCurrentItem();(s[it]=s[it]||{})[name]=s[it][name]||{};s[it][name][field]=value;taskSave(s);renderTaskSummary()}
-function view(id){$$('.view,.nav').forEach(x=>x.classList.remove('active'));$('#'+id).classList.add('active');$(`.nav[data-view="${id}"]`).classList.add('active');$('#page-title').textContent={overview:'오늘의 리서치 흐름',reports:'발간 보고서',news:'뉴스.아카이브',press:'보도기사 취합','union-board':'현중 노조게시판',tone:'DAOL 리서치 톤',collab:'섹터 콜라보 레이더',tasklist:'수명 피드백 확인',dart:'조선 수주공시 → 텔레',etf:'ETF/섹터 신호 포착',holdings:'액티브 ETF 구성 변화',flow:'시장 수급 동향',consensus:'코스피200 컨센서스 추적',defense:'글로벌 방산 데일리 브리핑',remember:'리멤버 → Notion 기록'}[id];if(id==='overview')fetchLiveMacro();if(id==='press'){state.pressCompany='';renderPressTable()}if(id==='tone')loadToneFrame();if(id==='union-board')loadUnionBoard();if(id==='tasklist'){renderTaskList();taskPull().then(ok=>{if(ok)renderTaskList()})}if(id==='etf'){const f=$('#etf-frame');if(!f.getAttribute('src'))f.src='etf_signal_report.html?t='+Date.now()}if(id==='holdings'){const f=$('#holdings-frame');if(!f.getAttribute('src'))f.src='etf_holdings_report.html?t='+Date.now()}if(id==='flow'){const f=$('#flow-frame');if(!f.getAttribute('src'))f.src='market_flow_report.html?t='+Date.now()}if(id==='consensus'){const f=$('#consensus-frame');if(!f.getAttribute('src'))f.src='consensus_revision.html?t='+Date.now()}if(id==='defense'){const f=$('#defense-frame');if(!f.getAttribute('src'))f.src='defense_briefing_report.html?t='+Date.now()}if(id==='collab'){const f=$('#collab-frame');if(!f.getAttribute('src'))f.src=TONE_SITE+'daol_collab_radar.html?t='+Date.now()}}
+function view(id){$$('.view,.nav').forEach(x=>x.classList.remove('active'));$('#'+id).classList.add('active');$(`.nav[data-view="${id}"]`).classList.add('active');$('#page-title').textContent={overview:'오늘의 리서치 흐름',reports:'발간 보고서',news:'뉴스.아카이브',press:'보도기사 취합','union-board':'현중 노조게시판',tone:'DAOL 리서치 톤',collab:'섹터 콜라보 레이더',tasklist:'수명 피드백 확인',dart:'조선 수주공시 → 텔레',etf:'ETF/섹터 신호 포착',holdings:'액티브 ETF 구성 변화',flow:'시장 수급 동향',consensus:'코스피200 컨센서스 추적',defense:'글로벌 방산 데일리 브리핑',remember:'리멤버 → Notion 기록',mzdiary:'mz일기 · 잔고/매매노트'}[id];if(id==='overview')fetchLiveMacro();if(id==='press'){state.pressCompany='';renderPressTable()}if(id==='tone')loadToneFrame();if(id==='union-board')loadUnionBoard();if(id==='tasklist'){renderTaskList();taskPull().then(ok=>{if(ok)renderTaskList()})}if(id==='etf'){const f=$('#etf-frame');if(!f.getAttribute('src'))f.src='etf_signal_report.html?t='+Date.now()}if(id==='holdings'){const f=$('#holdings-frame');if(!f.getAttribute('src'))f.src='etf_holdings_report.html?t='+Date.now()}if(id==='flow'){const f=$('#flow-frame');if(!f.getAttribute('src'))f.src='market_flow_report.html?t='+Date.now()}if(id==='consensus'){const f=$('#consensus-frame');if(!f.getAttribute('src'))f.src='consensus_revision.html?t='+Date.now()}if(id==='defense'){const f=$('#defense-frame');if(!f.getAttribute('src'))f.src='defense_briefing_report.html?t='+Date.now()}if(id==='collab'){const f=$('#collab-frame');if(!f.getAttribute('src'))f.src=TONE_SITE+'daol_collab_radar.html?t='+Date.now()}}
 const DISPATCH_ENDPOINT='https://script.google.com/macros/s/AKfycbzybp0b1W0wr9n2bfQsF1xblsaLdlu9oRtfH7xkbQrRYLaRpCwemhFRVLbk3rGnIO4zdQ/exec';
 async function dispatchWorkflow(payload,status,btn){
  if(status)status.textContent='요청 중…';if(btn)btn.disabled=true;
@@ -229,6 +229,30 @@ async function sendRemember(){
   const photos=d.imgOk?`\n- 사진: ${d.imgOk}장 첨부`:'';
   box.innerHTML=`📌 [GS_WRITING / 리멤버] 신규 페이지 생성 완료\n\n■ 페이지 제목: ${esc(d.title||'')}\n■ 생성 경로: GS_WRITING &gt; 리멤버 &gt; ${esc(d.title||'')}\n\n■ 본문 내용:\n- 입력 날짜: ${esc(d.date||'')}${tags}${photos}\n- 주요 내용:\n${bullets}`+(d.url?`\n\n<a href="${esc(d.url)}" target="_blank" rel="noopener">Notion에서 열기 ↗</a>`:'');
   box.hidden=false;$('#remember-text').value='';REMEMBER_IMGS.length=0;renderRememberPreviews();const fi=$('#remember-photos');if(fi)fi.value='';
+ }catch(e){status.textContent='실패: '+e.message}
+ finally{btn.disabled=false}}
+const MZDIARY_ENDPOINT='';/* mz일기→Notion GAS 웹앱 (gas/mz_diary_notion.gs). 비면 화면의 ⚙️ 연결 설정(localStorage) 사용 */
+const MZDIARY_EP_KEY='mzdiary_endpoint_v1';
+function mzdiaryEndpoint(){if(MZDIARY_ENDPOINT)return MZDIARY_ENDPOINT;try{return localStorage.getItem(MZDIARY_EP_KEY)||''}catch{return''}}
+async function sendMzDiary(){
+ const balance=($('#mzdiary-balance')?.value||'').trim(),returnPct=($('#mzdiary-return')?.value||'').trim(),note=($('#mzdiary-note')?.value||'').trim();
+ const status=$('#mzdiary-status'),btn=$('#mzdiary-send'),box=$('#mzdiary-result');
+ if(!balance&&!returnPct&&!note){status.textContent='⚠ 잔고·수익률·매매노트 중 하나는 입력해 주세요';return}
+ if(balance&&isNaN(Number(balance.replace(/[,\s원]/g,'')))){status.textContent='⚠ 잔고는 숫자로 입력해 주세요 (예: 12,345,678)';return}
+ if(returnPct&&isNaN(Number(returnPct.replace(/[%\s]/g,'')))){status.textContent='⚠ 수익률은 숫자로 입력해 주세요 (예: 7.7)';return}
+ const ep=mzdiaryEndpoint();
+ if(!ep){status.textContent='⚠ 아래 ⚙️ 연결 설정에서 GAS 웹앱 URL을 먼저 저장해 주세요';const st=$('#mzdiary-setup');if(st)st.open=true;return}
+ status.textContent=note?'AI 정리 + Notion 저장 중… (10초 안팎)':'Notion 저장 중…';btn.disabled=true;box.hidden=true;
+ try{
+  const r=await fetch(ep,{method:'POST',body:JSON.stringify({balance,returnPct,note})});
+  const d=await r.json();
+  if(!d.ok)throw new Error(d.error||'저장 실패');
+  status.textContent=note?(d.ai?'✅ 저장 완료 (AI 정리)':'✅ 저장 완료 (원문 기반 — GEMINI_API_KEY 미설정)'):'✅ 저장 완료';
+  const bullets=(d.bullets||[]).map(b=>`  • ${esc(b)}`).join('\n');
+  const stocks=(d.stocks||[]).length?`\n- 종목: ${esc(d.stocks.join(', '))}`:'';
+  const nums=[d.balance!=null?`잔고 ${Number(d.balance).toLocaleString('ko-KR')}원`:'',d.returnPct!=null?`수익률 ${d.returnPct}%`:''].filter(Boolean).join(' · ');
+  box.innerHTML=`📌 [MZ일기 / 잔고·매매노트] 신규 페이지 생성 완료\n\n■ 페이지 제목: ${esc(d.title||'')}\n■ 생성 경로: MZ일기 &gt; 잔고·매매노트 &gt; ${esc(d.title||'')}\n\n■ 본문 내용:\n- 입력 날짜: ${esc(d.date||'')}${nums?`\n- ${esc(nums)}`:''}${stocks}${bullets?`\n- 주요 내용:\n${bullets}`:''}`+(d.url?`\n\n<a href="${esc(d.url)}" target="_blank" rel="noopener">Notion에서 열기 ↗</a>`:'');
+  box.hidden=false;$('#mzdiary-balance').value='';$('#mzdiary-return').value='';$('#mzdiary-note').value='';
  }catch(e){status.textContent='실패: '+e.message}
  finally{btn.disabled=false}}
 async function dispatchEtf(){
@@ -296,6 +320,9 @@ $('#remember-photos')?.addEventListener('change',e=>{addRememberPhotos(e.target.
 $('#remember-previews')?.addEventListener('click',e=>{const b=e.target.closest('[data-rmimg]');if(!b)return;REMEMBER_IMGS.splice(+b.dataset.rmimg,1);renderRememberPreviews()});
 $('#remember-endpoint-save')?.addEventListener('click',()=>{const v=($('#remember-endpoint')?.value||'').trim();if(!/^https:\/\/script\.google\.com\/.+\/exec$/.test(v)){alert('GAS 웹앱 /exec URL 형식이 아닙니다.');return}try{localStorage.setItem(REMEMBER_EP_KEY,v)}catch{}$('#remember-status').textContent='☁ URL 저장됨 — 이제 기록할 수 있습니다';const st=$('#remember-setup');if(st)st.open=false});
 {const _rep=$('#remember-endpoint');if(_rep)_rep.value=rememberEndpoint();}
+$('#mzdiary-send')?.addEventListener('click',sendMzDiary);
+$('#mzdiary-endpoint-save')?.addEventListener('click',()=>{const v=($('#mzdiary-endpoint')?.value||'').trim();if(!/^https:\/\/script\.google\.com\/.+\/exec$/.test(v)){alert('GAS 웹앱 /exec URL 형식이 아닙니다.');return}try{localStorage.setItem(MZDIARY_EP_KEY,v)}catch{}$('#mzdiary-status').textContent='☁ URL 저장됨 — 이제 기록할 수 있습니다';const st=$('#mzdiary-setup');if(st)st.open=false});
+{const _mep=$('#mzdiary-endpoint');if(_mep)_mep.value=mzdiaryEndpoint();}
 $('#etf-refresh')?.addEventListener('click',dispatchEtf);
 $('#holdings-refresh')?.addEventListener('click',dispatchHoldings);
 $('#news-refresh')?.addEventListener('click',dispatchNews);
