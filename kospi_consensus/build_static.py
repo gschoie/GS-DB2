@@ -391,6 +391,9 @@ function fmt(n){return n==null?'-':Math.round(n).toLocaleString('ko-KR')}
 function pct(w){if(w==null)return'<span class="tiny">-</span>';
  var c=w>0?'pos':(w<0?'neg':'');return'<span class="'+c+'">'+(w>0?'+':'')+w.toFixed(1)+'%</span>'}
 function mmdd(s){return s?s.slice(5).replace('-','/'):''}   // 'YYYY-MM-DD' → 'MM/DD'
+function qq(p){if(!p)return'';var m=p.slice(5,7),y=p.slice(2,4);   // '2026.06' → '2Q26'
+ return ({'03':'1Q','06':'2Q','09':'3Q','12':'4Q'}[m]||m)+y}
+function plab(h){return h.key==='q'?qq(h.period):h.period}   // 분기는 'nQyy', 연간은 'YYYY.12'
 function nameCell(d){return '<a class="stk" href="https://finance.naver.com/item/fchart.naver?code='+
  d.code+'" target="_blank" rel="noopener">'+d.name+'</a>'+(d.cov?' <span class="covstar" title="리서치 커버리지">★</span>':'')}
 function mktBadge(m){return m?'<span class="'+(m==='코스닥'?'mkt-kq':'mkt-kp')+'">'+m+'</span>':''}
@@ -424,7 +427,7 @@ function renderTop(){
  if(D.has_revision){
   var M=m3(), ch='<div class="cards">';
   p.horizons.forEach(function(h){var up=M?h.up3:h.up,dn=M?h.down3:h.down,fl=M?h.flat3:h.flat,t=up+dn+fl||1;
-   ch+='<div class="card"><div class="lab">'+h.label+' ('+h.period+')</div>'+
+   ch+='<div class="card"><div class="lab">'+h.label+' ('+plab(h)+')</div>'+
     '<div class="nums"><span class="up">'+up+' ▲</span><span class="down">'+dn+' ▼</span></div>'+
     '<div class="bar"><i class="iu" style="width:'+(up/t*100)+'%"></i>'+
     '<i class="id" style="width:'+(dn/t*100)+'%"></i></div>'+
@@ -484,7 +487,8 @@ function draw(){
   var k=th.dataset.k;if(sortKey===k){sortDir=-sortDir}else{sortKey=k;sortDir=(k==='name'||k==='sec')?1:-1}draw()}});
 }
 function render(){renderNav();renderCtl();renderTop();draw()}
-var tabs='';P().horizons.forEach(function(h,i){tabs+='<button class="tab'+(i===0?' on':'')+'" data-i="'+i+'">'+h.label+'</button>'});
+var tabs='';P().horizons.forEach(function(h,i){var lab=h.key==='q'?qq(h.period):h.label;
+ tabs+='<button class="tab'+(i===0?' on':'')+'" data-i="'+i+'">'+lab+'</button>'});
 $('tabs').innerHTML=tabs;
 document.querySelectorAll('.tab').forEach(function(b){b.onclick=function(){
  sel=+b.dataset.i;document.querySelectorAll('.tab').forEach(function(x){x.classList.remove('on')});b.classList.add('on');draw()}});
