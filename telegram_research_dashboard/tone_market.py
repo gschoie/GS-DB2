@@ -73,6 +73,7 @@ def _tone_fields(record: dict) -> dict:
         "one_line": (record.get("one_line") or "")[:120],
         "points": (record.get("points") or [])[:4],
         "tp_reasons": ((record.get("tp_event") or {}).get("reasons") or [])[:3],
+        "tp_ev": ((record.get("tp_event") or {}).get("evidence") or "")[:600],
         "earn": record.get("earnings_direction") or "",
         "earn_ev": (record.get("earnings_evidence") or "")[:140],
         "est": {"label": annual.get("label"), "op": annual.get("op")}
