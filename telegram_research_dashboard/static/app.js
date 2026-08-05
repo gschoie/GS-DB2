@@ -93,9 +93,14 @@ const TASK_ITEMS_DEFAULT=['근태입력','휴가계획','자료제출','컴플�
 const TASK_ENDPOINT='https://script.google.com/macros/s/AKfycbwTX-Ld-ayqHgi97S0QiMYPsHfb2cjNwy66FyDYU6GBrS0kOgMH8KE220GPy3KRxcT3/exec';let taskPushT;
 function taskItems(){try{const a=JSON.parse(localStorage.getItem(TASK_ITEMS_KEY));if(Array.isArray(a)&&a.length)return a}catch{}return TASK_ITEMS_DEFAULT.slice()}
 function saveItems(a){try{localStorage.setItem(TASK_ITEMS_KEY,JSON.stringify(a))}catch{}taskPush()}
-function fillTaskItems(desired){const sel=$('#task-item');if(!sel)return;const items=taskItems();let last=null;try{last=localStorage.getItem(TASK_LAST_KEY)}catch{}
- // 항목 우선순위: 명시 지정 > 화면에서 고른 값 > 마지막 사용 항목(재방문 시 근태입력으로 리셋 방지) > 첫 항목
- const cur=items.includes(desired)?desired:(items.includes(sel.value)?sel.value:(items.includes(last)?last:items[0]));sel.innerHTML=items.map(x=>`<option ${x===cur?'selected':''}>${esc(x)}</option>`).join('');try{localStorage.setItem(TASK_LAST_KEY,cur)}catch{}}
+function taskArchived(){const a=taskLoad().__archived;return Array.isArray(a)?a.filter(x=>taskItems().includes(x)):[]}/* 보관함: 항목 이름 목록 — 기록(data)은 건드리지 않아 복원 시 그대로 */
+function fillTaskItems(desired){const sel=$('#task-item');if(!sel)return;const items=taskItems(),arch=taskArchived(),active=items.filter(x=>!arch.includes(x));let last=null;try{last=localStorage.getItem(TASK_LAST_KEY)}catch{}
+ // 항목 우선순위: 명시 지정 > 화면에서 고른 값 > 마지막 사용 항목(재방문 시 근태입력으로 리셋 방지) > 첫 활성 항목
+ const cur=items.includes(desired)?desired:(items.includes(sel.value)?sel.value:(items.includes(last)?last:(active[0]||items[0])));
+ const opt=x=>`<option ${x===cur?'selected':''}>${esc(x)}</option>`;
+ sel.innerHTML=active.map(opt).join('')+(arch.length?`<optgroup label="📦 보관함">${arch.map(opt).join('')}</optgroup>`:'');
+ const ab=$('#task-archive');if(ab)ab.textContent=arch.includes(cur)?'보관 해제':'보관';
+ try{localStorage.setItem(TASK_LAST_KEY,cur)}catch{}}
 const taskAllNames=()=>TASK_ROSTER.flatMap(([,ns])=>ns);
 function taskLoad(){try{return JSON.parse(localStorage.getItem(TASK_KEY))||{}}catch{return{}}}
 function taskSave(s){try{localStorage.setItem(TASK_KEY,JSON.stringify(s))}catch{}taskPush()}
@@ -105,8 +110,9 @@ async function taskPull(){if(!TASK_ENDPOINT)return false;const status=$('#task-s
 function taskCurrentItem(){return $('#task-item')?.value||taskItems()[0]}
 function renderTaskSummary(){const st=taskLoad()[taskCurrentItem()]||{},names=taskAllNames(),pending=names.filter(n=>!st[n]?.done);$('#task-summary').innerHTML=`완료 <b>${names.length-pending.length}</b> / ${names.length}`+(pending.length?` · 미응답: ${esc(pending.join(', '))}`:' · 전원 완료 🎉')}
 let taskSortByName=false;
+const TASK_RA=['이준범','김진영','김상혁','박소현','한수빈'];
 function renderTaskList(desired){fillTaskItems(desired);const st=taskLoad()[taskCurrentItem()]||{};
- const row=n=>{const r=st[n]||{};return `<tr data-name="${esc(n)}"><td class="task-name">${esc(n)}</td><td class="task-done"><input type="checkbox" data-f="done" ${r.done?'checked':''}></td><td><input class="task-in" data-f="resp" placeholder="응답내용" value="${esc(r.resp||'')}"></td><td><input class="task-in" data-f="note" placeholder="비고" value="${esc(r.note||'')}"></td></tr>`};
+ const row=n=>{const r=st[n]||{};return `<tr data-name="${esc(n)}"><td class="task-name"${TASK_RA.includes(n)?' style="color:#9aa0a6"':''}>${esc(n)}</td><td class="task-done"><input type="checkbox" data-f="done" ${r.done?'checked':''}></td><td><input class="task-in" data-f="resp" placeholder="응답내용" value="${esc(r.resp||'')}"></td><td><input class="task-in" data-f="note" placeholder="비고" value="${esc(r.note||'')}"></td></tr>`};
  const body=taskSortByName
   ?taskAllNames().slice().sort((a,b)=>a.localeCompare(b,'ko')).map(row).join('')
   :TASK_ROSTER.map(([part,names])=>`<tr class="task-group"><td colspan="4">${esc(part)}</td></tr>`+names.map(row).join('')).join('');
@@ -236,8 +242,11 @@ $('#consensus-refresh')?.addEventListener('click',dispatchConsensus);
 $('#flow-refresh')?.addEventListener('click',dispatchFlow);
 $('#task-item')?.addEventListener('change',()=>renderTaskList());
 $('#task-add')?.addEventListener('click',()=>{const name=(prompt('추가할 항목 이름')||'').trim();if(!name)return;const items=taskItems();if(items.includes(name)){alert('이미 있는 항목입니다.');return}items.push(name);saveItems(items);renderTaskList(name)});
-$('#task-rename')?.addEventListener('click',()=>{const items=taskItems(),cur=taskCurrentItem(),name=(prompt('항목 이름 변경',cur)||'').trim();if(!name||name===cur)return;if(items.includes(name)){alert('이미 있는 항목입니다.');return}items[items.indexOf(cur)]=name;saveItems(items);const s=taskLoad();if(s[cur]){s[name]=s[cur];delete s[cur];taskSave(s)}renderTaskList(name)});
-$('#task-del')?.addEventListener('click',()=>{const items=taskItems(),cur=taskCurrentItem();if(items.length<=1){alert('항목이 하나뿐이라 삭제할 수 없습니다.');return}if(!confirm(`[${cur}] 항목과 그 체크 내용을 삭제할까요?`))return;items.splice(items.indexOf(cur),1);saveItems(items);const s=taskLoad();delete s[cur];taskSave(s);renderTaskList(items[0])});
+$('#task-rename')?.addEventListener('click',()=>{const items=taskItems(),cur=taskCurrentItem(),name=(prompt('항목 이름 변경',cur)||'').trim();if(!name||name===cur)return;if(items.includes(name)){alert('이미 있는 항목입니다.');return}items[items.indexOf(cur)]=name;saveItems(items);const s=taskLoad();if(s[cur]){s[name]=s[cur];delete s[cur]}if(Array.isArray(s.__archived)){const i=s.__archived.indexOf(cur);if(i>-1)s.__archived[i]=name}taskSave(s);renderTaskList(name)});
+$('#task-del')?.addEventListener('click',()=>{const items=taskItems(),cur=taskCurrentItem();if(items.length<=1){alert('항목이 하나뿐이라 삭제할 수 없습니다.');return}if(!confirm(`[${cur}] 항목과 그 체크 내용을 삭제할까요?`))return;items.splice(items.indexOf(cur),1);saveItems(items);const s=taskLoad();delete s[cur];if(Array.isArray(s.__archived))s.__archived=s.__archived.filter(x=>x!==cur);taskSave(s);renderTaskList(items[0])});
+$('#task-archive')?.addEventListener('click',()=>{const cur=taskCurrentItem(),s=taskLoad(),arch=Array.isArray(s.__archived)?s.__archived:[];const wasArch=arch.includes(cur);
+ s.__archived=wasArch?arch.filter(x=>x!==cur):[...arch,cur];taskSave(s);
+ renderTaskList(wasArch?cur:(taskItems().find(x=>!s.__archived.includes(x))||cur))});
 $('#task-table')?.addEventListener('click',e=>{if(e.target.closest('th.task-sort')){taskSortByName=!taskSortByName;renderTaskList()}});
 $('#task-table')?.addEventListener('change',e=>{const tr=e.target.closest('tr[data-name]');if(tr&&e.target.dataset.f==='done')taskUpdate(tr.dataset.name,'done',e.target.checked)});
 $('#task-table')?.addEventListener('input',e=>{const tr=e.target.closest('tr[data-name]'),f=e.target.dataset.f;if(tr&&(f==='resp'||f==='note'))taskUpdate(tr.dataset.name,f,e.target.value)});
