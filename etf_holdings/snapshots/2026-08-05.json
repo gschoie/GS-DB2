@@ -1,13 +1,13 @@
 {
   "date": "2026-08-05",
-  "fetched_at": "2026-08-05 11:44",
-  "base_date": "",
+  "fetched_at": "2026-08-05 15:45",
+  "base_date": "2026-08-05",
   "source": "naver_top10",
   "etfs": {
     "385720": {
       "name": "TIME 코스피액티브",
       "nav": 23726.37,
-      "market_value": "3,756억",
+      "market_value": "3,771억",
       "holdings": [
         {
           "key": "005930",
@@ -82,12 +82,12 @@
       ],
       "group": "TIME(구 TIMEFOLIO)",
       "label": "TIME 코스피액티브",
-      "base_date": ""
+      "base_date": "2026-08-05"
     },
     "0162Y0": {
       "name": "TIME 코스닥액티브",
       "nav": 6932.32,
-      "market_value": "2,423억",
+      "market_value": "2,437억",
       "holdings": [
         {
           "key": "119850",
@@ -162,12 +162,12 @@
       ],
       "group": "TIME(구 TIMEFOLIO)",
       "label": "TIME 코스닥액티브",
-      "base_date": ""
+      "base_date": "2026-08-05"
     },
     "426020": {
       "name": "TIME 미국S&P500액티브",
       "nav": 32655.36,
-      "market_value": "4,003억",
+      "market_value": "4,014억",
       "holdings": [
         {
           "key": "NVIDIA CORP",
@@ -242,12 +242,12 @@
       ],
       "group": "TIME(구 TIMEFOLIO)",
       "label": "TIME 미국S&P500액티브",
-      "base_date": ""
+      "base_date": "2026-08-05"
     },
     "426030": {
       "name": "TIME 미국나스닥100액티브",
       "nav": 45778.77,
-      "market_value": "2조 5,271억",
+      "market_value": "2조 5,602억",
       "holdings": [
         {
           "key": "INTEL CORP",
@@ -322,12 +322,12 @@
       ],
       "group": "TIME(구 TIMEFOLIO)",
       "label": "TIME 미국나스닥100액티브",
-      "base_date": ""
+      "base_date": "2026-08-05"
     },
     "441800": {
       "name": "TIME Korea플러스배당액티브",
       "nav": 27472.32,
-      "market_value": "7,668억",
+      "market_value": "7,674억",
       "holdings": [
         {
           "key": "000660",
@@ -402,12 +402,12 @@
       ],
       "group": "TIME(구 TIMEFOLIO)",
       "label": "TIME Korea플러스배당액티브",
-      "base_date": ""
+      "base_date": "2026-08-05"
     },
     "463050": {
       "name": "TIME K바이오액티브",
       "nav": 12904.57,
-      "market_value": "2,184억",
+      "market_value": "2,186억",
       "holdings": [
         {
           "key": "196170",
@@ -482,12 +482,12 @@
       ],
       "group": "TIME(구 TIMEFOLIO)",
       "label": "TIME K바이오액티브",
-      "base_date": ""
+      "base_date": "2026-08-05"
     },
     "410870": {
       "name": "TIME K컬처액티브",
       "nav": 9714.76,
-      "market_value": "117억",
+      "market_value": "116억",
       "holdings": [
         {
           "key": "003230",
@@ -562,12 +562,12 @@
       ],
       "group": "TIME(구 TIMEFOLIO)",
       "label": "TIME K컬처액티브",
-      "base_date": ""
+      "base_date": "2026-08-05"
     },
     "456600": {
       "name": "TIME 글로벌AI인공지능액티브",
       "nav": 57809.69,
-      "market_value": "2조 2,592억",
+      "market_value": "2조 2,800억",
       "holdings": [
         {
           "key": "0043Y0",
@@ -642,12 +642,12 @@
       ],
       "group": "TIME(구 TIMEFOLIO)",
       "label": "TIME 글로벌AI인공지능액티브",
-      "base_date": ""
+      "base_date": "2026-08-05"
     },
     "0036D0": {
       "name": "TIME 미국배당다우존스액티브",
       "nav": 13003.88,
-      "market_value": "646억",
+      "market_value": "651억",
       "holdings": [
         {
           "key": "COMCAST CORP-CLASS A",
@@ -722,12 +722,12 @@
       ],
       "group": "TIME(구 TIMEFOLIO)",
       "label": "TIME 미국배당다우존스액티브",
-      "base_date": ""
+      "base_date": "2026-08-05"
     },
     "0163Y0": {
       "name": "KoAct 코스닥액티브",
       "nav": 8266.44,
-      "market_value": "4,355억",
+      "market_value": "4,372억",
       "holdings": [
         {
           "key": "095610",
@@ -802,12 +802,12 @@
       ],
       "group": "KoAct",
       "label": "KoAct 코스닥액티브",
-      "base_date": ""
+      "base_date": "2026-08-05"
     },
     "462900": {
       "name": "KoAct 바이오헬스케어액티브",
       "nav": 14204.7,
-      "market_value": "3,758억",
+      "market_value": "3,747억",
       "holdings": [
         {
           "key": "196170",
@@ -882,12 +882,12 @@
       ],
       "group": "KoAct",
       "label": "KoAct 바이오헬스케어액티브",
-      "base_date": ""
+      "base_date": "2026-08-05"
     },
     "476850": {
       "name": "KoAct 배당성장액티브",
       "nav": 20215.21,
-      "market_value": "983억",
+      "market_value": "987억",
       "holdings": [
         {
           "key": "005935",
@@ -962,12 +962,12 @@
       ],
       "group": "KoAct",
       "label": "KoAct 배당성장액티브",
-      "base_date": ""
+      "base_date": "2026-08-05"
     },
     "471040": {
       "name": "KoAct 글로벌AI&로봇액티브",
       "nav": 28385.22,
-      "market_value": "2,743억",
+      "market_value": "2,778억",
       "holdings": [
         {
           "key": "005930",
@@ -1042,12 +1042,12 @@
       ],
       "group": "KoAct",
       "label": "KoAct 글로벌AI&로봇액티브",
-      "base_date": ""
+      "base_date": "2026-08-05"
     },
     "445290": {
       "name": "KODEX 로봇액티브",
       "nav": 29975.77,
-      "market_value": "1조 831억",
+      "market_value": "1조 995억",
       "holdings": [
         {
           "key": "108490",
@@ -1122,12 +1122,12 @@
       ],
       "group": "KODEX",
       "label": "KODEX 로봇액티브",
-      "base_date": ""
+      "base_date": "2026-08-05"
     },
     "441640": {
       "name": "KODEX 미국배당커버드콜액티브",
       "nav": 12948.42,
-      "market_value": "1조 6,820억",
+      "market_value": "1조 6,884억",
       "holdings": [
         {
           "key": "AMPLIFY CWP ENHANCED DIVIDEND",
@@ -1202,12 +1202,12 @@
       ],
       "group": "KODEX",
       "label": "KODEX 미국배당커버드콜액티브",
-      "base_date": ""
+      "base_date": "2026-08-05"
     },
     "471780": {
       "name": "TIGER 코리아테크액티브",
       "nav": 31563.81,
-      "market_value": "2,449억",
+      "market_value": "2,478억",
       "holdings": [
         {
           "key": "005930",
@@ -1282,12 +1282,12 @@
       ],
       "group": "TIGER",
       "label": "TIGER 코리아테크액티브",
-      "base_date": ""
+      "base_date": "2026-08-05"
     },
     "472150": {
       "name": "TIGER 배당커버드콜액티브",
       "nav": 19191.75,
-      "market_value": "2조 2,891억",
+      "market_value": "2조 3,058억",
       "holdings": [
         {
           "key": "005930",
@@ -1362,12 +1362,12 @@
       ],
       "group": "TIGER",
       "label": "TIGER 배당커버드콜액티브",
-      "base_date": ""
+      "base_date": "2026-08-05"
     },
     "365040": {
       "name": "TIGER AI코리아그로스액티브",
       "nav": 33424.37,
-      "market_value": "728억",
+      "market_value": "734억",
       "holdings": [
         {
           "key": "005930",
@@ -1442,12 +1442,12 @@
       ],
       "group": "TIGER",
       "label": "TIGER AI코리아그로스액티브",
-      "base_date": ""
+      "base_date": "2026-08-05"
     },
     "387280": {
       "name": "TIGER 퓨처모빌리티액티브",
       "nav": 10658.31,
-      "market_value": "147억",
+      "market_value": "149억",
       "holdings": [
         {
           "key": "012330",
@@ -1522,12 +1522,12 @@
       ],
       "group": "TIGER",
       "label": "TIGER 퓨처모빌리티액티브",
-      "base_date": ""
+      "base_date": "2026-08-05"
     },
     "444200": {
       "name": "SOL 코리아메가테크액티브",
       "nav": 42970.58,
-      "market_value": "5,067억",
+      "market_value": "5,118억",
       "holdings": [
         {
           "key": "005930",
@@ -1602,12 +1602,12 @@
       ],
       "group": "SOL",
       "label": "SOL 코리아메가테크액티브",
-      "base_date": ""
+      "base_date": "2026-08-05"
     },
     "481180": {
       "name": "SOL 미국AI소프트웨어",
       "nav": 15588.43,
-      "market_value": "1,411억",
+      "market_value": "1,414억",
       "holdings": [
         {
           "key": "Palantir Technologies Inc",
@@ -1682,7 +1682,7 @@
       ],
       "group": "SOL",
       "label": "SOL 미국AI소프트웨어액티브",
-      "base_date": ""
+      "base_date": "2026-08-05"
     }
   },
   "errors": []
