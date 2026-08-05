@@ -209,12 +209,12 @@ function fillTodoGroups(){const sel=$('#todo-group');if(!sel)return;const cur=se
 function renderTodo(){const box=$('#todo-list');if(!box)return;fillTodoGroups();const a=todoLoad(),groups=todoGroups();
  if(!a.length&&!groups.length){box.innerHTML='<p class="empty">할 일을 한 줄 적고 ＋추가를 누르세요.</p>';return}
  const row=(t,i)=>{const imgs=(t.imgs||[]).map((d,k)=>`<img class="todo-thumb" src="${d}" alt="첨부 ${k+1}" title="클릭하면 크게 보기">`).join('');
-  return `<div class="todo-row${t.done?' done':''}" data-i="${i}"><input type="checkbox" ${t.done?'checked':''}><span class="todo-text">${esc(t.text)}${imgs?`<span class="todo-thumbs">${imgs}</span>`:''}</span><span class="todo-ts"${t.doneTs?` title="완료 ${todoFmt(t.doneTs)}"`:''}>${todoFmt(t.ts)}</span><button class="todo-edit" type="button" title="내용 수정">✎</button><button class="todo-del" type="button" title="삭제">✕</button></div>`};
+  return `<div class="todo-row${t.done?' done':''}" data-i="${i}"><span class="todo-grip" draggable="true" title="드래그해서 다른 그룹으로 이동">⠿</span><input type="checkbox" ${t.done?'checked':''}><span class="todo-text">${esc(t.text)}${imgs?`<span class="todo-thumbs">${imgs}</span>`:''}</span><span class="todo-ts"${t.doneTs?` title="완료 ${todoFmt(t.doneTs)}"`:''}>${todoFmt(t.ts)}</span><button class="todo-edit" type="button" title="내용 수정">✎</button><button class="todo-del" type="button" title="삭제">✕</button></div>`};
  const names=['기본',...groups],buckets=Object.fromEntries(names.map(n=>[n,[]]));
  a.forEach((t,i)=>{buckets[t.group&&names.includes(t.group)?t.group:'기본'].push([t,i])});
  box.innerHTML=names.map(n=>{const list=buckets[n],undone=list.filter(([t])=>!t.done).length;
   const tools=n==='기본'?'':`<span class="todo-g-tools"><button type="button" class="todo-g-ren" data-g="${esc(n)}" title="그룹 이름 변경">✎</button><button type="button" class="todo-g-del" data-g="${esc(n)}" title="그룹 삭제 (항목은 기본으로 이동)">✕</button></span>`;
-  return `<details class="todo-group" open><summary><span>${esc(n)}</span><em>${undone}/${list.length}</em>${tools}</summary>${list.map(([t,i])=>row(t,i)).join('')||'<p class="empty todo-empty">이 그룹에 할 일이 없습니다.</p>'}</details>`}).join('')}
+  return `<details class="todo-group" data-g="${esc(n)}" open><summary><span>${esc(n)}</span><em>${undone}/${list.length}</em>${tools}</summary>${list.map(([t,i])=>row(t,i)).join('')||'<p class="empty todo-empty">이 그룹에 할 일이 없습니다.</p>'}</details>`}).join('')}
 function todoAdd(){const inp=$('#todo-input'),text=(inp?.value||'').trim();if(!text&&!TODO_PEND.length)return;
  const a=todoLoad(),g=$('#todo-group')?.value||'',t={text:text||'(사진 메모)',ts:Date.now(),done:false};
  if(g)t.group=g;if(TODO_PEND.length)t.imgs=TODO_PEND.slice();
@@ -390,8 +390,25 @@ $('#todo-list')?.addEventListener('click',e=>{
  const th=e.target.closest('.todo-thumb');if(th){todoLightbox(th.src);return}
  const ren=e.target.closest('.todo-g-ren');if(ren){e.preventDefault();const cur=ren.dataset.g,name=(prompt('그룹 이름 변경',cur)||'').trim();if(!name||name===cur)return;const g=todoGroups();if(name==='기본'||g.includes(name)){alert('이미 있는 그룹입니다.');return}g[g.indexOf(cur)]=name;todoGroupsStore(g);todoSave(todoLoad().map(t=>t.group===cur?{...t,group:name}:t));const sel=$('#todo-group');if(sel)sel.value=name;return}
  const gd=e.target.closest('.todo-g-del');if(gd){e.preventDefault();const cur=gd.dataset.g;if(!confirm(`[${cur}] 그룹을 삭제할까요? 그룹의 할 일은 기본으로 이동합니다.`))return;todoGroupsStore(todoGroups().filter(x=>x!==cur));todoSave(todoLoad().map(t=>{if(t.group!==cur)return t;const{group,...rest}=t;return rest}));return}
- const ed=e.target.closest('.todo-edit');if(ed){const row=ed.closest('.todo-row'),a=todoLoad(),t=a[+row.dataset.i];if(!t)return;const text=(prompt('할 일 내용 수정',t.text)||'').trim();if(!text||text===t.text)return;t.text=text;todoSave(a);return}
+ const ed=e.target.closest('.todo-edit');if(ed){const row=ed.closest('.todo-row'),a=todoLoad(),t=a[+row.dataset.i];if(!t)return;
+  const text=prompt('할 일 내용 수정',t.text);if(text===null)return;const tx=text.trim();let dirty=false;
+  if(tx&&tx!==t.text){t.text=tx;dirty=true}
+  const names=['기본',...todoGroups()];
+  if(names.length>1){const cur=t.group&&names.includes(t.group)?t.group:'기본';
+   const pick=prompt(`그룹 이동 — 번호를 입력하세요\n${names.map((n,k)=>`${k+1}. ${n}${n===cur?' ← 현재':''}`).join('\n')}`,String(names.indexOf(cur)+1));
+   if(pick!==null){const g=names[Math.trunc(+pick.trim())-1];if(g&&g!==cur){if(g==='기본')delete t.group;else t.group=g;dirty=true}}}
+  if(dirty)todoSave(a);return}
  const del=e.target.closest('.todo-del');if(!del)return;const row=del.closest('.todo-row'),a=todoLoad(),t=a[+row.dataset.i];if(!t)return;if(!confirm(`삭제할까요? — ${t.text}`))return;a.splice(+row.dataset.i,1);todoSave(a)});
+// 드래그 앤 드랍으로 할 일을 다른 그룹에 떨어뜨려 이동
+let TODO_DRAG=-1;
+$('#todo-list')?.addEventListener('dragstart',e=>{const row=e.target.closest('.todo-row');if(!row)return;TODO_DRAG=+row.dataset.i;e.dataTransfer.effectAllowed='move';row.classList.add('dragging')});
+$('#todo-list')?.addEventListener('dragend',()=>{TODO_DRAG=-1;$$('#todo-list .drop-hover,#todo-list .dragging').forEach(x=>x.classList.remove('drop-hover','dragging'))});
+$('#todo-list')?.addEventListener('dragover',e=>{if(TODO_DRAG<0)return;const g=e.target.closest('.todo-group');if(!g)return;e.preventDefault();e.dataTransfer.dropEffect='move';$$('#todo-list .drop-hover').forEach(x=>{if(x!==g)x.classList.remove('drop-hover')});g.classList.add('drop-hover')});
+$('#todo-list')?.addEventListener('drop',e=>{if(TODO_DRAG<0)return;const gEl=e.target.closest('.todo-group');if(!gEl)return;e.preventDefault();
+ const name=gEl.dataset.g,a=todoLoad(),t=a[TODO_DRAG];TODO_DRAG=-1;if(!t)return;
+ const cur=t.group&&['기본',...todoGroups()].includes(t.group)?t.group:'기본';
+ if(name===cur){renderTodo();return}
+ if(name==='기본')delete t.group;else t.group=name;todoSave(a)});
 $('#task-item')?.addEventListener('change',()=>renderTaskList());
 $('#task-add')?.addEventListener('click',()=>{const name=(prompt('추가할 항목 이름')||'').trim();if(!name)return;const items=taskItems();if(items.includes(name)){alert('이미 있는 항목입니다.');return}items.push(name);saveItems(items);renderTaskList(name)});
 $('#task-rename')?.addEventListener('click',()=>{const items=taskItems(),cur=taskCurrentItem(),name=(prompt('항목 이름 변경',cur)||'').trim();if(!name||name===cur)return;if(items.includes(name)){alert('이미 있는 항목입니다.');return}items[items.indexOf(cur)]=name;saveItems(items);const s=taskLoad();if(s[cur]){s[name]=s[cur];delete s[cur]}if(Array.isArray(s.__archived)){const i=s.__archived.indexOf(cur);if(i>-1)s.__archived[i]=name}taskSave(s);renderTaskList(name)});
