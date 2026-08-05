@@ -209,7 +209,7 @@ function fillTodoGroups(){const sel=$('#todo-group');if(!sel)return;const cur=se
 function renderTodo(){const box=$('#todo-list');if(!box)return;fillTodoGroups();const a=todoLoad(),groups=todoGroups();
  if(!a.length&&!groups.length){box.innerHTML='<p class="empty">할 일을 한 줄 적고 ＋추가를 누르세요.</p>';return}
  const row=(t,i)=>{const imgs=(t.imgs||[]).map((d,k)=>`<img class="todo-thumb" src="${d}" alt="첨부 ${k+1}" title="클릭하면 크게 보기">`).join('');
-  return `<div class="todo-row${t.done?' done':''}" data-i="${i}"><input type="checkbox" ${t.done?'checked':''}><span class="todo-text">${esc(t.text)}${imgs?`<span class="todo-thumbs">${imgs}</span>`:''}</span><span class="todo-ts"${t.doneTs?` title="완료 ${todoFmt(t.doneTs)}"`:''}>${todoFmt(t.ts)}</span><button class="todo-del" type="button" title="삭제">✕</button></div>`};
+  return `<div class="todo-row${t.done?' done':''}" data-i="${i}"><input type="checkbox" ${t.done?'checked':''}><span class="todo-text">${esc(t.text)}${imgs?`<span class="todo-thumbs">${imgs}</span>`:''}</span><span class="todo-ts"${t.doneTs?` title="완료 ${todoFmt(t.doneTs)}"`:''}>${todoFmt(t.ts)}</span><button class="todo-edit" type="button" title="내용 수정">✎</button><button class="todo-del" type="button" title="삭제">✕</button></div>`};
  const names=['기본',...groups],buckets=Object.fromEntries(names.map(n=>[n,[]]));
  a.forEach((t,i)=>{buckets[t.group&&names.includes(t.group)?t.group:'기본'].push([t,i])});
  box.innerHTML=names.map(n=>{const list=buckets[n],undone=list.filter(([t])=>!t.done).length;
@@ -390,6 +390,7 @@ $('#todo-list')?.addEventListener('click',e=>{
  const th=e.target.closest('.todo-thumb');if(th){todoLightbox(th.src);return}
  const ren=e.target.closest('.todo-g-ren');if(ren){e.preventDefault();const cur=ren.dataset.g,name=(prompt('그룹 이름 변경',cur)||'').trim();if(!name||name===cur)return;const g=todoGroups();if(name==='기본'||g.includes(name)){alert('이미 있는 그룹입니다.');return}g[g.indexOf(cur)]=name;todoGroupsStore(g);todoSave(todoLoad().map(t=>t.group===cur?{...t,group:name}:t));const sel=$('#todo-group');if(sel)sel.value=name;return}
  const gd=e.target.closest('.todo-g-del');if(gd){e.preventDefault();const cur=gd.dataset.g;if(!confirm(`[${cur}] 그룹을 삭제할까요? 그룹의 할 일은 기본으로 이동합니다.`))return;todoGroupsStore(todoGroups().filter(x=>x!==cur));todoSave(todoLoad().map(t=>{if(t.group!==cur)return t;const{group,...rest}=t;return rest}));return}
+ const ed=e.target.closest('.todo-edit');if(ed){const row=ed.closest('.todo-row'),a=todoLoad(),t=a[+row.dataset.i];if(!t)return;const text=(prompt('할 일 내용 수정',t.text)||'').trim();if(!text||text===t.text)return;t.text=text;todoSave(a);return}
  const del=e.target.closest('.todo-del');if(!del)return;const row=del.closest('.todo-row'),a=todoLoad(),t=a[+row.dataset.i];if(!t)return;if(!confirm(`삭제할까요? — ${t.text}`))return;a.splice(+row.dataset.i,1);todoSave(a)});
 $('#task-item')?.addEventListener('change',()=>renderTaskList());
 $('#task-add')?.addEventListener('click',()=>{const name=(prompt('추가할 항목 이름')||'').trim();if(!name)return;const items=taskItems();if(items.includes(name)){alert('이미 있는 항목입니다.');return}items.push(name);saveItems(items);renderTaskList(name)});
