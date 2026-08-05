@@ -7,13 +7,13 @@
  *  2) 매매노트(시장 분위기 | 나의 판단)가 있으면 Gemini가 제목·개조식·종목 태그로
  *     정리하고 (실패 시 휴리스틱 폴백)
  *  3) 캡처를 Notion 파일 업로드 API로 올린 뒤
- *  4) Notion API로 MZ일기 > 📔 잔고·매매노트 DB에 새 페이지를 만들고
+ *  4) MZ일기 페이지 안의 기록 DB(첫 실행 때 자동 생성)에 새 페이지를 만들고
  *  5) {ok, title, bullets, stocks, date, balance, returnPct, url, imgOk, imgFail} 을 돌려준다.
  *
  * [설치 — 1회] (리멤버 기록기와 동일한 절차)
  *  1. https://www.notion.so/profile/integrations 의 내부 통합 시크릿(ntn_...) 재사용 가능
- *  2. Notion에서 📔 잔고·매매노트 DB를 전체 페이지로 연 뒤 우상단 ⋯ → 연결(Connections)
- *     → 통합 추가 (이걸 안 하면 404 납니다)
+ *  2. Notion에서 MZ일기 페이지 우상단 ⋯ → 연결(Connections) → 통합 추가
+ *     (이걸 안 하면 404 납니다. 기록 DB는 첫 기록 때 페이지 안에 자동 생성됨)
  *  3. script.google.com 새 프로젝트에 이 파일 전체 붙여넣기
  *  4. 프로젝트 설정(⚙) → 스크립트 속성 추가:
  *       NOTION_TOKEN   = ntn_...   (필수 — 리멤버와 같은 값이어도 됨)
@@ -26,9 +26,42 @@
  * [코드 수정 후] 배포 → 배포 관리 → ✏️ → 버전 "새 버전" → 배포 (URL은 그대로 유지됨)
  * ===================================================================== */
 
-const NOTION_DB_ID = 'b1038d361b3845f09335972a2df97c13'; // MZ일기 > 📔 잔고·매매노트
+const NOTION_PARENT_PAGE_ID = '3b357951c40c80208e07cacce843cfef'; // MZ일기 페이지 (이 안에 기록 DB를 자동 생성)
 const NOTION_VERSION = '2022-06-28';
 const GEMINI_MODEL = 'gemini-flash-lite-latest';
+
+/* 기록 DB는 첫 실행 때 MZ일기 페이지 안에 인라인으로 자동 생성하고
+ * 스크립트 속성 MZ_DB_ID에 기억해 둔다. (인라인 DB는 사이드바에 따로 안 보여서
+ * 기록 페이지들이 MZ일기 바로 밑에 쌓이는 모양이 된다) */
+function diaryDbId_(token) {
+  const sp = PropertiesService.getScriptProperties();
+  const saved = sp.getProperty('MZ_DB_ID');
+  if (saved) return saved;
+  const res = UrlFetchApp.fetch('https://api.notion.com/v1/databases', {
+    method: 'post', contentType: 'application/json', muteHttpExceptions: true,
+    headers: { Authorization: 'Bearer ' + token, 'Notion-Version': NOTION_VERSION },
+    payload: JSON.stringify({
+      parent: { type: 'page_id', page_id: NOTION_PARENT_PAGE_ID },
+      is_inline: true,
+      icon: { type: 'emoji', emoji: '📔' },
+      title: [{ type: 'text', text: { content: '기록' } }],
+      properties: {
+        Name: { title: {} },
+        Date: { date: {} },
+        '구분': { select: { options: [{ name: '잔고기록', color: 'blue' }, { name: '매매노트', color: 'orange' }] } },
+        '잔고': { number: { format: 'won' } },
+        '수익률': { number: { format: 'percent' } },
+        '종목': { multi_select: {} },
+      },
+    }),
+  });
+  if (res.getResponseCode() !== 200)
+    throw new Error('기록 DB 생성 실패 ' + res.getResponseCode() + ': ' + res.getContentText().slice(0, 300) +
+      ' — MZ일기 페이지에 통합(Connections)이 연결됐는지 확인하세요.');
+  const id = JSON.parse(res.getContentText()).id;
+  sp.setProperty('MZ_DB_ID', id);
+  return id;
+}
 
 function doGet() { return json_({ ok: true, app: 'mz-diary-notion' }); }
 
@@ -53,7 +86,7 @@ function doPost(e) {
       try { imgIds.push(uploadImage_(img, token)); } catch (err) { imgFail++; }
     });
 
-    const page = createNotionPage_(s, note, date, nums, imgIds, token);
+    const page = createNotionPage_(s, note, date, nums, imgIds, token, diaryDbId_(token));
     return json_({
       ok: true, title: s.title, bullets: s.bullets, stocks: s.stocks, ai: s.ai,
       date: date, balance: nums.balance, returnPct: nums.returnPct,
@@ -173,8 +206,23 @@ function uploadImage_(img, token) {
   return up.id;
 }
 
-/* ---------- 4) Notion 페이지 생성 ---------- */
-function createNotionPage_(s, note, date, nums, imgIds, token) {
+/* ---------- 4) Notion 페이지 생성 ----------
+ * DB 스키마를 먼저 읽어, 실제로 존재하는 속성만 채운다.
+ * → 제목 속성 이름이 '이름'이든 'Name'이든, 잔고·수익률 속성을 안 만들었든 모두 동작. */
+function dbProps_(token, dbId) {
+  const res = UrlFetchApp.fetch('https://api.notion.com/v1/databases/' + dbId, {
+    method: 'get', muteHttpExceptions: true,
+    headers: { Authorization: 'Bearer ' + token, 'Notion-Version': NOTION_VERSION },
+  });
+  if (res.getResponseCode() !== 200) throw new Error('Notion ' + res.getResponseCode() + ': ' + res.getContentText().slice(0, 300));
+  return JSON.parse(res.getContentText()).properties || {};
+}
+function findProp_(props, name, type) {
+  if (props[name] && props[name].type === type) return name;          // 이름·타입 일치 우선
+  for (var k in props) if (props[k].type === type) return k;          // 없으면 같은 타입 아무거나
+  return null;
+}
+function createNotionPage_(s, note, date, nums, imgIds, token, dbId) {
   const children = [para_('입력 날짜: ' + date, true)];
   const numLine = [];
   if (nums.balance !== null) numLine.push('잔고(평가금액): ' + fmtWon_(nums.balance));
@@ -194,23 +242,30 @@ function createNotionPage_(s, note, date, nums, imgIds, token) {
     });
   }
 
+  const props = dbProps_(token, dbId);
+  const properties = {};
+  const titleProp = findProp_(props, 'Name', 'title');
+  if (titleProp) properties[titleProp] = { title: rt_(s.title) };
+  const dateProp = findProp_(props, 'Date', 'date');
+  if (dateProp) properties[dateProp] = { date: { start: date } };
+  if (props['구분'] && props['구분'].type === 'select')
+    properties['구분'] = { select: { name: note ? '매매노트' : '잔고기록' } };
+  if (nums.balance !== null && props['잔고'] && props['잔고'].type === 'number')
+    properties['잔고'] = { number: nums.balance };
+  // Notion percent 포맷은 0~1 소수를 기대 → 7.7(%) 판독이면 0.077로 저장
+  if (nums.returnPct !== null && props['수익률'] && props['수익률'].type === 'number')
+    properties['수익률'] = { number: nums.returnPct / 100 };
+  if (s.stocks && s.stocks.length && props['종목'] && props['종목'].type === 'multi_select') {
+    // multi_select 옵션 이름에 콤마는 불가 → 공백으로 치환
+    properties['종목'] = { multi_select: s.stocks.map(function (t) { return { name: t.replace(/,/g, ' ') }; }) };
+  }
+
   const payload = {
-    parent: { database_id: NOTION_DB_ID },
+    parent: { database_id: dbId },
     icon: { type: 'emoji', emoji: '📔' },
-    properties: {
-      Name: { title: rt_(s.title) },
-      Date: { date: { start: date } },
-      '구분': { select: { name: note ? '매매노트' : '잔고기록' } },
-    },
+    properties: properties,
     children: children,
   };
-  if (nums.balance !== null) payload.properties['잔고'] = { number: nums.balance };
-  // Notion percent 포맷은 0~1 소수를 기대 → 7.7(%) 판독이면 0.077로 저장
-  if (nums.returnPct !== null) payload.properties['수익률'] = { number: nums.returnPct / 100 };
-  if (s.stocks && s.stocks.length) {
-    // multi_select 옵션 이름에 콤마는 불가 → 공백으로 치환
-    payload.properties['종목'] = { multi_select: s.stocks.map(function (t) { return { name: t.replace(/,/g, ' ') }; }) };
-  }
 
   const res = UrlFetchApp.fetch('https://api.notion.com/v1/pages', {
     method: 'post', contentType: 'application/json', muteHttpExceptions: true,
