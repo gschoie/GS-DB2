@@ -114,6 +114,7 @@ a.rep-title:hover{color:#386453;text-decoration:underline}
   .rep-links a{display:inline-block;margin-right:14px}
   .oc-cell small{white-space:normal}
 }
+.rep-rsn[title]{cursor:help}
 
 .todo-form{display:flex;gap:8px;background:#fff;border:1px solid var(--line);padding:14px;margin-bottom:14px}
 .todo-form input{flex:1;border:1px solid #cfd6d0;border-radius:8px;padding:12px 14px;font:14px/1.4 inherit;color:var(--ink);background:#fbfcfa}
