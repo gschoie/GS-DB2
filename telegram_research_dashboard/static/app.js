@@ -231,7 +231,7 @@ async function sendRemember(){
   box.hidden=false;$('#remember-text').value='';REMEMBER_IMGS.length=0;renderRememberPreviews();const fi=$('#remember-photos');if(fi)fi.value='';
  }catch(e){status.textContent='실패: '+e.message}
  finally{btn.disabled=false}}
-const MZDIARY_ENDPOINT='';/* mz일기→Notion GAS 웹앱 (gas/mz_diary_notion.gs). 비면 화면의 ⚙️ 연결 설정(localStorage) 사용 */
+const MZDIARY_ENDPOINT='https://script.google.com/macros/s/AKfycbzUhUwvnhmiz2qQz4NkJpSQgh2BuOpWcS7yPOXqQrBUFN40f6eIJW5i9Y_DV0gz3RekGQ/exec';/* MZ일기→Notion GAS 웹앱 (gas/mz_diary_notion.gs). 비면 화면의 ⚙️ 연결 설정(localStorage) 사용 */
 const MZDIARY_EP_KEY='mzdiary_endpoint_v1';
 function mzdiaryEndpoint(){if(MZDIARY_ENDPOINT)return MZDIARY_ENDPOINT;try{return localStorage.getItem(MZDIARY_EP_KEY)||''}catch{return''}}
 const MZDIARY_IMGS=[];/* {name,type,data(base64)} — 전송 전 대기 중인 잔고·수익률 캡처 */
