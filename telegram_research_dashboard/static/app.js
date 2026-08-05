@@ -98,8 +98,10 @@ function fillTaskItems(desired){const sel=$('#task-item');if(!sel)return;const i
  // 항목 우선순위: 명시 지정 > 화면에서 고른 값 > 마지막 사용 항목(재방문 시 근태입력으로 리셋 방지) > 첫 활성 항목
  const cur=items.includes(desired)?desired:(items.includes(sel.value)?sel.value:(items.includes(last)?last:(active[0]||items[0])));
  const opt=x=>`<option ${x===cur?'selected':''}>${esc(x)}</option>`;
- sel.innerHTML=active.map(opt).join('')+(arch.length?`<optgroup label="📦 보관함">${arch.map(opt).join('')}</optgroup>`:'');
+ sel.innerHTML=active.map(opt).join('')+(arch.includes(cur)?`<optgroup label="📦 보관함">${opt(cur)}</optgroup>`:'');
  const ab=$('#task-archive');if(ab)ab.textContent=arch.includes(cur)?'보관 해제':'보관';
+ const box=$('#task-archive-box');if(box){box.style.display=arch.length?'':'none';const sum=box.querySelector('summary');if(sum)sum.textContent=`📦 보관함 (${arch.length})`;
+  const list=$('#task-archive-list');if(list)list.innerHTML=arch.map(x=>`<span style="display:inline-flex;gap:2px"><button type="button" data-arch-open="${esc(x)}"${x===cur?' style="font-weight:700"':''} title="지난 기록 열람">${esc(x)}</button><button type="button" data-arch-restore="${esc(x)}" title="진행 중 목록으로 복원">↩ 복원</button></span>`).join('')}
  try{localStorage.setItem(TASK_LAST_KEY,cur)}catch{}}
 const taskAllNames=()=>TASK_ROSTER.flatMap(([,ns])=>ns);
 function taskLoad(){try{return JSON.parse(localStorage.getItem(TASK_KEY))||{}}catch{return{}}}
@@ -247,6 +249,9 @@ $('#task-del')?.addEventListener('click',()=>{const items=taskItems(),cur=taskCu
 $('#task-archive')?.addEventListener('click',()=>{const cur=taskCurrentItem(),s=taskLoad(),arch=Array.isArray(s.__archived)?s.__archived:[];const wasArch=arch.includes(cur);
  s.__archived=wasArch?arch.filter(x=>x!==cur):[...arch,cur];taskSave(s);
  renderTaskList(wasArch?cur:(taskItems().find(x=>!s.__archived.includes(x))||cur))});
+$('#task-archive-list')?.addEventListener('click',e=>{const o=e.target.dataset.archOpen,r=e.target.dataset.archRestore;
+ if(o)renderTaskList(o);
+ else if(r){const s=taskLoad();s.__archived=(Array.isArray(s.__archived)?s.__archived:[]).filter(x=>x!==r);taskSave(s);renderTaskList(r)}});
 $('#task-table')?.addEventListener('click',e=>{if(e.target.closest('th.task-sort')){taskSortByName=!taskSortByName;renderTaskList()}});
 $('#task-table')?.addEventListener('change',e=>{const tr=e.target.closest('tr[data-name]');if(tr&&e.target.dataset.f==='done')taskUpdate(tr.dataset.name,'done',e.target.checked)});
 $('#task-table')?.addEventListener('input',e=>{const tr=e.target.closest('tr[data-name]'),f=e.target.dataset.f;if(tr&&(f==='resp'||f==='note'))taskUpdate(tr.dataset.name,f,e.target.value)});
