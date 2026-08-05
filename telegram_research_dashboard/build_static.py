@@ -12,6 +12,7 @@ from urllib.request import Request, urlopen
 
 from db import connect, initialize
 from parser import APPROVED_COMPANIES
+from tone_market import attach_tone_market
 
 
 ROOT = Path(__file__).resolve().parent
@@ -103,6 +104,10 @@ def build() -> Path:
     report_counts = Counter(name for item in reports if item.get("report_type") != "위클리" for name in item["company_names"])
     report_companies = [{"name": name, "mentions": count} for name, count in sorted(report_counts.items(), key=lambda x: (-x[1], x[0]))]
 
+    # DAOL 톤 보드(AI 분석)·컨센 DB 접목: 보고서별 tone 필드 + 종목별 시장 스냅샷(market).
+    # 기업명 정규화(위 화이트리스트) 이후에 돌아야 톤 데이터의 표준명과 맞아떨어진다.
+    market = attach_tone_market(reports, previous_payload)
+
     # 뉴스 키워드 검색(nq)용 텔레그램 원문. 메시지 단위로 중복 제거해 임베드한다(약 +2MB).
     with connect() as conn:
         news_texts = {str(row["id"]): row["text"] for row in conn.execute(
@@ -130,7 +135,7 @@ def build() -> Path:
             defense_brief = {"date": latest.stem, "summary": summary_md}
     payload = json.dumps(
         {"summary": summary, "reports": reports, "news": news, "companies": companies,
-         "reportCompanies": report_companies, "newsTexts": news_texts,
+         "reportCompanies": report_companies, "newsTexts": news_texts, "market": market,
          "union": union, "macro": macro, "defenseBrief": defense_brief},
         ensure_ascii=False, separators=(",", ":"),
     ).replace("</", "<\\/").replace("\u2028", "\\u2028").replace("\u2029", "\\u2029")

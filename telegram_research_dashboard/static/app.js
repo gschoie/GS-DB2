@@ -1,7 +1,7 @@
 const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
 const dateValue=d=>`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
 const today=new Date(),weekAgo=new Date(today);weekAgo.setDate(today.getDate()-7);
-const state={q:'',reportCompany:'',newsCompany:'',newsQ:'',reportType:'',weeklyFolder:'',pressStart:dateValue(weekAgo),pressEnd:dateValue(today),pressCompany:'',pressRows:[],reports:[],news:[],companies:[],reportCompanies:[]};
+const state={q:'',reportCompany:'',newsCompany:'',newsQ:'',reportType:'',weeklyFolder:'',pressStart:dateValue(weekAgo),pressEnd:dateValue(today),pressCompany:'',pressRows:[],reports:[],news:[],companies:[],reportCompanies:[],repFrom:'',repTo:'',repDays:0,repSort:''};
 const fmtDate=s=>new Intl.DateTimeFormat('ko-KR',{year:'2-digit',month:'2-digit',day:'2-digit'}).format(new Date(s));
 const won=n=>n?`${Number(n).toLocaleString()}원`:'—';
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -24,6 +24,67 @@ function localData(url){
 }
 async function json(url){const local=localData(url);if(local!==null)return local;const r=await fetch(url);if(!r.ok)throw new Error(r.status);return r.json()}
 function reportRow(r){const kind=r.report_type||'기업분석',kindClass=kind==='산업분석'?'industry':kind==='위클리'?'weekly':'';const names=(r.company_names?.length?r.company_names:String(r.companies_label||r.company_name||'').split(',').map(s=>s.trim())).filter(Boolean);const label=names.length?names.map(n=>`<button type="button" class="company-chip" data-company="${esc(n)}" title="${esc(n)} 자료만 모아보기">${esc(n)}</button>`).join(''):`<b>${esc(kind==='산업분석'||kind==='위클리'?'산업 자료':'기업 미확인')}</b>`;const links=[r.source_url?`<a href="${esc(r.source_url)}" target="_blank" rel="noopener">텔레그램 ↗</a>`:'',r.original_url?`<a href="${esc(r.original_url)}" target="_blank" rel="noopener">리포트 ↗</a>`:''].filter(Boolean).join('')||'<span class="no-link">—</span>';const tag=r.target_change&&r.target_change!=='미확인'?`<span class="tag ${r.target_change==='상향'?'up':r.target_change==='하향'?'down':''}">${esc(r.target_change)}</span>`:'';return `<div class="research-row"><small>${fmtDate(r.posted_at)}</small><div class="row-title"><span class="report-kind ${kindClass}">${esc(kind)}</span>${r.weekly_folder?`<span class="weekly-source">${esc(r.weekly_folder)}</span>`:''}${label}</div><div class="row-main"><p>${esc(r.title)}</p>${r.needs_review?'<span class="review">검토 필요</span>':''}</div><div class="row-links">${links}</div><span class="price">${tag}${won(r.target_price)}${r.target_price&&r.previous_target_price>=1000&&r.previous_target_price!==r.target_price?`<small class="prev-price">(직전 ${Number(r.previous_target_price).toLocaleString()})</small>`:''}</span></div>`}
+/* ── GS 산출물 표: DAOL 톤 보드의 pub-table 레이아웃 이식 ──
+   행별 톤 필드(r.tone: one_line·points·tp_reasons·earn)는 빌드 때 tone_market.py가
+   다올 톤 보드 데이터를 매칭해 붙이고, 종목별 시장 스냅샷(내 영업이익 추정 vs 컨센,
+   타사 TP MAX/MIN/중앙값·커버 증권사 수)은 payload.market으로 내려온다. */
+const MARKET=()=>window.__DASHBOARD_DATA__?.market||{};
+const fmtEok=v=>v==null?'—':Math.abs(v)>=10000?(v/10000).toFixed(1).replace(/\.0$/,'')+'조':Math.round(v).toLocaleString()+'억';
+const fmtTPman=v=>v==null?'—':v>=10000?(Math.round(v/100)/100).toLocaleString()+'만':Number(v).toLocaleString();
+const yymmdd=s=>{const d=new Date(s);return `${String(d.getFullYear()).slice(2)}.${String(d.getMonth()+1).padStart(2,'0')}.${String(d.getDate()).padStart(2,'0')}`};
+function singleCompany(r){const names=r.company_names||[];return r.report_type==='기업분석'&&names.length===1?names[0]:null}
+function opConsCell(r){const name=singleCompany(r),m=name?MARKET()[name]:null;
+ if(!m||(!m.cons&&!m.mine))return '<span class="no-link">—</span>';
+ const yr=l=>String(l||'').slice(0,4),cons=m.cons||{},mine=m.mine,cy=cons.this,rows=[];
+ if(cy){const match=mine&&yr(mine.label)===yr(cy.label);const diff=match&&cy.op?Math.round((mine.op/cy.op-1)*1000)/10:null;
+  rows.push(`<span class="oc-line"><em>${yr(cy.label).slice(2)}E</em>${match?` 나 <b>${fmtEok(mine.op)}</b> · 컨 ${fmtEok(cy.op)}${diff!=null?` <i class="${diff>=0?'up':'down'}">${diff>0?'+':''}${diff}%</i>`:''}`:` 컨 ${fmtEok(cy.op)}`}</span>`)}
+ if(cons.next)rows.push(`<span class="oc-line"><em>${yr(cons.next.label).slice(2)}E</em> 컨 ${fmtEok(cons.next.op)}</span>`);
+ if(mine&&(!cy||yr(mine.label)!==yr(cy.label)))rows.push(`<span class="oc-line oc-stale"><em>${esc(mine.label||'')}</em> 나 ${fmtEok(mine.op)}</span>`);
+ if(!rows.length)return '<span class="no-link">—</span>';
+ const tip=[mine?`내 추정: ${mine.date} 리포트에서 추출${mine.diff_at_pct!=null?` (당시 컨센 대비 ${mine.diff_at_pct>0?'+':''}${mine.diff_at_pct}%)`:''}`:'',cons.asof?`컨센 스냅샷: ${cons.asof} (KOSPI 컨센 트래커, 억원)`:''].filter(Boolean).join('\n');
+ return `<div class="oc-cell" title="${esc(tip)}">${rows.join('')}</div>`}
+function streetCell(r){const name=singleCompany(r),st=name?(MARKET()[name]||{}).street:null;
+ if(!st)return '<span class="no-link">—</span>';
+ const tip=`타사 TP (한경 에이셀 60일 · ~${st.asof})\n${(st.brokers||[]).join(', ')}${st.daol?`\n다올 ${Number(st.daol).toLocaleString()}원${st.daol_pct!=null?` — 타사 ${st.n}곳 중 상위 ${100-st.daol_pct}%`:''}`:''}`;
+ return `<div class="oc-cell" title="${esc(tip)}"><span class="oc-line">↑${fmtTPman(st.max)} · <b>중 ${fmtTPman(st.median)}</b> · ↓${fmtTPman(st.min)}</span><small>${st.n}개사 커버${st.daol?` · 다올 ${fmtTPman(st.daol)}`:''}</small></div>`}
+function repRank(r,key){const t=r.tone||{};
+ if(key==='tp')return ['상향','하향'].includes(r.target_change)?2:(r.target_price?1:0);
+ if(key==='earn')return ['상향','하향'].includes(t.earn)?1:0;
+ if(key==='pts')return (t.points||[]).length?1:0;
+ if(key==='est')return t.est||MARKET()[singleCompany(r)]?.mine?1:0;
+ return 0}
+function reportTableRow(r){const t=r.tone||{},kind=r.report_type||'기업분석';
+ const kindCell=kind==='위클리'?`<span class="rep-kind strat">위클리</span>${r.weekly_folder?`<div class="rep-sub">${esc(r.weekly_folder)}</div>`:''}`:kind==='산업분석'?'<span class="rep-kind ind">산업</span>':'<span class="rep-kind co">기업</span>';
+ const names=(r.company_names?.length?r.company_names:String(r.companies_label||r.company_name||'').split(',').map(s=>s.trim())).filter(Boolean);
+ const company=names.map(n=>`<button type="button" class="company-chip" data-company="${esc(n)}" title="${esc(n)} 자료만 모아보기">${esc(n)}</button>`).join('')||'<span class="no-link">—</span>';
+ const dir=r.target_change,cls=dir==='상향'?'up':dir==='하향'?'down':'';
+ let tp='<span class="no-link">—</span>';
+ if(r.target_price){const prev=r.previous_target_price>=1000&&r.previous_target_price!==r.target_price?`<small>직전 ${Number(r.previous_target_price).toLocaleString()}</small>`:'';
+  tp=`<span class="rep-tp ${cls}">${dir==='상향'?'▲':dir==='하향'?'▼':'●'} ${Number(r.target_price).toLocaleString()}원</span>${prev}`}
+ else if(dir==='상향'||dir==='하향')tp=`<span class="rep-tp ${cls}">${dir==='상향'?'▲':'▼'} ${dir}</span>`;
+ const reasons=(t.tp_reasons||[]).map(x=>`<i class="tp-reason">${esc(x)}</i>`).join('');
+ const opinion=r.opinion?`<div class="rep-sub">${esc(r.opinion)}</div>`:'';
+ const earn=['상향','하향'].includes(t.earn)?`<span class="${t.earn==='상향'?'pub-up':'pub-down'}" title="${esc(t.earn_ev||'')}">${t.earn==='상향'?'▲':'▼'}</span>`:'<span class="no-link">—</span>';
+ const pts=(t.points||[]).length?t.points.slice(0,3).map(x=>`<span class="pt-chip">${esc(x)}</span>`).join(''):'<span class="no-link">—</span>';
+ const url=r.original_url||r.source_url;
+ const title=`${url?`<a class="rep-title" href="${esc(url)}" target="_blank" rel="noopener">${esc(r.title)}</a>`:`<span class="rep-title">${esc(r.title)}</span>`}${t.one_line?`<div class="rep-desc">${esc(t.one_line)}</div>`:''}${r.needs_review?'<span class="review">검토 필요</span>':''}`;
+ const links=[r.source_url?`<a class="table-link telegram-link" href="${esc(r.source_url)}" target="_blank" rel="noopener">텔레그램 ↗</a>`:'',r.original_url?`<a class="table-link" href="${esc(r.original_url)}" target="_blank" rel="noopener">리포트 ↗</a>`:''].filter(Boolean).join('')||'<span class="no-link">—</span>';
+ return `<tr><td>${kindCell}</td><td class="news-date">${yymmdd(r.posted_at)}</td><td class="rep-co">${company}</td><td class="rep-tpc" data-th="적정주가">${tp}${opinion}${reasons?`<div class="rep-rsn">${reasons}</div>`:''}</td><td class="rep-earn" data-th="실적">${earn}</td><td class="rep-est" data-th="영업이익 나 vs 컨센">${opConsCell(r)}</td><td class="rep-street" data-th="시장 TP">${streetCell(r)}</td><td class="rep-pts" data-th="투자포인트">${pts}</td><td class="rep-titlec">${title}</td><td class="rep-links">${links}</td></tr>`}
+function renderReportTable(){const box=$('#report-table');if(!box)return;
+ const todayStr=dateValue(new Date());
+ let from=state.repFrom,to=state.repTo||todayStr;
+ if(!from&&state.repDays){const d=new Date();d.setDate(d.getDate()-state.repDays);from=dateValue(d)}
+ let list=state.reports.filter(r=>{if(!from)return true;const day=dateValue(new Date(r.posted_at));return day>=from&&day<=to});
+ if(state.repSort)list=[...list].sort((a,b)=>repRank(b,state.repSort)-repRank(a,state.repSort)||new Date(b.posted_at)-new Date(a.posted_at));
+ const presets=[[0,'전체'],[7,'주간'],[30,'월간'],[90,'분기'],[180,'반기']];
+ const bar=`<div class="rep-range"><input type="date" id="rep-from" value="${from||''}" max="${todayStr}"><span>~</span><input type="date" id="rep-to" value="${to}" max="${todayStr}">${presets.map(([d,l])=>`<button type="button" class="rep-preset${!state.repFrom&&state.repDays===d?' on':''}" data-days="${d}">${l}</button>`).join('')}<strong>${list.length.toLocaleString()}건${state.repSort?' · 정렬됨':''}</strong></div>`;
+ const ind=k=>state.repSort===k?' ▼':'';
+ box.innerHTML=bar+(list.length?`<div class="rep-wrap"><table class="rep-table"><colgroup><col class="c-kind"><col class="c-date"><col class="c-co"><col class="c-tp"><col class="c-earn"><col class="c-est"><col class="c-street"><col class="c-pts"><col><col class="c-links"></colgroup><thead><tr><th>구분</th><th>날짜${state.repSort?'':' ▼'}</th><th>기업</th><th id="th-rp-tp" class="th-sort" title="적정주가 변경 우선 정렬">적정주가${ind('tp')}</th><th id="th-rp-earn" class="th-sort" title="실적추정 방향 있는 것 우선">실적${ind('earn')}</th><th id="th-rp-est" class="th-sort" title="내 추정·컨센 있는 것 우선">영업이익 나 vs 컨센${ind('est')}</th><th title="타사 TP 최고/중앙/최저 · 커버 증권사 수 (한경 에이셀 60일)">시장 TP</th><th id="th-rp-pts" class="th-sort" title="투자포인트 있는 것 우선">투자포인트${ind('pts')}</th><th>제목 · 설명</th><th>링크</th></tr></thead><tbody>${list.map(reportTableRow).join('')}</tbody></table></div>`:'<p class="empty">조건에 맞는 보고서가 없습니다.</p>');
+ const rf=$('#rep-from'),rt=$('#rep-to');
+ const applyRange=()=>{state.repFrom=rf.value;state.repTo=rt.value;renderReportTable()};
+ if(rf)rf.onchange=applyRange;if(rt)rt.onchange=applyRange;
+ box.querySelectorAll('.rep-preset').forEach(b=>b.onclick=()=>{state.repFrom='';state.repTo='';state.repDays=+b.dataset.days;renderReportTable()});
+ box.querySelectorAll('.th-sort').forEach(th=>th.onclick=()=>{const key={'th-rp-tp':'tp','th-rp-earn':'earn','th-rp-est':'est','th-rp-pts':'pts'}[th.id];if(!key)return;state.repSort=state.repSort===key?'':key;renderReportTable()})}
 function newsCard(n){return `<article class="news-card"><small>${fmtDate(n.posted_at)} · ${esc(n.industry||n.event_type)}</small><h3>${esc(n.title)}</h3><p class="tag">${esc(n.companies_label||n.company_name||'기업 미확인')}</p>${n.article_url?`<a href="${esc(n.article_url)}" target="_blank" rel="noopener">기사 원문 ↗</a>`:''}${n.source_url?` · <a href="${esc(n.source_url)}" target="_blank" rel="noopener">텔레그램 ↗</a>`:''}</article>`}
 function newsTable(list){return `<div class="news-table-wrap"><table class="news-table"><colgroup><col class="date-col"><col class="company-col"><col><col class="publisher-col"><col class="comment-col"><col class="link-col"><col class="telegram-col"></colgroup><thead><tr><th>날짜</th><th>기업명</th><th>제목</th><th>출처(언론사)</th><th>내 코멘트</th><th>링크</th><th>텔레그램 링크</th></tr></thead><tbody>${list.map(n=>`<tr><td class="news-date">${fmtDate(n.posted_at)}</td><td>${(n.company_names?.length?n.company_names:String(n.companies_label||n.company_name||'').split(',').map(s=>s.trim())).filter(Boolean).map(name=>`<button type="button" class="news-company-chip${state.newsCompany===name?' active':''}" data-company="${esc(name)}" title="${esc(name)} 뉴스만 보기 (다시 누르면 해제)">${esc(name)}</button>`).join('')||'<span class="company-label">기업 미확인</span>'}</td><td class="news-title">${esc(n.title)}</td><td>${esc(pressPublisher(n))}</td><td class="news-comment">${n.comment?`<div class="comment-clip" title="${esc(n.comment)}">${esc(n.comment)}</div>`:'<span class="no-link">N/A</span>'}</td><td>${n.article_url?`<a class="table-link" href="${esc(n.article_url)}" target="_blank" rel="noopener" aria-label="기사 원문 열기">기사 ↗</a>`:'<span class="no-link">—</span>'}</td><td>${n.source_url?`<a class="table-link telegram-link" href="${esc(n.source_url)}" target="_blank" rel="noopener" aria-label="텔레그램 원문 열기">텔레그램 ↗</a>`:'<span class="no-link">—</span>'}</td></tr>`).join('')}</tbody></table></div>`}
 function pressSector(n){const industry=n.industry||'',text=`${n.companies_label||n.company_name||''} ${n.title||''}`;if(industry==='조선'||['해양','LNG','가스선','컨테이너','탱커'].includes(industry))return '조선';if(industry==='방산')return '방산';if(industry==='기계'||industry==='건설기계')return '건설기계';if(/HD건설기계|현대건설기계|두산밥캣|두산인프라|디벨론|굴착기|건설기계/.test(text))return '건설기계';if(/한화오션|HD현대중공업|HD한국조선해양|삼성중공업|HD현대미포|K조선|HJ중공업|대한조선|조선|선박|VLCC|LNG선|컨테이너선/.test(text))return '조선';if(/KAI|한국항공우주|한화에어로|한화시스템|현대로템|LIG|풍산|방산|KF-21|K9|K2|천궁|자주포|전투기|미사일|고스트로보틱스|로봇개/.test(text))return '방산';return null}
@@ -68,7 +129,7 @@ async function load(){
  $('#updated-at').textContent=sum.updated_at?new Intl.DateTimeFormat('ko-KR',{year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit'}).format(new Date(sum.updated_at)):'미확인';
  $('#weekly-all-count').textContent=`${weeklyReports.length}건`;$('#weekly-daol-count').textContent=`${weeklyReports.filter(r=>r.weekly_folder==='다올선박').length}건`;$('#weekly-kis-count').textContent=`${weeklyReports.filter(r=>r.weekly_folder==='한투시절').length}건`;$('#weekly-hi-count').textContent=`${weeklyReports.filter(r=>r.weekly_folder==='하이투자증권시절').length}건`;
  $('#latest-reports').innerHTML=reports.slice(0,5).map(reportRow).join('')||'<p class="empty">수집된 보고서가 없습니다.</p>';
- $('#report-table').innerHTML=reports.map(reportRow).join('')||'<p class="empty">조건에 맞는 보고서가 없습니다.</p>';
+ renderReportTable();
  $('#latest-news').innerHTML=news.slice(0,6).map(overviewNews).join('')||'<p class="empty">수집된 뉴스가 없습니다.</p>';
  fetchToneSummary();
  const unionTop=window.__DASHBOARD_DATA__?.union?.monthly||[];
