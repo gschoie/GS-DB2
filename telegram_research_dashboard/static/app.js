@@ -105,8 +105,9 @@ async function taskPull(){if(!TASK_ENDPOINT)return false;const status=$('#task-s
 function taskCurrentItem(){return $('#task-item')?.value||taskItems()[0]}
 function renderTaskSummary(){const st=taskLoad()[taskCurrentItem()]||{},names=taskAllNames(),pending=names.filter(n=>!st[n]?.done);$('#task-summary').innerHTML=`완료 <b>${names.length-pending.length}</b> / ${names.length}`+(pending.length?` · 미응답: ${esc(pending.join(', '))}`:' · 전원 완료 🎉')}
 let taskSortByName=false;
+const TASK_RA=['이준범','김진영','김상혁','박소현','한수빈'];
 function renderTaskList(desired){fillTaskItems(desired);const st=taskLoad()[taskCurrentItem()]||{};
- const row=n=>{const r=st[n]||{};return `<tr data-name="${esc(n)}"><td class="task-name">${esc(n)}</td><td class="task-done"><input type="checkbox" data-f="done" ${r.done?'checked':''}></td><td><input class="task-in" data-f="resp" placeholder="응답내용" value="${esc(r.resp||'')}"></td><td><input class="task-in" data-f="note" placeholder="비고" value="${esc(r.note||'')}"></td></tr>`};
+ const row=n=>{const r=st[n]||{};return `<tr data-name="${esc(n)}"><td class="task-name"${TASK_RA.includes(n)?' style="color:#9aa0a6"':''}>${esc(n)}</td><td class="task-done"><input type="checkbox" data-f="done" ${r.done?'checked':''}></td><td><input class="task-in" data-f="resp" placeholder="응답내용" value="${esc(r.resp||'')}"></td><td><input class="task-in" data-f="note" placeholder="비고" value="${esc(r.note||'')}"></td></tr>`};
  const body=taskSortByName
   ?taskAllNames().slice().sort((a,b)=>a.localeCompare(b,'ko')).map(row).join('')
   :TASK_ROSTER.map(([part,names])=>`<tr class="task-group"><td colspan="4">${esc(part)}</td></tr>`+names.map(row).join('')).join('');
