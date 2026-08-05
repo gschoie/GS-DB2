@@ -36,7 +36,7 @@ function doPost(e) {
   try {
     const body = JSON.parse((e.postData && e.postData.contents) || '{}');
     const note = String(body.note || '').trim();               // 매매노트 (시장 분위기 | 나의 판단)
-    const images = Array.isArray(body.images) ? body.images.slice(0, 8) : []; // 잔고·수익률 캡처
+    const images = Array.isArray(body.images) ? body.images.slice(0, 5) : []; // 잔고·수익률 캡처 (최대 5장)
     if (!note && !images.length)
       return json_({ ok: false, error: '잔고·수익률 캡처를 첨부하거나 매매노트를 입력해 주세요.' });
 
