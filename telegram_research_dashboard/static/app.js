@@ -234,25 +234,28 @@ async function sendRemember(){
 const MZDIARY_ENDPOINT='';/* mz일기→Notion GAS 웹앱 (gas/mz_diary_notion.gs). 비면 화면의 ⚙️ 연결 설정(localStorage) 사용 */
 const MZDIARY_EP_KEY='mzdiary_endpoint_v1';
 function mzdiaryEndpoint(){if(MZDIARY_ENDPOINT)return MZDIARY_ENDPOINT;try{return localStorage.getItem(MZDIARY_EP_KEY)||''}catch{return''}}
+const MZDIARY_IMGS=[];/* {name,type,data(base64)} — 전송 전 대기 중인 잔고·수익률 캡처 */
+function renderMzdiaryPreviews(){const box=$('#mzdiary-previews');if(!box)return;box.innerHTML=MZDIARY_IMGS.map((im,i)=>`<span class="rp"><img src="data:${im.type};base64,${im.data}" alt="${esc(im.name)}" title="${esc(im.name)}"><button type="button" data-rmimg="${i}" title="제거">×</button></span>`).join('')}
+async function addMzdiaryPhotos(files){const status=$('#mzdiary-status');for(const f of Array.from(files||[])){if(MZDIARY_IMGS.length>=8){status.textContent='⚠ 사진은 최대 8장까지';break}
+  try{MZDIARY_IMGS.push(await shrinkImage(f))}catch{status.textContent=`⚠ ${f.name||'사진'} 은 읽지 못해 건너뜀`}}
+ renderMzdiaryPreviews()}
 async function sendMzDiary(){
- const balance=($('#mzdiary-balance')?.value||'').trim(),returnPct=($('#mzdiary-return')?.value||'').trim(),note=($('#mzdiary-note')?.value||'').trim();
- const status=$('#mzdiary-status'),btn=$('#mzdiary-send'),box=$('#mzdiary-result');
- if(!balance&&!returnPct&&!note){status.textContent='⚠ 잔고·수익률·매매노트 중 하나는 입력해 주세요';return}
- if(balance&&isNaN(Number(balance.replace(/[,\s원]/g,'')))){status.textContent='⚠ 잔고는 숫자로 입력해 주세요 (예: 12,345,678)';return}
- if(returnPct&&isNaN(Number(returnPct.replace(/[%\s]/g,'')))){status.textContent='⚠ 수익률은 숫자로 입력해 주세요 (예: 7.7)';return}
+ const note=($('#mzdiary-note')?.value||'').trim(),status=$('#mzdiary-status'),btn=$('#mzdiary-send'),box=$('#mzdiary-result');
+ if(!note&&!MZDIARY_IMGS.length){status.textContent='⚠ 잔고·수익률 캡처를 첨부하거나 매매노트를 입력해 주세요';return}
  const ep=mzdiaryEndpoint();
  if(!ep){status.textContent='⚠ 아래 ⚙️ 연결 설정에서 GAS 웹앱 URL을 먼저 저장해 주세요';const st=$('#mzdiary-setup');if(st)st.open=true;return}
- status.textContent=note?'AI 정리 + Notion 저장 중… (10초 안팎)':'Notion 저장 중…';btn.disabled=true;box.hidden=true;
+ status.textContent=MZDIARY_IMGS.length?`AI 정리 + 사진 ${MZDIARY_IMGS.length}장 업로드 중… (사진 장수에 따라 수십 초)`:'AI 정리 + Notion 저장 중… (10초 안팎)';btn.disabled=true;box.hidden=true;
  try{
-  const r=await fetch(ep,{method:'POST',body:JSON.stringify({balance,returnPct,note})});
+  const r=await fetch(ep,{method:'POST',body:JSON.stringify({note,images:MZDIARY_IMGS})});
   const d=await r.json();
   if(!d.ok)throw new Error(d.error||'저장 실패');
-  status.textContent=note?(d.ai?'✅ 저장 완료 (AI 정리)':'✅ 저장 완료 (원문 기반 — GEMINI_API_KEY 미설정)'):'✅ 저장 완료';
+  status.textContent=(d.ai?'✅ 저장 완료 (AI 정리)':'✅ 저장 완료')+(d.imgFail?` · ⚠ 사진 ${d.imgFail}장 실패`:'');
   const bullets=(d.bullets||[]).map(b=>`  • ${esc(b)}`).join('\n');
   const stocks=(d.stocks||[]).length?`\n- 종목: ${esc(d.stocks.join(', '))}`:'';
   const nums=[d.balance!=null?`잔고 ${Number(d.balance).toLocaleString('ko-KR')}원`:'',d.returnPct!=null?`수익률 ${d.returnPct}%`:''].filter(Boolean).join(' · ');
-  box.innerHTML=`📌 [MZ일기 / 잔고·매매노트] 신규 페이지 생성 완료\n\n■ 페이지 제목: ${esc(d.title||'')}\n■ 생성 경로: MZ일기 &gt; 잔고·매매노트 &gt; ${esc(d.title||'')}\n\n■ 본문 내용:\n- 입력 날짜: ${esc(d.date||'')}${nums?`\n- ${esc(nums)}`:''}${stocks}${bullets?`\n- 주요 내용:\n${bullets}`:''}`+(d.url?`\n\n<a href="${esc(d.url)}" target="_blank" rel="noopener">Notion에서 열기 ↗</a>`:'');
-  box.hidden=false;$('#mzdiary-balance').value='';$('#mzdiary-return').value='';$('#mzdiary-note').value='';
+  const photos=d.imgOk?`\n- 사진: ${d.imgOk}장 첨부`:'';
+  box.innerHTML=`📌 [MZ일기 / 잔고·매매노트] 신규 페이지 생성 완료\n\n■ 페이지 제목: ${esc(d.title||'')}\n■ 생성 경로: MZ일기 &gt; 잔고·매매노트 &gt; ${esc(d.title||'')}\n\n■ 본문 내용:\n- 입력 날짜: ${esc(d.date||'')}${nums?`\n- ${esc(nums)} (캡처에서 AI 판독)`:''}${stocks}${photos}${bullets?`\n- 주요 내용:\n${bullets}`:''}`+(d.url?`\n\n<a href="${esc(d.url)}" target="_blank" rel="noopener">Notion에서 열기 ↗</a>`:'');
+  box.hidden=false;$('#mzdiary-note').value='';MZDIARY_IMGS.length=0;renderMzdiaryPreviews();const fi=$('#mzdiary-photos');if(fi)fi.value='';
  }catch(e){status.textContent='실패: '+e.message}
  finally{btn.disabled=false}}
 async function dispatchEtf(){
@@ -321,6 +324,8 @@ $('#remember-previews')?.addEventListener('click',e=>{const b=e.target.closest('
 $('#remember-endpoint-save')?.addEventListener('click',()=>{const v=($('#remember-endpoint')?.value||'').trim();if(!/^https:\/\/script\.google\.com\/.+\/exec$/.test(v)){alert('GAS 웹앱 /exec URL 형식이 아닙니다.');return}try{localStorage.setItem(REMEMBER_EP_KEY,v)}catch{}$('#remember-status').textContent='☁ URL 저장됨 — 이제 기록할 수 있습니다';const st=$('#remember-setup');if(st)st.open=false});
 {const _rep=$('#remember-endpoint');if(_rep)_rep.value=rememberEndpoint();}
 $('#mzdiary-send')?.addEventListener('click',sendMzDiary);
+$('#mzdiary-photos')?.addEventListener('change',e=>{addMzdiaryPhotos(e.target.files);e.target.value=''});
+$('#mzdiary-previews')?.addEventListener('click',e=>{const b=e.target.closest('[data-rmimg]');if(!b)return;MZDIARY_IMGS.splice(+b.dataset.rmimg,1);renderMzdiaryPreviews()});
 $('#mzdiary-endpoint-save')?.addEventListener('click',()=>{const v=($('#mzdiary-endpoint')?.value||'').trim();if(!/^https:\/\/script\.google\.com\/.+\/exec$/.test(v)){alert('GAS 웹앱 /exec URL 형식이 아닙니다.');return}try{localStorage.setItem(MZDIARY_EP_KEY,v)}catch{}$('#mzdiary-status').textContent='☁ URL 저장됨 — 이제 기록할 수 있습니다';const st=$('#mzdiary-setup');if(st)st.open=false});
 {const _mep=$('#mzdiary-endpoint');if(_mep)_mep.value=mzdiaryEndpoint();}
 $('#etf-refresh')?.addEventListener('click',dispatchEtf);

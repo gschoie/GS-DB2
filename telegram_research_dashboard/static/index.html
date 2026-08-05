@@ -261,18 +261,14 @@
     </section>
 
     <section id="mzdiary" class="view">
-      <div class="archive-intro"><div><p class="eyebrow">NOTION · MZ DIARY</p><h2>mz일기 → 잔고·매매노트 기록</h2></div><div class="etf-actions"><span>잔고·수익률 숫자와 매매노트를 적으면 AI가 정리해 MZ일기 &gt; 잔고·매매노트 DB에 새 페이지로 저장합니다.</span><a class="panel-more" href="https://www.notion.so/b1038d361b3845f09335972a2df97c13" target="_blank" rel="noopener">📔 mz일기 열기 ↗</a></div></div>
+      <div class="archive-intro"><div><p class="eyebrow">NOTION · MZ DIARY</p><h2>mz일기 → 잔고·매매노트 기록</h2></div><div class="etf-actions"><span>잔고·수익률 캡처 사진과 매매노트를 올리면 AI가 정리해 MZ일기 &gt; 잔고·매매노트 DB에 새 페이지로 저장합니다.</span><a class="panel-more" href="https://www.notion.so/b1038d361b3845f09335972a2df97c13" target="_blank" rel="noopener">📔 mz일기 열기 ↗</a></div></div>
       <div class="dart-form">
-        <div class="mzdiary-nums">
-          <label>잔고 (평가금액, 원) <small>(선택)</small>
-            <input id="mzdiary-balance" type="text" inputmode="numeric" autocomplete="off" placeholder="예) 12,345,678">
-          </label>
-          <label>수익률 (%) <small>(선택 — 예: 7.7 또는 -3.2)</small>
-            <input id="mzdiary-return" type="text" inputmode="decimal" autocomplete="off" placeholder="예) 7.7">
-          </label>
-        </div>
-        <label>매매노트 <small>(선택 — 매수/매도 이유, 시황 판단, 다음 계획 등)</small>
-          <textarea id="mzdiary-note" rows="8" placeholder="예) 삼성전자 10주 71,300원 매수. 반도체 업황 바닥 판단, 조정 시 분할 매수 계획.&#10;자유롭게 적으면 제목·개조식 정리와 종목 태그는 AI가 합니다."></textarea>
+        <label>잔고·수익률 캡처 사진 <small>(선택 — 최대 8장, 자동으로 축소해 올립니다. AI가 캡처에서 잔고·수익률 숫자도 읽어 기록합니다)</small>
+          <input id="mzdiary-photos" type="file" accept="image/*" multiple>
+        </label>
+        <div id="mzdiary-previews" class="remember-previews"></div>
+        <label>매매노트 <small>(선택 — 그때 시장 분위기 | 나의 판단)</small>
+          <textarea id="mzdiary-note" rows="8" placeholder="예) 시장 분위기: 금리 인하 기대로 반도체 강세, 코스피 사상 최고치 근접&#10;나의 판단: 삼성전자 10주 71,300원 매수 — 조정 오면 분할로 더 담을 계획&#10;자유롭게 적으면 제목·개조식 정리와 종목 태그는 AI가 합니다."></textarea>
         </label>
         <button id="mzdiary-send" type="button">📔 Notion에 기록</button>
         <span id="mzdiary-status" class="dart-status"></span>
