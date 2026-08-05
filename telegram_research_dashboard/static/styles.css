@@ -53,6 +53,9 @@
 .remember-result{white-space:pre-wrap;border:1px solid rgba(148,163,184,.35);border-radius:12px;padding:14px 16px;margin-top:12px;font-size:13px;line-height:1.65;max-width:720px}
 .remember-result a{font-weight:600}
 
+.mzdiary-nums{display:flex;flex-wrap:wrap;gap:12px}
+.mzdiary-nums label{flex:1 1 220px}
+
 .remember-previews{display:flex;flex-wrap:wrap;gap:10px;margin:2px 0 6px}
 .remember-previews .rp{position:relative;display:inline-block}
 .remember-previews img{width:84px;height:84px;object-fit:cover;border-radius:10px;border:1px solid rgba(148,163,184,.35);display:block}

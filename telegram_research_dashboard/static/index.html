@@ -95,6 +95,7 @@
           <button class="nav" data-view="holdings">🧩 액티브ETF.매매동향</button>
           <button class="nav" data-view="flow">💹 시장.수급.동향</button>
           <button class="nav" data-view="consensus">📊 코스피200.컨센.추적</button>
+          <button class="nav" data-view="mzdiary">📔 mz일기</button>
           <a href="https://finance.naver.com/mystock/summary.naver" target="_blank" rel="noopener" onclick="if(/iPhone|iPad|iPod/.test(navigator.userAgent)){window.location.href='googlechromes://finance.naver.com/mystock/summary.naver';return false;}">🖥️ 네이버 전광판</a>
         </div>
       </details>
@@ -255,6 +256,33 @@
             <input id="remember-endpoint" type="url" inputmode="url" autocapitalize="off" autocomplete="off" placeholder="https://script.google.com/macros/s/…/exec">
           </label>
           <button id="remember-endpoint-save" type="button">URL 저장</button>
+        </details>
+      </div>
+    </section>
+
+    <section id="mzdiary" class="view">
+      <div class="archive-intro"><div><p class="eyebrow">NOTION · MZ DIARY</p><h2>mz일기 → 잔고·매매노트 기록</h2></div><div class="etf-actions"><span>잔고·수익률 숫자와 매매노트를 적으면 AI가 정리해 MZ일기 &gt; 잔고·매매노트 DB에 새 페이지로 저장합니다.</span><a class="panel-more" href="https://www.notion.so/b1038d361b3845f09335972a2df97c13" target="_blank" rel="noopener">📔 mz일기 열기 ↗</a></div></div>
+      <div class="dart-form">
+        <div class="mzdiary-nums">
+          <label>잔고 (평가금액, 원) <small>(선택)</small>
+            <input id="mzdiary-balance" type="text" inputmode="numeric" autocomplete="off" placeholder="예) 12,345,678">
+          </label>
+          <label>수익률 (%) <small>(선택 — 예: 7.7 또는 -3.2)</small>
+            <input id="mzdiary-return" type="text" inputmode="decimal" autocomplete="off" placeholder="예) 7.7">
+          </label>
+        </div>
+        <label>매매노트 <small>(선택 — 매수/매도 이유, 시황 판단, 다음 계획 등)</small>
+          <textarea id="mzdiary-note" rows="8" placeholder="예) 삼성전자 10주 71,300원 매수. 반도체 업황 바닥 판단, 조정 시 분할 매수 계획.&#10;자유롭게 적으면 제목·개조식 정리와 종목 태그는 AI가 합니다."></textarea>
+        </label>
+        <button id="mzdiary-send" type="button">📔 Notion에 기록</button>
+        <span id="mzdiary-status" class="dart-status"></span>
+        <div id="mzdiary-result" class="remember-result" hidden></div>
+        <details id="mzdiary-setup">
+          <summary>⚙️ 연결 설정 (최초 1회)</summary>
+          <label>mz일기 GAS 웹앱 /exec URL <small>(gas/mz_diary_notion.gs 배포 후 붙여넣기)</small>
+            <input id="mzdiary-endpoint" type="url" inputmode="url" autocapitalize="off" autocomplete="off" placeholder="https://script.google.com/macros/s/…/exec">
+          </label>
+          <button id="mzdiary-endpoint-save" type="button">URL 저장</button>
         </details>
       </div>
     </section>
