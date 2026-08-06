@@ -41,481 +41,19 @@
      "total_buy": 146607,
      "total_sell": 134486,
      "total_net": 12121
+    },
+    "futures": {
+     "individual": 224,
+     "foreign": -1448,
+     "inst_total": 1046,
+     "fin_invest": -310,
+     "insurance": 299,
+     "asset_mgmt": 1132,
+     "bank": -37,
+     "other_fin": -9,
+     "pension": -29,
+     "other_corp": 178
     }
-   },
-   "curve": {
-    "investor": [
-     [
-      "09:10",
-      -3778,
-      2531,
-      1132
-     ],
-     [
-      "09:20",
-      -4556,
-      2048,
-      2357
-     ],
-     [
-      "09:30",
-      -5179,
-      1888,
-      3145
-     ],
-     [
-      "09:40",
-      -5414,
-      2195,
-      3037
-     ],
-     [
-      "09:50",
-      -7361,
-      3058,
-      4213
-     ],
-     [
-      "10:00",
-      -8236,
-      3380,
-      4833
-     ],
-     [
-      "10:10",
-      -10773,
-      3744,
-      7109
-     ],
-     [
-      "10:20",
-      -11373,
-      4487,
-      6942
-     ],
-     [
-      "10:30",
-      -12129,
-      4637,
-      7519
-     ],
-     [
-      "10:40",
-      -15483,
-      4351,
-      11159
-     ],
-     [
-      "10:50",
-      -17025,
-      4811,
-      12206
-     ],
-     [
-      "11:00",
-      -17522,
-      4935,
-      12572
-     ],
-     [
-      "11:10",
-      -18343,
-      4853,
-      13497
-     ],
-     [
-      "11:20",
-      -19689,
-      5699,
-      14021
-     ],
-     [
-      "11:30",
-      -19576,
-      5761,
-      13890
-     ],
-     [
-      "11:40",
-      -19671,
-      5844,
-      13905
-     ],
-     [
-      "11:50",
-      -19003,
-      5751,
-      13306
-     ],
-     [
-      "12:00",
-      -18436,
-      6201,
-      12247
-     ],
-     [
-      "12:10",
-      -18081,
-      6417,
-      11733
-     ],
-     [
-      "12:20",
-      -17474,
-      6437,
-      11090
-     ],
-     [
-      "12:30",
-      -16823,
-      6158,
-      10656
-     ],
-     [
-      "12:40",
-      -16129,
-      5720,
-      10415
-     ],
-     [
-      "12:50",
-      -15982,
-      5374,
-      10609
-     ],
-     [
-      "13:00",
-      -15398,
-      5582,
-      9866
-     ],
-     [
-      "13:10",
-      -15399,
-      5970,
-      9410
-     ],
-     [
-      "13:20",
-      -15450,
-      6692,
-      8801
-     ],
-     [
-      "13:30",
-      -15364,
-      6776,
-      8594
-     ],
-     [
-      "13:40",
-      -15120,
-      6869,
-      8186
-     ],
-     [
-      "13:50",
-      -14811,
-      6934,
-      7759
-     ],
-     [
-      "14:00",
-      -14619,
-      7018,
-      7440
-     ],
-     [
-      "14:10",
-      -14670,
-      7207,
-      7297
-     ],
-     [
-      "14:20",
-      -14916,
-      7170,
-      7522
-     ],
-     [
-      "14:30",
-      -15006,
-      7335,
-      7434
-     ],
-     [
-      "14:40",
-      -14883,
-      7391,
-      7300
-     ],
-     [
-      "14:50",
-      -15550,
-      7771,
-      7552
-     ],
-     [
-      "15:00",
-      -15070,
-      7856,
-      7013
-     ],
-     [
-      "15:10",
-      -15112,
-      8138,
-      6748
-     ],
-     [
-      "15:20",
-      -14862,
-      8555,
-      6036
-     ],
-     [
-      "15:30",
-      -14833,
-      8583,
-      6007
-     ]
-    ],
-    "program": [
-     [
-      "09:10",
-      654,
-      1281,
-      1935
-     ],
-     [
-      "09:20",
-      726,
-      494,
-      1220
-     ],
-     [
-      "09:30",
-      846,
-      557,
-      1403
-     ],
-     [
-      "09:40",
-      839,
-      267,
-      1106
-     ],
-     [
-      "09:50",
-      944,
-      -76,
-      868
-     ],
-     [
-      "10:00",
-      972,
-      -32,
-      940
-     ],
-     [
-      "10:10",
-      1062,
-      -178,
-      884
-     ],
-     [
-      "10:20",
-      1180,
-      848,
-      2028
-     ],
-     [
-      "10:30",
-      1279,
-      2183,
-      3462
-     ],
-     [
-      "10:40",
-      1611,
-      3275,
-      4886
-     ],
-     [
-      "10:50",
-      1770,
-      4013,
-      5783
-     ],
-     [
-      "11:00",
-      1883,
-      3806,
-      5689
-     ],
-     [
-      "11:10",
-      1848,
-      3716,
-      5564
-     ],
-     [
-      "11:20",
-      1933,
-      4115,
-      6048
-     ],
-     [
-      "11:30",
-      1805,
-      4264,
-      6069
-     ],
-     [
-      "11:40",
-      1790,
-      4093,
-      5883
-     ],
-     [
-      "11:50",
-      1553,
-      4079,
-      5632
-     ],
-     [
-      "12:00",
-      1404,
-      4483,
-      5887
-     ],
-     [
-      "12:10",
-      1294,
-      4663,
-      5957
-     ],
-     [
-      "12:20",
-      1087,
-      4657,
-      5744
-     ],
-     [
-      "12:30",
-      824,
-      4779,
-      5603
-     ],
-     [
-      "12:40",
-      646,
-      4893,
-      5539
-     ],
-     [
-      "12:50",
-      601,
-      4964,
-      5565
-     ],
-     [
-      "13:00",
-      425,
-      5454,
-      5879
-     ],
-     [
-      "13:10",
-      380,
-      6264,
-      6644
-     ],
-     [
-      "13:20",
-      206,
-      6914,
-      7120
-     ],
-     [
-      "13:30",
-      262,
-      6882,
-      7144
-     ],
-     [
-      "13:40",
-      228,
-      7018,
-      7246
-     ],
-     [
-      "13:50",
-      156,
-      7014,
-      7170
-     ],
-     [
-      "14:00",
-      48,
-      7117,
-      7165
-     ],
-     [
-      "14:10",
-      -56,
-      7371,
-      7315
-     ],
-     [
-      "14:20",
-      -44,
-      7514,
-      7470
-     ],
-     [
-      "14:30",
-      -190,
-      7870,
-      7680
-     ],
-     [
-      "14:40",
-      -153,
-      7991,
-      7838
-     ],
-     [
-      "14:50",
-      -241,
-      8565,
-      8324
-     ],
-     [
-      "15:00",
-      -583,
-      8487,
-      7904
-     ],
-     [
-      "15:10",
-      -626,
-      8857,
-      8231
-     ],
-     [
-      "15:20",
-      -714,
-      9058,
-      8344
-     ],
-     [
-      "15:30",
-      -996,
-      11981,
-      10985
-     ]
-    ]
    }
   },
   "2026-07-29": {
@@ -542,6 +80,18 @@
      "total_buy": 168611,
      "total_sell": 163626,
      "total_net": 4985
+    },
+    "futures": {
+     "individual": -623,
+     "foreign": 7357,
+     "inst_total": -6560,
+     "fin_invest": -3624,
+     "insurance": -91,
+     "asset_mgmt": -2846,
+     "bank": -40,
+     "other_fin": -46,
+     "pension": 87,
+     "other_corp": -174
     }
    }
   },
@@ -569,6 +119,18 @@
      "total_buy": 107385,
      "total_sell": 133367,
      "total_net": -25983
+    },
+    "futures": {
+     "individual": 475,
+     "foreign": 5019,
+     "inst_total": -5902,
+     "fin_invest": 1806,
+     "insurance": 120,
+     "asset_mgmt": -7597,
+     "bank": 93,
+     "other_fin": -12,
+     "pension": -312,
+     "other_corp": 408
     }
    }
   },
@@ -596,6 +158,18 @@
      "total_buy": 75297,
      "total_sell": 101248,
      "total_net": -25951
+    },
+    "futures": {
+     "individual": 404,
+     "foreign": -2085,
+     "inst_total": 2365,
+     "fin_invest": -939,
+     "insurance": 241,
+     "asset_mgmt": 3026,
+     "bank": 19,
+     "other_fin": -1,
+     "pension": 19,
+     "other_corp": -684
     }
    }
   },
@@ -623,6 +197,18 @@
      "total_buy": 88711,
      "total_sell": 118796,
      "total_net": -30085
+    },
+    "futures": {
+     "individual": 335,
+     "foreign": -162,
+     "inst_total": -131,
+     "fin_invest": 6116,
+     "insurance": -333,
+     "asset_mgmt": -5913,
+     "bank": -36,
+     "other_fin": 2,
+     "pension": 33,
+     "other_corp": -42
     }
    }
   },
@@ -650,6 +236,18 @@
      "total_buy": 100546,
      "total_sell": 82973,
      "total_net": 17573
+    },
+    "futures": {
+     "individual": -826,
+     "foreign": -2289,
+     "inst_total": 3054,
+     "fin_invest": -741,
+     "insurance": 112,
+     "asset_mgmt": 3774,
+     "bank": 18,
+     "other_fin": 3,
+     "pension": -112,
+     "other_corp": 61
     }
    }
   },
@@ -677,6 +275,18 @@
      "total_buy": 108985,
      "total_sell": 93730,
      "total_net": 15255
+    },
+    "futures": {
+     "individual": 917,
+     "foreign": -248,
+     "inst_total": -709,
+     "fin_invest": -228,
+     "insurance": -89,
+     "asset_mgmt": -493,
+     "bank": -1,
+     "other_fin": 11,
+     "pension": 91,
+     "other_corp": 40
     }
    }
   },
@@ -704,6 +314,18 @@
      "total_buy": 91078,
      "total_sell": 79575,
      "total_net": 11503
+    },
+    "futures": {
+     "individual": -164,
+     "foreign": -2485,
+     "inst_total": 2391,
+     "fin_invest": -1958,
+     "insurance": 363,
+     "asset_mgmt": 4008,
+     "bank": -27,
+     "other_fin": 22,
+     "pension": -17,
+     "other_corp": 258
     }
    }
   },
@@ -731,6 +353,18 @@
      "total_buy": 108032,
      "total_sell": 100169,
      "total_net": 7862
+    },
+    "futures": {
+     "individual": 204,
+     "foreign": 3876,
+     "inst_total": -3837,
+     "fin_invest": -2962,
+     "insurance": 51,
+     "asset_mgmt": -804,
+     "bank": 37,
+     "other_fin": -32,
+     "pension": -127,
+     "other_corp": -243
     }
    }
   },
@@ -758,6 +392,18 @@
      "total_buy": 106856,
      "total_sell": 119867,
      "total_net": -13011
+    },
+    "futures": {
+     "individual": -1287,
+     "foreign": 2591,
+     "inst_total": -1173,
+     "fin_invest": 7343,
+     "insurance": -428,
+     "asset_mgmt": -8152,
+     "bank": 15,
+     "other_fin": -5,
+     "pension": 54,
+     "other_corp": -131
     }
    }
   },
@@ -785,6 +431,18 @@
      "total_buy": 136566,
      "total_sell": 119854,
      "total_net": 16712
+    },
+    "futures": {
+     "individual": 1039,
+     "foreign": -5673,
+     "inst_total": 4156,
+     "fin_invest": -1852,
+     "insurance": 220,
+     "asset_mgmt": 5563,
+     "bank": 8,
+     "other_fin": 67,
+     "pension": 150,
+     "other_corp": 478
     }
    }
   },
@@ -812,6 +470,18 @@
      "total_buy": 165163,
      "total_sell": 154556,
      "total_net": 10607
+    },
+    "futures": {
+     "individual": -1232,
+     "foreign": 6069,
+     "inst_total": -4868,
+     "fin_invest": -8731,
+     "insurance": 100,
+     "asset_mgmt": 3841,
+     "bank": -53,
+     "other_fin": -57,
+     "pension": 32,
+     "other_corp": 31
     }
    }
   },
@@ -839,6 +509,18 @@
      "total_buy": 124947,
      "total_sell": 142665,
      "total_net": -17718
+    },
+    "futures": {
+     "individual": 21,
+     "foreign": 5015,
+     "inst_total": -4516,
+     "fin_invest": 2218,
+     "insurance": -355,
+     "asset_mgmt": -6629,
+     "bank": 101,
+     "other_fin": -6,
+     "pension": 155,
+     "other_corp": -520
     }
    }
   },
@@ -866,6 +548,18 @@
      "total_buy": 113498,
      "total_sell": 113581,
      "total_net": -83
+    },
+    "futures": {
+     "individual": 51,
+     "foreign": -2599,
+     "inst_total": 2130,
+     "fin_invest": 984,
+     "insurance": 287,
+     "asset_mgmt": 853,
+     "bank": -11,
+     "other_fin": 0,
+     "pension": 17,
+     "other_corp": 418
     }
    }
   },
@@ -893,6 +587,18 @@
      "total_buy": 133328,
      "total_sell": 121287,
      "total_net": 12041
+    },
+    "futures": {
+     "individual": 691,
+     "foreign": 2527,
+     "inst_total": -3412,
+     "fin_invest": -4902,
+     "insurance": 247,
+     "asset_mgmt": 1082,
+     "bank": 10,
+     "other_fin": 18,
+     "pension": 133,
+     "other_corp": 194
     }
    }
   },
@@ -920,6 +626,18 @@
      "total_buy": 140769,
      "total_sell": 131712,
      "total_net": 9057
+    },
+    "futures": {
+     "individual": 936,
+     "foreign": 5564,
+     "inst_total": -6593,
+     "fin_invest": -3436,
+     "insurance": -172,
+     "asset_mgmt": -3093,
+     "bank": 25,
+     "other_fin": -6,
+     "pension": 89,
+     "other_corp": 93
     }
    }
   },
@@ -947,6 +665,18 @@
      "total_buy": 117276,
      "total_sell": 139568,
      "total_net": -22291
+    },
+    "futures": {
+     "individual": 443,
+     "foreign": 2812,
+     "inst_total": -3162,
+     "fin_invest": -853,
+     "insurance": -187,
+     "asset_mgmt": -2027,
+     "bank": 32,
+     "other_fin": 2,
+     "pension": -129,
+     "other_corp": -93
     }
    }
   },
@@ -974,6 +704,18 @@
      "total_buy": 89226,
      "total_sell": 103040,
      "total_net": -13814
+    },
+    "futures": {
+     "individual": 381,
+     "foreign": -3406,
+     "inst_total": 3273,
+     "fin_invest": 5579,
+     "insurance": -30,
+     "asset_mgmt": -2203,
+     "bank": -54,
+     "other_fin": -14,
+     "pension": -5,
+     "other_corp": -248
     }
    }
   },
@@ -1001,6 +743,18 @@
      "total_buy": 137817,
      "total_sell": 147184,
      "total_net": -9367
+    },
+    "futures": {
+     "individual": 104,
+     "foreign": 884,
+     "inst_total": -1584,
+     "fin_invest": -6351,
+     "insurance": -257,
+     "asset_mgmt": 4998,
+     "bank": -50,
+     "other_fin": 65,
+     "pension": 11,
+     "other_corp": 596
     }
    }
   },
@@ -1028,6 +782,18 @@
      "total_buy": 158720,
      "total_sell": 181167,
      "total_net": -22447
+    },
+    "futures": {
+     "individual": -1327,
+     "foreign": 10160,
+     "inst_total": -8732,
+     "fin_invest": -4277,
+     "insurance": -230,
+     "asset_mgmt": -4261,
+     "bank": 93,
+     "other_fin": -65,
+     "pension": 8,
+     "other_corp": -101
     }
    }
   },
@@ -1055,6 +821,18 @@
      "total_buy": 123207,
      "total_sell": 139242,
      "total_net": -16035
+    },
+    "futures": {
+     "individual": -1771,
+     "foreign": 5232,
+     "inst_total": -2461,
+     "fin_invest": -606,
+     "insurance": -14,
+     "asset_mgmt": -1798,
+     "bank": 45,
+     "other_fin": 0,
+     "pension": -88,
+     "other_corp": -1000
     }
    }
   },
@@ -1082,6 +860,18 @@
      "total_buy": 147835,
      "total_sell": 174920,
      "total_net": -27086
+    },
+    "futures": {
+     "individual": 1195,
+     "foreign": -2458,
+     "inst_total": 613,
+     "fin_invest": -876,
+     "insurance": 69,
+     "asset_mgmt": 1400,
+     "bank": -49,
+     "other_fin": 3,
+     "pension": 66,
+     "other_corp": 650
     }
    }
   },
@@ -1109,6 +899,18 @@
      "total_buy": 135747,
      "total_sell": 183869,
      "total_net": -48122
+    },
+    "futures": {
+     "individual": 721,
+     "foreign": 337,
+     "inst_total": -991,
+     "fin_invest": -2631,
+     "insurance": 145,
+     "asset_mgmt": 1557,
+     "bank": -2,
+     "other_fin": -3,
+     "pension": -57,
+     "other_corp": -67
     }
    }
   },
@@ -1136,6 +938,18 @@
      "total_buy": 149631,
      "total_sell": 179212,
      "total_net": -29580
+    },
+    "futures": {
+     "individual": -2617,
+     "foreign": 3939,
+     "inst_total": -850,
+     "fin_invest": 4472,
+     "insurance": -174,
+     "asset_mgmt": -5018,
+     "bank": -43,
+     "other_fin": 2,
+     "pension": -89,
+     "other_corp": -472
     }
    }
   },
@@ -1163,6 +977,18 @@
      "total_buy": 170078,
      "total_sell": 156028,
      "total_net": 14051
+    },
+    "futures": {
+     "individual": 2264,
+     "foreign": -7778,
+     "inst_total": 5170,
+     "fin_invest": 77,
+     "insurance": 348,
+     "asset_mgmt": 4693,
+     "bank": 65,
+     "other_fin": -6,
+     "pension": -7,
+     "other_corp": 344
     }
    }
   },
@@ -1364,6 +1190,18 @@
      "total_buy": 218419,
      "total_sell": 175510,
      "total_net": 42909
+    },
+    "futures": {
+     "individual": -1616,
+     "foreign": 92,
+     "inst_total": 1194,
+     "fin_invest": -4958,
+     "insurance": 463,
+     "asset_mgmt": 5817,
+     "bank": -136,
+     "other_fin": 45,
+     "pension": -37,
+     "other_corp": 330
     }
    },
    "curve": {
@@ -1904,6 +1742,18 @@
      "total_buy": 88122,
      "total_sell": 110969,
      "total_net": -22847
+    },
+    "futures": {
+     "individual": 655,
+     "foreign": -14821,
+     "inst_total": 14560,
+     "fin_invest": 11458,
+     "insurance": 847,
+     "asset_mgmt": 2107,
+     "bank": 4,
+     "other_fin": 102,
+     "pension": 42,
+     "other_corp": -394
     }
    },
    "curve": {
@@ -2455,6 +2305,18 @@
      "total_buy": 93292,
      "total_sell": 97363,
      "total_net": -4070
+    },
+    "futures": {
+     "individual": -668,
+     "foreign": -2672,
+     "inst_total": 3327,
+     "fin_invest": 2411,
+     "insurance": 114,
+     "asset_mgmt": 746,
+     "bank": 49,
+     "other_fin": -16,
+     "pension": 23,
+     "other_corp": 13
     }
    },
    "curve": {
@@ -2995,6 +2857,18 @@
      "total_buy": 90147,
      "total_sell": 83120,
      "total_net": 7027
+    },
+    "futures": {
+     "individual": 1181,
+     "foreign": -3288,
+     "inst_total": 1575,
+     "fin_invest": -1841,
+     "insurance": 627,
+     "asset_mgmt": 2853,
+     "bank": 5,
+     "other_fin": -54,
+     "pension": -15,
+     "other_corp": 532
     }
    },
    "curve": {
@@ -3471,7 +3345,64 @@
      ]
     ]
    }
+  },
+  "2026-08-06": {
+   "kospi": {
+    "close": 6258.79,
+    "chg_pct": -5.14
+   },
+   "slots": {
+    "1000": {
+     "individual": 13658,
+     "foreign": -14149,
+     "institution": 80,
+     "arb": 256,
+     "nonarb": -9045,
+     "program": -8790,
+     "time": "10:27",
+     "kospi": 6258.79,
+     "chg_pct": -5.14
+    }
+   },
+   "confirmed": {
+    "investor": {
+     "individual": 13658,
+     "foreign": -14149,
+     "inst_total": 80,
+     "fin_invest": 97,
+     "insurance": -4,
+     "asset_mgmt": -989,
+     "bank": -40,
+     "other_fin": 51,
+     "pension": 966,
+     "other_corp": 410
+    },
+    "program": {
+     "arb_buy": 1697,
+     "arb_sell": 1411,
+     "arb_net": 286,
+     "nonarb_buy": 24035,
+     "nonarb_sell": 33152,
+     "nonarb_net": -9116,
+     "total_buy": 25732,
+     "total_sell": 34563,
+     "total_net": -8830
+    },
+    "futures": {
+     "individual": -46,
+     "foreign": -645,
+     "inst_total": 656,
+     "fin_invest": 836,
+     "insurance": 85,
+     "asset_mgmt": -158,
+     "bank": 13,
+     "other_fin": 1,
+     "pension": -121,
+     "other_corp": 35
+    }
+   }
   }
  },
- "updated_kst": "2026-08-05 19:15"
+ "updated_kst": "2026-08-06 10:27",
+ "futures_unit": "계약"
 }
