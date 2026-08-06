@@ -174,9 +174,9 @@ function fillTaskItems(desired){const sel=$('#task-item');if(!sel)return;const i
 const taskAllNames=()=>TASK_ROSTER.flatMap(([,ns])=>ns);
 function taskLoad(){try{return JSON.parse(localStorage.getItem(TASK_KEY))||{}}catch{return{}}}
 function taskSave(s){try{localStorage.setItem(TASK_KEY,JSON.stringify(s))}catch{}taskPush()}
-function taskBundle(){return{data:taskLoad(),items:taskItems(),todos:todoLoad(),todoGroups:todoGroups()}}
+function taskBundle(){return{data:taskLoad(),items:taskItems(),todos:todoLoad(),todoGroups:todoGroups(),todoArchive:todoArchLoad()}}
 function taskPush(statusSel){if(!TASK_ENDPOINT)return;clearTimeout(taskPushT);const status=$(statusSel||'#task-sync');if(status)status.textContent='저장 중…';taskPushT=setTimeout(()=>{fetch(TASK_ENDPOINT,{method:'POST',body:JSON.stringify(taskBundle())}).then(()=>{if(status)status.textContent='☁ 동기화됨'}).catch(()=>{if(status)status.textContent='이 기기에만 저장(동기화 실패)'})},600)}
-async function taskPull(){if(!TASK_ENDPOINT)return false;const status=$('#task-sync');if(status)status.textContent='불러오는 중…';try{const r=await fetch(TASK_ENDPOINT,{cache:'no-store'});if(!r.ok)throw 0;const b=await r.json()||{};const remoteData=b.data&&typeof b.data==='object'?b.data:{};if(!Object.keys(remoteData).length&&Object.keys(taskLoad()).length){taskPush();if(status)status.textContent='☁ 이 기기 데이터 업로드됨';return false}if(b.data)localStorage.setItem(TASK_KEY,JSON.stringify(b.data));if(Array.isArray(b.items)&&b.items.length)localStorage.setItem(TASK_ITEMS_KEY,JSON.stringify(b.items));if(Array.isArray(b.todos))localStorage.setItem(TODO_KEY,JSON.stringify(b.todos));if(Array.isArray(b.todoGroups))localStorage.setItem(TODO_GROUPS_KEY,JSON.stringify(b.todoGroups));if(status)status.textContent='☁ 동기화됨';return true}catch{if(status)status.textContent='이 기기에만 저장(동기화 실패)'}return false}
+async function taskPull(){if(!TASK_ENDPOINT)return false;const status=$('#task-sync');if(status)status.textContent='불러오는 중…';try{const r=await fetch(TASK_ENDPOINT,{cache:'no-store'});if(!r.ok)throw 0;const b=await r.json()||{};const remoteData=b.data&&typeof b.data==='object'?b.data:{};if(!Object.keys(remoteData).length&&Object.keys(taskLoad()).length){taskPush();if(status)status.textContent='☁ 이 기기 데이터 업로드됨';return false}if(b.data)localStorage.setItem(TASK_KEY,JSON.stringify(b.data));if(Array.isArray(b.items)&&b.items.length)localStorage.setItem(TASK_ITEMS_KEY,JSON.stringify(b.items));if(Array.isArray(b.todos))localStorage.setItem(TODO_KEY,JSON.stringify(b.todos));if(Array.isArray(b.todoGroups))localStorage.setItem(TODO_GROUPS_KEY,JSON.stringify(b.todoGroups));if(Array.isArray(b.todoArchive))localStorage.setItem(TODO_ARCH_KEY,JSON.stringify(b.todoArchive));if(status)status.textContent='☁ 동기화됨';return true}catch{if(status)status.textContent='이 기기에만 저장(동기화 실패)'}return false}
 function taskCurrentItem(){return $('#task-item')?.value||taskItems()[0]}
 function renderTaskSummary(){const st=taskLoad()[taskCurrentItem()]||{},names=taskAllNames(),pending=names.filter(n=>!st[n]?.done);$('#task-summary').innerHTML=`완료 <b>${names.length-pending.length}</b> / ${names.length}`+(pending.length?` · 미응답: ${esc(pending.join(', '))}`:' · 전원 완료 🎉')}
 let taskSortByName=false;
@@ -189,10 +189,14 @@ function renderTaskList(desired){fillTaskItems(desired);const st=taskLoad()[task
  $('#task-table').innerHTML=`<table class="task-table"><thead><tr><th class="task-sort" style="cursor:pointer;user-select:none" title="클릭하면 이름순 ↔ 팀 순서로 전환">이름 ${taskSortByName?'▲':'⇅'}</th><th>완료</th><th>응답내용</th><th>비고</th></tr></thead><tbody>${body}</tbody></table>`;
  $('#task-date').textContent=new Intl.DateTimeFormat('ko-KR',{year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date());renderTaskSummary()}
 function taskUpdate(name,field,value){const s=taskLoad(),it=taskCurrentItem();(s[it]=s[it]||{})[name]=s[it][name]||{};s[it][name][field]=value;taskSave(s);renderTaskSummary()}
-/* ── TO-DO: 한 줄 할 일 + 체크 + 등록시각 + 이미지 첨부 + 그룹. 수명 피드백과 같은 GAS 번들(todos·todoGroups 필드)로 동기화 ── */
-const TODO_KEY='hi_todo_v1',TODO_GROUPS_KEY='hi_todo_groups_v1',TODO_IMG_MAX=4;/* 동기화 저장소 한도(실측 500KB) 보호 — 항목당 사진 4장 */
+/* ── TO-DO: 한 줄 할 일 + 체크 + 등록시각 + 이미지 첨부 + 그룹. 수명 피드백과 같은 GAS 번들(todos·todoGroups·todoArchive 필드)로 동기화 ── */
+const TODO_KEY='hi_todo_v1',TODO_GROUPS_KEY='hi_todo_groups_v1',TODO_ARCH_KEY='hi_todo_archive_v1',TODO_IMG_MAX=4;/* 동기화 저장소 한도(실측 500KB) 보호 — 항목당 사진 4장 */
 function todoLoad(){try{const a=JSON.parse(localStorage.getItem(TODO_KEY));if(Array.isArray(a))return a}catch{}return[]}
 function todoSave(a){try{localStorage.setItem(TODO_KEY,JSON.stringify(a))}catch{}taskPush('#todo-sync');renderTodo()}
+/* 보관함: 완료 항목을 지우지 않고 옮겨 두는 곳. 여기서 '보관항목 정리'를 눌러야 완전히 삭제된다 */
+function todoArchLoad(){try{const a=JSON.parse(localStorage.getItem(TODO_ARCH_KEY));if(Array.isArray(a))return a}catch{}return[]}
+function todoArchStore(a){try{localStorage.setItem(TODO_ARCH_KEY,JSON.stringify(a))}catch{}}
+function todoArchSave(a){todoArchStore(a);taskPush('#todo-sync');renderTodo()}
 function todoGroups(){try{const a=JSON.parse(localStorage.getItem(TODO_GROUPS_KEY));if(Array.isArray(a))return a.filter(x=>typeof x==='string'&&x.trim())}catch{}return[]}
 function todoGroupsStore(a){try{localStorage.setItem(TODO_GROUPS_KEY,JSON.stringify(a))}catch{}}
 const todoFmt=ts=>new Intl.DateTimeFormat('ko-KR',{month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',hour12:false}).format(new Date(ts));
@@ -212,9 +216,19 @@ function todoLightbox(src){let ov=$('#todo-lightbox');
  ov.querySelector('img').src=src;ov.classList.add('on')}
 function fillTodoGroups(){const sel=$('#todo-group');if(!sel)return;const cur=sel.value;
  sel.innerHTML='<option value="">기본</option>'+todoGroups().map(g=>`<option value="${esc(g)}"${g===cur?' selected':''}>${esc(g)}</option>`).join('')}
-function renderTodo(){const box=$('#todo-list');if(!box)return;fillTodoGroups();const a=todoLoad(),groups=todoGroups();
+const todoImgs=t=>(t.imgs||[]).map((d,k)=>`<img class="todo-thumb" src="${d}" alt="첨부 ${k+1}" title="클릭하면 크게 보기">`).join('');
+function renderTodoArch(){const box=$('#todo-arch-list');if(!box)return;const a=todoArchLoad(),cnt=$('#todo-arch-count');
+ if(cnt)cnt.textContent=a.length;
+ if(!a.length){box.innerHTML='<p class="empty">보관한 항목이 없습니다. 체크한 뒤 <b>보관</b>을 누르면 여기로 옮겨집니다.</p>';return}
+ const row=(t,i)=>{const imgs=todoImgs(t);
+  return `<div class="todo-row arch" data-i="${i}"><span class="todo-text">${esc(t.text)}${imgs?`<span class="todo-thumbs">${imgs}</span>`:''}</span><span class="todo-ts" title="등록 ${todoFmt(t.ts)}">✔ ${todoFmt(t.doneTs||t.archTs||t.ts)}</span><button class="todo-restore" type="button" title="진행 중 목록으로 되돌리기">↩</button><button class="todo-arch-del" type="button" title="이 항목만 완전히 삭제">✕</button></div>`};
+ const names=['기본',...todoGroups()],buckets=Object.fromEntries(names.map(n=>[n,[]]));
+ a.forEach((t,i)=>{buckets[t.group&&names.includes(t.group)?t.group:'기본'].push([t,i])});
+ box.innerHTML=names.filter(n=>buckets[n].length).map(n=>
+  `<details class="todo-group" data-g="${esc(n)}" open><summary><span>${esc(n)}</span><em>${buckets[n].length}</em></summary>${buckets[n].map(([t,i])=>row(t,i)).join('')}</details>`).join('')}
+function renderTodo(){renderTodoArch();const box=$('#todo-list');if(!box)return;fillTodoGroups();const a=todoLoad(),groups=todoGroups();
  if(!a.length&&!groups.length){box.innerHTML='<p class="empty">할 일을 한 줄 적고 ＋추가를 누르세요.</p>';return}
- const row=(t,i)=>{const imgs=(t.imgs||[]).map((d,k)=>`<img class="todo-thumb" src="${d}" alt="첨부 ${k+1}" title="클릭하면 크게 보기">`).join('');
+ const row=(t,i)=>{const imgs=todoImgs(t);
   return `<div class="todo-row${t.done?' done':''}" data-i="${i}"><span class="todo-grip" draggable="true" title="드래그해서 다른 그룹으로 이동">⠿</span><input type="checkbox" ${t.done?'checked':''}><span class="todo-text">${esc(t.text)}${imgs?`<span class="todo-thumbs">${imgs}</span>`:''}</span><span class="todo-ts"${t.doneTs?` title="완료 ${todoFmt(t.doneTs)}"`:''}>${todoFmt(t.ts)}</span><button class="todo-edit" type="button" title="내용 수정">✎</button><button class="todo-del" type="button" title="삭제">✕</button></div>`};
  const names=['기본',...groups],buckets=Object.fromEntries(names.map(n=>[n,[]]));
  a.forEach((t,i)=>{buckets[t.group&&names.includes(t.group)?t.group:'기본'].push([t,i])});
@@ -227,6 +241,7 @@ function todoAdd(){const inp=$('#todo-input'),text=(inp?.value||'').trim();if(!t
  a.unshift(t);TODO_PEND.length=0;renderTodoPend();todoSave(a);inp.value='';inp.focus()}
 async function todoPull(){if(!TASK_ENDPOINT)return false;const status=$('#todo-sync');if(status)status.textContent='불러오는 중…';try{const r=await fetch(TASK_ENDPOINT,{cache:'no-store'});if(!r.ok)throw 0;const b=await r.json()||{};
  if(Array.isArray(b.todoGroups))todoGroupsStore(b.todoGroups);
+ if(Array.isArray(b.todoArchive))todoArchStore(b.todoArchive);/* 서버에 보관함이 없으면 이 기기 보관함을 유지한다 */
  if(Array.isArray(b.todos)){localStorage.setItem(TODO_KEY,JSON.stringify(b.todos));if(status)status.textContent='☁ 동기화됨';return true}
  // 서버 번들에 아직 todos가 없으면 이 기기 목록을 올려 시드한다
  if(todoLoad().length||todoGroups().length)taskPush('#todo-sync');else if(status)status.textContent='☁ 동기화';return false}catch{if(status)status.textContent='이 기기에만 저장(동기화 실패)'}return false}
@@ -394,12 +409,28 @@ $('#todo-input')?.addEventListener('paste',e=>{const files=[...(e.clipboardData?
 $('#todo-photos')?.addEventListener('change',e=>{addTodoImgs(e.target.files);e.target.value=''});
 $('#todo-previews')?.addEventListener('click',e=>{const b=e.target.closest('[data-rmimg]');if(!b)return;TODO_PEND.splice(+b.dataset.rmimg,1);renderTodoPend()});
 $('#todo-group-add')?.addEventListener('click',()=>{const name=(prompt('추가할 그룹 이름')||'').trim();if(!name)return;const g=todoGroups();if(name==='기본'||g.includes(name)){alert('이미 있는 그룹입니다.');return}g.push(name);todoGroupsStore(g);taskPush('#todo-sync');renderTodo();const sel=$('#todo-group');if(sel)sel.value=name});
-$('#todo-clear-done')?.addEventListener('click',()=>{const a=todoLoad(),done=a.filter(t=>t.done).length;if(!done){alert('체크된 항목이 없습니다.');return}if(!confirm(`체크된 ${done}개 항목을 삭제할까요?`))return;todoSave(a.filter(t=>!t.done))});
+/* 보관: 체크된 항목을 지우지 않고 보관함으로 이동(그룹은 그대로 유지) */
+$('#todo-archive-done')?.addEventListener('click',()=>{const a=todoLoad(),done=a.filter(t=>t.done);if(!done.length){alert('체크된 항목이 없습니다.');return}
+ const now=Date.now();todoArchStore([...done.map(t=>({...t,doneTs:t.doneTs||now,archTs:now})),...todoArchLoad()]);
+ todoSave(a.filter(t=>!t.done));/* 저장·동기화·재렌더는 todoSave가 한 번에 처리 */
+ const status=$('#todo-sync');if(status)status.textContent=`📦 ${done.length}개 보관함으로 이동`});
+/* 보관항목 정리: 여기서만 완전 삭제된다 */
+$('#todo-clear-arch')?.addEventListener('click',()=>{const a=todoArchLoad();if(!a.length){alert('보관함이 비어 있습니다.');return}
+ if(!confirm(`보관함의 ${a.length}개 항목을 완전히 삭제할까요?\n삭제하면 되돌릴 수 없습니다.`))return;todoArchSave([])});
+$('#todo-arch-list')?.addEventListener('click',e=>{
+ const th=e.target.closest('.todo-thumb');if(th){todoLightbox(th.src);return}
+ const a=todoArchLoad();
+ const rs=e.target.closest('.todo-restore');if(rs){const i=+rs.closest('.todo-row').dataset.i,t=a[i];if(!t)return;a.splice(i,1);
+  const{archTs,doneTs,...rest}=t;todoArchStore(a);todoSave([{...rest,done:false},...todoLoad()]);return}
+ const del=e.target.closest('.todo-arch-del');if(!del)return;const i=+del.closest('.todo-row').dataset.i,t=a[i];if(!t)return;
+ if(!confirm(`보관함에서 완전히 삭제할까요? — ${t.text}`))return;a.splice(i,1);todoArchSave(a)});
 $('#todo-list')?.addEventListener('change',e=>{const row=e.target.closest('.todo-row');if(!row||e.target.type!=='checkbox')return;const a=todoLoad(),t=a[+row.dataset.i];if(!t)return;t.done=e.target.checked;if(t.done)t.doneTs=Date.now();else delete t.doneTs;todoSave(a)});
 $('#todo-list')?.addEventListener('click',e=>{
  const th=e.target.closest('.todo-thumb');if(th){todoLightbox(th.src);return}
- const ren=e.target.closest('.todo-g-ren');if(ren){e.preventDefault();const cur=ren.dataset.g,name=(prompt('그룹 이름 변경',cur)||'').trim();if(!name||name===cur)return;const g=todoGroups();if(name==='기본'||g.includes(name)){alert('이미 있는 그룹입니다.');return}g[g.indexOf(cur)]=name;todoGroupsStore(g);todoSave(todoLoad().map(t=>t.group===cur?{...t,group:name}:t));const sel=$('#todo-group');if(sel)sel.value=name;return}
- const gd=e.target.closest('.todo-g-del');if(gd){e.preventDefault();const cur=gd.dataset.g;if(!confirm(`[${cur}] 그룹을 삭제할까요? 그룹의 할 일은 기본으로 이동합니다.`))return;todoGroupsStore(todoGroups().filter(x=>x!==cur));todoSave(todoLoad().map(t=>{if(t.group!==cur)return t;const{group,...rest}=t;return rest}));return}
+ const ren=e.target.closest('.todo-g-ren');if(ren){e.preventDefault();const cur=ren.dataset.g,name=(prompt('그룹 이름 변경',cur)||'').trim();if(!name||name===cur)return;const g=todoGroups();if(name==='기본'||g.includes(name)){alert('이미 있는 그룹입니다.');return}g[g.indexOf(cur)]=name;todoGroupsStore(g);todoArchStore(todoArchLoad().map(t=>t.group===cur?{...t,group:name}:t));todoSave(todoLoad().map(t=>t.group===cur?{...t,group:name}:t));const sel=$('#todo-group');if(sel)sel.value=name;return}
+ const gd=e.target.closest('.todo-g-del');if(gd){e.preventDefault();const cur=gd.dataset.g;if(!confirm(`[${cur}] 그룹을 삭제할까요? 그룹의 할 일은 기본으로 이동합니다.`))return;todoGroupsStore(todoGroups().filter(x=>x!==cur));
+  const ungroup=t=>{if(t.group!==cur)return t;const{group,...rest}=t;return rest};
+  todoArchStore(todoArchLoad().map(ungroup));todoSave(todoLoad().map(ungroup));return}
  const ed=e.target.closest('.todo-edit');if(ed){const row=ed.closest('.todo-row'),a=todoLoad(),t=a[+row.dataset.i];if(!t)return;
   const text=prompt('할 일 내용 수정',t.text);if(text===null)return;const tx=text.trim();let dirty=false;
   if(tx&&tx!==t.text){t.text=tx;dirty=true}

@@ -120,7 +120,22 @@ a.rep-title:hover{color:#386453;text-decoration:underline}
 .todo-form input{flex:1;border:1px solid #cfd6d0;border-radius:8px;padding:12px 14px;font:14px/1.4 inherit;color:var(--ink);background:#fbfcfa}
 .todo-form input:focus{outline:0;border-color:#a9c3b6;background:#fff}
 .todo-form button{border:0;border-radius:8px;background:var(--green);color:#fff;font-size:13px;font-weight:700;padding:12px 16px;cursor:pointer;white-space:nowrap}
-#todo-clear-done{background:#fff;color:var(--green);border:1px solid var(--green)}
+#todo-archive-done{background:#fff;color:var(--green);border:1px solid var(--green)}
+/* 진행 중 | 보관함 2열 */
+.todo-cols{display:grid;grid-template-columns:1fr 1fr;gap:14px;align-items:start}
+.todo-pane{display:flex;flex-direction:column;gap:10px}
+.todo-pane-head{display:flex;align-items:center;gap:10px;border-bottom:1px solid #eef1ec;padding-bottom:9px}
+.todo-pane-head h3{font:700 14px/1.2 inherit;color:#2c463d;margin:0}
+.todo-pane-head em{font:normal 11px Georgia;color:var(--muted)}
+#todo-clear-arch{margin-left:auto;border:1px solid #e3c6c6;border-radius:8px;background:#fff;color:var(--red);font-size:12px;font-weight:700;padding:7px 11px;cursor:pointer;white-space:nowrap}
+#todo-clear-arch:hover{background:#fdf4f4}
+.todo-row.arch .todo-text{color:#6d7772}
+.todo-row.arch .todo-ts{color:#8a948e}
+.todo-restore{border:0;background:none;color:#b7bdb8;font-size:14px;cursor:pointer;padding:2px 6px;flex:none}
+.todo-restore:hover{color:var(--green)}
+.todo-arch-del{border:0;background:none;color:#b7bdb8;font-size:15px;cursor:pointer;padding:2px 6px;flex:none}
+.todo-arch-del:hover{color:var(--red)}
+@media(max-width:1000px){.todo-cols{grid-template-columns:1fr}}
 .todo-row{display:flex;align-items:center;gap:12px;border-bottom:1px solid #eef1ec;padding:11px 6px}
 .todo-row:last-child{border-bottom:0}
 .todo-row input[type=checkbox]{width:18px;height:18px;cursor:pointer;accent-color:#173f35;flex:none}
