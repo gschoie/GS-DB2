@@ -70,6 +70,8 @@ def _tone_fields(record: dict) -> dict:
     """임베드할 보고서별 톤 필드만 추린다(용량 절약)."""
     annual = ((record.get("est_compare") or {}).get("annual")) or {}
     fields = {
+        # 톤이 지목한 대표 종목. 태그가 여러 개인 기업분석에서 컨센·시장TP를 붙일 기준이 된다.
+        "co": record.get("company") or "",
         "one_line": (record.get("one_line") or "")[:120],
         "points": (record.get("points") or [])[:4],
         "tp_reasons": ((record.get("tp_event") or {}).get("reasons") or [])[:3],
