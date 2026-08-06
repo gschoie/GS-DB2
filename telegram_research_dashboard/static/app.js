@@ -344,9 +344,13 @@ async function dispatchFlow(){
  const btn=$('#flow-refresh'),status=$('#flow-status');
  if(await dispatchWorkflow({workflow:'flow'},status,btn))
    status.textContent='✅ 수급 수집 요청됨 — 몇 분 뒤 새로고침';}
-$$('.nav').forEach(b=>b.onclick=()=>view(b.dataset.view));$$('[data-go]').forEach(b=>b.onclick=()=>view(b.dataset.go));
-// 모바일(≤950px, 플라이아웃)에서 한 메뉴 그룹을 열면 나머지는 닫는다(겹침 방지).
-$$('details.nav-group').forEach(d=>d.addEventListener('toggle',()=>{if(d.open&&window.innerWidth<=950)$$('details.nav-group').forEach(o=>{if(o!==d)o.open=false})}));
+// 클릭한 메뉴가 속하지 않은 그룹의 서브메뉴는 모두 닫는다.
+function closeOtherNavGroups(el){const mine=el.closest?.('details.nav-group');$$('details.nav-group').forEach(o=>{if(o!==mine&&o.open){o.open=false;o.querySelectorAll('details.nav-subgroup').forEach(s=>s.open=false)}});}
+$$('.nav').forEach(b=>b.onclick=()=>{closeOtherNavGroups(b);view(b.dataset.view)});$$('[data-go]').forEach(b=>b.onclick=()=>view(b.dataset.go));
+// 한 메뉴 그룹을 열면 나머지 그룹의 서브메뉴는 닫는다(모바일·PC 공통, 아코디언).
+$$('details.nav-group').forEach(d=>d.addEventListener('toggle',()=>{if(!d.open)return;$$('details.nav-group').forEach(o=>{if(o!==d&&o.open){o.open=false;o.querySelectorAll('details.nav-subgroup').forEach(s=>s.open=false)}})}));
+// 같은 그룹 안의 하위 그룹(2단 서브메뉴)도 하나만 열리도록.
+$$('details.nav-subgroup').forEach(d=>d.addEventListener('toggle',()=>{if(!d.open)return;$$('details.nav-subgroup').forEach(o=>{if(o!==d)o.open=false})}));
 let timer;$('#search').oninput=e=>{clearTimeout(timer);timer=setTimeout(()=>{state.q=e.target.value;load()},250)};
 $('#report-company').onchange=e=>{state.reportCompany=e.target.value;load()};
 $('#news-company').onchange=e=>{state.newsCompany=e.target.value;load()};
