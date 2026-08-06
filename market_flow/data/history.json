@@ -3348,8 +3348,8 @@
   },
   "2026-08-06": {
    "kospi": {
-    "close": 6295.44,
-    "chg_pct": -4.59
+    "close": 6296.38,
+    "chg_pct": -4.58
    },
    "slots": {
     "1000": {
@@ -3384,43 +3384,54 @@
      "time": "15:32",
      "kospi": 6295.44,
      "chg_pct": -4.59
+    },
+    "1640": {
+     "individual": 33367,
+     "foreign": -32893,
+     "institution": -1214,
+     "arb": 1753,
+     "nonarb": -23010,
+     "program": -21257,
+     "time": "18:25",
+     "kospi": 6296.38,
+     "chg_pct": -4.58
     }
    },
    "confirmed": {
     "investor": {
-     "individual": 33412,
-     "foreign": -33285,
-     "inst_total": -1229,
-     "fin_invest": 6769,
-     "insurance": 479,
-     "asset_mgmt": -9046,
+     "individual": 33367,
+     "foreign": -32893,
+     "inst_total": -1214,
+     "fin_invest": 6787,
+     "insurance": 480,
+     "asset_mgmt": -9049,
      "bank": -78,
-     "other_fin": 177,
+     "other_fin": 175,
      "pension": 471,
-     "other_corp": 1101
+     "other_corp": 740
     },
     "program": {
-     "arb_buy": 4858,
-     "arb_sell": 3840,
-     "arb_net": 1017,
-     "nonarb_buy": 69020,
-     "nonarb_sell": 92668,
-     "nonarb_net": -23647,
-     "total_buy": 73878,
-     "total_sell": 96508,
-     "total_net": -22630
+     "arb_buy": 5643,
+     "arb_sell": 3890,
+     "arb_net": 1753,
+     "nonarb_buy": 74179,
+     "nonarb_sell": 97189,
+     "nonarb_net": -23010,
+     "total_buy": 79822,
+     "total_sell": 101079,
+     "total_net": -21257
     },
     "futures": {
-     "individual": -250,
-     "foreign": -2558,
-     "inst_total": 2811,
-     "fin_invest": 3015,
-     "insurance": 453,
-     "asset_mgmt": -700,
-     "bank": 55,
-     "other_fin": -15,
-     "pension": 3,
-     "other_corp": -3
+     "individual": 66,
+     "foreign": 1661,
+     "inst_total": -1693,
+     "fin_invest": 3077,
+     "insurance": 218,
+     "asset_mgmt": -5096,
+     "bank": 73,
+     "other_fin": -11,
+     "pension": 46,
+     "other_corp": -34
     }
    },
    "curve": {
@@ -4121,20 +4132,20 @@
      ],
      [
       "15:20",
-      -250,
-      -2558,
-      2811
+      -142,
+      -2399,
+      2570
      ],
      [
       "15:30",
-      -250,
-      -2558,
-      2811
+      -65,
+      -1396,
+      1506
      ]
     ]
    }
   }
  },
- "updated_kst": "2026-08-06 15:32",
+ "updated_kst": "2026-08-06 18:26",
  "futures_unit": "계약"
 }
