@@ -32,7 +32,13 @@ const MARKET=()=>window.__DASHBOARD_DATA__?.market||{};
 const fmtEok=v=>v==null?'—':Math.abs(v)>=10000?(v/10000).toFixed(1).replace(/\.0$/,'')+'조':Math.round(v).toLocaleString()+'억';
 const fmtTPman=v=>v==null?'—':v>=10000?(Math.round(v/100)/100).toLocaleString()+'만':Number(v).toLocaleString();
 const yymmdd=s=>{const d=new Date(s);return `${String(d.getFullYear()).slice(2)}.${String(d.getMonth()+1).padStart(2,'0')}.${String(d.getDate()).padStart(2,'0')}`};
-function singleCompany(r){const names=r.company_names||[];return r.report_type==='기업분석'&&names.length===1?names[0]:null}
+// 컨센·시장TP를 붙일 대상 종목. 태그가 2개 이상이어도 톤이 지목한 대표 종목(tone.co)이
+// 태그 안에 있으면 그걸 쓴다 — 예: 한화에어로 2Q26 리뷰에 한화오션이 같이 태깅된 경우.
+// 산업분석은 제외를 유지한다. 날짜 폴백 매칭이 같은 날 종목 노트에 잘못 걸릴 수 있어서다.
+function singleCompany(r){const names=r.company_names||[];
+ if(r.report_type!=='기업분석')return null;
+ const co=r.tone?.co;
+ return co&&names.includes(co)?co:(names.length===1?names[0]:null)}
 function opConsCell(r){const name=singleCompany(r),m=name?MARKET()[name]:null;
  if(!m||(!m.cons&&!m.mine))return '<span class="no-link">—</span>';
  const yr=l=>String(l||'').slice(0,4),cons=m.cons||{},mine=m.mine,cy=cons.this,rows=[];

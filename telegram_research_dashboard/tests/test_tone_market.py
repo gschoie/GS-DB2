@@ -72,7 +72,12 @@ class FieldsTest(unittest.TestCase):
         self.assertEqual(fields["earn"], "상향")
         self.assertEqual(fields["tp_reasons"], ["실적추정"])
         self.assertEqual(fields["est"]["op"]["our"], 41539.0)
+        self.assertEqual(fields["co"], "HD현대중공업")  # 다중 태그일 때 컨센을 붙일 대표 종목
         self.assertNotIn("tone_label", fields)  # 빈 값은 임베드하지 않는다
+
+    def test_tone_fields_drops_blank_company(self):
+        record = tone_fixture()["companies"]["IND:조선"]["timeline"][0]
+        self.assertNotIn("co", _tone_fields(record))  # 산업 레코드는 대표 종목이 없다
 
     def test_street_snapshot_dedupes_by_brokerage(self):
         snap = _street_snapshot(tone_fixture()["companies"]["329180"])
