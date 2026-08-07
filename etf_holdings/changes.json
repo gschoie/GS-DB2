@@ -1,72 +1,72 @@
 {
-  "date": "2026-08-06",
-  "prev_date": "2026-08-05",
-  "generated_at": "2026-08-06 16:06",
-  "base_date": "2026-08-06",
-  "prev_base_date": "2026-08-05",
+  "date": "2026-08-07",
+  "prev_date": "2026-08-06",
+  "generated_at": "2026-08-07 11:30",
+  "base_date": "",
+  "prev_base_date": "2026-08-06",
   "same_base": false,
   "first_run": false,
   "etfs": [
     {
-      "code": "0163Y0",
-      "label": "KoAct 코스닥액티브",
+      "code": "471040",
+      "label": "KoAct 글로벌AI&로봇액티브",
       "group": "KoAct",
       "flow_factor": 1.0,
       "new": [
         {
-          "key": "080220",
-          "name": "제주반도체",
-          "code": "080220",
-          "weight": 2.66,
-          "shares": 150.0
+          "key": "010170",
+          "name": "대한광통신",
+          "code": "010170",
+          "weight": 0.0,
+          "shares": 2447.0
         }
       ],
       "gone": [
         {
-          "key": "298380",
-          "name": "에이비엘바이오",
-          "code": "298380",
-          "weight_prev": 2.57,
-          "shares_prev": 132.0
+          "key": "Furukawa Electric Co Ltd",
+          "name": "Furukawa Electric Co Ltd",
+          "code": "",
+          "weight_prev": 0.0,
+          "shares_prev": 518.0
         }
       ],
       "moves": [
         {
-          "key": "196170",
-          "name": "알테오젠",
-          "code": "196170",
-          "shares_now": 75.0,
-          "shares_prev": 58.0,
-          "active_share_pct": 29.3,
-          "active_weight_pp": 1.05,
-          "weight_now": 4.88,
-          "weight_prev": 4.87,
+          "key": "005930",
+          "name": "삼성전자",
+          "code": "005930",
+          "shares_now": 147.0,
+          "shares_prev": 256.0,
+          "active_share_pct": -42.6,
+          "active_weight_pp": null,
+          "weight_now": 0.0,
+          "weight_prev": 0.0,
           "headline": false
         }
       ],
-      "has_weight": true
+      "has_weight": false
     },
     {
       "code": "426030",
       "label": "TIME 미국나스닥100액티브",
       "group": "TIME(구 TIMEFOLIO)",
-      "flow_factor": 1.0,
+      "flow_factor": 0.9918,
       "new": [
-        {
-          "key": "ALPHABET INC-CL A",
-          "name": "ALPHABET INC-CL A",
-          "code": "",
-          "weight": 0.0,
-          "shares": 91.0
-        }
-      ],
-      "gone": [
         {
           "key": "CREDO TECHNOLOGY GROUP HOLDI",
           "name": "CREDO TECHNOLOGY GROUP HOLDI",
           "code": "",
+          "weight": 0.0,
+          "shares": 87.0
+        }
+      ],
+      "gone": [
+        {
+          "key": "COINBASE GLOBAL INC -CLASS A",
+          "name": "COINBASE GLOBAL INC -CLASS A",
+          "code": "",
           "weight_prev": 0.0,
-          "shares_prev": 87.0
+          "shares_prev": 95.0
         }
       ],
       "moves": [],
@@ -79,72 +79,72 @@
       "flow_factor": 1.0,
       "new": [
         {
-          "key": "034730",
-          "name": "SK",
-          "code": "034730",
-          "weight": 2.99,
-          "shares": 30.0
+          "key": "017670",
+          "name": "SK텔레콤",
+          "code": "017670",
+          "weight": 3.33,
+          "shares": 200.0
         }
       ],
       "gone": [
         {
-          "key": "086790",
-          "name": "하나금융지주",
-          "code": "086790",
-          "weight_prev": 3.02,
-          "shares_prev": 130.0
+          "key": "034730",
+          "name": "SK",
+          "code": "034730",
+          "weight_prev": 2.99,
+          "shares_prev": 30.0
         }
       ],
       "moves": [],
       "has_weight": true
     },
     {
-      "code": "471040",
-      "label": "KoAct 글로벌AI&로봇액티브",
-      "group": "KoAct",
-      "flow_factor": 1.0,
+      "code": "456600",
+      "label": "TIME 글로벌AI인공지능액티브",
+      "group": "TIME(구 TIMEFOLIO)",
+      "flow_factor": 0.9981,
       "new": [
         {
-          "key": "327260",
-          "name": "RF머트리얼즈",
-          "code": "327260",
+          "key": "APPLIED OPTOELECTRONICS INC",
+          "name": "APPLIED OPTOELECTRONICS INC",
+          "code": "",
           "weight": 0.0,
-          "shares": 275.0
+          "shares": 148.0
         }
       ],
       "gone": [
         {
-          "key": "INTEL Corp",
-          "name": "INTEL Corp",
+          "key": "NVIDIA CORP",
+          "name": "NVIDIA CORP",
           "code": "",
           "weight_prev": 0.0,
-          "shares_prev": 422.0
+          "shares_prev": 134.0
         }
       ],
       "moves": [],
       "has_weight": false
     },
     {
-      "code": "365040",
-      "label": "TIGER AI코리아그로스액티브",
-      "group": "TIGER",
-      "flow_factor": 1.0153,
+      "code": "476850",
+      "label": "KoAct 배당성장액티브",
+      "group": "KoAct",
+      "flow_factor": 1.0,
       "new": [
         {
-          "key": "105560",
-          "name": "KB금융",
-          "code": "105560",
-          "weight": 0.87,
-          "shares": 178.0
+          "key": "222800",
+          "name": "심텍",
+          "code": "222800",
+          "weight": 2.1,
+          "shares": 200.0
         }
       ],
       "gone": [
         {
-          "key": "316140",
-          "name": "우리금융지주",
-          "code": "316140",
-          "weight_prev": 1.14,
-          "shares_prev": 1148.0
+          "key": "012450",
+          "name": "한화에어로스페이스",
+          "code": "012450",
+          "weight_prev": 2.1,
+          "shares_prev": 22.0
         }
       ],
       "moves": [],
@@ -159,85 +159,15 @@
       "gone": [],
       "moves": [
         {
-          "key": "196170",
-          "name": "알테오젠",
-          "code": "196170",
-          "shares_now": 356.0,
-          "shares_prev": 261.0,
-          "active_share_pct": 36.4,
-          "active_weight_pp": 3.66,
-          "weight_now": 15.19,
-          "weight_prev": 14.03,
-          "headline": false
-        },
-        {
-          "key": "207940",
-          "name": "삼성바이오로직스",
-          "code": "207940",
-          "shares_now": 24.0,
-          "shares_prev": 32.0,
-          "active_share_pct": -25.0,
-          "active_weight_pp": -2.1,
-          "weight_now": 5.51,
-          "weight_prev": 7.31,
-          "headline": false
-        }
-      ],
-      "has_weight": true
-    },
-    {
-      "code": "410870",
-      "label": "TIME K컬처액티브",
-      "group": "TIME(구 TIMEFOLIO)",
-      "flow_factor": 1.0,
-      "new": [],
-      "gone": [],
-      "moves": [
-        {
-          "key": "259960",
-          "name": "크래프톤",
-          "code": "259960",
-          "shares_now": 212.0,
-          "shares_prev": 291.0,
-          "active_share_pct": -27.1,
-          "active_weight_pp": -1.79,
-          "weight_now": 5.04,
-          "weight_prev": 7.12,
-          "headline": false
-        },
-        {
-          "key": "257720",
-          "name": "실리콘투",
-          "code": "257720",
-          "shares_now": 1267.0,
-          "shares_prev": 1000.0,
-          "active_share_pct": 26.7,
-          "active_weight_pp": 1.08,
-          "weight_now": 4.88,
-          "weight_prev": 3.84,
-          "headline": false
-        }
-      ],
-      "has_weight": true
-    },
-    {
-      "code": "462900",
-      "label": "KoAct 바이오헬스케어액티브",
-      "group": "KoAct",
-      "flow_factor": 1.0,
-      "new": [],
-      "gone": [],
-      "moves": [
-        {
-          "key": "196170",
-          "name": "알테오젠",
-          "code": "196170",
-          "shares_now": 249.0,
-          "shares_prev": 192.0,
-          "active_share_pct": 29.7,
-          "active_weight_pp": 1.97,
-          "weight_now": 9.69,
-          "weight_prev": 9.38,
+          "key": "141080",
+          "name": "리가켐바이오",
+          "code": "141080",
+          "shares_now": 388.0,
+          "shares_prev": 300.0,
+          "active_share_pct": 29.3,
+          "active_weight_pp": 1.35,
+          "weight_now": 6.44,
+          "weight_prev": 5.06,
           "headline": false
         }
       ],
@@ -250,10 +180,10 @@
     "share_pct_min": 30.0
   },
   "summary": {
-    "etfs_changed": 8,
+    "etfs_changed": 6,
     "new_total": 5,
     "gone_total": 5,
-    "moves_total": 6,
+    "moves_total": 2,
     "universe": 21
   }
 }
