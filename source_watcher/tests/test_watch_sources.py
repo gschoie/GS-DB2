@@ -20,7 +20,7 @@ NOW = datetime(2026, 8, 10, 0, 0, tzinfo=timezone.utc)
 
 
 def make_args(**overrides) -> Namespace:
-    base = dict(check=False, dry_run=False, seed=False, max=None)
+    base = dict(check=False, dry_run=False, seed=False, test=False, max=None)
     base.update(overrides)
     return Namespace(**base)
 
@@ -272,6 +272,32 @@ class RunSourceTest(unittest.TestCase):
         adapters.collect = boom
         state = {"version": 1, "sources": {"s1": {"seen": []}}}
         self.assertEqual(ws.run_source(make_source(), state, NOW, make_args()), 0)
+
+    def test_test_mode_sends_newest_without_touching_state(self):
+        # 발송 경로 점검용이라, 보낸 뒤에도 진짜 새 글은 나중에 정상 발송돼야 한다
+        state = {"version": 1, "sources": {}}
+        self.collected = [item("old", title="지난 글", hours_ago=50),
+                          item("new", title="최신 글", hours_ago=1)]
+        self.assertEqual(ws.run_source(make_source(), state, NOW, make_args(test=True)), 1)
+        self.assertEqual(len(self.sent), 1)
+        self.assertIn("최신 글", self.sent[0])
+        self.assertEqual(state["sources"], {})
+
+    def test_test_mode_respects_match_filter(self):
+        state = {"version": 1, "sources": {}}
+        self.collected = [item("a", title="종목분석")]
+        self.assertEqual(
+            ws.run_source(make_source(match="개장전"), state, NOW, make_args(test=True)), 0
+        )
+        self.assertEqual(self.sent, [])
+
+    def test_test_mode_ignores_lookback(self):
+        # 오래된 글밖에 없는 소스에서도 점검은 되어야 한다
+        state = {"version": 1, "sources": {}}
+        self.collected = [item("old", hours_ago=500)]
+        self.assertEqual(
+            ws.run_source(make_source(lookback_hours=24), state, NOW, make_args(test=True)), 1
+        )
 
     def test_check_mode_applies_filter_without_crashing(self):
         # match가 전부 걸러내도 점검은 정상 종료해야 한다(발송 0건과 수집 실패를 구분하려는 것)

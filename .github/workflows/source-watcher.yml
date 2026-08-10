@@ -10,7 +10,8 @@ on:
         description: "실행 모드"
         type: choice
         default: run
-        options: [run, check, dry-run, seed]
+        # test = 발송 경로 점검. 최신 글 1건을 상태 변경 없이 보낸다.
+        options: [run, check, dry-run, seed, test]
       only:
         description: "특정 소스 key만 (비우면 전체)"
         default: ""
@@ -62,13 +63,14 @@ jobs:
             check)   FLAGS="--check" ;;
             dry-run) FLAGS="--dry-run" ;;
             seed)    FLAGS="--seed" ;;
+            test)    FLAGS="--test" ;;
           esac
           if [ -n "$ONLY" ]; then FLAGS="$FLAGS --only $ONLY"; fi
           python watch_sources.py $FLAGS
 
       # 상태 커밋은 발송이 끝난 뒤에만 한다(발송 실패 시 커밋하면 그 글은 영영 안 온다).
       - name: 상태 커밋 및 푸시
-        if: ${{ success() && (inputs.mode || 'run') != 'check' && (inputs.mode || 'run') != 'dry-run' }}
+        if: ${{ success() && !contains(fromJSON('["check","dry-run","test"]'), inputs.mode || 'run') }}
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"

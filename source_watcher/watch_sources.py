@@ -8,6 +8,7 @@
     python watch_sources.py --dry-run       # 무엇이 나갈지 출력만
     python watch_sources.py --only mer      # 특정 소스만
     python watch_sources.py --seed          # 지금 글을 전부 '읽음' 처리(발송 없음)
+    python watch_sources.py --test          # 발송 경로 점검 — 최신 글 1건 시험 발송
 
 상태 파일(state/seen.json)이 중복 발송을 막는다. Actions 러너는 매번 새 컨테이너라
 이 파일을 저장소에 커밋해 두어야 다음 실행이 무엇을 이미 보냈는지 안다.
@@ -207,6 +208,18 @@ def run_source(source: dict, state: dict, now: datetime, args) -> int:
             print(f"    - {stamp} | {item.title[:60]}")
         return 0
 
+    if args.test:
+        # 발송 경로(토큰·chat_id·렌더링) 점검용. 새 글이 올라올 때까지 기다리지 않고
+        # 최신 글 1건을 그대로 보낸다. 상태는 건드리지 않으므로 진짜 새 글은 나중에 또 온다.
+        candidates = [item for item in items if keep(source, item)]
+        if not candidates:
+            print("  · 시험 발송할 글이 없습니다(필터 통과 0건)")
+            return 0
+        newest = max(candidates, key=lambda item: (item.published_at or now, item.uid))
+        notify.send(render(source, newest))
+        print(f"  · [시험발송] {newest.title[:70]}")
+        return 1
+
     known = source["key"] in state["sources"]
     if not known and not args.seed:
         # 첫 실행에서 피드 전체를 쏘면 수십 통이 한꺼번에 온다. 읽음 처리만 하고 다음 글부터 보낸다.
@@ -253,6 +266,8 @@ def main(argv: list[str] | None = None) -> int:
     cli.add_argument("--check", action="store_true", help="연결 점검만 — 발송·상태 저장 없음")
     cli.add_argument("--dry-run", action="store_true", help="무엇이 나갈지 출력만")
     cli.add_argument("--seed", action="store_true", help="현재 글을 전부 읽음 처리(발송 없음)")
+    cli.add_argument("--test", action="store_true",
+                     help="발송 경로 점검 — 최신 글 1건을 상태 변경 없이 보낸다")
     cli.add_argument("--max", type=int, default=None, help="소스당 최대 발송 수 override")
     args = cli.parse_args(argv)
 
@@ -287,7 +302,7 @@ def main(argv: list[str] | None = None) -> int:
     for source in active:
         total += run_source(source, state, now, args)
 
-    if not args.check and not args.dry_run:
+    if not (args.check or args.dry_run or args.test):
         save_state(state, args.state)
     print(f"완료 · {total}건 발송")
     return 0
