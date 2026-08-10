@@ -23,6 +23,18 @@ def reasons(s):
         r.append("외인·기관 동반 순매수")
     return r
 
+def reasons_sell(s):
+    r = []
+    if s.get("ev_trend_dead"):
+        r.append("＋DI가 −DI 하향이탈 · 추세 꺾임")
+    if s.get("stoch_overbought"):
+        r.append("Stochastic 과열 이탈 · 데드크로스")
+    elif s.get("ev_stoch_dead"):
+        r.append("Stochastic 데드크로스")
+    if s.get("dist"):
+        r.append("외인·기관 동반 순매도")
+    return r
+
 def flow_badge(flow):
     m = {"쌍끌이": ("쌍끌이 ↑", "b-buy"), "개인몰림": ("개인몰림 ⚠", "b-warn"),
          "중립": ("중립", "b-mut"), "수급없음": ("–", "b-mut")}
@@ -32,6 +44,8 @@ def flow_badge(flow):
 def trend_badge(s):
     if s["up_trend"]:
         return f'<span class="badge b-buy">▲ 상승추세</span>'
+    if s.get("down_trend"):
+        return f'<span class="badge b-down">▼ 하락추세</span>'
     if s["pdi"] < s["ndi"]:
         return f'<span class="badge b-down">▽ 하락</span>'
     return f'<span class="badge b-mut">– 중립</span>'
@@ -60,40 +74,53 @@ def day_html(payload, is_latest):
     sig = payload["signals"]
     scanned = len(sig)
     alerts = [s for s in sig if s["alert"]]
+    sells = [s for s in sig if s.get("alert_sell")]
     n_buy = sum(1 for s in sig if s["flow"] == "쌍끌이")
     n_warn = sum(1 for s in sig if s["flow"] == "개인몰림")
     asof = sig[0]["asof"] if sig else "—"
-    title = "오늘의 알림" if is_latest else "당일 알림"
+    day = "오늘" if is_latest else "당일"
 
-    # 알림 카드
-    alert_cards = ""
-    if alerts:
-        for s in alerts:
-            rs = " · ".join(reasons(s)) or "신호 발생"
-            alert_cards += f'''
-      <article class="alert-card">
+    def cards(rows, kind):
+        """kind: 'buy'(골든크로스) | 'sell'(데드크로스)"""
+        if not rows:
+            msg = ("이날 새로 뜬 매수 신호가 없습니다. (조정·횡보 국면일 가능성)" if kind == "buy"
+                   else "이날 새로 뜬 매도 경고가 없습니다.")
+            return f'<p class="none">{msg}</p>'
+        out = ""
+        for s in rows:
+            rs = " · ".join(reasons(s) if kind == "buy" else reasons_sell(s)) or "신호 발생"
+            out += f'''
+      <article class="alert-card {kind}">
         <div class="ac-head"><span class="ac-title"><b>{name_link(s)}</b><button class="btn-chart" data-code="{esc(s.get("code") or "")}" title="최근 120거래일 가격 · 신호 발생 시점">추세</button></span><small>{esc(s["group"])} · {s["close"]:,}원</small></div>
         <p>{esc(rs)}</p>
         <div class="ac-meta">ADX {s["adx"]} · %K {s["k"]}/{s["d"]} · {flow_badge(s["flow"])}</div>
       </article>'''
-    else:
-        alert_cards = '<p class="none">이날 새로 뜬 신호가 없습니다. (조정·횡보 국면일 가능성)</p>'
+        return out
 
-    # 전체 표 — 알림 우선, 이후 스캔순
-    rows_sorted = sorted(enumerate(sig), key=lambda x: (not x[1]["alert"], x[0]))
+    # 전체 표 — 매수 알림 → 매도 경고 → 나머지, 각 그룹 내부는 스캔순
+    def row_order(x):
+        s = x[1]
+        return (0 if s["alert"] else (1 if s.get("alert_sell") else 2), x[0])
+
+    rows_sorted = sorted(enumerate(sig), key=row_order)
     trs = ""
     for _, s in rows_sorted:
-        flag = '<span class="star">★ 알림</span>' if s["alert"] else ""
+        flag = '<span class="star">★ 매수</span>' if s["alert"] else ""
+        if s.get("alert_sell"):
+            flag += '<span class="skull">▼ 매도</span>'
         if not s["liquid"]:
             flag += '<span class="lowliq">저유동성</span>'
         stoch_ev = ""
         if s["stoch_oversold"]: stoch_ev = '<span class="mini gold">과매도반등</span>'
+        elif s.get("stoch_overbought"): stoch_ev = '<span class="mini dead">과열이탈</span>'
         elif s["ev_stoch"]: stoch_ev = '<span class="mini gold">골든</span>'
-        cls = "hl" if s["alert"] else ("dim" if not s["liquid"] else "")
+        elif s.get("ev_stoch_dead"): stoch_ev = '<span class="mini dead">데드</span>'
+        cls = "hl" if s["alert"] else ("hs" if s.get("alert_sell")
+                                       else ("dim" if not s["liquid"] else ""))
         # 정렬용 원시값(표시값이 아닌 실제 숫자/랭크)
         tr_rank = 2 if s["up_trend"] else (0 if s["pdi"] < s["ndi"] else 1)
         fl_rank = {"쌍끌이": 3, "중립": 2, "수급없음": 1, "개인몰림": 0}.get(s["flow"], 2)
-        fg_rank = (2 if s["alert"] else 0) + (0 if s["liquid"] else -1)
+        fg_rank = (3 if s["alert"] else (2 if s.get("alert_sell") else 0)) + (0 if s["liquid"] else -1)
         trs += f'''
       <tr class="{cls}">
         <td class="etf" data-v="{esc(s["name"])}"><div class="etf-row"><b>{name_link(s)}</b><button class="btn-chart" data-code="{esc(s.get("code") or "")}" title="최근 120거래일 가격 · 신호 발생 시점">추세</button></div><small>{esc(s["group"])}</small></td>
@@ -114,13 +141,17 @@ ADX(추세) + Stochastic Slow(타이밍) + 수급(외인·기관·개인 5일 �
 
 <section class="stats">
   <article><small>스캔 종목</small><strong>{scanned}</strong></article>
-  <article><small>{"오늘" if is_latest else "당일"} 알림</small><strong class="g">{len(alerts)}</strong></article>
+  <article><small>{day} 매수 신호</small><strong class="g">{len(alerts)}</strong></article>
+  <article><small>{day} 매도 경고</small><strong class="r">{len(sells)}</strong></article>
   <article><small>외인·기관 쌍끌이</small><strong class="g">{n_buy}</strong></article>
   <article><small>개인몰림 경계</small><strong class="w">{n_warn}</strong></article>
 </section>
 
-<h2>{title} <small style="font:400 12px Inter;color:#8b918e">— 새로 뜬 골든크로스 · 개인몰림 제외 · 유동성 확보 종목</small></h2>
-<div class="alerts">{alert_cards}</div>
+<h2>{day}의 매수 신호 <small style="font:400 12px Inter;color:#8b918e">— 새로 뜬 골든크로스 · 개인몰림 제외 · 유동성 확보 종목</small></h2>
+<div class="alerts">{cards(alerts, "buy")}</div>
+
+<h2>{day}의 매도 경고 <small style="font:400 12px Inter;color:#8b918e">— 새로 뜬 데드크로스 · 쌍끌이 제외 · 유동성 확보 종목</small></h2>
+<div class="alerts">{cards(sells, "sell")}</div>
 
 <h2>전체 신호판 ({scanned})</h2>
 <div class="tablewrap"><table>
@@ -206,14 +237,15 @@ font-family:Inter,Pretendard,"Noto Sans KR",sans-serif;padding:28px 30px 60px}}
 h1{{font:500 30px Georgia,"Noto Serif KR",serif;margin:0}}
 .sub{{color:var(--muted);font-size:12px;margin:8px 0 0;line-height:1.6}}
 .sub b{{color:#445049}}
-.stats{{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:22px 0 8px}}
+.stats{{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin:22px 0 8px}}
 .stats article{{background:var(--card);border:1px solid var(--line);padding:18px 20px}}
 .stats small{{color:var(--muted);font-size:11px;font-weight:700;letter-spacing:.04em}}
 .stats strong{{font:500 32px Georgia;display:block;margin:8px 0 0}}
-.stats .g{{color:#286342}}.stats .w{{color:#8a661c}}
+.stats .g{{color:#286342}}.stats .w{{color:#8a661c}}.stats .r{{color:#a43c31}}
 h2{{font:600 18px Georgia,"Noto Serif KR",serif;margin:30px 0 12px}}
 .alerts{{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px}}
 .alert-card{{background:#fff;border:1px solid var(--line);border-left:4px solid var(--green);padding:15px 17px}}
+.alert-card.sell{{border-left-color:var(--red)}}
 .ac-head{{display:flex;justify-content:space-between;align-items:baseline;gap:10px}}
 .ac-title{{display:inline-flex;align-items:center;gap:8px}}
 .ac-head b{{font-size:15px}}.ac-head small{{color:var(--muted);font-size:11px;white-space:nowrap}}
@@ -233,6 +265,7 @@ td{{border-bottom:1px solid #eef1ec;padding:10px 12px;font-size:13px;vertical-al
 td.c{{text-align:center}}td.r{{text-align:right;font-family:Georgia}}
 tbody tr:hover{{background:#fafbf8}}tbody tr.hl{{background:#fbfdf4}}
 tbody tr.hl:hover{{background:#f6faea}}tbody tr.dim td{{color:#98a09a}}
+tbody tr.hs{{background:#fdf7f5}}tbody tr.hs:hover{{background:#fbefeb}}
 .etf b{{font-size:13px;display:block}}.etf small{{color:var(--muted);font-size:10px}}
 .etf-link{{color:inherit;text-decoration:none;border-bottom:1px solid transparent}}
 .etf-link:hover{{color:#286342;border-bottom-color:#286342}}
@@ -242,8 +275,10 @@ tbody tr.hl:hover{{background:#f6faea}}tbody tr.dim td{{color:#98a09a}}
 .b-down{{background:#f8e9e6;color:#a43c31}}.b-mut{{background:#edf1ed;color:#61706a}}
 .mini{{display:inline-block;font-size:9px;font-weight:700;padding:2px 5px;border-radius:4px;margin-left:3px}}
 .mini.gold{{background:#fff4d6;color:#8a661c}}
+.mini.dead{{background:#f8e3e0;color:#a43c31}}
 .pos{{color:#286342}}.neg{{color:#a43c31}}.mut{{color:#a9afab}}
 .flags{{white-space:nowrap}}.star{{color:#5a7a1e;font-size:10px;font-weight:800}}
+.skull{{color:#a43c31;font-size:10px;font-weight:800;margin-left:5px}}
 .lowliq{{display:inline-block;margin-left:5px;color:#9a8650;font-size:9px;border:1px solid #e0d8bf;border-radius:4px;padding:1px 4px}}
 .legend{{margin-top:14px;color:var(--muted);font-size:11px;line-height:1.9}}
 .legend b{{color:#445049}}
@@ -273,8 +308,11 @@ padding:18px 22px 16px;box-shadow:0 12px 40px rgba(23,33,29,.22)}}
 .ax{{font:10px Georgia;fill:#8b918e}}
 .pline{{fill:none;stroke:#173f35;stroke-width:1.6}}
 .mk-t{{fill:#2e7d4f;cursor:help}}.mk-s{{fill:#c98a1e;cursor:help}}
-.chart-legend{{margin:10px 0 0;font-size:11px;color:var(--muted)}}
+.mk-dt{{fill:#bd4335;cursor:help}}.mk-ds{{fill:#8e5ba6;cursor:help}}
+.chart-legend{{margin:10px 0 0;font-size:11px;color:var(--muted);line-height:1.8}}
 .chart-legend .lg-t{{color:#2e7d4f}}.chart-legend .lg-s{{color:#c98a1e}}
+.chart-legend .lg-dt{{color:#bd4335}}.chart-legend .lg-ds{{color:#8e5ba6}}
+@media(max-width:1000px){{.stats{{grid-template-columns:repeat(3,1fr)}}}}
 @media(max-width:620px){{body{{padding:20px 12px 50px}}.stats{{grid-template-columns:1fr 1fr}}
 table{{min-width:760px}}}}
 </style></head><body>
@@ -289,12 +327,14 @@ table{{min-width:760px}}}}
 <div id="day"></div>
 
 <p class="legend">
-<b>추세</b> +DI&gt;−DI &amp; ADX&gt;20 = 상승추세 · <b>과매도반등</b> Stochastic %K가 %D를 20 이하에서 상향돌파 ·
+<b>추세</b> +DI&gt;−DI &amp; ADX&gt;20 = 상승추세, −DI&gt;+DI &amp; ADX&gt;20 = 하락추세 ·
+<b>과매도반등</b> Stochastic %K가 %D를 25 미만에서 상향돌파 · <b>과열이탈</b> %K가 %D를 75 초과에서 하향이탈 ·
 <b>쌍끌이</b> 외인+기관 5일 동반 순매수 · <b>개인몰림</b> 개인만 순매수(외인·기관 이탈) = 경계 ·
-<b>★알림</b> 오늘 새 골든크로스 + 개인몰림 아님 + 20일 거래대금 5억↑<br>
+<b>★매수</b> 오늘 새 골든크로스 + 개인몰림 아님 + 20일 거래대금 5억↑ ·
+<b>▼매도</b> 오늘 새 데드크로스 + 쌍끌이 아님 + 20일 거래대금 5억↑<br>
 수급 단위: 억원 · 매매가 아닌 <b>참고용 신호</b>입니다.<br>
 <b>정렬</b> 헤더를 클릭하면 해당 열 기준으로 정렬(다시 클릭 시 오름/내림 전환). 값 없음(–)은 항상 맨 아래.<br>
-<b>추세 버튼</b> 종목별 최근 120거래일 가격 차트와 과거 신호 발생 시점(▲ 추세 골든크로스 · ● 과매도 반등)을 보여줍니다.
+<b>추세 버튼</b> 종목별 최근 120거래일 가격 차트와 과거 신호 발생 시점(▲ 추세 골든크로스 · ● 과매도 반등 · ▼ 추세 데드크로스 · ◆ 과열 이탈)을 보여줍니다.
 </p>
 
 <div id="modal-bg"><div class="modal">
@@ -416,9 +456,21 @@ function renderChart(c) {{
     s += '<circle cx="' + x + '" cy="' + (y - 10).toFixed(1) + '" r="4.5" class="mk-s">' +
          '<title>' + c.dates[i] + ' · 과매도 반등(Stochastic 골든크로스) · ' + c.close[i].toLocaleString() + '원</title></circle>';
   }});
+  (c.dt || []).forEach(function (i) {{
+    var x = X(i).toFixed(1), y = Y(c.close[i]);
+    s += '<path d="M' + x + ' ' + (y - 6).toFixed(1) + ' l5 -9 h-10 z" class="mk-dt">' +
+         '<title>' + c.dates[i] + ' · 추세 데드크로스(+DI가 −DI 하향이탈) · ' + c.close[i].toLocaleString() + '원</title></path>';
+  }});
+  (c.ds || []).forEach(function (i) {{
+    var x = X(i).toFixed(1), y = Y(c.close[i]);
+    s += '<path d="M' + x + ' ' + (y + 7).toFixed(1) + ' l5 5 l-5 5 l-5 -5 z" class="mk-ds">' +
+         '<title>' + c.dates[i] + ' · 과열 이탈(Stochastic 데드크로스) · ' + c.close[i].toLocaleString() + '원</title></path>';
+  }});
   s += '</svg>';
   s += '<p class="chart-legend"><span class="lg-t">▲</span> 추세 골든크로스(+DI가 −DI 상향돌파, 라인 아래) · ' +
-       '<span class="lg-s">●</span> 과매도 반등(Stochastic %K↑%D, 라인 위) · 마커에 마우스를 올리면 날짜·가격 표시</p>';
+       '<span class="lg-s">●</span> 과매도 반등(Stochastic %K↑%D, 라인 위)<br>' +
+       '<span class="lg-dt">▼</span> 추세 데드크로스(+DI가 −DI 하향이탈, 라인 위) · ' +
+       '<span class="lg-ds">◆</span> 과열 이탈(Stochastic %K↓%D, 라인 아래) · 마커에 마우스를 올리면 날짜·가격 표시</p>';
   return s;
 }}
 </script>

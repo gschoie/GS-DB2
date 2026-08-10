@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
-"""signals.json의 '오늘 알림'만 텔레그램으로 발송 (기존 봇과 동일: sendMessage/HTML).
+"""signals.json의 '오늘 알림'(매수 골든크로스 · 매도 데드크로스)만 텔레그램으로 발송
+(기존 봇과 동일: sendMessage/HTML).
 알림이 없으면 발송하지 않음(스팸 방지). --dry-run 으로 메시지만 미리보기.
 --force 는 신호가 없어도 '오늘 새 신호 없음' 확인 메시지를 보냄(수동 🔄 갱신 확인용).
 전송 결과(성공/에러 원문)는 telegram_status.json 에 남긴다(원인 진단용).
@@ -32,22 +33,43 @@ def reasons(s):
     if s["flow"] == "쌍끌이": r.append("외인·기관 동반 순매수")
     return " · ".join(r) or "신호 발생"
 
-def build_message(payload):
-    alerts = [s for s in payload["signals"] if s["alert"]]
-    if not alerts:
-        return None
-    asof = payload["signals"][0]["asof"]
-    lines = [f"<b>📡 ETF/섹터 신호</b> · {esc(asof)} (전일 확정)", "",
-             f"★ 오늘 새 신호 <b>{len(alerts)}</b>개", ""]
-    for s in alerts:
-        flow = {"쌍끌이": "외인·기관 쌍끌이", "개인몰림": "개인몰림 주의",
-                "중립": "수급 중립", "수급없음": "수급 –"}.get(s["flow"], s["flow"])
+def reasons_sell(s):
+    r = []
+    if s.get("ev_trend_dead"): r.append("＋DI가 −DI 하향이탈·추세꺾임")
+    if s.get("stoch_overbought"): r.append("Stochastic 과열 이탈·데드크로스")
+    elif s.get("ev_stoch_dead"): r.append("Stochastic 데드크로스")
+    if s.get("dist"): r.append("외인·기관 동반 순매도")
+    return " · ".join(r) or "신호 발생"
+
+FLOW_LABEL = {"쌍끌이": "외인·기관 쌍끌이", "개인몰림": "개인몰림 주의",
+              "중립": "수급 중립", "수급없음": "수급 –"}
+
+def _block(rows, icon, why):
+    lines = []
+    for s in rows:
+        flow = FLOW_LABEL.get(s["flow"], s["flow"])
         lines += [
-            f"🟢 <b>{esc(s['name'])}</b> · {esc(s['group'])}",
-            f"   {esc(reasons(s))}",
+            f"{icon} <b>{esc(s['name'])}</b> · {esc(s['group'])}",
+            f"   {esc(why(s))}",
             f"   ADX {s['adx']} · %K {s['k']}/{s['d']} · {esc(flow)}",
             "",
         ]
+    return lines
+
+def build_message(payload):
+    sig = payload["signals"]
+    buys = [s for s in sig if s["alert"]]
+    sells = [s for s in sig if s.get("alert_sell")]
+    if not buys and not sells:
+        return None
+    asof = sig[0]["asof"]
+    lines = [f"<b>📡 ETF/섹터 신호</b> · {esc(asof)} (전일 확정)", ""]
+    if buys:
+        lines += [f"★ 매수 신호(골든크로스) <b>{len(buys)}</b>개", ""]
+        lines += _block(buys, "🟢", reasons)
+    if sells:
+        lines += [f"▼ 매도 경고(데드크로스) <b>{len(sells)}</b>개", ""]
+        lines += _block(sells, "🔴", reasons_sell)
     lines += [f'전체 신호판 › <a href="{DASH_URL}">대시보드</a>', SIGNATURE]
     return "\n".join(lines)
 
