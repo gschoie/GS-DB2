@@ -41,14 +41,13 @@ python watch_sources.py --check --only some_blog
 
 ## 지금 등록된 소스
 
-| key | 이름 | 종류 | 상태 |
+| key | 이름 | 종류 | 주소 |
 |---|---|---|---|
-| `mer` | 메르 | rss | 활성 |
-| `hanwha_5things` | 한화 임혜윤 · 개장전 5가지 | telegram | **비활성 — 채널 주소 필요** |
+| `mer` | 메르 | rss | `https://rss.blog.naver.com/ranto28.xml` |
+| `hanwha_5things` | 한화 임혜윤 · 개장전 5가지 | telegram | `https://t.me/lim_econ` |
 
-`hanwha_5things`는 `sources.yml`의 `channel`에 실제 채널 주소를 넣고 `enabled: true`로
-바꾸면 동작한다. `mer`의 블로그 ID(`ranto28`)도 실제 주소가 맞는지 `--check`로 한 번
-확인하는 편이 좋다.
+`hanwha_5things`에는 `match: "개장전|꼭 알아야|5가지"`가 걸려 있다. 채널이 데일리 말고
+다른 자료도 올리기 때문이다. 채널 글을 전부 받고 싶으면 `match` 줄을 지우면 된다.
 
 ## 실행
 
@@ -76,9 +75,56 @@ TELEGRAM_CHAT_ID=...
 `Actions → 소스 감시 봇 → Run workflow`로 수동 실행할 수 있고, 이때 `mode`를
 `check` / `dry-run` / `seed`로 골라 시험해 볼 수 있다.
 
-시크릿은 `WATCH_TELEGRAM_BOT_TOKEN` / `WATCH_TELEGRAM_CHAT_ID`를 쓰고,
-없으면 방산 브리핑이 쓰는 `KDEF_TELEGRAM_*`으로 자동 폴백한다.
-방산 브리핑과 **다른 채팅방**으로 받고 싶을 때만 `WATCH_*`를 새로 등록하면 된다.
+## 봇 설정 — 값을 넣는 자리
+
+발송 봇은 **@gs_macro_bot**을 쓴다. 토큰과 채팅방 ID는 코드에 넣지 않고
+저장소 시크릿으로 넣는다. 넣는 자리는 딱 한 곳이다.
+
+> GitHub 저장소 → **Settings** → **Secrets and variables** → **Actions**
+> → **New repository secret**
+
+여기에 두 개를 등록한다.
+
+| 시크릿 이름 | 값 |
+|---|---|
+| `WATCH_TELEGRAM_BOT_TOKEN` | @BotFather가 준 `123456:AAE...` 형태의 토큰 |
+| `WATCH_TELEGRAM_CHAT_ID` | 글을 받을 채팅방 ID (개인이면 숫자, 채널이면 `@채널아이디`) |
+
+이 이름은 `.github/workflows/source-watcher.yml`의 `소스 감시 실행` 단계에서 읽는다.
+이름을 바꾸고 싶으면 그 파일의 `env:` 블록만 고치면 된다.
+
+```yaml
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.WATCH_TELEGRAM_BOT_TOKEN || secrets.KDEF_TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.WATCH_TELEGRAM_CHAT_ID || secrets.KDEF_TELEGRAM_CHAT_ID }}
+```
+
+`WATCH_*`를 등록하지 않으면 방산 브리핑이 쓰는 `KDEF_TELEGRAM_*`으로 자동 폴백한다.
+방산 브리핑과 같은 방에서 받을 거라면 아무것도 등록하지 않아도 된다.
+
+### `WATCH_TELEGRAM_CHAT_ID` 알아내는 법
+
+1. 텔레그램에서 **@gs_macro_bot**과 대화를 시작해 아무 말이나 보낸다.
+   (채널로 받을 거라면 봇을 그 채널의 관리자로 추가한다.)
+2. 브라우저에서 아래를 연다. `<토큰>` 자리에 봇 토큰을 넣는다.
+
+   ```
+   https://api.telegram.org/bot<토큰>/getUpdates
+   ```
+
+3. 결과 JSON의 `"chat":{"id":123456789 ...}` 에 있는 숫자가 chat_id다.
+   그룹·채널이면 `-100`으로 시작하는 음수가 나오는데, **부호까지 그대로** 넣는다.
+
+### 내 PC에서 시험 발송
+
+```bash
+export TELEGRAM_BOT_TOKEN='123456:AAE...'
+export TELEGRAM_CHAT_ID='123456789'
+python watch_sources.py --only mer --max 1
+```
+
+토큰을 셸 히스토리에 남기고 싶지 않으면 `.env`에 적어두고 `set -a; . ./.env; set +a`로
+불러온다. `.env`는 저장소에 올리지 말 것.
 
 ## 중복 발송을 막는 장치
 

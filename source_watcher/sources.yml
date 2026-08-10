@@ -33,18 +33,18 @@ sources:
     # 메르는 하루에 여러 건 올릴 때가 있어 상한을 조금 넉넉히 둔다.
     max_per_run: 8
 
-  # 한화투자증권 임혜윤 <오늘 개장전 꼭 알아야할 5가지>.
-  # 채널 주소를 채운 뒤 enabled: true 로 바꾸세요. @채널아이디 / https://t.me/채널아이디 둘 다 됩니다.
-  # 채우고 나면 먼저 --check 로 글이 잡히는지 확인하는 것을 권합니다.
+  # 한화투자증권 임혜윤 <오늘 개장전 꼭 알아야할 5가지>. https://t.me/lim_econ
+  # 이 채널은 데일리 말고 다른 자료도 올리므로 match로 데일리만 골라낸다.
+  # 채널의 다른 글까지 전부 받고 싶으면 match 줄을 지우면 된다.
+  # 반대로 match 때문에 아무것도 안 오는 것 같으면 `--check --only hanwha_5things`가
+  # '필터 통과 n/m건'을 찍어주므로 정규식을 손볼지 바로 알 수 있다.
   - key: hanwha_5things
     name: 한화 임혜윤 · 개장전 5가지
     type: telegram
-    channel: "@채널아이디를_여기에"
-    enabled: false
-    # 이 채널이 다른 자료도 함께 뿌리면 아래 정규식이 데일리만 골라낸다.
-    # 채널이 이 자료만 올린다면 match 줄을 지우면 된다.
+    channel: "@lim_econ"
     match: "개장전|꼭 알아야|5가지"
     tags: [매크로, 개장전]
+    # 개장전 자료라 당일치만 의미가 있다. 지난 글이 뒤늦게 오는 것을 막는다.
     lookback_hours: 18
     max_per_run: 3
 

@@ -273,6 +273,15 @@ class RunSourceTest(unittest.TestCase):
         state = {"version": 1, "sources": {"s1": {"seen": []}}}
         self.assertEqual(ws.run_source(make_source(), state, NOW, make_args()), 0)
 
+    def test_check_mode_applies_filter_without_crashing(self):
+        # match가 전부 걸러내도 점검은 정상 종료해야 한다(발송 0건과 수집 실패를 구분하려는 것)
+        self.collected = [item("a", title="종목분석")]
+        state = {"version": 1, "sources": {}}
+        self.assertEqual(
+            ws.run_source(make_source(match="개장전"), state, NOW, make_args(check=True)), 0
+        )
+        self.assertEqual(self.sent, [])
+
     def test_check_mode_sends_nothing(self):
         self.collected = [item("a")]
         state = {"version": 1, "sources": {}}

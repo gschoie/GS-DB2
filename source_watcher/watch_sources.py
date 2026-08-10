@@ -195,7 +195,14 @@ def run_source(source: dict, state: dict, now: datetime, args) -> int:
 
     print(f"{label} · {len(items)}건 수집")
     if args.check:
-        for item in items[:3]:
+        # 필터가 전부 걸러내면 발송이 0건인데 로그만 봐서는 '수집 실패'와 구분이 안 된다.
+        # 통과 건수를 같이 찍어 match/exclude를 손볼지 바로 판단할 수 있게 한다.
+        kept = [item for item in items if keep(source, item)]
+        if source.get("match") or source.get("exclude"):
+            print(f"  · 필터 통과 {len(kept)}/{len(items)}건")
+            if items and not kept:
+                print("  ⚠ 전부 걸러졌습니다 — sources.yml의 match/exclude를 확인하세요.")
+        for item in (kept or items)[:3]:
             stamp = f"{item.published_at.astimezone(KST):%m-%d %H:%M}" if item.published_at else "날짜없음"
             print(f"    - {stamp} | {item.title[:60]}")
         return 0
