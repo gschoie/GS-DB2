@@ -2,6 +2,7 @@
 """55개 ETF 신호 스캔 엔진.
 - 일봉(ADX/DI, Stochastic Slow) + 수급(외인/기관/개인 5일) + 거래대금(유동성)
 - '오늘 새로 뜬' 크로스오버를 이벤트로 표시 (마지막 2봉 비교 → 상태파일 불필요)
+- 골든크로스(매수)와 데드크로스(매도) 양방향을 모두 감지
 - 신호는 '전일 확정 종가' 기준: 오늘(미완성) 봉은 제외
 결과: signals.json  (HTML/텔레그램이 이 파일을 읽음)
 """
@@ -14,6 +15,9 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 KST = timezone(timedelta(hours=9))
 BASE = "https://openapi.koreainvestment.com:9443"
 LIQ_MIN_EOK = 5          # 20일 평균 거래대금 5억 미만 = 저유동성(알림 제외)
+OVERSOLD = 25            # Stochastic 과매도 기준(골든크로스 직전 %K)
+OVERBOUGHT = 75          # Stochastic 과열 기준(데드크로스 직전 %K)
+EPS = 1e-6               # 지표 동률 판정 허용오차(%K·DI 포인트)
 
 # ── 키 로딩: 로컬 .env → 없으면 환경변수(GitHub Actions) ──
 def _load_keys():
@@ -107,22 +111,44 @@ def stoch_slow(df, n=14, k=3, d=3):
     slowk = (100*(df["c"]-ll)/(hh-ll)).rolling(k).mean()
     return slowk, slowk.rolling(d).mean()
 
+def _cross_up(a, b):
+    """a가 b를 상향돌파한 봉(True). 직전 봉은 a<=b, 이번 봉은 a>b."""
+    return (a - b > EPS) & (a.shift(1) - b.shift(1) <= EPS)
+
+def _cross_dn(a, b):
+    """a가 b를 하향이탈한 봉(True). 상향돌파의 대칭."""
+    return _cross_up(b, a)
+
+def cross_events(pdi, ndi, sk, sd):
+    """전 구간 크로스 이벤트(bool Series). 마지막 값 = '오늘 새로 뜬' 신호.
+    횡보·박스권에서 두 지표가 같은 값에 붙는 구간이 있어, 부동소수점 오차(1e-14 수준)를
+    크로스로 오판하지 않도록 EPS 이내 차이는 '같다'로 본다.
+    차트 마커(build_history)와 오늘의 알림(scan_one)이 같은 판정을 쓰도록 한 곳에서 계산."""
+    up, dn = _cross_up(sk, sd), _cross_dn(sk, sd)
+    return {
+        "trend": _cross_up(pdi, ndi), "trend_dead": _cross_dn(pdi, ndi),
+        "stoch": up, "stoch_dead": dn,
+        "oversold": up & (sk.shift(1) < OVERSOLD),
+        "overbought": dn & (sk.shift(1) > OVERBOUGHT),
+    }
+
 HIST_N = 120  # 차트용 이력 봉 수
 
-def build_history(px, pdi, ndi, sk, sd, n=HIST_N):
+def build_history(px, ev, n=HIST_N):
     """차트용 시계열: 최근 n봉의 (날짜, 종가)와 과거 신호 발생 위치.
-    t = +DI가 -DI 상향돌파(추세 골든크로스), s = 과매도권 Stochastic 골든크로스.
-    scan_one의 ev_trend/stoch_oversold(마지막 2봉 비교)를 전 구간에 벡터로 적용한 것."""
-    ev_t = (pdi > ndi) & (pdi.shift(1) <= ndi.shift(1))
-    ev_s = (sk > sd) & (sk.shift(1) <= sd.shift(1)) & (sk.shift(1) < 25)
+    t = +DI가 -DI 상향돌파(추세 골든크로스), s = 과매도권 Stochastic 골든크로스,
+    dt = +DI가 -DI 하향이탈(추세 데드크로스), ds = 과열권 Stochastic 데드크로스."""
     m = min(len(px), n)
-    t_tail = ev_t.iloc[-m:].reset_index(drop=True)
-    s_tail = ev_s.iloc[-m:].reset_index(drop=True)
+
+    def idx(key):
+        tail = ev[key].iloc[-m:].reset_index(drop=True)
+        return [int(i) for i in tail.index[tail]]
+
     return {
         "dates": [d.strftime("%Y-%m-%d") for d in px["date"].iloc[-m:]],
         "close": [int(v) for v in px["c"].iloc[-m:]],
-        "t": [int(i) for i in t_tail.index[t_tail]],
-        "s": [int(i) for i in s_tail.index[s_tail]],
+        "t": idx("trend"), "s": idx("oversold"),
+        "dt": idx("trend_dead"), "ds": idx("overbought"),
     }
 
 def load_universe():
@@ -141,17 +167,23 @@ def scan_one(u):
 
     # 상태
     up_trend = bool(pdi.iloc[-1] > ndi.iloc[-1] and adx.iloc[-1] > 20)
-    # 오늘 새로 뜬 크로스오버(마지막 2봉)
-    ev_trend = bool(pdi.iloc[-1] > ndi.iloc[-1] and pdi.iloc[-2] <= ndi.iloc[-2])
-    ev_stoch = bool(sk.iloc[-1] > sd.iloc[-1] and sk.iloc[-2] <= sd.iloc[-2])
-    stoch_oversold = ev_stoch and bool(sk.iloc[-2] < 25)
+    down_trend = bool(pdi.iloc[-1] < ndi.iloc[-1] and adx.iloc[-1] > 20)
+    # 오늘 새로 뜬 크로스오버(마지막 봉) — 골든(매수) / 데드(매도)
+    ev = cross_events(pdi, ndi, sk, sd)
+    ev_trend = bool(ev["trend"].iloc[-1])
+    ev_stoch = bool(ev["stoch"].iloc[-1])
+    stoch_oversold = bool(ev["oversold"].iloc[-1])
+    ev_trend_dead = bool(ev["trend_dead"].iloc[-1])
+    ev_stoch_dead = bool(ev["stoch_dead"].iloc[-1])
+    stoch_overbought = bool(ev["overbought"].iloc[-1])
 
     if f5 is not None:
         smart = bool(f5["외국인"] > 0 and f5["기관"] > 0)
         antp = bool(f5["개인"] > 0 and f5["외국인"] < 0 and f5["기관"] < 0)
         flow = "쌍끌이" if smart else ("개인몰림" if antp else "중립")
+        dist = bool(f5["외국인"] < 0 and f5["기관"] < 0)   # 외인·기관 동반 순매도
     else:
-        flow = "수급없음"
+        flow, dist = "수급없음", False
 
     return {
         "group": u["group"], "name": u["name"], "code": u["code"],
@@ -160,15 +192,20 @@ def scan_one(u):
         "pdi": round(float(pdi.iloc[-1]), 1), "ndi": round(float(ndi.iloc[-1]), 1),
         "k": round(float(sk.iloc[-1]), 1), "d": round(float(sd.iloc[-1]), 1),
         "turnover": round(turnover, 1), "liquid": bool(turnover >= LIQ_MIN_EOK),
-        "up_trend": up_trend, "ev_trend": ev_trend,
-        "ev_stoch": ev_stoch, "stoch_oversold": stoch_oversold,
+        "up_trend": up_trend, "down_trend": down_trend,
+        "ev_trend": ev_trend, "ev_stoch": ev_stoch, "stoch_oversold": stoch_oversold,
+        "ev_trend_dead": ev_trend_dead, "ev_stoch_dead": ev_stoch_dead,
+        "stoch_overbought": stoch_overbought,
         "for5": None if f5 is None else round(float(f5["외국인"])),
         "org5": None if f5 is None else round(float(f5["기관"])),
         "ind5": None if f5 is None else round(float(f5["개인"])),
-        "flow": flow,
-        # 알림감: 오늘 골든(추세 or 과매도-스토캐스틱) + 개인몰림 아님 + 유동성 OK
+        "flow": flow, "dist": dist,
+        # 매수 알림: 오늘 골든(추세 or 과매도-스토캐스틱) + 개인몰림 아님 + 유동성 OK
         "alert": bool((ev_trend or stoch_oversold) and flow != "개인몰림" and turnover >= LIQ_MIN_EOK),
-        "history": build_history(px, pdi, ndi, sk, sd),
+        # 매도 알림: 오늘 데드(추세 or 과열-스토캐스틱) + 외인·기관 쌍끌이 아님 + 유동성 OK
+        "alert_sell": bool((ev_trend_dead or stoch_overbought) and flow != "쌍끌이"
+                           and turnover >= LIQ_MIN_EOK),
+        "history": build_history(px, ev),
     }
 
 def scan_all():
@@ -177,8 +214,9 @@ def scan_all():
     for i, u in enumerate(uni, 1):
         try:
             rec = scan_one(u); out.append(rec)
-            print(f"  [{i}/{len(uni)}] OK {u['name']}  ADX{rec['adx']} flow={rec['flow']}"
-                  f"{'  ★ALERT' if rec['alert'] else ''}")
+            mark = "  ★BUY" if rec["alert"] else ""
+            mark += "  ▼SELL" if rec["alert_sell"] else ""
+            print(f"  [{i}/{len(uni)}] OK {u['name']}  ADX{rec['adx']} flow={rec['flow']}{mark}")
         except Exception as e:
             errs.append({"name": u["name"], "code": u["code"], "err": str(e)[:120]})
             print(f"  [{i}/{len(uni)}] ERR {u['name']}: {str(e)[:80]}")
@@ -189,8 +227,10 @@ def scan_all():
     }
     with open(os.path.join(HERE, "signals.json"), "w", encoding="utf-8") as f:
         json.dump(payload, f, ensure_ascii=False, indent=2)
-    alerts = [s for s in out if s["alert"]]
-    print(f"\n스캔 {len(out)}/{len(uni)}개 완료 · 에러 {len(errs)} · 오늘 알림 {len(alerts)}개 → signals.json")
+    n_buy = sum(1 for s in out if s["alert"])
+    n_sell = sum(1 for s in out if s["alert_sell"])
+    print(f"\n스캔 {len(out)}/{len(uni)}개 완료 · 에러 {len(errs)} · "
+          f"오늘 매수 {n_buy}개 · 매도 {n_sell}개 → signals.json")
     return payload
 
 if __name__ == "__main__":
