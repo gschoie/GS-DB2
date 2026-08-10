@@ -1,0 +1,71 @@
+# 감시할 소스 목록. 소스를 늘릴 때 손대는 파일은 여기 하나뿐이다.
+#
+# 필수 키
+#   key   : 상태 파일(state/seen.json)의 식별자. 한 번 정하면 절대 바꾸지 말 것
+#           (바꾸면 그 소스가 '첫 실행'으로 되돌아가 과거 글을 다시 읽음 처리한다)
+#   name  : 텔레그램 메시지 머리에 찍히는 이름
+#   type  : telegram | rss | web
+#
+# 자주 쓰는 선택 키
+#   enabled       : false면 건너뜀 (기본 true)
+#   match         : 제목+본문에 걸 정규식. 한 채널에서 원하는 자료만 골라낼 때
+#   exclude       : 걸리면 버릴 정규식
+#   max_per_run   : 한 번에 보낼 최대 글 수 (기본 5)
+#   lookback_hours: 이보다 오래된 글은 미발송분이어도 안 보냄 (기본 48)
+#   push          : full(본문 통째) | excerpt(요약+링크). 생략하면 종류별 기본값
+#   excerpt_chars : excerpt 길이 (기본 600)
+#   tags          : 메시지에 붙는 해시태그
+
+defaults:
+  max_per_run: 5
+  lookback_hours: 48
+  excerpt_chars: 600
+
+sources:
+  # 네이버 블로그는 rss.blog.naver.com/<블로그ID>.xml 로 RSS를 준다.
+  # 본문이 iframe(PostView.naver) 안에 있어 RSS 요약분만 오므로 전문은 원문 링크로 본다.
+  - key: mer
+    name: 메르
+    type: rss
+    url: https://rss.blog.naver.com/ranto28.xml
+    tags: [블로그]
+    excerpt_chars: 900
+    # 메르는 하루에 여러 건 올릴 때가 있어 상한을 조금 넉넉히 둔다.
+    max_per_run: 8
+
+  # 한화투자증권 임혜윤 <오늘 개장전 꼭 알아야할 5가지>.
+  # 채널 주소를 채운 뒤 enabled: true 로 바꾸세요. @채널아이디 / https://t.me/채널아이디 둘 다 됩니다.
+  # 채우고 나면 먼저 --check 로 글이 잡히는지 확인하는 것을 권합니다.
+  - key: hanwha_5things
+    name: 한화 임혜윤 · 개장전 5가지
+    type: telegram
+    channel: "@채널아이디를_여기에"
+    enabled: false
+    # 이 채널이 다른 자료도 함께 뿌리면 아래 정규식이 데일리만 골라낸다.
+    # 채널이 이 자료만 올린다면 match 줄을 지우면 된다.
+    match: "개장전|꼭 알아야|5가지"
+    tags: [매크로, 개장전]
+    lookback_hours: 18
+    max_per_run: 3
+
+  # ── 소스를 늘릴 때 아래 형식을 복사해서 쓰세요 ──────────────────────────
+  #
+  # - key: some_channel          # 영문 소문자 + 밑줄 권장
+  #   name: 보여줄 이름
+  #   type: telegram
+  #   channel: "@채널아이디"
+  #   tags: [태그]
+  #
+  # - key: some_blog
+  #   name: 보여줄 이름
+  #   type: rss
+  #   url: https://example.com/rss
+  #
+  # RSS도 텔레그램도 없을 때만 web을 쓴다(사이트 개편에 그대로 깨진다):
+  # - key: some_site
+  #   name: 보여줄 이름
+  #   type: web
+  #   url: https://example.com/list
+  #   item_selector: "ul.board > li"
+  #   title_selector: "a.title"
+  #   link_selector: "a.title"

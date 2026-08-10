@@ -1,0 +1,4 @@
+requests>=2.31
+pyyaml>=6.0
+# web 어댑터(CSS 선택자 수집)를 쓸 때만 필요. telegram/rss는 표준 라이브러리로 동작한다.
+beautifulsoup4>=4.12

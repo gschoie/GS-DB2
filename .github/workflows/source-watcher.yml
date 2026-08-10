@@ -1,0 +1,90 @@
+name: 소스 감시 봇
+
+# sources.yml에 등록된 블로그·텔레그램 채널을 주기적으로 훑어 새 글만 텔레그램으로 쏜다.
+# 무엇을 이미 보냈는지는 source_watcher/state/seen.json이 기억한다 — 러너는 매번
+# 새 컨테이너라 이 파일을 커밋해 두지 않으면 같은 글이 반복 발송된다.
+on:
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: "실행 모드"
+        type: choice
+        default: run
+        options: [run, check, dry-run, seed]
+      only:
+        description: "특정 소스 key만 (비우면 전체)"
+        default: ""
+  schedule:
+    # KST 06~22시에 30분 간격. (UTC 21~23시 + 0~13시)
+    - cron: "*/30 21-23,0-13 * * *"
+
+permissions:
+  contents: write
+
+# 앞 실행이 상태를 커밋하는 중에 다음 실행이 겹치면 같은 글이 두 번 나간다.
+concurrency:
+  group: source-watcher
+  cancel-in-progress: false
+
+jobs:
+  watch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: 패키지 설치
+        working-directory: source_watcher
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: 계약 테스트
+        working-directory: source_watcher
+        run: python -m unittest discover -s tests -p "test_*.py"
+
+      - name: 소스 감시 실행
+        working-directory: source_watcher
+        env:
+          # 방산 브리핑과 같은 봇을 쓰려면 WATCH_* 시크릿을 비워두면 된다.
+          TELEGRAM_BOT_TOKEN: ${{ secrets.WATCH_TELEGRAM_BOT_TOKEN || secrets.KDEF_TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.WATCH_TELEGRAM_CHAT_ID || secrets.KDEF_TELEGRAM_CHAT_ID }}
+          MODE: ${{ inputs.mode || 'run' }}
+          ONLY: ${{ inputs.only }}
+        run: |
+          FLAGS=""
+          case "$MODE" in
+            check)   FLAGS="--check" ;;
+            dry-run) FLAGS="--dry-run" ;;
+            seed)    FLAGS="--seed" ;;
+          esac
+          if [ -n "$ONLY" ]; then FLAGS="$FLAGS --only $ONLY"; fi
+          python watch_sources.py $FLAGS
+
+      # 상태 커밋은 발송이 끝난 뒤에만 한다(발송 실패 시 커밋하면 그 글은 영영 안 온다).
+      - name: 상태 커밋 및 푸시
+        if: ${{ success() && (inputs.mode || 'run') != 'check' && (inputs.mode || 'run') != 'dry-run' }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add source_watcher/state/seen.json
+          if git diff --cached --quiet; then
+            echo "새 글 없음 — 커밋 생략"
+            exit 0
+          fi
+          git commit -m "chore(watch): 소스 감시 상태 갱신 $(TZ=Asia/Seoul date +'%Y-%m-%d %H:%M')"
+          # 실행 중 main이 앞서가면 rebase 후 재시도 (최대 5회)
+          for i in 1 2 3 4 5; do
+            if git push origin HEAD:main; then
+              exit 0
+            fi
+            git pull --rebase --autostash origin main
+            sleep 5
+          done
+          echo "push 실패" >&2
+          exit 1
