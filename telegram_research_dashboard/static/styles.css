@@ -146,6 +146,8 @@ a.rep-title:hover{color:#386453;text-decoration:underline}
 .todo-del:hover{color:var(--red)}
 .todo-edit{border:0;background:none;color:#b7bdb8;font-size:13px;cursor:pointer;padding:2px 5px;flex:none}
 .todo-edit:hover{color:var(--green)}
+.todo-arch-one{border:0;background:none;font-size:14px;line-height:1;cursor:pointer;padding:2px 5px;flex:none;filter:grayscale(1);opacity:.55}
+.todo-arch-one:hover{filter:none;opacity:1}
 .todo-grip{color:#c3c9c4;font-size:13px;cursor:grab;flex:none;padding:2px 2px;user-select:none;touch-action:none}
 .todo-grip:hover{color:var(--green)}
 .todo-row.dragging{opacity:.45}

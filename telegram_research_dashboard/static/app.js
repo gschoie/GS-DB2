@@ -197,6 +197,11 @@ function todoSave(a){try{localStorage.setItem(TODO_KEY,JSON.stringify(a))}catch{
 function todoArchLoad(){try{const a=JSON.parse(localStorage.getItem(TODO_ARCH_KEY));if(Array.isArray(a))return a}catch{}return[]}
 function todoArchStore(a){try{localStorage.setItem(TODO_ARCH_KEY,JSON.stringify(a))}catch{}}
 function todoArchSave(a){todoArchStore(a);taskPush('#todo-sync');renderTodo()}
+/* 보관 공통: 고른 항목을 보관함 맨 앞으로 옮기고 진행 중 목록은 keep으로 교체(그룹·사진 유지) */
+function todoArchiveMove(list,keep){if(!list.length)return;const now=Date.now();
+ todoArchStore([...list.map(t=>{const o={...t,archTs:now};if(t.done&&!o.doneTs)o.doneTs=now;return o}),...todoArchLoad()]);
+ todoSave(keep);/* 저장·동기화·재렌더는 todoSave가 한 번에 처리 */
+ const status=$('#todo-sync');if(status)status.textContent=`📦 ${list.length}개 보관함으로 이동`}
 function todoGroups(){try{const a=JSON.parse(localStorage.getItem(TODO_GROUPS_KEY));if(Array.isArray(a))return a.filter(x=>typeof x==='string'&&x.trim())}catch{}return[]}
 function todoGroupsStore(a){try{localStorage.setItem(TODO_GROUPS_KEY,JSON.stringify(a))}catch{}}
 const todoFmt=ts=>new Intl.DateTimeFormat('ko-KR',{month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',hour12:false}).format(new Date(ts));
@@ -221,7 +226,7 @@ function renderTodoArch(){const box=$('#todo-arch-list');if(!box)return;const a=
  if(cnt)cnt.textContent=a.length;
  if(!a.length){box.innerHTML='<p class="empty">보관한 항목이 없습니다. 체크한 뒤 <b>보관</b>을 누르면 여기로 옮겨집니다.</p>';return}
  const row=(t,i)=>{const imgs=todoImgs(t);
-  return `<div class="todo-row arch" data-i="${i}"><span class="todo-text">${esc(t.text)}${imgs?`<span class="todo-thumbs">${imgs}</span>`:''}</span><span class="todo-ts" title="등록 ${todoFmt(t.ts)}">✔ ${todoFmt(t.doneTs||t.archTs||t.ts)}</span><button class="todo-restore" type="button" title="진행 중 목록으로 되돌리기">↩</button><button class="todo-arch-del" type="button" title="이 항목만 완전히 삭제">✕</button></div>`};
+  return `<div class="todo-row arch" data-i="${i}"><span class="todo-text">${esc(t.text)}${imgs?`<span class="todo-thumbs">${imgs}</span>`:''}</span><span class="todo-ts" title="등록 ${todoFmt(t.ts)}">${t.doneTs?'✔':'📦'} ${todoFmt(t.doneTs||t.archTs||t.ts)}</span><button class="todo-restore" type="button" title="진행 중 목록으로 되돌리기">↩</button><button class="todo-arch-del" type="button" title="이 항목만 완전히 삭제">✕</button></div>`};
  const names=['기본',...todoGroups()],buckets=Object.fromEntries(names.map(n=>[n,[]]));
  a.forEach((t,i)=>{buckets[t.group&&names.includes(t.group)?t.group:'기본'].push([t,i])});
  box.innerHTML=names.filter(n=>buckets[n].length).map(n=>
@@ -229,7 +234,7 @@ function renderTodoArch(){const box=$('#todo-arch-list');if(!box)return;const a=
 function renderTodo(){renderTodoArch();const box=$('#todo-list');if(!box)return;fillTodoGroups();const a=todoLoad(),groups=todoGroups();
  if(!a.length&&!groups.length){box.innerHTML='<p class="empty">할 일을 한 줄 적고 ＋추가를 누르세요.</p>';return}
  const row=(t,i)=>{const imgs=todoImgs(t);
-  return `<div class="todo-row${t.done?' done':''}" data-i="${i}"><span class="todo-grip" draggable="true" title="드래그해서 다른 그룹으로 이동">⠿</span><input type="checkbox" ${t.done?'checked':''}><span class="todo-text">${esc(t.text)}${imgs?`<span class="todo-thumbs">${imgs}</span>`:''}</span><span class="todo-ts"${t.doneTs?` title="완료 ${todoFmt(t.doneTs)}"`:''}>${todoFmt(t.ts)}</span><button class="todo-edit" type="button" title="내용 수정">✎</button><button class="todo-del" type="button" title="삭제">✕</button></div>`};
+  return `<div class="todo-row${t.done?' done':''}" data-i="${i}"><span class="todo-grip" draggable="true" title="드래그해서 다른 그룹으로 이동">⠿</span><input type="checkbox" ${t.done?'checked':''}><span class="todo-text">${esc(t.text)}${imgs?`<span class="todo-thumbs">${imgs}</span>`:''}</span><span class="todo-ts"${t.doneTs?` title="완료 ${todoFmt(t.doneTs)}"`:''}>${todoFmt(t.ts)}</span><button class="todo-edit" type="button" title="내용 수정">✎</button><button class="todo-del" type="button" title="삭제">✕</button><button class="todo-arch-one" type="button" title="이 항목만 보관함으로 이동 (삭제 아님)">📦</button></div>`};
  const names=['기본',...groups],buckets=Object.fromEntries(names.map(n=>[n,[]]));
  a.forEach((t,i)=>{buckets[t.group&&names.includes(t.group)?t.group:'기본'].push([t,i])});
  box.innerHTML=names.map(n=>{const list=buckets[n],undone=list.filter(([t])=>!t.done).length;
@@ -410,11 +415,9 @@ $('#todo-input')?.addEventListener('paste',e=>{const files=[...(e.clipboardData?
 $('#todo-photos')?.addEventListener('change',e=>{addTodoImgs(e.target.files);e.target.value=''});
 $('#todo-previews')?.addEventListener('click',e=>{const b=e.target.closest('[data-rmimg]');if(!b)return;TODO_PEND.splice(+b.dataset.rmimg,1);renderTodoPend()});
 $('#todo-group-add')?.addEventListener('click',()=>{const name=(prompt('추가할 그룹 이름')||'').trim();if(!name)return;const g=todoGroups();if(name==='기본'||g.includes(name)){alert('이미 있는 그룹입니다.');return}g.push(name);todoGroupsStore(g);taskPush('#todo-sync');renderTodo();const sel=$('#todo-group');if(sel)sel.value=name});
-/* 보관: 체크된 항목을 지우지 않고 보관함으로 이동(그룹은 그대로 유지) */
-$('#todo-archive-done')?.addEventListener('click',()=>{const a=todoLoad(),done=a.filter(t=>t.done);if(!done.length){alert('체크된 항목이 없습니다.');return}
- const now=Date.now();todoArchStore([...done.map(t=>({...t,doneTs:t.doneTs||now,archTs:now})),...todoArchLoad()]);
- todoSave(a.filter(t=>!t.done));/* 저장·동기화·재렌더는 todoSave가 한 번에 처리 */
- const status=$('#todo-sync');if(status)status.textContent=`📦 ${done.length}개 보관함으로 이동`});
+/* 일괄 보관: 체크한 항목을 한꺼번에 보관함으로(한 건씩은 각 줄의 📦) */
+$('#todo-archive-done')?.addEventListener('click',()=>{const a=todoLoad(),done=a.filter(t=>t.done);if(!done.length){alert('체크된 항목이 없습니다. 한 건만 보관하려면 그 줄의 📦를 누르세요.');return}
+ todoArchiveMove(done,a.filter(t=>!t.done))});
 /* 보관항목 정리: 여기서만 완전 삭제된다 */
 $('#todo-clear-arch')?.addEventListener('click',()=>{const a=todoArchLoad();if(!a.length){alert('보관함이 비어 있습니다.');return}
  if(!confirm(`보관함의 ${a.length}개 항목을 완전히 삭제할까요?\n삭제하면 되돌릴 수 없습니다.`))return;todoArchSave([])});
@@ -432,6 +435,7 @@ $('#todo-list')?.addEventListener('click',e=>{
  const gd=e.target.closest('.todo-g-del');if(gd){e.preventDefault();const cur=gd.dataset.g;if(!confirm(`[${cur}] 그룹을 삭제할까요? 그룹의 할 일은 기본으로 이동합니다.`))return;todoGroupsStore(todoGroups().filter(x=>x!==cur));
   const ungroup=t=>{if(t.group!==cur)return t;const{group,...rest}=t;return rest};
   todoArchStore(todoArchLoad().map(ungroup));todoSave(todoLoad().map(ungroup));return}
+ const ar=e.target.closest('.todo-arch-one');if(ar){const i=+ar.closest('.todo-row').dataset.i,a=todoLoad(),t=a[i];if(!t)return;a.splice(i,1);todoArchiveMove([t],a);return}
  const ed=e.target.closest('.todo-edit');if(ed){const row=ed.closest('.todo-row'),a=todoLoad(),t=a[+row.dataset.i];if(!t)return;
   const text=prompt('할 일 내용 수정',t.text);if(text===null)return;const tx=text.trim();let dirty=false;
   if(tx&&tx!==t.text){t.text=tx;dirty=true}
