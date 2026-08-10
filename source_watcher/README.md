@@ -59,8 +59,13 @@ python watch_sources.py --check         # 연결 점검만 (발송·저장 없�
 python watch_sources.py --dry-run       # 무엇이 나갈지 출력만
 python watch_sources.py --only mer      # 특정 소스만
 python watch_sources.py --seed          # 현재 글을 전부 '읽음' 처리 (발송 없음)
+python watch_sources.py --test          # 발송 경로 점검 — 최신 글 1건 시험 발송
 python watch_sources.py --max 1         # 소스당 발송 상한 임시 변경
 ```
+
+`--test`는 토큰·chat_id·렌더링이 실제로 동작하는지 확인하는 용도다. 새 글이 올라올
+때까지 기다리지 않고 각 소스의 최신 글 1건을 그대로 보낸다. **상태 파일을 건드리지
+않으므로** 시험 발송한 글이 진짜 새 글로 다시 올 일은 없고, 정상 발송도 그대로 이어진다.
 
 발송에는 환경변수 두 개가 필요하다. `--check` / `--dry-run` / `--seed` 는 필요 없다.
 
