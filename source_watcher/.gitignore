@@ -1,0 +1,5 @@
+# 텔레그램 계정 세션 — 계정 그 자체나 다름없다. 절대 커밋하지 말 것.
+*.session
+*.session-journal
+data/
+.env

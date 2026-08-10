@@ -55,6 +55,11 @@ jobs:
           # 방산 브리핑과 같은 봇을 쓰려면 WATCH_* 시크릿을 비워두면 된다.
           TELEGRAM_BOT_TOKEN: ${{ secrets.WATCH_TELEGRAM_BOT_TOKEN || secrets.KDEF_TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.WATCH_TELEGRAM_CHAT_ID || secrets.KDEF_TELEGRAM_CHAT_ID }}
+          # telegram_account 소스(내 계정으로 전 채널 훑기)를 켤 때만 필요.
+          # 세션 문자열은 `python login_account.py --string`으로 만든다(README 참고).
+          TELEGRAM_API_ID: ${{ secrets.TELEGRAM_API_ID }}
+          TELEGRAM_API_HASH: ${{ secrets.TELEGRAM_API_HASH }}
+          TELEGRAM_SESSION_STRING: ${{ secrets.TELEGRAM_SESSION_STRING }}
           MODE: ${{ inputs.mode || 'run' }}
           ONLY: ${{ inputs.only }}
         run: |

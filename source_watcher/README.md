@@ -29,6 +29,76 @@ python watch_sources.py --check --only some_blog
 | `rss` | RSS/Atom이 있는 블로그·언론사. 네이버 블로그는 `https://rss.blog.naver.com/<블로그ID>.xml` | `url` |
 | `web` | RSS도 텔레그램도 없을 때의 최후 수단. 사이트 개편에 그대로 깨진다 | `url`, `item_selector` |
 
+## 조선 코멘트 감시 — 여러 채널에서 회사 이름 잡아내기
+
+현대중공업·삼성중공업·한화오션 같은 회사가 언급된 글만 여러 채널에서 골라 받는
+용도로 두 소스가 준비되어 있다(`sources.yml`의 `ship_channels`, `ship_all`).
+낱말 목록은 `x_ship_keywords`에 있고 두 소스가 공유한다.
+
+**리소스 걱정은 하지 않아도 된다.** 채널 하나가 HTTP 요청 1번이라 채널 30개를
+붙여도 실행당 30초쯤 늘어날 뿐이고, 이 저장소는 public이라 Actions 사용료도 없다.
+
+### 방법 A — 채널을 지정해서 훑기 (`ship_channels`)
+
+공개 채널만 되지만 준비물이 없다. `channels:` 목록에 `@아이디`를 줄줄이 넣고
+`enabled: true`로 바꾸면 끝이다. 필터·발송형식은 묶음에 한 번만 쓴다.
+
+```bash
+python watch_sources.py --check --only ship_channels   # 묶음 전체 점검
+```
+
+`--only`는 묶음 key로도, 펼쳐진 개별 key(`ship_channels__채널아이디`)로도 집을 수
+있고, `enabled: false`인 소스도 돌려주므로 켜기 전에 점검할 수 있다.
+
+### 방법 B — 내가 가입한 모든 채널 훑기 (`ship_all`)
+
+채널 목록을 관리할 필요가 없고 비공개·초대링크 채널까지 잡힌다. 대신 봇이 아니라
+**내 텔레그램 계정 세션**이 필요하다(봇은 자기가 초대된 방만 보기 때문).
+
+1. `telegram_research_dashboard`와 같은 `api_id`/`api_hash`를 쓴다
+   (my.telegram.org → API development tools). `.env`에 `TELEGRAM_API_ID`,
+   `TELEGRAM_API_HASH`를 넣는다 — 대시보드 쪽 `.env`가 있으면 그대로 읽는다.
+2. `pip install telethon` 후 **한 번만** 로그인한다:
+
+   ```bash
+   python login_account.py
+   ```
+
+   전화번호와 인증코드를 넣으면 `data/telegram_user.session`이 생기고, 이후에는
+   재로그인이 필요 없다. **세션 파일은 계정 그 자체다 — 절대 커밋·공유하지 말 것**
+   (이 폴더 `.gitignore`가 막고 있다).
+3. `sources.yml`에서 `ship_all`을 `enabled: true`로 바꾸고 점검한다:
+
+   ```bash
+   python watch_sources.py --check --only ship_all
+   ```
+
+GitHub Actions에서 돌리려면 세션을 문자열로 만들어 시크릿에 넣는다.
+
+```bash
+python login_account.py --string   # 세션 문자열 출력(외부 노출 금지)
+```
+
+| 시크릿 이름 | 값 |
+|---|---|
+| `TELEGRAM_API_ID` | my.telegram.org의 api_id |
+| `TELEGRAM_API_HASH` | my.telegram.org의 api_hash |
+| `TELEGRAM_SESSION_STRING` | 위 명령이 찍어준 문자열 |
+
+워크플로는 이미 이 시크릿들을 읽도록 되어 있다. 시크릿을 넣지 않으면
+`ship_all`만 실패하고 나머지 소스는 그대로 돈다.
+
+### 중복·소음을 막는 장치
+
+- **내용 중복 제거(`dedupe_scope`)** — 채널들이 같은 리포트 요약을 퍼나르면 본문
+  지문(min-hash)으로 알아채 **한 번만** 보낸다. 머리말 한 줄이 붙어 있어도 잡는다.
+  `channels:`로 펼친 소스끼리는 자동으로 묶인다.
+- **걸린 문장만 발송(`push: hit`)** — 긴 데일리 전문 대신 회사 이름이 걸린 줄만
+  발췌해 오고, 알림 머리에 어느 회사(🚨) · 어느 채널(📡)인지 찍는다. 전문은 원문
+  링크로 본다.
+- **별칭 낱말 묶음(`match_any`)** — `한화오션: [한화오션, 대우조선해양, "042660"]`처럼
+  회사 이름 아래 별칭·종목코드를 묶는다. 정규식이 아니라 글자 그대로 찾는다.
+
 ### 한 채널에서 원하는 자료만 받기
 
 증권사 채널은 데일리·종목리포트·공지를 한 채널에 섞어 뿌리는 경우가 많다.
@@ -45,6 +115,8 @@ python watch_sources.py --check --only some_blog
 |---|---|---|---|
 | `mer` | 메르 | rss | `https://rss.blog.naver.com/ranto28.xml` |
 | `hanwha_5things` | 한화 임혜윤 · 개장전 5가지 | telegram | `https://t.me/lim_econ` |
+| `ship_channels` | 조선 코멘트 (채널 지정) | telegram | 꺼짐 — 채널 목록 채우고 켤 것 |
+| `ship_all` | 조선 코멘트 (전 채널) | telegram_account | 꺼짐 — 계정 로그인 후 켤 것 |
 
 `hanwha_5things`에는 `match: "개장전|꼭 알아야|5가지"`가 걸려 있다. 채널이 데일리 말고
 다른 자료도 올리기 때문이다. 채널 글을 전부 받고 싶으면 `match` 줄을 지우면 된다.
@@ -173,6 +245,7 @@ python -m unittest discover -s tests -p "test_*.py" -v
 |---|---|
 | `sources.yml` | 소스 레지스트리 — **평소 손대는 유일한 파일** |
 | `watch_sources.py` | 선별·중복판정·상태관리·발송 오케스트레이션 |
-| `adapters.py` | 종류별 수집기(telegram/rss/web). 새 종류는 여기에 붙인다 |
+| `adapters.py` | 종류별 수집기(telegram/telegram_account/rss/web). 새 종류는 여기에 붙인다 |
 | `notify.py` | 텔레그램 발송(분할·재시도) |
+| `login_account.py` | 계정 세션 1회 생성 — `telegram_account` 소스 준비물 |
 | `state/seen.json` | 이미 보낸 글 기록 — 손으로 고치지 말 것 |

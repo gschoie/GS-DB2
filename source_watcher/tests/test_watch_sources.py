@@ -155,6 +155,35 @@ class RegistryTest(unittest.TestCase):
         for source in sources:
             self.assertIn(source["type"], adapters.COLLECTORS)
 
+    def test_channels_expand_to_one_source_each(self):
+        path = self.write(
+            "sources:\n"
+            "  - key: ship\n    name: 조선\n    type: telegram\n"
+            "    match_any: [신조선가]\n"
+            "    channels:\n"
+            "      - \"@chan_a\"\n"
+            "      - channel: \"https://t.me/chan_b\"\n"
+            "        name: B증권\n"
+        )
+        a, b = ws.load_registry(path)
+        self.assertEqual(a["key"], "ship__chan_a")
+        self.assertEqual(a["name"], "chan_a")
+        self.assertEqual(b["key"], "ship__chan_b")
+        self.assertEqual(b["name"], "B증권")
+        # 필터는 묶음에서 물려받고, 묶음끼리는 내용 중복을 함께 건다
+        for source in (a, b):
+            self.assertEqual(source["match_any"], ["신조선가"])
+            self.assertEqual(source["dedupe_scope"], "ship")
+
+    def test_channels_duplicate_expands_to_key_clash(self):
+        path = self.write(
+            "sources:\n"
+            "  - key: ship\n    type: telegram\n"
+            "    channels: [\"@a\", \"@a\"]\n"
+        )
+        with self.assertRaises(ValueError):
+            ws.load_registry(path)
+
 
 class SelectTest(unittest.TestCase):
     def state_with(self, seen: list[str]) -> dict:
@@ -188,6 +217,73 @@ class SelectTest(unittest.TestCase):
         items = [item("new", hours_ago=1), item("old", hours_ago=5)]
         picked = ws.select(source, items, self.state_with([]), NOW)
         self.assertEqual([entry.uid for entry in picked], ["old", "new"])
+
+    def test_match_any_literal_words(self):
+        # 낱말 목록은 정규식이 아니다 — 괄호가 들어가도 그대로 찾아야 한다
+        source = make_source(match_any=["한화오션(구 대우조선)", "042660"])
+        self.assertTrue(ws.keep(source, item("a", body="오늘 042660 급등")))
+        self.assertTrue(ws.keep(source, item("b", body="한화오션(구 대우조선) 코멘트")))
+        self.assertFalse(ws.keep(source, item("c", body="삼성전자 이야기")))
+
+    def test_match_any_company_aliases(self):
+        source = make_source(match_any={"한화오션": ["한화오션", "대우조선해양"]})
+        found = ws.hits(source, item("a", body="대우조선해양 시절 수주 잔고"))
+        self.assertEqual(found, [("한화오션", "대우조선해양")])
+
+    def test_exclude_any(self):
+        source = make_source(match_any=["조선"], exclude_any=["휴장"])
+        self.assertFalse(ws.keep(source, item("a", body="조선주 코멘트 (금일 휴장)")))
+
+
+class DedupeTest(unittest.TestCase):
+    def scoped(self, **overrides) -> dict:
+        return make_source(dedupe_scope="ship", **overrides)
+
+    # 실제 리포트 요약처럼 문장이 다양한 본문이어야 한다. 같은 문장을 반복해 늘린
+    # 인공 본문은 조각(shingle)이 몇 개 안 나와 min-hash가 성립하지 않는다.
+    BODY = (
+        "[조선] 3분기 프리뷰\n"
+        "한화오션: 상선 마진 개선 지속, 특수선 매출 인식 본격화. 컨센서스 상회 전망.\n"
+        "삼성중공업: FLNG 추가 수주 모멘텀. 하반기 신조선가 강보합 유지 예상.\n"
+        "HD현대중공업: 함정 MRO 파이프라인 확대. 필리조선소 투자 뉴스플로우 주목.\n"
+        "클락슨 신조선가 지수 189.2pt(+0.3 WoW). LNG선 발주 문의 증가."
+    )
+
+    def test_same_body_across_channels_sent_once(self):
+        state = {"version": 1, "sources": {}}
+        original = item("a:1", body=self.BODY)
+        # 다른 채널이 머리말만 붙여 퍼나른 같은 글
+        forwarded = item("b:9", body="[○○증권 조선/기계 Fwd]\n" + self.BODY)
+        kept, dropped = ws.drop_duplicates(self.scoped(), [original], state)
+        self.assertEqual((len(kept), dropped), (1, 0))
+        kept, dropped = ws.drop_duplicates(self.scoped(), [forwarded], state)
+        self.assertEqual((len(kept), dropped), (0, 1))
+
+    def test_different_posts_survive(self):
+        state = {"version": 1, "sources": {}}
+        ws.drop_duplicates(self.scoped(), [item("a:1", body=self.BODY)], state)
+        other = (
+            "한화오션 신규 수주 공시. 유럽 선주로부터 LNG운반선 4척, 1.2조원 규모.\n"
+            "인도 시점은 2029년. 올해 누적 수주는 목표의 78% 수준까지 올라왔다."
+        )
+        kept, dropped = ws.drop_duplicates(self.scoped(), [item("b:2", body=other)], state)
+        self.assertEqual((len(kept), dropped), (1, 0))
+
+    def test_no_scope_means_no_dedupe(self):
+        state = {"version": 1, "sources": {}}
+        ws.drop_duplicates(make_source(), [item("a:1", body=self.BODY)], state)
+        kept, dropped = ws.drop_duplicates(make_source(), [item("b:2", body=self.BODY)], state)
+        self.assertEqual((len(kept), dropped), (1, 0))
+
+    def test_scope_state_survives_roundtrip(self):
+        state = {"version": 1, "sources": {}}
+        ws.drop_duplicates(self.scoped(), [item("a:1", body=self.BODY)], state)
+        path = Path(tempfile.mkdtemp()) / "seen.json"
+        ws.save_state(state, path)
+        kept, dropped = ws.drop_duplicates(
+            self.scoped(), [item("b:2", body=self.BODY)], ws.load_state(path)
+        )
+        self.assertEqual((len(kept), dropped), (0, 1))
 
 
 class StateTest(unittest.TestCase):
@@ -341,6 +437,33 @@ class RenderTest(unittest.TestCase):
         entry = adapters.Item(uid="a", title="t", body="b", url="",
                               published_at=datetime(2026, 8, 9, 22, 10, tzinfo=timezone.utc))
         self.assertIn("2026-08-10 07:10 KST", ws.render(source, entry))
+
+    def test_hit_mode_shows_matched_lines_with_company(self):
+        source = make_source(
+            type="telegram", push="hit",
+            match_any={"한화오션": ["한화오션", "대우조선해양"]},
+        )
+        body = "오늘의 데일리\n시황은 혼조\n한화오션 수주 코멘트: 미 해군 MRO 수주 임박\n다른 종목 이야기"
+        text = ws.render(source, item("a", body=body, url="http://t.me/x/1"))
+        self.assertIn("🚨", text)
+        self.assertIn("<b>한화오션</b>", text)                      # 머리에 회사 이름
+        self.assertIn("<b>한화오션</b> 수주 코멘트", text)          # 걸린 줄 + 낱말 강조
+        self.assertNotIn("시황은 혼조", text)                       # 안 걸린 줄은 버린다
+        self.assertIn('<a href="http://t.me/x/1">', text)
+
+    def test_hit_mode_origin_replaces_source_name(self):
+        # 전 채널 훑기(telegram_account)는 글이 나온 방 이름이 찍혀야 한다
+        source = make_source(type="telegram_account", push="hit", match_any=["조선"])
+        entry = adapters.Item(uid="a", title="t", body="조선 코멘트", url="", origin="○○증권 리서치")
+        text = ws.render(source, entry)
+        self.assertIn("○○증권 리서치", text)
+        self.assertNotIn("테스트", text)  # 소스 이름은 안 쓴다
+
+    def test_hit_mode_without_matched_line_falls_back_to_head(self):
+        # 제목에만 걸리고 본문 줄에는 없어도 빈 알림이 나가면 안 된다
+        source = make_source(push="hit", match_any=["조선"])
+        text = ws.render(source, item("a", title="조선 데일리", body="본문 첫 줄\n둘째 줄"))
+        self.assertIn("본문 첫 줄", text)
 
 
 class ChunkTest(unittest.TestCase):
