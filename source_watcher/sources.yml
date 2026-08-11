@@ -12,16 +12,58 @@
 #   exclude       : 걸리면 버릴 정규식
 #   max_per_run   : 한 번에 보낼 최대 글 수 (기본 5)
 #   lookback_hours: 이보다 오래된 글은 미발송분이어도 안 보냄 (기본 48)
-#   push          : full(본문 통째) | excerpt(요약+링크). 생략하면 종류별 기본값
+#   push          : full(본문 통째) | excerpt(요약+링크) | hit(걸린 문장만). 생략하면 종류별 기본값
 #   excerpt_chars : excerpt 길이 (기본 600)
 #   tags          : 메시지에 붙는 해시태그
+#
+# 여러 채널을 같은 조건으로 훑을 때
+#   channels      : 채널 목록. 한 항목이 채널 수만큼의 소스로 펼쳐진다(key는 자동 생성)
+#   match_any     : 낱말 목록(정규식 아님). 회사 이름 아래에 별칭·종목코드를 묶어도 된다
+#   exclude_any   : 낱말 목록. 하나라도 걸리면 버린다
+#   dedupe_scope  : 같은 값을 가진 소스끼리 '내용이 같은 글'을 한 번만 보낸다
+#                   (channels로 펼친 것들은 자동으로 묶음 key를 공유한다)
 
 defaults:
   max_per_run: 5
   lookback_hours: 48
   excerpt_chars: 600
 
+# 조선 감시에 쓰는 낱말 묶음. 아래 두 소스가 이 목록 하나를 같이 쓴다(YAML 앵커).
+# 왼쪽이 알림 머리에 찍히는 이름, 오른쪽이 실제로 찾을 낱말이다. 별칭과 종목코드를
+# 같이 넣어야 '한국조선해양', '대우조선'처럼 옛 이름으로 쓴 코멘트를 놓치지 않는다.
+# 정규식이 아니라 글자 그대로 찾으므로 괄호·점이 들어가도 그냥 쓰면 된다.
+x_ship_keywords: &ship_keywords
+  HD현대중공업: [현대중공업, HD현대중공업, HD한국조선해양, 한국조선해양, 현대삼호, 현대미포, HD현대미포, "009540", "329180", "010620"]
+  삼성중공업: [삼성중공업, "010140"]
+  한화오션: [한화오션, 대우조선해양, 대우조선, "042660"]
+  조선업황: [신조선가, 클락슨, Clarksons, 수주잔고, 선가지수, LNG운반선, LNG선, 컨테이너선, VLCC, 탱커, 조선업, 조선주, 조선섹터]
+  함정·MRO: [함정, 특수선, KDDX, 잠수함, 필리조선소, 한화필리, MASGA, 마스가, 존스법, Jones Act]
+
 sources:
+  # ── 조선 코멘트 감시 ────────────────────────────────────────────────────
+  # 내 텔레그램 계정이 구독한 **모든** 채널을 훑어, 위 낱말이 든 글의 걸린 문장만
+  # @gs_sb_bot으로 보낸다. 채널 목록을 관리할 필요가 없다 — 채널에 새로 들어가면
+  # 다음 실행부터 자동으로 감시 대상이 된다.
+  #
+  # 준비는 GitHub 웹에서만 하면 된다(README '조선 코멘트 감시' 절):
+  #   1) 시크릿 등록: TELEGRAM_API_ID·API_HASH·PHONE, SESSION_PASSPHRASE,
+  #      SHIP_TELEGRAM_BOT_TOKEN·CHAT_ID
+  #   2) Actions → '텔레그램 계정 로그인' 워크플로를 두 번 실행(코드 요청 → 코드 확인)
+  # 로그인 전에는 이 소스만 '수집 실패'로 넘어가고 나머지 소스는 정상 동작한다.
+  - key: ship_all
+    name: 조선 코멘트
+    type: telegram_account
+    match_any: *ship_keywords
+    push: hit              # 전문이 아니라 낱말이 걸린 문장만 보낸다
+    route: ship            # SHIP_TELEGRAM_* 시크릿의 봇(@gs_sb_bot)으로 발송
+    dedupe_scope: ship     # 여러 채널이 퍼나른 같은 글은 한 번만
+    tags: [조선]
+    lookback_hours: 24
+    max_per_run: 8
+    exclude_any: [휴장, 공지]
+    # exclude_chats: ["@lim_econ", 잡담방이름]  # 훑지 않을 방(@아이디 또는 표시 이름)
+    # include_groups: true                      # 채널 말고 토론 그룹까지 포함하려면
+
   # 네이버 블로그는 rss.blog.naver.com/<블로그ID>.xml 로 RSS를 준다.
   # 본문이 iframe(PostView.naver) 안에 있어 RSS 요약분만 오므로 전문은 원문 링크로 본다.
   - key: mer
@@ -47,6 +89,22 @@ sources:
     # 개장전 자료라 당일치만 의미가 있다. 지난 글이 뒤늦게 오는 것을 막는다.
     lookback_hours: 18
     max_per_run: 3
+
+  # 계정 로그인 없이 공개 채널 몇 개만 지정해서 훑는 대안(ship_all 대신, 또는 함께).
+  # channels 목록 하나가 채널 수만큼의 소스로 펼쳐지고, 목록 안 채널끼리는 자동으로
+  # 중복이 걸러진다. ship_all과 함께 켤 거라면 dedupe_scope: ship 을 줄 것.
+  # - key: ship_channels
+  #   name: 조선 코멘트
+  #   type: telegram
+  #   channels: ["@채널아이디1", "@채널아이디2"]
+  #   match_any: *ship_keywords
+  #   exclude_any: [휴장, 공지]
+  #   push: hit
+  #   route: ship
+  #   dedupe_scope: ship
+  #   tags: [조선]
+  #   lookback_hours: 24
+  #   max_per_run: 4
 
   # ── 소스를 늘릴 때 아래 형식을 복사해서 쓰세요 ──────────────────────────
   #

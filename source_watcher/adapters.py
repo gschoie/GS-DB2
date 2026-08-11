@@ -11,13 +11,15 @@
 
 from __future__ import annotations
 
+import asyncio
 import html
+import os
 import re
 import time
 import urllib.error
 import xml.etree.ElementTree as ET
 from dataclasses import dataclass
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from email.utils import parsedate_to_datetime
 from html.parser import HTMLParser
 from urllib.parse import urljoin, urlparse
@@ -32,6 +34,9 @@ class Item:
 
     uid는 소스 안에서 글을 유일하게 식별하는 키다. 상태 파일에 이 값이 쌓이므로
     같은 글이 매번 다른 uid로 나오면 중복 발송된다(예: 시간이 섞인 URL 금지).
+
+    origin은 한 소스가 여러 채널을 훑을 때(telegram_account) 글이 나온 채널 이름이다.
+    알림에 소스 이름 대신 이것을 찍어야 어느 방에서 온 말인지 알 수 있다.
     """
 
     uid: str
@@ -39,6 +44,7 @@ class Item:
     url: str
     body: str
     published_at: datetime | None = None
+    origin: str | None = None
 
     def text_for_match(self) -> str:
         return f"{self.title}\n{self.body}"
@@ -192,6 +198,12 @@ def collect_telegram(source: dict) -> list[Item]:
     channel = normalize_channel(str(source.get("channel") or source.get("url") or ""))
     if not channel:
         raise ValueError("telegram 소스에는 channel(또는 url)이 필요합니다")
+    # 채널 아이디는 원래 영문·숫자·밑줄이다. 한글이 들어왔다는 것은 sources.yml의
+    # 예시를 안 바꿨거나 채널 '이름'을 넣었다는 뜻이라, 붙여 보기 전에 바로 알려준다.
+    if not re.fullmatch(r"[A-Za-z0-9_]+", channel):
+        raise ValueError(
+            f"채널 주소가 아닙니다: {channel!r} — @아이디 또는 t.me/아이디 형식이어야 합니다"
+        )
     return parse_telegram_page(fetch(f"https://t.me/s/{channel}"), channel)
 
 
@@ -299,8 +311,138 @@ def collect_web(source: dict) -> list[Item]:
     return items
 
 
+# ── telegram_account ──────────────────────────────────────────────────────
+#
+# 채널을 하나씩 지정하지 않고 '내가 들어가 있는 모든 채널'을 훑는다. 공개 미리보기
+# (t.me/s)로는 불가능한 일이다 — 비공개·초대링크 채널은 로그인 없이 보이지 않고,
+# 공개 채널이라도 주소를 알아야 읽을 수 있기 때문이다. 대신 내 계정 세션이 필요하다.
+#
+# 호출량을 줄이는 것이 이 어댑터의 핵심이다. 대화 목록은 한 번에 100개씩 받아오면서
+# 각 방의 최신 글 시각을 같이 주므로, 그 시각이 조회 창(lookback)보다 오래된 방은
+# 히스토리를 아예 요청하지 않는다. 채널 300개를 구독해도 실제 요청은 대화 목록
+# 3~4번 + 새 글이 있는 방 몇 개뿐이다.
+
+DEFAULT_SESSION_PATH = "data/telegram_user"
+
+
+def _account_session():
+    """세션 문자열(CI·서버용)이 있으면 그것을, 없으면 세션 파일 경로를 쓴다."""
+    raw = os.environ.get("TELEGRAM_SESSION_STRING", "").strip()
+    if raw:
+        from telethon.sessions import StringSession
+
+        return StringSession(raw)
+    return os.environ.get("TELEGRAM_SESSION_PATH", DEFAULT_SESSION_PATH)
+
+
+def _chat_names(entity) -> set[str]:
+    names = set()
+    for value in (getattr(entity, "username", None), getattr(entity, "title", None)):
+        if value:
+            names.add(str(value).casefold())
+    return names
+
+
+def _message_url(entity, message_id: int) -> str:
+    username = getattr(entity, "username", None)
+    if username:
+        return f"https://t.me/{username}/{message_id}"
+    # 비공개 채널은 내부 주소만 있다. 텔레그램 앱에서는 열리지만 브라우저에서는 열리지 않는다.
+    internal = str(getattr(entity, "id", "")).lstrip("-").removeprefix("100")
+    return f"https://t.me/c/{internal}/{message_id}" if internal else ""
+
+
+async def _scan_account(source: dict, since: datetime) -> list[Item]:
+    from telethon import TelegramClient
+
+    api_id = os.environ.get("TELEGRAM_API_ID", "").strip()
+    api_hash = os.environ.get("TELEGRAM_API_HASH", "").strip()
+    if not api_id or not api_hash:
+        raise RuntimeError(
+            "telegram_account 어댑터에는 TELEGRAM_API_ID/TELEGRAM_API_HASH가 필요합니다 "
+            "(my.telegram.org에서 발급)"
+        )
+
+    include = {str(name).lstrip("@").casefold() for name in (source.get("include_chats") or [])}
+    exclude = {str(name).lstrip("@").casefold() for name in (source.get("exclude_chats") or [])}
+    include_groups = bool(source.get("include_groups"))
+    per_chat_limit = int(source.get("per_chat_limit") or 30)
+    max_chats = int(source.get("max_chats") or 500)
+
+    client = TelegramClient(_account_session(), int(api_id), api_hash)
+    await client.connect()
+    try:
+        if not await client.is_user_authorized():
+            # 여기서 대화형 로그인을 시작하면 자동 실행이 입력을 기다리며 멈춰 선다.
+            raise RuntimeError(
+                "텔레그램 계정 세션이 없습니다 — 먼저 `python login_account.py`로 한 번 로그인하세요"
+            )
+
+        items: list[Item] = []
+        scanned = 0
+        async for dialog in client.iter_dialogs(limit=max_chats):
+            entity = dialog.entity
+            broadcast = bool(getattr(entity, "broadcast", False))
+            megagroup = bool(getattr(entity, "megagroup", False))
+            if not broadcast and not (include_groups and megagroup):
+                continue  # 1:1 대화와 일반 그룹은 리서치 소스가 아니다
+
+            names = _chat_names(entity)
+            if include and not (names & include):
+                continue
+            if names & exclude:
+                continue
+            # 최신 글이 조회 창보다 오래된 방은 히스토리를 요청하지 않는다(호출량 절약).
+            if dialog.date and to_utc(dialog.date) < since:
+                continue
+
+            scanned += 1
+            title = getattr(entity, "title", None) or getattr(entity, "username", "") or "이름 없는 채널"
+            async for message in client.iter_messages(entity, limit=per_chat_limit):
+                posted = to_utc(message.date)
+                if posted and posted < since:
+                    break  # 최신순이라 창을 벗어나면 그 방은 끝
+                text = (message.message or "").strip()
+                if not text:
+                    continue
+                items.append(
+                    Item(
+                        uid=f"{getattr(entity, 'id', '?')}:{message.id}",
+                        title=first_line(text),
+                        url=_message_url(entity, message.id),
+                        body=text,
+                        published_at=posted,
+                        origin=str(title),
+                    )
+                )
+        print(f"  · 새 글이 있는 방 {scanned}개 확인", flush=True)
+        return items
+    finally:
+        await client.disconnect()
+
+
+def collect_telegram_account(source: dict) -> list[Item]:
+    """내 계정이 들어가 있는 모든 채널에서 조회 창 안의 글을 모은다.
+
+    채널 목록을 관리할 필요가 없는 대신 계정 세션이 필요하다. 세션 파일은 계정 그 자체나
+    다름없으므로 저장소에 올리지 않는다(.gitignore). 자세한 준비 절차는 README를 볼 것.
+    """
+    try:
+        import telethon  # noqa: F401
+    except ImportError as exc:  # pragma: no cover - 환경 의존
+        raise RuntimeError(
+            "telegram_account 어댑터에는 telethon이 필요합니다: pip install telethon"
+        ) from exc
+
+    hours = int(source.get("lookback_hours") or 0) or 24
+    # 워크플로가 늦게 돌거나 한 번 걸러도 글을 놓치지 않게 조회 창을 조금 넉넉히 잡는다.
+    since = datetime.now(timezone.utc) - timedelta(hours=hours + 1)
+    return asyncio.run(_scan_account(source, since))
+
+
 COLLECTORS = {
     "telegram": collect_telegram,
+    "telegram_account": collect_telegram_account,
     "rss": collect_rss,
     "web": collect_web,
 }

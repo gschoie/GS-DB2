@@ -29,6 +29,71 @@ python watch_sources.py --check --only some_blog
 | `rss` | RSS/Atom이 있는 블로그·언론사. 네이버 블로그는 `https://rss.blog.naver.com/<블로그ID>.xml` | `url` |
 | `web` | RSS도 텔레그램도 없을 때의 최후 수단. 사이트 개편에 그대로 깨진다 | `url`, `item_selector` |
 
+## 조선 코멘트 감시 (`ship_all`) — 구독한 모든 채널에서 회사 이름 잡아내기
+
+내 텔레그램 계정이 **가입해 있는 모든 채널**(비공개·초대링크 포함)을 훑어,
+현대중공업·삼성중공업·한화오션 등 조선 관련 낱말이 든 글의 **걸린 문장만**
+**@gs_sb_bot**으로 보낸다. 채널 목록을 관리할 필요가 없다 — 새 채널에 들어가면
+다음 실행부터 자동으로 감시 대상이 된다. 낱말 목록은 `sources.yml`의
+`x_ship_keywords`에서 고친다.
+
+**리소스 걱정은 하지 않아도 된다.** 대화 목록 조회가 100개 단위 요청 몇 번이고,
+새 글이 없는 방은 아예 히스토리를 요청하지 않는다. 채널 수백 개를 구독해도
+실행당 몇십 초 수준이며, 이 저장소는 public이라 Actions 사용료도 없다.
+
+### 준비 — PC 없이 GitHub 웹에서 전부 한다
+
+봇 토큰으로는 '내가 구독한 채널'을 읽을 수 없어서(봇은 초대된 방만 본다)
+**내 계정 세션**이 한 번의 로그인으로 필요하다. 로그인도 Actions 안에서 한다.
+
+**1. 시크릿 등록** — 저장소 → Settings → Secrets and variables → Actions:
+
+| 시크릿 이름 | 값 |
+|---|---|
+| `SHIP_TELEGRAM_BOT_TOKEN` | @BotFather가 준 **@gs_sb_bot**의 토큰 (`123456:AAE...`) |
+| `SHIP_TELEGRAM_CHAT_ID` | 알림 받을 방의 chat_id (아래 '알아내는 법' 참고) |
+| `TELEGRAM_API_ID` | my.telegram.org → API development tools의 api_id |
+| `TELEGRAM_API_HASH` | 같은 곳의 api_hash |
+| `TELEGRAM_PHONE` | 계정 전화번호, `+8210...` 국제 형식 |
+| `SESSION_PASSPHRASE` | 아무 길고 무작위한 문자열 — 세션 암호화 열쇠. 한 번 정하면 유지 |
+
+chat_id 알아내는 법: @gs_sb_bot에게 텔레그램에서 아무 말이나 보낸 뒤
+`https://api.telegram.org/bot<토큰>/getUpdates`를 브라우저로 열면
+`"chat":{"id":숫자}`가 보인다. 부호까지 그대로 넣는다.
+
+**2. 로그인 (Actions → `텔레그램 계정 로그인` 워크플로, 두 번 실행)**
+
+1. `Run workflow` → step: **request** — 인증코드가 내 텔레그램 앱으로 온다.
+2. 앱에 온 숫자를 시크릿 **`TELEGRAM_LOGIN_CODE`** 로 등록한다.
+   (⚠ 코드를 텔레그램 대화창에 적어 보내면 텔레그램이 즉시 무효화한다.
+   코드는 몇 분이면 만료되니 바로 이어서 할 것. 2단계 인증 계정이면
+   `TELEGRAM_2FA_PASSWORD` 시크릿도 등록.)
+3. `Run workflow` → step: **confirm** — 로그인이 끝나고, 세션이
+   `SESSION_PASSPHRASE`로 암호화되어 `state/session.enc`로 커밋된다.
+   로그에 "로그인 완료 · 구독 채널 n개"가 찍히면 성공. `TELEGRAM_LOGIN_CODE`는
+   지워도 된다.
+
+이후 소스 감시 봇이 매 실행마다 그 암호문을 풀어 쓴다. 재로그인은 필요 없다.
+세션 평문은 러너 안에서만 존재하고 로그에 찍히지 않으며, 저장소에는 암호문만
+남는다(passphrase는 시크릿에만 있다). 세션을 폐기하려면 텔레그램 앱 →
+설정 → 기기에서 해당 세션을 끊고 `state/session.enc`를 지우면 된다.
+
+**3. 점검** — Actions → `소스 감시 봇` → Run workflow → mode: `test`,
+only: `ship_all`. 최신 매칭 글 1건이 @gs_sb_bot으로 시험 발송된다.
+
+로그인 전에도 다른 소스는 그대로 돈다 — `ship_all`만 수집 실패로 남을 뿐이다.
+
+### 중복·소음을 막는 장치
+
+- **내용 중복 제거(`dedupe_scope`)** — 채널들이 같은 리포트 요약을 퍼나르면 본문
+  지문(min-hash)으로 알아채 **한 번만** 보낸다. 머리말 한 줄이 붙어 있어도 잡는다.
+  `channels:`로 펼친 소스끼리는 자동으로 묶인다.
+- **걸린 문장만 발송(`push: hit`)** — 긴 데일리 전문 대신 회사 이름이 걸린 줄만
+  발췌해 오고, 알림 머리에 어느 회사(🚨) · 어느 채널(📡)인지 찍는다. 전문은 원문
+  링크로 본다.
+- **별칭 낱말 묶음(`match_any`)** — `한화오션: [한화오션, 대우조선해양, "042660"]`처럼
+  회사 이름 아래 별칭·종목코드를 묶는다. 정규식이 아니라 글자 그대로 찾는다.
+
 ### 한 채널에서 원하는 자료만 받기
 
 증권사 채널은 데일리·종목리포트·공지를 한 채널에 섞어 뿌리는 경우가 많다.
@@ -43,6 +108,7 @@ python watch_sources.py --check --only some_blog
 
 | key | 이름 | 종류 | 주소 |
 |---|---|---|---|
+| `ship_all` | 조선 코멘트 | telegram_account | 구독한 전 채널 → @gs_sb_bot (로그인 필요, 위 절 참고) |
 | `mer` | 메르 | rss | `https://rss.blog.naver.com/ranto28.xml` |
 | `hanwha_5things` | 한화 임혜윤 · 개장전 5가지 | telegram | `https://t.me/lim_econ` |
 
@@ -173,6 +239,9 @@ python -m unittest discover -s tests -p "test_*.py" -v
 |---|---|
 | `sources.yml` | 소스 레지스트리 — **평소 손대는 유일한 파일** |
 | `watch_sources.py` | 선별·중복판정·상태관리·발송 오케스트레이션 |
-| `adapters.py` | 종류별 수집기(telegram/rss/web). 새 종류는 여기에 붙인다 |
+| `adapters.py` | 종류별 수집기(telegram/telegram_account/rss/web). 새 종류는 여기에 붙인다 |
 | `notify.py` | 텔레그램 발송(분할·재시도) |
+| `cloud_login.py` | Actions 안에서 계정 로그인 — `텔레그램 계정 로그인` 워크플로가 부른다 |
+| `login_account.py` | PC에서 로그인하고 싶을 때의 대안 (`--string`으로 세션 문자열 출력) |
 | `state/seen.json` | 이미 보낸 글 기록 — 손으로 고치지 말 것 |
+| `state/session.enc` | 암호화된 계정 세션 — 로그인 워크플로가 만들고 감시 봇이 푼다 |
