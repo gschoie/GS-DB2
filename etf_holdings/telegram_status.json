@@ -1,5 +1,5 @@
 {
-  "when_utc": "2026-08-10 06:45:15Z",
+  "when_utc": "2026-08-11 07:41:45Z",
   "ok": true,
   "note": "change_sent",
   "chat_id_tail": "5171",
@@ -7,7 +7,7 @@
   "response": {
     "ok": true,
     "result": {
-      "message_id": 66,
+      "message_id": 74,
       "from": {
         "id": 8875725998,
         "is_bot": true,
@@ -21,8 +21,8 @@
         "username": "gschoie",
         "type": "private"
       },
-      "date": 1786344315,
-      "text": "🧩 액티브 ETF 구성 변화 · 구성 기준일 2026-08-10 (KRX 장마감)\n\n변화 ETF 4개 · 진입 3·이탈 3·실매매 3\n\n🟢 TIGER 배당커버드콜액티브 · TIGER\n   ⊕ 진입: 한화에어로스페이스\n   ⊖ 이탈: LS ELECTRIC\n   ▽ 삼성전자우 계약수 −19% · 비중 −1.1%p\n   ▲ 삼성전자 계약수 +4% · 비중 +1.1%p\n🟢 TIME Korea플러스배당액티브 · TIME(구 TIMEFOLIO)\n   ⊕ 진입: 하나금융지주\n   ⊖ 이탈: 키움증권\n🟢 KoAct 코스닥액티브 · KoAct\n   ⊕ 진입: 에이비엘바이오\n   ⊖ 이탈: 제주반도체\n🟢 TIME 코스닥액티브 · TIME(구 TIMEFOLIO)\n   ▲ 알테오젠 계약수 +66% · 비중 +2.6%p\n\n전체 상세 › 대시보드\n🎴 GS Research Desk · 액티브 ETF 트래커",
+      "date": 1786434105,
+      "text": "🧩 액티브 ETF 구성 변화 · 구성 기준일 2026-08-11 (KRX 장마감)\n\n변화 ETF 3개 · 진입 3·이탈 3·실매매 0\n\n🟢 TIME Korea플러스배당액티브 · TIME(구 TIMEFOLIO)\n   ⊕ 진입: 키움증권\n   ⊖ 이탈: 하나금융지주\n🟢 TIME K컬처액티브 · TIME(구 TIMEFOLIO)\n   ⊕ 진입: 올릭스\n   ⊖ 이탈: 하이브\n🟢 KoAct 코스닥액티브 · KoAct\n   ⊕ 진입: 제주반도체\n   ⊖ 이탈: 에이비엘바이오\n\n전체 상세 › 대시보드\n🎴 GS Research Desk · 액티브 ETF 트래커",
       "entities": [
         {
           "offset": 0,
@@ -36,26 +36,21 @@
         },
         {
           "offset": 80,
-          "length": 15,
-          "type": "bold"
-        },
-        {
-          "offset": 209,
           "length": 18,
           "type": "bold"
         },
         {
-          "offset": 281,
-          "length": 12,
-          "type": "bold"
-        },
-        {
-          "offset": 337,
+          "offset": 152,
           "length": 11,
           "type": "bold"
         },
         {
-          "offset": 409,
+          "offset": 213,
+          "length": 12,
+          "type": "bold"
+        },
+        {
+          "offset": 275,
           "length": 4,
           "type": "text_link",
           "url": "https://gschoie.github.io/GS-output-dashboard/etf_holdings_report.html"
