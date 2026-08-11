@@ -445,7 +445,7 @@ class RenderTest(unittest.TestCase):
         )
         body = "오늘의 데일리\n시황은 혼조\n한화오션 수주 코멘트: 미 해군 MRO 수주 임박\n다른 종목 이야기"
         text = ws.render(source, item("a", body=body, url="http://t.me/x/1"))
-        self.assertIn("🚨", text)
+        self.assertIn("🕊️전보)", text)
         self.assertIn("<b>한화오션</b>", text)                      # 머리에 회사 이름
         self.assertIn("<b>한화오션</b> 수주 코멘트", text)          # 걸린 줄 + 낱말 강조
         self.assertNotIn("시황은 혼조", text)                       # 안 걸린 줄은 버린다
