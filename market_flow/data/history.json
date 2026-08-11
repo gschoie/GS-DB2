@@ -4301,61 +4301,61 @@
   },
   "2026-08-11": {
    "kospi": {
-    "close": 6347.41,
-    "chg_pct": 0.76
+    "close": 6376.33,
+    "chg_pct": 1.22
    },
    "slots": {
     "1300": {
-     "individual": -1498,
-     "foreign": 1190,
-     "institution": 432,
-     "arb": 615,
-     "nonarb": 1588,
-     "program": 2203,
-     "time": "12:02",
-     "kospi": 6347.41,
-     "chg_pct": 0.76
+     "individual": -2083,
+     "foreign": 817,
+     "institution": 1365,
+     "arb": 212,
+     "nonarb": 2710,
+     "program": 2922,
+     "time": "14:10",
+     "kospi": 6376.33,
+     "chg_pct": 1.22
     }
    },
    "confirmed": {
     "investor": {
-     "individual": -1552,
-     "foreign": 1164,
-     "inst_total": 514,
-     "fin_invest": -1514,
-     "insurance": -45,
-     "asset_mgmt": 561,
-     "bank": -52,
-     "other_fin": 42,
-     "pension": 1521,
-     "other_corp": -126
+     "individual": -2111,
+     "foreign": 818,
+     "inst_total": 1395,
+     "fin_invest": -165,
+     "insurance": -3,
+     "asset_mgmt": 895,
+     "bank": -70,
+     "other_fin": 134,
+     "pension": 605,
+     "other_corp": -102
     },
     "program": {
-     "arb_buy": 1364,
-     "arb_sell": 749,
-     "arb_net": 615,
-     "nonarb_buy": 35080,
-     "nonarb_sell": 33510,
-     "nonarb_net": 1570,
-     "total_buy": 36444,
-     "total_sell": 34259,
-     "total_net": 2185
+     "arb_buy": 1813,
+     "arb_sell": 1600,
+     "arb_net": 213,
+     "nonarb_buy": 49815,
+     "nonarb_sell": 47098,
+     "nonarb_net": 2717,
+     "total_buy": 51628,
+     "total_sell": 48698,
+     "total_net": 2930
     },
     "futures": {
-     "individual": -820,
-     "foreign": 1383,
-     "inst_total": -496,
-     "fin_invest": -545,
-     "insurance": 69,
-     "asset_mgmt": 184,
-     "bank": -14,
-     "other_fin": 18,
-     "pension": -208,
-     "other_corp": -67
+     "individual": -866,
+     "foreign": 2349,
+     "inst_total": -1277,
+     "fin_invest": -1479,
+     "insurance": -19,
+     "asset_mgmt": 289,
+     "bank": 26,
+     "other_fin": 8,
+     "pension": -102,
+     "other_corp": -206
     }
    }
   }
  },
- "updated_kst": "2026-08-11 12:02",
+ "updated_kst": "2026-08-11 14:10",
  "futures_unit": "계약"
 }
