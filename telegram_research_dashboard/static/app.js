@@ -121,6 +121,7 @@ async function fetchToneSummary(){const box=$('#tone-latest');if(!box)return;
  catch{box.innerHTML=`<p class="empty">톤 보드에서 확인 → <a href="${TONE_SITE}" target="_blank" rel="noopener">daol-research-tone ↗</a></p>`}}
 function miniRow(lead,body,href){return `<a class="mini-row" href="${esc(href||'#')}" target="_blank" rel="noopener">${lead}<div>${body}</div></a>`}
 function overviewNews(n){return `<a class="mini-line" href="${esc(n.article_url||n.source_url||'#')}" target="_blank" rel="noopener"><small>${esc(fmtDate(n.posted_at))}</small><b>${esc(n.companies_label||n.company_name||'기업 미확인')}</b><span>${esc(n.title)}</span></a>`}
+function overviewReport(r){const kind=r.report_type||'기업분석',kindClass=kind==='산업분석'?'industry':kind==='위클리'?'weekly':'';const who=r.companies_label||r.company_name||(kind==='기업분석'?'기업 미확인':'산업 자료');const tag=r.target_change&&r.target_change!=='미확인'?`<span class="tag ${r.target_change==='상향'?'up':r.target_change==='하향'?'down':''}">${esc(r.target_change)}</span>`:'';return `<a class="mini-line" href="${esc(r.original_url||r.source_url||'#')}" target="_blank" rel="noopener"><small>${esc(fmtDate(r.posted_at))}</small><span class="report-kind ${kindClass}">${esc(kind)}</span><b>${esc(who)}</b><span>${esc(r.title)}</span>${tag}</a>`}
 function overviewTone(r){const op=r.opinion&&!['명시 없음','없음',''].includes(r.opinion)?`<span class="tag">${esc(r.opinion)}</span>`:'';const tp=r.tp_dir==='상향'?'<span class="tag up">TP▲</span>':r.tp_dir==='하향'?'<span class="tag down">TP▼</span>':'';return miniRow(`<small>${esc(String(r.date||'').slice(5))}</small>`,`<div class="mini-head"><b>${esc(r.company||'')}</b> <span class="mini-sub">${esc(r.analyst||'')}</span>${op}${tp}</div><p>${esc(r.title||'')}</p>`,r.pdf_url||r.post_url)}
 function overviewUnion(p){return `<a class="mini-line" href="${esc(p.url||'#')}" target="_blank" rel="noopener"><b class="rk-s">${p.rank}</b><span>${esc(p.title)}</span><small>조회 ${Number(p.views).toLocaleString()} · 댓글 ${p.comments}</small></a>`}
 function overviewMacro(x,i){return miniRow(`<b class="rk">${i+1}</b>`,`<p class="mini-title">${esc(x.title)}</p>`,x.url)}
@@ -135,7 +136,7 @@ async function load(){
  $('#press-start').value=state.pressStart;$('#press-end').value=state.pressEnd;
  $('#updated-at').textContent=sum.updated_at?new Intl.DateTimeFormat('ko-KR',{year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit'}).format(new Date(sum.updated_at)):'미확인';
  $('#weekly-all-count').textContent=`${weeklyReports.length}건`;$('#weekly-daol-count').textContent=`${weeklyReports.filter(r=>r.weekly_folder==='다올선박').length}건`;$('#weekly-kis-count').textContent=`${weeklyReports.filter(r=>r.weekly_folder==='한투시절').length}건`;$('#weekly-hi-count').textContent=`${weeklyReports.filter(r=>r.weekly_folder==='하이투자증권시절').length}건`;
- $('#latest-reports').innerHTML=reports.slice(0,5).map(reportRow).join('')||'<p class="empty">수집된 보고서가 없습니다.</p>';
+ $('#latest-reports').innerHTML=reports.slice(0,8).map(overviewReport).join('')||'<p class="empty">수집된 보고서가 없습니다.</p>';
  renderReportTable();
  $('#latest-news').innerHTML=news.slice(0,10).map(overviewNews).join('')||'<p class="empty">수집된 뉴스가 없습니다.</p>';
  fetchToneSummary();
