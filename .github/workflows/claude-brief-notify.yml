@@ -1,0 +1,37 @@
+name: Claude 방산 브리핑 알림
+# Claude 예약 작업이 claude_defense/<날짜>.md 를 커밋하면 전용 텔레그램 봇으로
+# 핵심 요약을 발송한다. 시크릿(CLAUDE_TELEGRAM_BOT_TOKEN/CLAUDE_TELEGRAM_CHAT_ID)이
+# 없으면 스크립트가 발송을 건너뛰므로 봇 준비 전에도 안전하게 켜 둘 수 있다.
+
+on:
+  workflow_dispatch:
+  push:
+    branches: ["main"]
+    paths:
+      - "telegram_research_dashboard/static/claude_defense/*.md"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: claude-brief-notify
+  cancel-in-progress: false
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: 패키지 준비
+        run: python -m pip install requests
+
+      - name: 텔레그램 발송 (최신 브리핑 요약)
+        env:
+          CLAUDE_TELEGRAM_BOT_TOKEN: ${{ secrets.CLAUDE_TELEGRAM_BOT_TOKEN }}
+          CLAUDE_TELEGRAM_CHAT_ID: ${{ secrets.CLAUDE_TELEGRAM_CHAT_ID }}
+        run: python defense_briefing/claude_brief_publish.py --send-only

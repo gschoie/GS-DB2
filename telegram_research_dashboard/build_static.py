@@ -133,10 +133,23 @@ def build() -> Path:
         summary_md = "\n".join(md_lines[:end]).strip()
         if summary_md:
             defense_brief = {"date": latest.stem, "summary": summary_md}
+    # Claude 방산 브리핑(2탄): static/claude_defense/<날짜>.md — 같은 방식으로 요약 카드용 절단
+    claude_brief = {}
+    cdir = ROOT / "static" / "claude_defense"
+    cmd_files = sorted(cdir.glob("????-??-??.md")) if cdir.is_dir() else []
+    if cmd_files:
+        latest = cmd_files[-1]
+        md_lines = latest.read_text(encoding="utf-8").splitlines()
+        heads = [i for i, line in enumerate(md_lines) if line.startswith("## ")]
+        end = heads[1] if len(heads) >= 2 else len(md_lines)
+        summary_md = "\n".join(md_lines[:end]).strip()
+        if summary_md:
+            claude_brief = {"date": latest.stem, "summary": summary_md}
     payload = json.dumps(
         {"summary": summary, "reports": reports, "news": news, "companies": companies,
          "reportCompanies": report_companies, "newsTexts": news_texts, "market": market,
-         "union": union, "macro": macro, "defenseBrief": defense_brief},
+         "union": union, "macro": macro, "defenseBrief": defense_brief,
+         "claudeBrief": claude_brief},
         ensure_ascii=False, separators=(",", ":"),
     ).replace("</", "<\\/").replace("\u2028", "\\u2028").replace("\u2029", "\\u2029")
     html = (ROOT / "static" / "index.html").read_text(encoding="utf-8")
@@ -177,6 +190,12 @@ def build() -> Path:
     defense_dir = ROOT / "static" / "defense_daily"
     if defense_dir.is_dir():
         shutil.copytree(defense_dir, OUTPUT.parent / "defense_daily", dirs_exist_ok=True)
+    claude_index = ROOT / "static" / "claude_defense_report.html"
+    if claude_index.exists():
+        shutil.copy2(claude_index, OUTPUT.parent / "claude_defense_report.html")
+    claude_dir = ROOT / "static" / "claude_defense"
+    if claude_dir.is_dir():
+        shutil.copytree(claude_dir, OUTPUT.parent / "claude_defense", dirs_exist_ok=True)
     print(f"생성 완료: {OUTPUT} ({OUTPUT.stat().st_size / 1024 / 1024:.1f} MB)")
     return OUTPUT
 
