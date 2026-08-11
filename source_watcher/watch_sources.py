@@ -398,7 +398,7 @@ def render(source: dict, item: adapters.Item) -> str:
                 companies.append(name)
         terms = [term for _, term in found]
 
-        head = "🚨 " + (" · ".join(f"<b>{escape(name)}</b>" for name in companies) or "<b>키워드</b>")
+        head = "🕊️전보) " + (" · ".join(f"<b>{escape(name)}</b>" for name in companies) or "<b>키워드</b>")
         head += f"\n📡 {escape(label)}"
         if tag_line:
             head += f"  {tag_line}"
