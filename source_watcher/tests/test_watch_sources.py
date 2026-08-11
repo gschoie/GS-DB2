@@ -466,6 +466,30 @@ class RenderTest(unittest.TestCase):
         self.assertIn("본문 첫 줄", text)
 
 
+class RouteTest(unittest.TestCase):
+    """route가 걸린 소스는 <ROUTE>_TELEGRAM_* 환경변수의 봇으로 갈라 보낸다."""
+
+    def setUp(self):
+        import os
+        self.os = os
+        for name in ("SHIP_TELEGRAM_BOT_TOKEN", "SHIP_TELEGRAM_CHAT_ID"):
+            os.environ.pop(name, None)
+
+    tearDown = setUp
+
+    def test_route_reads_prefixed_env(self):
+        self.os.environ["SHIP_TELEGRAM_BOT_TOKEN"] = "tok"
+        self.os.environ["SHIP_TELEGRAM_CHAT_ID"] = "-100123"
+        self.assertEqual(ws.route_credentials(make_source(route="ship")), ("tok", "-100123"))
+
+    def test_missing_route_env_falls_back_to_default(self):
+        # 시크릿을 아직 안 넣었어도 알림이 사라지면 안 된다 — 기본 봇으로 나간다
+        self.assertEqual(ws.route_credentials(make_source(route="ship")), (None, None))
+
+    def test_no_route_uses_default(self):
+        self.assertEqual(ws.route_credentials(make_source()), (None, None))
+
+
 class ChunkTest(unittest.TestCase):
     def test_short_text_is_one_chunk(self):
         self.assertEqual(notify.split_chunks("짧은 글"), ["짧은 글"])

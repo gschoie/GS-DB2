@@ -49,17 +49,35 @@ jobs:
         working-directory: source_watcher
         run: python -m unittest discover -s tests -p "test_*.py"
 
+      # 조선 감시(ship_all)가 쓰는 계정 세션. '텔레그램 계정 로그인' 워크플로가 만든
+      # 암호문(state/session.enc)을 풀어 환경변수로 넘긴다. 아직 로그인 전이면 조용히
+      # 건너뛰고 ship_all만 수집 실패로 남는다(다른 소스는 정상 동작).
+      - name: 계정 세션 복호화
+        env:
+          SESSION_PASSPHRASE: ${{ secrets.SESSION_PASSPHRASE }}
+        run: |
+          if [ -f source_watcher/state/session.enc ] && [ -n "$SESSION_PASSPHRASE" ]; then
+            VALUE=$(openssl enc -aes-256-cbc -pbkdf2 -iter 200000 -d \
+              -in source_watcher/state/session.enc -pass env:SESSION_PASSPHRASE)
+            echo "::add-mask::$VALUE"
+            echo "TELEGRAM_SESSION_STRING=$VALUE" >> "$GITHUB_ENV"
+          else
+            echo "세션 없음 — telegram_account 소스는 건너뜁니다"
+          fi
+
       - name: 소스 감시 실행
         working-directory: source_watcher
         env:
           # 방산 브리핑과 같은 봇을 쓰려면 WATCH_* 시크릿을 비워두면 된다.
           TELEGRAM_BOT_TOKEN: ${{ secrets.WATCH_TELEGRAM_BOT_TOKEN || secrets.KDEF_TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.WATCH_TELEGRAM_CHAT_ID || secrets.KDEF_TELEGRAM_CHAT_ID }}
-          # telegram_account 소스(내 계정으로 전 채널 훑기)를 켤 때만 필요.
-          # 세션 문자열은 `python login_account.py --string`으로 만든다(README 참고).
+          # 조선 코멘트(route: ship)는 @gs_sb_bot으로 갈라 보낸다.
+          SHIP_TELEGRAM_BOT_TOKEN: ${{ secrets.SHIP_TELEGRAM_BOT_TOKEN }}
+          SHIP_TELEGRAM_CHAT_ID: ${{ secrets.SHIP_TELEGRAM_CHAT_ID }}
+          # telegram_account 소스(내 계정으로 전 채널 훑기)용.
+          # TELEGRAM_SESSION_STRING은 위 복호화 단계가 GITHUB_ENV로 넘긴다.
           TELEGRAM_API_ID: ${{ secrets.TELEGRAM_API_ID }}
           TELEGRAM_API_HASH: ${{ secrets.TELEGRAM_API_HASH }}
-          TELEGRAM_SESSION_STRING: ${{ secrets.TELEGRAM_SESSION_STRING }}
           MODE: ${{ inputs.mode || 'run' }}
           ONLY: ${{ inputs.only }}
         run: |

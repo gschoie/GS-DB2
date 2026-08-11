@@ -1,0 +1,103 @@
+name: 텔레그램 계정 로그인
+
+# 조선 감시(ship_all)가 쓰는 텔레그램 계정 세션을 PC 없이 만든다. 두 번 실행한다.
+#
+#   1) step=request : 인증코드를 내 텔레그램 앱으로 보낸다
+#   2) 앱에 온 숫자를 TELEGRAM_LOGIN_CODE 시크릿에 넣는다 (코드는 몇 분이면 만료)
+#   3) step=confirm : 로그인을 마치고, 세션을 SESSION_PASSPHRASE로 암호화해
+#      source_watcher/state/session.enc 로 커밋한다
+#
+# 세션 문자열은 계정 그 자체나 다름없다. 그래서 평문은 러너 안에서만 존재하고,
+# 저장소에는 암호문만 커밋되며, 로그에는 절대 찍지 않는다.
+# 필요한 시크릿: TELEGRAM_API_ID, TELEGRAM_API_HASH, TELEGRAM_PHONE(+82... 형식),
+#               SESSION_PASSPHRASE(아무 긴 문자열), (confirm 때) TELEGRAM_LOGIN_CODE,
+#               (2단계 인증 계정이면) TELEGRAM_2FA_PASSWORD
+
+on:
+  workflow_dispatch:
+    inputs:
+      step:
+        description: "1단계 request(코드 요청) → 2단계 confirm(코드 확인)"
+        type: choice
+        required: true
+        options: [request, confirm]
+
+permissions:
+  contents: write
+
+# 소스 감시 봇과 같은 그룹 — 로그인 커밋과 상태 커밋이 서로 밟지 않게 한다.
+concurrency:
+  group: source-watcher
+  cancel-in-progress: false
+
+jobs:
+  login:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: telethon 설치
+        run: pip install telethon
+
+      - name: 코드 요청
+        if: ${{ inputs.step == 'request' }}
+        working-directory: source_watcher
+        env:
+          TELEGRAM_API_ID: ${{ secrets.TELEGRAM_API_ID }}
+          TELEGRAM_API_HASH: ${{ secrets.TELEGRAM_API_HASH }}
+          TELEGRAM_PHONE: ${{ secrets.TELEGRAM_PHONE }}
+          SESSION_PASSPHRASE: ${{ secrets.SESSION_PASSPHRASE }}
+        run: |
+          test -n "$SESSION_PASSPHRASE" || { echo "SESSION_PASSPHRASE 시크릿이 비어 있습니다"; exit 2; }
+          python cloud_login.py request --pending /tmp/login_pending.json
+          mkdir -p state
+          openssl enc -aes-256-cbc -pbkdf2 -iter 200000 -salt \
+            -in /tmp/login_pending.json -out state/login_pending.enc \
+            -pass env:SESSION_PASSPHRASE
+          rm /tmp/login_pending.json
+
+      - name: 코드 확인
+        if: ${{ inputs.step == 'confirm' }}
+        working-directory: source_watcher
+        env:
+          TELEGRAM_API_ID: ${{ secrets.TELEGRAM_API_ID }}
+          TELEGRAM_API_HASH: ${{ secrets.TELEGRAM_API_HASH }}
+          TELEGRAM_PHONE: ${{ secrets.TELEGRAM_PHONE }}
+          TELEGRAM_LOGIN_CODE: ${{ secrets.TELEGRAM_LOGIN_CODE }}
+          TELEGRAM_2FA_PASSWORD: ${{ secrets.TELEGRAM_2FA_PASSWORD }}
+          SESSION_PASSPHRASE: ${{ secrets.SESSION_PASSPHRASE }}
+        run: |
+          test -f state/login_pending.enc || { echo "먼저 step=request 를 실행하세요"; exit 2; }
+          openssl enc -aes-256-cbc -pbkdf2 -iter 200000 -d \
+            -in state/login_pending.enc -out /tmp/login_pending.json \
+            -pass env:SESSION_PASSPHRASE
+          python cloud_login.py confirm --pending /tmp/login_pending.json --out /tmp/session_string.txt
+          openssl enc -aes-256-cbc -pbkdf2 -iter 200000 -salt \
+            -in /tmp/session_string.txt -out state/session.enc \
+            -pass env:SESSION_PASSPHRASE
+          rm /tmp/login_pending.json /tmp/session_string.txt state/login_pending.enc
+
+      - name: 커밋 및 푸시
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add -A source_watcher/state/
+          if git diff --cached --quiet; then
+            echo "커밋할 변경 없음"
+            exit 0
+          fi
+          git commit -m "chore(watch): 텔레그램 로그인 ${{ inputs.step }}"
+          for i in 1 2 3 4 5; do
+            if git push origin HEAD:main; then
+              exit 0
+            fi
+            git pull --rebase --autostash origin main
+            sleep 5
+          done
+          echo "push 실패" >&2
+          exit 1

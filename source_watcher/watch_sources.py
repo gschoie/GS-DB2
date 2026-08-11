@@ -54,6 +54,7 @@ DEFAULTS = {
     "dedupe_scope": None,  # 같은 값을 가진 소스끼리 내용 중복을 걸러낸다
     "hit_chars": 300,      # push: hit 에서 걸린 문장 한 줄의 길이 상한
     "max_hits": 3,         # push: hit 에서 보여줄 문장 수
+    "route": None,         # 발송 봇 분기 — <ROUTE>_TELEGRAM_BOT_TOKEN/_CHAT_ID 로 보낸다
     "tags": [],
 }
 
@@ -322,6 +323,25 @@ def clip(value: str, limit: int) -> str:
     return value[:cut].rstrip() + " …"
 
 
+def route_credentials(source: dict) -> tuple[str | None, str | None]:
+    """route가 걸린 소스의 봇 토큰·chat_id를 환경변수에서 찾는다.
+
+    조선 알림(@gs_sb_bot)처럼 기존 방과 다른 봇으로 갈라 보낼 때 쓴다. `route: ship`이면
+    SHIP_TELEGRAM_BOT_TOKEN / SHIP_TELEGRAM_CHAT_ID 를 읽는다. 시크릿이 아직 비어
+    있으면 기본 봇으로 대신 보낸다 — 알림이 조용히 사라지는 것보다 낫다.
+    """
+    route = source.get("route")
+    if not route:
+        return None, None
+    prefix = re.sub(r"[^0-9A-Za-z]+", "_", str(route)).upper().strip("_")
+    token = os.environ.get(f"{prefix}_TELEGRAM_BOT_TOKEN")
+    chat_id = os.environ.get(f"{prefix}_TELEGRAM_CHAT_ID")
+    if not token or not chat_id:
+        print(f"  ⚠ {prefix}_TELEGRAM_BOT_TOKEN/_CHAT_ID가 비어 기본 봇으로 보냅니다", file=sys.stderr)
+        return None, None
+    return token, chat_id
+
+
 def push_mode(source: dict) -> str:
     mode = source.get("push")
     if mode:
@@ -445,7 +465,8 @@ def run_source(source: dict, state: dict, now: datetime, args) -> int:
             print("  · 시험 발송할 글이 없습니다(필터 통과 0건)")
             return 0
         newest = max(candidates, key=lambda item: (item.published_at or now, item.uid))
-        notify.send(render(source, newest))
+        token, chat_id = route_credentials(source)
+        notify.send(render(source, newest), token=token, chat_id=chat_id)
         print(f"  · [시험발송] {newest.title[:70]}")
         return 1
 
@@ -481,12 +502,13 @@ def run_source(source: dict, state: dict, now: datetime, args) -> int:
         print(f"  · 새 글 {len(fresh)}건 중 최신 {len(to_send)}건만 발송(max_per_run) — 나머지는 읽음 처리")
 
     sent = 0
+    token, chat_id = route_credentials(source) if not args.dry_run else (None, None)
     for item in to_send:
         if args.dry_run:
             print(f"  · [모의] {item.title[:70]}  {item.url}")
             sent += 1
             continue
-        notify.send(render(source, item))
+        notify.send(render(source, item), token=token, chat_id=chat_id)
         print(f"  · 발송 {item.title[:70]}")
         sent += 1
 
