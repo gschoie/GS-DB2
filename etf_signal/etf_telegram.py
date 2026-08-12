@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-"""signals.json의 '오늘 알림'(매수 골든크로스 · 매도 데드크로스)만 텔레그램으로 발송
-(기존 봇과 동일: sendMessage/HTML).
+"""signals.json의 '오늘 알림'(매수 골든크로스 · 매도 데드크로스 · ADX 추세 강도)만
+텔레그램으로 발송 (기존 봇과 동일: sendMessage/HTML).
 알림이 없으면 발송하지 않음(스팸 방지). --dry-run 으로 메시지만 미리보기.
 --force 는 신호가 없어도 '오늘 새 신호 없음' 확인 메시지를 보냄(수동 🔄 갱신 확인용).
 전송 결과(성공/에러 원문)는 telegram_status.json 에 남긴다(원인 진단용).
@@ -41,26 +41,48 @@ def reasons_sell(s):
     if s.get("dist"): r.append("외인·기관 동반 순매도")
     return " · ".join(r) or "신호 발생"
 
+def reasons_adx(s):
+    """추세 강도 사유. 20 = 확인, 25 = 강력."""
+    up = s.get("adx_up")
+    dirn = "상승추세" if up else "하락추세"
+    r = []
+    if s.get("adx_stage") == 2: r.append(f"ADX 25 상향돌파 · {dirn} 강화(강력)")
+    elif s.get("adx_stage") == 1: r.append(f"ADX 20 상향돌파 · {dirn} 확립(확인)")
+    if up and s.get("flow") == "쌍끌이": r.append("외인·기관 동반 순매수")
+    if not up and s.get("dist"): r.append("외인·기관 동반 순매도")
+    return " · ".join(r) or "신호 발생"
+
 FLOW_LABEL = {"쌍끌이": "외인·기관 쌍끌이", "개인몰림": "개인몰림 주의",
               "중립": "수급 중립", "수급없음": "수급 –"}
 
 def _block(rows, icon, why):
+    """icon은 고정 문자열 또는 종목별로 아이콘을 정하는 함수."""
     lines = []
     for s in rows:
         flow = FLOW_LABEL.get(s["flow"], s["flow"])
+        mark = icon(s) if callable(icon) else icon
         lines += [
-            f"{icon} <b>{esc(s['name'])}</b> · {esc(s['group'])}",
+            f"{mark} <b>{esc(s['name'])}</b> · {esc(s['group'])}",
             f"   {esc(why(s))}",
             f"   ADX {s['adx']} · %K {s['k']}/{s['d']} · {esc(flow)}",
             "",
         ]
     return lines
 
+def _adx_icon(s):
+    """강력(25↑)은 ⚡, 확인(20↑)은 방향 화살표."""
+    if s.get("adx_stage") == 2:
+        return "⚡"
+    return "🔺" if s.get("adx_up") else "🔻"
+
 def build_message(payload):
     sig = payload["signals"]
     buys = [s for s in sig if s["alert"]]
     sells = [s for s in sig if s.get("alert_sell")]
-    if not buys and not sells:
+    # 추세 강도는 강력(25↑) 먼저, 그다음 확인(20↑)
+    adxs = sorted([s for s in sig if s.get("alert_adx")],
+                  key=lambda s: -(s.get("adx_stage") or 0))
+    if not buys and not sells and not adxs:
         return None
     asof = sig[0]["asof"]
     lines = [f"<b>📡 ETF/섹터 신호</b> · {esc(asof)} (전일 확정)", ""]
@@ -70,6 +92,13 @@ def build_message(payload):
     if sells:
         lines += [f"▼ 매도 경고(데드크로스) <b>{len(sells)}</b>개", ""]
         lines += _block(sells, "🔴", reasons_sell)
+    if adxs:
+        n2 = sum(1 for s in adxs if s.get("adx_stage") == 2)
+        head = f"⚡ 추세 강도 <b>{len(adxs)}</b>개"
+        if n2:
+            head += f" (강력 {n2})"
+        lines += [head, ""]
+        lines += _block(adxs, _adx_icon, reasons_adx)
     lines += [f'전체 신호판 › <a href="{DASH_URL}">대시보드</a>', SIGNATURE]
     return "\n".join(lines)
 
