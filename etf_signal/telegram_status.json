@@ -1,5 +1,5 @@
 {
-  "when_utc": "2026-08-11 03:06:34Z",
+  "when_utc": "2026-08-12 03:25:56Z",
   "ok": true,
   "note": "alert_sent",
   "chat_id_tail": "5171",
@@ -7,7 +7,7 @@
   "response": {
     "ok": true,
     "result": {
-      "message_id": 72,
+      "message_id": 79,
       "from": {
         "id": 8875725998,
         "is_bot": true,
@@ -21,8 +21,8 @@
         "username": "gschoie",
         "type": "private"
       },
-      "date": 1786417594,
-      "text": "📡 ETF/섹터 신호 · 2026-08-10 (전일 확정)\n\n★ 매수 신호(골든크로스) 4개\n\n🟢 KODEX 2차전지산업 · 2차전지\n   ＋DI가 −DI 상향돌파·추세전환\n   ADX 26.6 · %K 89.6/79.4 · 수급 중립\n\n🟢 RISE 수소경제테마 · 신재생/수소/기후\n   ＋DI가 −DI 상향돌파·추세전환\n   ADX 29.1 · %K 94.1/90.5 · 수급 중립\n\n🟢 SOL 조선TOP3플러스 · 조선\n   ＋DI가 −DI 상향돌파·추세전환\n   ADX 14.2 · %K 88.5/84.4 · 수급 중립\n\n🟢 KODEX 인버스 · 인버스/숏\n   Stochastic 과매도 반등·골든크로스\n   ADX 25.2 · %K 25.2/21.5 · 수급 중립\n\n▼ 매도 경고(데드크로스) 5개\n\n🔴 KODEX 로봇액티브 · 반도체/AI/로봇\n   Stochastic 과열 이탈·데드크로스\n   ADX 26.7 · %K 82.7/84.6 · 수급 중립\n\n🔴 SOL 화장품TOP3플러스 · 화장품\n   Stochastic 과열 이탈·데드크로스\n   ADX 18.1 · %K 89.5/90.6 · 수급 중립\n\n🔴 KODEX 건설 · 건설/운송\n   Stochastic 과열 이탈·데드크로스\n   ADX 14.9 · %K 91.3/91.8 · 수급 중립\n\n🔴 TIGER 200 건설 · 건설/운송\n   Stochastic 과열 이탈·데드크로스\n   ADX 22.3 · %K 89.2/90.2 · 수급 중립\n\n🔴 SOL 금융지주플러스고배당 · 금융\n   ＋DI가 −DI 하향이탈·추세꺾임\n   ADX 12.2 · %K 87.0/75.4 · 수급 중립\n\n전체 신호판 › 대시보드\n🎴 GS Research Desk · ETF/섹터 신호",
+      "date": 1786505156,
+      "text": "📡 ETF/섹터 신호 · 2026-08-11 (전일 확정)\n\n★ 매수 신호(골든크로스) 2개\n\n🟢 KODEX 보험 · 금융\n   ＋DI가 −DI 상향돌파·추세전환\n   ADX 18.9 · %K 76.4/68.1 · 수급 중립\n\n🟢 SOL 조선기자재 · 조선\n   ＋DI가 −DI 상향돌파·추세전환\n   ADX 19.6 · %K 66.6/62.1 · 수급 중립\n\n▼ 매도 경고(데드크로스) 4개\n\n🔴 KODEX 철강 · 철강/소재/화학\n   Stochastic 과열 이탈·데드크로스\n   ADX 27.0 · %K 95.6/96.2 · 수급 중립\n\n🔴 KoAct 바이오헬스케어액티브 · 바이오/헬스케어\n   Stochastic 과열 이탈·데드크로스\n   ADX 24.4 · %K 93.0/93.1 · 수급 중립\n\n🔴 KODEX 바이오 · 바이오/헬스케어\n   Stochastic 과열 이탈·데드크로스\n   ADX 28.7 · %K 94.7/94.8 · 수급 중립\n\n🔴 KODEX 은행 · 금융\n   Stochastic 과열 이탈·데드크로스 · 외인·기관 동반 순매도\n   ADX 10.9 · %K 80.9/82.0 · 개인몰림 주의\n\n전체 신호판 › 대시보드\n🎴 GS Research Desk · ETF/섹터 신호",
       "entities": [
         {
           "offset": 0,
@@ -36,56 +36,41 @@
         },
         {
           "offset": 57,
-          "length": 12,
-          "type": "bold"
-        },
-        {
-          "offset": 138,
-          "length": 11,
-          "type": "bold"
-        },
-        {
-          "offset": 223,
-          "length": 13,
-          "type": "bold"
-        },
-        {
-          "offset": 303,
-          "length": 9,
-          "type": "bold"
-        },
-        {
-          "offset": 399,
-          "length": 1,
-          "type": "bold"
-        },
-        {
-          "offset": 406,
-          "length": 11,
-          "type": "bold"
-        },
-        {
-          "offset": 495,
-          "length": 14,
-          "type": "bold"
-        },
-        {
-          "offset": 581,
           "length": 8,
           "type": "bold"
         },
         {
-          "offset": 663,
-          "length": 12,
+          "offset": 132,
+          "length": 9,
           "type": "bold"
         },
         {
-          "offset": 749,
-          "length": 14,
+          "offset": 220,
+          "length": 1,
           "type": "bold"
         },
         {
-          "offset": 836,
+          "offset": 227,
+          "length": 8,
+          "type": "bold"
+        },
+        {
+          "offset": 312,
+          "length": 16,
+          "type": "bold"
+        },
+        {
+          "offset": 405,
+          "length": 9,
+          "type": "bold"
+        },
+        {
+          "offset": 491,
+          "length": 8,
+          "type": "bold"
+        },
+        {
+          "offset": 593,
           "length": 4,
           "type": "text_link",
           "url": "https://gschoie.github.io/GS-output-dashboard/etf_signal_report.html"
