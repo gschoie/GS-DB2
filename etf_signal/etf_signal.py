@@ -17,6 +17,8 @@ BASE = "https://openapi.koreainvestment.com:9443"
 LIQ_MIN_EOK = 5          # 20일 평균 거래대금 5억 미만 = 저유동성(알림 제외)
 OVERSOLD = 25            # Stochastic 과매도 기준(골든크로스 직전 %K)
 OVERBOUGHT = 75          # Stochastic 과열 기준(데드크로스 직전 %K)
+ADX_LV1 = 20             # 추세 확립: ADX 상향돌파 → '확인' 신호
+ADX_LV2 = 25             # 추세 강화: ADX 상향돌파 → '강력' 신호
 EPS = 1e-6               # 지표 동률 판정 허용오차(%K·DI 포인트)
 
 # ── 키 로딩: 로컬 .env → 없으면 환경변수(GitHub Actions) ──
@@ -119,7 +121,11 @@ def _cross_dn(a, b):
     """a가 b를 하향이탈한 봉(True). 상향돌파의 대칭."""
     return _cross_up(b, a)
 
-def cross_events(pdi, ndi, sk, sd):
+def _cross_level(a, lv):
+    """a가 고정 임계선 lv를 상향돌파한 봉(True). 지표 대 지표가 아닌 대 상수 버전."""
+    return (a - lv > EPS) & (a.shift(1) - lv <= EPS)
+
+def cross_events(adx, pdi, ndi, sk, sd):
     """전 구간 크로스 이벤트(bool Series). 마지막 값 = '오늘 새로 뜬' 신호.
     횡보·박스권에서 두 지표가 같은 값에 붙는 구간이 있어, 부동소수점 오차(1e-14 수준)를
     크로스로 오판하지 않도록 EPS 이내 차이는 '같다'로 본다.
@@ -130,6 +136,9 @@ def cross_events(pdi, ndi, sk, sd):
         "stoch": up, "stoch_dead": dn,
         "oversold": up & (sk.shift(1) < OVERSOLD),
         "overbought": dn & (sk.shift(1) > OVERBOUGHT),
+        # 추세 '강도' 이벤트 — DI 교차와 무관하게 ADX가 임계선을 뚫은 날
+        "adx20": _cross_level(adx, ADX_LV1),
+        "adx25": _cross_level(adx, ADX_LV2),
     }
 
 HIST_N = 120  # 차트용 이력 봉 수
@@ -169,13 +178,20 @@ def scan_one(u):
     up_trend = bool(pdi.iloc[-1] > ndi.iloc[-1] and adx.iloc[-1] > 20)
     down_trend = bool(pdi.iloc[-1] < ndi.iloc[-1] and adx.iloc[-1] > 20)
     # 오늘 새로 뜬 크로스오버(마지막 봉) — 골든(매수) / 데드(매도)
-    ev = cross_events(pdi, ndi, sk, sd)
+    ev = cross_events(adx, pdi, ndi, sk, sd)
     ev_trend = bool(ev["trend"].iloc[-1])
     ev_stoch = bool(ev["stoch"].iloc[-1])
     stoch_oversold = bool(ev["oversold"].iloc[-1])
     ev_trend_dead = bool(ev["trend_dead"].iloc[-1])
     ev_stoch_dead = bool(ev["stoch_dead"].iloc[-1])
     stoch_overbought = bool(ev["overbought"].iloc[-1])
+    # 추세 강도 단계: 1 = ADX 20 돌파(확인), 2 = 25 돌파(강력). 0 = 해당 없음.
+    # 하루에 20과 25를 함께 뚫으면(예: 19→26) 더 센 쪽인 2로 본다.
+    ev_adx20 = bool(ev["adx20"].iloc[-1])
+    ev_adx25 = bool(ev["adx25"].iloc[-1])
+    adx_stage = 2 if ev_adx25 else (1 if ev_adx20 else 0)
+    # ADX는 방향이 없는 강도 지표 → 방향은 DI로 판정
+    adx_up = bool(pdi.iloc[-1] > ndi.iloc[-1])
 
     if f5 is not None:
         smart = bool(f5["외국인"] > 0 and f5["기관"] > 0)
@@ -196,6 +212,8 @@ def scan_one(u):
         "ev_trend": ev_trend, "ev_stoch": ev_stoch, "stoch_oversold": stoch_oversold,
         "ev_trend_dead": ev_trend_dead, "ev_stoch_dead": ev_stoch_dead,
         "stoch_overbought": stoch_overbought,
+        "ev_adx20": ev_adx20, "ev_adx25": ev_adx25,
+        "adx_stage": adx_stage, "adx_up": adx_up,
         "for5": None if f5 is None else round(float(f5["외국인"])),
         "org5": None if f5 is None else round(float(f5["기관"])),
         "ind5": None if f5 is None else round(float(f5["개인"])),
@@ -205,6 +223,11 @@ def scan_one(u):
         # 매도 알림: 오늘 데드(추세 or 과열-스토캐스틱) + 외인·기관 쌍끌이 아님 + 유동성 OK
         "alert_sell": bool((ev_trend_dead or stoch_overbought) and flow != "쌍끌이"
                            and turnover >= LIQ_MIN_EOK),
+        # 추세 강도 알림: ADX 20/25 상향돌파 + 방향별 수급 필터(상승은 개인몰림, 하락은
+        # 쌍끌이 제외) + 유동성 OK. 크로스 알림과 별개 신호이며 같은 날 함께 뜰 수 있다.
+        "alert_adx": bool(adx_stage
+                          and flow != ("개인몰림" if adx_up else "쌍끌이")
+                          and turnover >= LIQ_MIN_EOK),
         "history": build_history(px, ev),
     }
 
@@ -216,6 +239,8 @@ def scan_all():
             rec = scan_one(u); out.append(rec)
             mark = "  ★BUY" if rec["alert"] else ""
             mark += "  ▼SELL" if rec["alert_sell"] else ""
+            if rec["alert_adx"]:
+                mark += f"  ⚡ADX{ADX_LV2 if rec['adx_stage'] == 2 else ADX_LV1}↑"
             print(f"  [{i}/{len(uni)}] OK {u['name']}  ADX{rec['adx']} flow={rec['flow']}{mark}")
         except Exception as e:
             errs.append({"name": u["name"], "code": u["code"], "err": str(e)[:120]})
@@ -229,8 +254,9 @@ def scan_all():
         json.dump(payload, f, ensure_ascii=False, indent=2)
     n_buy = sum(1 for s in out if s["alert"])
     n_sell = sum(1 for s in out if s["alert_sell"])
+    n_adx = sum(1 for s in out if s["alert_adx"])
     print(f"\n스캔 {len(out)}/{len(uni)}개 완료 · 에러 {len(errs)} · "
-          f"오늘 매수 {n_buy}개 · 매도 {n_sell}개 → signals.json")
+          f"오늘 매수 {n_buy}개 · 매도 {n_sell}개 · 추세강도 {n_adx}개 → signals.json")
     return payload
 
 if __name__ == "__main__":
