@@ -132,7 +132,7 @@
           <div class="nav-sep"></div>
           <a href="https://gemini.google.com/gem/1oIQLXDDosu7gZD41hsLLRXiDPYgZnD3H?usp=sharing" target="_blank" rel="noopener">🗣️ 이쁘게.말하기</a>
           <a href="https://notebooklm.google.com/notebook/505ee4b1-ad05-4673-a06b-1ec106c2b940" target="_blank" rel="noopener">📓 노트북.교육법</a>
-          <a href="https://app.notion.com/p/1a57f2a566ff46a1aec80d6d31407e21" target="_blank" rel="noopener">🍳 레시피</a>
+          <button class="nav" data-view="recipe">🍳 레시피</button>
         </div>
       </details>
     </nav>
@@ -243,6 +243,17 @@
       </div>
       <details id="task-archive-box" style="display:none;margin:6px 0 0"><summary style="cursor:pointer;color:#9aa0a6;font-size:.9em">📦 보관함</summary><div id="task-archive-list" style="display:flex;flex-wrap:wrap;gap:6px;margin-top:6px"></div></details>
       <section class="panel"><div id="task-table"></div></section>
+    </section>
+
+    <section id="recipe" class="view">
+      <div class="archive-intro"><div><p class="eyebrow">RECIPE · YOUTUBE → NOTION</p><h2>레시피 수집 → Notion</h2></div><div class="etf-actions"><span>유튜브 요리 숏츠 링크를 붙여넣으면 요리명·재료·조리방법을 추출해 Notion에 자동 저장합니다.</span><a class="panel-more" href="https://app.notion.com/p/1a57f2a566ff46a1aec80d6d31407e21" target="_blank" rel="noopener">🍳 Notion 레시피북 열기 ↗</a></div></div>
+      <div class="dart-form">
+        <label>유튜브 숏츠/영상 링크
+          <input id="recipe-url" type="url" inputmode="url" autocapitalize="off" autocomplete="off" placeholder="https://youtube.com/shorts/...">
+        </label>
+        <button id="recipe-send" type="button">🍳 레시피 저장</button>
+        <span id="recipe-status" class="dart-status"></span>
+      </div>
     </section>
 
     <section id="dart" class="view">

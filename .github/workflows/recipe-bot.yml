@@ -1,0 +1,40 @@
+name: 레시피 봇 (유튜브→Notion)
+
+# 유튜브 요리 숏츠 링크를 받아 레시피(요리명/재료/조리방법)를 추출해
+# Notion 「🍳 레시피」 DB에 저장한다. 대시보드 폼 → GAS → 여기로 트리거.
+on:
+  workflow_dispatch:
+    inputs:
+      yt_url:
+        description: "유튜브 숏츠/영상 링크"
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  save-recipe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: 패키지 설치
+        working-directory: recipe_bot
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: 레시피 추출 → Notion 저장
+        working-directory: recipe_bot
+        env:
+          NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          YT_URL: ${{ inputs.yt_url }}
+        run: python recipe_bot.py

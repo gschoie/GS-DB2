@@ -252,7 +252,7 @@ async function todoPull(){if(!TASK_ENDPOINT)return false;const status=$('#todo-s
  if(Array.isArray(b.todos)){localStorage.setItem(TODO_KEY,JSON.stringify(b.todos));if(status)status.textContent='☁ 동기화됨';return true}
  // 서버 번들에 아직 todos가 없으면 이 기기 목록을 올려 시드한다
  if(todoLoad().length||todoGroups().length)taskPush('#todo-sync');else if(status)status.textContent='☁ 동기화';return false}catch{if(status)status.textContent='이 기기에만 저장(동기화 실패)'}return false}
-function view(id){$$('.view,.nav').forEach(x=>x.classList.remove('active'));$('#'+id).classList.add('active');$(`.nav[data-view="${id}"]`).classList.add('active');$('#page-title').textContent={todo:'TO-DO 체크리스트',overview:'오늘의 리서치 흐름',reports:'발간 보고서',news:'뉴스.아카이브',press:'보도기사 취합','union-board':'현중 노조게시판',tone:'DAOL 리서치 톤',collab:'섹터 콜라보 레이더',tasklist:'수명 피드백 확인',dart:'조선 수주공시 → 텔레',etf:'ETF/섹터 신호 포착',holdings:'액티브 ETF 구성 변화',flow:'시장 수급 동향',consensus:'코스피200 컨센서스 추적',defense:'글로벌 방산 데일리 브리핑',remember:'리멤버 → Notion 기록',mzdiary:'MZ일기 · 잔고/매매노트'}[id];if(id==='overview')fetchLiveMacro();if(id==='press'){state.pressCompany='';renderPressTable()}if(id==='tone')loadToneFrame();if(id==='union-board')loadUnionBoard();if(id==='tasklist'){renderTaskList();taskPull().then(ok=>{if(ok)renderTaskList()})}if(id==='todo'){renderTodo();todoPull().then(ok=>{if(ok)renderTodo()})}if(id==='etf'){const f=$('#etf-frame');if(!f.getAttribute('src'))f.src='etf_signal_report.html?t='+Date.now()}if(id==='holdings'){const f=$('#holdings-frame');if(!f.getAttribute('src'))f.src='etf_holdings_report.html?t='+Date.now()}if(id==='flow'){const f=$('#flow-frame');if(!f.getAttribute('src'))f.src='market_flow_report.html?t='+Date.now()}if(id==='consensus'){const f=$('#consensus-frame');if(!f.getAttribute('src'))f.src='consensus_revision.html?t='+Date.now()}if(id==='defense'){const f=$('#defense-frame');if(!f.getAttribute('src'))f.src='defense_briefing_report.html?t='+Date.now()}if(id==='collab'){const f=$('#collab-frame');if(!f.getAttribute('src'))f.src=TONE_SITE+'daol_collab_radar.html?t='+Date.now()}}
+function view(id){$$('.view,.nav').forEach(x=>x.classList.remove('active'));$('#'+id).classList.add('active');$(`.nav[data-view="${id}"]`).classList.add('active');$('#page-title').textContent={todo:'TO-DO 체크리스트',overview:'오늘의 리서치 흐름',reports:'발간 보고서',news:'뉴스.아카이브',press:'보도기사 취합','union-board':'현중 노조게시판',tone:'DAOL 리서치 톤',collab:'섹터 콜라보 레이더',tasklist:'수명 피드백 확인',dart:'조선 수주공시 → 텔레',recipe:'레시피 수집 → Notion',etf:'ETF/섹터 신호 포착',holdings:'액티브 ETF 구성 변화',flow:'시장 수급 동향',consensus:'코스피200 컨센서스 추적',defense:'글로벌 방산 데일리 브리핑',remember:'리멤버 → Notion 기록',mzdiary:'MZ일기 · 잔고/매매노트'}[id];if(id==='overview')fetchLiveMacro();if(id==='press'){state.pressCompany='';renderPressTable()}if(id==='tone')loadToneFrame();if(id==='union-board')loadUnionBoard();if(id==='tasklist'){renderTaskList();taskPull().then(ok=>{if(ok)renderTaskList()})}if(id==='todo'){renderTodo();todoPull().then(ok=>{if(ok)renderTodo()})}if(id==='etf'){const f=$('#etf-frame');if(!f.getAttribute('src'))f.src='etf_signal_report.html?t='+Date.now()}if(id==='holdings'){const f=$('#holdings-frame');if(!f.getAttribute('src'))f.src='etf_holdings_report.html?t='+Date.now()}if(id==='flow'){const f=$('#flow-frame');if(!f.getAttribute('src'))f.src='market_flow_report.html?t='+Date.now()}if(id==='consensus'){const f=$('#consensus-frame');if(!f.getAttribute('src'))f.src='consensus_revision.html?t='+Date.now()}if(id==='defense'){const f=$('#defense-frame');if(!f.getAttribute('src'))f.src='defense_briefing_report.html?t='+Date.now()}if(id==='collab'){const f=$('#collab-frame');if(!f.getAttribute('src'))f.src=TONE_SITE+'daol_collab_radar.html?t='+Date.now()}}
 const DISPATCH_ENDPOINT='https://script.google.com/macros/s/AKfycbx3RjIjtlO2Z6fIYo2T3LhJrFg9Wp2hS7dMS3Is52-JVF1hizoCWewbQ1uM_v5sdhR2jw/exec';/* 갱신 버튼 → GitHub Actions 디스패치 GAS 웹앱 (gas/dispatch_proxy.gs). 아래 workflow 키는 그 파일의 WF 매핑과 1:1이어야 한다 */
 async function dispatchWorkflow(payload,status,btn){
  if(status)status.textContent='요청 중…';if(btn)btn.disabled=true;
@@ -350,6 +350,11 @@ async function dispatchUnion(){
  const btn=$('#union-refresh'),status=$('#union-refresh-status');
  if(await dispatchWorkflow({workflow:'union'},status,btn))
    status.textContent='✅ 노조게시판 갱신 요청됨 — 몇 분 뒤 새로고침';}
+async function dispatchRecipe(){
+ const url=($('#recipe-url')?.value||'').trim(),status=$('#recipe-status'),btn=$('#recipe-send');
+ if(!/youtube\.com|youtu\.be/.test(url)){status.textContent='⚠ 유튜브 링크를 넣어주세요';return}
+ if(await dispatchWorkflow({workflow:'recipe',yt_url:url},status,btn)){
+   status.textContent='✅ 요청됨 — 1~2분 뒤 Notion 레시피북 확인';$('#recipe-url').value='';}}
 async function dispatchPressData(){
  // 보도기사는 뉴스에서 파생 → '데이터 갱신'은 뉴스 수집을 돌린다(끝나면 자동 반영).
  const btn=$('#press-data-refresh'),status=$('#press-data-status');
@@ -389,6 +394,7 @@ $('#press-clear').onclick=()=>{state.pressCompany='';renderPressTable()};
 $('#press-start').onchange=renderPressTable;
 $('#press-end').onchange=renderPressTable;
 $('#press-data-refresh')?.addEventListener('click',dispatchPressData);
+$('#recipe-send')?.addEventListener('click',dispatchRecipe);
 $('#press-export').onclick=exportPressExcel;
 $('#union-board-refresh').onclick=loadUnionBoard;
 $('#union-board-file').onchange=e=>{const file=e.target.files?.[0];if(!file)return;const frame=$('#union-board-frame');if(frame.dataset.objectUrl)URL.revokeObjectURL(frame.dataset.objectUrl);const url=URL.createObjectURL(file);frame.dataset.objectUrl=url;frame.src=url;$('#union-board-status').textContent=`${file.name} · ${(file.size/1024).toFixed(1)}KB`};
