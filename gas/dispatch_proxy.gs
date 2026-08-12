@@ -35,16 +35,18 @@ const WF = {
   etf:       'etf-signal.yml',         // ETF/섹터 신호
   holdings:  'etf-holdings.yml',       // 액티브 ETF 구성 변화
   dart:      'dart-shiporder-bot.yml', // 조선 수주공시 → 텔레그램 (입력 필요)
+  recipe:    'recipe-bot.yml',         // 유튜브 요리 숏츠 → Notion 레시피 (입력 필요)
 };
 
 // 워크플로별 추가 입력. 선언한 required 입력을 빠짐없이 채워야 422가 안 난다.
 function buildInputs(key, body) {
-  if (key !== 'dart') return {};
-  return {
+  if (key === 'dart') return {
     dart_url: String(body.dart_url || ''),
     target:   String(body.target || '공개채널'), // required + choice
     comment:  String(body.comment || ''),
   };
+  if (key === 'recipe') return { yt_url: String(body.yt_url || '') };
+  return {};
 }
 
 function doPost(e) {
@@ -62,6 +64,9 @@ function doPost(e) {
     }
     if (key === 'dart' && !body.dart_url) {
       return json({ ok: false, code: 400, wf: wf, error: 'dart_url이 비어 있습니다' });
+    }
+    if (key === 'recipe' && !body.yt_url) {
+      return json({ ok: false, code: 400, wf: wf, error: 'yt_url이 비어 있습니다' });
     }
 
     const token = PropertiesService.getScriptProperties().getProperty('GH_TOKEN');
