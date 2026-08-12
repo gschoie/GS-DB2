@@ -1,5 +1,5 @@
 {
-  "when_utc": "2026-08-12 03:25:56Z",
+  "when_utc": "2026-08-12 23:47:01Z",
   "ok": true,
   "note": "alert_sent",
   "chat_id_tail": "5171",
@@ -7,7 +7,7 @@
   "response": {
     "ok": true,
     "result": {
-      "message_id": 79,
+      "message_id": 85,
       "from": {
         "id": 8875725998,
         "is_bot": true,
@@ -21,8 +21,8 @@
         "username": "gschoie",
         "type": "private"
       },
-      "date": 1786505156,
-      "text": "📡 ETF/섹터 신호 · 2026-08-11 (전일 확정)\n\n★ 매수 신호(골든크로스) 2개\n\n🟢 KODEX 보험 · 금융\n   ＋DI가 −DI 상향돌파·추세전환\n   ADX 18.9 · %K 76.4/68.1 · 수급 중립\n\n🟢 SOL 조선기자재 · 조선\n   ＋DI가 −DI 상향돌파·추세전환\n   ADX 19.6 · %K 66.6/62.1 · 수급 중립\n\n▼ 매도 경고(데드크로스) 4개\n\n🔴 KODEX 철강 · 철강/소재/화학\n   Stochastic 과열 이탈·데드크로스\n   ADX 27.0 · %K 95.6/96.2 · 수급 중립\n\n🔴 KoAct 바이오헬스케어액티브 · 바이오/헬스케어\n   Stochastic 과열 이탈·데드크로스\n   ADX 24.4 · %K 93.0/93.1 · 수급 중립\n\n🔴 KODEX 바이오 · 바이오/헬스케어\n   Stochastic 과열 이탈·데드크로스\n   ADX 28.7 · %K 94.7/94.8 · 수급 중립\n\n🔴 KODEX 은행 · 금융\n   Stochastic 과열 이탈·데드크로스 · 외인·기관 동반 순매도\n   ADX 10.9 · %K 80.9/82.0 · 개인몰림 주의\n\n전체 신호판 › 대시보드\n🎴 GS Research Desk · ETF/섹터 신호",
+      "date": 1786578421,
+      "text": "📡 ETF/섹터 신호 · 2026-08-12 (전일 확정)\n\n▼ 매도 경고(데드크로스) 5개\n\n🔴 TIME K바이오액티브 · 바이오/헬스케어\n   Stochastic 과열 이탈·데드크로스 · 외인·기관 동반 순매도\n   ADX 27.4 · %K 88.2/92.3 · 개인몰림 주의\n\n🔴 TIGER 미디어컨텐츠 · 게임/콘텐츠\n   Stochastic 과열 이탈·데드크로스\n   ADX 13.7 · %K 88.6/90.8 · 수급 중립\n\n🔴 SOL 금융지주플러스고배당 · 금융\n   Stochastic 과열 이탈·데드크로스\n   ADX 11.5 · %K 73.3/81.3 · 수급 중립\n\n🔴 SOL 조선TOP3플러스 · 조선\n   ＋DI가 −DI 하향이탈·추세꺾임 · Stochastic 과열 이탈·데드크로스\n   ADX 12.6 · %K 85.2/87.0 · 수급 중립\n\n🔴 SOL 조선기자재 · 조선\n   ＋DI가 −DI 하향이탈·추세꺾임\n   ADX 18.5 · %K 71.2/66.7 · 수급 중립\n\n⚡ 추세 강도 1개\n\n🔺 SOL 화장품TOP3플러스 · 화장품\n   ADX 20 상향돌파 · 상승추세 확립(확인)\n   ADX 22.3 · %K 85.6/87.4 · 수급 중립\n\n전체 신호판 › 대시보드\n🎴 GS Research Desk · ETF/섹터 신호",
       "entities": [
         {
           "offset": 0,
@@ -36,41 +36,41 @@
         },
         {
           "offset": 57,
-          "length": 8,
+          "length": 12,
           "type": "bold"
         },
         {
-          "offset": 132,
+          "offset": 163,
+          "length": 12,
+          "type": "bold"
+        },
+        {
+          "offset": 250,
+          "length": 14,
+          "type": "bold"
+        },
+        {
+          "offset": 335,
+          "length": 13,
+          "type": "bold"
+        },
+        {
+          "offset": 440,
           "length": 9,
           "type": "bold"
         },
         {
-          "offset": 220,
+          "offset": 521,
           "length": 1,
           "type": "bold"
         },
         {
-          "offset": 227,
-          "length": 8,
+          "offset": 528,
+          "length": 14,
           "type": "bold"
         },
         {
-          "offset": 312,
-          "length": 16,
-          "type": "bold"
-        },
-        {
-          "offset": 405,
-          "length": 9,
-          "type": "bold"
-        },
-        {
-          "offset": 491,
-          "length": 8,
-          "type": "bold"
-        },
-        {
-          "offset": 593,
+          "offset": 623,
           "length": 4,
           "type": "text_link",
           "url": "https://gschoie.github.io/GS-output-dashboard/etf_signal_report.html"
