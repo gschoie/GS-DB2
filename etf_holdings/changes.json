@@ -1,218 +1,51 @@
 {
-  "date": "2026-08-12",
-  "prev_date": "2026-08-11",
-  "generated_at": "2026-08-12 15:46",
-  "base_date": "2026-08-12",
-  "prev_base_date": "2026-08-11",
+  "date": "2026-08-13",
+  "prev_date": "2026-08-12",
+  "generated_at": "2026-08-13 08:51",
+  "base_date": "2026-08-13",
+  "prev_base_date": "2026-08-12",
   "same_base": false,
   "first_run": false,
   "etfs": [
     {
-      "code": "385720",
-      "label": "TIME 코스피액티브",
+      "code": "0162Y0",
+      "label": "TIME 코스닥액티브",
       "group": "TIME(구 TIMEFOLIO)",
       "flow_factor": 1.0,
       "new": [
         {
-          "key": "071050",
-          "name": "한국금융지주",
-          "code": "071050",
-          "weight": 1.6,
-          "shares": 190.0
-        },
-        {
-          "key": "373220",
-          "name": "LG에너지솔루션",
-          "code": "373220",
-          "weight": 1.51,
-          "shares": 100.0
-        }
-      ],
-      "gone": [
-        {
-          "key": "017670",
-          "name": "SK텔레콤",
-          "code": "017670",
-          "weight_prev": 2.28,
-          "shares_prev": 625.0
-        },
-        {
-          "key": "055550",
-          "name": "신한지주",
-          "code": "055550",
-          "weight_prev": 2.23,
-          "shares_prev": 489.0
-        }
-      ],
-      "moves": [],
-      "has_weight": true
-    },
-    {
-      "code": "456600",
-      "label": "TIME 글로벌AI인공지능액티브",
-      "group": "TIME(구 TIMEFOLIO)",
-      "flow_factor": 1.0,
-      "new": [
-        {
-          "key": "MINIMAX GROUP INC",
-          "name": "MINIMAX GROUP INC",
-          "code": "",
-          "weight": 0.0,
-          "shares": 198.0
-        },
-        {
-          "key": "FUJIKURA LTD",
-          "name": "FUJIKURA LTD",
-          "code": "",
-          "weight": 0.0,
-          "shares": 251.0
-        }
-      ],
-      "gone": [
-        {
-          "key": "AMAZON.COM INC",
-          "name": "AMAZON.COM INC",
-          "code": "",
-          "weight_prev": 0.0,
-          "shares_prev": 136.0
-        },
-        {
-          "key": "PDD HOLDINGS INC",
-          "name": "PDD HOLDINGS INC",
-          "code": "",
-          "weight_prev": 0.0,
-          "shares_prev": 128.0
-        }
-      ],
-      "moves": [],
-      "has_weight": false
-    },
-    {
-      "code": "471040",
-      "label": "KoAct 글로벌AI&로봇액티브",
-      "group": "KoAct",
-      "flow_factor": 0.7932,
-      "new": [
-        {
-          "key": "0162L0",
-          "name": "KODEX 차이나AI반도체TOP10",
-          "code": "0162L0",
-          "weight": 0.0,
-          "shares": 2010.0
-        }
-      ],
-      "gone": [
-        {
-          "key": "356860",
-          "name": "티엘비",
-          "code": "356860",
-          "weight_prev": 0.0,
-          "shares_prev": 90.0
-        }
-      ],
-      "moves": [
-        {
-          "key": "108490",
-          "name": "로보티즈",
-          "code": "108490",
-          "shares_now": 145.0,
-          "shares_prev": 59.0,
-          "active_share_pct": 209.8,
-          "active_weight_pp": null,
-          "weight_now": 0.0,
-          "weight_prev": 0.0,
-          "headline": false
-        },
-        {
-          "key": "277810",
-          "name": "레인보우로보틱스",
-          "code": "277810",
-          "shares_now": 57.0,
-          "shares_prev": 28.0,
-          "active_share_pct": 156.6,
-          "active_weight_pp": null,
-          "weight_now": 0.0,
-          "weight_prev": 0.0,
-          "headline": false
+          "key": "080220",
+          "name": "제주반도체",
+          "code": "080220",
+          "weight": 3.16,
+          "shares": 139.0
         },
         {
           "key": "058610",
           "name": "에스피지",
           "code": "058610",
-          "shares_now": 340.0,
-          "shares_prev": 206.0,
-          "active_share_pct": 108.1,
-          "active_weight_pp": null,
-          "weight_now": 0.0,
-          "weight_prev": 0.0,
-          "headline": false
+          "weight": 2.93,
+          "shares": 100.0
+        }
+      ],
+      "gone": [
+        {
+          "key": "064290",
+          "name": "인텍플러스",
+          "code": "064290",
+          "weight_prev": 2.61,
+          "shares_prev": 298.0
         },
         {
-          "key": "000660",
-          "name": "SK하이닉스",
-          "code": "000660",
-          "shares_now": 14.0,
-          "shares_prev": 29.0,
-          "active_share_pct": -39.1,
-          "active_weight_pp": null,
-          "weight_now": 0.0,
-          "weight_prev": 0.0,
-          "headline": false
-        }
-      ],
-      "has_weight": false
-    },
-    {
-      "code": "426020",
-      "label": "TIME 미국S&P500액티브",
-      "group": "TIME(구 TIMEFOLIO)",
-      "flow_factor": 1.0,
-      "new": [
-        {
-          "key": "VERIZON COMMUNICATIONS INC",
-          "name": "VERIZON COMMUNICATIONS INC",
-          "code": "",
-          "weight": 0.0,
-          "shares": 49.0
-        }
-      ],
-      "gone": [
-        {
-          "key": "INTEL CORP",
-          "name": "INTEL CORP",
-          "code": "",
-          "weight_prev": 0.0,
-          "shares_prev": 54.0
+          "key": "089970",
+          "name": "브이엠",
+          "code": "089970",
+          "weight_prev": 2.18,
+          "shares_prev": 115.0
         }
       ],
       "moves": [],
-      "has_weight": false
-    },
-    {
-      "code": "426030",
-      "label": "TIME 미국나스닥100액티브",
-      "group": "TIME(구 TIMEFOLIO)",
-      "flow_factor": 1.0,
-      "new": [
-        {
-          "key": "TOWER SEMICONDUCTOR LTD",
-          "name": "TOWER SEMICONDUCTOR LTD",
-          "code": "",
-          "weight": 0.0,
-          "shares": 81.0
-        }
-      ],
-      "gone": [
-        {
-          "key": "ALPHABET INC-CL A",
-          "name": "ALPHABET INC-CL A",
-          "code": "",
-          "weight_prev": 0.0,
-          "shares_prev": 90.0
-        }
-      ],
-      "moves": [],
-      "has_weight": false
+      "has_weight": true
     },
     {
       "code": "410870",
@@ -221,76 +54,50 @@
       "flow_factor": 1.0,
       "new": [
         {
-          "key": "241710",
-          "name": "코스메카코리아",
-          "code": "241710",
-          "weight": 4.26,
-          "shares": 401.0
+          "key": "352820",
+          "name": "하이브",
+          "code": "352820",
+          "weight": 4.23,
+          "shares": 237.0
         }
       ],
       "gone": [
         {
-          "key": "001040",
-          "name": "CJ",
-          "code": "001040",
-          "weight_prev": 4.28,
-          "shares_prev": 300.0
+          "key": "226950",
+          "name": "올릭스",
+          "code": "226950",
+          "weight_prev": 4.34,
+          "shares_prev": 339.0
         }
       ],
       "moves": [],
       "has_weight": true
     },
     {
-      "code": "476850",
-      "label": "KoAct 배당성장액티브",
-      "group": "KoAct",
+      "code": "365040",
+      "label": "TIGER AI코리아그로스액티브",
+      "group": "TIGER",
       "flow_factor": 1.0,
       "new": [
         {
-          "key": "039490",
-          "name": "키움증권",
-          "code": "039490",
-          "weight": 1.97,
-          "shares": 67.0
+          "key": "006400",
+          "name": "삼성SDI",
+          "code": "006400",
+          "weight": 0.88,
+          "shares": 63.0
         }
       ],
       "gone": [
         {
-          "key": "222800",
-          "name": "심텍",
-          "code": "222800",
-          "weight_prev": 2.07,
-          "shares_prev": 180.0
+          "key": "105560",
+          "name": "KB금융",
+          "code": "105560",
+          "weight_prev": 0.89,
+          "shares_prev": 178.0
         }
       ],
       "moves": [],
       "has_weight": true
-    },
-    {
-      "code": "441640",
-      "label": "KODEX 미국배당커버드콜액티브",
-      "group": "KODEX",
-      "flow_factor": 1.0,
-      "new": [
-        {
-          "key": "NVIDIA Corp",
-          "name": "NVIDIA Corp",
-          "code": "",
-          "weight": 0.0,
-          "shares": 45.0
-        }
-      ],
-      "gone": [
-        {
-          "key": "APPLE Inc",
-          "name": "APPLE Inc",
-          "code": "",
-          "weight_prev": 0.0,
-          "shares_prev": 43.0
-        }
-      ],
-      "moves": [],
-      "has_weight": false
     },
     {
       "code": "444200",
@@ -299,58 +106,23 @@
       "flow_factor": 1.0,
       "new": [
         {
-          "key": "009540",
-          "name": "HD한국조선해양",
-          "code": "009540",
-          "weight": 2.5,
-          "shares": 137.0
+          "key": "012330",
+          "name": "현대모비스",
+          "code": "012330",
+          "weight": 2.42,
+          "shares": 110.0
         }
       ],
       "gone": [
         {
-          "key": "012330",
-          "name": "현대모비스",
-          "code": "012330",
-          "weight_prev": 2.55,
-          "shares_prev": 110.0
+          "key": "009540",
+          "name": "HD한국조선해양",
+          "code": "009540",
+          "weight_prev": 2.5,
+          "shares_prev": 137.0
         }
       ],
       "moves": [],
-      "has_weight": true
-    },
-    {
-      "code": "463050",
-      "label": "TIME K바이오액티브",
-      "group": "TIME(구 TIMEFOLIO)",
-      "flow_factor": 1.0,
-      "new": [],
-      "gone": [],
-      "moves": [
-        {
-          "key": "068270",
-          "name": "셀트리온",
-          "code": "068270",
-          "shares_now": 299.0,
-          "shares_prev": 371.0,
-          "active_share_pct": -19.4,
-          "active_weight_pp": -2.09,
-          "weight_now": 8.78,
-          "weight_prev": 10.22,
-          "headline": false
-        },
-        {
-          "key": "226950",
-          "name": "올릭스",
-          "code": "226950",
-          "shares_now": 435.0,
-          "shares_prev": 329.0,
-          "active_share_pct": 32.2,
-          "active_weight_pp": 1.96,
-          "weight_now": 8.0,
-          "weight_prev": 6.22,
-          "headline": false
-        }
-      ],
       "has_weight": true
     }
   ],
@@ -360,10 +132,10 @@
     "share_pct_min": 30.0
   },
   "summary": {
-    "etfs_changed": 10,
-    "new_total": 11,
-    "gone_total": 11,
-    "moves_total": 6,
+    "etfs_changed": 4,
+    "new_total": 5,
+    "gone_total": 5,
+    "moves_total": 0,
     "universe": 21
   }
 }
