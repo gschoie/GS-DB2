@@ -4682,8 +4682,8 @@
   },
   "2026-08-13": {
    "kospi": {
-    "close": 6853.64,
-    "chg_pct": 4.17
+    "close": 6852.93,
+    "chg_pct": 4.16
    },
    "slots": {
     "1000": {
@@ -4696,47 +4696,58 @@
      "time": "11:00",
      "kospi": 6853.64,
      "chg_pct": 4.17
+    },
+    "1300": {
+     "individual": -20388,
+     "foreign": 16760,
+     "institution": 3901,
+     "arb": -82,
+     "nonarb": 1242,
+     "program": 1161,
+     "time": "12:24",
+     "kospi": 6852.93,
+     "chg_pct": 4.16
     }
    },
    "confirmed": {
     "investor": {
-     "individual": -16033,
-     "foreign": 13134,
-     "inst_total": 3148,
-     "fin_invest": -3500,
-     "insurance": 73,
-     "asset_mgmt": 3443,
-     "bank": 8,
-     "other_fin": 13,
-     "pension": 3111,
-     "other_corp": -249
+     "individual": -20388,
+     "foreign": 16760,
+     "inst_total": 3901,
+     "fin_invest": -3678,
+     "insurance": 180,
+     "asset_mgmt": 3869,
+     "bank": -13,
+     "other_fin": 43,
+     "pension": 3499,
+     "other_corp": -273
     },
     "program": {
-     "arb_buy": 1420,
-     "arb_sell": 1611,
-     "arb_net": -191,
-     "nonarb_buy": 34973,
-     "nonarb_sell": 32304,
-     "nonarb_net": 2670,
-     "total_buy": 36393,
-     "total_sell": 33915,
-     "total_net": 2479
+     "arb_buy": 1908,
+     "arb_sell": 1990,
+     "arb_net": -82,
+     "nonarb_buy": 44491,
+     "nonarb_sell": 43267,
+     "nonarb_net": 1224,
+     "total_buy": 46399,
+     "total_sell": 45257,
+     "total_net": 1142
     },
     "futures": {
-     "individual": 592,
-     "foreign": 1397,
-     "inst_total": -2072,
-     "fin_invest": -1850,
-     "insurance": -44,
-     "asset_mgmt": -108,
-     "bank": -5,
+     "individual": 672,
+     "foreign": 1866,
+     "inst_total": -2506,
+     "fin_invest": -2169,
+     "insurance": -84,
+     "asset_mgmt": -63,
+     "bank": 0,
      "other_fin": 39,
-     "pension": -104,
-     "other_corp": 83
+     "pension": -229,
+     "other_corp": -32
     }
    }
   }
  },
- "updated_kst": "2026-08-13 11:00",
+ "updated_kst": "2026-08-13 12:24",
  "futures_unit": "계약"
 }
