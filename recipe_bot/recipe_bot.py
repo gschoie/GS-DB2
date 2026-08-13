@@ -110,10 +110,10 @@ def extract_recipe(meta: dict) -> dict:
     # 무료 쿼터를 분리한다. 없으면 공용 GEMINI_API_KEY.
     api_key = os.environ.get("RECIPE_GEMINI_API_KEY") or os.environ.get("GEMINI_API_KEY")
     client = genai.Client(api_key=api_key)
-    # 모델별 무료 쿼터가 분리돼 있어, 다른 봇들이 flash 한도를 소진해도
-    # flash-lite로 계속 돌 수 있게 순서대로 폴백한다(429 대비).
+    # 새 GCP 프로젝트는 구모델(2.5-flash-lite, 2.0-flash)이 404라 최신 별칭을 쓴다.
+    # flash-lite-latest 는 무료 일일 한도가 커서 1순위, 2.5-flash(하루 20회)는 최후 폴백.
     models = [m for m in [os.environ.get("GEMINI_MODEL"),
-                          "gemini-2.5-flash-lite", "gemini-2.0-flash",
+                          "gemini-flash-lite-latest", "gemini-flash-latest",
                           "gemini-2.5-flash"] if m]
     prompt = f"""다음은 유튜브 요리 영상의 정보다. 레시피를 추출해 JSON으로만 답하라.
 

@@ -13,10 +13,9 @@ on:
 permissions:
   contents: read
 
-# 여러 링크를 연달아 넣어도 한 번에 하나씩 처리(Gemini 분당 한도 보호).
-concurrency:
-  group: recipe-bot
-  cancel-in-progress: false
+# 주의: concurrency 그룹을 걸면 GitHub이 대기열에 1개만 남기고 중간 run을
+# '취소'해버려 연속 입력이 유실된다(2026-08-13 실측). 직렬화 대신
+# 봇 내부의 429 대기·재시도로 분당 한도를 흡수한다.
 
 jobs:
   save-recipe:
