@@ -285,6 +285,9 @@ def main():
                 if "futures" not in rec.get("confirmed", {}) or d == today:
                     rec.setdefault("confirmed", {})["futures"] = v
                     n_fut += 1
+            if today in fut:  # 슬롯별 선물 스냅샷 → 텔레그램의 전 슬롯 대비 증감 계산용
+                snap["futures"] = {"foreign": fut[today]["foreign"],
+                                   "inst_total": fut[today]["inst_total"]}
             print(f"선물 일별 백필: {len(fut)}일 수신, {n_fut}일 갱신 (단위: {fut_unit})")
     except Exception as e:
         print(f"⚠️ 선물 일별 수집 실패(리포트에는 해당 섹션만 비표시): {e}")
