@@ -22,26 +22,29 @@ SLOT_LABEL = {"1000": "10:00", "1300": "13:00",
               "1540": "15:40 잠정", "1640": "16:40 확정"}
 WD = "월화수목금토일"
 MAX_DAYS = 30  # 네비게이션으로 볼 수 있는 과거 일수(페이지 용량 상한)
-# 예약 시각. .github/workflows/market-flow.yml 의 cron 4개와 맞출 것.
-# 잠정/확정 구분은 첫 줄의 '최근 스냅샷 …'이 이미 보여주므로 여기선 시각만 적는다.
+# 슬롯 표기. .github/workflows/market-flow.yml 의 cron 4개와 맞출 것.
+# 왼쪽을 예약 시각이 아니라 차수로 적는다. scrape.decide_slot() 이 실행 시각을 구간으로
+# 나눠 슬롯을 배정하므로(16:10 이전이면 1540) 실제 수집 시각이 예약보다 이를 수 있는데,
+# 예약 시각을 나란히 두면 '15:40 → 14:40' 처럼 거꾸로 읽힌다. 예약 시각은 툴팁에 남긴다.
 SCHEDULE_TIME = "평일 하루 4회"
-SLOT_SCHED = {"1000": "10:00", "1300": "13:00", "1540": "15:40", "1640": "16:40"}
+SLOT_SCHED = {"1000": ("1차", "10:00"), "1300": ("2차", "13:00"),
+              "1540": ("3차", "15:40"), "1640": ("4차", "16:40")}
 
 
 def sched_badge(slots):
-    """예약 시각과 그 슬롯이 '실제로 수집된 시각'을 슬롯별로 짝지어 보여준다.
+    """차수별로 '실제로 수집된 시각'을 한 줄씩 보여준다.
 
-    대기열 지연으로 예약보다 늦게 도는 일이 잦은데, 하나의 대표 시각만 적으면
-    어느 슬롯이 얼마나 밀렸는지 알 수 없다. 각 슬롯의 time 필드(스크랩 시각)를
-    그대로 보여준다. 아직 돌지 않은 슬롯은 '—'.
+    대기열 지연으로 늦게 도는 일이 잦은데 대표 시각 하나만 적으면 어느 차수가
+    얼마나 밀렸는지 알 수 없다. 각 슬롯의 time 필드(스크랩 시각)를 그대로 쓰고,
+    아직 돌지 않은 차수는 '—'로 흐리게 둔다.
     """
     cells = []
-    for k, sched in SLOT_SCHED.items():
+    for k, (nth, sched) in SLOT_SCHED.items():
         got = (slots.get(k) or {}).get("time") if slots else None
-        if got:
-            cells.append(f'<span class="slotpair">{sched} → <b>{got}</b></span>')
-        else:
-            cells.append(f'<span class="slotpair off">{sched} → —</span>')
+        tip = f"예약 {sched} · 실제 수집 {got or '아직 없음'}"
+        val = f"<b>{got}</b>" if got else "—"
+        cells.append(f'<span class="slotpair{"" if got else " off"}" title="{tip}">'
+                     f'{nth} → {val}</span>')
     return (f'<span class="sched">🕙 정기 업데이트 <b>{SCHEDULE_TIME}</b>(한국시간) → 실제 갱신'
             f'<span class="slots">{"".join(cells)}</span>'
             f'<span class="schedq">대기열 지연으로 예약보다 늦을 수 있음</span></span>')
@@ -510,10 +513,10 @@ font:14px/1.55 -apple-system,"Malgun Gothic","Apple SD Gothic Neo",sans-serif}}
 .wrap{{max-width:820px;margin:0 auto}}
 h1{{font-size:19px;margin:0 0 2px}} h2{{font-size:15px;margin:26px 0 8px}}
 .sub{{color:var(--muted);font-size:12.5px;margin:0 0 14px}}
-.schedq{{color:#9aa19d;margin-left:8px}}
+.schedq{{color:#9aa19d;display:block;margin-top:2px}}
 @media(max-width:620px){{.schedq{{display:none}}}}
-.slots{{display:inline-flex;flex-wrap:wrap;gap:2px 12px;margin-left:8px}}
-.slotpair{{white-space:nowrap;font-variant-numeric:tabular-nums}}
+.slots{{display:block;margin:3px 0 0 14px}}
+.slotpair{{display:block;white-space:nowrap;font-variant-numeric:tabular-nums;line-height:1.7;cursor:help}}
 .slotpair.off{{color:#b3b9b4}}
 .sched{{display:inline-block;background:#eef2ec;border:1px solid var(--line);border-radius:4px;
 padding:3px 9px;margin:3px 0;font-size:11px;color:#5b6660}}
