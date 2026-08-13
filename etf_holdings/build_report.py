@@ -15,6 +15,9 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 SNAP_DIR = os.path.join(HERE, "snapshots")
 OUT = os.environ.get("ETF_HOLDINGS_OUT", os.path.join(HERE, "etf_holdings_report.html"))
 MAX_DAYS = 20   # 네비게이션으로 볼 수 있는 과거 일수(페이지 용량 상한)
+# 자동 실행 안내. .github/workflows/etf-holdings.yml 의 cron(17 0-12 * * 1-5)과 맞출 것.
+SCHEDULE_NOTE = ("자동 수집 <b>평일 오전 9시~오후 9시 매시간</b>(한국시간) — GitHub Actions "
+                 "대기열 사정으로 일부 시간대는 건너뛸 수 있습니다. 🔄 버튼으로 즉시 갱신도 가능.")
 MAX_WEEKS = 12  # 주간 누적 모드에서 볼 수 있는 과거 주수
 WD = "월화수목금토일"
 
@@ -133,6 +136,7 @@ def day_html(ch, snap, is_latest, period_label=None):
     return f"""
 <p class="sub">{first_line}<br>
 구성 기준일 <b>{base}</b> (KRX 장마감) · 비교 <b>{prevbase} → {base}</b><br>
+<span class="sched">🕙 {SCHEDULE_NOTE}</span><br>
 매일 구성종목(Top10)을 스냅샷하고, <b>주가 효과와 CU 자금유출입을 제거</b>해 운용사가 실제로 사고판 것만 잡아냅니다.</p>
 {banner}
 
@@ -250,6 +254,9 @@ font-family:Inter,Pretendard,"Noto Sans KR",sans-serif;padding:28px 30px 60px}}
 .eyebrow{{font-size:10px;font-weight:800;letter-spacing:1.6px;color:#758079;margin:0 0 7px}}
 h1{{font:500 30px Georgia,"Noto Serif KR",serif;margin:0}}
 .sub{{color:var(--muted);font-size:12px;margin:8px 0 0;line-height:1.6}}
+.sched{{display:inline-block;background:#eef2ec;border:1px solid var(--line);border-radius:4px;
+padding:3px 9px;margin:3px 0;font-size:11px;color:#5b6660}}
+.sched b{{color:#2c3a34}}
 .sub b{{color:#445049}}
 .stats{{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:22px 0 8px}}
 .stats article{{background:var(--card);border:1px solid var(--line);padding:18px 20px}}
