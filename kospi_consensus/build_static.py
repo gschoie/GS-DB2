@@ -379,7 +379,7 @@ border-radius:8px;padding:6px 10px;margin-left:6px}
 </style></head><body><div class="wrap">
 <h1>영업이익 컨센 리비전 <span class="tiny" style="font-weight:400">KOSPI200 · KOSDAQ50 · 리서치커버리지</span></h1>
 <div class="sub" id="sub"></div>
-<div class="sched">🕙 정기 업데이트 <b>매주 금요일 오후 5시</b>(한국시간) · 실제 갱신 <b>__GENERATED__</b><span class="schedq"> — 대기열 지연으로 예약보다 늦을 수 있음</span></div>
+<div class="sched">🕙 정기 업데이트 <b>매주 금요일 오후 5시</b>(한국시간) · 화면 생성 <b>__GENERATED__</b><span class="schedq"> — 대기열 지연으로 예약보다 늦을 수 있음. 데이터 시점은 위 기준일 참고</span></div>
 <div class="status" id="status"></div>
 <a class="dl" href="consensus_full.xlsx" download>📥 전체 종목 엑셀 다운로드</a>
 <div class="wknav" id="wknav"></div>
