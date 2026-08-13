@@ -13,6 +13,11 @@ on:
 permissions:
   contents: read
 
+# 여러 링크를 연달아 넣어도 한 번에 하나씩 처리(Gemini 분당 한도 보호).
+concurrency:
+  group: recipe-bot
+  cancel-in-progress: false
+
 jobs:
   save-recipe:
     runs-on: ubuntu-latest

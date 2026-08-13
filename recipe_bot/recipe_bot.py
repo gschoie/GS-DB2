@@ -141,17 +141,28 @@ JSON 스키마:
     video_part = genai_types.Part(file_data=genai_types.FileData(file_uri=meta["url"]))
     attempts = [("영상직접", [video_part, genai_types.Part(text=prompt)]),
                 ("텍스트만", prompt)]
+    import time
     response = None
     last_err: Exception | None = None
     for model in models:
         for mode, contents in attempts:
-            try:
-                response = client.models.generate_content(model=model, contents=contents, config=config)
-                print(f"Gemini OK: {model} ({mode})")
+            # 429(분당 한도)는 잠깐 기다렸다 같은 모델로 재시도한다.
+            for attempt in range(3):
+                try:
+                    response = client.models.generate_content(model=model, contents=contents, config=config)
+                    print(f"Gemini OK: {model} ({mode})")
+                    break
+                except Exception as exc:
+                    last_err = exc
+                    code = getattr(exc, "code", None) or getattr(exc, "status_code", None)
+                    print(f"Gemini {model}({mode}) 실패({type(exc).__name__} {code}): {str(exc)[:140]}")
+                    if code == 429 and attempt < 2:
+                        print("  429 → 65초 대기 후 재시도")
+                        time.sleep(65)
+                        continue
+                    break
+            if response is not None:
                 break
-            except Exception as exc:
-                last_err = exc
-                print(f"Gemini {model}({mode}) 실패({type(exc).__name__})")
         if response is not None:
             break
     if response is None:
