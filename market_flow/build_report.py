@@ -25,16 +25,26 @@ MAX_DAYS = 30  # 네비게이션으로 볼 수 있는 과거 일수(페이지 �
 # 예약 시각. .github/workflows/market-flow.yml 의 cron 4개와 맞출 것.
 # 잠정/확정 구분은 첫 줄의 '최근 스냅샷 …'이 이미 보여주므로 여기선 시각만 적는다.
 SCHEDULE_TIME = "평일 하루 4회"
-SCHEDULE_SLOTS = "10:00 · 13:00 · 15:40 · 16:40"
+SLOT_SCHED = {"1000": "10:00", "1300": "13:00", "1540": "15:40", "1640": "16:40"}
 
 
-def sched_badge(actual):
-    """'정기 업데이트 예약 시각 · 실제로 돌아간 시각'을 함께 보여준다.
-    대기열 지연으로 실제 실행이 늦는 경우가 많아 예약 시각만으로는 오해가 생긴다."""
-    act = f' · 실제 갱신 <b>{actual}</b>' if actual else ""
-    return (f'<span class="sched">🕙 정기 업데이트 <b>{SCHEDULE_TIME}</b>(한국시간) '
-            f'{SCHEDULE_SLOTS}{act}'
-            f'<span class="schedq"> — 대기열 지연으로 예약보다 늦을 수 있음</span></span>')
+def sched_badge(slots):
+    """예약 시각과 그 슬롯이 '실제로 수집된 시각'을 슬롯별로 짝지어 보여준다.
+
+    대기열 지연으로 예약보다 늦게 도는 일이 잦은데, 하나의 대표 시각만 적으면
+    어느 슬롯이 얼마나 밀렸는지 알 수 없다. 각 슬롯의 time 필드(스크랩 시각)를
+    그대로 보여준다. 아직 돌지 않은 슬롯은 '—'.
+    """
+    cells = []
+    for k, sched in SLOT_SCHED.items():
+        got = (slots.get(k) or {}).get("time") if slots else None
+        if got:
+            cells.append(f'<span class="slotpair">{sched} → <b>{got}</b></span>')
+        else:
+            cells.append(f'<span class="slotpair off">{sched} → —</span>')
+    return (f'<span class="sched">🕙 정기 업데이트 <b>{SCHEDULE_TIME}</b>(한국시간) → 실제 갱신'
+            f'<span class="slots">{"".join(cells)}</span>'
+            f'<span class="schedq">대기열 지연으로 예약보다 늦을 수 있음</span></span>')
 
 C_IND, C_FRN, C_INST = "#7f8792", "#d64545", "#3b6fd4"
 C_ARB, C_NONARB, C_TOTAL = "#e0902f", "#2fa170", "#666e78"
@@ -434,14 +444,13 @@ def render_day(hist, all_dates, i):
     else:
         kospi_html = 'KOSPI <span class="na">지수 데이터 없음</span>'
     latest_label = SLOT_LABEL.get(slot_keys[-1], "-") if slot_keys else "-"
-    updated = hist.get("updated_kst", "")
-    upd_txt = ""   # 갱신 시각은 아래 sched 배지에서 표시
+    upd_txt = ""   # 갱신 시각은 아래 sched 배지에서 슬롯별로 표시
     sig_title = "🧭 오늘의 해석" if is_latest else "🧭 당일 해석"
 
     return f"""
 <p class="sub">{t_date.month}/{t_date.day}({WD[t_date.weekday()]}) · 최근 스냅샷 {latest_label}{upd_txt}
  · 단위 억원<br>
-{sched_badge(updated and updated + " KST")}</p>
+{sched_badge(slots)}</p>
 <p class="kospi">{kospi_html}</p>
 
 <h2>{sig_title}</h2>
@@ -501,8 +510,11 @@ font:14px/1.55 -apple-system,"Malgun Gothic","Apple SD Gothic Neo",sans-serif}}
 .wrap{{max-width:820px;margin:0 auto}}
 h1{{font-size:19px;margin:0 0 2px}} h2{{font-size:15px;margin:26px 0 8px}}
 .sub{{color:var(--muted);font-size:12.5px;margin:0 0 14px}}
-.schedq{{color:#9aa19d}}
+.schedq{{color:#9aa19d;margin-left:8px}}
 @media(max-width:620px){{.schedq{{display:none}}}}
+.slots{{display:inline-flex;flex-wrap:wrap;gap:2px 12px;margin-left:8px}}
+.slotpair{{white-space:nowrap;font-variant-numeric:tabular-nums}}
+.slotpair.off{{color:#b3b9b4}}
 .sched{{display:inline-block;background:#eef2ec;border:1px solid var(--line);border-radius:4px;
 padding:3px 9px;margin:3px 0;font-size:11px;color:#5b6660}}
 .sched b{{color:#2c3a34}}
