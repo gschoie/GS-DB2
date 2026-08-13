@@ -22,15 +22,18 @@ SLOT_LABEL = {"1000": "10:00", "1300": "13:00",
               "1540": "15:40 잠정", "1640": "16:40 확정"}
 WD = "월화수목금토일"
 MAX_DAYS = 30  # 네비게이션으로 볼 수 있는 과거 일수(페이지 용량 상한)
-# 예약 시각. .github/workflows/market-flow.yml 의 cron(0 1 * * 1-5)과 맞출 것.
-SCHEDULE_TIME = "평일 오전 10시"
+# 예약 시각. .github/workflows/market-flow.yml 의 cron 4개와 맞출 것.
+# 잠정/확정 구분은 첫 줄의 '최근 스냅샷 …'이 이미 보여주므로 여기선 시각만 적는다.
+SCHEDULE_TIME = "평일 하루 4회"
+SCHEDULE_SLOTS = "10:00 · 13:00 · 15:40 · 16:40"
 
 
 def sched_badge(actual):
     """'정기 업데이트 예약 시각 · 실제로 돌아간 시각'을 함께 보여준다.
     대기열 지연으로 실제 실행이 늦는 경우가 많아 예약 시각만으로는 오해가 생긴다."""
     act = f' · 실제 갱신 <b>{actual}</b>' if actual else ""
-    return (f'<span class="sched">🕙 정기 업데이트 <b>{SCHEDULE_TIME}</b>(한국시간){act}'
+    return (f'<span class="sched">🕙 정기 업데이트 <b>{SCHEDULE_TIME}</b>(한국시간) '
+            f'{SCHEDULE_SLOTS}{act}'
             f'<span class="schedq"> — 대기열 지연으로 예약보다 늦을 수 있음</span></span>')
 
 C_IND, C_FRN, C_INST = "#7f8792", "#d64545", "#3b6fd4"
