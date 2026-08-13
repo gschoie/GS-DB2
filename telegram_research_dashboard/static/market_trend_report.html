@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>시장관심.내러티브</title>
+<style>
+:root{--bg:#fff;--fg:#1c2430;--muted:#6b7684;--line:#e5e8ec;--card:#f7f8fa;--accent:#2e6b4f}
+@media(prefers-color-scheme:dark){:root{--bg:#14181f;--fg:#e6e9ee;--muted:#8b93a1;
+--line:#2a313c;--card:#1b212b;--accent:#7fc8a4}}
+*{box-sizing:border-box}
+body{margin:0;padding:18px 16px 40px;background:var(--bg);color:var(--fg);
+font:14px/1.6 -apple-system,"Malgun Gothic","Apple SD Gothic Neo",sans-serif}
+.wrap{max-width:820px;margin:0 auto}
+h1{font-size:19px;margin:0 0 2px}
+.sub{color:var(--muted);font-size:12.5px;margin:2px 0 12px}
+.oneliner{font-size:15.5px;font-weight:600;margin:14px 0 4px;padding:10px 14px;
+border-left:3px solid var(--accent);background:var(--card);border-radius:0 8px 8px 0}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;
+padding:14px;margin:10px 0}
+.ctitle{font-size:14.5px;font-weight:700;margin:0 0 6px}
+.badge{display:inline-block;font-size:10.5px;border:1px solid var(--line);border-radius:4px;
+padding:1px 6px;color:var(--muted);vertical-align:1px}
+.badge.new{color:#fff;background:var(--accent);border-color:var(--accent)}
+.dots{color:var(--accent);letter-spacing:1px;font-size:11px;vertical-align:1px}
+.narr{margin:6px 0}
+.kws{margin:8px 0 2px}
+.kw{display:inline-block;font-size:12px;background:var(--bg);border:1px solid var(--line);
+border-radius:12px;padding:2px 9px;margin:2px 4px 2px 0;color:var(--muted)}
+.ev{margin:8px 0 2px;padding-left:18px;font-size:12.5px;color:var(--muted)}
+.ev li{margin:3px 0}
+.appendix{margin:12px 0}
+.appendix summary{cursor:pointer;font-size:13px;font-weight:600;color:var(--muted)}
+table{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums;margin-top:8px}
+th,td{padding:5px 8px;border-bottom:1px solid var(--line);text-align:right;font-size:12.5px;
+white-space:nowrap}
+tr th:first-child{text-align:left;font-weight:600}
+thead th{color:var(--muted);font-weight:600;font-size:11.5px}
+.posts{margin:8px 0;padding-left:18px;font-size:12.5px}
+.posts li{margin:5px 0}
+.posts a{color:var(--accent)}
+.note{font-size:12.5px;color:var(--muted);margin:8px 2px}
+.scroll{overflow-x:auto}
+footer{margin-top:28px;font-size:11.5px;color:var(--muted)}
+.nav{display:flex;align-items:center;gap:8px;margin:10px 0 4px;position:sticky;top:0;
+background:var(--bg);padding:6px 0;z-index:5}
+.nav button{background:var(--card);color:var(--fg);border:1px solid var(--line);
+border-radius:8px;padding:6px 14px;font-size:14px;cursor:pointer;line-height:1}
+.nav button:disabled{opacity:.35;cursor:default}
+.nav select{background:var(--card);color:var(--fg);border:1px solid var(--line);
+border-radius:8px;padding:6px 8px;font-size:13px}
+.nav .hint{margin-left:auto;font-size:11.5px;color:var(--muted)}
+</style></head><body><div class="wrap">
+<h1>🧠 시장관심.내러티브</h1>
+<p class="sub">구독 텔레그램 전 채널의 하루치에서 계량으로 추린 신호를 테마로 묶은 것 · 매일 06:30 갱신</p>
+<div class="nav">
+<button id="btn-prev" title="이전 날짜 (←)">◀</button>
+<select id="sel-date"><option value="empty">데이터 없음</option></select>
+<button id="btn-next" title="다음 날짜 (→)">▶</button>
+<span class="hint">← → 키로도 이동</span>
+</div>
+<div id="day"></div>
+<footer>신호: 급증 키워드(7일 기준선 대비) · 채널 간 전파 수 · min-hash 중복 접기 —
+테마 합성만 Gemini · 과거 1일 조회 가능 · GS Research Desk</footer>
+</div>
+<script>
+var PAGES = {"empty": "<p class=\"note\">아직 산출된 날이 없습니다 — 첫 실행 후 이 페이지가 채워집니다.<\/p>"};
+var DATES = ["empty"];
+var idx = DATES.length - 1;
+var sel = document.getElementById("sel-date");
+var prev = document.getElementById("btn-prev");
+var next = document.getElementById("btn-next");
+function show(i) {
+  idx = Math.max(0, Math.min(i, DATES.length - 1));
+  document.getElementById("day").innerHTML = PAGES[DATES[idx]];
+  sel.value = DATES[idx];
+  prev.disabled = idx === 0;
+  next.disabled = idx === DATES.length - 1;
+}
+prev.addEventListener("click", function () { show(idx - 1); });
+next.addEventListener("click", function () { show(idx + 1); });
+sel.addEventListener("change", function () { show(DATES.indexOf(sel.value)); });
+document.addEventListener("keydown", function (e) {
+  if (e.key === "ArrowLeft") show(idx - 1);
+  else if (e.key === "ArrowRight") show(idx + 1);
+});
+show(idx);
+</script>
+</body></html>

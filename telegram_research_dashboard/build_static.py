@@ -181,6 +181,12 @@ def build() -> Path:
     flow_report = ROOT / "static" / "market_flow_report.html"
     if flow_report.exists():
         shutil.copy2(flow_report, OUTPUT.parent / "market_flow_report.html")
+    trend_report = ROOT / "static" / "market_trend_report.html"
+    if trend_report.exists():
+        shutil.copy2(trend_report, OUTPUT.parent / "market_trend_report.html")
+    trend_dir = ROOT / "static" / "market_trend"
+    if trend_dir.is_dir():
+        shutil.copytree(trend_dir, OUTPUT.parent / "market_trend", dirs_exist_ok=True)
     consensus_xlsx = ROOT / "static" / "consensus_full.xlsx"
     if consensus_xlsx.exists():
         shutil.copy2(consensus_xlsx, OUTPUT.parent / "consensus_full.xlsx")
