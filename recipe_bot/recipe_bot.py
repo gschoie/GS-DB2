@@ -105,7 +105,11 @@ def extract_recipe(meta: dict) -> dict:
     from google.genai import types as genai_types
 
     client = genai.Client()  # GEMINI_API_KEY 사용
-    model = os.environ.get("GEMINI_MODEL", "gemini-2.5-flash")
+    # 모델별 무료 쿼터가 분리돼 있어, 다른 봇들이 flash 한도를 소진해도
+    # flash-lite로 계속 돌 수 있게 순서대로 폴백한다(429 대비).
+    models = [m for m in [os.environ.get("GEMINI_MODEL"),
+                          "gemini-2.5-flash-lite", "gemini-2.0-flash",
+                          "gemini-2.5-flash"] if m]
     prompt = f"""다음은 유튜브 요리 영상의 정보다. 레시피를 추출해 JSON으로만 답하라.
 
 제목: {meta['title']}
@@ -127,7 +131,18 @@ JSON 스키마:
 규칙: 영상 정보에 근거해서만 작성하고, 재료 분량이 안 나오면 재료명만 적는다.
 정보가 부족해 레시피를 알 수 없으면 조리방법에 "영상 정보 부족"이라고 한 줄만 넣는다."""
     config = genai_types.GenerateContentConfig(response_mime_type="application/json")
-    response = client.models.generate_content(model=model, contents=prompt, config=config)
+    response = None
+    last_err: Exception | None = None
+    for model in models:
+        try:
+            response = client.models.generate_content(model=model, contents=prompt, config=config)
+            print(f"Gemini OK: {model}")
+            break
+        except Exception as exc:
+            last_err = exc
+            print(f"Gemini {model} 실패({type(exc).__name__}) → 다음 모델")
+    if response is None:
+        raise SystemExit(f"Gemini 모두 실패: {last_err}")
     data = json.loads(response.text)
     if data.get("분류") not in CATEGORIES:
         data["분류"] = "기타"
