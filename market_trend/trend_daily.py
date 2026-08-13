@@ -473,9 +473,11 @@ def render_markdown(day: str, result: dict | None, spikes: list[dict], posts: li
 def write_outputs(day: str, markdown: str, payload: dict, out_dir: Path = OUT_DIR) -> None:
     out_dir.mkdir(parents=True, exist_ok=True)
     (out_dir / f"{day}.md").write_text(markdown, encoding="utf-8")
-    (out_dir / "latest.json").write_text(
-        json.dumps(payload, ensure_ascii=False, indent=1) + "\n", encoding="utf-8"
-    )
+    body = json.dumps(payload, ensure_ascii=False, indent=1) + "\n"
+    # 날짜별 json은 리포트 페이지(build_report.py)의 날짜 네비게이션이,
+    # latest.json은 대시보드 요약 카드와 텔레그램 발송(telegram_send.py)이 읽는다.
+    (out_dir / f"{day}.json").write_text(body, encoding="utf-8")
+    (out_dir / "latest.json").write_text(body, encoding="utf-8")
 
 
 # ── 코퍼스 저장/복원 (디버깅) ──────────────────────────────────────────────

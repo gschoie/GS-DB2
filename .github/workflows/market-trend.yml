@@ -76,13 +76,32 @@ jobs:
           esac
           python trend_daily.py $FLAGS
 
+      # 날짜별 json들을 모아 대시보드용 단일 페이지로 굽는다.
+      - name: 리포트 페이지 생성
+        if: ${{ !contains(fromJSON('["check","dry-run"]'), inputs.mode || 'run') }}
+        run: python market_trend/build_report.py
+
+      # 발송 실패해도 리포트·이력 커밋은 진행한다 — telegram_status.json이 실패 원인을
+      # 담은 채 커밋되므로 1회 실행으로 원인을 특정할 수 있다(etf_signal과 같은 방식).
+      - name: 텔레그램 발송
+        if: ${{ !contains(fromJSON('["check","dry-run"]'), inputs.mode || 'run') }}
+        continue-on-error: true
+        env:
+          # 전용 봇을 쓰려면 TREND_* 시크릿을 등록한다. 없으면 소스 감시 봇 → 방산 봇 순 폴백.
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TREND_TELEGRAM_BOT_TOKEN || secrets.WATCH_TELEGRAM_BOT_TOKEN || secrets.KDEF_TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TREND_TELEGRAM_CHAT_ID || secrets.WATCH_TELEGRAM_CHAT_ID || secrets.KDEF_TELEGRAM_CHAT_ID }}
+        run: python market_trend/telegram_send.py
+
       # 리포트와 기준선 이력을 함께 커밋한다. 이력이 쌓여야 '평소 대비 배수'가 나온다.
       - name: 산출물 커밋 및 푸시
         if: ${{ success() && !contains(fromJSON('["check","dry-run"]'), inputs.mode || 'run') }}
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add telegram_research_dashboard/static/market_trend market_trend/state/trend_history.json
+          git add telegram_research_dashboard/static/market_trend \
+                  telegram_research_dashboard/static/market_trend_report.html \
+                  market_trend/state/trend_history.json \
+                  market_trend/telegram_status.json
           if git diff --cached --quiet; then
             echo "변경 없음 — 커밋 생략"
             exit 0

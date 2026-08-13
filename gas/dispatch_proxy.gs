@@ -32,6 +32,7 @@ const WF = {
   union:     'refresh-union.yml',      // 현중 노조게시판
   consensus: 'kospi-consensus.yml',    // 코스피200 컨센 스냅샷
   flow:      'market-flow.yml',        // 시장 수급 동향
+  trend:     'market-trend.yml',       // 시장관심.내러티브 (구독 채널 트렌드)
   etf:       'etf-signal.yml',         // ETF/섹터 신호
   holdings:  'etf-holdings.yml',       // 액티브 ETF 구성 변화
   dart:      'dart-shiporder-bot.yml', // 조선 수주공시 → 텔레그램 (입력 필요)

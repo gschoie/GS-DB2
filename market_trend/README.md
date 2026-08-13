@@ -44,13 +44,36 @@ python trend_daily.py --corpus corpus.jsonl        # 재수집 없이 파일로 
 합성에는 `GEMINI_API_KEY`(선택: `GEMINI_MODEL`, 기본 gemini-2.5-flash, 실패 시
 flash-lite 폴백).
 
-## 산출물
+## 산출물과 소비처
 
 | 경로 | 내용 |
 |---|---|
-| `telegram_research_dashboard/static/market_trend/<날짜>.md` | 사람이 읽는 리포트(테마 + 부록 계량 신호) |
-| `telegram_research_dashboard/static/market_trend/latest.json` | 대시보드·텔레그램 발송용 구조화 데이터 |
+| `…/static/market_trend/<날짜>.md` | 사람이 읽는 아카이브(테마 + 부록 계량 신호) |
+| `…/static/market_trend/<날짜>.json` | 날짜별 구조화 데이터 — `build_report.py`가 읽는다 |
+| `…/static/market_trend/latest.json` | 최신본 — `telegram_send.py`가 읽는다 |
+| `…/static/market_trend_report.html` | 대시보드 '투자 > 시장관심.내러티브'가 iframe으로 띄우는 페이지 (`build_report.py` 산출, 날짜 네비게이션) |
 | `state/trend_history.json` | 일별 낱말 빈도 이력(기준선). 워크플로가 커밋. 손대지 말 것 |
+| `telegram_status.json` | 마지막 발송 결과 — 시크릿 누락 등 실패 원인을 1회 실행으로 특정 |
+
+## 텔레그램 발송
+
+`telegram_send.py`가 latest.json을 읽어 테마 요약을 보낸다. 산출 날짜가 오늘(KST)이
+아니면 옛 리포트를 다시 쏘지 않도록 스스로 생략한다. 봇은 시크릿으로 정한다:
+
+| 시크릿 | 역할 |
+|---|---|
+| `TREND_TELEGRAM_BOT_TOKEN` / `TREND_TELEGRAM_CHAT_ID` | 전용 봇 (권장, 없어도 동작) |
+| (미등록 시) `WATCH_TELEGRAM_*` → `KDEF_TELEGRAM_*` | 소스 감시 봇 → 방산 봇 순 폴백 |
+
+```bash
+python telegram_send.py --dry-run   # 무엇이 나갈지 출력만
+```
+
+## 대시보드 갱신 버튼
+
+'🔄 트렌드 갱신' 버튼은 GAS dispatch_proxy의 `trend` 라우트로 이 워크플로를 부른다.
+**GAS 정본(`gas/dispatch_proxy.gs`)에 라우트가 추가되어 있으므로, Apps Script 편집기에
+붙여넣고 '배포 관리 → 새 버전'으로 갱신해야 버튼이 동작한다** (새 배포 금지 — URL이 바뀐다).
 
 ## 튜닝은 config.yml 한 곳에서
 
@@ -68,7 +91,11 @@ python -m unittest discover -s tests -p "test_*.py" -v
 
 네트워크·LLM 없이 돈다. config.yml 파싱도 함께 검사하므로 설정 오타는 수집 전에 걸린다.
 
-## 이후 단계 (예정)
+## 파일
 
-- 대시보드 메뉴 '투자 > 시장관심.내러티브'에서 latest.json 렌더링
-- 텔레그램 봇 발송 (source_watcher/notify.py 재사용)
+| 파일 | 하는 일 |
+|---|---|
+| `trend_daily.py` | 수집 → 계량 → Gemini 합성 → md/json 산출 |
+| `build_report.py` | 날짜별 json → 대시보드용 단일 HTML |
+| `telegram_send.py` | latest.json → 텔레그램 발송 + 상태 기록 |
+| `config.yml` | 불용어·별칭·광고필터 — 평소 튜닝하는 유일한 파일 |
