@@ -1,0 +1,74 @@
+{
+  "when_utc": "2026-08-13 22:11:27Z",
+  "ok": true,
+  "note": "sent",
+  "chat_id_tail": "5171",
+  "token_set": true,
+  "response": {
+    "ok": true,
+    "result": {
+      "message_id": 97,
+      "from": {
+        "id": 8875725998,
+        "is_bot": true,
+        "first_name": "GB Investing Signal",
+        "username": "gs_invest_signal_bot"
+      },
+      "chat": {
+        "id": 279385171,
+        "first_name": "광식",
+        "last_name": "최",
+        "username": "gschoie",
+        "type": "private"
+      },
+      "date": 1786659087,
+      "text": "🧠 시장관심.내러티브 · 8/14(금)\n\nAI 인프라의 자산 가치 부각 속 기업 실적 발표가 이어지고, 글로벌 증시 및 산업 동향에 관심이 집중된 하루.\n\n1. AI 인프라 — 자산 가치 및 비용 효율성 〰️ ●●●●●\nAI CapEx가 단순 소모 비용이 아닌 장기 수익 창출이 가능한 자산으로 인식되며, 구형 GPU의 가치 유지와 함께 AI 투자에 있어 비용 효율성 및 하이퍼스케일러의 역량이 중요해지고 있다.\n· AI · 분기 · 올해 · 미국 · 종합 · 연결\n\n2. 2분기/반기 기업 실적 — 호실적 및 옥석 가리기 〰️ ●●●●○\n2분기 및 반기 실적 발표가 활발히 진행되며, 달바글로벌, 자화전자, 아이티센엔텍, 제주반도체 등 다수 기업이 예상치를 상회하는 호실적을 기록했다. 반면 일부 기업은 예상치를 하회하며 개별 기업의 성과에 따른 시장의 옥석 가리기가 심화되고 있다.\n· 매출액 · 순이익 · 영업익 · 예상치 · 분기 · 시가총액\n\n3. 글로벌 경제 — 인플레이션 안도감 및 산업재/조선 업황 호조 〰️ ●●●○○\n미국 증시는 7월 CPI 컨센서스 부합에 따른 인플레이션 안도감과 AI 인프라 수요 호조로 상승했으며, Caterpillar의 사상 최대 실적은 산업재 업황의 강력한 회복을 보여준다. 조선/해운 업계에서도 탱커 및 컨테이너선 발주 소식이 이어지며 긍정적인 흐름이 지속될 전망이다.\n· 미국 · 올해 · 종합 · 조선 · 분기\n\n4. MSCI 지수 리밸런싱 — 스몰캡 종목 변동 🆕 ●●○○○\nMSCI 스몰캡 지수에 두산테스나, 제주반도체 등 16개 종목이 편입되고 49개 종목이 제외되는 리밸런싱이 발표되었다. 이는 해당 종목들의 수급에 영향을 미치며 투자자들의 포트폴리오 조정으로 이어질 수 있다.\n· 투자자 · 종합\n\n채널 98개 · 글 2289건 분석\n상세 › 대시보드\n🎴 GS Research Desk · 시장관심.내러티브",
+      "entities": [
+        {
+          "offset": 3,
+          "length": 9,
+          "type": "bold"
+        },
+        {
+          "offset": 24,
+          "length": 62,
+          "type": "italic"
+        },
+        {
+          "offset": 91,
+          "length": 23,
+          "type": "bold"
+        },
+        {
+          "offset": 266,
+          "length": 27,
+          "type": "bold"
+        },
+        {
+          "offset": 481,
+          "length": 33,
+          "type": "bold"
+        },
+        {
+          "offset": 710,
+          "length": 24,
+          "type": "bold"
+        },
+        {
+          "offset": 873,
+          "length": 19,
+          "type": "italic"
+        },
+        {
+          "offset": 898,
+          "length": 4,
+          "type": "text_link",
+          "url": "https://gschoie.github.io/GS-output-dashboard/market_trend_report.html"
+        }
+      ],
+      "link_preview_options": {
+        "is_disabled": true
+      }
+    }
+  }
+}
