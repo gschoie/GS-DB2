@@ -104,7 +104,10 @@ def extract_recipe(meta: dict) -> dict:
     from google import genai
     from google.genai import types as genai_types
 
-    client = genai.Client()  # GEMINI_API_KEY 사용
+    # 레시피 전용 키(RECIPE_GEMINI_API_KEY)가 있으면 우선 사용 — 다른 봇들과
+    # 무료 쿼터를 분리한다. 없으면 공용 GEMINI_API_KEY.
+    api_key = os.environ.get("RECIPE_GEMINI_API_KEY") or os.environ.get("GEMINI_API_KEY")
+    client = genai.Client(api_key=api_key)
     # 모델별 무료 쿼터가 분리돼 있어, 다른 봇들이 flash 한도를 소진해도
     # flash-lite로 계속 돌 수 있게 순서대로 폴백한다(429 대비).
     models = [m for m in [os.environ.get("GEMINI_MODEL"),
@@ -131,16 +134,24 @@ JSON 스키마:
 규칙: 영상 정보에 근거해서만 작성하고, 재료 분량이 안 나오면 재료명만 적는다.
 정보가 부족해 레시피를 알 수 없으면 조리방법에 "영상 정보 부족"이라고 한 줄만 넣는다."""
     config = genai_types.GenerateContentConfig(response_mime_type="application/json")
+    # 1순위: 유튜브 영상을 직접 첨부(모델이 영상·자막을 보고 추출 — 가장 정확).
+    # 2순위: 텍스트(제목·설명·자막)만. 러너에서 yt-dlp가 막혀도 1순위가 커버한다.
+    video_part = genai_types.Part(file_data=genai_types.FileData(file_uri=meta["url"]))
+    attempts = [("영상직접", [video_part, genai_types.Part(text=prompt)]),
+                ("텍스트만", prompt)]
     response = None
     last_err: Exception | None = None
     for model in models:
-        try:
-            response = client.models.generate_content(model=model, contents=prompt, config=config)
-            print(f"Gemini OK: {model}")
+        for mode, contents in attempts:
+            try:
+                response = client.models.generate_content(model=model, contents=contents, config=config)
+                print(f"Gemini OK: {model} ({mode})")
+                break
+            except Exception as exc:
+                last_err = exc
+                print(f"Gemini {model}({mode}) 실패({type(exc).__name__})")
+        if response is not None:
             break
-        except Exception as exc:
-            last_err = exc
-            print(f"Gemini {model} 실패({type(exc).__name__}) → 다음 모델")
     if response is None:
         raise SystemExit(f"Gemini 모두 실패: {last_err}")
     data = json.loads(response.text)

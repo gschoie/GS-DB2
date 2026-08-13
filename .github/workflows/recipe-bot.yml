@@ -36,5 +36,6 @@ jobs:
         env:
           NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          RECIPE_GEMINI_API_KEY: ${{ secrets.RECIPE_GEMINI_API_KEY }}  # 선택 — 전용 쿼터 분리용
           YT_URL: ${{ inputs.yt_url }}
         run: python recipe_bot.py
