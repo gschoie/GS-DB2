@@ -22,7 +22,9 @@ import sys
 
 import requests
 
-NOTION_DB = os.environ.get("RECIPE_DB_ID", "1a57f2a566ff46a1aec80d6d31407e21")
+# 사용자가 직접 만든 「레시피」 DB (daol_sunbak 인테그레이션 연결됨).
+# 스키마: 요리제목(title)/유튜브(url)/재료(text)/방법(text)/입력날짜(date)/체크·별표(checkbox)
+NOTION_DB = os.environ.get("RECIPE_DB_ID", "3c32051c652b4d08b2c807e45f4cd9b6")
 NOTION_API = "https://api.notion.com/v1"
 CATEGORIES = ["한식", "중식", "일식", "양식", "간식/디저트", "기타"]
 UA = ("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
@@ -169,12 +171,17 @@ def _rt(text: str) -> list:
 
 
 def save_to_notion(meta: dict, recipe: dict) -> str:
+    from datetime import datetime, timezone, timedelta
     token = os.environ["NOTION_TOKEN"]
     headers = {"Authorization": f"Bearer {token}", "Notion-Version": "2022-06-28",
                "Content-Type": "application/json"}
     ingredients = "\n".join(recipe["재료"])
     steps = "\n".join(f"{i}. {s}" for i, s in enumerate(recipe["조리방법"], 1))
+    today = datetime.now(timezone(timedelta(hours=9))).strftime("%Y-%m-%d")
+    info_line = " · ".join(x for x in [recipe.get("분류"), meta.get("channel")] if x)
     children = [
+        *([{"object": "block", "type": "paragraph",
+            "paragraph": {"rich_text": _rt(f"📎 {info_line}")}}] if info_line else []),
         {"object": "block", "type": "heading_2",
          "heading_2": {"rich_text": _rt("🧺 재료")}},
         *[{"object": "block", "type": "bulleted_list_item",
@@ -188,12 +195,11 @@ def save_to_notion(meta: dict, recipe: dict) -> str:
     body = {
         "parent": {"database_id": NOTION_DB},
         "properties": {
-            "요리명": {"title": _rt(recipe["요리명"])},
+            "요리제목": {"title": _rt(recipe["요리명"])},
             "재료": {"rich_text": _rt(ingredients)},
-            "조리방법": {"rich_text": _rt(steps)},
+            "방법": {"rich_text": _rt(steps)},
             "유튜브": {"url": meta["url"]},
-            "채널": {"rich_text": _rt(meta["channel"])},
-            "분류": {"select": {"name": recipe["분류"]}},
+            "입력날짜": {"date": {"start": today}},
         },
         "children": children,
     }
