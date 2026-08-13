@@ -315,6 +315,9 @@ _TEMPLATE = r"""<!doctype html>
 font-family:-apple-system,"Segoe UI","Malgun Gothic",sans-serif;line-height:1.5}
 .wrap{max-width:860px;margin:0 auto;padding:24px 18px 60px}
 h1{font-size:20px;font-weight:600;margin:0 0 2px}.sub{color:var(--muted);font-size:13px}
+.sched{display:inline-block;background:var(--card);border:1px solid var(--line);border-radius:6px;
+padding:3px 9px;margin:6px 0 0;font-size:11px;color:var(--muted)}
+.sched b{color:var(--ink);font-weight:600}
 .status{display:flex;flex-wrap:wrap;gap:8px 16px;align-items:center;background:var(--card);
 border:1px solid var(--line);border-radius:12px;padding:12px 16px;margin:14px 0 16px;font-size:13px}
 .status b{font-weight:600}
@@ -371,6 +374,7 @@ border-radius:8px;padding:6px 10px;margin-left:6px}
 </style></head><body><div class="wrap">
 <h1>영업이익 컨센 리비전 <span class="tiny" style="font-weight:400">KOSPI200 · KOSDAQ50 · 리서치커버리지</span></h1>
 <div class="sub" id="sub"></div>
+<div class="sched">🕙 자동 스냅샷 <b>매주 금요일 오후 5시</b>(한국시간) 예약 — GitHub Actions 대기열 사정으로 실제 갱신은 다소 늦어질 수 있습니다. 🔄 버튼으로 즉시 갱신도 가능.</div>
 <div class="status" id="status"></div>
 <a class="dl" href="consensus_full.xlsx" download>📥 전체 종목 엑셀 다운로드</a>
 <div class="wknav" id="wknav"></div>
