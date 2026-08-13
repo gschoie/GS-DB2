@@ -7,10 +7,16 @@ import os, json, glob, html, datetime
 HERE = os.path.dirname(os.path.abspath(__file__))
 HIST_DIR = os.path.join(HERE, "history")
 MAX_DAYS = 15  # 네비게이션으로 볼 수 있는 과거 일수(페이지 용량 상한)
-# 자동 실행 안내 문구. .github/workflows/etf-signal.yml 의 cron(0 1 * * * = KST 10:00)과
-# 맞춰 둘 것. 크론을 바꾸면 이 문구도 같이 고쳐야 한다.
-SCHEDULE_NOTE = ("자동 스캔 <b>매일 오전 10시</b>(한국시간) 예약 — GitHub Actions 대기열 사정으로 "
-                 "실제로는 <b>11~13시</b>에 갱신되는 경우가 많습니다. 대시보드 🔄 버튼으로 즉시 갱신도 가능.")
+# 예약 시각. .github/workflows/etf-signal.yml 의 cron(0 1 * * * = KST 10:00)과 맞춰 둘 것.
+SCHEDULE_TIME = "매일 오전 10시"
+
+def sched_badge(actual):
+    """'정기 업데이트 예약 시각 · 실제로 돌아간 시각'을 함께 보여준다.
+    크론은 KST 10시지만 GitHub Actions 대기열 지연으로 실제 실행은 그보다 늦는 경우가
+    많아, 예약 시각만 적으면 안 돈 것처럼 보인다."""
+    act = f' · 실제 갱신 <b>{esc(actual)}</b>' if actual else ""
+    return (f'<span class="sched">🕙 정기 업데이트 <b>{SCHEDULE_TIME}</b>(한국시간){act}'
+            f'<span class="schedq"> — 대기열 지연으로 예약보다 늦을 수 있음</span></span>')
 WD = "월화수목금토일"
 
 def esc(s): return html.escape(str(s))
@@ -181,8 +187,8 @@ def day_html(payload, is_latest):
       </tr>'''
 
     return f"""
-<p class="sub">생성 <b>{esc(payload["generated_at"])}</b> · 신호 기준일(전일 확정) <b>{esc(asof)}</b><br>
-<span class="sched">🕙 {SCHEDULE_NOTE}</span><br>
+<p class="sub">신호 기준일(전일 확정) <b>{esc(asof)}</b><br>
+{sched_badge(payload.get("generated_at"))}<br>
 ADX(추세) + Stochastic Slow(타이밍) + 수급(외인·기관·개인 5일 순매수, 억원). 신호는 장중 흔들림을 피해 <b>전일 확정 종가</b>로 계산.</p>
 
 <section class="stats">
@@ -294,6 +300,8 @@ h1{{font:500 30px Georgia,"Noto Serif KR",serif;margin:0}}
 .sched{{display:inline-block;background:#eef2ec;border:1px solid var(--line);border-radius:4px;
 padding:3px 9px;margin:3px 0;font-size:11px;color:#5b6660}}
 .sched b{{color:#2c3a34}}
+.schedq{{color:#8b918e}}
+@media(max-width:620px){{.schedq{{display:none}}}}
 .stats{{display:grid;grid-template-columns:repeat(6,1fr);gap:12px;margin:22px 0 8px}}
 .stats article{{background:var(--card);border:1px solid var(--line);padding:18px 20px}}
 .stats small{{color:var(--muted);font-size:11px;font-weight:700;letter-spacing:.04em}}
