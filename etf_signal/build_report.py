@@ -7,13 +7,13 @@ import os, json, glob, html, datetime
 HERE = os.path.dirname(os.path.abspath(__file__))
 HIST_DIR = os.path.join(HERE, "history")
 MAX_DAYS = 15  # 네비게이션으로 볼 수 있는 과거 일수(페이지 용량 상한)
-# 예약 시각. .github/workflows/etf-signal.yml 의 cron(0 1 * * * = KST 10:00)과 맞춰 둘 것.
-SCHEDULE_TIME = "매일 오전 10시"
+# 예약 시각. .github/workflows/etf-signal.yml 의 cron(0 22 * * * = KST 07:00)과 맞춰 둘 것.
+SCHEDULE_TIME = "매일 오전 7시"
 
 def sched_badge(actual):
     """'정기 업데이트 예약 시각 · 실제로 돌아간 시각'을 함께 보여준다.
-    크론은 KST 10시지만 GitHub Actions 대기열 지연으로 실제 실행은 그보다 늦는 경우가
-    많아, 예약 시각만 적으면 안 돈 것처럼 보인다."""
+    GitHub Actions 대기열 지연으로 실제 실행은 예약보다 늦는 경우가 많아, 예약 시각만
+    적으면 안 돈 것처럼 보인다."""
     act = f' · 실제 갱신 <b>{esc(actual)}</b>' if actual else ""
     return (f'<span class="sched">🕙 정기 업데이트 <b>{SCHEDULE_TIME}</b>(한국시간){act}'
             f'<span class="schedq"> — 대기열 지연으로 예약보다 늦을 수 있음</span></span>')
@@ -495,7 +495,7 @@ function openChart(code) {{
   var body = document.getElementById('modal-body');
   if (!c) {{
     title.textContent = '시계열 데이터 없음';
-    body.innerHTML = '<p class="none">아직 이력이 없습니다. 다음 스캔(매일 오전 10시)부터 차트가 표시됩니다.</p>';
+    body.innerHTML = '<p class="none">아직 이력이 없습니다. 다음 스캔부터 차트가 표시됩니다.</p>';
   }} else {{
     title.textContent = c.name + ' · 최근 ' + c.dates.length + '거래일 (' + c.dates[0] + ' ~ ' + c.dates[c.dates.length - 1] + ')';
     body.innerHTML = renderChart(c);
