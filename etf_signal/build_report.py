@@ -11,6 +11,14 @@ WD = "월화수목금토일"
 
 def esc(s): return html.escape(str(s))
 
+def fmt_day(iso):
+    """'2026-08-12' → '8/12(수)'. 날짜 형식이 아니면 원문 그대로."""
+    try:
+        t = datetime.date.fromisoformat(iso)
+    except ValueError:
+        return iso
+    return f"{t.month}/{t.day}({WD[t.weekday()]})"
+
 def reasons(s):
     r = []
     if s["ev_trend"]:
@@ -230,22 +238,26 @@ def build(payload):
         d = sig[0]["asof"] if sig else "—"
         nav_dates = [d]
         pages = {d: day_html(payload, True)}
+        gens = {d: (payload.get("generated_at") or "")[:10]}
     else:
-        pages = {}
+        pages, gens = {}, {}
         for d in nav_dates:
             with open(hist[d], encoding="utf-8") as f:
-                pages[d] = day_html(json.load(f), is_latest=(d == nav_dates[-1]))
+                pl = json.load(f)
+            pages[d] = day_html(pl, is_latest=(d == nav_dates[-1]))
+            gens[d] = (pl.get("generated_at") or "")[:10]   # 그날 스캔이 돌아간 날짜
 
+    # 라벨은 'DATA 기준일 → 스캔일' 형태. 기준일은 전일 확정이라 스캔일보다 하루 이상
+    # 이르기 때문에, 둘을 같이 보여주지 않으면 최신인데도 옛날 날짜로 보인다.
     date_opts = []
     for d in nav_dates:
-        try:
-            t = datetime.date.fromisoformat(d)
-            label = f"{t.month}/{t.day}({WD[t.weekday()]})"
-        except ValueError:
-            label = d
+        label = f"{fmt_day(d)} DATA"
+        g = gens.get(d) or ""
+        if g and g != d:
+            label += f" → {fmt_day(g)}"
         if d == nav_dates[-1]:
-            label += " · 최신"
-        date_opts.append(f'<option value="{d}">{label}</option>')
+            label += " 최신"
+        date_opts.append(f'<option value="{d}">{esc(label)}</option>')
 
     pages_json = json.dumps(pages, ensure_ascii=False).replace("</", "<\\/")
     dates_json = json.dumps(nav_dates)
