@@ -1,5 +1,5 @@
 {
-  "when_utc": "2026-08-14 01:30:27Z",
+  "when_utc": "2026-08-14 03:21:59Z",
   "ok": true,
   "note": "sent",
   "chat_id_tail": "5171",
@@ -7,7 +7,7 @@
   "response": {
     "ok": true,
     "result": {
-      "message_id": 99,
+      "message_id": 100,
       "from": {
         "id": 8875725998,
         "is_bot": true,
@@ -21,8 +21,8 @@
         "username": "gschoie",
         "type": "private"
       },
-      "date": 1786671027,
-      "text": "💹 시장 수급 · 8/14(금) 10:00\nKOSPI 6,895.08 🔺1.2%\n\n개인 -6,111억\n외국인 +7,300억\n기관 -882억\n\n프로그램 +947억 = 차익 -574 · 비차익 +1,521\n\nK200선물 외인 -554계약 · 기관 +444계약\n\n상세 차트 › 대시보드\n🎴 GS Research Desk · 시장 수급",
+      "date": 1786677719,
+      "text": "💹 시장 수급 · 8/14(금) 13:00\nKOSPI 6,912.27 🔺1.45%\n\n개인 -7,368억 (-1,257)\n외국인 +12,825억 (+5,525)\n기관 -5,182억 (-4,300)\n\n프로그램 +956억 = 차익 -630 · 비차익 +1,586\n\nK200선물 외인 -299계약 (+255) · 기관 -61계약 (-505)\n\n( ) 안은 10:00 대비 증감\n\n상세 차트 › 대시보드\n🎴 GS Research Desk · 시장 수급",
       "entities": [
         {
           "offset": 3,
@@ -35,32 +35,37 @@
           "type": "bold"
         },
         {
-          "offset": 51,
+          "offset": 52,
           "length": 7,
           "type": "bold"
         },
         {
-          "offset": 63,
+          "offset": 73,
+          "length": 8,
+          "type": "bold"
+        },
+        {
+          "offset": 94,
           "length": 7,
           "type": "bold"
         },
         {
-          "offset": 74,
+          "offset": 117,
           "length": 5,
           "type": "bold"
         },
         {
-          "offset": 86,
-          "length": 5,
-          "type": "bold"
-        },
-        {
-          "offset": 126,
+          "offset": 157,
           "length": 6,
           "type": "bold"
         },
         {
-          "offset": 154,
+          "offset": 190,
+          "length": 18,
+          "type": "italic"
+        },
+        {
+          "offset": 218,
           "length": 4,
           "type": "text_link",
           "url": "https://gschoie.github.io/GS-output-dashboard/market_flow_report.html"
