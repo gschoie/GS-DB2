@@ -75,7 +75,7 @@ sources:
   #
   # 준비는 GitHub 웹에서만 하면 된다(README '조선 코멘트 감시' 절):
   #   1) 시크릿 등록: TELEGRAM_API_ID·API_HASH·PHONE, SESSION_PASSPHRASE,
-  #      SHIP_TELEGRAM_BOT_TOKEN·CHAT_ID
+  #      SPYING_TELEGRAM_BOT_TOKEN·CHAT_ID
   #   2) Actions → '텔레그램 계정 로그인' 워크플로를 두 번 실행(코드 요청 → 코드 확인)
   # 로그인 전에는 이 소스만 '수집 실패'로 넘어가고 나머지 소스는 정상 동작한다.
   - key: ship_all
@@ -83,7 +83,7 @@ sources:
     type: telegram_account
     match_any: *ship_keywords
     push: hit              # 전문이 아니라 낱말이 걸린 문장만 보낸다
-    route: ship            # SHIP_TELEGRAM_* 시크릿의 봇(@gs_sb_bot)으로 발송
+    route: spying          # SPYING_TELEGRAM_* 시크릿의 봇으로 발송(염탐봇)
     dedupe_scope: ship     # 여러 채널이 퍼나른 같은 글은 한 번만
     tags: [조선]
     lookback_hours: 24
@@ -128,7 +128,7 @@ sources:
   #   match_any: *ship_keywords
   #   exclude_any: [휴장, 공지]
   #   push: hit
-  #   route: ship
+  #   route: spying
   #   dedupe_scope: ship
   #   tags: [조선]
   #   lookback_hours: 24
