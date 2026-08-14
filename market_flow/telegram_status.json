@@ -1,5 +1,5 @@
 {
-  "when_utc": "2026-08-14 03:21:59Z",
+  "when_utc": "2026-08-14 05:39:22Z",
   "ok": true,
   "note": "sent",
   "chat_id_tail": "5171",
@@ -7,7 +7,7 @@
   "response": {
     "ok": true,
     "result": {
-      "message_id": 100,
+      "message_id": 101,
       "from": {
         "id": 8875725998,
         "is_bot": true,
@@ -21,8 +21,8 @@
         "username": "gschoie",
         "type": "private"
       },
-      "date": 1786677719,
-      "text": "💹 시장 수급 · 8/14(금) 13:00\nKOSPI 6,912.27 🔺1.45%\n\n개인 -7,368억 (-1,257)\n외국인 +12,825억 (+5,525)\n기관 -5,182억 (-4,300)\n\n프로그램 +956억 = 차익 -630 · 비차익 +1,586\n\nK200선물 외인 -299계약 (+255) · 기관 -61계약 (-505)\n\n( ) 안은 10:00 대비 증감\n\n상세 차트 › 대시보드\n🎴 GS Research Desk · 시장 수급",
+      "date": 1786685962,
+      "text": "💹 시장 수급 · 8/14(금) 15:40 · 마감 잠정\nKOSPI 6,960.01 🔺2.15%\n\n개인 -13,603억 (-6,235)\n외국인 +23,518억 (+10,693)\n기관 -9,658억 (-4,476)\n\n프로그램 +316억 = 차익 -690 · 비차익 +1,006\n\nK200선물 외인 +301계약 (+600) · 기관 -506계약 (-445)\n\n( ) 안은 13:00 대비 증감\n\n상세 차트 › 대시보드\n🎴 GS Research Desk · 시장 수급",
       "entities": [
         {
           "offset": 3,
@@ -30,42 +30,42 @@
           "type": "bold"
         },
         {
-          "offset": 31,
+          "offset": 39,
           "length": 8,
           "type": "bold"
         },
         {
-          "offset": 52,
-          "length": 7,
-          "type": "bold"
-        },
-        {
-          "offset": 73,
+          "offset": 60,
           "length": 8,
           "type": "bold"
         },
         {
-          "offset": 94,
+          "offset": 82,
+          "length": 8,
+          "type": "bold"
+        },
+        {
+          "offset": 104,
           "length": 7,
           "type": "bold"
         },
         {
-          "offset": 117,
+          "offset": 127,
           "length": 5,
           "type": "bold"
         },
         {
-          "offset": 157,
+          "offset": 167,
           "length": 6,
           "type": "bold"
         },
         {
-          "offset": 190,
+          "offset": 201,
           "length": 18,
           "type": "italic"
         },
         {
-          "offset": 218,
+          "offset": 229,
           "length": 4,
           "type": "text_link",
           "url": "https://gschoie.github.io/GS-output-dashboard/market_flow_report.html"
