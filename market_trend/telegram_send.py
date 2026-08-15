@@ -69,7 +69,8 @@ def build_message(payload: dict) -> str | None:
         lines += ["", "🌡️ <b>커뮤니티 온도</b> (네이버 종토)"]
         tags = []
         for row in hot[:5]:
-            burst = f" {row['burst']}×" if row.get("burst") is not None else f" {row['posts']}글"
+            approx = "≈" if row.get("capped") else ""
+            burst = f" {row['burst']}×" if row.get("burst") is not None else f" {approx}{row['posts']}글"
             tags.append(f"{esc(row['name'])}{burst}")
         lines.append("· " + " · ".join(tags))
         liked = (community.get("top_liked") or [])

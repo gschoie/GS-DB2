@@ -181,6 +181,21 @@ def collect_board(code: str, start: datetime, end: datetime,
 
 # ── 계량 ──────────────────────────────────────────────────────────────────
 
+def estimate_window_count(posts: list[dict], window_start: datetime, window_end: datetime) -> int:
+    """페이지 상한에 걸린 게시판의 창 전체 글 수를 '작성 속도'로 추정한다.
+
+    대형주는 하루 수천 글이라 페이지 상한(100글)에 걸리는데, 그대로 100을 쓰면
+    상한 걸린 종목이 전부 같은 값이 되어 급증 표가 무의미해진다. 대신 수집한
+    글들이 몇 시간 만에 쌓였는지(속도)를 재서 창 전체로 환산한다 — 요청을 더
+    쓰지 않고 진짜 규모를 얻고, 기준선 배수도 대형주까지 작동하게 된다.
+    """
+    if not posts:
+        return 0
+    times = sorted(p["posted"] for p in posts)
+    covered_h = max((times[-1] - times[0]).total_seconds() / 3600, 0.25)
+    window_h = (window_end - window_start).total_seconds() / 3600
+    return min(round(len(posts) * window_h / covered_h), 99_999)
+
 def load_history() -> dict:
     if not HISTORY_PATH.exists():
         return {"version": 1, "days": {}}
@@ -315,9 +330,11 @@ def main(argv: list[str] | None = None) -> int:
     capped: set[str] = set()
     for code in universe:
         posts, hit_cap = collect_board(code, start, end, max_pages, delay)
-        counts[code] = len(posts)
         if hit_cap:
+            counts[code] = estimate_window_count(posts, start, end)
             capped.add(code)
+        else:
+            counts[code] = len(posts)
         all_posts += posts
     print(f"창 안의 글 {len(all_posts)}건 (페이지 상한에 걸린 종목 {len(capped)}개)")
     if not all_posts:

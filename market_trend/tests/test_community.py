@@ -90,6 +90,16 @@ class SignalTest(unittest.TestCase):
         self.assertNotIn("삼성전자", names)       # 평소 수준은 탈락
         self.assertAlmostEqual(rows[0]["burst"], 5.5, places=1)
 
+    def test_estimate_window_count(self):
+        # 100글이 1.5시간 만에 쌓였으면 24시간 창은 ≈1600글
+        end = datetime(2026, 8, 15, 6, 0, tzinfo=KST)
+        start = end - timedelta(hours=24)
+        posts = [{"posted": end - timedelta(hours=1.5) + timedelta(seconds=54 * i)}
+                 for i in range(100)]
+        estimate = community_naver.estimate_window_count(posts, start, end)
+        self.assertTrue(1500 <= estimate <= 1700, estimate)
+        self.assertEqual(community_naver.estimate_window_count([], start, end), 0)
+
     def test_cold_start_by_count(self):
         rows = community_naver.stock_bursts({"042660": 55}, {"042660": "한화오션"},
                                             set(), {"days": {}}, "2026-08-15")
