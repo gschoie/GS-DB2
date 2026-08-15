@@ -448,6 +448,27 @@ TICKER_SHAPE = re.compile(r"^[A-Za-z0-9][A-Za-z0-9.\-]*$")
 HANGUL = re.compile(r"[가-힣]")
 
 
+KRX_UNIVERSE = ROOT.parent / "kospi_consensus" / "data" / "universe.json"
+
+
+def local_ticker(term):
+    """리포에 이미 있는 국내 종목 목록에서 이름으로 찾는다.
+
+    kospi_consensus 가 관리하는 universe.json(코스피200 + 코스닥 318종목)에
+    코드·시장이 다 들어 있다. 야후 검색은 '현대차'를 못 찾고 외부 검색은 러너
+    IP가 막힐 수 있다 — 리포 안의 파일이 가장 확실하고 빠르다.
+    """
+    try:
+        table = json.loads(KRX_UNIVERSE.read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        return None
+    target = term.replace(" ", "")
+    for code, meta in table.items():
+        if str(meta.get("name", "")).replace(" ", "") == target:
+            return f"{code}.{'KQ' if meta.get('market') == '코스닥' else 'KS'}"
+    return None
+
+
 def naver_ticker(term):
     """네이버 금융 자동완성으로 한글 종목명 → 야후 심볼.
 
@@ -534,8 +555,11 @@ def resolve_term(term):
     text = term.strip()
     if TICKER_SHAPE.match(text):
         return text.upper(), text          # 이미 티커꼴 — 그대로 쓴다
-    # 한글 이름은 네이버가 정확하다. 실패하면 야후 검색으로 넘어간다(해외 종목 담당).
-    found = naver_ticker(text) if HANGUL.search(text) else None
+    # 국내 종목은 리포의 종목 목록이 가장 확실하다 → 네이버 → 야후 순으로 내려간다.
+    # (야후는 '현대차'·'두산에너빌리티'를 못 찾고, 'SK하이닉스'엔 미국 ADR을 준다)
+    found = None
+    if HANGUL.search(text):
+        found = local_ticker(text) or naver_ticker(text)
     if not found:
         found = search_ticker(text)
     if found:

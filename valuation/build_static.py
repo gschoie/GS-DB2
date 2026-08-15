@@ -348,6 +348,13 @@ tr.grp td.name{background:var(--grp)}
 tr.reg td{background:transparent;font-weight:600;color:var(--muted);font-size:11.5px}
 tr.sum td{background:var(--sum);font-weight:600}
 tr.sum td.name{background:var(--sum)}
+/* 산업 블록 사이 여백 — 조선·방산·건설기계가 붙어 있으면 경계가 안 읽힌다 */
+tr.gap td{height:16px;padding:0;background:var(--bg);border-bottom:0}
+tr.gap td.name{background:var(--bg)}
+.del{background:none;border:0;color:var(--muted);cursor:pointer;font-family:inherit;
+font-size:13px;padding:0 6px 0 0;line-height:1}
+.del:hover{color:var(--bad)}
+.del.all{font-size:11px;border:1px solid var(--line);border-radius:10px;padding:2px 8px;margin-left:6px}
 td.name .tk{color:var(--muted);font-size:11px;margin-left:6px}
 tr.co:hover td{background:rgba(24,95,165,.07)}
 tr.co:hover td.name{background:rgba(24,95,165,.07)}
@@ -398,6 +405,23 @@ const BLOCKS = __BLOCKS__;
 const DISPATCH_ENDPOINT='https://script.google.com/macros/s/AKfycbx3RjIjtlO2Z6fIYo2T3LhJrFg9Wp2hS7dMS3Is52-JVF1hizoCWewbQ1uM_v5sdhR2jw/exec';
 
 const state = {industry:'전체', q:'', span:'ref', metrics:METRICS.map(m=>m[0])};
+
+/* 임시 조회 줄 지우기 — 이 브라우저에서만 감춘다(수집을 다시 돌릴 필요 없이 즉시).
+   조회 시각(adhoc_at)이 바뀌면, 즉 새로 조회하면 감춤 목록은 저절로 초기화된다. */
+const HIDE_KEY = 'valuation.adhocHidden';
+function hiddenAdhoc(){
+  try{
+    const saved = JSON.parse(localStorage.getItem(HIDE_KEY) || '{}');
+    return saved.at === DATA.adhoc_at ? (saved.keys || []) : [];
+  }catch{ return []; }
+}
+function hideAdhoc(key){
+  const keys = key === '__all'
+    ? (DATA.adhoc||[]).map(c=>c.ticker + '|' + c.name)
+    : [...new Set([...hiddenAdhoc(), key])];
+  localStorage.setItem(HIDE_KEY, JSON.stringify({at: DATA.adhoc_at, keys}));
+  render();
+}
 const industries = ['전체', ...new Set(DATA.companies.map(c=>c.industry)),
                     ...((DATA.adhoc||[]).length ? ['임시 조회'] : [])];
 
@@ -471,17 +495,22 @@ function render(){
 
   /* 임시 조회 결과는 정기 유니버스와 섞지 않는다 — 맨 위 별도 블록에 두고
      중앙값 계산에서도 뺀다(피어 통계를 임시 종목이 흔들면 안 된다). */
+  const gone = hiddenAdhoc();
   const adhoc = (DATA.adhoc||[]).filter(c=>{
     const q = state.q.trim().toLowerCase();
-    return (state.industry==='전체' || state.industry==='임시 조회')
+    return !gone.includes(c.ticker + '|' + c.name)
+      && (state.industry==='전체' || state.industry==='임시 조회')
       && (!q || c.name.toLowerCase().includes(q) || c.ticker.toLowerCase().includes(q));
   });
   if(adhoc.length){
     html += `<tr class="grp"><td class="name">🔎 임시 조회 <span style="font-weight:400">`+
-            `${DATA.adhoc_at ? DATA.adhoc_at.slice(0,16).replace('T',' ') : ''}</span></td>`+
+            `${DATA.adhoc_at ? DATA.adhoc_at.slice(0,16).replace('T',' ') : ''}</span>`+
+            ` <button class="del all" data-del="__all" title="임시 조회 전체 지우기">전체 지우기</button></td>`+
             `<td colspan="${span-1}"></td></tr>`;
     for(const c of adhoc){
-      html += `<tr class="co"><td class="name">${c.name}<span class="tk">${c.ticker}</span></td>`+
+      html += `<tr class="co"><td class="name">`+
+              `<button class="del" data-del="${c.ticker}|${c.name}" title="이 종목 지우기">×</button>`+
+              `${c.name}<span class="tk">${c.ticker}</span></td>`+
               `<td>${c.market_cap_musd!=null?c.market_cap_musd.toLocaleString():''}</td>`+
               cells((m,a)=>{
                 const y=(c.years||[]).find(y=>y.year===a.year);
@@ -492,9 +521,13 @@ function render(){
     }
   }
 
+  const spacer = `<tr class="gap"><td class="name"></td><td colspan="${span-1}"></td></tr>`;
+  let drawn = adhoc.length ? 1 : 0;
+
   for(const block of BLOCKS){
     const inBlock = rows.filter(c=>c.industry===block.industry);
     if(!inBlock.length) continue;
+    if(drawn++) html += spacer;   // 첫 블록 앞에는 여백을 두지 않는다
     html += `<tr class="grp"><td class="name">${block.industry}</td><td colspan="${span-1}"></td></tr>`;
     for(const region of block.regions){
       const list = inBlock.filter(c=>c.region===region.region);
@@ -543,6 +576,9 @@ document.getElementById('chips').addEventListener('click', e=>{
   render();
 });
 document.getElementById('q').addEventListener('input', e=>{ state.q = e.target.value; render(); });
+document.getElementById('body').addEventListener('click', e=>{
+  const b = e.target.closest('.del'); if(b) hideAdhoc(b.dataset.del);
+});
 
 /* 수집 실행 — GAS 프록시가 valuation.yml 을 workflow_dispatch 로 돌린다.
    결과 반영까지 수집(1~2분) + Pages 배포(2~3분)가 필요해 안내를 함께 띄운다. */
