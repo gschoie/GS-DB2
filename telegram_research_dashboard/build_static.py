@@ -190,6 +190,12 @@ def build() -> Path:
     consensus_xlsx = ROOT / "static" / "consensus_full.xlsx"
     if consensus_xlsx.exists():
         shutil.copy2(consensus_xlsx, OUTPUT.parent / "consensus_full.xlsx")
+    valuation_report = ROOT / "static" / "valuation_report.html"
+    if valuation_report.exists():
+        shutil.copy2(valuation_report, OUTPUT.parent / "valuation_report.html")
+    valuation_xlsx = ROOT / "static" / "valuation_full.xlsx"
+    if valuation_xlsx.exists():
+        shutil.copy2(valuation_xlsx, OUTPUT.parent / "valuation_full.xlsx")
     defense_index = ROOT / "static" / "defense_briefing_report.html"
     if defense_index.exists():
         shutil.copy2(defense_index, OUTPUT.parent / "defense_briefing_report.html")

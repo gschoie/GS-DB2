@@ -1,0 +1,73 @@
+name: 밸류에이션 PER·PBR·ROE·PSR
+
+# 야후 파이낸스 → 종목별 과거 4개 회계연도 + 컨센서스(올해·내년) 배수 →
+# 대시보드 화면(valuation_report.html) + 엑셀(valuation_full.xlsx) 커밋 → Pages 재배포.
+#
+# 주 1회면 충분하다: 연간 재무제표는 분기에 한 번 바뀌고, 애널리스트 컨센도
+# 하루 단위로 요동치지 않는다. 급할 땐 Actions에서 "Run workflow"로 즉시 실행.
+on:
+  workflow_dispatch:
+    inputs:
+      only:
+        description: "특정 티커만 수집 (쉼표 구분, 비우면 전체)"
+        required: false
+        default: ""
+  schedule:
+    - cron: "0 22 * * 5"   # 22:00 UTC 금요일 = 한국 토요일 07:00
+
+permissions:
+  contents: write   # 산출물 커밋·푸시 → deploy-pages 의 workflow_run 트리거
+
+# 주의: concurrency 는 걸지 않는다. 대기 중인 run 을 취소해 수집이 통째로
+# 유실되는 함정(CLAUDE.md 운영 교훈)을 이 잡에서도 그대로 피한다.
+
+jobs:
+  collect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30   # 야후가 러너 IP를 스로틀하면 종목당 재시도가 붙는다
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: 패키지 설치
+        working-directory: valuation
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      # 산식 검산(가짜 야후 응답 기준). 야후가 죽어 있어도 계산 로직 회귀는 여기서 잡힌다.
+      - name: 산식 테스트
+        working-directory: valuation
+        run: python -m unittest discover -s tests -p "test_*.py" -v
+
+      - name: 야후 파이낸스 수집
+        working-directory: valuation
+        run: python fetch_valuation.py --only "${{ inputs.only }}"
+
+      - name: 화면·엑셀 생성
+        working-directory: valuation
+        run: python build_static.py
+
+      - name: 커밋 및 푸시 (→ Pages 재배포)
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add valuation/data/valuation.json \
+                  telegram_research_dashboard/static/valuation_report.html \
+                  telegram_research_dashboard/static/valuation_full.xlsx
+          if git diff --cached --quiet; then
+            echo "변경 없음 — 커밋 생략"
+          else
+            git commit -m "chore(valuation): 밸류에이션 스냅샷 $(date -u +%Y-%m-%d)"
+            # 수집이 길어 그 사이 main이 앞서가면 push가 거부된다 → 재기반 후 재시도.
+            for i in 1 2 3 4 5; do
+              git push origin HEAD:main && { echo "push 성공"; break; }
+              echo "원격이 앞서감 — 재기반 후 재시도 ($i/5)"
+              git pull --rebase --autostash origin main || exit 1
+              sleep 3
+            done
+          fi
