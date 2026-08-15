@@ -58,11 +58,22 @@ BASELINE_DAYS = 7
 MIN_BASELINE = 3
 
 
+def decode_page(content: bytes) -> str:
+    """네이버 금융은 페이지마다 인코딩이 다르다 — 검색상위는 euc-kr, 게시판은 utf-8.
+
+    utf-8 엄격 디코드는 euc-kr 바이트에서 거의 반드시 실패하므로 판별기로 쓴다.
+    (처음에 euc-kr로 강제했다가 게시판 제목이 '湲곕�ㅻ┝'처럼 깨진 사고의 재발 방지)
+    """
+    try:
+        return content.decode("utf-8")
+    except UnicodeDecodeError:
+        return content.decode("cp949", errors="replace")
+
+
 def fetch(url: str) -> str:
     r = SESSION.get(url, timeout=20)
     r.raise_for_status()
-    r.encoding = "euc-kr"
-    return r.text
+    return decode_page(r.content)
 
 
 # ── 수집 대상 ──────────────────────────────────────────────────────────────
@@ -144,8 +155,14 @@ def parse_board(html: str, code: str) -> list[dict]:
     return posts
 
 
-def collect_board(code: str, start: datetime, max_pages: int, delay: float) -> tuple[list[dict], bool]:
-    """창(start~) 안의 글을 페이지 넘기며 모은다. (글 목록, 상한에 걸렸는지)"""
+def collect_board(code: str, start: datetime, end: datetime,
+                  max_pages: int, delay: float) -> tuple[list[dict], bool]:
+    """창(start~end) 안의 글을 페이지 넘기며 모은다. (글 목록, 상한에 걸렸는지)
+
+    게시판은 최신순이라 창 끝(end) 이후의 글은 건너뛰며 계속 가고, 창 시작(start)보다
+    오래된 글이 나오면 그 게시판은 끝이다. end 상한이 없으면 다음날 새벽에 수동
+    실행했을 때 이튿날 글이 전날 리포트에 섞인다.
+    """
     posts: list[dict] = []
     for page in range(1, max_pages + 1):
         try:
@@ -155,9 +172,8 @@ def collect_board(code: str, start: datetime, max_pages: int, delay: float) -> t
             break
         if not page_posts:
             break
-        fresh = [p for p in page_posts if p["posted"] >= start]
-        posts += fresh
-        if len(fresh) < len(page_posts):  # 창을 벗어났다 — 이 게시판은 끝
+        posts += [p for p in page_posts if start <= p["posted"] < end]
+        if any(p["posted"] < start for p in page_posts):  # 창 시작을 지났다 — 끝
             return posts, False
         time.sleep(delay)
     return posts, len(posts) > 0  # 페이지 상한까지 전부 창 안이면 잘렸을 수 있다
@@ -286,8 +302,9 @@ def main(argv: list[str] | None = None) -> int:
 
     now = datetime.now(KST)
     start_utc, end_utc = trend_daily.day_window(now.astimezone(timezone.utc), cfg)
-    start, day = start_utc.astimezone(KST), end_utc.astimezone(KST).strftime("%Y-%m-%d")
-    print(f"커뮤니티 온도(종토) {day} · 창 {start:%m-%d %H:%M} KST~")
+    start, end = start_utc.astimezone(KST), end_utc.astimezone(KST)
+    day = end.strftime("%Y-%m-%d")
+    print(f"커뮤니티 온도(종토) {day} · 창 {start:%m-%d %H:%M}~{end:%m-%d %H:%M} KST")
 
     search_top = fetch_search_top()
     universe = build_universe(cfg, search_top)
@@ -297,7 +314,7 @@ def main(argv: list[str] | None = None) -> int:
     counts: dict[str, int] = {}
     capped: set[str] = set()
     for code in universe:
-        posts, hit_cap = collect_board(code, start, max_pages, delay)
+        posts, hit_cap = collect_board(code, start, end, max_pages, delay)
         counts[code] = len(posts)
         if hit_cap:
             capped.add(code)

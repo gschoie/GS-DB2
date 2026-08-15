@@ -63,6 +63,12 @@ class ParserTest(unittest.TestCase):
         self.assertEqual(rows[0], {"code": "005930", "name": "삼성전자"})
         self.assertEqual(rows[1]["name"], "한화오션")
 
+    def test_decode_page_utf8_and_euckr(self):
+        # 게시판(utf-8)과 검색상위(euc-kr)를 같은 판별기로 처리한다
+        self.assertEqual(community_naver.decode_page("기다림은 배신하지 않는다".encode("utf-8")),
+                         "기다림은 배신하지 않는다")
+        self.assertEqual(community_naver.decode_page("삼성전자".encode("cp949")), "삼성전자")
+
     def test_alias_codes_from_config(self):
         codes = community_naver.alias_codes(trend_daily.load_config())
         self.assertEqual(codes.get("042660"), "한화오션")
