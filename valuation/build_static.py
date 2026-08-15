@@ -343,9 +343,17 @@ min-width:190px}
 thead th.name{z-index:3}
 th.mg{border-left:1px solid var(--line)}td.mg{border-left:1px solid var(--line)}
 td.est,th.est{background:var(--est)}
-tr.grp td{background:var(--grp);font-weight:700;font-size:12px}
-tr.grp td.name{background:var(--grp)}
-tr.reg td{background:transparent;font-weight:600;color:var(--muted);font-size:11.5px}
+/* 산업(조선·방산·건설기계) — 표에서 가장 큰 글자. 왼쪽 굵은 띠로 블록 시작을 못박는다 */
+tr.grp td{background:var(--grp);font-weight:700;font-size:15px;letter-spacing:-.2px;
+padding-top:9px;padding-bottom:9px}
+tr.grp td.name{background:var(--grp);border-left:5px solid var(--accent)}
+/* 지역(한국·미국…) — 위에 가로선을 긋고 왼쪽에 얇은 띠, 종목 수를 옆에 붙인다 */
+tr.reg td{background:transparent;font-weight:700;color:var(--ink);font-size:12.5px;
+border-top:1px solid var(--line);padding-top:9px}
+tr.reg td.name{border-left:3px solid var(--accent);padding-left:11px}
+tr.reg .cnt{color:var(--muted);font-weight:400;font-size:11px;margin-left:5px}
+/* 기업명은 한 칸 들여써 지역 아래 소속임이 보이게 */
+tr.co td.name{padding-left:18px}
 tr.sum td{background:var(--sum);font-weight:600}
 tr.sum td.name{background:var(--sum)}
 /* 산업 블록 사이 여백 — 조선·방산·건설기계가 붙어 있으면 경계가 안 읽힌다 */
@@ -360,6 +368,8 @@ tr.co:hover td{background:rgba(24,95,165,.07)}
 tr.co:hover td.name{background:rgba(24,95,165,.07)}
 .na{color:var(--muted)}
 .mark{color:var(--accent);font-weight:700}
+.src{color:#0a8f5b;font-weight:700}
+@media(prefers-color-scheme:dark){.src{color:#3fbf8a}}
 .legend{margin-top:12px;font-size:11.5px;color:var(--muted);line-height:1.75}
 .legend b{color:var(--ink)}
 .warn{margin-top:8px;font-size:11.5px;color:var(--bad)}
@@ -387,8 +397,12 @@ tr.co:hover td.name{background:rgba(24,95,165,.07)}
 <div class="legend">
   <b>확정(A)</b> = 회계연도 기말 주가·재무제표 기준 · <b>컨센(E)</b> = 음영 열, 현재 주가 기준 ·
   <b>시가총액</b> = 백만달러 환산<br>
-  PER(E)·PSR(E)는 야후 컨센서스 EPS·매출 원본. <b>PBR(E)·ROE(E)는 컨센 항목이 없어</b>
-  «직전 확정자본 + 컨센순이익 × (1 − 배당성향)» 롤포워드로 <b>자체 산출</b>했다(<span class="mark">*</span> 표기).
+  <b><span class="src">ᴺ</span> 표시</b>는 <b>국내 컨센(에프앤가이드 · 네이버 금융)</b> 원본이다 —
+  국내 종목은 국내 증권사 추정치가 정본이라 컨센 PER·PBR·ROE를 그쪽에서 가져온다.
+  해외 종목 컨센은 야후 기준이므로 <b>국내와 해외는 컨센 출처가 다르다</b>(확정 실적은
+  41종목 모두 같은 산식으로 계산하므로 동일 기준).<br>
+  <span class="mark">*</span> 표시는 야후에 컨센 원본이 없어
+  «직전 확정자본 + 컨센순이익 × (1 − 배당성향)» 롤포워드로 <b>자체 산출</b>한 값이다.
   EV/EBITDA는 야후에 EBITDA 컨센이 없어 컨센 열이 비어 있고, 2년후 열은 컨센 자체가 없어 비어 있다.<br>
   <b>요약행은 평균이 아니라 중앙값</b>이다 — 적자 직후 PER 수백배·자본 얇은 종목 PBR 수십배 같은
   극단값 하나가 평균을 통째로 끌고 가기 때문. 적자·자본잠식으로 분모가 0 이하인 배수는 공란(ROE 음수는 표기).
@@ -443,6 +457,15 @@ function axisFor(){
           ...solid.filter(x=>x.kind==='E').slice(0, 2)];
 }
 const fmt = (v,m) => v==null ? '' : (m==='roe' ? v.toFixed(1) : v.toFixed(2));
+
+/* 값의 출처 표시. ᴺ = 국내 컨센(에프앤가이드/네이버) 원본, * = 우리가 롤포워드로 만든 값.
+   출처가 섞인 표라 어느 쪽인지 숨기지 않는다. */
+function badge(year, metric, value){
+  if(value==null || !year) return '';
+  if((year.naver||[]).includes(metric)) return '<span class="src">ᴺ</span>';
+  if((year.derived||[]).includes(metric)) return '<span class="mark">*</span>';
+  return '';
+}
 
 function visible(){
   const q = state.q.trim().toLowerCase();
@@ -515,8 +538,7 @@ function render(){
               cells((m,a)=>{
                 const y=(c.years||[]).find(y=>y.year===a.year);
                 const v=y?y[m]:null;
-                const der = y && (y.derived||[]).includes(m) && v!=null;
-                return v==null ? '' : fmt(v,m)+(der?'<span class="mark">*</span>':'');
+                return v==null ? '' : fmt(v,m)+badge(y,m,v);
               }, axis) + '</tr>';
     }
   }
@@ -532,16 +554,15 @@ function render(){
     for(const region of block.regions){
       const list = inBlock.filter(c=>c.region===region.region);
       if(!list.length) continue;
-      html += `<tr class="reg"><td class="name">${region.region}</td><td colspan="${span-1}"></td></tr>`;
+      html += `<tr class="reg"><td class="name">${region.region}`+
+              `<span class="cnt">${list.length}</span></td><td colspan="${span-1}"></td></tr>`;
       for(const c of list){
         html += `<tr class="co"><td class="name">${c.name}<span class="tk">${c.ticker}</span></td>`+
                 `<td>${c.market_cap_musd!=null?c.market_cap_musd.toLocaleString():''}</td>`+
                 cells((m,a)=>{
                   const y=(c.years||[]).find(y=>y.year===a.year);
                   const v=y?y[m]:null;
-                  const der = y && (y.derived||[]).includes(m) && v!=null;
-                  return v==null ? '<span class="na"></span>'
-                                 : fmt(v,m)+(der?'<span class="mark">*</span>':'');
+                  return v==null ? '<span class="na"></span>' : fmt(v,m)+badge(y,m,v);
                 }, axis) + '</tr>';
       }
     }

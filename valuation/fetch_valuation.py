@@ -44,6 +44,7 @@ from urllib.request import Request, urlopen
 import pandas as pd
 import yfinance as yf
 
+import naver_consensus
 from companies import TARGET_COMPANIES
 
 try:
@@ -439,6 +440,33 @@ def collect(company):
             # PER·PSR 은 야후 컨센 원본, PBR·ROE 는 롤포워드 자체 산출임을 화면에 알린다.
             "derived": ["pbr", "roe"],
         })
+
+    # 국내 종목은 컨센(E) PER·PBR·ROE 를 네이버(에프앤가이드)로 덮어쓴다.
+    # 야후엔 EPS·매출 컨센뿐이라 PBR·ROE 를 롤포워드로 만들어 왔는데, 국내는
+    # 에프앤가이드 추정치가 원본이다. 못 가져오면 기존 산출값이 그대로 남는다.
+    if ticker.upper().endswith((".KS", ".KQ")):
+        code = ticker.split(".")[0]
+        overrides = naver_consensus.estimates(code)
+        if overrides:
+            applied = 0
+            for entry in years:
+                if entry["kind"] != "E" or entry.get("unavailable"):
+                    continue
+                bucket = overrides.get(entry["year"])
+                if not bucket:
+                    continue
+                taken = []
+                for metric in ("per", "pbr", "roe"):
+                    if bucket.get(metric) is not None:
+                        entry[metric] = round(bucket[metric], 2)
+                        taken.append(metric)
+                if taken:
+                    # 네이버가 채운 지표는 '자체 산출(*)' 딱지를 떼고 출처를 남긴다.
+                    entry["derived"] = [m for m in entry.get("derived", []) if m not in taken]
+                    entry["naver"] = sorted(set(entry.get("naver", []) + taken))
+                    applied += len(taken)
+            if applied:
+                print(f"    📊 네이버 컨센 {applied}칸 적용")
 
     record["years"] = years
     return record

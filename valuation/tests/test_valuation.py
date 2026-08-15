@@ -16,6 +16,19 @@ import pandas as pd
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 import fetch_valuation as fv
+import naver_consensus as nc
+
+_REAL_READ_TABLES = nc.read_tables
+
+
+def setUpModule():
+    """collect() 는 .KS 종목마다 네이버 컨센을 부른다 → 테스트에서는 끊는다.
+    (빈 표를 주면 estimates() 가 조용히 {} 를 돌려주고 기존 산출값이 남는다)"""
+    nc.read_tables = lambda *a, **k: []
+
+
+def tearDownModule():
+    nc.read_tables = _REAL_READ_TABLES
 
 
 def frame(rows, periods):
@@ -208,11 +221,17 @@ class TermResolution(unittest.TestCase):
             def __init__(self, *a, **k): pass
             def get_stock(self, **k): return None
 
+        def no_network(*a, **k):
+            raise OSError("테스트는 네이버를 호출하지 않는다")
+
         saved = getattr(fv.yf, "Search", None), getattr(fv.yf, "Lookup", None)
+        saved_urlopen = fv.urlopen
+        fv.urlopen = no_network
         fv.yf.Search, fv.yf.Lookup = FakeSearch, FakeLookup
         try:
             return fv.resolve_term(term)
         finally:
+            fv.urlopen = saved_urlopen
             for name, value in zip(("Search", "Lookup"), saved):
                 if value is not None:
                     setattr(fv.yf, name, value)
