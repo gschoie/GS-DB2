@@ -70,6 +70,44 @@ ROW_EQUITY = [
 ]
 ROW_SHARES_BS = ["Ordinary Shares Number", "Share Issued"]
 ROW_SHARES_IS = ["Diluted Average Shares", "Basic Average Shares"]
+ROW_EBITDA = ["EBITDA", "Normalized EBITDA"]
+ROW_OPERATING = ["Operating Income", "Total Operating Income As Reported"]
+ROW_DEPRECIATION = [
+    "Reconciled Depreciation", "Depreciation And Amortization",
+    "Depreciation Amortization Depletion",
+]
+ROW_DEBT = ["Total Debt", "Total Debt And Capital Lease Obligation"]
+ROW_CASH = ["Cash And Cash Equivalents", "Cash Cash Equivalents And Short Term Investments"]
+
+# 환율 시계열 캐시. 종목마다 같은 통화쌍을 다시 받지 않도록 프로세스 전체에서 공유한다.
+FX_CACHE = {}
+
+
+def fx_history(base, quote):
+    """base→quote 환율 시계열. 같은 통화면 None(=환산 불필요)."""
+    if not base or not quote or base == quote:
+        return None
+    key = (base, quote)
+    if key in FX_CACHE:
+        return FX_CACHE[key]
+    pair = f"{base}{quote}=X"
+    frame = call_with_retry(f"환율 {pair}", lambda: yf.Ticker(pair).history(period="6y", auto_adjust=False))
+    series = None
+    if frame is not None and not frame.empty and "Close" in frame:
+        series = frame["Close"].copy()
+        series.index = pd.to_datetime(series.index).tz_localize(None).normalize()
+        series = series[~series.index.duplicated(keep="last")]
+    FX_CACHE[key] = series
+    return series
+
+
+def fx_at(series, when):
+    """해당 시점(회계연도 기말) 이전 마지막 환율. 시계열이 없으면 1.0(환산 안 함)."""
+    if series is None or series.empty:
+        return 1.0
+    window = series.loc[series.index <= when]
+    rate = num(window.iloc[-1]) if not window.empty else num(series.iloc[0])
+    return rate if rate else 1.0
 
 
 def num(value):
@@ -180,11 +218,26 @@ def collect(company):
     if scale != 1.0:
         closes = closes / scale
     normalized_quote = "GBP" if quote_ccy in ("GBp", "GBX") else quote_ccy
-    currency_ok = (not fin_ccy) or (not normalized_quote) or (fin_ccy == normalized_quote)
-    if not currency_ok:
-        record["warnings"].append(
-            f"주가통화({quote_ccy})와 재무통화({fin_ccy})가 달라 배수를 계산하지 않았습니다"
-        )
+
+    # 주가통화 ≠ 재무통화인 종목이 실제로 있다(두산밥캣: 호가 KRW / 재무 USD).
+    # 시총(주가통화)을 재무통화로 환산해야 배수가 성립한다. 환율을 못 구하면
+    # 그때만 배수를 포기한다 — 잘못된 100배·1400배 숫자를 내놓는 것보다 공란이 낫다.
+    fx_to_fin = None
+    currency_ok = True
+    if normalized_quote and fin_ccy and normalized_quote != fin_ccy:
+        fx_to_fin = fx_history(normalized_quote, fin_ccy)
+        if fx_to_fin is None:
+            currency_ok = False
+            record["warnings"].append(
+                f"주가통화({quote_ccy})와 재무통화({fin_ccy})가 다른데 환율을 구하지 못해 배수를 비웠습니다"
+            )
+        else:
+            record["warnings"].append(
+                f"재무통화({fin_ccy})가 주가통화({normalized_quote})와 달라 환율로 환산했습니다"
+            )
+
+    # 시가총액은 종목 간 비교를 위해 백만달러로 통일한다.
+    fx_to_usd = fx_history(normalized_quote, "USD")
 
     record["currency"] = normalized_quote or None
     record["fin_currency"] = fin_ccy or None
@@ -197,6 +250,11 @@ def collect(company):
     equity = pick(balance, ROW_EQUITY)
     shares_bs = pick(balance, ROW_SHARES_BS)
     shares_is = pick(income, ROW_SHARES_IS)
+    ebitda_row = pick(income, ROW_EBITDA)
+    operating_row = pick(income, ROW_OPERATING)
+    depreciation_row = pick(income, ROW_DEPRECIATION)
+    debt_row = pick(balance, ROW_DEBT)
+    cash_row = pick(balance, ROW_CASH)
 
     if net_income is None or equity is None:
         record["warnings"].append("연간 재무제표를 가져오지 못했습니다")
@@ -221,9 +279,20 @@ def collect(company):
         eq = at(equity, period)
         shares = at(shares_bs, period) or at(shares_is, period)
         close = price_on_or_before(closes, stamp)
-        market_cap = (close * shares) if (close and shares) else None
+        # 시총은 주가통화 → 재무통화로 환산해야 손익·자본과 같은 잣대가 된다.
+        market_cap = (close * shares * fx_at(fx_to_fin, stamp)) if (close and shares) else None
         if shares:
             latest_shares = shares
+
+        # EV/EBITDA. EBITDA 행이 없으면 영업이익 + 감가상각으로 만든다.
+        ebitda = at(ebitda_row, period)
+        if ebitda is None:
+            op, da = at(operating_row, period), at(depreciation_row, period)
+            ebitda = (op + da) if (op is not None and da is not None) else None
+        debt, cash = at(debt_row, period), at(cash_row, period)
+        enterprise = None
+        if market_cap is not None:
+            enterprise = market_cap + (debt or 0) - (cash or 0)
 
         # ROE 는 기초·기말 평균자본. 첫 연도(기초 없음)만 기말자본으로 폴백한다.
         avg_equity = eq
@@ -239,6 +308,7 @@ def collect(company):
             "pbr": ratio(market_cap, eq) if usable else None,
             "psr": ratio(market_cap, rev) if usable else None,
             "roe": pct(ni, avg_equity),
+            "ev_ebitda": ratio(enterprise, ebitda) if usable else None,
             "eps": round(ni / shares, 2) if (ni and shares) else None,
             "bps": round(eq / shares, 2) if (eq and shares) else None,
             "revenue": rev,
@@ -252,14 +322,23 @@ def collect(company):
     earnings_est = call_with_retry("earnings_estimate", lambda: stock.earnings_estimate)
     revenue_est = call_with_retry("revenue_estimate", lambda: stock.revenue_estimate)
 
-    market_cap_now = None
+    last_stamp = closes.index[-1]
+    quote_cap_now = None                       # 주가통화 기준 현재 시총
     if current_price and latest_shares:
-        market_cap_now = current_price * latest_shares
-    if not market_cap_now:
+        quote_cap_now = current_price * latest_shares
+    if not quote_cap_now:
         raw_cap = num(info.get("marketCap"))
         # info.marketCap 은 호가통화 기준 → 소단위 종목은 여기서도 맞춰준다.
-        market_cap_now = raw_cap / scale if raw_cap else None
+        quote_cap_now = raw_cap / scale if raw_cap else None
+
+    # 배수 계산은 재무통화 기준 시총으로, 화면 표기는 백만달러로.
+    fin_rate = fx_at(fx_to_fin, last_stamp)
+    market_cap_now = quote_cap_now * fin_rate if quote_cap_now else None
     record["market_cap"] = market_cap_now
+    usd_rate = fx_at(fx_to_usd, last_stamp)
+    record["market_cap_musd"] = round(quote_cap_now * usd_rate / 1_000_000) if quote_cap_now else None
+    # 컨센 EPS·매출은 재무통화 기준이므로 주가도 재무통화로 맞춰 나눈다.
+    price_in_fin = current_price * fin_rate if current_price else None
 
     payout = num(info.get("payoutRatio"))
     if payout is None or payout < 0 or payout > 1:
@@ -282,7 +361,7 @@ def collect(company):
             # 2년후 슬롯: 야후에 컨센 자체가 없어 비워 둔다(추정으로 채우지 않음).
             years.append({
                 "label": f"{fy}E", "year": fy, "kind": "E", "unavailable": True,
-                "per": None, "pbr": None, "psr": None, "roe": None,
+                "per": None, "pbr": None, "psr": None, "roe": None, "ev_ebitda": None,
                 "eps": None, "bps": None, "revenue": None,
                 "net_income": None, "equity": None, "price": None,
             })
@@ -305,10 +384,12 @@ def collect(company):
             "label": f"{fy}E",
             "year": fy,
             "kind": "E",
-            "per": ratio(current_price, eps_est) if usable else None,
+            "per": ratio(price_in_fin, eps_est) if usable else None,
             "pbr": ratio(market_cap_now, closing_equity) if usable else None,
             "psr": ratio(market_cap_now, rev_est) if usable else None,
             "roe": pct(ni_est, avg_equity),
+            # EV/EBITDA 컨센은 야후에 EBITDA 추정이 없어 만들 수 없다 → 공란.
+            "ev_ebitda": None,
             "eps": round(eps_est, 2) if eps_est else None,
             "bps": round(closing_equity / latest_shares, 2) if (closing_equity and latest_shares) else None,
             "revenue": rev_est,
