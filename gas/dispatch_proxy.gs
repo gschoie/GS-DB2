@@ -35,6 +35,7 @@ const WF = {
   trend:     'market-trend.yml',       // 시장관심.내러티브 (구독 채널 트렌드)
   etf:       'etf-signal.yml',         // ETF/섹터 신호
   holdings:  'etf-holdings.yml',       // 액티브 ETF 구성 변화
+  valuation: 'valuation.yml',          // 밸류에이션 PER·PBR·ROE·PSR (야후 수집)
   dart:      'dart-shiporder-bot.yml', // 조선 수주공시 → 텔레그램 (입력 필요)
   recipe:    'recipe-bot.yml',         // 유튜브 요리 숏츠 → Notion 레시피 (입력 필요)
 };
