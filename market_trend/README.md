@@ -91,11 +91,26 @@ python -m unittest discover -s tests -p "test_*.py" -v
 
 네트워크·LLM 없이 돈다. config.yml 파싱도 함께 검사하므로 설정 오타는 수집 전에 걸린다.
 
+## 커뮤니티 온도 (네이버 종목토론실)
+
+텔레그램(리서치 채널)이 "전문가들이 뭘 말하나"라면, 종토는 "개미들이 뭘 쳐다보나"다.
+`community_naver.py`가 트렌드 산출 뒤에 돌며 날짜 json에 `community` 키를 덧붙이고,
+리포트 하단 섹션과 텔레그램 메시지 꼬리에 함께 나간다.
+
+- **감시 종목은 관리할 게 없다** — config `aliases`의 종목코드(조선·방산 등) +
+  네이버 검색상위 30이 자동으로 들어간다. 더 보고 싶으면 `community.extra_codes`.
+- 신호: 종목별 글 수 급증(7일 기준선 배수) · 공감 상위 글 · 시간당 조회 상위 글 ·
+  제목 급증 키워드(트렌드와 같은 토큰화·불용어 재사용) · 검색상위 순위.
+- 기준선 이력은 `state/community_history.json`에 쌓인다(트렌드와 동일하게 3일부터 배수).
+- 네이버가 러너 IP를 튕기면 이 단계만 조용히 실패한다(continue-on-error) —
+  트렌드 리포트·발송은 그대로 나간다. 종토 경로만 시험하려면 워크플로 mode `community`.
+
 ## 파일
 
 | 파일 | 하는 일 |
 |---|---|
 | `trend_daily.py` | 수집 → 계량 → Gemini 합성 → md/json 산출 |
+| `community_naver.py` | 네이버 종토 수집·계량 → 날짜 json에 community 병합 |
 | `build_report.py` | 날짜별 json → 대시보드용 단일 HTML |
 | `telegram_send.py` | latest.json → 텔레그램 발송 + 상태 기록 |
-| `config.yml` | 불용어·별칭·광고필터 — 평소 튜닝하는 유일한 파일 |
+| `config.yml` | 불용어·별칭·광고필터·커뮤니티 설정 — 평소 튜닝하는 유일한 파일 |

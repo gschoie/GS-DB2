@@ -109,6 +109,58 @@ def render_day(payload: dict) -> str:
                          f'{esc(post.get("time_kst", ""))}) {esc(post.get("head", ""))}{link}</li>')
         parts.append('<details class="appendix"><summary>부록 — 여러 채널이 퍼나른 글</summary>'
                      '<ul class="posts">' + "".join(items) + "</ul></details>")
+
+    community = payload.get("community")
+    if community:
+        parts.append(render_community(community))
+    return "".join(parts)
+
+
+def render_community(community: dict) -> str:
+    """커뮤니티 온도(네이버 종토) — 개미 관심 섹션. 트렌드(리서치 채널)와 성격이 달라 구분해 그린다."""
+    parts = [f'<h2 class="commhead">🌡️ 커뮤니티 온도 <span class="commsub">'
+             f'{esc(community.get("source", ""))} · 종목 {community.get("universe", "?")}개 · '
+             f'글 {community.get("posts", "?")}건</span></h2>']
+
+    stocks = community.get("hot_stocks") or []
+    if stocks:
+        rows = []
+        for row in stocks:
+            burst = f"{row['burst']}×" if row.get("burst") is not None else "—"
+            base = row["base_daily"] if row.get("base_daily") is not None else "—"
+            cap = "+" if row.get("capped") else ""
+            rows.append(f"<tr><th>{esc(row.get('name'))}</th><td>{row.get('posts', '')}{cap}</td>"
+                        f"<td>{base}</td><td>{burst}</td></tr>")
+        parts.append('<div class="card"><div class="ctitle">글 수 급증 종목</div><div class="scroll">'
+                     '<table><thead><tr><th>종목</th><th>오늘 글</th><th>평소</th><th>배수</th></tr></thead>'
+                     '<tbody>' + "".join(rows) + "</tbody></table></div></div>")
+
+    keywords = community.get("keywords") or []
+    if keywords:
+        chips = "".join(
+            f'<span class="kw">{esc(k["term"])} {k["count"]}'
+            + (f' · {k["burst"]}×' if k.get("burst") is not None else "") + "</span>"
+            for k in keywords[:12]
+        )
+        parts.append(f'<div class="card"><div class="ctitle">제목 급증 키워드</div><div class="kws">{chips}</div></div>')
+
+    for label, key, meta in (("공감 상위 글", "top_liked", lambda p: f"공감 {p.get('likes', 0)} · 조회 {p.get('views', 0)}"),
+                             ("조회 급상승 글", "top_rising", lambda p: f"시간당 {p.get('views_per_hour', 0)}회 · 조회 {p.get('views', 0)}")):
+        posts = community.get(key) or []
+        if not posts:
+            continue
+        items = []
+        for p in posts:
+            link = f' <a href="{esc(p["url"])}" target="_blank" rel="noopener">원문</a>' if p.get("url") else ""
+            items.append(f'<li><b>[{esc(p.get("name"))}]</b> {esc(p.get("title", ""))} '
+                         f'<span class="pmeta">({meta(p)}){link}</span></li>')
+        parts.append(f'<div class="card"><div class="ctitle">{label}</div>'
+                     '<ul class="posts">' + "".join(items) + "</ul></div>")
+
+    ranks = community.get("search_top") or []
+    if ranks:
+        parts.append('<p class="note">네이버 검색상위: ' +
+                     " · ".join(f"{r['rank']}.{esc(r['name'])}" for r in ranks[:10]) + "</p>")
     return "".join(parts)
 
 
@@ -173,6 +225,9 @@ thead th{{color:var(--muted);font-weight:600;font-size:11.5px}}
 .posts li{{margin:5px 0}}
 .posts a{{color:var(--accent)}}
 .note{{font-size:12.5px;color:var(--muted);margin:8px 2px}}
+.commhead{{font-size:16px;margin:26px 0 4px;padding-top:14px;border-top:1px solid var(--line)}}
+.commsub{{font-size:12px;font-weight:400;color:var(--muted)}}
+.pmeta{{font-size:11.5px;color:var(--muted)}}
 .scroll{{overflow-x:auto}}
 footer{{margin-top:28px;font-size:11.5px;color:var(--muted)}}
 .nav{{display:flex;align-items:center;gap:8px;margin:10px 0 4px;position:sticky;top:0;
