@@ -125,15 +125,20 @@ def render_community(community: dict) -> str:
     stocks = community.get("hot_stocks") or []
     if stocks:
         rows = []
+        any_capped = False
         for row in stocks:
             burst = f"{row['burst']}×" if row.get("burst") is not None else "—"
             base = row["base_daily"] if row.get("base_daily") is not None else "—"
-            cap = "+" if row.get("capped") else ""
-            rows.append(f"<tr><th>{esc(row.get('name'))}</th><td>{row.get('posts', '')}{cap}</td>"
+            # 상한에 걸린 대형주는 수집분의 작성 속도로 환산한 추정치 — ≈로 구분한다
+            posts = f"≈{row.get('posts', 0):,}" if row.get("capped") else f"{row.get('posts', '')}"
+            any_capped = any_capped or bool(row.get("capped"))
+            rows.append(f"<tr><th>{esc(row.get('name'))}</th><td>{posts}</td>"
                         f"<td>{base}</td><td>{burst}</td></tr>")
         parts.append('<div class="card"><div class="ctitle">글 수 급증 종목</div><div class="scroll">'
                      '<table><thead><tr><th>종목</th><th>오늘 글</th><th>평소</th><th>배수</th></tr></thead>'
-                     '<tbody>' + "".join(rows) + "</tbody></table></div></div>")
+                     '<tbody>' + "".join(rows) + "</tbody></table></div>"
+                     + ('<p class="note">≈ 글이 많아 일부만 수집한 종목 — 작성 속도로 하루치를 환산한 추정</p>'
+                        if any_capped else "") + "</div>")
 
     keywords = community.get("keywords") or []
     if keywords:
