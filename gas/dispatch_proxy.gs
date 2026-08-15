@@ -48,6 +48,11 @@ function buildInputs(key, body) {
     comment:  String(body.comment || ''),
   };
   if (key === 'recipe') return { yt_url: String(body.yt_url || '') };
+  // 밸류에이션: 비워 두면 정기 수집, lookup 에 티커를 넣으면 임시 조회만 돈다.
+  if (key === 'valuation') return {
+    only:   String(body.only || ''),
+    lookup: String(body.lookup || ''),
+  };
   return {};
 }
 

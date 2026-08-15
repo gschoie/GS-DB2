@@ -366,6 +366,12 @@ tr.co:hover td.name{background:rgba(24,95,165,.07)}
   <button class="btn ghost" id="csv" type="button">⤓ 현재 화면 CSV</button>
   <input type="search" id="q" placeholder="기업명 · 티커 검색">
 </div>
+<div class="bar">
+  <input type="text" id="lookup" placeholder="임시 조회할 티커 (예: 241560.KS, CAT, 7011.T) — 최대 8개"
+         style="flex:1;min-width:220px;background:var(--card);border:1px solid var(--line);
+                border-radius:9px;padding:9px 12px;font-size:13px;color:var(--ink)">
+  <button class="btn ghost" id="lookupgo" type="button">🔎 임시 조회</button>
+</div>
 <div id="status"></div>
 
 <div class="chips" id="chips"></div>
@@ -392,7 +398,8 @@ const BLOCKS = __BLOCKS__;
 const DISPATCH_ENDPOINT='https://script.google.com/macros/s/AKfycbx3RjIjtlO2Z6fIYo2T3LhJrFg9Wp2hS7dMS3Is52-JVF1hizoCWewbQ1uM_v5sdhR2jw/exec';
 
 const state = {industry:'전체', q:'', span:'ref', metrics:METRICS.map(m=>m[0])};
-const industries = ['전체', ...new Set(DATA.companies.map(c=>c.industry))];
+const industries = ['전체', ...new Set(DATA.companies.map(c=>c.industry)),
+                    ...((DATA.adhoc||[]).length ? ['임시 조회'] : [])];
 
 /* 지표 5종을 다 켜면 표가 넓다 — 보고 싶은 것만 켜서 좁게 볼 수 있게 한다.
    순서는 항상 METRICS 순서를 따른다(켠 순서대로 뒤섞이지 않게). */
@@ -461,6 +468,30 @@ function render(){
   const rows = visible();
   const span = 2 + metrics.length*axis.length;
   let html = '';
+
+  /* 임시 조회 결과는 정기 유니버스와 섞지 않는다 — 맨 위 별도 블록에 두고
+     중앙값 계산에서도 뺀다(피어 통계를 임시 종목이 흔들면 안 된다). */
+  const adhoc = (DATA.adhoc||[]).filter(c=>{
+    const q = state.q.trim().toLowerCase();
+    return (state.industry==='전체' || state.industry==='임시 조회')
+      && (!q || c.name.toLowerCase().includes(q) || c.ticker.toLowerCase().includes(q));
+  });
+  if(adhoc.length){
+    html += `<tr class="grp"><td class="name">🔎 임시 조회 <span style="font-weight:400">`+
+            `${DATA.adhoc_at ? DATA.adhoc_at.slice(0,16).replace('T',' ') : ''}</span></td>`+
+            `<td colspan="${span-1}"></td></tr>`;
+    for(const c of adhoc){
+      html += `<tr class="co"><td class="name">${c.name}<span class="tk">${c.ticker}</span></td>`+
+              `<td>${c.market_cap_musd!=null?c.market_cap_musd.toLocaleString():''}</td>`+
+              cells((m,a)=>{
+                const y=(c.years||[]).find(y=>y.year===a.year);
+                const v=y?y[m]:null;
+                const der = y && (y.derived||[]).includes(m) && v!=null;
+                return v==null ? '' : fmt(v,m)+(der?'<span class="mark">*</span>':'');
+              }, axis) + '</tr>';
+    }
+  }
+
   for(const block of BLOCKS){
     const inBlock = rows.filter(c=>c.industry===block.industry);
     if(!inBlock.length) continue;
@@ -529,6 +560,29 @@ document.getElementById('run').addEventListener('click', async ()=>{
   finally{ btn.disabled = false; }
 });
 
+/* 임시 조회 — 유니버스에 없는 종목을 그때그때 확인한다.
+   정기 수집분(41종목)은 건드리지 않고 맨 위 '임시 조회' 블록만 갈아끼운다. */
+document.getElementById('lookupgo').addEventListener('click', async ()=>{
+  const input = document.getElementById('lookup'), status = document.getElementById('status');
+  const btn = document.getElementById('lookupgo');
+  const value = input.value.trim();
+  if(!value){ status.textContent = '⚠ 조회할 티커를 넣어주세요 (예: 241560.KS, CAT)'; return; }
+  btn.disabled = true; status.textContent = '요청 중…';
+  try{
+    const r = await fetch(DISPATCH_ENDPOINT, {method:'POST',
+      body: JSON.stringify({workflow:'valuation', lookup:value})});
+    let denied = null;
+    try{ const d = await r.json(); if(d && d.ok===false) denied = d; }catch{}
+    status.textContent = denied
+      ? `⚠ 거절 ${denied.code||'?'}${denied.wf?` (${denied.wf})`:''} — ${denied.error||'GAS 프록시 매핑 확인 필요'}`
+      : `✅ '${value}' 조회를 시작했습니다. 3~5분 뒤 새로고침하면 맨 위 '임시 조회' 줄에 나옵니다.`;
+  }catch(e){ status.textContent = '실패: ' + e.message; }
+  finally{ btn.disabled = false; }
+});
+document.getElementById('lookup').addEventListener('keydown', e=>{
+  if(e.key === 'Enter') document.getElementById('lookupgo').click();
+});
+
 document.getElementById('csv').addEventListener('click', ()=>{
   const axis = axisFor();
   const cell = v => `"${String(v??'').replace(/"/g,'""')}"`;
@@ -556,7 +610,8 @@ render();
 
 def build_html(payload):
     companies = payload["companies"]
-    axis = year_axis(companies)
+    # 임시 조회 종목의 회계연도도 축에 포함해야 값이 열에 얹힌다(결산월이 다를 수 있다).
+    axis = year_axis(companies + payload.get("adhoc", []))
     blocks = [{"industry": b["industry"],
                "regions": [{"region": r["region"]} for r in b["regions"]]}
               for b in industry_blocks(companies)]

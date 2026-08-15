@@ -12,6 +12,10 @@ on:
         description: "특정 티커만 수집 (쉼표 구분, 비우면 전체)"
         required: false
         default: ""
+      lookup:
+        description: "유니버스 밖 종목 임시 조회 (쉼표 구분, 최대 8개). 넣으면 정기 수집 대신 이것만 돈다"
+        required: false
+        default: ""
   schedule:
     - cron: "0 22 * * 5"   # 22:00 UTC 금요일 = 한국 토요일 07:00
 
@@ -44,9 +48,17 @@ jobs:
         working-directory: valuation
         run: python -m unittest discover -s tests -p "test_*.py" -v
 
+      # 정기 수집(전체 유니버스). 임시 조회 요청이면 건너뛴다 — 41종목 스냅샷을
+      # 임시 조회가 덮어쓰지 않도록 둘은 배타적으로 돈다.
       - name: 야후 파이낸스 수집
+        if: ${{ !inputs.lookup }}
         working-directory: valuation
         run: python fetch_valuation.py --only "${{ inputs.only }}"
+
+      - name: 임시 조회 (유니버스 밖 종목)
+        if: ${{ inputs.lookup }}
+        working-directory: valuation
+        run: python fetch_valuation.py --lookup "${{ inputs.lookup }}"
 
       - name: 화면·엑셀 생성
         working-directory: valuation
@@ -77,7 +89,7 @@ jobs:
           if git diff --cached --quiet; then
             echo "변경 없음 — 커밋 생략"
           else
-            git commit -m "chore(valuation): 밸류에이션 스냅샷 $(date -u +%Y-%m-%d)"
+            git commit -m "chore(valuation): ${{ inputs.lookup && '임시 조회' || '밸류에이션 스냅샷' }} $(date -u +%Y-%m-%d)"
             # 수집이 길어 그 사이 main이 앞서가면 push가 거부된다 → 재기반 후 재시도.
             for i in 1 2 3 4 5; do
               git push origin HEAD:main && { echo "push 성공"; break; }
