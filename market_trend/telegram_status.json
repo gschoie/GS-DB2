@@ -1,0 +1,79 @@
+{
+  "when_utc": "2026-08-14 21:50:21Z",
+  "ok": true,
+  "note": "sent",
+  "chat_id_tail": "5171",
+  "token_set": true,
+  "response": {
+    "ok": true,
+    "result": {
+      "message_id": 106,
+      "from": {
+        "id": 8875725998,
+        "is_bot": true,
+        "first_name": "GB Investing Signal",
+        "username": "gs_invest_signal_bot"
+      },
+      "chat": {
+        "id": 279385171,
+        "first_name": "광식",
+        "last_name": "최",
+        "username": "gschoie",
+        "type": "private"
+      },
+      "date": 1786744221,
+      "text": "🧠 시장관심.내러티브 · 8/15(토)\n\nAI 투자 확대와 미국 인플레이션 완화 기대 속, 기업 실적 발표와 지정학적 리스크 부각\n\n1. AI 인프라 투자 확대와 차세대 광통신 기술 부각 〰️ ●●●●●\nAI 서버 수요가 2028년까지 강하게 지속될 것으로 전망되는 가운데, 북미 광통신 업체들이 NPO/CPO와 같은 차세대 기술 도입에 대한 높은 관심을 보이고 있다. 이는 글로벌 AI 인프라 구축 가속화에 따른 반도체 및 IT 부품 시장의 성장을 시사하며, 관련 기업들의 실적 개선으로 이어지고 있다.\n· AI 서버 · CPO · NPO · 반도체 · 전기전자 · 디스플레이\n\n2. 미국 인플레이션 완화와 기술주 강세 🆕 ●●●●○\n7월 생산자물가지수(PPI)가 시장 예상치를 하회하며 소비자물가지수(CPI)와 함께 연방준비제도(Fed)의 긴축 우려를 완화시켰다. 이러한 인플레이션 완화 기조는 성장주에 대한 투자심리를 개선시키며 미국 증시, 특히 기술주의 강세를 이끌었다.\n· 인플레이션 완화 · PPI · CPI · Fed 긴축 우려 · 기술주 강세 · S&P500\n\n3. 일본은행(BOJ) 통화정책 변화 가능성 및 엔화 강세 압력 〰️ ●●●○○\n시장은 일본은행(BOJ)의 9월 금리 인상 가능성을 약 75%로 높게 보고 있으며, 이는 엔화 강세를 장기화하고 엔 캐리 트레이드 포지션의 추가 청산으로 이어질 수 있다는 골드만삭스의 분석이 나왔다.\n· BOJ · 금리 인상 · 엔 캐리 트레이드 · 엔화 강세 · 기간\n\n4. 이란 지정학적 리스크 고조 🆕 ●●●○○\n미국 재무장관이 이란에 대해 '전례 없는 경제적 고립 조치'와 '호르무즈 해협에 대한 지속적인 봉쇄'를 시행할 것이라고 밝히면서, 중동 지역의 지정학적 긴장감이 고조되고 있다.\n· 이란 · 경제적 고립 · 호르무즈 해협 · 봉쇄\n\n5. 조선업계 동향 및 실적 발표 〰️ ●●●○○\n조선업계에서는 HD현대 회장이 단기 성과 집착에 대한 경고를 한 가운데, LNG 운반선 관련 소재 기업인 한국카본이 예상치를 상회하는 반기 실적을 발표하며 개별 기업의 성과가 주목받고 있다.\n· 조선 · 한국카본 · HD Hyundai · Golar LNG · 매출액 · 영업익\n\n채널 94개 · 글 1985건 분석\n상세 › 대시보드\n🎴 GS Research Desk · 시장관심.내러티브",
+      "entities": [
+        {
+          "offset": 3,
+          "length": 9,
+          "type": "bold"
+        },
+        {
+          "offset": 24,
+          "length": 49,
+          "type": "italic"
+        },
+        {
+          "offset": 78,
+          "length": 27,
+          "type": "bold"
+        },
+        {
+          "offset": 329,
+          "length": 19,
+          "type": "bold"
+        },
+        {
+          "offset": 551,
+          "length": 32,
+          "type": "bold"
+        },
+        {
+          "offset": 748,
+          "length": 14,
+          "type": "bold"
+        },
+        {
+          "offset": 904,
+          "length": 15,
+          "type": "bold"
+        },
+        {
+          "offset": 1086,
+          "length": 19,
+          "type": "italic"
+        },
+        {
+          "offset": 1111,
+          "length": 4,
+          "type": "text_link",
+          "url": "https://gschoie.github.io/GS-output-dashboard/market_trend_report.html"
+        }
+      ],
+      "link_preview_options": {
+        "is_disabled": true
+      }
+    }
+  }
+}
