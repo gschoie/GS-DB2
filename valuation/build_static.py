@@ -329,6 +329,7 @@ border-radius:9px;padding:9px 12px;font-size:13px;color:var(--ink)}
 .chip{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:5px 13px;
 font-size:12px;color:var(--muted);cursor:pointer;font-family:inherit}
 .chip.on{background:var(--ink);border-color:var(--ink);color:var(--bg)}
+.chip.mt.on{background:var(--accent);border-color:var(--accent);color:#fff}
 .chips .gap{width:10px}
 #status{font-size:12.5px;color:var(--muted);min-height:18px;margin-bottom:8px}
 .tablewrap{background:var(--card);border:1px solid var(--line);border-radius:10px;overflow:auto}
@@ -390,8 +391,14 @@ const BLOCKS = __BLOCKS__;
    workflow 키 'valuation' 은 그 파일의 WF 매핑과 1:1이어야 한다. */
 const DISPATCH_ENDPOINT='https://script.google.com/macros/s/AKfycbx3RjIjtlO2Z6fIYo2T3LhJrFg9Wp2hS7dMS3Is52-JVF1hizoCWewbQ1uM_v5sdhR2jw/exec';
 
-const state = {industry:'전체', q:'', span:'ref'};
+const state = {industry:'전체', q:'', span:'ref', metrics:METRICS.map(m=>m[0])};
 const industries = ['전체', ...new Set(DATA.companies.map(c=>c.industry))];
+
+/* 지표 5종을 다 켜면 표가 넓다 — 보고 싶은 것만 켜서 좁게 볼 수 있게 한다.
+   순서는 항상 METRICS 순서를 따른다(켠 순서대로 뒤섞이지 않게). */
+function activeMetrics(){
+  return METRICS.filter(m=>state.metrics.includes(m[0]));
+}
 
 /* 기본은 참고 레이아웃과 같은 4열(확정 2 + 컨센 2).
    결산월이 다른 소수 종목 때문에 생긴 얇은 연도(예: 3월 결산만 값이 있는 해)는
@@ -424,7 +431,7 @@ function median(list, year, metric){
 
 function cells(getter, axis, cls){
   let html='';
-  for(const [mi,m] of METRICS.entries())
+  for(const [mi,m] of activeMetrics().entries())
     for(const [ai,a] of axis.entries())
       html += `<td class="${ai===0&&mi>0?'mg':''} ${a.kind==='E'?'est':''} ${cls||''}">`+
               `${getter(m[0], a)}</td>`;
@@ -432,16 +439,19 @@ function cells(getter, axis, cls){
 }
 
 function render(){
-  const axis = axisFor();
+  const axis = axisFor(), metrics = activeMetrics();
   document.getElementById('chips').innerHTML =
     industries.map(i=>`<button class="chip ${i===state.industry?'on':''}" data-i="${i}">${i}</button>`).join('')
     + '<span class="gap"></span>'
     + `<button class="chip ${state.span==='ref'?'on':''}" data-s="ref">최근 4열</button>`
-    + `<button class="chip ${state.span==='all'?'on':''}" data-s="all">전체 연도</button>`;
+    + `<button class="chip ${state.span==='all'?'on':''}" data-s="all">전체 연도</button>`
+    + '<span class="gap"></span>'
+    + METRICS.map(m=>`<button class="chip mt ${state.metrics.includes(m[0])?'on':''}" data-m="${m[0]}">${m[1]}</button>`).join('')
+    + `<button class="chip" data-m="__all">전체 지표</button>`;
 
   let h1 = '<tr><th class="name" rowspan="2">회사</th><th rowspan="2">시가총액<br><span style="font-weight:400">(백만$)</span></th>';
   let h2 = '<tr>';
-  for(const [mi,m] of METRICS.entries()){
+  for(const [mi,m] of metrics.entries()){
     h1 += `<th class="${mi>0?'mg':''}" colspan="${axis.length}">${m[1]}${m[2]==='%'?' (%)':''}</th>`;
     for(const [ai,a] of axis.entries())
       h2 += `<th class="${ai===0&&mi>0?'mg':''} ${a.kind==='E'?'est':''}">${a.label}</th>`;
@@ -449,7 +459,7 @@ function render(){
   document.getElementById('head').innerHTML = h1+'</tr>'+h2+'</tr>';
 
   const rows = visible();
-  const span = 2 + METRICS.length*axis.length;
+  const span = 2 + metrics.length*axis.length;
   let html = '';
   for(const block of BLOCKS){
     const inBlock = rows.filter(c=>c.industry===block.industry);
@@ -492,6 +502,13 @@ document.getElementById('chips').addEventListener('click', e=>{
   const b = e.target.closest('.chip'); if(!b) return;
   if(b.dataset.i) state.industry = b.dataset.i;
   if(b.dataset.s) state.span = b.dataset.s;
+  if(b.dataset.m === '__all') state.metrics = METRICS.map(m=>m[0]);
+  else if(b.dataset.m){
+    const key = b.dataset.m, on = state.metrics.includes(key);
+    // 마지막 한 개는 끄지 않는다 — 지표가 0개면 볼 게 없는 표가 된다.
+    if(!(on && state.metrics.length === 1))
+      state.metrics = on ? state.metrics.filter(k=>k!==key) : [...state.metrics, key];
+  }
   render();
 });
 document.getElementById('q').addEventListener('input', e=>{ state.q = e.target.value; render(); });
@@ -516,10 +533,10 @@ document.getElementById('csv').addEventListener('click', ()=>{
   const axis = axisFor();
   const cell = v => `"${String(v??'').replace(/"/g,'""')}"`;
   const head = ['기업명','티커','산업','지역','시총(백만$)'];
-  for(const m of METRICS) for(const a of axis) head.push(`${m[1]} ${a.label}`);
+  for(const m of activeMetrics()) for(const a of axis) head.push(`${m[1]} ${a.label}`);
   const rows = visible().map(c=>{
     const row = [c.name, c.ticker, c.industry, c.region, c.market_cap_musd ?? ''];
-    for(const m of METRICS) for(const a of axis){
+    for(const m of activeMetrics()) for(const a of axis){
       const y=(c.years||[]).find(y=>y.year===a.year); row.push(y ? (y[m[0]] ?? '') : '');
     }
     return row;
