@@ -52,7 +52,22 @@ jobs:
         working-directory: valuation
         run: python build_static.py
 
+      # 산출물은 항상 아티팩트로 남긴다 — 기능 브랜치에서 수집 결과를 커밋 없이 확인할 수 있다.
+      - name: 산출물 아티팩트 업로드
+        if: always()
+        uses: actions/upload-artifact@v6
+        with:
+          name: valuation-output
+          path: |
+            valuation/data/valuation.json
+            telegram_research_dashboard/static/valuation_report.html
+            telegram_research_dashboard/static/valuation_full.xlsx
+          if-no-files-found: warn
+
+      # main 에서만 커밋한다. 이 스텝은 HEAD:main 으로 푸시하므로, 기능 브랜치에서
+      # 수동 실행하면 그 브랜치 커밋이 main 으로 밀려 들어간다 → ref 로 막는다.
       - name: 커밋 및 푸시 (→ Pages 재배포)
+        if: github.ref == 'refs/heads/main'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
