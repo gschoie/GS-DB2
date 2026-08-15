@@ -196,6 +196,56 @@ class CurrencyHandling(unittest.TestCase):
         self.assertTrue(any("구하지 못해" in w for w in record["warnings"]))
 
 
+class TermResolution(unittest.TestCase):
+    """회사명으로도 조회되게 — 'SK하이닉스' 처럼 티커를 모르고 넣는 게 자연스럽다."""
+
+    def resolve(self, term, quotes=None):
+        class FakeSearch:
+            def __init__(self, *a, **k): self.quotes = quotes or []
+
+        class FakeLookup:      # 검색이 비면 여기로 폴백한다 → 테스트가 실제 야후를 때리지 않게 막는다
+            def __init__(self, *a, **k): pass
+            def get_stock(self, **k): return None
+
+        saved = getattr(fv.yf, "Search", None), getattr(fv.yf, "Lookup", None)
+        fv.yf.Search, fv.yf.Lookup = FakeSearch, FakeLookup
+        try:
+            return fv.resolve_term(term)
+        finally:
+            for name, value in zip(("Search", "Lookup"), saved):
+                if value is not None:
+                    setattr(fv.yf, name, value)
+
+    def test_ticker_shape_passes_through_untouched(self):
+        # 티커꼴이면 검색하지 않고 그대로 쓴다(불필요한 야후 호출 방지).
+        self.assertEqual(self.resolve("000660.KS")[0], "000660.KS")
+        self.assertEqual(self.resolve("cat")[0], "CAT")
+        self.assertEqual(self.resolve("SAAB-B.ST")[0], "SAAB-B.ST")
+
+    def test_korean_name_is_searched(self):
+        symbol, typed = self.resolve("SK하이닉스", quotes=[
+            {"symbol": "000660.KS", "quoteType": "EQUITY"}])
+        self.assertEqual(symbol, "000660.KS")
+        self.assertEqual(typed, "SK하이닉스")
+
+    def test_name_with_space_is_searched_not_split(self):
+        symbol, _ = self.resolve("Samsung Electronics", quotes=[
+            {"symbol": "005930.KS", "quoteType": "EQUITY"}])
+        self.assertEqual(symbol, "005930.KS")
+
+    def test_equity_is_preferred_over_etf(self):
+        # ETF·지수가 먼저 잡히면 엉뚱한 종목을 조회하게 된다.
+        symbol, _ = self.resolve("현대", quotes=[
+            {"symbol": "PLUS.KS", "quoteType": "ETF"},
+            {"symbol": "005380.KS", "quoteType": "EQUITY"}])
+        self.assertEqual(symbol, "005380.KS")
+
+    def test_no_match_returns_none(self):
+        symbol, typed = self.resolve("존재하지않는회사", quotes=[])
+        self.assertIsNone(symbol)
+        self.assertEqual(typed, "존재하지않는회사")
+
+
 class EnterpriseValue(unittest.TestCase):
     def setUp(self):
         self.years = {y["label"]: y for y in run(FakeTicker())["years"]}

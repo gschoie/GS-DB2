@@ -33,6 +33,7 @@ from __future__ import annotations
 import argparse
 import json
 import math
+import re
 import sys
 import time
 from datetime import datetime, timedelta, timezone
@@ -441,6 +442,42 @@ def collect(company):
     return record
 
 
+TICKER_SHAPE = re.compile(r"^[A-Za-z0-9][A-Za-z0-9.\-]*$")
+
+
+def search_ticker(term):
+    """회사명으로 야후 심볼을 찾는다. 'SK하이닉스' → '000660.KS'.
+
+    티커를 외우고 있어야만 조회되는 건 불편하다 — 사람이 자연스럽게 넣는 건 회사명이다.
+    yfinance 버전에 따라 Search/Lookup 이 갈려서 있는 쪽을 골라 쓴다.
+    """
+    quotes = []
+    if hasattr(yf, "Search"):
+        result = call_with_retry(f"검색 {term}", lambda: yf.Search(term, max_results=8))
+        quotes = list(getattr(result, "quotes", None) or [])
+    if not quotes and hasattr(yf, "Lookup"):
+        result = call_with_retry(f"조회 {term}", lambda: yf.Lookup(term).get_stock(count=8))
+        if result is not None and hasattr(result, "index"):
+            quotes = [{"symbol": s, "quoteType": "EQUITY"} for s in result.index]
+    for quote in quotes:
+        symbol = quote.get("symbol")
+        # 주식만 고른다(ETF·옵션·지수가 먼저 잡히면 엉뚱한 걸 조회하게 된다).
+        if symbol and str(quote.get("quoteType", "EQUITY")).upper() == "EQUITY":
+            return symbol
+    return quotes[0].get("symbol") if quotes else None
+
+
+def resolve_term(term):
+    """입력 한 건을 (조회에 쓸 심볼, 사용자가 적은 원문) 으로 바꾼다."""
+    text = term.strip()
+    if TICKER_SHAPE.match(text):
+        return text.upper(), text          # 이미 티커꼴 — 그대로 쓴다
+    found = search_ticker(text)
+    if found:
+        print(f"    🔗 '{text}' → {found}")
+    return found, text
+
+
 def describe(ticker):
     """유니버스에 없는 티커의 표시용 이름·섹터를 야후에서 받아 온다."""
     info = call_with_retry(f"{ticker} info", lambda: yf.Ticker(ticker).info) or {}
@@ -459,23 +496,32 @@ def run_lookup(raw, sleep):
     정기 수집 결과(companies)는 건드리지 않고 adhoc 키에만 담는다 — 임시 조회가
     41종목 스냅샷을 덮어써서 정기 데이터가 날아가면 안 된다.
     """
-    tickers = [t.strip().upper() for t in raw.replace(" ", ",").split(",") if t.strip()]
-    tickers = list(dict.fromkeys(tickers))[:MAX_LOOKUP]
-    if not tickers:
-        sys.exit("조회할 티커가 없습니다.")
-    print(f"🔎 임시 조회 — {len(tickers)}개: {', '.join(tickers)}")
+    # 쉼표로만 나눈다 — 'SK 하이닉스'처럼 이름에 공백이 들어갈 수 있다.
+    terms = [t.strip() for t in raw.split(",") if t.strip()]
+    terms = list(dict.fromkeys(terms))[:MAX_LOOKUP]
+    if not terms:
+        sys.exit("조회할 종목이 없습니다.")
+    print(f"🔎 임시 조회 — {len(terms)}개: {', '.join(terms)}")
 
     results = []
-    for index, ticker in enumerate(tickers, 1):
-        print(f"[{index}/{len(tickers)}] {ticker}")
+    for index, term in enumerate(terms, 1):
+        print(f"[{index}/{len(terms)}] {term}")
+        symbol, typed = resolve_term(term)
+        if not symbol:
+            print(f"    ❌ '{typed}' 에 해당하는 종목을 찾지 못했습니다")
+            results.append({"industry": "임시 조회", "sub": "-", "region": "-", "name": typed,
+                            "ticker": "-", "years": [],
+                            "warnings": [f"'{typed}' 을(를) 야후에서 찾지 못했습니다 — 회사명 철자나 티커를 확인해 주세요"]})
+            continue
         try:
-            record = collect(describe(ticker))
+            record = collect(describe(symbol))
         except Exception as exc:
             print(f"    ❌ 실패: {exc}")
-            record = {"industry": "임시 조회", "sub": "-", "region": "-", "name": ticker,
-                      "ticker": ticker, "warnings": [f"수집 실패: {exc}"], "years": []}
+            record = {"industry": "임시 조회", "sub": "-", "region": "-", "name": symbol,
+                      "ticker": symbol, "warnings": [f"수집 실패: {exc}"], "years": []}
         if not record.get("years"):
-            record.setdefault("warnings", []).append("야후에서 데이터를 찾지 못했습니다(티커 확인 필요)")
+            record.setdefault("warnings", []).append(
+                f"'{typed}'({symbol}) 는 야후에 재무 데이터가 없습니다")
         print(f"    → {record['name']} / 연도 {len(record.get('years', []))}개")
         results.append(record)
         if sleep:
