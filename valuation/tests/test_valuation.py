@@ -247,6 +247,52 @@ class TermResolution(unittest.TestCase):
         self.assertEqual(typed, "존재하지않는회사")
 
 
+class NaverResolution(unittest.TestCase):
+    """한글 종목명은 네이버로 찾는다 — 야후는 '현대차'·'두산에너빌리티'를 못 찾는다."""
+
+    def naver(self, payload):
+        import io
+
+        def fake_urlopen(*a, **k):
+            body = json.dumps(payload).encode("utf-8")
+
+            class Response(io.BytesIO):
+                def __enter__(self): return self
+                def __exit__(self, *e): return False
+            return Response(body)
+
+        original = fv.urlopen
+        fv.urlopen = fake_urlopen
+        try:
+            return fv.naver_ticker("현대차")
+        finally:
+            fv.urlopen = original
+
+    def test_kospi_code_gets_ks_suffix(self):
+        # 네이버 자동완성은 중첩 배열로 준다 — 6자리 코드를 훑어 찾는다.
+        self.assertEqual(self.naver({"items": [[[["005380"], ["현대차"], ["KOSPI"]]]]}),
+                         "005380.KS")
+
+    def test_kosdaq_code_gets_kq_suffix(self):
+        self.assertEqual(self.naver({"items": [[[["247540"], ["에코프로비엠"], ["KOSDAQ"]]]]}),
+                         "247540.KQ")
+
+    def test_unknown_market_defaults_to_kospi(self):
+        self.assertEqual(self.naver({"items": [[[["005380"], ["현대차"]]]]}), "005380.KS")
+
+    def test_no_hit_returns_none(self):
+        self.assertIsNone(self.naver({"items": []}))
+
+    def test_network_failure_is_swallowed(self):
+        def boom(*a, **k): raise OSError("네트워크 차단")
+        original = fv.urlopen
+        fv.urlopen = boom
+        try:
+            self.assertIsNone(fv.naver_ticker("현대차"))
+        finally:
+            fv.urlopen = original
+
+
 class LookupRun(unittest.TestCase):
     """run_lookup 전체 경로를 실제로 태운다.
 
@@ -269,8 +315,13 @@ class LookupRun(unittest.TestCase):
         if existing is not None:
             tmp.write_text(json.dumps(existing, ensure_ascii=False), encoding="utf-8")
 
+        def no_network(*a, **k):
+            raise OSError("테스트는 네이버를 호출하지 않는다")
+
         saved = (fv.OUT_JSON, fv.yf.Ticker,
                  getattr(fv.yf, "Search", None), getattr(fv.yf, "Lookup", None))
+        saved_urlopen = fv.urlopen
+        fv.urlopen = no_network     # 한글 조회가 실제 네이버로 새지 않게 막는다
         fv.OUT_JSON = tmp
         fv.yf.Ticker = lambda s, *a, **k: FakeTicker(
             history=pd.DataFrame()) if str(s).endswith("=X") else FakeTicker()
@@ -281,6 +332,7 @@ class LookupRun(unittest.TestCase):
             return json.loads(tmp.read_text(encoding="utf-8"))
         finally:
             fv.OUT_JSON, fv.yf.Ticker = saved[0], saved[1]
+            fv.urlopen = saved_urlopen
             for name, value in zip(("Search", "Lookup"), saved[2:]):
                 if value is not None:
                     setattr(fv.yf, name, value)
