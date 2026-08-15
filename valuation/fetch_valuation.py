@@ -38,6 +38,8 @@ import sys
 import time
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
+from urllib.parse import quote
+from urllib.request import Request, urlopen
 
 import pandas as pd
 import yfinance as yf
@@ -446,6 +448,57 @@ TICKER_SHAPE = re.compile(r"^[A-Za-z0-9][A-Za-z0-9.\-]*$")
 HANGUL = re.compile(r"[가-힣]")
 
 
+def naver_ticker(term):
+    """네이버 금융 자동완성으로 한글 종목명 → 야후 심볼.
+
+    야후 검색은 국내 통용명을 못 찾는다 — '현대차'·'두산에너빌리티' 모두 빈 결과다
+    (반면 네이버는 줄임말도 정확히 잡는다). 국내 종목 조회는 이쪽을 먼저 쓴다.
+    응답 구조가 중첩 배열이라 6자리 종목코드를 훑어 찾고, 같은 묶음에서
+    KOSPI/KOSDAQ 를 읽어 .KS/.KQ 를 붙인다.
+    """
+    url = ("https://ac.finance.naver.com/ac?q=" + quote(term) +
+           "&q_enc=utf-8&st=111&r_format=json&r_enc=utf-8&r_lt=111&t_koreng=1")
+    try:
+        request = Request(url, headers={"User-Agent": "Mozilla/5.0", "Referer": "https://finance.naver.com/"})
+        with urlopen(request, timeout=15) as response:
+            data = json.loads(response.read().decode("utf-8", errors="replace"))
+    except Exception as exc:
+        print(f"    · 네이버 검색 실패: {exc}")
+        return None
+
+    hits = []
+
+    def texts_under(node):
+        """그 노드 아래 모든 문자열. 코드와 시장명이 형제 배열에 흩어져 있어 펼쳐서 본다."""
+        if isinstance(node, str):
+            return [node]
+        if isinstance(node, list):
+            return [t for item in node for t in texts_under(item)]
+        if isinstance(node, dict):
+            return [t for value in node.values() for t in texts_under(value)]
+        return []
+
+    def walk(node):
+        if isinstance(node, list):
+            texts = texts_under(node)
+            codes = [t for t in texts if re.fullmatch(r"\d{6}", t)]
+            # 종목 코드가 정확히 하나인 묶음 = 종목 한 건. 여러 개면 상위 컨테이너라 건너뛴다.
+            if len(codes) == 1:
+                market = next((t for t in texts if t.upper() in ("KOSPI", "KOSDAQ")), "")
+                hits.append((codes[0], market.upper()))
+            for item in node:
+                walk(item)
+        elif isinstance(node, dict):
+            for value in node.values():
+                walk(value)
+
+    walk(data)
+    if not hits:
+        return None
+    code, market = hits[0]
+    return f"{code}.{'KQ' if market == 'KOSDAQ' else 'KS'}"
+
+
 def search_ticker(term):
     """회사명으로 야후 심볼을 찾는다. 'SK하이닉스' → '000660.KS'.
 
@@ -481,7 +534,10 @@ def resolve_term(term):
     text = term.strip()
     if TICKER_SHAPE.match(text):
         return text.upper(), text          # 이미 티커꼴 — 그대로 쓴다
-    found = search_ticker(text)
+    # 한글 이름은 네이버가 정확하다. 실패하면 야후 검색으로 넘어간다(해외 종목 담당).
+    found = naver_ticker(text) if HANGUL.search(text) else None
+    if not found:
+        found = search_ticker(text)
     if found:
         print(f"    🔗 '{text}' → {found}")
     return found, text
