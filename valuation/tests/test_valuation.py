@@ -171,6 +171,20 @@ class CurrencyHandling(unittest.TestCase):
         # 현재주가 40 × 0.5 = 20 → 컨센EPS 2.0 대비 10배
         self.assertEqual(years["2026E"]["per"], 10.0)
 
+    def test_mislabeled_financial_currency_is_not_converted(self):
+        """두산밥캣 실제 사례: financialCurrency 는 USD인데 재무제표는 원화.
+
+        그대로 환산하면 PER이 0.01배로 조용히 틀린다 → 환산 전 배수가 상식적이면
+        야후 라벨을 무시하고 환산하지 않는다.
+        """
+        # 환율 0.001(원→달러 수준)을 주면 환산 시 PER 20 → 0.02 로 무너진다.
+        cheap_fx = pd.DataFrame({"Close": [0.001] * 5}, index=HISTORY.index)
+        ticker = FakeTicker(info={"currency": "KRW", "financialCurrency": "USD", "payoutRatio": 0.2})
+        record = run(ticker, fx=cheap_fx)
+        year = {y["label"]: y for y in record["years"]}["2023A"]
+        self.assertEqual(year["per"], 20.0)      # 환산 안 한 원래 값이 유지된다
+        self.assertTrue(any("환산하지 않았습니다" in w for w in record["warnings"]))
+
     def test_multiples_blank_when_fx_unavailable(self):
         # 환율을 못 구하면 틀린 숫자를 내놓느니 공란이 낫다.
         ticker = FakeTicker(info={"currency": "KRW", "financialCurrency": "USD"})
