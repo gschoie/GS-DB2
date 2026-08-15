@@ -6,6 +6,7 @@
 컨센 롤포워드, 2년후 공란 처리를 손계산 값과 맞춰 본다.
 """
 
+import json
 import sys
 import unittest
 from pathlib import Path
@@ -244,6 +245,70 @@ class TermResolution(unittest.TestCase):
         symbol, typed = self.resolve("존재하지않는회사", quotes=[])
         self.assertIsNone(symbol)
         self.assertEqual(typed, "존재하지않는회사")
+
+
+class LookupRun(unittest.TestCase):
+    """run_lookup 전체 경로를 실제로 태운다.
+
+    이 함수는 유닛테스트가 없어서, 변수명을 바꾸다 한 줄을 놓친 NameError 가
+    러너에서야 터졌다(조회가 통째로 죽고 커밋이 안 됨). 경로 전체를 굽는다.
+    """
+
+    def run_lookup(self, raw, quotes=None, existing=None):
+        import tempfile
+        from pathlib import Path
+
+        class FakeSearch:
+            def __init__(self, *a, **k): self.quotes = quotes or []
+
+        class FakeLookup:
+            def __init__(self, *a, **k): pass
+            def get_stock(self, **k): return None
+
+        tmp = Path(tempfile.mkdtemp()) / "valuation.json"
+        if existing is not None:
+            tmp.write_text(json.dumps(existing, ensure_ascii=False), encoding="utf-8")
+
+        saved = (fv.OUT_JSON, fv.yf.Ticker,
+                 getattr(fv.yf, "Search", None), getattr(fv.yf, "Lookup", None))
+        fv.OUT_JSON = tmp
+        fv.yf.Ticker = lambda s, *a, **k: FakeTicker(
+            history=pd.DataFrame()) if str(s).endswith("=X") else FakeTicker()
+        fv.yf.Search, fv.yf.Lookup = FakeSearch, FakeLookup
+        fv.FX_CACHE.clear()
+        try:
+            fv.run_lookup(raw, 0)
+            return json.loads(tmp.read_text(encoding="utf-8"))
+        finally:
+            fv.OUT_JSON, fv.yf.Ticker = saved[0], saved[1]
+            for name, value in zip(("Search", "Lookup"), saved[2:]):
+                if value is not None:
+                    setattr(fv.yf, name, value)
+            fv.FX_CACHE.clear()
+
+    def test_lookup_completes_and_records_query(self):
+        out = self.run_lookup("005930.KS", existing={"companies": [], "updated_at": "x"})
+        self.assertEqual(out["adhoc_query"], "005930.KS")
+        self.assertEqual(len(out["adhoc"]), 1)
+        self.assertTrue(out["adhoc_at"])
+
+    def test_regular_companies_are_preserved(self):
+        prior = {"companies": [{"name": "기존"}], "updated_at": "2026-01-01T00:00:00+09:00"}
+        out = self.run_lookup("005930.KS", existing=prior)
+        self.assertEqual(out["companies"], prior["companies"])
+        self.assertEqual(out["updated_at"], prior["updated_at"])
+
+    def test_unresolved_name_is_reported_not_crashed(self):
+        out = self.run_lookup("없는회사", quotes=[], existing={"companies": []})
+        self.assertEqual(out["adhoc"][0]["ticker"], "-")
+        self.assertIn("찾지 못했습니다", out["adhoc"][0]["warnings"][0])
+
+    def test_korean_query_prefers_domestic_listing(self):
+        # 야후는 'SK하이닉스'에 미국 ADR(SKHY)을 먼저 준다 → 국내 상장을 골라야 한다.
+        out = self.run_lookup("SK하이닉스", quotes=[
+            {"symbol": "SKHY", "quoteType": "EQUITY"},
+            {"symbol": "000660.KS", "quoteType": "EQUITY"}], existing={"companies": []})
+        self.assertEqual(out["adhoc"][0]["ticker"], "000660.KS")
 
 
 class EnterpriseValue(unittest.TestCase):
