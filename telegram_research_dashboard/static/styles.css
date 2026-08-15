@@ -155,6 +155,9 @@ a.rep-title:hover{color:#386453;text-decoration:underline}
 .todo-grip:hover{color:var(--green)}
 .todo-row.dragging{opacity:.45}
 .todo-group.drop-hover{border-color:var(--green);box-shadow:inset 0 0 0 1px var(--green)}
+.todo-g-grip{color:#b9c0ba;font-size:13px;cursor:grab;flex:none;padding:0 2px;user-select:none;touch-action:none}
+.todo-g-grip:hover{color:var(--green)}
+.todo-group.dragging{opacity:.45}
 @media(max-width:620px){.todo-form{flex-wrap:wrap}.todo-form input{flex:100%}}
 
 /* ── TO-DO 확장: 그룹 섹션 + 이미지 첨부/라이트박스 ── */
