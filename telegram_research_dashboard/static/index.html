@@ -44,7 +44,7 @@
       <details class="nav-group">
         <summary>🦿 <span>업무자동화</span></summary>
         <div class="nav-submenu">
-          <a href="https://github.com/gschoie/ecos-fx-rates/raw/main/output/%EA%B8%80%EB%A1%9C%EB%B2%8C_%EC%A3%BC%EA%B0%80_%EB%B3%80%EB%8F%99%EB%A5%A0_%EB%AA%A8%EB%8B%88%ED%84%B0%EB%A7%81_%EC%B5%9C%EC%A2%85.xlsx" target="_blank" rel="noopener">📈 피어그룹 주가 다운로드</a>
+          <a href="https://github.com/gschoie/ecos-fx-rates/raw/main/output/%EA%B8%80%EB%A1%9C%EB%B2%8C_%EC%A3%BC%EA%B0%80_%EB%B3%80%EB%8F%99%EB%A5%A0_%EB%AA%A8%EB%8B%88%ED%84%B0%EB%A7%81_%EC%B5%9C%EC%A2%85.xlsx" target="_blank" rel="noopener">📈 피어그룹.주가 다운로드</a>
           <a href="https://gschoie.github.io/GS-output-dashboard/valuation_report.html" target="_blank" rel="noopener">📊 피어그룹.Valuation</a>
           <details class="nav-subgroup">
             <summary>⇄ 수출입데이터</summary>
@@ -90,7 +90,7 @@
       <details class="nav-group">
         <summary>📈 <span>투자</span></summary>
         <div class="nav-submenu">
-          <button class="nav" data-view="etf">📡 ETF/섹터 신호 포착</button>
+          <button class="nav" data-view="etf">📡 ETF/섹터.신호 포착</button>
           <button class="nav" data-view="holdings">🧩 액티브ETF.매매동향</button>
           <button class="nav" data-view="flow">💹 시장.수급.동향</button>
           <button class="nav" data-view="trend">🧠 시장관심.내러티브</button>
@@ -154,7 +154,8 @@
     </header>
 
     <section id="todo" class="view">
-      <div class="archive-intro"><div><p class="eyebrow">TO-DO</p><h2>할 일 체크리스트</h2></div><div class="etf-actions"><span>한 줄씩 적고 완료하면 체크 — 그룹으로 묶고, 이미지는 Ctrl+V 붙여넣기·📎 파일선택으로 첨부합니다. <span id="todo-sync" class="task-sync">☁ 동기화</span></span><a class="panel-more" data-go="tasklist" href="#tasklist">📬 수명 피드백.확인 →</a></div></div>
+      <a class="refresh-btn todo-feedback" data-go="tasklist" href="#tasklist">📬 수명 피드백.확인</a>
+      <div class="archive-intro"><div><p class="eyebrow">TO-DO</p><h2>할 일 체크리스트</h2></div><div class="etf-actions"><span>한 줄씩 적고 완료하면 체크 — 그룹으로 묶고, 이미지는 Ctrl+V 붙여넣기·📎 파일선택으로 첨부합니다. <span id="todo-sync" class="task-sync">☁ 동기화</span></span></div></div>
       <div class="todo-form">
         <select id="todo-group" title="추가할 그룹 선택"></select>
         <button id="todo-group-add" type="button" class="todo-ghost" title="새 그룹 만들기">＋그룹</button>
@@ -331,8 +332,8 @@
     </section>
 
     <section id="etf" class="view">
-      <div class="archive-intro"><div><p class="eyebrow">INVEST · SIGNAL</p><h2>ETF/섹터 신호 포착</h2></div><div class="etf-actions"><button id="etf-refresh" class="refresh-btn" type="button" title="49개 ETF를 다시 스캔해 신호판을 갱신합니다 (자동 실행, 몇 분 소요).">🔄 ETF 갱신</button><span id="etf-status" class="task-sync"></span><a class="panel-more" href="etf_signal_report.html" target="_blank" rel="noopener">새 창으로 ↗</a></div></div>
-      <iframe id="etf-frame" class="union-board-frame" title="ETF/섹터 신호 포착" loading="lazy"></iframe>
+      <div class="archive-intro"><div><p class="eyebrow">INVEST · SIGNAL</p><h2>ETF/섹터.신호 포착</h2></div><div class="etf-actions"><button id="etf-refresh" class="refresh-btn" type="button" title="49개 ETF를 다시 스캔해 신호판을 갱신합니다 (자동 실행, 몇 분 소요).">🔄 ETF 갱신</button><span id="etf-status" class="task-sync"></span><a class="panel-more" href="etf_signal_report.html" target="_blank" rel="noopener">새 창으로 ↗</a></div></div>
+      <iframe id="etf-frame" class="union-board-frame" title="ETF/섹터.신호 포착" loading="lazy"></iframe>
     </section>
 
     <section id="holdings" class="view">
