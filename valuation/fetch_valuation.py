@@ -51,6 +51,7 @@ except Exception:
 ROOT = Path(__file__).resolve().parent
 OUT_JSON = ROOT / "data" / "valuation.json"
 
+MAX_LOOKUP = 8           # 임시 조회 1회 최대 종목 수 (러너 시간·야후 스로틀 방어)
 HISTORY_YEARS = 4        # 과거 회계연도 수 (야후 무료 API가 안정적으로 주는 범위)
 FORWARD_YEARS = 3        # 올해·내년·2년후 슬롯 (2년후는 야후 미제공 → 공란)
 KST = timezone(timedelta(hours=9))
@@ -440,11 +441,65 @@ def collect(company):
     return record
 
 
+def describe(ticker):
+    """유니버스에 없는 티커의 표시용 이름·섹터를 야후에서 받아 온다."""
+    info = call_with_retry(f"{ticker} info", lambda: yf.Ticker(ticker).info) or {}
+    return {
+        "industry": "임시 조회",
+        "sub": info.get("sector") or "-",
+        "region": info.get("country") or "-",
+        "name": info.get("shortName") or info.get("longName") or ticker,
+        "ticker": ticker,
+    }
+
+
+def run_lookup(raw, sleep):
+    """유니버스에 없는 종목을 임시로 조회한다.
+
+    정기 수집 결과(companies)는 건드리지 않고 adhoc 키에만 담는다 — 임시 조회가
+    41종목 스냅샷을 덮어써서 정기 데이터가 날아가면 안 된다.
+    """
+    tickers = [t.strip().upper() for t in raw.replace(" ", ",").split(",") if t.strip()]
+    tickers = list(dict.fromkeys(tickers))[:MAX_LOOKUP]
+    if not tickers:
+        sys.exit("조회할 티커가 없습니다.")
+    print(f"🔎 임시 조회 — {len(tickers)}개: {', '.join(tickers)}")
+
+    results = []
+    for index, ticker in enumerate(tickers, 1):
+        print(f"[{index}/{len(tickers)}] {ticker}")
+        try:
+            record = collect(describe(ticker))
+        except Exception as exc:
+            print(f"    ❌ 실패: {exc}")
+            record = {"industry": "임시 조회", "sub": "-", "region": "-", "name": ticker,
+                      "ticker": ticker, "warnings": [f"수집 실패: {exc}"], "years": []}
+        if not record.get("years"):
+            record.setdefault("warnings", []).append("야후에서 데이터를 찾지 못했습니다(티커 확인 필요)")
+        print(f"    → {record['name']} / 연도 {len(record.get('years', []))}개")
+        results.append(record)
+        if sleep:
+            time.sleep(sleep)
+
+    payload = json.loads(OUT_JSON.read_text(encoding="utf-8")) if OUT_JSON.exists() else {}
+    payload["adhoc"] = results
+    payload["adhoc_at"] = datetime.now(KST).isoformat(timespec="seconds")
+    payload["adhoc_query"] = ", ".join(tickers)
+    OUT_JSON.parent.mkdir(parents=True, exist_ok=True)
+    OUT_JSON.write_text(json.dumps(payload, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
+    print(f"\n✅ 임시 조회 저장: {OUT_JSON} ({len(results)}종목) — 정기 수집분은 그대로 보존")
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--only", help="쉼표로 구분한 티커만 수집(디버깅용)")
+    parser.add_argument("--lookup", help="유니버스에 없는 티커를 임시로 조회(쉼표 구분)")
     parser.add_argument("--sleep", type=float, default=1.0, help="종목 간 대기(초)")
     args = parser.parse_args()
+
+    if args.lookup:
+        run_lookup(args.lookup, args.sleep)
+        return
 
     targets = TARGET_COMPANIES
     if args.only:
@@ -472,6 +527,13 @@ def main():
         "history_years": HISTORY_YEARS,
         "companies": results,
     }
+    # 정기 수집이 임시 조회 결과를 지우지 않게 그대로 옮겨 담는다
+    # (주말 수집 뒤 월요일에 보면 조회해 둔 게 사라져 있으면 곤란하다).
+    if OUT_JSON.exists():
+        previous = json.loads(OUT_JSON.read_text(encoding="utf-8"))
+        for key in ("adhoc", "adhoc_at", "adhoc_query"):
+            if previous.get(key):
+                payload[key] = previous[key]
     OUT_JSON.parent.mkdir(parents=True, exist_ok=True)
     OUT_JSON.write_text(json.dumps(payload, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
 
