@@ -89,7 +89,11 @@ sources:
     lookback_hours: 24
     max_per_run: 8
     exclude_any: [휴장, 공지]
-    # exclude_chats: ["@lim_econ", 잡담방이름]  # 훑지 않을 방(@아이디 또는 표시 이름)
+    # 내 채널은 뺀다 — 내가 쓴 조선 글이 나에게 알림으로 되돌아오는 것을 막는다.
+    # 비공개 방은 주소가 없어 텔레그램에 보이는 이름 그대로 적는다(이름을 바꾸면 여기도 맞출 것).
+    exclude_chats:
+      - "@HI_GS"
+      - "GS의 조선/기계/방산 「바담」"
     # include_groups: true                      # 채널 말고 토론 그룹까지 포함하려면
 
   # 네이버 블로그는 rss.blog.naver.com/<블로그ID>.xml 로 RSS를 준다.
