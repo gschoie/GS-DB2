@@ -367,7 +367,7 @@ tr.co:hover td.name{background:rgba(24,95,165,.07)}
   <input type="search" id="q" placeholder="기업명 · 티커 검색">
 </div>
 <div class="bar">
-  <input type="text" id="lookup" placeholder="임시 조회할 티커 (예: 241560.KS, CAT, 7011.T) — 최대 8개"
+  <input type="text" id="lookup" placeholder="임시 조회 — 회사명 또는 티커, 쉼표로 구분 (예: SK하이닉스, 두산에너빌리티, CAT) 최대 8개"
          style="flex:1;min-width:220px;background:var(--card);border:1px solid var(--line);
                 border-radius:9px;padding:9px 12px;font-size:13px;color:var(--ink)">
   <button class="btn ghost" id="lookupgo" type="button">🔎 임시 조회</button>
@@ -566,7 +566,7 @@ document.getElementById('lookupgo').addEventListener('click', async ()=>{
   const input = document.getElementById('lookup'), status = document.getElementById('status');
   const btn = document.getElementById('lookupgo');
   const value = input.value.trim();
-  if(!value){ status.textContent = '⚠ 조회할 티커를 넣어주세요 (예: 241560.KS, CAT)'; return; }
+  if(!value){ status.textContent = '⚠ 조회할 회사명이나 티커를 넣어주세요 (예: SK하이닉스, CAT)'; return; }
   btn.disabled = true; status.textContent = '요청 중…';
   try{
     const r = await fetch(DISPATCH_ENDPOINT, {method:'POST',
