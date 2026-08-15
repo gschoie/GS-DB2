@@ -343,9 +343,17 @@ min-width:190px}
 thead th.name{z-index:3}
 th.mg{border-left:1px solid var(--line)}td.mg{border-left:1px solid var(--line)}
 td.est,th.est{background:var(--est)}
-tr.grp td{background:var(--grp);font-weight:700;font-size:12px}
-tr.grp td.name{background:var(--grp)}
-tr.reg td{background:transparent;font-weight:600;color:var(--muted);font-size:11.5px}
+/* 산업(조선·방산·건설기계) — 표에서 가장 큰 글자. 왼쪽 굵은 띠로 블록 시작을 못박는다 */
+tr.grp td{background:var(--grp);font-weight:700;font-size:15px;letter-spacing:-.2px;
+padding-top:9px;padding-bottom:9px}
+tr.grp td.name{background:var(--grp);border-left:5px solid var(--accent)}
+/* 지역(한국·미국…) — 위에 가로선을 긋고 왼쪽에 얇은 띠, 종목 수를 옆에 붙인다 */
+tr.reg td{background:transparent;font-weight:700;color:var(--ink);font-size:12.5px;
+border-top:1px solid var(--line);padding-top:9px}
+tr.reg td.name{border-left:3px solid var(--accent);padding-left:11px}
+tr.reg .cnt{color:var(--muted);font-weight:400;font-size:11px;margin-left:5px}
+/* 기업명은 한 칸 들여써 지역 아래 소속임이 보이게 */
+tr.co td.name{padding-left:18px}
 tr.sum td{background:var(--sum);font-weight:600}
 tr.sum td.name{background:var(--sum)}
 /* 산업 블록 사이 여백 — 조선·방산·건설기계가 붙어 있으면 경계가 안 읽힌다 */
@@ -532,7 +540,8 @@ function render(){
     for(const region of block.regions){
       const list = inBlock.filter(c=>c.region===region.region);
       if(!list.length) continue;
-      html += `<tr class="reg"><td class="name">${region.region}</td><td colspan="${span-1}"></td></tr>`;
+      html += `<tr class="reg"><td class="name">${region.region}`+
+              `<span class="cnt">${list.length}</span></td><td colspan="${span-1}"></td></tr>`;
       for(const c of list){
         html += `<tr class="co"><td class="name">${c.name}<span class="tk">${c.ticker}</span></td>`+
                 `<td>${c.market_cap_musd!=null?c.market_cap_musd.toLocaleString():''}</td>`+
