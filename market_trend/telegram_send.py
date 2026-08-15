@@ -54,13 +54,28 @@ def build_message(payload: dict) -> str | None:
     if not themes:
         # --no-llm 산출일 때는 급증 키워드 상위로 대신한다 — 아무것도 안 오는 것보다 낫다.
         spikes = (payload.get("signals") or {}).get("spikes") or []
-        if not spikes:
-            return None
-        lines += ["", "<b>급증 키워드</b> (테마 합성 없음)"]
-        for row in spikes[:10]:
-            burst = f" · {row['burst']:.1f}×" if row.get("burst") is not None else ""
-            flag = " 🆕" if row.get("new") else ""
-            lines.append(f"· {esc(row['term'])} {row['count']}건{burst}{flag}")
+        if spikes:
+            lines += ["", "<b>급증 키워드</b> (테마 합성 없음)"]
+            for row in spikes[:10]:
+                burst = f" · {row['burst']:.1f}×" if row.get("burst") is not None else ""
+                flag = " 🆕" if row.get("new") else ""
+                lines.append(f"· {esc(row['term'])} {row['count']}건{burst}{flag}")
+        elif not (payload.get("community") or {}).get("hot_stocks"):
+            return None  # 테마도 신호도 커뮤니티도 없다 — 보낼 게 없다
+
+    community = payload.get("community") or {}
+    hot = community.get("hot_stocks") or []
+    if hot:
+        lines += ["", "🌡️ <b>커뮤니티 온도</b> (네이버 종토)"]
+        tags = []
+        for row in hot[:5]:
+            burst = f" {row['burst']}×" if row.get("burst") is not None else f" {row['posts']}글"
+            tags.append(f"{esc(row['name'])}{burst}")
+        lines.append("· " + " · ".join(tags))
+        liked = (community.get("top_liked") or [])
+        if liked:
+            p = liked[0]
+            lines.append(f"· 인기글: [{esc(p.get('name'))}] {esc(str(p.get('title', ''))[:60])} (공감 {p.get('likes', 0)})")
 
     stats = payload.get("stats") or {}
     lines += ["", f"<i>채널 {stats.get('channels', '?')}개 · 글 {stats.get('messages', '?')}건 분석</i>",
