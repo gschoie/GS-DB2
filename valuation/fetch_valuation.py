@@ -133,6 +133,11 @@ def ratio(numerator, denominator):
     return round(n / d, 2)
 
 
+def sane_multiple(value):
+    """PER이 이 범위를 벗어나면 통화 자릿수가 어긋났다고 본다(0.01배·1400배 같은 값)."""
+    return value is not None and 1.0 <= value <= 300.0
+
+
 def pct(numerator, denominator):
     n, d = num(numerator), num(denominator)
     if n is None or d is None or d <= 0:
@@ -264,6 +269,37 @@ def collect(company):
     if income is not None and hasattr(income, "columns") and not income.empty:
         periods = sorted([c for c in income.columns], reverse=True)[:HISTORY_YEARS]
     periods = sorted(periods)  # 오래된 연도 → 최근 연도 순으로 표시
+
+    # ── 환산 여부 검증 ─────────────────────────────────────
+    # 야후의 financialCurrency 는 틀릴 때가 있다. 두산밥캣은 이 필드가 USD인데
+    # 실제 재무제표는 원화다(매출 8.6조·EPS 6,426원). 그대로 믿고 환산하면
+    # PER이 0.01배로 찍힌다 — 공란보다 나쁜, 조용히 틀린 숫자다.
+    # → 최근 확정연도 EPS와 현재 주가로 환산 전/후 PER을 만들어 상식적인 쪽을 고른다.
+    if fx_to_fin is not None and periods and current_price:
+        last = periods[-1]
+        probe_ni = at(net_income, last)
+        probe_shares = at(shares_bs, last) or at(shares_is, last)
+        probe_eps = (probe_ni / probe_shares) if (probe_ni and probe_shares and probe_ni > 0) else None
+        if probe_eps and probe_eps > 0:
+            plain = current_price / probe_eps
+            converted = plain * fx_at(fx_to_fin, closes.index[-1])
+            record["warnings"] = [w for w in record["warnings"] if "환산했습니다" not in w]
+            if sane_multiple(plain) and not sane_multiple(converted):
+                fx_to_fin = None
+                record["warnings"].append(
+                    f"야후는 재무통화를 {fin_ccy}로 표기했지만 실제 재무제표가 "
+                    f"{normalized_quote} 기준이라 환산하지 않았습니다"
+                )
+            elif sane_multiple(converted):
+                record["warnings"].append(
+                    f"재무통화({fin_ccy})가 주가통화({normalized_quote})와 달라 환율로 환산했습니다"
+                )
+            else:
+                # 어느 쪽도 상식적인 배수가 아니면 판단을 포기하고 비운다.
+                currency_ok = False
+                record["warnings"].append(
+                    f"주가통화({normalized_quote})와 재무통화({fin_ccy})를 맞출 수 없어 배수를 비웠습니다"
+                )
 
     years = []
     prior_equity = None
