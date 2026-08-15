@@ -247,6 +247,32 @@ class TermResolution(unittest.TestCase):
         self.assertEqual(typed, "존재하지않는회사")
 
 
+class LocalUniverseResolution(unittest.TestCase):
+    """국내 종목은 리포의 universe.json 으로 찾는다 — 외부 검색보다 확실하다."""
+
+    def test_real_universe_file_resolves_names_that_yahoo_missed(self):
+        # 실제로 야후가 못 찾았던 이름들. 파일이 사라지거나 형식이 바뀌면 여기서 걸린다.
+        self.assertEqual(fv.local_ticker("현대차"), "005380.KS")
+        self.assertEqual(fv.local_ticker("두산에너빌리티"), "034020.KS")
+
+    def test_kosdaq_gets_kq_suffix(self):
+        self.assertEqual(fv.local_ticker("에코프로비엠"), "247540.KQ")
+
+    def test_spaces_are_ignored(self):
+        self.assertEqual(fv.local_ticker("SK 하이닉스"), "000660.KS")
+
+    def test_unknown_name_returns_none(self):
+        self.assertIsNone(fv.local_ticker("없는회사이름"))
+
+    def test_missing_file_is_not_fatal(self):
+        saved = fv.KRX_UNIVERSE
+        fv.KRX_UNIVERSE = Path("/nonexistent/universe.json")
+        try:
+            self.assertIsNone(fv.local_ticker("현대차"))
+        finally:
+            fv.KRX_UNIVERSE = saved
+
+
 class NaverResolution(unittest.TestCase):
     """한글 종목명은 네이버로 찾는다 — 야후는 '현대차'·'두산에너빌리티'를 못 찾는다."""
 
