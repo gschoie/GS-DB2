@@ -443,6 +443,7 @@ def collect(company):
 
 
 TICKER_SHAPE = re.compile(r"^[A-Za-z0-9][A-Za-z0-9.\-]*$")
+HANGUL = re.compile(r"[가-힣]")
 
 
 def search_ticker(term):
@@ -459,11 +460,19 @@ def search_ticker(term):
         result = call_with_retry(f"조회 {term}", lambda: yf.Lookup(term).get_stock(count=8))
         if result is not None and hasattr(result, "index"):
             quotes = [{"symbol": s, "quoteType": "EQUITY"} for s in result.index]
-    for quote in quotes:
-        symbol = quote.get("symbol")
-        # 주식만 고른다(ETF·옵션·지수가 먼저 잡히면 엉뚱한 걸 조회하게 된다).
-        if symbol and str(quote.get("quoteType", "EQUITY")).upper() == "EQUITY":
-            return symbol
+    # 주식만 고른다(ETF·옵션·지수가 먼저 잡히면 엉뚱한 걸 조회하게 된다).
+    equities = [q for q in quotes
+                if q.get("symbol") and str(q.get("quoteType", "EQUITY")).upper() == "EQUITY"]
+
+    # 한글로 검색했으면 국내 상장을 먼저 고른다. 야후 검색은 'SK하이닉스'에
+    # 미국 ADR(SKHY)을 먼저 주는데, 한글로 찾는 사람이 원하는 건 000660.KS 다.
+    if HANGUL.search(term):
+        domestic = [q for q in equities if str(q["symbol"]).upper().endswith((".KS", ".KQ"))]
+        if domestic:
+            return domestic[0]["symbol"]
+
+    if equities:
+        return equities[0]["symbol"]
     return quotes[0].get("symbol") if quotes else None
 
 
@@ -530,7 +539,7 @@ def run_lookup(raw, sleep):
     payload = json.loads(OUT_JSON.read_text(encoding="utf-8")) if OUT_JSON.exists() else {}
     payload["adhoc"] = results
     payload["adhoc_at"] = datetime.now(KST).isoformat(timespec="seconds")
-    payload["adhoc_query"] = ", ".join(tickers)
+    payload["adhoc_query"] = ", ".join(terms)
     OUT_JSON.parent.mkdir(parents=True, exist_ok=True)
     OUT_JSON.write_text(json.dumps(payload, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
     print(f"\n✅ 임시 조회 저장: {OUT_JSON} ({len(results)}종목) — 정기 수집분은 그대로 보존")
