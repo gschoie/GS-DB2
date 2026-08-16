@@ -435,7 +435,7 @@
  "community": {
   "source": "네이버 종목토론실",
   "universe": 40,
-  "posts": 1154,
+  "posts": 1115,
   "search_top": [
    {
     "code": "005930",
@@ -453,13 +453,13 @@
     "rank": 3
    },
    {
-    "code": "009150",
-    "name": "삼성전기",
+    "code": "066570",
+    "name": "LG전자",
     "rank": 4
    },
    {
-    "code": "066570",
-    "name": "LG전자",
+    "code": "009150",
+    "name": "삼성전기",
     "rank": 5
    },
    {
@@ -492,7 +492,7 @@
    {
     "code": "000660",
     "name": "SK하이닉스",
-    "posts": 317,
+    "posts": 300,
     "capped": true,
     "burst": null,
     "base_daily": null
@@ -500,7 +500,7 @@
    {
     "code": "080220",
     "name": "제주반도체",
-    "posts": 128,
+    "posts": 126,
     "capped": true,
     "burst": null,
     "base_daily": null
@@ -508,7 +508,7 @@
    {
     "code": "066570",
     "name": "LG전자",
-    "posts": 117,
+    "posts": 118,
     "capped": true,
     "burst": null,
     "base_daily": null
@@ -524,7 +524,7 @@
    {
     "code": "035420",
     "name": "NAVER",
-    "posts": 92,
+    "posts": 95,
     "capped": true,
     "burst": null,
     "base_daily": null
@@ -594,13 +594,19 @@
     "new": null
    },
    {
-    "term": "반도체",
-    "count": 17,
+    "term": "로봇",
+    "count": 18,
     "burst": null,
     "new": null
    },
    {
     "term": "트럼프",
+    "count": 16,
+    "burst": null,
+    "new": null
+   },
+   {
+    "term": "반도체",
     "count": 16,
     "burst": null,
     "new": null
@@ -619,18 +625,12 @@
    },
    {
     "term": "지금",
-    "count": 13,
-    "burst": null,
-    "new": null
-   },
-   {
-    "term": "엔비디아",
     "count": 12,
     "burst": null,
     "new": null
    },
    {
-    "term": "로봇",
+    "term": "엔비디아",
     "count": 12,
     "burst": null,
     "new": null
@@ -644,12 +644,6 @@
    {
     "term": "머니메이커",
     "count": 12,
-    "burst": null,
-    "new": null
-   },
-   {
-    "term": "많이",
-    "count": 11,
     "burst": null,
     "new": null
    },
@@ -676,6 +670,12 @@
     "count": 11,
     "burst": null,
     "new": null
+   },
+   {
+    "term": "바이낸스",
+    "count": 10,
+    "burst": null,
+    "new": null
    }
   ],
   "top_liked": [
@@ -683,7 +683,7 @@
     "code": "010170",
     "name": "대한광통신",
     "title": "애들아~~~  반기 보고서, 주린이 시...[22]",
-    "views": 1244,
+    "views": 1249,
     "likes": 109,
     "url": "https://finance.naver.com/item/board_read.naver?code=010170&nid=427885543",
     "time_kst": "08-15 18:18"
@@ -692,8 +692,8 @@
     "code": "010170",
     "name": "대한광통신",
     "title": "9억 영업이익?  진짜실력은[14]",
-    "views": 1125,
-    "likes": 95,
+    "views": 1130,
+    "likes": 97,
     "url": "https://finance.naver.com/item/board_read.naver?code=010170&nid=427887536",
     "time_kst": "08-15 23:05"
    },
@@ -701,7 +701,7 @@
     "code": "066570",
     "name": "LG전자",
     "title": "전고점 돌파는 기정사실 100만원 간다[3]",
-    "views": 1090,
+    "views": 1091,
     "likes": 78,
     "url": "https://finance.naver.com/item/board_read.naver?code=066570&nid=427888466",
     "time_kst": "08-16 05:51"
@@ -730,50 +730,50 @@
     "code": "035420",
     "name": "NAVER",
     "title": "네이버 시총이 35조원[7]",
-    "views": 1181,
-    "likes": 20,
+    "views": 1187,
+    "likes": 21,
     "url": "https://finance.naver.com/item/board_read.naver?code=035420&nid=427888435",
     "time_kst": "08-16 05:31",
-    "views_per_hour": 125.2
+    "views_per_hour": 123.6
    },
    {
     "code": "066570",
     "name": "LG전자",
     "title": "전고점 돌파는 기정사실 100만원 간다[3]",
-    "views": 1090,
+    "views": 1091,
     "likes": 78,
     "url": "https://finance.naver.com/item/board_read.naver?code=066570&nid=427888466",
     "time_kst": "08-16 05:51",
-    "views_per_hour": 119.8
+    "views_per_hour": 117.7
    },
    {
     "code": "066570",
     "name": "LG전자",
     "title": "엘지전자만을 매매하는 주주입니다.",
-    "views": 993,
+    "views": 1005,
     "likes": 15,
     "url": "https://finance.naver.com/item/board_read.naver?code=066570&nid=427888313",
     "time_kst": "08-16 03:50",
-    "views_per_hour": 89.3
+    "views_per_hour": 89.0
+   },
+   {
+    "code": "034020",
+    "name": "두산에너빌리티",
+    "title": "화요일[4]",
+    "views": 1487,
+    "likes": 37,
+    "url": "https://finance.naver.com/item/board_read.naver?code=034020&nid=427887035",
+    "time_kst": "08-15 21:46",
+    "views_per_hour": 85.7
    },
    {
     "code": "009150",
     "name": "삼성전기",
     "title": "반도체 폭등, 화요일 몰빵 들어갑니다.",
-    "views": 949,
+    "views": 959,
     "likes": 15,
     "url": "https://finance.naver.com/item/board_read.naver?code=009150&nid=427888316",
     "time_kst": "08-16 03:54",
-    "views_per_hour": 85.9
-   },
-   {
-    "code": "066570",
-    "name": "LG전자",
-    "title": "23만~25만원대[10]",
-    "views": 2313,
-    "likes": 43,
-    "url": "https://finance.naver.com/item/board_read.naver?code=066570&nid=427882054",
-    "time_kst": "08-15 11:54",
     "views_per_hour": 85.5
    }
   ]
@@ -853,7 +853,7 @@
    {
     "gallery": "해외주식갤러리",
     "title": "voo 사면 장점.jpg",
-    "views": 15080,
+    "views": 15108,
     "recommend": 267,
     "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=17445166&exception_mode=recommend&page=1",
     "time_kst": "08-15 11:57"
@@ -861,7 +861,7 @@
    {
     "gallery": "해외주식갤러리",
     "title": "홈플러스 세금으로 살려준거였음 시발 ㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋ",
-    "views": 14529,
+    "views": 14567,
     "recommend": 242,
     "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=17447618&exception_mode=recommend&page=1",
     "time_kst": "08-15 17:24"
@@ -869,7 +869,7 @@
    {
     "gallery": "해외주식갤러리",
     "title": "구걸 안통하니 이젠 저주까지 하는새끼 .jpg",
-    "views": 14903,
+    "views": 14991,
     "recommend": 200,
     "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=17449333&exception_mode=recommend&page=1",
     "time_kst": "08-15 22:15"
@@ -877,15 +877,15 @@
    {
     "gallery": "해외주식갤러리",
     "title": "워런 버핏과 7억원짜리 점심식사를 한 투자자의 조언",
-    "views": 13802,
-    "recommend": 180,
+    "views": 13847,
+    "recommend": 181,
     "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=17447779&exception_mode=recommend&page=1",
     "time_kst": "08-15 17:48"
    },
    {
     "gallery": "해외주식갤러리",
     "title": "미붕단이 voo 적립충 이해 못하는 이유",
-    "views": 10369,
+    "views": 10407,
     "recommend": 176,
     "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=17447714&exception_mode=recommend&page=1",
     "time_kst": "08-15 17:39"
