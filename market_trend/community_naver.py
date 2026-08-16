@@ -164,7 +164,11 @@ def collect_board(code: str, start: datetime, end: datetime,
     실행했을 때 이튿날 글이 전날 리포트에 섞인다.
     """
     posts: list[dict] = []
-    for page in range(1, max_pages + 1):
+    collected_pages = 0
+    # 창 끝(end) 이후의 새 글만 있는 페이지는 '건너가는 중'이므로 수집 예산(max_pages)을
+    # 쓰지 않는다 — 정기 시각보다 늦게 돌리면 대형주는 새 글 몇 페이지를 지나야 창에
+    # 닿기 때문이다. 무한히 파고들지 않게 절대 상한(max_pages×4)은 따로 둔다.
+    for page in range(1, max_pages * 4 + 1):
         try:
             page_posts = parse_board(fetch(BOARD_URL.format(code=code, page=page)), code)
         except requests.RequestException as exc:
@@ -175,6 +179,10 @@ def collect_board(code: str, start: datetime, end: datetime,
         posts += [p for p in page_posts if start <= p["posted"] < end]
         if any(p["posted"] < start for p in page_posts):  # 창 시작을 지났다 — 끝
             return posts, False
+        if any(p["posted"] < end for p in page_posts):
+            collected_pages += 1
+        if collected_pages >= max_pages:
+            break
         time.sleep(delay)
     return posts, len(posts) > 0  # 페이지 상한까지 전부 창 안이면 잘렸을 수 있다
 
