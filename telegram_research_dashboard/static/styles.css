@@ -159,6 +159,17 @@ a.rep-title:hover{color:#386453;text-decoration:underline}
 .todo-g-grip:hover{color:var(--green)}
 .todo-group.dragging{opacity:.45}
 @media(max-width:620px){.todo-form{flex-wrap:wrap}.todo-form input{flex:100%}}
+/* 좁은 화면: 한 줄에 8개 요소를 욱여넣으면 텍스트가 몇 글자 폭만 남는다
+   → 1줄째 그립+체크+텍스트, 2줄째 시각+버튼들로 나눈다. */
+@media(max-width:620px){
+  .todo-row{flex-wrap:wrap;row-gap:3px;column-gap:10px}
+  .todo-text{flex:1 1 55%;min-width:55%}
+  .todo-ts{margin-left:45px}/* 그립+체크박스 폭만큼 들여써 텍스트와 정렬 */
+  .todo-edit{margin-left:auto}
+  .todo-row.arch .todo-text{flex-basis:100%;min-width:100%}
+  .todo-row.arch .todo-ts{margin-left:0}
+  .todo-row.arch .todo-restore{margin-left:auto}
+}
 
 /* ── TO-DO 확장: 그룹 섹션 + 이미지 첨부/라이트박스 ── */
 .todo-form select{border:1px solid #cfd6d0;border-radius:8px;padding:0 10px;font:13px inherit;color:var(--ink);background:#fbfcfa;max-width:160px}
