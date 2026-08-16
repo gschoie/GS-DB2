@@ -76,6 +76,15 @@ class TokenizeTest(unittest.TestCase):
         self.assertNotIn("오늘", [t for t in tokens if t])   # 불용어
         self.assertNotIn("급등", [t for t in tokens if t])   # 상투어
 
+    def test_verbal_endings_dropped(self):
+        tokens = trend_daily.tokenize("존스법이 급등했다 예상됨 좋아요 그렇죠", self.stop, self.aliases)
+        alive = [t for t in tokens if t]
+        self.assertEqual(alive, ["존스법"])  # 서술형(~다/~요/~죠/~됨)은 전부 걸러진다
+        # 별칭 정식명은 어미 필터의 보호를 받는다 (해당 어미 종목명은 없지만 계약으로 고정)
+        tokens = trend_daily.tokenize("한화오션 간다", self.stop, self.aliases)
+        self.assertIn("한화오션", [t for t in tokens if t])
+        self.assertNotIn("간다", tokens)
+
     def test_bigram_not_across_stopword(self):
         tokens = ["존스법", "", "개정"]
         _, bigrams = trend_daily.term_sets(tokens)
@@ -107,10 +116,19 @@ class SpikeTest(unittest.TestCase):
 
     def test_cold_start_ranks_by_count(self):
         cfg = {"min_doc_count": 3, "top_terms": 10}
-        rows = trend_daily.spike_scores(Counter({"조선": 10, "관세": 5}), 50,
+        rows = trend_daily.spike_scores(Counter({"조선": 10, "관세": 5}), 200,
                                         {"days": {}}, "2026-08-13", cfg)
         self.assertEqual(rows[0]["term"], "조선")
         self.assertIsNone(rows[0]["burst"])
+
+    def test_generic_word_dropped_by_doc_share(self):
+        # 하루 글의 10% 넘게 등장하는 낱말은 상투어 — 목록에 없어도 자동 탈락
+        cfg = {"min_doc_count": 3, "top_terms": 10}
+        rows = trend_daily.spike_scores(Counter({"가능성": 60, "존스법": 8}), 200,
+                                        {"days": {}}, "2026-08-13", cfg)
+        terms = [r["term"] for r in rows]
+        self.assertNotIn("가능성", terms)   # 30% 점유 → 탈락
+        self.assertIn("존스법", terms)      # 4% 점유 → 생존
 
     def test_new_term_spikes_over_common_term(self):
         cfg = {"min_doc_count": 3, "top_terms": 10}

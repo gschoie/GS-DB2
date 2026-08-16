@@ -175,6 +175,9 @@ JOSA = sorted(
     key=len, reverse=True,
 )
 ENGLISH_STOP = {"the", "and", "for", "with", "from", "this", "that", "are", "was", "has", "have", "will", "not", "you"}
+# 서술형 어미로 끝나는 토큰은 명사가 아니다 — '했다·간다·좋아요·예상됨' 류를 목록 관리
+# 없이 통째로 거른다. 별칭 사전에 있는 정식명은 보호된다(해당 어미로 끝나는 종목명은 없다).
+VERBAL_ENDING_RE = re.compile(r"[가-힣]+(다|요|죠|됨)$")
 
 
 def strip_josa(word: str) -> str:
@@ -187,12 +190,14 @@ def strip_josa(word: str) -> str:
 def tokenize(text: str, stopwords: set[str], aliases: dict[str, str]) -> list[str]:
     """본문 → 정규화된 낱말 나열(순서 보존, bigram용). 불용어는 빈 문자열로 남겨 자리 표시."""
     tokens: list[str] = []
+    protected = set(aliases.values())  # 정식명은 서술형 어미 필터에서 보호
     for raw in TOKEN_RE.findall(URL_RE.sub("", text)):
         word = strip_josa(raw) if re.fullmatch(r"[가-힣]+", raw) else raw
         # 조사를 뗀 형태로 못 찾으면 원형으로 한 번 더 — '삼전은'처럼 별칭+조사 대비
         canonical = aliases.get(word.casefold()) or aliases.get(raw.casefold()) or word
         folded = canonical.casefold()
-        if len(canonical) < 2 or folded in stopwords or folded in ENGLISH_STOP:
+        if (len(canonical) < 2 or folded in stopwords or folded in ENGLISH_STOP
+                or (canonical not in protected and VERBAL_ENDING_RE.fullmatch(canonical))):
             tokens.append("")  # bigram이 불용어를 건너뛰어 붙지 않게 자리만 남긴다
             continue
         tokens.append(canonical)
@@ -264,10 +269,15 @@ def spike_scores(doc_counts: Counter, total_docs: int, history: dict, day: str, 
     past = [entry for stamp, entry in sorted(history["days"].items()) if stamp < day][-BASELINE_DAYS:]
     min_count = int(cfg["min_doc_count"])
     baseline_ready = len(past) >= MIN_BASELINE
+    # 하루 글의 일정 비율(기본 10%) 넘게 등장하는 낱말은 정의상 상투어다 — 진짜 테마는
+    # 많아야 2~4% 점유라 안 걸린다. 불용어 목록을 무한정 키우지 않기 위한 구조적 상한.
+    max_share = float(cfg.get("max_doc_share") or 0.10)
 
     rows: list[dict] = []
     for term, count in doc_counts.items():
         if count < min_count:
+            continue
+        if total_docs >= 50 and count / total_docs > max_share:
             continue
         row = {"term": term, "count": count, "burst": None, "base_daily": None, "new": None}
         if baseline_ready:
