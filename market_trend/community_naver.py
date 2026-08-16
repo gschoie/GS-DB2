@@ -386,17 +386,16 @@ def main(argv: list[str] | None = None) -> int:
         del history["days"][stale]
     save_history(history)
 
+    # 조각 파일 — 뒤이어 도는 트렌드 산출(trend_daily)이 읽어 Gemini 입력·날짜 json에 넣는다.
+    trend_daily.PARTS_DIR.mkdir(parents=True, exist_ok=True)
+    (trend_daily.PARTS_DIR / f"{day}-naver.json").write_text(
+        json.dumps(community, ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
+
     if merge_into_day_json(day, community):
-        print(f"저장 완료: {day}.json·latest.json에 community 병합 · 이력 {len(history['days'])}일")
+        print(f"저장 완료: 조각 + {day}.json·latest.json 병합 · 이력 {len(history['days'])}일")
     else:
-        # 트렌드 산출이 먼저 실패한 날도 커뮤니티만 단독 파일로 남긴다.
-        path = OUT_DIR / f"{day}.json"
-        OUT_DIR.mkdir(parents=True, exist_ok=True)
-        path.write_text(json.dumps({"date": day, "themes": [], "signals": {},
-                                    "stats": {}, "meta": {"engine": "커뮤니티 단독"},
-                                    "community": community},
-                                   ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
-        print(f"트렌드 json 없음 — 커뮤니티 단독으로 {path.name} 생성")
+        # 트렌드 산출 전(정상 순서)이거나 트렌드가 실패한 날 — 조각만 남긴다.
+        print(f"저장 완료: 조각({day}-naver.json) · 이력 {len(history['days'])}일")
     return 0
 
 

@@ -63,10 +63,23 @@ def build_message(payload: dict) -> str | None:
         elif not (payload.get("community") or {}).get("hot_stocks"):
             return None  # 테마도 신호도 커뮤니티도 없다 — 보낼 게 없다
 
+    mood = payload.get("community_mood")
+    if mood:
+        score = int(mood.get("score") or 0)
+        face = "🔥" if score >= 50 else "🙂" if score >= 10 else "😐" if score > -10 else "😟" if score > -50 else "🧊"
+        lines += ["", f"🐜 <b>커뮤니티 무드</b> {face} {'+' if score > 0 else ''}{score}"]
+        if mood.get("summary"):
+            lines.append(f"<i>{esc(mood['summary'])}</i>")
+        stocks = sorted(mood.get("hot_stocks") or [], key=lambda s: -(int(s.get("score") or 0)))
+        if stocks:
+            lines.append("· " + " · ".join(
+                f"{esc(s.get('name'))} {'+' if int(s.get('score') or 0) > 0 else ''}{int(s.get('score') or 0)}"
+                for s in stocks[:6]))
+
     community = payload.get("community") or {}
     hot = community.get("hot_stocks") or []
     if hot:
-        lines += ["", "🌡️ <b>커뮤니티 온도</b> (네이버 종토)"]
+        lines += ["", "🌡️ <b>NAVER 종토방 온도</b>"]
         tags = []
         for row in hot[:5]:
             approx = "≈" if row.get("capped") else ""

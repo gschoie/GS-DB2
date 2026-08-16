@@ -219,21 +219,16 @@ def title_keywords(posts: list[dict], cfg: dict, history: dict, day: str) -> lis
     return rows[:15]
 
 
-def pick_posts(recommended: list[dict], sampled: list[dict], now: datetime) -> tuple[list[dict], list[dict]]:
-    """(개념글 추천 상위, 시간당 조회 상위)."""
-    def pack(p: dict, extra: dict | None = None) -> dict:
+def pick_posts(recommended: list[dict], sampled: list[dict]) -> tuple[list[dict], list[dict]]:
+    """(개념글 추천 상위, 화제의 글 조회순)."""
+    def pack(p: dict) -> dict:
         return {"gallery": p["gallery"], "title": p["title"], "views": p["views"],
                 "recommend": p["recommend"], "url": p["url"],
-                "time_kst": p["posted"].strftime("%m-%d %H:%M"), **(extra or {})}
+                "time_kst": p["posted"].strftime("%m-%d %H:%M")}
 
     top = [pack(p) for p in sorted(recommended, key=lambda p: (-p["recommend"], -p["views"]))[:8]]
-    rising = []
-    for p in sampled:
-        age_h = max((now - p["posted"]).total_seconds() / 3600, 0.5)
-        rising.append((p["views"] / age_h, p))
-    rising.sort(key=lambda x: -x[0])
-    hot = [pack(p, {"views_per_hour": round(v, 1)}) for v, p in rising[:8] if p["views"] >= 200]
-    return top, hot
+    viewed = [pack(p) for p in sorted(sampled, key=lambda p: -p["views"])[:10] if p["views"] >= 100]
+    return top, viewed
 
 
 # ── 실행 ──────────────────────────────────────────────────────────────────
@@ -290,7 +285,7 @@ def main(argv: list[str] | None = None) -> int:
         return 1
 
     keywords = title_keywords(sampled, cfg, history, day)
-    top_recommended, top_rising = pick_posts(recommended, sampled, now)
+    top_recommended, top_viewed = pick_posts(recommended, sampled)
 
     block = {
         "source": "DC인사이드",
@@ -298,7 +293,7 @@ def main(argv: list[str] | None = None) -> int:
         "posts_sampled": len(sampled),
         "keywords": keywords,
         "top_recommended": top_recommended[:5],
-        "top_rising": top_rising[:5],
+        "top_viewed": top_viewed[:8],
     }
 
     if args.check:
@@ -318,15 +313,15 @@ def main(argv: list[str] | None = None) -> int:
         del history["days"][stale]
     save_history(history)
 
+    # 조각 파일 — 뒤이어 도는 트렌드 산출(trend_daily)이 읽어 Gemini 입력·날짜 json에 넣는다.
+    trend_daily.PARTS_DIR.mkdir(parents=True, exist_ok=True)
+    (trend_daily.PARTS_DIR / f"{day}-dc.json").write_text(
+        json.dumps(block, ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
+
     if merge_into_day_json(day, block):
-        print(f"저장 완료: {day}.json·latest.json에 community_dc 병합 · 이력 {len(history['days'])}일")
+        print(f"저장 완료: 조각 + {day}.json·latest.json 병합 · 이력 {len(history['days'])}일")
     else:
-        path = OUT_DIR / f"{day}.json"
-        OUT_DIR.mkdir(parents=True, exist_ok=True)
-        path.write_text(json.dumps({"date": day, "themes": [], "signals": {}, "stats": {},
-                                    "meta": {"engine": "커뮤니티 단독"}, "community_dc": block},
-                                   ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
-        print(f"트렌드 json 없음 — 디시 단독으로 {path.name} 생성")
+        print(f"저장 완료: 조각({day}-dc.json) · 이력 {len(history['days'])}일")
     return 0
 
 

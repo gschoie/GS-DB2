@@ -74,7 +74,8 @@ class RenderTest(unittest.TestCase):
         "keywords": [{"term": "존스법", "count": 9, "burst": 7.0, "new": True}],
         "top_recommended": [{"gallery": "주식갤러리", "title": "개념글 <script>제목",
                              "views": 1540, "recommend": 88, "url": "https://x", "time_kst": "08-16 03:33"}],
-        "top_rising": [],
+        "top_viewed": [{"gallery": "주식갤러리", "title": "화제글", "views": 900,
+                        "recommend": 2, "url": "https://y", "time_kst": "08-16 04:00"}],
     }
 
     def test_report_renders_dc(self):
@@ -82,6 +83,7 @@ class RenderTest(unittest.TestCase):
         self.assertIn("갤러리 온도", page)
         self.assertIn("≈4,200", page)
         self.assertIn("존스법", page)
+        self.assertIn("화제의 글", page)
         self.assertNotIn("<script>", page)  # 제목 이스케이프
 
     def test_telegram_includes_dc(self):

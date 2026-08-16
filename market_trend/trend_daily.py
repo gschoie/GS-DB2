@@ -46,6 +46,9 @@ KST = timezone(timedelta(hours=9))
 CONFIG_PATH = BASE_DIR / "config.yml"
 STATE_PATH = BASE_DIR / "state" / "trend_history.json"
 OUT_DIR = BASE_DIR.parent / "telegram_research_dashboard" / "static" / "market_trend"
+# 커뮤니티 수집기(community_naver/dc)가 남기는 조각 파일 자리. 워크플로가 수집기를
+# 먼저 돌리므로, 트렌드 산출이 이 조각을 읽어 Gemini 입력과 날짜 json에 함께 넣는다.
+PARTS_DIR = OUT_DIR / "parts"
 
 HISTORY_DAYS = 21       # 이력 보관 일수 (기준선 7일 + 신조어 판정 여유)
 BASELINE_DAYS = 7       # 급증 비교 창
@@ -361,6 +364,17 @@ def top_spread_posts(groups: list[dict], cfg: dict) -> list[dict]:
     return posts
 
 
+def load_part(day: str, name: str) -> dict | None:
+    path = PARTS_DIR / f"{day}-{name}.json"
+    if not path.exists():
+        return None
+    try:
+        return json.loads(path.read_text(encoding="utf-8"))
+    except (json.JSONDecodeError, OSError) as exc:
+        print(f"  ⚠ 조각 {path.name} 읽기 실패: {exc}", file=sys.stderr)
+        return None
+
+
 # ── C. Gemini 합성 ─────────────────────────────────────────────────────────
 
 SYSTEM_PROMPT = """너는 한국 주식시장을 다루는 리서치 어시스턴트다.
@@ -377,14 +391,24 @@ SYSTEM_PROMPT = """너는 한국 주식시장을 다루는 리서치 어시스�
 - evidence에는 입력 발췌에서 고른 근거를 채널 이름과 함께 1~3개.
 - 광고·리딩방 홍보로 보이는 신호는 무시한다.
 
+입력에 '## 커뮤니티(개미) 신호' 절이 있으면 community_mood도 함께 만든다:
+- score: 개미 정서 -100(공포·회피)~+100(과열·환희). 키워드·인기글 어조로 판단.
+- summary: 1~2문장 — 무엇에 몰려 있고 어떤 온도인지.
+- hot_stocks: 커뮤니티가 주목하는 종목 3~8개. score는 그 종목에 대한 기대감
+  -100~+100, reason은 입력 신호에서 읽히는 이유 한 문장. 입력에 없는 종목 금지.
+커뮤니티 절이 없으면 community_mood는 null로 둔다.
+
 반드시 아래 형태의 JSON만 출력한다(설명·마크다운 금지):
 {"one_liner": "오늘 시장 관심 한 줄 요약",
  "themes": [{"name": "...", "narrative": "...", "status": "new|ongoing",
              "strength": 3, "keywords": ["..."],
-             "evidence": [{"channel": "...", "quote": "..."}]}]}"""
+             "evidence": [{"channel": "...", "quote": "..."}]}],
+ "community_mood": {"score": 0, "summary": "...",
+                    "hot_stocks": [{"name": "...", "score": 0, "reason": "..."}]} 또는 null}"""
 
 
-def build_llm_input(day: str, stats: dict, spikes: list[dict], posts: list[dict], term_excerpts: dict) -> str:
+def build_llm_input(day: str, stats: dict, spikes: list[dict], posts: list[dict], term_excerpts: dict,
+                    naver: dict | None = None, dc: dict | None = None) -> str:
     lines = [f"날짜: {day}", f"코퍼스: 채널 {stats['channels']}개, 글 {stats['messages']}건(중복 접은 뒤 {stats['groups']}건)", ""]
     lines.append("## 급증 키워드 (오늘 언급 글 수 · 7일 하루평균 · 배수 · 신규 여부)")
     for row in spikes:
@@ -397,6 +421,26 @@ def build_llm_input(day: str, stats: dict, spikes: list[dict], posts: list[dict]
     lines.append("## 여러 채널이 퍼나른 글 (전파 수 순)")
     for post in posts:
         lines.append(f"- [{post['channels']}개 채널] ({post['channel']}) \"{post['head']}\"")
+
+    if naver or dc:
+        lines += ["", "## 커뮤니티(개미) 신호"]
+    if naver:
+        hot = ", ".join(
+            f"{r['name']}({'≈' if r.get('capped') else ''}{r['posts']}글"
+            + (f", {r['burst']}×" if r.get("burst") is not None else "") + ")"
+            for r in (naver.get("hot_stocks") or [])[:10])
+        if hot:
+            lines.append(f"- 네이버 종토 글 수 상위: {hot}")
+        for p in (naver.get("top_liked") or [])[:5]:
+            lines.append(f"- 종토 공감글 [{p.get('name')}] \"{p.get('title')}\" (공감 {p.get('likes')})")
+    if dc:
+        kw = ", ".join(f"{k['term']}({k['count']})" for k in (dc.get("keywords") or [])[:10])
+        if kw:
+            lines.append(f"- 디시 갤러리 제목 키워드: {kw}")
+        for p in (dc.get("top_recommended") or [])[:5]:
+            lines.append(f"- 디시 개념글 [{p.get('gallery')}] \"{p.get('title')}\" (추천 {p.get('recommend')})")
+        for p in (dc.get("top_viewed") or [])[:8]:
+            lines.append(f"- 디시 화제글 [{p.get('gallery')}] \"{p.get('title')}\" (조회 {p.get('views')})")
     return "\n".join(lines)
 
 
@@ -576,10 +620,16 @@ def main(argv: list[str] | None = None) -> int:
             print(f"  [{post['channels']}] ({post['channel']}) {post['head'][:70]}")
         return 0
 
+    # 커뮤니티 조각 — 워크플로가 수집기를 먼저 돌려두면 Gemini가 개미 신호까지 읽는다.
+    naver_part = load_part(day, "naver")
+    dc_part = load_part(day, "dc")
+    if naver_part or dc_part:
+        print(f"커뮤니티 조각: 종토 {'있음' if naver_part else '없음'} · 디시 {'있음' if dc_part else '없음'}")
+
     # C. 합성
     result, engine = None, "계량 신호만(--no-llm)"
     if not args.no_llm:
-        llm_input = build_llm_input(day, stats, spikes, posts, term_excerpts)
+        llm_input = build_llm_input(day, stats, spikes, posts, term_excerpts, naver_part, dc_part)
         print(f"Gemini 입력 {len(llm_input):,}자")
         result, model = synthesize(day, llm_input)
         engine = f"Gemini({model})"
@@ -590,8 +640,13 @@ def main(argv: list[str] | None = None) -> int:
         "date": day, "meta": meta, "stats": stats,
         "one_liner": (result or {}).get("one_liner"),
         "themes": (result or {}).get("themes") or [],
+        "community_mood": (result or {}).get("community_mood"),
         "signals": {"spikes": spikes, "top_posts": posts},
     }
+    if naver_part:
+        payload["community"] = naver_part
+    if dc_part:
+        payload["community_dc"] = dc_part
 
     if args.dry_run:
         print("\n" + markdown)

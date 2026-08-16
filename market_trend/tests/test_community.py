@@ -121,7 +121,7 @@ class RenderTest(unittest.TestCase):
 
     def test_report_renders_community(self):
         page = build_report.render_community(self.COMMUNITY)
-        self.assertIn("커뮤니티 온도", page)
+        self.assertIn("NAVER 종토방 온도", page)
         self.assertIn("한화오션", page)
         self.assertIn("존스법", page)
         self.assertNotIn("<b>제목</b>", page)  # 제목 이스케이프
@@ -131,8 +131,22 @@ class RenderTest(unittest.TestCase):
                    "community": self.COMMUNITY}
         msg = telegram_send.build_message(payload)
         self.assertIsNotNone(msg)  # 테마 없어도 커뮤니티가 있으면 보낸다
-        self.assertIn("커뮤니티 온도", msg)
+        self.assertIn("NAVER 종토방 온도", msg)
         self.assertIn("한화오션 5.5×", msg)
+
+    def test_mood_rendering(self):
+        mood = {"score": 65, "summary": "반도체 기대감이 높다.",
+                "hot_stocks": [{"name": "SK하이닉스", "score": 85, "reason": "저평가 분석 언급"},
+                               {"name": "게임주", "score": -90, "reason": "회피 권고"}]}
+        page = build_report.render_mood(mood)
+        self.assertIn("커뮤니티 무드", page)
+        self.assertIn("SK하이닉스", page)
+        self.assertIn("📉", page)
+        payload = {"date": "2026-08-16", "stats": {}, "themes": [{"name": "테마", "narrative": "n"}],
+                   "signals": {}, "community_mood": mood}
+        msg = telegram_send.build_message(payload)
+        self.assertIn("커뮤니티 무드", msg)
+        self.assertIn("SK하이닉스 +85", msg)
 
 
 if __name__ == "__main__":
