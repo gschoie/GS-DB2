@@ -1,144 +1,168 @@
 {
- "date": "2026-08-15",
+ "date": "2026-08-16",
  "meta": {
-  "window": "08-14 06:00~08-15 06:00 KST",
+  "window": "08-15 06:00~08-16 06:00 KST",
   "engine": "Gemini(gemini-2.5-flash)",
-  "generated_at": "2026-08-15T06:48+09:00"
+  "generated_at": "2026-08-16T13:35+09:00"
  },
  "stats": {
-  "channels": 94,
-  "messages": 1985,
-  "groups": 1819
+  "channels": 37,
+  "messages": 244,
+  "groups": 231
  },
- "one_liner": "AI 투자 확대와 미국 인플레이션 완화 기대 속, 기업 실적 발표와 지정학적 리스크 부각",
+ "one_liner": "AI 및 반도체 섹터의 성장 기대에도 불구하고, 지정학적 긴장, 미중 기술 갈등, 거시 경제 지표 둔화 등 대외 불확실성 증대로 시장은 관망세가 짙다.",
  "themes": [
   {
-   "name": "AI 인프라 투자 확대와 차세대 광통신 기술 부각",
-   "narrative": "AI 서버 수요가 2028년까지 강하게 지속될 것으로 전망되는 가운데, 북미 광통신 업체들이 NPO/CPO와 같은 차세대 기술 도입에 대한 높은 관심을 보이고 있다. 이는 글로벌 AI 인프라 구축 가속화에 따른 반도체 및 IT 부품 시장의 성장을 시사하며, 관련 기업들의 실적 개선으로 이어지고 있다.",
+   "name": "AI·반도체 - 성장 기대와 리스크 공존",
+   "narrative": "AI 및 반도체 산업은 폭발적인 성장 기대와 주요 기업들의 긍정적인 실적/전망으로 시장을 주도하고 있으나, 일부 AI 관련주의 투자 축소 소식, CAPEX 비용 증가 우려, 그리고 미중 기술 갈등 등 지정학적 리스크가 상승 폭을 제한하며 시장은 관망세를 보이고 있다.",
    "status": "ongoing",
    "strength": 5,
    "keywords": [
-    "AI 서버",
-    "CPO",
-    "NPO",
+    "AI",
     "반도체",
-    "전기전자",
-    "디스플레이",
-    "WFE",
-    "메모리",
-    "엘티씨",
-    "예스티",
-    "매출액",
-    "영업익",
-    "예상치",
-    "연결"
-   ],
-   "evidence": [
-    {
-     "channel": "메리츠증권 리서치",
-     "quote": "📮[메리츠증권 전기전자/IT부품 양승수] ▶ 북미 광통신 3사 실적 Review : 800G에서 1.6T, 그리고 NPO/CPO [주요 시사점] ▶ 높아지는 NPO/CPO에 대한 관심 - 이번 미국 광통신 3사의 실적 발표에서 CPO/NPO 도입에 대한 고객 관심이 빠르게 확대되고 있음을 공통적으로 확인"
-    },
-    {
-     "channel": "하나 중국/신흥국 전략 김경환",
-     "quote": ">>Quanta, AI 서버 주문 2028년까지… 향후 2년 전망 “exciting” (대만경제일보) •Quanta는 AI 서버 수요가 강하고 주문 가시성이 2028년까지 이어지고 있다며 향후 2년 전망에 대해 “상당히 흥분된다”고 밝혔음."
-    },
-    {
-     "channel": "[신한 리서치본부] IT(반도체/전기전자/디스플레이)",
-     "quote": "[신한투자증권 IT소부장/디스플레이 박현우, 김예성] 엘티씨: 2분기 연속 최대 실적 경신 ▶️ Full Capa에 근접한 장비 출하 - 고객사 단위투자 증가율 상회하는 성장 전망"
-    }
-   ]
-  },
-  {
-   "name": "미국 인플레이션 완화와 기술주 강세",
-   "narrative": "7월 생산자물가지수(PPI)가 시장 예상치를 하회하며 소비자물가지수(CPI)와 함께 연방준비제도(Fed)의 긴축 우려를 완화시켰다. 이러한 인플레이션 완화 기조는 성장주에 대한 투자심리를 개선시키며 미국 증시, 특히 기술주의 강세를 이끌었다.",
-   "status": "new",
-   "strength": 4,
-   "keywords": [
-    "인플레이션 완화",
-    "PPI",
-    "CPI",
-    "Fed 긴축 우려",
-    "기술주 강세",
-    "S&P500",
-    "미국 증시",
-    "예상치"
+    "엔비디아",
+    "인프라",
+    "성장",
+    "증가",
+    "가능성",
+    "높은",
+    "확대",
+    "일부",
+    "우려",
+    "주요"
    ],
    "evidence": [
     {
      "channel": "서화백의 AI놀이🚀",
-     "quote": "미국 증시는 목요일 인플레이션 완화 기조 속 기술주 강세에 힘입어 상승 마감했습니다. 7월 생산자물가지수(PPI)가 시장 예상치를 하회하며 전일 발표된 소비자물가지수(CPI)와 함께 연방준비제도(Fed)의 긴축 우려를 한층 완화했습니다."
+     "quote": "💡 요약 AI 산업의 폭발적인 성장 기대와 주요 기업들의 긍정적인 실적/전망이 시장을 주도. 지정학적 리스크 (호르무즈 해협 긴장) 고조와 주요국 경제 지표 둔화 (소비 위축) 우려. 미국 연준 금리 인상 불확실성과 AI 산업 성장 명암 교차로 관망세."
     },
     {
-     "channel": "키움증권 전략/시황 한지영",
-     "quote": "[8/14, 장 시작 전 생각: 수급의 퀄리티, 키움 한지영] - 다우 +0.1%, S&P500 +0.7%, 나스닥 +0.8%"
+     "channel": "서화백의 그림놀이 🚀",
+     "quote": "💡 요약 AI 인프라 및 국내외 반도체 기업들의 긍정적인 실적과 AI 기술 발전 기대감이 시장에 활력을 불어넣었지만, 일부 AI 관련주의 투자 축소 소식과 중동 지정학적 리스크가 잠재적 불안 요인으로 작용하며 상승 폭을 제한하고 있습니다."
+    },
+    {
+     "channel": "빠르고 정확한 주식정보방",
+     "quote": "AI CapEx 방향은 여전히 강합니다. LSEG 기준 주요 5개 기업의 올해 CapEx 컨센서스는 1월 약 4,850억달러에서 7월 약 7,300억달러로 급증했습니다. Reuters는 이번 주말 전망에서도 주요 hyperscaler의 올해 투자액이 7,000억달러를 넘어설 것으로 보고 있습니다."
     }
    ]
   },
   {
-   "name": "일본은행(BOJ) 통화정책 변화 가능성 및 엔화 강세 압력",
-   "narrative": "시장은 일본은행(BOJ)의 9월 금리 인상 가능성을 약 75%로 높게 보고 있으며, 이는 엔화 강세를 장기화하고 엔 캐리 트레이드 포지션의 추가 청산으로 이어질 수 있다는 골드만삭스의 분석이 나왔다.",
+   "name": "미중 기술 갈등 - 반도체 공급망 압박",
+   "narrative": "미국 정부가 중국산 메모리 반도체 구매 자제를 촉구하며 미중 기술 갈등이 심화되고 있다. 이는 AI 및 반도체 산업의 공급망 불확실성을 높이는 요인으로 작용하며 시장에 부담을 주고 있다.",
    "status": "ongoing",
-   "strength": 3,
+   "strength": 4,
    "keywords": [
-    "BOJ",
-    "금리 인상",
-    "엔 캐리 트레이드",
-    "엔화 강세",
-    "기간"
+    "중국",
+    "반도체",
+    "트럼프"
    ],
    "evidence": [
     {
-     "channel": "하나 중국/신흥국 전략 김경환",
-     "quote": ">>골드만삭스: BOJ 금리 인상 가속 시 엔 캐리 트레이드 추가 청산 가능 •골드만삭스는 일본의 15년 만에 최대 규모 외환시장 개입으로 전술적 엔 캐리 포지션이 크게 감소했지만, 조건이 맞으면 추가 청산 여지가 있다고 밝혔음."
+     "channel": "서화백의 AI놀이🚀",
+     "quote": "미국 정부 중국 메모리 구매 자제 촉구, 미국 정부 AAPL에게 중국 메모리를 사지말라고 촉구"
     },
     {
-     "channel": "하나 중국/신흥국 전략 김경환",
-     "quote": "•시장은 현재 BOJ의 9월 금리 인상 가능성을 약 75%로 보고 있으며, 긴축이 빨라질 경우 세계 경제 성장 환경에 변화가 없어도 엔화가 더 오랜 기간 강세를 유지할 수 있다고 전망."
+     "channel": "YM리서치",
+     "quote": "미국 정부는 애플에게 중국 메모리를 사지말라고 촉구(WSJ)"
+    },
+    {
+     "channel": "서화백의 그림놀이 🚀",
+     "quote": "미국 정부의 중국산 메모리 반도체 구매 제동, DeFiLlama 가짜 앱 관련 보안 문제 및 자금 도난 발생, 제프리스 투자의견 하향"
     }
    ]
   },
   {
-   "name": "이란 지정학적 리스크 고조",
-   "narrative": "미국 재무장관이 이란에 대해 '전례 없는 경제적 고립 조치'와 '호르무즈 해협에 대한 지속적인 봉쇄'를 시행할 것이라고 밝히면서, 중동 지역의 지정학적 긴장감이 고조되고 있다.",
+   "name": "지정학적 리스크 - 호르무즈 해협 긴장 및 에너지 불안",
+   "narrative": "호르무즈 해협을 미국 영토로 선포하겠다는 발언 등 지정학적 긴장이 고조되고 있으며, 이는 중동 리스크와 함께 유가 상승 압력으로 이어지고 있다. 러시아의 에너지 핵심 인프라 운영 중단 소식도 글로벌 에너지 시장의 불안감을 가중시키고 있다.",
+   "status": "ongoing",
+   "strength": 5,
+   "keywords": [
+    "트럼프",
+    "핵심",
+    "가격",
+    "우려"
+   ],
+   "evidence": [
+    {
+     "channel": "미국 주식 인사이더 🇺🇸 (US Stocks Insider)",
+     "quote": "⚡️⚡️⚡️⚡️⚡️⚡️⚡️⚡️⚡️⚡️⚡️⚡️ “조만간 나는 호르무즈 해협을 미국 영토로 선포할 것이다.”"
+    },
+    {
+     "channel": "서화백의 AI놀이🚀",
+     "quote": "💡 요약 미국 증시가 소비 지표 부진과 국채금리 상승으로 전반적인 약세를 보였고, 중동발 지정학적 긴장(트럼프의 이란, 호르무즈 해협 발언)과 대형 금융사(Jane Street)의 대규모 손실 소식이 시장의 불확실성을 키웠습니다."
+    },
+    {
+     "channel": "미국 주식 인사이더 🇺🇸 (US Stocks Insider)",
+     "quote": "• 러시아는 우크라이나 드론 공격 이후 주요 흑해 원유 수출 거점인 노보로시스크 Sheskharis 터미널 운영을 중단한 것으로 알려져. 해당 시설은 하루 약 70만 배럴의 원유를 처리하는 핵심 수출 인프라."
+    }
+   ]
+  },
+  {
+   "name": "거시 경제 - 소비 둔화 및 금리 불확실성",
+   "narrative": "7월 소매판매가 시장 예상치를 크게 하회하며 3분기 GDP 성장률 하향 조정 가능성이 제기되었다. CPI·PPI 둔화에도 불구하고 소비 지표 약세가 이어지면서 연준의 금리 인상 불확실성과 고금리 우려가 시장의 관망세를 심화시키고 있다.",
+   "status": "ongoing",
+   "strength": 4,
+   "keywords": [
+    "가능성",
+    "증가",
+    "높은",
+    "다만",
+    "우려",
+    "성장",
+    "것으",
+    "주요"
+   ],
+   "evidence": [
+    {
+     "channel": "서화백의 AI놀이🚀",
+     "quote": "7월 소매판매는 전월 대비 0.6% 감소하며 시장 예상치(0.2% 증가)를 크게 하회했습니다. 자동차를 제외한 소매판매 역시 0.3% 감소했습니다. 이는 3분기 국내총생산(GDP) 성장률 전망치 하향 조정으로 이어질 수 있습니다."
+    },
+    {
+     "channel": "서화백의 AI놀이🚀",
+     "quote": "💡 요약 AI 산업의 폭발적인 성장 기대와 주요 기업들의 긍정적인 실적/전망이 시장을 주도. 지정학적 리스크 (호르무즈 해협 긴장) 고조와 주요국 경제 지표 둔화 (소비 위축) 우려. 미국 연준 금리 인상 불확실성과 AI 산업 성장 명암 교차로 관망세."
+    },
+    {
+     "channel": "빠르고 정확한 주식정보방",
+     "quote": "최근 CPI·PPI 둔화에 이어 소비까지 약해지면서 Fed가 9월에 추가 인상을 해야 할 명분은 약해지고 있습니다. 다만 이는 Goldilocks보다 “물가는 아직 높은데 소비가 먼저 둔화되는 상황”에 가까워졌다는 점에서 무조건적인 증시 호재는 아닙니다."
+    }
+   ]
+  },
+  {
+   "name": "비만 치료제 - 경구제 처방 비중 정체",
+   "narrative": "노보 노디스크의 경구용 비만 치료제 위고비의 주간 처방 건수가 소폭 감소했으며, 전체 위고비 처방에서 경구제의 비중이 33%로 하락하며 수개월째 1/3 수준에서 정체되고 있다. 이는 경구제 전환 속도에 대한 시장의 관심이 지속될 것임을 시사한다.",
+   "status": "ongoing",
+   "strength": 3,
+   "keywords": [
+    "전체"
+   ],
+   "evidence": [
+    {
+     "channel": "허혜민의 제약/바이오 소식통",
+     "quote": "[키움 허혜민] 경구 비만치료제, 처방 동향 노보의 위고비 경구 주간 처방 약 16.3만 건, 전주 약 17.2만 건에서 감소 Wegovy 전체 처방 중 경구제 비중: 35% → 33%로 하락. 수개월째 대체로 1/3 수준에서 정체 주사제 포함 Wegovy 전체 처방 약 49.6만 건, WoW -1.1% 비만 GLP-1…"
+    }
+   ]
+  },
+  {
+   "name": "방산 - 필리핀 유로파이터 타이푼 도입 검토",
+   "narrative": "필리핀이 인도-태평양 지역 전투기 경쟁 심화 속에서 유로파이터 타이푼 32대 도입을 검토하고 있다. 2026년 계약 체결 시 2028년 초도 인도 가능성이 제기되나, 기종 선정 및 정부 재정 확보 여부에 따라 인도 일정 변동 가능성이 존재한다.",
    "status": "new",
    "strength": 3,
    "keywords": [
-    "이란",
-    "경제적 고립",
-    "호르무즈 해협",
-    "봉쇄"
+    "가능성",
+    "전체"
    ],
    "evidence": [
     {
-     "channel": "텐렙",
-     "quote": "⚡️⚡️⚡️⚡️⚡️⚡️⚡️⚡️⚡️⚡️⚡️⚡️ 미국 재무장관 스콧 베센트가 현지시간 13일 밤 미국이 이란을 상대로 “전례 없는” 조치를 시행할 것이라고 밝힘. 베센트 장관은 인터뷰에서 “전례 없는 경제적 고립 조치와 호르무즈 해협에 대한 지속적인 봉쇄를 결합해 이란 항구로 들어오고 나가는 모든 통로를 차단할 것입니다."
-    }
-   ]
-  },
-  {
-   "name": "조선업계 동향 및 실적 발표",
-   "narrative": "조선업계에서는 HD현대 회장이 단기 성과 집착에 대한 경고를 한 가운데, LNG 운반선 관련 소재 기업인 한국카본이 예상치를 상회하는 반기 실적을 발표하며 개별 기업의 성과가 주목받고 있다.",
-   "status": "ongoing",
-   "strength": 3,
-   "keywords": [
-    "조선",
-    "한국카본",
-    "HD Hyundai",
-    "Golar LNG",
-    "매출액",
-    "영업익",
-    "순이익",
-    "예상치",
-    "반기보고서"
-   ],
-   "evidence": [
-    {
-     "channel": "SK증권 조선/방산 한승한",
-     "quote": "기업명: 한국카본(시가총액: 1조 2,532억) A017960 보고서명: 반기보고서 (2026.06) 잠정실적 : N 매출액 : 2,434억(예상치 : 2,424억, +0.4%) 영업익 : 504억(예상치 : 485억, +3.9%) 순이익 : 366억(예상치 : 349억, +4.8%)"
+     "channel": "GS의 조선/기계/방산 「바담」",
+     "quote": "✈️ Philippines Weighs 32 Eurofighter Typhoons as Indo-Pacific Fighter Race Intensifies ✈️ 인도-태평양 전투기 경쟁 심화 속 필리핀, 유로파이터 타이푼 32대 도입 검토 출처: Defence Security Asia 링크: [https://defence…"
     },
     {
-     "channel": "다올투자증권 리서치센터",
-     "quote": "[다올투자증권 조선/기계/방산 최광식] 8/14(금) 데일리뉴스 🛳 조선 [TradeWinds] HD Hyundai chair warns of fixation on immediate results after string of shipyard deaths"
+     "channel": "GS의 조선/기계/방산 「바담」",
+     "quote": "* 2026년 계약 체결 시 2028년 초도 인도 가능성이 제기되었으나, 기종 선정 미확정 및 정부 재정 확보 여부에 따라 인도 일정 변동 가능"
+    },
+    {
+     "channel": "GS의 조선/기계/방산 「바담」",
+     "quote": "* 필리핀 전체 전투기 소요는 약 40대로 논의되는 반면, 레오나르도의 공식 제안 규모는 최대 32대로 집계"
     }
    ]
   }
@@ -146,176 +170,176 @@
  "signals": {
   "spikes": [
    {
-    "term": "매출액",
-    "count": 766,
+    "term": "AI",
+    "count": 80,
     "burst": null,
     "base_daily": null,
     "new": null
    },
    {
-    "term": "영업익",
-    "count": 527,
+    "term": "반도체",
+    "count": 38,
     "burst": null,
     "base_daily": null,
     "new": null
    },
    {
-    "term": "순익",
-    "count": 486,
+    "term": "가능성",
+    "count": 36,
     "burst": null,
     "base_daily": null,
     "new": null
    },
    {
-    "term": "잠정실적",
-    "count": 462,
+    "term": "증가",
+    "count": 31,
     "burst": null,
     "base_daily": null,
     "new": null
    },
    {
-    "term": "영업익 순익",
-    "count": 458,
+    "term": "높은",
+    "count": 30,
     "burst": null,
     "base_daily": null,
     "new": null
    },
    {
-    "term": "시가총액",
-    "count": 447,
+    "term": "중국",
+    "count": 30,
     "burst": null,
     "base_daily": null,
     "new": null
    },
    {
-    "term": "순이익",
-    "count": 435,
+    "term": "것으",
+    "count": 30,
     "burst": null,
     "base_daily": null,
     "new": null
    },
    {
-    "term": "예상치",
-    "count": 431,
+    "term": "엔비디아",
+    "count": 30,
     "burst": null,
     "base_daily": null,
     "new": null
    },
    {
-    "term": "연결",
-    "count": 429,
+    "term": "다만",
+    "count": 28,
     "burst": null,
     "base_daily": null,
     "new": null
    },
    {
-    "term": "공시링크",
-    "count": 429,
+    "term": "분석",
+    "count": 28,
     "burst": null,
     "base_daily": null,
     "new": null
    },
    {
-    "term": "기간",
-    "count": 421,
+    "term": "확대",
+    "count": 28,
     "burst": null,
     "base_daily": null,
     "new": null
    },
    {
-    "term": "기업명",
-    "count": 402,
+    "term": "추가",
+    "count": 26,
     "burst": null,
     "base_daily": null,
     "new": null
    },
    {
-    "term": "반기보고서",
-    "count": 401,
+    "term": "주요",
+    "count": 25,
     "burst": null,
     "base_daily": null,
     "new": null
    },
    {
-    "term": "보고서명",
-    "count": 401,
+    "term": "가격",
+    "count": 25,
     "burst": null,
     "base_daily": null,
     "new": null
    },
    {
-    "term": "추이",
-    "count": 393,
+    "term": "핵심",
+    "count": 25,
     "burst": null,
     "base_daily": null,
     "new": null
    },
    {
-    "term": "잠정실적 매출액",
-    "count": 391,
+    "term": "트럼프",
+    "count": 25,
     "burst": null,
     "base_daily": null,
     "new": null
    },
    {
-    "term": "실적속보",
-    "count": 388,
+    "term": "Top",
+    "count": 25,
     "burst": null,
     "base_daily": null,
     "new": null
    },
    {
-    "term": "반기보고서 잠정실적",
-    "count": 386,
+    "term": "일부",
+    "count": 24,
     "burst": null,
     "base_daily": null,
     "new": null
    },
    {
-    "term": "예상치 영업익",
-    "count": 385,
+    "term": "우려",
+    "count": 24,
     "burst": null,
     "base_daily": null,
     "new": null
    },
    {
-    "term": "영업익 예상치",
-    "count": 385,
+    "term": "따르면",
+    "count": 23,
     "burst": null,
     "base_daily": null,
     "new": null
    },
    {
-    "term": "매출액 예상치",
-    "count": 385,
+    "term": "성장",
+    "count": 23,
     "burst": null,
     "base_daily": null,
     "new": null
    },
    {
-    "term": "예상치 순이익",
-    "count": 385,
+    "term": "대통령",
+    "count": 23,
     "burst": null,
     "base_daily": null,
     "new": null
    },
    {
-    "term": "순이익 예상치",
-    "count": 384,
+    "term": "있다고",
+    "count": 23,
     "burst": null,
     "base_daily": null,
     "new": null
    },
    {
-    "term": "추이 기간",
-    "count": 381,
+    "term": "전체",
+    "count": 23,
     "burst": null,
     "base_daily": null,
     "new": null
    },
    {
-    "term": "순익 공시링크",
-    "count": 379,
+    "term": "인프라",
+    "count": 22,
     "burst": null,
     "base_daily": null,
     "new": null
@@ -323,109 +347,434 @@
   ],
   "top_posts": [
    {
-    "channels": 4,
-    "channel": "메리츠증권 리서치",
-    "head": "📮[메리츠증권 전기전자/IT부품 양승수] ▶ 북미 광통신 3사 실적 Review : 800G에서 1.6T, 그리고 NPO/CPO [주요 시사점] ▶ 높아지는 NPO/CPO에 대한 관심 - 이번 미국 광통신 3사의 실적 발표에서 CPO/NPO 도입에 대한 고객 관심이 빠르게 확대되고 있음을 공통적으로 확인 - Coheren…",
-    "url": "https://t.me/meritz_research/44415",
-    "time_kst": "08-14 07:55"
-   },
-   {
-    "channels": 4,
-    "channel": "[신한 리서치본부] IT(반도체/전기전자/디스플레이)",
-    "head": "[신한투자증권 IT소부장/디스플레이 박현우, 김예성] 엘티씨: 2분기 연속 최대 실적 경신 ▶️ Full Capa에 근접한 장비 출하 - 고객사 단위투자 증가율 상회하는 성장 전망 → 26F, 27F 영업이익 9%, 10% 추가 상향 - Y1 클린룸 오픈 내년 2월 예정 → 4분기 PO 본격화 기대 - 장비/소재의 투자…",
-    "url": "https://t.me/c/1355104422/7335",
-    "time_kst": "08-14 07:30"
-   },
-   {
     "channels": 3,
-    "channel": "키움증권 전략/시황 한지영",
-    "head": "[8/14, 장 시작 전 생각: 수급의 퀄리티, 키움 한지영] - 다우 +0.1%, S&P500 +0.7%, 나스닥 +0.8% - 샌디스크 +13.8%, 마이크론 +4.2%, 시스코 -8.4% - WTI 81.0달러, 미 10년물 금리 4.63%, 달러/원 1,418.5원 1. 미국 증시는 강세를 보였습니다. 시스코(-8…",
-    "url": "https://t.me/hedgecat0301/2914",
-    "time_kst": "08-14 07:43"
-   },
-   {
-    "channels": 3,
-    "channel": "다올투자증권 리서치센터",
-    "head": "[다올투자증권 조선/기계/방산 최광식] 8/14(금) 데일리뉴스 🛳 조선 [TradeWinds] HD Hyundai chair warns of fixation on immediate results after string of shipyard deaths Golar LNG lays out 'path' to seven-ves…",
-    "url": "https://t.me/daolresearch/14887",
-    "time_kst": "08-14 08:29"
-   },
-   {
-    "channels": 3,
-    "channel": "메리츠증권 리서치",
-    "head": "📮[메리츠증권 전기전자/IT부품 양승수] 파미셀(005690) : 긍정적인 변화 점검 ▶ 2Q26 Review: 일회성 이슈에도 높은 수익성 유지 - 파미셀의 2Q26 별도 기준 실적은 매출액 390억원(+45.7% YoY), 영업이익 132억원(+62.1% YoY, OPM 33.9%)을 기록, 시장 컨센서스를 각각 1.…",
-    "url": "https://t.me/meritz_research/44414",
-    "time_kst": "08-14 07:44"
-   },
-   {
-    "channels": 3,
-    "channel": "키움증권 리서치센터",
-    "head": "[키움 혁신성장리서치/스몰캡 오현진, 이하곤] ▶️한국공항 (005430) : 저평가 업체의 실적 개선세와 추가 모멘텀 주목 ◎ 국내 최대 지상 조업사의 역대급 실적 - 동사는 한진 그룹 계열의 지상 조업사로 국내 최대 M/S 보유. 대한항공과 진에어의 항공여객, 화물, 정비 관련 서비스를 주 사업으로 영위 - 26년 상…",
-    "url": "https://t.me/KiwoomResearch/23798",
-    "time_kst": "08-14 07:46"
-   },
-   {
-    "channels": 3,
-    "channel": "하나 중국/신흥국 전략 김경환",
-    "head": ">>Quanta, AI 서버 주문 2028년까지… 향후 2년 전망 “exciting” (대만경제일보) •Quanta는 AI 서버 수요가 강하고 주문 가시성이 2028년까지 이어지고 있다며 향후 2년 전망에 대해 “상당히 흥분된다”고 밝혔음. 올해 CAPEX도 기존 300억 대만달러에서 400억 대만달러로 33% 이상 상향…",
-    "url": "https://t.me/HANAchina/67120",
-    "time_kst": "08-14 07:35"
-   },
-   {
-    "channels": 3,
-    "channel": "텐렙",
-    "head": "📌 예스티(시가총액: 6,330억) #A122640 📁 반기보고서 (2026.06) 2026.08.14 09:03:46 (현재가 : 29,300원, +0.69%) 잠정실적 : N 매출액 : 419억(예상치 : 303억, +38.4%) 영업익 : 46억(예상치 : 39억, +17.1%) 순이익 : 19억(예상치 : -) *…",
-    "url": "https://t.me/Ten_level/90293",
-    "time_kst": "08-14 09:04"
-   },
-   {
-    "channels": 3,
-    "channel": "하나 중국/신흥국 전략 김경환",
-    "head": ">>골드만삭스: BOJ 금리 인상 가속 시 엔 캐리 트레이드 추가 청산 가능 •골드만삭스는 일본의 15년 만에 최대 규모 외환시장 개입으로 전술적 엔 캐리 포지션이 크게 감소했지만, 조건이 맞으면 추가 청산 여지가 있다고 밝혔음. 거시경제와 시장 환경이 엔화 강세를 뒷받침할 경우 포지션이 순매수로 전환될 가능성도 상존 •…",
-    "url": "https://t.me/HANAchina/67125",
-    "time_kst": "08-14 08:59"
-   },
-   {
-    "channels": 3,
-    "channel": "SK증권 조선/방산 한승한",
-    "head": "2026.08.14 10:39:37 기업명: 한국카본(시가총액: 1조 2,532억) A017960 보고서명: 반기보고서 (2026.06) 잠정실적 : N 매출액 : 2,434억(예상치 : 2,424억, +0.4%) 영업익 : 504억(예상치 : 485억, +3.9%) 순이익 : 366억(예상치 : 349억, +4.8%)…",
-    "url": "https://t.me/SKSCyclical/1855",
-    "time_kst": "08-14 10:41"
-   },
-   {
-    "channels": 3,
-    "channel": "텐렙",
-    "head": "⚡️⚡️⚡️⚡️⚡️⚡️⚡️⚡️⚡️⚡️⚡️⚡️ 미국 재무장관 스콧 베센트가 현지시간 13일 밤 미국이 이란을 상대로 “전례 없는” 조치를 시행할 것이라고 밝힘. 베센트 장관은 인터뷰에서 “전례 없는 경제적 고립 조치와 호르무즈 해협에 대한 지속적인 봉쇄를 결합해 이란 항구로 들어오고 나가는 모든 통로를 차단할 것입니다. 다…",
-    "url": "https://t.me/Ten_level/90290",
-    "time_kst": "08-14 08:59"
+    "channel": "미국 주식 인사이더 🇺🇸 (US Stocks Insider)",
+    "head": "⚡️⚡️⚡️⚡️⚡️⚡️⚡️⚡️⚡️⚡️⚡️⚡️ “조만간 나는 호르무즈 해협을 미국 영토로 선포할 것이다.”",
+    "url": "https://t.me/insidertracking/61167",
+    "time_kst": "08-15 08:27"
    },
    {
     "channels": 2,
-    "channel": "다올투자증권 리서치센터",
-    "head": "#AMAT 컨퍼런스콜 주요 코멘트 및 Q&A 요약(1) _다올 반도체 고영민 ▶️ 주요 Comments » 실적 및 시장 전망 - 역사상 최고 QoQ 매출 성장률(15.2%) 달성 - 최근 3개월간 연간 매출 성장 전망치를 추가 상향 조정하며 WFE(전체 장비시장) 성장률을 상회할 것으로 전망 - 글로벌 AI 인프라 구축…",
-    "url": "https://t.me/daolresearch/14878",
-    "time_kst": "08-14 07:04"
+    "channel": "서화백의 AI놀이🚀",
+    "head": "📝 텔레그램 심층 분석 Report (11시 07분) 기준 🌡️ 센티먼트 관망 (+10) 💡 요약 AI 산업의 폭발적인 성장 기대와 주요 기업들의 긍정적인 실적/전망이 시장을 주도. 지정학적 리스크 (호르무즈 해협 긴장) 고조와 주요국 경제 지표 둔화 (소비 위축) 우려. 미국 연준 금리 인상 불확실성과 AI 산업 성장…",
+    "url": "https://t.me/easobi_ai/19325",
+    "time_kst": "08-15 11:07"
+   },
+   {
+    "channels": 2,
+    "channel": "서화백의 그림놀이 🚀",
+    "head": "📝 텔레그램 심층 분석 Report (23시 04분) 기준 🌡️ 센티먼트 기대감/관망 (+30) 💡 요약 AI 인프라 및 국내외 반도체 기업들의 긍정적인 실적과 AI 기술 발전 기대감이 시장에 활력을 불어넣었지만, 일부 AI 관련주의 투자 축소 소식과 중동 지정학적 리스크가 잠재적 불안 요인으로 작용하며 상승 폭을 제한하…",
+    "url": "https://t.me/easobi/16424",
+    "time_kst": "08-15 23:04"
+   },
+   {
+    "channels": 2,
+    "channel": "서화백의 AI놀이🚀",
+    "head": "📝 텔레그램 심층 분석 Report (15시 04분) 기준 🌡️ 센티먼트 관망 (-20) 💡 요약 AI 및 반도체 섹터의 견조한 성장세와 기업 실적 개선에도 불구하고, 중동 지정학적 긴장, 미중 기술 갈등, 암호화폐 시장 침체 등 대외 불확실성 증대로 시장은 관망세가 짙다. 🗣️ Top 키워드: AI(20), 반도체(14…",
+    "url": "https://t.me/easobi_ai/19329",
+    "time_kst": "08-15 15:04"
+   },
+   {
+    "channels": 2,
+    "channel": "서화백의 그림놀이 🚀",
+    "head": "📝 텔레그램 심층 분석 Report (19시 04분) 기준 🌡️ 센티먼트 관망 (-25) 💡 요약 AI 및 메모리 반도체 산업의 강력한 수요가 성장을 견인하지만, 미중 기술 갈등, AI 관련 CAPEX 비용 증가, 고금리 및 국내 가계대출 우려 등 거시 경제 및 지정학적 리스크가 시장의 불확실성을 높여 관망세가 짙습니다.…",
+    "url": "https://t.me/easobi/16423",
+    "time_kst": "08-15 19:04"
+   },
+   {
+    "channels": 2,
+    "channel": "서화백의 AI놀이🚀",
+    "head": "📝 텔레그램 심층 분석 Report (07시 04분) 기준 🌡️ 센티먼트 관망 (Caution) (-25) 💡 요약 미국 증시가 소비 지표 부진과 국채금리 상승으로 전반적인 약세를 보였고, 중동발 지정학적 긴장(트럼프의 이란, 호르무즈 해협 발언)과 대형 금융사(Jane Street)의 대규모 손실 소식이 시장의 불확실성…",
+    "url": "https://t.me/easobi_ai/19322",
+    "time_kst": "08-15 07:04"
+   },
+   {
+    "channels": 2,
+    "channel": "서화백의 AI놀이🚀",
+    "head": "2026년 8월 14일 글로벌 마감 시황 브리핑 📈📉 미국 증시는 금요일 장에서 전반적으로 소폭 하락하며 한 주를 마감했습니다. 다우존스 산업평균지수는 107.58포인트(-0.20%) 하락한 53732.41을 기록했습니다. 나스닥 종합지수는 73.86포인트(-0.28%) 내린 26750.19에 마감했으며, S&P 500…",
+    "url": "https://t.me/easobi_ai/19319",
+    "time_kst": "08-15 06:30"
+   },
+   {
+    "channels": 2,
+    "channel": "하나증권 리서치",
+    "head": "DN오토모티브 (007340.KS/매수): 서프라이즈는 2분기로 끝나지 않는다 [하나증권 자동차 Analyst 송선재] ■ 2Q26 Review: 영업이익률 16.4% 기록 - 2분기 실적 시장 기대치 크게 상회, 영업이익 기준 +28% - 매출액/영업이익은 YoY +37%/+69% 1.25조원/2,054억원 - 핵심 연…",
+    "url": "https://t.me/HanaResearch/20234",
+    "time_kst": "08-15 15:47"
+   },
+   {
+    "channels": 2,
+    "channel": "GS의 조선/기계/방산 「바담」",
+    "head": "✈️ Philippines Weighs 32 Eurofighter Typhoons as Indo-Pacific Fighter Race Intensifies ✈️ 인도-태평양 전투기 경쟁 심화 속 필리핀, 유로파이터 타이푼 32대 도입 검토 출처: Defence Security Asia 링크: [https://defence…",
+    "url": "https://t.me/c/1405984327/7896",
+    "time_kst": "08-15 09:48"
    },
    {
     "channels": 2,
     "channel": "허혜민의 제약/바이오 소식통",
-    "head": "26/08/14 (금) 키움 제약바이오 데일리 💊 [제약/바이오 Analyst 허혜민, RA 김종현] 키움 제약/바이오/의료기기 소식통: t.me/huhpharm <‍📈 주요 지수 등락> * 코스피 +3.56% vs 코스피 제약 +0.54% * 코스닥 +0.29% vs 코스닥 제약 +0.5% * S&P500 +0.65%…",
-    "url": "https://t.me/huhpharm/11602",
-    "time_kst": "08-14 07:40"
+    "head": "[키움 허혜민] 경구 비만치료제, 처방 동향 노보의 위고비 경구 주간 처방 약 16.3만 건, 전주 약 17.2만 건에서 감소 Wegovy 전체 처방 중 경구제 비중: 35% → 33%로 하락. 수개월째 대체로 1/3 수준에서 정체 주사제 포함 Wegovy 전체 처방 약 49.6만 건, WoW -1.1% 비만 GLP-1…",
+    "url": "https://t.me/huhpharm/11605",
+    "time_kst": "08-15 15:42"
    },
    {
     "channels": 2,
-    "channel": "[신한 리서치본부] IT(반도체/전기전자/디스플레이)",
-    "head": "[신한투자증권 IT팀 오강호, 김형태, 박현우, 송혜수, 김예성] 8/14(금) 🕗Daily IT 예습하기 ✅ 반도체/장비 ▶️ 2분기 낸드 시장…삼성 1위·SK 2위, YMTC 첫 3위 입성 (ZDNET) https://alie.kr/7x90mKo ▶️ 삼성전자, 美 테일러로 파운드리 승부수…인텔과 맞불 (아이뉴스24)…",
-    "url": "https://t.me/c/1355104422/7336",
-    "time_kst": "08-14 07:42"
+    "channel": "엄브렐라리서치 Jay의 주식투자교실",
+    "head": "삼전 닉스의 영향도 있겠지만 (둘다 서프였나? 아니었던거 같은데?) 한국은 유달리 이번 실적시즌 전후 & 컨센서스 대비로 보더라도 서프라이즈 정도가 매우 큼 (옆나라 대만과도 차이가 큼) 기업이 정말 잘했을수도 있고 or 애널리스트들이 숫자 업데이트를 안해서 나온 결과일수도 있고. (그래서 자꾸 스트릿 넘버를 만들어내나?…",
+    "url": "https://t.me/Jstockclass/15015",
+    "time_kst": "08-15 10:59"
    },
    {
     "channels": 2,
-    "channel": "키움증권 미국주식 톡톡",
-    "head": "[키움 글로벌 ETF 김진영] 🌏글로벌 ETF Daily (8/14) (8/13 종가기준) (Daily Return) 📈 주요 ETF 수익률 (전일대비) *시장 대표 ETF QQQ 1.16% SPY 0.70% DIA 0.14% IWM 0.26% *미국 상승 업종 XLC (통신서비스) 2.07% XLRE (부동산) 1.42…",
-    "url": "https://t.me/kwusa/60276",
-    "time_kst": "08-14 07:53"
+    "channel": "YM리서치",
+    "head": "미국 정부는 애플에게 중국 메모리를 사지말라고 촉구(WSJ) https://www.wsj.com/tech/apple-china-memory-chip-plan-57773a83?mod=mhp",
+    "url": "https://t.me/ym_research/6336",
+    "time_kst": "08-15 10:54"
+   }
+  ]
+ },
+ "community": {
+  "source": "네이버 종목토론실",
+  "universe": 40,
+  "posts": 1141,
+  "search_top": [
+   {
+    "code": "005930",
+    "name": "삼성전자",
+    "rank": 1
+   },
+   {
+    "code": "000660",
+    "name": "SK하이닉스",
+    "rank": 2
+   },
+   {
+    "code": "005380",
+    "name": "현대차",
+    "rank": 3
+   },
+   {
+    "code": "066570",
+    "name": "LG전자",
+    "rank": 4
+   },
+   {
+    "code": "009150",
+    "name": "삼성전기",
+    "rank": 5
+   },
+   {
+    "code": "034020",
+    "name": "두산에너빌리티",
+    "rank": 6
+   },
+   {
+    "code": "035420",
+    "name": "NAVER",
+    "rank": 7
+   },
+   {
+    "code": "042660",
+    "name": "한화오션",
+    "rank": 8
+   },
+   {
+    "code": "006400",
+    "name": "삼성SDI",
+    "rank": 9
+   },
+   {
+    "code": "017670",
+    "name": "SK텔레콤",
+    "rank": 10
+   }
+  ],
+  "hot_stocks": [
+   {
+    "code": "005930",
+    "name": "삼성전자",
+    "posts": 404,
+    "capped": true,
+    "burst": null,
+    "base_daily": null
+   },
+   {
+    "code": "000660",
+    "name": "SK하이닉스",
+    "posts": 298,
+    "capped": true,
+    "burst": null,
+    "base_daily": null
+   },
+   {
+    "code": "080220",
+    "name": "제주반도체",
+    "posts": 129,
+    "capped": true,
+    "burst": null,
+    "base_daily": null
+   },
+   {
+    "code": "066570",
+    "name": "LG전자",
+    "posts": 112,
+    "capped": true,
+    "burst": null,
+    "base_daily": null
+   },
+   {
+    "code": "073240",
+    "name": "금호타이어",
+    "posts": 90,
+    "capped": false,
+    "burst": null,
+    "base_daily": null
+   },
+   {
+    "code": "035420",
+    "name": "NAVER",
+    "posts": 88,
+    "capped": false,
+    "burst": null,
+    "base_daily": null
+   },
+   {
+    "code": "950160",
+    "name": "코오롱티슈진",
+    "posts": 74,
+    "capped": false,
+    "burst": null,
+    "base_daily": null
+   },
+   {
+    "code": "034020",
+    "name": "두산에너빌리티",
+    "posts": 51,
+    "capped": false,
+    "burst": null,
+    "base_daily": null
+   },
+   {
+    "code": "005380",
+    "name": "현대차",
+    "posts": 50,
+    "capped": false,
+    "burst": null,
+    "base_daily": null
+   },
+   {
+    "code": "006400",
+    "name": "삼성SDI",
+    "posts": 42,
+    "capped": false,
+    "burst": null,
+    "base_daily": null
+   },
+   {
+    "code": "042660",
+    "name": "한화오션",
+    "posts": 37,
+    "capped": false,
+    "burst": null,
+    "base_daily": null
+   },
+   {
+    "code": "009150",
+    "name": "삼성전기",
+    "posts": 37,
+    "capped": false,
+    "burst": null,
+    "base_daily": null
+   }
+  ],
+  "keywords": [
+   {
+    "term": "AI",
+    "count": 21,
+    "burst": null,
+    "new": null
+   },
+   {
+    "term": "트럼프",
+    "count": 16,
+    "burst": null,
+    "new": null
+   },
+   {
+    "term": "네이버",
+    "count": 16,
+    "burst": null,
+    "new": null
+   },
+   {
+    "term": "로봇",
+    "count": 15,
+    "burst": null,
+    "new": null
+   },
+   {
+    "term": "반도체",
+    "count": 15,
+    "burst": null,
+    "new": null
+   },
+   {
+    "term": "메모리",
+    "count": 13,
+    "burst": null,
+    "new": null
+   },
+   {
+    "term": "지금",
+    "count": 13,
+    "burst": null,
+    "new": null
+   },
+   {
+    "term": "내가",
+    "count": 12,
+    "burst": null,
+    "new": null
+   },
+   {
+    "term": "머니메이커",
+    "count": 12,
+    "burst": null,
+    "new": null
+   },
+   {
+    "term": "이유",
+    "count": 11,
+    "burst": null,
+    "new": null
+   },
+   {
+    "term": "SK",
+    "count": 11,
+    "burst": null,
+    "new": null
+   },
+   {
+    "term": "안티들",
+    "count": 11,
+    "burst": null,
+    "new": null
+   },
+   {
+    "term": "많이",
+    "count": 10,
+    "burst": null,
+    "new": null
+   },
+   {
+    "term": "이제",
+    "count": 10,
+    "burst": null,
+    "new": null
+   },
+   {
+    "term": "시대",
+    "count": 10,
+    "burst": null,
+    "new": null
+   }
+  ],
+  "top_liked": [
+   {
+    "code": "010170",
+    "name": "대한광통신",
+    "title": "애들아~~~  반기 보고서, 주린이 시...[22]",
+    "views": 1180,
+    "likes": 106,
+    "url": "https://finance.naver.com/item/board_read.naver?code=010170&nid=427885543",
+    "time_kst": "08-15 18:18"
+   },
+   {
+    "code": "010170",
+    "name": "대한광통신",
+    "title": "9억 영업이익?  진짜실력은[14]",
+    "views": 1054,
+    "likes": 95,
+    "url": "https://finance.naver.com/item/board_read.naver?code=010170&nid=427887536",
+    "time_kst": "08-15 23:05"
+   },
+   {
+    "code": "066570",
+    "name": "LG전자",
+    "title": "전고점 돌파는 기정사실 100만원 간다[3]",
+    "views": 1051,
+    "likes": 76,
+    "url": "https://finance.naver.com/item/board_read.naver?code=066570&nid=427888466",
+    "time_kst": "08-16 05:51"
+   },
+   {
+    "code": "066570",
+    "name": "LG전자",
+    "title": "우보 형, LG전자 뉴스기사 정리 팩...[9]",
+    "views": 986,
+    "likes": 74,
+    "url": "https://finance.naver.com/item/board_read.naver?code=066570&nid=427882993",
+    "time_kst": "08-15 13:30"
+   },
+   {
+    "code": "196170",
+    "name": "알테오젠",
+    "title": "코스닥",
+    "views": 708,
+    "likes": 72,
+    "url": "https://finance.naver.com/item/board_read.naver?code=196170&nid=427883551",
+    "time_kst": "08-15 14:24"
+   }
+  ],
+  "top_rising": [
+   {
+    "code": "005930",
+    "name": "삼성전자",
+    "title": "주주환원300조[11]",
+    "views": 2056,
+    "likes": 48,
+    "url": "https://finance.naver.com/item/board_read.naver?code=005930&nid=427888467",
+    "time_kst": "08-16 05:52",
+    "views_per_hour": 265.6
+   },
+   {
+    "code": "066570",
+    "name": "LG전자",
+    "title": "전고점 돌파는 기정사실 100만원 간다[3]",
+    "views": 1051,
+    "likes": 76,
+    "url": "https://finance.naver.com/item/board_read.naver?code=066570&nid=427888466",
+    "time_kst": "08-16 05:51",
+    "views_per_hour": 135.5
+   },
+   {
+    "code": "035420",
+    "name": "NAVER",
+    "title": "네이버 시총이 35조원[5]",
+    "views": 1060,
+    "likes": 18,
+    "url": "https://finance.naver.com/item/board_read.naver?code=035420&nid=427888435",
+    "time_kst": "08-16 05:31",
+    "views_per_hour": 131.0
+   },
+   {
+    "code": "066570",
+    "name": "LG전자",
+    "title": "엘지 이제 부터 시작??[1]",
+    "views": 1352,
+    "likes": 30,
+    "url": "https://finance.naver.com/item/board_read.naver?code=066570&nid=427887385",
+    "time_kst": "08-15 22:39",
+    "views_per_hour": 90.4
+   },
+   {
+    "code": "066570",
+    "name": "LG전자",
+    "title": "엘지전자만을 매매하는 주주입니다.",
+    "views": 881,
+    "likes": 15,
+    "url": "https://finance.naver.com/item/board_read.naver?code=066570&nid=427888313",
+    "time_kst": "08-16 03:50",
+    "views_per_hour": 90.1
    }
   ]
  }
