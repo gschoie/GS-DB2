@@ -17,7 +17,7 @@
 | `etf_signal/` | ETF/섹터 신호 산출 + 텔레그램 발송 (`etf-signal.yml`, 정기 스캔 오전 7시) |
 | `etf_holdings/` | 액티브 ETF 보유종목 변동 감지 리포트 |
 | `market_flow/` | 시장 수급 스크랩 + 리포트 + 텔레그램 (평일 10:00/13:00/15:40/16:40, 하루 4회) |
-| `market_trend/` | 시장관심.내러티브 — 구독 전 채널 하루치를 계량(급증 키워드·전파 수)하고 Gemini 1회로 테마 합성 (`market-trend.yml`, 매일 06:30) |
+| `market_trend/` | 시장관심.내러티브 — 구독 전 채널 하루치를 계량(급증 키워드·전파 수)하고 Gemini 1회로 테마 합성 + 커뮤니티 온도(네이버 종토·디시 갤러리, 순수 파이썬) (`market-trend.yml`, 매일 06:30) |
 | `kospi_consensus/` | 주간 컨센서스 스냅샷 |
 | `valuation/` | 야후 파이낸스 PER·PBR·ROE·PSR — 과거 4개 회계연도(확정) + 컨센(올해·내년), 화면 + 엑셀 (`valuation.yml`, 토 07:00) |
 | `defense_briefing/` | 방산 데일리 브리핑 (Gemini/Claude 브리핑, `claude-brief-*.yml`) |
