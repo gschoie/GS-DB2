@@ -258,9 +258,12 @@ def title_keywords(posts: list[dict], cfg: dict, history: dict, day: str) -> lis
     past = [entry for stamp, entry in sorted(history["days"].items()) if stamp < day][-BASELINE_DAYS:]
     ready = len(past) >= MIN_BASELINE
     total = max(len(posts), 1)
+    max_share = float(cfg.get("max_doc_share") or 0.10)  # 상투어 구조 필터 — trend와 동일
     rows = []
     for term, count in counts.items():
         if count < 5:  # 종토는 도배가 많아 문턱을 텔레그램(3)보다 높인다
+            continue
+        if total >= 50 and count / total > max_share:
             continue
         row = {"term": term, "count": count, "burst": None, "new": None}
         if ready:
