@@ -26,6 +26,19 @@ community:
   delay_sec: 0.3     # 페이지 사이 간격 (네이버 예의)
   extra_codes: []    # 예: [{"005490": POSCO홀딩스}]
 
+# 커뮤니티 온도 2(community_dc.py) — DC인사이드 주식 갤러리.
+# 갤러리 ID가 바뀌면(디시는 종종 바꾼다) 여기만 고치면 된다.
+# minor: true 는 마이너 갤러리(mgallery 주소)라는 뜻.
+community_dc:
+  max_pages: 6       # 갤러리당 일반글 샘플 페이지 상한 (페이지당 ~50글)
+  delay_sec: 0.5     # 페이지 사이 간격
+  galleries:
+    - id: stock_new2
+      name: 주식갤러리
+    - id: stockus
+      name: 해외주식갤러리
+      minor: true
+
 # 걸리면 글 전체를 버리는 광고·리딩방 패턴(정규식). 과하게 잡으면 진짜 뉴스가
 # 사라지므로 확실한 문구만 넣는다.
 ad_patterns:

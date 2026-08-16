@@ -105,12 +105,23 @@ python -m unittest discover -s tests -p "test_*.py" -v
 - 네이버가 러너 IP를 튕기면 이 단계만 조용히 실패한다(continue-on-error) —
   트렌드 리포트·발송은 그대로 나간다. 종토 경로만 시험하려면 워크플로 mode `community`.
 
+## 갤러리 온도 (DC인사이드)
+
+종토가 '종목별 관심'이라면 디시는 '시장 전체 분위기·밈'이다 — 테마 별명(마스가류)이
+먼저 생기는 곳. `community_dc.py`가 날짜 json에 `community_dc` 키를 병합한다.
+
+- 신호: 개념글(추천 상위) · 제목 급증 키워드 · 갤러리 하루 글 수(작성 속도 환산 ≈) ·
+  시간당 조회 상위. 이력은 `state/community_dc_history.json`.
+- 갤러리 목록은 config `community_dc.galleries` — 디시가 갤러리 ID를 바꾸면 여기만 고친다.
+- 네이버와 독립적으로 실패/성공한다(continue-on-error 별도 단계).
+
 ## 파일
 
 | 파일 | 하는 일 |
 |---|---|
 | `trend_daily.py` | 수집 → 계량 → Gemini 합성 → md/json 산출 |
 | `community_naver.py` | 네이버 종토 수집·계량 → 날짜 json에 community 병합 |
+| `community_dc.py` | DC 갤러리 수집·계량 → 날짜 json에 community_dc 병합 |
 | `build_report.py` | 날짜별 json → 대시보드용 단일 HTML |
 | `telegram_send.py` | latest.json → 텔레그램 발송 + 상태 기록 |
 | `config.yml` | 불용어·별칭·광고필터·커뮤니티 설정 — 평소 튜닝하는 유일한 파일 |
