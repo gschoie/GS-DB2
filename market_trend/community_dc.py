@@ -140,6 +140,11 @@ def collect_list(gallery: dict, start: datetime, end: datetime, max_pages: int,
         if collected_pages >= max_pages:
             break
         time.sleep(delay)
+    if not posts and collected_pages == 0:
+        # 절대 상한까지 전부 '창 이후 새 글'이었다 — 정기 시각(창 끝 직후) 실행에선
+        # 일어나지 않고, 몇 시간 늦은 수동 실행에서 초활성 갤러리만 이렇게 된다.
+        print(f"  · [{label}] 창 도달 실패 — 창 이후 새 글이 너무 많음 (늦은 수동 실행에선 정상)",
+              file=sys.stderr)
     return posts, len(posts) > 0
 
 
