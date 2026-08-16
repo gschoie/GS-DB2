@@ -113,6 +113,9 @@ def render_day(payload: dict) -> str:
     community = payload.get("community")
     if community:
         parts.append(render_community(community))
+    dc = payload.get("community_dc")
+    if dc:
+        parts.append(render_dc(dc))
     return "".join(parts)
 
 
@@ -166,6 +169,45 @@ def render_community(community: dict) -> str:
     if ranks:
         parts.append('<p class="note">네이버 검색상위: ' +
                      " · ".join(f"{r['rank']}.{esc(r['name'])}" for r in ranks[:10]) + "</p>")
+    return "".join(parts)
+
+
+def render_dc(dc: dict) -> str:
+    """DC 갤러리 온도 — 시장 전체 분위기·밈. 종토(종목 관심)와 성격이 달라 따로 그린다."""
+    parts = [f'<h2 class="commhead">🎮 갤러리 온도 <span class="commsub">'
+             f'{esc(dc.get("source", ""))} · 샘플 {dc.get("posts_sampled", "?")}글</span></h2>']
+
+    galleries = dc.get("galleries") or []
+    if galleries:
+        chips = []
+        for g in galleries:
+            posts = f"≈{g.get('posts', 0):,}" if g.get("capped") else f"{g.get('posts', 0):,}"
+            burst = f" · {g['burst']}×" if g.get("burst") is not None else ""
+            chips.append(f'<span class="kw">{esc(g.get("name"))} {posts}글{burst}</span>')
+        parts.append(f'<div class="card"><div class="ctitle">갤러리 열기 (하루 글 수)</div>'
+                     f'<div class="kws">{"".join(chips)}</div></div>')
+
+    keywords = dc.get("keywords") or []
+    if keywords:
+        chips = "".join(
+            f'<span class="kw">{esc(k["term"])} {k["count"]}'
+            + (f' · {k["burst"]}×' if k.get("burst") is not None else "") + "</span>"
+            for k in keywords[:12]
+        )
+        parts.append(f'<div class="card"><div class="ctitle">제목 급증 키워드</div><div class="kws">{chips}</div></div>')
+
+    for label, key, meta in (("개념글 (추천 상위)", "top_recommended", lambda p: f"추천 {p.get('recommend', 0)} · 조회 {p.get('views', 0)}"),
+                             ("조회 급상승 글", "top_rising", lambda p: f"시간당 {p.get('views_per_hour', 0)}회 · 조회 {p.get('views', 0)}")):
+        posts = dc.get(key) or []
+        if not posts:
+            continue
+        items = []
+        for p in posts:
+            link = f' <a href="{esc(p["url"])}" target="_blank" rel="noopener">원문</a>' if p.get("url") else ""
+            items.append(f'<li><b>[{esc(p.get("gallery"))}]</b> {esc(p.get("title", ""))} '
+                         f'<span class="pmeta">({meta(p)}){link}</span></li>')
+        parts.append(f'<div class="card"><div class="ctitle">{label}</div>'
+                     '<ul class="posts">' + "".join(items) + "</ul></div>")
     return "".join(parts)
 
 

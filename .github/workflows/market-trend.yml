@@ -85,6 +85,12 @@ jobs:
         continue-on-error: true
         run: python market_trend/community_naver.py
 
+      # 갤러리 온도(디시) — community_dc 키. 네이버와 독립적으로 실패/성공한다.
+      - name: 갤러리 온도 수집
+        if: ${{ !contains(fromJSON('["check","dry-run"]'), inputs.mode || 'run') }}
+        continue-on-error: true
+        run: python market_trend/community_dc.py
+
       # 날짜별 json들을 모아 대시보드용 단일 페이지로 굽는다.
       - name: 리포트 페이지 생성
         if: ${{ !contains(fromJSON('["check","dry-run"]'), inputs.mode || 'run') }}

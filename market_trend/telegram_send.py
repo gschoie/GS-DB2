@@ -78,6 +78,17 @@ def build_message(payload: dict) -> str | None:
             p = liked[0]
             lines.append(f"· 인기글: [{esc(p.get('name'))}] {esc(str(p.get('title', ''))[:60])} (공감 {p.get('likes', 0)})")
 
+    dc = payload.get("community_dc") or {}
+    dc_keywords = dc.get("keywords") or []
+    dc_top = dc.get("top_recommended") or []
+    if dc_keywords or dc_top:
+        lines += ["", "🎮 <b>갤러리</b> (디시)"]
+        if dc_keywords:
+            lines.append("· " + " · ".join(esc(k["term"]) for k in dc_keywords[:6]))
+        if dc_top:
+            p = dc_top[0]
+            lines.append(f"· 개념글: {esc(str(p.get('title', ''))[:60])} (추천 {p.get('recommend', 0)})")
+
     stats = payload.get("stats") or {}
     lines += ["", f"<i>채널 {stats.get('channels', '?')}개 · 글 {stats.get('messages', '?')}건 분석</i>",
               f'상세 › <a href="{DASH_URL}">대시보드</a>', SIGNATURE]
