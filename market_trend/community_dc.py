@@ -114,14 +114,23 @@ def collect_list(gallery: dict, start: datetime, end: datetime, max_pages: int,
     창 끝 이후의 새 글 페이지는 수집 예산을 쓰지 않고 건너간다."""
     posts: list[dict] = []
     collected_pages = 0
+    label = f"{gallery['id']}{'·개념글' if recommend else ''}"
     for page in range(1, max_pages * 4 + 1):
         try:
-            page_posts = parse_list(fetch(gallery_url(gallery, page, recommend)), gallery)
+            html = fetch(gallery_url(gallery, page, recommend))
+            page_posts = parse_list(html, gallery)
         except requests.RequestException as exc:
-            print(f"  ⚠ [{gallery['id']}{'·개념글' if recommend else ''}] p{page} 요청 실패: {exc}",
-                  file=sys.stderr)
+            print(f"  ⚠ [{label}] p{page} 요청 실패: {exc}", file=sys.stderr)
             break
         if not page_posts:
+            if page == 1:
+                # 오류 없이 0건이면 리다이렉트·차단 페이지·마크업 변화 중 하나다.
+                # 어느 쪽인지 로그만으로 알 수 있게 페이지 정황을 남긴다.
+                title = re.search(r"<title>(.*?)</title>", html, re.S)
+                print(f"  · [{label}] p1 파싱 0건 — 페이지 {len(html):,}자 · "
+                      f"title='{(title.group(1).strip()[:60] if title else '?')}' · "
+                      f"ub-content {html.count('ub-content')}개 · gall_date {html.count('gall_date')}개",
+                      file=sys.stderr)
             break
         posts += [p for p in page_posts if start <= p["posted"] < end]
         if any(p["posted"] < start for p in page_posts):
