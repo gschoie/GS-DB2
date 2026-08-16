@@ -3,93 +3,66 @@
  "meta": {
   "window": "08-15 06:00~08-16 06:00 KST",
   "engine": "Gemini(gemini-2.5-flash)",
-  "generated_at": "2026-08-16T13:35+09:00"
+  "generated_at": "2026-08-16T17:31+09:00"
  },
  "stats": {
   "channels": 37,
-  "messages": 244,
-  "groups": 231
+  "messages": 241,
+  "groups": 228
  },
- "one_liner": "AI 및 반도체 섹터의 성장 기대에도 불구하고, 지정학적 긴장, 미중 기술 갈등, 거시 경제 지표 둔화 등 대외 불확실성 증대로 시장은 관망세가 짙다.",
+ "one_liner": "AI 산업의 성장 기대감과 반도체 기업들의 긍정적인 실적이 시장을 주도했으나, 중동 지정학적 리스크와 미국 소비 둔화 우려가 상승 폭을 제한했습니다.",
  "themes": [
   {
-   "name": "AI·반도체 - 성장 기대와 리스크 공존",
-   "narrative": "AI 및 반도체 산업은 폭발적인 성장 기대와 주요 기업들의 긍정적인 실적/전망으로 시장을 주도하고 있으나, 일부 AI 관련주의 투자 축소 소식, CAPEX 비용 증가 우려, 그리고 미중 기술 갈등 등 지정학적 리스크가 상승 폭을 제한하며 시장은 관망세를 보이고 있다.",
+   "name": "AI/반도체 — 성장 기대와 조정 압력 공존",
+   "narrative": "AI 인프라 및 반도체 기업들의 긍정적인 실적과 AI 기술 발전 기대감이 시장에 활력을 불어넣고 있으나, 일부 AI 관련주의 투자 축소 소식과 레버리지 위험, 데이터센터 투자 규모 축소 등 조정 압력도 동시에 작용하고 있습니다.",
    "status": "ongoing",
    "strength": 5,
    "keywords": [
     "AI",
-    "반도체",
-    "엔비디아",
     "인프라",
-    "성장",
-    "증가",
-    "가능성",
-    "높은",
-    "확대",
-    "일부",
-    "우려",
-    "주요"
+    "반도체",
+    "데이터센터",
+    "모델",
+    "투자자들",
+    "대규모",
+    "실제"
    ],
    "evidence": [
-    {
-     "channel": "서화백의 AI놀이🚀",
-     "quote": "💡 요약 AI 산업의 폭발적인 성장 기대와 주요 기업들의 긍정적인 실적/전망이 시장을 주도. 지정학적 리스크 (호르무즈 해협 긴장) 고조와 주요국 경제 지표 둔화 (소비 위축) 우려. 미국 연준 금리 인상 불확실성과 AI 산업 성장 명암 교차로 관망세."
-    },
     {
      "channel": "서화백의 그림놀이 🚀",
      "quote": "💡 요약 AI 인프라 및 국내외 반도체 기업들의 긍정적인 실적과 AI 기술 발전 기대감이 시장에 활력을 불어넣었지만, 일부 AI 관련주의 투자 축소 소식과 중동 지정학적 리스크가 잠재적 불안 요인으로 작용하며 상승 폭을 제한하고 있습니다."
     },
     {
      "channel": "빠르고 정확한 주식정보방",
-     "quote": "AI CapEx 방향은 여전히 강합니다. LSEG 기준 주요 5개 기업의 올해 CapEx 컨센서스는 1월 약 4,850억달러에서 7월 약 7,300억달러로 급증했습니다. Reuters는 이번 주말 전망에서도 주요 hyperscaler의 올해 투자액이 7,000억달러를 넘어설 것으로 보고 있습니다."
+     "quote": "따라서 현재 AI 조정의 우선순위는 ① 기대치·밸류에이션 ② 최근 급등 이후 포지션 조정 ③ 금리·유가 부담이며, 실제 AI 인프라 주문 감소는 아직 1순위 원인으로 확인되지 않습니다. 다만 좋은 실적에도 주가가 계속 하락한다면 앞으로는 펀더멘털보다 멀티플 압축이 더 중요한 변수가 될 수 있습니다."
+    },
+    {
+     "channel": "서화백의 AI놀이🚀",
+     "quote": "오픈AI 데이터센터 금융 보증 축소, SpaceX 지분 보유 관련 순환금융 논란, 오픈AI 데이터센터 투자 규모 축소"
     }
    ]
   },
   {
-   "name": "미중 기술 갈등 - 반도체 공급망 압박",
-   "narrative": "미국 정부가 중국산 메모리 반도체 구매 자제를 촉구하며 미중 기술 갈등이 심화되고 있다. 이는 AI 및 반도체 산업의 공급망 불확실성을 높이는 요인으로 작용하며 시장에 부담을 주고 있다.",
+   "name": "중동 지정학적 긴장 고조 및 유가 상승",
+   "narrative": "호르무즈 해협을 둘러싼 지정학적 긴장이 고조되고 러시아의 흑해 원유 수출 터미널 운영 중단 소식이 전해지면서 유가가 상승, 시장에 잠재적 불안 요인으로 작용하고 있습니다.",
    "status": "ongoing",
    "strength": 4,
    "keywords": [
-    "중국",
-    "반도체",
-    "트럼프"
-   ],
-   "evidence": [
-    {
-     "channel": "서화백의 AI놀이🚀",
-     "quote": "미국 정부 중국 메모리 구매 자제 촉구, 미국 정부 AAPL에게 중국 메모리를 사지말라고 촉구"
-    },
-    {
-     "channel": "YM리서치",
-     "quote": "미국 정부는 애플에게 중국 메모리를 사지말라고 촉구(WSJ)"
-    },
-    {
-     "channel": "서화백의 그림놀이 🚀",
-     "quote": "미국 정부의 중국산 메모리 반도체 구매 제동, DeFiLlama 가짜 앱 관련 보안 문제 및 자금 도난 발생, 제프리스 투자의견 하향"
-    }
-   ]
-  },
-  {
-   "name": "지정학적 리스크 - 호르무즈 해협 긴장 및 에너지 불안",
-   "narrative": "호르무즈 해협을 미국 영토로 선포하겠다는 발언 등 지정학적 긴장이 고조되고 있으며, 이는 중동 리스크와 함께 유가 상승 압력으로 이어지고 있다. 러시아의 에너지 핵심 인프라 운영 중단 소식도 글로벌 에너지 시장의 불안감을 가중시키고 있다.",
-   "status": "ongoing",
-   "strength": 5,
-   "keywords": [
-    "트럼프",
-    "핵심",
-    "가격",
-    "우려"
+    "호르무즈",
+    "해협",
+    "이란",
+    "중동",
+    "리스크",
+    "유가"
    ],
    "evidence": [
     {
      "channel": "미국 주식 인사이더 🇺🇸 (US Stocks Insider)",
-     "quote": "⚡️⚡️⚡️⚡️⚡️⚡️⚡️⚡️⚡️⚡️⚡️⚡️ “조만간 나는 호르무즈 해협을 미국 영토로 선포할 것이다.”"
+     "quote": "“조만간 나는 호르무즈 해협을 미국 영토로 선포할 것이다.”"
     },
     {
      "channel": "서화백의 AI놀이🚀",
-     "quote": "💡 요약 미국 증시가 소비 지표 부진과 국채금리 상승으로 전반적인 약세를 보였고, 중동발 지정학적 긴장(트럼프의 이란, 호르무즈 해협 발언)과 대형 금융사(Jane Street)의 대규모 손실 소식이 시장의 불확실성을 키웠습니다."
+     "quote": "💡 요약 AI 산업의 폭발적인 성장 기대와 주요 기업들의 긍정적인 실적/전망이 시장을 주도. 지정학적 리스크 (호르무즈 해협 긴장) 고조와 주요국 경제 지표 둔화 (소비 위축) 우려. 미국 연준 금리 인상 불확실성과 AI 산업 성장 명암 교차로 관망세."
     },
     {
      "channel": "미국 주식 인사이더 🇺🇸 (US Stocks Insider)",
@@ -98,42 +71,59 @@
    ]
   },
   {
-   "name": "거시 경제 - 소비 둔화 및 금리 불확실성",
-   "narrative": "7월 소매판매가 시장 예상치를 크게 하회하며 3분기 GDP 성장률 하향 조정 가능성이 제기되었다. CPI·PPI 둔화에도 불구하고 소비 지표 약세가 이어지면서 연준의 금리 인상 불확실성과 고금리 우려가 시장의 관망세를 심화시키고 있다.",
+   "name": "미국 소비 둔화와 Fed 금리 인상 불확실성",
+   "narrative": "예상치를 크게 하회한 7월 소매판매 지표와 약화된 소비심리가 Fed의 9월 금리 인상 가능성을 낮췄지만, 이는 동시에 경기 둔화 신호로 해석되며 시장의 하방 압력으로 작용했습니다.",
    "status": "ongoing",
    "strength": 4,
    "keywords": [
-    "가능성",
-    "증가",
-    "높은",
-    "다만",
-    "우려",
-    "성장",
-    "것으",
-    "주요"
+    "소비",
+    "금리",
+    "향후",
+    "영향",
+    "S&P",
+    "반면"
    ],
    "evidence": [
+    {
+     "channel": "빠르고 정확한 주식정보방",
+     "quote": "📉 미국 소비 — 이날 가장 중요한 Macro"
+    },
     {
      "channel": "서화백의 AI놀이🚀",
      "quote": "7월 소매판매는 전월 대비 0.6% 감소하며 시장 예상치(0.2% 증가)를 크게 하회했습니다. 자동차를 제외한 소매판매 역시 0.3% 감소했습니다. 이는 3분기 국내총생산(GDP) 성장률 전망치 하향 조정으로 이어질 수 있습니다."
     },
     {
-     "channel": "서화백의 AI놀이🚀",
-     "quote": "💡 요약 AI 산업의 폭발적인 성장 기대와 주요 기업들의 긍정적인 실적/전망이 시장을 주도. 지정학적 리스크 (호르무즈 해협 긴장) 고조와 주요국 경제 지표 둔화 (소비 위축) 우려. 미국 연준 금리 인상 불확실성과 AI 산업 성장 명암 교차로 관망세."
-    },
-    {
      "channel": "빠르고 정확한 주식정보방",
-     "quote": "최근 CPI·PPI 둔화에 이어 소비까지 약해지면서 Fed가 9월에 추가 인상을 해야 할 명분은 약해지고 있습니다. 다만 이는 Goldilocks보다 “물가는 아직 높은데 소비가 먼저 둔화되는 상황”에 가까워졌다는 점에서 무조건적인 증시 호재는 아닙니다."
+     "quote": "미국 증시는 약한 소비와 소비심리 악화가 Fed의 9월 금리인상 가능성을 더 낮췄지만, 이를 경기둔화 신호로 받아들이면서 S&P500·Nasdaq·Dow는 소폭 하락했습니다."
     }
    ]
   },
   {
-   "name": "비만 치료제 - 경구제 처방 비중 정체",
-   "narrative": "노보 노디스크의 경구용 비만 치료제 위고비의 주간 처방 건수가 소폭 감소했으며, 전체 위고비 처방에서 경구제의 비중이 33%로 하락하며 수개월째 1/3 수준에서 정체되고 있다. 이는 경구제 전환 속도에 대한 시장의 관심이 지속될 것임을 시사한다.",
-   "status": "ongoing",
+   "name": "방산/항공 — 인도-태평양 전투기 경쟁 심화",
+   "narrative": "필리핀이 유로파이터 타이푼 32대 도입을 검토하는 등 인도-태평양 지역에서 전투기 도입 경쟁이 심화되고 있으며, 이는 방산 및 항공 산업에 대한 관심을 높이고 있습니다.",
+   "status": "new",
    "strength": 3,
    "keywords": [
-    "전체"
+    "필리핀",
+    "전투기",
+    "방산"
+   ],
+   "evidence": [
+    {
+     "channel": "GS의 조선/기계/방산 「바담」",
+     "quote": "✈️ Philippines Weighs 32 Eurofighter Typhoons as Indo-Pacific Fighter Race Intensifies ✈️ 인도-태평양 전투기 경쟁 심화 속 필리핀, 유로파이터 타이푼 32대 도입 검토 출처: Defence Security Asia 링크: [https://defence…"
+    }
+   ]
+  },
+  {
+   "name": "제약/바이오 — 경구 비만치료제 처방 비중 정체",
+   "narrative": "노보 노디스크의 비만 치료제 위고비(Wegovy)의 경구제 처방 비중이 수개월째 1/3 수준에서 정체되고 있으며, 전체 처방 건수도 소폭 감소하는 등 시장 동향에 변화가 감지됩니다.",
+   "status": "ongoing",
+   "strength": 2,
+   "keywords": [
+    "Wegovy",
+    "경구제",
+    "비중"
    ],
    "evidence": [
     {
@@ -141,205 +131,197 @@
      "quote": "[키움 허혜민] 경구 비만치료제, 처방 동향 노보의 위고비 경구 주간 처방 약 16.3만 건, 전주 약 17.2만 건에서 감소 Wegovy 전체 처방 중 경구제 비중: 35% → 33%로 하락. 수개월째 대체로 1/3 수준에서 정체 주사제 포함 Wegovy 전체 처방 약 49.6만 건, WoW -1.1% 비만 GLP-1…"
     }
    ]
-  },
-  {
-   "name": "방산 - 필리핀 유로파이터 타이푼 도입 검토",
-   "narrative": "필리핀이 인도-태평양 지역 전투기 경쟁 심화 속에서 유로파이터 타이푼 32대 도입을 검토하고 있다. 2026년 계약 체결 시 2028년 초도 인도 가능성이 제기되나, 기종 선정 및 정부 재정 확보 여부에 따라 인도 일정 변동 가능성이 존재한다.",
-   "status": "new",
-   "strength": 3,
-   "keywords": [
-    "가능성",
-    "전체"
-   ],
-   "evidence": [
-    {
-     "channel": "GS의 조선/기계/방산 「바담」",
-     "quote": "✈️ Philippines Weighs 32 Eurofighter Typhoons as Indo-Pacific Fighter Race Intensifies ✈️ 인도-태평양 전투기 경쟁 심화 속 필리핀, 유로파이터 타이푼 32대 도입 검토 출처: Defence Security Asia 링크: [https://defence…"
-    },
-    {
-     "channel": "GS의 조선/기계/방산 「바담」",
-     "quote": "* 2026년 계약 체결 시 2028년 초도 인도 가능성이 제기되었으나, 기종 선정 미확정 및 정부 재정 확보 여부에 따라 인도 일정 변동 가능"
-    },
-    {
-     "channel": "GS의 조선/기계/방산 「바담」",
-     "quote": "* 필리핀 전체 전투기 소요는 약 40대로 논의되는 반면, 레오나르도의 공식 제안 규모는 최대 32대로 집계"
-    }
-   ]
   }
  ],
+ "community_mood": {
+  "score": 30,
+  "summary": "개인 투자자들은 LG전자와 대한광통신 등 특정 종목의 실적 개선 및 성장 잠재력에 강한 기대감을 보이고 있으며, 동시에 해외 주식 ETF 투자와 워런 버핏 조언 등 장기적이고 안정적인 투자 전략에도 관심을 기울이고 있습니다.",
+  "hot_stocks": [
+   {
+    "name": "LG전자",
+    "score": 80,
+    "reason": "전고점 돌파와 실적 개선에 대한 강한 기대감."
+   },
+   {
+    "name": "대한광통신",
+    "score": 70,
+    "reason": "반기 보고서 상의 영업이익 개선 등 실적에 주목하며 긍정적인 평가."
+   }
+  ]
+ },
  "signals": {
   "spikes": [
    {
-    "term": "AI",
-    "count": 80,
-    "burst": null,
-    "base_daily": null,
-    "new": null
-   },
-   {
-    "term": "반도체",
-    "count": 38,
-    "burst": null,
-    "base_daily": null,
-    "new": null
-   },
-   {
-    "term": "가능성",
-    "count": 36,
-    "burst": null,
-    "base_daily": null,
-    "new": null
-   },
-   {
-    "term": "증가",
-    "count": 31,
-    "burst": null,
-    "base_daily": null,
-    "new": null
-   },
-   {
-    "term": "높은",
-    "count": 30,
-    "burst": null,
-    "base_daily": null,
-    "new": null
-   },
-   {
-    "term": "중국",
-    "count": 30,
-    "burst": null,
-    "base_daily": null,
-    "new": null
-   },
-   {
-    "term": "것으",
-    "count": 30,
-    "burst": null,
-    "base_daily": null,
-    "new": null
-   },
-   {
-    "term": "엔비디아",
-    "count": 30,
-    "burst": null,
-    "base_daily": null,
-    "new": null
-   },
-   {
-    "term": "다만",
-    "count": 28,
-    "burst": null,
-    "base_daily": null,
-    "new": null
-   },
-   {
-    "term": "분석",
-    "count": 28,
-    "burst": null,
-    "base_daily": null,
-    "new": null
-   },
-   {
-    "term": "확대",
-    "count": 28,
-    "burst": null,
-    "base_daily": null,
-    "new": null
-   },
-   {
-    "term": "추가",
-    "count": 26,
-    "burst": null,
-    "base_daily": null,
-    "new": null
-   },
-   {
-    "term": "주요",
-    "count": 25,
-    "burst": null,
-    "base_daily": null,
-    "new": null
-   },
-   {
-    "term": "가격",
-    "count": 25,
-    "burst": null,
-    "base_daily": null,
-    "new": null
-   },
-   {
-    "term": "핵심",
-    "count": 25,
-    "burst": null,
-    "base_daily": null,
-    "new": null
-   },
-   {
-    "term": "트럼프",
-    "count": 25,
-    "burst": null,
-    "base_daily": null,
-    "new": null
-   },
-   {
-    "term": "Top",
-    "count": 25,
-    "burst": null,
-    "base_daily": null,
-    "new": null
-   },
-   {
-    "term": "일부",
-    "count": 24,
-    "burst": null,
-    "base_daily": null,
-    "new": null
-   },
-   {
-    "term": "우려",
-    "count": 24,
-    "burst": null,
-    "base_daily": null,
-    "new": null
-   },
-   {
-    "term": "따르면",
-    "count": 23,
-    "burst": null,
-    "base_daily": null,
-    "new": null
-   },
-   {
-    "term": "성장",
-    "count": 23,
-    "burst": null,
-    "base_daily": null,
-    "new": null
-   },
-   {
-    "term": "대통령",
-    "count": 23,
-    "burst": null,
-    "base_daily": null,
-    "new": null
-   },
-   {
-    "term": "있다고",
-    "count": 23,
-    "burst": null,
-    "base_daily": null,
-    "new": null
-   },
-   {
-    "term": "전체",
-    "count": 23,
-    "burst": null,
-    "base_daily": null,
-    "new": null
-   },
-   {
     "term": "인프라",
     "count": 22,
+    "burst": null,
+    "base_daily": null,
+    "new": null
+   },
+   {
+    "term": "가장",
+    "count": 21,
+    "burst": null,
+    "base_daily": null,
+    "new": null
+   },
+   {
+    "term": "다른",
+    "count": 21,
+    "burst": null,
+    "base_daily": null,
+    "new": null
+   },
+   {
+    "term": "호르무즈",
+    "count": 21,
+    "burst": null,
+    "base_daily": null,
+    "new": null
+   },
+   {
+    "term": "반면",
+    "count": 20,
+    "burst": null,
+    "base_daily": null,
+    "new": null
+   },
+   {
+    "term": "향후",
+    "count": 20,
+    "burst": null,
+    "base_daily": null,
+    "new": null
+   },
+   {
+    "term": "에서",
+    "count": 20,
+    "burst": null,
+    "base_daily": null,
+    "new": null
+   },
+   {
+    "term": "호르무즈 해협",
+    "count": 20,
+    "burst": null,
+    "base_daily": null,
+    "new": null
+   },
+   {
+    "term": "해협",
+    "count": 20,
+    "burst": null,
+    "base_daily": null,
+    "new": null
+   },
+   {
+    "term": "데이터센터",
+    "count": 20,
+    "burst": null,
+    "base_daily": null,
+    "new": null
+   },
+   {
+    "term": "실제",
+    "count": 19,
+    "burst": null,
+    "base_daily": null,
+    "new": null
+   },
+   {
+    "term": "요약",
+    "count": 19,
+    "burst": null,
+    "base_daily": null,
+    "new": null
+   },
+   {
+    "term": "투자자들",
+    "count": 19,
+    "burst": null,
+    "base_daily": null,
+    "new": null
+   },
+   {
+    "term": "보유",
+    "count": 19,
+    "burst": null,
+    "base_daily": null,
+    "new": null
+   },
+   {
+    "term": "인사이더",
+    "count": 19,
+    "burst": null,
+    "base_daily": null,
+    "new": null
+   },
+   {
+    "term": "해당",
+    "count": 18,
+    "burst": null,
+    "base_daily": null,
+    "new": null
+   },
+   {
+    "term": "비중",
+    "count": 18,
+    "burst": null,
+    "base_daily": null,
+    "new": null
+   },
+   {
+    "term": "S&P",
+    "count": 18,
+    "burst": null,
+    "base_daily": null,
+    "new": null
+   },
+   {
+    "term": "가운데",
+    "count": 18,
+    "burst": null,
+    "base_daily": null,
+    "new": null
+   },
+   {
+    "term": "영향",
+    "count": 18,
+    "burst": null,
+    "base_daily": null,
+    "new": null
+   },
+   {
+    "term": "보도",
+    "count": 18,
+    "burst": null,
+    "base_daily": null,
+    "new": null
+   },
+   {
+    "term": "이란",
+    "count": 18,
+    "burst": null,
+    "base_daily": null,
+    "new": null
+   },
+   {
+    "term": "협상",
+    "count": 18,
+    "burst": null,
+    "base_daily": null,
+    "new": null
+   },
+   {
+    "term": "대규모",
+    "count": 18,
+    "burst": null,
+    "base_daily": null,
+    "new": null
+   },
+   {
+    "term": "모델",
+    "count": 18,
     "burst": null,
     "base_daily": null,
     "new": null
@@ -435,7 +417,7 @@
  "community": {
   "source": "네이버 종목토론실",
   "universe": 40,
-  "posts": 1115,
+  "posts": 1066,
   "search_top": [
    {
     "code": "005930",
@@ -453,13 +435,13 @@
     "rank": 3
    },
    {
-    "code": "066570",
-    "name": "LG전자",
+    "code": "009150",
+    "name": "삼성전기",
     "rank": 4
    },
    {
-    "code": "009150",
-    "name": "삼성전기",
+    "code": "066570",
+    "name": "LG전자",
     "rank": 5
    },
    {
@@ -468,18 +450,18 @@
     "rank": 6
    },
    {
+    "code": "006400",
+    "name": "삼성SDI",
+    "rank": 7
+   },
+   {
     "code": "035420",
     "name": "NAVER",
-    "rank": 7
+    "rank": 8
    },
    {
     "code": "042660",
     "name": "한화오션",
-    "rank": 8
-   },
-   {
-    "code": "006400",
-    "name": "삼성SDI",
     "rank": 9
    },
    {
@@ -490,17 +472,9 @@
   ],
   "hot_stocks": [
    {
-    "code": "000660",
-    "name": "SK하이닉스",
-    "posts": 300,
-    "capped": true,
-    "burst": null,
-    "base_daily": null
-   },
-   {
     "code": "080220",
     "name": "제주반도체",
-    "posts": 126,
+    "posts": 132,
     "capped": true,
     "burst": null,
     "base_daily": null
@@ -524,8 +498,8 @@
    {
     "code": "035420",
     "name": "NAVER",
-    "posts": 95,
-    "capped": true,
+    "posts": 88,
+    "capped": false,
     "burst": null,
     "base_daily": null
    },
@@ -538,16 +512,16 @@
     "base_daily": null
    },
    {
-    "code": "034020",
-    "name": "두산에너빌리티",
-    "posts": 51,
+    "code": "005380",
+    "name": "현대차",
+    "posts": 50,
     "capped": false,
     "burst": null,
     "base_daily": null
    },
    {
-    "code": "005380",
-    "name": "현대차",
+    "code": "034020",
+    "name": "두산에너빌리티",
     "posts": 50,
     "capped": false,
     "burst": null,
@@ -572,7 +546,7 @@
    {
     "code": "009150",
     "name": "삼성전기",
-    "posts": 37,
+    "posts": 35,
     "capped": false,
     "burst": null,
     "base_daily": null
@@ -584,18 +558,26 @@
     "capped": false,
     "burst": null,
     "base_daily": null
+   },
+   {
+    "code": "196170",
+    "name": "알테오젠",
+    "posts": 32,
+    "capped": false,
+    "burst": null,
+    "base_daily": null
    }
   ],
   "keywords": [
    {
     "term": "AI",
-    "count": 19,
+    "count": 18,
     "burst": null,
     "new": null
    },
    {
-    "term": "로봇",
-    "count": 18,
+    "term": "반도체",
+    "count": 17,
     "burst": null,
     "new": null
    },
@@ -606,14 +588,14 @@
     "new": null
    },
    {
-    "term": "반도체",
-    "count": 16,
+    "term": "로봇",
+    "count": 15,
     "burst": null,
     "new": null
    },
    {
     "term": "네이버",
-    "count": 14,
+    "count": 15,
     "burst": null,
     "new": null
    },
@@ -624,14 +606,8 @@
     "new": null
    },
    {
-    "term": "지금",
-    "count": 12,
-    "burst": null,
-    "new": null
-   },
-   {
     "term": "엔비디아",
-    "count": 12,
+    "count": 13,
     "burst": null,
     "new": null
    },
@@ -660,12 +636,6 @@
     "new": null
    },
    {
-    "term": "SK",
-    "count": 11,
-    "burst": null,
-    "new": null
-   },
-   {
     "term": "안티들",
     "count": 11,
     "burst": null,
@@ -676,6 +646,18 @@
     "count": 10,
     "burst": null,
     "new": null
+   },
+   {
+    "term": "이제",
+    "count": 9,
+    "burst": null,
+    "new": null
+   },
+   {
+    "term": "대박",
+    "count": 9,
+    "burst": null,
+    "new": null
    }
   ],
   "top_liked": [
@@ -683,17 +665,17 @@
     "code": "010170",
     "name": "대한광통신",
     "title": "애들아~~~  반기 보고서, 주린이 시...[22]",
-    "views": 1249,
-    "likes": 109,
+    "views": 1377,
+    "likes": 112,
     "url": "https://finance.naver.com/item/board_read.naver?code=010170&nid=427885543",
     "time_kst": "08-15 18:18"
    },
    {
     "code": "010170",
     "name": "대한광통신",
-    "title": "9억 영업이익?  진짜실력은[14]",
-    "views": 1130,
-    "likes": 97,
+    "title": "9억 영업이익?  진짜실력은[15]",
+    "views": 1196,
+    "likes": 100,
     "url": "https://finance.naver.com/item/board_read.naver?code=010170&nid=427887536",
     "time_kst": "08-15 23:05"
    },
@@ -701,8 +683,8 @@
     "code": "066570",
     "name": "LG전자",
     "title": "전고점 돌파는 기정사실 100만원 간다[3]",
-    "views": 1091,
-    "likes": 78,
+    "views": 1103,
+    "likes": 79,
     "url": "https://finance.naver.com/item/board_read.naver?code=066570&nid=427888466",
     "time_kst": "08-16 05:51"
    },
@@ -710,8 +692,8 @@
     "code": "066570",
     "name": "LG전자",
     "title": "우보 형, LG전자 뉴스기사 정리 팩...[9]",
-    "views": 988,
-    "likes": 74,
+    "views": 990,
+    "likes": 75,
     "url": "https://finance.naver.com/item/board_read.naver?code=066570&nid=427882993",
     "time_kst": "08-15 13:30"
    },
@@ -719,7 +701,7 @@
     "code": "196170",
     "name": "알테오젠",
     "title": "코스닥",
-    "views": 722,
+    "views": 731,
     "likes": 72,
     "url": "https://finance.naver.com/item/board_read.naver?code=196170&nid=427883551",
     "time_kst": "08-15 14:24"
@@ -729,52 +711,52 @@
    {
     "code": "035420",
     "name": "NAVER",
-    "title": "네이버 시총이 35조원[7]",
-    "views": 1187,
-    "likes": 21,
+    "title": "네이버 시총이 35조원[8]",
+    "views": 1329,
+    "likes": 22,
     "url": "https://finance.naver.com/item/board_read.naver?code=035420&nid=427888435",
     "time_kst": "08-16 05:31",
-    "views_per_hour": 123.6
+    "views_per_hour": 110.8
    },
    {
     "code": "066570",
     "name": "LG전자",
     "title": "전고점 돌파는 기정사실 100만원 간다[3]",
-    "views": 1091,
-    "likes": 78,
+    "views": 1103,
+    "likes": 79,
     "url": "https://finance.naver.com/item/board_read.naver?code=066570&nid=427888466",
     "time_kst": "08-16 05:51",
-    "views_per_hour": 117.7
-   },
-   {
-    "code": "066570",
-    "name": "LG전자",
-    "title": "엘지전자만을 매매하는 주주입니다.",
-    "views": 1005,
-    "likes": 15,
-    "url": "https://finance.naver.com/item/board_read.naver?code=066570&nid=427888313",
-    "time_kst": "08-16 03:50",
-    "views_per_hour": 89.0
+    "views_per_hour": 94.6
    },
    {
     "code": "034020",
     "name": "두산에너빌리티",
     "title": "화요일[4]",
-    "views": 1487,
-    "likes": 37,
+    "views": 1657,
+    "likes": 40,
     "url": "https://finance.naver.com/item/board_read.naver?code=034020&nid=427887035",
     "time_kst": "08-15 21:46",
-    "views_per_hour": 85.7
+    "views_per_hour": 83.9
+   },
+   {
+    "code": "066570",
+    "name": "LG전자",
+    "title": "23만~25만원대[10]",
+    "views": 2316,
+    "likes": 43,
+    "url": "https://finance.naver.com/item/board_read.naver?code=066570&nid=427882054",
+    "time_kst": "08-15 11:54",
+    "views_per_hour": 78.2
    },
    {
     "code": "009150",
     "name": "삼성전기",
-    "title": "반도체 폭등, 화요일 몰빵 들어갑니다.",
-    "views": 959,
-    "likes": 15,
-    "url": "https://finance.naver.com/item/board_read.naver?code=009150&nid=427888316",
-    "time_kst": "08-16 03:54",
-    "views_per_hour": 85.5
+    "title": "주당배당금 3만원[1]",
+    "views": 1791,
+    "likes": 12,
+    "url": "https://finance.naver.com/item/board_read.naver?code=009150&nid=427885596",
+    "time_kst": "08-15 18:25",
+    "views_per_hour": 77.6
    }
   ]
  },
@@ -782,9 +764,9 @@
   "source": "DC인사이드",
   "galleries": [
    {
-    "id": "stock_new2",
-    "name": "주식갤러리",
-    "posts": 203,
+    "id": "krstock",
+    "name": "국내주식갤러리",
+    "posts": 0,
     "capped": false,
     "burst": null,
     "base_daily": null
@@ -798,99 +780,50 @@
     "base_daily": null
    }
   ],
-  "posts_sampled": 203,
-  "keywords": [
-   {
-    "term": "한국",
-    "count": 8,
-    "burst": null,
-    "new": null
-   },
-   {
-    "term": "이재명",
-    "count": 7,
-    "burst": null,
-    "new": null
-   },
-   {
-    "term": "국힘",
-    "count": 7,
-    "burst": null,
-    "new": null
-   },
-   {
-    "term": "하영",
-    "count": 6,
-    "burst": null,
-    "new": null
-   },
-   {
-    "term": "친일파",
-    "count": 6,
-    "burst": null,
-    "new": null
-   },
-   {
-    "term": "AI",
-    "count": 5,
-    "burst": null,
-    "new": null
-   },
-   {
-    "term": "광복절",
-    "count": 5,
-    "burst": null,
-    "new": null
-   },
-   {
-    "term": "북한",
-    "count": 5,
-    "burst": null,
-    "new": null
-   }
-  ],
+  "posts_sampled": 0,
+  "keywords": [],
   "top_recommended": [
    {
     "gallery": "해외주식갤러리",
     "title": "voo 사면 장점.jpg",
-    "views": 15108,
-    "recommend": 267,
+    "views": 15410,
+    "recommend": 274,
     "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=17445166&exception_mode=recommend&page=1",
     "time_kst": "08-15 11:57"
    },
    {
     "gallery": "해외주식갤러리",
     "title": "홈플러스 세금으로 살려준거였음 시발 ㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋ",
-    "views": 14567,
-    "recommend": 242,
+    "views": 15060,
+    "recommend": 250,
     "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=17447618&exception_mode=recommend&page=1",
     "time_kst": "08-15 17:24"
    },
    {
     "gallery": "해외주식갤러리",
     "title": "구걸 안통하니 이젠 저주까지 하는새끼 .jpg",
-    "views": 14991,
-    "recommend": 200,
+    "views": 16000,
+    "recommend": 215,
     "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=17449333&exception_mode=recommend&page=1",
     "time_kst": "08-15 22:15"
    },
    {
     "gallery": "해외주식갤러리",
     "title": "워런 버핏과 7억원짜리 점심식사를 한 투자자의 조언",
-    "views": 13847,
-    "recommend": 181,
+    "views": 14375,
+    "recommend": 188,
     "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=17447779&exception_mode=recommend&page=1",
     "time_kst": "08-15 17:48"
    },
    {
     "gallery": "해외주식갤러리",
     "title": "미붕단이 voo 적립충 이해 못하는 이유",
-    "views": 10407,
-    "recommend": 176,
+    "views": 10777,
+    "recommend": 187,
     "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=17447714&exception_mode=recommend&page=1",
     "time_kst": "08-15 17:39"
    }
   ],
-  "top_rising": []
+  "top_viewed": []
  }
 }
