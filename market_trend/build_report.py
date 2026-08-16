@@ -81,6 +81,10 @@ def render_day(payload: dict) -> str:
     else:
         parts.append('<p class="note">이 날짜는 테마 합성 없이 계량 신호만 산출되었습니다.</p>')
 
+    mood = payload.get("community_mood")
+    if mood:
+        parts.append(render_mood(mood))
+
     signals = payload.get("signals") or {}
     spikes = signals.get("spikes") or []
     if spikes:
@@ -119,10 +123,31 @@ def render_day(payload: dict) -> str:
     return "".join(parts)
 
 
+def render_mood(mood: dict) -> str:
+    """커뮤니티 무드 — Gemini가 개미 신호(종토·디시)를 읽고 매긴 정서 점수와 주목 종목."""
+    score = int(mood.get("score") or 0)
+    face = "🔥" if score >= 50 else "🙂" if score >= 10 else "😐" if score > -10 else "😟" if score > -50 else "🧊"
+    parts = [f'<div class="card mood"><div class="ctitle">🐜 커뮤니티 무드 {face} '
+             f'<span class="dots">{"+" if score > 0 else ""}{score}</span></div>']
+    if mood.get("summary"):
+        parts.append(f'<p class="narr">{esc(mood["summary"])}</p>')
+    stocks = mood.get("hot_stocks") or []
+    if stocks:
+        items = []
+        for s in sorted(stocks, key=lambda x: -(int(x.get("score") or 0))):
+            sc = int(s.get("score") or 0)
+            arrow = "📈" if sc >= 0 else "📉"
+            items.append(f'<li>{arrow} <b>{esc(s.get("name"))}</b> ({"+" if sc > 0 else ""}{sc}) '
+                         f'<span class="pmeta">{esc(s.get("reason", ""))}</span></li>')
+        parts.append('<ul class="ev">' + "".join(items) + "</ul>")
+    parts.append("</div>")
+    return "".join(parts)
+
+
 def render_community(community: dict) -> str:
     """커뮤니티 온도(네이버 종토) — 개미 관심 섹션. 트렌드(리서치 채널)와 성격이 달라 구분해 그린다."""
-    parts = [f'<h2 class="commhead">🌡️ 커뮤니티 온도 <span class="commsub">'
-             f'{esc(community.get("source", ""))} · 종목 {community.get("universe", "?")}개 · '
+    parts = [f'<h2 class="commhead">🌡️ NAVER 종토방 온도 <span class="commsub">'
+             f'종목 {community.get("universe", "?")}개 · '
              f'글 {community.get("posts", "?")}건</span></h2>']
 
     stocks = community.get("hot_stocks") or []
@@ -197,7 +222,7 @@ def render_dc(dc: dict) -> str:
         parts.append(f'<div class="card"><div class="ctitle">제목 급증 키워드</div><div class="kws">{chips}</div></div>')
 
     for label, key, meta in (("개념글 (추천 상위)", "top_recommended", lambda p: f"추천 {p.get('recommend', 0)} · 조회 {p.get('views', 0)}"),
-                             ("조회 급상승 글", "top_rising", lambda p: f"시간당 {p.get('views_per_hour', 0)}회 · 조회 {p.get('views', 0)}")):
+                             ("화제의 글 (조회순)", "top_viewed", lambda p: f"조회 {p.get('views', 0)}")):
         posts = dc.get(key) or []
         if not posts:
             continue

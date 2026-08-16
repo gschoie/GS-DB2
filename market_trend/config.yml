@@ -33,8 +33,11 @@ community_dc:
   max_pages: 6       # 갤러리당 일반글 샘플 페이지 상한 (페이지당 ~50글)
   delay_sec: 0.5     # 페이지 사이 간격
   galleries:
-    - id: stock_new2
-      name: 주식갤러리
+    # 국내주식(국장갤)이 요즘 진짜 주식 얘기가 도는 곳이다. 구 주갤(stock_new2)은
+    # 정치 잡담판이 되어 뺐다 — 다시 보고 싶으면 {id: stock_new2, name: 주식갤러리} 추가.
+    - id: krstock
+      name: 국내주식갤러리
+      minor: true
     - id: stockus
       name: 해외주식갤러리
       minor: true

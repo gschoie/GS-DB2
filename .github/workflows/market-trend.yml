@@ -60,6 +60,19 @@ jobs:
             exit 1
           fi
 
+      # 커뮤니티 수집을 먼저 돌린다 — 조각(parts/*.json)을 트렌드 산출이 읽어
+      # Gemini가 개미 신호까지 보고 커뮤니티 무드를 함께 만든다.
+      # 네이버·디시가 러너 IP를 튕겨도 트렌드 리포트·발송까지 죽이지 않는다.
+      - name: 커뮤니티 온도 수집 (네이버 종토)
+        if: ${{ !contains(fromJSON('["check","dry-run"]'), inputs.mode || 'run') }}
+        continue-on-error: true
+        run: python market_trend/community_naver.py
+
+      - name: 갤러리 온도 수집 (디시)
+        if: ${{ !contains(fromJSON('["check","dry-run"]'), inputs.mode || 'run') }}
+        continue-on-error: true
+        run: python market_trend/community_dc.py
+
       - name: 트렌드 산출
         if: ${{ (inputs.mode || 'run') != 'community' }}
         working-directory: market_trend
@@ -77,19 +90,6 @@ jobs:
             dry-run) FLAGS="--dry-run" ;;
           esac
           python trend_daily.py $FLAGS
-
-      # 커뮤니티 온도(네이버 종토) — 날짜 json에 community 키를 덧붙인다.
-      # 네이버가 러너 IP를 튕겨도 트렌드 리포트·발송까지 죽이지 않는다.
-      - name: 커뮤니티 온도 수집
-        if: ${{ !contains(fromJSON('["check","dry-run"]'), inputs.mode || 'run') }}
-        continue-on-error: true
-        run: python market_trend/community_naver.py
-
-      # 갤러리 온도(디시) — community_dc 키. 네이버와 독립적으로 실패/성공한다.
-      - name: 갤러리 온도 수집
-        if: ${{ !contains(fromJSON('["check","dry-run"]'), inputs.mode || 'run') }}
-        continue-on-error: true
-        run: python market_trend/community_dc.py
 
       # 날짜별 json들을 모아 대시보드용 단일 페이지로 굽는다.
       - name: 리포트 페이지 생성
