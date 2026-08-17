@@ -27,7 +27,7 @@
 | `source_watcher/` | 외부 소스 감시 |
 | `gas/` | Google Apps Script 정본 (dispatch_proxy 등) |
 
-관련 별도 리포: `gschoie/tradewinds_telegram_bot`(TradeWinds 해운뉴스, Python+Playwright, 매시 실행), family-talk-daily(이쁘게.말하기).
+관련 별도 리포: `gschoie/tradewinds_telegram_bot`(TradeWinds 해운뉴스, Python+Playwright, 매시 실행), family-talk-daily(이쁘게.말하기), `gschoie/GS.korea-defense-news-bot`(외신 해외 방산 뉴스 → 텔레그램. 구글뉴스 RSS 30개 피드 + Gemini 배치 채점(10건/호출), 매시 17분, 00~05시 KST 스킵).
 
 ## 운영 교훈 (반드시 지킬 것)
 
@@ -35,6 +35,8 @@
 - **텔레그램·유튜브는 GitHub 러너 IP를 간헐 차단**(스로틀·봇체크) → 재시도/폴백/Gemini 영상 직접 시청 등으로 우회.
 - **뉴스 캐시**: 캐시는 뉴스DB·노조로 분리, 복원은 읽기전용·저장은 수집 run만. push 배포도 캐시 DB 사용(옛 커밋 DB로 덮어쓰는 7/8 리버트 사고의 원인이었음). 전체 재분류(rebuild)는 파서 변경 시 1회만.
 - **Gemini 쿼터**: recipe_bot은 전용 키 `RECIPE_GEMINI_API_KEY`(별도 GCP 프로젝트) 사용, 모델은 `gemini-flash-lite-latest` 등 최신 별칭 우선, 429 시 65초 대기·재시도.
+  무료 RPD는 **모델별·프로젝트별**이고 태평양 자정(16:00 KST) 리셋 — 시간당 도는 봇에 `gemini-2.5-flash`를 쓰면 새벽에 소진된다
+  (2026-08-18 방산뉴스봇 'AI 채점 실패 발송 보류' 건 → flash-lite-latest로 교체해 해결). 상시 실행 봇은 flash-lite 계열이 기본.
 - **배포 안전망(verify)**: 메뉴명 하드코딩 대신 키워드 매칭 — 메뉴 이름을 바꿔도 배포가 깨지지 않게 유지할 것.
 
 ## 작업 이력 (2026-07-09 ~ 2026-08-13, PC 시절 정리)
