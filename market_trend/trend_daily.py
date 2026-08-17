@@ -52,7 +52,10 @@ PARTS_DIR = OUT_DIR / "parts"
 
 HISTORY_DAYS = 21       # 이력 보관 일수 (기준선 7일 + 신조어 판정 여유)
 BASELINE_DAYS = 7       # 급증 비교 창
-HISTORY_TERM_CAP = 400  # 하루치 이력에 남길 낱말 수 — 파일이 무한정 크지 않게
+# 하루치 이력에 남길 낱말 수. 너무 작으면 중간 빈도의 흔한 낱말이 이력에서 잘려
+# '기준선 0 → 99× 신규'로 오판된다(08-17 실제 발생: 시간·보고·지원 등이 🆕로 둔갑).
+# 2000이면 하루 2만 토큰 코퍼스에서도 3회 이상 나온 낱말은 거의 다 남는다.
+HISTORY_TERM_CAP = 2000
 MIN_BASELINE = 3        # 기준선이 이 일수 미만이면 '수집 중'으로 표시하고 빈도순으로만 순위
 
 
@@ -180,7 +183,7 @@ JOSA = sorted(
 ENGLISH_STOP = {"the", "and", "for", "with", "from", "this", "that", "are", "was", "has", "have", "will", "not", "you"}
 # 서술형 어미로 끝나는 토큰은 명사가 아니다 — '했다·간다·좋아요·예상됨' 류를 목록 관리
 # 없이 통째로 거른다. 별칭 사전에 있는 정식명은 보호된다(해당 어미로 끝나는 종목명은 없다).
-VERBAL_ENDING_RE = re.compile(r"[가-힣]+(다|요|죠|됨)$")
+VERBAL_ENDING_RE = re.compile(r"[가-힣]+(다|요|죠|됨|적인)$")
 
 
 def strip_josa(word: str) -> str:
