@@ -24,6 +24,9 @@ import os
 import sys
 from pathlib import Path
 
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from adapters import DEVICE_INFO  # 수집과 같은 기기 정보로 로그인해야 세션이 안정된다  # noqa: E402
+
 
 def need(name: str) -> str:
     value = os.environ.get(name, "").strip()
@@ -37,7 +40,8 @@ async def request(out_path: Path) -> None:
     from telethon import TelegramClient
     from telethon.sessions import StringSession
 
-    client = TelegramClient(StringSession(), int(need("TELEGRAM_API_ID")), need("TELEGRAM_API_HASH"))
+    client = TelegramClient(StringSession(), int(need("TELEGRAM_API_ID")), need("TELEGRAM_API_HASH"),
+                            **DEVICE_INFO)
     await client.connect()
     try:
         sent = await client.send_code_request(need("TELEGRAM_PHONE"))
@@ -58,7 +62,8 @@ async def confirm(pending_path: Path, out_path: Path) -> None:
 
     pending = json.loads(pending_path.read_text(encoding="utf-8"))
     client = TelegramClient(
-        StringSession(pending["session"]), int(need("TELEGRAM_API_ID")), need("TELEGRAM_API_HASH")
+        StringSession(pending["session"]), int(need("TELEGRAM_API_ID")), need("TELEGRAM_API_HASH"),
+        **DEVICE_INFO,
     )
     await client.connect()
     try:
