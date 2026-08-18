@@ -4915,24 +4915,24 @@
      }
     },
     "1640": {
-     "individual": 7415,
+     "individual": 7414,
      "foreign": 914,
      "institution": -7951,
      "arb": 182,
      "nonarb": -10887,
      "program": -10705,
-     "time": "16:22",
+     "time": "17:05",
      "kospi": 6869.83,
      "chg_pct": -1.55,
      "futures": {
-      "foreign": 1349,
-      "inst_total": -2367
+      "foreign": 808,
+      "inst_total": -2252
      }
     }
    },
    "confirmed": {
     "investor": {
-     "individual": 7415,
+     "individual": 7414,
      "foreign": 914,
      "inst_total": -7951,
      "fin_invest": -5473,
@@ -4955,16 +4955,16 @@
      "total_net": -10705
     },
     "futures": {
-     "individual": 942,
-     "foreign": 1349,
-     "inst_total": -2367,
-     "fin_invest": -259,
+     "individual": 1367,
+     "foreign": 808,
+     "inst_total": -2252,
+     "fin_invest": -296,
      "insurance": -164,
-     "asset_mgmt": -1867,
+     "asset_mgmt": -1702,
      "bank": -29,
-     "other_fin": 20,
+     "other_fin": 7,
      "pension": -68,
-     "other_corp": 76
+     "other_corp": 77
     }
    },
    "curve": {
@@ -5679,6 +5679,6 @@
    }
   }
  },
- "updated_kst": "2026-08-18 16:22",
+ "updated_kst": "2026-08-18 17:06",
  "futures_unit": "계약"
 }
