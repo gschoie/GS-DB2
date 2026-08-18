@@ -51,6 +51,15 @@ jobs:
         working-directory: etf_holdings
         run: python detect_changes.py
 
+      - name: 카드 종목 시세 수집 (스파크라인용 · 하루 1회만 API 사용)
+        if: steps.watch.outputs.should_run == 'true'
+        working-directory: etf_holdings
+        env:
+          KIS_APP_KEY: ${{ secrets.KIS_APP_KEY }}
+          KIS_APP_SECRET: ${{ secrets.KIS_APP_SECRET }}
+        # 실패해도 리포트는 나가야 하므로 스크립트가 예외를 삼킨다(스파크라인만 비표시).
+        run: python fetch_prices.py
+
       - name: HTML 리포트 생성 (대시보드 static)
         if: steps.watch.outputs.should_run == 'true'
         working-directory: etf_holdings
@@ -78,7 +87,8 @@ jobs:
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add telegram_research_dashboard/static/etf_holdings_report.html \
                   etf_holdings/snapshots etf_holdings/changes.json \
-                  etf_holdings/telegram_status.json etf_holdings/state.json
+                  etf_holdings/telegram_status.json etf_holdings/state.json \
+                  etf_holdings/prices.json
           if git diff --cached --quiet; then
             echo "변경 없음 — 커밋 생략"
           else
