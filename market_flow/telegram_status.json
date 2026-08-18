@@ -1,5 +1,5 @@
 {
-  "when_utc": "2026-08-18 04:36:53Z",
+  "when_utc": "2026-08-18 05:22:43Z",
   "ok": true,
   "note": "sent",
   "chat_id_tail": "5171",
@@ -7,7 +7,7 @@
   "response": {
     "ok": true,
     "result": {
-      "message_id": 122,
+      "message_id": 123,
       "from": {
         "id": 8875725998,
         "is_bot": true,
@@ -21,8 +21,8 @@
         "username": "gschoie",
         "type": "private"
       },
-      "date": 1787027813,
-      "text": "💹 시장 수급 · 8/18(화) 13:00\nKOSPI 6,944.58 🔻0.48%\n\n개인 +2,802억 (+11,513)\n외국인 +3,803억 (-7,381)\n기관 -5,996억 (-3,894)\n\n프로그램 -6,506억 = 차익 -468 · 비차익 -6,038\n\nK200선물 외인 -1,203계약 (-2,017) · 기관 +1,230계약 (+1,919)\n\n( ) 안은 10:00 대비 증감\n\n상세 차트 › 대시보드\n🎴 GS Research Desk · 시장 수급",
+      "date": 1787030563,
+      "text": "💹 시장 수급 · 8/18(화) 13:00\nKOSPI 6,902.36 🔻1.08%\n\n개인 +4,784억 (+13,495)\n외국인 +2,721억 (-8,463)\n기관 -7,012억 (-4,910)\n\n프로그램 -7,889억 = 차익 -422 · 비차익 -7,467\n\nK200선물 외인 -1,610계약 (-2,424) · 기관 +1,313계약 (+2,002)\n\n( ) 안은 10:00 대비 증감\n\n상세 차트 › 대시보드\n🎴 GS Research Desk · 시장 수급",
       "entities": [
         {
           "offset": 3,
@@ -68,7 +68,7 @@
           "offset": 229,
           "length": 4,
           "type": "text_link",
-          "url": "https://gschoie.github.io/GS-output-dashboard/market_flow_report.html"
+          "url": "https://gs-research-desk.pages.dev/market_flow_report.html"
         }
       ],
       "link_preview_options": {
