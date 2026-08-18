@@ -4880,65 +4880,65 @@
   },
   "2026-08-18": {
    "kospi": {
-    "close": 7087.1,
-    "chg_pct": 1.56
+    "close": 7064.71,
+    "chg_pct": 1.24
    },
    "slots": {
     "1000": {
-     "individual": -9874,
-     "foreign": 10945,
-     "institution": -744,
-     "arb": -253,
-     "nonarb": 3505,
-     "program": 3253,
-     "time": "10:46",
-     "kospi": 7087.1,
-     "chg_pct": 1.56,
+     "individual": -8711,
+     "foreign": 11184,
+     "institution": -2102,
+     "arb": -255,
+     "nonarb": 2374,
+     "program": 2119,
+     "time": "11:13",
+     "kospi": 7064.71,
+     "chg_pct": 1.24,
      "futures": {
-      "foreign": 2203,
-      "inst_total": -1890
+      "foreign": 814,
+      "inst_total": -689
      }
     }
    },
    "confirmed": {
     "investor": {
-     "individual": -9525,
-     "foreign": 10834,
-     "inst_total": -991,
-     "fin_invest": -2259,
-     "insurance": -6,
-     "asset_mgmt": 949,
-     "bank": -43,
-     "other_fin": 41,
-     "pension": 328,
-     "other_corp": -318
+     "individual": -8634,
+     "foreign": 11167,
+     "inst_total": -2162,
+     "fin_invest": -3185,
+     "insurance": -35,
+     "asset_mgmt": 1109,
+     "bank": -42,
+     "other_fin": 53,
+     "pension": -63,
+     "other_corp": -371
     },
     "program": {
-     "arb_buy": 1259,
-     "arb_sell": 1512,
-     "arb_net": -253,
-     "nonarb_buy": 37193,
-     "nonarb_sell": 33746,
-     "nonarb_net": 3447,
-     "total_buy": 38452,
-     "total_sell": 35258,
-     "total_net": 3194
+     "arb_buy": 1314,
+     "arb_sell": 1569,
+     "arb_net": -255,
+     "nonarb_buy": 41734,
+     "nonarb_sell": 39421,
+     "nonarb_net": 2313,
+     "total_buy": 43048,
+     "total_sell": 40990,
+     "total_net": 2058
     },
     "futures": {
-     "individual": -297,
-     "foreign": 2203,
-     "inst_total": -1890,
-     "fin_invest": -1622,
-     "insurance": -50,
-     "asset_mgmt": -167,
-     "bank": 2,
-     "other_fin": 5,
-     "pension": -58,
-     "other_corp": -16
+     "individual": -108,
+     "foreign": 814,
+     "inst_total": -689,
+     "fin_invest": -611,
+     "insurance": -71,
+     "asset_mgmt": 37,
+     "bank": -12,
+     "other_fin": 15,
+     "pension": -47,
+     "other_corp": -17
     }
    }
   }
  },
- "updated_kst": "2026-08-18 10:46",
+ "updated_kst": "2026-08-18 11:13",
  "futures_unit": "계약"
 }
