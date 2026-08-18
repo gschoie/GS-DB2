@@ -324,6 +324,19 @@ def collect_web(source: dict) -> list[Item]:
 
 DEFAULT_SESSION_PATH = "data/telegram_user"
 
+# 세션 안정화 — 기본값으로 두면 Telethon이 러너의 OS 버전을 기기 정보로 보내는데,
+# 러너 이미지가 바뀔 때마다 값이 달라진다. 같은 세션 키가 '늘 다른 기기 + 다른 IP'로
+# 접속하는 모양새가 되어 텔레그램이 계정 탈취로 의심해 세션을 끊는다
+# (2026-08-15·08-17 이틀 새 두 번 발생). 기기 정보를 고정해 '같은 기기가 IP만
+# 바뀌는' 모습으로 만든다. 로그인(cloud_login.py)과 수집이 같은 값을 써야 한다.
+DEVICE_INFO = {
+    "device_model": "GS Research Desk",
+    "system_version": "Ubuntu 24.04",
+    "app_version": "1.0",
+    "lang_code": "ko",
+    "system_lang_code": "ko",
+}
+
 
 def _account_session():
     """세션 문자열(CI·서버용)이 있으면 그것을, 없으면 세션 파일 경로를 쓴다."""
@@ -369,7 +382,7 @@ async def _scan_account(source: dict, since: datetime) -> list[Item]:
     per_chat_limit = int(source.get("per_chat_limit") or 30)
     max_chats = int(source.get("max_chats") or 500)
 
-    client = TelegramClient(_account_session(), int(api_id), api_hash)
+    client = TelegramClient(_account_session(), int(api_id), api_hash, **DEVICE_INFO)
     await client.connect()
     try:
         if not await client.is_user_authorized():

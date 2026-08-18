@@ -10,8 +10,9 @@ on:
         description: "실행 모드"
         type: choice
         default: run
-        # check = 수집·계량 통계만(토큰·저장 없음), no-llm = Gemini 없이 신호만 저장
-        options: [run, check, no-llm, dry-run]
+        # check = 수집·계량 통계만(토큰·저장 없음), no-llm = Gemini 없이 신호만 저장,
+        # community = 네이버 종토만 수집(텔레그램·Gemini·발송 없음 — 종토 경로 점검용)
+        options: [run, check, no-llm, dry-run, community]
   schedule:
     - cron: "30 21 * * *"   # 매일 KST 06:30
 
@@ -59,7 +60,21 @@ jobs:
             exit 1
           fi
 
+      # 커뮤니티 수집을 먼저 돌린다 — 조각(parts/*.json)을 트렌드 산출이 읽어
+      # Gemini가 개미 신호까지 보고 커뮤니티 무드를 함께 만든다.
+      # 네이버·디시가 러너 IP를 튕겨도 트렌드 리포트·발송까지 죽이지 않는다.
+      - name: 커뮤니티 온도 수집 (네이버 종토)
+        if: ${{ !contains(fromJSON('["check","dry-run"]'), inputs.mode || 'run') }}
+        continue-on-error: true
+        run: python market_trend/community_naver.py
+
+      - name: 갤러리 온도 수집 (디시)
+        if: ${{ !contains(fromJSON('["check","dry-run"]'), inputs.mode || 'run') }}
+        continue-on-error: true
+        run: python market_trend/community_dc.py
+
       - name: 트렌드 산출
+        if: ${{ (inputs.mode || 'run') != 'community' }}
         working-directory: market_trend
         env:
           TELEGRAM_API_ID: ${{ secrets.TELEGRAM_API_ID }}
@@ -84,7 +99,7 @@ jobs:
       # 발송 실패해도 리포트·이력 커밋은 진행한다 — telegram_status.json이 실패 원인을
       # 담은 채 커밋되므로 1회 실행으로 원인을 특정할 수 있다(etf_signal과 같은 방식).
       - name: 텔레그램 발송
-        if: ${{ !contains(fromJSON('["check","dry-run"]'), inputs.mode || 'run') }}
+        if: ${{ !contains(fromJSON('["check","dry-run","community"]'), inputs.mode || 'run') }}
         continue-on-error: true
         env:
           # 전용 봇을 쓰려면 TREND_* 시크릿을 등록한다. 없으면 소스 감시 봇 → 방산 봇 순 폴백.
@@ -100,7 +115,7 @@ jobs:
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add telegram_research_dashboard/static/market_trend \
                   telegram_research_dashboard/static/market_trend_report.html \
-                  market_trend/state/trend_history.json \
+                  market_trend/state \
                   market_trend/telegram_status.json
           if git diff --cached --quiet; then
             echo "변경 없음 — 커밋 생략"
