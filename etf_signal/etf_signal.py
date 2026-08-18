@@ -60,7 +60,7 @@ def _get(url, tr, params, tries=3):
                 raise
             time.sleep(0.7)
 
-def fetch_ohlc(code, days=300):
+def fetch_ohlc(code, days=430):   # 430일 ≈ 290거래일 — YoY(1년 전 대비) 계산분까지
     url = f"{BASE}/uapi/domestic-stock/v1/quotations/inquire-daily-itemchartprice"
     start = (datetime.now(KST) - timedelta(days=days)).strftime("%Y%m%d")
     cur = datetime.now(KST).strftime("%Y%m%d"); rows = []
@@ -112,6 +112,37 @@ def stoch_slow(df, n=14, k=3, d=3):
     ll = df["l"].rolling(n).min(); hh = df["h"].rolling(n).max()
     slowk = (100*(df["c"]-ll)/(hh-ll)).rolling(k).mean()
     return slowk, slowk.rolling(d).mean()
+
+def _ret(px, days_back):
+    """기준일 대비 days_back(달력일) 이전 마지막 확정 종가 대비 등락률(%).
+
+    거래일 개수로 세면 휴장일 때문에 종목마다 기준이 어긋난다. 달력으로 거슬러
+    올라가 '그 날짜 이전의 마지막 종가'를 쓰면 휴장·상장일 차이에 영향받지 않는다.
+    데이터가 그만큼 없으면(신규 상장 등) None."""
+    last_d = px["date"].iloc[-1]
+    last_c = float(px["c"].iloc[-1])
+    prior = px[px["date"] <= last_d - pd.Timedelta(days=days_back)]
+    if prior.empty:
+        return None
+    base = float(prior["c"].iloc[-1])
+    if base <= 0:
+        return None
+    return round((last_c / base - 1) * 100, 2)
+
+
+def returns(px):
+    """1일·주간(WoW)·월간(MoM)·연간(YoY) 등락률(%).
+
+    YoY는 화면에 아직 쓰지 않지만, 지금부터 같이 저장해 이력을 쌓아둔다."""
+    prev = float(px["c"].iloc[-2]) if len(px) >= 2 else None
+    last = float(px["c"].iloc[-1])
+    return {
+        "ret_1d": round((last / prev - 1) * 100, 2) if prev else None,
+        "ret_1w": _ret(px, 7),
+        "ret_1m": _ret(px, 30),
+        "ret_1y": _ret(px, 365),
+    }
+
 
 def _cross_up(a, b):
     """a가 b를 상향돌파한 봉(True). 직전 봉은 a<=b, 이번 봉은 a>b."""
@@ -218,6 +249,7 @@ def scan_one(u):
         "org5": None if f5 is None else round(float(f5["기관"])),
         "ind5": None if f5 is None else round(float(f5["개인"])),
         "flow": flow, "dist": dist,
+        **returns(px),
         # 매수 알림: 오늘 골든(추세 or 과매도-스토캐스틱) + 개인몰림 아님 + 유동성 OK
         "alert": bool((ev_trend or stoch_oversold) and flow != "개인몰림" and turnover >= LIQ_MIN_EOK),
         # 매도 알림: 오늘 데드(추세 or 과열-스토캐스틱) + 외인·기관 쌍끌이 아님 + 유동성 OK
