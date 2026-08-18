@@ -22,7 +22,7 @@ if hasattr(sys.stdout, "reconfigure"):
 
 HERE = Path(__file__).resolve().parent
 LATEST = HERE.parent / "telegram_research_dashboard" / "static" / "market_trend" / "latest.json"
-DASH_URL = "https://gschoie.github.io/GS-output-dashboard/market_trend_report.html"
+DASH_URL = "https://gs-research-desk.pages.dev/market_trend_report.html"
 SIGNATURE = "🎴 GS Research Desk · 시장관심.내러티브"
 STATUS_PATH = HERE / "telegram_status.json"
 WD = "월화수목금토일"

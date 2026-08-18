@@ -4,7 +4,7 @@
 
 ## 아키텍처 한눈에
 
-- **대시보드**: `telegram_research_dashboard/`가 정적 사이트를 빌드(`build_static.py` → `_site/`), `deploy-pages.yml`로 GitHub Pages 배포.
+- **대시보드**: `telegram_research_dashboard/`가 정적 사이트를 빌드(`build_static.py` → `_site/`), 워크플로 5종(deploy-pages·refresh-news/union/macro/reports)이 **Cloudflare Pages로 배포**(`wrangler pages deploy`, 프로젝트 `gs-research-desk`). 접속 주소는 https://gs-research-desk.pages.dev — **Cloudflare Access(One-time PIN, gschoie@gmail.com만 허용)** 로그인 벽 뒤에 있다. 구 gschoie.github.io 배포는 2026-08-18 종료. 시크릿: `CLOUDFLARE_API_TOKEN`·`CLOUDFLARE_ACCOUNT_ID`(배포), `CF_ACCESS_CLIENT_ID`·`CF_ACCESS_CLIENT_SECRET`(배포본 안전망 fetch용 서비스 토큰, 선택).
 - **버튼 → 실행 프록시**: 대시보드 버튼 → GAS `dispatch_proxy`(정본: `gas/dispatch_proxy.gs`) → GitHub Actions `workflow_dispatch`. 라우트: reports / news / union / consensus / flow / etf / holdings / dart / recipe.
   - GAS 수정 시 Apps Script에 붙여넣고 **'배포 관리 → 새 버전'**으로 갱신할 것. **새 배포 금지**(URL이 바뀌어 대시보드가 깨짐).
 - **알림**: 텔레그램 봇들(@gs_invest_signal_bot 등). `etf_signal/etf_telegram.py`는 전송 결과를 `telegram_status.json`에 기록 → 시크릿 누락 등 실패 원인을 1회 실행으로 특정 가능.
@@ -61,5 +61,14 @@
    - 적자·자본잠식(분모 ≤ 0)은 배수를 공란 처리. 단 **ROE는 음수도 그대로 둔다**(해석 가능한 정보).
    - 야후가 개발 컨테이너에서 egress 차단(fc.yahoo.com 403)이라 실호출 검증 불가 →
      가짜 야후 응답으로 산식을 검산하는 테스트 16개를 두고 워크플로에서 매번 돌린다.
+
+9. **대시보드 로그인 벽 — Cloudflare Pages + Access 이관** (8/18): "주소만 알면 다 보이는" 문제 해결.
+   - GitHub Pages는 로그인 제한 불가(Enterprise 전용)·repo private 전환은 Actions 무료 무제한 상실 →
+     repo는 public 유지, 사이트만 Cloudflare로 이관.
+   - 워크플로 5종의 Pages 배포(artifact + deploy 잡)를 `wrangler pages deploy` 단일 스텝으로 교체.
+   - `build_static.previous_payload()`(캐시 유실 안전망)는 배포본을 fetch하므로 Access 서비스 토큰
+     헤더 지원 추가 — 토큰 미설정 시 빈 dict 폴백으로 빌드는 계속된다.
+   - 텔레그램 봇 링크 6곳(etf·flow·trend·holdings·defense×2) pages.dev로 교체, 사이드바 절대링크 2곳 상대경로화.
+   - DAOL-RESEARCH-TONE(별도 리포의 Pages)은 여전히 공개 — 필요 시 같은 방식으로 이관.
 
 이후 작업은 git log와 이 파일을 갱신하며 이어간다.

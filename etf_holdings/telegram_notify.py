@@ -11,7 +11,7 @@ except Exception:
     pass
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-DASH_URL = "https://gschoie.github.io/GS-output-dashboard/etf_holdings_report.html"
+DASH_URL = "https://gs-research-desk.pages.dev/etf_holdings_report.html"
 SIGNATURE = "🎴 GS Research Desk · 액티브 ETF 트래커"
 STATUS_PATH = os.path.join(HERE, "telegram_status.json")
 MAX_ETFS = 12          # 메시지에 상세 표기할 최대 ETF 수(나머지는 '외 N개')
