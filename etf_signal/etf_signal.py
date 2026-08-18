@@ -337,15 +337,18 @@ def scan_one(u):
         "bb_bw": bb_bw, "bb_squeeze": bb_squeeze, "bb_release": bb_release,
         # 매수 알림: 오늘 골든(추세 or 과매도-스토캐스틱) + 개인몰림 아님 + 유동성 OK
         "alert": bool((ev_trend or stoch_oversold) and flow != "개인몰림" and turnover >= LIQ_MIN_EOK),
-        # 매도 알림: 오늘 데드(추세 or 과열-스토캐스틱) + 외인·기관 쌍끌이 아님 + 유동성 OK
-        # 단, '상승추세 + 신고가권'에서의 과열이탈은 뺀다 — 강한 추세에서 %K는 계속
-        # 고점에 머물며 반복 교차해, 추세가 멀쩡한데 매도 경고만 나가는 문제가 있었다
-        # (아카이브 28일 기준 과열이탈 19건 중 7건이 상승추세 중 발생).
-        # 추세 자체가 꺾인 신호(ev_trend_dead)는 이 예외와 무관하게 그대로 경고한다.
+        # 매도 알림: 추세 데드크로스(+DI 하향이탈)만. 외인·기관 쌍끌이 제외 + 유동성 OK.
+        #
+        # 과열이탈(Stochastic %K가 75 초과에서 하향이탈)은 매도에서 뺐다. 백테스트
+        # (2023-08~2026-08, 53종목, N=2,282)에서 경고 이후 오히려 기준선보다 더 올랐다
+        # — D+5 +0.14%p, D+20 +0.91%p. 매도 신호로서 방향이 반대다. 강한 모멘텀 구간에서
+        # %K가 고점을 스치며 교차하는 것이라 '상승 지속 표시'에 가깝다.
+        # 앞서 '상승추세+신고가권'만 제외해봤지만 남은 것도 D+20 +0.77%p로 여전히 틀렸다.
+        # 감지 자체는 유지해 표에 참고 배지로만 남긴다(stoch_overbought).
+        #
+        # 추세 데드크로스는 D+5 −0.15%p, D+20 −0.43%p로 약하게나마 방향이 맞았다.
         "strong_up": bool(up_trend and near_high),
-        "alert_sell": bool((ev_trend_dead
-                            or (stoch_overbought and not (up_trend and near_high)))
-                           and flow != "쌍끌이" and turnover >= LIQ_MIN_EOK),
+        "alert_sell": bool(ev_trend_dead and flow != "쌍끌이" and turnover >= LIQ_MIN_EOK),
         # 추세 강도 알림: ADX 20/25 상향돌파 + 방향별 수급 필터(상승은 개인몰림, 하락은
         # 쌍끌이 제외) + 유동성 OK. 크로스 알림과 별개 신호이며 같은 날 함께 뜰 수 있다.
         "alert_adx": bool(adx_stage
@@ -403,9 +406,20 @@ def add_conviction(out):
             pts += 10; why.append(f"외인·기관 연속 순매수 {st}일")
         if not side_up and st <= -4:
             pts += 10; why.append(f"외인·기관 연속 순매도 {abs(st)}일")
+        # 과매도반등 단독 신호는 등급을 C로 묶는다. 백테스트에서 초과수익이
+        # D+5 −0.01%p · D+20 −0.28%p(N=1,893)로 기준선 이하였다 — 표본이 커서
+        # 우연으로 보기 어렵다. 매수 알림의 70%를 차지하던 종류라, 그대로 두면
+        # 근거 없는 신호가 텔레그램을 채운다(텔레그램은 B 이상만 발송).
+        # 추세골든이 함께 뜬 경우는 '단독'이 아니므로 이 제한을 받지 않는다.
+        only_oversold = bool(r.get("stoch_oversold") and not r.get("ev_trend"))
         r["conviction"] = min(pts, 100)
+        r["only_oversold"] = only_oversold
+        if only_oversold and r.get("alert"):
+            why = why + ["과매도반등 단독 — 백테스트상 초과수익 없음"]
+            r["grade"] = "C"
+        else:
+            r["grade"] = "A" if pts >= 55 else ("B" if pts >= 30 else "C")
         r["conviction_why"] = why
-        r["grade"] = "A" if pts >= 55 else ("B" if pts >= 30 else "C")
 
 
 def scan_all():
