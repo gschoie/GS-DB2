@@ -83,7 +83,7 @@ def render_day(payload: dict) -> str:
 
     mood = payload.get("community_mood")
     if mood:
-        parts.append(render_mood(mood))
+        parts.append(render_mood(mood, payload))
 
     signals = payload.get("signals") or {}
     spikes = signals.get("spikes") or []
@@ -123,12 +123,36 @@ def render_day(payload: dict) -> str:
     return "".join(parts)
 
 
-def render_mood(mood: dict) -> str:
+def mood_sources(payload: dict | None) -> str:
+    """무드가 어떤 재료로 계산됐는지 한 줄로 — '이거 어느 커뮤니티냐'는 질문에 화면이 답하게."""
+    if not payload:
+        return ""
+    parts = []
+    naver = payload.get("community") or {}
+    if naver.get("posts"):
+        parts.append(f"종토 {naver['posts']:,}글")
+    dc = payload.get("community_dc") or {}
+    if dc:
+        bits = []
+        if dc.get("posts_sampled"):
+            bits.append(f"{dc['posts_sampled']:,}글")
+        rec = len(dc.get("top_recommended") or [])
+        if rec:
+            bits.append(f"개념글 {rec}")
+        if bits:
+            parts.append("디시 " + "+".join(bits))
+    return " · ".join(parts)
+
+
+def render_mood(mood: dict, payload: dict | None = None) -> str:
     """커뮤니티 무드 — Gemini가 개미 신호(종토·디시)를 읽고 매긴 정서 점수와 주목 종목."""
     score = int(mood.get("score") or 0)
     face = "🔥" if score >= 50 else "🙂" if score >= 10 else "😐" if score > -10 else "😟" if score > -50 else "🧊"
+    sources = mood_sources(payload)
     parts = [f'<div class="card mood"><div class="ctitle">🐜 커뮤니티 무드 {face} '
-             f'<span class="dots">{"+" if score > 0 else ""}{score}</span></div>']
+             f'<span class="dots">{"+" if score > 0 else ""}{score}</span>'
+             + (f' <span class="pmeta">재료: {esc(sources)}</span>' if sources else "")
+             + "</div>"]
     if mood.get("summary"):
         parts.append(f'<p class="narr">{esc(mood["summary"])}</p>')
     stocks = mood.get("hot_stocks") or []
