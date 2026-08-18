@@ -75,6 +75,17 @@ def build_message(payload: dict) -> str | None:
             lines.append("· " + " · ".join(
                 f"{esc(s.get('name'))} {'+' if int(s.get('score') or 0) > 0 else ''}{int(s.get('score') or 0)}"
                 for s in stocks[:6]))
+        # 재료 출처 — '이 무드가 어느 커뮤니티에서 왔나'를 메시지가 스스로 답한다
+        sources = []
+        if (payload.get("community") or {}).get("posts"):
+            sources.append(f"종토 {payload['community']['posts']:,}글")
+        dc_block = payload.get("community_dc") or {}
+        if dc_block.get("posts_sampled") or dc_block.get("top_recommended"):
+            n = dc_block.get("posts_sampled") or 0
+            rec = len(dc_block.get("top_recommended") or [])
+            sources.append(f"디시 {n:,}글" + (f"+개념글{rec}" if rec else ""))
+        if sources:
+            lines.append(f"<i>재료: {' · '.join(sources)}</i>")
 
     community = payload.get("community") or {}
     hot = community.get("hot_stocks") or []
