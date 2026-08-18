@@ -125,6 +125,29 @@ def dbar(v, scale):
     return f'<span class="dbar"><i class="{cls}" style="{side};width:{w:.1f}%"></i></span>'
 
 
+def ret_scale(sig):
+    """열별 막대 정규화용 최대 절대값. 열마다 변동폭이 달라 함께 쓰면 1D가 안 보인다."""
+    return {k: max([abs(s[k]) for s in sig if s.get(k) is not None] or [1])
+            for k, _, _ in RET_COLS}
+
+
+def ret_cells(s, scale):
+    """본표에 들어가는 1D·WoW·MoM 칸. scale이 없으면(구버전 데이터) 칸 자체를 안 만든다."""
+    if not scale:
+        return ""
+    return "".join(
+        f'<td class="c ret" data-v="{sv(s.get(k))}">{dbar(s.get(k), scale[k])}'
+        f'<span class="rv">{pct(s.get(k))}</span></td>'
+        for k, _, _ in RET_COLS)
+
+
+def ret_headers(scale):
+    if not scale:
+        return ""
+    return "".join(f'<th class="c" data-type="num" title="{esc(t)}">{h}</th>'
+                   for _, h, t in RET_COLS)
+
+
 SPARKS = {}   # code → 최근 종가. 아카이브는 용량 때문에 history를 빼고 저장하므로
               # 최신 payload에서 한 번 채워 전 페이지가 같이 쓴다(차트 모달과 동일한 방식).
 
@@ -188,13 +211,8 @@ def returns_block(sig, day):
     heads = "".join(f'<th class="c" data-type="num" title="{esc(t)}">{h}</th>'
                     for _, h, t in RET_COLS)
     return f"""
-<h2>{day}의 수익률 <small style="font:400 12px Inter;color:#8b918e">— WoW 높은 순 · 헤더 클릭으로 재정렬</small></h2>
-<details class="grp" open><summary>그룹 평균 WoW ({len(gavg)}개 그룹)</summary>
+<details class="grp" open><summary>그룹 평균 WoW ({len(gavg)}개 그룹) — 종목을 훑기 전에 어느 섹터가 셌는지</summary>
 <ul class="gbars">{gitems}</ul></details>
-<div class="tablewrap"><table class="rets">
-<thead><tr><th data-type="text">ETF</th><th class="c">최근 60일</th>{heads}</tr></thead>
-<tbody>{trs}</tbody>
-</table></div>
 """
 
 
@@ -340,6 +358,10 @@ def day_html(payload, is_latest):
                                      (2 if s.get("alert_adx") else 3))
         return (rank, x[0])
 
+    # 수익률 열은 데이터가 있을 때만 붙인다(구버전 아카이브 호환)
+    rscale = ret_scale(sig) if any(s.get("ret_1w") is not None for s in sig) else None
+    ret_heads = ret_headers(rscale)
+
     rows_sorted = sorted(enumerate(sig), key=row_order)
     trs = ""
     for _, s in rows_sorted:
@@ -369,15 +391,15 @@ def day_html(payload, is_latest):
                                          (1 if s.get("alert_adx") else 0))) + (0 if s["liquid"] else -1)
         trs += f'''
       <tr class="{cls}">
-        <td class="etf" data-v="{esc(s["name"])}"><div class="etf-row"><b>{name_link(s)}</b><button class="btn-chart" data-code="{esc(s.get("code") or "")}" title="최근 120거래일 가격 · 신호 발생 시점">추세</button></div><small>{esc(s["group"])}</small></td>
+        <td class="etf" data-v="{esc(s["name"])}"><div class="etf-row"><b>{name_link(s)}</b><button class="btn-chart" data-code="{esc(s.get("code") or "")}" title="최근 120거래일 가격 · 신호 발생 시점">추세</button></div><div class="etf-sub"><small>{esc(s["group"])}</small>{mini_spark(s, 46, 13)}</div></td>
         <td class="r" data-v="{s["close"]}">{s["close"]:,}</td>
+        {ret_cells(s, rscale)}
         <td class="c" data-v="{s["adx"]}">{s["adx"]} {adx_ev}<small class="di">{s["pdi"]}/{s["ndi"]}</small></td>
         <td class="c" data-v="{tr_rank}">{trend_badge(s)}</td>
         <td class="c" data-v="{s["k"]}">{s["k"]}/{s["d"]} {stoch_ev}</td>
         <td class="c" data-v="{fl_rank}">{flow_badge(s["flow"])}</td>
         <td class="r" data-v="{sv(s["for5"])}">{num(s["for5"])}</td>
         <td class="r" data-v="{sv(s["org5"])}">{num(s["org5"])}</td>
-        <td class="r" data-v="{sv(s["ind5"])}">{num(s["ind5"])}</td>
         <td class="c flags" data-v="{fg_rank}">{flag}</td>
       </tr>'''
 
@@ -408,11 +430,13 @@ ADX(추세) + Stochastic Slow(타이밍) + 수급(외인·기관·개인 5일 �
 {returns_block(sig, day)}
 
 <h2>전체 신호판 ({scanned})</h2>
-<div class="tablewrap"><table>
+<div class="tablewrap"><table class="board">
 <thead><tr>
-<th data-type="text">ETF</th><th class="r" data-type="num">종가</th><th class="c" data-type="num">ADX<br>+DI/−DI</th><th class="c" data-type="num">추세</th>
+<th data-type="text">ETF</th><th class="r" data-type="num">종가</th>
+{ret_heads}
+<th class="c" data-type="num">ADX<br>+DI/−DI</th><th class="c" data-type="num">추세</th>
 <th class="c" data-type="num">%K/%D</th><th class="c" data-type="num">수급</th>
-<th class="r" data-type="num">외인5D</th><th class="r" data-type="num">기관5D</th><th class="r" data-type="num">개인5D</th><th class="c" data-type="num">플래그</th>
+<th class="r" data-type="num" title="외국인 5일 순매수(억원)">외인5D</th><th class="r" data-type="num" title="기관 5일 순매수(억원)">기관5D</th><th class="c" data-type="num">플래그</th>
 </tr></thead>
 <tbody>{trs}</tbody>
 </table></div>
@@ -657,7 +681,8 @@ ADX는 방향이 없는 강도 지표라 방향은 +DI/−DI로 판정한다(＋
 </div></div>
 <script>
 function initSort(){{
-  var table = document.querySelector('#day table');
+  // 로직 설명 안에도 표가 있어 '#day table'은 그쪽을 먼저 잡는다 — 데이터 표만 지정.
+  var table = document.querySelector('#day table.board');
   if(!table) return;
   var tbody = table.tBodies[0];
   var ths = table.tHead.rows[0].cells;
