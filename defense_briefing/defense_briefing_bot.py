@@ -391,7 +391,7 @@ def send_telegram(md_report: str, now: datetime) -> None:
     chat_id = os.environ["TELEGRAM_CHAT_ID"]
     mode = os.environ.get("TELEGRAM_MODE", "summary")  # summary | full
     base_url = os.environ.get("DASHBOARD_BASE_URL",
-                              "https://gschoie.github.io/GS-output-dashboard")
+                              "https://gs-research-desk.pages.dev")
     date_str = now.strftime("%Y-%m-%d")
     # 텔레그램은 텍스트라 가독성이 떨어지므로 기본은 핵심 요약만 보내고
     # 표·색상이 있는 대시보드 날짜 페이지로 링크한다.

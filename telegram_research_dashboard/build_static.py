@@ -26,10 +26,16 @@ def records(conn, sql: str) -> list[dict]:
 def previous_payload() -> dict:
     """캐시 일부가 유실되면 현재 배포본의 정상 섹션을 보존한다."""
     try:
-        request = Request(
-            "https://gschoie.github.io/GS-output-dashboard/",
-            headers={"User-Agent": "GSResearchDashboard/1.0", "Cache-Control": "no-cache"},
-        )
+        # 2026-08-18 Cloudflare Pages + Access 이관. 로그인 벽 때문에 서비스 토큰
+        # (Zero Trust Service Token) 헤더가 있어야 통과한다 — 없으면 로그인 HTML이
+        # 내려와 marker 미발견 → 빈 dict 폴백(안전망만 비활성, 빌드는 계속).
+        headers = {"User-Agent": "GSResearchDashboard/1.0", "Cache-Control": "no-cache"}
+        access_id = os.environ.get("CF_ACCESS_CLIENT_ID", "")
+        access_secret = os.environ.get("CF_ACCESS_CLIENT_SECRET", "")
+        if access_id and access_secret:
+            headers["CF-Access-Client-Id"] = access_id
+            headers["CF-Access-Client-Secret"] = access_secret
+        request = Request("https://gs-research-desk.pages.dev/", headers=headers)
         with urlopen(request, timeout=30) as response:
             html = response.read().decode("utf-8", errors="replace")
         marker = "window.__DASHBOARD_DATA__="
