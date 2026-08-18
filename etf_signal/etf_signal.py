@@ -144,6 +144,79 @@ def returns(px):
     }
 
 
+VOL_SURGE_X = 1.5     # 당일 거래대금이 20일 평균의 몇 배면 '급증'으로 볼지
+NEAR_HIGH_PCT = 3.0   # 52주 신고가 대비 이 % 이내면 '신고가권'
+BB_N, BB_K = 20, 2.0  # 볼린저 밴드 기간·표준편차
+SQUEEZE_PCTL = 0.20   # 밴드폭이 최근 120일 중 하위 20%면 '수축'
+
+
+def volume_ratio(px):
+    """당일 거래대금 / 직전 20일 평균 거래대금.
+
+    크로스가 실제 수급을 동반했는지 가르는 확인 지표다. 분모에 당일을 넣으면
+    급증분이 평균을 끌어올려 배수가 희석되므로 직전 20일로 계산한다."""
+    tv = px["c"] * px["v"]
+    if len(tv) < 22:
+        return None
+    base = float(tv.iloc[-21:-1].mean())
+    if base <= 0:
+        return None
+    return round(float(tv.iloc[-1]) / base, 2)
+
+
+def high_low_52w(px):
+    """52주(≈250거래일) 최고·최저 종가와 현재가의 이격(%).
+
+    강한 추세 종목은 Stochastic이 늘 과열권이라 오실레이터만으로는 잡히지 않는다.
+    신고가 근접도는 그 구간을 따로 보여준다. 데이터가 짧으면 있는 만큼만 쓴다."""
+    c = px["c"].tail(250)
+    if len(c) < 60:
+        return None, None, None, None
+    hi, lo, last = float(c.max()), float(c.min()), float(c.iloc[-1])
+    return (round(hi), round(lo),
+            round((last / hi - 1) * 100, 1) if hi > 0 else None,
+            round((last / lo - 1) * 100, 1) if lo > 0 else None)
+
+
+def bollinger(px):
+    """밴드폭과 수축·확장 판정.
+
+    변동성이 수축(스퀴즈)한 뒤 확장할 때 큰 움직임이 나오는 경향을 잡는다.
+    반환: (밴드폭%, 수축 여부, 확장 전환 여부)"""
+    c = px["c"]
+    if len(c) < BB_N + 20:
+        return None, False, False
+    mid = c.rolling(BB_N).mean()
+    sd = c.rolling(BB_N).std()
+    bw = (2 * BB_K * sd / mid) * 100          # 밴드폭을 중심선 대비 %로
+    tail = bw.dropna().tail(120)
+    if len(tail) < 30:
+        return None, False, False
+    thr = float(tail.quantile(SQUEEZE_PCTL))
+    now, prev = float(bw.iloc[-1]), float(bw.iloc[-2])
+    return round(now, 1), bool(now <= thr), bool(prev <= thr < now)
+
+
+def flow_streaks(fl):
+    """외국인·기관의 연속 순매수(+)/순매도(−) 일수.
+
+    5일 합계는 하루 큰 금액에 좌우된다. 며칠째 같은 방향인지가 지속성을 더 잘 나타낸다."""
+    out = {}
+    for who, key in (("for", "외국인"), ("org", "기관")):
+        n = 0
+        if len(fl):
+            vals = list(fl[key])[::-1]
+            if vals and vals[0] != 0:
+                sign = 1 if vals[0] > 0 else -1
+                for v in vals:
+                    if (v > 0) - (v < 0) != sign:
+                        break
+                    n += 1
+                n *= sign
+        out[f"{who}_streak"] = int(n)
+    return out
+
+
 def _cross_up(a, b):
     """a가 b를 상향돌파한 봉(True). 직전 봉은 a<=b, 이번 봉은 a>b."""
     return (a - b > EPS) & (a.shift(1) - b.shift(1) <= EPS)
@@ -216,6 +289,14 @@ def scan_one(u):
     ev_trend_dead = bool(ev["trend_dead"].iloc[-1])
     ev_stoch_dead = bool(ev["stoch_dead"].iloc[-1])
     stoch_overbought = bool(ev["overbought"].iloc[-1])
+    # 확인 지표 — 크로스가 '진짜'인지 뒷받침하는 근거들
+    vol_ratio = volume_ratio(px)
+    vol_surge = bool(vol_ratio and vol_ratio >= VOL_SURGE_X)
+    hi52, lo52, from_high, from_low = high_low_52w(px)
+    near_high = bool(from_high is not None and from_high >= -NEAR_HIGH_PCT)
+    near_low = bool(from_low is not None and from_low <= NEAR_HIGH_PCT)
+    bb_bw, bb_squeeze, bb_release = bollinger(px)
+
     # 추세 강도 단계: 1 = ADX 20 돌파(확인), 2 = 25 돌파(강력). 0 = 해당 없음.
     # 하루에 20과 25를 함께 뚫으면(예: 19→26) 더 센 쪽인 2로 본다.
     ev_adx20 = bool(ev["adx20"].iloc[-1])
@@ -249,12 +330,22 @@ def scan_one(u):
         "org5": None if f5 is None else round(float(f5["기관"])),
         "ind5": None if f5 is None else round(float(f5["개인"])),
         "flow": flow, "dist": dist,
-        **returns(px),
+        **returns(px), **flow_streaks(fl),
+        "vol_ratio": vol_ratio, "vol_surge": vol_surge,
+        "hi52": hi52, "lo52": lo52, "from_high": from_high, "from_low": from_low,
+        "near_high": near_high, "near_low": near_low,
+        "bb_bw": bb_bw, "bb_squeeze": bb_squeeze, "bb_release": bb_release,
         # 매수 알림: 오늘 골든(추세 or 과매도-스토캐스틱) + 개인몰림 아님 + 유동성 OK
         "alert": bool((ev_trend or stoch_oversold) and flow != "개인몰림" and turnover >= LIQ_MIN_EOK),
         # 매도 알림: 오늘 데드(추세 or 과열-스토캐스틱) + 외인·기관 쌍끌이 아님 + 유동성 OK
-        "alert_sell": bool((ev_trend_dead or stoch_overbought) and flow != "쌍끌이"
-                           and turnover >= LIQ_MIN_EOK),
+        # 단, '상승추세 + 신고가권'에서의 과열이탈은 뺀다 — 강한 추세에서 %K는 계속
+        # 고점에 머물며 반복 교차해, 추세가 멀쩡한데 매도 경고만 나가는 문제가 있었다
+        # (아카이브 28일 기준 과열이탈 19건 중 7건이 상승추세 중 발생).
+        # 추세 자체가 꺾인 신호(ev_trend_dead)는 이 예외와 무관하게 그대로 경고한다.
+        "strong_up": bool(up_trend and near_high),
+        "alert_sell": bool((ev_trend_dead
+                            or (stoch_overbought and not (up_trend and near_high)))
+                           and flow != "쌍끌이" and turnover >= LIQ_MIN_EOK),
         # 추세 강도 알림: ADX 20/25 상향돌파 + 방향별 수급 필터(상승은 개인몰림, 하락은
         # 쌍끌이 제외) + 유동성 OK. 크로스 알림과 별개 신호이며 같은 날 함께 뜰 수 있다.
         "alert_adx": bool(adx_stage
@@ -262,6 +353,60 @@ def scan_one(u):
                           and turnover >= LIQ_MIN_EOK),
         "history": build_history(px, ev),
     }
+
+def add_relative_strength(out):
+    """유니버스 내 상대강도 백분위(0~100). 스캔이 끝난 뒤 횡단면으로 계산한다.
+
+    '올랐다'보다 '남들보다 더 올랐다'가 섹터 로테이션의 본질이다. 시장지수 대신
+    이 56개 ETF 자체를 비교군으로 쓴다 — 실제로 이 안에서 고르기 때문에
+    비교군으로 더 적절하고, 지수 API를 새로 붙이지 않아도 된다."""
+    for key, out_key in (("ret_1w", "rs_1w"), ("ret_1m", "rs_1m")):
+        vals = sorted(x[key] for x in out if x.get(key) is not None)
+        for r in out:
+            v = r.get(key)
+            if v is None or not vals:
+                r[out_key] = None
+            else:
+                below = sum(1 for u in vals if u < v)
+                r[out_key] = round(below / len(vals) * 100)
+
+
+def add_conviction(out):
+    """신호의 '뒷받침 근거' 개수를 점수화(0~100)하고 A/B/C 등급을 매긴다.
+
+    신호를 걸러내는 대신 등급을 매기는 쪽을 택했다. 하드 필터는 근거를 남기지 않아
+    왜 빠졌는지 알 수 없지만, 등급은 화면에 다 보여주면서 우선순위만 정한다.
+    텔레그램은 B 이상만 보내 알림 피로를 줄인다(대시보드에는 전부 표시)."""
+    for r in out:
+        side_up = bool(r["alert"] or (r.get("alert_adx") and r.get("adx_up")))
+        pts, why = 0, []
+        if r.get("vol_surge"):
+            pts += 25; why.append(f"거래대금 {r['vol_ratio']}배")
+        rs = r.get("rs_1m")
+        if rs is not None:
+            if side_up and rs >= 70:
+                pts += 20; why.append(f"상대강도 상위 {100-rs}%")
+            elif not side_up and rs <= 30:
+                pts += 20; why.append(f"상대강도 하위 {rs}%")
+        if side_up and r.get("up_trend"):
+            pts += 20; why.append("ADX 상승추세")
+        if not side_up and r.get("down_trend"):
+            pts += 20; why.append("ADX 하락추세")
+        if side_up and r.get("near_high"):
+            pts += 15; why.append("52주 신고가권")
+        if not side_up and r.get("near_low"):
+            pts += 15; why.append("52주 신저가권")
+        if r.get("bb_release"):
+            pts += 10; why.append("변동성 수축 후 확장")
+        st = (r.get("for_streak") or 0) + (r.get("org_streak") or 0)
+        if side_up and st >= 4:
+            pts += 10; why.append(f"외인·기관 연속 순매수 {st}일")
+        if not side_up and st <= -4:
+            pts += 10; why.append(f"외인·기관 연속 순매도 {abs(st)}일")
+        r["conviction"] = min(pts, 100)
+        r["conviction_why"] = why
+        r["grade"] = "A" if pts >= 55 else ("B" if pts >= 30 else "C")
+
 
 def scan_all():
     uni = load_universe()
@@ -278,6 +423,8 @@ def scan_all():
             errs.append({"name": u["name"], "code": u["code"], "err": str(e)[:120]})
             print(f"  [{i}/{len(uni)}] ERR {u['name']}: {str(e)[:80]}")
         time.sleep(0.15)
+    add_relative_strength(out)
+    add_conviction(out)
     payload = {
         "generated_at": datetime.now(KST).strftime("%Y-%m-%d %H:%M"),
         "signals": out, "errors": errs,
