@@ -183,6 +183,22 @@ jobs:
         with:
           path: telegram_research_dashboard/_site
 
+      # ── Cloudflare Pages 병행 배포 (로그인 벽 이관 1단계) ──────────────
+      # CLOUDFLARE_API_TOKEN·CLOUDFLARE_ACCOUNT_ID 시크릿을 등록해야 켜진다.
+      # Access 로그인 검증이 끝나 github.io를 내릴 때까지 양쪽에 같이 배포한다.
+      - name: Cloudflare Pages 배포 (병행)
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: |
+          if [ -z "$CLOUDFLARE_API_TOKEN" ] || [ -z "$CLOUDFLARE_ACCOUNT_ID" ]; then
+            echo "::notice::Cloudflare 시크릿 미설정 — 병행 배포 건너뜀 (GitHub Pages만 배포)"
+            exit 0
+          fi
+          npx --yes wrangler@4 pages project create gs-research-desk --production-branch=main 2>/dev/null || true
+          npx --yes wrangler@4 pages deploy telegram_research_dashboard/_site \
+            --project-name=gs-research-desk --branch=main --commit-dirty=true
+
   deploy:
     environment:
       name: github-pages
