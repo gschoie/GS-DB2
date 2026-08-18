@@ -102,13 +102,111 @@ def name_link(s):
     return (f'<a class="etf-link" href="https://finance.naver.com/item/fchart.naver?code={esc(code)}"'
             f' target="_blank" rel="noopener">{name}</a>')
 
+RET_COLS = [("ret_1d", "1D", "전일 대비"), ("ret_1w", "WoW", "1주 전 대비"),
+            ("ret_1m", "MoM", "1개월 전 대비")]
+# YoY(ret_1y)는 스캔에서 함께 저장하지만 이력이 쌓일 때까지 화면에는 넣지 않는다.
+
+
+def pct(v):
+    if v is None:
+        return '<span class="mut">–</span>'
+    sign = "+" if v > 0 else ("" if v == 0 else "−")
+    cls = "pos" if v > 0 else ("neg" if v < 0 else "mut")
+    return f'<span class="{cls}">{sign}{abs(v):.1f}%</span>'
+
+
+def dbar(v, scale):
+    """0을 가운데 두고 좌우로 뻗는 막대. scale은 그 열의 최대 절대값."""
+    if v is None or not scale:
+        return '<span class="dbar"></span>'
+    w = min(abs(v) / scale, 1.0) * 50
+    side = "left:50%" if v >= 0 else f"right:50%"
+    cls = "up" if v >= 0 else "dn"
+    return f'<span class="dbar"><i class="{cls}" style="{side};width:{w:.1f}%"></i></span>'
+
+
+SPARKS = {}   # code → 최근 종가. 아카이브는 용량 때문에 history를 빼고 저장하므로
+              # 최신 payload에서 한 번 채워 전 페이지가 같이 쓴다(차트 모달과 동일한 방식).
+
+
+def mini_spark(s, w=54, h=16):
+    """최근 60거래일 종가 스파크라인. 숫자만으로는 안 보이는 '모양'을 같이 준다.
+
+    과거 일자를 조회해도 시계열은 최신 것을 쓴다 — 아카이브에 종가가 없기 때문이며,
+    기존 '추세' 차트 모달도 같은 방식이다."""
+    cl = (SPARKS.get(str(s.get("code") or "")) or [])[-60:]
+    if len(cl) < 5:
+        return ""
+    mn, mx = min(cl), max(cl)
+    rng = (mx - mn) or 1
+    n = len(cl)
+    pts = " ".join(f"{i/(n-1)*(w-2)+1:.1f},{h-1-(v-mn)/rng*(h-2):.1f}" for i, v in enumerate(cl))
+    cls = "sp-up" if cl[-1] >= cl[0] else "sp-dn"
+    return (f'<svg class="spark {cls}" viewBox="0 0 {w} {h}" width="{w}" height="{h}" '
+            f'aria-hidden="true"><polyline points="{pts}"/></svg>')
+
+
+def returns_block(sig, day):
+    """기간 수익률 판 — WoW 내림차순 기본. 위에 그룹 평균 WoW 요약을 얹는다."""
+    if not any(s.get("ret_1w") is not None for s in sig):
+        return ""   # 구버전 아카이브에는 수익률이 없다
+
+    # 열별 스케일(최대 절대값)로 막대를 정규화 — 열마다 변동폭이 다르다
+    scale = {k: max([abs(s[k]) for s in sig if s.get(k) is not None] or [1])
+             for k, _, _ in RET_COLS}
+
+    # 그룹 평균 WoW — 종목을 훑기 전에 어느 섹터가 셌는지 먼저 보이게
+    g = {}
+    for s in sig:
+        if s.get("ret_1w") is not None:
+            g.setdefault(s["group"], []).append(s["ret_1w"])
+    gavg = sorted(((k, sum(v) / len(v), len(v)) for k, v in g.items()),
+                  key=lambda x: -x[1])
+    gmax = max([abs(v) for _, v, _ in gavg] or [1])
+    gitems = "".join(
+        f'<li><span class="gn">{esc(k)}</span>{dbar(v, gmax)}'
+        f'<span class="gv">{pct(round(v, 1))}</span><small>{n}종목</small></li>'
+        for k, v, n in gavg)
+
+    rows = sorted(sig, key=lambda s: (s.get("ret_1w") is None, -(s.get("ret_1w") or 0)))
+    trs = ""
+    for s in rows:
+        flag = ""
+        if s.get("alert"): flag += '<span class="star">★</span>'
+        if s.get("alert_sell"): flag += '<span class="skull">▼</span>'
+        if s.get("alert_adx"): flag += '<span class="bolt">⚡</span>'
+        tds = "".join(
+            f'<td class="c" data-v="{sv(s.get(k))}">{dbar(s.get(k), scale[k])}'
+            f'<span class="rv">{pct(s.get(k))}</span></td>'
+            for k, _, _ in RET_COLS)
+        trs += (f'<tr><td class="etf" data-v="{esc(s["name"])}">'
+                f'<div class="etf-row"><b>{name_link(s)}</b>{flag}</div>'
+                f'<small>{esc(s["group"])}</small></td>'
+                f'<td class="c sparkcell" data-v="{sv(s.get("ret_1m"))}">{mini_spark(s)}</td>'
+                f'{tds}</tr>')
+
+    heads = "".join(f'<th class="c" data-type="num" title="{esc(t)}">{h}</th>'
+                    for _, h, t in RET_COLS)
+    return f"""
+<h2>{day}의 수익률 <small style="font:400 12px Inter;color:#8b918e">— WoW 높은 순 · 헤더 클릭으로 재정렬</small></h2>
+<details class="grp" open><summary>그룹 평균 WoW ({len(gavg)}개 그룹)</summary>
+<ul class="gbars">{gitems}</ul></details>
+<div class="tablewrap"><table class="rets">
+<thead><tr><th data-type="text">ETF</th><th class="c">최근 60일</th>{heads}</tr></thead>
+<tbody>{trs}</tbody>
+</table></div>
+"""
+
+
 def day_html(payload, is_latest):
     """하루치 본문(네비게이션으로 교체되는 부분)."""
     sig = payload["signals"]
     scanned = len(sig)
     alerts = [s for s in sig if s["alert"]]
     sells = [s for s in sig if s.get("alert_sell")]
-    adxs = [s for s in sig if s.get("alert_adx")]
+    # 강력(25↑)을 확인(20↑)보다 앞에 — 맨 위 섹션이라 확신도 높은 것부터 보이게
+    adxs = sorted([s for s in sig if s.get("alert_adx")],
+                  key=lambda x: (-(x.get("adx_stage") or 0), not x.get("adx_up")))
     n_buy = sum(1 for s in sig if s["flow"] == "쌍끌이")
     n_warn = sum(1 for s in sig if s["flow"] == "개인몰림")
     asof = sig[0]["asof"] if sig else "—"
@@ -200,14 +298,16 @@ ADX(추세) + Stochastic Slow(타이밍) + 수급(외인·기관·개인 5일 �
   <article><small>개인몰림 경계</small><strong class="w">{n_warn}</strong></article>
 </section>
 
+<h2>{day}의 추세 강도 <small style="font:400 12px Inter;color:#8b918e">— ADX 20 돌파(확인) · 25 돌파(강력) · 방향은 DI로 판정</small></h2>
+<div class="alerts">{cards(adxs, "adx")}</div>
+
 <h2>{day}의 매수 신호 <small style="font:400 12px Inter;color:#8b918e">— 새로 뜬 골든크로스 · 개인몰림 제외 · 유동성 확보 종목</small></h2>
 <div class="alerts">{cards(alerts, "buy")}</div>
 
 <h2>{day}의 매도 경고 <small style="font:400 12px Inter;color:#8b918e">— 새로 뜬 데드크로스 · 쌍끌이 제외 · 유동성 확보 종목</small></h2>
 <div class="alerts">{cards(sells, "sell")}</div>
 
-<h2>{day}의 추세 강도 <small style="font:400 12px Inter;color:#8b918e">— ADX 20 돌파(확인) · 25 돌파(강력) · 방향은 DI로 판정</small></h2>
-<div class="alerts">{cards(adxs, "adx")}</div>
+{returns_block(sig, day)}
 
 <h2>전체 신호판 ({scanned})</h2>
 <div class="tablewrap"><table>
@@ -238,6 +338,9 @@ def archive(payload):
 
 
 def build(payload):
+    global SPARKS
+    SPARKS = {str(s.get("code")): ((s.get("history") or {}).get("close") or [])
+              for s in (payload.get("signals") or []) if s.get("code")}
     archive(payload)
     hist = {}
     for p in sorted(glob.glob(os.path.join(HIST_DIR, "*.json"))):
@@ -346,6 +449,25 @@ tbody tr.ha{{background:#f6f9fc}}tbody tr.ha:hover{{background:#eef4fa}}
 .mini{{display:inline-block;font-size:9px;font-weight:700;padding:2px 5px;border-radius:4px;margin-left:3px}}
 .mini.gold{{background:#fff4d6;color:#8a661c}}
 .mini.dead{{background:#f8e3e0;color:#a43c31}}
+.spark{{vertical-align:middle;overflow:visible}}
+.spark polyline{{fill:none;stroke-width:1.3;vector-effect:non-scaling-stroke}}
+.spark.sp-up polyline{{stroke:#2e7d4f}}.spark.sp-dn polyline{{stroke:#bd4335}}
+table.rets td{{padding:7px 10px}}table.rets .sparkcell{{width:60px}}
+.dbar{{display:block;position:relative;height:7px;background:#f1f4f0;border-radius:2px;margin:0 0 3px}}
+.dbar::before{{content:"";position:absolute;left:50%;top:-1px;bottom:-1px;width:1px;background:#d5dcd4}}
+.dbar i{{position:absolute;top:0;bottom:0;border-radius:2px}}
+.dbar i.up{{background:#7fb894}}.dbar i.dn{{background:#e29b91}}
+.rv{{font-size:12px;font-family:Georgia;white-space:nowrap}}
+.grp{{background:#fff;border:1px solid var(--line);padding:10px 14px;margin:4px 0 10px}}
+.grp summary{{cursor:pointer;font-size:12px;font-weight:700;color:#5b6660}}
+.gbars{{list-style:none;margin:10px 0 2px;padding:0;
+display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:4px 18px}}
+.gbars li{{display:grid;grid-template-columns:110px 1fr 54px 42px;align-items:center;gap:8px;font-size:11px}}
+.gbars .gn{{color:#445049;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}}
+.gbars .gv{{text-align:right;font-family:Georgia}}
+.gbars small{{color:#9aa19d;text-align:right}}
+.gbars .dbar{{margin:0}}
+@media(max-width:620px){{.gbars li{{grid-template-columns:88px 1fr 48px}} .gbars small{{display:none}}}}
 .mini.bolt1{{background:#e7eef6;color:#2b5f8a}}
 .mini.bolt2{{background:#d9e6f3;color:#1d4e75;font-weight:800}}
 .pos{{color:#286342}}.neg{{color:#a43c31}}.mut{{color:#a9afab}}
