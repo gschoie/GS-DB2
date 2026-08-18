@@ -170,13 +170,12 @@ def mini_spark(s, w=54, h=16):
 
 
 def returns_block(sig, day):
-    """기간 수익률 판 — WoW 내림차순 기본. 위에 그룹 평균 WoW 요약을 얹는다."""
+    """수익률 섹션 머리 — 그룹 평균 WoW 랭킹.
+
+    종목별 수익률은 아래 전체 신호판에 열로 합쳐져 있고, 여기서는 '어느 섹터가
+    셌는지'만 먼저 보여준다."""
     if not any(s.get("ret_1w") is not None for s in sig):
         return ""   # 구버전 아카이브에는 수익률이 없다
-
-    # 열별 스케일(최대 절대값)로 막대를 정규화 — 열마다 변동폭이 다르다
-    scale = {k: max([abs(s[k]) for s in sig if s.get(k) is not None] or [1])
-             for k, _, _ in RET_COLS}
 
     # 그룹 평균 WoW — 종목을 훑기 전에 어느 섹터가 셌는지 먼저 보이게
     g = {}
@@ -191,26 +190,8 @@ def returns_block(sig, day):
         f'<span class="gv">{pct(round(v, 1))}</span><small>{n}종목</small></li>'
         for k, v, n in gavg)
 
-    rows = sorted(sig, key=lambda s: (s.get("ret_1w") is None, -(s.get("ret_1w") or 0)))
-    trs = ""
-    for s in rows:
-        flag = ""
-        if s.get("alert"): flag += '<span class="star">★</span>'
-        if s.get("alert_sell"): flag += '<span class="skull">▼</span>'
-        if s.get("alert_adx"): flag += '<span class="bolt">⚡</span>'
-        tds = "".join(
-            f'<td class="c" data-v="{sv(s.get(k))}">{dbar(s.get(k), scale[k])}'
-            f'<span class="rv">{pct(s.get(k))}</span></td>'
-            for k, _, _ in RET_COLS)
-        trs += (f'<tr><td class="etf" data-v="{esc(s["name"])}">'
-                f'<div class="etf-row"><b>{name_link(s)}</b>{flag}</div>'
-                f'<small>{esc(s["group"])}</small></td>'
-                f'<td class="c sparkcell" data-v="{sv(s.get("ret_1m"))}">{mini_spark(s)}</td>'
-                f'{tds}</tr>')
-
-    heads = "".join(f'<th class="c" data-type="num" title="{esc(t)}">{h}</th>'
-                    for _, h, t in RET_COLS)
     return f"""
+<h2>{day}의 수익률 <small style="font:400 12px Inter;color:#8b918e">— 그룹 평균 WoW · 센 섹터부터</small></h2>
 <details class="grp" open><summary>그룹 평균 WoW ({len(gavg)}개 그룹) — 종목을 훑기 전에 어느 섹터가 셌는지</summary>
 <ul class="gbars">{gitems}</ul></details>
 """
@@ -429,7 +410,7 @@ ADX(추세) + Stochastic Slow(타이밍) + 수급(외인·기관·개인 5일 �
 
 {returns_block(sig, day)}
 
-<h2>전체 신호판 ({scanned})</h2>
+<h2>전체 신호판 ({scanned}) <small style="font:400 12px Inter;color:#8b918e">— 수익률·지표·수급 한 표 · 헤더 클릭으로 정렬</small></h2>
 <div class="tablewrap"><table class="board">
 <thead><tr>
 <th data-type="text">ETF</th><th class="r" data-type="num">종가</th>
@@ -600,9 +581,12 @@ table.rets td{{padding:7px 10px}}table.rets .sparkcell{{width:60px}}
 .rv{{font-size:12px;font-family:Georgia;white-space:nowrap}}
 .grp{{background:#fff;border:1px solid var(--line);padding:10px 14px;margin:4px 0 10px}}
 .grp summary{{cursor:pointer;font-size:12px;font-weight:700;color:#5b6660}}
+/* 순위표는 위에서 아래로 읽어야 흐름이 끊기지 않는다. 여러 열로 흩으면
+   가로로 읽게 돼 '센 섹터부터'가 사라지므로, 폰과 PC 모두 한 줄 세로로 둔다. */
 .gbars{{list-style:none;margin:10px 0 2px;padding:0;
-display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:4px 18px}}
-.gbars li{{display:grid;grid-template-columns:110px 1fr 54px 42px;align-items:center;gap:8px;font-size:11px}}
+display:block;max-width:720px}}
+.gbars li{{display:grid;grid-template-columns:130px 1fr 58px 46px;align-items:center;
+gap:10px;font-size:12px;padding:2px 0}}
 .gbars .gn{{color:#445049;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}}
 .gbars .gv{{text-align:right;font-family:Georgia}}
 .gbars small{{color:#9aa19d;text-align:right}}
