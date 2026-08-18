@@ -196,14 +196,14 @@ def returns_block(sig, day):
 
 
 LOGIC_DOC = """
-<details class="logic" open>
-<summary>📐 이 판이 신호를 고르는 방식 — 지표·필터·등급 (클릭해서 접기)</summary>
+<details class="logic">
+<summary>📐 이 판이 신호를 고르는 방식 — 지표·필터·등급·백테스트 (클릭해서 펼치기)</summary>
 <div class="logic-body">
 
 <p><b>전제.</b> 모든 계산은 <b>전일 확정 종가</b>로 한다. 스캔이 도는 아침 7시엔 당일 봉이
 없고, 장중 값으로 계산하면 오후에 뒤집히는 신호가 나온다. 대신 신호는 하루 늦게 잡힌다.</p>
 
-<h4>1. 무엇을 신호로 보는가 — 3종류</h4>
+<details class="sec"><summary>1. 무엇을 신호로 보는가 — 3종류</summary>
 <ul>
 <li><b>⚡ 추세 강도</b> · ADX가 20을 상향돌파하면 <b>확인</b>, 25를 넘으면 <b>강력</b>.
 ADX는 방향이 없는 강도 지표라 방향은 ＋DI/−DI로 정한다. <b>맨 위에 두는 이유</b>는
@@ -214,8 +214,8 @@ ADX는 방향이 없는 강도 지표라 방향은 ＋DI/−DI로 정한다. <b>
 <li><b>▼ 매도</b> · ＋DI가 −DI를 하향이탈(추세 꺾임)한 날. <b>과열이탈은 매도에서 뺐다</b>
 — 아래 백테스트 참고.</li>
 </ul>
-
-<h4>2. 왜 걸러내는가 — 필터</h4>
+</details>
+<details class="sec"><summary>2. 왜 걸러내는가 — 필터</summary>
 <ul>
 <li><b>유동성</b> · 20일 평균 거래대금 5억 미만은 제외. 신호가 맞아도 못 산다.</li>
 <li><b>수급 역방향</b> · 매수는 <b>개인몰림</b>(개인만 사고 외인·기관은 파는 중) 제외,
@@ -223,8 +223,8 @@ ADX는 방향이 없는 강도 지표라 방향은 ＋DI/−DI로 정한다. <b>
 <li><b>과열이탈은 매도에서 제외</b> · 백테스트 결과 매도 신호로서 방향이 반대였다(아래 4번).
 감지는 계속하되 표에 참고 배지로만 남긴다.</li>
 </ul>
-
-<h4>3. 신뢰도 등급 — A / B / C</h4>
+</details>
+<details class="sec"><summary>3. 신뢰도 등급 — A / B / C</summary>
 <p>신호를 지우는 대신 <b>등급</b>을 매긴다. 하드 필터는 왜 빠졌는지 알 수 없지만,
 등급은 다 보여주면서 우선순위만 정한다. 아래 근거가 있을 때마다 점수를 더한다.</p>
 <table class="logic-tb">
@@ -239,8 +239,8 @@ ADX는 방향이 없는 강도 지표라 방향은 ＋DI/−DI로 정한다. <b>
 <p><b>A</b> 55점↑ · <b>B</b> 30점↑ · <b>C</b> 그 미만.
 <b>텔레그램은 B 이상만</b> 보낸다 — 28일간 매수 신호가 138건(하루 4.9건)이라
 전부 보내면 알림이 무의미해진다. 이 판에는 C까지 전부 표시된다.</p>
-
-<h4>4. 백테스트 — 어느 신호가 실제로 돈이 됐나</h4>
+</details>
+<details class="sec"><summary>4. 백테스트 — 어느 신호가 실제로 돈이 됐나</summary>
 <p>2023-08 ~ 2026-08, 53종목, 표본 3.7만 봉. 진입은 <b>신호 다음 봉 종가</b>(신호 당일
 매수는 불가능하므로). 측정 구간이 상승장이라 아무 신호나 +로 나오므로,
 <b>기준선</b>(같은 기간 아무 날이나 매수: D+5 +0.41% · D+20 +1.50%) 대비 <b>초과수익</b>만 본다.
@@ -260,13 +260,13 @@ ADX는 방향이 없는 강도 지표라 방향은 ＋DI/−DI로 정한다. <b>
 <p><b>측정의 한계</b> — 수급 필터(개인몰림·쌍끌이)는 과거 재현이 안 돼 '필터 전 원신호'
 기준이다. 현재 유니버스 종목만 봐서 생존 편향이 있고, 거래비용 미반영, 구간이 겹쳐
 표본이 독립이 아니다. 측정 구간 3년이 상승장이라 <b>하락장에서는 결과가 다를 수 있다.</b></p>
-
-<h4>5. 상대강도는 무엇 대비인가</h4>
+</details>
+<details class="sec"><summary>5. 상대강도는 무엇 대비인가</summary>
 <p>시장지수가 아니라 <b>이 판의 56개 ETF 자체</b>가 비교군이다. 실제로 이 안에서
 고르기 때문에 비교군으로 더 적절하고, 지수 API를 새로 붙이지 않아도 된다.
 표시값은 백분위(0~100)이며 100에 가까울수록 유니버스에서 강하다.</p>
-
-<h4>6. 한계 — 알고 쓰자</h4>
+</details>
+<details class="sec"><summary>6. 한계 — 알고 쓰자</summary>
 <ul>
 <li>등급 배점(25/20/20/15/10/10)은 아직 <b>경험칙</b>이다. 백테스트로 신호 유형은
 검증했지만 배점 가중치까지 최적화하지는 않았다. 실제로 거래대금 급증은 추세골든에는
@@ -275,10 +275,12 @@ ADX는 방향이 없는 강도 지표라 방향은 ＋DI/−DI로 정한다. <b>
 최적화하지 않았다.</li>
 <li>매매 신호가 아니라 <b>관심 종목을 좁히는 도구</b>다.</li>
 </ul>
+</details>
 
 </div>
 </details>
 """
+
 
 
 def grade_badge(s):
@@ -574,7 +576,14 @@ tbody tr.ha{{background:#f6f9fc}}tbody tr.ha:hover{{background:#eef4fa}}
 padding:14px 18px;margin:18px 0 6px}}
 .logic>summary{{cursor:pointer;font:600 14px Georgia,"Noto Serif KR",serif;color:#2c3a34}}
 .logic-body{{font-size:12.5px;line-height:1.75;color:#3c4842;margin-top:10px}}
-.logic-body h4{{font:600 13px Georgia,"Noto Serif KR",serif;margin:16px 0 6px;color:#1f2b26}}
+.logic-body .sec{{border-top:1px solid #eef1ec;padding:7px 0}}
+.logic-body .sec:first-of-type{{border-top:0}}
+.logic-body .sec>summary{{cursor:pointer;font:600 13px Georgia,"Noto Serif KR",serif;
+color:#1f2b26;list-style:none;padding:2px 0}}
+.logic-body .sec>summary::before{{content:"▸ ";color:#8b918e}}
+.logic-body .sec[open]>summary::before{{content:"▾ "}}
+.logic-body .sec>summary::-webkit-details-marker{{display:none}}
+.logic-body .sec[open]{{padding-bottom:10px}}
 .logic-body p{{margin:6px 0}}.logic-body ul{{margin:6px 0;padding-left:18px}}
 .logic-body li{{margin:3px 0}}
 .logic-tb{{border-collapse:collapse;margin:8px 0;min-width:0;width:auto}}
