@@ -65,6 +65,8 @@ def _block(rows, icon, why):
             f"{mark} <b>{esc(s['name'])}</b> · {esc(s['group'])}",
             f"   {esc(why(s))}",
             f"   ADX {s['adx']} · %K {s['k']}/{s['d']} · {esc(flow)}",
+            *( [f"   [{s['grade']}] {esc(' · '.join(s['conviction_why']))}"]
+               if s.get("conviction_why") else [] ),
             "",
         ]
     return lines
@@ -75,12 +77,21 @@ def _adx_icon(s):
         return "⚡"
     return "🔺" if s.get("adx_up") else "🔻"
 
+MIN_GRADE = ("A", "B")   # 텔레그램은 B 이상만 — 대시보드에는 C까지 전부 표시된다
+
+
+def _keep(s):
+    """알림 피로를 줄이려고 등급이 낮은 신호는 발송하지 않는다.
+    등급이 없는 구버전 payload는 그대로 통과시킨다."""
+    return s.get("grade", "A") in MIN_GRADE
+
+
 def build_message(payload):
     sig = payload["signals"]
-    buys = [s for s in sig if s["alert"]]
-    sells = [s for s in sig if s.get("alert_sell")]
+    buys = [s for s in sig if s["alert"] and _keep(s)]
+    sells = [s for s in sig if s.get("alert_sell") and _keep(s)]
     # 추세 강도는 강력(25↑) 먼저, 그다음 확인(20↑)
-    adxs = sorted([s for s in sig if s.get("alert_adx")],
+    adxs = sorted([s for s in sig if s.get("alert_adx") and _keep(s)],
                   key=lambda s: -(s.get("adx_stage") or 0))
     if not buys and not sells and not adxs:
         return None

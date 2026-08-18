@@ -198,6 +198,102 @@ def returns_block(sig, day):
 """
 
 
+LOGIC_DOC = """
+<details class="logic" open>
+<summary>📐 이 판이 신호를 고르는 방식 — 지표·필터·등급 (클릭해서 접기)</summary>
+<div class="logic-body">
+
+<p><b>전제.</b> 모든 계산은 <b>전일 확정 종가</b>로 한다. 스캔이 도는 아침 7시엔 당일 봉이
+없고, 장중 값으로 계산하면 오후에 뒤집히는 신호가 나온다. 대신 신호는 하루 늦게 잡힌다.</p>
+
+<h4>1. 무엇을 신호로 보는가 — 3종류</h4>
+<ul>
+<li><b>⚡ 추세 강도</b> · ADX가 20을 상향돌파하면 <b>확인</b>, 25를 넘으면 <b>강력</b>.
+ADX는 방향이 없는 강도 지표라 방향은 ＋DI/−DI로 정한다. <b>맨 위에 두는 이유</b>는
+'추세가 진짜인가'가 '무엇이 교차했나'보다 먼저이기 때문이다 — 교차만 보면 힘없는
+횡보장 신호에 휘둘린다.</li>
+<li><b>★ 매수</b> · ＋DI가 −DI를 상향돌파(추세 전환)하거나, Stochastic %K가 %D를
+<b>25 미만</b>에서 상향돌파(과매도 반등)한 날.</li>
+<li><b>▼ 매도</b> · 그 반대. ＋DI 하향이탈, 또는 %K가 %D를 <b>75 초과</b>에서 하향이탈.</li>
+</ul>
+
+<h4>2. 왜 걸러내는가 — 필터</h4>
+<ul>
+<li><b>유동성</b> · 20일 평균 거래대금 5억 미만은 제외. 신호가 맞아도 못 산다.</li>
+<li><b>수급 역방향</b> · 매수는 <b>개인몰림</b>(개인만 사고 외인·기관은 파는 중) 제외,
+매도는 <b>쌍끌이</b>(외인·기관 동반 순매수) 제외. 주포와 반대로 가는 신호를 뺀다.</li>
+<li><b>강한 상승추세의 과열이탈 제외</b> · ADX 상승추세 + 52주 신고가권(−3% 이내)이면
+Stochastic 과열이탈을 매도로 보지 않는다. 강한 추세에서 %K는 80~100에 머물며 계속
+교차해, 추세는 멀쩡한데 경고만 반복된다. 실제로 아카이브 28일 기준 과열이탈 19건 중
+<b>7건(37%)</b>이 상승추세 중 발생했다. 추세 자체가 꺾인 신호(＋DI 하향이탈)는
+이 예외와 무관하게 그대로 경고한다.</li>
+</ul>
+
+<h4>3. 신뢰도 등급 — A / B / C</h4>
+<p>신호를 지우는 대신 <b>등급</b>을 매긴다. 하드 필터는 왜 빠졌는지 알 수 없지만,
+등급은 다 보여주면서 우선순위만 정한다. 아래 근거가 있을 때마다 점수를 더한다.</p>
+<table class="logic-tb">
+<tr><th>근거</th><th>점수</th><th>뜻</th></tr>
+<tr><td>거래대금 급증(20일 평균 1.5배↑)</td><td>25</td><td>실제 수급이 붙었는가</td></tr>
+<tr><td>상대강도 상위 30%(하락신호는 하위 30%)</td><td>20</td><td>남들보다 더 갔는가</td></tr>
+<tr><td>ADX 추세 방향 일치</td><td>20</td><td>추세가 신호를 뒷받침하는가</td></tr>
+<tr><td>52주 신고가권(하락신호는 신저가권)</td><td>15</td><td>가격 구조상 어디인가</td></tr>
+<tr><td>변동성 수축 후 확장</td><td>10</td><td>큰 움직임의 초입인가</td></tr>
+<tr><td>외인·기관 연속 순매수/매도 4일↑</td><td>10</td><td>수급이 지속되는가</td></tr>
+</table>
+<p><b>A</b> 55점↑ · <b>B</b> 30점↑ · <b>C</b> 그 미만.
+<b>텔레그램은 B 이상만</b> 보낸다 — 28일간 매수 신호가 138건(하루 4.9건)이라
+전부 보내면 알림이 무의미해진다. 이 판에는 C까지 전부 표시된다.</p>
+
+<h4>4. 상대강도는 무엇 대비인가</h4>
+<p>시장지수가 아니라 <b>이 판의 56개 ETF 자체</b>가 비교군이다. 실제로 이 안에서
+고르기 때문에 비교군으로 더 적절하고, 지수 API를 새로 붙이지 않아도 된다.
+표시값은 백분위(0~100)이며 100에 가까울수록 유니버스에서 강하다.</p>
+
+<h4>5. 한계 — 알고 쓰자</h4>
+<ul>
+<li>이 신호들의 <b>사후 성과는 아직 측정되지 않았다.</b> 과매도반등이 실제로 돈이
+됐는지는 백테스트를 붙여야 안다. 등급 배점도 현재는 <b>경험칙</b>이지 검증된 가중치가 아니다.</li>
+<li>임계값(25/75, ADX 20/25, 거래대금 1.5배)은 통상값을 쓴 것이며 이 유니버스에
+최적화하지 않았다.</li>
+<li>매매 신호가 아니라 <b>관심 종목을 좁히는 도구</b>다.</li>
+</ul>
+
+</div>
+</details>
+"""
+
+
+def grade_badge(s):
+    """A/B/C 신뢰도 등급. 등급이 없는 구버전 데이터면 표시하지 않는다."""
+    g = s.get("grade")
+    if not g:
+        return ""
+    return (f'<span class="grade g-{g.lower()}" title="신뢰도 {s.get("conviction", 0)}점 '
+            f'— 상단 로직 설명 참고">{g}</span>')
+
+
+def why_line(s):
+    """등급 점수를 만든 근거들. 왜 이 신호가 셌는지/약했는지 그대로 보여준다."""
+    why = s.get("conviction_why") or []
+    if not why:
+        return '<p class="why none-why">뒷받침 근거 없음 — 크로스 단독 신호</p>'
+    return '<p class="why">' + " · ".join(f'<span>{esc(w)}</span>' for w in why) + '</p>'
+
+
+def extra_meta(s):
+    """카드 하단에 확인 지표를 덧붙인다(값이 있을 때만)."""
+    out = []
+    # 급증했을 때는 위 근거 칩이 이미 보여주므로 여기선 뺀다(중복 방지)
+    if s.get("vol_ratio") is not None and not s.get("vol_surge"):
+        out.append(f'거래대금 <span class="mut">{s["vol_ratio"]}배</span>')
+    if s.get("rs_1m") is not None:
+        out.append(f'RS {s["rs_1m"]}')
+    if s.get("from_high") is not None:
+        out.append(f'52주고 대비 {s["from_high"]:+.1f}%')
+    return (" · " + " · ".join(out)) if out else ""
+
+
 def day_html(payload, is_latest):
     """하루치 본문(네비게이션으로 교체되는 부분)."""
     sig = payload["signals"]
@@ -230,9 +326,10 @@ def day_html(payload, is_latest):
                 cls += " strong" if s.get("adx_stage") == 2 else ""
             out += f'''
       <article class="alert-card {cls}">
-        <div class="ac-head"><span class="ac-title"><b>{name_link(s)}</b><button class="btn-chart" data-code="{esc(s.get("code") or "")}" title="최근 120거래일 가격 · 신호 발생 시점">추세</button></span><small>{esc(s["group"])} · {s["close"]:,}원</small></div>
+        <div class="ac-head"><span class="ac-title">{grade_badge(s)}<b>{name_link(s)}</b><button class="btn-chart" data-code="{esc(s.get("code") or "")}" title="최근 120거래일 가격 · 신호 발생 시점">추세</button></span><small>{esc(s["group"])} · {s["close"]:,}원</small></div>
         <p>{esc(rs)}</p>
-        <div class="ac-meta">ADX {s["adx"]} · %K {s["k"]}/{s["d"]} · {flow_badge(s["flow"])}</div>
+        {why_line(s)}
+        <div class="ac-meta">ADX {s["adx"]} · %K {s["k"]}/{s["d"]} · {flow_badge(s["flow"])}{extra_meta(s)}</div>
       </article>'''
         return out
 
@@ -285,6 +382,7 @@ def day_html(payload, is_latest):
       </tr>'''
 
     return f"""
+{LOGIC_DOC if is_latest else ""}
 <p class="sub">신호 기준일(전일 확정) <b>{esc(asof)}</b><br>
 {sched_badge(payload.get("generated_at"))}<br>
 ADX(추세) + Stochastic Slow(타이밍) + 수급(외인·기관·개인 5일 순매수, 억원). 신호는 장중 흔들림을 피해 <b>전일 확정 종가</b>로 계산.</p>
@@ -449,6 +547,24 @@ tbody tr.ha{{background:#f6f9fc}}tbody tr.ha:hover{{background:#eef4fa}}
 .mini{{display:inline-block;font-size:9px;font-weight:700;padding:2px 5px;border-radius:4px;margin-left:3px}}
 .mini.gold{{background:#fff4d6;color:#8a661c}}
 .mini.dead{{background:#f8e3e0;color:#a43c31}}
+.logic{{background:#fff;border:1px solid var(--line);border-left:4px solid var(--green);
+padding:14px 18px;margin:18px 0 6px}}
+.logic>summary{{cursor:pointer;font:600 14px Georgia,"Noto Serif KR",serif;color:#2c3a34}}
+.logic-body{{font-size:12.5px;line-height:1.75;color:#3c4842;margin-top:10px}}
+.logic-body h4{{font:600 13px Georgia,"Noto Serif KR",serif;margin:16px 0 6px;color:#1f2b26}}
+.logic-body p{{margin:6px 0}}.logic-body ul{{margin:6px 0;padding-left:18px}}
+.logic-body li{{margin:3px 0}}
+.logic-tb{{border-collapse:collapse;margin:8px 0;min-width:0;width:auto}}
+.logic-tb th,.logic-tb td{{border:1px solid #e6eae4;padding:5px 10px;font-size:11.5px;text-align:left}}
+.logic-tb th{{background:#f5f7f3;color:#5b6660;white-space:nowrap}}
+.logic-tb td:nth-child(2){{text-align:center;font-family:Georgia}}
+.grade{{display:inline-block;width:17px;height:17px;line-height:17px;text-align:center;
+border-radius:4px;font-size:10px;font-weight:800;margin-right:6px;cursor:help}}
+.g-a{{background:#173f35;color:#d9f272}}.g-b{{background:#dfe9df;color:#2c3a34}}
+.g-c{{background:#eef1ec;color:#98a09a}}
+.why{{margin:6px 0;font-size:11px;color:#5b6660;display:flex;flex-wrap:wrap;gap:4px 6px}}
+.why span{{background:#f2f5f0;border-radius:3px;padding:1px 6px}}
+.why.none-why{{color:#a9afab;font-style:italic;display:block}}
 .spark{{vertical-align:middle;overflow:visible}}
 .spark polyline{{fill:none;stroke-width:1.3;vector-effect:non-scaling-stroke}}
 .spark.sp-up polyline{{stroke:#2e7d4f}}.spark.sp-dn polyline{{stroke:#bd4335}}
