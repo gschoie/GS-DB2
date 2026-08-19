@@ -1,5 +1,5 @@
 {
-  "when_utc": "2026-08-18 22:14:27Z",
+  "when_utc": "2026-08-19 22:16:29Z",
   "ok": true,
   "note": "alert_sent",
   "chat_id_tail": "5171",
@@ -7,7 +7,7 @@
   "response": {
     "ok": true,
     "result": {
-      "message_id": 129,
+      "message_id": 142,
       "from": {
         "id": 8875725998,
         "is_bot": true,
@@ -21,8 +21,8 @@
         "username": "gschoie",
         "type": "private"
       },
-      "date": 1787091267,
-      "text": "📡 ETF/섹터 신호 · 2026-08-18 (전일 확정)\n\n★ 매수 신호(골든크로스) 1개\n\n🟢 KODEX 반도체 · 반도체/AI/로봇\n   ＋DI가 −DI 상향돌파·추세전환 · 외인·기관 동반 순매수\n   ADX 23.6 · %K 90.0/84.0 · 외인·기관 쌍끌이\n   [B] ADX 상승추세 · 외인·기관 연속 순매수 5일\n\n▼ 매도 경고(데드크로스) 2개\n\n🔴 KODEX 증권 · 금융\n   Stochastic 과열 이탈·데드크로스\n   ADX 20.0 · %K 70.8/72.8 · 수급 중립\n   [B] 거래대금 1.55배 · 상대강도 하위 0%\n\n🔴 PLUS K방산소부장 · 방산\n   Stochastic 과열 이탈·데드크로스\n   ADX 21.0 · %K 88.3/91.9 · 수급 중립\n   [B] 상대강도 하위 29% · ADX 하락추세\n\n⚡ 추세 강도 1개\n\n🔻 KODEX 인도Nifty50 · 해외지수\n   ADX 20 상향돌파 · 하락추세 확립(확인)\n   ADX 22.1 · %K 43.7/36.1 · 수급 중립\n   [A] 상대강도 하위 18% · ADX 하락추세 · 52주 신저가권 · 외인·기관 연속 순매도 6일\n\n전체 신호판 › 대시보드\n🎴 GS Research Desk · ETF/섹터 신호",
+      "date": 1787177788,
+      "text": "📡 ETF/섹터 신호 · 2026-08-19 (전일 확정)\n\n▼ 매도 경고(데드크로스) 2개\n\n🔴 KODEX 반도체 · 반도체/AI/로봇\n   ＋DI가 −DI 하향이탈·추세꺾임 · Stochastic 과열 이탈·데드크로스\n   ADX 22.5 · %K 79.2/85.5 · 수급 중립\n   [B] 상대강도 하위 9% · ADX 하락추세\n\n🔴 KODEX AI반도체TOP2플러스 · 반도체/AI/로봇\n   ＋DI가 −DI 하향이탈·추세꺾임 · Stochastic 과열 이탈·데드크로스 · 외인·기관 동반 순매도\n   ADX 23.3 · %K 75.6/82.7 · 개인몰림 주의\n   [B] 상대강도 하위 5% · ADX 하락추세 · 외인·기관 연속 순매도 5일\n\n⚡ 추세 강도 1개\n\n🔻 KODEX 증권 · 금융\n   ADX 20 상향돌파 · 하락추세 확립(확인)\n   ADX 20.4 · %K 54.6/67.2 · 수급 중립\n   [B] 상대강도 하위 2% · ADX 하락추세\n\n전체 신호판 › 대시보드\n🎴 GS Research Desk · ETF/섹터 신호",
       "entities": [
         {
           "offset": 0,
@@ -40,32 +40,22 @@
           "type": "bold"
         },
         {
-          "offset": 205,
+          "offset": 194,
+          "length": 18,
+          "type": "bold"
+        },
+        {
+          "offset": 380,
           "length": 1,
           "type": "bold"
         },
         {
-          "offset": 212,
+          "offset": 387,
           "length": 8,
           "type": "bold"
         },
         {
-          "offset": 322,
-          "length": 11,
-          "type": "bold"
-        },
-        {
-          "offset": 439,
-          "length": 1,
-          "type": "bold"
-        },
-        {
-          "offset": 446,
-          "length": 15,
-          "type": "bold"
-        },
-        {
-          "offset": 602,
+          "offset": 504,
           "length": 4,
           "type": "text_link",
           "url": "https://gs-research-desk.pages.dev/etf_signal_report.html"
