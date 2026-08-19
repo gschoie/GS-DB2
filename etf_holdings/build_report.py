@@ -174,7 +174,8 @@ def day_html(ch, snap, is_latest, period_label=None):
 <p class="sub">{first_line}<br>
 구성 기준일 <b>{base}</b> (KRX 장마감) · 비교 <b>{prevbase} → {base}</b><br>
 <span class="sched">🕙 정기 업데이트 <b>{SCHEDULE_TIME}</b>(한국시간){f' · 실제 갱신 <b>{gen}</b>' if gen else ''}<span class="schedq"> — 대기열 사정으로 일부 시간대는 건너뜀</span></span><br>
-매일 구성종목(Top10)을 스냅샷하고, <b>주가 효과와 CU 자금유출입을 제거</b>해 운용사가 실제로 사고판 것만 잡아냅니다.</p>
+매일 구성종목(Top10)을 스냅샷하고, <b>주가 효과와 CU 자금유출입을 제거</b>해 운용사가 실제로 사고판 것만 잡아냅니다.<br>
+<span class="sparknote">종목명 옆 곡선은 <b>최근 60거래일</b> 주가 — 상승 초록 · 하락 빨강, 마우스를 올리면 등락률</span></p>
 {banner}
 
 <section class="stats">
@@ -313,6 +314,7 @@ h2{{font:600 18px Georgia,"Noto Serif KR",serif;margin:30px 0 12px}}
 .tnew{{background:#e3f3e7;color:#286342}}.tgone{{background:#f8e9e6;color:#a43c31}}
 .chip{{font-size:12px;padding:3px 8px;border-radius:11px;background:#f2f5f0}}
 .spark{{vertical-align:middle;margin-left:6px;overflow:visible}}
+.sparknote{{color:#9aa19d;font-size:11px}}
 .spark polyline{{fill:none;stroke-width:1.3;vector-effect:non-scaling-stroke}}
 .spark.sp-up polyline{{stroke:#2e7d4f}}
 .spark.sp-dn polyline{{stroke:#bd4335}}
