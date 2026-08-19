@@ -430,7 +430,7 @@ ADX(추세) + Stochastic Slow(타이밍) + 수급(외인·기관·개인 5일 �
 
 {returns_block(sig, day)}
 
-<h2>전체 신호판 ({scanned}) <small style="font:400 12px Inter;color:#8b918e">— 수익률·지표·수급 한 표 · 헤더 클릭으로 정렬</small></h2>
+<h2>전체 신호판 ({scanned}) <small style="font:400 12px Inter;color:#8b918e">— 수익률·지표·수급 한 표 · 헤더 클릭으로 정렬 · 종목명 아래 곡선은 <b>최근 60거래일</b> 주가</small></h2>
 <div class="tablewrap"><table class="board">
 <thead><tr>
 <th data-type="text">ETF</th><th class="r" data-type="num">종가</th>
