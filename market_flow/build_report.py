@@ -23,16 +23,15 @@ SLOT_LABEL = {"1000": "10:00", "1300": "13:00",
 WD = "월화수목금토일"
 MAX_DAYS = 30  # 네비게이션으로 볼 수 있는 과거 일수(페이지 용량 상한)
 # 슬롯 표기. .github/workflows/market-flow.yml 의 cron 4개와 맞출 것.
-# 왼쪽을 예약 시각이 아니라 차수로 적는다. scrape.decide_slot() 이 실행 시각을 구간으로
-# 나눠 슬롯을 배정하므로(16:10 이전이면 1540) 실제 수집 시각이 예약보다 이를 수 있는데,
-# 예약 시각을 나란히 두면 '15:40 → 14:40' 처럼 거꾸로 읽힌다. 예약 시각은 툴팁에 남긴다.
+# scrape.decide_slot() 이 실행 시각을 구간으로 나눠 슬롯을 배정하므로(16:10 이전이면 1540)
+# 실제 수집 시각이 예약보다 이를 수도 있다 — '15:40 → 14:40' 처럼 보이는 게 정상.
 SCHEDULE_TIME = "평일 하루 4회"
 SLOT_SCHED = {"1000": ("1차", "10:00"), "1300": ("2차", "13:00"),
               "1540": ("3차", "15:40"), "1640": ("4차", "16:40")}
 
 
 def sched_badge(slots):
-    """차수별로 '실제로 수집된 시각'을 한 줄씩 보여준다.
+    """차수별로 '예약 시각 → 실제로 수집된 시각'을 한 줄씩 보여준다.
 
     대기열 지연으로 늦게 도는 일이 잦은데 대표 시각 하나만 적으면 어느 차수가
     얼마나 밀렸는지 알 수 없다. 각 슬롯의 time 필드(스크랩 시각)를 그대로 쓰고,
@@ -44,8 +43,8 @@ def sched_badge(slots):
         tip = f"예약 {sched} · 실제 수집 {got or '아직 없음'}"
         val = f"<b>{got}</b>" if got else "—"
         cells.append(f'<span class="slotpair{"" if got else " off"}" title="{tip}">'
-                     f'{nth} → {val}</span>')
-    return (f'<span class="sched">🕙 정기 업데이트 <b>{SCHEDULE_TIME}</b>(한국시간) → 실제 갱신'
+                     f'{nth} {sched} → {val}</span>')
+    return (f'<span class="sched">🕙 정기 업데이트 <b>{SCHEDULE_TIME}</b>(한국시간) · 예약 → 실제 갱신'
             f'<span class="slots">{"".join(cells)}</span>'
             f'<span class="schedq">대기열 지연으로 예약보다 늦을 수 있음</span></span>')
 
