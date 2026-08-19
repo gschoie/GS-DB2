@@ -4970,8 +4970,8 @@
   },
   "2026-08-19": {
    "kospi": {
-    "close": 6493.34,
-    "chg_pct": -5.48
+    "close": 6479.23,
+    "chg_pct": -5.69
    },
    "slots": {
     "1000": {
@@ -4990,60 +4990,145 @@
      }
     },
     "1300": {
-     "individual": 36283,
-     "foreign": -23985,
-     "institution": -13793,
-     "arb": -2777,
-     "nonarb": -22712,
-     "program": -25489,
-     "time": "13:38",
-     "kospi": 6493.34,
-     "chg_pct": -5.48,
+     "individual": 36787,
+     "foreign": -24535,
+     "institution": -13762,
+     "arb": -2720,
+     "nonarb": -23410,
+     "program": -26130,
+     "time": "13:44",
+     "kospi": 6479.23,
+     "chg_pct": -5.69,
      "futures": {
-      "foreign": -5625,
-      "inst_total": 8575
+      "foreign": -5565,
+      "inst_total": 8469
      }
     }
    },
    "confirmed": {
     "investor": {
-     "individual": 36298,
-     "foreign": -24135,
-     "inst_total": -13660,
-     "fin_invest": -13932,
-     "insurance": 331,
-     "asset_mgmt": -465,
+     "individual": 37020,
+     "foreign": -24702,
+     "inst_total": -13837,
+     "fin_invest": -14085,
+     "insurance": 338,
+     "asset_mgmt": -523,
      "bank": -109,
-     "other_fin": 134,
-     "pension": 381,
-     "other_corp": 1497
+     "other_fin": 135,
+     "pension": 407,
+     "other_corp": 1519
     },
     "program": {
-     "arb_buy": 2285,
-     "arb_sell": 5035,
-     "arb_net": -2750,
-     "nonarb_buy": 34645,
-     "nonarb_sell": 57451,
-     "nonarb_net": -22807,
-     "total_buy": 36930,
-     "total_sell": 62486,
-     "total_net": -25557
+     "arb_buy": 2358,
+     "arb_sell": 5083,
+     "arb_net": -2725,
+     "nonarb_buy": 35057,
+     "nonarb_sell": 58592,
+     "nonarb_net": -23535,
+     "total_buy": 37415,
+     "total_sell": 63675,
+     "total_net": -26260
     },
     "futures": {
-     "individual": -2366,
-     "foreign": -5625,
-     "inst_total": 8575,
-     "fin_invest": 7872,
+     "individual": -2274,
+     "foreign": -5565,
+     "inst_total": 8469,
+     "fin_invest": 7891,
      "insurance": 178,
-     "asset_mgmt": 514,
+     "asset_mgmt": 529,
      "bank": -11,
-     "other_fin": 1,
-     "pension": 21,
-     "other_corp": -584
+     "other_fin": 0,
+     "pension": -118,
+     "other_corp": -630
     }
+   },
+   "group_1d": {
+    "time": "13:44",
+    "groups": [
+     [
+      "인버스/숏",
+      2.65,
+      2
+     ],
+     [
+      "화장품",
+      1.18,
+      2
+     ],
+     [
+      "바이오/헬스케어",
+      0.22,
+      7
+     ],
+     [
+      "건설/운송",
+      -0.21,
+      3
+     ],
+     [
+      "소비/여행/음식료",
+      -0.21,
+      2
+     ],
+     [
+      "2차전지",
+      -0.24,
+      2
+     ],
+     [
+      "방산",
+      -0.49,
+      3
+     ],
+     [
+      "신재생/수소/기후",
+      -1.54,
+      5
+     ],
+     [
+      "철강/소재/화학",
+      -1.86,
+      2
+     ],
+     [
+      "게임/콘텐츠",
+      -2.09,
+      6
+     ],
+     [
+      "조선",
+      -2.27,
+      2
+     ],
+     [
+      "해외지수",
+      -2.31,
+      4
+     ],
+     [
+      "금융",
+      -2.83,
+      5
+     ],
+     [
+      "자동차",
+      -3.45,
+      3
+     ],
+     [
+      "배당/그룹",
+      -4.01,
+      2
+     ],
+     [
+      "반도체/AI/로봇",
+      -4.02,
+      6
+     ]
+    ]
    }
   }
  },
- "updated_kst": "2026-08-19 13:38",
+ "updated_kst": "2026-08-19 13:44",
  "futures_unit": "계약"
 }
