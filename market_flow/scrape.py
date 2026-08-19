@@ -8,6 +8,7 @@
 휴장일(모바일API localTradedAt 날짜 ≠ 오늘)은 아무것도 쓰지 않고 종료한다.
 단위: 현물·프로그램 억원, 선물은 페이지 표기 단위(보통 계약)를 futures_unit에 기록.
 """
+import csv
 import json
 import re
 import datetime as dt
@@ -159,6 +160,31 @@ def daily_confirmed(bizdate, pages=3):
     return out
 
 
+UNIVERSE_CSV = HERE.parent / "etf_signal" / "etf_universe.csv"
+
+
+def group_returns():
+    """etf_signal 유니버스 ETF들의 현재가 등락률을 그룹 평균으로 묶는다.
+    ETF 신호판의 '그룹 평균 WoW' 그림을 수급 화면에서는 당일 등락률로 보여주기 위한 것.
+    반환: {"time": "HH:MM", "groups": [[그룹, 평균%, 종목수], …]} (평균 내림차순) 또는 None"""
+    rows = list(csv.DictReader(UNIVERSE_CSV.open(encoding="utf-8-sig")))
+    by_grp, fail = {}, 0
+    for r in rows:
+        if (r.get("active") or "").strip() != "1":
+            continue
+        try:
+            j = get(f"https://m.stock.naver.com/api/stock/{r['code'].strip()}/basic").json()
+            by_grp.setdefault(r["group"].strip(), []).append(float(j["fluctuationsRatio"]))
+        except Exception:
+            fail += 1
+    if not by_grp:
+        return None
+    groups = sorted(((g, round(sum(v) / len(v), 2), len(v)) for g, v in by_grp.items()),
+                    key=lambda x: -x[1])
+    print(f"ETF 그룹 등락률: {len(groups)}그룹 수집 · 실패 {fail}종목")
+    return {"time": now_kst().strftime("%H:%M"), "groups": [list(t) for t in groups]}
+
+
 def intraday_curve(bizdate, kind, max_pages=45, sosok=None):
     """시간대별 누적치(분 단위)를 전 페이지 수집 후 10분 간격으로 샘플링.
     kind: "investor"(10칸 → 개인/외인/기관만) 또는 "program"(9칸 → 차익순/비차익순/전체순)
@@ -291,6 +317,14 @@ def main():
             print(f"선물 일별 백필: {len(fut)}일 수신, {n_fut}일 갱신 (단위: {fut_unit})")
     except Exception as e:
         print(f"⚠️ 선물 일별 수집 실패(리포트에는 해당 섹션만 비표시): {e}")
+
+    # ETF 그룹 평균 등락률 (실패해도 본 파이프라인 유지, 해당 섹션만 비표시)
+    try:
+        gr = group_returns()
+        if gr:
+            day["group_1d"] = gr
+    except Exception as e:
+        print(f"⚠️ ETF 그룹 등락률 수집 실패(섹션 비표시): {e}")
 
     # 마감 이후 실행이면 장중 곡선 저장
     if slot in ("1540", "1640"):
