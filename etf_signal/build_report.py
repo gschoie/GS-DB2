@@ -325,7 +325,10 @@ def day_html(payload, is_latest):
     n_buy = sum(1 for s in sig if s["flow"] == "쌍끌이")
     n_warn = sum(1 for s in sig if s["flow"] == "개인몰림")
     asof = sig[0]["asof"] if sig else "—"
-    day = "오늘" if is_latest else "당일"
+    # 제목에는 '오늘' 대신 신호 기준일을 쓴다. 스캔은 아침 7시에 돌지만 계산은
+    # 전일 확정 종가라, '오늘의 수익률'이라고 하면 오늘 장 수익률로 읽힌다.
+    # '어제'로 바꿔도 월요일엔 금요일 데이터라 틀리므로 날짜를 그대로 적는다.
+    day = fmt_day(asof)
 
     def cards(rows, kind):
         """kind: 'buy'(골든크로스) | 'sell'(데드크로스) | 'adx'(추세 강도)"""
@@ -412,9 +415,9 @@ ADX(추세) + Stochastic Slow(타이밍) + 수급(외인·기관·개인 5일 �
 
 <section class="stats">
   <article><small>스캔 종목</small><strong>{scanned}</strong></article>
-  <article><small>{day} 매수 신호</small><strong class="g">{len(alerts)}</strong></article>
-  <article><small>{day} 매도 경고</small><strong class="r">{len(sells)}</strong></article>
-  <article><small>{day} 추세 강도</small><strong class="b">{len(adxs)}</strong></article>
+  <article><small>매수 신호</small><strong class="g">{len(alerts)}</strong></article>
+  <article><small>매도 경고</small><strong class="r">{len(sells)}</strong></article>
+  <article><small>추세 강도</small><strong class="b">{len(adxs)}</strong></article>
   <article><small>외인·기관 쌍끌이</small><strong class="g">{n_buy}</strong></article>
   <article><small>개인몰림 경계</small><strong class="w">{n_warn}</strong></article>
 </section>
