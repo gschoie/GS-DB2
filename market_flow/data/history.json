@@ -5005,18 +5005,18 @@
      }
     },
     "1640": {
-     "individual": 46358,
+     "individual": 46357,
      "foreign": -34884,
      "institution": -13232,
      "arb": -1905,
      "nonarb": -33721,
-     "program": -35627,
-     "time": "16:22",
+     "program": -35626,
+     "time": "17:07",
      "kospi": 6471.17,
      "chg_pct": -5.8,
      "futures": {
-      "foreign": -195,
-      "inst_total": 2159
+      "foreign": -331,
+      "inst_total": 2175
      }
     }
    },
@@ -5025,7 +5025,7 @@
      "individual": 46357,
      "foreign": -34884,
      "inst_total": -13232,
-     "fin_invest": -9754,
+     "fin_invest": -9753,
      "insurance": 647,
      "asset_mgmt": -5117,
      "bank": -116,
@@ -5045,20 +5045,20 @@
      "total_net": -35626
     },
     "futures": {
-     "individual": -1475,
-     "foreign": -195,
-     "inst_total": 2159,
-     "fin_invest": 7532,
+     "individual": -1339,
+     "foreign": -331,
+     "inst_total": 2175,
+     "fin_invest": 7108,
      "insurance": 86,
-     "asset_mgmt": -5537,
+     "asset_mgmt": -5100,
      "bank": 41,
-     "other_fin": -13,
+     "other_fin": -10,
      "pension": 50,
-     "other_corp": -489
+     "other_corp": -505
     }
    },
    "group_1d": {
-    "time": "16:22",
+    "time": "17:07",
     "groups": [
      [
       "인버스/숏",
@@ -5854,6 +5854,6 @@
    }
   }
  },
- "updated_kst": "2026-08-19 16:23",
+ "updated_kst": "2026-08-19 17:07",
  "futures_unit": "계약"
 }
