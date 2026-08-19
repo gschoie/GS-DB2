@@ -171,6 +171,31 @@ def combo_chart(rows, color, line_unit, width=760, height=250):
             f'<svg viewBox="0 0 {width} {height}" role="img">{"".join(g)}</svg>')
 
 
+def group_ret_block(today, is_latest):
+    """ETF 그룹 평균 당일 등락률 랭킹 — ETF 신호판의 '그룹 평균 WoW' 그림과 같은 형식.
+    색상도 신호판과 동일(상승 초록·하락 붉은색)하게 맞춘다. 데이터: scrape.group_returns()."""
+    gr = today.get("group_1d")
+    if not gr or not gr.get("groups"):
+        return ""
+    groups = gr["groups"]
+    gmax = max(abs(v) for _, v, _ in groups) or 1
+    items = []
+    for g, v, n in groups:
+        w = min(abs(v) / gmax, 1.0) * 50
+        side = "left:50%" if v >= 0 else "right:50%"
+        bar = "up" if v >= 0 else "dn"
+        sign = "+" if v > 0 else "−" if v < 0 else ""
+        vcls = "gup" if v > 0 else "gdn" if v < 0 else "na"
+        items.append(
+            f'<li><span class="gn">{g}</span>'
+            f'<span class="dbar"><i class="{bar}" style="{side};width:{w:.1f}%"></i></span>'
+            f'<span class="gv {vcls}">{sign}{abs(v):.1f}%</span><small>{n}종목</small></li>')
+    title = "📊 오늘의 수익률" if is_latest else "📊 당일 수익률"
+    return (f'<h2>{title} <span class="na" style="font-weight:400;font-size:12px">'
+            f'— ETF 그룹 평균 등락률({len(groups)}개 그룹) · {gr["time"]} 기준 · 센 섹터부터</span></h2>'
+            f'<div class="card"><ul class="gbars">{"".join(items)}</ul></div>')
+
+
 def fut_snapshot(day):
     """당일 K200 선물 순매수 (확정 우선, 없으면 장중 곡선 마지막 점).
     반환: ({individual, foreign, inst}, 출처라벨) 또는 (None, None)"""
@@ -458,6 +483,8 @@ def render_day(hist, all_dates, i):
 <h2>{sig_title}</h2>
 <div class="card"><ul class="signals">{sig_html}</ul></div>
 
+{group_ret_block(today, is_latest)}
+
 <h2>📸 시점별 스냅샷 <span class="na" style="font-weight:400;font-size:12px">(잠정치, 억원)</span></h2>
 <div class="card scroll">{snap_table}{conf_note}</div>
 
@@ -503,9 +530,9 @@ def build():
 <title>시장 수급 동향</title>
 <style>
 :root{{--bg:#fff;--fg:#1c2430;--muted:#6b7684;--line:#e5e8ec;--card:#f7f8fa;
---pos:#d64545;--neg:#3b6fd4}}
+--pos:#d64545;--neg:#3b6fd4;--gup:#286342;--gdn:#a43c31;--gbar-bg:#f1f4f0}}
 @media(prefers-color-scheme:dark){{:root{{--bg:#14181f;--fg:#e6e9ee;--muted:#8b93a1;
---line:#2a313c;--card:#1b212b}}}}
+--line:#2a313c;--card:#1b212b;--gup:#8fc7a5;--gdn:#e8a49b;--gbar-bg:#232a34}}}}
 *{{box-sizing:border-box}}
 body{{margin:0;padding:18px 16px 40px;background:var(--bg);color:var(--fg);
 font:14px/1.55 -apple-system,"Malgun Gothic","Apple SD Gothic Neo",sans-serif}}
@@ -541,6 +568,18 @@ border-radius:8px;padding:8px 10px;display:flex;flex-direction:column}}
 .note{{font-size:12.5px;color:var(--muted);margin:6px 2px}}
 .ctitle{{font-size:13px;font-weight:600;margin:0 0 6px}}
 .signals{{margin:6px 0;padding-left:20px}} .signals li{{margin:3px 0}}
+.gbars{{list-style:none;margin:6px 0 8px;padding:0}}
+.gbars li{{display:grid;grid-template-columns:120px 1fr 58px 44px;align-items:center;
+gap:10px;padding:2.5px 0;font-size:13px}}
+.gbars .gn{{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}}
+.gbars .gv{{text-align:right;font-variant-numeric:tabular-nums}}
+.gbars small{{color:var(--muted);text-align:right;font-size:11.5px}}
+.gup{{color:var(--gup)}} .gdn{{color:var(--gdn)}}
+.dbar{{display:block;position:relative;height:7px;background:var(--gbar-bg);border-radius:2px}}
+.dbar::before{{content:"";position:absolute;left:50%;top:-1px;bottom:-1px;width:1px;background:var(--line)}}
+.dbar i{{position:absolute;top:0;bottom:0;border-radius:2px}}
+.dbar i.up{{background:#7fb894}} .dbar i.dn{{background:#e29b91}}
+@media(max-width:620px){{.gbars li{{grid-template-columns:88px 1fr 52px}} .gbars small{{display:none}}}}
 .scroll{{overflow-x:auto}}
 footer{{margin-top:28px;font-size:11.5px;color:var(--muted)}}
 .nav{{display:flex;align-items:center;gap:8px;margin:10px 0 4px;position:sticky;top:0;
