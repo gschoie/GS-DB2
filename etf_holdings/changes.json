@@ -1,12 +1,38 @@
 {
-  "date": "2026-08-19",
-  "prev_date": "2026-08-18",
-  "generated_at": "2026-08-19 16:09",
-  "base_date": "2026-08-19",
-  "prev_base_date": "2026-08-18",
+  "date": "2026-08-20",
+  "prev_date": "2026-08-19",
+  "generated_at": "2026-08-20 09:24",
+  "base_date": "",
+  "prev_base_date": "2026-08-19",
   "same_base": false,
   "first_run": false,
   "etfs": [
+    {
+      "code": "0162Y0",
+      "label": "TIME 코스닥액티브",
+      "group": "TIME(구 TIMEFOLIO)",
+      "flow_factor": 1.0,
+      "new": [
+        {
+          "key": "403870",
+          "name": "HPSP",
+          "code": "403870",
+          "weight": 2.47,
+          "shares": 202.0
+        }
+      ],
+      "gone": [
+        {
+          "key": "086520",
+          "name": "에코프로",
+          "code": "086520",
+          "weight_prev": 2.44,
+          "shares_prev": 106.0
+        }
+      ],
+      "moves": [],
+      "has_weight": true
+    },
     {
       "code": "441800",
       "label": "TIME Korea플러스배당액티브",
@@ -14,51 +40,11 @@
       "flow_factor": 1.0,
       "new": [
         {
-          "key": "034730",
-          "name": "SK",
-          "code": "034730",
-          "weight": 3.36,
-          "shares": 33.0
-        },
-        {
-          "key": "086790",
-          "name": "하나금융지주",
-          "code": "086790",
-          "weight": 2.94,
-          "shares": 130.0
-        }
-      ],
-      "gone": [
-        {
           "key": "105560",
           "name": "KB금융",
           "code": "105560",
-          "weight_prev": 4.04,
-          "shares_prev": 140.0
-        },
-        {
-          "key": "003230",
-          "name": "삼양식품",
-          "code": "003230",
-          "weight_prev": 3.26,
-          "shares_prev": 15.0
-        }
-      ],
-      "moves": [],
-      "has_weight": true
-    },
-    {
-      "code": "476850",
-      "label": "KoAct 배당성장액티브",
-      "group": "KoAct",
-      "flow_factor": 1.0,
-      "new": [
-        {
-          "key": "005380",
-          "name": "현대차",
-          "code": "005380",
-          "weight": 2.76,
-          "shares": 68.0
+          "weight": 3.0,
+          "shares": 99.0
         }
       ],
       "gone": [
@@ -66,94 +52,57 @@
           "key": "039490",
           "name": "키움증권",
           "code": "039490",
-          "weight_prev": 2.01,
-          "shares_prev": 73.0
-        }
-      ],
-      "moves": [
-        {
-          "key": "012450",
-          "name": "한화에어로스페이스",
-          "code": "012450",
-          "shares_now": 29.0,
-          "shares_prev": 22.0,
-          "active_share_pct": 31.8,
-          "active_weight_pp": 0.73,
-          "weight_now": 3.11,
-          "weight_prev": 2.34,
-          "headline": false
-        }
-      ],
-      "has_weight": true
-    },
-    {
-      "code": "387280",
-      "label": "TIGER 퓨처모빌리티액티브",
-      "group": "TIGER",
-      "flow_factor": 1.0,
-      "new": [
-        {
-          "key": "066970",
-          "name": "엘앤에프",
-          "code": "066970",
-          "weight": 3.11,
-          "shares": 35.0
-        }
-      ],
-      "gone": [
-        {
-          "key": "204320",
-          "name": "HL만도",
-          "code": "204320",
-          "weight_prev": 3.14,
-          "shares_prev": 68.0
+          "weight_prev": 2.94,
+          "shares_prev": 60.0
         }
       ],
       "moves": [],
       "has_weight": true
     },
     {
-      "code": "385720",
-      "label": "TIME 코스피액티브",
-      "group": "TIME(구 TIMEFOLIO)",
+      "code": "472150",
+      "label": "TIGER 배당커버드콜액티브",
+      "group": "TIGER",
+      "flow_factor": 1.0,
+      "new": [
+        {
+          "key": "105560",
+          "name": "KB금융",
+          "code": "105560",
+          "weight": 1.71,
+          "shares": 20.0
+        }
+      ],
+      "gone": [
+        {
+          "key": "005380",
+          "name": "현대차",
+          "code": "005380",
+          "weight_prev": 1.68,
+          "shares_prev": 8.0
+        }
+      ],
+      "moves": [],
+      "has_weight": true
+    },
+    {
+      "code": "471780",
+      "label": "TIGER 코리아테크액티브",
+      "group": "TIGER",
       "flow_factor": 1.0,
       "new": [],
       "gone": [],
       "moves": [
         {
-          "key": "003230",
-          "name": "삼양식품",
-          "code": "003230",
-          "shares_now": 55.0,
-          "shares_prev": 90.0,
-          "active_share_pct": -38.9,
-          "active_weight_pp": -1.79,
-          "weight_now": 2.88,
-          "weight_prev": 4.43,
-          "headline": false
-        },
-        {
-          "key": "005930",
-          "name": "삼성전자",
-          "code": "005930",
-          "shares_now": 2718.0,
-          "shares_prev": 2600.0,
-          "active_share_pct": 4.5,
-          "active_weight_pp": 1.49,
-          "weight_now": 28.65,
-          "weight_prev": 27.69,
-          "headline": false
-        },
-        {
-          "key": "009150",
-          "name": "삼성전기",
-          "code": "009150",
-          "shares_now": 50.0,
-          "shares_prev": 37.0,
-          "active_share_pct": 35.1,
-          "active_weight_pp": 0.75,
-          "weight_now": 2.83,
-          "weight_prev": 2.24,
+          "key": "222800",
+          "name": "심텍",
+          "code": "222800",
+          "shares_now": 58.0,
+          "shares_prev": 83.0,
+          "active_share_pct": -30.1,
+          "active_weight_pp": -0.82,
+          "weight_now": 1.93,
+          "weight_prev": 2.61,
           "headline": false
         }
       ],
@@ -167,9 +116,9 @@
   },
   "summary": {
     "etfs_changed": 4,
-    "new_total": 4,
-    "gone_total": 4,
-    "moves_total": 4,
+    "new_total": 3,
+    "gone_total": 3,
+    "moves_total": 1,
     "universe": 20
   }
 }
