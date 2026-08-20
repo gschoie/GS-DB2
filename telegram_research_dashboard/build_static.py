@@ -151,11 +151,23 @@ def build() -> Path:
         summary_md = "\n".join(md_lines[:end]).strip()
         if summary_md:
             claude_brief = {"date": latest.stem, "summary": summary_md}
+    # 건설기계 브리핑: static/construction_daily/<날짜>.md — 같은 방식으로 요약 카드용 절단
+    construction_brief = {}
+    ndir = ROOT / "static" / "construction_daily"
+    nmd_files = sorted(ndir.glob("????-??-??.md")) if ndir.is_dir() else []
+    if nmd_files:
+        latest = nmd_files[-1]
+        md_lines = latest.read_text(encoding="utf-8").splitlines()
+        heads = [i for i, line in enumerate(md_lines) if line.startswith("## ")]
+        end = heads[1] if len(heads) >= 2 else len(md_lines)
+        summary_md = "\n".join(md_lines[:end]).strip()
+        if summary_md:
+            construction_brief = {"date": latest.stem, "summary": summary_md}
     payload = json.dumps(
         {"summary": summary, "reports": reports, "news": news, "companies": companies,
          "reportCompanies": report_companies, "newsTexts": news_texts, "market": market,
          "union": union, "macro": macro, "defenseBrief": defense_brief,
-         "claudeBrief": claude_brief},
+         "claudeBrief": claude_brief, "constructionBrief": construction_brief},
         ensure_ascii=False, separators=(",", ":"),
     ).replace("</", "<\\/").replace("\u2028", "\\u2028").replace("\u2029", "\\u2029")
     html = (ROOT / "static" / "index.html").read_text(encoding="utf-8")
