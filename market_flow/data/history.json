@@ -5186,12 +5186,12 @@
      "arb": -3675,
      "nonarb": 12719,
      "program": 9044,
-     "time": "16:25",
+     "time": "17:16",
      "kospi": 6852.58,
      "chg_pct": 5.89,
      "futures": {
-      "foreign": -5715,
-      "inst_total": 7031
+      "foreign": -6978,
+      "inst_total": 8232
      }
     }
    },
@@ -5206,7 +5206,7 @@
      "bank": 35,
      "other_fin": 223,
      "pension": -1816,
-     "other_corp": 10539
+     "other_corp": 10538
     },
     "program": {
      "arb_buy": 2743,
@@ -5220,20 +5220,20 @@
      "total_net": 9044
     },
     "futures": {
-     "individual": -1253,
-     "foreign": -5715,
-     "inst_total": 7031,
-     "fin_invest": 3397,
+     "individual": -1241,
+     "foreign": -6978,
+     "inst_total": 8232,
+     "fin_invest": 4807,
      "insurance": 461,
-     "asset_mgmt": 3187,
+     "asset_mgmt": 2968,
      "bank": -23,
-     "other_fin": 38,
+     "other_fin": 48,
      "pension": -29,
-     "other_corp": -63
+     "other_corp": -13
     }
    },
    "group_1d": {
-    "time": "16:25",
+    "time": "17:17",
     "groups": [
      [
       "화장품",
@@ -6029,6 +6029,6 @@
    }
   }
  },
- "updated_kst": "2026-08-20 16:26",
+ "updated_kst": "2026-08-20 17:17",
  "futures_unit": "계약"
 }
