@@ -1,8 +1,8 @@
 {
   "date": "2026-08-20",
   "prev_date": "2026-08-19",
-  "generated_at": "2026-08-20 09:24",
-  "base_date": "",
+  "generated_at": "2026-08-20 16:11",
+  "base_date": "2026-08-20",
   "prev_base_date": "2026-08-19",
   "same_base": false,
   "first_run": false,
@@ -86,6 +86,29 @@
       "has_weight": true
     },
     {
+      "code": "385720",
+      "label": "TIME 코스피액티브",
+      "group": "TIME(구 TIMEFOLIO)",
+      "flow_factor": 1.0,
+      "new": [],
+      "gone": [],
+      "moves": [
+        {
+          "key": "017670",
+          "name": "SK텔레콤",
+          "code": "017670",
+          "shares_now": 520.0,
+          "shares_prev": 391.0,
+          "active_share_pct": 33.0,
+          "active_weight_pp": 0.51,
+          "weight_now": 2.12,
+          "weight_prev": 1.53,
+          "headline": false
+        }
+      ],
+      "has_weight": true
+    },
+    {
       "code": "471780",
       "label": "TIGER 코리아테크액티브",
       "group": "TIGER",
@@ -115,10 +138,10 @@
     "share_pct_min": 30.0
   },
   "summary": {
-    "etfs_changed": 4,
+    "etfs_changed": 5,
     "new_total": 3,
     "gone_total": 3,
-    "moves_total": 1,
+    "moves_total": 2,
     "universe": 20
   }
 }
