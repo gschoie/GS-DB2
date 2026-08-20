@@ -71,4 +71,18 @@
    - 텔레그램 봇 링크 6곳(etf·flow·trend·holdings·defense×2) pages.dev로 교체, 사이드바 절대링크 2곳 상대경로화.
    - DAOL-RESEARCH-TONE(별도 리포의 Pages)은 여전히 공개 — 필요 시 같은 방식으로 이관.
 
+10. **글로벌 건설기계 브리핑 신설** (8/20): `construction_briefing/` — defense_briefing과 동일
+    골격(yfinance 확정 시세 + 구글뉴스 RSS 24h + Gemini 작성)의 건설기계 버전.
+    - 유니버스 31종목: 한국 3사(HD현대건설기계·HD현대인프라코어·두산밥캣) + 미·유럽·일본·중국·
+      인도 피어 + 렌탈(URI·Ashtead·Herc) + CAT 딜러(Finning·Toromont) + PAVE ETF.
+      매크로 6종(미국채10y·금·구리·WTI·원달러·위안달러)도 코드로 확정 조회.
+    - 뉴스 쿼리 축: 미국 주택·인프라·렌탈 / 유럽·독일 인프라기금 / 중국 굴착기 판매·부양책 /
+      광산 capex(금광 포함 — 금 가격→금광 투자 경로) / 인도·아세안·중동 / 관세·금리 / 한국어 피드.
+      Bobcat(동물·대학팀)·Caterpillar(애벌레) 동음이의어는 제목 프리필터로 컷.
+    - `construction-briefing.yml` 매일 UTC 21:10(KST 06:10) — 방산(20:40)과 30분 오프셋으로
+      Gemini 분당 한도 충돌 회피. 키는 `CONSTRUCTION_GEMINI_API_KEY || GEMINI_API_KEY` 폴백.
+    - 산출물: `static/construction_daily/<날짜>.html|.md` + `construction_briefing_report.html`
+      (날짜 선택 인덱스). 사이드바 `🏗️ 글로벌건설기계.브리핑` 뷰 추가, deploy-pages workflow_run
+      연결, build_static 복사 추가. 텔레그램은 `CONSTRUCTION_TELEGRAM_*` 시크릿 설정 시에만 발송.
+
 이후 작업은 git log와 이 파일을 갱신하며 이어간다.
