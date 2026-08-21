@@ -1,5 +1,5 @@
 {
-  "when_utc": "2026-08-20 08:42:33Z",
+  "when_utc": "2026-08-21 04:19:09Z",
   "ok": true,
   "note": "change_sent",
   "chat_id_tail": "5171",
@@ -7,7 +7,7 @@
   "response": {
     "ok": true,
     "result": {
-      "message_id": 152,
+      "message_id": 158,
       "from": {
         "id": 8875725998,
         "is_bot": true,
@@ -21,8 +21,8 @@
         "username": "gschoie",
         "type": "private"
       },
-      "date": 1787215352,
-      "text": "🧩 액티브 ETF 구성 변화 · 구성 기준일 2026-08-20 (KRX 장마감)\n\n변화 ETF 5개 · 진입 3·이탈 3·실매매 2\n\n🟢 TIME 코스닥액티브 · TIME(구 TIMEFOLIO)\n   ⊕ 진입: HPSP\n   ⊖ 이탈: 에코프로\n🟢 TIME Korea플러스배당액티브 · TIME(구 TIMEFOLIO)\n   ⊕ 진입: KB금융\n   ⊖ 이탈: 키움증권\n🟢 TIGER 배당커버드콜액티브 · TIGER\n   ⊕ 진입: KB금융\n   ⊖ 이탈: 현대차\n🟢 TIME 코스피액티브 · TIME(구 TIMEFOLIO)\n   ▲ SK텔레콤 계약수 +33% · 비중 +0.5%p\n🟢 TIGER 코리아테크액티브 · TIGER\n   ▽ 심텍 계약수 −30% · 비중 −0.8%p\n\n전체 상세 › 대시보드\n🎴 GS Research Desk · 액티브 ETF 트래커",
+      "date": 1787285949,
+      "text": "🧩 액티브 ETF 구성 변화 · 구성 기준일 — (KRX 장마감)\n\n변화 ETF 6개 · 진입 7·이탈 7·실매매 4\n\n🟢 TIME K바이오액티브 · TIME(구 TIMEFOLIO)\n   ⊕ 진입: 보로노이, 한올바이오파마\n   ⊖ 이탈: 에스티팜, 디앤디파마텍\n   ▽ 리가켐바이오 계약수 −32% · 비중 −2.0%p\n   ▲ 셀트리온 계약수 +15% · 비중 +1.9%p\n🟢 TIME K컬처액티브 · TIME(구 TIMEFOLIO)\n   ⊕ 진입: 농심\n   ⊖ 이탈: 하이브\n   ▲ 실리콘투 계약수 +51% · 비중 +2.9%p\n   ▽ NC 계약수 −24% · 비중 −2.0%p\n🟢 TIME Korea플러스배당액티브 · TIME(구 TIMEFOLIO)\n   ⊕ 진입: 키움증권\n   ⊖ 이탈: KB금융\n🟢 KoAct 바이오헬스케어액티브 · KoAct\n   ⊕ 진입: 알지노믹스\n   ⊖ 이탈: 리가켐바이오\n🟢 KoAct 배당성장액티브 · KoAct\n   ⊕ 진입: 키움증권\n   ⊖ 이탈: HD현대\n🟢 TIGER 배당커버드콜액티브 · TIGER\n   ⊕ 진입: 현대차\n   ⊖ 이탈: KB금융\n\n전체 상세 › 대시보드\n🎴 GS Research Desk · 액티브 ETF 트래커",
       "entities": [
         {
           "offset": 0,
@@ -30,37 +30,42 @@
           "type": "bold"
         },
         {
-          "offset": 55,
+          "offset": 46,
           "length": 1,
           "type": "bold"
         },
         {
-          "offset": 80,
+          "offset": 71,
+          "length": 12,
+          "type": "bold"
+        },
+        {
+          "offset": 216,
           "length": 11,
           "type": "bold"
         },
         {
-          "offset": 143,
+          "offset": 336,
           "length": 18,
           "type": "bold"
         },
         {
-          "offset": 213,
+          "offset": 406,
+          "length": 16,
+          "type": "bold"
+        },
+        {
+          "offset": 465,
+          "length": 13,
+          "type": "bold"
+        },
+        {
+          "offset": 518,
           "length": 15,
           "type": "bold"
         },
         {
-          "offset": 267,
-          "length": 11,
-          "type": "bold"
-        },
-        {
-          "offset": 334,
-          "length": 14,
-          "type": "bold"
-        },
-        {
-          "offset": 395,
+          "offset": 578,
           "length": 4,
           "type": "text_link",
           "url": "https://gs-research-desk.pages.dev/etf_holdings_report.html"

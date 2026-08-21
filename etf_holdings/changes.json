@@ -1,36 +1,126 @@
 {
-  "date": "2026-08-20",
-  "prev_date": "2026-08-19",
-  "generated_at": "2026-08-20 17:42",
-  "base_date": "2026-08-20",
-  "prev_base_date": "2026-08-19",
+  "date": "2026-08-21",
+  "prev_date": "2026-08-20",
+  "generated_at": "2026-08-21 13:18",
+  "base_date": "",
+  "prev_base_date": "2026-08-20",
   "same_base": false,
   "first_run": false,
   "etfs": [
     {
-      "code": "0162Y0",
-      "label": "TIME 코스닥액티브",
+      "code": "463050",
+      "label": "TIME K바이오액티브",
       "group": "TIME(구 TIMEFOLIO)",
       "flow_factor": 1.0,
       "new": [
         {
-          "key": "403870",
-          "name": "HPSP",
-          "code": "403870",
-          "weight": 2.47,
-          "shares": 202.0
+          "key": "310210",
+          "name": "보로노이",
+          "code": "310210",
+          "weight": 3.99,
+          "shares": 156.0
+        },
+        {
+          "key": "009420",
+          "name": "한올바이오파마",
+          "code": "009420",
+          "weight": 3.91,
+          "shares": 421.0
         }
       ],
       "gone": [
         {
-          "key": "086520",
-          "name": "에코프로",
-          "code": "086520",
-          "weight_prev": 2.44,
-          "shares_prev": 106.0
+          "key": "237690",
+          "name": "에스티팜",
+          "code": "237690",
+          "weight_prev": 3.78,
+          "shares_prev": 250.0
+        },
+        {
+          "key": "347850",
+          "name": "디앤디파마텍",
+          "code": "347850",
+          "weight_prev": 3.65,
+          "shares_prev": 412.0
         }
       ],
-      "moves": [],
+      "moves": [
+        {
+          "key": "141080",
+          "name": "리가켐바이오",
+          "code": "141080",
+          "shares_now": 264.0,
+          "shares_prev": 389.0,
+          "active_share_pct": -32.1,
+          "active_weight_pp": -2.0,
+          "weight_now": 4.24,
+          "weight_prev": 6.19,
+          "headline": false
+        },
+        {
+          "key": "068270",
+          "name": "셀트리온",
+          "code": "068270",
+          "shares_now": 520.0,
+          "shares_prev": 453.0,
+          "active_share_pct": 14.8,
+          "active_weight_pp": 1.95,
+          "weight_now": 14.96,
+          "weight_prev": 13.4,
+          "headline": false
+        }
+      ],
+      "has_weight": true
+    },
+    {
+      "code": "410870",
+      "label": "TIME K컬처액티브",
+      "group": "TIME(구 TIMEFOLIO)",
+      "flow_factor": 1.0,
+      "new": [
+        {
+          "key": "004370",
+          "name": "농심",
+          "code": "004370",
+          "weight": 5.21,
+          "shares": 115.0
+        }
+      ],
+      "gone": [
+        {
+          "key": "352820",
+          "name": "하이브",
+          "code": "352820",
+          "weight_prev": 4.29,
+          "shares_prev": 236.0
+        }
+      ],
+      "moves": [
+        {
+          "key": "257720",
+          "name": "실리콘투",
+          "code": "257720",
+          "shares_now": 1911.0,
+          "shares_prev": 1267.0,
+          "active_share_pct": 50.8,
+          "active_weight_pp": 2.92,
+          "weight_now": 9.03,
+          "weight_prev": 6.06,
+          "headline": false
+        },
+        {
+          "key": "036570",
+          "name": "NC",
+          "code": "036570",
+          "shares_now": 265.0,
+          "shares_prev": 348.0,
+          "active_share_pct": -23.9,
+          "active_weight_pp": -2.04,
+          "weight_now": 6.01,
+          "weight_prev": 8.06,
+          "headline": false
+        }
+      ],
       "has_weight": true
     },
     {
@@ -40,20 +130,72 @@
       "flow_factor": 1.0,
       "new": [
         {
-          "key": "105560",
-          "name": "KB금융",
-          "code": "105560",
-          "weight": 3.0,
-          "shares": 99.0
+          "key": "039490",
+          "name": "키움증권",
+          "code": "039490",
+          "weight": 2.89,
+          "shares": 60.0
         }
       ],
       "gone": [
         {
+          "key": "105560",
+          "name": "KB금융",
+          "code": "105560",
+          "weight_prev": 3.0,
+          "shares_prev": 99.0
+        }
+      ],
+      "moves": [],
+      "has_weight": true
+    },
+    {
+      "code": "462900",
+      "label": "KoAct 바이오헬스케어액티브",
+      "group": "KoAct",
+      "flow_factor": 1.0,
+      "new": [
+        {
+          "key": "476830",
+          "name": "알지노믹스",
+          "code": "476830",
+          "weight": 4.81,
+          "shares": 986.0
+        }
+      ],
+      "gone": [
+        {
+          "key": "141080",
+          "name": "리가켐바이오",
+          "code": "141080",
+          "weight_prev": 4.76,
+          "shares_prev": 330.0
+        }
+      ],
+      "moves": [],
+      "has_weight": true
+    },
+    {
+      "code": "476850",
+      "label": "KoAct 배당성장액티브",
+      "group": "KoAct",
+      "flow_factor": 1.0,
+      "new": [
+        {
           "key": "039490",
           "name": "키움증권",
           "code": "039490",
-          "weight_prev": 2.94,
-          "shares_prev": 60.0
+          "weight": 1.89,
+          "shares": 73.0
+        }
+      ],
+      "gone": [
+        {
+          "key": "267250",
+          "name": "HD현대",
+          "code": "267250",
+          "weight_prev": 2.0,
+          "shares_prev": 89.0
         }
       ],
       "moves": [],
@@ -66,69 +208,23 @@
       "flow_factor": 1.0,
       "new": [
         {
-          "key": "105560",
-          "name": "KB금융",
-          "code": "105560",
-          "weight": 1.71,
-          "shares": 20.0
+          "key": "005380",
+          "name": "현대차",
+          "code": "005380",
+          "weight": 1.62,
+          "shares": 8.0
         }
       ],
       "gone": [
         {
-          "key": "005380",
-          "name": "현대차",
-          "code": "005380",
-          "weight_prev": 1.68,
-          "shares_prev": 8.0
+          "key": "105560",
+          "name": "KB금융",
+          "code": "105560",
+          "weight_prev": 1.71,
+          "shares_prev": 20.0
         }
       ],
       "moves": [],
-      "has_weight": true
-    },
-    {
-      "code": "385720",
-      "label": "TIME 코스피액티브",
-      "group": "TIME(구 TIMEFOLIO)",
-      "flow_factor": 1.0,
-      "new": [],
-      "gone": [],
-      "moves": [
-        {
-          "key": "017670",
-          "name": "SK텔레콤",
-          "code": "017670",
-          "shares_now": 520.0,
-          "shares_prev": 391.0,
-          "active_share_pct": 33.0,
-          "active_weight_pp": 0.51,
-          "weight_now": 2.12,
-          "weight_prev": 1.53,
-          "headline": false
-        }
-      ],
-      "has_weight": true
-    },
-    {
-      "code": "471780",
-      "label": "TIGER 코리아테크액티브",
-      "group": "TIGER",
-      "flow_factor": 1.0,
-      "new": [],
-      "gone": [],
-      "moves": [
-        {
-          "key": "222800",
-          "name": "심텍",
-          "code": "222800",
-          "shares_now": 58.0,
-          "shares_prev": 83.0,
-          "active_share_pct": -30.1,
-          "active_weight_pp": -0.82,
-          "weight_now": 1.93,
-          "weight_prev": 2.61,
-          "headline": false
-        }
-      ],
       "has_weight": true
     }
   ],
@@ -138,10 +234,10 @@
     "share_pct_min": 30.0
   },
   "summary": {
-    "etfs_changed": 5,
-    "new_total": 3,
-    "gone_total": 3,
-    "moves_total": 2,
+    "etfs_changed": 6,
+    "new_total": 7,
+    "gone_total": 7,
+    "moves_total": 4,
     "universe": 20
   }
 }
