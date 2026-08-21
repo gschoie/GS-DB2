@@ -1,5 +1,5 @@
 {
-  "when_utc": "2026-08-21 04:18:48Z",
+  "when_utc": "2026-08-21 04:39:25Z",
   "ok": true,
   "note": "sent",
   "chat_id_tail": "5171",
@@ -7,7 +7,7 @@
   "response": {
     "ok": true,
     "result": {
-      "message_id": 157,
+      "message_id": 159,
       "from": {
         "id": 8875725998,
         "is_bot": true,
@@ -21,8 +21,8 @@
         "username": "gschoie",
         "type": "private"
       },
-      "date": 1787285928,
-      "text": "💹 시장 수급 · 8/21(금) 13:00\nKOSPI 6,905.6 🔺0.77%\n\n개인 -8,793억 (-4,382)\n외국인 +1,587억 (-1,571)\n기관 -1,003억 (+2,162)\n\n프로그램 -2,451억 = 차익 +327 · 비차익 -2,779\n\nK200선물 외인 +2,481계약 (+1,976) · 기관 -1,526계약 (-1,414)\n\n( ) 안은 10:00 대비 증감\n\n상세 차트 › 대시보드\n🎴 GS Research Desk · 시장 수급",
+      "date": 1787287165,
+      "text": "💹 시장 수급 · 8/21(금) 13:00\nKOSPI 6,882.63 🔺0.44%\n\n개인 -9,257억 (-4,846)\n외국인 +1,701억 (-1,457)\n기관 -1,233억 (+1,932)\n\n프로그램 -2,687억 = 차익 +468 · 비차익 -3,155\n\nK200선물 외인 +2,793계약 (+2,288) · 기관 -1,798계약 (-1,686)\n\n( ) 안은 10:00 대비 증감\n\n상세 차트 › 대시보드\n🎴 GS Research Desk · 시장 수급",
       "entities": [
         {
           "offset": 3,
@@ -31,41 +31,41 @@
         },
         {
           "offset": 31,
-          "length": 7,
-          "type": "bold"
-        },
-        {
-          "offset": 51,
-          "length": 7,
-          "type": "bold"
-        },
-        {
-          "offset": 72,
-          "length": 7,
-          "type": "bold"
-        },
-        {
-          "offset": 92,
-          "length": 7,
-          "type": "bold"
-        },
-        {
-          "offset": 115,
-          "length": 7,
-          "type": "bold"
-        },
-        {
-          "offset": 157,
           "length": 8,
           "type": "bold"
         },
         {
-          "offset": 199,
+          "offset": 52,
+          "length": 7,
+          "type": "bold"
+        },
+        {
+          "offset": 73,
+          "length": 7,
+          "type": "bold"
+        },
+        {
+          "offset": 93,
+          "length": 7,
+          "type": "bold"
+        },
+        {
+          "offset": 116,
+          "length": 7,
+          "type": "bold"
+        },
+        {
+          "offset": 158,
+          "length": 8,
+          "type": "bold"
+        },
+        {
+          "offset": 200,
           "length": 18,
           "type": "italic"
         },
         {
-          "offset": 227,
+          "offset": 228,
           "length": 4,
           "type": "text_link",
           "url": "https://gs-research-desk.pages.dev/market_flow_report.html"
