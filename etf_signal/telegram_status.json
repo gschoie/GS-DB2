@@ -1,5 +1,5 @@
 {
-  "when_utc": "2026-08-20 22:18:05Z",
+  "when_utc": "2026-08-21 22:14:21Z",
   "ok": true,
   "note": "alert_sent",
   "chat_id_tail": "5171",
@@ -7,7 +7,7 @@
   "response": {
     "ok": true,
     "result": {
-      "message_id": 155,
+      "message_id": 165,
       "from": {
         "id": 8875725998,
         "is_bot": true,
@@ -21,8 +21,8 @@
         "username": "gschoie",
         "type": "private"
       },
-      "date": 1787264285,
-      "text": "📡 ETF/섹터 신호 · 2026-08-20 (전일 확정)\n\n★ 매수 신호(골든크로스) 2개\n\n🟢 KODEX 바이오 · 바이오/헬스케어\n   ＋DI가 −DI 상향돌파·추세전환\n   ADX 22.3 · %K 64.5/69.8 · 수급 중립\n   [B] 상대강도 상위 21% · ADX 상승추세\n\n🟢 TIME K바이오액티브 · 바이오/헬스케어\n   ＋DI가 −DI 상향돌파·추세전환\n   ADX 22.0 · %K 61.4/65.1 · 수급 중립\n   [B] 상대강도 상위 18% · ADX 상승추세\n\n⚡ 추세 강도 1개 (강력 1)\n\n⚡ KODEX 인도Nifty50 · 해외지수\n   ADX 25 상향돌파 · 하락추세 강화(강력) · 외인·기관 동반 순매도\n   ADX 27.2 · %K 33.5/39.9 · 개인몰림 주의\n   [A] 상대강도 하위 12% · ADX 하락추세 · 52주 신저가권 · 변동성 수축 후 확장\n\n전체 신호판 › 대시보드\n🎴 GS Research Desk · ETF/섹터 신호",
+      "date": 1787350460,
+      "text": "📡 ETF/섹터 신호 · 2026-08-21 (전일 확정)\n\n▼ 매도 경고(데드크로스) 1개\n\n🔴 KODEX 바이오 · 바이오/헬스케어\n   ＋DI가 −DI 하향이탈·추세꺾임\n   ADX 21.1 · %K 57.8/63.9 · 수급 중립\n   [B] ADX 하락추세 · 외인·기관 연속 순매도 4일\n\n⚡ 추세 강도 1개 (강력 1)\n\n⚡ HANARO Fn K-푸드 · 음식료\n   ADX 25 상향돌파 · 상승추세 강화(강력)\n   ADX 25.3 · %K 75.2/73.2 · 수급 중립\n   [B] 상대강도 상위 16% · ADX 상승추세\n\n전체 신호판 › 대시보드\n🎴 GS Research Desk · ETF/섹터 신호",
       "entities": [
         {
           "offset": 0,
@@ -40,22 +40,17 @@
           "type": "bold"
         },
         {
-          "offset": 169,
-          "length": 12,
-          "type": "bold"
-        },
-        {
-          "offset": 289,
+          "offset": 178,
           "length": 1,
           "type": "bold"
         },
         {
-          "offset": 302,
-          "length": 15,
+          "offset": 191,
+          "length": 14,
           "type": "bold"
         },
         {
-          "offset": 471,
+          "offset": 316,
           "length": 4,
           "type": "text_link",
           "url": "https://gs-research-desk.pages.dev/etf_signal_report.html"
