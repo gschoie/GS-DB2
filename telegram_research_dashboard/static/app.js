@@ -129,7 +129,7 @@ function overviewUnion(p){return `<a class="mini-line" href="${esc(p.url||'#')}"
 function overviewMacro(x,i){return miniRow(`<b class="rk">${i+1}</b>`,`<p class="mini-title">${esc(x.title)}</p>`,x.url)}
 const MACRO_ENDPOINT='https://script.google.com/macros/s/AKfycbxNClBzJoE35VSwcCNgMEJ_PvFCBphH87g4gq7xDiGXhO5x-fd-IMpNL6Ly0oURJzEN/exec';/* 네이버 Top5 실시간 JSON(GAS). 비면 배포 데이터만 사용 */
 const decodeEnt=s=>{const t=document.createElement('textarea');t.innerHTML=s||'';return t.value};
-async function fetchLiveMacro(){if(!MACRO_ENDPOINT)return;try{const r=await fetch(MACRO_ENDPOINT,{cache:'no-store'});if(!r.ok)return;const d=await r.json();const items=(d.global_economy||d.items||[]).map(x=>({title:decodeEnt(x.title),url:x.url}));if(items.length&&$('#macro-global'))$('#macro-global').innerHTML=items.slice(0,5).map(overviewMacro).join('')}catch{}}
+async function fetchLiveMacro(){if(!MACRO_ENDPOINT)return;try{const r=await fetch(MACRO_ENDPOINT,{cache:'no-store'});if(!r.ok)return;const d=await r.json();const items=(d.global_economy||d.items||[]).map(x=>({title:decodeEnt(x.title),url:x.url}));if(items.length&&$('#macro-global'))$('#macro-global').innerHTML=items.slice(0,3).map(overviewMacro).join('')}catch{}}
 async function load(){
  const reportQs=new URLSearchParams({q:state.q,company:state.reportCompany,type:state.reportType,weekly:state.weeklyFolder});
  const newsQs=new URLSearchParams({q:state.q,nq:state.newsQ,company:state.newsCompany});
@@ -145,7 +145,7 @@ async function load(){
  const unionTop=window.__DASHBOARD_DATA__?.union?.monthly||[];
  if($('#union-top'))$('#union-top').innerHTML=unionTop.slice(0,10).map(overviewUnion).join('')||'<p class="empty">노조게시판 데이터가 없습니다.</p>';
  const macro=window.__DASHBOARD_DATA__?.macro||{};
- if($('#macro-global'))$('#macro-global').innerHTML=(macro.global_economy||[]).slice(0,5).map(overviewMacro).join('')||'<p class="empty">매크로 데이터가 없습니다.</p>';
+ if($('#macro-global'))$('#macro-global').innerHTML=(macro.global_economy||[]).slice(0,3).map(overviewMacro).join('')||'<p class="empty">매크로 데이터가 없습니다.</p>';
  fetchLiveMacro();
  const brief=$('#daily-brief');if(brief){const gm='https://gemini.google.com/app/dc1cee4fd9194007?usp=sharing';const body=macro.daily_brief?esc(macro.daily_brief).replace(/\n/g,'<br>'):'<span class="brief-empty">아직 핵심요약이 없습니다. GMN.글로벌방산 문서에 붙여넣으면 여기 표시됩니다.</span>';brief.innerHTML=`<div class="brief-head"><small>GEMINI · 오늘의 핵심요약</small><a href="${gm}" target="_blank" rel="noopener">Gemini 열기 →</a></div><div class="brief-body">${body}</div>`}
  const dbe=$('#defense-brief');if(dbe){const db=window.__DASHBOARD_DATA__?.defenseBrief;if(db&&db.summary){const body=db.summary.split('\n').map(l=>l.trim()).filter(Boolean).map(l=>l.startsWith('## ')?'━ '+l.replace(/^#+\s*/,'').split('—')[0].trim():l.replace(/^\*+\s+/,'• ')).join('\n');dbe.innerHTML=`<div class="brief-head"><small>🌍 글로벌 방산 데일리 브리핑${db.date?' · '+esc(db.date)+(d=>isNaN(d)?'':`(${'일월화수목금토'[d.getDay()]})`)(new Date(db.date+'T00:00:00')):''}</small><a href="defense_briefing_report.html" target="_blank" rel="noopener">전체 브리핑 →</a></div><div class="brief-body">${esc(body).replace(/\n/g,'<br>')}</div>`;dbe.style.display='';}else{dbe.style.display='none';}}
