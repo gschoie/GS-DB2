@@ -38,6 +38,7 @@
           <div class="nav-sep"></div>
           <button class="nav" data-view="defense">🌍 글로벌방산.브리핑(제)</button>
           <a href="claude_defense_report.html" target="_blank" rel="noopener">🌐 글로벌방산.브리핑(클)</a>
+          <button class="nav" data-view="construction">🏗️ 글로벌건설기계.브리핑</button>
           <a href="https://app.raindrop.io/my/0" target="_blank" rel="noopener">💧 RainDrop.4방산</a>
         </div>
       </details>
@@ -174,10 +175,14 @@
 
     <section id="overview" class="view active">
       <div class="brief-row" style="display:flex;gap:14px;align-items:stretch;flex-wrap:wrap;margin-bottom:14px">
-        <div id="defense-brief" class="brief-card" style="flex:30 1 280px;min-width:260px;margin:0"></div>
-        <div id="claude-brief" class="brief-card" style="flex:30 1 280px;min-width:260px;margin:0"></div>
+        <section class="panel" style="flex:45 1 280px;min-width:260px;margin:0"><div class="panel-head"><div><small>MACRO · 글로벌경제</small><h2>네이버 Top 7</h2></div><a class="panel-more" href="https://news.naver.com/breakingnews/section/101/262" target="_blank" rel="noopener">더보기 →</a></div><div id="macro-global"></div></section>
+        <div style="flex:10 1 80px;min-width:0" aria-hidden="true"></div>
+        <div id="claude-brief" class="brief-card" style="flex:45 1 280px;min-width:260px;margin:0"></div>
+      </div>
+      <div class="brief-row" style="display:flex;gap:14px;align-items:stretch;flex-wrap:wrap;margin-bottom:14px">
+        <div id="construction-brief" class="brief-card" style="flex:45 1 280px;min-width:260px;margin:0"></div>
         <div id="daily-brief" class="brief-card" style="flex:10 1 140px;min-width:130px;margin:0"></div>
-        <section class="panel" style="flex:30 1 260px;min-width:250px;margin:0"><div class="panel-head"><div><small>MACRO · 글로벌경제</small><h2>네이버 Top 5</h2></div><a class="panel-more" href="https://news.naver.com/breakingnews/section/101/262" target="_blank" rel="noopener">더보기 →</a></div><div id="macro-global"></div></section>
+        <div id="defense-brief" class="brief-card" style="flex:45 1 280px;min-width:260px;margin:0"></div>
       </div>
       <div class="grid grid-quad">
         <section class="panel"><div class="panel-head"><div><small>LATEST RESEARCH</small><h2>GS의 발간 보고서</h2></div><button data-go="reports">전체 보기 →</button></div><div id="latest-reports"></div></section>
@@ -355,6 +360,11 @@
     <section id="defense" class="view">
       <div class="archive-intro"><div><p class="eyebrow">GLOBAL DEFENSE · DAILY</p><h2>글로벌 방산 데일리 브리핑</h2></div><div class="etf-actions"><span>매일 아침 6시경 Claude가 지난 24시간 글로벌 방산 뉴스·주가를 정리해 텔레그램(GS K-Defence NEWS)으로 발송하고 날짜별로 쌓입니다.</span><a class="panel-more" href="defense_briefing_report.html" target="_blank" rel="noopener">새 창으로 ↗</a></div></div>
       <iframe id="defense-frame" class="union-board-frame" title="글로벌 방산 데일리 브리핑" loading="lazy"></iframe>
+    </section>
+
+    <section id="construction" class="view">
+      <div class="archive-intro"><div><p class="eyebrow">CONSTRUCTION EQUIPMENT · DAILY</p><h2>글로벌 건설기계 데일리 브리핑</h2></div><div class="etf-actions"><span>매일 아침 6시경 지난 24시간 건설기계 뉴스·주가·매크로(금리·금·구리)를 정리해 날짜별로 쌓입니다. HD현대건설기계·HD현대인프라코어·두산밥캣 + 글로벌·중국 피어.</span><a class="panel-more" href="construction_briefing_report.html" target="_blank" rel="noopener">새 창으로 ↗</a></div></div>
+      <iframe id="construction-frame" class="union-board-frame" title="글로벌 건설기계 데일리 브리핑" loading="lazy"></iframe>
     </section>
 
     <section id="consensus" class="view">

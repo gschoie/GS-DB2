@@ -25,6 +25,42 @@ def esc(s):
     return html.escape(str(s))
 
 
+PRICES = {}
+
+
+def load_prices():
+    """fetch_prices.py 가 남긴 시세 캐시. 없으면 스파크라인만 생략된다."""
+    global PRICES
+    p = os.path.join(HERE, "prices.json")
+    if os.path.exists(p):
+        try:
+            with open(p, encoding="utf-8") as f:
+                PRICES = (json.load(f) or {}).get("codes", {})
+        except Exception:
+            PRICES = {}
+
+
+def spark(code, w=58, h=16):
+    """종목별 최근 60거래일 종가 스파크라인(인라인 SVG).
+
+    기간 등락으로 색을 나눈다(상승 초록/하락 빨강). 시세가 없는 종목(해외 등)은
+    빈 문자열을 돌려 카드가 그대로 렌더되게 한다."""
+    rec = PRICES.get(str(code or ""))
+    cl = (rec or {}).get("close") or []
+    if len(cl) < 5:
+        return ""
+    mn, mx = min(cl), max(cl)
+    rng = (mx - mn) or 1
+    n = len(cl)
+    pts = " ".join(f"{i/(n-1)*(w-2)+1:.1f},{h-1-(v-mn)/rng*(h-2):.1f}" for i, v in enumerate(cl))
+    ret = (cl[-1] / cl[0] - 1) * 100 if cl[0] else 0
+    cls = "sp-up" if ret >= 0 else "sp-dn"
+    tip = f'{rec.get("name", code)} · 최근 {n}거래일 {"+" if ret >= 0 else "−"}{abs(ret):.1f}%'
+    return (f'<svg class="spark {cls}" viewBox="0 0 {w} {h}" width="{w}" height="{h}" '
+            f'role="img" aria-label="{esc(tip)}"><title>{esc(tip)}</title>'
+            f'<polyline points="{pts}"/></svg>')
+
+
 def naver_link(name, code):
     name = esc(name)
     if not code:
@@ -43,7 +79,7 @@ def move_row(m):
     big = " head" if m["headline"] else ""
     wtxt = "—" if wp is None else f'{"+" if wp >= 0 else "−"}{abs(wp):.2f}%p'
     return (f'<div class="mv{big}"><span class="{cls} dir">{arrow}</span> '
-            f'<b>{naver_link(m["name"], m["code"])}</b>'
+            f'<b>{naver_link(m["name"], m["code"])}</b>{spark(m.get("code"))}'
             f'<span class="mvnum">계약수 <span class="{cls}">{"+" if up else "−"}{abs(sp):.0f}%</span>'
             f' · 액티브비중 <span class="{cls}">{wtxt}</span>'
             f' · 현비중 {m["weight_now"]:.2f}%</span></div>')
@@ -54,12 +90,14 @@ def etf_card(e):
              f'<small>{esc(e["group"])}</small></div>']
     if e["new"]:
         chips = " ".join(f'<span class="chip new">{naver_link(n["name"], n["code"])}'
-                         f'{" · "+format(n["weight"],".1f")+"%" if n["weight"] else ""}</span>'
+                         f'{" · "+format(n["weight"],".1f")+"%" if n["weight"] else ""}'
+                         f'{spark(n.get("code"))}</span>'
                          for n in e["new"])
         parts.append(f'<div class="row"><span class="tag tnew">Top10 진입</span>{chips}</div>')
     if e["gone"]:
         chips = " ".join(f'<span class="chip gone">{naver_link(g["name"], g["code"])}'
-                         f'{" · "+format(g["weight_prev"],".1f")+"%" if g["weight_prev"] else ""}</span>'
+                         f'{" · "+format(g["weight_prev"],".1f")+"%" if g["weight_prev"] else ""}'
+                         f'{spark(g.get("code"))}</span>'
                          for g in e["gone"])
         parts.append(f'<div class="row"><span class="tag tgone">Top10 이탈</span>{chips}</div>')
     if e["moves"]:
@@ -136,7 +174,8 @@ def day_html(ch, snap, is_latest, period_label=None):
 <p class="sub">{first_line}<br>
 구성 기준일 <b>{base}</b> (KRX 장마감) · 비교 <b>{prevbase} → {base}</b><br>
 <span class="sched">🕙 정기 업데이트 <b>{SCHEDULE_TIME}</b>(한국시간){f' · 실제 갱신 <b>{gen}</b>' if gen else ''}<span class="schedq"> — 대기열 사정으로 일부 시간대는 건너뜀</span></span><br>
-매일 구성종목(Top10)을 스냅샷하고, <b>주가 효과와 CU 자금유출입을 제거</b>해 운용사가 실제로 사고판 것만 잡아냅니다.</p>
+매일 구성종목(Top10)을 스냅샷하고, <b>주가 효과와 CU 자금유출입을 제거</b>해 운용사가 실제로 사고판 것만 잡아냅니다.<br>
+<span class="sparknote">종목명 옆 곡선은 <b>최근 60거래일</b> 주가 — 상승 초록 · 하락 빨강, 마우스를 올리면 등락률</span></p>
 {banner}
 
 <section class="stats">
@@ -160,6 +199,7 @@ def _opt(d, label, latest):
 
 
 def build():
+    load_prices()
     with open(os.path.join(HERE, "changes.json"), encoding="utf-8") as f:
         ch = json.load(f)
     snaps = sorted(glob.glob(os.path.join(SNAP_DIR, "*.json")))
@@ -273,6 +313,12 @@ h2{{font:600 18px Georgia,"Noto Serif KR",serif;margin:30px 0 12px}}
 .tag{{font-size:9px;font-weight:800;letter-spacing:.04em;padding:3px 7px;border-radius:5px;white-space:nowrap}}
 .tnew{{background:#e3f3e7;color:#286342}}.tgone{{background:#f8e9e6;color:#a43c31}}
 .chip{{font-size:12px;padding:3px 8px;border-radius:11px;background:#f2f5f0}}
+.spark{{vertical-align:middle;margin-left:6px;overflow:visible}}
+.sparknote{{color:#9aa19d;font-size:11px}}
+.spark polyline{{fill:none;stroke-width:1.3;vector-effect:non-scaling-stroke}}
+.spark.sp-up polyline{{stroke:#2e7d4f}}
+.spark.sp-dn polyline{{stroke:#bd4335}}
+.chip .spark{{margin-left:5px}}
 .chip.new{{background:#eaf6ee}}.chip.gone{{background:#faeeeb}}
 .moves{{margin-top:8px;display:flex;flex-direction:column;gap:6px}}
 .mv{{font-size:12px;line-height:1.5;padding:6px 9px;background:#fafbf8;border:1px solid #eef1ec;border-radius:6px}}

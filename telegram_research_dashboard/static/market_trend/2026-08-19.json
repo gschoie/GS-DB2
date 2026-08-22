@@ -1,0 +1,887 @@
+{
+ "date": "2026-08-19",
+ "meta": {
+  "window": "08-18 06:00~08-19 06:00 KST",
+  "engine": "Gemini(gemini-2.5-flash)",
+  "generated_at": "2026-08-19T06:48+09:00"
+ },
+ "stats": {
+  "channels": 101,
+  "messages": 1788,
+  "groups": 1655
+ },
+ "one_liner": "AI 투자 확대와 반도체 공급 부족 기대감 속, 기술적 지표와 글로벌 변수에 대한 시장의 신중한 접근이 요구된다.",
+ "themes": [
+  {
+   "name": "AI 투자 확대 및 자금 조달 경쟁",
+   "narrative": "AI 인프라 투자가 지속적으로 확대되고 있으며, 이에 필요한 자금 조달을 위해 AI 관련 기업들의 회사채 발행이 급증, 미 국채와 자금 쟁탈전 양상을 보이며 장기금리 상승에 영향을 미치고 있다. LG전자는 AIDC 수주 급증이 전망된다.",
+   "status": "ongoing",
+   "strength": 5,
+   "keywords": [
+    "지속되고",
+    "위치",
+    "나타나고",
+    "따른 판단",
+    "이용"
+   ],
+   "evidence": [
+    {
+     "channel": "미국 주식 인사이더 🇺🇸 (US Stocks Insider)",
+     "quote": "아마존은 루이지애나 데이터센터 투자 계획을 기존 120억달러에서 180억달러로 확대하고 세 번째 데이터센터 캠퍼스를 추가하기로 결정. 전력망 및 에너지 인프라 비용을 직접 부담하고 공공 수자원 인프라에도 최대 4억달러를 투입할 계획으로, 하이퍼스케일러의 AI CAPEX가 전력·유…"
+    },
+    {
+     "channel": "이상헌 부장 iM 지주/ESG/중소형주",
+     "quote": "* 美 장기금리 왜 안 떨어지나…AI 회사채와 ‘자금 쟁탈전’ - 블룸버그통신은 17일(현지시간) AI 투자를 위한 기업들의 차입 급증이 채권시장의 소화 능력을 압박하면서 미 국채 장기금리 상승에 갈수록 큰 영향을 미치고 있다고 보도했다."
+    },
+    {
+     "channel": "가치투자클럽",
+     "quote": "[교보증권 IT 최보영] * LG전자(066570): AIDC, 10월 2.5조원의 수주 전망 - 당사 추정 AIDC 관련 수주는 10월경 약 2.5조원이 추가되어 잔고기준 1H26 6,000억원에서 2H26 약 3조원 이상으로 급증 전망."
+    }
+   ]
+  },
+  {
+   "name": "반도체 섹터 - 공급 부족 및 주도주 기대",
+   "narrative": "반도체 섹터가 KOSPI의 주도주로서 자리매김하는 가운데, 중기 HBM 등 스페셜티 메모리 제품의 2028년 공급 부족 신호가 강력하게 발생하고 있어 메모리 사이클의 반등 연속성 확보가 기대된다. 다만, 장기물 국채금리 상승으로 AI 및 반도체 관련주의 낙폭이 두드러지는 등 단기 변동성은 존재한다.",
+   "status": "ongoing",
+   "strength": 4,
+   "keywords": [
+    "위치",
+    "지속되고",
+    "나타나고",
+    "수치",
+    "못하고"
+   ],
+   "evidence": [
+    {
+     "channel": "대신 전략. 돌직구",
+     "quote": "향후 KOSPI는 반도체가 다시금 주도주로서 자리매김하는 가운데 실적대비 저평가, 소외주들의 동반 상승이 이뤄질 것으로 전망."
+    },
+    {
+     "channel": "메리츠증권 리서치",
+     "quote": "📮[메리츠증권 반도체/디스플레이 김선우] 반도체: 점차 선명해지는 2028년 DRAM 공급부족 [중기 HBM 주문량 확대가 야기할 변화] - 지난달 시장을 강타한 막연한 우려에도 불구하고 중기 메모리 공급부족 신호들이 강력하게 발생하기 시작함"
+    },
+    {
+     "channel": "키움증권 해외선물 톡톡",
+     "quote": "뉴욕증시, 30년물 금리 상승에 '비명'…필리 지수 5.44%↓ (뉴욕=연합뉴스) 진정호 연합인포맥스 특파원 = 뉴욕증시가 동반 약세를 보이는 가운데 인공지능(AI) 및 반도체 관련주의 낙폭이 두드러진다."
+    }
+   ]
+  },
+  {
+   "name": "기술적 지표 및 글로벌 변수에 따른 시장 신중론",
+   "narrative": "글로벌 금리 인상과 지정학적 불안감이 시장에 부담을 주며 투자자들의 보수적인 접근이 필요한 시점이다. 기술적 지표상 과매수 상태에 대한 주의와 함께 거래량 감소, 하락세 신호가 나타나고 있어 신중한 투자 전략이 요구된다.",
+   "status": "ongoing",
+   "strength": 5,
+   "keywords": [
+    "신중한",
+    "RSI 수치",
+    "주의",
+    "거래량 비율",
+    "감소하고",
+    "이동평균선 아래",
+    "신중한 접근",
+    "거래량 감소하고",
+    "밴드 위치",
+    "하락세",
+    "접근"
+   ],
+   "evidence": [
+    {
+     "channel": "서화백의 그림놀이 🚀",
+     "quote": "💡 요약 글로벌 금리 인상 및 지정학적 불안감이 시장에 부담을 주며 투자자들의 보수적인 접근이 필요한 시점입니다."
+    },
+    {
+     "channel": "키움증권 해외선물 톡톡",
+     "quote": "<b>종목 분석 결과</b> 현재 주가는 저항선에 근접해 있으며, 지지선은 아래에 위치하고 있습니다. 기술적 지표들은 상승세를 보이고 있으나, 거래량이 감소하고 있어 주가의 지속적인 상승에 대한 우려가 존재합니다. 따라서 매도 신호가 우세한 상황입니다. 주가는 조정 가능성이 있으며, 신중한 접근이필요합니다."
+    },
+    {
+     "channel": "키움증권 해외선물 톡톡",
+     "quote": "<b>종목 분석 결과</b> 현재 주가는 상승세를 보이고 있으나, 과매수 상태에 진입하여 조정이 필요할 수 있습니다. 매수세가 지속된다면 상승 가능성이 높지만, 저항선에 도달한 만큼 주의가 필요합니다."
+    }
+   ]
+  },
+  {
+   "name": "조선/방산 - 미국 시장 진출 기대감",
+   "narrative": "한화시스템이 미국 방산 시장 진출을 통해 미국에서 가장 가파르게 성장할 조선사로 평가받으며 높은 멀티플과 주가 동력을 확보할 것으로 기대된다. HD현대도 원자로 용기 사업 확대를 위해 협력하는 등 국내 기업들의 미국 시장 진출이 주목받고 있다.",
+   "status": "new",
+   "strength": 3,
+   "keywords": [
+    "따른 판단",
+    "이용"
+   ],
+   "evidence": [
+    {
+     "channel": "▩발간자료PDF.저장",
+     "quote": "⛴ #한화시스템 「미국에서 가장 가파르게 성장할 조선사」 ▶️ Issue: 커버리지 재개. 방산은 캐시카우, 미국 조선은 성장, 모멘텀과 멀티플 ▶️ Pitch: > K-방산의 부체계로서 성장 중. 그러나 > 동사의 높은 멀티플과 주가 동력은 (우주 외에) 미국 방산 진출로…"
+    },
+    {
+     "channel": "다올투자증권 리서치센터",
+     "quote": "🛳 조선 [TradeWinds] Bill Gates-backed TerraPower taps HD Hyundai for reactor vessel scale-up"
+    }
+   ]
+  },
+  {
+   "name": "중국 경제 둔화 및 부양책 기대",
+   "narrative": "7월 중국 소비, 투자, 생산 등 주요 경제 지표가 예상치를 하회하며 둔화세를 보이고 있어, 내수 부진 타개를 위한 4분기 부양책 강화에 대한 기대감이 높아지고 있다.",
+   "status": "ongoing",
+   "strength": 3,
+   "keywords": [
+    "수치",
+    "못하고"
+   ],
+   "evidence": [
+    {
+     "channel": "[메리츠 중국 최설화]",
+     "quote": "📮[메리츠증권 신흥국 투자전략 최설화] <중국, 다시 높아지는 부양 기대> - 7월 중국 소비, 투자, 생산 3대 지표 일제히 예상치 하회하며 둔화 - 내수 부진을 타개할 수 있는 관건은 재정 지출 속도, 4분기 부양책 강화 예상"
+    },
+    {
+     "channel": "키움증권 해외선물 톡톡",
+     "quote": "회계연도 2026년 순매출 3% 감소한 196억 달러…주당 배당금도 50센트로 반토막 글로벌 주류 기업 디아지오(DIAGEO PLC ADR EA REPR 4 ORD GBX28.935185, NYSE:DEO)가 북미 시장 부진과 중국 백주 시장의 약세로 인해 직전 회계연도 대비 저조한 성적표를 받아들였다."
+    }
+   ]
+  }
+ ],
+ "community_mood": {
+  "score": 20,
+  "summary": "개인 투자자들은 AI 및 반도체 대형주에 높은 관심을 보이며 일부 종목에 대한 긍정적인 기대를 나타내고 있으나, 전반적인 시장 상황과 투자 전략에 대해서는 신중한 태도와 함께 일부 불만도 표출되고 있다.",
+  "hot_stocks": [
+   {
+    "name": "더본코리아",
+    "score": 50,
+    "reason": "네이버 종토 글 수 급증으로 높은 관심."
+   },
+   {
+    "name": "HMM",
+    "score": 50,
+    "reason": "네이버 종토 글 수 급증으로 높은 관심."
+   },
+   {
+    "name": "SK하이닉스",
+    "score": 60,
+    "reason": "반도체 섹터의 주도주 기대감 및 높은 관심."
+   },
+   {
+    "name": "삼성전자",
+    "score": 50,
+    "reason": "반도체 섹터의 주도주 기대감 및 높은 관심."
+   },
+   {
+    "name": "LG전자",
+    "score": 70,
+    "reason": "AIDC 수주 전망 등 급호재 기대감."
+   },
+   {
+    "name": "한화시스템",
+    "score": 60,
+    "reason": "미국 방산 시장 진출 기대감 및 주가 하락에도 버티는 투자자 심리."
+   },
+   {
+    "name": "한미반도체",
+    "score": 70,
+    "reason": "8공장 확정 소식에 대한 긍정적 기대감."
+   },
+   {
+    "name": "에코프로",
+    "score": 40,
+    "reason": "높은 관심 지속."
+   }
+  ]
+ },
+ "signals": {
+  "spikes": [
+   {
+    "term": "지속되고",
+    "count": 150,
+    "burst": 97.72406847935548,
+    "base_daily": 0.8,
+    "new": false
+   },
+   {
+    "term": "위치",
+    "count": 142,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "신중한",
+    "count": 138,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "RSI 수치",
+    "count": 136,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "주의",
+    "count": 149,
+    "burst": 79.42301565503983,
+    "base_daily": 1.0,
+    "new": false
+   },
+   {
+    "term": "이용",
+    "count": 135,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "거래량 비율",
+    "count": 134,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "감소하고",
+    "count": 133,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "이동평균선 아래",
+    "count": 131,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "신중한 접근",
+    "count": 130,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "거래량 감소하고",
+    "count": 130,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "밴드 위치",
+    "count": 129,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "독자",
+    "count": 127,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "수치",
+    "count": 150,
+    "burst": 67.65512433186149,
+    "base_daily": 1.2,
+    "new": false
+   },
+   {
+    "term": "나타나고",
+    "count": 133,
+    "burst": 86.6486740516952,
+    "base_daily": 0.8,
+    "new": false
+   },
+   {
+    "term": "못하고",
+    "count": 125,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "정보 이용",
+    "count": 124,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "견해이며",
+    "count": 124,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "작성기관",
+    "count": 124,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "따른 판단",
+    "count": 124,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "판단 독자",
+    "count": 124,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "이용 따른",
+    "count": 124,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "작성기관 견해이며",
+    "count": 124,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "하락세",
+    "count": 140,
+    "burst": 74.62565229332601,
+    "base_daily": 1.0,
+    "new": false
+   },
+   {
+    "term": "접근",
+    "count": 146,
+    "burst": 65.85098768301185,
+    "base_daily": 1.2,
+    "new": false
+   }
+  ],
+  "top_posts": [
+   {
+    "channels": 4,
+    "channel": "키움증권 리서치센터",
+    "head": "[8/18, Kiwoom Weekly, 키움 전략 한지영] \"반등의 연속성 확보 구간” ------ <Weekly Three Points> a. 국내 연휴 기간(14~17일, 2거래일) 미국 증시는 7월 소매판매 쇼크, 미-이란 불확실성, 반도체 쏠림현상 등으로 소폭 약세(2거래일 누적 등락률 다우 -0.7%, S&P50…",
+    "url": "https://t.me/KiwoomResearch/23811",
+    "time_kst": "08-18 07:37"
+   },
+   {
+    "channels": 4,
+    "channel": "▩발간자료PDF.저장",
+    "head": "⛴ #한화시스템 「미국에서 가장 가파르게 성장할 조선사」 ☞ https://bit.ly/HS2Q26RE ▶️ Issue: 커버리지 재개. 방산은 캐시카우, 미국 조선은 성장, 모멘텀과 멀티플 ▶️ Pitch: > K-방산의 부체계로서 성장 중. 그러나 > 동사의 높은 멀티플과 주가 동력은 (우주 외에) 미국 방산 진출로…",
+    "url": "https://t.me/c/1416673238/1508",
+    "time_kst": "08-18 07:21"
+   },
+   {
+    "channels": 4,
+    "channel": "가치투자클럽",
+    "head": "[교보증권 IT 최보영] * LG전자(066570): AIDC, 10월 2.5조원의 수주 전망 - 당사 추정 AIDC 관련 수주는 10월경 약 2.5조원이 추가되어 잔고기준 1H26 6,000억원에서 2H26 약 3조원 이상으로 급증 전망. - 양재 데이터팩토리에는 현재 약 50대의 CLOiD 로봇이 투입돼 학습 데이터…",
+    "url": "https://t.me/corevalue/46598",
+    "time_kst": "08-18 08:34"
+   },
+   {
+    "channels": 4,
+    "channel": "AWAKE - 실시간 주식 공시 정리채널",
+    "head": "2026.08.18 14:15:28 기업명: 실리콘투(시가총액: 2조 8,263억) A257720 보고서명: 주요사항보고서(유상증자결정) 보통주 : 우선주 : 6,666,666주(발행가격 : 45,000원) 발행비율 : 10% * 투자자 StarlinkInvestment L.P. 발표일자 : 2026-08-18 납입일자…",
+    "url": "https://t.me/darthacking/151569",
+    "time_kst": "08-18 14:15"
+   },
+   {
+    "channels": 3,
+    "channel": "다올투자증권 리서치센터",
+    "head": "[다올투자증권 조선/기계/방산 최광식] 8/18(화) 데일리뉴스 🛳 조선 [TradeWinds] Bill Gates-backed TerraPower taps HD Hyundai for reactor vessel scale-up Fifty years on, Idan Ofer makes 'sentimental' newbuil…",
+    "url": "https://t.me/daolresearch/14902",
+    "time_kst": "08-18 08:57"
+   },
+   {
+    "channels": 3,
+    "channel": "이상헌 부장 iM 지주/ESG/중소형주",
+    "head": "* 美 장기금리 왜 안 떨어지나…AI 회사채와 ‘자금 쟁탈전’ - 블룸버그통신은 17일(현지시간) AI 투자를 위한 기업들의 차입 급증이 채권시장의 소화 능력을 압박하면서 미 국채 장기금리 상승에 갈수록 큰 영향을 미치고 있다고 보도했다. 통상 ‘구축효과(crowding out)’는 정부가 국채를 대규모로 발행해 시중 자…",
+    "url": "https://t.me/INSIGHTVALUELEE/9449",
+    "time_kst": "08-18 06:05"
+   },
+   {
+    "channels": 3,
+    "channel": "메리츠증권 리서치",
+    "head": "📮[메리츠증권 반도체/디스플레이 김선우] 반도체: 점차 선명해지는 2028년 DRAM 공급부족 [중기 HBM 주문량 확대가 야기할 변화] - 지난달 시장을 강타한 막연한 우려에도 불구하고 중기 메모리 공급부족 신호들이 강력하게 발생하기 시작함 - 최근 HBM 등 중요 스페셜티 메모리 제품들의 2028년 공급확약 문의가 폭…",
+    "url": "https://t.me/meritz_research/44446",
+    "time_kst": "08-18 07:57"
+   },
+   {
+    "channels": 3,
+    "channel": "유진투자증권 코스닥벤처팀",
+    "head": "[후성(093370.KS) / 유진투자증권 코스닥벤처팀 / 그린산업&ESG 한병화 ☎02)368-6171] ★ 본업에 의한 어닝스 서프라이즈 첫 시현 ☞ 2분기 기존 예상보다 매출, 영업이익 대폭 상회 - 후성의 2분기 연결 매출, 영업이익은 각각 1,882억원, 234억원으로 당사의 기존 추정치(1,480억원, 153억…",
+    "url": "https://t.me/SmallCap/8933",
+    "time_kst": "08-18 08:27"
+   },
+   {
+    "channels": 3,
+    "channel": "iM전략 김준영",
+    "head": "[iM증권 김준영] [주식전략] ★ 주식하기 딱 좋은 날씨 ▶️ 골디락스 재확인, 지표 둔화가 오히려 우호적으로 해석되는 국면 - 글로벌 ESI 플러스권 유지, ISI는 0 부근. 경기는 예상보다 양호하고 인플레는 예상 범위 내. 유가 배럴당 80불 전후로 중동 리스크만 통제되면 골디락스 지속 가능. - 7월 비농업 -2…",
+    "url": "https://t.me/crazyecon/1720",
+    "time_kst": "08-18 07:44"
+   },
+   {
+    "channels": 3,
+    "channel": "[신한 리서치본부] IT(반도체/전기전자/디스플레이)",
+    "head": "[신한투자증권 IT소부장/디스플레이 박현우, 김예성] 이오테크닉스: 줄 서는 맛집, 메뉴도 많다! ▶️ 수주 흐름과 리드타임을 보면 생기는 확신. 관심종목 유지 - 주력 제품 마커는 내년 중반까지 수주 확보. 3분기부터는 PCB 장비군 매출 성장 가세 → 전사 실적 모멘텀 강화 - 최근 고객사들은 장비 투자에 있어 가격(…",
+    "url": "https://t.me/c/1355104422/7344",
+    "time_kst": "08-18 07:42"
+   },
+   {
+    "channels": 3,
+    "channel": "[ IT는 SK ]",
+    "head": "[SK증권 반도체 소부장 이동주] 반도체 소부장 수주 잔고가 주는 시그널 ▶️ 과거 메모리 사이클 구간에서의 소부장 - 메모리 투자 사이클에서 소부장 주가 상승은 삼성전자&SK하이닉스의 상승 구간 혹은 횡보 구간에서 목격 - 올해 5-7월 이 패턴은 잠시 깨졌으나 종목 레버리지 ETF 거래대금 감소와 함께 8월부터 패턴…",
+    "url": "https://t.me/skitteam/4499",
+    "time_kst": "08-18 07:54"
+   },
+   {
+    "channels": 3,
+    "channel": "[신한 리서치본부] IT(반도체/전기전자/디스플레이)",
+    "head": "[신한투자증권 반도체/글로벌IT 송혜수, 김형태] 유니테스트(086390.KQ); 달라진 이익 체력 ▶️ 시장 관심을 되돌릴 이익 서프라이즈 - 마진이 빠른 속도로 개선 중임을 확인. 실적 발표 당일 주가 11% 상승 - 현재 주가 26F P/E 12배, 12MF P/E 6배. 투자 매력도 높은 구간 ▶️ 2Q26 Rev…",
+    "url": "https://t.me/c/1355104422/7346",
+    "time_kst": "08-18 07:49"
+   },
+   {
+    "channels": 3,
+    "channel": "하나 중국/신흥국 전략 김경환",
+    "head": ">>북한에 ‘유화 신호’인가, 한국에 ‘책임 추궁’인가? 트럼프의 한미연합훈련 축소 요구에 추측 확산 (환구시보) •트럼프가 갑작스럽게 한미연합훈련 규모 축소를 요구. 표면적으로는 북한에 ‘유화 신호’를 보내고 북미 대화 재개를 위한 분위기를 조성하려는 조치 •실질적으로는 한국에 대한 ‘책임 추궁’이라는 분석도 나옴. 핵…",
+    "url": "https://t.me/HANAchina/67318",
+    "time_kst": "08-18 09:24"
+   },
+   {
+    "channels": 3,
+    "channel": "[메리츠 중국 최설화]",
+    "head": "📮[메리츠증권 신흥국 투자전략 최설화] 최설화의 Real China, 2026.8.18(화) <중국, 다시 높아지는 부양 기대> - 7월 중국 소비, 투자, 생산 3대 지표 일제히 예상치 하회하며 둔화 - 내수 부진을 타개할 수 있는 관건은 재정 지출 속도, 4분기 부양책 강화 예상 - 시장은 이미 통화완화 기대 선반영…",
+    "url": "https://t.me/china_kis/3904",
+    "time_kst": "08-18 07:56"
+   },
+   {
+    "channels": 3,
+    "channel": "이그전 (이은택의 그림 전략)",
+    "head": ". [이그전] 클로즈 모델 VS. 오픈 모델의 전쟁 (1편): 프런티어 모델의 후퇴 안녕하세요. KB증권 자산배분 이은택입니다. 1) 7월에 격화됐던 오픈모델과 클로즈모델의 가격전쟁은 비교적 적게 언급되지만, 중요한 주가 조정 요인이었습니다. 2) 6월부터 기업들이 프런티어 모델 사용을 통제하면서, 오픈모델의 점유율이 빠…",
+    "url": "https://t.me/egzion/6420",
+    "time_kst": "08-18 09:03"
+   }
+  ]
+ },
+ "community": {
+  "source": "네이버 종목토론실",
+  "universe": 41,
+  "posts": 3015,
+  "search_top": [
+   {
+    "code": "005930",
+    "name": "삼성전자",
+    "rank": 1
+   },
+   {
+    "code": "000660",
+    "name": "SK하이닉스",
+    "rank": 2
+   },
+   {
+    "code": "009150",
+    "name": "삼성전기",
+    "rank": 3
+   },
+   {
+    "code": "066570",
+    "name": "LG전자",
+    "rank": 4
+   },
+   {
+    "code": "005380",
+    "name": "현대차",
+    "rank": 5
+   },
+   {
+    "code": "035420",
+    "name": "NAVER",
+    "rank": 6
+   },
+   {
+    "code": "034020",
+    "name": "두산에너빌리티",
+    "rank": 7
+   },
+   {
+    "code": "042660",
+    "name": "한화오션",
+    "rank": 8
+   },
+   {
+    "code": "006400",
+    "name": "삼성SDI",
+    "rank": 9
+   },
+   {
+    "code": "402340",
+    "name": "SK스퀘어",
+    "rank": 10
+   }
+  ],
+  "hot_stocks": [
+   {
+    "code": "475560",
+    "name": "더본코리아",
+    "posts": 219,
+    "capped": true,
+    "burst": 99.0,
+    "base_daily": 0.0
+   },
+   {
+    "code": "011200",
+    "name": "HMM",
+    "posts": 155,
+    "capped": true,
+    "burst": 99.0,
+    "base_daily": 0.0
+   },
+   {
+    "code": "000660",
+    "name": "SK하이닉스",
+    "posts": 2487,
+    "capped": true,
+    "burst": 10.9,
+    "base_daily": 228.7
+   },
+   {
+    "code": "005930",
+    "name": "삼성전자",
+    "posts": 1538,
+    "capped": true,
+    "burst": 9.5,
+    "base_daily": 161.7
+   },
+   {
+    "code": "086450",
+    "name": "동국제약",
+    "posts": 38,
+    "capped": false,
+    "burst": 57.0,
+    "base_daily": 0.7
+   },
+   {
+    "code": "005935",
+    "name": "삼성전자우",
+    "posts": 79,
+    "capped": false,
+    "burst": 26.3,
+    "base_daily": 3.0
+   },
+   {
+    "code": "086520",
+    "name": "에코프로",
+    "posts": 145,
+    "capped": true,
+    "burst": 18.9,
+    "base_daily": 7.7
+   },
+   {
+    "code": "005490",
+    "name": "POSCO홀딩스",
+    "posts": 223,
+    "capped": true,
+    "burst": 10.0,
+    "base_daily": 22.3
+   },
+   {
+    "code": "402340",
+    "name": "SK스퀘어",
+    "posts": 142,
+    "capped": true,
+    "burst": 10.9,
+    "base_daily": 13.0
+   },
+   {
+    "code": "068270",
+    "name": "셀트리온",
+    "posts": 137,
+    "capped": true,
+    "burst": 10.5,
+    "base_daily": 13.0
+   },
+   {
+    "code": "010140",
+    "name": "삼성중공업",
+    "posts": 138,
+    "capped": true,
+    "burst": 10.3,
+    "base_daily": 13.3
+   },
+   {
+    "code": "011070",
+    "name": "LG이노텍",
+    "posts": 161,
+    "capped": true,
+    "burst": 8.5,
+    "base_daily": 19.0
+   }
+  ],
+  "keywords": [
+   {
+    "term": "진짜",
+    "count": 33,
+    "burst": 76.1,
+    "new": true
+   },
+   {
+    "term": "외인",
+    "count": 31,
+    "burst": 71.5,
+    "new": true
+   },
+   {
+    "term": "기관",
+    "count": 27,
+    "burst": 62.3,
+    "new": true
+   },
+   {
+    "term": "이거",
+    "count": 23,
+    "burst": 53.1,
+    "new": true
+   },
+   {
+    "term": "폭락",
+    "count": 21,
+    "burst": 48.4,
+    "new": true
+   },
+   {
+    "term": "다시",
+    "count": 21,
+    "burst": 48.4,
+    "new": true
+   },
+   {
+    "term": "국장",
+    "count": 19,
+    "burst": 43.8,
+    "new": true
+   },
+   {
+    "term": "노조",
+    "count": 19,
+    "burst": 43.8,
+    "new": true
+   },
+   {
+    "term": "외국인",
+    "count": 16,
+    "burst": 36.9,
+    "new": true
+   },
+   {
+    "term": "하닉",
+    "count": 16,
+    "burst": 36.9,
+    "new": true
+   },
+   {
+    "term": "프로",
+    "count": 15,
+    "burst": 34.6,
+    "new": true
+   },
+   {
+    "term": "현대차",
+    "count": 15,
+    "burst": 34.6,
+    "new": true
+   },
+   {
+    "term": "빨리",
+    "count": 15,
+    "burst": 34.6,
+    "new": true
+   },
+   {
+    "term": "그냥",
+    "count": 14,
+    "burst": 32.3,
+    "new": true
+   },
+   {
+    "term": "아직",
+    "count": 14,
+    "burst": 32.3,
+    "new": true
+   }
+  ],
+  "top_liked": [
+   {
+    "code": "047810",
+    "name": "한국항공우주",
+    "title": "금감원은 눈깔있음 이거좀 봐라[4]",
+    "views": 529,
+    "likes": 47,
+    "url": "https://finance.naver.com/item/board_read.naver?code=047810&nid=427971078",
+    "time_kst": "08-18 16:15"
+   },
+   {
+    "code": "066570",
+    "name": "LG전자",
+    "title": "급호재[5]",
+    "views": 1271,
+    "likes": 41,
+    "url": "https://finance.naver.com/item/board_read.naver?code=066570&nid=427984582",
+    "time_kst": "08-18 21:43"
+   },
+   {
+    "code": "272210",
+    "name": "한화시스템",
+    "title": "5만원대도 버틴 나다[2]",
+    "views": 363,
+    "likes": 40,
+    "url": "https://finance.naver.com/item/board_read.naver?code=272210&nid=427927963",
+    "time_kst": "08-18 09:31"
+   },
+   {
+    "code": "009150",
+    "name": "삼성전기",
+    "title": "주식은 기다리는 맛이다[1]",
+    "views": 1383,
+    "likes": 38,
+    "url": "https://finance.naver.com/item/board_read.naver?code=009150&nid=427982104",
+    "time_kst": "08-18 20:06"
+   },
+   {
+    "code": "042700",
+    "name": "한미반도체",
+    "title": "----8공장 확정!!----[5]",
+    "views": 1351,
+    "likes": 38,
+    "url": "https://finance.naver.com/item/board_read.naver?code=042700&nid=427944761",
+    "time_kst": "08-18 11:45"
+   }
+  ],
+  "top_rising": [
+   {
+    "code": "000660",
+    "name": "SK하이닉스",
+    "title": "어제 선반영[8]",
+    "views": 515,
+    "likes": 21,
+    "url": "https://finance.naver.com/item/board_read.naver?code=000660&nid=427994730",
+    "time_kst": "08-19 05:55",
+    "views_per_hour": 602.1
+   },
+   {
+    "code": "005930",
+    "name": "삼성전자",
+    "title": "오늘이 중요한 날/전일 선반영[1]",
+    "views": 397,
+    "likes": 10,
+    "url": "https://finance.naver.com/item/board_read.naver?code=005930&nid=427994734",
+    "time_kst": "08-19 05:55",
+    "views_per_hour": 464.2
+   },
+   {
+    "code": "005930",
+    "name": "삼성전자",
+    "title": "대한민국 1위기업 클라스[1]",
+    "views": 498,
+    "likes": 10,
+    "url": "https://finance.naver.com/item/board_read.naver?code=005930&nid=427994446",
+    "time_kst": "08-19 05:18",
+    "views_per_hour": 338.3
+   },
+   {
+    "code": "000660",
+    "name": "SK하이닉스",
+    "title": "곱버스들은 기대가 크겠지만 ㆍ글쎄???[1]",
+    "views": 361,
+    "likes": 5,
+    "url": "https://finance.naver.com/item/board_read.naver?code=000660&nid=427994507",
+    "time_kst": "08-19 05:27",
+    "views_per_hour": 273.1
+   },
+   {
+    "code": "000660",
+    "name": "SK하이닉스",
+    "title": "장기금리 고공행진에 반도체 털썩…",
+    "views": 213,
+    "likes": 3,
+    "url": "https://finance.naver.com/item/board_read.naver?code=000660&nid=427994761",
+    "time_kst": "08-19 05:57",
+    "views_per_hour": 259.1
+   }
+  ]
+ },
+ "community_dc": {
+  "source": "DC인사이드",
+  "galleries": [
+   {
+    "id": "krstock",
+    "name": "국내주식갤러리",
+    "posts": 0,
+    "capped": false,
+    "burst": 0.0,
+    "base_daily": 0.3
+   },
+   {
+    "id": "stockus",
+    "name": "해외주식갤러리",
+    "posts": 0,
+    "capped": false,
+    "burst": 0.0,
+    "base_daily": 0.0
+   }
+  ],
+  "posts_sampled": 0,
+  "keywords": [],
+  "top_recommended": [
+   {
+    "gallery": "해외주식갤러리",
+    "title": "\"부자들이 가난을 탐내리라고는 꿈에도 생각못해본 일이었다\"",
+    "views": 10996,
+    "recommend": 305,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=17480594&exception_mode=recommend&page=1",
+    "time_kst": "08-18 22:13"
+   },
+   {
+    "gallery": "해외주식갤러리",
+    "title": "소신발언) 난 유투버들 주식하면 구독 취소함",
+    "views": 13719,
+    "recommend": 278,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=17479058&exception_mode=recommend&page=1",
+    "time_kst": "08-18 19:40"
+   },
+   {
+    "gallery": "해외주식갤러리",
+    "title": "미주갤 매입한다는 놈 있는데 뭐냐",
+    "views": 10545,
+    "recommend": 207,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=17478776&exception_mode=recommend&page=1",
+    "time_kst": "08-18 19:17"
+   },
+   {
+    "gallery": "해외주식갤러리",
+    "title": "트럼프식 10년물 해결방법...TXT",
+    "views": 11382,
+    "recommend": 196,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=17474475&exception_mode=recommend&page=1",
+    "time_kst": "08-18 12:42"
+   },
+   {
+    "gallery": "해외주식갤러리",
+    "title": "그와중에 국민연금 근황 시발 ㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋ",
+    "views": 13057,
+    "recommend": 192,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=17474252&exception_mode=recommend&page=1",
+    "time_kst": "08-18 12:28"
+   }
+  ],
+  "top_viewed": []
+ }
+}

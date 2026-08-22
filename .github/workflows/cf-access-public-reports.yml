@@ -1,0 +1,60 @@
+name: CF Access 공개 리포트 예외
+
+# 대시보드 5개 리포트 화면을 Cloudflare Access 로그인 벽 밖으로 뺀다(Bypass).
+# 텔레그램 봇 링크로 받은 사람이 OTP 없이 바로 볼 수 있게 하기 위한 것.
+# 수동 실행 전용. 아래 목록을 고쳐 재실행하면 같은 Access 앱을 갱신한다(멱등).
+# 필요 토큰 권한: Account → Access: Apps and Policies → Edit
+on:
+  workflow_dispatch:
+
+permissions: {}
+
+jobs:
+  bypass:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Access 앱 생성/갱신 (5개 경로 Bypass)
+        env:
+          CF_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CF_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: |
+          set -euo pipefail
+          api="https://api.cloudflare.com/client/v4/accounts/$CF_ACCOUNT_ID/access/apps"
+          name="gs-research-desk 공개 리포트"
+          domains='[
+            "gs-research-desk.pages.dev/etf_signal_report.html",
+            "gs-research-desk.pages.dev/etf_holdings_report.html",
+            "gs-research-desk.pages.dev/market_flow_report.html",
+            "gs-research-desk.pages.dev/market_trend_report.html",
+            "gs-research-desk.pages.dev/consensus_revision.html"
+          ]'
+
+          list=$(curl -sS -H "Authorization: Bearer $CF_API_TOKEN" "$api?per_page=100")
+          if [ "$(echo "$list" | jq -r '.success')" != "true" ]; then
+            echo "::error::Access API 호출 실패 — 토큰에 'Access: Apps and Policies: Edit' 권한이 필요합니다"
+            echo "$list" | jq -c '.errors'
+            exit 1
+          fi
+          app_id=$(echo "$list" | jq -r --arg n "$name" \
+            '[.result[]? | select(.name==$n) | .id][0] // empty')
+
+          body=$(jq -n --arg n "$name" --argjson d "$domains" '{
+            name: $n, type: "self_hosted",
+            domain: $d[0], self_hosted_domains: $d,
+            session_duration: "24h",
+            policies: [{name: "public bypass", decision: "bypass",
+                        include: [{everyone: {}}]}]}')
+          if [ -n "$app_id" ]; then
+            echo "기존 앱 갱신: $app_id"
+            res=$(curl -sS -X PUT -H "Authorization: Bearer $CF_API_TOKEN" \
+                  -H "Content-Type: application/json" "$api/$app_id" --data "$body")
+          else
+            echo "새 앱 생성"
+            res=$(curl -sS -X POST -H "Authorization: Bearer $CF_API_TOKEN" \
+                  -H "Content-Type: application/json" "$api" --data "$body")
+          fi
+          echo "$res" | jq '{success, errors,
+            app: {id: .result.id, name: .result.name,
+                  domains: .result.self_hosted_domains}}'
+          [ "$(echo "$res" | jq -r '.success')" = "true" ]

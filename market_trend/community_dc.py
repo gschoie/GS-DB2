@@ -133,9 +133,12 @@ def collect_list(gallery: dict, start: datetime, end: datetime, max_pages: int,
                       file=sys.stderr)
             break
         posts += [p for p in page_posts if start <= p["posted"] < end]
-        if any(p["posted"] < start for p in page_posts):
+        # 창 통과 판정은 '페이지 전체가 창 이전'일 때만. any()로 하면 목록 상단에
+        # 고정 노출되는 오래된 개념글(국장갤·해외주갤 설정) 한 줄 때문에 1페이지에서
+        # 수집이 끝나 일반글이 매번 0건이 된다(08-19 아침 실행에서 실제 발생).
+        if all(p["posted"] < start for p in page_posts):
             return posts, False
-        if any(p["posted"] < end for p in page_posts):
+        if any(start <= p["posted"] < end for p in page_posts):
             collected_pages += 1
         if collected_pages >= max_pages:
             break

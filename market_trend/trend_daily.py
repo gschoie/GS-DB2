@@ -183,7 +183,9 @@ JOSA = sorted(
 ENGLISH_STOP = {"the", "and", "for", "with", "from", "this", "that", "are", "was", "has", "have", "will", "not", "you"}
 # 서술형 어미로 끝나는 토큰은 명사가 아니다 — '했다·간다·좋아요·예상됨' 류를 목록 관리
 # 없이 통째로 거른다. 별칭 사전에 있는 정식명은 보호된다(해당 어미로 끝나는 종목명은 없다).
-VERBAL_ENDING_RE = re.compile(r"[가-힣]+(다|요|죠|됨|적인)$")
+# ~고/~며 연결형(지속되고·나타나고·보이며)까지 잡되, 명사가 '고'로 끝나는 경우
+# (재고·창고·광고)를 지키기 위해 동사 어간+어미 조합만 나열한다.
+VERBAL_ENDING_RE = re.compile(r"[가-힣]+(다|요|죠|됨|적인|되고|하고|지고|나고|않고|없고|있고|하며|되며|으며|이며)$")
 
 
 def strip_josa(word: str) -> str:

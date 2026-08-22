@@ -19,6 +19,19 @@ table.ptab{border-collapse:collapse;width:100%;margin:12px 0;font-size:13.5px}
 .ptab tr:hover td{background:#131a26}
 .up{color:#ff6b6b;font-weight:600}
 .down{color:#5b9dff;font-weight:600}
+/* 모바일: 6열 표가 세로로 짓눌리므로 행을 카드로 재배치 (헤더행 기반 라벨) */
+@media (max-width:640px){
+  body{padding:20px 14px 48px}
+  .ptab.hdr, .ptab.hdr tbody, .ptab.hdr tr, .ptab.hdr td{display:block;width:100%;box-sizing:border-box}
+  .ptab.hdr tr:first-child{display:none}
+  .ptab.hdr tr{border:1px solid #223046;border-radius:10px;margin:10px 0;padding:9px 12px;background:#111825}
+  .ptab.hdr tr:hover td{background:transparent}
+  .ptab.hdr td{border:none;padding:2px 0;display:flex;gap:10px;align-items:baseline;font-size:13.5px}
+  .ptab.hdr td::before{content:attr(data-l);color:#8b96a8;font-size:11.5px;flex:0 0 58px}
+  .ptab.hdr td:first-child{display:block;font-weight:700;color:#f0f4fa;font-size:14.5px;
+    padding-bottom:5px;margin-bottom:4px;border-bottom:1px solid #1d2838}
+  .ptab.hdr td:first-child::before{content:none}
+}
 </style></head>
 <body><div class="wrap">
 <h1>🤖 Claude 글로벌 방산 브리핑</h1>
@@ -33,18 +46,18 @@ table.ptab{border-collapse:collapse;width:100%;margin:12px 0;font-size:13.5px}
 <li><b>국내 오늘 재개장:</b> 주말 중동 교전(이스라엘-헤즈볼라)·Tomahawk 본계약·미 방산 약세가 일괄 반영됩니다. 참고로 일부 수집 데이터에 8/17 한국 종가가 표기됐으나 어제는 휴장이었습니다(정정). [사실]</li>
 </ul>
 <h2>주요 주가 동향</h2>
-<div style="overflow-x:auto"><table class="ptab">
+<div style="overflow-x:auto"><table class="ptab hdr">
 <tr><td>기업</td><td>국가</td><td>기준일</td><td>등락률</td><td>시가총액</td><td>변동 요인</td></tr>
-<tr><td>AeroVironment</td><td>미국</td><td>08/17</td><td><span class="down">-6.06%</span></td><td>$9.2B</td><td>SCAR 회계 재작성·목표가 하향 여파 지속</td></tr>
-<tr><td>L3Harris</td><td>미국</td><td>08/17</td><td><span class="down">-4.61%</span></td><td>$51.8B</td><td>CEO 행동강령 위반 해임, Mehta 승계</td></tr>
-<tr><td>Huntington Ingalls</td><td>미국</td><td>08/17</td><td><span class="down">-2.86%</span></td><td>$12.5B</td><td>특이 재료 미확인 — 섹터 약세 동반</td></tr>
-<tr><td>Northrop Grumman</td><td>미국</td><td>08/17</td><td><span class="down">-2.67%</span></td><td>$81.0B</td><td>특이 재료 미확인 — 섹터 약세 동반</td></tr>
-<tr><td>Boeing</td><td>미국</td><td>08/17</td><td><span class="down">-2.47%</span></td><td>$178.6B</td><td>아파치 추락(8/12) 후 육군 훈련비행 전면 중단</td></tr>
-<tr><td>Lockheed Martin</td><td>미국</td><td>08/17</td><td><span class="down">-2.45%</span></td><td>$137.0B</td><td>특이 재료 미확인 — 섹터 약세 동반</td></tr>
-<tr><td>Kongsberg</td><td>노르웨이</td><td>08/17</td><td><span class="down">-2.47%</span></td><td>kr288.9B</td><td>특이 재료 미확인</td></tr>
-<tr><td>RTX</td><td>미국</td><td>08/17</td><td><span class="down">-0.60%</span></td><td>$298.7B</td><td>$22.9bn Tomahawk 본계약에도 차익실현</td></tr>
-<tr><td>Rheinmetall</td><td>독일</td><td>08/17</td><td><span class="up">+1.00%</span></td><td>€56.7B</td><td>FV-014 이동식 발사 시연 공개 등</td></tr>
-<tr><td>Rolls-Royce</td><td>영국</td><td>08/17</td><td><span class="up">+1.48%</span></td><td>-</td><td>Citi·Morgan Stanley 목표가 상향, 14년 최고가</td></tr>
+<tr><td data-l="기업">AeroVironment</td><td data-l="국가">미국</td><td data-l="기준일">08/17</td><td data-l="등락률"><span class="down">-6.06%</span></td><td data-l="시가총액">$9.2B</td><td data-l="변동 요인">SCAR 회계 재작성·목표가 하향 여파 지속</td></tr>
+<tr><td data-l="기업">L3Harris</td><td data-l="국가">미국</td><td data-l="기준일">08/17</td><td data-l="등락률"><span class="down">-4.61%</span></td><td data-l="시가총액">$51.8B</td><td data-l="변동 요인">CEO 행동강령 위반 해임, Mehta 승계</td></tr>
+<tr><td data-l="기업">Huntington Ingalls</td><td data-l="국가">미국</td><td data-l="기준일">08/17</td><td data-l="등락률"><span class="down">-2.86%</span></td><td data-l="시가총액">$12.5B</td><td data-l="변동 요인">특이 재료 미확인 — 섹터 약세 동반</td></tr>
+<tr><td data-l="기업">Northrop Grumman</td><td data-l="국가">미국</td><td data-l="기준일">08/17</td><td data-l="등락률"><span class="down">-2.67%</span></td><td data-l="시가총액">$81.0B</td><td data-l="변동 요인">특이 재료 미확인 — 섹터 약세 동반</td></tr>
+<tr><td data-l="기업">Boeing</td><td data-l="국가">미국</td><td data-l="기준일">08/17</td><td data-l="등락률"><span class="down">-2.47%</span></td><td data-l="시가총액">$178.6B</td><td data-l="변동 요인">아파치 추락(8/12) 후 육군 훈련비행 전면 중단</td></tr>
+<tr><td data-l="기업">Lockheed Martin</td><td data-l="국가">미국</td><td data-l="기준일">08/17</td><td data-l="등락률"><span class="down">-2.45%</span></td><td data-l="시가총액">$137.0B</td><td data-l="변동 요인">특이 재료 미확인 — 섹터 약세 동반</td></tr>
+<tr><td data-l="기업">Kongsberg</td><td data-l="국가">노르웨이</td><td data-l="기준일">08/17</td><td data-l="등락률"><span class="down">-2.47%</span></td><td data-l="시가총액">kr288.9B</td><td data-l="변동 요인">특이 재료 미확인</td></tr>
+<tr><td data-l="기업">RTX</td><td data-l="국가">미국</td><td data-l="기준일">08/17</td><td data-l="등락률"><span class="down">-0.60%</span></td><td data-l="시가총액">$298.7B</td><td data-l="변동 요인">$22.9bn Tomahawk 본계약에도 차익실현</td></tr>
+<tr><td data-l="기업">Rheinmetall</td><td data-l="국가">독일</td><td data-l="기준일">08/17</td><td data-l="등락률"><span class="up">+1.00%</span></td><td data-l="시가총액">€56.7B</td><td data-l="변동 요인">FV-014 이동식 발사 시연 공개 등</td></tr>
+<tr><td data-l="기업">Rolls-Royce</td><td data-l="국가">영국</td><td data-l="기준일">08/17</td><td data-l="등락률"><span class="up">+1.48%</span></td><td data-l="시가총액">-</td><td data-l="변동 요인">Citi·Morgan Stanley 목표가 상향, 14년 최고가</td></tr>
 </table></div>
 <p>(등락률·시가총액은 대시보드 수집 데이터 + <a href="https://www.bloomberg.com/news/articles/2026-08-17/rtx-wins-22-9-billion-navy-missile-contract-amid-supply-strain">Bloomberg</a> 등 교차확인. 한국 8/17 휴장 — 국내 직전 종가는 8/14)</p>
 <h2>큰 변동 분석</h2>

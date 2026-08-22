@@ -1,5 +1,5 @@
 {
-  "when_utc": "2026-08-18 01:47:16Z",
+  "when_utc": "2026-08-21 07:11:30Z",
   "ok": true,
   "note": "change_sent",
   "chat_id_tail": "5171",
@@ -7,7 +7,7 @@
   "response": {
     "ok": true,
     "result": {
-      "message_id": 119,
+      "message_id": 160,
       "from": {
         "id": 8875725998,
         "is_bot": true,
@@ -21,8 +21,8 @@
         "username": "gschoie",
         "type": "private"
       },
-      "date": 1787017635,
-      "text": "🧩 액티브 ETF 구성 변화 · 구성 기준일 — (KRX 장마감)\n\n변화 ETF 10개 · 진입 9·이탈 9·실매매 7\n\n🟢 TIME 코스피액티브 · TIME(구 TIMEFOLIO)\n   ⊕ 진입: 삼성생명, SK텔레콤\n   ⊖ 이탈: 한국금융지주, LG에너지솔루션\n🟢 KoAct 배당성장액티브 · KoAct\n   ⊕ 진입: 키움증권\n   ⊖ 이탈: HD현대중공업\n   ▽ 삼성전자우 계약수 −4% · 비중 −1.2%p\n   ▲ SK하이닉스 계약수 +7% · 비중 +1.2%p\n🟢 TIGER 코리아테크액티브 · TIGER\n   ⊕ 진입: 피에스케이홀딩스\n   ⊖ 이탈: 삼성SDI\n   ▽ 심텍 계약수 −31% · 비중 −1.1%p\n🟢 TIME 코스닥액티브 · TIME(구 TIMEFOLIO)\n   ⊕ 진입: 로보티즈\n   ⊖ 이탈: 미코\n🟢 TIME 미국나스닥100액티브 · TIME(구 TIMEFOLIO)\n   ⊕ 진입: TOWER SEMICONDUCTOR LTD\n   ⊖ 이탈: MICROSOFT CORP\n🟢 KoAct 코스닥액티브 · KoAct\n   ⊕ 진입: 티에스이\n   ⊖ 이탈: 파마리서치\n🟢 KoAct 글로벌AI&로봇액티브 · KoAct\n   ⊕ 진입: 현대모비스\n   ⊖ 이탈: 레인보우로보틱스\n🟢 TIGER 배당커버드콜액티브 · TIGER\n   ⊕ 진입: 현대차\n   ⊖ 이탈: LS ELECTRIC\n🟢 TIME Korea플러스배당액티브 · TIME(구 TIMEFOLIO)\n   ▲ 삼성전자 계약수 +22% · 비중 +3.0%p\n   ▽ 삼양식품 계약수 −44% · 비중 −2.6%p\n🟢 TIME 글로벌AI인공지능액티브 · TIME(구 TIMEFOLIO)\n   ▲ MINIMAX GROUP INC 계약수 +45%\n   ▲ SK HYNIX INC-ADR 계약수 +36%\n\n전체 상세 › 대시보드\n🎴 GS Research Desk · 액티브 ETF 트래커",
+      "date": 1787296290,
+      "text": "🧩 액티브 ETF 구성 변화 · 구성 기준일 2026-08-21 (KRX 장마감)\n\n변화 ETF 6개 · 진입 7·이탈 7·실매매 4\n\n🟢 TIME K바이오액티브 · TIME(구 TIMEFOLIO)\n   ⊕ 진입: 보로노이, 한올바이오파마\n   ⊖ 이탈: 에스티팜, 디앤디파마텍\n   ▽ 리가켐바이오 계약수 −32% · 비중 −2.0%p\n   ▲ 셀트리온 계약수 +15% · 비중 +1.9%p\n🟢 TIME K컬처액티브 · TIME(구 TIMEFOLIO)\n   ⊕ 진입: 농심\n   ⊖ 이탈: 하이브\n   ▲ 실리콘투 계약수 +51% · 비중 +2.9%p\n   ▽ NC 계약수 −24% · 비중 −2.0%p\n🟢 TIME Korea플러스배당액티브 · TIME(구 TIMEFOLIO)\n   ⊕ 진입: 키움증권\n   ⊖ 이탈: KB금융\n🟢 KoAct 바이오헬스케어액티브 · KoAct\n   ⊕ 진입: 알지노믹스\n   ⊖ 이탈: 리가켐바이오\n🟢 KoAct 배당성장액티브 · KoAct\n   ⊕ 진입: 키움증권\n   ⊖ 이탈: HD현대\n🟢 TIGER 배당커버드콜액티브 · TIGER\n   ⊕ 진입: 현대차\n   ⊖ 이탈: KB금융\n\n전체 상세 › 대시보드\n🎴 GS Research Desk · 액티브 ETF 트래커",
       "entities": [
         {
           "offset": 0,
@@ -30,65 +30,45 @@
           "type": "bold"
         },
         {
-          "offset": 46,
-          "length": 2,
+          "offset": 55,
+          "length": 1,
           "type": "bold"
         },
         {
-          "offset": 72,
-          "length": 11,
-          "type": "bold"
-        },
-        {
-          "offset": 154,
-          "length": 13,
-          "type": "bold"
-        },
-        {
-          "offset": 273,
-          "length": 14,
-          "type": "bold"
-        },
-        {
-          "offset": 361,
-          "length": 11,
-          "type": "bold"
-        },
-        {
-          "offset": 422,
-          "length": 16,
-          "type": "bold"
-        },
-        {
-          "offset": 519,
+          "offset": 80,
           "length": 12,
           "type": "bold"
         },
         {
-          "offset": 572,
-          "length": 17,
+          "offset": 225,
+          "length": 11,
           "type": "bold"
         },
         {
-          "offset": 634,
-          "length": 15,
-          "type": "bold"
-        },
-        {
-          "offset": 695,
+          "offset": 345,
           "length": 18,
           "type": "bold"
         },
         {
-          "offset": 799,
-          "length": 17,
+          "offset": 415,
+          "length": 16,
           "type": "bold"
         },
         {
-          "offset": 909,
+          "offset": 474,
+          "length": 13,
+          "type": "bold"
+        },
+        {
+          "offset": 527,
+          "length": 15,
+          "type": "bold"
+        },
+        {
+          "offset": 587,
           "length": 4,
           "type": "text_link",
-          "url": "https://gschoie.github.io/GS-output-dashboard/etf_holdings_report.html"
+          "url": "https://gs-research-desk.pages.dev/etf_holdings_report.html"
         }
       ],
       "link_preview_options": {
