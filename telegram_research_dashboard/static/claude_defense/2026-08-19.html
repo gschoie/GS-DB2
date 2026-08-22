@@ -19,6 +19,19 @@ table.ptab{border-collapse:collapse;width:100%;margin:12px 0;font-size:13.5px}
 .ptab tr:hover td{background:#131a26}
 .up{color:#ff6b6b;font-weight:600}
 .down{color:#5b9dff;font-weight:600}
+/* 모바일: 6열 표가 세로로 짓눌리므로 행을 카드로 재배치 (헤더행 기반 라벨) */
+@media (max-width:640px){
+  body{padding:20px 14px 48px}
+  .ptab.hdr, .ptab.hdr tbody, .ptab.hdr tr, .ptab.hdr td{display:block;width:100%;box-sizing:border-box}
+  .ptab.hdr tr:first-child{display:none}
+  .ptab.hdr tr{border:1px solid #223046;border-radius:10px;margin:10px 0;padding:9px 12px;background:#111825}
+  .ptab.hdr tr:hover td{background:transparent}
+  .ptab.hdr td{border:none;padding:2px 0;display:flex;gap:10px;align-items:baseline;font-size:13.5px}
+  .ptab.hdr td::before{content:attr(data-l);color:#8b96a8;font-size:11.5px;flex:0 0 58px}
+  .ptab.hdr td:first-child{display:block;font-weight:700;color:#f0f4fa;font-size:14.5px;
+    padding-bottom:5px;margin-bottom:4px;border-bottom:1px solid #1d2838}
+  .ptab.hdr td:first-child::before{content:none}
+}
 </style></head>
 <body><div class="wrap">
 <h1>🤖 Claude 글로벌 방산 브리핑</h1>
@@ -33,18 +46,18 @@ table.ptab{border-collapse:collapse;width:100%;margin:12px 0;font-size:13.5px}
 <li><b>이스라엘, Boeing F-47 정보요청(RFI) 추진 보도:</b> 중동 각국의 F-35 도입 움직임 속 질적 우위 유지를 위해 6세대기 확보 검토 — F-47은 $20bn 프로그램으로 2027~29년 전력화 목표입니다. [보도]</li>
 </ul>
 <h2>주요 주가 동향</h2>
-<div style="overflow-x:auto"><table class="ptab">
+<div style="overflow-x:auto"><table class="ptab hdr">
 <tr><td>기업</td><td>국가</td><td>기준일</td><td>등락률</td><td>시가총액</td><td>변동 요인</td></tr>
-<tr><td>Northrop Grumman</td><td>미국</td><td>08/18</td><td><span class="up">+3.32%</span></td><td>$83.7B</td><td>가이던스·백로그 부각 + Valkyrie CCA 진전</td></tr>
-<tr><td>Lockheed Martin</td><td>미국</td><td>08/18</td><td><span class="up">+2.26%</span></td><td>$140.1B</td><td>F-16 기술지원 FMS($31.3M) 등 증산 기대</td></tr>
-<tr><td>RTX</td><td>미국</td><td>08/18</td><td><span class="up">+1.74%</span></td><td>$303.9B</td><td>Tomahawk $22.9bn 본계약 후속 매수</td></tr>
-<tr><td>Rheinmetall</td><td>독일</td><td>08/18</td><td><span class="up">+1.68%</span></td><td>-</td><td>NATO 드론 격추 → €3.1bn 방공 백로그 부각</td></tr>
-<tr><td>Elbit Systems</td><td>이스라엘</td><td>08/18</td><td><span class="up">+1.64%</span></td><td>$37.3B</td><td>특이 재료 미확인 — 중동 긴장 반영</td></tr>
-<tr><td>Boeing</td><td>미국</td><td>08/18</td><td><span class="down">-1.28%</span></td><td>$176.3B</td><td>아파치 운항 중단 여파 지속</td></tr>
-<tr><td>Kratos Defense</td><td>미국</td><td>08/18</td><td><span class="down">-2.05%</span></td><td>$11.6B</td><td>Valkyrie 뉴스에도 차익실현</td></tr>
-<tr><td>AeroVironment</td><td>미국</td><td>08/18</td><td><span class="down">-3.86%</span></td><td>$8.9B</td><td>SCAR 회계 이슈발 약세 지속</td></tr>
-<tr><td>Babcock</td><td>영국</td><td>08/18</td><td><span class="down">-3.27%</span></td><td>-</td><td>특이 재료 미확인</td></tr>
-<tr><td>PLUS K방산 ETF</td><td>한국</td><td>08/18</td><td><span class="down">-2.61%</span></td><td>-</td><td>훈련 축소 헤드라인·차익실현 (대시보드 수집 데이터)</td></tr>
+<tr><td data-l="기업">Northrop Grumman</td><td data-l="국가">미국</td><td data-l="기준일">08/18</td><td data-l="등락률"><span class="up">+3.32%</span></td><td data-l="시가총액">$83.7B</td><td data-l="변동 요인">가이던스·백로그 부각 + Valkyrie CCA 진전</td></tr>
+<tr><td data-l="기업">Lockheed Martin</td><td data-l="국가">미국</td><td data-l="기준일">08/18</td><td data-l="등락률"><span class="up">+2.26%</span></td><td data-l="시가총액">$140.1B</td><td data-l="변동 요인">F-16 기술지원 FMS($31.3M) 등 증산 기대</td></tr>
+<tr><td data-l="기업">RTX</td><td data-l="국가">미국</td><td data-l="기준일">08/18</td><td data-l="등락률"><span class="up">+1.74%</span></td><td data-l="시가총액">$303.9B</td><td data-l="변동 요인">Tomahawk $22.9bn 본계약 후속 매수</td></tr>
+<tr><td data-l="기업">Rheinmetall</td><td data-l="국가">독일</td><td data-l="기준일">08/18</td><td data-l="등락률"><span class="up">+1.68%</span></td><td data-l="시가총액">-</td><td data-l="변동 요인">NATO 드론 격추 → €3.1bn 방공 백로그 부각</td></tr>
+<tr><td data-l="기업">Elbit Systems</td><td data-l="국가">이스라엘</td><td data-l="기준일">08/18</td><td data-l="등락률"><span class="up">+1.64%</span></td><td data-l="시가총액">$37.3B</td><td data-l="변동 요인">특이 재료 미확인 — 중동 긴장 반영</td></tr>
+<tr><td data-l="기업">Boeing</td><td data-l="국가">미국</td><td data-l="기준일">08/18</td><td data-l="등락률"><span class="down">-1.28%</span></td><td data-l="시가총액">$176.3B</td><td data-l="변동 요인">아파치 운항 중단 여파 지속</td></tr>
+<tr><td data-l="기업">Kratos Defense</td><td data-l="국가">미국</td><td data-l="기준일">08/18</td><td data-l="등락률"><span class="down">-2.05%</span></td><td data-l="시가총액">$11.6B</td><td data-l="변동 요인">Valkyrie 뉴스에도 차익실현</td></tr>
+<tr><td data-l="기업">AeroVironment</td><td data-l="국가">미국</td><td data-l="기준일">08/18</td><td data-l="등락률"><span class="down">-3.86%</span></td><td data-l="시가총액">$8.9B</td><td data-l="변동 요인">SCAR 회계 이슈발 약세 지속</td></tr>
+<tr><td data-l="기업">Babcock</td><td data-l="국가">영국</td><td data-l="기준일">08/18</td><td data-l="등락률"><span class="down">-3.27%</span></td><td data-l="시가총액">-</td><td data-l="변동 요인">특이 재료 미확인</td></tr>
+<tr><td data-l="기업">PLUS K방산 ETF</td><td data-l="국가">한국</td><td data-l="기준일">08/18</td><td data-l="등락률"><span class="down">-2.61%</span></td><td data-l="시가총액">-</td><td data-l="변동 요인">훈련 축소 헤드라인·차익실현 (대시보드 수집 데이터)</td></tr>
 </table></div>
 <ul>
 <li>국내 개별 8/18: LIG넥스원 <span class="down">-2.41%</span>, KAI <span class="down">-1.83%</span>, 한화에어로스페이스 <span class="down">-0.84%</span> (장중 보도 기준 <a href="https://www.sedaily.com/article/20020810">서울경제</a>). 일부 수집 데이터의 한화오션 <span class="up">+5.62%</span>는 이틀 연속 동일 수치로 중복 오류 가능성이 있어 제외했습니다. [미확인]</li>

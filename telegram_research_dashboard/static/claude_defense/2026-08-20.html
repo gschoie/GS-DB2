@@ -19,6 +19,19 @@ table.ptab{border-collapse:collapse;width:100%;margin:12px 0;font-size:13.5px}
 .ptab tr:hover td{background:#131a26}
 .up{color:#ff6b6b;font-weight:600}
 .down{color:#5b9dff;font-weight:600}
+/* 모바일: 6열 표가 세로로 짓눌리므로 행을 카드로 재배치 (헤더행 기반 라벨) */
+@media (max-width:640px){
+  body{padding:20px 14px 48px}
+  .ptab.hdr, .ptab.hdr tbody, .ptab.hdr tr, .ptab.hdr td{display:block;width:100%;box-sizing:border-box}
+  .ptab.hdr tr:first-child{display:none}
+  .ptab.hdr tr{border:1px solid #223046;border-radius:10px;margin:10px 0;padding:9px 12px;background:#111825}
+  .ptab.hdr tr:hover td{background:transparent}
+  .ptab.hdr td{border:none;padding:2px 0;display:flex;gap:10px;align-items:baseline;font-size:13.5px}
+  .ptab.hdr td::before{content:attr(data-l);color:#8b96a8;font-size:11.5px;flex:0 0 58px}
+  .ptab.hdr td:first-child{display:block;font-weight:700;color:#f0f4fa;font-size:14.5px;
+    padding-bottom:5px;margin-bottom:4px;border-bottom:1px solid #1d2838}
+  .ptab.hdr td:first-child::before{content:none}
+}
 </style></head>
 <body><div class="wrap">
 <h1>🤖 Claude 글로벌 방산 브리핑</h1>
@@ -33,19 +46,19 @@ table.ptab{border-collapse:collapse;width:100%;margin:12px 0;font-size:13.5px}
 <li><b>수주 뉴스는 견조:</b> <b>Rheinmetall</b>이 독일군 이동식 의무시설 149기(€500M+, 자회사 사상 최대 단일 수주)를 확보했고, <b>HD현대중공업</b>은 페루에서 상륙지원함 1번함 '침보테함'을 진수 — K-함정의 첫 해외 현지 공동건조 결실입니다. [사실]</li>
 </ul>
 <h2>주요 주가 동향</h2>
-<div style="overflow-x:auto"><table class="ptab">
+<div style="overflow-x:auto"><table class="ptab hdr">
 <tr><td>기업</td><td>국가</td><td>기준일</td><td>등락률</td><td>시가총액</td><td>변동 요인</td></tr>
-<tr><td>Elbit Systems</td><td>이스라엘</td><td>08/19</td><td><span class="down">-5.46%</span></td><td>$35.2B</td><td>실적 후 밸류에이션 부담 지속(YTD <span class="up">+46%</span>·PER 60배)</td></tr>
-<tr><td>한화오션</td><td>한국</td><td>08/19</td><td><span class="down">-5.11%</span></td><td>₩27.0조</td><td>시장 폭락 동반 — 개별 악재 미확인</td></tr>
-<tr><td>GE Aerospace</td><td>미국</td><td>08/19</td><td><span class="down">-5.03%</span></td><td>$369.6B</td><td>특이 재료 미확인 (수급 요인 추정)</td></tr>
-<tr><td>한국항공우주(KAI)</td><td>한국</td><td>08/19</td><td><span class="down">-4.37%</span></td><td>₩13.2조</td><td>시장 폭락 동반 — 개별 악재 미확인</td></tr>
-<tr><td>HD현대중공업</td><td>한국</td><td>08/19</td><td><span class="down">-4.02%</span></td><td>₩49.7조</td><td>페루 진수 호재에도 시장 폭락 동반</td></tr>
-<tr><td>Howmet Aerospace</td><td>미국</td><td>08/19</td><td><span class="down">-3.13%</span></td><td>$113.1B</td><td>특이 재료 미확인</td></tr>
-<tr><td>Lockheed Martin</td><td>미국</td><td>08/19</td><td><span class="down">-2.97%</span></td><td>$136.0B</td><td>금리·로테이션발 차익실현</td></tr>
-<tr><td>BAE Systems</td><td>영국</td><td>08/19</td><td><span class="down">-2.92%</span></td><td>-</td><td>AUKUS 산업기반 확장 소식에도 하락</td></tr>
-<tr><td>Rheinmetall</td><td>독일</td><td>08/19</td><td><span class="down">-2.88%</span></td><td>€55.0B</td><td>€500M+ 의무시설 수주에도 유럽 방산 동반 약세</td></tr>
-<tr><td>RTX</td><td>미국</td><td>08/19</td><td><span class="down">-2.28%</span></td><td>$297.0B</td><td>Tomahawk 계약 후 차익실현 지속</td></tr>
-<tr><td>한화에어로스페이스</td><td>한국</td><td>08/19</td><td><span class="down">-1.21%</span></td><td>₩60.6조</td><td>지수(<span class="down">-5.80%</span>) 대비 뚜렷한 상대 강도</td></tr>
+<tr><td data-l="기업">Elbit Systems</td><td data-l="국가">이스라엘</td><td data-l="기준일">08/19</td><td data-l="등락률"><span class="down">-5.46%</span></td><td data-l="시가총액">$35.2B</td><td data-l="변동 요인">실적 후 밸류에이션 부담 지속(YTD <span class="up">+46%</span>·PER 60배)</td></tr>
+<tr><td data-l="기업">한화오션</td><td data-l="국가">한국</td><td data-l="기준일">08/19</td><td data-l="등락률"><span class="down">-5.11%</span></td><td data-l="시가총액">₩27.0조</td><td data-l="변동 요인">시장 폭락 동반 — 개별 악재 미확인</td></tr>
+<tr><td data-l="기업">GE Aerospace</td><td data-l="국가">미국</td><td data-l="기준일">08/19</td><td data-l="등락률"><span class="down">-5.03%</span></td><td data-l="시가총액">$369.6B</td><td data-l="변동 요인">특이 재료 미확인 (수급 요인 추정)</td></tr>
+<tr><td data-l="기업">한국항공우주(KAI)</td><td data-l="국가">한국</td><td data-l="기준일">08/19</td><td data-l="등락률"><span class="down">-4.37%</span></td><td data-l="시가총액">₩13.2조</td><td data-l="변동 요인">시장 폭락 동반 — 개별 악재 미확인</td></tr>
+<tr><td data-l="기업">HD현대중공업</td><td data-l="국가">한국</td><td data-l="기준일">08/19</td><td data-l="등락률"><span class="down">-4.02%</span></td><td data-l="시가총액">₩49.7조</td><td data-l="변동 요인">페루 진수 호재에도 시장 폭락 동반</td></tr>
+<tr><td data-l="기업">Howmet Aerospace</td><td data-l="국가">미국</td><td data-l="기준일">08/19</td><td data-l="등락률"><span class="down">-3.13%</span></td><td data-l="시가총액">$113.1B</td><td data-l="변동 요인">특이 재료 미확인</td></tr>
+<tr><td data-l="기업">Lockheed Martin</td><td data-l="국가">미국</td><td data-l="기준일">08/19</td><td data-l="등락률"><span class="down">-2.97%</span></td><td data-l="시가총액">$136.0B</td><td data-l="변동 요인">금리·로테이션발 차익실현</td></tr>
+<tr><td data-l="기업">BAE Systems</td><td data-l="국가">영국</td><td data-l="기준일">08/19</td><td data-l="등락률"><span class="down">-2.92%</span></td><td data-l="시가총액">-</td><td data-l="변동 요인">AUKUS 산업기반 확장 소식에도 하락</td></tr>
+<tr><td data-l="기업">Rheinmetall</td><td data-l="국가">독일</td><td data-l="기준일">08/19</td><td data-l="등락률"><span class="down">-2.88%</span></td><td data-l="시가총액">€55.0B</td><td data-l="변동 요인">€500M+ 의무시설 수주에도 유럽 방산 동반 약세</td></tr>
+<tr><td data-l="기업">RTX</td><td data-l="국가">미국</td><td data-l="기준일">08/19</td><td data-l="등락률"><span class="down">-2.28%</span></td><td data-l="시가총액">$297.0B</td><td data-l="변동 요인">Tomahawk 계약 후 차익실현 지속</td></tr>
+<tr><td data-l="기업">한화에어로스페이스</td><td data-l="국가">한국</td><td data-l="기준일">08/19</td><td data-l="등락률"><span class="down">-1.21%</span></td><td data-l="시가총액">₩60.6조</td><td data-l="변동 요인">지수(<span class="down">-5.80%</span>) 대비 뚜렷한 상대 강도</td></tr>
 </table></div>
 <p>(등락률·시가총액은 대시보드 수집 데이터. KOSPI 6,471.17 <span class="down">-5.80%</span>, 외국인 -3조4,884억·기관 -1조3,232억·개인 +4조6,357억)</p>
 <h2>큰 변동 분석</h2>

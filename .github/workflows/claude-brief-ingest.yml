@@ -42,7 +42,16 @@ jobs:
           if git diff --cached --quiet; then
             echo "변경 없음 — 커밋 생략 (재실행 등)"
             echo "changed=false" >> "$GITHUB_OUTPUT"
+            echo "send=false" >> "$GITHUB_OUTPUT"
           else
+            # 텔레그램은 새 브리핑(md 변경)일 때만 — 렌더러/CSS 수정으로 HTML만
+            # 재생성된 커밋에서 최신 요약이 중복 발송되는 것을 막는다.
+            if git diff --cached --name-only | grep -q '\.md$'; then
+              echo "send=true" >> "$GITHUB_OUTPUT"
+            else
+              echo "md 변경 없음 — 텔레그램 발송 생략"
+              echo "send=false" >> "$GITHUB_OUTPUT"
+            fi
             git commit -m "Claude 방산 브리핑 $(TZ=Asia/Seoul date +%Y-%m-%d)"
             git pull --rebase origin main
             git push origin HEAD:main
@@ -50,12 +59,12 @@ jobs:
           fi
 
       - uses: actions/setup-python@v6
-        if: steps.commit.outputs.changed == 'true'
+        if: steps.commit.outputs.send == 'true'
         with:
           python-version: "3.12"
 
       - name: 텔레그램 발송 (새 브리핑일 때만)
-        if: steps.commit.outputs.changed == 'true'
+        if: steps.commit.outputs.send == 'true'
         env:
           CLAUDE_TELEGRAM_BOT_TOKEN: ${{ secrets.CLAUDE_TELEGRAM_BOT_TOKEN }}
           CLAUDE_TELEGRAM_CHAT_ID: ${{ secrets.CLAUDE_TELEGRAM_CHAT_ID }}
