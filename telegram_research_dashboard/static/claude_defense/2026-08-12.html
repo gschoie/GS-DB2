@@ -19,6 +19,19 @@ table.ptab{border-collapse:collapse;width:100%;margin:12px 0;font-size:13.5px}
 .ptab tr:hover td{background:#131a26}
 .up{color:#ff6b6b;font-weight:600}
 .down{color:#5b9dff;font-weight:600}
+/* 모바일: 6열 표가 세로로 짓눌리므로 행을 카드로 재배치 (헤더행 기반 라벨) */
+@media (max-width:640px){
+  body{padding:20px 14px 48px}
+  .ptab.hdr, .ptab.hdr tbody, .ptab.hdr tr, .ptab.hdr td{display:block;width:100%;box-sizing:border-box}
+  .ptab.hdr tr:first-child{display:none}
+  .ptab.hdr tr{border:1px solid #223046;border-radius:10px;margin:10px 0;padding:9px 12px;background:#111825}
+  .ptab.hdr tr:hover td{background:transparent}
+  .ptab.hdr td{border:none;padding:2px 0;display:flex;gap:10px;align-items:baseline;font-size:13.5px}
+  .ptab.hdr td::before{content:attr(data-l);color:#8b96a8;font-size:11.5px;flex:0 0 58px}
+  .ptab.hdr td:first-child{display:block;font-weight:700;color:#f0f4fa;font-size:14.5px;
+    padding-bottom:5px;margin-bottom:4px;border-bottom:1px solid #1d2838}
+  .ptab.hdr td:first-child::before{content:none}
+}
 </style></head>
 <body><div class="wrap">
 <h1>🤖 Claude 글로벌 방산 브리핑</h1>
@@ -33,16 +46,16 @@ table.ptab{border-collapse:collapse;width:100%;margin:12px 0;font-size:13.5px}
 <li>국내: 화요일 KOSPI 6,345.53(<span class="up">+0.73%</span>) 마감, 외국인 +443억·기관 +305억 순매수(대시보드 수집 데이터). HD현대중공업·한화오션은 남미 함정(잠수함) 시장 개척 보도가 이어졌습니다.</li>
 </ul>
 <h2>주요 주가 동향 — 기업명 | 국가 | 등락률(08/11 종가) | 시총 | 변동 요인</h2>
-<div style="overflow-x:auto"><table class="ptab">
+<div style="overflow-x:auto"><table class="ptab hdr">
 <tr><td>기업명</td><td>국가</td><td>등락률</td><td>시총</td><td>변동 요인</td></tr>
-<tr><td>Elbit Systems</td><td>이스라엘</td><td><span class="down">-8.27%</span></td><td>$36.4B</td><td>2Q 실적 서프라이즈·백로그 $32bn 최대에도 차익실현 추정</td></tr>
-<tr><td>AeroVironment</td><td>미국</td><td><span class="up">+3.63%</span></td><td>$9.9B</td><td>관련 공시·뉴스 미확인 (수급 요인 추정)</td></tr>
-<tr><td>Saab</td><td>스웨덴</td><td><span class="up">+2.96%</span></td><td>kr354.5B</td><td>관련 공시·뉴스 미확인 (수급 요인 추정)</td></tr>
-<tr><td>Kongsberg</td><td>노르웨이</td><td><span class="up">+2.79%</span></td><td>kr282.1B</td><td>관련 공시·뉴스 미확인 (수급 요인 추정)</td></tr>
-<tr><td>Kratos Defense</td><td>미국</td><td><span class="up">+2.10%</span></td><td>$12.0B</td><td>관련 공시·뉴스 미확인 (수급 요인 추정)</td></tr>
-<tr><td>Boeing</td><td>미국</td><td><span class="up">+0.19%</span></td><td>$184.3B</td><td>폴란드 AH-64E 정비 오프셋 계약·ULCS 시커 공개</td></tr>
-<tr><td>Northrop Grumman</td><td>미국</td><td><span class="down">-0.38%</span></td><td>$81.8B</td><td>Raid Hunter 방공체계 공개</td></tr>
-<tr><td>Lockheed Martin</td><td>미국</td><td><span class="down">-0.89%</span></td><td>$138.0B</td><td>MDA 디지털 시뮬레이션 현대화 수주 보도</td></tr>
+<tr><td data-l="기업명">Elbit Systems</td><td data-l="국가">이스라엘</td><td data-l="등락률"><span class="down">-8.27%</span></td><td data-l="시총">$36.4B</td><td data-l="변동 요인">2Q 실적 서프라이즈·백로그 $32bn 최대에도 차익실현 추정</td></tr>
+<tr><td data-l="기업명">AeroVironment</td><td data-l="국가">미국</td><td data-l="등락률"><span class="up">+3.63%</span></td><td data-l="시총">$9.9B</td><td data-l="변동 요인">관련 공시·뉴스 미확인 (수급 요인 추정)</td></tr>
+<tr><td data-l="기업명">Saab</td><td data-l="국가">스웨덴</td><td data-l="등락률"><span class="up">+2.96%</span></td><td data-l="시총">kr354.5B</td><td data-l="변동 요인">관련 공시·뉴스 미확인 (수급 요인 추정)</td></tr>
+<tr><td data-l="기업명">Kongsberg</td><td data-l="국가">노르웨이</td><td data-l="등락률"><span class="up">+2.79%</span></td><td data-l="시총">kr282.1B</td><td data-l="변동 요인">관련 공시·뉴스 미확인 (수급 요인 추정)</td></tr>
+<tr><td data-l="기업명">Kratos Defense</td><td data-l="국가">미국</td><td data-l="등락률"><span class="up">+2.10%</span></td><td data-l="시총">$12.0B</td><td data-l="변동 요인">관련 공시·뉴스 미확인 (수급 요인 추정)</td></tr>
+<tr><td data-l="기업명">Boeing</td><td data-l="국가">미국</td><td data-l="등락률"><span class="up">+0.19%</span></td><td data-l="시총">$184.3B</td><td data-l="변동 요인">폴란드 AH-64E 정비 오프셋 계약·ULCS 시커 공개</td></tr>
+<tr><td data-l="기업명">Northrop Grumman</td><td data-l="국가">미국</td><td data-l="등락률"><span class="down">-0.38%</span></td><td data-l="시총">$81.8B</td><td data-l="변동 요인">Raid Hunter 방공체계 공개</td></tr>
+<tr><td data-l="기업명">Lockheed Martin</td><td data-l="국가">미국</td><td data-l="등락률"><span class="down">-0.89%</span></td><td data-l="시총">$138.0B</td><td data-l="변동 요인">MDA 디지털 시뮬레이션 현대화 수주 보도</td></tr>
 </table></div>
 <p>(시총·등락률은 대시보드 수집 데이터. 한국 개별 방산주의 08/11(화) 종가 등락률은 이번 실행 시점에 확인 불가 — 지수·수급만 반영. KOSPI <span class="up">+0.73%</span>, 외국인·기관 동반 순매수)</p>
 <h2>큰 변동 분석 — ±10% 이상 종목 별도 표기</h2>

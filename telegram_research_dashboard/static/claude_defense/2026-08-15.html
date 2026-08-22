@@ -19,6 +19,19 @@ table.ptab{border-collapse:collapse;width:100%;margin:12px 0;font-size:13.5px}
 .ptab tr:hover td{background:#131a26}
 .up{color:#ff6b6b;font-weight:600}
 .down{color:#5b9dff;font-weight:600}
+/* 모바일: 6열 표가 세로로 짓눌리므로 행을 카드로 재배치 (헤더행 기반 라벨) */
+@media (max-width:640px){
+  body{padding:20px 14px 48px}
+  .ptab.hdr, .ptab.hdr tbody, .ptab.hdr tr, .ptab.hdr td{display:block;width:100%;box-sizing:border-box}
+  .ptab.hdr tr:first-child{display:none}
+  .ptab.hdr tr{border:1px solid #223046;border-radius:10px;margin:10px 0;padding:9px 12px;background:#111825}
+  .ptab.hdr tr:hover td{background:transparent}
+  .ptab.hdr td{border:none;padding:2px 0;display:flex;gap:10px;align-items:baseline;font-size:13.5px}
+  .ptab.hdr td::before{content:attr(data-l);color:#8b96a8;font-size:11.5px;flex:0 0 58px}
+  .ptab.hdr td:first-child{display:block;font-weight:700;color:#f0f4fa;font-size:14.5px;
+    padding-bottom:5px;margin-bottom:4px;border-bottom:1px solid #1d2838}
+  .ptab.hdr td:first-child::before{content:none}
+}
 </style></head>
 <body><div class="wrap">
 <h1>🤖 Claude 글로벌 방산 브리핑</h1>
@@ -33,18 +46,18 @@ table.ptab{border-collapse:collapse;width:100%;margin:12px 0;font-size:13.5px}
 <li><b>Rolls-Royce–Reliance, 인도 AMCA 엔진 파트너십(8/14):</b> 인도 5세대 전투기 자국산 엔진 공동개발 의향 발표 — 엔진 기술의 지역 분산이라는 구조 변화 신호입니다. [사실]</li>
 </ul>
 <h2>주요 주가 동향</h2>
-<div style="overflow-x:auto"><table class="ptab">
+<div style="overflow-x:auto"><table class="ptab hdr">
 <tr><td>기업</td><td>국가</td><td>기준일</td><td>등락률</td><td>시가총액</td><td>변동 요인</td></tr>
-<tr><td>LIG넥스원</td><td>한국</td><td>08/14</td><td><span class="up">+6.22%</span></td><td>₩17.8조</td><td>당일 공시 미확인 — 중동 방공 수요·천궁-II 인도 가속 기대 (추정)</td></tr>
-<tr><td>한화시스템</td><td>한국</td><td>08/14</td><td><span class="up">+5.29%</span></td><td>₩15.0조</td><td>당일 공시 미확인 — 방공 밸류체인 동반 강세 (추정)</td></tr>
-<tr><td>Hensoldt</td><td>독일</td><td>08/14</td><td><span class="up">+3.96%</span></td><td>€11.1조</td><td>특이 재료 미확인 — 유럽 방산 동반 강세</td></tr>
-<tr><td>Mitsubishi Heavy</td><td>일본</td><td>08/14</td><td><span class="up">+3.96%</span></td><td>¥14.3조</td><td>특이 재료 미확인</td></tr>
-<tr><td>Rheinmetall</td><td>독일</td><td>08/14</td><td><span class="up">+3.21%</span></td><td>€56.1B</td><td>2Q 사상 최대 실적·Jefferies Buy 재확인</td></tr>
-<tr><td>Kratos Defense</td><td>미국</td><td>08/14</td><td><span class="up">+2.85%</span></td><td>$12.1B</td><td>2Q 호실적·2026 가이던스 상향, 방공 계약 확보</td></tr>
-<tr><td>Northrop Grumman</td><td>미국</td><td>08/14</td><td><span class="up">+1.94%</span></td><td>$83.2B</td><td>요격탄 증산 사이클 수혜 인식</td></tr>
-<tr><td>Lockheed Martin</td><td>미국</td><td>08/14</td><td><span class="up">+1.78%</span></td><td>$140.5B</td><td>요격탄 증산 사이클 수혜 인식</td></tr>
-<tr><td>RTX</td><td>미국</td><td>08/14</td><td><span class="up">+1.13%</span></td><td>$300.5B</td><td>SM-3 증산 프레임워크 체결</td></tr>
-<tr><td>Boeing</td><td>미국</td><td>08/14</td><td><span class="up">+0.58%</span></td><td>$183.1B</td><td>SM-3 항전·이젝터 부품 증산 프레임워크</td></tr>
+<tr><td data-l="기업">LIG넥스원</td><td data-l="국가">한국</td><td data-l="기준일">08/14</td><td data-l="등락률"><span class="up">+6.22%</span></td><td data-l="시가총액">₩17.8조</td><td data-l="변동 요인">당일 공시 미확인 — 중동 방공 수요·천궁-II 인도 가속 기대 (추정)</td></tr>
+<tr><td data-l="기업">한화시스템</td><td data-l="국가">한국</td><td data-l="기준일">08/14</td><td data-l="등락률"><span class="up">+5.29%</span></td><td data-l="시가총액">₩15.0조</td><td data-l="변동 요인">당일 공시 미확인 — 방공 밸류체인 동반 강세 (추정)</td></tr>
+<tr><td data-l="기업">Hensoldt</td><td data-l="국가">독일</td><td data-l="기준일">08/14</td><td data-l="등락률"><span class="up">+3.96%</span></td><td data-l="시가총액">€11.1조</td><td data-l="변동 요인">특이 재료 미확인 — 유럽 방산 동반 강세</td></tr>
+<tr><td data-l="기업">Mitsubishi Heavy</td><td data-l="국가">일본</td><td data-l="기준일">08/14</td><td data-l="등락률"><span class="up">+3.96%</span></td><td data-l="시가총액">¥14.3조</td><td data-l="변동 요인">특이 재료 미확인</td></tr>
+<tr><td data-l="기업">Rheinmetall</td><td data-l="국가">독일</td><td data-l="기준일">08/14</td><td data-l="등락률"><span class="up">+3.21%</span></td><td data-l="시가총액">€56.1B</td><td data-l="변동 요인">2Q 사상 최대 실적·Jefferies Buy 재확인</td></tr>
+<tr><td data-l="기업">Kratos Defense</td><td data-l="국가">미국</td><td data-l="기준일">08/14</td><td data-l="등락률"><span class="up">+2.85%</span></td><td data-l="시가총액">$12.1B</td><td data-l="변동 요인">2Q 호실적·2026 가이던스 상향, 방공 계약 확보</td></tr>
+<tr><td data-l="기업">Northrop Grumman</td><td data-l="국가">미국</td><td data-l="기준일">08/14</td><td data-l="등락률"><span class="up">+1.94%</span></td><td data-l="시가총액">$83.2B</td><td data-l="변동 요인">요격탄 증산 사이클 수혜 인식</td></tr>
+<tr><td data-l="기업">Lockheed Martin</td><td data-l="국가">미국</td><td data-l="기준일">08/14</td><td data-l="등락률"><span class="up">+1.78%</span></td><td data-l="시가총액">$140.5B</td><td data-l="변동 요인">요격탄 증산 사이클 수혜 인식</td></tr>
+<tr><td data-l="기업">RTX</td><td data-l="국가">미국</td><td data-l="기준일">08/14</td><td data-l="등락률"><span class="up">+1.13%</span></td><td data-l="시가총액">$300.5B</td><td data-l="변동 요인">SM-3 증산 프레임워크 체결</td></tr>
+<tr><td data-l="기업">Boeing</td><td data-l="국가">미국</td><td data-l="기준일">08/14</td><td data-l="등락률"><span class="up">+0.58%</span></td><td data-l="시가총액">$183.1B</td><td data-l="변동 요인">SM-3 항전·이젝터 부품 증산 프레임워크</td></tr>
 </table></div>
 <p>(등락률·시가총액은 대시보드 수집 데이터. General Dynamics <span class="up">+0.72%</span> 등 나머지 미국·유럽 종목은 특이사항 없음)</p>
 <h2>큰 변동 분석</h2>

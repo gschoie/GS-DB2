@@ -19,6 +19,19 @@ table.ptab{border-collapse:collapse;width:100%;margin:12px 0;font-size:13.5px}
 .ptab tr:hover td{background:#131a26}
 .up{color:#ff6b6b;font-weight:600}
 .down{color:#5b9dff;font-weight:600}
+/* 모바일: 6열 표가 세로로 짓눌리므로 행을 카드로 재배치 (헤더행 기반 라벨) */
+@media (max-width:640px){
+  body{padding:20px 14px 48px}
+  .ptab.hdr, .ptab.hdr tbody, .ptab.hdr tr, .ptab.hdr td{display:block;width:100%;box-sizing:border-box}
+  .ptab.hdr tr:first-child{display:none}
+  .ptab.hdr tr{border:1px solid #223046;border-radius:10px;margin:10px 0;padding:9px 12px;background:#111825}
+  .ptab.hdr tr:hover td{background:transparent}
+  .ptab.hdr td{border:none;padding:2px 0;display:flex;gap:10px;align-items:baseline;font-size:13.5px}
+  .ptab.hdr td::before{content:attr(data-l);color:#8b96a8;font-size:11.5px;flex:0 0 58px}
+  .ptab.hdr td:first-child{display:block;font-weight:700;color:#f0f4fa;font-size:14.5px;
+    padding-bottom:5px;margin-bottom:4px;border-bottom:1px solid #1d2838}
+  .ptab.hdr td:first-child::before{content:none}
+}
 </style></head>
 <body><div class="wrap">
 <h1>🤖 Claude 글로벌 방산 브리핑</h1>
@@ -33,20 +46,20 @@ table.ptab{border-collapse:collapse;width:100%;margin:12px 0;font-size:13.5px}
 <li><b>수주·프로그램 뉴스는 견조:</b> <b>Kongsberg</b>가 캐나다 육군 ACSV용 Protector RS4 원격무장 $117.8M 수주, <b>Saab</b>은 무인 전투기(CCA) 'A3-01' 콘셉트를 첫 공개(2027년 실증기 비행 목표). [사실]</li>
 </ul>
 <h2>주요 주가 동향</h2>
-<div style="overflow-x:auto"><table class="ptab">
+<div style="overflow-x:auto"><table class="ptab hdr">
 <tr><td>기업</td><td>국가</td><td>기준일</td><td>등락률</td><td>시가총액</td><td>변동 요인</td></tr>
-<tr><td>한화에어로스페이스</td><td>한국</td><td>08/21</td><td><span class="down">-7.03%</span></td><td>-</td><td>종전 기대·차익실현·밸류 부담 3중</td></tr>
-<tr><td>PLUS K방산 ETF</td><td>한국</td><td>08/21</td><td><span class="down">-6.49%</span></td><td>-</td><td>국내 방산 전반 급락 반영</td></tr>
-<tr><td>Northrop Grumman</td><td>미국</td><td>08/21</td><td><span class="down">-2.28%</span></td><td>$78.3B</td><td>E-2D 성능개선 발언에도 섹터 약세</td></tr>
-<tr><td>Kongsberg</td><td>노르웨이</td><td>08/21</td><td><span class="down">-1.93%</span></td><td>kr277.0B</td><td>캐나다 RS4 수주에도 유럽 방산 동반 약세</td></tr>
-<tr><td>Leonardo</td><td>이탈리아</td><td>08/21</td><td><span class="down">-1.88%</span></td><td>€32.4B</td><td>특이 재료 미확인</td></tr>
-<tr><td>Saab</td><td>스웨덴</td><td>08/21</td><td><span class="down">-1.70%</span></td><td>kr352.9B</td><td>CCA 콘셉트 공개에도 하락</td></tr>
-<tr><td>Lockheed Martin</td><td>미국</td><td>08/21</td><td><span class="down">-1.38%</span></td><td>$130.1B</td><td>특이 재료 미확인</td></tr>
-<tr><td>L3Harris</td><td>미국</td><td>08/21</td><td><span class="down">-1.37%</span></td><td>$49.7B</td><td>CEO 교체 후 약세 지속</td></tr>
-<tr><td>RTX</td><td>미국</td><td>08/21</td><td><span class="down">-1.12%</span></td><td>$282.9B</td><td>특이 재료 미확인</td></tr>
-<tr><td>Rheinmetall</td><td>독일</td><td>08/21</td><td><span class="down">-0.59%</span></td><td>€53.9B</td><td>독일 국방 프로젝트 지연 보도</td></tr>
-<tr><td>Kratos Defense</td><td>미국</td><td>08/21</td><td><span class="up">+1.76%</span></td><td>$10.7B</td><td>급락 후 반발 매수</td></tr>
-<tr><td>GE Aerospace</td><td>미국</td><td>08/21</td><td><span class="up">+1.08%</span></td><td>$361.5B</td><td>특이 재료 미확인</td></tr>
+<tr><td data-l="기업">한화에어로스페이스</td><td data-l="국가">한국</td><td data-l="기준일">08/21</td><td data-l="등락률"><span class="down">-7.03%</span></td><td data-l="시가총액">-</td><td data-l="변동 요인">종전 기대·차익실현·밸류 부담 3중</td></tr>
+<tr><td data-l="기업">PLUS K방산 ETF</td><td data-l="국가">한국</td><td data-l="기준일">08/21</td><td data-l="등락률"><span class="down">-6.49%</span></td><td data-l="시가총액">-</td><td data-l="변동 요인">국내 방산 전반 급락 반영</td></tr>
+<tr><td data-l="기업">Northrop Grumman</td><td data-l="국가">미국</td><td data-l="기준일">08/21</td><td data-l="등락률"><span class="down">-2.28%</span></td><td data-l="시가총액">$78.3B</td><td data-l="변동 요인">E-2D 성능개선 발언에도 섹터 약세</td></tr>
+<tr><td data-l="기업">Kongsberg</td><td data-l="국가">노르웨이</td><td data-l="기준일">08/21</td><td data-l="등락률"><span class="down">-1.93%</span></td><td data-l="시가총액">kr277.0B</td><td data-l="변동 요인">캐나다 RS4 수주에도 유럽 방산 동반 약세</td></tr>
+<tr><td data-l="기업">Leonardo</td><td data-l="국가">이탈리아</td><td data-l="기준일">08/21</td><td data-l="등락률"><span class="down">-1.88%</span></td><td data-l="시가총액">€32.4B</td><td data-l="변동 요인">특이 재료 미확인</td></tr>
+<tr><td data-l="기업">Saab</td><td data-l="국가">스웨덴</td><td data-l="기준일">08/21</td><td data-l="등락률"><span class="down">-1.70%</span></td><td data-l="시가총액">kr352.9B</td><td data-l="변동 요인">CCA 콘셉트 공개에도 하락</td></tr>
+<tr><td data-l="기업">Lockheed Martin</td><td data-l="국가">미국</td><td data-l="기준일">08/21</td><td data-l="등락률"><span class="down">-1.38%</span></td><td data-l="시가총액">$130.1B</td><td data-l="변동 요인">특이 재료 미확인</td></tr>
+<tr><td data-l="기업">L3Harris</td><td data-l="국가">미국</td><td data-l="기준일">08/21</td><td data-l="등락률"><span class="down">-1.37%</span></td><td data-l="시가총액">$49.7B</td><td data-l="변동 요인">CEO 교체 후 약세 지속</td></tr>
+<tr><td data-l="기업">RTX</td><td data-l="국가">미국</td><td data-l="기준일">08/21</td><td data-l="등락률"><span class="down">-1.12%</span></td><td data-l="시가총액">$282.9B</td><td data-l="변동 요인">특이 재료 미확인</td></tr>
+<tr><td data-l="기업">Rheinmetall</td><td data-l="국가">독일</td><td data-l="기준일">08/21</td><td data-l="등락률"><span class="down">-0.59%</span></td><td data-l="시가총액">€53.9B</td><td data-l="변동 요인">독일 국방 프로젝트 지연 보도</td></tr>
+<tr><td data-l="기업">Kratos Defense</td><td data-l="국가">미국</td><td data-l="기준일">08/21</td><td data-l="등락률"><span class="up">+1.76%</span></td><td data-l="시가총액">$10.7B</td><td data-l="변동 요인">급락 후 반발 매수</td></tr>
+<tr><td data-l="기업">GE Aerospace</td><td data-l="국가">미국</td><td data-l="기준일">08/21</td><td data-l="등락률"><span class="up">+1.08%</span></td><td data-l="시가총액">$361.5B</td><td data-l="변동 요인">특이 재료 미확인</td></tr>
 </table></div>
 <p>(등락률·시가총액은 대시보드 수집 데이터 + <a href="https://news.jkn.co.kr/post/960399">재경일보</a> 등 교차확인. KOSPI 6,912.95 <span class="up">+0.88%</span>, 외국인 -1,761억·기관 +2,481억)</p>
 <h2>큰 변동 분석</h2>

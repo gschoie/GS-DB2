@@ -19,6 +19,19 @@ table.ptab{border-collapse:collapse;width:100%;margin:12px 0;font-size:13.5px}
 .ptab tr:hover td{background:#131a26}
 .up{color:#ff6b6b;font-weight:600}
 .down{color:#5b9dff;font-weight:600}
+/* 모바일: 6열 표가 세로로 짓눌리므로 행을 카드로 재배치 (헤더행 기반 라벨) */
+@media (max-width:640px){
+  body{padding:20px 14px 48px}
+  .ptab.hdr, .ptab.hdr tbody, .ptab.hdr tr, .ptab.hdr td{display:block;width:100%;box-sizing:border-box}
+  .ptab.hdr tr:first-child{display:none}
+  .ptab.hdr tr{border:1px solid #223046;border-radius:10px;margin:10px 0;padding:9px 12px;background:#111825}
+  .ptab.hdr tr:hover td{background:transparent}
+  .ptab.hdr td{border:none;padding:2px 0;display:flex;gap:10px;align-items:baseline;font-size:13.5px}
+  .ptab.hdr td::before{content:attr(data-l);color:#8b96a8;font-size:11.5px;flex:0 0 58px}
+  .ptab.hdr td:first-child{display:block;font-weight:700;color:#f0f4fa;font-size:14.5px;
+    padding-bottom:5px;margin-bottom:4px;border-bottom:1px solid #1d2838}
+  .ptab.hdr td:first-child::before{content:none}
+}
 </style></head>
 <body><div class="wrap">
 <h1>🤖 Claude 글로벌 방산 브리핑</h1>
@@ -33,9 +46,9 @@ table.ptab{border-collapse:collapse;width:100%;margin:12px 0;font-size:13.5px}
 <li><b>[정정] KDDX는 이미 본계약까지 완료:</b> 지난 8/14 브리핑에서 '우선협상대상자 유력 보도'로 전했으나, 확인 결과 이는 6월 기사의 재유통이었습니다. 실제로는 <b>7/2 한화오션 우선협상대상자 공시, 7/31 상세설계·선도함 본계약(8,380억원) 체결</b>이 이미 완료된 사안입니다. 정정합니다. [사실]</li>
 </ul>
 <h2>주요 주가 동향</h2>
-<div style="overflow-x:auto"><table class="ptab">
+<div style="overflow-x:auto"><table class="ptab hdr">
 <tr><td>기업</td><td>국가</td><td>기준일</td><td>등락률</td><td>시가총액</td><td>변동 요인</td></tr>
-<tr><td>전 시장</td><td>-</td><td>08/16~17</td><td>휴장</td><td>-</td><td>주말 + 국내 8/17 광복절 대체공휴일</td></tr>
+<tr><td data-l="기업">전 시장</td><td data-l="국가">-</td><td data-l="기준일">08/16~17</td><td data-l="등락률">휴장</td><td data-l="시가총액">-</td><td data-l="변동 요인">주말 + 국내 8/17 광복절 대체공휴일</td></tr>
 </table></div>
 <ul>
 <li>직전 거래일(8/14) 동향은 8/15 브리핑 참조. 미국·유럽은 한국시간 오늘 밤 재개장하며, 주말 중동 교전·UFS 개시가 첫 반영 재료입니다. [사실]</li>
