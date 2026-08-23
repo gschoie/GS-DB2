@@ -243,7 +243,7 @@ def send_telegram(date_str: str) -> None:
 
     md_report = (ARCHIVE_DIR / f"{date_str}.md").read_text(encoding="utf-8")
     base_url = os.environ.get("DASHBOARD_BASE_URL",
-                              "https://gs-research-desk.pages.dev")
+                              "https://gschoie.github.io/GS-output-dashboard")
     mode = os.environ.get("TELEGRAM_MODE", "summary")  # summary | full
     md_body = md_report if mode == "full" else extract_summary(md_report)
     body = to_telegram_html(md_body)

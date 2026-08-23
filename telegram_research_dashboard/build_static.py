@@ -35,7 +35,7 @@ def previous_payload() -> dict:
         if access_id and access_secret:
             headers["CF-Access-Client-Id"] = access_id
             headers["CF-Access-Client-Secret"] = access_secret
-        request = Request("https://gs-research-desk.pages.dev/", headers=headers)
+        request = Request("https://gschoie.github.io/GS-output-dashboard/", headers=headers)
         with urlopen(request, timeout=30) as response:
             html = response.read().decode("utf-8", errors="replace")
         marker = "window.__DASHBOARD_DATA__="
