@@ -9,7 +9,7 @@
 import os, json, html, argparse, datetime, urllib.request, urllib.error
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-DASH_URL = "https://gs-research-desk.pages.dev/etf_signal_report.html"
+DASH_URL = "https://gschoie.github.io/GS-output-dashboard/etf_signal_report.html"
 SIGNATURE = "🎴 GS Research Desk · ETF/섹터 신호"
 STATUS_PATH = os.path.join(HERE, "telegram_status.json")
 

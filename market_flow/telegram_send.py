@@ -12,7 +12,7 @@ if hasattr(sys.stdout, "reconfigure"):
     sys.stdout.reconfigure(encoding="utf-8")  # Windows cp949 콘솔에서 이모지 출력 보호
 
 HERE = Path(__file__).resolve().parent
-DASH_URL = "https://gs-research-desk.pages.dev/market_flow_report.html"
+DASH_URL = "https://gschoie.github.io/GS-output-dashboard/market_flow_report.html"
 SIGNATURE = "🎴 GS Research Desk · 시장 수급"
 STATUS_PATH = HERE / "telegram_status.json"
 SLOT_LABEL = {"1000": "10:00", "1300": "13:00",

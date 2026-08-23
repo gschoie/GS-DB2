@@ -4,7 +4,7 @@
 
 ## 아키텍처 한눈에
 
-- **대시보드**: `telegram_research_dashboard/`가 정적 사이트를 빌드(`build_static.py` → `_site/`), 워크플로 5종(deploy-pages·refresh-news/union/macro/reports)이 **Cloudflare Pages로 배포**(`wrangler pages deploy`, 프로젝트 `gs-research-desk`). 접속 주소는 https://gs-research-desk.pages.dev — **Cloudflare Access(One-time PIN, gschoie@gmail.com만 허용)** 로그인 벽 뒤에 있다. 구 gschoie.github.io 배포는 2026-08-18 종료. 시크릿: `CLOUDFLARE_API_TOKEN`·`CLOUDFLARE_ACCOUNT_ID`(배포), `CF_ACCESS_CLIENT_ID`·`CF_ACCESS_CLIENT_SECRET`(배포본 안전망 fetch용 서비스 토큰, 선택).
+- **대시보드**: `telegram_research_dashboard/`가 정적 사이트를 빌드(`build_static.py` → `_site/`), 워크플로 5종(deploy-pages·refresh-news/union/macro/reports)이 **GitHub Pages로 배포**. 접속 주소는 https://gschoie.github.io/GS-output-dashboard (공개). Cloudflare Pages+Access 이관(8/18)은 로그인 번거로움으로 **8/23 원복** — CF 프로젝트·시크릿은 남아있으나 미사용.
 - **버튼 → 실행 프록시**: 대시보드 버튼 → GAS `dispatch_proxy`(정본: `gas/dispatch_proxy.gs`) → GitHub Actions `workflow_dispatch`. 라우트: reports / news / union / consensus / flow / etf / holdings / dart / recipe.
   - GAS 수정 시 Apps Script에 붙여넣고 **'배포 관리 → 새 버전'**으로 갱신할 것. **새 배포 금지**(URL이 바뀌어 대시보드가 깨짐).
 - **알림**: 텔레그램 봇들(@gs_invest_signal_bot 등). `etf_signal/etf_telegram.py`는 전송 결과를 `telegram_status.json`에 기록 → 시크릿 누락 등 실패 원인을 1회 실행으로 특정 가능.
@@ -84,5 +84,12 @@
     - 산출물: `static/construction_daily/<날짜>.html|.md` + `construction_briefing_report.html`
       (날짜 선택 인덱스). 사이드바 `🏗️ 글로벌건설기계.브리핑` 뷰 추가, deploy-pages workflow_run
       연결, build_static 복사 추가. 텔레그램은 `CONSTRUCTION_TELEGRAM_*` 시크릿 설정 시에만 발송.
+
+11. **Cloudflare 이관 원복** (8/23): Access 로그인(OTP)이 일상 사용에 번거로워 GitHub Pages로 복귀.
+    - 워크플로 5종 wrangler 스텝 → Pages artifact+deploy 잡 복원(configure-pages `enablement: true`로
+      Unpublish 상태에서도 자동 재개설). 텔레그램 링크 7곳·안전망 fetch 주소 github.io로 원복.
+    - cf-access-public-reports.yml(리포트 공개 예외) 삭제. 톤 딥링크·새창 래퍼·동기화 가드는 유지.
+    - 후속 과제: "대시보드 이름(주소)을 주기적으로 바꾸는" 접근차단 방식 설계 — repo rename은
+      GAS dispatch_proxy·텔레그램 링크와 연동 필요.
 
 이후 작업은 git log와 이 파일을 갱신하며 이어간다.
