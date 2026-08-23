@@ -1,10 +1,10 @@
 # GS Research Desk — 프로젝트 컨텍스트
 
-개인 리서치 자동화 모노리포. 산출물은 GitHub Pages 대시보드(https://gschoie.github.io/GS-output-dashboard)로 배포되고, 수집·알림은 GitHub Actions 스케줄/디스패치로 돌아간다. 원래 PC(로컬 Claude Code)에서 개발하다가 2026-08부터 클라우드 세션으로 이관해 계속 업그레이드 중이다.
+개인 리서치 자동화 모노리포. 산출물은 GitHub Pages 대시보드(https://gschoie.github.io/GS-DB2 — 2026-08-23 리포명 GS-output-dashboard→GS-DB2, 주소 노출 시 리네임으로 주소를 갈아타는 운영)로 배포되고, 수집·알림은 GitHub Actions 스케줄/디스패치로 돌아간다. 원래 PC(로컬 Claude Code)에서 개발하다가 2026-08부터 클라우드 세션으로 이관해 계속 업그레이드 중이다.
 
 ## 아키텍처 한눈에
 
-- **대시보드**: `telegram_research_dashboard/`가 정적 사이트를 빌드(`build_static.py` → `_site/`), 워크플로 5종(deploy-pages·refresh-news/union/macro/reports)이 **GitHub Pages로 배포**. 접속 주소는 https://gschoie.github.io/GS-output-dashboard (공개). Cloudflare Pages+Access 이관(8/18)은 로그인 번거로움으로 **8/23 원복** — CF 프로젝트·시크릿은 남아있으나 미사용.
+- **대시보드**: `telegram_research_dashboard/`가 정적 사이트를 빌드(`build_static.py` → `_site/`), 워크플로 5종(deploy-pages·refresh-news/union/macro/reports)이 **GitHub Pages로 배포**. 접속 주소는 https://gschoie.github.io/GS-DB2 (공개, 리포명 변경으로 주소 교체 가능). Cloudflare Pages+Access 이관(8/18)은 로그인 번거로움으로 **8/23 원복** — CF 프로젝트·시크릿은 남아있으나 미사용.
 - **버튼 → 실행 프록시**: 대시보드 버튼 → GAS `dispatch_proxy`(정본: `gas/dispatch_proxy.gs`) → GitHub Actions `workflow_dispatch`. 라우트: reports / news / union / consensus / flow / etf / holdings / dart / recipe.
   - GAS 수정 시 Apps Script에 붙여넣고 **'배포 관리 → 새 버전'**으로 갱신할 것. **새 배포 금지**(URL이 바뀌어 대시보드가 깨짐).
 - **알림**: 텔레그램 봇들(@gs_invest_signal_bot 등). `etf_signal/etf_telegram.py`는 전송 결과를 `telegram_status.json`에 기록 → 시크릿 누락 등 실패 원인을 1회 실행으로 특정 가능.

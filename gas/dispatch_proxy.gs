@@ -23,7 +23,7 @@
  *  app.js·이 파일·워크플로 파일 셋을 같이 확인할 것.
  * ===================================================================== */
 
-const OWNER = 'gschoie', REPO = 'GS-output-dashboard', REF = 'main';
+const OWNER = 'gschoie', REPO = 'GS-DB2', REF = 'main';
 
 // app.js 의 workflow 키 → .github/workflows/ 파일명.
 const WF = {
