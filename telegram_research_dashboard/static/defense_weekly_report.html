@@ -39,7 +39,7 @@ iframe{width:100%;height:calc(100vh - 110px);border:1px solid #223046;border-rad
 </div>
 <iframe id="frame" title="주간 정리"></iframe>
 <script>
-const DATES=[];
+const DATES=["2026-08-24"];
 const sel=document.getElementById('dsel'),fr=document.getElementById('frame');
 DATES.forEach(d=>{const o=document.createElement('option');o.value=d;o.textContent=d;sel.appendChild(o)});
 function load(){fr.src='defense_weekly/'+sel.value+'.html'}
