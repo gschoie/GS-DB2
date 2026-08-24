@@ -40,7 +40,8 @@ jobs:
         env:
           # 전용 키(별도 GCP 프로젝트) 권장 — 없으면 방산과 같은 키로 폴백
           GEMINI_API_KEY: ${{ secrets.CONSTRUCTION_GEMINI_API_KEY || secrets.GEMINI_API_KEY }}
-          GEMINI_MODEL: gemini-2.5-pro
+          # 신규 GCP 프로젝트 키는 gemini-2.5-pro 사용 불가(404) — flash 폴백 내장
+          GEMINI_MODEL: gemini-3.1-pro-preview
           # 텔레그램은 시크릿 설정 시에만 발송 (미설정이면 봇이 생략)
           TELEGRAM_BOT_TOKEN: ${{ secrets.CONSTRUCTION_TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.CONSTRUCTION_TELEGRAM_CHAT_ID }}

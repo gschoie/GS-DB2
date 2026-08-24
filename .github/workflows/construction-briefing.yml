@@ -40,8 +40,9 @@ jobs:
         env:
           # 전용 키(별도 GCP 프로젝트) 권장 — 없으면 방산과 같은 키로 폴백
           GEMINI_API_KEY: ${{ secrets.CONSTRUCTION_GEMINI_API_KEY || secrets.GEMINI_API_KEY }}
-          # pro가 품질이 좋음(하루 1회라 무료 티어 내). 쿼터 초과 시 flash로 자동 폴백.
-          GEMINI_MODEL: gemini-2.5-pro
+          # 신규 GCP 프로젝트 키는 gemini-2.5-pro 사용 불가(404) — 구글 안내 모델 사용.
+          # 실패·쿼터 초과 시 gemini-2.5-flash 자동 폴백 (봇 내장).
+          GEMINI_MODEL: gemini-3.1-pro-preview
           # 텔레그램은 나중 단계 — 시크릿 미설정이면 봇이 발송을 생략한다
           TELEGRAM_BOT_TOKEN: ${{ secrets.CONSTRUCTION_TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.CONSTRUCTION_TELEGRAM_CHAT_ID }}
