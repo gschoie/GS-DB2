@@ -225,12 +225,24 @@ def build() -> Path:
     defense_dir = ROOT / "static" / "defense_daily"
     if defense_dir.is_dir():
         shutil.copytree(defense_dir, OUTPUT.parent / "defense_daily", dirs_exist_ok=True)
+    weekly_index = ROOT / "static" / "defense_weekly_report.html"
+    if weekly_index.exists():
+        shutil.copy2(weekly_index, OUTPUT.parent / "defense_weekly_report.html")
+    weekly_dir = ROOT / "static" / "defense_weekly"
+    if weekly_dir.is_dir():
+        shutil.copytree(weekly_dir, OUTPUT.parent / "defense_weekly", dirs_exist_ok=True)
     construction_index = ROOT / "static" / "construction_briefing_report.html"
     if construction_index.exists():
         shutil.copy2(construction_index, OUTPUT.parent / "construction_briefing_report.html")
     construction_dir = ROOT / "static" / "construction_daily"
     if construction_dir.is_dir():
         shutil.copytree(construction_dir, OUTPUT.parent / "construction_daily", dirs_exist_ok=True)
+    construction_weekly_index = ROOT / "static" / "construction_weekly_report.html"
+    if construction_weekly_index.exists():
+        shutil.copy2(construction_weekly_index, OUTPUT.parent / "construction_weekly_report.html")
+    construction_weekly_dir = ROOT / "static" / "construction_weekly"
+    if construction_weekly_dir.is_dir():
+        shutil.copytree(construction_weekly_dir, OUTPUT.parent / "construction_weekly", dirs_exist_ok=True)
     claude_index = ROOT / "static" / "claude_defense_report.html"
     if claude_index.exists():
         shutil.copy2(claude_index, OUTPUT.parent / "claude_defense_report.html")
