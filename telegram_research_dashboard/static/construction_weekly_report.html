@@ -32,14 +32,14 @@ iframe{width:100%;height:calc(100vh - 110px);border:1px solid #3a3046;border-rad
 <div class="bar">
   <h1>🗓️ 글로벌 건설기계 주간 정리 <small style="font-size:11px;color:#8b96a8">매주 토 12:10</small></h1>
   <a class="bundle" href="construction_weekly/last4weeks.html" target="_blank" rel="noopener" title="월간 세미나(NotebookLM)용 최근 4주 묶음">📦 4주 묶음</a>
-  <a class="bundle" href="construction_weekly/last4weeks.md" download="GLOBAL_CONSTRUCTION.md" title="NotebookLM 업로드용 마크다운 (GLOBAL_CONSTRUCTION.md)">⬇ .md</a>
+  <a class="bundle" href="construction_weekly/last4weeks.md" download="GLOBAL_CONSTRUCTION_260824.md" title="NotebookLM 업로드용 마크다운 (GLOBAL_CONSTRUCTION_260824.md)">⬇ .md</a>
   <button id="prev" title="이전 주">◀</button>
   <select id="dsel"></select>
   <button id="next" title="다음 주">▶</button>
 </div>
 <iframe id="frame" title="주간 정리"></iframe>
 <script>
-const DATES=[];
+const DATES=["2026-08-24"];
 const sel=document.getElementById('dsel'),fr=document.getElementById('frame');
 DATES.forEach(d=>{const o=document.createElement('option');o.value=d;o.textContent=d;sel.appendChild(o)});
 function load(){fr.src='construction_weekly/'+sel.value+'.html'}
