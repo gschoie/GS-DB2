@@ -1,0 +1,8 @@
+pyyaml>=6.0
+# source_watcher의 어댑터·발송 모듈을 import하므로 그쪽 의존성이 함께 필요하다.
+requests>=2.31
+telethon>=1.34
+# 내러티브 합성(Gemini). --check / --no-llm 만 쓸 거라면 없어도 된다.
+google-genai>=1.0
+# 커뮤니티 온도(community_naver.py) — 네이버 종토 HTML 파싱.
+beautifulsoup4>=4.12

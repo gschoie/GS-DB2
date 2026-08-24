@@ -63,7 +63,8 @@ x_ship_keywords: &ship_keywords
   # 사람
   최광식: [최광식]
   # 업황·테마
-  조선업황: [신조선가, 클락슨, Clarksons, 수주잔고, 선가지수, LNG운반선, LNG선, 컨테이너선, VLCC, 탱커, 조선업, 조선주, 조선섹터]
+  # '수주잔고'는 방산·건설 등 다른 산업 글에 너무 많이 걸려서 뺐다
+  조선업황: [신조선가, 클락슨, Clarksons, 선가지수, LNG운반선, LNG선, 컨테이너선, VLCC, 탱커, 조선업, 조선주, 조선섹터]
   함정·MRO: [함정, 특수선, KDDX, 잠수함, 필리조선소, 한화필리, MASGA, 마스가, 존스법, Jones Act]
 
 sources:
@@ -74,7 +75,7 @@ sources:
   #
   # 준비는 GitHub 웹에서만 하면 된다(README '조선 코멘트 감시' 절):
   #   1) 시크릿 등록: TELEGRAM_API_ID·API_HASH·PHONE, SESSION_PASSPHRASE,
-  #      SHIP_TELEGRAM_BOT_TOKEN·CHAT_ID
+  #      SPYING_TELEGRAM_BOT_TOKEN·CHAT_ID
   #   2) Actions → '텔레그램 계정 로그인' 워크플로를 두 번 실행(코드 요청 → 코드 확인)
   # 로그인 전에는 이 소스만 '수집 실패'로 넘어가고 나머지 소스는 정상 동작한다.
   - key: ship_all
@@ -82,13 +83,17 @@ sources:
     type: telegram_account
     match_any: *ship_keywords
     push: hit              # 전문이 아니라 낱말이 걸린 문장만 보낸다
-    route: ship            # SHIP_TELEGRAM_* 시크릿의 봇(@gs_sb_bot)으로 발송
+    route: spying          # SPYING_TELEGRAM_* 시크릿의 봇으로 발송(염탐봇)
     dedupe_scope: ship     # 여러 채널이 퍼나른 같은 글은 한 번만
     tags: [조선]
     lookback_hours: 24
     max_per_run: 8
     exclude_any: [휴장, 공지]
-    # exclude_chats: ["@lim_econ", 잡담방이름]  # 훑지 않을 방(@아이디 또는 표시 이름)
+    # 내 채널은 뺀다 — 내가 쓴 조선 글이 나에게 알림으로 되돌아오는 것을 막는다.
+    # 비공개 방은 주소가 없어 텔레그램에 보이는 이름 그대로 적는다(이름을 바꾸면 여기도 맞출 것).
+    exclude_chats:
+      - "@HI_GS"
+      - "GS의 조선/기계/방산 「바담」"
     # include_groups: true                      # 채널 말고 토론 그룹까지 포함하려면
 
   # 네이버 블로그는 rss.blog.naver.com/<블로그ID>.xml 로 RSS를 준다.
@@ -127,7 +132,7 @@ sources:
   #   match_any: *ship_keywords
   #   exclude_any: [휴장, 공지]
   #   push: hit
-  #   route: ship
+  #   route: spying
   #   dedupe_scope: ship
   #   tags: [조선]
   #   lookback_hours: 24

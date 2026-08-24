@@ -7,7 +7,7 @@ on:
   # 봇(GITHUB_TOKEN)이 스냅샷을 push하면 on:push가 안 걸리므로(무한루프 방지 정책),
   # 컨센 워크플로 완료 이벤트로 배포를 잇는다. workflow_run은 토큰 제약을 우회한다.
   workflow_run:
-    workflows: ["KOSPI200 컨센 트래킹", "시장 수급 동향", "글로벌 방산 브리핑", "ETF 섹터 신호", "Claude 방산 브리핑 수집"]
+    workflows: ["KOSPI200 컨센 트래킹", "시장 수급 동향", "시장관심 내러티브", "글로벌 방산 브리핑", "글로벌 방산 주간정리", "글로벌 건설기계 브리핑", "글로벌 건설기계 주간정리", "ETF 섹터 신호", "Claude 방산 브리핑 수집", "밸류에이션 PER·PBR·ROE·PSR"]
     types: [completed]
   schedule:
     # 한국시간 06·09·12·15·18·21·24시 (3시간 간격, 하루 7회) 자동 갱신.
@@ -149,6 +149,9 @@ jobs:
         working-directory: telegram_research_dashboard
         env:
           DASHBOARD_OUTPUT: _site/index.html
+          # 배포본 안전망 fetch가 Access 로그인 벽을 통과하기 위한 서비스 토큰(선택)
+          CF_ACCESS_CLIENT_ID: ${{ secrets.CF_ACCESS_CLIENT_ID }}
+          CF_ACCESS_CLIENT_SECRET: ${{ secrets.CF_ACCESS_CLIENT_SECRET }}
         # 노조게시판(build_hhiun) 수집은 여기서 빼고 별도 refresh-union 워크플로가 하루 2회만 돌린다.
         # 캐시로 복원된 hhiun_top.json 을 build_static 이 그대로 구우므로 대시보드엔 항상 표시된다.
         run: python build_static.py
@@ -161,6 +164,9 @@ jobs:
         working-directory: telegram_research_dashboard
         env:
           DASHBOARD_OUTPUT: _site/index.html
+          # 배포본 안전망 fetch가 Access 로그인 벽을 통과하기 위한 서비스 토큰(선택)
+          CF_ACCESS_CLIENT_ID: ${{ secrets.CF_ACCESS_CLIENT_ID }}
+          CF_ACCESS_CLIENT_SECRET: ${{ secrets.CF_ACCESS_CLIENT_SECRET }}
         run: python build_static.py
 
       - name: 배포 안전망 검사
@@ -179,6 +185,9 @@ jobs:
           key: newsdb2-${{ github.run_id }}
 
       - uses: actions/configure-pages@v6
+        with:
+          # 8/18 Unpublish로 사이트가 꺼져 있으면 자동으로 다시 켠다
+          enablement: true
       - uses: actions/upload-pages-artifact@v5
         with:
           path: telegram_research_dashboard/_site

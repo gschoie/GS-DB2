@@ -1,0 +1,432 @@
+{
+ "date": "2026-08-15",
+ "meta": {
+  "window": "08-14 06:00~08-15 06:00 KST",
+  "engine": "Gemini(gemini-2.5-flash)",
+  "generated_at": "2026-08-15T06:48+09:00"
+ },
+ "stats": {
+  "channels": 94,
+  "messages": 1985,
+  "groups": 1819
+ },
+ "one_liner": "AI 투자 확대와 미국 인플레이션 완화 기대 속, 기업 실적 발표와 지정학적 리스크 부각",
+ "themes": [
+  {
+   "name": "AI 인프라 투자 확대와 차세대 광통신 기술 부각",
+   "narrative": "AI 서버 수요가 2028년까지 강하게 지속될 것으로 전망되는 가운데, 북미 광통신 업체들이 NPO/CPO와 같은 차세대 기술 도입에 대한 높은 관심을 보이고 있다. 이는 글로벌 AI 인프라 구축 가속화에 따른 반도체 및 IT 부품 시장의 성장을 시사하며, 관련 기업들의 실적 개선으로 이어지고 있다.",
+   "status": "ongoing",
+   "strength": 5,
+   "keywords": [
+    "AI 서버",
+    "CPO",
+    "NPO",
+    "반도체",
+    "전기전자",
+    "디스플레이",
+    "WFE",
+    "메모리",
+    "엘티씨",
+    "예스티",
+    "매출액",
+    "영업익",
+    "예상치",
+    "연결"
+   ],
+   "evidence": [
+    {
+     "channel": "메리츠증권 리서치",
+     "quote": "📮[메리츠증권 전기전자/IT부품 양승수] ▶ 북미 광통신 3사 실적 Review : 800G에서 1.6T, 그리고 NPO/CPO [주요 시사점] ▶ 높아지는 NPO/CPO에 대한 관심 - 이번 미국 광통신 3사의 실적 발표에서 CPO/NPO 도입에 대한 고객 관심이 빠르게 확대되고 있음을 공통적으로 확인"
+    },
+    {
+     "channel": "하나 중국/신흥국 전략 김경환",
+     "quote": ">>Quanta, AI 서버 주문 2028년까지… 향후 2년 전망 “exciting” (대만경제일보) •Quanta는 AI 서버 수요가 강하고 주문 가시성이 2028년까지 이어지고 있다며 향후 2년 전망에 대해 “상당히 흥분된다”고 밝혔음."
+    },
+    {
+     "channel": "[신한 리서치본부] IT(반도체/전기전자/디스플레이)",
+     "quote": "[신한투자증권 IT소부장/디스플레이 박현우, 김예성] 엘티씨: 2분기 연속 최대 실적 경신 ▶️ Full Capa에 근접한 장비 출하 - 고객사 단위투자 증가율 상회하는 성장 전망"
+    }
+   ]
+  },
+  {
+   "name": "미국 인플레이션 완화와 기술주 강세",
+   "narrative": "7월 생산자물가지수(PPI)가 시장 예상치를 하회하며 소비자물가지수(CPI)와 함께 연방준비제도(Fed)의 긴축 우려를 완화시켰다. 이러한 인플레이션 완화 기조는 성장주에 대한 투자심리를 개선시키며 미국 증시, 특히 기술주의 강세를 이끌었다.",
+   "status": "new",
+   "strength": 4,
+   "keywords": [
+    "인플레이션 완화",
+    "PPI",
+    "CPI",
+    "Fed 긴축 우려",
+    "기술주 강세",
+    "S&P500",
+    "미국 증시",
+    "예상치"
+   ],
+   "evidence": [
+    {
+     "channel": "서화백의 AI놀이🚀",
+     "quote": "미국 증시는 목요일 인플레이션 완화 기조 속 기술주 강세에 힘입어 상승 마감했습니다. 7월 생산자물가지수(PPI)가 시장 예상치를 하회하며 전일 발표된 소비자물가지수(CPI)와 함께 연방준비제도(Fed)의 긴축 우려를 한층 완화했습니다."
+    },
+    {
+     "channel": "키움증권 전략/시황 한지영",
+     "quote": "[8/14, 장 시작 전 생각: 수급의 퀄리티, 키움 한지영] - 다우 +0.1%, S&P500 +0.7%, 나스닥 +0.8%"
+    }
+   ]
+  },
+  {
+   "name": "일본은행(BOJ) 통화정책 변화 가능성 및 엔화 강세 압력",
+   "narrative": "시장은 일본은행(BOJ)의 9월 금리 인상 가능성을 약 75%로 높게 보고 있으며, 이는 엔화 강세를 장기화하고 엔 캐리 트레이드 포지션의 추가 청산으로 이어질 수 있다는 골드만삭스의 분석이 나왔다.",
+   "status": "ongoing",
+   "strength": 3,
+   "keywords": [
+    "BOJ",
+    "금리 인상",
+    "엔 캐리 트레이드",
+    "엔화 강세",
+    "기간"
+   ],
+   "evidence": [
+    {
+     "channel": "하나 중국/신흥국 전략 김경환",
+     "quote": ">>골드만삭스: BOJ 금리 인상 가속 시 엔 캐리 트레이드 추가 청산 가능 •골드만삭스는 일본의 15년 만에 최대 규모 외환시장 개입으로 전술적 엔 캐리 포지션이 크게 감소했지만, 조건이 맞으면 추가 청산 여지가 있다고 밝혔음."
+    },
+    {
+     "channel": "하나 중국/신흥국 전략 김경환",
+     "quote": "•시장은 현재 BOJ의 9월 금리 인상 가능성을 약 75%로 보고 있으며, 긴축이 빨라질 경우 세계 경제 성장 환경에 변화가 없어도 엔화가 더 오랜 기간 강세를 유지할 수 있다고 전망."
+    }
+   ]
+  },
+  {
+   "name": "이란 지정학적 리스크 고조",
+   "narrative": "미국 재무장관이 이란에 대해 '전례 없는 경제적 고립 조치'와 '호르무즈 해협에 대한 지속적인 봉쇄'를 시행할 것이라고 밝히면서, 중동 지역의 지정학적 긴장감이 고조되고 있다.",
+   "status": "new",
+   "strength": 3,
+   "keywords": [
+    "이란",
+    "경제적 고립",
+    "호르무즈 해협",
+    "봉쇄"
+   ],
+   "evidence": [
+    {
+     "channel": "텐렙",
+     "quote": "⚡️⚡️⚡️⚡️⚡️⚡️⚡️⚡️⚡️⚡️⚡️⚡️ 미국 재무장관 스콧 베센트가 현지시간 13일 밤 미국이 이란을 상대로 “전례 없는” 조치를 시행할 것이라고 밝힘. 베센트 장관은 인터뷰에서 “전례 없는 경제적 고립 조치와 호르무즈 해협에 대한 지속적인 봉쇄를 결합해 이란 항구로 들어오고 나가는 모든 통로를 차단할 것입니다."
+    }
+   ]
+  },
+  {
+   "name": "조선업계 동향 및 실적 발표",
+   "narrative": "조선업계에서는 HD현대 회장이 단기 성과 집착에 대한 경고를 한 가운데, LNG 운반선 관련 소재 기업인 한국카본이 예상치를 상회하는 반기 실적을 발표하며 개별 기업의 성과가 주목받고 있다.",
+   "status": "ongoing",
+   "strength": 3,
+   "keywords": [
+    "조선",
+    "한국카본",
+    "HD Hyundai",
+    "Golar LNG",
+    "매출액",
+    "영업익",
+    "순이익",
+    "예상치",
+    "반기보고서"
+   ],
+   "evidence": [
+    {
+     "channel": "SK증권 조선/방산 한승한",
+     "quote": "기업명: 한국카본(시가총액: 1조 2,532억) A017960 보고서명: 반기보고서 (2026.06) 잠정실적 : N 매출액 : 2,434억(예상치 : 2,424억, +0.4%) 영업익 : 504억(예상치 : 485억, +3.9%) 순이익 : 366억(예상치 : 349억, +4.8%)"
+    },
+    {
+     "channel": "다올투자증권 리서치센터",
+     "quote": "[다올투자증권 조선/기계/방산 최광식] 8/14(금) 데일리뉴스 🛳 조선 [TradeWinds] HD Hyundai chair warns of fixation on immediate results after string of shipyard deaths"
+    }
+   ]
+  }
+ ],
+ "signals": {
+  "spikes": [
+   {
+    "term": "매출액",
+    "count": 766,
+    "burst": null,
+    "base_daily": null,
+    "new": null
+   },
+   {
+    "term": "영업익",
+    "count": 527,
+    "burst": null,
+    "base_daily": null,
+    "new": null
+   },
+   {
+    "term": "순익",
+    "count": 486,
+    "burst": null,
+    "base_daily": null,
+    "new": null
+   },
+   {
+    "term": "잠정실적",
+    "count": 462,
+    "burst": null,
+    "base_daily": null,
+    "new": null
+   },
+   {
+    "term": "영업익 순익",
+    "count": 458,
+    "burst": null,
+    "base_daily": null,
+    "new": null
+   },
+   {
+    "term": "시가총액",
+    "count": 447,
+    "burst": null,
+    "base_daily": null,
+    "new": null
+   },
+   {
+    "term": "순이익",
+    "count": 435,
+    "burst": null,
+    "base_daily": null,
+    "new": null
+   },
+   {
+    "term": "예상치",
+    "count": 431,
+    "burst": null,
+    "base_daily": null,
+    "new": null
+   },
+   {
+    "term": "연결",
+    "count": 429,
+    "burst": null,
+    "base_daily": null,
+    "new": null
+   },
+   {
+    "term": "공시링크",
+    "count": 429,
+    "burst": null,
+    "base_daily": null,
+    "new": null
+   },
+   {
+    "term": "기간",
+    "count": 421,
+    "burst": null,
+    "base_daily": null,
+    "new": null
+   },
+   {
+    "term": "기업명",
+    "count": 402,
+    "burst": null,
+    "base_daily": null,
+    "new": null
+   },
+   {
+    "term": "반기보고서",
+    "count": 401,
+    "burst": null,
+    "base_daily": null,
+    "new": null
+   },
+   {
+    "term": "보고서명",
+    "count": 401,
+    "burst": null,
+    "base_daily": null,
+    "new": null
+   },
+   {
+    "term": "추이",
+    "count": 393,
+    "burst": null,
+    "base_daily": null,
+    "new": null
+   },
+   {
+    "term": "잠정실적 매출액",
+    "count": 391,
+    "burst": null,
+    "base_daily": null,
+    "new": null
+   },
+   {
+    "term": "실적속보",
+    "count": 388,
+    "burst": null,
+    "base_daily": null,
+    "new": null
+   },
+   {
+    "term": "반기보고서 잠정실적",
+    "count": 386,
+    "burst": null,
+    "base_daily": null,
+    "new": null
+   },
+   {
+    "term": "예상치 영업익",
+    "count": 385,
+    "burst": null,
+    "base_daily": null,
+    "new": null
+   },
+   {
+    "term": "영업익 예상치",
+    "count": 385,
+    "burst": null,
+    "base_daily": null,
+    "new": null
+   },
+   {
+    "term": "매출액 예상치",
+    "count": 385,
+    "burst": null,
+    "base_daily": null,
+    "new": null
+   },
+   {
+    "term": "예상치 순이익",
+    "count": 385,
+    "burst": null,
+    "base_daily": null,
+    "new": null
+   },
+   {
+    "term": "순이익 예상치",
+    "count": 384,
+    "burst": null,
+    "base_daily": null,
+    "new": null
+   },
+   {
+    "term": "추이 기간",
+    "count": 381,
+    "burst": null,
+    "base_daily": null,
+    "new": null
+   },
+   {
+    "term": "순익 공시링크",
+    "count": 379,
+    "burst": null,
+    "base_daily": null,
+    "new": null
+   }
+  ],
+  "top_posts": [
+   {
+    "channels": 4,
+    "channel": "메리츠증권 리서치",
+    "head": "📮[메리츠증권 전기전자/IT부품 양승수] ▶ 북미 광통신 3사 실적 Review : 800G에서 1.6T, 그리고 NPO/CPO [주요 시사점] ▶ 높아지는 NPO/CPO에 대한 관심 - 이번 미국 광통신 3사의 실적 발표에서 CPO/NPO 도입에 대한 고객 관심이 빠르게 확대되고 있음을 공통적으로 확인 - Coheren…",
+    "url": "https://t.me/meritz_research/44415",
+    "time_kst": "08-14 07:55"
+   },
+   {
+    "channels": 4,
+    "channel": "[신한 리서치본부] IT(반도체/전기전자/디스플레이)",
+    "head": "[신한투자증권 IT소부장/디스플레이 박현우, 김예성] 엘티씨: 2분기 연속 최대 실적 경신 ▶️ Full Capa에 근접한 장비 출하 - 고객사 단위투자 증가율 상회하는 성장 전망 → 26F, 27F 영업이익 9%, 10% 추가 상향 - Y1 클린룸 오픈 내년 2월 예정 → 4분기 PO 본격화 기대 - 장비/소재의 투자…",
+    "url": "https://t.me/c/1355104422/7335",
+    "time_kst": "08-14 07:30"
+   },
+   {
+    "channels": 3,
+    "channel": "키움증권 전략/시황 한지영",
+    "head": "[8/14, 장 시작 전 생각: 수급의 퀄리티, 키움 한지영] - 다우 +0.1%, S&P500 +0.7%, 나스닥 +0.8% - 샌디스크 +13.8%, 마이크론 +4.2%, 시스코 -8.4% - WTI 81.0달러, 미 10년물 금리 4.63%, 달러/원 1,418.5원 1. 미국 증시는 강세를 보였습니다. 시스코(-8…",
+    "url": "https://t.me/hedgecat0301/2914",
+    "time_kst": "08-14 07:43"
+   },
+   {
+    "channels": 3,
+    "channel": "다올투자증권 리서치센터",
+    "head": "[다올투자증권 조선/기계/방산 최광식] 8/14(금) 데일리뉴스 🛳 조선 [TradeWinds] HD Hyundai chair warns of fixation on immediate results after string of shipyard deaths Golar LNG lays out 'path' to seven-ves…",
+    "url": "https://t.me/daolresearch/14887",
+    "time_kst": "08-14 08:29"
+   },
+   {
+    "channels": 3,
+    "channel": "메리츠증권 리서치",
+    "head": "📮[메리츠증권 전기전자/IT부품 양승수] 파미셀(005690) : 긍정적인 변화 점검 ▶ 2Q26 Review: 일회성 이슈에도 높은 수익성 유지 - 파미셀의 2Q26 별도 기준 실적은 매출액 390억원(+45.7% YoY), 영업이익 132억원(+62.1% YoY, OPM 33.9%)을 기록, 시장 컨센서스를 각각 1.…",
+    "url": "https://t.me/meritz_research/44414",
+    "time_kst": "08-14 07:44"
+   },
+   {
+    "channels": 3,
+    "channel": "키움증권 리서치센터",
+    "head": "[키움 혁신성장리서치/스몰캡 오현진, 이하곤] ▶️한국공항 (005430) : 저평가 업체의 실적 개선세와 추가 모멘텀 주목 ◎ 국내 최대 지상 조업사의 역대급 실적 - 동사는 한진 그룹 계열의 지상 조업사로 국내 최대 M/S 보유. 대한항공과 진에어의 항공여객, 화물, 정비 관련 서비스를 주 사업으로 영위 - 26년 상…",
+    "url": "https://t.me/KiwoomResearch/23798",
+    "time_kst": "08-14 07:46"
+   },
+   {
+    "channels": 3,
+    "channel": "하나 중국/신흥국 전략 김경환",
+    "head": ">>Quanta, AI 서버 주문 2028년까지… 향후 2년 전망 “exciting” (대만경제일보) •Quanta는 AI 서버 수요가 강하고 주문 가시성이 2028년까지 이어지고 있다며 향후 2년 전망에 대해 “상당히 흥분된다”고 밝혔음. 올해 CAPEX도 기존 300억 대만달러에서 400억 대만달러로 33% 이상 상향…",
+    "url": "https://t.me/HANAchina/67120",
+    "time_kst": "08-14 07:35"
+   },
+   {
+    "channels": 3,
+    "channel": "텐렙",
+    "head": "📌 예스티(시가총액: 6,330억) #A122640 📁 반기보고서 (2026.06) 2026.08.14 09:03:46 (현재가 : 29,300원, +0.69%) 잠정실적 : N 매출액 : 419억(예상치 : 303억, +38.4%) 영업익 : 46억(예상치 : 39억, +17.1%) 순이익 : 19억(예상치 : -) *…",
+    "url": "https://t.me/Ten_level/90293",
+    "time_kst": "08-14 09:04"
+   },
+   {
+    "channels": 3,
+    "channel": "하나 중국/신흥국 전략 김경환",
+    "head": ">>골드만삭스: BOJ 금리 인상 가속 시 엔 캐리 트레이드 추가 청산 가능 •골드만삭스는 일본의 15년 만에 최대 규모 외환시장 개입으로 전술적 엔 캐리 포지션이 크게 감소했지만, 조건이 맞으면 추가 청산 여지가 있다고 밝혔음. 거시경제와 시장 환경이 엔화 강세를 뒷받침할 경우 포지션이 순매수로 전환될 가능성도 상존 •…",
+    "url": "https://t.me/HANAchina/67125",
+    "time_kst": "08-14 08:59"
+   },
+   {
+    "channels": 3,
+    "channel": "SK증권 조선/방산 한승한",
+    "head": "2026.08.14 10:39:37 기업명: 한국카본(시가총액: 1조 2,532억) A017960 보고서명: 반기보고서 (2026.06) 잠정실적 : N 매출액 : 2,434억(예상치 : 2,424억, +0.4%) 영업익 : 504억(예상치 : 485억, +3.9%) 순이익 : 366억(예상치 : 349억, +4.8%)…",
+    "url": "https://t.me/SKSCyclical/1855",
+    "time_kst": "08-14 10:41"
+   },
+   {
+    "channels": 3,
+    "channel": "텐렙",
+    "head": "⚡️⚡️⚡️⚡️⚡️⚡️⚡️⚡️⚡️⚡️⚡️⚡️ 미국 재무장관 스콧 베센트가 현지시간 13일 밤 미국이 이란을 상대로 “전례 없는” 조치를 시행할 것이라고 밝힘. 베센트 장관은 인터뷰에서 “전례 없는 경제적 고립 조치와 호르무즈 해협에 대한 지속적인 봉쇄를 결합해 이란 항구로 들어오고 나가는 모든 통로를 차단할 것입니다. 다…",
+    "url": "https://t.me/Ten_level/90290",
+    "time_kst": "08-14 08:59"
+   },
+   {
+    "channels": 2,
+    "channel": "다올투자증권 리서치센터",
+    "head": "#AMAT 컨퍼런스콜 주요 코멘트 및 Q&A 요약(1) _다올 반도체 고영민 ▶️ 주요 Comments » 실적 및 시장 전망 - 역사상 최고 QoQ 매출 성장률(15.2%) 달성 - 최근 3개월간 연간 매출 성장 전망치를 추가 상향 조정하며 WFE(전체 장비시장) 성장률을 상회할 것으로 전망 - 글로벌 AI 인프라 구축…",
+    "url": "https://t.me/daolresearch/14878",
+    "time_kst": "08-14 07:04"
+   },
+   {
+    "channels": 2,
+    "channel": "허혜민의 제약/바이오 소식통",
+    "head": "26/08/14 (금) 키움 제약바이오 데일리 💊 [제약/바이오 Analyst 허혜민, RA 김종현] 키움 제약/바이오/의료기기 소식통: t.me/huhpharm <‍📈 주요 지수 등락> * 코스피 +3.56% vs 코스피 제약 +0.54% * 코스닥 +0.29% vs 코스닥 제약 +0.5% * S&P500 +0.65%…",
+    "url": "https://t.me/huhpharm/11602",
+    "time_kst": "08-14 07:40"
+   },
+   {
+    "channels": 2,
+    "channel": "[신한 리서치본부] IT(반도체/전기전자/디스플레이)",
+    "head": "[신한투자증권 IT팀 오강호, 김형태, 박현우, 송혜수, 김예성] 8/14(금) 🕗Daily IT 예습하기 ✅ 반도체/장비 ▶️ 2분기 낸드 시장…삼성 1위·SK 2위, YMTC 첫 3위 입성 (ZDNET) https://alie.kr/7x90mKo ▶️ 삼성전자, 美 테일러로 파운드리 승부수…인텔과 맞불 (아이뉴스24)…",
+    "url": "https://t.me/c/1355104422/7336",
+    "time_kst": "08-14 07:42"
+   },
+   {
+    "channels": 2,
+    "channel": "키움증권 미국주식 톡톡",
+    "head": "[키움 글로벌 ETF 김진영] 🌏글로벌 ETF Daily (8/14) (8/13 종가기준) (Daily Return) 📈 주요 ETF 수익률 (전일대비) *시장 대표 ETF QQQ 1.16% SPY 0.70% DIA 0.14% IWM 0.26% *미국 상승 업종 XLC (통신서비스) 2.07% XLRE (부동산) 1.42…",
+    "url": "https://t.me/kwusa/60276",
+    "time_kst": "08-14 07:53"
+   }
+  ]
+ }
+}

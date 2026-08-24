@@ -1,0 +1,67 @@
+name: 글로벌 방산 주간정리
+
+# 매주 토요일 KST 11:50에 지난 7일의 데일리 브리핑 2종(제미나이·클로드)을
+# 종합한 주간 정리본을 생성해 대시보드에 커밋한다.
+# 최근 4주 묶음(last4weeks.md/.html)도 함께 갱신 — 월간 세미나(NotebookLM) 소스.
+on:
+  workflow_dispatch:
+  schedule:
+    # UTC 02:50 = KST 11:50 (토). 큐 지연 감안 시 실생성 ~12시 전후.
+    - cron: "50 2 * * 6"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: defense-weekly
+  cancel-in-progress: false
+
+jobs:
+  weekly:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: 패키지 설치
+        working-directory: defense_briefing
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: 주간 정리 생성
+        working-directory: defense_briefing
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          # 주 1회라 pro 무료 티어로 충분. 쿼터 초과 시 flash 자동 폴백.
+          GEMINI_MODEL: gemini-2.5-pro
+          # 일간 방산 브리핑과 같은 텔레그램 채널(GS K-Defence NEWS)로 요약+링크 발송
+          TELEGRAM_BOT_TOKEN: ${{ secrets.KDEF_TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.KDEF_TELEGRAM_CHAT_ID }}
+        run: python weekly_defense_bot.py
+
+      - name: 아카이브 커밋 및 푸시
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add telegram_research_dashboard/static/defense_weekly \
+                  telegram_research_dashboard/static/defense_weekly_report.html
+          if git diff --cached --quiet; then
+            echo "변경 없음 — 커밋 생략"
+            exit 0
+          fi
+          git commit -m "chore(defense): 방산 주간 정리 $(TZ=Asia/Seoul date +%Y-%m-%d)"
+          for i in 1 2 3 4 5; do
+            if git push origin HEAD:main; then
+              exit 0
+            fi
+            git pull --rebase --autostash origin main
+            sleep 5
+          done
+          echo "push 실패" >&2
+          exit 1

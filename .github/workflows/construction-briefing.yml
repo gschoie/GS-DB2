@@ -1,0 +1,73 @@
+name: 글로벌 건설기계 브리핑
+
+# 매일 아침 KST 06:10경 글로벌 건설기계 데일리 브리핑을 생성해
+# 날짜별 아카이브를 대시보드에 커밋한다. 텔레그램은 시크릿 설정 시에만 발송.
+# 방산 브리핑(UTC 20:40)과 30분 오프셋 — 같은 Gemini 키를 쓸 경우
+# 분당 rate limit 충돌과 RSS 동시 요청을 피한다.
+on:
+  workflow_dispatch:
+  schedule:
+    # UTC 21:10 = KST 06:10. GitHub 큐 지연(보통 5~30분)을 감안하면 실생성 ~06:30.
+    - cron: "10 21 * * *"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: construction-briefing
+  cancel-in-progress: false
+
+jobs:
+  brief:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: 패키지 설치
+        working-directory: construction_briefing
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: 브리핑 생성
+        working-directory: construction_briefing
+        env:
+          # 전용 키(별도 GCP 프로젝트) 권장 — 없으면 방산과 같은 키로 폴백
+          GEMINI_API_KEY: ${{ secrets.CONSTRUCTION_GEMINI_API_KEY || secrets.GEMINI_API_KEY }}
+          # 신규 GCP 프로젝트 키는 gemini-2.5-pro 사용 불가(404) — 구글 안내 모델 사용.
+          # 실패·쿼터 초과 시 gemini-2.5-flash 자동 폴백 (봇 내장).
+          GEMINI_MODEL: gemini-3.1-pro-preview
+          # 텔레그램은 나중 단계 — 시크릿 미설정이면 봇이 발송을 생략한다
+          TELEGRAM_BOT_TOKEN: ${{ secrets.CONSTRUCTION_TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.CONSTRUCTION_TELEGRAM_CHAT_ID }}
+        run: python construction_briefing_bot.py
+
+      # 아카이브 커밋 → deploy-pages가 workflow_run으로 이어서 재배포한다.
+      # (봇 GITHUB_TOKEN push는 on:push를 트리거하지 않으므로 workflow_run 필수)
+      - name: 아카이브 커밋 및 푸시
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add telegram_research_dashboard/static/construction_daily \
+                  telegram_research_dashboard/static/construction_briefing_report.html
+          if git diff --cached --quiet; then
+            echo "변경 없음 — 커밋 생략"
+            exit 0
+          fi
+          git commit -m "chore(construction): 글로벌 건설기계 브리핑 $(TZ=Asia/Seoul date +%Y-%m-%d)"
+          # 실행 중 main이 앞서가면 rebase 후 재시도 (최대 5회)
+          for i in 1 2 3 4 5; do
+            if git push origin HEAD:main; then
+              exit 0
+            fi
+            git pull --rebase --autostash origin main
+            sleep 5
+          done
+          echo "push 실패" >&2
+          exit 1

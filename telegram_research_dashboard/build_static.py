@@ -26,10 +26,16 @@ def records(conn, sql: str) -> list[dict]:
 def previous_payload() -> dict:
     """캐시 일부가 유실되면 현재 배포본의 정상 섹션을 보존한다."""
     try:
-        request = Request(
-            "https://gschoie.github.io/GS-output-dashboard/",
-            headers={"User-Agent": "GSResearchDashboard/1.0", "Cache-Control": "no-cache"},
-        )
+        # 2026-08-18 Cloudflare Pages + Access 이관. 로그인 벽 때문에 서비스 토큰
+        # (Zero Trust Service Token) 헤더가 있어야 통과한다 — 없으면 로그인 HTML이
+        # 내려와 marker 미발견 → 빈 dict 폴백(안전망만 비활성, 빌드는 계속).
+        headers = {"User-Agent": "GSResearchDashboard/1.0", "Cache-Control": "no-cache"}
+        access_id = os.environ.get("CF_ACCESS_CLIENT_ID", "")
+        access_secret = os.environ.get("CF_ACCESS_CLIENT_SECRET", "")
+        if access_id and access_secret:
+            headers["CF-Access-Client-Id"] = access_id
+            headers["CF-Access-Client-Secret"] = access_secret
+        request = Request("https://gschoie.github.io/GS-DB2/", headers=headers)
         with urlopen(request, timeout=30) as response:
             html = response.read().decode("utf-8", errors="replace")
         marker = "window.__DASHBOARD_DATA__="
@@ -145,11 +151,23 @@ def build() -> Path:
         summary_md = "\n".join(md_lines[:end]).strip()
         if summary_md:
             claude_brief = {"date": latest.stem, "summary": summary_md}
+    # 건설기계 브리핑: static/construction_daily/<날짜>.md — 같은 방식으로 요약 카드용 절단
+    construction_brief = {}
+    ndir = ROOT / "static" / "construction_daily"
+    nmd_files = sorted(ndir.glob("????-??-??.md")) if ndir.is_dir() else []
+    if nmd_files:
+        latest = nmd_files[-1]
+        md_lines = latest.read_text(encoding="utf-8").splitlines()
+        heads = [i for i, line in enumerate(md_lines) if line.startswith("## ")]
+        end = heads[1] if len(heads) >= 2 else len(md_lines)
+        summary_md = "\n".join(md_lines[:end]).strip()
+        if summary_md:
+            construction_brief = {"date": latest.stem, "summary": summary_md}
     payload = json.dumps(
         {"summary": summary, "reports": reports, "news": news, "companies": companies,
          "reportCompanies": report_companies, "newsTexts": news_texts, "market": market,
          "union": union, "macro": macro, "defenseBrief": defense_brief,
-         "claudeBrief": claude_brief},
+         "claudeBrief": claude_brief, "constructionBrief": construction_brief},
         ensure_ascii=False, separators=(",", ":"),
     ).replace("</", "<\\/").replace("\u2028", "\\u2028").replace("\u2029", "\\u2029")
     html = (ROOT / "static" / "index.html").read_text(encoding="utf-8")
@@ -166,6 +184,11 @@ def build() -> Path:
     (OUTPUT.parent / "version.json").write_text(
         json.dumps({"updated_at": summary["updated_at"]}), encoding="utf-8"
     )
+    # 리서치 톤·챗봇 새 창 래퍼 — 주소창에 톤 사이트 주소 대신 대시보드 주소만 보이게
+    for wrapper in ("tone_full.html", "chat_full.html"):
+        wrapper_src = ROOT / "static" / wrapper
+        if wrapper_src.exists():
+            shutil.copy2(wrapper_src, OUTPUT.parent / wrapper)
     union_report = ROOT / "static" / "hhiun_board_report.html"
     if union_report.exists():
         shutil.copy2(union_report, OUTPUT.parent / "hhiun_board_report.html")
@@ -181,15 +204,45 @@ def build() -> Path:
     flow_report = ROOT / "static" / "market_flow_report.html"
     if flow_report.exists():
         shutil.copy2(flow_report, OUTPUT.parent / "market_flow_report.html")
+    trend_report = ROOT / "static" / "market_trend_report.html"
+    if trend_report.exists():
+        shutil.copy2(trend_report, OUTPUT.parent / "market_trend_report.html")
+    trend_dir = ROOT / "static" / "market_trend"
+    if trend_dir.is_dir():
+        shutil.copytree(trend_dir, OUTPUT.parent / "market_trend", dirs_exist_ok=True)
     consensus_xlsx = ROOT / "static" / "consensus_full.xlsx"
     if consensus_xlsx.exists():
         shutil.copy2(consensus_xlsx, OUTPUT.parent / "consensus_full.xlsx")
+    valuation_report = ROOT / "static" / "valuation_report.html"
+    if valuation_report.exists():
+        shutil.copy2(valuation_report, OUTPUT.parent / "valuation_report.html")
+    valuation_xlsx = ROOT / "static" / "valuation_full.xlsx"
+    if valuation_xlsx.exists():
+        shutil.copy2(valuation_xlsx, OUTPUT.parent / "valuation_full.xlsx")
     defense_index = ROOT / "static" / "defense_briefing_report.html"
     if defense_index.exists():
         shutil.copy2(defense_index, OUTPUT.parent / "defense_briefing_report.html")
     defense_dir = ROOT / "static" / "defense_daily"
     if defense_dir.is_dir():
         shutil.copytree(defense_dir, OUTPUT.parent / "defense_daily", dirs_exist_ok=True)
+    weekly_index = ROOT / "static" / "defense_weekly_report.html"
+    if weekly_index.exists():
+        shutil.copy2(weekly_index, OUTPUT.parent / "defense_weekly_report.html")
+    weekly_dir = ROOT / "static" / "defense_weekly"
+    if weekly_dir.is_dir():
+        shutil.copytree(weekly_dir, OUTPUT.parent / "defense_weekly", dirs_exist_ok=True)
+    construction_index = ROOT / "static" / "construction_briefing_report.html"
+    if construction_index.exists():
+        shutil.copy2(construction_index, OUTPUT.parent / "construction_briefing_report.html")
+    construction_dir = ROOT / "static" / "construction_daily"
+    if construction_dir.is_dir():
+        shutil.copytree(construction_dir, OUTPUT.parent / "construction_daily", dirs_exist_ok=True)
+    construction_weekly_index = ROOT / "static" / "construction_weekly_report.html"
+    if construction_weekly_index.exists():
+        shutil.copy2(construction_weekly_index, OUTPUT.parent / "construction_weekly_report.html")
+    construction_weekly_dir = ROOT / "static" / "construction_weekly"
+    if construction_weekly_dir.is_dir():
+        shutil.copytree(construction_weekly_dir, OUTPUT.parent / "construction_weekly", dirs_exist_ok=True)
     claude_index = ROOT / "static" / "claude_defense_report.html"
     if claude_index.exists():
         shutil.copy2(claude_index, OUTPUT.parent / "claude_defense_report.html")

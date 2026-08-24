@@ -1,0 +1,222 @@
+{
+ "source": "DC인사이드",
+ "galleries": [
+  {
+   "id": "krstock",
+   "name": "국내주식갤러리",
+   "posts": 1134,
+   "capped": true,
+   "burst": 1.3,
+   "base_daily": 903.1
+  },
+  {
+   "id": "stockus",
+   "name": "해외주식갤러리",
+   "posts": 2439,
+   "capped": true,
+   "burst": 0.9,
+   "base_daily": 2838.1
+  }
+ ],
+ "posts_sampled": 575,
+ "keywords": [
+  {
+   "term": "트럼프",
+   "count": 14,
+   "burst": 79.7,
+   "new": true
+  },
+  {
+   "term": "중국",
+   "count": 14,
+   "burst": 79.7,
+   "new": true
+  },
+  {
+   "term": "한국",
+   "count": 13,
+   "burst": 74.0,
+   "new": true
+  },
+  {
+   "term": "창신",
+   "count": 12,
+   "burst": 68.3,
+   "new": true
+  },
+  {
+   "term": "애플",
+   "count": 11,
+   "burst": 62.6,
+   "new": true
+  },
+  {
+   "term": "일본",
+   "count": 11,
+   "burst": 62.6,
+   "new": true
+  },
+  {
+   "term": "ai",
+   "count": 10,
+   "burst": 56.9,
+   "new": true
+  },
+  {
+   "term": "전쟁",
+   "count": 10,
+   "burst": 56.9,
+   "new": true
+  },
+  {
+   "term": "삼성",
+   "count": 6,
+   "burst": 34.2,
+   "new": true
+  },
+  {
+   "term": "창신메모리",
+   "count": 6,
+   "burst": 34.2,
+   "new": true
+  },
+  {
+   "term": "AI",
+   "count": 6,
+   "burst": 34.2,
+   "new": true
+  },
+  {
+   "term": "이란",
+   "count": 6,
+   "burst": 34.2,
+   "new": true
+  },
+  {
+   "term": "요즘",
+   "count": 6,
+   "burst": 34.2,
+   "new": true
+  },
+  {
+   "term": "드론",
+   "count": 6,
+   "burst": 34.2,
+   "new": true
+  },
+  {
+   "term": "환율",
+   "count": 6,
+   "burst": 34.2,
+   "new": true
+  }
+ ],
+ "top_recommended": [
+  {
+   "gallery": "해외주식갤러리",
+   "title": "코인<<< 아무리 바이럴해도 절대 안살거면 개추 ㅋㅋㅋ",
+   "views": 8660,
+   "recommend": 228,
+   "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=17537752&exception_mode=recommend&page=1",
+   "time_kst": "08-22 14:14"
+  },
+  {
+   "gallery": "해외주식갤러리",
+   "title": "주변에 코인하는애들 이렇게 하던데?",
+   "views": 14230,
+   "recommend": 131,
+   "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=17538278&exception_mode=recommend&page=1",
+   "time_kst": "08-22 15:31"
+  },
+  {
+   "gallery": "해외주식갤러리",
+   "title": "미주갤 시발 존나 웃기네 ㅋㅋㅋ",
+   "views": 11939,
+   "recommend": 128,
+   "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=17538223&exception_mode=recommend&page=1",
+   "time_kst": "08-22 15:22"
+  },
+  {
+   "gallery": "해외주식갤러리",
+   "title": "진짜 미주갤 ㅈㄴ 웃기지않냐 ㅋㅋㅋㅋ",
+   "views": 8741,
+   "recommend": 116,
+   "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=17538099&exception_mode=recommend&page=1",
+   "time_kst": "08-22 15:02"
+  },
+  {
+   "gallery": "해외주식갤러리",
+   "title": "1억3천정도 잃었는데 이정도 금액 흔하냐?",
+   "views": 14559,
+   "recommend": 88,
+   "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=17535272&exception_mode=recommend&page=1",
+   "time_kst": "08-22 07:53"
+  }
+ ],
+ "top_viewed": [
+  {
+   "gallery": "해외주식갤러리",
+   "title": "엔비디아 긴급속보 ㄷㄷㄷㄷㄷㄷㄷㄷㄷ",
+   "views": 1718,
+   "recommend": 10,
+   "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=17542270&page=5",
+   "time_kst": "08-23 04:11"
+  },
+  {
+   "gallery": "국내주식갤러리",
+   "title": "이사람 존나 이쁘지않냐 첫눈에 반함",
+   "views": 716,
+   "recommend": 2,
+   "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3309703&page=2",
+   "time_kst": "08-23 02:42"
+  },
+  {
+   "gallery": "국내주식갤러리",
+   "title": "애플 창신메모리 허용 찌라시 이거임",
+   "views": 710,
+   "recommend": 9,
+   "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3309464&page=6",
+   "time_kst": "08-22 23:58"
+  },
+  {
+   "gallery": "국내주식갤러리",
+   "title": "월요일 삼전 22  하닉 190 갈듯?",
+   "views": 645,
+   "recommend": 1,
+   "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3309612&page=4",
+   "time_kst": "08-23 01:13"
+  },
+  {
+   "gallery": "국내주식갤러리",
+   "title": "(카더라) 삼성•SK하이닉스•마이크론 메모리 공급난에 엔비디아 AI 서버",
+   "views": 629,
+   "recommend": 0,
+   "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3309729&page=2",
+   "time_kst": "08-23 03:51"
+  },
+  {
+   "gallery": "국내주식갤러리",
+   "title": "월요일 숏 확정임?",
+   "views": 626,
+   "recommend": 1,
+   "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3309664&page=3",
+   "time_kst": "08-23 01:52"
+  },
+  {
+   "gallery": "국내주식갤러리",
+   "title": "님들 주식으로 부자되면 머할거임?",
+   "views": 614,
+   "recommend": 0,
+   "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3309663&page=3",
+   "time_kst": "08-23 01:47"
+  },
+  {
+   "gallery": "국내주식갤러리",
+   "title": "일본 지진 진도 5.9 머임",
+   "views": 580,
+   "recommend": 0,
+   "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3309679&page=2",
+   "time_kst": "08-23 02:13"
+  }
+ ]
+}

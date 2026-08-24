@@ -326,8 +326,8 @@ def clip(value: str, limit: int) -> str:
 def route_credentials(source: dict) -> tuple[str | None, str | None]:
     """route가 걸린 소스의 봇 토큰·chat_id를 환경변수에서 찾는다.
 
-    조선 알림(@gs_sb_bot)처럼 기존 방과 다른 봇으로 갈라 보낼 때 쓴다. `route: ship`이면
-    SHIP_TELEGRAM_BOT_TOKEN / SHIP_TELEGRAM_CHAT_ID 를 읽는다. 시크릿이 아직 비어
+    조선 알림처럼 기존 방과 다른 봇으로 갈라 보낼 때 쓴다. `route: spying`이면
+    SPYING_TELEGRAM_BOT_TOKEN / SPYING_TELEGRAM_CHAT_ID 를 읽는다. 시크릿이 아직 비어
     있으면 기본 봇으로 대신 보낸다 — 알림이 조용히 사라지는 것보다 낫다.
     """
     route = source.get("route")
@@ -398,7 +398,7 @@ def render(source: dict, item: adapters.Item) -> str:
                 companies.append(name)
         terms = [term for _, term in found]
 
-        head = "🚨 " + (" · ".join(f"<b>{escape(name)}</b>" for name in companies) or "<b>키워드</b>")
+        head = "🕊️전보) " + (" · ".join(f"<b>{escape(name)}</b>" for name in companies) or "<b>키워드</b>")
         head += f"\n📡 {escape(label)}"
         if tag_line:
             head += f"  {tag_line}"

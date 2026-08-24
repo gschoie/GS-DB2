@@ -12,7 +12,7 @@ if hasattr(sys.stdout, "reconfigure"):
     sys.stdout.reconfigure(encoding="utf-8")  # Windows cp949 콘솔에서 이모지 출력 보호
 
 HERE = Path(__file__).resolve().parent
-DASH_URL = "https://gschoie.github.io/GS-output-dashboard/market_flow_report.html"
+DASH_URL = "https://gschoie.github.io/GS-DB2/market_flow_report.html"
 SIGNATURE = "🎴 GS Research Desk · 시장 수급"
 STATUS_PATH = HERE / "telegram_status.json"
 SLOT_LABEL = {"1000": "10:00", "1300": "13:00",
@@ -66,15 +66,36 @@ def build_message():
     fut = day.get("confirmed", {}).get("futures")
     fut_curve = (day.get("curve") or {}).get("futures")
     unit = hist.get("futures_unit", "계약")
+    prev_fut = prev.get("futures") if prev else None
+
+    def fut_d(key, cur):
+        if prev_fut and cur is not None and prev_fut.get(key) is not None:
+            return f" ({fmt(cur - prev_fut[key])})"
+        return ""
+
     if fut:
-        lines.append(f"K200선물 외인 <b>{fmt(fut['foreign'])}{unit}</b> · "
-                     f"기관 {fmt(fut['inst_total'])}{unit}")
+        lines += ["", f"K200선물 외인 <b>{fmt(fut['foreign'])}{unit}</b>{fut_d('foreign', fut['foreign'])} · "
+                      f"기관 {fmt(fut['inst_total'])}{unit}{fut_d('inst_total', fut['inst_total'])}"]
     elif fut_curve:
         last = fut_curve[-1]
-        lines.append(f"K200선물 외인 <b>{fmt(last[2])}{unit}</b> · "
-                     f"기관 {fmt(last[3])}{unit} <i>(장중 {last[0]})</i>")
+        lines += ["", f"K200선물 외인 <b>{fmt(last[2])}{unit}</b>{fut_d('foreign', last[2])} · "
+                      f"기관 {fmt(last[3])}{unit}{fut_d('inst_total', last[3])} <i>(장중 {last[0]})</i>"]
     if prev:
-        lines.append(f"<i>( ) 안은 {SLOT_LABEL[keys[-2]].split(' ')[0]} 대비 증감</i>")
+        lines += ["", f"<i>( ) 안은 {SLOT_LABEL[keys[-2]].split(' ')[0]} 대비 증감</i>"]
+    sf = day.get("stock_flow")
+    if sf and (sf.get("buy") or sf.get("sell")):
+        def sf_line(name, chg, amt):
+            sign = "+" if chg > 0 else ""
+            return f"({sign}{chg:.1f}%) {name} <b>{fmt(amt)}억</b>"
+        lines += ["", f"✅ <b>외국인 순매수 상위</b> <i>({sf['time']} 가집계)</i>"]
+        lines += [sf_line(*r) for r in sf.get("buy", [])]
+        lines += ["", "❌ <b>외국인 순매도 상위</b>"]
+        lines += [sf_line(*r) for r in sf.get("sell", [])]
+        if sf.get("inst_buy") or sf.get("inst_sell"):
+            lines += ["", "✅ <b>기관 순매수 상위</b>"]
+            lines += [sf_line(*r) for r in sf.get("inst_buy", [])]
+            lines += ["", "❌ <b>기관 순매도 상위</b>"]
+            lines += [sf_line(*r) for r in sf.get("inst_sell", [])]
     lines += ["", f'상세 차트 › <a href="{DASH_URL}">대시보드</a>', SIGNATURE]
     return "\n".join(lines)
 

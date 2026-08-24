@@ -1,0 +1,885 @@
+{
+ "date": "2026-08-17",
+ "meta": {
+  "window": "08-16 06:00~08-17 06:00 KST",
+  "engine": "Gemini(gemini-2.5-flash)",
+  "generated_at": "2026-08-17T20:35+09:00"
+ },
+ "stats": {
+  "channels": 39,
+  "messages": 239,
+  "groups": 221
+ },
+ "one_liner": "AI 산업의 강력한 성장 기대감과 지정학적 리스크 및 거시경제 불확실성이 혼재된 시장.",
+ "themes": [
+  {
+   "name": "AI 산업의 견고한 성장과 인프라 투자 확대",
+   "narrative": "OpenAI의 데이터센터 투자 협상, 기술 기업들의 긍정적인 실적 발표, 그리고 앤트로픽의 높은 매출 전망 등 AI 산업 전반의 강력한 성장 기대감이 시장을 견인하고 있다. 특히 AI 인프라 구축을 위한 대규모 자본 조달 및 투자가 활발히 논의되고 있다.",
+   "status": "ongoing",
+   "strength": 5,
+   "keywords": [
+    "SB",
+    "지원",
+    "앤트로픽",
+    "긍정적인",
+    "조달",
+    "넘어",
+    "역할",
+    "사례"
+   ],
+   "evidence": [
+    {
+     "channel": "서화백의 AI놀이🚀",
+     "quote": "OpenAI 연산센터 개발사 SB Energy에 30억 달러 투자 협상 중, AI 인프라 프로젝트 금융·전력자산에 직접 개입하며 데이터센터 확대의 병목 현상에 대응"
+    },
+    {
+     "channel": "서화백의 AI놀이🚀",
+     "quote": "이번 주 다수의 기술 기업들이 실적을 발표했습니다... 각 기업의 수치, 가이던스, 그리고 질적 언급은 특히 AI 붐과 관련하여 매우 낙관적이었습니다."
+    },
+    {
+     "channel": "미국 주식 인사이더 🇺🇸 (US Stocks Insider)",
+     "quote": "· 앤트로픽은 2028년 매출을 $190 billion~$200 billion으로 예상하며, 월가는 2028년 예상 매출과 EV/매출 배수를 기반으로 향후 IPO 기업가치를 산정 중."
+    }
+   ]
+  },
+  {
+   "name": "글로벌 거시경제 불확실성 및 금리 인상 압박 완화 기대",
+   "narrative": "7월 인플레이션 데이터(CPI, PPI, 고용 보고서) 완화로 연준의 금리 인상 압박이 줄어들 것이라는 기대감이 형성되었으나, 미국 국가부채 증가, 가계부채 우려, 부동산 시장 하락세 등 거시 경제의 불확실성과 FOMC 회의록의 매파적일 가능성에 대한 경고 신호가 여전히 존재한다.",
+   "status": "ongoing",
+   "strength": 4,
+   "keywords": [
+    "경기",
+    "경고",
+    "부채",
+    "금리 인상",
+    "악화",
+    "지정학적"
+   ],
+   "evidence": [
+    {
+     "channel": "서화백의 AI놀이🚀",
+     "quote": "강세장이 승리한 한 주였습니다! 🏆 AI 붐이 더욱 강력해지고 있다는 여러 신호들과 함께, 7월 인플레이션 데이터가 완화되어 다음 달 연준의 금리 인상 압박이 더욱 줄어들었습니다."
+    },
+    {
+     "channel": "서화백의 AI놀이🚀",
+     "quote": "💡 요약 AI 및 반도체 섹터의 강력한 성장 기대감과 기업들의 긍정적인 실적 발표가 시장을 견인하나, 고금리와 가계부채 증가, 일부 AI 기업의 잠재 부채 우려가 상승세를 제한하는 관망세가 혼재되어 있습니다."
+    },
+    {
+     "channel": "서화백의 그림놀이 🚀",
+     "quote": "💡 요약 AI, 반도체 등 성장 섹터에 대한 긍정적 전망이 우세하나, 미국 국가부채 증가, 하이퍼스케일러 규제 리스크, 부동산 시장 하락세, IPO 경고 신호 등 거시 경제의 불확실성으로 인해 신중한 낙관론이 지배적입니다."
+    }
+   ]
+  },
+  {
+   "name": "중동 및 러시아-우크라이나 지정학적 리스크 고조",
+   "narrative": "이란의 호르무즈 해협 관련 강경한 태도와 중동 지역 대리인들의 호전적인 움직임, 그리고 러시아-우크라이나 전쟁의 지속적인 확전 양상으로 지정학적 혼란이 심화되고 있다. 이는 에너지 시장과 글로벌 공급망에 인플레이션 파급 효과를 미칠 수 있다는 우려를 낳고 있다.",
+   "status": "ongoing",
+   "strength": 4,
+   "keywords": [
+    "전쟁",
+    "요구",
+    "명의",
+    "우크라이나",
+    "아시아",
+    "중단"
+   ],
+   "evidence": [
+    {
+     "channel": "서화백의 AI놀이🚀",
+     "quote": "중동 상황은 여전히 암울합니다. 🌑 이란은 점점 더 완고하고 강경해지며 호르무즈 해협을 인질로 잡고 있고, 경제는 미국의 제재를 견디기 위해 움츠리고 있으며, 지역 내 대리인들은 더욱 호전적이 되고 있습니다."
+    },
+    {
+     "channel": "서화백의 AI놀이🚀",
+     "quote": "지정학적 혼란으로 인한 인플레이션 파급 효과는 호르무즈 해협 통행이 방해받고 (후티 반군 덕분에) 홍해가 공격을 받으며 흑해가 러시아-우크라이나 전쟁과 관련하여 심각한 혼란을 겪으면서 악화될 수 있습니다."
+    },
+    {
+     "channel": "미국 주식 인사이더 🇺🇸 (US Stocks Insider)",
+     "quote": "• 우크라이나가 모스크바 지역을 대규모 드론으로 공격해 물류시설 여러 곳에서 대형 화재 발생. 공격 과정에서 모스크바 주요 공항의 운항도 일시 중단."
+    }
+   ]
+  },
+  {
+   "name": "조선 및 방산 산업의 수주 및 전력화 소식",
+   "narrative": "미국향 발전엔진 수주 소식과 호주 육군의 AS9 헌츠맨 자주포 전력화 완료 소식이 전해지며 조선 및 방산 산업에 긍정적인 모멘텀을 제공하고 있다. 이는 글로벌 방위력 증강 및 에너지 인프라 투자와 맞물려 관련 기업들의 실적 기대감을 높이고 있다.",
+   "status": "new",
+   "strength": 3,
+   "keywords": [
+    "명의",
+    "보고"
+   ],
+   "evidence": [
+    {
+     "channel": "▩다올 선박 + 방산 외신",
+     "quote": "🛳 미국 DC향 발전엔진 2번째 수주 확인"
+    },
+    {
+     "channel": "GS의 조선/기계/방산 「바담」",
+     "quote": "🛡 호주 육군, 최초 AS9 헌츠맨 자주포 포대 전력화 완료"
+    }
+   ]
+  }
+ ],
+ "community_mood": {
+  "score": 40,
+  "summary": "개미 투자자들은 AI 관련 기술주와 실적 개선이 기대되는 개별 종목에 높은 기대감을 보이고 있으며, 특히 로봇, 에너지, 통신 장비 등 특정 섹터에 대한 관심이 뜨겁다. 다만, 일부 종목에 대한 과열 경고도 나타난다.",
+  "hot_stocks": [
+   {
+    "name": "알테오젠",
+    "score": 80,
+    "reason": "영업이익률 49.6% 기록에 대한 높은 기대감."
+   },
+   {
+    "name": "LG전자",
+    "score": 70,
+    "reason": "휴머노이드 로봇 사업 진출 기대감."
+   },
+   {
+    "name": "두산에너빌리티",
+    "score": 60,
+    "reason": "상한가 기대 및 에너지 관련 사업 주목."
+   },
+   {
+    "name": "대한광통신",
+    "score": 60,
+    "reason": "2분기 흑자전환 소식에 대한 기대감."
+   },
+   {
+    "name": "금호타이어",
+    "score": 30,
+    "reason": "커뮤니티 내 높은 언급량으로 주목."
+   },
+   {
+    "name": "NAVER",
+    "score": 20,
+    "reason": "커뮤니티 내 높은 언급량으로 주목."
+   },
+   {
+    "name": "제주반도체",
+    "score": 20,
+    "reason": "커뮤니티 내 높은 언급량으로 주목."
+   },
+   {
+    "name": "코오롱티슈진",
+    "score": 20,
+    "reason": "커뮤니티 내 높은 언급량으로 주목."
+   },
+   {
+    "name": "삼성전기",
+    "score": 20,
+    "reason": "커뮤니티 내 높은 언급량으로 주목."
+   },
+   {
+    "name": "HLB",
+    "score": 20,
+    "reason": "커뮤니티 내 높은 언급량으로 주목."
+   }
+  ]
+ },
+ "signals": {
+  "spikes": [
+   {
+    "term": "경기",
+    "count": 16,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "요구",
+    "count": 14,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "경고",
+    "count": 21,
+    "burst": 34.59649813102498,
+    "base_daily": 3.7,
+    "new": false
+   },
+   {
+    "term": "전쟁",
+    "count": 18,
+    "burst": 45.469683257918554,
+    "base_daily": 2.3,
+    "new": false
+   },
+   {
+    "term": "명의",
+    "count": 12,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "부채",
+    "count": 12,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "아시아",
+    "count": 11,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "SB",
+    "count": 11,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "시간",
+    "count": 11,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "넘어",
+    "count": 11,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "보고",
+    "count": 11,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "경향신문",
+    "count": 11,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "지원",
+    "count": 18,
+    "burst": 32.47834518422754,
+    "base_daily": 3.3,
+    "new": false
+   },
+   {
+    "term": "역할",
+    "count": 10,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "긍정적인",
+    "count": 10,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "조달",
+    "count": 10,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "지정학적",
+    "count": 10,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "금리 인상",
+    "count": 10,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "사례",
+    "count": 10,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "앤트로픽",
+    "count": 10,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "악화",
+    "count": 10,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "중단",
+    "count": 9,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "우크라이나",
+    "count": 9,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "인도",
+    "count": 9,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "분위기",
+    "count": 9,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   }
+  ],
+  "top_posts": [
+   {
+    "channels": 4,
+    "channel": "▩다올 선박 + 방산 외신",
+    "head": "🛳 미국 DC향 발전엔진 2번째 수주 확인 ☞ http://bit.ly/DOS835 ⚓️ 주시 뉴스 💲 선가, 실적, 캐파 △ 컨테이너선 하락에도, 신조선가지수 2주 연속 상승 및 지난주 보합 🌏 그린쉽 △ BW LNG, 노후 스팀터빈 LNG선 - FSRU 개조 🌪 LNG ▲ ExxonMobil의 모잠비크 Rovuma E…",
+    "url": "https://t.me/c/1454748589/733",
+    "time_kst": "08-16 14:29"
+   },
+   {
+    "channels": 2,
+    "channel": "서화백의 AI놀이🚀",
+    "head": "📘 Weekly Recap (week ended Friday August 14, 2026) - 지난주 미국 시황 리뷰 🧭 한눈에 보는 주간 핵심 강세장이 승리한 한 주였습니다! 🏆 AI 붐이 더욱 강력해지고 있다는 여러 신호들과 함께, 7월 인플레이션 데이터가 완화되어 다음 달 연준의 금리 인상 압박이 더욱 줄어들었습니다…",
+    "url": "https://t.me/easobi_ai/19347",
+    "time_kst": "08-16 17:30"
+   },
+   {
+    "channels": 2,
+    "channel": "서화백의 AI놀이🚀",
+    "head": "📅 Catalyst Watch (week of Mon 8/17) - 주간 전략 프리뷰 🧭 한눈에 보는 주간 핵심 이번 주 시장의 주요 초점은 연방공개시장위원회(FOMC) 회의록 발표와 대형 기업들의 실적 발표에 맞춰져 있습니다 💰. 주요 매크로 이벤트로는 FOMC 회의록(수요일)과 미국 플래시 PMI(금요일)가 예정되어…",
+    "url": "https://t.me/easobi_ai/19350",
+    "time_kst": "08-16 18:00"
+   },
+   {
+    "channels": 2,
+    "channel": "서화백의 AI놀이🚀",
+    "head": "🔁 Catalyst Watch Delta (week of Mon 8/17 vs Mon 8/10) 🧭 변화 한눈에 이번 주 Vital Catalyst Watch는 거시 경제 초점이 미국 인플레이션 지표(CPI/PPI)에서 연방공개시장위원회(FOMC) 회의 의사록과 미국 플래시 PMI로 이동했습니다. 또한, 다음 주(8/26…",
+    "url": "https://t.me/easobi_ai/19349",
+    "time_kst": "08-16 17:40"
+   },
+   {
+    "channels": 2,
+    "channel": "서화백의 AI놀이🚀",
+    "head": "- Maersk (머스크): 2분기 실적 호조 및 연간 가이던스 상향 조정을 통해 시장의 기대를 뛰어넘었습니다. 📈 - FERG (퍼거슨): '비트 앤 레이즈' 실적을 기록하며 예상치를 상회하고 가이던스를 높였습니다. ✨ - Berkshire Hathaway (버크셔 해서웨이): 전반적인 영업 이익/EPS가 예상치를 상회…",
+    "url": "https://t.me/easobi_ai/19348",
+    "time_kst": "08-16 17:30"
+   },
+   {
+    "channels": 2,
+    "channel": "서화백의 AI놀이🚀",
+    "head": "📝 텔레그램 심층 분석 Report (11시 07분) 기준 🌡️ 센티먼트 기대 (+35) 💡 요약 AI 및 반도체 섹터의 강력한 성장 기대감과 기업들의 긍정적인 실적 발표가 시장을 견인하나, 고금리와 가계부채 증가, 일부 AI 기업의 잠재 부채 우려가 상승세를 제한하는 관망세가 혼재되어 있습니다. 🗣️ Top 키워드: A…",
+    "url": "https://t.me/easobi_ai/19342",
+    "time_kst": "08-16 11:07"
+   },
+   {
+    "channels": 2,
+    "channel": "서화백의 그림놀이 🚀",
+    "head": "📝 텔레그램 심층 분석 Report (07시 06분) 기준 🌡️ 센티먼트 공포 (-60) 💡 요약 메가캡 기술주 약세, 국채 금리 상승, 가계부채 급증으로 시장 전반에 공포 심리 확산. 암호화폐 시장도 저점 예상 등 하방 압력 지속. 🗣️ Top 키워드: 비트코인(76), NVIDIA(61), 삼성전자(59), AI(42…",
+    "url": "https://t.me/easobi/16425",
+    "time_kst": "08-16 07:06"
+   },
+   {
+    "channels": 2,
+    "channel": "서화백의 AI놀이🚀",
+    "head": "📝 텔레그램 심층 분석 Report (15시 04분) 기준 🌡️ 센티먼트 관망 속 성장 기대 (+35) 💡 요약 글로벌 경기 둔화 및 지정학적 리스크 우려에도 불구하고, AI, 반도체 등 첨단 기술 분야와 일부 기업들의 압도적인 실적 개선 및 신사업 기대감이 투자 심리를 견인하고 있음. 🗣️ Top 키워드: ESS(230…",
+    "url": "https://t.me/easobi_ai/19345",
+    "time_kst": "08-16 15:04"
+   },
+   {
+    "channels": 2,
+    "channel": "서화백의 AI놀이🚀",
+    "head": "📝 텔레그램 심층 분석 Report (19시 07분) 기준 🌡️ 센티먼트 환호 (+60) 💡 요약 AI 및 반도체 섹터의 강한 성장 기대감과 기업들의 실적 호조가 시장 분위기를 긍정적으로 이끌고 있습니다. 그러나 일부 기업의 내부 혼란, 가상자산 시장의 하락세, 그리고 거시 경제 불확실성이 우려 요인으로 작용합니다. 🗣️…",
+    "url": "https://t.me/easobi_ai/19354",
+    "time_kst": "08-16 19:07"
+   },
+   {
+    "channels": 2,
+    "channel": "서화백의 그림놀이 🚀",
+    "head": "📝 텔레그램 심층 분석 Report (23시 06분) 기준 🌡️ 센티먼트 낙관 (+15) 💡 요약 AI, 반도체 등 성장 섹터에 대한 긍정적 전망이 우세하나, 미국 국가부채 증가, 하이퍼스케일러 규제 리스크, 부동산 시장 하락세, IPO 경고 신호 등 거시 경제의 불확실성으로 인해 신중한 낙관론이 지배적입니다. 🗣️ To…",
+    "url": "https://t.me/easobi/16434",
+    "time_kst": "08-16 23:06"
+   },
+   {
+    "channels": 2,
+    "channel": "서화백의 AI놀이🚀",
+    "head": "- 주택 시장의 어려운 거시 환경 📉: Home Depot, Lowe's, Toll Brothers 등 주택 관련 기업들에게 금리 변동과 맞물려 지속적인 역풍으로 작용할 수 있습니다. - AI 관련 종목의 높은 가치평가 🚦: Keysight, Fabrinet 등 AI 수요 관련 기업들은 긍정적인 기조를 보이지만, 이미 높…",
+    "url": "https://t.me/easobi_ai/19351",
+    "time_kst": "08-16 18:00"
+   },
+   {
+    "channels": 2,
+    "channel": "이상헌 부장 iM 지주/ESG/중소형주",
+    "head": "* [단독] \"'탱크데이' 신세계 주식 왜 샀나\"…소명 요구한 與 의원 - 여당 의원이 최근 자산운용사들에 신세계그룹 계열사 주식을 갖고 있는지, 해당 기업들을 대상으로 스튜어드십코드(주주인 기관투자가가 기업 의사결정에 적극 참여하는 것) 활동을 했는지 등을 제출하라고 요구해 논란이 되고 있다. 금융투자업계에서는 국회의원…",
+    "url": "https://t.me/INSIGHTVALUELEE/9430",
+    "time_kst": "08-16 10:38"
+   },
+   {
+    "channels": 2,
+    "channel": "GS의 조선/기계/방산 「바담」",
+    "head": "🛡 Avustralya Ordusu AS9 Howitzer Bataryasını Hizmete Aldı 🛡 호주 육군, 최초 AS9 헌츠맨 자주포 포대 전력화 완료 출처: SSBülten 링크: [https://ssbulten.com.tr/gundem/detay/avustralya-ordusu-as9-howitzer-ba…",
+    "url": "https://t.me/c/1405984327/7899",
+    "time_kst": "08-16 18:34"
+   },
+   {
+    "channels": 2,
+    "channel": "엄브렐라리서치 Jay의 주식투자교실",
+    "head": "이전에 언급한 Bofa의 마이크론 레포트(https://t.me/Jstockclass/15012)까지 포함해서 보면, 하나의 흐름이 보이는것 같습니다. 지금 AI 밸류체인 안에서는 한 기업의 펀더멘털이 그 기업 혼자만의 매출, 마진, 밸류에이션 배수로 설명되지 않습니다. 마이크론의 미래 이익 체력은 단순히 DRAM가격이…",
+    "url": "https://t.me/Jstockclass/15023",
+    "time_kst": "08-16 22:06"
+   },
+   {
+    "channels": 2,
+    "channel": "하나 중국/신흥국 전략 김경환",
+    "head": ">>중앙은행 금 매수·ETF 자금 유입, 도이치뱅크 “금값은 ‘폭발적 상승’ 단계” •도이치뱅크는 2024년 시작된 금 가격의 5번째 ‘폭발적 상승’ 단계가 현재도 이어지고 있다고 분석 중앙은행의 금 매수 수요는 실질 달러 기준으로 사상 최고 수준을 기록했으며, 이 가운데 약 절반은 IMF에 보고되지 않은 수요인 것으로…",
+    "url": "https://t.me/HANAchina/67206",
+    "time_kst": "08-16 14:54"
+   }
+  ]
+ },
+ "community": {
+  "source": "네이버 종목토론실",
+  "universe": 40,
+  "posts": 947,
+  "search_top": [
+   {
+    "code": "005930",
+    "name": "삼성전자",
+    "rank": 1
+   },
+   {
+    "code": "000660",
+    "name": "SK하이닉스",
+    "rank": 2
+   },
+   {
+    "code": "066570",
+    "name": "LG전자",
+    "rank": 3
+   },
+   {
+    "code": "005380",
+    "name": "현대차",
+    "rank": 4
+   },
+   {
+    "code": "009150",
+    "name": "삼성전기",
+    "rank": 5
+   },
+   {
+    "code": "034020",
+    "name": "두산에너빌리티",
+    "rank": 6
+   },
+   {
+    "code": "035420",
+    "name": "NAVER",
+    "rank": 7
+   },
+   {
+    "code": "042660",
+    "name": "한화오션",
+    "rank": 8
+   },
+   {
+    "code": "006400",
+    "name": "삼성SDI",
+    "rank": 9
+   },
+   {
+    "code": "064400",
+    "name": "LG씨엔에스",
+    "rank": 10
+   }
+  ],
+  "hot_stocks": [
+   {
+    "code": "073240",
+    "name": "금호타이어",
+    "posts": 140,
+    "capped": true,
+    "burst": null,
+    "base_daily": null
+   },
+   {
+    "code": "066570",
+    "name": "LG전자",
+    "posts": 99,
+    "capped": true,
+    "burst": null,
+    "base_daily": null
+   },
+   {
+    "code": "035420",
+    "name": "NAVER",
+    "posts": 75,
+    "capped": false,
+    "burst": null,
+    "base_daily": null
+   },
+   {
+    "code": "080220",
+    "name": "제주반도체",
+    "posts": 62,
+    "capped": false,
+    "burst": null,
+    "base_daily": null
+   },
+   {
+    "code": "950160",
+    "name": "코오롱티슈진",
+    "posts": 57,
+    "capped": false,
+    "burst": null,
+    "base_daily": null
+   },
+   {
+    "code": "010170",
+    "name": "대한광통신",
+    "posts": 43,
+    "capped": false,
+    "burst": null,
+    "base_daily": null
+   },
+   {
+    "code": "034020",
+    "name": "두산에너빌리티",
+    "posts": 40,
+    "capped": false,
+    "burst": null,
+    "base_daily": null
+   },
+   {
+    "code": "002990",
+    "name": "금호건설",
+    "posts": 40,
+    "capped": false,
+    "burst": null,
+    "base_daily": null
+   },
+   {
+    "code": "009150",
+    "name": "삼성전기",
+    "posts": 39,
+    "capped": false,
+    "burst": null,
+    "base_daily": null
+   },
+   {
+    "code": "028300",
+    "name": "HLB",
+    "posts": 38,
+    "capped": false,
+    "burst": null,
+    "base_daily": null
+   },
+   {
+    "code": "005380",
+    "name": "현대차",
+    "posts": 37,
+    "capped": false,
+    "burst": null,
+    "base_daily": null
+   },
+   {
+    "code": "006400",
+    "name": "삼성SDI",
+    "posts": 30,
+    "capped": false,
+    "burst": null,
+    "base_daily": null
+   }
+  ],
+  "keywords": [
+   {
+    "term": "네이버",
+    "count": 15,
+    "burst": null,
+    "new": null
+   },
+   {
+    "term": "안티들",
+    "count": 14,
+    "burst": null,
+    "new": null
+   },
+   {
+    "term": "LG",
+    "count": 12,
+    "burst": null,
+    "new": null
+   },
+   {
+    "term": "파업",
+    "count": 10,
+    "burst": null,
+    "new": null
+   },
+   {
+    "term": "이유",
+    "count": 10,
+    "burst": null,
+    "new": null
+   },
+   {
+    "term": "안티",
+    "count": 10,
+    "burst": null,
+    "new": null
+   },
+   {
+    "term": "로봇",
+    "count": 10,
+    "burst": null,
+    "new": null
+   },
+   {
+    "term": "삼성전기",
+    "count": 10,
+    "burst": null,
+    "new": null
+   },
+   {
+    "term": "김민석",
+    "count": 10,
+    "burst": null,
+    "new": null
+   },
+   {
+    "term": "반도체",
+    "count": 9,
+    "burst": null,
+    "new": null
+   },
+   {
+    "term": "상한",
+    "count": 9,
+    "burst": null,
+    "new": null
+   },
+   {
+    "term": "속보",
+    "count": 9,
+    "burst": null,
+    "new": null
+   },
+   {
+    "term": "SK하이닉스",
+    "count": 9,
+    "burst": null,
+    "new": null
+   },
+   {
+    "term": "공매",
+    "count": 9,
+    "burst": null,
+    "new": null
+   },
+   {
+    "term": "찬티",
+    "count": 9,
+    "burst": null,
+    "new": null
+   }
+  ],
+  "top_liked": [
+   {
+    "code": "196170",
+    "name": "알테오젠",
+    "title": "영업이익률 49.6프로 !!!!![2]",
+    "views": 1101,
+    "likes": 90,
+    "url": "https://finance.naver.com/item/board_read.naver?code=196170&nid=427892711",
+    "time_kst": "08-16 16:23"
+   },
+   {
+    "code": "066570",
+    "name": "LG전자",
+    "title": "LG전자를 휴머노이드 로봇만으로 보면 안돼[4]",
+    "views": 2147,
+    "likes": 85,
+    "url": "https://finance.naver.com/item/board_read.naver?code=066570&nid=427889872",
+    "time_kst": "08-16 10:24"
+   },
+   {
+    "code": "034020",
+    "name": "두산에너빌리티",
+    "title": "축하합니다  화요일 상한가네요[13]",
+    "views": 2848,
+    "likes": 68,
+    "url": "https://finance.naver.com/item/board_read.naver?code=034020&nid=427890192",
+    "time_kst": "08-16 11:00"
+   },
+   {
+    "code": "010170",
+    "name": "대한광통신",
+    "title": "대한광통신 2분기  흑자전환[2]",
+    "views": 1135,
+    "likes": 67,
+    "url": "https://finance.naver.com/item/board_read.naver?code=010170&nid=427888499",
+    "time_kst": "08-16 06:10"
+   },
+   {
+    "code": "196170",
+    "name": "알테오젠",
+    "title": "조심해라 주린이들아[2]",
+    "views": 1571,
+    "likes": 65,
+    "url": "https://finance.naver.com/item/board_read.naver?code=196170&nid=427894607",
+    "time_kst": "08-16 21:00"
+   }
+  ],
+  "top_rising": [
+   {
+    "code": "073240",
+    "name": "금호타이어",
+    "title": "내일부터 김민석 관련주 되는거다[6]",
+    "views": 1790,
+    "likes": 46,
+    "url": "https://finance.naver.com/item/board_read.naver?code=073240&nid=427895648",
+    "time_kst": "08-16 23:54",
+    "views_per_hour": 86.7
+   },
+   {
+    "code": "034020",
+    "name": "두산에너빌리티",
+    "title": "美 테라파워  SMR 핵심 기자재 수...[8]",
+    "views": 1950,
+    "likes": 31,
+    "url": "https://finance.naver.com/item/board_read.naver?code=034020&nid=427895052",
+    "time_kst": "08-16 22:03",
+    "views_per_hour": 86.6
+   },
+   {
+    "code": "034020",
+    "name": "두산에너빌리티",
+    "title": "축하합니다  화요일 상한가네요[13]",
+    "views": 2848,
+    "likes": 68,
+    "url": "https://finance.naver.com/item/board_read.naver?code=034020&nid=427890192",
+    "time_kst": "08-16 11:00",
+    "views_per_hour": 84.9
+   },
+   {
+    "code": "035420",
+    "name": "NAVER",
+    "title": "화요일 장시작은 이거 보면 답나옵니다.[5]",
+    "views": 2119,
+    "likes": 28,
+    "url": "https://finance.naver.com/item/board_read.naver?code=035420&nid=427892496",
+    "time_kst": "08-16 15:57",
+    "views_per_hour": 74.1
+   },
+   {
+    "code": "017670",
+    "name": "SK텔레콤",
+    "title": "최태원  재산분할 재상고[3]",
+    "views": 1805,
+    "likes": 31,
+    "url": "https://finance.naver.com/item/board_read.naver?code=017670&nid=427894130",
+    "time_kst": "08-16 19:49",
+    "views_per_hour": 73.0
+   }
+  ]
+ },
+ "community_dc": {
+  "source": "DC인사이드",
+  "galleries": [
+   {
+    "id": "krstock",
+    "name": "국내주식갤러리",
+    "posts": 1,
+    "capped": false,
+    "burst": null,
+    "base_daily": null
+   },
+   {
+    "id": "stockus",
+    "name": "해외주식갤러리",
+    "posts": 0,
+    "capped": false,
+    "burst": null,
+    "base_daily": null
+   }
+  ],
+  "posts_sampled": 1,
+  "keywords": [],
+  "top_recommended": [
+   {
+    "gallery": "해외주식갤러리",
+    "title": "나이키 모델.jpg",
+    "views": 16156,
+    "recommend": 212,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=17454566&exception_mode=recommend&page=1",
+    "time_kst": "08-16 18:14"
+   },
+   {
+    "gallery": "해외주식갤러리",
+    "title": "SK, 세계 최초 5단 초고층 적층 지배구조 개발",
+    "views": 12014,
+    "recommend": 184,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=17455307&exception_mode=recommend&page=1",
+    "time_kst": "08-16 20:11"
+   },
+   {
+    "gallery": "해외주식갤러리",
+    "title": "주식 수익으로 깝치는 애들 존나 귀여움",
+    "views": 13995,
+    "recommend": 166,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=17455497&exception_mode=recommend&page=1",
+    "time_kst": "08-16 20:42"
+   },
+   {
+    "gallery": "해외주식갤러리",
+    "title": "애플 미국 정부 쌩까고 중국 전용 AI 개발 ㄷㄷ",
+    "views": 13713,
+    "recommend": 149,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=17454716&exception_mode=recommend&page=1",
+    "time_kst": "08-16 18:37"
+   },
+   {
+    "gallery": "해외주식갤러리",
+    "title": "지수추종 하는놈들이 애고가 왜캐 좆됨",
+    "views": 15681,
+    "recommend": 141,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=17452038&exception_mode=recommend&page=1",
+    "time_kst": "08-16 11:03"
+   }
+  ],
+  "top_viewed": [
+   {
+    "gallery": "국내주식갤러리",
+    "title": "국내 주요 게임사, 2분기 체질 개선 성과로 숨구멍 틔웠다",
+    "views": 205,
+    "recommend": 0,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3236504&page=1",
+    "time_kst": "08-16 23:22"
+   }
+  ]
+ }
+}

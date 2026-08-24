@@ -50,8 +50,8 @@ python watch_sources.py --check --only some_blog
 
 | 시크릿 이름 | 값 |
 |---|---|
-| `SHIP_TELEGRAM_BOT_TOKEN` | @BotFather가 준 **@gs_sb_bot**의 토큰 (`123456:AAE...`) |
-| `SHIP_TELEGRAM_CHAT_ID` | 알림 받을 방의 chat_id (아래 '알아내는 법' 참고) |
+| `SPYING_TELEGRAM_BOT_TOKEN` | @BotFather가 준 수신 봇(염탐봇)의 토큰 (`123456:AAE...`) |
+| `SPYING_TELEGRAM_CHAT_ID` | 알림 받을 방의 chat_id (아래 '알아내는 법' 참고) |
 | `TELEGRAM_API_ID` | my.telegram.org → API development tools의 api_id |
 | `TELEGRAM_API_HASH` | 같은 곳의 api_hash |
 | `TELEGRAM_PHONE` | 계정 전화번호, `+8210...` 국제 형식 |

@@ -245,7 +245,10 @@ def build():
                "groups": ["KOSPI200", "KOSDAQ50", "커버리지"], "markets": ["코스피", "코스닥"]}
     os.makedirs(STATIC, exist_ok=True)
     with open(OUT_HTML, "w", encoding="utf-8") as f:
-        f.write(_TEMPLATE.replace("__DATA__", json.dumps(payload, ensure_ascii=False).replace("</", "<\\/")))
+        gen = dt.datetime.now(dt.timezone(dt.timedelta(hours=9))).strftime("%Y-%m-%d %H:%M")
+        f.write(_TEMPLATE
+                .replace("__DATA__", json.dumps(payload, ensure_ascii=False).replace("</", "<\\/"))
+                .replace("__GENERATED__", gen))
     con.close()
     print(f"생성 완료 [{len(periods_payload)}개 비교주 · {'리비전' if base else '베이스라인'}]: {OUT_HTML}\n            엑셀: {OUT_XLSX}")
 
@@ -315,6 +318,11 @@ _TEMPLATE = r"""<!doctype html>
 font-family:-apple-system,"Segoe UI","Malgun Gothic",sans-serif;line-height:1.5}
 .wrap{max-width:860px;margin:0 auto;padding:24px 18px 60px}
 h1{font-size:20px;font-weight:600;margin:0 0 2px}.sub{color:var(--muted);font-size:13px}
+.sched{display:inline-block;background:var(--card);border:1px solid var(--line);border-radius:6px;
+padding:3px 9px;margin:6px 0 0;font-size:11px;color:var(--muted)}
+.sched b{color:var(--ink);font-weight:600}
+.schedq{opacity:.75}
+@media(max-width:620px){.schedq{display:none}}
 .status{display:flex;flex-wrap:wrap;gap:8px 16px;align-items:center;background:var(--card);
 border:1px solid var(--line);border-radius:12px;padding:12px 16px;margin:14px 0 16px;font-size:13px}
 .status b{font-weight:600}
@@ -371,6 +379,7 @@ border-radius:8px;padding:6px 10px;margin-left:6px}
 </style></head><body><div class="wrap">
 <h1>영업이익 컨센 리비전 <span class="tiny" style="font-weight:400">KOSPI200 · KOSDAQ50 · 리서치커버리지</span></h1>
 <div class="sub" id="sub"></div>
+<div class="sched">🕙 정기 업데이트 <b>매주 금요일 오후 5시</b>(한국시간) · 화면 생성 <b>__GENERATED__</b><span class="schedq"> — 대기열 지연으로 예약보다 늦을 수 있음. 데이터 시점은 위 기준일 참고</span></div>
 <div class="status" id="status"></div>
 <a class="dl" href="consensus_full.xlsx" download>📥 전체 종목 엑셀 다운로드</a>
 <div class="wknav" id="wknav"></div>

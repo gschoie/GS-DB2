@@ -76,7 +76,7 @@ function reportTableRow(r){const t=r.tone||{},kind=r.report_type||'기업분석'
  const url=r.original_url||r.source_url;
  const title=`${url?`<a class="rep-title" href="${esc(url)}" target="_blank" rel="noopener">${esc(r.title)}</a>`:`<span class="rep-title">${esc(r.title)}</span>`}${t.one_line?`<div class="rep-desc">${esc(t.one_line)}</div>`:''}${r.needs_review?'<span class="review">검토 필요</span>':''}`;
  const links=[r.source_url?`<a class="table-link telegram-link" href="${esc(r.source_url)}" target="_blank" rel="noopener">텔레그램 ↗</a>`:'',r.original_url?`<a class="table-link" href="${esc(r.original_url)}" target="_blank" rel="noopener">리포트 ↗</a>`:''].filter(Boolean).join('')||'<span class="no-link">—</span>';
- return `<tr><td>${kindCell}</td><td class="news-date">${yymmdd(r.posted_at)}</td><td class="rep-co">${company}</td><td class="rep-tpc" data-th="적정주가">${tp}${opinion}${reasons?`<div class="rep-rsn"${t.tp_ev?` title="TP 조정 근거 (톤 보드 AI 추출)&#10;${esc(t.tp_ev)}"`:''}>${reasons}</div>`:''}</td><td class="rep-earn" data-th="실적">${earn}</td><td class="rep-est" data-th="영업이익 나 vs 컨센">${opConsCell(r)}</td><td class="rep-street" data-th="시장 TP">${streetCell(r)}</td><td class="rep-pts" data-th="투자포인트">${pts}</td><td class="rep-titlec">${title}</td><td class="rep-links">${links}</td></tr>`}
+ return `<tr><td>${kindCell}</td><td class="news-date">${yymmdd(r.posted_at)}</td><td class="rep-co">${company}</td><td class="rep-titlec">${title}</td><td class="rep-pts" data-th="투자포인트">${pts}</td><td class="rep-tpc" data-th="적정주가">${tp}${opinion}${reasons?`<div class="rep-rsn"${t.tp_ev?` title="TP 조정 근거 (톤 보드 AI 추출)&#10;${esc(t.tp_ev)}"`:''}>${reasons}</div>`:''}</td><td class="rep-earn" data-th="실적">${earn}</td><td class="rep-est" data-th="영업이익 나 vs 컨센">${opConsCell(r)}</td><td class="rep-street" data-th="시장 TP">${streetCell(r)}</td><td class="rep-links">${links}</td></tr>`}
 function renderReportTable(){const box=$('#report-table');if(!box)return;
  const todayStr=dateValue(new Date());
  let from=state.repFrom,to=state.repTo||todayStr;
@@ -86,7 +86,7 @@ function renderReportTable(){const box=$('#report-table');if(!box)return;
  const presets=[[0,'전체'],[7,'주간'],[30,'월간'],[90,'분기'],[180,'반기']];
  const bar=`<div class="rep-range"><input type="date" id="rep-from" value="${from||''}" max="${todayStr}"><span>~</span><input type="date" id="rep-to" value="${to}" max="${todayStr}">${presets.map(([d,l])=>`<button type="button" class="rep-preset${!state.repFrom&&state.repDays===d?' on':''}" data-days="${d}">${l}</button>`).join('')}<strong>${list.length.toLocaleString()}건${state.repSort?' · 정렬됨':''}</strong></div>`;
  const ind=k=>state.repSort===k?' ▼':'';
- box.innerHTML=bar+(list.length?`<div class="rep-wrap"><table class="rep-table"><colgroup><col class="c-kind"><col class="c-date"><col class="c-co"><col class="c-tp"><col class="c-earn"><col class="c-est"><col class="c-street"><col class="c-pts"><col><col class="c-links"></colgroup><thead><tr><th>구분</th><th>날짜${state.repSort?'':' ▼'}</th><th>기업</th><th id="th-rp-tp" class="th-sort" title="적정주가 변경 우선 정렬">적정주가${ind('tp')}</th><th id="th-rp-earn" class="th-sort" title="실적추정 방향 있는 것 우선">실적${ind('earn')}</th><th id="th-rp-est" class="th-sort" title="내 추정·컨센 있는 것 우선">영업이익 나 vs 컨센${ind('est')}</th><th title="타사 TP 최고/중앙/최저 · 커버 증권사 수 (한경 에이셀 60일)">시장 TP</th><th id="th-rp-pts" class="th-sort" title="투자포인트 있는 것 우선">투자포인트${ind('pts')}</th><th>제목 · 설명</th><th>링크</th></tr></thead><tbody>${list.map(reportTableRow).join('')}</tbody></table></div>`:'<p class="empty">조건에 맞는 보고서가 없습니다.</p>');
+ box.innerHTML=bar+(list.length?`<div class="rep-wrap"><table class="rep-table"><colgroup><col class="c-kind"><col class="c-date"><col class="c-co"><col><col class="c-pts"><col class="c-tp"><col class="c-earn"><col class="c-est"><col class="c-street"><col class="c-links"></colgroup><thead><tr><th>구분</th><th>날짜${state.repSort?'':' ▼'}</th><th>기업</th><th>제목 · 설명</th><th id="th-rp-pts" class="th-sort" title="투자포인트 있는 것 우선">투자포인트${ind('pts')}</th><th id="th-rp-tp" class="th-sort" title="적정주가 변경 우선 정렬">적정주가${ind('tp')}</th><th id="th-rp-earn" class="th-sort" title="실적추정 방향 있는 것 우선">실적${ind('earn')}</th><th id="th-rp-est" class="th-sort" title="내 추정·컨센 있는 것 우선">영업이익 나 vs 컨센${ind('est')}</th><th title="타사 TP 최고/중앙/최저 · 커버 증권사 수 (한경 에이셀 60일)">시장 TP</th><th>링크</th></tr></thead><tbody>${list.map(reportTableRow).join('')}</tbody></table></div>`:'<p class="empty">조건에 맞는 보고서가 없습니다.</p>');
  const rf=$('#rep-from'),rt=$('#rep-to');
  const applyRange=()=>{state.repFrom=rf.value;state.repTo=rt.value;renderReportTable()};
  if(rf)rf.onchange=applyRange;if(rt)rt.onchange=applyRange;
@@ -117,16 +117,19 @@ const TONE_SITE='https://gschoie.github.io/DAOL-RESEARCH-TONE/';
 function loadToneFrame(){const f=$('#tone-frame');if(f&&!f.getAttribute('src'))f.src=TONE_SITE+'?t='+Date.now()}
 async function fetchToneSummary(){const box=$('#tone-latest');if(!box)return;
  try{const r=await fetch(TONE_SITE+'tone_summary.json?t='+Date.now(),{cache:'no-store'});if(!r.ok)throw 0;
-  const s=await r.json();box.innerHTML=(s.latest||[]).slice(0,6).map(overviewTone).join('')||'<p class="empty">톤 데이터가 없습니다.</p>'}
+  const s=await r.json();box.innerHTML=(s.latest||[]).slice(0,8).map(overviewTone).join('')||'<p class="empty">톤 데이터가 없습니다.</p>'}
  catch{box.innerHTML=`<p class="empty">톤 보드에서 확인 → <a href="${TONE_SITE}" target="_blank" rel="noopener">daol-research-tone ↗</a></p>`}}
 function miniRow(lead,body,href){return `<a class="mini-row" href="${esc(href||'#')}" target="_blank" rel="noopener">${lead}<div>${body}</div></a>`}
-function overviewNews(n){return miniRow(`<small>${esc(fmtDate(n.posted_at))}</small>`,`<div class="mini-head"><b>${esc(n.companies_label||n.company_name||'기업 미확인')}</b></div><p>${esc(n.title)}</p>`,n.article_url||n.source_url)}
-function overviewTone(r){const op=r.opinion&&!['명시 없음','없음',''].includes(r.opinion)?`<span class="tag">${esc(r.opinion)}</span>`:'';const tp=r.tp_dir==='상향'?'<span class="tag up">TP▲</span>':r.tp_dir==='하향'?'<span class="tag down">TP▼</span>':'';return miniRow(`<small>${esc(String(r.date||'').slice(5))}</small>`,`<div class="mini-head"><b>${esc(r.company||'')}</b> <span class="mini-sub">${esc(r.analyst||'')}</span>${op}${tp}</div><p>${esc(r.title||'')}</p>`,r.pdf_url||r.post_url)}
-function overviewUnion(p){return miniRow(`<b class="rk">${p.rank}</b>`,`<p class="mini-title">${esc(p.title)}</p><small>주목도 ${p.score} · 조회 ${Number(p.views).toLocaleString()} · 댓글 ${p.comments}</small>`,p.url)}
+function overviewNews(n){return `<a class="mini-line" href="${esc(n.article_url||n.source_url||'#')}" target="_blank" rel="noopener"><small>${esc(fmtDate(n.posted_at))}</small><b>${esc(n.companies_label||n.company_name||'기업 미확인')}</b><span>${esc(n.title)}</span></a>`}
+function overviewReport(r){const kind=r.report_type||'기업분석',kindClass=kind==='산업분석'?'industry':kind==='위클리'?'weekly':'';const who=r.companies_label||r.company_name||(kind==='기업분석'?'기업 미확인':'산업 자료');const tag=r.target_change&&r.target_change!=='미확인'?`<span class="tag ${r.target_change==='상향'?'up':r.target_change==='하향'?'down':''}">${esc(r.target_change)}</span>`:'';return `<a class="mini-line" href="${esc(r.original_url||r.source_url||'#')}" target="_blank" rel="noopener"><small>${esc(fmtDate(r.posted_at))}</small><span class="report-kind ${kindClass}">${esc(kind)}</span><b>${esc(who)}</b><span>${esc(r.title)}</span>${tag}</a>`}
+function overviewTone(r){const op=r.opinion&&!['명시 없음','없음',''].includes(r.opinion)?`<span class="tag">${esc(r.opinion)}</span>`:'';const tp=r.tp_dir==='상향'?'<span class="tag up">TP▲</span>':r.tp_dir==='하향'?'<span class="tag down">TP▼</span>':'';return `<a class="mini-line" href="${esc(r.pdf_url||r.post_url||'#')}" target="_blank" rel="noopener"><small>${esc(String(r.date||'').slice(5))}</small><b class="tone-co" data-co="${esc(r.company_key||r.company||'')}" title="리서치 톤에서 이 기업 분석 열기">${esc(r.company||'')}</b><span>${esc(r.title||'')}</span>${op}${tp}</a>`}
+/* 오늘의요약 톤 패널: 기업명 클릭 → 리서치 톤 화면으로 전환해 해당 기업 팝업을 연다(해시 딥링크) */
+document.addEventListener('click',e=>{const co=e.target.closest('#tone-latest .tone-co');if(!co||!co.dataset.co)return;e.preventDefault();e.stopPropagation();view('tone');const f=$('#tone-frame');if(f)f.src=TONE_SITE+'?t='+Date.now()+'#co='+encodeURIComponent(co.dataset.co)});
+function overviewUnion(p){return `<a class="mini-line" href="${esc(p.url||'#')}" target="_blank" rel="noopener"><b class="rk-s">${p.rank}</b><span>${esc(p.title)}</span><small>조회 ${Number(p.views).toLocaleString()} · 댓글 ${p.comments}</small></a>`}
 function overviewMacro(x,i){return miniRow(`<b class="rk">${i+1}</b>`,`<p class="mini-title">${esc(x.title)}</p>`,x.url)}
 const MACRO_ENDPOINT='https://script.google.com/macros/s/AKfycbxNClBzJoE35VSwcCNgMEJ_PvFCBphH87g4gq7xDiGXhO5x-fd-IMpNL6Ly0oURJzEN/exec';/* 네이버 Top5 실시간 JSON(GAS). 비면 배포 데이터만 사용 */
 const decodeEnt=s=>{const t=document.createElement('textarea');t.innerHTML=s||'';return t.value};
-async function fetchLiveMacro(){if(!MACRO_ENDPOINT)return;try{const r=await fetch(MACRO_ENDPOINT,{cache:'no-store'});if(!r.ok)return;const d=await r.json();const items=(d.global_economy||d.items||[]).map(x=>({title:decodeEnt(x.title),url:x.url}));if(items.length&&$('#macro-global'))$('#macro-global').innerHTML=items.slice(0,5).map(overviewMacro).join('')}catch{}}
+async function fetchLiveMacro(){if(!MACRO_ENDPOINT)return;try{const r=await fetch(MACRO_ENDPOINT,{cache:'no-store'});if(!r.ok)return;const d=await r.json();const items=(d.global_economy||d.items||[]).map(x=>({title:decodeEnt(x.title),url:x.url}));if(items.length&&$('#macro-global'))$('#macro-global').innerHTML=items.slice(0,7).map(overviewMacro).join('')}catch{}}
 async function load(){
  const reportQs=new URLSearchParams({q:state.q,company:state.reportCompany,type:state.reportType,weekly:state.weeklyFolder});
  const newsQs=new URLSearchParams({q:state.q,nq:state.newsQ,company:state.newsCompany});
@@ -135,18 +138,19 @@ async function load(){
  $('#press-start').value=state.pressStart;$('#press-end').value=state.pressEnd;
  $('#updated-at').textContent=sum.updated_at?new Intl.DateTimeFormat('ko-KR',{year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit'}).format(new Date(sum.updated_at)):'미확인';
  $('#weekly-all-count').textContent=`${weeklyReports.length}건`;$('#weekly-daol-count').textContent=`${weeklyReports.filter(r=>r.weekly_folder==='다올선박').length}건`;$('#weekly-kis-count').textContent=`${weeklyReports.filter(r=>r.weekly_folder==='한투시절').length}건`;$('#weekly-hi-count').textContent=`${weeklyReports.filter(r=>r.weekly_folder==='하이투자증권시절').length}건`;
- $('#latest-reports').innerHTML=reports.slice(0,5).map(reportRow).join('')||'<p class="empty">수집된 보고서가 없습니다.</p>';
+ $('#latest-reports').innerHTML=reports.slice(0,8).map(overviewReport).join('')||'<p class="empty">수집된 보고서가 없습니다.</p>';
  renderReportTable();
- $('#latest-news').innerHTML=news.slice(0,6).map(overviewNews).join('')||'<p class="empty">수집된 뉴스가 없습니다.</p>';
+ $('#latest-news').innerHTML=news.slice(0,10).map(overviewNews).join('')||'<p class="empty">수집된 뉴스가 없습니다.</p>';
  fetchToneSummary();
  const unionTop=window.__DASHBOARD_DATA__?.union?.monthly||[];
- if($('#union-top'))$('#union-top').innerHTML=unionTop.slice(0,6).map(overviewUnion).join('')||'<p class="empty">노조게시판 데이터가 없습니다.</p>';
+ if($('#union-top'))$('#union-top').innerHTML=unionTop.slice(0,10).map(overviewUnion).join('')||'<p class="empty">노조게시판 데이터가 없습니다.</p>';
  const macro=window.__DASHBOARD_DATA__?.macro||{};
- if($('#macro-global'))$('#macro-global').innerHTML=(macro.global_economy||[]).slice(0,5).map(overviewMacro).join('')||'<p class="empty">매크로 데이터가 없습니다.</p>';
+ if($('#macro-global'))$('#macro-global').innerHTML=(macro.global_economy||[]).slice(0,7).map(overviewMacro).join('')||'<p class="empty">매크로 데이터가 없습니다.</p>';
  fetchLiveMacro();
  const brief=$('#daily-brief');if(brief){const gm='https://gemini.google.com/app/dc1cee4fd9194007?usp=sharing';const body=macro.daily_brief?esc(macro.daily_brief).replace(/\n/g,'<br>'):'<span class="brief-empty">아직 핵심요약이 없습니다. GMN.글로벌방산 문서에 붙여넣으면 여기 표시됩니다.</span>';brief.innerHTML=`<div class="brief-head"><small>GEMINI · 오늘의 핵심요약</small><a href="${gm}" target="_blank" rel="noopener">Gemini 열기 →</a></div><div class="brief-body">${body}</div>`}
  const dbe=$('#defense-brief');if(dbe){const db=window.__DASHBOARD_DATA__?.defenseBrief;if(db&&db.summary){const body=db.summary.split('\n').map(l=>l.trim()).filter(Boolean).map(l=>l.startsWith('## ')?'━ '+l.replace(/^#+\s*/,'').split('—')[0].trim():l.replace(/^\*+\s+/,'• ')).join('\n');dbe.innerHTML=`<div class="brief-head"><small>🌍 글로벌 방산 데일리 브리핑${db.date?' · '+esc(db.date)+(d=>isNaN(d)?'':`(${'일월화수목금토'[d.getDay()]})`)(new Date(db.date+'T00:00:00')):''}</small><a href="defense_briefing_report.html" target="_blank" rel="noopener">전체 브리핑 →</a></div><div class="brief-body">${esc(body).replace(/\n/g,'<br>')}</div>`;dbe.style.display='';}else{dbe.style.display='none';}}
  const cbe=$('#claude-brief');if(cbe){const cb=window.__DASHBOARD_DATA__?.claudeBrief;if(cb&&cb.summary){const body=cb.summary.split('\n').map(l=>l.trim()).filter(Boolean).map(l=>l.startsWith('## ')?'━ '+l.replace(/^#+\s*/,'').split('—')[0].trim():l.replace(/^\*+\s+/,'• ')).join('\n');cbe.innerHTML=`<div class="brief-head"><small>🤖 Claude 방산 브리핑${cb.date?' · '+esc(cb.date)+(d=>isNaN(d)?'':`(${'일월화수목금토'[d.getDay()]})`)(new Date(cb.date+'T00:00:00')):''}</small><a href="claude_defense_report.html" target="_blank" rel="noopener">전체 브리핑 →</a></div><div class="brief-body">${esc(body).replace(/\n/g,'<br>')}</div>`;cbe.style.display='';}else{cbe.style.display='none';}}
+ const nbe=$('#construction-brief');if(nbe){const nb=window.__DASHBOARD_DATA__?.constructionBrief;if(nb&&nb.summary){const body=nb.summary.split('\n').map(l=>l.trim()).filter(Boolean).map(l=>l.startsWith('## ')?'━ '+l.replace(/^#+\s*/,'').split('—')[0].trim():l.replace(/^\*+\s+/,'• ')).join('\n');nbe.innerHTML=`<div class="brief-head"><small>🏗️ 글로벌 건설기계 데일리 브리핑${nb.date?' · '+esc(nb.date)+(d=>isNaN(d)?'':`(${'일월화수목금토'[d.getDay()]})`)(new Date(nb.date+'T00:00:00')):''}</small><a href="construction_briefing_report.html" target="_blank" rel="noopener">전체 브리핑 →</a></div><div class="brief-body">${esc(body).replace(/\n/g,'<br>')}</div>`;nbe.style.display='';}else{nbe.style.display='none';}}
  const archive=news.reduce((all,n)=>{const d=new Date(n.posted_at),y=String(d.getFullYear()),m=`${String(d.getMonth()+1).padStart(2,'0')}월`;all[y]??={};all[y][m]??=[];all[y][m].push(n);return all},{});
  const years=Object.entries(archive).sort(([a],[b])=>b.localeCompare(a));
  $('#news-list').innerHTML=years.map(([year,months],yi)=>{const count=Object.values(months).reduce((sum,list)=>sum+list.length,0);return `<details class="year-group" ${yi===0||state.newsQ?'open':''}><summary><span>${year}년</span><em>${count.toLocaleString()}건</em></summary><div class="year-content">${Object.entries(months).sort(([a],[b])=>b.localeCompare(a)).map(([month,list],mi)=>`<details class="month-group" ${(yi===0&&mi===0)||state.newsQ?'open':''}><summary class="month-divider"><h3>${month}</h3><span>${list.length}건</span></summary>${newsTable(list)}</details>`).join('')}</div></details>`}).join('')||'<p class="empty">조건에 맞는 뉴스가 없습니다.</p>';
@@ -159,6 +163,10 @@ async function load(){
 function loadUnionBoard(){const frame=$('#union-board-frame'),status=$('#union-board-status');status.textContent='최신 보고서를 불러오는 중';frame.onload=()=>status.textContent='현중 노조게시판 분석 보고서';frame.onerror=()=>status.textContent='hhiun_board_report.html 파일을 확인해 주세요';frame.src=`hhiun_board_report.html?t=${Date.now()}`}
 const TASK_ROSTER=[['팀장',['최광식','이준범']],['지속가능(Sustainability)',['박영도','김지원','이정우','김진영']],['지능화(Intelligence)',['유지웅','고영민','김혜영','김연미','김상혁']],['휴먼/생체(Human)',['이지수','박종현','이다연','임도영','박소현','한수빈']]];
 const TASK_ITEMS_DEFAULT=['근태입력','휴가계획','자료제출','컴플라이언스','기타'],TASK_KEY='hi_tasklist_v1',TASK_ITEMS_KEY='hi_tasklist_items_v1',TASK_LAST_KEY='hi_tasklist_last_v1';
+/* 서버 덮어쓰기 가드: 이 브라우저(도메인)가 서버 번들을 한 번이라도 받아본 뒤에만 push를 허용.
+   도메인 이관 직후 빈 localStorage 상태에서의 조작이 GAS 사본을 빈 목록으로 덮던 사고(8/18) 방지. */
+const SYNC_SEEDED_KEY='hi_sync_seeded_v1';
+const syncSeeded=()=>{try{localStorage.setItem(SYNC_SEEDED_KEY,'1')}catch{}};
 const TASK_ENDPOINT='https://script.google.com/macros/s/AKfycbwTX-Ld-ayqHgi97S0QiMYPsHfb2cjNwy66FyDYU6GBrS0kOgMH8KE220GPy3KRxcT3/exec';let taskPushT;
 function taskItems(){try{const a=JSON.parse(localStorage.getItem(TASK_ITEMS_KEY));if(Array.isArray(a)&&a.length)return a}catch{}return TASK_ITEMS_DEFAULT.slice()}
 function saveItems(a){try{localStorage.setItem(TASK_ITEMS_KEY,JSON.stringify(a))}catch{}taskPush()}
@@ -176,8 +184,10 @@ const taskAllNames=()=>TASK_ROSTER.flatMap(([,ns])=>ns);
 function taskLoad(){try{return JSON.parse(localStorage.getItem(TASK_KEY))||{}}catch{return{}}}
 function taskSave(s){try{localStorage.setItem(TASK_KEY,JSON.stringify(s))}catch{}taskPush()}
 function taskBundle(){return{data:taskLoad(),items:taskItems(),todos:todoLoad(),todoGroups:todoGroups(),todoArchive:todoArchLoad()}}
-function taskPush(statusSel){if(!TASK_ENDPOINT)return;clearTimeout(taskPushT);const status=$(statusSel||'#task-sync');if(status)status.textContent='저장 중…';taskPushT=setTimeout(()=>{fetch(TASK_ENDPOINT,{method:'POST',body:JSON.stringify(taskBundle())}).then(()=>{if(status)status.textContent='☁ 동기화됨'}).catch(()=>{if(status)status.textContent='이 기기에만 저장(동기화 실패)'})},600)}
-async function taskPull(){if(!TASK_ENDPOINT)return false;const status=$('#task-sync');if(status)status.textContent='불러오는 중…';try{const r=await fetch(TASK_ENDPOINT,{cache:'no-store'});if(!r.ok)throw 0;const b=await r.json()||{};const remoteData=b.data&&typeof b.data==='object'?b.data:{};if(!Object.keys(remoteData).length&&Object.keys(taskLoad()).length){taskPush();if(status)status.textContent='☁ 이 기기 데이터 업로드됨';return false}if(b.data)localStorage.setItem(TASK_KEY,JSON.stringify(b.data));if(Array.isArray(b.items)&&b.items.length)localStorage.setItem(TASK_ITEMS_KEY,JSON.stringify(b.items));if(Array.isArray(b.todos))localStorage.setItem(TODO_KEY,JSON.stringify(b.todos));if(Array.isArray(b.todoGroups))localStorage.setItem(TODO_GROUPS_KEY,JSON.stringify(b.todoGroups));if(Array.isArray(b.todoArchive))localStorage.setItem(TODO_ARCH_KEY,JSON.stringify(b.todoArchive));if(status)status.textContent='☁ 동기화됨';return true}catch{if(status)status.textContent='이 기기에만 저장(동기화 실패)'}return false}
+function taskPush(statusSel){if(!TASK_ENDPOINT)return;
+ if(!localStorage.getItem(SYNC_SEEDED_KEY)){const s=$(statusSel||'#task-sync');if(s)s.textContent='⚠ 서버 동기화 전 — 저장 보류(목록을 다시 열면 동기화됩니다)';return}
+ clearTimeout(taskPushT);const status=$(statusSel||'#task-sync');if(status)status.textContent='저장 중…';taskPushT=setTimeout(()=>{fetch(TASK_ENDPOINT,{method:'POST',body:JSON.stringify(taskBundle())}).then(()=>{if(status)status.textContent='☁ 동기화됨'}).catch(()=>{if(status)status.textContent='이 기기에만 저장(동기화 실패)'})},600)}
+async function taskPull(){if(!TASK_ENDPOINT)return false;const status=$('#task-sync');if(status)status.textContent='불러오는 중…';try{const r=await fetch(TASK_ENDPOINT,{cache:'no-store'});if(!r.ok)throw 0;const b=await r.json()||{};const remoteData=b.data&&typeof b.data==='object'?b.data:{};syncSeeded();if(!Object.keys(remoteData).length&&Object.keys(taskLoad()).length){taskPush();if(status)status.textContent='☁ 이 기기 데이터 업로드됨';return false}if(b.data)localStorage.setItem(TASK_KEY,JSON.stringify(b.data));if(Array.isArray(b.items)&&b.items.length)localStorage.setItem(TASK_ITEMS_KEY,JSON.stringify(b.items));if(Array.isArray(b.todos))localStorage.setItem(TODO_KEY,JSON.stringify(b.todos));if(Array.isArray(b.todoGroups))localStorage.setItem(TODO_GROUPS_KEY,JSON.stringify(b.todoGroups));if(Array.isArray(b.todoArchive))localStorage.setItem(TODO_ARCH_KEY,JSON.stringify(b.todoArchive));if(status)status.textContent='☁ 동기화됨';return true}catch{if(status)status.textContent='이 기기에만 저장(동기화 실패)'}return false}
 function taskCurrentItem(){return $('#task-item')?.value||taskItems()[0]}
 function renderTaskSummary(){const st=taskLoad()[taskCurrentItem()]||{},names=taskAllNames(),pending=names.filter(n=>!st[n]?.done);$('#task-summary').innerHTML=`완료 <b>${names.length-pending.length}</b> / ${names.length}`+(pending.length?` · 미응답: ${esc(pending.join(', '))}`:' · 전원 완료 🎉')}
 let taskSortByName=false;
@@ -239,19 +249,20 @@ function renderTodo(){renderTodoArch();const box=$('#todo-list');if(!box)return;
  const names=['기본',...groups],buckets=Object.fromEntries(names.map(n=>[n,[]]));
  a.forEach((t,i)=>{buckets[t.group&&names.includes(t.group)?t.group:'기본'].push([t,i])});
  box.innerHTML=names.map(n=>{const list=buckets[n],undone=list.filter(([t])=>!t.done).length;
+  const grip=n==='기본'?'':`<span class="todo-g-grip" draggable="true" data-g="${esc(n)}" title="드래그해서 그룹 순서 변경">⠿</span>`;
   const tools=n==='기본'?'':`<span class="todo-g-tools"><button type="button" class="todo-g-ren" data-g="${esc(n)}" title="그룹 이름 변경">✎</button><button type="button" class="todo-g-del" data-g="${esc(n)}" title="그룹 삭제 (항목은 기본으로 이동)">✕</button></span>`;
-  return `<details class="todo-group" data-g="${esc(n)}" open><summary><span>${esc(n)}</span><em>${undone}/${list.length}</em>${tools}</summary>${list.map(([t,i])=>row(t,i)).join('')||'<p class="empty todo-empty">이 그룹에 할 일이 없습니다.</p>'}</details>`}).join('')}
+  return `<details class="todo-group" data-g="${esc(n)}" open><summary>${grip}<span>${esc(n)}</span><em>${undone}/${list.length}</em>${tools}</summary>${list.map(([t,i])=>row(t,i)).join('')||'<p class="empty todo-empty">이 그룹에 할 일이 없습니다.</p>'}</details>`}).join('')}
 function todoAdd(){const inp=$('#todo-input'),text=(inp?.value||'').trim();if(!text&&!TODO_PEND.length)return;
  const a=todoLoad(),g=$('#todo-group')?.value||'',t={text:text||'(사진 메모)',ts:Date.now(),done:false};
  if(g)t.group=g;if(TODO_PEND.length)t.imgs=TODO_PEND.slice();
  a.unshift(t);TODO_PEND.length=0;renderTodoPend();todoSave(a);inp.value='';inp.focus()}
-async function todoPull(){if(!TASK_ENDPOINT)return false;const status=$('#todo-sync');if(status)status.textContent='불러오는 중…';try{const r=await fetch(TASK_ENDPOINT,{cache:'no-store'});if(!r.ok)throw 0;const b=await r.json()||{};
+async function todoPull(){if(!TASK_ENDPOINT)return false;const status=$('#todo-sync');if(status)status.textContent='불러오는 중…';try{const r=await fetch(TASK_ENDPOINT,{cache:'no-store'});if(!r.ok)throw 0;const b=await r.json()||{};syncSeeded();
  if(Array.isArray(b.todoGroups))todoGroupsStore(b.todoGroups);
  if(Array.isArray(b.todoArchive))todoArchStore(b.todoArchive);/* 서버에 보관함이 없으면 이 기기 보관함을 유지한다 */
  if(Array.isArray(b.todos)){localStorage.setItem(TODO_KEY,JSON.stringify(b.todos));if(status)status.textContent='☁ 동기화됨';return true}
  // 서버 번들에 아직 todos가 없으면 이 기기 목록을 올려 시드한다
  if(todoLoad().length||todoGroups().length)taskPush('#todo-sync');else if(status)status.textContent='☁ 동기화';return false}catch{if(status)status.textContent='이 기기에만 저장(동기화 실패)'}return false}
-function view(id){$$('.view,.nav').forEach(x=>x.classList.remove('active'));$('#'+id).classList.add('active');$(`.nav[data-view="${id}"]`).classList.add('active');$('#page-title').textContent={todo:'TO-DO 체크리스트',overview:'오늘의 리서치 흐름',reports:'발간 보고서',news:'뉴스.아카이브',press:'보도기사 취합','union-board':'현중 노조게시판',tone:'DAOL 리서치 톤',collab:'섹터 콜라보 레이더',tasklist:'수명 피드백 확인',dart:'조선 수주공시 → 텔레',etf:'ETF/섹터 신호 포착',holdings:'액티브 ETF 구성 변화',flow:'시장 수급 동향',consensus:'코스피200 컨센서스 추적',defense:'글로벌 방산 데일리 브리핑',remember:'리멤버 → Notion 기록',mzdiary:'MZ일기 · 잔고/매매노트'}[id];if(id==='overview')fetchLiveMacro();if(id==='press'){state.pressCompany='';renderPressTable()}if(id==='tone')loadToneFrame();if(id==='union-board')loadUnionBoard();if(id==='tasklist'){renderTaskList();taskPull().then(ok=>{if(ok)renderTaskList()})}if(id==='todo'){renderTodo();todoPull().then(ok=>{if(ok)renderTodo()})}if(id==='etf'){const f=$('#etf-frame');if(!f.getAttribute('src'))f.src='etf_signal_report.html?t='+Date.now()}if(id==='holdings'){const f=$('#holdings-frame');if(!f.getAttribute('src'))f.src='etf_holdings_report.html?t='+Date.now()}if(id==='flow'){const f=$('#flow-frame');if(!f.getAttribute('src'))f.src='market_flow_report.html?t='+Date.now()}if(id==='consensus'){const f=$('#consensus-frame');if(!f.getAttribute('src'))f.src='consensus_revision.html?t='+Date.now()}if(id==='defense'){const f=$('#defense-frame');if(!f.getAttribute('src'))f.src='defense_briefing_report.html?t='+Date.now()}if(id==='collab'){const f=$('#collab-frame');if(!f.getAttribute('src'))f.src=TONE_SITE+'daol_collab_radar.html?t='+Date.now()}}
+function view(id){$$('.view,.nav').forEach(x=>x.classList.remove('active'));$('#'+id).classList.add('active');$(`.nav[data-view="${id}"]`).classList.add('active');$('#page-title').textContent={todo:'TO-DO 체크리스트',overview:'오늘의 리서치 흐름',reports:'발간 보고서',news:'뉴스.아카이브',press:'보도기사 취합','union-board':'현중 노조게시판',tone:'DAOL 리서치 톤',chatbot:'DAOL 리서치와 챗봇',collab:'섹터 콜라보 레이더',tasklist:'수명 피드백 확인',dart:'조선 수주공시 → 텔레',recipe:'레시피 수집 → Notion',etf:'ETF/섹터.신호 포착',holdings:'액티브 ETF 구성 변화',flow:'시장 수급 동향',trend:'시장관심.내러티브',consensus:'코스피200 컨센서스 추적',defense:'글로벌 방산 데일리 브리핑',defweekly:'글로벌 방산 주간 정리',construction:'글로벌 건설기계 데일리 브리핑',conweekly:'글로벌 건설기계 주간 정리',remember:'리멤버 → Notion 기록',mzdiary:'MZ일기 · 잔고/매매노트'}[id];if(id==='overview')fetchLiveMacro();if(id==='press'){state.pressCompany='';renderPressTable()}if(id==='tone')loadToneFrame();if(id==='union-board')loadUnionBoard();if(id==='tasklist'){renderTaskList();taskPull().then(ok=>{if(ok)renderTaskList()})}if(id==='todo'){renderTodo();todoPull().then(ok=>{if(ok)renderTodo()})}if(id==='etf'){const f=$('#etf-frame');if(!f.getAttribute('src'))f.src='etf_signal_report.html?t='+Date.now()}if(id==='holdings'){const f=$('#holdings-frame');if(!f.getAttribute('src'))f.src='etf_holdings_report.html?t='+Date.now()}if(id==='flow'){const f=$('#flow-frame');if(!f.getAttribute('src'))f.src='market_flow_report.html?t='+Date.now()}if(id==='trend'){const f=$('#trend-frame');if(!f.getAttribute('src'))f.src='market_trend_report.html?t='+Date.now()}if(id==='consensus'){const f=$('#consensus-frame');if(!f.getAttribute('src'))f.src='consensus_revision.html?t='+Date.now()}if(id==='defense'){const f=$('#defense-frame');if(!f.getAttribute('src'))f.src='defense_briefing_report.html?t='+Date.now()}if(id==='defweekly'){const f=$('#defweekly-frame');if(!f.getAttribute('src'))f.src='defense_weekly_report.html?t='+Date.now()}if(id==='construction'){const f=$('#construction-frame');if(!f.getAttribute('src'))f.src='construction_briefing_report.html?t='+Date.now()}if(id==='conweekly'){const f=$('#conweekly-frame');if(!f.getAttribute('src'))f.src='construction_weekly_report.html?t='+Date.now()}if(id==='collab'){const f=$('#collab-frame');if(!f.getAttribute('src'))f.src=TONE_SITE+'daol_collab_radar.html?t='+Date.now()}if(id==='chatbot'){const f=$('#chatbot-frame');if(!f.getAttribute('src'))f.src=TONE_SITE+'chat.html?t='+Date.now()}}
 const DISPATCH_ENDPOINT='https://script.google.com/macros/s/AKfycbx3RjIjtlO2Z6fIYo2T3LhJrFg9Wp2hS7dMS3Is52-JVF1hizoCWewbQ1uM_v5sdhR2jw/exec';/* 갱신 버튼 → GitHub Actions 디스패치 GAS 웹앱 (gas/dispatch_proxy.gs). 아래 workflow 키는 그 파일의 WF 매핑과 1:1이어야 한다 */
 async function dispatchWorkflow(payload,status,btn){
  if(status)status.textContent='요청 중…';if(btn)btn.disabled=true;
@@ -349,6 +360,11 @@ async function dispatchUnion(){
  const btn=$('#union-refresh'),status=$('#union-refresh-status');
  if(await dispatchWorkflow({workflow:'union'},status,btn))
    status.textContent='✅ 노조게시판 갱신 요청됨 — 몇 분 뒤 새로고침';}
+async function dispatchRecipe(){
+ const url=($('#recipe-url')?.value||'').trim(),status=$('#recipe-status'),btn=$('#recipe-send');
+ if(!/youtube\.com|youtu\.be/.test(url)){status.textContent='⚠ 유튜브 링크를 넣어주세요';return}
+ if(await dispatchWorkflow({workflow:'recipe',yt_url:url},status,btn)){
+   status.textContent='✅ 요청됨 — 1~2분 뒤 Notion 레시피북 확인';$('#recipe-url').value='';}}
 async function dispatchPressData(){
  // 보도기사는 뉴스에서 파생 → '데이터 갱신'은 뉴스 수집을 돌린다(끝나면 자동 반영).
  const btn=$('#press-data-refresh'),status=$('#press-data-status');
@@ -372,6 +388,10 @@ async function dispatchFlow(){
  const btn=$('#flow-refresh'),status=$('#flow-status');
  if(await dispatchWorkflow({workflow:'flow'},status,btn))
    status.textContent='✅ 수급 수집 요청됨 — 몇 분 뒤 새로고침';}
+async function dispatchTrend(){
+ const btn=$('#trend-refresh'),status=$('#trend-status');
+ if(await dispatchWorkflow({workflow:'trend'},status,btn))
+   status.textContent='✅ 트렌드 산출 요청됨 — 몇 분 뒤 새로고침';}
 // 클릭한 메뉴가 속하지 않은 그룹의 서브메뉴는 모두 닫는다.
 function closeOtherNavGroups(el){const mine=el.closest?.('details.nav-group');$$('details.nav-group').forEach(o=>{if(o!==mine&&o.open){o.open=false;o.querySelectorAll('details.nav-subgroup').forEach(s=>s.open=false)}});}
 $$('.nav').forEach(b=>b.onclick=()=>{closeOtherNavGroups(b);view(b.dataset.view)});$$('[data-go]').forEach(b=>b.onclick=()=>view(b.dataset.go));
@@ -388,6 +408,7 @@ $('#press-clear').onclick=()=>{state.pressCompany='';renderPressTable()};
 $('#press-start').onchange=renderPressTable;
 $('#press-end').onchange=renderPressTable;
 $('#press-data-refresh')?.addEventListener('click',dispatchPressData);
+$('#recipe-send')?.addEventListener('click',dispatchRecipe);
 $('#press-export').onclick=exportPressExcel;
 $('#union-board-refresh').onclick=loadUnionBoard;
 $('#union-board-file').onchange=e=>{const file=e.target.files?.[0];if(!file)return;const frame=$('#union-board-frame');if(frame.dataset.objectUrl)URL.revokeObjectURL(frame.dataset.objectUrl);const url=URL.createObjectURL(file);frame.dataset.objectUrl=url;frame.src=url;$('#union-board-status').textContent=`${file.name} · ${(file.size/1024).toFixed(1)}KB`};
@@ -409,6 +430,7 @@ $('#reports-refresh')?.addEventListener('click',dispatchReports);
 $('#union-refresh')?.addEventListener('click',dispatchUnion);
 $('#consensus-refresh')?.addEventListener('click',dispatchConsensus);
 $('#flow-refresh')?.addEventListener('click',dispatchFlow);
+$('#trend-refresh')?.addEventListener('click',dispatchTrend);
 $('#todo-add')?.addEventListener('click',todoAdd);
 $('#todo-input')?.addEventListener('keydown',e=>{if(e.key==='Enter')todoAdd()});
 // 클립보드 이미지 붙여넣기(Ctrl+V) → 첨부 대기열로
@@ -431,6 +453,7 @@ $('#todo-arch-list')?.addEventListener('click',e=>{
  if(!confirm(`보관함에서 완전히 삭제할까요? — ${t.text}`))return;a.splice(i,1);todoArchSave(a)});
 $('#todo-list')?.addEventListener('change',e=>{const row=e.target.closest('.todo-row');if(!row||e.target.type!=='checkbox')return;const a=todoLoad(),t=a[+row.dataset.i];if(!t)return;t.done=e.target.checked;if(t.done)t.doneTs=Date.now();else delete t.doneTs;todoSave(a)});
 $('#todo-list')?.addEventListener('click',e=>{
+ if(e.target.closest('.todo-g-grip')){e.preventDefault();return}/* 그립 클릭이 그룹 접힘 토글로 번지지 않게 */
  const th=e.target.closest('.todo-thumb');if(th){todoLightbox(th.src);return}
  const ren=e.target.closest('.todo-g-ren');if(ren){e.preventDefault();const cur=ren.dataset.g,name=(prompt('그룹 이름 변경',cur)||'').trim();if(!name||name===cur)return;const g=todoGroups();if(name==='기본'||g.includes(name)){alert('이미 있는 그룹입니다.');return}g[g.indexOf(cur)]=name;todoGroupsStore(g);todoArchStore(todoArchLoad().map(t=>t.group===cur?{...t,group:name}:t));todoSave(todoLoad().map(t=>t.group===cur?{...t,group:name}:t));const sel=$('#todo-group');if(sel)sel.value=name;return}
  const gd=e.target.closest('.todo-g-del');if(gd){e.preventDefault();const cur=gd.dataset.g;if(!confirm(`[${cur}] 그룹을 삭제할까요? 그룹의 할 일은 기본으로 이동합니다.`))return;todoGroupsStore(todoGroups().filter(x=>x!==cur));
@@ -456,6 +479,17 @@ $('#todo-list')?.addEventListener('drop',e=>{if(TODO_DRAG<0)return;const gEl=e.t
  const cur=t.group&&['기본',...todoGroups()].includes(t.group)?t.group:'기본';
  if(name===cur){renderTodo();return}
  if(name==='기본')delete t.group;else t.group=name;todoSave(a)});
+// 드래그로 그룹 순서 변경 — 그룹 헤더의 ⠿를 다른 그룹 위에 떨어뜨리면 그 위/아래로 이동 (기본 그룹은 맨 위 고정)
+let TODO_G_DRAG='';
+$('#todo-list')?.addEventListener('dragstart',e=>{const grip=e.target.closest('.todo-g-grip');if(!grip)return;TODO_G_DRAG=grip.dataset.g;e.dataTransfer.effectAllowed='move';grip.closest('.todo-group').classList.add('dragging')});
+$('#todo-list')?.addEventListener('dragend',()=>{TODO_G_DRAG=''});
+$('#todo-list')?.addEventListener('dragover',e=>{if(!TODO_G_DRAG)return;const g=e.target.closest('.todo-group');if(!g)return;e.preventDefault();e.dataTransfer.dropEffect='move';$$('#todo-list .drop-hover').forEach(x=>{if(x!==g)x.classList.remove('drop-hover')});if(g.dataset.g!==TODO_G_DRAG)g.classList.add('drop-hover')});
+$('#todo-list')?.addEventListener('drop',e=>{if(!TODO_G_DRAG)return;const gEl=e.target.closest('.todo-group'),drag=TODO_G_DRAG;TODO_G_DRAG='';if(!gEl)return;e.preventDefault();
+ const target=gEl.dataset.g;if(target===drag){renderTodo();return}
+ const g=todoGroups().filter(x=>x!==drag);
+ const r=gEl.getBoundingClientRect(),after=e.clientY>r.top+r.height/2;/* 상대 위치로 위/아래 판단 */
+ g.splice(target==='기본'?0:g.indexOf(target)+(after?1:0),0,drag);
+ todoGroupsStore(g);taskPush('#todo-sync');renderTodo()});
 $('#task-item')?.addEventListener('change',()=>renderTaskList());
 $('#task-add')?.addEventListener('click',()=>{const name=(prompt('추가할 항목 이름')||'').trim();if(!name)return;const items=taskItems();if(items.includes(name)){alert('이미 있는 항목입니다.');return}items.push(name);saveItems(items);renderTaskList(name)});
 $('#task-rename')?.addEventListener('click',()=>{const items=taskItems(),cur=taskCurrentItem(),name=(prompt('항목 이름 변경',cur)||'').trim();if(!name||name===cur)return;if(items.includes(name)){alert('이미 있는 항목입니다.');return}items[items.indexOf(cur)]=name;saveItems(items);const s=taskLoad();if(s[cur]){s[name]=s[cur];delete s[cur]}if(Array.isArray(s.__archived)){const i=s.__archived.indexOf(cur);if(i>-1)s.__archived[i]=name}taskSave(s);renderTaskList(name)});

@@ -1,0 +1,51 @@
+<!DOCTYPE html><html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>글로벌 방산 주간 정리</title><style>
+
+:root{color-scheme:dark}
+body{margin:0;padding:28px 24px 60px;background:#0d1117;color:#d8dee9;
+  font-family:'Pretendard','Malgun Gothic','Apple SD Gothic Neo',sans-serif;line-height:1.75;font-size:15px}
+.wrap{max-width:860px;margin:0 auto}
+h1{font-size:21px;color:#e8edf5;margin:0 0 4px}
+.meta{color:#8b96a8;font-size:12.5px;margin-bottom:22px}
+h2{font-size:16.5px;color:#7fb4ff;margin:30px 0 10px;padding-bottom:6px;border-bottom:1px solid #223046}
+a{color:#6aa8ff;text-decoration:none}a:hover{text-decoration:underline}
+b,strong{color:#f0f4fa}
+ul{margin:6px 0;padding-left:22px}
+p{margin:8px 0}
+hr{border:none;border-top:1px solid #223046;margin:20px 0}
+table.ptab{border-collapse:collapse;width:100%;margin:12px 0;font-size:13.5px}
+.ptab td{border-bottom:1px solid #1d2838;padding:7px 9px;text-align:left;vertical-align:top}
+.ptab tr:first-child td{color:#8b96a8;font-size:12.5px;border-bottom:1px solid #2c3a52}
+.ptab tr:hover td{background:#131a26}
+.up{color:#ff6b6b;font-weight:600}
+.down{color:#5b9dff;font-weight:600}
+
+.bar{display:flex;gap:10px;align-items:center;max-width:860px;margin:0 auto 14px;flex-wrap:wrap}
+.bar h1{font-size:17px;margin:0;flex:1;min-width:200px}
+select,button{background:#161d29;color:#d8dee9;border:1px solid #2c3a52;border-radius:8px;
+  padding:7px 12px;font-size:13.5px;cursor:pointer}
+.bar a.bundle{color:#7fb4ff;font-size:12.5px;text-decoration:none;border:1px solid #2c3a52;
+  border-radius:8px;padding:7px 12px}
+iframe{width:100%;height:calc(100vh - 110px);border:1px solid #223046;border-radius:10px;background:#0d1117}
+</style></head><body>
+<div class="bar">
+  <h1>🗓️ 글로벌 방산 주간 정리 <small style="font-size:11px;color:#8b96a8">매주 토 11:50</small></h1>
+  <a class="bundle" href="defense_weekly/last4weeks.html" target="_blank" rel="noopener" title="월간 세미나(NotebookLM)용 최근 4주 묶음">📦 4주 묶음</a>
+  <a class="bundle" href="defense_weekly/last4weeks.md" download="GLOBAL_DEFENSE_260824.md" title="NotebookLM 업로드용 마크다운 (GLOBAL_DEFENSE_260824.md)">⬇ .md</a>
+  <button id="prev" title="이전 주">◀</button>
+  <select id="dsel"></select>
+  <button id="next" title="다음 주">▶</button>
+</div>
+<iframe id="frame" title="주간 정리"></iframe>
+<script>
+const DATES=["2026-08-24"];
+const sel=document.getElementById('dsel'),fr=document.getElementById('frame');
+DATES.forEach(d=>{const o=document.createElement('option');o.value=d;o.textContent=d;sel.appendChild(o)});
+function load(){fr.src='defense_weekly/'+sel.value+'.html'}
+sel.onchange=load;
+document.getElementById('prev').onclick=()=>{if(sel.selectedIndex<DATES.length-1){sel.selectedIndex++;load()}};
+document.getElementById('next').onclick=()=>{if(sel.selectedIndex>0){sel.selectedIndex--;load()}};
+if(DATES.length)load();
+else fr.srcdoc='<body style="background:#0d1117;color:#8b96a8;font-family:sans-serif;display:flex;align-items:center;justify-content:center;height:100vh;margin:0">아직 주간 정리가 없습니다 — 매주 토요일 11:50에 자동 생성됩니다.</body>';
+</script></body></html>

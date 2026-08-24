@@ -1,0 +1,1045 @@
+{
+ "date": "2026-08-22",
+ "meta": {
+  "window": "08-21 06:00~08-22 06:00 KST",
+  "engine": "Gemini(gemini-2.5-flash)",
+  "generated_at": "2026-08-22T06:49+09:00"
+ },
+ "stats": {
+  "channels": 90,
+  "messages": 1556,
+  "groups": 1395
+ },
+ "one_liner": "미국 매크로 불확실성 속 국내 기업별 희비 교차, 바이오 및 AI/로봇 섹터 성장 기대",
+ "themes": [
+  {
+   "name": "미국 경제 — 국채 시장 불안정 속 서비스업 지표 호조",
+   "narrative": "미국 국채 바이백 효과가 하루 만에 약화되고 장기 국채 금리 상승 압력이 지속되는 가운데, 월마트 실적 쇼크로 소비 섹터 전반에 대한 우려가 확산되었다. 다만, 8월 S&P 글로벌 종합 PMI 예비치가 예상치를 상회하며 서비스업의 강한 확장세를 보여 혼조세를 보였다.",
+   "status": "ongoing",
+   "strength": 4,
+   "keywords": [
+    "하루 만에",
+    "압력 강하게",
+    "WMT",
+    "PMI",
+    "서비스업",
+    "정기",
+    "없어",
+    "압력 증가할"
+   ],
+   "evidence": [
+    {
+     "channel": "여의도스토리 Ver2.0-习近平是个狗东西",
+     "quote": "② 미국채 바이백 효과 하루 만에 약화"
+    },
+    {
+     "channel": "김현석(자본주의 바이어스 있는 채널입니다)",
+     "quote": "월마트 실적 쇼크의 소비 섹터 전이 — 월마트(WMT) 주가는 4년여 만의 최대 낙폭을 기록하였으며, 소비재 전반으로 매도세가 확산되었다."
+    },
+    {
+     "channel": "미국 주식 인사이더 🇺🇸 (US Stocks Insider)",
+     "quote": "미국 8월 S&P 글로벌 종합 PMI 예비치는 56.0으로 전월 54.5와 예상 54.0을 모두 상회하며 2022년 4월 이후 최고 수준 기록. 서비스업 PMI는 56.8로 예상 54.0을 크게 웃돌아 2024년 말 이후 가장 강한 확장세를 보인 반면 제조업 PMI는 53.2로 예상 53.9를 하회하며 5개월 만의 최저…"
+    }
+   ]
+  },
+  {
+   "name": "바이오 — 임상 성공 및 생산 역량 확대 기대",
+   "narrative": "디앤디파마텍이 MASH 치료제 임상 2상에서 1차 평가지표를 달성하며 긍정적인 결과를 발표했고, 올릭스는 Hansoh와의 공동연구 계약을 체결했다. 알테오젠 또한 바이오의약품 사업 확대를 위한 신규 공장 투자를 발표하며 국내 바이오 기업들의 성장 기대감이 높아졌다.",
+   "status": "new",
+   "strength": 5,
+   "keywords": [
+    "계약 따라",
+    "조달한",
+    "예정일"
+   ],
+   "evidence": [
+    {
+     "channel": "간절한 투자스터디카페",
+     "quote": "📌 디앤디파마텍... (대사이상지방간염 (MASH) 치료제 DD01의 미국 임상 제2상 임상시험결과보고서(CSR) 수령)... 1차 평가지표 달성 및 경쟁력 있는 48주 조직생검 결과 최종 확정"
+    },
+    {
+     "channel": "AWAKE - 실시간 주식 공시 정리채널",
+     "quote": "기업명: 올릭스... 투자판단관련주요경영사항 (Hansoh와의 공동연구 및 염기서열 이전 계약 체결)"
+    },
+    {
+     "channel": "간절한 투자스터디카페",
+     "quote": "📌 알테오젠... 투자구분 및 목적 - 공장신설 - 바이오의약품 사업 확대 및 글로벌 시장 대응을 위한 생산역량 확보 목적"
+    }
+   ]
+  },
+  {
+   "name": "국내 대기업 — 삼성전자 주주환원 강화, 카카오 인적분할에 시장 실망",
+   "narrative": "삼성전자가 대규모 주주환원 정책과 임직원 보상용 자사주 취득 계획을 발표하며 긍정적인 반응을 얻었다. 반면 카카오는 기업가치 제고 계획의 일환으로 인적분할을 발표했으나, 시장에서는 이에 대한 실망감으로 주가가 하락했다.",
+   "status": "new",
+   "strength": 5,
+   "keywords": [
+    "임직원",
+    "카카오",
+    "인적분할",
+    "삼성전자"
+   ],
+   "evidence": [
+    {
+     "channel": "텐렙",
+     "quote": "📌 삼성전자... 2026년 주주환원 예상 규모 및 시행 방안 * 주요내용 □ 2024~2026년 주주환원정책 및 실적"
+    },
+    {
+     "channel": "[ IT는 SK ]",
+     "quote": "- 그간 임직원 평균 약 6억원 상당 성과급 지급에는 합의했으나 자사주 매입·배당 확대는 없었던 데 대한 투자자 압박"
+    },
+    {
+     "channel": "텐렙",
+     "quote": "📌 카카오... 기업가치제고계획(자율공시)... 그룹 내 다양한 사업 포트폴리오 구조로 인한 복합기업…인적분할"
+    },
+    {
+     "channel": "서화백의 그림놀이 🚀",
+     "quote": "💡 요약 ... 카카오 인적분할, 코스닥 사이드카 발동, 현대차 파업 등 부정적 이슈와 금리/환율 불안감이 상존하여 시장 전반의 관망세가 우세합니다."
+    }
+   ]
+  },
+  {
+   "name": "AI 및 로봇 산업 성장 가속화",
+   "narrative": "중국의 AI 관련 제품 수출이 급증하고, 온디바이스 AI 기술을 통한 추론 비용 절감 가능성이 제시되는 등 AI 산업의 성장이 가속화되고 있다. 또한 국토부의 주차로봇 인정 기준 개정에 따라 현대위아가 주차로봇 상용화를 본격화하며 로봇 산업의 확장이 기대된다.",
+   "status": "ongoing",
+   "strength": 4,
+   "keywords": [
+    "처리",
+    "개정",
+    "확대하"
+   ],
+   "evidence": [
+    {
+     "channel": "하나 중국/신흥국 전략 김경환",
+     "quote": "> 수출 포트폴리오 경쟁력 : 2026년 중국 수출 호황은 당연히 AI 제품의 가격 상승 기여가 가장 큼. AI 수출 제품은 집적회로, 자동 데이터 처리장치, 중앙처리장치 부품, 저장장치 부품, PCB 등의 총합으로 1-7월 YoY+58.6% 급증했고, 전체 수출 비중이 최초 15%를 기록."
+    },
+    {
+     "channel": "[DAOL 인터넷/게임/레저 김혜영]",
+     "quote": "- 온디바이스 우선 처리 아키텍처로 추론 비용 최대 90% 절감"
+    },
+    {
+     "channel": "메리츠 김준성, Mobility War",
+     "quote": "- 현대위아는 19일부터 이틀간 경기 의왕시 현대자동차그룹 의왕연구소에서 ‘주차솔루션 고객 초청 행사’를 개최. 이번 행사는 국토교통부가 주차로봇을 기계식 주차장치로 인정하고 공동주택 설치를 허용하는 내용의 법 개정을 단행한 데 따라 마련된 것"
+    }
+   ]
+  },
+  {
+   "name": "원전/플랜트 — 두산에너빌리티 해외 수주로 성장 동력 확보",
+   "narrative": "두산에너빌리티가 오만 Misfah 독립 발전 프로젝트 공사를 수주하며 해외 시장에서의 경쟁력을 입증했다. 이는 중국 원전 공급망 참여 가능성과 함께 원전 및 발전 플랜트 분야의 긍정적인 성장 기대를 높이고 있다.",
+   "status": "new",
+   "strength": 3,
+   "keywords": [
+    "두산에너빌리티"
+   ],
+   "evidence": [
+    {
+     "channel": "AWAKE - 실시간 주식 공시 정리채널",
+     "quote": "기업명: 두산에너빌리티... 단일판매ㆍ공급계약체결 계약상대 : Jabel Power SAOC 계약내용 : ( 공사수주 ) Misfah Independent Power Project"
+    },
+    {
+     "channel": "텐렙",
+     "quote": "#두산에너빌리티 #중국원전 #라이양원전 #원전공급망 #단조품"
+    }
+   ]
+  }
+ ],
+ "community_mood": {
+  "score": -10,
+  "summary": "개인 투자자들은 바이오 섹터의 긍정적인 소식에 기대감을 보였으나, 카카오의 인적분할 소식과 삼성전자의 단기 주가 흐름에 대해서는 우려가 섞인 반응을 보였다. 해외 주식 투자에 대한 환차손 논란과 금에 대한 관심도 높았다.",
+  "hot_stocks": [
+   {
+    "name": "알테오젠",
+    "score": 70,
+    "reason": "공장 신설 및 임상 성공에 대한 기대감"
+   },
+   {
+    "name": "카카오",
+    "score": -50,
+    "reason": "인적분할 소식에 대한 우려 및 부정적 예상"
+   },
+   {
+    "name": "삼성전자",
+    "score": -10,
+    "reason": "주주환원 발표에도 단기 주가 흐름에 대한 실망감"
+   },
+   {
+    "name": "두산에너빌리티",
+    "score": 40,
+    "reason": "해외 플랜트 수주 소식에 대한 관심"
+   },
+   {
+    "name": "삼성생명",
+    "score": 0,
+    "reason": "높은 거래량으로 주목받음"
+   },
+   {
+    "name": "삼성물산",
+    "score": 0,
+    "reason": "높은 거래량으로 주목받음"
+   },
+   {
+    "name": "LG이노텍",
+    "score": -30,
+    "reason": "일부 투자자들의 매도 움직임 포착"
+   },
+   {
+    "name": "삼성SDI",
+    "score": 10,
+    "reason": "삼성디스플레이 지분 관련 소식에 주목"
+   }
+  ]
+ },
+ "signals": {
+  "spikes": [
+   {
+    "term": "압력 강하게",
+    "count": 23,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "하루 만에",
+    "count": 22,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "임직원",
+    "count": 19,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "조건 충족하지",
+    "count": 18,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "카카오",
+    "count": 36,
+    "burst": 23.621505376344086,
+    "base_daily": 1.0,
+    "new": false
+   },
+   {
+    "term": "WMT",
+    "count": 17,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "PMI",
+    "count": 17,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "서비스업",
+    "count": 17,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "정기",
+    "count": 17,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "지표들 하락세",
+    "count": 17,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "조달한",
+    "count": 16,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "계약 따라",
+    "count": 16,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "있으나 전반적",
+    "count": 16,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "기한",
+    "count": 15,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "값을",
+    "count": 15,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "압력 증가할",
+    "count": 15,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "가까워져",
+    "count": 15,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "예정일",
+    "count": 14,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "처리",
+    "count": 14,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "개정",
+    "count": 14,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "확대하",
+    "count": 14,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "없어",
+    "count": 14,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "두산에너빌리티",
+    "count": 14,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "인적분할",
+    "count": 14,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "위치한",
+    "count": 14,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   }
+  ],
+  "top_posts": [
+   {
+    "channels": 6,
+    "channel": "간절한 투자스터디카페",
+    "head": "📌 디앤디파마텍(시가총액: 2조 3,790억) #A347850 📁 투자판단관련주요경영사항(임상시험결과) (대사이상지방간염 (MASH) 치료제 DD01의 미국 임상 제2상 임상시험결과보고서(CSR) 수령) 2026.08.21 10:52:37 (현재가 : 51,900원, -10.21%) * 임상명칭 : 과체중/비만을 동반한…",
+    "url": "https://t.me/desperatestudycafe/54329",
+    "time_kst": "08-21 10:53"
+   },
+   {
+    "channels": 6,
+    "channel": "AWAKE - 실시간 주식 공시 정리채널",
+    "head": "2026.08.21 14:16:01 기업명: 올릭스(시가총액: 2조 410억) A226950 보고서명: 투자판단관련주요경영사항 (Hansoh와의 공동연구 및 염기서열 이전 계약 체결) 제목 : Hansoh와의 공동연구 및 염기서열 이전 계약 체결 * 주요내용 ※ 투자유의사항 동 계약은 의약품규제기관의 허가가 완료되어야 이…",
+    "url": "https://t.me/darthacking/151809",
+    "time_kst": "08-21 14:16"
+   },
+   {
+    "channels": 5,
+    "channel": "텐렙",
+    "head": "📌 삼성전자(시가총액: 1,645조 7,274억) #A005930 📁 수시공시의무관련사항(공정공시) 2026.08.21 17:09:54 (현재가 : 281,500원, +3.87%) 제목 : 2026년 주주환원 예상 규모 및 시행 방안 * 주요내용 □ 2024~2026년 주주환원정책 및 실적 (2024년 1월 31일 공시…",
+    "url": "https://t.me/Ten_level/90655",
+    "time_kst": "08-21 17:16"
+   },
+   {
+    "channels": 4,
+    "channel": "키움증권 전략/시황 한지영",
+    "head": "[8/21, 장 시작 전 생각: 레벨보다 속도, 키움 한지영] - 다우 -1.3%, S&P500 -0.9%, 나스닥 -1.0% - 마이크론 +4.0%, 엔비디아 -0.3%, 월마트 -9.2% - 미 10년물 금리 4.70%, 미 30년물 금리 5.25%, 달러/원 1,394.5원 1. 미국 증시는 또 다시 약세를 보였습니…",
+    "url": "https://t.me/hedgecat0301/2919",
+    "time_kst": "08-21 07:46"
+   },
+   {
+    "channels": 4,
+    "channel": "AWAKE - 실시간 주식 공시 정리채널",
+    "head": "2026.08.21 08:17:39 기업명: 두산에너빌리티(시가총액: 48조 6,186억) A034020 보고서명: 단일판매ㆍ공급계약체결 계약상대 : Jabel Power SAOC 계약내용 : ( 공사수주 ) Misfah Independent Power Project 공급지역 : Misfah, Oman 계약금액 : 9,2…",
+    "url": "https://t.me/darthacking/151779",
+    "time_kst": "08-21 08:17"
+   },
+   {
+    "channels": 4,
+    "channel": "간절한 투자스터디카페",
+    "head": "📌 알테오젠(시가총액: 16조 8,529억) #A196170 📁 신규시설투자등 2026.08.21 13:11:31 (현재가 : 314,500원, -7.36%) *투자구분 및 목적 - 공장신설 - 바이오의약품 사업 확대 및 글로벌 시장 대응을 위한 생산역량 확보 목적 투자금액 : 2,532억 자본대비 : 55.7% 시총대비…",
+    "url": "https://t.me/desperatestudycafe/54333",
+    "time_kst": "08-21 13:30"
+   },
+   {
+    "channels": 3,
+    "channel": "[ IT는 SK ]",
+    "head": "[SK증권 반도체 한동희, 손 건] 2026.08.21 주요 뉴스 호남 반도체 팹 2기 추가 건설…2040년까지 '6기+α' 규모로 확대 삼성전자·SK하이닉스가 메모리 호황 장기화 전망에 기존 4기 계획에 2기 이상을 더하겠다는 의향을 정부에 전달. 이에 2040년 최대 전력수요 전망이 138.2GW에서 165GW로 20…",
+    "url": "https://t.me/skitteam/4513",
+    "time_kst": "08-21 07:49"
+   },
+   {
+    "channels": 3,
+    "channel": "이지스 리서치 (주식 투자 정보 텔레그램)",
+    "head": "안녕하세요 디앤디파마텍입니다. 당사 MASH 치료제 자보페그두타이드 임상 2상 CSR을 수령하여 관련 보도자료 공유 드립니다. 디앤디파마텍 MASH 치료제 ‘자보페그두타이드’ 임상 2상 최종결과보고서(CSR) 수령 ▶️1차 평가지표 달성 및 경쟁력 있는 48주 조직생검 결과 최종 확정 ▶️MASH 해소, 간 섬유화 개선…",
+    "url": "https://t.me/jeilstock/46191",
+    "time_kst": "08-21 11:09"
+   },
+   {
+    "channels": 3,
+    "channel": "메리츠증권 리서치",
+    "head": "📮[메리츠증권 전기전자/IT부품 양승수] 삼화콘덴서(001820): 이번 업사이클은 원(MLCC) 플러스 원(FC) ▶ 2Q26 Review: MLCC 낙수효과 시작 - 2Q26 매출액과 영업이익은 각각 829억원(+5.2% YoY), 86억원(+55.1% YoY)을 기록, 8개 분기 만에 두 자릿수 영업이익률을 회복 -…",
+    "url": "https://t.me/meritz_research/44469",
+    "time_kst": "08-21 07:55"
+   },
+   {
+    "channels": 3,
+    "channel": "다올투자증권 리서치센터",
+    "head": "[다올투자증권 조선/기계/방산 최광식] 8/21(금) 데일리뉴스 🛳 조선 [TradeWinds] Viking Holdings exercises options for two new cruise ships at Fincantieri Navios boosts VLCC orderbook and adds new capesize o…",
+    "url": "https://t.me/daolresearch/14933",
+    "time_kst": "08-21 08:41"
+   },
+   {
+    "channels": 3,
+    "channel": "여의도스토리 Ver2.0-习近平是个狗东西",
+    "head": "[신한투자증권 혁신성장 김유민] NHN KCP (060250) - NDR 후기: PG를 넘어 AI 결제 인프라로 ▶️ 신한생각 본업 성장 가속, 차세대 결제 인프라 준비도 구체화 - 신규 가맹점 유입과 테슬라·벤츠 호조가 외형 성장 견인 - 온라인 PG 점유율은 2분기 기준 30%로 확대 - 대형 가맹점 믹스로 GPM은…",
+    "url": "https://t.me/YeouidoStory2/116362",
+    "time_kst": "08-21 08:13"
+   },
+   {
+    "channels": 3,
+    "channel": "허재환 유진증권 전략",
+    "head": "[Web발신] 안녕하십니까 유진투자증권 허재환입니다 =미국 정부부채= * 베센트 장관의 바이백 정책은 역설적입니다. 베센트 장관이 재무장관 취임 전 옐런 재무장관의 바이백/단기채 발행 정책(24/4월)을 강하게 비판했었기 때문입니다. * 24/4월 미국 10년 국채금리가 5%를 돌파했을 때 옐런재무장관은 회당 20억 달러…",
+    "url": "https://t.me/huhjae/4170",
+    "time_kst": "08-21 08:37"
+   },
+   {
+    "channels": 3,
+    "channel": "여의도스토리 Ver2.0-习近平是个狗东西",
+    "head": "<한화 임혜윤 오늘 개장전 꼭 알아야 할 5가지_8/21 Bloomberg> ① 베선트, 장기 국채 바이백 추가 확대 시사 - 스콧 베선트 재무장관, 장기 국채 바이백 추가 확대 가능성과 신규 재정건전화 방안 발표 예고 - 재정건전화 방안은 이번 주 말이나 다음 주 초 발표 예정 - 베선트는 현재 금리가 기초 경제여건을…",
+    "url": "https://t.me/YeouidoStory2/116360",
+    "time_kst": "08-21 07:46"
+   },
+   {
+    "channels": 3,
+    "channel": "[시그널랩] Signal Lab 리서치",
+    "head": "안녕하세요! 현대차증권 시황/전략담당 김재승입니다. 오픈AI 2분기 매출 성장 실망에 미국 프론티어 AI 모델의 성장성 의구심 높아졌습니다. 다만 3분기부터 성장 재확인되고 있습니다. 미국 프론티어 AI 모델 수익화 우려는 낮아질 것으로 판단됩니다. <미국 프론티어 AI 모델, 반격의 서막> - 오픈AI 2분기 매출이 전…",
+    "url": "https://t.me/siglab/140546",
+    "time_kst": "08-21 08:46"
+   },
+   {
+    "channels": 3,
+    "channel": "텐렙",
+    "head": "📌 카카오(시가총액: 15조 9,030억) #A035720 📁 기업가치제고계획(자율공시) 2026.08.21 10:20:11 (현재가 : 35,900원, -7.24%) 계획서 명칭 : 2026 카카오 기업가치 제고계획 * 주요 내용 1. 기업 개요 2. 현황 진단 - 그룹 내 다양한 사업 포트폴리오 구조로 인한 복합기업…",
+    "url": "https://t.me/Ten_level/90619",
+    "time_kst": "08-21 10:20"
+   }
+  ]
+ },
+ "community": {
+  "source": "네이버 종목토론실",
+  "universe": 39,
+  "posts": 3100,
+  "search_top": [
+   {
+    "code": "005930",
+    "name": "삼성전자",
+    "rank": 1
+   },
+   {
+    "code": "000660",
+    "name": "SK하이닉스",
+    "rank": 2
+   },
+   {
+    "code": "035720",
+    "name": "카카오",
+    "rank": 3
+   },
+   {
+    "code": "009150",
+    "name": "삼성전기",
+    "rank": 4
+   },
+   {
+    "code": "005935",
+    "name": "삼성전자우",
+    "rank": 5
+   },
+   {
+    "code": "035420",
+    "name": "NAVER",
+    "rank": 6
+   },
+   {
+    "code": "005380",
+    "name": "현대차",
+    "rank": 7
+   },
+   {
+    "code": "006400",
+    "name": "삼성SDI",
+    "rank": 8
+   },
+   {
+    "code": "034020",
+    "name": "두산에너빌리티",
+    "rank": 9
+   },
+   {
+    "code": "066570",
+    "name": "LG전자",
+    "rank": 10
+   }
+  ],
+  "hot_stocks": [
+   {
+    "code": "032830",
+    "name": "삼성생명",
+    "posts": 206,
+    "capped": true,
+    "burst": 99.0,
+    "base_daily": 0.0
+   },
+   {
+    "code": "028260",
+    "name": "삼성물산",
+    "posts": 74,
+    "capped": false,
+    "burst": 99.0,
+    "base_daily": 0.0
+   },
+   {
+    "code": "035720",
+    "name": "카카오",
+    "posts": 308,
+    "capped": true,
+    "burst": 12.2,
+    "base_daily": 25.2
+   },
+   {
+    "code": "005930",
+    "name": "삼성전자",
+    "posts": 1547,
+    "capped": true,
+    "burst": 2.2,
+    "base_daily": 690.7
+   },
+   {
+    "code": "002990",
+    "name": "금호건설",
+    "posts": 226,
+    "capped": true,
+    "burst": 5.4,
+    "base_daily": 42.2
+   },
+   {
+    "code": "079550",
+    "name": "LIG넥스원",
+    "posts": 213,
+    "capped": true,
+    "burst": 5.0,
+    "base_daily": 42.8
+   },
+   {
+    "code": "017670",
+    "name": "SK텔레콤",
+    "posts": 224,
+    "capped": true,
+    "burst": 3.8,
+    "base_daily": 59.7
+   },
+   {
+    "code": "005935",
+    "name": "삼성전자우",
+    "posts": 206,
+    "capped": true,
+    "burst": 3.9,
+    "base_daily": 53.3
+   },
+   {
+    "code": "047810",
+    "name": "한국항공우주",
+    "posts": 151,
+    "capped": true,
+    "burst": 3.7,
+    "base_daily": 41.0
+   },
+   {
+    "code": "034020",
+    "name": "두산에너빌리티",
+    "posts": 279,
+    "capped": true,
+    "burst": 2.5,
+    "base_daily": 109.5
+   },
+   {
+    "code": "010120",
+    "name": "LS ELECTRIC",
+    "posts": 133,
+    "capped": true,
+    "burst": 3.6,
+    "base_daily": 37.2
+   },
+   {
+    "code": "042660",
+    "name": "한화오션",
+    "posts": 223,
+    "capped": true,
+    "burst": 2.3,
+    "base_daily": 99.0
+   }
+  ],
+  "keywords": [
+   {
+    "term": "삼성",
+    "count": 19,
+    "burst": 99.0,
+    "new": true
+   },
+   {
+    "term": "아니",
+    "count": 16,
+    "burst": 99.0,
+    "new": true
+   },
+   {
+    "term": "이런",
+    "count": 15,
+    "burst": 99.0,
+    "new": true
+   },
+   {
+    "term": "만주",
+    "count": 15,
+    "burst": 99.0,
+    "new": true
+   },
+   {
+    "term": "마지막",
+    "count": 13,
+    "burst": 99.0,
+    "new": true
+   },
+   {
+    "term": "이건",
+    "count": 13,
+    "burst": 99.0,
+    "new": true
+   },
+   {
+    "term": "주주들",
+    "count": 13,
+    "burst": 99.0,
+    "new": true
+   },
+   {
+    "term": "하나",
+    "count": 13,
+    "burst": 99.0,
+    "new": true
+   },
+   {
+    "term": "주주",
+    "count": 12,
+    "burst": 97.7,
+    "new": true
+   },
+   {
+    "term": "한국",
+    "count": 12,
+    "burst": 97.7,
+    "new": true
+   },
+   {
+    "term": "한번",
+    "count": 12,
+    "burst": 97.7,
+    "new": true
+   },
+   {
+    "term": "그래",
+    "count": 11,
+    "burst": 89.6,
+    "new": true
+   },
+   {
+    "term": "야선",
+    "count": 11,
+    "burst": 89.6,
+    "new": true
+   },
+   {
+    "term": "공장",
+    "count": 11,
+    "burst": 89.6,
+    "new": true
+   },
+   {
+    "term": "시간외",
+    "count": 11,
+    "burst": 89.6,
+    "new": true
+   }
+  ],
+  "top_liked": [
+   {
+    "code": "196170",
+    "name": "알테오젠",
+    "title": "암백신+키트루다 성공 다음날 굳이 공장 공시 낸 ...[4]",
+    "views": 747,
+    "likes": 59,
+    "url": "https://finance.naver.com/item/board_read.naver?code=196170&nid=428257215",
+    "time_kst": "08-21 20:43"
+   },
+   {
+    "code": "196170",
+    "name": "알테오젠",
+    "title": "공장을 건설한다면 계산은 끝났다는 이야기[6]",
+    "views": 605,
+    "likes": 50,
+    "url": "https://finance.naver.com/item/board_read.naver?code=196170&nid=428233232",
+    "time_kst": "08-21 15:32"
+   },
+   {
+    "code": "196170",
+    "name": "알테오젠",
+    "title": "2026년 연기금 지분율 현황(8/21 ...[3]",
+    "views": 718,
+    "likes": 49,
+    "url": "https://finance.naver.com/item/board_read.naver?code=196170&nid=428248583",
+    "time_kst": "08-21 18:17"
+   },
+   {
+    "code": "006400",
+    "name": "삼성SDI",
+    "title": "속보]삼성SDI \"삼성디스플레이 지분 4.4...[1]",
+    "views": 1200,
+    "likes": 46,
+    "url": "https://finance.naver.com/item/board_read.naver?code=006400&nid=428239403",
+    "time_kst": "08-21 16:55"
+   },
+   {
+    "code": "011070",
+    "name": "LG이노텍",
+    "title": "형님들.. 먼저 떠납니다.. 건승하십시요...[5]",
+    "views": 812,
+    "likes": 42,
+    "url": "https://finance.naver.com/item/board_read.naver?code=011070&nid=428228308",
+    "time_kst": "08-21 14:45"
+   }
+  ],
+  "top_rising": [
+   {
+    "code": "005930",
+    "name": "삼성전자",
+    "title": "281500 부근에서 최소 한달은 걱...[2]",
+    "views": 798,
+    "likes": 16,
+    "url": "https://finance.naver.com/item/board_read.naver?code=005930&nid=428267196",
+    "time_kst": "08-22 05:31",
+    "views_per_hour": 623.8
+   },
+   {
+    "code": "005930",
+    "name": "삼성전자",
+    "title": "뉴스가 떴다[4]",
+    "views": 557,
+    "likes": 8,
+    "url": "https://finance.naver.com/item/board_read.naver?code=005930&nid=428267195",
+    "time_kst": "08-22 05:30",
+    "views_per_hour": 429.8
+   },
+   {
+    "code": "000660",
+    "name": "SK하이닉스",
+    "title": "◇ 하닉 주주환원 아직 시작안했다 JP모건...",
+    "views": 296,
+    "likes": 15,
+    "url": "https://finance.naver.com/item/board_read.naver?code=000660&nid=428267275",
+    "time_kst": "08-22 05:54",
+    "views_per_hour": 330.4
+   },
+   {
+    "code": "005930",
+    "name": "삼성전자",
+    "title": "금요일 넥스트 반응은 매우 과도한 잘...",
+    "views": 553,
+    "likes": 28,
+    "url": "https://finance.naver.com/item/board_read.naver?code=005930&nid=428267078",
+    "time_kst": "08-22 04:59",
+    "views_per_hour": 305.1
+   },
+   {
+    "code": "005930",
+    "name": "삼성전자",
+    "title": "우선주는",
+    "views": 258,
+    "likes": 3,
+    "url": "https://finance.naver.com/item/board_read.naver?code=005930&nid=428267287",
+    "time_kst": "08-22 05:57",
+    "views_per_hour": 305.0
+   }
+  ]
+ },
+ "community_dc": {
+  "source": "DC인사이드",
+  "galleries": [
+   {
+    "id": "krstock",
+    "name": "국내주식갤러리",
+    "posts": 1396,
+    "capped": true,
+    "burst": 1.7,
+    "base_daily": 821.0
+   },
+   {
+    "id": "stockus",
+    "name": "해외주식갤러리",
+    "posts": 3955,
+    "capped": true,
+    "burst": 1.5,
+    "base_daily": 2652.0
+   }
+  ],
+  "posts_sampled": 542,
+  "keywords": [
+   {
+    "term": "삼성전자",
+    "count": 24,
+    "burst": 97.0,
+    "new": true
+   },
+   {
+    "term": "그래",
+    "count": 6,
+    "burst": 24.2,
+    "new": true
+   },
+   {
+    "term": "양닉",
+    "count": 6,
+    "burst": 24.2,
+    "new": true
+   },
+   {
+    "term": "아님",
+    "count": 6,
+    "burst": 24.2,
+    "new": true
+   },
+   {
+    "term": "보면",
+    "count": 6,
+    "burst": 24.2,
+    "new": true
+   },
+   {
+    "term": "절대",
+    "count": 5,
+    "burst": 20.2,
+    "new": true
+   },
+   {
+    "term": "내가",
+    "count": 5,
+    "burst": 20.2,
+    "new": true
+   },
+   {
+    "term": "모머니",
+    "count": 5,
+    "burst": 20.2,
+    "new": true
+   },
+   {
+    "term": "씨발",
+    "count": 5,
+    "burst": 20.2,
+    "new": true
+   },
+   {
+    "term": "공군",
+    "count": 5,
+    "burst": 20.2,
+    "new": true
+   },
+   {
+    "term": "대만",
+    "count": 5,
+    "burst": 20.2,
+    "new": true
+   },
+   {
+    "term": "존나",
+    "count": 11,
+    "burst": 3.4,
+    "new": false
+   },
+   {
+    "term": "미장",
+    "count": 9,
+    "burst": 3.3,
+    "new": false
+   },
+   {
+    "term": "SK하이닉스",
+    "count": 17,
+    "burst": 1.6,
+    "new": false
+   },
+   {
+    "term": "야선",
+    "count": 9,
+    "burst": 2.1,
+    "new": false
+   }
+  ],
+  "top_recommended": [
+   {
+    "gallery": "해외주식갤러리",
+    "title": "환차손 << 이거 자체가 의미없는 소리임",
+    "views": 13673,
+    "recommend": 288,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=17524247&exception_mode=recommend&page=1",
+    "time_kst": "08-21 11:46"
+   },
+   {
+    "gallery": "해외주식갤러리",
+    "title": "\"저 1000원 환전 좀 해주세요\"",
+    "views": 12166,
+    "recommend": 165,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=17530420&exception_mode=recommend&page=1",
+    "time_kst": "08-21 20:06"
+   },
+   {
+    "gallery": "해외주식갤러리",
+    "title": "이걸 이해하면 삼성이 왜 소각 못 하는지 알 수 있음",
+    "views": 10864,
+    "recommend": 150,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=17529753&exception_mode=recommend&page=1",
+    "time_kst": "08-21 18:48"
+   },
+   {
+    "gallery": "해외주식갤러리",
+    "title": "병신.jpg",
+    "views": 10043,
+    "recommend": 143,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=17529143&exception_mode=recommend&page=1",
+    "time_kst": "08-21 17:59"
+   },
+   {
+    "gallery": "해외주식갤러리",
+    "title": "카카오 2030년 예상도 그려옴....jpg",
+    "views": 11953,
+    "recommend": 141,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=17523175&exception_mode=recommend&page=1",
+    "time_kst": "08-21 10:36"
+   }
+  ],
+  "top_viewed": [
+   {
+    "gallery": "해외주식갤러리",
+    "title": "이거 존나 웃기네 ㅋㅋㅋㅋㅋㅋㅋ",
+    "views": 1788,
+    "recommend": 27,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=17534730&page=6",
+    "time_kst": "08-22 04:50"
+   },
+   {
+    "gallery": "해외주식갤러리",
+    "title": "속보) 닛본 7월 무역수지도 적자",
+    "views": 802,
+    "recommend": 16,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=17534687&page=7",
+    "time_kst": "08-22 04:36"
+   },
+   {
+    "gallery": "국내주식갤러리",
+    "title": "확실히 저점신호 맞는게",
+    "views": 545,
+    "recommend": 0,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3306178&page=6",
+    "time_kst": "08-22 01:45"
+   },
+   {
+    "gallery": "국내주식갤러리",
+    "title": "본인 이번달 수익",
+    "views": 543,
+    "recommend": 1,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3306169&page=6",
+    "time_kst": "08-22 01:36"
+   },
+   {
+    "gallery": "국내주식갤러리",
+    "title": "장 보합이니 어쩌고 할때가아님",
+    "views": 539,
+    "recommend": 0,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3306217&page=6",
+    "time_kst": "08-22 02:14"
+   },
+   {
+    "gallery": "국내주식갤러리",
+    "title": "삼전 종배 망했네",
+    "views": 495,
+    "recommend": 0,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3306437&page=1",
+    "time_kst": "08-22 05:54"
+   },
+   {
+    "gallery": "국내주식갤러리",
+    "title": "금이 안전자산이라고 불리는 이유는",
+    "views": 495,
+    "recommend": 0,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3306274&page=5",
+    "time_kst": "08-22 02:54"
+   },
+   {
+    "gallery": "국내주식갤러리",
+    "title": "다시 전고 가버렸네 ㅋㅋ",
+    "views": 489,
+    "recommend": 0,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3306288&page=4",
+    "time_kst": "08-22 03:16"
+   }
+  ]
+ }
+}

@@ -23,7 +23,7 @@
  *  app.js·이 파일·워크플로 파일 셋을 같이 확인할 것.
  * ===================================================================== */
 
-const OWNER = 'gschoie', REPO = 'GS-output-dashboard', REF = 'main';
+const OWNER = 'gschoie', REPO = 'GS-DB2', REF = 'main';
 
 // app.js 의 workflow 키 → .github/workflows/ 파일명.
 const WF = {
@@ -32,19 +32,28 @@ const WF = {
   union:     'refresh-union.yml',      // 현중 노조게시판
   consensus: 'kospi-consensus.yml',    // 코스피200 컨센 스냅샷
   flow:      'market-flow.yml',        // 시장 수급 동향
+  trend:     'market-trend.yml',       // 시장관심.내러티브 (구독 채널 트렌드)
   etf:       'etf-signal.yml',         // ETF/섹터 신호
   holdings:  'etf-holdings.yml',       // 액티브 ETF 구성 변화
+  valuation: 'valuation.yml',          // 밸류에이션 PER·PBR·ROE·PSR (야후 수집)
   dart:      'dart-shiporder-bot.yml', // 조선 수주공시 → 텔레그램 (입력 필요)
+  recipe:    'recipe-bot.yml',         // 유튜브 요리 숏츠 → Notion 레시피 (입력 필요)
 };
 
 // 워크플로별 추가 입력. 선언한 required 입력을 빠짐없이 채워야 422가 안 난다.
 function buildInputs(key, body) {
-  if (key !== 'dart') return {};
-  return {
+  if (key === 'dart') return {
     dart_url: String(body.dart_url || ''),
     target:   String(body.target || '공개채널'), // required + choice
     comment:  String(body.comment || ''),
   };
+  if (key === 'recipe') return { yt_url: String(body.yt_url || '') };
+  // 밸류에이션: 비워 두면 정기 수집, lookup 에 티커를 넣으면 임시 조회만 돈다.
+  if (key === 'valuation') return {
+    only:   String(body.only || ''),
+    lookup: String(body.lookup || ''),
+  };
+  return {};
 }
 
 function doPost(e) {
@@ -62,6 +71,9 @@ function doPost(e) {
     }
     if (key === 'dart' && !body.dart_url) {
       return json({ ok: false, code: 400, wf: wf, error: 'dart_url이 비어 있습니다' });
+    }
+    if (key === 'recipe' && !body.yt_url) {
+      return json({ ok: false, code: 400, wf: wf, error: 'yt_url이 비어 있습니다' });
     }
 
     const token = PropertiesService.getScriptProperties().getProperty('GH_TOKEN');
