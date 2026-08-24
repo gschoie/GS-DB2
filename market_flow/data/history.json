@@ -5580,27 +5580,27 @@
      }
     },
     "1540": {
-     "individual": 33192,
-     "foreign": -36758,
-     "institution": -12917,
+     "individual": 33198,
+     "foreign": -36765,
+     "institution": -12916,
      "arb": 1185,
-     "nonarb": -30609,
+     "nonarb": -30610,
      "program": -29424,
-     "time": "15:40",
+     "time": "15:43",
      "kospi": 6696.96,
      "chg_pct": -3.12,
      "futures": {
-      "foreign": -109,
-      "inst_total": 225
+      "foreign": 25,
+      "inst_total": 92
      }
     }
    },
    "confirmed": {
     "investor": {
-     "individual": 33192,
-     "foreign": -36758,
-     "inst_total": -12917,
-     "fin_invest": -4034,
+     "individual": 33198,
+     "foreign": -36765,
+     "inst_total": -12916,
+     "fin_invest": -4033,
      "insurance": -184,
      "asset_mgmt": -8915,
      "bank": 3,
@@ -5613,27 +5613,27 @@
      "arb_sell": 3953,
      "arb_net": 1185,
      "nonarb_buy": 58594,
-     "nonarb_sell": 89203,
-     "nonarb_net": -30609,
+     "nonarb_sell": 89204,
+     "nonarb_net": -30610,
      "total_buy": 63732,
-     "total_sell": 93156,
-     "total_net": -29424
+     "total_sell": 93157,
+     "total_net": -29425
     },
     "futures": {
-     "individual": -68,
-     "foreign": -109,
-     "inst_total": 225,
-     "fin_invest": -278,
+     "individual": -72,
+     "foreign": 25,
+     "inst_total": 92,
+     "fin_invest": -398,
      "insurance": 103,
-     "asset_mgmt": 244,
+     "asset_mgmt": 231,
      "bank": 15,
      "other_fin": 4,
      "pension": 137,
-     "other_corp": -48
+     "other_corp": -45
     }
    },
    "group_1d": {
-    "time": "15:40",
+    "time": "15:44",
     "groups": [
      [
       "2차전지",
@@ -6446,14 +6446,91 @@
      ],
      [
       "15:30",
-      -68,
-      -109,
-      225
+      -72,
+      48,
+      69
+     ]
+    ]
+   },
+   "stock_flow": {
+    "time": "15:44",
+    "buy": [
+     [
+      "SK스퀘어",
+      -4.19,
+      527
+     ],
+     [
+      "카카오",
+      0.0,
+      239
+     ],
+     [
+      "HMM",
+      5.79,
+      237
+     ],
+     [
+      "에코프로",
+      7.59,
+      230
+     ],
+     [
+      "POSCO홀딩스",
+      5.65,
+      226
+     ],
+     [
+      "에코프로비엠",
+      10.8,
+      206
+     ],
+     [
+      "효성중공업",
+      2.61,
+      195
+     ]
+    ],
+    "sell": [
+     [
+      "삼성전자",
+      -8.7,
+      -14053
+     ],
+     [
+      "SK하이닉스",
+      -3.41,
+      -11931
+     ],
+     [
+      "삼성전자우",
+      -8.55,
+      -3627
+     ],
+     [
+      "삼성생명",
+      -13.09,
+      -440
+     ],
+     [
+      "SK텔레콤",
+      0.1,
+      -436
+     ],
+     [
+      "삼성전기",
+      0.15,
+      -369
+     ],
+     [
+      "한미약품",
+      29.96,
+      -292
      ]
     ]
    }
   }
  },
- "updated_kst": "2026-08-24 15:40",
+ "updated_kst": "2026-08-24 15:44",
  "futures_unit": "계약"
 }
