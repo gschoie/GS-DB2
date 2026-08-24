@@ -2,6 +2,9 @@ name: Claude 방산 브리핑 수집
 # Claude 예약 작업 세션은 main 직접 push 권한이 없을 수 있어 전용 브랜치
 # (claude/defense-brief-daily)에 결과물을 올린다. 이 워크플로가 그 push를 받아
 # 브리핑 파일만 main에 반영하고 텔레그램을 발송한다.
+# 2026-08-25부터 건설기계 브리핑(Claude 작성판)도 같은 경로로 나른다.
+# 주의: 세션은 push 전 반드시 origin/main을 머지해 브랜치의 건설기계 파일이
+# main보다 뒤처지지 않게 유지할 것 (Gemini 폴백이 main에 직접 쓰는 날 대비).
 # GITHUB_TOKEN push는 on:push 워크플로를 다시 깨우지 못하므로, 배포는
 # deploy-pages.yml 의 workflow_run 목록에 이 워크플로 이름을 등록해 잇는다.
 
@@ -30,7 +33,9 @@ jobs:
           git fetch origin claude/defense-brief-daily
           git checkout origin/claude/defense-brief-daily -- \
             'telegram_research_dashboard/static/claude_defense/' \
-            'telegram_research_dashboard/static/claude_defense_report.html'
+            'telegram_research_dashboard/static/claude_defense_report.html' \
+            'telegram_research_dashboard/static/construction_daily/' \
+            'telegram_research_dashboard/static/construction_briefing_report.html'
 
       - name: main에 커밋
         id: commit
@@ -38,21 +43,28 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add telegram_research_dashboard/static/claude_defense \
-                  telegram_research_dashboard/static/claude_defense_report.html
+                  telegram_research_dashboard/static/claude_defense_report.html \
+                  telegram_research_dashboard/static/construction_daily \
+                  telegram_research_dashboard/static/construction_briefing_report.html
           if git diff --cached --quiet; then
             echo "변경 없음 — 커밋 생략 (재실행 등)"
             echo "changed=false" >> "$GITHUB_OUTPUT"
             echo "send=false" >> "$GITHUB_OUTPUT"
           else
-            # 텔레그램은 새 브리핑(md 변경)일 때만 — 렌더러/CSS 수정으로 HTML만
-            # 재생성된 커밋에서 최신 요약이 중복 발송되는 것을 막는다.
-            if git diff --cached --name-only | grep -q '\.md$'; then
+            # 텔레그램은 새 방산 브리핑(claude_defense md 변경)일 때만 — 렌더러 수정이나
+            # 건설기계 파일만 바뀐 커밋에서 방산 요약이 중복 발송되는 것을 막는다.
+            if git diff --cached --name-only | grep -q 'claude_defense/.*\.md$'; then
               echo "send=true" >> "$GITHUB_OUTPUT"
             else
               echo "md 변경 없음 — 텔레그램 발송 생략"
               echo "send=false" >> "$GITHUB_OUTPUT"
             fi
-            git commit -m "Claude 방산 브리핑 $(TZ=Asia/Seoul date +%Y-%m-%d)"
+            if git diff --cached --name-only | grep -q 'claude_defense/'; then
+              msg="Claude 방산 브리핑 $(TZ=Asia/Seoul date +%Y-%m-%d)"
+            else
+              msg="Claude 건설기계 브리핑 $(TZ=Asia/Seoul date +%Y-%m-%d)"
+            fi
+            git commit -m "$msg"
             git pull --rebase origin main
             git push origin HEAD:main
             echo "changed=true" >> "$GITHUB_OUTPUT"

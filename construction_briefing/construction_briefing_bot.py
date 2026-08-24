@@ -28,16 +28,15 @@ import urllib.parse
 import xml.etree.ElementTree as ET
 from email.utils import parsedate_to_datetime
 
-import requests
-import yfinance as yf
-from google import genai
-from google.genai import types as genai_types
+# yfinance·genai·requests는 사용하는 함수 안에서 import한다 —
+# --render-md(로컬 렌더 전용) 모드는 네트워크 패키지 없이도 돌아야 한다.
 
 KST = ZoneInfo("Asia/Seoul")
 ROOT = Path(__file__).resolve().parent
 DASH_STATIC = ROOT.parent / "telegram_research_dashboard" / "static"
 ARCHIVE_DIR = DASH_STATIC / "construction_daily"
 INDEX_PAGE = DASH_STATIC / "construction_briefing_report.html"
+INPUTS_DIR = ROOT / "inputs"  # 수집 전용 모드 산출물 (Claude 작성 세션의 입력)
 
 MODEL = os.environ.get("GEMINI_MODEL", "gemini-2.5-flash")
 LAST_USED_MODEL = MODEL  # 폴백 시 실제 사용 모델로 갱신됨
@@ -112,6 +111,7 @@ def fmt_cap(cap: float | None, currency: str) -> str:
 
 def fetch_prices() -> list[dict]:
     """유니버스 전 종목의 최근 종가·등락률·시총을 조회한다. 실패 종목은 값 None."""
+    import yfinance as yf
     rows = []
     for ticker, name, country, sector in UNIVERSE:
         row = {"ticker": ticker, "name": name, "country": country, "sector": sector,
@@ -143,6 +143,7 @@ def fetch_prices() -> list[dict]:
 
 def fetch_macro() -> list[dict]:
     """매크로 지표(금리·금·구리·유가·환율)의 최근값·등락률을 조회한다."""
+    import yfinance as yf
     rows = []
     for ticker, name, unit in MACRO_TICKERS:
         row = {"ticker": ticker, "name": name, "unit": unit,
@@ -249,6 +250,7 @@ NEWS_QUERIES = [
 
 def fetch_news(now: datetime, max_items: int = 60) -> list[dict]:
     """구글뉴스 RSS에서 지난 ~30시간 기사만 수집해 최신순으로 반환."""
+    import requests
     cutoff = now - timedelta(hours=30)
     items, seen = [], set()
     for query, hl, gl, ceid in NEWS_QUERIES:
@@ -340,6 +342,8 @@ def clean_report(text: str) -> str:
 
 
 def generate_report(price_table: str, macro_table: str, news_text: str, now: datetime) -> str:
+    from google import genai
+    from google.genai import types as genai_types
     client = genai.Client()  # GEMINI_API_KEY 환경변수 사용
     update_time = now.strftime("%Y-%m-%d %H:00")
     system = SYSTEM_PROMPT.replace("{UPDATE_TIME}", update_time)
@@ -447,6 +451,7 @@ def extract_summary(md: str) -> str:
 
 def send_telegram(md_report: str, now: datetime) -> None:
     """텔레그램 발송 — 시크릿 미설정이면 생략 (나중 단계)."""
+    import requests
     token = os.environ.get("TELEGRAM_BOT_TOKEN", "").strip()
     chat_id = os.environ.get("TELEGRAM_CHAT_ID", "").strip()
     if not token or not chat_id:
@@ -573,16 +578,17 @@ def report_to_page_html(md: str) -> str:
     return "\n".join(out)
 
 
-def write_archive(md_report: str, now: datetime) -> None:
+def write_archive(md_report: str, now: datetime, generator: str | None = None) -> None:
     ARCHIVE_DIR.mkdir(parents=True, exist_ok=True)
     date_str = now.strftime("%Y-%m-%d")
+    gen_label = generator or f"Gemini({LAST_USED_MODEL})"
     body = report_to_page_html(md_report)
     page = f"""<!DOCTYPE html><html lang="ko"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>글로벌 건설기계 브리핑 {date_str}</title><style>{PAGE_CSS}</style></head>
 <body><div class="wrap">
 <h1>🏗️ 글로벌 건설기계 데일리 브리핑</h1>
-<div class="meta">기준: {now.strftime('%Y-%m-%d %H:00')} KST · 생성: Gemini({LAST_USED_MODEL}) + 구글뉴스 RSS + yfinance 확정 시세·매크로</div>
+<div class="meta">기준: {now.strftime('%Y-%m-%d %H:00')} KST · 생성: {gen_label} + 구글뉴스 RSS + yfinance 확정 시세·매크로</div>
 {body}
 </div></body></html>"""
     (ARCHIVE_DIR / f"{date_str}.html").write_text(page, encoding="utf-8")
@@ -629,9 +635,8 @@ else fr.srcdoc='<body style="background:#0d1117;color:#8b96a8;font-family:sans-s
     print(f"[인덱스] construction_briefing_report.html 갱신 (누적 {len(dates)}일)")
 
 
-def main() -> None:
-    now = datetime.now(KST)
-    print(f"=== 글로벌 건설기계 브리핑 시작: {now:%Y-%m-%d %H:%M} KST / model={MODEL} ===")
+def collect_data(now: datetime) -> tuple[str, str, list[dict]]:
+    """시세·매크로·뉴스를 조회해 (시세표, 매크로표, 뉴스목록)을 반환한다."""
     rows = fetch_prices()
     ok = sum(1 for r in rows if r["close"] is not None)
     print(f"[시세] {ok}/{len(rows)} 종목 조회 성공")
@@ -646,6 +651,48 @@ def main() -> None:
     print(f"[뉴스] 지난 24시간 기사 {len(news)}건 수집")
     if len(news) < 5:
         print("[경고] 뉴스 수집이 5건 미만 — RSS 차단 가능성", file=sys.stderr)
+    return table, macro_table, news
+
+
+def collect_only(now: datetime) -> None:
+    """수집 전용 모드 — Gemini 없이 시세·매크로·뉴스만 inputs JSON으로 저장.
+
+    Claude 세션(예약 루틴)이 이 파일을 읽어 해석·작성한다. Gemini 폴백 경로는
+    이 파일을 쓰지 않고 자체 재수집한다(수집~폴백 사이 시차 반영).
+    """
+    table, macro_table, news = collect_data(now)
+    INPUTS_DIR.mkdir(parents=True, exist_ok=True)
+    date_str = now.strftime("%Y-%m-%d")
+    payload = {
+        "date": date_str,
+        "collected_at": now.strftime("%Y-%m-%d %H:%M KST"),
+        "price_table": table,
+        "macro_table": macro_table,
+        "news_list": news_list_text(news),
+    }
+    (INPUTS_DIR / f"{date_str}.json").write_text(
+        json.dumps(payload, ensure_ascii=False, indent=1), encoding="utf-8")
+    # 7일 초과 과거 inputs 정리 (아카이브는 md/html로 이미 남는다)
+    for stale in sorted(INPUTS_DIR.glob("????-??-??.json"))[:-7]:
+        stale.unlink()
+    print(f"[수집] inputs/{date_str}.json 저장 (뉴스 {len(news)}건)")
+
+
+def render_md(date_str: str) -> None:
+    """렌더 전용 모드 — 기존 md(예: Claude 작성분)로 html+인덱스만 재생성.
+
+    네트워크 패키지 불필요 (Claude 세션 컨테이너에서 실행 가능).
+    """
+    md_path = ARCHIVE_DIR / f"{date_str}.md"
+    md_report = md_path.read_text(encoding="utf-8")
+    when = datetime.strptime(date_str, "%Y-%m-%d").replace(hour=6, tzinfo=KST)
+    write_archive(md_report, when, generator="Claude 리서치 데스크")
+
+
+def main() -> None:
+    now = datetime.now(KST)
+    print(f"=== 글로벌 건설기계 브리핑 시작: {now:%Y-%m-%d %H:%M} KST / model={MODEL} ===")
+    table, macro_table, news = collect_data(now)
     report = generate_report(table, macro_table, news_list_text(news), now)
     write_archive(report, now)
     send_telegram(report, now)
@@ -655,5 +702,9 @@ def main() -> None:
 if __name__ == "__main__":
     if "--init" in sys.argv:  # 아카이브 인덱스만 재생성 (첫 배포용 플레이스홀더)
         write_index()
+    elif "--collect-only" in sys.argv:
+        collect_only(datetime.now(KST))
+    elif "--render-md" in sys.argv:
+        render_md(sys.argv[sys.argv.index("--render-md") + 1])
     else:
         main()
