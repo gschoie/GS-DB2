@@ -5593,47 +5593,62 @@
       "foreign": 25,
       "inst_total": 92
      }
+    },
+    "1640": {
+     "individual": 33210,
+     "foreign": -36764,
+     "institution": -12928,
+     "arb": 1183,
+     "nonarb": -30612,
+     "program": -29430,
+     "time": "16:41",
+     "kospi": 6696.96,
+     "chg_pct": -3.12,
+     "futures": {
+      "foreign": 2657,
+      "inst_total": -3340
+     }
     }
    },
    "confirmed": {
     "investor": {
-     "individual": 33198,
-     "foreign": -36765,
-     "inst_total": -12916,
-     "fin_invest": -4033,
+     "individual": 33209,
+     "foreign": -36764,
+     "inst_total": -12928,
+     "fin_invest": -4044,
      "insurance": -184,
-     "asset_mgmt": -8915,
+     "asset_mgmt": -8916,
      "bank": 3,
      "other_fin": 169,
      "pension": 44,
-     "other_corp": 16483
+     "other_corp": 16482
     },
     "program": {
      "arb_buy": 5138,
-     "arb_sell": 3953,
-     "arb_net": 1185,
-     "nonarb_buy": 58594,
-     "nonarb_sell": 89204,
-     "nonarb_net": -30610,
-     "total_buy": 63732,
-     "total_sell": 93157,
-     "total_net": -29425
+     "arb_sell": 3955,
+     "arb_net": 1183,
+     "nonarb_buy": 58596,
+     "nonarb_sell": 89208,
+     "nonarb_net": -30612,
+     "total_buy": 63734,
+     "total_sell": 93163,
+     "total_net": -29429
     },
     "futures": {
-     "individual": -72,
-     "foreign": 25,
-     "inst_total": 92,
-     "fin_invest": -398,
-     "insurance": 103,
-     "asset_mgmt": 231,
-     "bank": 15,
-     "other_fin": 4,
-     "pension": 137,
-     "other_corp": -45
+     "individual": 845,
+     "foreign": 2657,
+     "inst_total": -3340,
+     "fin_invest": 509,
+     "insurance": 35,
+     "asset_mgmt": -4025,
+     "bank": -1,
+     "other_fin": 2,
+     "pension": 140,
+     "other_corp": -162
     }
    },
    "group_1d": {
-    "time": "15:44",
+    "time": "16:42",
     "groups": [
      [
       "2차전지",
@@ -6446,14 +6461,14 @@
      ],
      [
       "15:30",
-      -72,
-      48,
-      69
+      39,
+      215,
+      -236
      ]
     ]
    },
    "stock_flow": {
-    "time": "15:44",
+    "time": "16:42",
     "buy": [
      [
       "SK스퀘어",
@@ -6527,10 +6542,84 @@
       29.96,
       -292
      ]
+    ],
+    "inst_buy": [
+     [
+      "NAVER",
+      0.68,
+      284
+     ],
+     [
+      "삼성SDI",
+      7.74,
+      206
+     ],
+     [
+      "엘앤에프",
+      16.36,
+      185
+     ],
+     [
+      "포스코퓨처엠",
+      10.33,
+      97
+     ],
+     [
+      "한미약품",
+      29.96,
+      97
+     ],
+     [
+      "에이피알",
+      6.36,
+      90
+     ],
+     [
+      "SK텔레콤",
+      0.1,
+      90
+     ]
+    ],
+    "inst_sell": [
+     [
+      "삼성전자",
+      -8.7,
+      -5919
+     ],
+     [
+      "SK하이닉스",
+      -3.41,
+      -1721
+     ],
+     [
+      "삼성전자우",
+      -8.55,
+      -309
+     ],
+     [
+      "삼성물산",
+      -7.84,
+      -142
+     ],
+     [
+      "SK스퀘어",
+      -4.19,
+      -108
+     ],
+     [
+      "삼성전기",
+      0.15,
+      -105
+     ],
+     [
+      "니어스랩",
+      -30.46,
+      -79
+     ]
     ]
    }
   }
  },
- "updated_kst": "2026-08-24 15:44",
+ "updated_kst": "2026-08-24 16:42",
  "futures_unit": "계약"
 }
