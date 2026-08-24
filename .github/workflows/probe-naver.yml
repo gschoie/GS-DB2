@@ -1,8 +1,18 @@
 name: probe-naver (임시)
 
 # 종목별 외국인 수급 데이터 소스 탐색용 임시 워크플로 — 확인 후 삭제 예정
+# urls 입력(공백 구분)으로 아무 페이지나 태그 제거 텍스트로 확인할 수 있다.
 on:
   workflow_dispatch:
+    inputs:
+      urls:
+        description: "확인할 URL들 (공백 구분)"
+        required: true
+        default: "https://finance.naver.com/sise/sise_deal_rank.naver"
+      chars:
+        description: "URL당 출력 문자수"
+        required: false
+        default: "6000"
 
 permissions: {}
 
@@ -11,30 +21,37 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
-      - name: 후보 URL 구조 확인
+      - name: URL 텍스트 덤프
+        env:
+          URLS: ${{ inputs.urls }}
+          CHARS: ${{ inputs.chars }}
         run: |
           UA="Mozilla/5.0 (Windows NT 10.0; Win64; x64)"
-          fetch() {
-            echo "===== $1"
-            curl -sS -m 20 -H "User-Agent: $UA" "$1" | iconv -f euc-kr -t utf-8 2>/dev/null \
-              | tr -d '\r' | sed 's/\t/ /g' | grep -v '^\s*$' | head -c 4000 || echo "(fetch 실패)"
-            echo; echo
-          }
-          fetchj() {
-            echo "===== $1"
-            curl -sS -m 20 -H "User-Agent: $UA" "$1" | head -c 3000 || echo "(fetch 실패)"
-            echo; echo
-          }
-          # 시세분석 허브에서 관련 메뉴 링크 훑기
-          echo "===== 메뉴 링크 목록 (finance.naver.com/sise/)"
-          curl -sS -m 20 -H "User-Agent: $UA" "https://finance.naver.com/sise/" \
-            | iconv -f euc-kr -t utf-8 2>/dev/null \
-            | grep -o 'href="/sise/[^"]*"[^>]*>[^<]*' | sort -u | head -60
-          echo
-          # 외국인/기관 매매 상위 후보들
-          fetch "https://finance.naver.com/sise/sise_deal_rank.naver"
-          fetch "https://finance.naver.com/sise/sise_deal_rank.naver?sosok=01&investor_gubun=9000"
-          fetch "https://finance.naver.com/sise/sise_foreign_deal.naver"
-          # 모바일 API 후보
-          fetchj "https://m.stock.naver.com/api/stocks/dealTrend/foreign?page=1&pageSize=10"
-          fetchj "https://m.stock.naver.com/api/dealTrend/foreign/buy?page=1&pageSize=10"
+          for u in $URLS; do
+            echo "===== $u"
+            curl -sS -m 20 -H "User-Agent: $UA" "$u" -o /tmp/raw || { echo "(fetch 실패)"; continue; }
+            python3 - "$u" <<'EOF'
+          import re, sys, os
+          raw = open('/tmp/raw', 'rb').read()
+          try:
+              html = raw.decode('euc-kr')
+          except UnicodeDecodeError:
+              html = raw.decode('utf-8', 'replace')
+          html = re.sub(r'<(script|style)[^>]*>.*?</\1>', ' ', html, flags=re.S | re.I)
+          # 폼 파라미터 후보
+          for m in re.findall(r'<(?:input|select)[^>]*name="([^"]+)"', html):
+              print('[param]', m)
+          for m in sorted(set(re.findall(r'href="([^"]*deal_rank[^"]*)"', html))):
+              print('[link]', m)
+          text = re.sub(r'<[^>]+>', ' ', html)
+          text = re.sub(r'&nbsp;?', ' ', text)
+          text = re.sub(r'[ \t]+', ' ', text)
+          lines = [l.strip() for l in text.splitlines() if l.strip()]
+          body = '\n'.join(lines)
+          # 본문 표 근처부터 출력
+          n = int(os.environ.get('CHARS', '6000'))
+          i = max(body.find('상위'), 0)
+          print(body[i:i + n])
+          EOF
+            echo
+          done
