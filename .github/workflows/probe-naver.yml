@@ -7,12 +7,16 @@ on:
     inputs:
       urls:
         description: "확인할 URL들 (공백 구분)"
-        required: true
-        default: "https://finance.naver.com/sise/sise_deal_rank.naver"
+        required: false
+        default: ""
       chars:
         description: "URL당 출력 문자수"
         required: false
         default: "6000"
+      kis:
+        description: "true면 한투 매매종목가집계(FHPTJ04400000) 응답 확인"
+        required: false
+        default: "false"
 
 permissions: {}
 
@@ -55,3 +59,37 @@ jobs:
           EOF
             echo
           done
+
+      - name: KIS 매매종목가집계 확인
+        if: ${{ inputs.kis == 'true' }}
+        env:
+          KIS_APP_KEY: ${{ secrets.KIS_APP_KEY }}
+          KIS_APP_SECRET: ${{ secrets.KIS_APP_SECRET }}
+        run: |
+          pip install -q requests
+          python3 <<'EOF'
+          import os, json, requests
+          BASE = "https://openapi.koreainvestment.com:9443"
+          k, s = os.environ["KIS_APP_KEY"], os.environ["KIS_APP_SECRET"]
+          r = requests.post(f"{BASE}/oauth2/tokenP", json={
+              "grant_type": "client_credentials", "appkey": k, "appsecret": s}, timeout=15)
+          r.raise_for_status()
+          tok = r.json()["access_token"]
+          H = {"authorization": f"Bearer {tok}", "appkey": k, "appsecret": s,
+               "tr_id": "FHPTJ04400000", "custtype": "P"}
+          for sort_cls in ("0", "1"):  # 0 순매수상위, 1 순매도상위
+              p = {"FID_COND_MRKT_DIV_CODE": "V", "FID_COND_SCR_DIV_CODE": "16449",
+                   "FID_INPUT_ISCD": "0000", "FID_DIV_CLS_CODE": "1",
+                   "FID_RANK_SORT_CLS_CODE": sort_cls, "FID_ETC_CLS_CODE": "1"}
+              r = requests.get(f"{BASE}/uapi/domestic-stock/v1/quotations/foreign-institution-total",
+                               headers=H, params=p, timeout=15)
+              print("== sort", sort_cls, "HTTP", r.status_code)
+              try:
+                  j = r.json()
+                  print("rt_cd", j.get("rt_cd"), "msg", j.get("msg1"))
+                  out = j.get("output") or j.get("output1") or []
+                  print(json.dumps(out[:3], ensure_ascii=False, indent=1))
+                  print("행수:", len(out))
+              except Exception as e:
+                  print("parse fail:", e, r.text[:500])
+          EOF
