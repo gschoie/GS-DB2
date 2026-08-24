@@ -64,7 +64,8 @@ UNIVERSE = [
     ("SAND.ST", "Sandvik", "스웨덴", "광산장비"),
     ("WAC.DE", "Wacker Neuson", "독일", "소형장비"),
     ("MTU.PA", "Manitou", "프랑스", "크레인·고소장비"),
-    ("AHT.L", "Ashtead (Sunbelt)", "영국", "렌탈"),
+    # 2026 NYSE 상장 이전으로 런던 티커(AHT.L) 조회 불가 — 미국 티커 사용
+    ("AHT", "Ashtead (Sunbelt)", "영국", "렌탈"),
     # 일본
     ("6301.T", "고마쓰 (Komatsu)", "일본", "종합"),
     ("6305.T", "히타치건기 (Hitachi CM)", "일본", "종합"),
