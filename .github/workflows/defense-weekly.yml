@@ -40,6 +40,9 @@ jobs:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           # 주 1회라 pro 무료 티어로 충분. 쿼터 초과 시 flash 자동 폴백.
           GEMINI_MODEL: gemini-2.5-pro
+          # 일간 방산 브리핑과 같은 텔레그램 채널(GS K-Defence NEWS)로 요약+링크 발송
+          TELEGRAM_BOT_TOKEN: ${{ secrets.KDEF_TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.KDEF_TELEGRAM_CHAT_ID }}
         run: python weekly_defense_bot.py
 
       - name: 아카이브 커밋 및 푸시

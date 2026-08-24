@@ -102,4 +102,12 @@
       (Gemini·NotebookLM) 소스용: NotebookLM에는 .md 업로드, PDF 필요 시 last4weeks.html에서 인쇄.
     - 사이드바 `🗓️ ┗방산.주간정리(토)` 뷰, build_static 복사, deploy-pages workflow_run 연결.
 
+13. **건설기계 주간 정리 + 방산 주간 텔레 발송** (8/24): `construction_briefing/weekly_construction_bot.py`
+    — 방산 주간과 동일 골격, 매주 토 KST 12:10(`construction-weekly.yml`, 방산 주간 11:50과 20분
+    오프셋). 소스는 construction_daily 7일치 + 주간 시세·매크로(yfinance). 산출물
+    `static/construction_weekly/` + `construction_weekly_report.html` + last4weeks 묶음
+    (다운로드명 GLOBAL_CONSTRUCTION_YYMMDD.md). 사이드바 `🗓️ ┗건설기계.주간정리(토)`.
+    텔레그램은 CONSTRUCTION_TELEGRAM_* 시크릿 설정 시에만 (현재 미설정 = 대시보드 전용).
+    방산 주간(weekly_defense_bot)에는 일간과 같은 채널(KDEF_TELEGRAM_*)로 요약+링크 발송 추가.
+
 이후 작업은 git log와 이 파일을 갱신하며 이어간다.

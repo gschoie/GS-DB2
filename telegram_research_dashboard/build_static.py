@@ -237,6 +237,12 @@ def build() -> Path:
     construction_dir = ROOT / "static" / "construction_daily"
     if construction_dir.is_dir():
         shutil.copytree(construction_dir, OUTPUT.parent / "construction_daily", dirs_exist_ok=True)
+    construction_weekly_index = ROOT / "static" / "construction_weekly_report.html"
+    if construction_weekly_index.exists():
+        shutil.copy2(construction_weekly_index, OUTPUT.parent / "construction_weekly_report.html")
+    construction_weekly_dir = ROOT / "static" / "construction_weekly"
+    if construction_weekly_dir.is_dir():
+        shutil.copytree(construction_weekly_dir, OUTPUT.parent / "construction_weekly", dirs_exist_ok=True)
     claude_index = ROOT / "static" / "claude_defense_report.html"
     if claude_index.exists():
         shutil.copy2(claude_index, OUTPUT.parent / "claude_defense_report.html")
