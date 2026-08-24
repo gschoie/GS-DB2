@@ -37,6 +37,9 @@ jobs:
 
       - name: 수급 스냅샷 수집 (휴장일이면 자동 생략)
         working-directory: market_flow
+        env:
+          KIS_APP_KEY: ${{ secrets.KIS_APP_KEY }}
+          KIS_APP_SECRET: ${{ secrets.KIS_APP_SECRET }}
         run: python scrape.py
 
       - name: 리포트 HTML 생성
