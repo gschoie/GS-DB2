@@ -275,6 +275,11 @@ def write_index() -> None:
     WEEKLY_DIR.mkdir(parents=True, exist_ok=True)
     dates = sorted((p.stem for p in WEEKLY_DIR.glob("????-??-??.html")), reverse=True)
     dates_js = json.dumps(dates, ensure_ascii=False)
+    # 다운로드 파일명: GLOBAL_DEFENSE_YYMMDD.md (YYMMDD = 최신 정리본 생성일)
+    md_download_name = (
+        f"GLOBAL_DEFENSE_{dates[0][2:].replace('-', '')}.md" if dates
+        else "GLOBAL_DEFENSE.md"
+    )
     index = f"""<!DOCTYPE html><html lang="ko"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>글로벌 방산 주간 정리</title><style>
@@ -290,7 +295,7 @@ iframe{{width:100%;height:calc(100vh - 110px);border:1px solid #223046;border-ra
 <div class="bar">
   <h1>🗓️ 글로벌 방산 주간 정리 <small style="font-size:11px;color:#8b96a8">매주 토 11:50</small></h1>
   <a class="bundle" href="defense_weekly/last4weeks.html" target="_blank" rel="noopener" title="월간 세미나(NotebookLM)용 최근 4주 묶음">📦 4주 묶음</a>
-  <a class="bundle" href="defense_weekly/last4weeks.md" download title="NotebookLM 업로드용 마크다운">⬇ .md</a>
+  <a class="bundle" href="defense_weekly/last4weeks.md" download="{md_download_name}" title="NotebookLM 업로드용 마크다운 ({md_download_name})">⬇ .md</a>
   <button id="prev" title="이전 주">◀</button>
   <select id="dsel"></select>
   <button id="next" title="다음 주">▶</button>
