@@ -206,3 +206,10 @@ a.rep-title:hover{color:#386453;text-decoration:underline}
 @media(max-width:620px){.todo-form select{max-width:110px}}
 .mini-line{display:flex;gap:8px;align-items:baseline;border-top:1px solid #edf0eb;padding:8px 3px;text-decoration:none;color:inherit;font-size:12px;min-width:0}.mini-line:first-child{border-top:0}.mini-line:hover{background:#fafbf8}.mini-line>small{color:#8a918d;font-family:Georgia;font-size:11px;white-space:nowrap}.mini-line>b{white-space:nowrap;font-size:12px;color:#18231f}.mini-line>span{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#3a453f}.mini-line .rk-s{display:grid;place-items:center;width:20px;height:20px;border-radius:50%;background:var(--green);color:var(--lime);font-size:11px;font-family:Georgia;flex:none;align-self:center}
 .mini-line>.report-kind,.mini-line>.tag{flex:none;white-space:nowrap;overflow:visible;text-overflow:clip;font-size:9px;padding:2px 5px;align-self:center}
+
+/* 수명 피드백 보관함: 항목+복원을 한 묶음으로, 복원은 보조 톤으로 구분 */
+.task-arch-pair{display:inline-flex;border:1px solid #cfd6d0;border-radius:8px;overflow:hidden;background:#fff}
+.task-arch-item{border:0;background:#fff;padding:7px 12px;font-size:12px;font-weight:600;color:#3a453f;cursor:pointer}
+.task-arch-item:hover{background:#f2f5f1}
+.task-arch-restore{border:0;border-left:1px solid #e3e8e2;background:#f2f5f1;color:#2e6250;padding:7px 10px;font-size:11px;font-weight:700;cursor:pointer;white-space:nowrap}
+.task-arch-restore:hover{background:#2e6250;color:#fff}
