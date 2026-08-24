@@ -1,64 +1,8 @@
 {
-  "when_utc": "2026-08-23 22:12:22Z",
+  "when_utc": "2026-08-24 22:18:43Z",
   "ok": true,
-  "note": "alert_sent",
+  "note": "no_alert_skip",
   "chat_id_tail": "5171",
   "token_set": true,
-  "response": {
-    "ok": true,
-    "result": {
-      "message_id": 172,
-      "from": {
-        "id": 8875725998,
-        "is_bot": true,
-        "first_name": "GB Investing Signal",
-        "username": "gs_invest_signal_bot"
-      },
-      "chat": {
-        "id": 279385171,
-        "first_name": "광식",
-        "last_name": "최",
-        "username": "gschoie",
-        "type": "private"
-      },
-      "date": 1787523142,
-      "text": "📡 ETF/섹터 신호 · 2026-08-21 (전일 확정)\n\n▼ 매도 경고(데드크로스) 1개\n\n🔴 KODEX 바이오 · 바이오/헬스케어\n   ＋DI가 −DI 하향이탈·추세꺾임\n   ADX 21.1 · %K 57.8/63.9 · 수급 중립\n   [B] ADX 하락추세 · 외인·기관 연속 순매도 4일\n\n⚡ 추세 강도 1개 (강력 1)\n\n⚡ HANARO Fn K-푸드 · 음식료\n   ADX 25 상향돌파 · 상승추세 강화(강력)\n   ADX 25.3 · %K 75.2/73.2 · 수급 중립\n   [B] 상대강도 상위 16% · ADX 상승추세\n\n전체 신호판 › 대시보드\n🎴 GS Research Desk · ETF/섹터 신호",
-      "entities": [
-        {
-          "offset": 0,
-          "length": 12,
-          "type": "bold"
-        },
-        {
-          "offset": 50,
-          "length": 1,
-          "type": "bold"
-        },
-        {
-          "offset": 57,
-          "length": 9,
-          "type": "bold"
-        },
-        {
-          "offset": 178,
-          "length": 1,
-          "type": "bold"
-        },
-        {
-          "offset": 191,
-          "length": 14,
-          "type": "bold"
-        },
-        {
-          "offset": 316,
-          "length": 4,
-          "type": "text_link",
-          "url": "https://gschoie.github.io/GS-DB2/etf_signal_report.html"
-        }
-      ],
-      "link_preview_options": {
-        "is_disabled": true
-      }
-    }
-  }
+  "response": null
 }
