@@ -10,6 +10,7 @@
 """
 import csv
 import json
+import os
 import re
 import datetime as dt
 from pathlib import Path
