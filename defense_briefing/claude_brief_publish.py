@@ -128,6 +128,19 @@ table.ptab{border-collapse:collapse;width:100%;margin:12px 0;font-size:13.5px}
 .ptab tr:hover td{background:#131a26}
 .up{color:#ff6b6b;font-weight:600}
 .down{color:#5b9dff;font-weight:600}
+/* 모바일: 6열 표가 세로로 짓눌리므로 행을 카드로 재배치 (헤더행 기반 라벨) */
+@media (max-width:640px){
+  body{padding:20px 14px 48px}
+  .ptab.hdr, .ptab.hdr tbody, .ptab.hdr tr, .ptab.hdr td{display:block;width:100%;box-sizing:border-box}
+  .ptab.hdr tr:first-child{display:none}
+  .ptab.hdr tr{border:1px solid #223046;border-radius:10px;margin:10px 0;padding:9px 12px;background:#111825}
+  .ptab.hdr tr:hover td{background:transparent}
+  .ptab.hdr td{border:none;padding:2px 0;display:flex;gap:10px;align-items:baseline;font-size:13.5px}
+  .ptab.hdr td::before{content:attr(data-l);color:#8b96a8;font-size:11.5px;flex:0 0 58px}
+  .ptab.hdr td:first-child{display:block;font-weight:700;color:#f0f4fa;font-size:14.5px;
+    padding-bottom:5px;margin-bottom:4px;border-bottom:1px solid #1d2838}
+  .ptab.hdr td:first-child::before{content:none}
+}
 """
 
 
@@ -136,9 +149,18 @@ def report_to_page_html(md: str) -> str:
 
     def flush_table():
         if table_rows:
-            out.append('<div style="overflow-x:auto"><table class="ptab">')
-            for cells in table_rows:
-                out.append("<tr>" + "".join(f"<td>{c}</td>" for c in cells) + "</tr>")
+            # 첫 행을 헤더로 간주해 각 셀에 data-l 라벨을 달면, 모바일 CSS가
+            # 행을 카드로 재배치할 때 "국가: 한국" 식으로 라벨을 붙일 수 있다.
+            has_hdr = len(table_rows) >= 2
+            labels = [re.sub(r"<[^>]+>", "", h).strip() for h in table_rows[0]] if has_hdr else []
+            out.append(f'<div style="overflow-x:auto"><table class="ptab{" hdr" if has_hdr else ""}">')
+            for i, cells in enumerate(table_rows):
+                tds = []
+                for j, c in enumerate(cells):
+                    label = labels[j] if has_hdr and i > 0 and j < len(labels) else ""
+                    attr = f' data-l="{html.escape(label, quote=True)}"' if label else ""
+                    tds.append(f"<td{attr}>{c}</td>")
+                out.append("<tr>" + "".join(tds) + "</tr>")
             out.append("</table></div>")
             table_rows.clear()
 
