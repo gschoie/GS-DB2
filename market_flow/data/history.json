@@ -5545,8 +5545,8 @@
   },
   "2026-08-24": {
    "kospi": {
-    "close": 6770.46,
-    "chg_pct": -2.06
+    "close": 6719.15,
+    "chg_pct": -2.8
    },
    "slots": {
     "1000": {
@@ -5565,170 +5565,170 @@
      }
     },
     "1300": {
-     "individual": 18995,
-     "foreign": -20081,
-     "institution": -6184,
-     "arb": 1485,
-     "nonarb": -15904,
-     "program": -14420,
-     "time": "11:42",
-     "kospi": 6770.46,
-     "chg_pct": -2.06,
+     "individual": 28577,
+     "foreign": -31193,
+     "institution": -10455,
+     "arb": 1881,
+     "nonarb": -26247,
+     "program": -24366,
+     "time": "13:46",
+     "kospi": 6719.15,
+     "chg_pct": -2.8,
      "futures": {
-      "foreign": -1302,
-      "inst_total": 1695
+      "foreign": -1430,
+      "inst_total": 1323
      }
     }
    },
    "confirmed": {
     "investor": {
-     "individual": 18995,
-     "foreign": -20081,
-     "inst_total": -6185,
-     "fin_invest": -5176,
-     "insurance": 14,
-     "asset_mgmt": -2822,
-     "bank": 3,
-     "other_fin": 59,
-     "pension": 1738,
-     "other_corp": 7271
+     "individual": 28524,
+     "foreign": -31308,
+     "inst_total": -10341,
+     "fin_invest": -7423,
+     "insurance": 21,
+     "asset_mgmt": -5173,
+     "bank": -5,
+     "other_fin": 100,
+     "pension": 2137,
+     "other_corp": 13125
     },
     "program": {
-     "arb_buy": 2796,
-     "arb_sell": 1310,
-     "arb_net": 1486,
-     "nonarb_buy": 27497,
-     "nonarb_sell": 43501,
-     "nonarb_net": -16004,
-     "total_buy": 30293,
-     "total_sell": 44811,
-     "total_net": -14518
+     "arb_buy": 3957,
+     "arb_sell": 2052,
+     "arb_net": 1905,
+     "nonarb_buy": 36995,
+     "nonarb_sell": 63293,
+     "nonarb_net": -26298,
+     "total_buy": 40952,
+     "total_sell": 65345,
+     "total_net": -24393
     },
     "futures": {
-     "individual": -327,
-     "foreign": -1302,
-     "inst_total": 1695,
-     "fin_invest": 1230,
+     "individual": 177,
+     "foreign": -1430,
+     "inst_total": 1323,
+     "fin_invest": 954,
      "insurance": 99,
-     "asset_mgmt": 340,
-     "bank": -1,
-     "other_fin": 20,
-     "pension": 7,
-     "other_corp": -66
+     "asset_mgmt": 252,
+     "bank": -2,
+     "other_fin": 21,
+     "pension": -1,
+     "other_corp": -70
     }
    },
    "group_1d": {
-    "time": "11:42",
+    "time": "13:46",
     "groups": [
      [
       "2차전지",
-      5.97,
+      5.47,
       2
      ],
      [
       "철강/소재",
-      5.59,
+      4.27,
       1
      ],
      [
       "화장품",
-      3.82,
+      3.48,
       2
      ],
      [
       "바이오/헬스케어",
-      3.33,
+      3.45,
       7
      ],
      [
+      "음식료",
+      2.27,
+      1
+     ],
+     [
       "운송",
-      2.69,
+      2.14,
       1
      ],
      [
       "화학",
-      2.64,
-      1
-     ],
-     [
-      "조선",
-      2.14,
-      2
-     ],
-     [
-      "음식료",
-      1.83,
-      1
-     ],
-     [
-      "인터넷/플랫폼",
-      1.64,
+      1.51,
       1
      ],
      [
       "신재생/수소/기후",
-      1.58,
+      1.02,
       5
      ],
      [
-      "게임/콘텐츠",
-      0.99,
-      6
-     ],
-     [
-      "소비/여행",
-      0.58,
-      1
-     ],
-     [
-      "로봇",
-      0.22,
+      "조선",
+      0.67,
       2
      ],
      [
+      "게임/콘텐츠",
+      0.66,
+      6
+     ],
+     [
+      "인버스/숏",
+      0.48,
+      2
+     ],
+     [
+      "인터넷/플랫폼",
+      0.41,
+      1
+     ],
+     [
+      "소비/여행",
+      0.39,
+      1
+     ],
+     [
       "자동차",
-      0.22,
+      -0.42,
       3
      ],
      [
       "방산",
-      0.13,
+      -0.58,
       3
      ],
      [
-      "인버스/숏",
-      -0.18,
+      "로봇",
+      -0.94,
       2
      ],
      [
-      "해외지수",
-      -1.09,
-      4
-     ],
-     [
       "금융",
-      -1.18,
+      -1.2,
       5
      ],
      [
+      "해외지수",
+      -1.55,
+      4
+     ],
+     [
       "건설",
-      -1.52,
+      -1.89,
       2
      ],
      [
       "배당/그룹",
-      -2.17,
+      -2.63,
       2
      ],
      [
       "반도체/AI",
-      -2.35,
+      -3.26,
       3
      ]
     ]
    }
   }
  },
- "updated_kst": "2026-08-24 11:42",
+ "updated_kst": "2026-08-24 13:46",
  "futures_unit": "계약"
 }
