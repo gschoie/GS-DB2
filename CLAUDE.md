@@ -110,4 +110,17 @@
     텔레그램은 CONSTRUCTION_TELEGRAM_* 시크릿 설정 시에만 (현재 미설정 = 대시보드 전용).
     방산 주간(weekly_defense_bot)에는 일간과 같은 채널(KDEF_TELEGRAM_*)로 요약+링크 발송 추가.
 
+14. **건설기계 브리핑 작성 주체를 Gemini → Claude로 전환** (8/25): Gemini 무료 티어에서
+    pro 쿼터가 0이 되고 flash 503으로 아침 브리핑이 처음 결측된 것을 계기로,
+    "수집은 러너, 해석·작성은 Claude 예약 세션" 구조로 개편.
+    - `construction-briefing.yml` 2단 스케줄: 06:10 KST 수집 전용(`--collect-only` →
+      `construction_briefing/inputs/<날짜>.json`, 7일 보관) / 07:40 KST Gemini 폴백
+      (오늘 md가 이미 있으면 무동작; 모델 gemini-flash-latest).
+    - 봇에 `--collect-only`·`--render-md <날짜>` 모드 추가, yfinance·genai·requests는
+      지연 import(렌더 모드는 세션 컨테이너에서 네트워크 패키지 없이 실행).
+    - claude-brief-ingest가 건설기계 파일도 main으로 나른다. 텔레그램 발송 가드는
+      `claude_defense/*.md` 변경으로 한정(건설기계만 바뀐 커밋에 방산 요약 중복 발송 방지).
+    - **세션 규율**: 브리핑 push 전 반드시 origin/main 머지 — 폴백이 main에 직접 쓴 날
+      브랜치의 구본이 main을 되덮는 사고 방지.
+
 이후 작업은 git log와 이 파일을 갱신하며 이어간다.
