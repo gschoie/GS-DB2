@@ -91,6 +91,11 @@ def build_message():
         lines += [sf_line(*r) for r in sf.get("buy", [])]
         lines += ["", "❌ <b>외국인 순매도 상위</b>"]
         lines += [sf_line(*r) for r in sf.get("sell", [])]
+        if sf.get("inst_buy") or sf.get("inst_sell"):
+            lines += ["", "✅ <b>기관 순매수 상위</b>"]
+            lines += [sf_line(*r) for r in sf.get("inst_buy", [])]
+            lines += ["", "❌ <b>기관 순매도 상위</b>"]
+            lines += [sf_line(*r) for r in sf.get("inst_sell", [])]
     lines += ["", f'상세 차트 › <a href="{DASH_URL}">대시보드</a>', SIGNATURE]
     return "\n".join(lines)
 

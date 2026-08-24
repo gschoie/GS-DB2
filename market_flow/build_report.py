@@ -212,14 +212,17 @@ def stock_flow_block(today, is_latest):
         return (f'<div class="sfcol"><p class="ctitle">{title}</p>'
                 f'<ul class="sflist">{lis}</ul></div>')
 
+    cols = (col("✅ 외국인 순매수 상위", sf.get("buy", []), "gup")
+            + col("❌ 외국인 순매도 상위", sf.get("sell", []), "gdn"))
+    if sf.get("inst_buy") or sf.get("inst_sell"):
+        cols += (col("✅ 기관 순매수 상위", sf.get("inst_buy", []), "gup")
+                 + col("❌ 기관 순매도 상위", sf.get("inst_sell", []), "gdn"))
     when = "오늘의" if is_latest else "당일"
-    return (f'<h2>📌 {when} 외국인 종목별 수급 <span class="na" '
+    return (f'<h2>📌 {when} 외국인·기관 종목별 수급 <span class="na" '
             f'style="font-weight:400;font-size:12px">— 장중 가집계(잠정) · {sf["time"]} 기준 '
             f'· 금액순 · ( )는 등락률</span></h2>'
-            f'<div class="card"><div class="sfgrid">'
-            + col("✅ 순매수 상위", sf.get("buy", []), "gup")
-            + col("❌ 순매도 상위", sf.get("sell", []), "gdn")
-            + '</div><p class="note">한국투자증권 장중 가집계 — 확정치와 다를 수 있음</p></div>')
+            f'<div class="card"><div class="sfgrid">{cols}'
+            '</div><p class="note">한국투자증권 장중 가집계 — 확정치와 다를 수 있음</p></div>')
 
 
 def fut_snapshot(day):

@@ -189,15 +189,16 @@ def group_returns():
 KIS_BASE = "https://openapi.koreainvestment.com:9443"
 
 
-def stock_foreign_flow(top=7):
+def stock_investor_flow(top=7):
     """한투 OpenAPI '국내기관_외국인 매매종목가집계'(FHPTJ04400000) — 장중 잠정.
-    외국인 순매수/순매도 상위 종목을 금액 기준으로 뽑는다.
-    반환: {"time": "HH:MM", "buy": [[종목명, 등락률%, 순매수억], …], "sell": […]} 또는 None
+    외국인·기관 각각의 순매수/순매도 상위 종목을 금액 기준으로 뽑는다.
+    반환: {"time": "HH:MM", "buy": [[종목명, 등락률%, 순매수억], …], "sell": […],
+           "inst_buy": […], "inst_sell": […]} 또는 None
     (KIS_APP_KEY/SECRET 미설정이면 None — 섹션만 비표시)"""
     key = os.environ.get("KIS_APP_KEY")
     sec = os.environ.get("KIS_APP_SECRET")
     if not key or not sec:
-        print("KIS 키 미설정 → 종목별 외국인 수급 생략")
+        print("KIS 키 미설정 → 종목별 수급 생략")
         return None
     r = SESSION.post(f"{KIS_BASE}/oauth2/tokenP", timeout=15, json={
         "grant_type": "client_credentials", "appkey": key, "appsecret": sec})
@@ -205,24 +206,28 @@ def stock_foreign_flow(top=7):
     hdr = {"authorization": f"Bearer {r.json()['access_token']}",
            "appkey": key, "appsecret": sec, "tr_id": "FHPTJ04400000", "custtype": "P"}
     out = {"time": now_kst().strftime("%H:%M")}
-    for name, sort_cls in (("buy", "0"), ("sell", "1")):
-        p = {"FID_COND_MRKT_DIV_CODE": "V", "FID_COND_SCR_DIV_CODE": "16449",
-             "FID_INPUT_ISCD": "0000",          # 전체 시장
-             "FID_DIV_CLS_CODE": "1",           # 금액 기준 정렬
-             "FID_RANK_SORT_CLS_CODE": sort_cls,  # 0 순매수상위 / 1 순매도상위
-             "FID_ETC_CLS_CODE": "1"}           # 외국인
-        rr = SESSION.get(f"{KIS_BASE}/uapi/domestic-stock/v1/quotations/foreign-institution-total",
-                         headers=hdr, params=p, timeout=15)
-        rr.raise_for_status()
-        j = rr.json()
-        if j.get("rt_cd") != "0":
-            raise RuntimeError(f"KIS 가집계 오류: {j.get('msg1')}")
-        rows = []
-        for x in j.get("output", [])[:top]:
-            rows.append([x["hts_kor_isnm"], float(x["prdy_ctrt"]),
-                         round(int(x["frgn_ntby_tr_pbmn"]) / 100)])  # 백만원 → 억원
-        out[name] = rows
-    print(f"외국인 종목별 가집계: 매수 {len(out['buy'])} · 매도 {len(out['sell'])}종목")
+    # FID_ETC_CLS_CODE: 1 외국인 / 2 기관계 — 기관은 orgn_* 필드에서 금액을 읽는다
+    for inv_cls, amt_key, prefix in (("1", "frgn_ntby_tr_pbmn", ""),
+                                     ("2", "orgn_ntby_tr_pbmn", "inst_")):
+        for name, sort_cls in (("buy", "0"), ("sell", "1")):
+            p = {"FID_COND_MRKT_DIV_CODE": "V", "FID_COND_SCR_DIV_CODE": "16449",
+                 "FID_INPUT_ISCD": "0000",          # 전체 시장
+                 "FID_DIV_CLS_CODE": "1",           # 금액 기준 정렬
+                 "FID_RANK_SORT_CLS_CODE": sort_cls,  # 0 순매수상위 / 1 순매도상위
+                 "FID_ETC_CLS_CODE": inv_cls}
+            rr = SESSION.get(f"{KIS_BASE}/uapi/domestic-stock/v1/quotations/foreign-institution-total",
+                             headers=hdr, params=p, timeout=15)
+            rr.raise_for_status()
+            j = rr.json()
+            if j.get("rt_cd") != "0":
+                raise RuntimeError(f"KIS 가집계 오류: {j.get('msg1')}")
+            rows = []
+            for x in j.get("output", [])[:top]:
+                rows.append([x["hts_kor_isnm"], float(x["prdy_ctrt"]),
+                             round(int(x[amt_key]) / 100)])  # 백만원 → 억원
+            out[prefix + name] = rows
+    print(f"종목별 가집계: 외국인 {len(out['buy'])}/{len(out['sell'])} · "
+          f"기관 {len(out['inst_buy'])}/{len(out['inst_sell'])}종목")
     return out
 
 
@@ -369,7 +374,7 @@ def main():
 
     # 종목별 외국인 수급 가집계 (한투 API, 잠정 — 실패/키 미설정이면 섹션만 비표시)
     try:
-        sf = stock_foreign_flow()
+        sf = stock_investor_flow()
         if sf:
             day["stock_flow"] = sf
     except Exception as e:
