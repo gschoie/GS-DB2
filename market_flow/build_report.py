@@ -196,6 +196,32 @@ def group_ret_block(today, is_latest):
             f'<div class="card"><ul class="gbars">{"".join(items)}</ul></div>')
 
 
+def stock_flow_block(today, is_latest):
+    """종목별 외국인 수급 가집계(한투 API, 장중 잠정) — 순매수/순매도 상위 리스트."""
+    sf = today.get("stock_flow")
+    if not sf or not (sf.get("buy") or sf.get("sell")):
+        return ""
+
+    def col(title, rows, cls):
+        lis = "".join(
+            f'<li><span class="gv {"gup" if c > 0 else "gdn" if c < 0 else "na"}">'
+            f'{"+" if c > 0 else "−" if c < 0 else ""}{abs(c):.1f}%</span>'
+            f'<span class="sfname">{name}</span>'
+            f'<span class="sfamt {cls}">{fmt(amt)}억</span></li>'
+            for name, c, amt in rows)
+        return (f'<div class="sfcol"><p class="ctitle">{title}</p>'
+                f'<ul class="sflist">{lis}</ul></div>')
+
+    when = "오늘의" if is_latest else "당일"
+    return (f'<h2>📌 {when} 외국인 종목별 수급 <span class="na" '
+            f'style="font-weight:400;font-size:12px">— 장중 가집계(잠정) · {sf["time"]} 기준 '
+            f'· 금액순 · ( )는 등락률</span></h2>'
+            f'<div class="card"><div class="sfgrid">'
+            + col("✅ 순매수 상위", sf.get("buy", []), "gup")
+            + col("❌ 순매도 상위", sf.get("sell", []), "gdn")
+            + '</div><p class="note">한국투자증권 장중 가집계 — 확정치와 다를 수 있음</p></div>')
+
+
 def fut_snapshot(day):
     """당일 K200 선물 순매수 (확정 우선, 없으면 장중 곡선 마지막 점).
     반환: ({individual, foreign, inst}, 출처라벨) 또는 (None, None)"""
@@ -485,6 +511,8 @@ def render_day(hist, all_dates, i):
 
 {group_ret_block(today, is_latest)}
 
+{stock_flow_block(today, is_latest)}
+
 <h2>📸 시점별 스냅샷 <span class="na" style="font-weight:400;font-size:12px">(잠정치, 억원)</span></h2>
 <div class="card scroll">{snap_table}{conf_note}</div>
 
@@ -575,6 +603,14 @@ gap:10px;padding:2.5px 0;font-size:13px}}
 .gbars .gv{{text-align:right;font-variant-numeric:tabular-nums}}
 .gbars small{{color:var(--muted);text-align:right;font-size:11.5px}}
 .gup{{color:var(--gup)}} .gdn{{color:var(--gdn)}}
+.sfgrid{{display:grid;grid-template-columns:1fr 1fr;gap:4px 22px}}
+@media(max-width:620px){{.sfgrid{{grid-template-columns:1fr}}}}
+.sflist{{list-style:none;margin:4px 0;padding:0}}
+.sflist li{{display:grid;grid-template-columns:52px 1fr 76px;align-items:center;gap:8px;
+padding:2.5px 0;font-size:13px;font-variant-numeric:tabular-nums}}
+.sflist .gv{{text-align:right}}
+.sfname{{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}}
+.sfamt{{text-align:right}}
 .dbar{{display:block;position:relative;height:7px;background:var(--gbar-bg);border-radius:2px}}
 .dbar::before{{content:"";position:absolute;left:50%;top:-1px;bottom:-1px;width:1px;background:var(--line)}}
 .dbar i{{position:absolute;top:0;bottom:0;border-radius:2px}}
