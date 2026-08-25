@@ -5946,25 +5946,25 @@
      }
     },
     "1640": {
-     "individual": 10514,
-     "foreign": -38142,
+     "individual": 10509,
+     "foreign": -38136,
      "institution": 11708,
      "arb": 1025,
      "nonarb": -27315,
      "program": -26291,
-     "time": "16:27",
+     "time": "17:21",
      "kospi": 6742.74,
      "chg_pct": 0.68,
      "futures": {
-      "foreign": -860,
-      "inst_total": 1660
+      "foreign": -357,
+      "inst_total": 1476
      }
     }
    },
    "confirmed": {
     "investor": {
-     "individual": 10514,
-     "foreign": -38142,
+     "individual": 10509,
+     "foreign": -38136,
      "inst_total": 11708,
      "fin_invest": 10706,
      "insurance": 57,
@@ -5986,20 +5986,20 @@
      "total_net": -26290
     },
     "futures": {
-     "individual": -815,
-     "foreign": -860,
-     "inst_total": 1660,
-     "fin_invest": -1555,
+     "individual": -1080,
+     "foreign": -357,
+     "inst_total": 1476,
+     "fin_invest": -1497,
      "insurance": 154,
-     "asset_mgmt": 2970,
+     "asset_mgmt": 2723,
      "bank": -3,
-     "other_fin": -5,
+     "other_fin": 0,
      "pension": 99,
-     "other_corp": 15
+     "other_corp": -39
     }
    },
    "group_1d": {
-    "time": "16:27",
+    "time": "17:21",
     "groups": [
      [
       "건설",
@@ -6109,7 +6109,7 @@
     ]
    },
    "stock_flow": {
-    "time": "16:27",
+    "time": "17:21",
     "buy": [
      [
       "SK",
@@ -6971,6 +6971,6 @@
    }
   }
  },
- "updated_kst": "2026-08-25 16:28",
+ "updated_kst": "2026-08-25 17:21",
  "futures_unit": "계약"
 }
