@@ -394,7 +394,7 @@ def day_html(payload, is_latest):
         fg_rank = (3 if s["alert"] else (2 if s.get("alert_sell") else
                                          (1 if s.get("alert_adx") else 0))) + (0 if s["liquid"] else -1)
         trs += f'''
-      <tr class="{cls}">
+      <tr class="{cls}" data-flow="{esc(s["flow"])}">
         <td class="etf" data-v="{esc(s["name"])}"><div class="etf-row"><b>{name_link(s)}</b><button class="btn-chart" data-code="{esc(s.get("code") or "")}" title="최근 120거래일 가격 · 신호 발생 시점">추세</button></div><div class="etf-sub"><small>{esc(s["group"])}</small>{mini_spark(s, 46, 13)}</div></td>
         <td class="r" data-v="{s["close"]}">{s["close"]:,}</td>
         {ret_cells(s, rscale)}
@@ -414,26 +414,27 @@ def day_html(payload, is_latest):
 ADX(추세) + Stochastic Slow(타이밍) + 수급(외인·기관·개인 5일 순매수, 억원). 신호는 장중 흔들림을 피해 <b>전일 확정 종가</b>로 계산.</p>
 
 <section class="stats">
-  <article><small>스캔 종목</small><strong>{scanned}</strong></article>
-  <article><small>매수 신호</small><strong class="g">{len(alerts)}</strong></article>
-  <article><small>매도 경고</small><strong class="r">{len(sells)}</strong></article>
-  <article><small>추세 강도</small><strong class="b">{len(adxs)}</strong></article>
-  <article><small>외인·기관 쌍끌이</small><strong class="g">{n_buy}</strong></article>
-  <article><small>개인몰림 경계</small><strong class="w">{n_warn}</strong></article>
+  <a class="tile" href="#sec-board"><small>스캔 종목</small><strong>{scanned}</strong></a>
+  <a class="tile" href="#sec-buy"><small>매수 신호</small><strong class="g">{len(alerts)}</strong></a>
+  <a class="tile" href="#sec-sell"><small>매도 경고</small><strong class="r">{len(sells)}</strong></a>
+  <a class="tile" href="#sec-adx"><small>추세 강도</small><strong class="b">{len(adxs)}</strong></a>
+  <a class="tile" href="#sec-board" data-flow="쌍끌이"><small>외인·기관 쌍끌이</small><strong class="g">{n_buy}</strong></a>
+  <a class="tile" href="#sec-board" data-flow="개인몰림"><small>개인몰림 경계</small><strong class="w">{n_warn}</strong></a>
 </section>
 
-<h2>{day}의 추세 강도 <small style="font:400 12px Inter;color:#8b918e">— ADX 20 돌파(확인) · 25 돌파(강력) · 방향은 DI로 판정</small></h2>
+<h2 id="sec-adx">{day}의 추세 강도 <small style="font:400 12px Inter;color:#8b918e">— ADX 20 돌파(확인) · 25 돌파(강력) · 방향은 DI로 판정</small></h2>
 <div class="alerts">{cards(adxs, "adx")}</div>
 
-<h2>{day}의 매수 신호 <small style="font:400 12px Inter;color:#8b918e">— 새로 뜬 골든크로스 · 개인몰림 제외 · 유동성 확보 종목</small></h2>
+<h2 id="sec-buy">{day}의 매수 신호 <small style="font:400 12px Inter;color:#8b918e">— 새로 뜬 골든크로스 · 개인몰림 제외 · 유동성 확보 종목</small></h2>
 <div class="alerts">{cards(alerts, "buy")}</div>
 
-<h2>{day}의 매도 경고 <small style="font:400 12px Inter;color:#8b918e">— 새로 뜬 데드크로스 · 쌍끌이 제외 · 유동성 확보 종목</small></h2>
+<h2 id="sec-sell">{day}의 매도 경고 <small style="font:400 12px Inter;color:#8b918e">— 새로 뜬 데드크로스 · 쌍끌이 제외 · 유동성 확보 종목</small></h2>
 <div class="alerts">{cards(sells, "sell")}</div>
 
 {returns_block(sig, day)}
 
-<h2>전체 신호판 ({scanned}) <small style="font:400 12px Inter;color:#8b918e">— 수익률·지표·수급 한 표 · 헤더 클릭으로 정렬 · 종목명 아래 곡선은 <b>최근 60거래일</b> 주가</small></h2>
+<h2 id="sec-board">전체 신호판 ({scanned}) <small style="font:400 12px Inter;color:#8b918e">— 수익률·지표·수급 한 표 · 헤더 클릭으로 정렬 · 종목명 아래 곡선은 <b>최근 60거래일</b> 주가</small></h2>
+<div id="board-filter"></div>
 <div class="tablewrap"><table class="board">
 <thead><tr>
 <th data-type="text">ETF</th><th class="r" data-type="num">종가</th>
@@ -532,7 +533,19 @@ padding:3px 9px;margin:3px 0;font-size:11px;color:#5b6660}}
 .schedq{{color:#8b918e}}
 @media(max-width:620px){{.schedq{{display:none}}}}
 .stats{{display:grid;grid-template-columns:repeat(6,1fr);gap:12px;margin:22px 0 8px}}
-.stats article{{background:var(--card);border:1px solid var(--line);padding:18px 20px}}
+.stats .tile{{background:var(--card);border:1px solid var(--line);padding:18px 20px;
+  display:block;text-decoration:none;color:inherit;cursor:pointer;transition:border-color .12s,box-shadow .12s}}
+.stats .tile:hover{{border-color:#b9c2bd;box-shadow:0 1px 6px rgba(0,0,0,.06)}}
+.stats .tile:focus-visible{{outline:2px solid #2b5f8a;outline-offset:2px}}
+/* 클릭해서 이동한 섹션을 잠깐 표시해 어디로 왔는지 알려준다 */
+h2.jumped{{animation:jump 1.6s ease-out}}
+@keyframes jump{{0%,55%{{background:#fdf3d4}}100%{{background:transparent}}}}
+#board-filter:empty{{display:none}}
+#board-filter{{margin:10px 0 0}}
+#board-filter .chip{{display:inline-flex;align-items:center;gap:8px;background:#eef3f7;
+  border:1px solid #cfdce6;color:#2b5f8a;font:700 12px Inter;padding:6px 10px}}
+#board-filter .chip button{{background:none;border:0;color:#2b5f8a;cursor:pointer;font:700 13px Inter;padding:0 2px}}
+tr.hidden-row{{display:none}}
 .stats small{{color:var(--muted);font-size:11px;font-weight:700;letter-spacing:.04em}}
 .stats strong{{font:500 32px Georgia;display:block;margin:8px 0 0}}
 .stats .g{{color:#286342}}.stats .w{{color:#8a661c}}.stats .r{{color:#a43c31}}
@@ -732,6 +745,54 @@ function initSort(){{
     }});
   }});
 }}
+function initStats(){{
+  var day = document.getElementById('day');
+  var chip = document.getElementById('board-filter');
+  var table = document.querySelector('#day table.board');
+
+  function clearFilter(){{
+    if(chip) chip.innerHTML = '';
+    if(!table) return;
+    Array.prototype.forEach.call(table.tBodies[0].rows, function(r){{
+      r.classList.remove('hidden-row');
+    }});
+  }}
+  function applyFilter(flow){{
+    if(!table) return 0;
+    var n = 0;
+    Array.prototype.forEach.call(table.tBodies[0].rows, function(r){{
+      var hit = r.getAttribute('data-flow') === flow;
+      r.classList.toggle('hidden-row', !hit);
+      if(hit) n++;
+    }});
+    if(chip){{
+      chip.innerHTML = '';
+      var box = document.createElement('span');
+      box.className = 'chip';
+      box.appendChild(document.createTextNode('수급 필터: ' + flow + ' ' + n + '종목'));
+      var x = document.createElement('button');
+      x.type = 'button'; x.textContent = '✕ 해제'; x.title = '필터 해제';
+      x.addEventListener('click', clearFilter);
+      box.appendChild(x);
+      chip.appendChild(box);
+    }}
+    return n;
+  }}
+
+  Array.prototype.forEach.call(day.querySelectorAll('.stats .tile'), function(a){{
+    a.addEventListener('click', function(e){{
+      e.preventDefault();
+      var target = document.querySelector(a.getAttribute('href'));
+      if(!target) return;
+      var flow = a.getAttribute('data-flow');
+      if(flow) applyFilter(flow); else clearFilter();
+      target.scrollIntoView({{behavior: 'smooth', block: 'start'}});
+      target.classList.remove('jumped');
+      void target.offsetWidth;          // 리플로우 강제 — 같은 타일 연속 클릭에도 다시 깜빡이게
+      target.classList.add('jumped');
+    }});
+  }});
+}}
 var PAGES = {pages_json};
 var DATES = {dates_json};
 var idx = DATES.length - 1;
@@ -745,6 +806,7 @@ function show(i) {{
   prev.disabled = idx === 0;
   next.disabled = idx === DATES.length - 1;
   initSort();
+  initStats();
 }}
 prev.addEventListener("click", function () {{ show(idx - 1); }});
 next.addEventListener("click", function () {{ show(idx + 1); }});
