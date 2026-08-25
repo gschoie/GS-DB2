@@ -42,35 +42,37 @@ def _num(x):
         return None
 
 
-def fetch_quarter(code, session=None):
-    """이번분기(가장 가까운 E 분기) 영업이익 컨센. dict 또는 None."""
+def fetch_quarters(code, session=None):
+    """추정(E) 분기 전부의 영업이익 컨센. 시간순 list[dict] (없으면 빈 리스트).
+
+    당분기뿐 아니라 다음 분기(3Q·4Q 등)도 함께 저장해 두면, 분기보고서 발간으로
+    당분기 시점이 넘어가도 다음 분기의 리비전 히스토리가 이미 쌓여 있게 된다.
+    """
     s = session or requests
     headers = {"User-Agent": UA, "Referer": "https://m.stock.naver.com/"}
     try:
         d = s.get(QUARTER_API.format(code=code), headers=headers, timeout=10).json()
     except Exception:
-        return None
+        return []
     fi = d.get("financeInfo", {})
     titles = fi.get("trTitleList", [])
     rows = fi.get("rowList", [])
-    # 가장 가까운 추정(E) 분기 = 시간순 첫 consensus 항목
     cons = [t for t in titles if t.get("isConsensus") == "Y"]
-    if not cons:
-        return None
-    tgt = cons[0]
-    key = tgt["key"]
-    period = tgt["title"].rstrip(".")  # 'YYYY.MM'
 
-    def val(title):
+    def val(title, key):
         row = next((r for r in rows if r.get("title", "").strip() == title), None)
         return _num(row["columns"].get(key, {}).get("value")) if row else None
 
-    return {
-        "period": period,
-        "sales": val("매출액"),
-        "op_profit": val("영업이익"),
-        "net_profit": val("당기순이익") or val("당기순이익(지배)"),
-    }
+    out = []
+    for tgt in cons:
+        key = tgt["key"]
+        out.append({
+            "period": tgt["title"].rstrip("."),  # 'YYYY.MM'
+            "sales": val("매출액", key),
+            "op_profit": val("영업이익", key),
+            "net_profit": val("당기순이익", key) or val("당기순이익(지배)", key),
+        })
+    return out
 
 
 def fetch_close(code, on_date=None, session=None):
