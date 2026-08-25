@@ -96,6 +96,8 @@ def build_message():
             lines += [sf_line(*r) for r in sf.get("inst_buy", [])]
             lines += ["", "❌ <b>기관 순매도 상위</b>"]
             lines += [sf_line(*r) for r in sf.get("inst_sell", [])]
+        else:  # 기관 가집계는 장 초반엔 아직 안 나온다 (통상 오전 중반 이후 제공)
+            lines += ["", "<i>기관 가집계는 아직 미제공 — 다음 회차부터 표시</i>"]
     lines += ["", f'상세 차트 › <a href="{DASH_URL}">대시보드</a>', SIGNATURE]
     return "\n".join(lines)
 
