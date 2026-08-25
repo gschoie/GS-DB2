@@ -1,128 +1,129 @@
 {
-  "date": "2026-08-24",
-  "prev_date": "2026-08-21",
-  "generated_at": "2026-08-24 16:32",
-  "base_date": "2026-08-24",
-  "prev_base_date": "2026-08-21",
+  "date": "2026-08-25",
+  "prev_date": "2026-08-24",
+  "generated_at": "2026-08-25 09:23",
+  "base_date": "",
+  "prev_base_date": "2026-08-24",
   "same_base": false,
   "first_run": false,
   "etfs": [
     {
-      "code": "471780",
-      "label": "TIGER 코리아테크액티브",
-      "group": "TIGER",
-      "flow_factor": 1.0,
+      "code": "426030",
+      "label": "TIME 미국나스닥100액티브",
+      "group": "TIME(구 TIMEFOLIO)",
+      "flow_factor": 0.942,
       "new": [
         {
-          "key": "006400",
-          "name": "삼성SDI",
-          "code": "006400",
-          "weight": 1.8,
-          "shares": 13.0
+          "key": "STRATEGY INC",
+          "name": "STRATEGY INC",
+          "code": "",
+          "weight": 0.0,
+          "shares": 110.0
+        },
+        {
+          "key": "COINBASE GLOBAL INC -CLASS A",
+          "name": "COINBASE GLOBAL INC -CLASS A",
+          "code": "",
+          "weight": 0.0,
+          "shares": 109.0
         }
       ],
       "gone": [
         {
-          "key": "222800",
-          "name": "심텍",
-          "code": "222800",
-          "weight_prev": 1.9,
-          "shares_prev": 58.0
+          "key": "TOWER SEMICONDUCTOR LTD",
+          "name": "TOWER SEMICONDUCTOR LTD",
+          "code": "",
+          "weight_prev": 0.0,
+          "shares_prev": 80.0
+        },
+        {
+          "key": "CREDO TECHNOLOGY GROUP HOLDI",
+          "name": "CREDO TECHNOLOGY GROUP HOLDI",
+          "code": "",
+          "weight_prev": 0.0,
+          "shares_prev": 85.0
         }
       ],
       "moves": [
         {
-          "key": "095610",
-          "name": "테스",
-          "code": "095610",
-          "shares_now": 72.0,
-          "shares_prev": 106.0,
-          "active_share_pct": -32.1,
-          "active_weight_pp": -1.24,
-          "weight_now": 2.78,
-          "weight_prev": 4.3,
+          "key": "ROBINHOOD MARKETS INC - A",
+          "name": "ROBINHOOD MARKETS INC - A",
+          "code": "",
+          "shares_now": 194.0,
+          "shares_prev": 126.0,
+          "active_share_pct": 63.5,
+          "active_weight_pp": null,
+          "weight_now": 0.0,
+          "weight_prev": 0.0,
+          "headline": false
+        }
+      ],
+      "has_weight": false
+    },
+    {
+      "code": "410870",
+      "label": "TIME K컬처액티브",
+      "group": "TIME(구 TIMEFOLIO)",
+      "flow_factor": 1.0,
+      "new": [
+        {
+          "key": "278470",
+          "name": "에이피알",
+          "code": "278470",
+          "weight": 5.05,
+          "shares": 121.0
+        }
+      ],
+      "gone": [
+        {
+          "key": "041510",
+          "name": "에스엠",
+          "code": "041510",
+          "weight_prev": 4.29,
+          "shares_prev": 575.0
+        }
+      ],
+      "moves": [
+        {
+          "key": "241710",
+          "name": "코스메카코리아",
+          "code": "241710",
+          "shares_now": 472.0,
+          "shares_prev": 401.0,
+          "active_share_pct": 17.7,
+          "active_weight_pp": 1.11,
+          "weight_now": 6.73,
+          "weight_prev": 5.76,
           "headline": false
         }
       ],
       "has_weight": true
     },
     {
-      "code": "441800",
-      "label": "TIME Korea플러스배당액티브",
+      "code": "0162Y0",
+      "label": "TIME 코스닥액티브",
       "group": "TIME(구 TIMEFOLIO)",
       "flow_factor": 1.0,
       "new": [
         {
-          "key": "105560",
-          "name": "KB금융",
-          "code": "105560",
-          "weight": 2.8,
-          "shares": 99.0
+          "key": "086520",
+          "name": "에코프로",
+          "code": "086520",
+          "weight": 2.58,
+          "shares": 106.0
         }
       ],
       "gone": [
         {
-          "key": "039490",
-          "name": "키움증권",
-          "code": "039490",
-          "weight_prev": 2.89,
-          "shares_prev": 60.0
+          "key": "403870",
+          "name": "HPSP",
+          "code": "403870",
+          "weight_prev": 2.54,
+          "shares_prev": 202.0
         }
       ],
       "moves": [],
       "has_weight": true
-    },
-    {
-      "code": "462900",
-      "label": "KoAct 바이오헬스케어액티브",
-      "group": "KoAct",
-      "flow_factor": 1.0,
-      "new": [
-        {
-          "key": "141080",
-          "name": "리가켐바이오",
-          "code": "141080",
-          "weight": 4.68,
-          "shares": 330.0
-        }
-      ],
-      "gone": [
-        {
-          "key": "476830",
-          "name": "알지노믹스",
-          "code": "476830",
-          "weight_prev": 4.81,
-          "shares_prev": 986.0
-        }
-      ],
-      "moves": [],
-      "has_weight": true
-    },
-    {
-      "code": "471040",
-      "label": "KoAct 글로벌AI&로봇액티브",
-      "group": "KoAct",
-      "flow_factor": 1.0,
-      "new": [
-        {
-          "key": "007660",
-          "name": "이수페타시스",
-          "code": "007660",
-          "weight": 0.0,
-          "shares": 138.0
-        }
-      ],
-      "gone": [
-        {
-          "key": "327260",
-          "name": "RF머트리얼즈",
-          "code": "327260",
-          "weight_prev": 0.0,
-          "shares_prev": 275.0
-        }
-      ],
-      "moves": [],
-      "has_weight": false
     },
     {
       "code": "472150",
@@ -131,20 +132,20 @@
       "flow_factor": 1.0,
       "new": [
         {
-          "key": "105560",
-          "name": "KB금융",
-          "code": "105560",
-          "weight": 1.56,
-          "shares": 20.0
+          "key": "012450",
+          "name": "한화에어로스페이스",
+          "code": "012450",
+          "weight": 1.64,
+          "shares": 3.0
         }
       ],
       "gone": [
         {
-          "key": "012450",
-          "name": "한화에어로스페이스",
-          "code": "012450",
-          "weight_prev": 1.69,
-          "shares_prev": 3.0
+          "key": "105560",
+          "name": "KB금융",
+          "code": "105560",
+          "weight_prev": 1.56,
+          "shares_prev": 20.0
         }
       ],
       "moves": [],
@@ -157,20 +158,20 @@
       "flow_factor": 1.0,
       "new": [
         {
-          "key": "032830",
-          "name": "삼성생명",
-          "code": "032830",
-          "weight": 0.88,
-          "shares": 98.0
+          "key": "006400",
+          "name": "삼성SDI",
+          "code": "006400",
+          "weight": 0.92,
+          "shares": 63.0
         }
       ],
       "gone": [
         {
-          "key": "006400",
-          "name": "삼성SDI",
-          "code": "006400",
-          "weight_prev": 0.87,
-          "shares_prev": 63.0
+          "key": "032830",
+          "name": "삼성생명",
+          "code": "032830",
+          "weight_prev": 0.88,
+          "shares_prev": 98.0
         }
       ],
       "moves": [],
@@ -183,47 +184,47 @@
       "flow_factor": 1.0,
       "new": [
         {
-          "key": "005930",
-          "name": "삼성전자",
-          "code": "005930",
-          "weight": 3.22,
-          "shares": 13.0
+          "key": "066970",
+          "name": "엘앤에프",
+          "code": "066970",
+          "weight": 3.68,
+          "shares": 35.0
         }
       ],
       "gone": [
         {
-          "key": "066970",
-          "name": "엘앤에프",
-          "code": "066970",
+          "key": "005930",
+          "name": "삼성전자",
+          "code": "005930",
           "weight_prev": 3.22,
-          "shares_prev": 35.0
+          "shares_prev": 13.0
         }
       ],
       "moves": [],
       "has_weight": true
     },
     {
-      "code": "426030",
-      "label": "TIME 미국나스닥100액티브",
-      "group": "TIME(구 TIMEFOLIO)",
+      "code": "471780",
+      "label": "TIGER 코리아테크액티브",
+      "group": "TIGER",
       "flow_factor": 1.0,
       "new": [],
       "gone": [],
       "moves": [
         {
-          "key": "SK HYNIX INC-ADR",
-          "name": "SK HYNIX INC-ADR",
-          "code": "",
-          "shares_now": 146.0,
-          "shares_prev": 87.0,
-          "active_share_pct": 67.8,
-          "active_weight_pp": null,
-          "weight_now": 0.0,
-          "weight_prev": 0.0,
+          "key": "006400",
+          "name": "삼성SDI",
+          "code": "006400",
+          "shares_now": 18.0,
+          "shares_prev": 13.0,
+          "active_share_pct": 38.5,
+          "active_weight_pp": 0.75,
+          "weight_now": 2.75,
+          "weight_prev": 1.8,
           "headline": false
         }
       ],
-      "has_weight": false
+      "has_weight": true
     }
   ],
   "thresholds": {
@@ -232,10 +233,10 @@
     "share_pct_min": 30.0
   },
   "summary": {
-    "etfs_changed": 8,
+    "etfs_changed": 7,
     "new_total": 7,
     "gone_total": 7,
-    "moves_total": 2,
+    "moves_total": 3,
     "universe": 20
   }
 }
