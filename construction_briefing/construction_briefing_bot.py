@@ -86,15 +86,47 @@ UNIVERSE = [
     ("PAVE", "Global X US Infrastructure ETF", "미국", "ETF"),
 ]
 
-# 매크로 지표 (티커, 표기명, 단위) — 금리·금·자원 가격·환율을 코드로 확정
+# 매크로 지표 (티커, 표기명, 단위) — 금리·주요 원재료(금·은·구리·유가)·환율을 코드로 확정
 MACRO_TICKERS = [
     ("^TNX", "미국채 10년 금리", "%"),
     ("GC=F", "금 (COMEX)", "$/oz"),
+    ("SI=F", "은 (COMEX)", "$/oz"),
     ("HG=F", "구리 (COMEX)", "$/lb"),
     ("CL=F", "WTI 원유", "$/bbl"),
     ("KRW=X", "원/달러", "₩"),
     ("CNY=X", "위안/달러", "¥"),
 ]
+
+# 주가표 그룹 구분 (표시 순서) — 대형/중소형/광산/국가 축
+PRICE_GROUPS = [
+    ("한국", ["267270.KS", "241560.KS"]),
+    ("글로벌 대형", ["CAT", "DE", "CNH", "6301.T", "6305.T", "6326.T", "VOLV-B.ST"]),
+    ("중소형", ["TEX", "OSK", "MTW", "WAC.DE", "MTU.PA", "6432.T", "6395.T",
+               "ACE.NS", "ESCORTS.NS"]),
+    ("광산장비", ["EPI-A.ST", "SAND.ST"]),
+    ("렌탈·딜러", ["URI", "HRI", "AHT", "FTT.TO", "TIH.TO"]),
+    ("중국", ["600031.SS", "000425.SZ", "000157.SZ", "000528.SZ"]),
+    ("ETF", ["PAVE"]),
+]
+
+# 수익률 계산 구간 (거래일 기준 오프셋)
+HORIZONS = [("1M", 21), ("3M", 63), ("12M", 252)]
+
+
+def horizon_pcts(closes) -> dict[str, float | None]:
+    """종가 시계열에서 1M/3M/12M 수익률(%)을 계산. 이력이 짧으면 None."""
+    out = {}
+    last = float(closes.iloc[-1])
+    for label, offset in HORIZONS:
+        if len(closes) > offset:
+            out[label] = (last / float(closes.iloc[-offset - 1]) - 1) * 100
+        else:
+            out[label] = None
+    return out
+
+
+def fmt_pct(value: float | None) -> str:
+    return "-" if value is None else f"{value:+.1f}%"
 
 CURRENCY_SYMBOL = {"USD": "$", "EUR": "€", "GBP": "£", "GBp": "£", "KRW": "₩", "JPY": "¥",
                    "SEK": "kr", "NOK": "kr", "CNY": "¥", "INR": "₹", "CAD": "C$"}
@@ -119,12 +151,14 @@ def fetch_prices() -> list[dict]:
         for attempt in range(2):
             try:
                 t = yf.Ticker(ticker)
-                hist = t.history(period="10d", interval="1d", auto_adjust=False)
+                # 12M 수익률 계산을 위해 약 400일치 조회
+                hist = t.history(period="400d", interval="1d", auto_adjust=False)
                 closes = hist["Close"].dropna()
                 if len(closes) >= 2:
                     row["close"] = float(closes.iloc[-1])
                     row["pct"] = (float(closes.iloc[-1]) / float(closes.iloc[-2]) - 1) * 100
                     row["date"] = closes.index[-1].strftime("%m/%d")
+                    row.update({f"pct_{k.lower()}": v for k, v in horizon_pcts(closes).items()})
                 try:
                     fi = t.fast_info
                     row["cap"] = fmt_cap(fi.get("marketCap"), fi.get("currency") or "")
@@ -150,12 +184,13 @@ def fetch_macro() -> list[dict]:
                "close": None, "pct": None, "date": None}
         for attempt in range(2):
             try:
-                hist = yf.Ticker(ticker).history(period="10d", interval="1d", auto_adjust=False)
+                hist = yf.Ticker(ticker).history(period="400d", interval="1d", auto_adjust=False)
                 closes = hist["Close"].dropna()
                 if len(closes) >= 2:
                     row["close"] = float(closes.iloc[-1])
                     row["pct"] = (float(closes.iloc[-1]) / float(closes.iloc[-2]) - 1) * 100
                     row["date"] = closes.index[-1].strftime("%m/%d")
+                    row.update({f"pct_{k.lower()}": v for k, v in horizon_pcts(closes).items()})
                 break
             except Exception as e:
                 if attempt == 0:
@@ -168,30 +203,51 @@ def fetch_macro() -> list[dict]:
 
 
 def price_table_text(rows: list[dict]) -> str:
-    lines = ["티커 | 기업명 | 국가 | 섹터 | 종가(기준일) | 등락률 | 시총"]
-    for r in rows:
-        if r["close"] is None:
-            lines.append(f"{r['ticker']} | {r['name']} | {r['country']} | {r['sector']} | 조회실패 | - | -")
+    """그룹(한국/대형/중소형/광산/렌탈·딜러/중국/ETF)별로 묶은 시세표 텍스트."""
+    by_ticker = {r["ticker"]: r for r in rows}
+    lines = ["티커 | 기업명 | 국가 | 종가(기준일) | 1D | 1M | 3M | 12M | 시총"]
+    grouped = set()
+    for group_name, tickers in PRICE_GROUPS:
+        members = [by_ticker[t] for t in tickers if t in by_ticker]
+        if not members:
             continue
-        flag = ""
-        if abs(r["pct"]) >= 10:
-            flag = " ⚠️±10%이상"
-        elif abs(r["pct"]) >= 5:
-            flag = " ●±5%이상"
-        lines.append(
-            f"{r['ticker']} | {r['name']} | {r['country']} | {r['sector']} | "
-            f"{r['close']:,.2f}({r['date']}) | {r['pct']:+.2f}%{flag} | {r['cap']}"
-        )
+        lines.append(f"[{group_name}]")
+        grouped.update(t for t in tickers)
+        for r in members:
+            lines.append(price_row_text(r))
+    # 그룹 정의에 빠진 신규 종목 안전망
+    for r in rows:
+        if r["ticker"] not in grouped:
+            lines.append(price_row_text(r))
     return "\n".join(lines)
 
 
+def price_row_text(r: dict) -> str:
+    if r["close"] is None:
+        return f"{r['ticker']} | {r['name']} | {r['country']} | 조회실패 | - | - | - | - | -"
+    flag = ""
+    if abs(r["pct"]) >= 10:
+        flag = " ⚠️±10%이상"
+    elif abs(r["pct"]) >= 5:
+        flag = " ●±5%이상"
+    return (
+        f"{r['ticker']} | {r['name']} | {r['country']} | "
+        f"{r['close']:,.2f}({r['date']}) | {r['pct']:+.2f}%{flag} | "
+        f"{fmt_pct(r.get('pct_1m'))} | {fmt_pct(r.get('pct_3m'))} | "
+        f"{fmt_pct(r.get('pct_12m'))} | {r['cap']}"
+    )
+
+
 def macro_table_text(rows: list[dict]) -> str:
-    lines = ["지표 | 값(기준일) | 등락률"]
+    lines = ["지표 | 값(기준일) | 1D | 1M | 3M | 12M"]
     for r in rows:
         if r["close"] is None:
-            lines.append(f"{r['name']} | 조회실패 | -")
+            lines.append(f"{r['name']} | 조회실패 | - | - | - | -")
             continue
-        lines.append(f"{r['name']} | {r['close']:,.2f}{r['unit']}({r['date']}) | {r['pct']:+.2f}%")
+        lines.append(
+            f"{r['name']} | {r['close']:,.2f}{r['unit']}({r['date']}) | {r['pct']:+.2f}% | "
+            f"{fmt_pct(r.get('pct_1m'))} | {fmt_pct(r.get('pct_3m'))} | {fmt_pct(r.get('pct_12m'))}"
+        )
     return "\n".join(lines)
 
 
@@ -313,8 +369,8 @@ SYSTEM_PROMPT = """당신은 글로벌 건설기계(Construction Equipment) 섹�
 [출력 형식 — 반드시 이 구조를 따르세요]
 0. 서두: "글로벌 건설기계 업종에서 지난 24시간 동안 발생한 주요 뉴스 및 상장 기업 동향을 정리해 드립니다. 업데이트 시간은 {UPDATE_TIME}입니다." 문장으로 시작 (시간 표기 필수)
 1. ## 오늘의 핵심 요약 — 시장에 가장 중요한 이슈 3~5개를 3~5줄로
-2. ## 매크로·수요 지표 — 매크로표(금리·금·구리·유가·환율)의 확정값과 등락을 2~3줄로 요약하고, 건설기계 수요 관점의 함의(금리→주택, 금·구리→광산 capex)를 한 줄씩. 뉴스 목록에 주택착공·굴착기 판매 등 지표 기사가 있으면 함께.
-3. ## 주요 주가 동향 — 기업명 | 국가 | 종가 기준 등락률 | 시총 | 변동 요인. 변동폭이 크거나 뉴스가 있는 종목 위주로 15개 내외. 한국 기업(HD현대건설기계·두산밥캣)은 변동이 작아도 반드시 포함. 각 행은 "기업명 | 국가 | +x.xx% | 시총 | 요인" 형태의 일반 텍스트 줄로 쓰세요 (마크다운 표 문법 |---| 사용 금지).
+2. ## 매크로·원재료 — 매크로표의 확정값으로 금리·환율과 주요 원재료(금·은·구리·유가)의 1D 등락 및 1M/3M/12M 추세를 정리하고, 건설기계 수요 관점의 함의(금리→주택, 금·은·구리→광산 capex)를 한 줄씩. 각 지표 행은 "지표명 | 값 | 1D | 1M | 3M | 12M" 형태의 일반 텍스트 줄로. 뉴스 목록에 주택착공·굴착기 판매 등 지표 기사가 있으면 함께.
+3. ## 주요 주가 동향 — 시세표의 그룹 구분(**한국 / 글로벌 대형 / 중소형 / 광산장비 / 렌탈·딜러 / 중국**)을 그대로 따라, 그룹명을 굵은 줄로 쓰고 그 아래 각 행을 "기업명 | 1D | 1M | 3M | 12M | 변동 요인" 형태의 일반 텍스트 줄로 쓰세요 (마크다운 표 문법 |---| 사용 금지). 수치는 시세표 값 그대로. 한국 그룹은 전 종목 필수, 다른 그룹은 변동폭이 크거나 뉴스가 있는 종목 위주. 변동 요인이 없으면 1M/3M/12M 추세로 짧게 코멘트.
 4. ## 큰 변동 분석 — ±10% 이상 종목은 반드시 별도 표기하고 배경을 뉴스·실적·수급·정책 요인으로 구분해 구체적으로 설명. 해당 없으면 "±10% 이상 변동 종목 없음. (±5% 이상: ...)"으로 처리
 5. ## 시장별 동향 — 미국(주택·인프라·렌탈) / 유럽 / 중국(굴착기·부동산·부양책) / 자원국·광산(남미·중동·아프리카·인니·몽골) / 신흥국(인도·아세안) 순으로 핵심 이슈. 이슈 없는 시장은 생략 가능
 6. ## 기업 전략 동향 — 신제품·전동화 / 딜러망·유통 / 생산·공장 / M&A 관점의 기업 소식. 한국 기업 관련 함의가 있으면 반드시 명시
@@ -669,6 +725,15 @@ def collect_only(now: datetime) -> None:
         "price_table": table,
         "macro_table": macro_table,
         "news_list": news_list_text(news),
+        # 작성 세션(Claude)용 형식 안내 — SYSTEM_PROMPT의 2·3번 섹션과 동일하게 유지할 것
+        "format_note": (
+            "매크로·원재료 섹션: 각 지표를 '지표명 | 값 | 1D | 1M | 3M | 12M' 줄로, "
+            "금·은·구리 추세의 광산 capex 함의 포함. "
+            "주요 주가 동향 섹션: 시세표의 그룹([한국]/[글로벌 대형]/[중소형]/[광산장비]/"
+            "[렌탈·딜러]/[중국]) 순서를 그대로 따라 그룹명을 굵은 줄로 쓰고, "
+            "각 행은 '기업명 | 1D | 1M | 3M | 12M | 변동 요인' 형태로. "
+            "한국 그룹은 전 종목 필수."
+        ),
     }
     (INPUTS_DIR / f"{date_str}.json").write_text(
         json.dumps(payload, ensure_ascii=False, indent=1), encoding="utf-8")
