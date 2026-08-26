@@ -178,7 +178,7 @@ function fillTaskItems(desired){const sel=$('#task-item');if(!sel)return;const i
  sel.innerHTML=active.map(opt).join('')+(arch.includes(cur)?`<optgroup label="📦 보관함">${opt(cur)}</optgroup>`:'');
  const ab=$('#task-archive');if(ab)ab.textContent=arch.includes(cur)?'보관 해제':'보관';
  const box=$('#task-archive-box');if(box){box.style.display=arch.length?'':'none';const sum=box.querySelector('summary');if(sum)sum.textContent=`📦 보관함 (${arch.length})`;
-  const list=$('#task-archive-list');if(list)list.innerHTML=arch.map(x=>`<span style="display:inline-flex;gap:2px"><button type="button" data-arch-open="${esc(x)}"${x===cur?' style="font-weight:700"':''} title="지난 기록 열람">${esc(x)}</button><button type="button" data-arch-restore="${esc(x)}" title="진행 중 목록으로 복원">↩ 복원</button></span>`).join('')}
+  const list=$('#task-archive-list');if(list)list.innerHTML=arch.map(x=>`<span class="task-arch-pair"><button type="button" class="task-arch-item" data-arch-open="${esc(x)}"${x===cur?' style="font-weight:700"':''} title="지난 기록 열람">${esc(x)}</button><button type="button" class="task-arch-restore" data-arch-restore="${esc(x)}" title="진행 중 목록으로 복원">↩ 복원</button></span>`).join('')}
  try{localStorage.setItem(TASK_LAST_KEY,cur)}catch{}}
 const taskAllNames=()=>TASK_ROSTER.flatMap(([,ns])=>ns);
 function taskLoad(){try{return JSON.parse(localStorage.getItem(TASK_KEY))||{}}catch{return{}}}

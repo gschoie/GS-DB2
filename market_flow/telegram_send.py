@@ -82,6 +82,22 @@ def build_message():
                       f"기관 {fmt(last[3])}{unit}{fut_d('inst_total', last[3])} <i>(장중 {last[0]})</i>"]
     if prev:
         lines += ["", f"<i>( ) 안은 {SLOT_LABEL[keys[-2]].split(' ')[0]} 대비 증감</i>"]
+    sf = day.get("stock_flow")
+    if sf and (sf.get("buy") or sf.get("sell")):
+        def sf_line(name, chg, amt):
+            sign = "+" if chg > 0 else ""
+            return f"({sign}{chg:.1f}%) {name} <b>{fmt(amt)}억</b>"
+        lines += ["", f"✅ <b>외국인 순매수 상위</b> <i>({sf['time']} 가집계)</i>"]
+        lines += [sf_line(*r) for r in sf.get("buy", [])]
+        lines += ["", "❌ <b>외국인 순매도 상위</b>"]
+        lines += [sf_line(*r) for r in sf.get("sell", [])]
+        if sf.get("inst_buy") or sf.get("inst_sell"):
+            lines += ["", "✅ <b>기관 순매수 상위</b>"]
+            lines += [sf_line(*r) for r in sf.get("inst_buy", [])]
+            lines += ["", "❌ <b>기관 순매도 상위</b>"]
+            lines += [sf_line(*r) for r in sf.get("inst_sell", [])]
+        else:  # 기관 가집계는 장 초반엔 아직 안 나온다 (통상 오전 중반 이후 제공)
+            lines += ["", "<i>기관 가집계는 아직 미제공 — 다음 회차부터 표시</i>"]
     lines += ["", f'상세 차트 › <a href="{DASH_URL}">대시보드</a>', SIGNATURE]
     return "\n".join(lines)
 

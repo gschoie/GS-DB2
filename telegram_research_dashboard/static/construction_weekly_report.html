@@ -41,7 +41,7 @@ iframe{width:100%;height:calc(100vh - 110px);border:1px solid #3a3046;border-rad
 <script>
 const DATES=["2026-08-24"];
 const sel=document.getElementById('dsel'),fr=document.getElementById('frame');
-DATES.forEach(d=>{const o=document.createElement('option');o.value=d;o.textContent=d;sel.appendChild(o)});
+DATES.forEach(d=>{const o=document.createElement('option');o.value=d;o.textContent=d+' ('+'일월화수목금토'[new Date(d+'T00:00:00').getDay()]+')';sel.appendChild(o)});
 function load(){fr.src='construction_weekly/'+sel.value+'.html'}
 sel.onchange=load;
 document.getElementById('prev').onclick=()=>{if(sel.selectedIndex<DATES.length-1){sel.selectedIndex++;load()}};

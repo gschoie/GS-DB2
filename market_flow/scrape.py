@@ -10,6 +10,7 @@
 """
 import csv
 import json
+import os
 import re
 import datetime as dt
 from pathlib import Path
@@ -185,6 +186,51 @@ def group_returns():
     return {"time": now_kst().strftime("%H:%M"), "groups": [list(t) for t in groups]}
 
 
+KIS_BASE = "https://openapi.koreainvestment.com:9443"
+
+
+def stock_investor_flow(top=7):
+    """한투 OpenAPI '국내기관_외국인 매매종목가집계'(FHPTJ04400000) — 장중 잠정.
+    외국인·기관 각각의 순매수/순매도 상위 종목을 금액 기준으로 뽑는다.
+    반환: {"time": "HH:MM", "buy": [[종목명, 등락률%, 순매수억], …], "sell": […],
+           "inst_buy": […], "inst_sell": […]} 또는 None
+    (KIS_APP_KEY/SECRET 미설정이면 None — 섹션만 비표시)"""
+    key = os.environ.get("KIS_APP_KEY")
+    sec = os.environ.get("KIS_APP_SECRET")
+    if not key or not sec:
+        print("KIS 키 미설정 → 종목별 수급 생략")
+        return None
+    r = SESSION.post(f"{KIS_BASE}/oauth2/tokenP", timeout=15, json={
+        "grant_type": "client_credentials", "appkey": key, "appsecret": sec})
+    r.raise_for_status()
+    hdr = {"authorization": f"Bearer {r.json()['access_token']}",
+           "appkey": key, "appsecret": sec, "tr_id": "FHPTJ04400000", "custtype": "P"}
+    out = {"time": now_kst().strftime("%H:%M")}
+    # FID_ETC_CLS_CODE: 1 외국인 / 2 기관계 — 기관은 orgn_* 필드에서 금액을 읽는다
+    for inv_cls, amt_key, prefix in (("1", "frgn_ntby_tr_pbmn", ""),
+                                     ("2", "orgn_ntby_tr_pbmn", "inst_")):
+        for name, sort_cls in (("buy", "0"), ("sell", "1")):
+            p = {"FID_COND_MRKT_DIV_CODE": "V", "FID_COND_SCR_DIV_CODE": "16449",
+                 "FID_INPUT_ISCD": "0000",          # 전체 시장
+                 "FID_DIV_CLS_CODE": "1",           # 금액 기준 정렬
+                 "FID_RANK_SORT_CLS_CODE": sort_cls,  # 0 순매수상위 / 1 순매도상위
+                 "FID_ETC_CLS_CODE": inv_cls}
+            rr = SESSION.get(f"{KIS_BASE}/uapi/domestic-stock/v1/quotations/foreign-institution-total",
+                             headers=hdr, params=p, timeout=15)
+            rr.raise_for_status()
+            j = rr.json()
+            if j.get("rt_cd") != "0":
+                raise RuntimeError(f"KIS 가집계 오류: {j.get('msg1')}")
+            rows = []
+            for x in j.get("output", [])[:top]:
+                rows.append([x["hts_kor_isnm"], float(x["prdy_ctrt"]),
+                             round(int(x[amt_key]) / 100)])  # 백만원 → 억원
+            out[prefix + name] = rows
+    print(f"종목별 가집계: 외국인 {len(out['buy'])}/{len(out['sell'])} · "
+          f"기관 {len(out['inst_buy'])}/{len(out['inst_sell'])}종목")
+    return out
+
+
 def intraday_curve(bizdate, kind, max_pages=45, sosok=None):
     """시간대별 누적치(분 단위)를 전 페이지 수집 후 10분 간격으로 샘플링.
     kind: "investor"(10칸 → 개인/외인/기관만) 또는 "program"(9칸 → 차익순/비차익순/전체순)
@@ -325,6 +371,14 @@ def main():
             day["group_1d"] = gr
     except Exception as e:
         print(f"⚠️ ETF 그룹 등락률 수집 실패(섹션 비표시): {e}")
+
+    # 종목별 외국인 수급 가집계 (한투 API, 잠정 — 실패/키 미설정이면 섹션만 비표시)
+    try:
+        sf = stock_investor_flow()
+        if sf:
+            day["stock_flow"] = sf
+    except Exception as e:
+        print(f"⚠️ 종목별 외국인 가집계 수집 실패(섹션 비표시): {e}")
 
     # 마감 이후 실행이면 장중 곡선 저장
     if slot in ("1540", "1640"):

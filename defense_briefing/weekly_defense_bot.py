@@ -351,7 +351,7 @@ iframe{{width:100%;height:calc(100vh - 110px);border:1px solid #223046;border-ra
 <script>
 const DATES={dates_js};
 const sel=document.getElementById('dsel'),fr=document.getElementById('frame');
-DATES.forEach(d=>{{const o=document.createElement('option');o.value=d;o.textContent=d;sel.appendChild(o)}});
+DATES.forEach(d=>{{const o=document.createElement('option');o.value=d;o.textContent=d+' ('+'일월화수목금토'[new Date(d+'T00:00:00').getDay()]+')';sel.appendChild(o)}});
 function load(){{fr.src='defense_weekly/'+sel.value+'.html'}}
 sel.onchange=load;
 document.getElementById('prev').onclick=()=>{{if(sel.selectedIndex<DATES.length-1){{sel.selectedIndex++;load()}}}};
