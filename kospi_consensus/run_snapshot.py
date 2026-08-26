@@ -50,10 +50,12 @@ def run(limit=None, snapshot_date=None, refresh_universe=False, delay=0.3):
                                ",".join(meta.get("groups", [])) if isinstance(meta, dict) else None,
                                meta.get("status") if isinstance(meta, dict) else None)
 
-            q = scrape.fetch_quarter(code, session)
-            if q and q["op_profit"] is not None:
+            quarters = [q for q in scrape.fetch_quarters(code, session)
+                        if q["op_profit"] is not None]
+            for q in quarters:
                 db.upsert_consensus(con, snap, code, name, "quarter", q["period"],
                                     q["sales"], q["op_profit"], q["net_profit"])
+            if quarters:
                 ok_q += 1
 
             annual = scrape.scrape_annual(page, code)
@@ -62,7 +64,7 @@ def run(limit=None, snapshot_date=None, refresh_universe=False, delay=0.3):
                                     row["sales"], row["op_profit"], row["net_profit"])
             if annual:
                 ok_a += 1
-            if not q and not annual:
+            if not quarters and not annual:
                 fail += 1
 
             pr = scrape.fetch_close(code, session=session)
@@ -71,8 +73,8 @@ def run(limit=None, snapshot_date=None, refresh_universe=False, delay=0.3):
 
             con.commit()
             e_years = ",".join(r["period"][:4] for r in annual) or "-"
-            print(f"[{i}/{total}] {name}({code})  Q={q['period'] if q else '-'}  "
-                  f"연간E={e_years}")
+            q_periods = ",".join(q["period"] for q in quarters) or "-"
+            print(f"[{i}/{total}] {name}({code})  Q={q_periods}  연간E={e_years}")
             time.sleep(delay)
 
         browser.close()

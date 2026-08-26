@@ -1,15 +1,17 @@
 # -*- coding: utf-8 -*-
 """SQLite 스냅샷 → 'consensus_revision.html' + 'consensus_full.xlsx' 생성.
 
-- 화면: (리비전 주) 어닝 변화 큰 순 상위 20 — 컨센 변동 + 주가 변동 함께 · (첫 주) 컨센 레벨 상위 20
+- 화면 상단 4개 시계: 당분기 / 다음분기 / 올해E / 내년E (연도는 스냅샷 연도 기준 자동)
+- 당분기는 법정 보고서 마감(분기말+45일, 4Q는 90일) 경과 시 자동으로 다음 분기로 이동,
+  화면의 ◀▶ 버튼으로 수동 이동도 가능(브라우저 저장, '자동으로' 버튼으로 복귀)
 - 전체 종목 데이터는 엑셀 다운로드 버튼으로 제공
 출력: telegram_research_dashboard/static/{consensus_revision.html, consensus_full.xlsx}
 """
+import calendar
 import datetime as dt
 import json
 import os
 import sys
-from collections import Counter
 
 import openpyxl
 from openpyxl.styles import Font, PatternFill
@@ -26,20 +28,48 @@ SECTORS_PATH = os.path.join(BASE, "sectors.json")   # 코드→섹터(세부업�
 MAX_PERIODS = 10                                     # 화면 주차 이동 최대 비교주 수
 MONTHS3 = 3                                           # 장기 비교 기준(개월)
 
-HORIZONS = [
-    ("이번분기", "quarter", None, "q"),
-    ("2026E", "annual", "2026.12", "a26"),
-    ("2027E", "annual", "2027.12", "a27"),
-    ("2028E", "annual", "2028.12", "a28"),
-]
-PAGE_KEYS = ["q", "a26", "a27"]
+REPORT_LAG_DAYS = {"03": 45, "06": 45, "09": 45, "12": 90}   # 분기·반기 45일 / 사업보고서 90일
 
 
-def dominant_quarter(con, snap):
-    rows = con.execute(
-        "SELECT period FROM consensus_snapshots WHERE snapshot_date=? AND kind='quarter'",
-        (snap,)).fetchall()
-    return Counter(r[0] for r in rows).most_common(1)[0][0] if rows else None
+def qlabel(period):
+    """'2026.09' → '3Q26'"""
+    if not period:
+        return "-"
+    q = {"03": "1Q", "06": "2Q", "09": "3Q", "12": "4Q"}.get(period[5:7], period[5:7])
+    return f"{q}{period[2:4]}"
+
+
+def next_quarter(period):
+    y, m = int(period[:4]), int(period[5:7])
+    y, m = (y + 1, 3) if m == 12 else (y, m + 3)
+    return f"{y}.{m:02d}"
+
+
+def report_deadline(period):
+    """해당 분기 보고서의 법정 제출 마감일."""
+    y, m = int(period[:4]), int(period[5:7])
+    end = dt.date(y, m, calendar.monthrange(y, m)[1])
+    return end + dt.timedelta(days=REPORT_LAG_DAYS.get(period[5:7], 45))
+
+
+def quarter_periods(con, snap):
+    """스냅샷에 수집된 분기 컨센 period 목록 (오름차순)."""
+    return sorted(r[0] for r in con.execute(
+        "SELECT DISTINCT period FROM consensus_snapshots "
+        "WHERE snapshot_date=? AND kind='quarter'", (snap,)))
+
+
+def default_anchor(qps, snap):
+    """당분기 자동 결정: 보고서 마감이 아직 안 지난 가장 이른 수집 분기.
+
+    분기보고서 발간 시즌이 끝나면(마감 경과) 그 분기는 확정 국면이므로
+    당분기가 자동으로 다음 분기로 넘어간다. 전부 지났으면 가장 늦은 분기 유지.
+    """
+    d = dt.date(*map(int, snap.split("-")))
+    for p in qps:
+        if report_deadline(p) >= d:
+            return p
+    return qps[-1] if qps else None
 
 
 def series(con, snap, base, kind, period):
@@ -137,9 +167,23 @@ def _counts(vals):
     return up, down, len(rated) - up - down
 
 
+def horizon_specs(con, snap):
+    """스냅샷 하나의 시계열 축: 수집된 분기 전부 + 올해E·내년E (연도 자동).
+
+    반환: (specs, qps, anchor)  — specs 항목은 (key, kind, period, label).
+    """
+    qps = quarter_periods(con, snap)
+    anchor = default_anchor(qps, snap)
+    year = int(snap[:4])
+    specs = [(f"q:{p}", "quarter", p, qlabel(p)) for p in qps]
+    specs += [("a0", "annual", f"{year}.12", f"{year}E"),
+              ("a1", "annual", f"{year + 1}.12", f"{year + 1}E")]
+    return specs, qps, anchor
+
+
 def build_period(con, snap, base, ref3, sectors, umeta):
     """한 비교주: 전주(base)와 3개월전(ref3) 두 기준 대비 값을 함께 담는다."""
-    qp = dominant_quarter(con, snap)
+    specs, qps, anchor = horizon_specs(con, snap)
     psnap = db.price_map(con, snap)
     pbase = db.price_map(con, base) if base else {}
     pref3 = db.price_map(con, ref3) if ref3 else {}
@@ -148,13 +192,9 @@ def build_period(con, snap, base, ref3, sectors, umeta):
         a, b = psnap.get(code), mp.get(code)
         return ((a - b) / b * 100.0) if (a and b) else None
 
-    hz_meta = {k: (kind, period) for _, kind, period, k in HORIZONS}
-    labels = {k: l for l, _, _, k in HORIZONS}
     names = {}
     hz = []
-    for key in PAGE_KEYS:
-        kind, period = hz_meta[key]
-        p = period or qp
+    for key, kind, p, label in specs:
         sw = series(con, snap, base, kind, p)                     # 전주 대비
         s3 = series(con, snap, ref3, kind, p) if ref3 else {}     # 3개월전 대비
         for code, d in sw.items():
@@ -175,7 +215,7 @@ def build_period(con, snap, base, ref3, sectors, umeta):
             rows.sort(key=lambda r: (r["wow"] is None, -abs(r["wow"]) if r["wow"] is not None else 0))
         else:
             rows.sort(key=lambda r: -(r["curr"] or 0))
-        hz.append({"label": labels[key], "period": p, "key": key,
+        hz.append({"label": label, "period": p, "key": key,
                    "up": uw[0], "down": uw[1], "flat": uw[2],
                    "up3": u3[0], "down3": u3[1], "flat3": u3[2], "rows": rows})
     uni = con.execute("SELECT COUNT(*) FROM universe WHERE snapshot_date=?", (snap,)).fetchone()[0]
@@ -183,6 +223,7 @@ def build_period(con, snap, base, ref3, sectors, umeta):
             "price_date_snap": price_date_of(con, snap),
             "price_date_base": price_date_of(con, base) if base else None,
             "price_date_ref3": price_date_of(con, ref3) if ref3 else None,
+            "qlist": qps, "anchor": anchor,
             "universe": uni, "covered": len(names), "horizons": hz}
 
 
@@ -198,8 +239,17 @@ def build():
     snap = reps[-1]
     base = reps[-2] if len(reps) >= 2 else None
 
-    # --- 엑셀: 최신 주 기준 전체 종목(a28 포함) ---
-    qp = dominant_quarter(con, snap)
+    # --- 엑셀: 최신 주 기준 전체 종목 (당분기·다음분기 + 올해·내년·내후년E) ---
+    qps = quarter_periods(con, snap)
+    anchor = default_anchor(qps, snap)
+    year = int(snap[:4])
+    xl_specs = []                                    # (key, kind, period, label)
+    if anchor:
+        xl_specs.append(("q0", "quarter", anchor, f"당분기({qlabel(anchor)})"))
+        nq = next_quarter(anchor)
+        xl_specs.append(("q1", "quarter", nq, f"다음분기({qlabel(nq)})"))
+    for i in range(3):
+        xl_specs.append((f"a{i}", "annual", f"{year + i}.12", f"{year + i}E"))
     psnap = db.price_map(con, snap)
     pbase = db.price_map(con, base) if base else {}
 
@@ -207,11 +257,7 @@ def build():
         a, b = psnap.get(code), pbase.get(code)
         return ((a - b) / b * 100.0) if (a and b) else None
 
-    maps, periods = {}, {}
-    for label, kind, period, key in HORIZONS:
-        p = period or qp
-        periods[key] = p
-        maps[key] = series(con, snap, base, kind, p)
+    maps = {key: series(con, snap, base, kind, p) for key, kind, p, _ in xl_specs}
     names = {}
     for key in maps:
         for code, d in maps[key].items():
@@ -223,13 +269,13 @@ def build():
                "mkt": um.get("mkt"), "sec": sectors.get(code, "기타"),
                "grp": ",".join(um.get("groups", [])),
                "pcur": psnap.get(code), "pbase": pbase.get(code), "pw": pwow(code)}
-        for key in ("q", "a26", "a27", "a28"):
+        for key, _, _, _ in xl_specs:
             d = maps[key].get(code)
             row[key] = d["curr"] if d else None
             row[key + "_b"] = d["base"] if d else None
             row[key + "_w"] = d["wow"] if d else None
         stocks.append(row)
-    write_excel(stocks, snap, base, periods)
+    write_excel(stocks, snap, base, xl_specs)
 
     # --- 화면: 최근 여러 주 비교(주차 이동 ◀▶) ---
     if len(reps) == 1:
@@ -253,16 +299,14 @@ def build():
     print(f"생성 완료 [{len(periods_payload)}개 비교주 · {'리비전' if base else '베이스라인'}]: {OUT_HTML}\n            엑셀: {OUT_XLSX}")
 
 
-def write_excel(stocks, snap, base, periods):
+def write_excel(stocks, snap, base, xl_specs):
     wb = openpyxl.Workbook()
     ws = wb.active
     ws.title = "컨센"
-    labels = [("q", "이번분기"), ("a26", "2026E"), ("a27", "2027E"), ("a28", "2028E")]
     header = ["종목코드", "종목명", "시장", "섹터", "그룹"]
     cols = []
-    for key, lab in labels:
-        per = periods.get(key, "")
-        header.append(f"{lab}({per}) 영업이익")
+    for key, _, per, lab in xl_specs:
+        header.append(f"{lab} 영업이익" if lab.endswith(")") else f"{lab}({per}) 영업이익")
         cols.append(("v", key))
         if base:
             header += [f"{lab} 전주", f"{lab} 컨센변동%"]
@@ -353,6 +397,7 @@ a.stk:hover{color:var(--accent);border-color:var(--accent)}
 .lim{margin:0 0 10px;border:1px solid var(--line);background:var(--card);color:var(--accent);
 font-size:12px;font-weight:600;padding:6px 12px;border-radius:8px;cursor:pointer}
 .wknav{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:2px 0 16px}
+.anchorbar{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:2px 0 14px}
 .wkbtn{border:1px solid var(--line);background:var(--card);color:var(--ink);font-size:13px;
 font-weight:600;padding:7px 13px;border-radius:8px;cursor:pointer}
 .wkbtn:disabled{opacity:.38;cursor:default}.wklab{font-size:14px;font-weight:600}
@@ -383,6 +428,7 @@ border-radius:8px;padding:6px 10px;margin-left:6px}
 <div class="status" id="status"></div>
 <a class="dl" href="consensus_full.xlsx" download>📥 전체 종목 엑셀 다운로드</a>
 <div class="wknav" id="wknav"></div>
+<div class="anchorbar" id="anchorbar"></div>
 <div id="cards"></div>
 <div class="tabs" id="tabs"></div>
 <div class="ctlbar" id="ctlbar"></div>
@@ -392,6 +438,7 @@ border-radius:8px;padding:6px 10px;margin-left:6px}
 <script>
 var D=__DATA__;
 var pi=0, sel=0, sortKey=null, sortDir=-1, showAll=false, secFilter='', grpFilter='', MODE='wk', TOP=30;
+var qOverride=null; try{qOverride=localStorage.getItem('kc_anchor')||null}catch(e){}
 function P(){return D.periods[pi]}
 function $(id){return document.getElementById(id)}
 function m3(){return MODE==='3m'}
@@ -400,9 +447,26 @@ function fmt(n){return n==null?'-':Math.round(n).toLocaleString('ko-KR')}
 function pct(w){if(w==null)return'<span class="tiny">-</span>';
  var c=w>0?'pos':(w<0?'neg':'');return'<span class="'+c+'">'+(w>0?'+':'')+w.toFixed(1)+'%</span>'}
 function mmdd(s){return s?s.slice(5).replace('-','/'):''}   // 'YYYY-MM-DD' → 'MM/DD'
-function qq(p){if(!p)return'';var m=p.slice(5,7),y=p.slice(2,4);   // '2026.06' → '2Q26'
+function qq(p){if(!p)return'-';var m=p.slice(5,7),y=p.slice(2,4);   // '2026.06' → '2Q26'
  return ({'03':'1Q','06':'2Q','09':'3Q','12':'4Q'}[m]||m)+y}
-function plab(h){return h.key==='q'?qq(h.period):h.period}   // 분기는 'nQyy', 연간은 'YYYY.12'
+function dlab(h){return h.key&&h.key.slice(0,2)==='q:'?qq(h.period):h.label}   // 분기 'nQyy' / 연간 'YYYYE'
+// --- 분기 시점(당분기 앵커): 기본은 서버 계산(보고서 마감 경과 시 자동 이동), ◀▶로 수동 이동 ---
+function saveAnchor(v){qOverride=v;
+ try{if(v)localStorage.setItem('kc_anchor',v);else localStorage.removeItem('kc_anchor')}catch(e){}}
+function nextq(p){var y=+p.slice(0,4),m=+p.slice(5,7)+3;if(m>12){y++;m-=12}
+ return y+'.'+(m<10?'0':'')+m}
+function anchorOf(p){return (qOverride&&p.qlist.indexOf(qOverride)>=0)?qOverride:p.anchor}
+function findHz(p,key){for(var i=0;i<p.horizons.length;i++)if(p.horizons[i].key===key)return p.horizons[i];return null}
+function stubHz(per){return{key:'q:'+(per||''),label:qq(per),period:per,stub:true,
+ up:0,down:0,flat:0,up3:0,down3:0,flat3:0,rows:[]}}
+function roled(h,role){var o={};for(var k in h)o[k]=h[k];o.role=role;return o}
+function activeHz(p){   // 화면 4개 시계: 당분기 / 다음분기 / 올해E / 내년E
+ var a=anchorOf(p), n=a?nextq(a):null;
+ return [roled((a&&findHz(p,'q:'+a))||stubHz(a),'당분기'),
+         roled((n&&findHz(p,'q:'+n))||stubHz(n),'다음분기'),
+         roled(findHz(p,'a0')||stubHz(null),'올해'),
+         roled(findHz(p,'a1')||stubHz(null),'내년')];
+}
 function nameCell(d){return '<a class="stk" href="https://finance.naver.com/item/fchart.naver?code='+
  d.code+'" target="_blank" rel="noopener">'+d.name+'</a>'+(d.cov?' <span class="covstar" title="리서치 커버리지">★</span>':'')}
 function mktBadge(m){return m?'<span class="'+(m==='코스닥'?'mkt-kq':'mkt-kp')+'">'+m+'</span>':''}
@@ -427,6 +491,21 @@ function renderNav(){   // 주차 이동 ◀▶ (비교주가 2개 이상일 때
  if(older)$('wkprev').onclick=function(){pi++;render()};
  if(newer)$('wknext').onclick=function(){pi--;render()};
 }
+function renderAnchor(){   // 당분기 시점 이동 ◀▶ (분기보고서 발간 시즌 전환용)
+ var p=P(), a=anchorOf(p), i=p.qlist.indexOf(a);
+ var prevOk=i>0, nextOk=i>=0&&i<p.qlist.length-1;
+ var manual=a!==p.anchor;
+ $('anchorbar').innerHTML='<span class="ctllab">분기 시점</span>'+
+  '<button class="wkbtn" id="acprev"'+(prevOk?'':' disabled')+'>◀</button>'+
+  '<span class="wklab">당분기 '+qq(a)+' · 다음분기 '+qq(a?nextq(a):null)+'</span>'+
+  '<button class="wkbtn" id="acnext"'+(nextOk?'':' disabled')+'>▶</button>'+
+  (manual?'<button class="lim" id="acauto" style="margin:0">↺ 자동('+qq(p.anchor)+')으로</button>'
+   :'<span class="tiny">자동 — 분기보고서 마감 지나면 다음 분기로</span>');
+ function go(v){saveAnchor(v===p.anchor?null:v);sel=0;render()}
+ if(prevOk)$('acprev').onclick=function(){go(p.qlist[i-1])};
+ if(nextOk)$('acnext').onclick=function(){go(p.qlist[i+1])};
+ var au=$('acauto');if(au)au.onclick=function(){saveAnchor(null);sel=0;render()};
+}
 function renderTop(){
  var p=P();
  $('sub').textContent=D.has_revision?('전주 '+p.base_date+' → 현재 '+p.snapshot_date):(p.snapshot_date+' 기준 · 첫 스냅샷');
@@ -435,8 +514,13 @@ function renderTop(){
   '<span>✅ 컨센 확보 <b>'+p.covered+'</b> · 없음 '+(p.universe-p.covered)+'</span>';
  if(D.has_revision){
   var M=m3(), ch='<div class="cards">';
-  p.horizons.forEach(function(h){var up=M?h.up3:h.up,dn=M?h.down3:h.down,fl=M?h.flat3:h.flat,t=up+dn+fl||1;
-   ch+='<div class="card"><div class="lab">'+h.label+' ('+plab(h)+')</div>'+
+  activeHz(p).forEach(function(h){
+   var lab='<div class="lab"><b>'+h.role+'</b> '+dlab(h)+'</div>';
+   if(h.stub||!h.rows.length){
+    ch+='<div class="card">'+lab+'<div class="tiny" style="margin-top:6px">'+
+     (h.period?'다음 주간 스냅샷부터 수집':'데이터 없음')+'</div></div>';return}
+   var up=M?h.up3:h.up,dn=M?h.down3:h.down,fl=M?h.flat3:h.flat,t=up+dn+fl||1;
+   ch+='<div class="card">'+lab+
     '<div class="nums"><span class="up">'+up+' ▲</span><span class="down">'+dn+' ▼</span></div>'+
     '<div class="bar"><i class="iu" style="width:'+(up/t*100)+'%"></i>'+
     '<i class="id" style="width:'+(dn/t*100)+'%"></i></div>'+
@@ -466,7 +550,10 @@ function renderCtl(){   // 그룹/섹터 필터 + 기준(주간/3개월) 토글
  document.querySelectorAll('.modetog button').forEach(function(b){b.onclick=function(){MODE=b.dataset.m;sortKey=null;render()}});
 }
 function draw(){
- var p=P(), h=p.horizons[sel], rev=D.has_revision, M=m3(), tbl=$('tbl');
+ var p=P(), h=activeHz(p)[sel], rev=D.has_revision, M=m3(), tbl=$('tbl');
+ if(h.stub||!h.rows.length){
+  tbl.innerHTML='<div class="note">'+(h.period?dlab(h)+' 컨센은 아직 수집 전입니다. 다음 주간 스냅샷부터 쌓입니다.':'데이터가 없습니다.')+'</div>';
+  return}
  var all=(h.rows||[]).filter(function(d){return (!secFilter||d.sec===secFilter)&&(!grpFilter||(d.grp||'').indexOf(grpFilter)>=0)});
  var rows=sortRows(all), shown=showAll?rows:rows.slice(0,TOP);
  var toggle=all.length>TOP?'<button class="lim" id="limtog">'+
@@ -495,12 +582,15 @@ function draw(){
  tbl.querySelectorAll('th.sortable').forEach(function(th){th.onclick=function(){
   var k=th.dataset.k;if(sortKey===k){sortDir=-sortDir}else{sortKey=k;sortDir=(k==='name'||k==='sec')?1:-1}draw()}});
 }
-function render(){renderNav();renderCtl();renderTop();draw()}
-var tabs='';P().horizons.forEach(function(h,i){var lab=h.key==='q'?qq(h.period):h.label;
- tabs+='<button class="tab'+(i===0?' on':'')+'" data-i="'+i+'">'+lab+'</button>'});
-$('tabs').innerHTML=tabs;
-document.querySelectorAll('.tab').forEach(function(b){b.onclick=function(){
- sel=+b.dataset.i;document.querySelectorAll('.tab').forEach(function(x){x.classList.remove('on')});b.classList.add('on');draw()}});
+function renderTabs(){
+ var t='';
+ activeHz(P()).forEach(function(h,i){
+  t+='<button class="tab'+(i===sel?' on':'')+'" data-i="'+i+'">'+h.role+' '+dlab(h)+'</button>'});
+ $('tabs').innerHTML=t;
+ document.querySelectorAll('.tab').forEach(function(b){b.onclick=function(){
+  sel=+b.dataset.i;renderTabs();draw()}});
+}
+function render(){renderNav();renderAnchor();renderCtl();renderTop();renderTabs();draw()}
 render();
 </script></body></html>"""
 
