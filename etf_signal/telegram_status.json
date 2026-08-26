@@ -1,13 +1,13 @@
 {
-  "when_utc": "2026-08-24 22:27:38Z",
+  "when_utc": "2026-08-25 22:17:34Z",
   "ok": true,
-  "note": "forced_heartbeat",
+  "note": "alert_sent",
   "chat_id_tail": "5171",
   "token_set": true,
   "response": {
     "ok": true,
     "result": {
-      "message_id": 184,
+      "message_id": 193,
       "from": {
         "id": 8875725998,
         "is_bot": true,
@@ -21,8 +21,8 @@
         "username": "gschoie",
         "type": "private"
       },
-      "date": 1787610458,
-      "text": "📡 ETF/섹터 신호 · 2026-08-24 (전일 확정)\n\n오늘 새 신호 없음 ✅ (수동 갱신 확인)\n\n전체 신호판 › 대시보드\n🎴 GS Research Desk · ETF/섹터 신호",
+      "date": 1787696254,
+      "text": "📡 ETF/섹터 신호 · 2026-08-25 (전일 확정)\n\n★ 매수 신호(골든크로스) 1개\n\n🟢 KODEX 건설 · 건설\n   ＋DI가 −DI 상향돌파·추세전환\n   ADX 11.8 · %K 51.2/57.9 · 수급 중립\n   [B] 거래대금 1.81배 · 상대강도 상위 23%\n\n▼ 매도 경고(데드크로스) 1개\n\n🔴 TIGER 200커뮤니케이션서비스 · 게임/콘텐츠\n   ＋DI가 −DI 하향이탈·추세꺾임\n   ADX 11.7 · %K 48.7/51.0 · 수급 중립\n   [B] 거래대금 1.98배 · 상대강도 하위 27%\n\n전체 신호판 › 대시보드\n🎴 GS Research Desk · ETF/섹터 신호",
       "entities": [
         {
           "offset": 0,
@@ -30,7 +30,27 @@
           "type": "bold"
         },
         {
-          "offset": 69,
+          "offset": 50,
+          "length": 1,
+          "type": "bold"
+        },
+        {
+          "offset": 57,
+          "length": 8,
+          "type": "bold"
+        },
+        {
+          "offset": 176,
+          "length": 1,
+          "type": "bold"
+        },
+        {
+          "offset": 183,
+          "length": 18,
+          "type": "bold"
+        },
+        {
+          "offset": 310,
           "length": 4,
           "type": "text_link",
           "url": "https://gschoie.github.io/GS-DB2/etf_signal_report.html"
