@@ -1,7 +1,7 @@
 {
  "source": "네이버 종목토론실",
- "universe": 41,
- "posts": 3002,
+ "universe": 40,
+ "posts": 2741,
  "search_top": [
   {
    "code": "005930",
@@ -19,38 +19,38 @@
    "rank": 3
   },
   {
-   "code": "005380",
-   "name": "현대차",
+   "code": "009150",
+   "name": "삼성전기",
    "rank": 4
   },
   {
-   "code": "009150",
-   "name": "삼성전기",
+   "code": "005380",
+   "name": "현대차",
    "rank": 5
+  },
+  {
+   "code": "402340",
+   "name": "SK스퀘어",
+   "rank": 6
   },
   {
    "code": "035420",
    "name": "NAVER",
-   "rank": 6
+   "rank": 7
   },
   {
    "code": "066570",
    "name": "LG전자",
-   "rank": 7
-  },
-  {
-   "code": "196170",
-   "name": "알테오젠",
    "rank": 8
   },
   {
-   "code": "096770",
-   "name": "SK이노베이션",
+   "code": "042700",
+   "name": "한미반도체",
    "rank": 9
   },
   {
-   "code": "361610",
-   "name": "SK아이이테크놀로지",
+   "code": "006400",
+   "name": "삼성SDI",
    "rank": 10
   }
  ],
@@ -58,7 +58,7 @@
   {
    "code": "012330",
    "name": "현대모비스",
-   "posts": 235,
+   "posts": 214,
    "capped": true,
    "burst": 99.0,
    "base_daily": 0.0
@@ -66,50 +66,42 @@
   {
    "code": "361610",
    "name": "SK아이이테크놀로지",
-   "posts": 187,
+   "posts": 179,
    "capped": true,
    "burst": 99.0,
    "base_daily": 0.0
   },
   {
-   "code": "003490",
-   "name": "대한항공",
-   "posts": 95,
-   "capped": false,
+   "code": "222800",
+   "name": "심텍",
+   "posts": 87,
+   "capped": true,
    "burst": 99.0,
    "base_daily": 0.0
   },
   {
    "code": "078340",
    "name": "컴투스",
-   "posts": 211,
+   "posts": 219,
    "capped": true,
-   "burst": 10.2,
+   "burst": 10.6,
    "base_daily": 20.7
   },
   {
    "code": "096770",
    "name": "SK이노베이션",
-   "posts": 223,
+   "posts": 233,
    "capped": true,
-   "burst": 6.6,
+   "burst": 6.9,
    "base_daily": 33.7
   },
   {
    "code": "047040",
    "name": "대우건설",
-   "posts": 149,
+   "posts": 139,
    "capped": true,
-   "burst": 7.7,
+   "burst": 7.2,
    "base_daily": 19.3
-  },
-  {
-   "code": "005930",
-   "name": "삼성전자",
-   "posts": 2198,
-   "capped": true,
-   "burst": 2.0,
-   "base_daily": 1116.3
   },
   {
    "code": "015760",
@@ -120,36 +112,44 @@
    "base_daily": 19.1
   },
   {
-   "code": "052690",
-   "name": "한전기술",
-   "posts": 119,
-   "capped": true,
-   "burst": 5.3,
-   "base_daily": 22.3
-  },
-  {
-   "code": "252670",
-   "name": "KODEX 200선물인버스2X",
-   "posts": 133,
-   "capped": true,
-   "burst": 4.7,
-   "base_daily": 28.4
-  },
-  {
    "code": "128940",
    "name": "한미약품",
-   "posts": 152,
+   "posts": 151,
    "capped": true,
-   "burst": 3.2,
+   "burst": 3.1,
    "base_daily": 48.1
   },
   {
    "code": "000720",
    "name": "현대건설",
-   "posts": 135,
+   "posts": 126,
    "capped": true,
-   "burst": 2.9,
+   "burst": 2.7,
    "base_daily": 46.6
+  },
+  {
+   "code": "034020",
+   "name": "두산에너빌리티",
+   "posts": 281,
+   "capped": true,
+   "burst": 1.7,
+   "base_daily": 162.6
+  },
+  {
+   "code": "028300",
+   "name": "HLB",
+   "posts": 160,
+   "capped": true,
+   "burst": 1.8,
+   "base_daily": 87.1
+  },
+  {
+   "code": "010170",
+   "name": "대한광통신",
+   "posts": 129,
+   "capped": true,
+   "burst": 1.7,
+   "base_daily": 75.6
   }
  ],
  "keywords": [
@@ -161,18 +161,12 @@
   },
   {
    "term": "기관",
-   "count": 22,
+   "count": 18,
    "burst": 99.0,
    "new": true
   },
   {
    "term": "외국인",
-   "count": 19,
-   "burst": 99.0,
-   "new": true
-  },
-  {
-   "term": "현대차",
    "count": 15,
    "burst": 99.0,
    "new": true
@@ -184,19 +178,13 @@
    "new": true
   },
   {
-   "term": "네이버",
+   "term": "이게",
    "count": 14,
    "burst": 99.0,
    "new": true
   },
   {
-   "term": "SK하이닉스",
-   "count": 13,
-   "burst": 99.0,
-   "new": true
-  },
-  {
-   "term": "수주",
+   "term": "결국",
    "count": 12,
    "burst": 99.0,
    "new": true
@@ -208,25 +196,13 @@
    "new": true
   },
   {
-   "term": "현대",
-   "count": 11,
+   "term": "네이버",
+   "count": 12,
    "burst": 99.0,
    "new": true
   },
   {
-   "term": "결국",
-   "count": 11,
-   "burst": 99.0,
-   "new": true
-  },
-  {
-   "term": "조금",
-   "count": 11,
-   "burst": 99.0,
-   "new": true
-  },
-  {
-   "term": "제발",
+   "term": "수주",
    "count": 10,
    "burst": 99.0,
    "new": true
@@ -238,8 +214,32 @@
    "new": true
   },
   {
-   "term": "형들",
+   "term": "언제",
    "count": 10,
+   "burst": 99.0,
+   "new": true
+  },
+  {
+   "term": "이노텍",
+   "count": 10,
+   "burst": 99.0,
+   "new": true
+  },
+  {
+   "term": "현대",
+   "count": 9,
+   "burst": 99.0,
+   "new": true
+  },
+  {
+   "term": "SK하이닉스",
+   "count": 9,
+   "burst": 99.0,
+   "new": true
+  },
+  {
+   "term": "국장",
+   "count": 9,
    "burst": 99.0,
    "new": true
   }
@@ -249,98 +249,98 @@
    "code": "196170",
    "name": "알테오젠",
    "title": "이번 무증 이벤트를 보내며...[10]",
-   "views": 1713,
-   "likes": 136,
+   "views": 1746,
+   "likes": 138,
    "url": "https://finance.naver.com/item/board_read.naver?code=196170&nid=428493885",
    "time_kst": "08-26 19:15"
+  },
+  {
+   "code": "010170",
+   "name": "대한광통신",
+   "title": "애들아~~~ 두가지[14]",
+   "views": 2668,
+   "likes": 136,
+   "url": "https://finance.naver.com/item/board_read.naver?code=010170&nid=428464880",
+   "time_kst": "08-26 11:47"
+  },
+  {
+   "code": "096770",
+   "name": "SK이노베이션",
+   "title": "SK이노베이션 국민청원[18]",
+   "views": 905,
+   "likes": 95,
+   "url": "https://finance.naver.com/item/board_read.naver?code=096770&nid=428499559",
+   "time_kst": "08-26 22:44"
+  },
+  {
+   "code": "196170",
+   "name": "알테오젠",
+   "title": "알테오젠 고생했다ᆢ[6]",
+   "views": 846,
+   "likes": 83,
+   "url": "https://finance.naver.com/item/board_read.naver?code=196170&nid=428496177",
+   "time_kst": "08-26 20:36"
   },
   {
    "code": "000720",
    "name": "현대건설",
    "title": "금주 15만원 찍는다 찬반 투표[3]",
-   "views": 1087,
+   "views": 1089,
    "likes": 82,
    "url": "https://finance.naver.com/item/board_read.naver?code=000720&nid=428461362",
    "time_kst": "08-26 11:13"
-  },
-  {
-   "code": "196170",
-   "name": "알테오젠",
-   "title": "알테오젠 고생했다ᆢ[5]",
-   "views": 738,
-   "likes": 74,
-   "url": "https://finance.naver.com/item/board_read.naver?code=196170&nid=428496177",
-   "time_kst": "08-26 20:36"
-  },
-  {
-   "code": "035420",
-   "name": "NAVER",
-   "title": "엔비디아 실적 발표 후 시나리오[9]",
-   "views": 1803,
-   "likes": 67,
-   "url": "https://finance.naver.com/item/board_read.naver?code=035420&nid=428494727",
-   "time_kst": "08-26 19:43"
-  },
-  {
-   "code": "035420",
-   "name": "NAVER",
-   "title": "네이버 떠납니다[11]",
-   "views": 1259,
-   "likes": 67,
-   "url": "https://finance.naver.com/item/board_read.naver?code=035420&nid=428495940",
-   "time_kst": "08-26 20:25"
   }
  ],
  "top_rising": [
   {
    "code": "034020",
    "name": "두산에너빌리티",
-   "title": "속보 트럼프 에너지장비 서명[1]",
-   "views": 852,
-   "likes": 14,
+   "title": "속보 트럼프 에너지장비 서명[2]",
+   "views": 3717,
+   "likes": 41,
    "url": "https://finance.naver.com/item/board_read.naver?code=034020&nid=428504265",
    "time_kst": "08-27 05:49",
-   "views_per_hour": 585.5
+   "views_per_hour": 900.8
   },
   {
-   "code": "005930",
-   "name": "삼성전자",
-   "title": "[속보]엔비디아 메모리 조달 전분기 ...[2]",
-   "views": 461,
-   "likes": 20,
-   "url": "https://finance.naver.com/item/board_read.naver?code=005930&nid=428504357",
-   "time_kst": "08-27 05:56",
-   "views_per_hour": 344.4
+   "code": "196170",
+   "name": "알테오젠",
+   "title": "단주대금 9월1일[4]",
+   "views": 3892,
+   "likes": 44,
+   "url": "https://finance.naver.com/item/board_read.naver?code=196170&nid=428486254",
+   "time_kst": "08-26 16:06",
+   "views_per_hour": 218.1
   },
   {
-   "code": "034020",
-   "name": "두산에너빌리티",
-   "title": "네팔사고 160명 사망 ?[3]",
-   "views": 454,
-   "likes": 9,
-   "url": "https://finance.naver.com/item/board_read.naver?code=034020&nid=428504074",
-   "time_kst": "08-27 05:32",
-   "views_per_hour": 261.2
+   "code": "196170",
+   "name": "알테오젠",
+   "title": "1,243,717 대차 체결 수량은[3]",
+   "views": 1320,
+   "likes": 70,
+   "url": "https://finance.naver.com/item/board_read.naver?code=196170&nid=428503010",
+   "time_kst": "08-27 02:15",
+   "views_per_hour": 171.6
   },
   {
-   "code": "066570",
-   "name": "LG전자",
-   "title": "엔비디아-시장의 예상을 뛰어넘는 역대 최대 실...[3]",
-   "views": 322,
-   "likes": 11,
-   "url": "https://finance.naver.com/item/board_read.naver?code=066570&nid=428504346",
-   "time_kst": "08-27 05:55",
-   "views_per_hour": 237.6
+   "code": "035420",
+   "name": "NAVER",
+   "title": "엔비디아 실적 발표 후 시나리오[13]",
+   "views": 2310,
+   "likes": 73,
+   "url": "https://finance.naver.com/item/board_read.naver?code=035420&nid=428494727",
+   "time_kst": "08-26 19:43",
+   "views_per_hour": 162.4
   },
   {
-   "code": "052690",
-   "name": "한전기술",
-   "title": "속보 트럼프 에너지 장비 서명[1]",
-   "views": 326,
-   "likes": 12,
-   "url": "https://finance.naver.com/item/board_read.naver?code=052690&nid=428504288",
-   "time_kst": "08-27 05:51",
-   "views_per_hour": 229.3
+   "code": "005935",
+   "name": "삼성전자우",
+   "title": "22만6 천원에  우선주있는데[14]",
+   "views": 2092,
+   "likes": 17,
+   "url": "https://finance.naver.com/item/board_read.naver?code=005935&nid=428491753",
+   "time_kst": "08-26 18:05",
+   "views_per_hour": 131.9
   }
  ]
 }
