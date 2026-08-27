@@ -1,134 +1,181 @@
 {
-  "date": "2026-08-26",
-  "prev_date": "2026-08-25",
-  "generated_at": "2026-08-26 16:12",
-  "base_date": "2026-08-26",
-  "prev_base_date": "2026-08-25",
+  "date": "2026-08-27",
+  "prev_date": "2026-08-26",
+  "generated_at": "2026-08-27 18:58",
+  "base_date": "2026-08-27",
+  "prev_base_date": "2026-08-26",
   "same_base": false,
   "first_run": false,
   "etfs": [
     {
-      "code": "0162Y0",
-      "label": "TIME 코스닥액티브",
+      "code": "463050",
+      "label": "TIME K바이오액티브",
       "group": "TIME(구 TIMEFOLIO)",
       "flow_factor": 1.0,
       "new": [
         {
-          "key": "403870",
-          "name": "HPSP",
-          "code": "403870",
-          "weight": 2.63,
-          "shares": 202.0
+          "key": "475830",
+          "name": "오름테라퓨틱",
+          "code": "475830",
+          "weight": 4.42,
+          "shares": 430.0
         }
       ],
       "gone": [
         {
-          "key": "086520",
-          "name": "에코프로",
-          "code": "086520",
-          "weight_prev": 2.58,
-          "shares_prev": 106.0
+          "key": "310210",
+          "name": "보로노이",
+          "code": "310210",
+          "weight_prev": 4.01,
+          "shares_prev": 156.0
+        }
+      ],
+      "moves": [
+        {
+          "key": "128940",
+          "name": "한미약품",
+          "code": "128940",
+          "shares_now": 109.0,
+          "shares_prev": 85.0,
+          "active_share_pct": 28.2,
+          "active_weight_pp": 2.03,
+          "weight_now": 8.71,
+          "weight_prev": 6.52,
+          "headline": false
+        },
+        {
+          "key": "068270",
+          "name": "셀트리온",
+          "code": "068270",
+          "shares_now": 451.0,
+          "shares_prev": 520.0,
+          "active_share_pct": -13.3,
+          "active_weight_pp": -1.76,
+          "weight_now": 13.15,
+          "weight_prev": 15.08,
+          "headline": false
+        }
+      ],
+      "has_weight": true
+    },
+    {
+      "code": "385720",
+      "label": "TIME 코스피액티브",
+      "group": "TIME(구 TIMEFOLIO)",
+      "flow_factor": 1.0,
+      "new": [
+        {
+          "key": "034020",
+          "name": "두산에너빌리티",
+          "code": "034020",
+          "weight": 1.52,
+          "shares": 450.0
+        }
+      ],
+      "gone": [
+        {
+          "key": "032830",
+          "name": "삼성생명",
+          "code": "032830",
+          "weight_prev": 1.7,
+          "shares_prev": 150.0
+        }
+      ],
+      "moves": [
+        {
+          "key": "005930",
+          "name": "삼성전자",
+          "code": "005930",
+          "shares_now": 2566.0,
+          "shares_prev": 2718.0,
+          "active_share_pct": -5.6,
+          "active_weight_pp": -1.41,
+          "weight_now": 26.33,
+          "weight_prev": 27.75,
+          "headline": false
+        }
+      ],
+      "has_weight": true
+    },
+    {
+      "code": "0163Y0",
+      "label": "KoAct 코스닥액티브",
+      "group": "KoAct",
+      "flow_factor": 1.0,
+      "new": [
+        {
+          "key": "214450",
+          "name": "파마리서치",
+          "code": "214450",
+          "weight": 2.88,
+          "shares": 29.0
+        }
+      ],
+      "gone": [
+        {
+          "key": "108490",
+          "name": "로보티즈",
+          "code": "108490",
+          "weight_prev": 2.85,
+          "shares_prev": 50.0
         }
       ],
       "moves": [],
       "has_weight": true
     },
     {
-      "code": "426020",
-      "label": "TIME 미국S&P500액티브",
+      "code": "0162Y0",
+      "label": "TIME 코스닥액티브",
       "group": "TIME(구 TIMEFOLIO)",
       "flow_factor": 1.0,
-      "new": [
+      "new": [],
+      "gone": [],
+      "moves": [
         {
-          "key": "NEWMONT CORP",
-          "name": "NEWMONT CORP",
-          "code": "",
-          "weight": 0.0,
-          "shares": 51.0
+          "key": "196170",
+          "name": "알테오젠",
+          "code": "196170",
+          "shares_now": 48.0,
+          "shares_prev": 83.0,
+          "active_share_pct": -42.2,
+          "active_weight_pp": -2.64,
+          "weight_now": 4.04,
+          "weight_prev": 6.81,
+          "headline": false
+        },
+        {
+          "key": "222800",
+          "name": "심텍",
+          "code": "222800",
+          "shares_now": 210.0,
+          "shares_prev": 149.0,
+          "active_share_pct": 40.9,
+          "active_weight_pp": 2.06,
+          "weight_now": 6.4,
+          "weight_prev": 4.67,
+          "headline": false
         }
       ],
-      "gone": [
-        {
-          "key": "VERIZON COMMUNICATIONS INC",
-          "name": "VERIZON COMMUNICATIONS INC",
-          "code": "",
-          "weight_prev": 0.0,
-          "shares_prev": 48.0
-        }
-      ],
-      "moves": [],
-      "has_weight": false
+      "has_weight": true
     },
     {
       "code": "441800",
       "label": "TIME Korea플러스배당액티브",
       "group": "TIME(구 TIMEFOLIO)",
       "flow_factor": 1.0,
-      "new": [
-        {
-          "key": "039490",
-          "name": "키움증권",
-          "code": "039490",
-          "weight": 2.9,
-          "shares": 60.0
-        }
-      ],
-      "gone": [
-        {
-          "key": "105560",
-          "name": "KB금융",
-          "code": "105560",
-          "weight_prev": 2.86,
-          "shares_prev": 99.0
-        }
-      ],
-      "moves": [],
-      "has_weight": true
-    },
-    {
-      "code": "472150",
-      "label": "TIGER 배당커버드콜액티브",
-      "group": "TIGER",
-      "flow_factor": 1.0,
-      "new": [
-        {
-          "key": "105560",
-          "name": "KB금융",
-          "code": "105560",
-          "weight": 1.63,
-          "shares": 20.0
-        }
-      ],
-      "gone": [
-        {
-          "key": "012450",
-          "name": "한화에어로스페이스",
-          "code": "012450",
-          "weight_prev": 1.64,
-          "shares_prev": 3.0
-        }
-      ],
-      "moves": [],
-      "has_weight": true
-    },
-    {
-      "code": "471780",
-      "label": "TIGER 코리아테크액티브",
-      "group": "TIGER",
-      "flow_factor": 1.0,
       "new": [],
       "gone": [],
       "moves": [
         {
-          "key": "005930",
-          "name": "삼성전자",
-          "code": "005930",
-          "shares_now": 336.0,
-          "shares_prev": 355.0,
-          "active_share_pct": -5.4,
-          "active_weight_pp": -1.29,
-          "weight_now": 25.02,
-          "weight_prev": 27.1,
+          "key": "005830",
+          "name": "DB손해보험",
+          "code": "005830",
+          "shares_now": 110.0,
+          "shares_prev": 165.0,
+          "active_share_pct": -33.3,
+          "active_weight_pp": -1.63,
+          "weight_now": 3.55,
+          "weight_prev": 5.27,
           "headline": false
         }
       ],
@@ -142,9 +189,9 @@
   },
   "summary": {
     "etfs_changed": 5,
-    "new_total": 4,
-    "gone_total": 4,
-    "moves_total": 1,
+    "new_total": 3,
+    "gone_total": 3,
+    "moves_total": 6,
     "universe": 20
   }
 }

@@ -2,26 +2,27 @@
  "date": "2026-08-27",
  "meta": {
   "window": "08-26 06:00~08-27 06:00 KST",
-  "engine": "Gemini(gemini-flash-lite-latest)",
-  "generated_at": "2026-08-27T07:19+09:00"
+  "engine": "Gemini(gemini-2.5-flash)",
+  "generated_at": "2026-08-27T10:00+09:00"
  },
  "stats": {
   "channels": 91,
-  "messages": 1543,
-  "groups": 1433
+  "messages": 1487,
+  "groups": 1389
  },
- "one_liner": "SK이노베이션-SKIET 합병 주주가치 우려와 웨스팅하우스 지분 인수설 속 원전·전력주 강세",
+ "one_liner": "SK이노베이션 합병 논란과 중동 긴장 완화가 시장의 주요 테마로 부상한 가운데, 미국 PCE 물가 상승으로 금리 인상 우려가 재점화되었습니다.",
  "themes": [
   {
-   "name": "SK이노베이션 — SKIET 흡수합병 및 주주가치 희석 우려",
-   "narrative": "SK이노베이션이 SKIET를 흡수합병하기로 한 가운데, 분리막 사업의 저마진과 중국 저가 공세 심화에 따른 밸류 희석 및 기존 주주 보호정책 필요성이 대두되며 주가 변동성이 확대되었다.",
+   "name": "SK이노베이션-SKIET 합병 논란 및 주주 우려",
+   "narrative": "SK이노베이션의 SKIET 흡수합병 발표 후, 분리막 사업의 저마진과 중국 저가 공세 심화로 인한 SKIET의 가치 하락, 그리고 합병으로 인한 기존 주주들의 밸류 희석 우려가 커지고 있다. 이에 주주 보호 정책 필요성이 대두되고 있다.",
    "status": "new",
    "strength": 5,
    "keywords": [
     "SK 이노베이션",
     "SKIET",
+    "SK 아이이테크놀로지",
     "분리막",
-    "이노베이션"
+    "합병"
    ],
    "evidence": [
     {
@@ -31,83 +32,99 @@
     {
      "channel": "하나증권/에너지화학/윤재성",
      "quote": "[하나/에너지화학/윤재성] SK이노베이션: SKIET 흡수합병에 따른 기존 주주 보호정책 필요"
-    }
-   ]
-  },
-  {
-   "name": "원전/전력 — 웨스팅하우스 지분 공동 인수 제안 기대감",
-   "narrative": "미국 정부가 한국에 웨스팅하우스 지분 공동 인수를 제안했다는 소식이 전해지며 한국전력, 두산에너빌리티, 한전기술 등 전기유틸리티 및 원전 관련주가 강한 상승세를 기록했다.",
-   "status": "new",
-   "strength": 4,
-   "keywords": [
-    "한국전력",
-    "두산에너빌리티",
-    "한전기술",
-    "전기유틸리티"
-   ],
-   "evidence": [
-    {
-     "channel": "epic AI - 투자 어시스턴트",
-     "quote": "강세 업종으로는 전기유틸리티(+6.89%)가 가장 두드러진 상승세를 기록했으며, 이는 미국 정부가 한국에 웨스팅하우스 지분 공동 인수를 제안했다는 소식이 투자심리를 강하게 자극한 결과로 풀이됩니다."
     },
     {
-     "channel": "대신 전략. 돌직구",
-     "quote": "원전 업종 강세. 웨스팅하우스 지분 인수설에 연일 상승. 한전기술(+12.2%), 현대건설(+7.2%), 한국전력(+7.3%), 두산에너빌리티(+5.1%) 등 강세 지속."
+     "channel": "서화백의 그림놀이 🚀",
+     "quote": "📉 SK이노베이션 (-30)"
     }
    ]
   },
   {
-   "name": "중동 — 미·이란 휴전 합의 및 호르무즈 해협 재개방 기대",
-   "narrative": "미국과 이란의 휴전 합의 보도와 이란-오만의 호르무즈 해협 임시 재개방 회담 소식이 전해지며 중동 지정학적 긴장이 완화 조짐을 보였고, 유가 하락과 함께 해운주는 약세를 보였다.",
+   "name": "중동 지정학적 긴장 완화 및 유가 하락",
+   "narrative": "미국과 이란 간 휴전 합의 보도 및 이란-오만 간 호르무즈 해협 임시 공동 해상 통로 개설 논의로 중동 지역의 지정학적 긴장 완화 기대감이 커지고 있다. 이는 유가 하락 및 해운 업종 약세로 이어졌다.",
    "status": "new",
    "strength": 4,
    "keywords": [
     "이란 휴전",
     "이란 오만",
     "휴전 합의",
-    "오만 호르무즈"
+    "호르무즈"
    ],
    "evidence": [
+    {
+     "channel": "키움증권 전략/시황 한지영",
+     "quote": "미국의 대이란 경제 제재 발표 이후 군사충돌 가능성 후퇴 및 휴전 기대감 등에 따른 금리 및 유가 하락 속에,"
+    },
     {
      "channel": "다올투자증권 리서치센터",
      "quote": "러시아 국영 통신사 \"美•이란 휴전 합의…호르무즈 항행 자유 포함\""
     },
     {
      "channel": "대신 전략. 돌직구",
-     "quote": "반면, 해운 업종 약세. 미국과 이란의 휴전 합의 보도와 이란-오만의 호르무즈 해협 재개방 합의 소식에 중동 긴장 완화 기대 작용."
+     "quote": "이란 외무부, 이란-오만 공동성명을 통해 호르무즈 해협 내 임시 공동 해상 통로 개설과 기뢰 제거 공동 프로젝트 등 추진을 발표."
     }
    ]
   },
   {
-   "name": "거시경제 — 미국 7월 PCE 물가 발표 대기 및 인플레이션 경계",
-   "narrative": "미국의 7월 PCE 가격지수 발표를 앞두고 물가 상승에 따른 인플레이션 우려와 금리 상승 속도가 시장의 주요 경계 요인으로 작용했다.",
+   "name": "미국 PCE 물가 상승 및 금리 인상 우려",
+   "narrative": "7월 미국 PCE 물가지수가 전월 대비 0.2%, 전년 동월 대비 3.7% 상승하며 시장 전망치를 상회했고, 변동성이 큰 식품과 에너지를 제외한 근원 PCE 물가도 예상보다 높게 나타나 금리 상승 속도에 대한 우려를 키우고 있다.",
    "status": "new",
    "strength": 3,
    "keywords": [
     "PCE 물가",
     "근원",
-    "식품"
+    "금리"
    ],
    "evidence": [
     {
-     "channel": "키움증권 전략/시황 한지영",
-     "quote": "앞으로 중요한 것은 금리 상승 속도이기에, 그 속도 변화에 영향력을 행사할 1차 단기 이벤트는 26일 예정된 미국의 7월 PCE 물가가 될 예정입니다"
+     "channel": "이상헌 부장 iM 지주/ESG/중소형주",
+     "quote": "- 미 상무부는 26일(현지시간) 7월 PCE 가격지수가 전월 대비 0.2% 상승했다고 밝혔다. 전년 동월 대비로는 3.7% 올랐다. 두 수치 모두 시장 전망치를 각각 0.1%p 웃돌았다."
     },
     {
-     "channel": "이상헌 부장 iM 지주/ESG/중소형주",
-     "quote": "* 美 7월 PCE 3.7%로 예상 상회…서비스 물가가 발목"
+     "channel": "서화백의 AI놀이🚀",
+     "quote": "📝 근원PCE 부합 2년물 하락"
+    },
+    {
+     "channel": "키움증권 전략/시황 한지영",
+     "quote": "앞으로 중요한 것은 금리 상승 속도이기에, 그 속도 변화에 영향력을 행사할 1차 단기 이벤트는 26일 예정된 미국의 7월 PCE 물가가 될 예정입니다"
     }
    ]
   },
   {
-   "name": "해외 — 네팔 대규모 홍수 및 사상자 발생",
-   "narrative": "네팔에서 대규모 홍수와 산사태로 다수의 사망자가 발생하고 현지 발전소 건설 현장 한국인 직원들이 연락이 두절되는 등 인명 피해 소식이 전해졌다.",
+   "name": "원전 산업 기대감 재점화",
+   "narrative": "미국 정부가 한국에 웨스팅하우스 지분 공동 인수를 제안했다는 소식이 전해지면서 한국전력 등 국내 원전 관련주들의 주가가 강세를 보였다. 두산에너빌리티 또한 국내외 원전 산업 모멘텀 강화 구간에 진입했다는 분석이 나왔다.",
+   "status": "new",
+   "strength": 4,
+   "keywords": [
+    "한국전력",
+    "웨스팅하우스",
+    "원전",
+    "두산에너빌리티"
+   ],
+   "evidence": [
+    {
+     "channel": "epic AI - 투자 어시스턴트",
+     "quote": "강세 업종으로는 전기유틸리티(+6.89%)가 가장 두드러진 상승세를 기록했으며, 이는 미국 정부가 한국에 웨스팅하우스 지분 공동 인수를 제안했다는 소식이 투자심리를 강하게 자극한 결과로 풀이됩니다. 한국전력(+6.42%), 한전기술(+13.63%), 한전산업(+12.74%), SNT에너지(+15.33%), SK아이이테크놀…"
+    },
+    {
+     "channel": "여의도스토리 Ver2.0-习近平是个狗东西",
+     "quote": "한국전력 8%대 급등…'웨스팅하우스 지분 투자' 기대감 [특징주]"
+    },
+    {
+     "channel": "NH투자증권 리서치",
+     "quote": "[NH/이민재] 두산에너빌리티두 - 11월까지 계속될 모멘텀"
+    }
+   ]
+  },
+  {
+   "name": "네팔 홍수 피해 및 한국 기업 영향",
+   "narrative": "네팔에서 대규모 홍수 피해가 발생하여 최소 157명이 사망했으며, 현지 수력발전소 건설 현장에 있던 한국남동발전과 두산에너빌리티 직원 8명이 연락 두절 상태인 것으로 확인되어 우려를 낳고 있다.",
    "status": "new",
    "strength": 3,
    "keywords": [
     "네팔",
-    "한국인",
-    "홍수"
+    "홍수",
+    "한국인"
    ],
    "evidence": [
     {
@@ -116,61 +133,80 @@
     },
     {
      "channel": "키움증권 해외선물 톡톡",
-     "quote": "네팔 홍수에 발전소 짓던 남동발전·두산에너빌 직원 8명 연락 두절(종합) 남동발전, 인력 현장 급파…두산에너빌, 비상대책본부 가동"
+     "quote": "제목 : 네팔 홍수에 발전소 짓던 남동발전·두산에너빌 직원 8명 연락 두절(종합) *연합인포*"
     }
    ]
   },
   {
-   "name": "반도체/AI — 엔비디아 실적 발표 앞둔 기대와 훈풍",
-   "narrative": "미국 증시에서 반도체 주식에 대한 매수세가 재개되고 엔비디아 실적 발표를 앞두고 커뮤니티와 시장 전반에 롱 포지션과 실적 기대감이 고조되었다.",
-   "status": "ongoing",
-   "strength": 3,
+   "name": "메타 플랫폼스 청소년 보호 합의",
+   "narrative": "메타 플랫폼스가 소셜미디어의 청소년 유해성 관련 미국 주정부 소송에서 최대 167억 달러 규모의 합의에 도달했으며, 미성년자 이용 시간 제한 및 심야 이용 차단 등 청소년 보호 조치를 도입하기로 했다.",
+   "status": "new",
+   "strength": 2,
    "keywords": [
-    "엔비디아",
-    "젠슨황",
-    "어닝콜",
-    "반도체"
+    "청소년",
+    "메타 플랫폼스",
+    "소송"
    ],
    "evidence": [
     {
-     "channel": "서화백의 AI놀이🚀",
-     "quote": "미국 증시는 화요일 (현지시간) 반도체 주식에 대한 매수세가 재개되면서 완만한 상승세로 마감했습니다."
+     "channel": "사제콩이_서상영",
+     "quote": "메타 플랫폼(+1.07%)은 미국 주정부들과 최대 166.8억 달러 규모의 아동, 청소년 피해 소송 합의했고 이용시간, 야간접속, 알림 기능 등을 변경하기로 했다는 소식에 상승."
     },
     {
-     "channel": "키움증권 전략/시황 한지영",
-     "quote": "- 마이크론 +2.4%, 엔비디아 +2.2%, 모더나 +14.4%"
+     "channel": "미국 주식 인사이더 🇺🇸 (US Stocks Insider)",
+     "quote": "• 메타는 아동·청소년에게 소셜미디어 플랫폼이 유해한 영향을 미쳤다는 미국 주정부들의 소송과 관련해 최대 약 167억 달러 규모의 합의에 도달."
     }
    ]
   }
  ],
  "community_mood": {
-  "score": 35,
-  "summary": "엔비디아 실적 발표를 앞두고 해외주식갤러리를 중심으로 롱 포지션 기대감이 높으며, 일부 대형주와 원전·제약 종목에 대한 관심이 교차하고 있음.",
+  "score": -20,
+  "summary": "SK이노베이션과 SK아이이테크놀로지의 합병 이슈로 인한 주주 가치 훼손 우려와 폭락에 대한 개미 투자자들의 강한 불만과 공포가 나타나고 있다. 반면 알테오젠, 현대건설, 엔비디아 등 일부 종목에 대해서는 긍정적인 기대감이 혼재한다.",
   "hot_stocks": [
    {
-    "name": "알테오젠",
-    "score": 60,
-    "reason": "무증 이벤트 및 주가 흐름에 대한 공감과 고생했다는 반응이 이어짐."
-   },
-   {
-    "name": "현대건설",
-    "score": 50,
-    "reason": "원전 및 건설 모멘텀과 함께 주가 상승 기대감이 언급됨."
+    "name": "SK이노베이션",
+    "score": -80,
+    "reason": "SKIET 흡수합병으로 인한 밸류 희석 우려 및 주주 보호 정책 요구가 빗발치고 있다."
    },
    {
     "name": "SK아이이테크놀로지",
-    "score": -60,
-    "reason": "SK이노베이션과의 합병 및 업황 부진으로 종토에서 우려와 언급이 급증함."
+    "score": -70,
+    "reason": "IPO 고점 대비 95% 이상 폭락과 SK이노베이션과의 합병 우려로 투자자들의 불만이 크다."
    },
    {
-    "name": "현대모비스",
-    "score": 10,
-    "reason": "종토 글 수 상위에 오르며 투자자들의 관심이 집중됨."
+    "name": "알테오젠",
+    "score": 70,
+    "reason": "무증 이벤트와 주가 상승에 대한 기대감이 높다."
+   },
+   {
+    "name": "현대건설",
+    "score": 60,
+    "reason": "웨스팅하우스 지분 인수 기대감과 주가 15만원 상승 전망에 주목하고 있다."
+   },
+   {
+    "name": "심텍",
+    "score": 40,
+    "reason": "2,700억원 규모의 신규 시설 투자 발표에 긍정적으로 반응하고 있다."
    },
    {
     "name": "한국전력",
-    "score": 40,
-    "reason": "웨스팅하우스 지분 인수설 등 유틸리티/원전 모멘텀으로 주목받음."
+    "score": 30,
+    "reason": "미국 웨스팅하우스 지분 공동 인수 제안 소식에 따른 기대감이 반영되었다."
+   },
+   {
+    "name": "두산에너빌리티",
+    "score": 30,
+    "reason": "국내외 원전 산업 모멘텀 강화 및 수주 기대감에 관심이 높다."
+   },
+   {
+    "name": "현대차",
+    "score": -50,
+    "reason": "주식 전부 매도하라는 부정적인 의견이 인기글로 올라왔다."
+   },
+   {
+    "name": "엔비디아",
+    "score": 50,
+    "reason": "실적 발표 후 숏보다는 롱 포지션 가능성이 높다는 기대감이 형성되었다."
    }
   ]
  },
@@ -178,7 +214,7 @@
   "spikes": [
    {
     "term": "SK 이노베이션",
-    "count": 43,
+    "count": 42,
     "burst": 99.0,
     "base_daily": 0.0,
     "new": true
@@ -205,15 +241,15 @@
     "new": true
    },
    {
-    "term": "SKIET",
+    "term": "네팔",
     "count": 20,
     "burst": 99.0,
     "base_daily": 0.0,
     "new": true
    },
    {
-    "term": "네팔",
-    "count": 20,
+    "term": "SKIET",
+    "count": 19,
     "burst": 99.0,
     "base_daily": 0.0,
     "new": true
@@ -234,8 +270,8 @@
    },
    {
     "term": "이노베이션",
-    "count": 43,
-    "burst": 19.70744026850098,
+    "count": 42,
+    "burst": 19.858891288696906,
     "base_daily": 1.4,
     "new": false
    },
@@ -247,21 +283,7 @@
     "new": true
    },
    {
-    "term": "기록할",
-    "count": 18,
-    "burst": 99.0,
-    "base_daily": 0.0,
-    "new": true
-   },
-   {
     "term": "식품",
-    "count": 18,
-    "burst": 99.0,
-    "base_daily": 0.0,
-    "new": true
-   },
-   {
-    "term": "단기 장기",
     "count": 17,
     "burst": 99.0,
     "base_daily": 0.0,
@@ -296,6 +318,13 @@
     "new": true
    },
    {
+    "term": "기록할",
+    "count": 16,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
     "term": "한국인",
     "count": 16,
     "burst": 99.0,
@@ -310,18 +339,18 @@
     "new": true
    },
    {
-    "term": "지지선 근처에서",
+    "term": "Non-GAAP",
     "count": 16,
     "burst": 99.0,
     "base_daily": 0.0,
     "new": true
    },
    {
-    "term": "Non-GAAP",
-    "count": 16,
-    "burst": 99.0,
-    "base_daily": 0.0,
-    "new": true
+    "term": "근원",
+    "count": 25,
+    "burst": 35.46230587267304,
+    "base_daily": 0.4,
+    "new": false
    },
    {
     "term": "오만 호르무즈",
@@ -331,21 +360,28 @@
     "new": true
    },
    {
-    "term": "전망치 상향",
+    "term": "지지선 근처에서",
     "count": 15,
     "burst": 99.0,
     "base_daily": 0.0,
     "new": true
    },
    {
-    "term": "근원",
-    "count": 25,
-    "burst": 34.37344232878078,
-    "base_daily": 0.4,
-    "new": false
+    "term": "단기 장기",
+    "count": 15,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
    },
    {
-    "term": "최대주주",
+    "term": "최적화",
+    "count": 14,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "청소년",
     "count": 14,
     "burst": 99.0,
     "base_daily": 0.0,
@@ -462,8 +498,8 @@
  },
  "community": {
   "source": "네이버 종목토론실",
-  "universe": 41,
-  "posts": 3002,
+  "universe": 40,
+  "posts": 2741,
   "search_top": [
    {
     "code": "005930",
@@ -481,38 +517,38 @@
     "rank": 3
    },
    {
-    "code": "005380",
-    "name": "현대차",
+    "code": "009150",
+    "name": "삼성전기",
     "rank": 4
    },
    {
-    "code": "009150",
-    "name": "삼성전기",
+    "code": "005380",
+    "name": "현대차",
     "rank": 5
+   },
+   {
+    "code": "402340",
+    "name": "SK스퀘어",
+    "rank": 6
    },
    {
     "code": "035420",
     "name": "NAVER",
-    "rank": 6
+    "rank": 7
    },
    {
     "code": "066570",
     "name": "LG전자",
-    "rank": 7
-   },
-   {
-    "code": "196170",
-    "name": "알테오젠",
     "rank": 8
    },
    {
-    "code": "096770",
-    "name": "SK이노베이션",
+    "code": "042700",
+    "name": "한미반도체",
     "rank": 9
    },
    {
-    "code": "361610",
-    "name": "SK아이이테크놀로지",
+    "code": "006400",
+    "name": "삼성SDI",
     "rank": 10
    }
   ],
@@ -520,7 +556,7 @@
    {
     "code": "012330",
     "name": "현대모비스",
-    "posts": 235,
+    "posts": 214,
     "capped": true,
     "burst": 99.0,
     "base_daily": 0.0
@@ -528,50 +564,42 @@
    {
     "code": "361610",
     "name": "SK아이이테크놀로지",
-    "posts": 187,
+    "posts": 179,
     "capped": true,
     "burst": 99.0,
     "base_daily": 0.0
    },
    {
-    "code": "003490",
-    "name": "대한항공",
-    "posts": 95,
-    "capped": false,
+    "code": "222800",
+    "name": "심텍",
+    "posts": 87,
+    "capped": true,
     "burst": 99.0,
     "base_daily": 0.0
    },
    {
     "code": "078340",
     "name": "컴투스",
-    "posts": 211,
+    "posts": 219,
     "capped": true,
-    "burst": 10.2,
+    "burst": 10.6,
     "base_daily": 20.7
    },
    {
     "code": "096770",
     "name": "SK이노베이션",
-    "posts": 223,
+    "posts": 233,
     "capped": true,
-    "burst": 6.6,
+    "burst": 6.9,
     "base_daily": 33.7
    },
    {
     "code": "047040",
     "name": "대우건설",
-    "posts": 149,
+    "posts": 139,
     "capped": true,
-    "burst": 7.7,
+    "burst": 7.2,
     "base_daily": 19.3
-   },
-   {
-    "code": "005930",
-    "name": "삼성전자",
-    "posts": 2198,
-    "capped": true,
-    "burst": 2.0,
-    "base_daily": 1116.3
    },
    {
     "code": "015760",
@@ -582,36 +610,44 @@
     "base_daily": 19.1
    },
    {
-    "code": "052690",
-    "name": "한전기술",
-    "posts": 119,
-    "capped": true,
-    "burst": 5.3,
-    "base_daily": 22.3
-   },
-   {
-    "code": "252670",
-    "name": "KODEX 200선물인버스2X",
-    "posts": 133,
-    "capped": true,
-    "burst": 4.7,
-    "base_daily": 28.4
-   },
-   {
     "code": "128940",
     "name": "한미약품",
-    "posts": 152,
+    "posts": 151,
     "capped": true,
-    "burst": 3.2,
+    "burst": 3.1,
     "base_daily": 48.1
    },
    {
     "code": "000720",
     "name": "현대건설",
-    "posts": 135,
+    "posts": 126,
     "capped": true,
-    "burst": 2.9,
+    "burst": 2.7,
     "base_daily": 46.6
+   },
+   {
+    "code": "034020",
+    "name": "두산에너빌리티",
+    "posts": 281,
+    "capped": true,
+    "burst": 1.7,
+    "base_daily": 162.6
+   },
+   {
+    "code": "028300",
+    "name": "HLB",
+    "posts": 160,
+    "capped": true,
+    "burst": 1.8,
+    "base_daily": 87.1
+   },
+   {
+    "code": "010170",
+    "name": "대한광통신",
+    "posts": 129,
+    "capped": true,
+    "burst": 1.7,
+    "base_daily": 75.6
    }
   ],
   "keywords": [
@@ -623,18 +659,12 @@
    },
    {
     "term": "기관",
-    "count": 22,
+    "count": 18,
     "burst": 99.0,
     "new": true
    },
    {
     "term": "외국인",
-    "count": 19,
-    "burst": 99.0,
-    "new": true
-   },
-   {
-    "term": "현대차",
     "count": 15,
     "burst": 99.0,
     "new": true
@@ -646,19 +676,13 @@
     "new": true
    },
    {
-    "term": "네이버",
+    "term": "이게",
     "count": 14,
     "burst": 99.0,
     "new": true
    },
    {
-    "term": "SK하이닉스",
-    "count": 13,
-    "burst": 99.0,
-    "new": true
-   },
-   {
-    "term": "수주",
+    "term": "결국",
     "count": 12,
     "burst": 99.0,
     "new": true
@@ -670,25 +694,13 @@
     "new": true
    },
    {
-    "term": "현대",
-    "count": 11,
+    "term": "네이버",
+    "count": 12,
     "burst": 99.0,
     "new": true
    },
    {
-    "term": "결국",
-    "count": 11,
-    "burst": 99.0,
-    "new": true
-   },
-   {
-    "term": "조금",
-    "count": 11,
-    "burst": 99.0,
-    "new": true
-   },
-   {
-    "term": "제발",
+    "term": "수주",
     "count": 10,
     "burst": 99.0,
     "new": true
@@ -700,8 +712,32 @@
     "new": true
    },
    {
-    "term": "형들",
+    "term": "언제",
     "count": 10,
+    "burst": 99.0,
+    "new": true
+   },
+   {
+    "term": "이노텍",
+    "count": 10,
+    "burst": 99.0,
+    "new": true
+   },
+   {
+    "term": "현대",
+    "count": 9,
+    "burst": 99.0,
+    "new": true
+   },
+   {
+    "term": "SK하이닉스",
+    "count": 9,
+    "burst": 99.0,
+    "new": true
+   },
+   {
+    "term": "국장",
+    "count": 9,
     "burst": 99.0,
     "new": true
    }
@@ -711,98 +747,98 @@
     "code": "196170",
     "name": "알테오젠",
     "title": "이번 무증 이벤트를 보내며...[10]",
-    "views": 1713,
-    "likes": 136,
+    "views": 1746,
+    "likes": 138,
     "url": "https://finance.naver.com/item/board_read.naver?code=196170&nid=428493885",
     "time_kst": "08-26 19:15"
+   },
+   {
+    "code": "010170",
+    "name": "대한광통신",
+    "title": "애들아~~~ 두가지[14]",
+    "views": 2668,
+    "likes": 136,
+    "url": "https://finance.naver.com/item/board_read.naver?code=010170&nid=428464880",
+    "time_kst": "08-26 11:47"
+   },
+   {
+    "code": "096770",
+    "name": "SK이노베이션",
+    "title": "SK이노베이션 국민청원[18]",
+    "views": 905,
+    "likes": 95,
+    "url": "https://finance.naver.com/item/board_read.naver?code=096770&nid=428499559",
+    "time_kst": "08-26 22:44"
+   },
+   {
+    "code": "196170",
+    "name": "알테오젠",
+    "title": "알테오젠 고생했다ᆢ[6]",
+    "views": 846,
+    "likes": 83,
+    "url": "https://finance.naver.com/item/board_read.naver?code=196170&nid=428496177",
+    "time_kst": "08-26 20:36"
    },
    {
     "code": "000720",
     "name": "현대건설",
     "title": "금주 15만원 찍는다 찬반 투표[3]",
-    "views": 1087,
+    "views": 1089,
     "likes": 82,
     "url": "https://finance.naver.com/item/board_read.naver?code=000720&nid=428461362",
     "time_kst": "08-26 11:13"
-   },
-   {
-    "code": "196170",
-    "name": "알테오젠",
-    "title": "알테오젠 고생했다ᆢ[5]",
-    "views": 738,
-    "likes": 74,
-    "url": "https://finance.naver.com/item/board_read.naver?code=196170&nid=428496177",
-    "time_kst": "08-26 20:36"
-   },
-   {
-    "code": "035420",
-    "name": "NAVER",
-    "title": "엔비디아 실적 발표 후 시나리오[9]",
-    "views": 1803,
-    "likes": 67,
-    "url": "https://finance.naver.com/item/board_read.naver?code=035420&nid=428494727",
-    "time_kst": "08-26 19:43"
-   },
-   {
-    "code": "035420",
-    "name": "NAVER",
-    "title": "네이버 떠납니다[11]",
-    "views": 1259,
-    "likes": 67,
-    "url": "https://finance.naver.com/item/board_read.naver?code=035420&nid=428495940",
-    "time_kst": "08-26 20:25"
    }
   ],
   "top_rising": [
    {
     "code": "034020",
     "name": "두산에너빌리티",
-    "title": "속보 트럼프 에너지장비 서명[1]",
-    "views": 852,
-    "likes": 14,
+    "title": "속보 트럼프 에너지장비 서명[2]",
+    "views": 3717,
+    "likes": 41,
     "url": "https://finance.naver.com/item/board_read.naver?code=034020&nid=428504265",
     "time_kst": "08-27 05:49",
-    "views_per_hour": 585.5
+    "views_per_hour": 900.8
    },
    {
-    "code": "005930",
-    "name": "삼성전자",
-    "title": "[속보]엔비디아 메모리 조달 전분기 ...[2]",
-    "views": 461,
-    "likes": 20,
-    "url": "https://finance.naver.com/item/board_read.naver?code=005930&nid=428504357",
-    "time_kst": "08-27 05:56",
-    "views_per_hour": 344.4
+    "code": "196170",
+    "name": "알테오젠",
+    "title": "단주대금 9월1일[4]",
+    "views": 3892,
+    "likes": 44,
+    "url": "https://finance.naver.com/item/board_read.naver?code=196170&nid=428486254",
+    "time_kst": "08-26 16:06",
+    "views_per_hour": 218.1
    },
    {
-    "code": "034020",
-    "name": "두산에너빌리티",
-    "title": "네팔사고 160명 사망 ?[3]",
-    "views": 454,
-    "likes": 9,
-    "url": "https://finance.naver.com/item/board_read.naver?code=034020&nid=428504074",
-    "time_kst": "08-27 05:32",
-    "views_per_hour": 261.2
+    "code": "196170",
+    "name": "알테오젠",
+    "title": "1,243,717 대차 체결 수량은[3]",
+    "views": 1320,
+    "likes": 70,
+    "url": "https://finance.naver.com/item/board_read.naver?code=196170&nid=428503010",
+    "time_kst": "08-27 02:15",
+    "views_per_hour": 171.6
    },
    {
-    "code": "066570",
-    "name": "LG전자",
-    "title": "엔비디아-시장의 예상을 뛰어넘는 역대 최대 실...[3]",
-    "views": 322,
-    "likes": 11,
-    "url": "https://finance.naver.com/item/board_read.naver?code=066570&nid=428504346",
-    "time_kst": "08-27 05:55",
-    "views_per_hour": 237.6
+    "code": "035420",
+    "name": "NAVER",
+    "title": "엔비디아 실적 발표 후 시나리오[13]",
+    "views": 2310,
+    "likes": 73,
+    "url": "https://finance.naver.com/item/board_read.naver?code=035420&nid=428494727",
+    "time_kst": "08-26 19:43",
+    "views_per_hour": 162.4
    },
    {
-    "code": "052690",
-    "name": "한전기술",
-    "title": "속보 트럼프 에너지 장비 서명[1]",
-    "views": 326,
-    "likes": 12,
-    "url": "https://finance.naver.com/item/board_read.naver?code=052690&nid=428504288",
-    "time_kst": "08-27 05:51",
-    "views_per_hour": 229.3
+    "code": "005935",
+    "name": "삼성전자우",
+    "title": "22만6 천원에  우선주있는데[14]",
+    "views": 2092,
+    "likes": 17,
+    "url": "https://finance.naver.com/item/board_read.naver?code=005935&nid=428491753",
+    "time_kst": "08-26 18:05",
+    "views_per_hour": 131.9
    }
   ]
  },
@@ -812,220 +848,64 @@
    {
     "id": "krstock",
     "name": "국내주식갤러리",
-    "posts": 1850,
-    "capped": true,
-    "burst": 1.2,
+    "posts": 0,
+    "capped": false,
+    "burst": 0.0,
     "base_daily": 1491.1
    },
    {
     "id": "stockus",
     "name": "해외주식갤러리",
-    "posts": 634,
-    "capped": true,
-    "burst": 0.1,
+    "posts": 0,
+    "capped": false,
+    "burst": 0.0,
     "base_daily": 4767.7
    }
   ],
-  "posts_sampled": 545,
-  "keywords": [
-   {
-    "term": "감동",
-    "count": 28,
-    "burst": 99.0,
-    "new": true
-   },
-   {
-    "term": "젠슨황",
-    "count": 14,
-    "burst": 99.0,
-    "new": true
-   },
-   {
-    "term": "어닝콜",
-    "count": 13,
-    "burst": 99.0,
-    "new": true
-   },
-   {
-    "term": "엔비디아",
-    "count": 44,
-    "burst": 47.0,
-    "new": false
-   },
-   {
-    "term": "램혁수",
-    "count": 9,
-    "burst": 99.0,
-    "new": true
-   },
-   {
-    "term": "마이클버리",
-    "count": 9,
-    "burst": 99.0,
-    "new": true
-   },
-   {
-    "term": "버리",
-    "count": 9,
-    "burst": 99.0,
-    "new": true
-   },
-   {
-    "term": "샌마",
-    "count": 9,
-    "burst": 99.0,
-    "new": true
-   },
-   {
-    "term": "숏충",
-    "count": 7,
-    "burst": 97.2,
-    "new": true
-   },
-   {
-    "term": "숏충이들",
-    "count": 6,
-    "burst": 83.3,
-    "new": true
-   },
-   {
-    "term": "이새끼",
-    "count": 6,
-    "burst": 83.3,
-    "new": true
-   },
-   {
-    "term": "입갤",
-    "count": 6,
-    "burst": 83.3,
-    "new": true
-   },
-   {
-    "term": "엔버지",
-    "count": 6,
-    "burst": 83.3,
-    "new": true
-   },
-   {
-    "term": "시총",
-    "count": 6,
-    "burst": 83.3,
-    "new": true
-   },
-   {
-    "term": "갑자기",
-    "count": 5,
-    "burst": 69.4,
-    "new": true
-   }
-  ],
+  "posts_sampled": 0,
+  "keywords": [],
   "top_recommended": [
    {
     "gallery": "해외주식갤러리",
     "title": "이따 컨콜때 젠슨황 이러면 어떻게됨?",
-    "views": 10534,
-    "recommend": 300,
+    "views": 10887,
+    "recommend": 307,
     "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=17575571&exception_mode=recommend&page=1",
     "time_kst": "08-26 17:34"
    },
    {
     "gallery": "해외주식갤러리",
     "title": "현대차 주식 전부다 팔고 튀어라 ㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋ",
-    "views": 12942,
-    "recommend": 203,
+    "views": 13148,
+    "recommend": 207,
     "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=17573779&exception_mode=recommend&page=1",
     "time_kst": "08-26 13:13"
    },
    {
     "gallery": "해외주식갤러리",
-    "title": "워렌버핏 진짜 ㅂㅅ맞노",
-    "views": 11895,
-    "recommend": 198,
-    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=17573608&exception_mode=recommend&page=1",
-    "time_kst": "08-26 12:47"
-   },
-   {
-    "gallery": "해외주식갤러리",
     "title": "[속보] 엔비디아 실적발표, 숏보다는 롱 가능성이 높다",
-    "views": 12036,
-    "recommend": 189,
+    "views": 14165,
+    "recommend": 206,
     "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=17576791&exception_mode=recommend&page=1",
     "time_kst": "08-26 20:29"
    },
    {
     "gallery": "해외주식갤러리",
+    "title": "워렌버핏 진짜 ㅂㅅ맞노",
+    "views": 12091,
+    "recommend": 202,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=17573608&exception_mode=recommend&page=1",
+    "time_kst": "08-26 12:47"
+   },
+   {
+    "gallery": "해외주식갤러리",
     "title": "니들 디엠 피싱 조심해라",
-    "views": 9390,
-    "recommend": 186,
+    "views": 9710,
+    "recommend": 190,
     "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=17576487&exception_mode=recommend&page=1",
     "time_kst": "08-26 19:50"
    }
   ],
-  "top_viewed": [
-   {
-    "gallery": "해외주식갤러리",
-    "title": "[속보] 엔비디아 실적발표, 숏보다는 롱 가능성이 높다",
-    "views": 12034,
-    "recommend": 189,
-    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=17576791&page=12",
-    "time_kst": "08-26 20:29"
-   },
-   {
-    "gallery": "해외주식갤러리",
-    "title": "오피셜) 2분기 M7+반도치 실적 순위",
-    "views": 2582,
-    "recommend": 22,
-    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=17580972&page=18",
-    "time_kst": "08-27 05:41"
-   },
-   {
-    "gallery": "국내주식갤러리",
-    "title": "얘들아 희망이 될까봐 가져왔음",
-    "views": 617,
-    "recommend": 0,
-    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3342582&page=18",
-    "time_kst": "08-27 03:22"
-   },
-   {
-    "gallery": "국내주식갤러리",
-    "title": "솔리다임이 생각보다 초대형 악재네..",
-    "views": 580,
-    "recommend": 0,
-    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3342569&page=18",
-    "time_kst": "08-27 02:37"
-   },
-   {
-    "gallery": "국내주식갤러리",
-    "title": "풀롱ㅋㅋ시발아 ㅋㅋㅋㅋㅋ",
-    "views": 558,
-    "recommend": 1,
-    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3342560&page=18",
-    "time_kst": "08-27 02:19"
-   },
-   {
-    "gallery": "국내주식갤러리",
-    "title": "매일 마누라를 보면서 행복을 느낀다.",
-    "views": 526,
-    "recommend": 0,
-    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3342591&page=18",
-    "time_kst": "08-27 03:42"
-   },
-   {
-    "gallery": "국내주식갤러리",
-    "title": "실발후 폭락은 엔비디아 본인뿐인데",
-    "views": 515,
-    "recommend": 0,
-    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3342571&page=18",
-    "time_kst": "08-27 02:49"
-   },
-   {
-    "gallery": "국내주식갤러리",
-    "title": "사실 월가가 진짜 개샛기들인 게",
-    "views": 484,
-    "recommend": 0,
-    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3342589&page=18",
-    "time_kst": "08-27 03:37"
-   }
-  ]
+  "top_viewed": []
  }
 }
