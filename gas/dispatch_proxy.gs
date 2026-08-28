@@ -139,9 +139,9 @@ const SCHEDULE = [
   { wf: 'flow',      hours: [10, 13], minute: 0,  days: 'weekday', label: '시장 수급' },
   { wf: 'flow',      hours: [15],     minute: 40, days: 'weekday', label: '시장 수급(마감 잠정)' },
   { wf: 'flow',      hours: [16],     minute: 40, days: 'weekday', label: '시장 수급(확정)' },
-  { wf: 'holdings',  hours: [9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21],
+  { wf: 'holdings',  hours: [9, 10, 11, 12, 13, 14, 15, 16],   // 장중~마감 직후까지만
                      minute: 17, days: 'weekday', label: '액티브ETF 매매동향' },
-  { wf: 'consensus', hours: [17],     minute: 0,  days: 'fri',     label: '코스피200 컨센' },
+  { wf: 'consensus', hours: [17],     minute: 0,  days: 'fri,sat', label: '코스피200 컨센' },
 ];
 
 /** 5분마다 도는 본체. 목표 시각을 지난 슬롯 중 오늘 아직 안 쏜 것을 발사한다. */
@@ -181,7 +181,8 @@ function dayMatches_(spec, dow) {
   if (spec === 'daily') return true;
   if (spec === 'weekday') return dow >= 1 && dow <= 5;
   const map = { mon: 1, tue: 2, wed: 3, thu: 4, fri: 5, sat: 6, sun: 7 };
-  return map[String(spec).toLowerCase()] === dow;
+  // 'fri' 처럼 하나만 쓰거나 'fri,sat' 처럼 쉼표로 여러 요일을 쓸 수 있다
+  return String(spec).toLowerCase().split(',').some(function (d) { return map[d.trim()] === dow; });
 }
 
 function pad2_(n) { return ('0' + n).slice(-2); }

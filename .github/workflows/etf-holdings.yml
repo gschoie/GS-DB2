@@ -7,7 +7,9 @@ name: 액티브 ETF 매매동향
 on:
   workflow_dispatch:
   schedule:
-    - cron: "17 0-12 * * 1-5"  # UTC 00~12시 매시 17분 = KST 09~21시, 월~금 (정각은 GitHub 혼잡으로 자주 스킵됨)
+    - cron: "17 0-7 * * 1-5"   # UTC 00~07시 매시 17분 = KST 09~16시(장중~마감 직후), 월~금
+    # 정시성은 GAS 시계(gas/dispatch_proxy.gs SCHEDULE)가 담당 — 이 크론은 안전망이다.
+    # 시각을 바꿀 때는 GAS SCHEDULE과 반드시 같이 고칠 것.
 
 permissions:
   contents: write
