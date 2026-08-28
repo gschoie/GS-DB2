@@ -4,7 +4,8 @@ name: KOSPI200 컨센 트래킹
 on:
   workflow_dispatch:
   schedule:
-    - cron: "0 8 * * 5"   # 08:00 UTC 금요일 = 한국 17:00
+    - cron: "0 8 * * 5,6"   # 08:00 UTC 금·토 = 한국 17:00 (주간 스냅샷 2회)
+    # 정시성은 GAS 시계(gas/dispatch_proxy.gs SCHEDULE)가 담당 — 이 크론은 안전망이다.
 
 permissions:
   contents: write   # 갱신된 DB/HTML 커밋·푸시 → deploy-pages 트리거
