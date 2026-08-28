@@ -6964,8 +6964,8 @@
   },
   "2026-08-28": {
    "kospi": {
-    "close": 6807.9,
-    "chg_pct": -1.51
+    "close": 6788.88,
+    "chg_pct": -1.79
    },
    "slots": {
     "1540": {
@@ -6982,47 +6982,62 @@
       "foreign": 1107,
       "inst_total": -852
      }
+    },
+    "1640": {
+     "individual": 4194,
+     "foreign": -8525,
+     "institution": -11876,
+     "arb": 449,
+     "nonarb": -15398,
+     "program": -14950,
+     "time": "21:27",
+     "kospi": 6788.88,
+     "chg_pct": -1.79,
+     "futures": {
+      "foreign": 2289,
+      "inst_total": -2835
+     }
     }
    },
    "confirmed": {
     "investor": {
-     "individual": 2640,
-     "foreign": -16573,
-     "inst_total": -2228,
-     "fin_invest": 4020,
-     "insurance": 262,
-     "asset_mgmt": -6472,
+     "individual": 4194,
+     "foreign": -8525,
+     "inst_total": -11876,
+     "fin_invest": -2874,
+     "insurance": 244,
+     "asset_mgmt": -9224,
      "bank": 5,
      "other_fin": 202,
-     "pension": -244,
-     "other_corp": 16160
+     "pension": -229,
+     "other_corp": 16206
     },
     "program": {
-     "arb_buy": 3612,
+     "arb_buy": 4208,
      "arb_sell": 3759,
-     "arb_net": -148,
-     "nonarb_buy": 44342,
-     "nonarb_sell": 59308,
-     "nonarb_net": -14966,
-     "total_buy": 47954,
-     "total_sell": 63067,
-     "total_net": -15114
+     "arb_net": 449,
+     "nonarb_buy": 50587,
+     "nonarb_sell": 65986,
+     "nonarb_net": -15398,
+     "total_buy": 54795,
+     "total_sell": 69745,
+     "total_net": -14949
     },
     "futures": {
-     "individual": -179,
-     "foreign": 1107,
-     "inst_total": -852,
-     "fin_invest": -1185,
-     "insurance": 151,
-     "asset_mgmt": 104,
-     "bank": 29,
+     "individual": 567,
+     "foreign": 2289,
+     "inst_total": -2835,
+     "fin_invest": -2639,
+     "insurance": 256,
+     "asset_mgmt": -548,
+     "bank": 7,
      "other_fin": 5,
-     "pension": 44,
-     "other_corp": -76
+     "pension": 84,
+     "other_corp": -21
     }
    },
    "group_1d": {
-    "time": "15:31",
+    "time": "21:28",
     "groups": [
      [
       "화장품",
@@ -7132,7 +7147,7 @@
     ]
    },
    "stock_flow": {
-    "time": "15:31",
+    "time": "21:28",
     "buy": [
      [
       "삼성전기",
@@ -7980,20 +7995,20 @@
      ],
      [
       "15:20",
-      -179,
-      1107,
-      -852
+      -189,
+      1696,
+      -1444
      ],
      [
       "15:30",
-      -179,
-      1107,
-      -852
+      70,
+      2061,
+      -2063
      ]
     ]
    }
   }
  },
- "updated_kst": "2026-08-28 15:32",
+ "updated_kst": "2026-08-28 21:28",
  "futures_unit": "계약"
 }
