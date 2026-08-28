@@ -76,29 +76,153 @@ function doPost(e) {
       return json({ ok: false, code: 400, wf: wf, error: 'yt_url이 비어 있습니다' });
     }
 
-    const token = PropertiesService.getScriptProperties().getProperty('GH_TOKEN');
-    if (!token) return json({ ok: false, code: 500, wf: wf, error: 'GH_TOKEN 미설정' });
-
-    const res = UrlFetchApp.fetch(
-      `https://api.github.com/repos/${OWNER}/${REPO}/actions/workflows/${wf}/dispatches`,
-      { method: 'post', contentType: 'application/json',
-        headers: { Authorization: 'Bearer ' + token, Accept: 'application/vnd.github+json' },
-        payload: JSON.stringify({ ref: REF, inputs: buildInputs(key, body) }),
-        muteHttpExceptions: true });
-
-    const code = res.getResponseCode();
-    // 204만 성공. 실패 사유(GitHub 응답 본문)를 같이 돌려줘야 원인을 볼 수 있다.
-    return json(code === 204
-      ? { ok: true, code: code, wf: wf }
-      : { ok: false, code: code, wf: wf, error: String(res.getContentText() || '').slice(0, 300) });
+    return json(fireWorkflow(key, buildInputs(key, body)));
   } catch (err) {
     return json({ ok: false, code: 500, error: String(err) });
   }
 }
 
+/** 워크플로 하나를 workflow_dispatch로 발사한다. 웹앱(doPost)과 스케줄러(tick)가 같이 쓴다. */
+function fireWorkflow(key, inputs) {
+  const wf = WF[key];
+  if (!wf) return { ok: false, code: 400, wf: null, error: 'unknown workflow key: ' + key };
+
+  const token = PropertiesService.getScriptProperties().getProperty('GH_TOKEN');
+  if (!token) return { ok: false, code: 500, wf: wf, error: 'GH_TOKEN 미설정' };
+
+  const res = UrlFetchApp.fetch(
+    `https://api.github.com/repos/${OWNER}/${REPO}/actions/workflows/${wf}/dispatches`,
+    { method: 'post', contentType: 'application/json',
+      headers: { Authorization: 'Bearer ' + token, Accept: 'application/vnd.github+json' },
+      payload: JSON.stringify({ ref: REF, inputs: inputs || {} }),
+      muteHttpExceptions: true });
+
+  const code = res.getResponseCode();
+  // 204만 성공. 실패 사유(GitHub 응답 본문)를 같이 돌려줘야 원인을 볼 수 있다.
+  return code === 204
+    ? { ok: true, code: code, wf: wf }
+    : { ok: false, code: code, wf: wf, error: String(res.getContentText() || '').slice(0, 300) };
+}
+
 function json(obj) {
   return ContentService.createTextOutput(JSON.stringify(obj))
     .setMimeType(ContentService.MimeType.JSON);
+}
+
+/** =====================================================================
+ * 정시 발사 스케줄러 (2026-08-29 신설)
+ * ---------------------------------------------------------------------
+ * GitHub 무료 러너의 `schedule` 큐가 최대 몇 시간까지 밀린다(실측: market-trend
+ * 평소 +19분, 8/27 +3시간 26분, 8/28 +8시간 1분). 시간에 민감한 워크플로는
+ * 이 GAS 시계가 KST 기준으로 workflow_dispatch를 직접 쏜다(±5분).
+ *
+ * GitHub 크론은 지우지 않고 **안전망**으로 남긴다 — 각 워크플로의 `guard` 잡이
+ * "최근에 dispatch로 이미 돌았으면" 뒤늦은 예약 실행을 건너뛴다.
+ *
+ * [설치 — 1회]
+ *   1. 이 파일을 Apps Script 편집기에 붙여넣고 저장(Ctrl+S)
+ *   2. 함수 선택창에서 installScheduler 골라 ▶ 실행 (권한 승인 + 5분 트리거 생성)
+ *   3. 왼쪽 ⏰ 트리거 화면에 `tick · 시간 기반 · 5분` 1개가 보이면 끝
+ *   ※ 트리거는 '저장된 최신 코드'로 도므로 웹앱 재배포 없이 바로 적용된다.
+ *      (웹앱 doPost도 함께 바뀌었으니 '배포 관리 → 새 버전'도 해두면 깔끔)
+ *
+ * 스케줄을 바꿀 때는 아래 SCHEDULE 표만 고치고 저장하면 된다(트리거 재생성 불필요).
+ * ===================================================================== */
+
+const TZ = 'Asia/Seoul';
+const GRACE_MIN = 60;   // 트리거가 밀리거나 실패해도 목표 시각 +60분까지는 따라 쏜다
+
+// wf: 위 WF 매핑의 키 / hours·minute: KST 발사 시각 / days: daily·weekday·mon~sun
+const SCHEDULE = [
+  { wf: 'trend',     hours: [6],      minute: 30, days: 'daily',   label: '시장관심.내러티브' },
+  { wf: 'etf',       hours: [7],      minute: 0,  days: 'daily',   label: 'ETF/섹터 신호' },
+  { wf: 'flow',      hours: [10, 13], minute: 0,  days: 'weekday', label: '시장 수급' },
+  { wf: 'flow',      hours: [15],     minute: 40, days: 'weekday', label: '시장 수급(마감 잠정)' },
+  { wf: 'flow',      hours: [16],     minute: 40, days: 'weekday', label: '시장 수급(확정)' },
+  { wf: 'holdings',  hours: [9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21],
+                     minute: 17, days: 'weekday', label: '액티브ETF 매매동향' },
+  { wf: 'consensus', hours: [17],     minute: 0,  days: 'fri',     label: '코스피200 컨센' },
+];
+
+/** 5분마다 도는 본체. 목표 시각을 지난 슬롯 중 오늘 아직 안 쏜 것을 발사한다. */
+function tick() {
+  const now = new Date();
+  const today = Utilities.formatDate(now, TZ, 'yyyy-MM-dd');
+  const dow = Number(Utilities.formatDate(now, TZ, 'u'));   // 1=월 … 7=일
+  const nowMin = Number(Utilities.formatDate(now, TZ, 'H')) * 60 +
+                 Number(Utilities.formatDate(now, TZ, 'm'));
+
+  const props = PropertiesService.getScriptProperties();
+  let fired = {};
+  try { fired = JSON.parse(props.getProperty('FIRED') || '{}'); } catch (e) { fired = {}; }
+  let changed = false;
+
+  SCHEDULE.forEach(function (row) {
+    if (!dayMatches_(row.days, dow)) return;
+    row.hours.forEach(function (hour) {
+      const target = hour * 60 + row.minute;
+      // 창을 벗어난 슬롯은 건너뛴다 — 자정 넘어 옛 슬롯을 뒤늦게 쏘는 것을 막는다.
+      if (nowMin < target || nowMin > target + GRACE_MIN) return;
+
+      const slot = row.wf + '@' + pad2_(hour) + ':' + pad2_(row.minute);
+      if (fired[slot] === today) return;          // 오늘 이 슬롯은 이미 쐈다
+
+      const res = fireWorkflow(row.wf, {});
+      Logger.log('%s %s → %s', slot, row.label || '', res.ok ? 'OK' : 'FAIL ' + res.error);
+      if (res.ok) { fired[slot] = today; changed = true; }
+      // 실패하면 기록하지 않는다 → 다음 틱에서 GRACE_MIN 안까지 자동 재시도
+    });
+  });
+
+  if (changed) props.setProperty('FIRED', JSON.stringify(prune_(fired, today)));
+}
+
+function dayMatches_(spec, dow) {
+  if (spec === 'daily') return true;
+  if (spec === 'weekday') return dow >= 1 && dow <= 5;
+  const map = { mon: 1, tue: 2, wed: 3, thu: 4, fri: 5, sat: 6, sun: 7 };
+  return map[String(spec).toLowerCase()] === dow;
+}
+
+function pad2_(n) { return ('0' + n).slice(-2); }
+
+/** 발사 기록은 어제치까지만 남긴다(스크립트 속성 용량 보호). */
+function prune_(fired, today) {
+  const cutoff = Utilities.formatDate(
+    new Date(new Date().getTime() - 24 * 60 * 60 * 1000), TZ, 'yyyy-MM-dd');
+  const keep = {};
+  Object.keys(fired).forEach(function (k) { if (fired[k] >= cutoff) keep[k] = fired[k]; });
+  return keep;
+}
+
+/** [설치] 편집기에서 1회 실행 — 5분 트리거를 만든다(중복 생성 방지 포함). */
+function installScheduler() {
+  ScriptApp.getProjectTriggers().forEach(function (t) {
+    if (t.getHandlerFunction() === 'tick') ScriptApp.deleteTrigger(t);
+  });
+  ScriptApp.newTrigger('tick').timeBased().everyMinutes(5).create();
+  Logger.log('스케줄러 설치 완료 — 5분마다 tick 실행. 슬롯 %s개', SCHEDULE.length);
+}
+
+/** [점검] 지금 시각 기준으로 오늘 무엇이 언제 나가는지 로그로만 확인(발사 안 함). */
+function previewSchedule() {
+  const now = new Date();
+  const dow = Number(Utilities.formatDate(now, TZ, 'u'));
+  const fired = JSON.parse(PropertiesService.getScriptProperties().getProperty('FIRED') || '{}');
+  Logger.log('지금(KST): %s', Utilities.formatDate(now, TZ, 'yyyy-MM-dd HH:mm (E)'));
+  SCHEDULE.forEach(function (row) {
+    row.hours.forEach(function (hour) {
+      const slot = row.wf + '@' + pad2_(hour) + ':' + pad2_(row.minute);
+      Logger.log('  %s %s · 오늘대상=%s · 마지막발사=%s',
+        slot, row.label || '', dayMatches_(row.days, dow) ? 'Y' : 'n', fired[slot] || '-');
+    });
+  });
+}
+
+/** [수동] 슬롯 기록을 지워 같은 날 다시 쏠 수 있게 한다(테스트용). */
+function resetFired() {
+  PropertiesService.getScriptProperties().deleteProperty('FIRED');
+  Logger.log('발사 기록 초기화 — 다음 tick에서 창 안의 슬롯을 다시 쏩니다.');
 }
 
 /** 편집기에서 1회 실행 — 권한 승인 + 매핑 확인용(실제 디스패치는 안 함). */
