@@ -21,6 +21,7 @@
 | `kospi_consensus/` | 주간 컨센서스 스냅샷 |
 | `valuation/` | 야후 파이낸스 PER·PBR·ROE·PSR — 과거 4개 회계연도(확정) + 컨센(올해·내년), 화면 + 엑셀 (`valuation.yml`, 토 07:00) |
 | `defense_briefing/` | 방산 데일리 브리핑 (Gemini/Claude 브리핑, `claude-brief-*.yml`) |
+| `youtube_digest/` | 방산 유튜브 3일 모음 — GAS가 모은 링크를 받아 대시보드 페이지로 굽는다 |
 | `recipe_bot/` | 유튜브 숏츠 링크 → Gemini 영상 시청 → Notion 「레시피」 DB 저장 |
 | `dart_shiporder_bot/` | DART 수주 공시 봇 |
 | `peergroup/` | 주간 피어그룹 주가 |
@@ -174,5 +175,26 @@
       슬롯 경계(11:30/14:30/16:10, scrape.decide_slot과 동일)** — 몇 시간 늦은 크론이
       다음 슬롯을 덮어써 수급 텔레그램이 두 번 가는 것을 막기 위함.
     - 사용자 설치: Apps Script에 붙여넣기 → `installScheduler` 1회 실행 → 트리거 확인.
+
+18. **방산 유튜브 3일 모음** (8/28): 구독 방산 채널 7곳(샤를세환·KKMD·까치살모·슈퍼소닉·
+    밀덕·KFN+·KFN1)의 영상 링크를 3일마다 모아 텔레그램(@gs_analyst_bot) + 대시보드로.
+    NotebookLM에 소스로 넣어 오디오 개요로 듣는 용도다.
+    - **수집은 GAS가 이미 하고 있었다** — `gas/youtube_defense_bot.gs`(이 리포에 정본 편입).
+      낱개 알림(제미나이 요약)을 보낼 때 링크를 스크립트 속성에 한 건씩 적립하고,
+      3일 트리거가 그걸 모아 두 통으로 보낸다: 제목 목록 + **주소만**(붙여넣기용).
+      속성 값 하나당 9KB 제한이 있어 JSON 배열 하나가 아니라 영상당 속성 하나로 둔다.
+    - **대시보드**: GAS가 같은 내용을 `youtube-digest.yml` workflow_dispatch 입력으로
+      넘기면 `youtube_digest/build_digest_page.py`가 `static/youtube_digest/<날짜>.html|.md|.txt`
+      + 날짜 인덱스를 굽고 커밋 → deploy-pages가 workflow_run으로 받아 배포.
+      **유튜브를 다시 긁지 않으므로 봇에 나간 것과 대시보드가 항상 일치한다.**
+      사이드바 `📺 ┗방산유튜브.3일모음`(방산.주간정리 바로 밑), 페이지에 '전체 복사' 버튼.
+    - 왜 GitHub Actions로 수집하지 않았나: 채널 목록이 GAS·리포 두 곳으로 갈려 어긋나고,
+      17번에서 확인했듯 무료 러너 크론이 몇 시간씩 밀린다. 수집은 GAS 한 곳으로 유지.
+    - GAS 쪽 고친 것: 키를 소스에서 빼 스크립트 속성으로(`secret_()`), 내부 함수는
+      밑줄 접미사로 실행 드롭다운에서 감춤, 기록해 둔 영상이 피드에서 사라지면
+      피드 15건이 통째로 나가고 제미나이도 15번 호출되던 문제에 상한(5건).
+    - 사용자 설치: 스크립트 속성 `TELEGRAM_TOKEN`·`TELEGRAM_CHAT_ID`·`GEMINI_API_KEY`
+      (+대시보드까지 쓰려면 `GH_TOKEN`) → `checkSetup()` → `installDigestTrigger()`.
+      `fillBufferFromFeeds(3)`로 3일 안 기다리고 바로 시험해 볼 수 있다.
 
 이후 작업은 git log와 이 파일을 갱신하며 이어간다.

@@ -1,0 +1,53 @@
+name: 유튜브 3일 모음
+
+# 수집·발송은 Apps Script(gas/youtube_defense_bot.gs)가 한다. 그쪽이 텔레그램으로
+# 모음을 보낸 뒤 같은 내용을 payload 로 넘겨 이 워크플로를 깨우면, 여기서는
+# 대시보드에 남길 페이지만 만든다. 유튜브를 다시 긁지 않으므로 봇에 나간 것과 일치한다.
+#
+# GAS 쪽 호출: POST .../actions/workflows/youtube-digest.yml/dispatches
+#              { ref: "main", inputs: { payload: "<JSON>" } }
+
+on:
+  workflow_dispatch:
+    inputs:
+      payload:
+        description: "모음 JSON {date, from, channels:[{name, videos:[{t,u,p}]}]}"
+        type: string
+        required: true
+
+permissions:
+  contents: write
+
+jobs:
+  page:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Build digest page
+        env:
+          # 셸을 거치지 않고 환경변수로 넘긴다 — 제목에 따옴표·백틱이 들어와도 안전하다.
+          PAYLOAD: ${{ inputs.payload }}
+        run: printf '%s' "$PAYLOAD" | python youtube_digest/build_digest_page.py
+
+      - name: Commit page
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add telegram_research_dashboard/static/youtube_digest \
+                  telegram_research_dashboard/static/youtube_digest_report.html
+          if git diff --cached --quiet; then
+            echo "No changes to commit."
+            exit 0
+          fi
+          git commit -m "data: youtube digest $(TZ=Asia/Seoul date +%F)"
+          for i in 1 2 3; do
+            git pull --rebase origin "${GITHUB_REF_NAME}" && git push && exit 0
+            sleep $((i * 5))
+          done
+          exit 1
