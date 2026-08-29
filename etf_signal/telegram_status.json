@@ -1,59 +1,8 @@
 {
-  "when_utc": "2026-08-28 05:54:33Z",
+  "when_utc": "2026-08-29 03:28:34Z",
   "ok": true,
-  "note": "alert_sent",
+  "note": "no_alert_skip",
   "chat_id_tail": "5171",
   "token_set": true,
-  "response": {
-    "ok": true,
-    "result": {
-      "message_id": 211,
-      "from": {
-        "id": 8875725998,
-        "is_bot": true,
-        "first_name": "GB Investing Signal",
-        "username": "gs_invest_signal_bot"
-      },
-      "chat": {
-        "id": 279385171,
-        "first_name": "광식",
-        "last_name": "최",
-        "username": "gschoie",
-        "type": "private"
-      },
-      "date": 1787896473,
-      "text": "📡 ETF/섹터 신호 · 2026-08-27 (전일 확정)\n\n★ 매수 신호(골든크로스) 2개\n\n🟢 KODEX 2차전지산업 · 2차전지\n   ＋DI가 −DI 상향돌파·추세전환 · 외인·기관 동반 순매수\n   ADX 14.2 · %K 81.9/78.6 · 외인·기관 쌍끌이\n   [B] 거래대금 1.84배 · 상대강도 상위 14%\n\n🟢 KODEX 신재생에너지액티브 · 신재생/수소/기후\n   ＋DI가 −DI 상향돌파·추세전환 · 외인·기관 동반 순매수\n   ADX 12.0 · %K 79.6/68.6 · 외인·기관 쌍끌이\n   [B] 상대강도 상위 4% · 외인·기관 연속 순매수 6일\n\n전체 신호판 › 대시보드\n🎴 GS Research Desk · ETF/섹터 신호",
-      "entities": [
-        {
-          "offset": 0,
-          "length": 12,
-          "type": "bold"
-        },
-        {
-          "offset": 50,
-          "length": 1,
-          "type": "bold"
-        },
-        {
-          "offset": 57,
-          "length": 12,
-          "type": "bold"
-        },
-        {
-          "offset": 189,
-          "length": 15,
-          "type": "bold"
-        },
-        {
-          "offset": 339,
-          "length": 4,
-          "type": "text_link",
-          "url": "https://gschoie.github.io/GS-DB2/etf_signal_report.html"
-        }
-      ],
-      "link_preview_options": {
-        "is_disabled": true
-      }
-    }
-  }
+  "response": null
 }
