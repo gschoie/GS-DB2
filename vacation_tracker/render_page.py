@@ -109,6 +109,14 @@ tr.today td{background:#14202f}
 .badge.trip{background:#3a2f1d;color:#ffd9a0;border-color:#55452c}
 tr.pending td{opacity:.75}
 tr.pending .badge,.chip.pending{border-style:dashed}
+#chip-pop{position:fixed;z-index:50;max-width:320px;background:#151d2b;color:#d8dee9;
+  border:1px solid #35486a;border-radius:12px;padding:12px 14px;font-size:13px;line-height:1.6;
+  box-shadow:0 10px 30px rgba(0,0,0,.55)}
+#chip-pop .t{font-weight:700;color:#e8edf5;font-size:14px;margin-bottom:2px}
+#chip-pop .quote{color:#8b96a8;font-size:12.5px;margin-top:6px;border-left:2px solid #2c3a52;
+  padding-left:8px;word-break:break-all}
+#chip-pop .meta2{color:#8b96a8;font-size:11.5px;margin-top:6px}
+#chip-pop .close{position:absolute;top:6px;right:9px;color:#8b96a8;cursor:pointer;font-size:14px}
 
 """
 
@@ -147,6 +155,21 @@ def _row(entry: dict, today: str) -> str:
 
 def _is_trip(kind: str) -> bool:
     return any(word in str(kind or "") for word in TRIP_KINDS)
+
+
+def _chip_html(entry: dict) -> str:
+    """달력 이름 칩. 클릭 팝업이 읽을 상세를 data-* 로 싣는다."""
+    attr = lambda v: html.escape(str(v or ""), quote=True)
+    engine = entry.get("engine")
+    when = str(entry.get("msg_date") or "")[:16].replace("T", " ")
+    source = "✍️ 직접 기입" if engine == "manual" else "텔레그램 보고"
+    return (f'<span class="chip{" trip" if _is_trip(entry.get("kind")) else ""}"'
+            f' data-name="{attr(entry.get("name"))}" data-span="{attr(_span(entry))}"'
+            f' data-kind="{attr(entry.get("kind"))}" data-note="{attr(entry.get("note"))}"'
+            f' data-text="{attr(str(entry.get("text") or "")[:200])}"'
+            f' data-when="{attr(when)}" data-source="{attr(source)}"'
+            f' title="{attr(entry.get("kind"))} — 눌러서 상세 보기">'
+            f'{html.escape(str(entry.get("name") or "?"))}</span>')
 
 
 def _calendar_section(dated: list[dict], today_d: date) -> str:
@@ -200,12 +223,7 @@ def _calendar_section(dated: list[dict], today_d: date) -> str:
                 if day == today_d:
                     cls.append("today")
                 attrs = f' data-date="{day.isoformat()}"'
-                chips = "".join(
-                    f'<span class="chip{" trip" if _is_trip(e.get("kind")) else ""}" '
-                    f'title="{html.escape(str(e.get("kind") or ""))}">'
-                    f'{html.escape(str(e.get("name") or "?"))}</span>'
-                    for e in per_day.get(day, ())
-                )
+                chips = "".join(_chip_html(e) for e in per_day.get(day, ()))
                 cells.append(f'<td class="{" ".join(cls)}"{attrs}>'
                              f'<div class="d">{day.day}</div>{chips}</td>')
             rows.append("<tr>" + "".join(cells) + "</tr>")
@@ -277,7 +295,11 @@ function localApply(en){
     const cell=document.querySelector('td[data-date="'+day.toLocaleDateString('sv')+'"]');
     if(cell){const chip=document.createElement('span');
       chip.className='chip pending'+(isTrip(en.kind)?' trip':'');
-      chip.title=en.kind;chip.textContent=en.name;cell.appendChild(chip);}
+      chip.title=en.kind;chip.textContent=en.name;
+      Object.assign(chip.dataset,{name:en.name,kind:en.kind,note:en.note||'',
+        span:en.end&&en.end!==en.start?en.start+' ~ '+en.end:en.start,
+        text:'',when:'방금',source:'✍️ 직접 기입 (반영 중)'});
+      cell.appendChild(chip);}
     day.setDate(day.getDate()+1);
   }
 }
@@ -317,6 +339,32 @@ async function addEntry(){
   finally{btn.disabled=false}
 }
 
+// 이름 칩 클릭 → 상세 팝업 (기간·종류·메모·원문). 바깥 클릭/Esc/× 로 닫는다.
+let chipPop=null;
+function hidePop(){if(chipPop){chipPop.remove();chipPop=null}}
+function showPop(chip){
+  hidePop();
+  const d=chip.dataset;
+  chipPop=document.createElement('div');chipPop.id='chip-pop';
+  chipPop.innerHTML='<span class="close" onclick="hidePop()">✕</span>'
+    +'<div class="t">'+escText(d.name)+' — '+escText(d.span)+'</div>'
+    +'<span class="badge'+(isTrip(d.kind)?' trip':'')+'">'+escText(d.kind||'휴가')+'</span>'
+    +(d.note?'<div>'+escText(d.note)+'</div>':'')
+    +(d.text&&d.text!==d.note?'<div class="quote">“'+escText(d.text)+'”</div>':'')
+    +'<div class="meta2">'+escText(d.when)+' · '+escText(d.source||'')+'</div>';
+  document.body.appendChild(chipPop);
+  const r=chip.getBoundingClientRect(),pw=chipPop.offsetWidth,ph=chipPop.offsetHeight;
+  let left=Math.min(Math.max(8,r.left),window.innerWidth-pw-8);
+  let top=r.bottom+6;if(top+ph>window.innerHeight-8)top=Math.max(8,r.top-ph-6);
+  chipPop.style.left=left+'px';chipPop.style.top=top+'px';
+}
+document.addEventListener('click',ev=>{
+  const chip=ev.target.closest('.chip');
+  if(chip&&chip.dataset.name){showPop(chip);return}
+  if(!ev.target.closest('#chip-pop'))hidePop();
+});
+document.addEventListener('keydown',ev=>{if(ev.key==='Escape')hidePop()});
+
 // 달력 페이저: 모든 달이 DOM에 있고, 한 번에 2개월만 보여준다. ◀▶로 한 달씩 이동.
 const calMonths=[...document.querySelectorAll('.cal-month')];
 let calIdx=0;
@@ -345,6 +393,7 @@ function calMove(step){calIdx+=step;calRender()}
 // 달력 더블클릭 → 기입 폼 날짜 채우기. 첫 더블클릭=시작일,
 // 그보다 뒤 날짜를 이어서 더블클릭하면 종료일(기간).
 document.addEventListener('dblclick',ev=>{
+  if(ev.target.closest('.chip'))return; // 칩 더블클릭은 팝업 전용
   const td=ev.target.closest('td[data-date]');if(!td)return;
   const d=td.dataset.date,s=$id('add-start'),e=$id('add-end'),status=$id('add-status');
   if(s.value&&d>s.value&&(!e.value||e.value===s.value)){
