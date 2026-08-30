@@ -171,6 +171,8 @@ async def _scan(config: dict, state: dict, probe: bool = False) -> list[dict]:
             directory = await _dialog_directory(client, int(config.get("max_chats") or 500))
         for friend in config["friends"]:
             name = friend["name"]
+            if friend.get("scan") is False:
+                continue  # 기입 폼 전용 이름(본인 등) — 대화 수집 없음
             try:
                 if friend.get("chat_id"):
                     entity = await client.get_entity(int(friend["chat_id"]))
