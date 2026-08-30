@@ -5,8 +5,9 @@
 
 from __future__ import annotations
 
+import calendar
 import html
-from datetime import datetime
+from datetime import date, datetime, timedelta
 from pathlib import Path
 
 from rules import KST
@@ -34,7 +35,23 @@ tr.today td{background:#14202f}
 .src{color:#8b96a8;font-size:12.5px}
 .name{font-weight:700;color:#e8edf5;white-space:nowrap}
 .empty{color:#8b96a8;padding:18px 0}
+.cal{width:100%;border-collapse:collapse;table-layout:fixed;margin:6px 0 26px;font-size:12.5px}
+.cal th{padding:6px 4px;border-bottom:1px solid #223046;color:#8b96a8;font-size:12px;text-align:center}
+.cal th.sun,.cal td.sun .d{color:#ff8f8f}
+.cal th.sat,.cal td.sat .d{color:#7fb4ff}
+.cal td{border:1px solid #1c2534;vertical-align:top;padding:4px 5px;height:56px}
+.cal td.blank{background:#0a0e14;border-color:#141b26}
+.cal td.today{background:#14202f;box-shadow:inset 0 0 0 1px #2c3a52}
+.cal .d{color:#8b96a8;font-size:11.5px;margin-bottom:3px}
+.chip{display:block;margin:2px 0;padding:1px 5px;border-radius:6px;background:#1d2a3d;
+  color:#cfe0ff;border:1px solid #2c3a52;font-size:11.5px;white-space:nowrap;
+  overflow:hidden;text-overflow:ellipsis}
+.chip.trip{background:#3a2f1d;color:#ffd9a0;border-color:#55452c}
+.cal-title{font-size:15px;color:#e8edf5;margin:22px 0 6px;font-weight:700}
 """
+
+# 달력 칩 색 구분: 출장·샵투어 계열은 주황, 나머지(휴가·연차·반차…)는 파랑.
+TRIP_KINDS = ("출장", "샵투어", "투어")
 
 
 def _span(entry: dict) -> str:
@@ -61,6 +78,60 @@ def _row(entry: dict, today: str) -> str:
     return (f"<tr{active}><td class=\"name\">{html.escape(str(entry.get('name') or '?'))}</td>"
             f"<td>{_span(entry)}</td><td>{badge}</td>"
             f"<td>{note}<div class=\"src\">{msg_date} · “{source}”</div></td></tr>")
+
+
+def _is_trip(kind: str) -> bool:
+    return any(word in str(kind or "") for word in TRIP_KINDS)
+
+
+def _calendar_section(dated: list[dict], today_d: date) -> str:
+    """날짜 있는 항목을 월별 달력 그리드로. 휴가가 있는 달 + 이번 달을 그린다."""
+    per_day: dict[date, list[dict]] = {}
+    for entry in dated:
+        start = date.fromisoformat(entry["start"])
+        end = date.fromisoformat(entry.get("end") or entry["start"])
+        # 잘못 추출된 초장기 구간이 달력을 도배하지 않게 상한을 둔다.
+        end = min(end, start + timedelta(days=60))
+        day = start
+        while day <= end:
+            per_day.setdefault(day, []).append(entry)
+            day += timedelta(days=1)
+
+    months = sorted({(d.year, d.month) for d in per_day} | {(today_d.year, today_d.month)})
+    grid = calendar.Calendar(firstweekday=6)  # 일요일 시작
+    parts = []
+    for year, month in months:
+        rows = []
+        for week in grid.monthdatescalendar(year, month):
+            cells = []
+            for day in week:
+                cls = []
+                if day.weekday() == 6:
+                    cls.append("sun")
+                elif day.weekday() == 5:
+                    cls.append("sat")
+                if day.month != month:
+                    cells.append(f'<td class="blank {" ".join(cls)}"></td>')
+                    continue
+                if day == today_d:
+                    cls.append("today")
+                chips = "".join(
+                    f'<span class="chip{" trip" if _is_trip(e.get("kind")) else ""}" '
+                    f'title="{html.escape(str(e.get("kind") or ""))}">'
+                    f'{html.escape(str(e.get("name") or "?"))}</span>'
+                    for e in per_day.get(day, ())
+                )
+                cells.append(f'<td class="{" ".join(cls)}"><div class="d">{day.day}</div>{chips}</td>')
+            rows.append("<tr>" + "".join(cells) + "</tr>")
+        head = "".join(
+            f'<th class="{cls}">{label}</th>'
+            for label, cls in (("일", "sun"), ("월", ""), ("화", ""), ("수", ""),
+                               ("목", ""), ("금", ""), ("토", "sat"))
+        )
+        parts.append(f'<div class="cal-title">{year}년 {month}월</div>'
+                     f'<table class="cal"><thead><tr>{head}</tr></thead>'
+                     f'<tbody>{"".join(rows)}</tbody></table>')
+    return "".join(parts)
 
 
 def build_page(store: dict) -> Path:
@@ -93,6 +164,8 @@ def build_page(store: dict) -> Path:
 {table(upcoming)}
 <h2>지난 휴가 ({len(past)}건)</h2>
 {table(past)}
+<h2>📅 달력</h2>
+{_calendar_section(dated, now.date()) or '<p class="empty">기록 없음</p>'}
 """
     if review:
         doc += f"<h2>확인 필요 — 날짜를 못 읽은 보고 ({len(review)}건)</h2>\n{table(review)}\n"
