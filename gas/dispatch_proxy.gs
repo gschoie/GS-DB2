@@ -38,6 +38,7 @@ const WF = {
   valuation: 'valuation.yml',          // 밸류에이션 PER·PBR·ROE·PSR (야후 수집)
   dart:      'dart-shiporder-bot.yml', // 조선 수주공시 → 텔레그램 (입력 필요)
   recipe:    'recipe-bot.yml',         // 유튜브 요리 숏츠 → Notion 레시피 (입력 필요)
+  vacation:  'vacation-tracker.yml',   // 휴가/출장 직접 기입 (entry 입력 필요)
 };
 
 // 워크플로별 추가 입력. 선언한 required 입력을 빠짐없이 채워야 422가 안 난다.
@@ -48,6 +49,8 @@ function buildInputs(key, body) {
     comment:  String(body.comment || ''),
   };
   if (key === 'recipe') return { yt_url: String(body.yt_url || '') };
+  // 휴가/출장 직접 기입: 페이지 폼이 entry(JSON 문자열)를 넘긴다. mode=add 고정.
+  if (key === 'vacation') return { mode: 'add', entry: String(body.entry || '') };
   // 밸류에이션: 비워 두면 정기 수집, lookup 에 티커를 넣으면 임시 조회만 돈다.
   if (key === 'valuation') return {
     only:   String(body.only || ''),
@@ -74,6 +77,9 @@ function doPost(e) {
     }
     if (key === 'recipe' && !body.yt_url) {
       return json({ ok: false, code: 400, wf: wf, error: 'yt_url이 비어 있습니다' });
+    }
+    if (key === 'vacation' && !body.entry) {
+      return json({ ok: false, code: 400, wf: wf, error: 'entry가 비어 있습니다' });
     }
 
     return json(fireWorkflow(key, buildInputs(key, body)));

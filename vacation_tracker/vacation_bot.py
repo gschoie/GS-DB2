@@ -371,6 +371,52 @@ def run(dry_run: bool = False, probe: bool = False) -> None:
         notify(new_entries)
 
 
+def add_manual(raw: str) -> None:
+    """대시보드 기입 폼에서 온 항목 한 건을 entries.json에 붙이고 페이지를 다시 굽는다.
+
+    입력(JSON): {"name","start","end","kind","note"} — end 비면 하루짜리.
+    수집과 무관하므로 텔레그램 세션·Gemini가 필요 없다.
+    """
+    try:
+        body = json.loads(raw or "{}")
+    except json.JSONDecodeError as exc:
+        raise SystemExit(f"entry가 JSON이 아닙니다: {exc}")
+    name = str(body.get("name") or "").strip()
+    start = str(body.get("start") or "").strip()
+    if not name or not start:
+        raise SystemExit("name과 start(YYYY-MM-DD)는 필수입니다")
+    try:
+        datetime.strptime(start, "%Y-%m-%d")
+        end = str(body.get("end") or "").strip() or start
+        datetime.strptime(end, "%Y-%m-%d")
+    except ValueError as exc:
+        raise SystemExit(f"날짜 형식이 틀렸습니다(YYYY-MM-DD): {exc}")
+    if end < start:
+        start, end = end, start
+
+    now = datetime.now(KST)
+    note = str(body.get("note") or "").strip()
+    store = load_json(ENTRIES_PATH, {"entries": {}})
+    uid = f"manual:{now.strftime('%Y%m%d%H%M%S')}"
+    store["entries"][uid] = {
+        "name": name,
+        "start": start,
+        "end": end,
+        "kind": str(body.get("kind") or "휴가").strip() or "휴가",
+        "note": note,
+        "text": note or "직접 기입",
+        "needs_review": False,
+        "engine": "manual",
+        "msg_date": now.isoformat(timespec="minutes"),
+        "detected_at": now.isoformat(timespec="minutes"),
+    }
+    save_json(ENTRIES_PATH, store)
+    from render_page import build_page
+
+    build_page(store)
+    print(f"직접 기입: {name} {start}~{end} {store['entries'][uid]['kind']}")
+
+
 def check() -> None:
     config = load_config()
     print(f"친구 {len(config['friends'])}명 등록: " + ", ".join(f["name"] for f in config["friends"]))
@@ -386,10 +432,13 @@ def main() -> None:
     parser.add_argument("--probe", action="store_true")
     parser.add_argument("--dry-run", action="store_true")
     parser.add_argument("--rebuild-page", action="store_true")
+    parser.add_argument("--add", metavar="JSON", help='직접 기입 {"name","start","end","kind","note"}')
     args = parser.parse_args()
 
     if args.check:
         check()
+    elif args.add is not None:
+        add_manual(args.add)
     elif args.rebuild_page:
         from render_page import build_page
 

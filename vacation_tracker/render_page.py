@@ -7,6 +7,7 @@ from __future__ import annotations
 
 import calendar
 import html
+import json
 from datetime import date, datetime, timedelta
 from pathlib import Path
 
@@ -14,6 +15,42 @@ from rules import KST
 
 ROOT = Path(__file__).resolve().parent.parent
 OUT_PATH = ROOT / "telegram_research_dashboard" / "static" / "vacation_report.html"
+CONFIG_PATH = Path(__file__).resolve().parent / "config.yml"
+
+# 기입 폼 → GAS dispatch_proxy(vacation) → vacation-tracker.yml(mode=add).
+# app.js의 DISPATCH_ENDPOINT와 같은 주소 — 바꿀 땐 두 곳을 같이 고칠 것.
+DISPATCH_ENDPOINT = "https://script.google.com/macros/s/AKfycbx3RjIjtlO2Z6fIYo2T3LhJrFg9Wp2hS7dMS3Is52-JVF1hizoCWewbQ1uM_v5sdhR2jw/exec"
+
+KIND_OPTIONS = ["연차", "반차", "오전반차", "오후반차", "휴가", "출장", "해외출장",
+                "샵투어", "휴무", "병가", "기타"]
+
+
+def friend_names() -> list[str]:
+    """config.yml의 friends 이름 목록. yaml이 없으면 가벼운 파싱으로 폴백."""
+    try:
+        text = CONFIG_PATH.read_text(encoding="utf-8")
+    except OSError:
+        return []
+    try:
+        import yaml
+
+        friends = (yaml.safe_load(text) or {}).get("friends") or []
+        return [f if isinstance(f, str) else str(f.get("name") or "") for f in friends if f]
+    except ImportError:
+        import re
+
+        names, in_friends = [], False
+        for line in text.splitlines():
+            if line.startswith("friends:"):
+                in_friends = True
+                continue
+            if in_friends:
+                match = re.match(r"\s+-\s*(?:name:\s*)?([^#\n]+)", line)
+                if match:
+                    names.append(match.group(1).strip())
+                elif line.strip() and not line.startswith(" "):
+                    break
+        return names
 
 WEEKDAY_KO = "월화수목금토일"
 
@@ -48,6 +85,16 @@ tr.today td{background:#14202f}
   overflow:hidden;text-overflow:ellipsis}
 .chip.trip{background:#3a2f1d;color:#ffd9a0;border-color:#55452c}
 .cal-title{font-size:15px;color:#e8edf5;margin:22px 0 6px;font-weight:700}
+.addform{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:10px 0 6px}
+.addform input,.addform select{background:#161d29;color:#d8dee9;border:1px solid #2c3a52;
+  border-radius:8px;padding:7px 10px;font-size:13.5px;font-family:inherit}
+.addform input[type=date]{color-scheme:dark}
+.addform button{background:#1d2a3d;color:#cfe0ff;border:1px solid #2c3a52;border-radius:8px;
+  padding:7px 14px;font-size:13.5px;cursor:pointer}
+.addform button:hover{border-color:#3d5175}
+.addform button:disabled{opacity:.5;cursor:default}
+#add-status{color:#8b96a8;font-size:12.5px;margin:4px 0 0}
+.form-hint{color:#8b96a8;font-size:12.5px;margin:2px 0 0}
 """
 
 # 달력 칩 색 구분: 출장·샵투어 계열은 주황, 나머지(휴가·연차·반차…)는 파랑.
@@ -74,10 +121,13 @@ def _row(entry: dict, today: str) -> str:
              else f'<span class="badge">{html.escape(str(entry.get("kind") or "휴가"))}</span>')
     note = html.escape(str(entry.get("note") or ""))
     msg_date = str(entry.get("msg_date") or "")[:16].replace("T", " ")
-    source = html.escape(str(entry.get("text") or "")[:140])
+    if entry.get("engine") == "manual":
+        origin = f"{msg_date} · ✍️ 직접 기입"
+    else:
+        origin = f"{msg_date} · “{html.escape(str(entry.get('text') or '')[:140])}”"
     return (f"<tr{active}><td class=\"name\">{html.escape(str(entry.get('name') or '?'))}</td>"
             f"<td>{_span(entry)}</td><td>{badge}</td>"
-            f"<td>{note}<div class=\"src\">{msg_date} · “{source}”</div></td></tr>")
+            f"<td>{note}<div class=\"src\">{origin}</div></td></tr>")
 
 
 def _is_trip(kind: str) -> bool:
@@ -134,6 +184,49 @@ def _calendar_section(dated: list[dict], today_d: date) -> str:
     return "".join(parts)
 
 
+def _add_form() -> str:
+    """직접 기입 폼. GAS 프록시(vacation 라우트)로 workflow_dispatch를 쏜다."""
+    name_options = "".join(f'<option value="{html.escape(n)}">' for n in friend_names() if n)
+    kind_options = "".join(f"<option>{k}</option>" for k in KIND_OPTIONS)
+    return f"""
+<h2>✍️ 직접 기입</h2>
+<p class="form-hint">봇이 못 잡은 일정을 손으로 추가합니다. 요청하면 1~2분 뒤 자동
+재배포로 표·달력에 반영됩니다(새로고침 필요). 잘못 넣은 건 entries.json에서 지우고
+rebuild-page로 되돌립니다.</p>
+<div class="addform">
+  <input id="add-name" list="add-names" placeholder="이름" style="width:110px">
+  <datalist id="add-names">{name_options}</datalist>
+  <select id="add-kind">{kind_options}</select>
+  <input id="add-start" type="date" title="시작일">
+  <span>~</span>
+  <input id="add-end" type="date" title="종료일 (비우면 하루)">
+  <input id="add-note" placeholder="메모 (선택)" style="flex:1;min-width:140px">
+  <button id="add-btn" onclick="addEntry()">추가</button>
+</div>
+<p id="add-status"></p>
+<script>
+const EP={json.dumps(DISPATCH_ENDPOINT)};
+async function addEntry(){{
+  const g=id=>document.getElementById(id);
+  const name=g('add-name').value.trim(), start=g('add-start').value;
+  const status=g('add-status'), btn=g('add-btn');
+  if(!name||!start){{status.textContent='⚠ 이름과 시작일은 필수입니다';return}}
+  const entry={{name:name,start:start,end:g('add-end').value||start,
+    kind:g('add-kind').value,note:g('add-note').value.trim()}};
+  status.textContent='요청 중…';btn.disabled=true;
+  try{{
+    const r=await fetch(EP,{{method:'POST',body:JSON.stringify({{workflow:'vacation',entry:JSON.stringify(entry)}})}});
+    try{{const d=await r.json();
+      if(d&&d.ok===false){{status.textContent=`⚠ 거절 ${{d.code||'?'}} — ${{d.error||'GAS 프록시 확인 필요'}}`;return}}
+    }}catch{{}}
+    status.textContent='✅ 요청됨 — 1~2분 뒤 새로고침하면 반영됩니다';
+    g('add-note').value='';
+  }}catch(e){{status.textContent='실패: '+e.message}}
+  finally{{btn.disabled=false}}
+}}
+</script>"""
+
+
 def build_page(store: dict) -> Path:
     entries = list((store.get("entries") or {}).values())
     now = datetime.now(KST)
@@ -166,6 +259,7 @@ def build_page(store: dict) -> Path:
 {table(past)}
 <h2>📅 달력</h2>
 {_calendar_section(dated, now.date()) or '<p class="empty">기록 없음</p>'}
+{_add_form()}
 """
     if review:
         doc += f"<h2>확인 필요 — 날짜를 못 읽은 보고 ({len(review)}건)</h2>\n{table(review)}\n"
