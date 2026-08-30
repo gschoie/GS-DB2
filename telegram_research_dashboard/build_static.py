@@ -249,6 +249,9 @@ def build() -> Path:
     youtube_dir = ROOT / "static" / "youtube_digest"
     if youtube_dir.is_dir():
         shutil.copytree(youtube_dir, OUTPUT.parent / "youtube_digest", dirs_exist_ok=True)
+    vacation_report = ROOT / "static" / "vacation_report.html"
+    if vacation_report.exists():
+        shutil.copy2(vacation_report, OUTPUT.parent / "vacation_report.html")
     claude_index = ROOT / "static" / "claude_defense_report.html"
     if claude_index.exists():
         shutil.copy2(claude_index, OUTPUT.parent / "claude_defense_report.html")
