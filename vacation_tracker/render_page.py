@@ -78,6 +78,8 @@ tr.today td{background:#14202f}
 .cal th.sat,.cal td.sat .d{color:#7fb4ff}
 .cal td{border:1px solid #1c2534;vertical-align:top;padding:4px 5px;height:56px}
 .cal td.blank{background:#0a0e14;border-color:#141b26}
+.cal td[data-date]{cursor:pointer}
+.cal td[data-date]:hover{background:#121a27}
 .cal td.today{background:#14202f;box-shadow:inset 0 0 0 1px #2c3a52}
 .cal .d{color:#8b96a8;font-size:11.5px;margin-bottom:3px}
 .chip{display:block;margin:2px 0;padding:1px 5px;border-radius:6px;background:#1d2a3d;
@@ -165,13 +167,15 @@ def _calendar_section(dated: list[dict], today_d: date) -> str:
                     continue
                 if day == today_d:
                     cls.append("today")
+                attrs = f' data-date="{day.isoformat()}"'
                 chips = "".join(
                     f'<span class="chip{" trip" if _is_trip(e.get("kind")) else ""}" '
                     f'title="{html.escape(str(e.get("kind") or ""))}">'
                     f'{html.escape(str(e.get("name") or "?"))}</span>'
                     for e in per_day.get(day, ())
                 )
-                cells.append(f'<td class="{" ".join(cls)}"><div class="d">{day.day}</div>{chips}</td>')
+                cells.append(f'<td class="{" ".join(cls)}"{attrs}>'
+                             f'<div class="d">{day.day}</div>{chips}</td>')
             rows.append("<tr>" + "".join(cells) + "</tr>")
         head = "".join(
             f'<th class="{cls}">{label}</th>'
@@ -224,6 +228,19 @@ async function addEntry(){{
   }}catch(e){{status.textContent='실패: '+e.message}}
   finally{{btn.disabled=false}}
 }}
+// 달력 더블클릭 → 기입 폼 날짜 채우기. 첫 더블클릭=시작일,
+// 그보다 뒤 날짜를 이어서 더블클릭하면 종료일(기간).
+document.addEventListener('dblclick',ev=>{{
+  const td=ev.target.closest('td[data-date]');if(!td)return;
+  const g=id=>document.getElementById(id);
+  const d=td.dataset.date,s=g('add-start'),e=g('add-end'),status=g('add-status');
+  if(s.value&&d>s.value&&(!e.value||e.value===s.value)){{
+    e.value=d;status.textContent=`기간 ${{s.value}} ~ ${{d}} — 이름 고르고 '추가'를 누르세요`;
+  }}else{{
+    s.value=d;e.value='';status.textContent=`시작일 ${{d}} — 끝나는 날도 더블클릭하면 기간이 됩니다`;
+  }}
+  document.querySelector('.addform').scrollIntoView({{behavior:'smooth',block:'center'}});
+}});
 </script>"""
 
 
@@ -258,6 +275,8 @@ def build_page(store: dict) -> Path:
 <h2>지난 휴가 ({len(past)}건)</h2>
 {table(past)}
 <h2>📅 달력</h2>
+<p class="form-hint">날짜를 더블클릭(모바일: 두 번 탭)하면 아래 기입 폼에 시작일로 들어가고,
+이어서 다른 날을 더블클릭하면 기간이 됩니다.</p>
 {_calendar_section(dated, now.date()) or '<p class="empty">기록 없음</p>'}
 {_add_form()}
 """
