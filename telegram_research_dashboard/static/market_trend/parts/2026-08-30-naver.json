@@ -1,7 +1,7 @@
 {
  "source": "네이버 종목토론실",
- "universe": 40,
- "posts": 1158,
+ "universe": 41,
+ "posts": 1020,
  "search_top": [
   {
    "code": "005930",
@@ -24,8 +24,8 @@
    "rank": 4
   },
   {
-   "code": "009150",
-   "name": "삼성전기",
+   "code": "035420",
+   "name": "NAVER",
    "rank": 5
   },
   {
@@ -34,8 +34,8 @@
    "rank": 6
   },
   {
-   "code": "035420",
-   "name": "NAVER",
+   "code": "009150",
+   "name": "삼성전기",
    "rank": 7
   },
   {
@@ -49,76 +49,72 @@
    "rank": 9
   },
   {
-   "code": "007390",
-   "name": "네이처셀",
+   "code": "002990",
+   "name": "금호건설",
    "rank": 10
   }
  ],
  "hot_stocks": [
   {
+   "code": "263750",
+   "name": "펄어비스",
+   "posts": 120,
+   "capped": true,
+   "burst": 99.0,
+   "base_daily": 0.0
+  },
+  {
    "code": "007390",
    "name": "네이처셀",
-   "posts": 130,
+   "posts": 120,
    "capped": true,
-   "burst": 3.0,
+   "burst": 2.8,
    "base_daily": 42.7
   },
   {
-   "code": "000660",
-   "name": "SK하이닉스",
-   "posts": 394,
-   "capped": true,
-   "burst": 1.6,
-   "base_daily": 254.0
+   "code": "096530",
+   "name": "씨젠",
+   "posts": 19,
+   "capped": false,
+   "burst": 3.4,
+   "base_daily": 5.6
   },
   {
    "code": "002990",
    "name": "금호건설",
-   "posts": 68,
+   "posts": 61,
    "capped": false,
-   "burst": 1.7,
+   "burst": 1.6,
    "base_daily": 39.0
   }
  ],
  "keywords": [
   {
-   "term": "찬티",
+   "term": "안티",
+   "count": 12,
+   "burst": 99.0,
+   "new": true
+  },
+  {
+   "term": "회사",
+   "count": 9,
+   "burst": 99.0,
+   "new": true
+  },
+  {
+   "term": "좋은",
    "count": 8,
+   "burst": 99.0,
+   "new": true
+  },
+  {
+   "term": "찬티",
+   "count": 7,
    "burst": 99.0,
    "new": true
   },
   {
    "term": "금리인상",
-   "count": 8,
-   "burst": 99.0,
-   "new": true
-  },
-  {
-   "term": "삼성",
-   "count": 8,
-   "burst": 99.0,
-   "new": true
-  },
-  {
-   "term": "아니라",
-   "count": 7,
-   "burst": 99.0,
-   "new": true
-  },
-  {
-   "term": "안티",
-   "count": 7,
-   "burst": 99.0,
-   "new": true
-  },
-  {
-   "term": "닉스",
-   "count": 7,
-   "burst": 99.0,
-   "new": true
-  },
-  {
-   "term": "시총",
    "count": 7,
    "burst": 99.0,
    "new": true
@@ -136,25 +132,19 @@
    "new": true
   },
   {
-   "term": "좋은",
+   "term": "자사주",
    "count": 6,
    "burst": 99.0,
    "new": true
   },
   {
-   "term": "회사",
+   "term": "안티들",
    "count": 6,
    "burst": 99.0,
    "new": true
   },
   {
-   "term": "대폭락",
-   "count": 6,
-   "burst": 99.0,
-   "new": true
-  },
-  {
-   "term": "게시판",
+   "term": "시총",
    "count": 6,
    "burst": 99.0,
    "new": true
@@ -166,7 +156,25 @@
    "new": true
   },
   {
-   "term": "삼전닉스",
+   "term": "유튜브",
+   "count": 5,
+   "burst": 99.0,
+   "new": true
+  },
+  {
+   "term": "아니라",
+   "count": 5,
+   "burst": 99.0,
+   "new": true
+  },
+  {
+   "term": "돌파",
+   "count": 5,
+   "burst": 99.0,
+   "new": true
+  },
+  {
+   "term": "게시판",
    "count": 5,
    "burst": 99.0,
    "new": true
@@ -176,18 +184,18 @@
   {
    "code": "007390",
    "name": "네이처셀",
-   "title": "Pre BLA 미팅 생략 가능성[12]",
-   "views": 1923,
-   "likes": 140,
+   "title": "Pre BLA 미팅 생략 가능성[15]",
+   "views": 2270,
+   "likes": 154,
    "url": "https://finance.naver.com/item/board_read.naver?code=007390&nid=428645170",
    "time_kst": "08-29 11:39"
   },
   {
    "code": "010170",
    "name": "대한광통신",
-   "title": "애들아~~~ 작은 소식^^[23]",
-   "views": 1060,
-   "likes": 103,
+   "title": "애들아~~~ 작은 소식^^[28]",
+   "views": 1531,
+   "likes": 135,
    "url": "https://finance.naver.com/item/board_read.naver?code=010170&nid=428645809",
    "time_kst": "08-29 12:39"
   },
@@ -195,80 +203,80 @@
    "code": "196170",
    "name": "알테오젠",
    "title": "[찬티글 맞음] 러프하게 봅시다.[6]",
-   "views": 1233,
-   "likes": 92,
+   "views": 1432,
+   "likes": 106,
    "url": "https://finance.naver.com/item/board_read.naver?code=196170&nid=428646181",
    "time_kst": "08-29 13:16"
   },
   {
-   "code": "034020",
-   "name": "두산에너빌리티",
-   "title": "네팔에서 실종된 두빌 직원분들이 산으로 대...[1]",
-   "views": 350,
-   "likes": 81,
-   "url": "https://finance.naver.com/item/board_read.naver?code=034020&nid=428642846",
-   "time_kst": "08-29 08:11"
+   "code": "007390",
+   "name": "네이처셀",
+   "title": "금방 10만원 갑니다.[3]",
+   "views": 785,
+   "likes": 98,
+   "url": "https://finance.naver.com/item/board_read.naver?code=007390&nid=428650877",
+   "time_kst": "08-30 00:45"
   },
   {
    "code": "196170",
    "name": "알테오젠",
    "title": "모더나 암백신 외에 ...다른 암백신...[2]",
-   "views": 1085,
-   "likes": 80,
+   "views": 1479,
+   "likes": 93,
    "url": "https://finance.naver.com/item/board_read.naver?code=196170&nid=428649122",
    "time_kst": "08-29 19:44"
   }
  ],
  "top_rising": [
   {
-   "code": "005930",
-   "name": "삼성전자",
-   "title": "뭔 일이죠? 반도체 선물 갑자기 상승중인데.[2]",
-   "views": 1197,
-   "likes": 31,
-   "url": "https://finance.naver.com/item/board_read.naver?code=005930&nid=428651242",
-   "time_kst": "08-30 05:32",
-   "views_per_hour": 405.0
+   "code": "034020",
+   "name": "두산에너빌리티",
+   "title": "월요일 10만돌파뉴스.  기관매집이유...[1]",
+   "views": 2675,
+   "likes": 54,
+   "url": "https://finance.naver.com/item/board_read.naver?code=034020&nid=428649612",
+   "time_kst": "08-29 20:49",
+   "views_per_hour": 80.7
   },
   {
-   "code": "000660",
-   "name": "SK하이닉스",
-   "title": "무슨 일 있나요? 반도체 선물 급등중...[5]",
-   "views": 874,
-   "likes": 23,
-   "url": "https://finance.naver.com/item/board_read.naver?code=000660&nid=428651228",
-   "time_kst": "08-30 05:25",
-   "views_per_hour": 284.5
+   "code": "196170",
+   "name": "알테오젠",
+   "title": "당장 윌요일부터[7]",
+   "views": 2240,
+   "likes": 79,
+   "url": "https://finance.naver.com/item/board_read.naver?code=196170&nid=428647264",
+   "time_kst": "08-29 15:24",
+   "views_per_hour": 58.1
   },
   {
-   "code": "005930",
-   "name": "삼성전자",
-   "title": "긴급 미증시 엔비디아. 브로드컴. 마이크론테...[3]",
-   "views": 456,
-   "likes": 8,
-   "url": "https://finance.naver.com/item/board_read.naver?code=005930&nid=428651252",
-   "time_kst": "08-30 05:37",
-   "views_per_hour": 158.7
+   "code": "007390",
+   "name": "네이처셀",
+   "title": "Pre BLA 미팅 생략 가능성[15]",
+   "views": 2270,
+   "likes": 154,
+   "url": "https://finance.naver.com/item/board_read.naver?code=007390&nid=428645170",
+   "time_kst": "08-29 11:39",
+   "views_per_hour": 53.6
   },
   {
    "code": "034020",
    "name": "두산에너빌리티",
-   "title": "박정원 두산 회장...",
-   "views": 372,
-   "likes": 14,
-   "url": "https://finance.naver.com/item/board_read.naver?code=034020&nid=428651249",
-   "time_kst": "08-30 05:36",
-   "views_per_hour": 128.8
+   "title": "두빌 수주 잔고가 26조인데[6]",
+   "views": 2002,
+   "likes": 62,
+   "url": "https://finance.naver.com/item/board_read.naver?code=034020&nid=428647394",
+   "time_kst": "08-29 15:43",
+   "views_per_hour": 52.3
   },
   {
-   "code": "000660",
-   "name": "SK하이닉스",
-   "title": "월요일시가 왜 계속오름?[1]",
-   "views": 338,
-   "likes": 10,
-   "url": "https://finance.naver.com/item/board_read.naver?code=000660&nid=428651232",
-   "time_kst": "08-30 05:27",
-   "views_per_hour": 111.2
+   "code": "002990",
+   "name": "금호건설",
+   "title": "● 무안 군공항 공사 금호건설이 하나요?[3]",
+   "views": 1215,
+   "likes": 30,
+   "url": "https://finance.naver.com/item/board_read.naver?code=002990&nid=428651243",
+   "time_kst": "08-30 05:33",
+   "views_per_hour": 49.7
   }
  ]
 }
