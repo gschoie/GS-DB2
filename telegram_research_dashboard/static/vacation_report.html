@@ -32,17 +32,64 @@ tr.today td{background:#14202f}
   overflow:hidden;text-overflow:ellipsis}
 .chip.trip{background:#3a2f1d;color:#ffd9a0;border-color:#55452c}
 .cal-title{font-size:15px;color:#e8edf5;margin:22px 0 6px;font-weight:700}
+.addform{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:10px 0 6px}
+.addform input,.addform select{background:#161d29;color:#d8dee9;border:1px solid #2c3a52;
+  border-radius:8px;padding:7px 10px;font-size:13.5px;font-family:inherit}
+.addform input[type=date]{color-scheme:dark}
+.addform button{background:#1d2a3d;color:#cfe0ff;border:1px solid #2c3a52;border-radius:8px;
+  padding:7px 14px;font-size:13.5px;cursor:pointer}
+.addform button:hover{border-color:#3d5175}
+.addform button:disabled{opacity:.5;cursor:default}
+#add-status{color:#8b96a8;font-size:12.5px;margin:4px 0 0}
+.form-hint{color:#8b96a8;font-size:12.5px;margin:2px 0 0}
 </style></head>
 <body><div class="wrap">
 <h1>🏖️ 친구 휴가 일정</h1>
 <p class="meta">지정한 친구들과의 텔레그램 1:1 대화에서 휴가 보고를 자동으로 잡아 정리 ·
-갱신 2026-08-30 16:50 KST · 총 4건</p>
+갱신 2026-08-30 16:54 KST · 총 4건</p>
 <h2>다가오는 휴가 (0건)</h2>
 <p class="empty">기록 없음</p>
 <h2>지난 휴가 (3건)</h2>
 <table><thead><tr><th>이름</th><th>기간</th><th>종류</th><th>메모 · 원문</th></tr></thead><tbody><tr><td class="name">김연미</td><td>08/18(화)</td><td><span class="badge">오전반차</span></td><td>휴가 가기 전 오전반차<div class="src">2026-08-14 14:33 · “팀장님 ~~ 네이트온 드렸는데용 저 다음주화요일 오전반차라서 휴가가기 전에 다시 말씀드립니다..!! 기업팀 회의 소집하신 거랑 겹치는데,,ㅜㅜ 꼭 가야하는 휴가는 아니라서, 필요하시면 일정 조정하겠습니닷”</div></td></tr><tr><td class="name">고영민</td><td>08/18(화)</td><td><span class="badge">휴가</span></td><td>스튜디오 촬영<div class="src">2026-08-17 11:00 · “저 내일 휴가임다 스튜디오 촬영!”</div></td></tr><tr><td class="name">이다연</td><td>08/13(목)</td><td><span class="badge">오전반차</span></td><td>목요일(당일) 오전반차<div class="src">2026-08-13 00:36 · “팀장님 늦게 말씀드려 죄송한데요... 저 목요일 (이제 오늘) 오전반차 쓰고 싶습니다”</div></td></tr></tbody></table>
 <h2>📅 달력</h2>
 <div class="cal-title">2026년 8월</div><table class="cal"><thead><tr><th class="sun">일</th><th class="">월</th><th class="">화</th><th class="">수</th><th class="">목</th><th class="">금</th><th class="sat">토</th></tr></thead><tbody><tr><td class="blank sun"></td><td class="blank "></td><td class="blank "></td><td class="blank "></td><td class="blank "></td><td class="blank "></td><td class="sat"><div class="d">1</div></td></tr><tr><td class="sun"><div class="d">2</div></td><td class=""><div class="d">3</div></td><td class=""><div class="d">4</div></td><td class=""><div class="d">5</div></td><td class=""><div class="d">6</div></td><td class=""><div class="d">7</div></td><td class="sat"><div class="d">8</div></td></tr><tr><td class="sun"><div class="d">9</div></td><td class=""><div class="d">10</div></td><td class=""><div class="d">11</div></td><td class=""><div class="d">12</div></td><td class=""><div class="d">13</div><span class="chip" title="오전반차">이다연</span></td><td class=""><div class="d">14</div></td><td class="sat"><div class="d">15</div></td></tr><tr><td class="sun"><div class="d">16</div></td><td class=""><div class="d">17</div></td><td class=""><div class="d">18</div><span class="chip" title="휴가">고영민</span><span class="chip" title="오전반차">김연미</span></td><td class=""><div class="d">19</div></td><td class=""><div class="d">20</div></td><td class=""><div class="d">21</div></td><td class="sat"><div class="d">22</div></td></tr><tr><td class="sun"><div class="d">23</div></td><td class=""><div class="d">24</div></td><td class=""><div class="d">25</div></td><td class=""><div class="d">26</div></td><td class=""><div class="d">27</div></td><td class=""><div class="d">28</div></td><td class="sat"><div class="d">29</div></td></tr><tr><td class="sun today"><div class="d">30</div></td><td class=""><div class="d">31</div></td><td class="blank "></td><td class="blank "></td><td class="blank "></td><td class="blank "></td><td class="blank sat"></td></tr></tbody></table>
+
+<h2>✍️ 직접 기입</h2>
+<p class="form-hint">봇이 못 잡은 일정을 손으로 추가합니다. 요청하면 1~2분 뒤 자동
+재배포로 표·달력에 반영됩니다(새로고침 필요). 잘못 넣은 건 entries.json에서 지우고
+rebuild-page로 되돌립니다.</p>
+<div class="addform">
+  <input id="add-name" list="add-names" placeholder="이름" style="width:110px">
+  <datalist id="add-names"><option value="이준범"><option value="박영도"><option value="김지원"><option value="이정우"><option value="김진영"><option value="유지웅"><option value="고영민"><option value="김혜영"><option value="김연미"><option value="김상혁"><option value="이지수"><option value="박종현"><option value="이다연"><option value="임도영"><option value="박소현"><option value="한수빈"></datalist>
+  <select id="add-kind"><option>연차</option><option>반차</option><option>오전반차</option><option>오후반차</option><option>휴가</option><option>출장</option><option>해외출장</option><option>샵투어</option><option>휴무</option><option>병가</option><option>기타</option></select>
+  <input id="add-start" type="date" title="시작일">
+  <span>~</span>
+  <input id="add-end" type="date" title="종료일 (비우면 하루)">
+  <input id="add-note" placeholder="메모 (선택)" style="flex:1;min-width:140px">
+  <button id="add-btn" onclick="addEntry()">추가</button>
+</div>
+<p id="add-status"></p>
+<script>
+const EP="https://script.google.com/macros/s/AKfycbx3RjIjtlO2Z6fIYo2T3LhJrFg9Wp2hS7dMS3Is52-JVF1hizoCWewbQ1uM_v5sdhR2jw/exec";
+async function addEntry(){
+  const g=id=>document.getElementById(id);
+  const name=g('add-name').value.trim(), start=g('add-start').value;
+  const status=g('add-status'), btn=g('add-btn');
+  if(!name||!start){status.textContent='⚠ 이름과 시작일은 필수입니다';return}
+  const entry={name:name,start:start,end:g('add-end').value||start,
+    kind:g('add-kind').value,note:g('add-note').value.trim()};
+  status.textContent='요청 중…';btn.disabled=true;
+  try{
+    const r=await fetch(EP,{method:'POST',body:JSON.stringify({workflow:'vacation',entry:JSON.stringify(entry)})});
+    try{const d=await r.json();
+      if(d&&d.ok===false){status.textContent=`⚠ 거절 ${d.code||'?'} — ${d.error||'GAS 프록시 확인 필요'}`;return}
+    }catch{}
+    status.textContent='✅ 요청됨 — 1~2분 뒤 새로고침하면 반영됩니다';
+    g('add-note').value='';
+  }catch(e){status.textContent='실패: '+e.message}
+  finally{btn.disabled=false}
+}
+</script>
 <h2>확인 필요 — 날짜를 못 읽은 보고 (1건)</h2>
 <table><thead><tr><th>이름</th><th>기간</th><th>종류</th><th>메모 · 원문</th></tr></thead><tbody><tr><td class="name">이다연</td><td>날짜 미상</td><td><span class="badge review">확인 필요</span></td><td>다음주 kt 데이터센터 투어 출장<div class="src">2026-08-27 17:27 · “팀장님 그리고 담주에 kt 데이터센터 투어 가는 거 잇는데
 
