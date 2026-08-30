@@ -340,14 +340,16 @@ function sendThreeDayDigest() {
     `채널 ${names.length}개 · 영상 ${rows.length}건`,
     ''
   ];
+  // 채널 몇 곳 안 되니 제목 바로 밑에 링크를 붙여, 이 통만 보고도 바로 열 수 있게 한다.
   names.forEach(function (name) {
     lines.push('<b>' + escapeHtml_(name) + '</b>');
     byChannel[name].forEach(function (row) {
       lines.push('• ' + escapeHtml_(row.t || ''));
+      if (row.u) lines.push(row.u);
     });
     lines.push('');
   });
-  lines.push('↓ 아래 메시지를 통째로 복사해 NotebookLM 소스에 붙여넣으세요');
+  lines.push('↓ 다음 메시지(주소만)를 통째로 복사해 NotebookLM 소스에 붙여넣으세요');
   sendChunked_(lines, false);
 
   // 2) 붙여넣는 판 — 주소만. 다른 글자가 섞이면 복사가 번거로워진다.

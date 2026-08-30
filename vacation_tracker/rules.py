@@ -156,3 +156,44 @@ def rule_extract(text: str, msg_dt: datetime) -> dict:
         "needs_review": start is None,
         "engine": "rule",
     }
+
+
+# ── 대화 맥락 후보 선별 ────────────────────────────────────────────────────
+# "출장 언제야?"(내 질문) → "9/15화-9/18금 입니당"(친구 답)처럼 키워드와 날짜가
+# 다른 메시지에 갈라져 있는 경우를 잡는다. 키워드 등장 후 window개(기본 10)·hours시간 안의
+# 날짜 있는 친구 메시지를 맥락 후보로 삼는다.
+
+def has_date(text: str) -> bool:
+    """본문에 날짜로 읽을 만한 토큰이 있는지."""
+    return bool(_DATE_TOKEN.search(text) or _REL_TOKEN.search(text)
+                or _WEEKDAY_TOKEN.search(text))
+
+
+def pick_candidates(messages: list[dict], window: int = 10, hours: float = 12.0) -> list[dict]:
+    """시간순 메시지에서 후보를 고른다.
+
+    messages: [{"out": bool, "text": str, "dt": datetime}, ...] (시간순)
+    반환: [{"index", "trigger": "keyword"|"context", "kind_hint"}]
+      - keyword: 친구 메시지에 휴가·출장 키워드가 직접 있음
+      - context: 직전 window개·hours시간 안에 (누구든) 키워드를 말했고,
+                 친구가 날짜가 든 메시지로 답함
+    내(out) 메시지는 후보가 되지 않고 맥락(키워드 트리거)으로만 쓰인다.
+    """
+    picked: list[dict] = []
+    last_kw: tuple[int, object, str] | None = None  # (index, dt, kind)
+    for index, msg in enumerate(messages):
+        text = (msg.get("text") or "").strip()
+        if not text:
+            continue
+        kind = None if _NEGATIVE_RE.search(text) else detect_kind(text)
+        if kind:
+            last_kw = (index, msg["dt"], kind)
+        if msg.get("out"):
+            continue
+        if kind:
+            picked.append({"index": index, "trigger": "keyword", "kind_hint": kind})
+        elif (last_kw and (index - last_kw[0]) <= window
+              and (msg["dt"] - last_kw[1]).total_seconds() <= hours * 3600
+              and has_date(text)):
+            picked.append({"index": index, "trigger": "context", "kind_hint": last_kw[2]})
+    return picked
