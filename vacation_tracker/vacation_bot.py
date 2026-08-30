@@ -102,6 +102,22 @@ def _session():
     return str(ROOT / "source_watcher" / "state" / "telegram_account.session")
 
 
+def pick_dialog(name: str, directory: dict[str, object]) -> tuple[object | None, str]:
+    """이름으로 대화 상대를 고른다. 정확 일치 → 포함 일치(대화명에 '다리' 같은 수식어가
+    붙는 관행 때문: '이준범 다리'도 '이준범'으로 잡힌다). 포함 후보가 여럿이면
+    엉뚱한 사람을 잡지 않도록 보류하고 경고만 남긴다 — config에 username으로 확정할 것.
+    """
+    key = "".join(str(name).split()).casefold()
+    if key in directory:
+        return directory[key], "정확 일치"
+    hits = sorted(k for k in directory if key in k)
+    if len(hits) == 1:
+        return directory[hits[0]], f"포함 일치 '{hits[0]}'"
+    if not hits:
+        return None, "대화 목록에 이 이름이 들어간 1:1 대화가 없습니다"
+    return None, f"이름이 들어간 대화가 {len(hits)}개라 보류: {', '.join(hits[:5])}"
+
+
 async def _dialog_directory(client, max_chats: int = 500) -> dict[str, object]:
     """1:1 대화 상대의 '표시 이름' → 엔티티. username 없이 이름만으로 친구를 찾는 용도.
 
@@ -159,10 +175,9 @@ async def _scan(config: dict, state: dict, probe: bool = False) -> list[dict]:
                 elif friend.get("phone"):
                     entity = await client.get_entity(str(friend["phone"]))
                 else:
-                    entity = directory.get("".join(str(name).split()).casefold())
+                    entity, how = pick_dialog(name, directory)
                     if entity is None:
-                        raise LookupError("대화 목록에 이 이름의 1:1 대화가 없습니다 "
-                                          "(텔레그램 표시 이름과 다르면 config에 username을 적으세요)")
+                        raise LookupError(f"{how} (config에 username을 적으면 확정됩니다)")
             except Exception as exc:
                 print(f"[경고] '{name}' 대화를 못 찾았습니다: {exc}", file=sys.stderr)
                 continue
