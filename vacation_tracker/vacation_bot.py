@@ -33,7 +33,7 @@ sys.path.insert(0, str(HERE))
 # 로그인(cloud_login.py)·소스 감시와 같은 기기 정보를 써야 세션이 안정된다.
 sys.path.insert(0, str(ROOT / "source_watcher"))
 
-from rules import KST, is_candidate, rule_extract  # noqa: E402
+from rules import KST, detect_kind, pick_candidates, rule_extract  # noqa: E402
 
 CONFIG_PATH = HERE / "config.yml"
 STATE_PATH = HERE / "state" / "state.json"
@@ -53,7 +53,11 @@ GEMINI_SYSTEM_PROMPT = """너는 텔레그램 대화에서 '자리 비움 보고
   질문("휴가 언제 가?"), 일반 잡담은 false.
 - "내일", "다음주 수요일" 같은 상대 날짜는 그 메시지의 보낸 시각을 기준으로 계산한다.
 - 종료일이 없으면 end=start(하루짜리). "3일간"이면 시작일 포함 3일.
-- 날짜를 도저히 못 정하면 vacation=true라도 start=null로 두라(사람이 확인한다)."""
+- 날짜를 도저히 못 정하면 vacation=true라도 start=null로 두라(사람이 확인한다).
+- 일부 메시지에는 (맥락)으로 직전 대화가 붙어 있다. '나'는 계정 주인이다.
+  맥락의 질문(예: "출장 언제야?")에 대한 날짜 답변이면 보낸 사람의 자리 비움 보고로
+  vacation=true로 판정하고, 종류(kind)는 맥락에서 찾아라.
+- note에는 장소·목적 같은 부가 정보(예: "카자흐스탄 출장")를 짧게 담아라."""
 
 
 # ── 설정·상태 ──────────────────────────────────────────────────────────────
@@ -198,28 +202,41 @@ async def _scan(config: dict, state: dict, probe: bool = False) -> list[dict]:
             chat_state["name"] = name
             last_id = int(chat_state.get("last_id") or 0)
             newest_id = last_id
-            scanned = 0
             # min_id로 지난번 이후 새 메시지만. 첫 실행은 lookback 창으로 제한.
+            # 내 메시지도 모아 둔다 — "출장 언제야?"(내 질문) → "9/15-9/18"(친구 답)처럼
+            # 키워드와 날짜가 갈라진 문답을 맥락으로 잡기 위해서다.
+            timeline: list[dict] = []
             async for message in client.iter_messages(entity, limit=per_chat_limit,
                                                       min_id=last_id):
                 newest_id = max(newest_id, message.id)
                 posted = message.date if message.date.tzinfo else message.date.replace(tzinfo=timezone.utc)
                 if last_id == 0 and posted < since:
                     break  # 최신순 순회 — 창을 벗어나면 끝
-                if message.out and not include_own:
-                    continue  # 내가 보낸 메시지는 기본 제외 (친구의 '보고'만)
-                text = (message.message or "").strip()
-                if not text or not is_candidate(text):
-                    continue
-                scanned += 1
+                timeline.append({"id": message.id, "out": bool(message.out),
+                                 "text": (message.message or "").strip(), "dt": posted})
+            timeline.reverse()  # 시간순으로
+            if include_own:
+                for item in timeline:
+                    item["out"] = False  # 내 보고도 후보로 (이름은 이 대화의 친구로 붙는다)
+            picked = pick_candidates(timeline)
+            for pick in picked:
+                msg = timeline[pick["index"]]
+                context_lines = [
+                    f"{'나' if prev['out'] else name}: {prev['text'][:120]}"
+                    for prev in timeline[max(0, pick["index"] - 3):pick["index"]]
+                    if prev["text"]
+                ]
                 candidates.append({
-                    "uid": f"{entity.id}:{message.id}",
+                    "uid": f"{entity.id}:{msg['id']}",
                     "name": name,
-                    "text": text,
-                    "msg_date": posted.astimezone(KST).isoformat(timespec="minutes"),
+                    "text": msg["text"],
+                    "msg_date": msg["dt"].astimezone(KST).isoformat(timespec="minutes"),
+                    "context": "\n".join(context_lines),
+                    "kind_hint": pick["kind_hint"],
+                    "trigger": pick["trigger"],
                 })
             chat_state["last_id"] = newest_id
-            print(f"  · {name}: 후보 {scanned}건 (마지막 메시지 id {newest_id})")
+            print(f"  · {name}: 후보 {len(picked)}건 (마지막 메시지 id {newest_id})")
     finally:
         await client.disconnect()
     return candidates
@@ -243,8 +260,12 @@ def _gemini_extract(candidates: list[dict]) -> dict[int, dict] | None:
     lines = []
     for index, cand in enumerate(candidates):
         stamp = datetime.fromisoformat(cand["msg_date"])
-        lines.append(f"[{index}] {cand['name']} · {stamp.strftime('%Y-%m-%d')}"
-                     f"({WEEKDAY_KO[stamp.weekday()]}) {stamp.strftime('%H:%M')}\n{cand['text']}")
+        block = (f"[{index}] {cand['name']} · {stamp.strftime('%Y-%m-%d')}"
+                 f"({WEEKDAY_KO[stamp.weekday()]}) {stamp.strftime('%H:%M')}")
+        if cand.get("context"):
+            block += f"\n(맥락)\n{cand['context']}"
+        block += f"\n(대상 메시지) {cand['text']}"
+        lines.append(block)
     payload = "\n\n".join(lines)
 
     client = genai.Client()
@@ -298,7 +319,13 @@ def extract(candidates: list[dict]) -> list[dict]:
         else:  # Gemini 불가·실패 — 규칙 파서로라도 잡아둔다
             entry = rule_extract(cand["text"], msg_dt)
             entry["note"] = ""
-        entry.update(uid=cand["uid"], name=cand["name"], text=cand["text"],
+            # 맥락 후보는 키워드가 상대 질문 쪽에 있다 — 종류를 맥락에서 가져온다.
+            if cand.get("kind_hint") and detect_kind(cand["text"]) is None:
+                entry["kind"] = cand["kind_hint"]
+        display_text = cand["text"]
+        if cand.get("trigger") == "context" and cand.get("context"):
+            display_text = f"{cand['context'].splitlines()[-1]} → {cand['text']}"
+        entry.update(uid=cand["uid"], name=cand["name"], text=display_text,
                      msg_date=cand["msg_date"],
                      detected_at=datetime.now(KST).isoformat(timespec="minutes"))
         entries.append(entry)

@@ -102,5 +102,54 @@ class RuleExtract(unittest.TestCase):
         self.assertIsNone(entry["start"])
 
 
+
+
+class ContextCandidates(unittest.TestCase):
+    """문답 맥락 — 키워드는 내 질문에, 날짜는 친구 답에 갈라진 경우."""
+
+    def _msgs(self, *rows):
+        from datetime import timedelta
+        return [{"out": out, "text": text, "dt": BASE + timedelta(minutes=10 * i)}
+                for i, (out, text) in enumerate(rows)]
+
+    def test_question_then_date_answer(self):
+        from rules import pick_candidates
+        msgs = self._msgs((True, "아~ 카자흐스탄 출장은 언제~언제라궁"),
+                          (False, "9/15화-9/18금 입니당"))
+        picked = pick_candidates(msgs)
+        self.assertEqual(len(picked), 1)
+        self.assertEqual(picked[0]["trigger"], "context")
+        self.assertEqual(picked[0]["kind_hint"], "출장")
+        self.assertEqual(picked[0]["index"], 1)
+
+    def test_dateless_reply_not_picked(self):
+        from rules import pick_candidates
+        msgs = self._msgs((True, "출장 언제야?"), (False, "넵 확인해볼게요 ㅎㅎ"))
+        self.assertEqual(pick_candidates(msgs), [])
+
+    def test_window_expiry(self):
+        from rules import pick_candidates
+        msgs = self._msgs((True, "출장 언제야?"), (False, "잠시만요"), (False, "회의 중"),
+                          (False, "밥 먹자"), (False, "9/15에 봐요"))
+        # 키워드로부터 4번째 뒤(윈도 3 초과) — 맥락으로 안 잡힌다
+        self.assertEqual(pick_candidates(msgs), [])
+
+    def test_my_message_never_candidate(self):
+        from rules import pick_candidates
+        msgs = self._msgs((True, "나 9/1 연차야"))
+        self.assertEqual(pick_candidates(msgs), [])
+
+    def test_keyword_still_direct(self):
+        from rules import pick_candidates
+        msgs = self._msgs((False, "저 내일 연차입니다"))
+        picked = pick_candidates(msgs)
+        self.assertEqual(picked[0]["trigger"], "keyword")
+
+
+class KazakhDates(unittest.TestCase):
+    def test_slash_range_with_weekday_suffix(self):
+        # "9/15화-9/18금 입니당" — 요일 붙은 슬래시 구간
+        self.assertEqual(extract_dates("9/15화-9/18금 입니당", BASE),
+                         (date(2026, 9, 15), date(2026, 9, 18)))
 if __name__ == "__main__":
     unittest.main()
