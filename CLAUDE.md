@@ -194,7 +194,8 @@
       밑줄 접미사로 실행 드롭다운에서 감춤, 기록해 둔 영상이 피드에서 사라지면
       피드 15건이 통째로 나가고 제미나이도 15번 호출되던 문제에 상한(5건).
     - 사용자 설치: 스크립트 속성 `TELEGRAM_TOKEN`·`TELEGRAM_CHAT_ID`·`GEMINI_API_KEY`
-      (+대시보드까지 쓰려면 `GH_TOKEN`) → `checkSetup()` → `installDigestTrigger()`.
+      (+대시보드까지 쓰려면 `defenseYoutube_token` — 이름과 달리
+      GitHub 토큰이다. dispatch_proxy 의 `GH_TOKEN` 과 같은 값을 복사해 넣는다) → `checkSetup()` → `installDigestTrigger()`.
       `fillBufferFromFeeds(3)`로 3일 안 기다리고 바로 시험해 볼 수 있다.
 
 이후 작업은 git log와 이 파일을 갱신하며 이어간다.

@@ -14,7 +14,9 @@
 //
 // 키는 소스에 적지 않는다. 프로젝트 설정 → 스크립트 속성에 아래를 넣을 것.
 //   TELEGRAM_TOKEN / TELEGRAM_CHAT_ID / GEMINI_API_KEY
-//   GH_TOKEN (선택) — 있으면 3일 모음을 대시보드에도 남긴다. actions:write 권한 필요.
+//   defenseYoutube_token (선택) — 이름과 달리 유튜브가 아니라 **GitHub** 토큰이다.
+//     dispatch_proxy 프로젝트의 GH_TOKEN 과 같은 값을 복사해 넣는다(스크립트 속성은
+//     프로젝트별로 따로다). 있으면 3일 모음을 대시보드에도 남긴다. actions:write 권한 필요.
 // 넣고 나서 checkSetup() 을 한 번 돌리면 제대로 들어갔는지 확인된다.
 
 const PROPS = PropertiesService.getScriptProperties();
@@ -62,9 +64,10 @@ function checkSetup() {
   });
   const buffered = digestKeys_().length;
   Logger.log('3일 모음 버퍼: ' + buffered + '건');
-  Logger.log('GH_TOKEN: ' + (PROPS.getProperty('GH_TOKEN')
-    ? '✅ 설정됨 — 대시보드에도 남깁니다'
-    : '— 없음 (텔레그램만 발송. 대시보드에 남기려면 넣으세요)'));
+  Logger.log('defenseYoutube_token (GitHub 토큰): '
+    + (PROPS.getProperty('defenseYoutube_token')
+      ? '✅ 설정됨 — 대시보드에도 남깁니다'
+      : '— 없음 (텔레그램만 발송. 대시보드에 남기려면 넣으세요)'));
 }
 
 // 3일 모음 트리거를 건다. 한 번만 실행하면 된다(여러 번 눌러도 중복되지 않는다).
@@ -342,11 +345,12 @@ function sendThreeDayDigest() {
 }
 
 // 모음을 GS-DB2 의 워크플로로 넘겨 대시보드 페이지를 만들게 한다.
-// GH_TOKEN 이 없으면 조용히 건너뛴다 — 텔레그램만 쓰는 것도 정상 운용이다.
+// defenseYoutube_token 은 이름과 달리 GitHub 토큰이다(dispatch_proxy 의 GH_TOKEN 과 같은 값).
+// 없으면 조용히 건너뛴다 — 텔레그램만 쓰는 것도 정상 운용이다.
 function pushDigestToDashboard_(names, byChannel, rows) {
-  const token = PROPS.getProperty('GH_TOKEN');
+  const token = PROPS.getProperty('defenseYoutube_token');
   if (!token) {
-    Logger.log('GH_TOKEN 이 없어 대시보드에는 남기지 않습니다.');
+    Logger.log('defenseYoutube_token(GitHub 토큰) 이 없어 대시보드에는 남기지 않습니다.');
     return;
   }
 
