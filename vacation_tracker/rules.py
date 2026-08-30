@@ -160,7 +160,7 @@ def rule_extract(text: str, msg_dt: datetime) -> dict:
 
 # ── 대화 맥락 후보 선별 ────────────────────────────────────────────────────
 # "출장 언제야?"(내 질문) → "9/15화-9/18금 입니당"(친구 답)처럼 키워드와 날짜가
-# 다른 메시지에 갈라져 있는 경우를 잡는다. 키워드 등장 후 window개·hours시간 안의
+# 다른 메시지에 갈라져 있는 경우를 잡는다. 키워드 등장 후 window개(기본 10)·hours시간 안의
 # 날짜 있는 친구 메시지를 맥락 후보로 삼는다.
 
 def has_date(text: str) -> bool:
@@ -169,7 +169,7 @@ def has_date(text: str) -> bool:
                 or _WEEKDAY_TOKEN.search(text))
 
 
-def pick_candidates(messages: list[dict], window: int = 3, hours: float = 12.0) -> list[dict]:
+def pick_candidates(messages: list[dict], window: int = 10, hours: float = 12.0) -> list[dict]:
     """시간순 메시지에서 후보를 고른다.
 
     messages: [{"out": bool, "text": str, "dt": datetime}, ...] (시간순)

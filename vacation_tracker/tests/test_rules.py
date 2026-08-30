@@ -127,11 +127,19 @@ class ContextCandidates(unittest.TestCase):
         msgs = self._msgs((True, "출장 언제야?"), (False, "넵 확인해볼게요 ㅎㅎ"))
         self.assertEqual(pick_candidates(msgs), [])
 
-    def test_window_expiry(self):
+    def test_within_wide_window(self):
+        # 키워드 뒤 잡담 몇 마디가 껴도(기본 윈도 10) 날짜 답이면 잡는다
         from rules import pick_candidates
         msgs = self._msgs((True, "출장 언제야?"), (False, "잠시만요"), (False, "회의 중"),
                           (False, "밥 먹자"), (False, "9/15에 봐요"))
-        # 키워드로부터 4번째 뒤(윈도 3 초과) — 맥락으로 안 잡힌다
+        picked = pick_candidates(msgs)
+        self.assertEqual([p["trigger"] for p in picked], ["context"])
+
+    def test_window_expiry(self):
+        from rules import pick_candidates
+        filler = [(False, f"잡담 {i}") for i in range(11)]
+        msgs = self._msgs((True, "출장 언제야?"), *filler, (False, "9/15에 봐요"))
+        # 키워드로부터 12번째 뒤(윈도 10 초과) — 맥락으로 안 잡힌다
         self.assertEqual(pick_candidates(msgs), [])
 
     def test_my_message_never_candidate(self):

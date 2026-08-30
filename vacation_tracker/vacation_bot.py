@@ -223,7 +223,7 @@ async def _scan(config: dict, state: dict, probe: bool = False) -> list[dict]:
                 msg = timeline[pick["index"]]
                 context_lines = [
                     f"{'나' if prev['out'] else name}: {prev['text'][:120]}"
-                    for prev in timeline[max(0, pick["index"] - 3):pick["index"]]
+                    for prev in timeline[max(0, pick["index"] - 10):pick["index"]]
                     if prev["text"]
                 ]
                 candidates.append({
