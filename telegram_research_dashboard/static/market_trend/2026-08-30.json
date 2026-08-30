@@ -1,0 +1,982 @@
+{
+ "date": "2026-08-30",
+ "meta": {
+  "window": "08-29 06:00~08-30 06:00 KST",
+  "engine": "Gemini(gemini-2.5-flash)",
+  "generated_at": "2026-08-30T08:30+09:00"
+ },
+ "stats": {
+  "channels": 38,
+  "messages": 234,
+  "groups": 221
+ },
+ "one_liner": "연준의 매파적 발언으로 시장 경계감이 고조된 가운데, 중국 CXMT의 LPDDR6 양산과 샤오미 탑재 소식이 메모리 시장에 주목을 받고 있으며, AI 및 반도체 산업의 성장 기대감은 여전하다.",
+ "themes": [
+  {
+   "name": "미국 통화정책 — 연준 매파적 발언에 긴축 우려",
+   "narrative": "케빈 워시 연준 의장의 매파적 발언으로 금리 인상 압력과 시장 경계심이 고조되고 있으며, 이는 뉴욕 증시의 혼조세와 국채 금리 상승으로 이어지고 있다.",
+   "status": "new",
+   "strength": 4,
+   "keywords": [
+    "매파",
+    "매파적 발언",
+    "연방공개시장위원회 연준",
+    "워시 매파",
+    "의장 매파적",
+    "단기물"
+   ],
+   "evidence": [
+    {
+     "channel": "서화백의 그림놀이 🚀",
+     "quote": "💡 요약 주요 지표 및 기업 실적에 대한 관망세; 연준의 매파적 발언과 금리 인상 압력으로 시장 경계심 고조."
+    },
+    {
+     "channel": "서화백의 AI놀이🚀",
+     "quote": "💡 요약 케빈 워시 연준 의장의 매파적 발언에 따른 금리 인상 우려가 시장을 지배하며, AI 산업 성장 기대 등 개별 이슈도 부각되는 상황"
+    },
+    {
+     "channel": "서화백의 AI놀이🚀",
+     "quote": "뉴욕 증시는 연준 의장의 매파적 발언과 국채 금리 상승 압력 속에 혼조세를 보이며 소폭 하락 마감했습니다."
+    }
+   ]
+  },
+  {
+   "name": "중국 메모리 — CXMT LPDDR6 양산 및 샤오미 탑재",
+   "narrative": "중국 CXMT가 글로벌 최초로 차세대 저전력 메모리 LPDDR6 양산을 공식 발표했으며, 이 제품은 9월 출시될 샤오미 18 Fold 폴더블 플래그십 스마트폰에 탑재될 예정이다. 이는 중국 메모리 기술의 발전을 보여주며 HBM 시장 공급 부족에 따른 수혜 기대감도 있다.",
+   "status": "new",
+   "strength": 5,
+   "keywords": [
+    "LPDDR",
+    "샤오미",
+    "LPDDR 양산",
+    "Fold",
+    "CXMT",
+    "중국 메모리",
+    "CXMT LPDDR",
+    "탑재될",
+    "샤오미 Fold",
+    "저전력 메모리"
+   ],
+   "evidence": [
+    {
+     "channel": "서화백의 그림놀이 🚀",
+     "quote": "LPDDR6 양산 발표, 최대 전송속도 12,800Mbps, 샤오미 18 Fold 탑재"
+    },
+    {
+     "channel": "서화백의 AI놀이🚀",
+     "quote": "글로벌 최초 LPDDR6 양산 공식 발표, HBM 시장 공급 부족 지속에 따른 수혜 기대"
+    },
+    {
+     "channel": "[메리츠 중국 최설화]",
+     "quote": "CXMT, LPDDR6 양산 공식화 금일 창신메모리는 공식 SNS 계정을 통해 LPDDR6 양산을 공식화했고, 9월에 나오는 샤오미18 폴더블 플래그십 모델부터 탑재된다고 발표"
+    }
+   ]
+  },
+  {
+   "name": "AI 코딩 툴 — Cursor 파트너십 변화",
+   "narrative": "AI 코딩 툴 Cursor가 OpenAI와의 파트너십 종료 가능성 및 SpaceX 인수 관련 이슈에 직면했으나, 동시에 Claude 모델 공급을 확대하며 시장 지위 강화를 모색하고 있다.",
+   "status": "new",
+   "strength": 3,
+   "keywords": [
+    "Cursor"
+   ],
+   "evidence": [
+    {
+     "channel": "서화백의 그림놀이 🚀",
+     "quote": "Cursor가 SpaceX 인수로 OpenAI 모델 접속 끊길 예정, 일론 머스크 약관 위반 사유"
+    },
+    {
+     "channel": "서화백의 AI놀이🚀",
+     "quote": "Cursor AI 코딩 툴과의 파트너십 종료"
+    },
+    {
+     "channel": "서화백의 그림놀이 🚀",
+     "quote": "OpenAI와의 경쟁 속에서 Cursor에 Claude 모델 공급을 확대하며 시장 지위 강화"
+    }
+   ]
+  },
+  {
+   "name": "미국 에너지 정책 — 트럼프 베네수엘라 석유 거래 발표",
+   "narrative": "도널드 트럼프 전 미국 대통령이 베네수엘라와 세계 역사상 최대 규모의 석유 거래에 합의했으며, 이를 통해 미국이 베네수엘라의 650억 배럴 이상 석유 매장량에 대한 과반 통제권을 확보했다고 발표했다.",
+   "status": "new",
+   "strength": 3,
+   "keywords": [
+    "피트 헤그세스",
+    "피트",
+    "과반",
+    "헤그세스"
+   ],
+   "evidence": [
+    {
+     "channel": "미국 주식 인사이더 🇺🇸 (US Stocks Insider)",
+     "quote": "• 트럼프 대통령은 베네수엘라와 “세계 역사상 최대 규모의 석유 협정”을 체결했다고 발표. 미국이 베네수엘라 확인 매장량 650억 배럴 이상에 대해 과반 통제권을 확보했다고 밝혀."
+    },
+    {
+     "channel": "이상헌 부장 iM 지주/ESG/중소형주",
+     "quote": "* 트럼프 \"베네수엘라 석유 650억배럴 과반 통제권 확보\" '"
+    },
+    {
+     "channel": "미국 주식 인사이더 🇺🇸 (US Stocks Insider)",
+     "quote": "내 지시에 따라 마코 루비오 국무장관과 피트 헤그세스 전쟁장관은 매우 존경받는 베네수엘라의 델시 로드리게스 임시 대통령과 긴밀히 협력하고 민간 기업과의 파트너십을 통해, 미국 납세자에게 아무런 비용도 부담시키지 않고 베네수엘라의 확인된 석유 매장량 650억 배럴 이상에 대한 미국의 과반 지배권을 확보했다."
+    }
+   ]
+  },
+  {
+   "name": "네팔 재난 구호 — 한국 신속대응팀 헬기 수색",
+   "narrative": "네팔 대홍수 현장에서 한국인 실종자 수색을 위해 한국 정부의 신속대응팀이 헬기 수색을 시작했으며, 네팔 정부의 국제사회 지원 수용으로 수색 작업이 활발히 진행되고 있다.",
+   "status": "new",
+   "strength": 2,
+   "keywords": [
+    "헬기",
+    "신속대응팀"
+   ],
+   "evidence": [
+    {
+     "channel": "main news",
+     "quote": "[국민일보] 정부 네팔 신속대응팀 “직접 헬기 못 띄워… 9명 수색작업 노력할 것”"
+    },
+    {
+     "channel": "main news",
+     "quote": "[동아일보] 속보 韓 신속대응팀 헬기 네팔 현장으로 출발...실종자 수색 재개"
+    },
+    {
+     "channel": "main news",
+     "quote": "[한겨레] 네팔, 국제사회 압박에 외국 구조 지원 일부 수용…한국 헬기 수색 가능성 주목"
+    }
+   ]
+  },
+  {
+   "name": "AI 및 반도체 — 견조한 성장 기대감",
+   "narrative": "연준의 매파적 발언과 시장 경계감 속에서도 AI 기술 혁신과 반도체 산업의 실적 호조에 대한 강한 기대감이 지속되고 있으며, 특히 메모리 섹터의 높은 성장 가능성이 언급되고 있다.",
+   "status": "ongoing",
+   "strength": 4,
+   "keywords": [
+    "AI",
+    "반도체",
+    "메모리",
+    "HBM"
+   ],
+   "evidence": [
+    {
+     "channel": "서화백의 그림놀이 🚀",
+     "quote": "💡 요약 주요 지표 및 기업 실적에 대한 관망세; 연준의 매파적 발언과 금리 인상 압력으로 시장 경계심 고조. AI 기술 혁신 및 반도체 산업의 실적 호조 기대."
+    },
+    {
+     "channel": "서화백의 AI놀이🚀",
+     "quote": "📝 텔레그램 심층 분석 Report (23시 04분) 기준 🌡️ 센티먼트 낙관적 기대 (+55) 💡 요약 주요 기술 섹터(메모리, AI 하드웨어)의 강력한 성장 기대감과 가격 상승 전망이 시장 불확실성을 상쇄하며 낙관적인 분위기를 형성."
+    },
+    {
+     "channel": "재야의 고수들",
+     "quote": "BofA ,글로벌 메모리 테크 (Global Memory Tech) 엔비디아의 성장이 70%라면, 메모리는 80%+ 성장 가능"
+    }
+   ]
+  }
+ ],
+ "community_mood": {
+  "score": -30,
+  "summary": "전반적으로 해외주식갤러리에서 레버리지 투자 실패와 반대매매로 인한 깊은 좌절감이 표출되고 있으나, 국내 종목 게시판에서는 특정 바이오 및 반도체 관련주에 대한 개별적인 기대감이 나타나며 혼재된 심리를 보인다.",
+  "hot_stocks": [
+   {
+    "name": "네이처셀",
+    "score": 60,
+    "reason": "Pre BLA 미팅 생략 가능성으로 인한 기대감."
+   },
+   {
+    "name": "SK하이닉스",
+    "score": 40,
+    "reason": "월요일 170 스타트 기대 등 긍정적 전망."
+   },
+   {
+    "name": "금호건설",
+    "score": 10,
+    "reason": "높은 글 수로 커뮤니티의 주목을 받음."
+   },
+   {
+    "name": "대한광통신",
+    "score": 50,
+    "reason": "작은 소식에 대한 기대감."
+   },
+   {
+    "name": "알테오젠",
+    "score": 70,
+    "reason": "모더나 외 다른 암백신 관련 찬티글 등 강한 기대감."
+   }
+  ]
+ },
+ "signals": {
+  "spikes": [
+   {
+    "term": "LPDDR",
+    "count": 9,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "매파",
+    "count": 8,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "Cursor",
+    "count": 8,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "샤오미",
+    "count": 8,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "연방공개시장위원회 연준",
+    "count": 7,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "매파적 발언",
+    "count": 7,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "연방공개시장위원회",
+    "count": 7,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "LPDDR 양산",
+    "count": 7,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "워시 매파",
+    "count": 6,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "지원할",
+    "count": 6,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "헬기",
+    "count": 6,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "Fold",
+    "count": 6,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "CXMT",
+    "count": 17,
+    "burst": 13.120879120879122,
+    "base_daily": 5.4,
+    "new": false
+   },
+   {
+    "term": "중국 메모리",
+    "count": 7,
+    "burst": 59.42986425339367,
+    "base_daily": 0.4,
+    "new": false
+   },
+   {
+    "term": "단기물",
+    "count": 5,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "의장 매파적",
+    "count": 5,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "피트 헤그세스",
+    "count": 5,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "피트",
+    "count": 5,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "과반",
+    "count": 5,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "헤그세스",
+    "count": 5,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "신속대응팀",
+    "count": 5,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "CXMT LPDDR",
+    "count": 5,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "탑재될",
+    "count": 5,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "샤오미 Fold",
+    "count": 5,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "저전력 메모리",
+    "count": 5,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   }
+  ],
+  "top_posts": [
+   {
+    "channels": 2,
+    "channel": "서화백의 그림놀이 🚀",
+    "head": "📝 텔레그램 심층 분석 Report (15시 06분) 기준 🌡️ 센티먼트 관망 (-20) 💡 요약 주요 지표 및 기업 실적에 대한 관망세; 연준의 매파적 발언과 금리 인상 압력으로 시장 경계심 고조. AI 기술 혁신 및 반도체 산업의 실적 호조 기대. 가상자산 시장, ETF 유출 및 투기성 밈코인 이슈로 불안정. 국제 정…",
+    "url": "https://t.me/easobi/16545",
+    "time_kst": "08-29 15:06"
+   },
+   {
+    "channels": 2,
+    "channel": "서화백의 AI놀이🚀",
+    "head": "📝 텔레그램 심층 분석 Report (11시 07분) 기준 🌡️ 센티먼트 경계 (-10) 💡 요약 케빈 워시 연준 의장의 매파적 발언에 따른 금리 인상 우려가 시장을 지배하며, AI 산업 성장 기대 등 개별 이슈도 부각되는 상황 🗣️ Top 키워드: 케빈 워시(376), 금리 인상(366), 연준(298), AI(277)…",
+    "url": "https://t.me/easobi_ai/19963",
+    "time_kst": "08-29 11:07"
+   },
+   {
+    "channels": 2,
+    "channel": "서화백의 AI놀이🚀",
+    "head": "2026년 8월 28일 글로벌 마감 시황 브리핑 📈📉 뉴욕 증시는 연준 의장의 매파적 발언과 국채 금리 상승 압력 속에 혼조세를 보이며 소폭 하락 마감했습니다. 다우존스 산업평균지수는 전 거래일 대비 9.45포인트(-0.02%) 하락한 53559.99를 기록했으며, 나스닥 종합지수는 138.93포인트(-0.52%) 내린…",
+    "url": "https://t.me/easobi_ai/19957",
+    "time_kst": "08-29 06:31"
+   },
+   {
+    "channels": 2,
+    "channel": "서화백의 그림놀이 🚀",
+    "head": "📝 텔레그램 심층 분석 Report (19시 04분) 기준 🌡️ 센티먼트 기대와 관망 (+35) 💡 요약 AI 및 반도체, K뷰티 등 특정 성장 섹터에 대한 강한 기대감이 시장을 주도하나, 연준의 매파적 금리 발언과 지정학적 불안정성이 투자 심리에 관망세를 형성하고 있음. 🗣️ Top 키워드: AI(15), 반도체(12)…",
+    "url": "https://t.me/easobi/16546",
+    "time_kst": "08-29 19:04"
+   },
+   {
+    "channels": 2,
+    "channel": "서화백의 AI놀이🚀",
+    "head": "📝 텔레그램 심층 분석 Report (23시 04분) 기준 🌡️ 센티먼트 낙관적 기대 (+55) 💡 요약 주요 기술 섹터(메모리, AI 하드웨어)의 강력한 성장 기대감과 가격 상승 전망이 시장 불확실성을 상쇄하며 낙관적인 분위기를 형성. 🗣️ Top 키워드: 메모리(214), 중간선거(98), 키옥시아(81), 장기계약(…",
+    "url": "https://t.me/easobi_ai/19970",
+    "time_kst": "08-29 23:04"
+   },
+   {
+    "channels": 2,
+    "channel": "서화백의 그림놀이 🚀",
+    "head": "📝 텔레그램 심층 분석 Report (07시 05분) 기준 🌡️ 센티먼트 경계 (-20) 💡 요약 전반적으로 워시 연준 의장의 매파적 발언과 금리 인상 우려로 시장에 대한 경계감이 높으며, 반도체 부진과 일부 기업의 상장 폐지 및 크립토 관련 보안 문제로 투자 심리가 위축된 양상입니다. 중동 정세 불안과 국제 유가 변동성…",
+    "url": "https://t.me/easobi/16542",
+    "time_kst": "08-29 07:05"
+   },
+   {
+    "channels": 2,
+    "channel": "이상헌 부장 iM 지주/ESG/중소형주",
+    "head": "* “우주서 2등이면 지구서 1등 못해”…트럼프, 우주사관학교 창설 - 트럼프 대통령은 28일(현지시간) 텍사스주 휴스턴에 위치한 미 항공우주국(NASA) 린든 B. 존슨 우주센터를 찾아 우주사관학교 설립 준비를 위한 행정명령에 서명했다. 트럼프 대통령은 “집권 1기에 미군의 6번째 군종인 우주군을 창설했고 오늘 또 다른…",
+    "url": "https://t.me/INSIGHTVALUELEE/9659",
+    "time_kst": "08-29 16:32"
+   },
+   {
+    "channels": 2,
+    "channel": "재야의 고수들",
+    "head": "BofA ,글로벌 메모리 테크 (Global Memory Tech) 엔비디아의 성장이 70%라면, 메모리는 80%+ 성장 가능 엔비디아(NVIDIA)가 제시한 2027년 매출 70% 성장 가이던스는 최근 메모리 섹터에 대해 비관적으로 돌아선 투자자들에게 긍정적인 서프라이즈가 될 것입니다. 컨퍼런스에 참석한 일부 투자자들은…",
+    "url": "https://t.me/gaoshoukorea/63830",
+    "time_kst": "08-29 09:10"
+   },
+   {
+    "channels": 2,
+    "channel": "GS의 조선/기계/방산 「바담」",
+    "head": "🛡️ ⚔️ Tancurile Leopard din Ucraina, trase pe dreapta. România va cumpăra sute de blindate, dar spune că are soluții pentru a nu pica în aceeași capcană 🛡️ ⚔️ 우크라이나 레오파르트 전차 후방 대기……",
+    "url": "https://t.me/c/1405984327/7987",
+    "time_kst": "08-29 13:09"
+   },
+   {
+    "channels": 2,
+    "channel": "GS의 조선/기계/방산 「바담」",
+    "head": "[한화에어로, 유·무인기 범용 엔진 개발] • 유인기와 무인기를 아우르는 범용 항공엔진 개발을 위한 원 스카이 전략 추진 • 저피탐 무인 편대기용 5500파운드 터보팬 엔진 및 중고도 무인기용 1400마력급 터보프롭 엔진 시제 공개 • 향후 스텔스 무인기용 1만 파운드 터보팬 엔진 및 차세대 전투기 첨단항공엔진 개발 참여…",
+    "url": "https://t.me/c/1405984327/7988",
+    "time_kst": "08-29 16:27"
+   },
+   {
+    "channels": 2,
+    "channel": "미국 주식 인사이더 🇺🇸 (US Stocks Insider)",
+    "head": "케빈 워시 젝슨홀 발언 3줄 요약 - AI가 물가와 성장 둘다 긍정적인 역할을 할 수 있는건 맞는데 언제가 될지는 모름 - 물가는 너무 높음 코로나 직후 만큼은 아니지만 그전에 비해서는 너무 높음 - 금리는 제약적인 수준이 아니며 데이터센터 건설 등에 계속 돈을 빌려서 투자하고 유동성은 풍부함 한줄평 : 난 시장이 무슨말…",
+    "url": "https://t.me/insidertracking/62370",
+    "time_kst": "08-29 09:19"
+   },
+   {
+    "channels": 2,
+    "channel": "Rafiki research",
+    "head": "아니 매파적이네 어쩌네 하는 건 그래서 금리를 올리면 주식이 되네 안되네 얘기하려고 하는 거 아님? 그런데 AI(주식)가 좋아서 경기가 좋으면 금리를 주식시장이 올리는건데 그걸 보고 주식시장에 부정적이라고 얘기하면 어쩌라는 거야",
+    "url": "https://t.me/rafikiresearch/24713",
+    "time_kst": "08-29 13:16"
+   },
+   {
+    "channels": 2,
+    "channel": "[메리츠 중국 최설화]",
+    "head": "CXMT, LPDDR6 양산 공식화 금일 창신메모리는 공식 SNS 계정을 통해 LPDDR6 양산을 공식화했고, 9월에 나오는 샤오미18 폴더블 플래그십 모델부터 탑재된다고 발표",
+    "url": "https://t.me/china_kis/3917",
+    "time_kst": "08-29 15:37"
+   }
+  ]
+ },
+ "community": {
+  "source": "네이버 종목토론실",
+  "universe": 41,
+  "posts": 1020,
+  "search_top": [
+   {
+    "code": "005930",
+    "name": "삼성전자",
+    "rank": 1
+   },
+   {
+    "code": "000660",
+    "name": "SK하이닉스",
+    "rank": 2
+   },
+   {
+    "code": "034020",
+    "name": "두산에너빌리티",
+    "rank": 3
+   },
+   {
+    "code": "006400",
+    "name": "삼성SDI",
+    "rank": 4
+   },
+   {
+    "code": "035420",
+    "name": "NAVER",
+    "rank": 5
+   },
+   {
+    "code": "005380",
+    "name": "현대차",
+    "rank": 6
+   },
+   {
+    "code": "009150",
+    "name": "삼성전기",
+    "rank": 7
+   },
+   {
+    "code": "066570",
+    "name": "LG전자",
+    "rank": 8
+   },
+   {
+    "code": "196170",
+    "name": "알테오젠",
+    "rank": 9
+   },
+   {
+    "code": "002990",
+    "name": "금호건설",
+    "rank": 10
+   }
+  ],
+  "hot_stocks": [
+   {
+    "code": "263750",
+    "name": "펄어비스",
+    "posts": 120,
+    "capped": true,
+    "burst": 99.0,
+    "base_daily": 0.0
+   },
+   {
+    "code": "007390",
+    "name": "네이처셀",
+    "posts": 120,
+    "capped": true,
+    "burst": 2.8,
+    "base_daily": 42.7
+   },
+   {
+    "code": "096530",
+    "name": "씨젠",
+    "posts": 19,
+    "capped": false,
+    "burst": 3.4,
+    "base_daily": 5.6
+   },
+   {
+    "code": "002990",
+    "name": "금호건설",
+    "posts": 61,
+    "capped": false,
+    "burst": 1.6,
+    "base_daily": 39.0
+   }
+  ],
+  "keywords": [
+   {
+    "term": "안티",
+    "count": 12,
+    "burst": 99.0,
+    "new": true
+   },
+   {
+    "term": "회사",
+    "count": 9,
+    "burst": 99.0,
+    "new": true
+   },
+   {
+    "term": "좋은",
+    "count": 8,
+    "burst": 99.0,
+    "new": true
+   },
+   {
+    "term": "찬티",
+    "count": 7,
+    "burst": 99.0,
+    "new": true
+   },
+   {
+    "term": "금리인상",
+    "count": 7,
+    "burst": 99.0,
+    "new": true
+   },
+   {
+    "term": "금리",
+    "count": 7,
+    "burst": 99.0,
+    "new": true
+   },
+   {
+    "term": "담관암",
+    "count": 7,
+    "burst": 99.0,
+    "new": true
+   },
+   {
+    "term": "자사주",
+    "count": 6,
+    "burst": 99.0,
+    "new": true
+   },
+   {
+    "term": "안티들",
+    "count": 6,
+    "burst": 99.0,
+    "new": true
+   },
+   {
+    "term": "시총",
+    "count": 6,
+    "burst": 99.0,
+    "new": true
+   },
+   {
+    "term": "승인",
+    "count": 6,
+    "burst": 99.0,
+    "new": true
+   },
+   {
+    "term": "유튜브",
+    "count": 5,
+    "burst": 99.0,
+    "new": true
+   },
+   {
+    "term": "아니라",
+    "count": 5,
+    "burst": 99.0,
+    "new": true
+   },
+   {
+    "term": "돌파",
+    "count": 5,
+    "burst": 99.0,
+    "new": true
+   },
+   {
+    "term": "게시판",
+    "count": 5,
+    "burst": 99.0,
+    "new": true
+   }
+  ],
+  "top_liked": [
+   {
+    "code": "007390",
+    "name": "네이처셀",
+    "title": "Pre BLA 미팅 생략 가능성[15]",
+    "views": 2270,
+    "likes": 154,
+    "url": "https://finance.naver.com/item/board_read.naver?code=007390&nid=428645170",
+    "time_kst": "08-29 11:39"
+   },
+   {
+    "code": "010170",
+    "name": "대한광통신",
+    "title": "애들아~~~ 작은 소식^^[28]",
+    "views": 1531,
+    "likes": 135,
+    "url": "https://finance.naver.com/item/board_read.naver?code=010170&nid=428645809",
+    "time_kst": "08-29 12:39"
+   },
+   {
+    "code": "196170",
+    "name": "알테오젠",
+    "title": "[찬티글 맞음] 러프하게 봅시다.[6]",
+    "views": 1432,
+    "likes": 106,
+    "url": "https://finance.naver.com/item/board_read.naver?code=196170&nid=428646181",
+    "time_kst": "08-29 13:16"
+   },
+   {
+    "code": "007390",
+    "name": "네이처셀",
+    "title": "금방 10만원 갑니다.[3]",
+    "views": 785,
+    "likes": 98,
+    "url": "https://finance.naver.com/item/board_read.naver?code=007390&nid=428650877",
+    "time_kst": "08-30 00:45"
+   },
+   {
+    "code": "196170",
+    "name": "알테오젠",
+    "title": "모더나 암백신 외에 ...다른 암백신...[2]",
+    "views": 1479,
+    "likes": 93,
+    "url": "https://finance.naver.com/item/board_read.naver?code=196170&nid=428649122",
+    "time_kst": "08-29 19:44"
+   }
+  ],
+  "top_rising": [
+   {
+    "code": "034020",
+    "name": "두산에너빌리티",
+    "title": "월요일 10만돌파뉴스.  기관매집이유...[1]",
+    "views": 2675,
+    "likes": 54,
+    "url": "https://finance.naver.com/item/board_read.naver?code=034020&nid=428649612",
+    "time_kst": "08-29 20:49",
+    "views_per_hour": 80.7
+   },
+   {
+    "code": "196170",
+    "name": "알테오젠",
+    "title": "당장 윌요일부터[7]",
+    "views": 2240,
+    "likes": 79,
+    "url": "https://finance.naver.com/item/board_read.naver?code=196170&nid=428647264",
+    "time_kst": "08-29 15:24",
+    "views_per_hour": 58.1
+   },
+   {
+    "code": "007390",
+    "name": "네이처셀",
+    "title": "Pre BLA 미팅 생략 가능성[15]",
+    "views": 2270,
+    "likes": 154,
+    "url": "https://finance.naver.com/item/board_read.naver?code=007390&nid=428645170",
+    "time_kst": "08-29 11:39",
+    "views_per_hour": 53.6
+   },
+   {
+    "code": "034020",
+    "name": "두산에너빌리티",
+    "title": "두빌 수주 잔고가 26조인데[6]",
+    "views": 2002,
+    "likes": 62,
+    "url": "https://finance.naver.com/item/board_read.naver?code=034020&nid=428647394",
+    "time_kst": "08-29 15:43",
+    "views_per_hour": 52.3
+   },
+   {
+    "code": "002990",
+    "name": "금호건설",
+    "title": "● 무안 군공항 공사 금호건설이 하나요?[3]",
+    "views": 1215,
+    "likes": 30,
+    "url": "https://finance.naver.com/item/board_read.naver?code=002990&nid=428651243",
+    "time_kst": "08-30 05:33",
+    "views_per_hour": 49.7
+   }
+  ]
+ },
+ "community_dc": {
+  "source": "DC인사이드",
+  "galleries": [
+   {
+    "id": "krstock",
+    "name": "국내주식갤러리",
+    "posts": 1369,
+    "capped": true,
+    "burst": 1.7,
+    "base_daily": 804.1
+   },
+   {
+    "id": "stockus",
+    "name": "해외주식갤러리",
+    "posts": 1909,
+    "capped": true,
+    "burst": 1.0,
+    "base_daily": 1943.3
+   }
+  ],
+  "posts_sampled": 587,
+  "keywords": [
+   {
+    "term": "지금",
+    "count": 14,
+    "burst": 99.0,
+    "new": true
+   },
+   {
+    "term": "생산성",
+    "count": 10,
+    "burst": 82.5,
+    "new": true
+   },
+   {
+    "term": "엔터주",
+    "count": 8,
+    "burst": 66.0,
+    "new": true
+   },
+   {
+    "term": "많이",
+    "count": 7,
+    "burst": 57.7,
+    "new": true
+   },
+   {
+    "term": "솔직히",
+    "count": 7,
+    "burst": 57.7,
+    "new": true
+   },
+   {
+    "term": "보면",
+    "count": 7,
+    "burst": 57.7,
+    "new": true
+   },
+   {
+    "term": "하이브",
+    "count": 7,
+    "burst": 57.7,
+    "new": true
+   },
+   {
+    "term": "너네",
+    "count": 7,
+    "burst": 57.7,
+    "new": true
+   },
+   {
+    "term": "제일",
+    "count": 6,
+    "burst": 49.5,
+    "new": true
+   },
+   {
+    "term": "존나",
+    "count": 6,
+    "burst": 49.5,
+    "new": true
+   },
+   {
+    "term": "갤창",
+    "count": 6,
+    "burst": 49.5,
+    "new": true
+   },
+   {
+    "term": "미주갤",
+    "count": 6,
+    "burst": 49.5,
+    "new": true
+   },
+   {
+    "term": "여자",
+    "count": 6,
+    "burst": 49.5,
+    "new": true
+   },
+   {
+    "term": "vs",
+    "count": 6,
+    "burst": 49.5,
+    "new": true
+   },
+   {
+    "term": "ai",
+    "count": 41,
+    "burst": 16.1,
+    "new": false
+   }
+  ],
+  "top_recommended": [
+   {
+    "gallery": "해외주식갤러리",
+    "title": "주식 시작하기 전에 약한 우울증 있었는데",
+    "views": 14061,
+    "recommend": 239,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=17605788&exception_mode=recommend&page=1",
+    "time_kst": "08-29 09:00"
+   },
+   {
+    "gallery": "해외주식갤러리",
+    "title": "이런 새끼들이 무슨 주식을한다고 ㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋ",
+    "views": 13434,
+    "recommend": 165,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=17605974&exception_mode=recommend&page=1",
+    "time_kst": "08-29 09:49"
+   },
+   {
+    "gallery": "해외주식갤러리",
+    "title": "국장 1달 동향ㅋㅋㅋㅋㅋㅋㅋ",
+    "views": 14387,
+    "recommend": 145,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=17605753&exception_mode=recommend&page=1",
+    "time_kst": "08-29 08:49"
+   },
+   {
+    "gallery": "해외주식갤러리",
+    "title": "FX 쿠루미 작가 < 전재산 날림 ㄷㄷ...",
+    "views": 11215,
+    "recommend": 124,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=17609721&exception_mode=recommend&page=1",
+    "time_kst": "08-29 20:37"
+   },
+   {
+    "gallery": "해외주식갤러리",
+    "title": "레버 천만원에 피분수쇼하던 새끼들이 3억 파이어는 씨발",
+    "views": 6317,
+    "recommend": 117,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=17611005&exception_mode=recommend&page=1",
+    "time_kst": "08-29 23:42"
+   }
+  ],
+  "top_viewed": [
+   {
+    "gallery": "해외주식갤러리",
+    "title": "미주갤 반대매매 충격근황ㅋㅋㅋㅋㅋㅋㅋ",
+    "views": 2761,
+    "recommend": 60,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=17611995&page=9",
+    "time_kst": "08-30 04:13"
+   },
+   {
+    "gallery": "국내주식갤러리",
+    "title": "코랩 하닉 폭동 뭐임",
+    "views": 737,
+    "recommend": 1,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3365570&page=3",
+    "time_kst": "08-30 05:38"
+   },
+   {
+    "gallery": "국내주식갤러리",
+    "title": "은근히좋은몸매",
+    "views": 655,
+    "recommend": 1,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3365554&page=3",
+    "time_kst": "08-30 04:28"
+   },
+   {
+    "gallery": "국내주식갤러리",
+    "title": "신기하지않음?",
+    "views": 530,
+    "recommend": 0,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3365406&page=6",
+    "time_kst": "08-30 01:39"
+   },
+   {
+    "gallery": "국내주식갤러리",
+    "title": "그렇다 드디어 깨달았구나",
+    "views": 492,
+    "recommend": 0,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3365565&page=3",
+    "time_kst": "08-30 05:14"
+   },
+   {
+    "gallery": "국내주식갤러리",
+    "title": "엔화 가격 박살난 이유 만화",
+    "views": 479,
+    "recommend": 2,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3365567&page=3",
+    "time_kst": "08-30 05:21"
+   },
+   {
+    "gallery": "국내주식갤러리",
+    "title": "가장 이해 안되는게 삼전 반도체다니다가 하닉간놈들임",
+    "views": 466,
+    "recommend": 1,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3365543&page=3",
+    "time_kst": "08-30 03:51"
+   },
+   {
+    "gallery": "국내주식갤러리",
+    "title": "하닉 월요일 잘하면 170 스타트네",
+    "views": 461,
+    "recommend": 0,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3365555&page=3",
+    "time_kst": "08-30 04:40"
+   }
+  ]
+ }
+}

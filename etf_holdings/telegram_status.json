@@ -1,5 +1,5 @@
 {
-  "when_utc": "2026-08-27 09:58:16Z",
+  "when_utc": "2026-08-30 13:55:58Z",
   "ok": true,
   "note": "change_sent",
   "chat_id_tail": "5171",
@@ -7,7 +7,7 @@
   "response": {
     "ok": true,
     "result": {
-      "message_id": 206,
+      "message_id": 216,
       "from": {
         "id": 8875725998,
         "is_bot": true,
@@ -21,8 +21,8 @@
         "username": "gschoie",
         "type": "private"
       },
-      "date": 1787824696,
-      "text": "🧩 액티브 ETF 구성 변화 · 구성 기준일 2026-08-27 (KRX 장마감)\n\n변화 ETF 5개 · 진입 3·이탈 3·실매매 6\n\n🟢 TIME K바이오액티브 · TIME(구 TIMEFOLIO)\n   ⊕ 진입: 오름테라퓨틱\n   ⊖ 이탈: 보로노이\n   ▲ 한미약품 계약수 +28% · 비중 +2.0%p\n   ▽ 셀트리온 계약수 −13% · 비중 −1.8%p\n🟢 TIME 코스피액티브 · TIME(구 TIMEFOLIO)\n   ⊕ 진입: 두산에너빌리티\n   ⊖ 이탈: 삼성생명\n   ▽ 삼성전자 계약수 −6% · 비중 −1.4%p\n🟢 KoAct 코스닥액티브 · KoAct\n   ⊕ 진입: 파마리서치\n   ⊖ 이탈: 로보티즈\n🟢 TIME 코스닥액티브 · TIME(구 TIMEFOLIO)\n   ▽ 알테오젠 계약수 −42% · 비중 −2.6%p\n   ▲ 심텍 계약수 +41% · 비중 +2.1%p\n🟢 TIME Korea플러스배당액티브 · TIME(구 TIMEFOLIO)\n   ▽ DB손해보험 계약수 −33% · 비중 −1.6%p\n\n전체 상세 › 대시보드\n🎴 GS Research Desk · 액티브 ETF 트래커",
+      "date": 1788098157,
+      "text": "🧩 액티브 ETF 구성 변화 · 구성 기준일 2026-08-28 (KRX 장마감)\n\n변화 ETF 13개 · 진입 16·이탈 16·실매매 5\n\n🟢 TIME K컬처액티브 · TIME(구 TIMEFOLIO)\n   ⊕ 진입: 에스엠, 하이브\n   ⊖ 이탈: NC, 크래프톤\n   ▲ 삼양식품 계약수 +27% · 비중 +1.6%p\n   ▽ 농심 계약수 −23% · 비중 −1.4%p\n🟢 TIME K바이오액티브 · TIME(구 TIMEFOLIO)\n   ⊕ 진입: 보로노이, 에스티팜\n   ⊖ 이탈: 셀트리온제약, 리가켐바이오\n   ▽ 셀트리온 계약수 −30% · 비중 −3.1%p\n🟢 TIGER 코리아테크액티브 · TIGER\n   ⊕ 진입: 엘앤에프, 심텍\n   ⊖ 이탈: 테스, 피에스케이홀딩스\n🟢 KoAct 글로벌AI&로봇액티브 · KoAct\n   ⊕ 진입: RF머트리얼즈\n   ⊖ 이탈: 현대모비스\n   ▲ 이수페타시스 계약수 +90%\n🟢 TIGER 배당커버드콜액티브 · TIGER\n   ⊕ 진입: 한화에어로스페이스\n   ⊖ 이탈: 현대차\n   ▽ TIGER 200 계약수 −33% · 비중 −1.9%p\n🟢 TIME 코스닥액티브 · TIME(구 TIMEFOLIO)\n   ⊕ 진입: 에코프로\n   ⊖ 이탈: 로보티즈\n🟢 TIME 미국S&P500액티브 · TIME(구 TIMEFOLIO)\n   ⊕ 진입: AT&T INC\n   ⊖ 이탈: APPLE INC\n🟢 TIME 미국나스닥100액티브 · TIME(구 TIMEFOLIO)\n   ⊕ 진입: MARVELL TECHNOLOGY INC\n   ⊖ 이탈: NEBIUS GROUP NV\n🟢 TIME Korea플러스배당액티브 · TIME(구 TIMEFOLIO)\n   ⊕ 진입: KB금융\n   ⊖ 이탈: 키움증권\n🟢 KoAct 코스닥액티브 · KoAct\n   ⊕ 진입: HPSP\n   ⊖ 이탈: 성호전자\n🟢 KoAct 배당성장액티브 · KoAct\n   ⊕ 진입: HD현대중공업\n   ⊖ 이탈: 현대차\n🟢 KODEX 로봇액티브 · KODEX\n   ⊕ 진입: 삼성에스디에스\n   ⊖ 이탈: 에스피지\n… 외 1개 ETF 변화\n\n전체 상세 › 대시보드\n🎴 GS Research Desk · 액티브 ETF 트래커",
       "entities": [
         {
           "offset": 0,
@@ -31,36 +31,71 @@
         },
         {
           "offset": 55,
-          "length": 1,
+          "length": 2,
           "type": "bold"
         },
         {
-          "offset": 80,
-          "length": 12,
-          "type": "bold"
-        },
-        {
-          "offset": 208,
+          "offset": 83,
           "length": 11,
           "type": "bold"
         },
         {
-          "offset": 304,
+          "offset": 214,
           "length": 12,
           "type": "bold"
         },
         {
-          "offset": 357,
+          "offset": 325,
+          "length": 14,
+          "type": "bold"
+        },
+        {
+          "offset": 391,
+          "length": 17,
+          "type": "bold"
+        },
+        {
+          "offset": 473,
+          "length": 15,
+          "type": "bold"
+        },
+        {
+          "offset": 568,
           "length": 11,
           "type": "bold"
         },
         {
-          "offset": 452,
+          "offset": 631,
+          "length": 16,
+          "type": "bold"
+        },
+        {
+          "offset": 708,
+          "length": 16,
+          "type": "bold"
+        },
+        {
+          "offset": 805,
           "length": 18,
           "type": "bold"
         },
         {
-          "offset": 533,
+          "offset": 875,
+          "length": 12,
+          "type": "bold"
+        },
+        {
+          "offset": 927,
+          "length": 13,
+          "type": "bold"
+        },
+        {
+          "offset": 982,
+          "length": 11,
+          "type": "bold"
+        },
+        {
+          "offset": 1056,
           "length": 4,
           "type": "text_link",
           "url": "https://gschoie.github.io/GS-DB2/etf_holdings_report.html"

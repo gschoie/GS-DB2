@@ -26,6 +26,7 @@
 | `dart_shiporder_bot/` | DART 수주 공시 봇 |
 | `peergroup/` | 주간 피어그룹 주가 |
 | `source_watcher/` | 외부 소스 감시 |
+| `vacation_tracker/` | 친구 휴가 일정 추적 — 지정 친구와의 텔레그램 1:1 대화에서 휴가 보고를 잡아 정리 |
 | `gas/` | Google Apps Script 정본 (dispatch_proxy 등) |
 
 관련 별도 리포: `gschoie/tradewinds_telegram_bot`(TradeWinds 해운뉴스, Python+Playwright, 매시 실행), family-talk-daily(이쁘게.말하기).
@@ -190,11 +191,37 @@
       사이드바 `📺 ┗방산유튜브.3일모음`(방산.주간정리 바로 밑), 페이지에 '전체 복사' 버튼.
     - 왜 GitHub Actions로 수집하지 않았나: 채널 목록이 GAS·리포 두 곳으로 갈려 어긋나고,
       17번에서 확인했듯 무료 러너 크론이 몇 시간씩 밀린다. 수집은 GAS 한 곳으로 유지.
+    - **쇼츠는 모음에서 뺀다**(`DIGEST_SKIP_SHORTS`). 첫 회차 실측이 32건 중 16건이
+      쇼츠였는데, 쇼츠는 자막이 거의 없어 NotebookLM이 소스로 받지 못하고 무료 플랜
+      소스 상한(50개)만 잡아먹는다. 낱개 알림에는 영향 없다 — 쇼츠도 그대로 온다.
+      피드가 쇼츠를 `/shorts/<id>` 주소로 주는 것에 기대는 최선의 추정이다.
+      담는 주소는 `watch?v=`로 정규화한다(같은 영상, NotebookLM 호환).
     - GAS 쪽 고친 것: 키를 소스에서 빼 스크립트 속성으로(`secret_()`), 내부 함수는
       밑줄 접미사로 실행 드롭다운에서 감춤, 기록해 둔 영상이 피드에서 사라지면
       피드 15건이 통째로 나가고 제미나이도 15번 호출되던 문제에 상한(5건).
     - 사용자 설치: 스크립트 속성 `TELEGRAM_TOKEN`·`TELEGRAM_CHAT_ID`·`GEMINI_API_KEY`
       (+대시보드까지 쓰려면 `GH_TOKEN`) → `checkSetup()` → `installDigestTrigger()`.
       `fillBufferFromFeeds(3)`로 3일 안 기다리고 바로 시험해 볼 수 있다.
+
+19. **친구 휴가 일정 추적 신설** (8/30): `vacation_tracker/` — config.yml에 지정한 친구 16명과의
+    텔레그램 1:1 대화에서 휴가·연차·반차·출장·샵투어 보고를 잡아 정리 (`vacation-tracker.yml`, KST 08:30·18:30).
+    - **봇은 1:1 대화를 못 읽는다** → source_watcher의 계정 세션(state/session.enc +
+      SESSION_PASSPHRASE, telegram-login.yml)을 그대로 공유. DEVICE_INFO도 adapters에서 import
+      (기기 정보가 다르면 텔레그램이 세션을 끊는다).
+    - 친구 매칭은 대화 목록 표시 이름(성+이름, 공백 무시)으로 — username 몰라도 됨.
+      확인은 mode=probe(메시지 안 읽음). 수집은 대화별 last_id 증분, 내 메시지 기본 제외.
+    - 추출 2단: 규칙 프리필터(키워드+잡담 컷) → Gemini 구조화(상대 날짜는 메시지 시각 기준).
+      Gemini 실패 시 규칙 파서 폴백(rules.py, 테스트 15개) — 날짜 못 읽으면 needs_review로
+      남긴다(버리지 않음). entries.json을 손으로 고치고 rebuild-page로 재반영 가능.
+    - 산출: state/entries.json 누적 + static/vacation_report.html(사이드바 🏖️ ┗휴가/출장.계획,
+      관리/모미 그룹 수명 피드백 아래) + 신규 건만 텔레그램(VACATION_* → WATCH_* → KDEF_* 폴백).
+      상태 커밋은 발송 성공 뒤에만(실패 run이 last_id를 올리면 그 보고는 영영 안 잡힘).
+    - 대시보드가 공개 주소라 친구 이름·휴가 기간이 노출되는 점은 감수(리네임 운영과 동일 정책).
+    - **직접 기입 + 달력** (8/30 저녁): 페이지(팀원 휴가 일정 체크)에 ✍️ 기입 폼 —
+      GAS dispatch_proxy `vacation` 라우트 → vacation-tracker.yml mode=add(세션 불필요).
+      제출 즉시 점선(pending)으로 표시하고, 15초 간격으로 배포본 갱신 시각을 감시하다
+      자동 새로고침. 달력은 2개월 나란히 + ◀▶ 이동(이번 달~+6개월 연속 렌더),
+      날짜 더블클릭 두 번으로 기간 입력. 순서: 다가오는 → 달력 → 기입 → 지난 → 확인필요.
+      친구 매칭은 표시 이름 포함 일치('다리' 수식어 우선). 검증: 김혜영 독일 출장 기입 E2E 성공.
 
 이후 작업은 git log와 이 파일을 갱신하며 이어간다.

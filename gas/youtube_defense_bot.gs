@@ -9,6 +9,8 @@
 //   installDigestTrigger()— 3일 트리거 걸기
 //   fillBufferFromFeeds(3)— 지난 3일치를 버퍼에 채워 넣기 (지금 바로 시험해 볼 때)
 //
+// 3일 모음에는 쇼츠를 담지 않는다(DIGEST_SKIP_SHORTS). 낱개 알림은 쇼츠도 그대로 온다.
+//
 // 낱개 발송 때 링크를 스크립트 속성에 같이 쌓아 두고, 3일마다 그걸 비워 내보낸다.
 // 유튜브를 다시 긁지 않으므로 봇에 실제로 나간 것과 100% 일치한다.
 //
@@ -30,6 +32,11 @@ const DASHBOARD_REF = 'main';
 
 // 기록해 둔 영상이 피드에서 사라졌을 때(삭제·비공개) 피드 전체를 쏟아내지 않기 위한 상한.
 const MAX_NEW_PER_RUN = 5;
+
+// 3일 모음에서 쇼츠를 뺀다. 쇼츠는 자막이 거의 없어 NotebookLM이 소스로 받지 못하고,
+// 무료 플랜 소스 상한(50개)만 잡아먹는다. 낱개 알림에는 영향이 없다 — 쇼츠도 그대로 온다.
+// 다시 담고 싶으면 이 값을 false 로.
+const DIGEST_SKIP_SHORTS = true;
 
 // 구독할 방산 채널 목록 (총 7개 채널)
 const WATCH_CHANNELS = [
@@ -211,12 +218,29 @@ function digestKeys_() {
     .sort();  // 키 앞머리가 시각이라 정렬하면 올라온 순서가 된다
 }
 
+// 유튜브 피드는 쇼츠를 .../shorts/<id> 주소로 준다. 확실한 판별법은 이것뿐이라
+// 최선의 추정이다 — 피드가 쇼츠를 watch?v= 로 주면 걸러지지 않는다.
+function isShorts_(url) {
+  return String(url).indexOf('/shorts/') !== -1;
+}
+
+// /shorts/<id> → watch?v=<id>. 같은 영상이고, NotebookLM·브라우저 모두 이 형태를 받는다.
+function normalizeVideoUrl_(url) {
+  const found = String(url).match(/\/shorts\/([A-Za-z0-9_-]+)/);
+  return found ? 'https://www.youtube.com/watch?v=' + found[1] : url;
+}
+
+// 담았으면 true, 쇼츠라 건너뛰었으면 false.
 function bufferForDigest_(channelName, videoId, title, url, whenMillis) {
+  if (DIGEST_SKIP_SHORTS && isShorts_(url)) return false;
   // 키 앞머리를 '올라온 시각'으로 두면 정렬만으로 업로드 순서가 나온다.
   // 같은 밀리초에 두 건이 들어와도 videoId 가 붙어 있어 덮어쓰이지 않는다.
   const when = whenMillis ? whenMillis : Date.now();
   const key = DIGEST_PREFIX + when + '_' + videoId;
-  PROPS.setProperty(key, JSON.stringify({ ch: channelName, t: title, u: url }));
+  PROPS.setProperty(key, JSON.stringify({
+    ch: channelName, t: title, u: normalizeVideoUrl_(url)
+  }));
+  return true;
 }
 
 function isBuffered_(videoId) {
@@ -234,6 +258,7 @@ function fillBufferFromFeeds(days) {
   const span = (days ? days : 3) * 24 * 60 * 60 * 1000;
   const since = Date.now() - span;
   let added = 0;
+  let skipped = 0;
 
   WATCH_CHANNELS.forEach(function (channel) {
     try {
@@ -251,15 +276,20 @@ function fillBufferFromFeeds(days) {
 
         const title = entry.getChildText('title', atom);
         const link = entry.getChild('link', atom).getAttribute('href').getValue();
-        bufferForDigest_(channel.name, videoId, title, link, published);
-        added++;
+        if (bufferForDigest_(channel.name, videoId, title, link, published)) {
+          added++;
+        } else {
+          skipped++;
+        }
       });
     } catch (error) {
       Logger.log('버퍼 채우기 실패 (' + channel.name + '): ' + error.toString());
     }
   });
 
-  Logger.log(added + '건을 버퍼에 담았습니다. 이제 sendThreeDayDigest() 를 돌려 보세요.');
+  Logger.log(added + '건을 버퍼에 담았습니다'
+    + (skipped ? ' (쇼츠 ' + skipped + '건 제외)' : '')
+    + '. 이제 sendThreeDayDigest() 를 돌려 보세요.');
 }
 
 function sendThreeDayDigest() {
@@ -317,15 +347,18 @@ function sendThreeDayDigest() {
     });
     lines.push('');
   });
-  lines.push('↓ 아래 메시지를 통째로 복사해 NotebookLM 소스에 붙여넣으세요');
+  lines.push('↓ 다음 메시지를 통째로 복사해 NotebookLM 소스에 붙여넣으세요');
   sendChunked_(lines, false);
 
-  // 2) 붙여넣는 판 — 주소만. 다른 글자가 섞이면 복사가 번거로워진다.
+  // 2) 붙여넣는 판 — 채널 이름 한 줄 밑에 그 채널 주소들. NotebookLM은 붙여넣은
+  // 글에서 유튜브 주소만 골라 읽으므로 채널 이름 줄이 섞여 있어도 문제없다.
   const urls = [];
   names.forEach(function (name) {
+    urls.push('[' + name + ']');
     byChannel[name].forEach(function (row) {
       if (row.u) urls.push(row.u);
     });
+    urls.push('');
   });
   sendChunked_(urls, true);
 
