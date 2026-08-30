@@ -33,6 +33,13 @@ class Kind(unittest.TestCase):
         self.assertEqual(detect_kind("여름휴가 갑니다"), "여름휴가")
         self.assertIsNone(detect_kind("주말에 캠핑 감"))
 
+    def test_trip_and_shoptour(self):
+        self.assertEqual(detect_kind("다음주 해외 출장입니다"), "해외출장")
+        self.assertEqual(detect_kind("내일부터 부산 출장"), "출장")
+        self.assertEqual(detect_kind("9/3 샵투어 갑니다"), "샵투어")
+        self.assertEqual(detect_kind("숍 투어 일정 잡혔어"), "샵투어")
+        self.assertTrue(is_candidate("내일 출장 가요"))
+
 
 class Dates(unittest.TestCase):
     def test_slash_range(self):

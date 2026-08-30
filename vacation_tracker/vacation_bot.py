@@ -39,12 +39,13 @@ CONFIG_PATH = HERE / "config.yml"
 STATE_PATH = HERE / "state" / "state.json"
 ENTRIES_PATH = HERE / "state" / "entries.json"
 
-GEMINI_SYSTEM_PROMPT = """너는 텔레그램 대화에서 '휴가 보고'를 추려 정리하는 비서다.
+GEMINI_SYSTEM_PROMPT = """너는 텔레그램 대화에서 '자리 비움 보고'(휴가·연차·반차·출장·샵투어 등)를
+추려 정리하는 비서다.
 입력은 번호가 붙은 메시지 목록이다. 각 메시지에는 보낸 사람, 보낸 시각(KST, 요일 포함), 본문이 있다.
 
 메시지마다 아래를 판정해 JSON 배열로만 답하라(설명 금지):
 [{"i": <메시지 번호>, "vacation": true|false, "start": "YYYY-MM-DD"|null,
-  "end": "YYYY-MM-DD"|null, "kind": "연차|반차|오전반차|오후반차|휴가|병가|휴무|기타",
+  "end": "YYYY-MM-DD"|null, "kind": "연차|반차|오전반차|오후반차|휴가|출장|해외출장|병가|휴무|기타",
   "note": "짧은 메모(선택)"}]
 
 판정 기준:

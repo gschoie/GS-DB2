@@ -204,7 +204,7 @@
       `fillBufferFromFeeds(3)`로 3일 안 기다리고 바로 시험해 볼 수 있다.
 
 19. **친구 휴가 일정 추적 신설** (8/30): `vacation_tracker/` — config.yml에 지정한 친구 16명과의
-    텔레그램 1:1 대화에서 휴가·연차·반차 보고를 잡아 정리 (`vacation-tracker.yml`, KST 08:30·18:30).
+    텔레그램 1:1 대화에서 휴가·연차·반차·출장·샵투어 보고를 잡아 정리 (`vacation-tracker.yml`, KST 08:30·18:30).
     - **봇은 1:1 대화를 못 읽는다** → source_watcher의 계정 세션(state/session.enc +
       SESSION_PASSPHRASE, telegram-login.yml)을 그대로 공유. DEVICE_INFO도 adapters에서 import
       (기기 정보가 다르면 텔레그램이 세션을 끊는다).
@@ -213,8 +213,8 @@
     - 추출 2단: 규칙 프리필터(키워드+잡담 컷) → Gemini 구조화(상대 날짜는 메시지 시각 기준).
       Gemini 실패 시 규칙 파서 폴백(rules.py, 테스트 15개) — 날짜 못 읽으면 needs_review로
       남긴다(버리지 않음). entries.json을 손으로 고치고 rebuild-page로 재반영 가능.
-    - 산출: state/entries.json 누적 + static/vacation_report.html(사이드바 🏖️ 친구.휴가일정,
-      관리/모미 그룹) + 신규 건만 텔레그램(VACATION_* → WATCH_* → KDEF_* 폴백).
+    - 산출: state/entries.json 누적 + static/vacation_report.html(사이드바 🏖️ ┗휴가/출장.계획,
+      관리/모미 그룹 수명 피드백 아래) + 신규 건만 텔레그램(VACATION_* → WATCH_* → KDEF_* 폴백).
       상태 커밋은 발송 성공 뒤에만(실패 run이 last_id를 올리면 그 보고는 영영 안 잡힘).
     - 대시보드가 공개 주소라 친구 이름·휴가 기간이 노출되는 점은 감수(리네임 운영과 동일 정책).
 
