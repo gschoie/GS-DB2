@@ -115,6 +115,10 @@ def pick_dialog(name: str, directory: dict[str, object]) -> tuple[object | None,
         return directory[hits[0]], f"포함 일치 '{hits[0]}'"
     if not hits:
         return None, "대화 목록에 이 이름이 들어간 1:1 대화가 없습니다"
+    # 여럿이면 '다리'가 붙은 쪽을 우선한다 — 친구 대화명에 다리를 붙이는 관행.
+    dari = [k for k in hits if "다리" in k]
+    if len(dari) == 1:
+        return directory[dari[0]], f"포함 일치(다리 우선) '{dari[0]}'"
     return None, f"이름이 들어간 대화가 {len(hits)}개라 보류: {', '.join(hits[:5])}"
 
 
