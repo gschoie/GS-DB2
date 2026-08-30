@@ -394,7 +394,11 @@ async function dispatchTrend(){
    status.textContent='✅ 트렌드 산출 요청됨 — 몇 분 뒤 새로고침';}
 // 클릭한 메뉴가 속하지 않은 그룹의 서브메뉴는 모두 닫는다.
 function closeOtherNavGroups(el){const mine=el.closest?.('details.nav-group');$$('details.nav-group').forEach(o=>{if(o!==mine&&o.open){o.open=false;o.querySelectorAll('details.nav-subgroup').forEach(s=>s.open=false)}});}
-$$('.nav').forEach(b=>b.onclick=()=>{closeOtherNavGroups(b);view(b.dataset.view)});$$('[data-go]').forEach(b=>b.onclick=()=>view(b.dataset.go));
+// 좁은 화면(≤950px)에서는 서브메뉴가 화면을 덮는 플라이아웃이라, 메뉴를 고르면 자기 그룹도 닫는다.
+function closeNavFlyout(el){if(!matchMedia('(max-width:950px)').matches)return;const g=el.closest?.('details.nav-group');if(g&&g.open){g.open=false;g.querySelectorAll('details.nav-subgroup').forEach(s=>s.open=false)}}
+$$('.nav').forEach(b=>b.onclick=()=>{closeOtherNavGroups(b);closeNavFlyout(b);view(b.dataset.view)});$$('[data-go]').forEach(b=>b.onclick=()=>view(b.dataset.go));
+// 서브메뉴 안의 일반 링크(외부 링크 등)를 눌러도 모바일 플라이아웃은 닫는다.
+document.addEventListener('click',e=>{const a=e.target.closest?.('.nav-submenu a');if(a)closeNavFlyout(a)});
 // 한 메뉴 그룹을 열면 나머지 그룹의 서브메뉴는 닫는다(모바일·PC 공통, 아코디언).
 $$('details.nav-group').forEach(d=>d.addEventListener('toggle',()=>{if(!d.open)return;$$('details.nav-group').forEach(o=>{if(o!==d&&o.open){o.open=false;o.querySelectorAll('details.nav-subgroup').forEach(s=>s.open=false)}})}));
 // 같은 그룹 안의 하위 그룹(2단 서브메뉴)도 하나만 열리도록.
