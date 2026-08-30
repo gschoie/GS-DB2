@@ -86,7 +86,16 @@ tr.today td{background:#14202f}
   color:#cfe0ff;border:1px solid #2c3a52;font-size:11.5px;white-space:nowrap;
   overflow:hidden;text-overflow:ellipsis}
 .chip.trip{background:#3a2f1d;color:#ffd9a0;border-color:#55452c}
-.cal-title{font-size:15px;color:#e8edf5;margin:22px 0 6px;font-weight:700}
+.cal-title{font-size:15px;color:#e8edf5;margin:4px 0 6px;font-weight:700}
+#cal-strip{display:grid;grid-template-columns:1fr 1fr;gap:18px;align-items:start}
+@media(max-width:700px){#cal-strip{grid-template-columns:1fr}}
+.cal-month[hidden]{display:none}
+.cal-nav{display:flex;align-items:center;gap:12px;margin:10px 0 8px}
+.cal-nav button{background:#161d29;color:#cfe0ff;border:1px solid #2c3a52;border-radius:8px;
+  padding:5px 14px;font-size:14px;cursor:pointer}
+.cal-nav button:hover{border-color:#3d5175}
+.cal-nav button:disabled{opacity:.35;cursor:default}
+#cal-label{font-size:14.5px;color:#e8edf5;font-weight:700;min-width:180px;text-align:center}
 .addform{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:10px 0 6px}
 .addform input,.addform select{background:#161d29;color:#d8dee9;border:1px solid #2c3a52;
   border-radius:8px;padding:7px 10px;font-size:13.5px;font-family:inherit}
@@ -153,16 +162,26 @@ def _calendar_section(dated: list[dict], today_d: date) -> str:
             per_day.setdefault(day, []).append(entry)
             day += timedelta(days=1)
 
-    # 이번 달 + 앞으로 3개월은 비어 있어도 항상 그린다 — 더블클릭 기입이 미래 날짜를
-    # 고를 수 있어야 한다. 과거 달은 기록이 있는 달만.
-    always = set()
-    year, month = today_d.year, today_d.month
-    for _ in range(4):
-        always.add((year, month))
-        month += 1
-        if month > 12:
-            year, month = year + 1, 1
-    months = sorted({(d.year, d.month) for d in per_day} | always)
+    # 화살표로 좌우 이동하는 구조라 달 목록은 빈 달 없이 연속이어야 한다.
+    # 범위: (기록 있는 가장 이른 달 ~ 가장 늦은 달) ∪ (이번 달 ~ +6개월), 최대 24개월.
+    def shift(pair, k):
+        year, month = pair
+        month += k
+        while month > 12:
+            year, month = year + 1, month - 12
+        while month < 1:
+            year, month = year - 1, month + 12
+        return year, month
+
+    have = {(d.year, d.month) for d in per_day}
+    current = (today_d.year, today_d.month)
+    lo = min(have | {current})
+    hi = max(have | {shift(current, 6)})
+    months = []
+    cursor = lo
+    while cursor <= hi and len(months) < 24:
+        months.append(cursor)
+        cursor = shift(cursor, 1)
     grid = calendar.Calendar(firstweekday=6)  # 일요일 시작
     parts = []
     for year, month in months:
@@ -195,10 +214,14 @@ def _calendar_section(dated: list[dict], today_d: date) -> str:
             for label, cls in (("일", "sun"), ("월", ""), ("화", ""), ("수", ""),
                                ("목", ""), ("금", ""), ("토", "sat"))
         )
-        parts.append(f'<div class="cal-title">{year}년 {month}월</div>'
+        parts.append(f'<div class="cal-month" data-ym="{year}-{month:02d}" hidden>'
+                     f'<div class="cal-title">{year}년 {month}월</div>'
                      f'<table class="cal"><thead><tr>{head}</tr></thead>'
-                     f'<tbody>{"".join(rows)}</tbody></table>')
-    return "".join(parts)
+                     f'<tbody>{"".join(rows)}</tbody></table></div>')
+    nav = ('<div class="cal-nav"><button id="cal-prev" onclick="calMove(-1)">◀</button>'
+           '<span id="cal-label"></span>'
+           '<button id="cal-next" onclick="calMove(1)">▶</button></div>')
+    return nav + '<div id="cal-strip">' + "".join(parts) + "</div>"
 
 
 def _add_form(stamp: str) -> str:
@@ -294,6 +317,31 @@ async function addEntry(){
   finally{btn.disabled=false}
 }
 
+// 달력 페이저: 모든 달이 DOM에 있고, 한 번에 2개월만 보여준다. ◀▶로 한 달씩 이동.
+const calMonths=[...document.querySelectorAll('.cal-month')];
+let calIdx=0;
+function calRender(){
+  const maxIdx=Math.max(0,calMonths.length-2);
+  calIdx=Math.min(Math.max(0,calIdx),maxIdx);
+  calMonths.forEach((m,i)=>{m.hidden=!(i===calIdx||i===calIdx+1)});
+  const first=calMonths[calIdx],second=calMonths[calIdx+1];
+  const label=$id('cal-label');
+  if(label&&first){
+    const name=el=>el.querySelector('.cal-title').textContent;
+    label.textContent=second?name(first)+' · '+name(second):name(first);
+  }
+  const prev=$id('cal-prev'),next=$id('cal-next');
+  if(prev)prev.disabled=calIdx<=0;
+  if(next)next.disabled=calIdx>=maxIdx;
+}
+function calMove(step){calIdx+=step;calRender()}
+{
+  const nowYm=new Date().toLocaleDateString('sv').slice(0,7);
+  const at=calMonths.findIndex(m=>m.dataset.ym===nowYm);
+  calIdx=at>=0?at:0;
+  calRender();
+}
+
 // 달력 더블클릭 → 기입 폼 날짜 채우기. 첫 더블클릭=시작일,
 // 그보다 뒤 날짜를 이어서 더블클릭하면 종료일(기간).
 document.addEventListener('dblclick',ev=>{
@@ -344,12 +392,14 @@ def build_page(store: dict) -> Path:
 <p class="form-hint">날짜를 더블클릭(모바일: 두 번 탭)하면 아래 기입 폼에 시작일로 들어가고,
 이어서 다른 날을 더블클릭하면 기간이 됩니다.</p>
 {_calendar_section(dated, now.date()) or '<p class="empty">기록 없음</p>'}
+"""
+    doc += _add_form(stamp)
+    doc += f"""
 <h2>지난 휴가 ({len(past)}건)</h2>
 {table(past, "tbl-past")}
 """
     if review:
         doc += f"<h2>확인 필요 — 날짜를 못 읽은 보고 ({len(review)}건)</h2>\n{table(review)}\n"
-    doc += _add_form(stamp)
     doc += "</div></body></html>\n"
 
     OUT_PATH.parent.mkdir(parents=True, exist_ok=True)
