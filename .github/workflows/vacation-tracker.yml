@@ -1,0 +1,98 @@
+name: 휴가 일정 추적
+
+# config.yml에 지정한 친구들과의 텔레그램 1:1 대화를 내 계정 세션으로 훑어
+# 휴가 보고를 잡아 정리한다. 세션은 source_watcher와 같은 것(state/session.enc)을 쓴다.
+# 산출물: vacation_tracker/state/*.json(누적 DB) + static/vacation_report.html(대시보드).
+on:
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: "실행 모드"
+        type: choice
+        default: run
+        # probe = 친구 이름이 실제 대화로 매칭되는지 확인(메시지 안 읽음)
+        # dry-run = 수집·추출까지만, 상태·페이지·발송 없음
+        options: [run, dry-run, probe, rebuild-page]
+  schedule:
+    # KST 08:30 · 18:30 (UTC 23:30 전일 · 09:30). 하루 2회면 충분 — 휴가 보고는 드문 이벤트다.
+    - cron: "30 23,9 * * *"
+
+permissions:
+  contents: write
+
+jobs:
+  track:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: 패키지 설치
+        working-directory: vacation_tracker
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: 규칙 파서 테스트
+        working-directory: vacation_tracker
+        run: python -m unittest discover -s tests -p "test_*.py"
+
+      # '텔레그램 계정 로그인' 워크플로가 만든 암호문을 푼다 — source_watcher와 공유.
+      - name: 계정 세션 복호화
+        env:
+          SESSION_PASSPHRASE: ${{ secrets.SESSION_PASSPHRASE }}
+        run: |
+          if [ -f source_watcher/state/session.enc ] && [ -n "$SESSION_PASSPHRASE" ]; then
+            VALUE=$(openssl enc -aes-256-cbc -pbkdf2 -iter 200000 -d \
+              -in source_watcher/state/session.enc -pass env:SESSION_PASSPHRASE)
+            echo "::add-mask::$VALUE"
+            echo "TELEGRAM_SESSION_STRING=$VALUE" >> "$GITHUB_ENV"
+          else
+            echo "세션 없음 — 먼저 '텔레그램 계정 로그인' 워크플로를 실행하세요" >&2
+            exit 1
+          fi
+
+      - name: 휴가 추적 실행
+        working-directory: vacation_tracker
+        env:
+          TELEGRAM_API_ID: ${{ secrets.TELEGRAM_API_ID }}
+          TELEGRAM_API_HASH: ${{ secrets.TELEGRAM_API_HASH }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          # 알림 봇: 전용 시크릿이 없으면 소스 감시와 같은 봇으로 보낸다.
+          TELEGRAM_BOT_TOKEN: ${{ secrets.VACATION_TELEGRAM_BOT_TOKEN || secrets.WATCH_TELEGRAM_BOT_TOKEN || secrets.KDEF_TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.VACATION_TELEGRAM_CHAT_ID || secrets.WATCH_TELEGRAM_CHAT_ID || secrets.KDEF_TELEGRAM_CHAT_ID }}
+          MODE: ${{ inputs.mode || 'run' }}
+        run: |
+          case "$MODE" in
+            probe)        python vacation_bot.py --probe ;;
+            dry-run)      python vacation_bot.py --dry-run ;;
+            rebuild-page) python vacation_bot.py --rebuild-page ;;
+            *)            python vacation_bot.py ;;
+          esac
+
+      # 상태 커밋은 발송까지 끝난 뒤에만 — 실패한 run이 last_id를 올리면 그 보고는 영영 안 잡힌다.
+      - name: 상태·페이지 커밋
+        if: ${{ success() && !contains(fromJSON('["probe","dry-run"]'), inputs.mode || 'run') }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add vacation_tracker/state telegram_research_dashboard/static/vacation_report.html
+          if git diff --cached --quiet; then
+            echo "변경 없음 — 커밋 생략"
+            exit 0
+          fi
+          git commit -m "chore(vacation): 휴가 일정 갱신 $(TZ=Asia/Seoul date +'%Y-%m-%d %H:%M')"
+          for i in 1 2 3 4 5; do
+            if git push origin HEAD:main; then
+              exit 0
+            fi
+            git pull --rebase --autostash origin main
+            sleep 5
+          done
+          echo "push 실패" >&2
+          exit 1
