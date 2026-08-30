@@ -97,6 +97,10 @@ tr.today td{background:#14202f}
 .addform button:disabled{opacity:.5;cursor:default}
 #add-status{color:#8b96a8;font-size:12.5px;margin:4px 0 0}
 .form-hint{color:#8b96a8;font-size:12.5px;margin:2px 0 0}
+.badge.trip{background:#3a2f1d;color:#ffd9a0;border-color:#55452c}
+tr.pending td{opacity:.75}
+tr.pending .badge,.chip.pending{border-style:dashed}
+
 """
 
 # 달력 칩 색 구분: 출장·샵투어 계열은 주황, 나머지(휴가·연차·반차…)는 파랑.
@@ -149,7 +153,16 @@ def _calendar_section(dated: list[dict], today_d: date) -> str:
             per_day.setdefault(day, []).append(entry)
             day += timedelta(days=1)
 
-    months = sorted({(d.year, d.month) for d in per_day} | {(today_d.year, today_d.month)})
+    # 이번 달 + 앞으로 3개월은 비어 있어도 항상 그린다 — 더블클릭 기입이 미래 날짜를
+    # 고를 수 있어야 한다. 과거 달은 기록이 있는 달만.
+    always = set()
+    year, month = today_d.year, today_d.month
+    for _ in range(4):
+        always.add((year, month))
+        month += 1
+        if month > 12:
+            year, month = year + 1, 1
+    months = sorted({(d.year, d.month) for d in per_day} | always)
     grid = calendar.Calendar(firstweekday=6)  # 일요일 시작
     parts = []
     for year, month in months:
@@ -188,14 +201,18 @@ def _calendar_section(dated: list[dict], today_d: date) -> str:
     return "".join(parts)
 
 
-def _add_form() -> str:
-    """직접 기입 폼. GAS 프록시(vacation 라우트)로 workflow_dispatch를 쏜다."""
+def _add_form(stamp: str) -> str:
+    """직접 기입 폼. GAS 프록시(vacation 라우트)로 workflow_dispatch를 쏜다.
+
+    stamp는 이 페이지의 갱신 시각 — 제출 뒤 배포본의 갱신 시각이 달라지면
+    자동 새로고침한다. 그 사이 화면에는 점선(pending) 스타일로 즉시 그려 둔다.
+    """
     name_options = "".join(f'<option value="{html.escape(n)}">' for n in friend_names() if n)
     kind_options = "".join(f"<option>{k}</option>" for k in KIND_OPTIONS)
-    return f"""
+    head = f"""
 <h2>✍️ 직접 기입</h2>
-<p class="form-hint">봇이 못 잡은 일정을 손으로 추가합니다. 요청하면 1~2분 뒤 자동
-재배포로 표·달력에 반영됩니다(새로고침 필요). 잘못 넣은 건 entries.json에서 지우고
+<p class="form-hint">봇이 못 잡은 일정을 손으로 추가합니다. 화면에는 바로 표시되고,
+1~2분 뒤 서버 반영이 끝나면 자동 새로고침됩니다. 잘못 넣은 건 entries.json에서 지우고
 rebuild-page로 되돌립니다.</p>
 <div class="addform">
   <input id="add-name" list="add-names" placeholder="이름" style="width:110px">
@@ -210,38 +227,87 @@ rebuild-page로 되돌립니다.</p>
 <p id="add-status"></p>
 <script>
 const EP={json.dumps(DISPATCH_ENDPOINT)};
-async function addEntry(){{
-  const g=id=>document.getElementById(id);
-  const name=g('add-name').value.trim(), start=g('add-start').value;
-  const status=g('add-status'), btn=g('add-btn');
-  if(!name||!start){{status.textContent='⚠ 이름과 시작일은 필수입니다';return}}
-  const entry={{name:name,start:start,end:g('add-end').value||start,
-    kind:g('add-kind').value,note:g('add-note').value.trim()}};
+const PAGE_STAMP={json.dumps(stamp)};
+"""
+    # 아래는 순수 JS — f-string 이스케이프(중괄호 겹침)를 피하려고 분리해 둔다.
+    script = """
+const $id=i=>document.getElementById(i);
+function escText(t){const d=document.createElement('div');d.textContent=t==null?'':t;return d.innerHTML}
+function isTrip(kind){return /출장|투어/.test(kind||'')}
+
+// 제출 직후 화면에 임시(pending)로 그린다 — 서버 반영 전에도 바로 보이게.
+function localApply(en){
+  const today=new Date().toLocaleDateString('sv');
+  const tid=(en.end||en.start)>=today?'tbl-upcoming':'tbl-past';
+  const tbody=document.querySelector('#'+tid+' tbody');
+  if(tbody){
+    const empty=tbody.querySelector('.empty-row');if(empty)empty.remove();
+    const tr=document.createElement('tr');tr.className='pending';
+    const span=en.end&&en.end!==en.start?en.start+' ~ '+en.end:en.start;
+    tr.innerHTML='<td class="name">'+escText(en.name)+'</td><td>'+span+'</td>'
+      +'<td><span class="badge'+(isTrip(en.kind)?' trip':'')+'">'+escText(en.kind)+'</span></td>'
+      +'<td>'+escText(en.note||'')+'<div class="src">방금 · ✍️ 직접 기입 (서버 반영 중…)</div></td>';
+    tbody.prepend(tr);
+  }
+  let day=new Date(en.start+'T00:00:00');const last=new Date((en.end||en.start)+'T00:00:00');
+  for(let i=0;i<60&&day<=last;i++){
+    const cell=document.querySelector('td[data-date="'+day.toLocaleDateString('sv')+'"]');
+    if(cell){const chip=document.createElement('span');
+      chip.className='chip pending'+(isTrip(en.kind)?' trip':'');
+      chip.title=en.kind;chip.textContent=en.name;cell.appendChild(chip);}
+    day.setDate(day.getDate()+1);
+  }
+}
+
+// 배포본의 '갱신 시각'이 이 페이지와 달라지면 새로고침 — 임시 표시가 진짜 데이터로 교체된다.
+async function watchDeploy(){
+  const status=$id('add-status');
+  for(let i=0;i<24;i++){
+    await new Promise(r=>setTimeout(r,15000));
+    try{
+      const r=await fetch('vacation_report.html?t='+Date.now(),{cache:'no-store'});
+      const m=(await r.text()).match(/갱신 ([0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2})/);
+      if(m&&m[1]!==PAGE_STAMP){location.reload();return}
+    }catch(e){}
+  }
+  if(status)status.textContent='서버 반영 확인이 오래 걸립니다 — 잠시 뒤 수동 새로고침해 주세요';
+}
+
+async function addEntry(){
+  const name=$id('add-name').value.trim(), start=$id('add-start').value;
+  const status=$id('add-status'), btn=$id('add-btn');
+  if(!name||!start){status.textContent='⚠ 이름과 시작일은 필수입니다';return}
+  // 종료<시작이면 서버(add_manual)가 자동으로 뒤집는다.
+  const entry={name:name,start:start,end:$id('add-end').value||start,
+    kind:$id('add-kind').value,note:$id('add-note').value.trim()};
   status.textContent='요청 중…';btn.disabled=true;
-  try{{
-    const r=await fetch(EP,{{method:'POST',body:JSON.stringify({{workflow:'vacation',entry:JSON.stringify(entry)}})}});
-    try{{const d=await r.json();
-      if(d&&d.ok===false){{status.textContent=`⚠ 거절 ${{d.code||'?'}} — ${{d.error||'GAS 프록시 확인 필요'}}`;return}}
-    }}catch{{}}
-    status.textContent='✅ 요청됨 — 1~2분 뒤 새로고침하면 반영됩니다';
-    g('add-note').value='';
-  }}catch(e){{status.textContent='실패: '+e.message}}
-  finally{{btn.disabled=false}}
-}}
+  try{
+    const r=await fetch(EP,{method:'POST',body:JSON.stringify({workflow:'vacation',entry:JSON.stringify(entry)})});
+    try{const d=await r.json();
+      if(d&&d.ok===false){status.textContent='⚠ 거절 '+(d.code||'?')+' — '+(d.error||'GAS 프록시 확인 필요');return}
+    }catch(e){}
+    localApply(entry);
+    status.textContent='✅ 추가됨 — 화면에 임시 표시했고, 서버 반영이 끝나면 자동 새로고침됩니다';
+    $id('add-note').value='';$id('add-start').value='';$id('add-end').value='';
+    watchDeploy();
+  }catch(e){status.textContent='실패: '+e.message}
+  finally{btn.disabled=false}
+}
+
 // 달력 더블클릭 → 기입 폼 날짜 채우기. 첫 더블클릭=시작일,
 // 그보다 뒤 날짜를 이어서 더블클릭하면 종료일(기간).
-document.addEventListener('dblclick',ev=>{{
+document.addEventListener('dblclick',ev=>{
   const td=ev.target.closest('td[data-date]');if(!td)return;
-  const g=id=>document.getElementById(id);
-  const d=td.dataset.date,s=g('add-start'),e=g('add-end'),status=g('add-status');
-  if(s.value&&d>s.value&&(!e.value||e.value===s.value)){{
-    e.value=d;status.textContent=`기간 ${{s.value}} ~ ${{d}} — 이름 고르고 '추가'를 누르세요`;
-  }}else{{
-    s.value=d;e.value='';status.textContent=`시작일 ${{d}} — 끝나는 날도 더블클릭하면 기간이 됩니다`;
-  }}
-  document.querySelector('.addform').scrollIntoView({{behavior:'smooth',block:'center'}});
-}});
+  const d=td.dataset.date,s=$id('add-start'),e=$id('add-end'),status=$id('add-status');
+  if(s.value&&d>s.value&&(!e.value||e.value===s.value)){
+    e.value=d;status.textContent='기간 '+s.value+' ~ '+d+" — 이름 고르고 '추가'를 누르세요";
+  }else{
+    s.value=d;e.value='';status.textContent='시작일 '+d+' — 끝나는 날도 더블클릭하면 기간이 됩니다';
+  }
+  document.querySelector('.addform').scrollIntoView({behavior:'smooth',block:'center'});
+});
 </script>"""
+    return head + script
 
 
 def build_page(store: dict) -> Path:
@@ -255,33 +321,35 @@ def build_page(store: dict) -> Path:
     past = [e for e in dated if (e.get("end") or e["start"]) < today][::-1]  # 최근 순
     review = [e for e in entries if not e.get("start")]
 
-    def table(rows: list[dict]) -> str:
-        if not rows:
-            return '<p class="empty">기록 없음</p>'
-        body = "".join(_row(e, today) for e in rows)
-        return ("<table><thead><tr><th>이름</th><th>기간</th><th>종류</th><th>메모 · 원문</th>"
-                f"</tr></thead><tbody>{body}</tbody></table>")
+    def table(rows: list[dict], table_id: str = "") -> str:
+        # 빈 표도 tbody를 남긴다 — 직접 기입의 즉시 표시(낙관적 행 삽입)가 붙을 곳.
+        body = "".join(_row(e, today) for e in rows) or \
+            '<tr class="empty-row"><td colspan="4" class="empty">기록 없음</td></tr>'
+        id_attr = f' id="{table_id}"' if table_id else ""
+        return (f"<table{id_attr}><thead><tr><th>이름</th><th>기간</th><th>종류</th>"
+                f"<th>메모 · 원문</th></tr></thead><tbody>{body}</tbody></table>")
 
+    stamp = now.strftime('%Y-%m-%d %H:%M')
     doc = f"""<!doctype html>
 <html lang="ko"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>친구 휴가 일정</title><style>{PAGE_CSS}</style></head>
+<title>팀원 휴가 일정 체크</title><style>{PAGE_CSS}</style></head>
 <body><div class="wrap">
-<h1>🏖️ 친구 휴가 일정</h1>
-<p class="meta">지정한 친구들과의 텔레그램 1:1 대화에서 휴가 보고를 자동으로 잡아 정리 ·
-갱신 {now.strftime('%Y-%m-%d %H:%M')} KST · 총 {len(entries)}건</p>
+<h1>🏖️ 팀원 휴가 일정 체크</h1>
+<p class="meta">지정한 팀원들과의 텔레그램 1:1 대화에서 휴가·출장 보고를 자동으로 잡아 정리 ·
+갱신 {stamp} KST · 총 {len(entries)}건</p>
 <h2>다가오는 휴가 ({len(upcoming)}건)</h2>
-{table(upcoming)}
-<h2>지난 휴가 ({len(past)}건)</h2>
-{table(past)}
+{table(upcoming, "tbl-upcoming")}
 <h2>📅 달력</h2>
 <p class="form-hint">날짜를 더블클릭(모바일: 두 번 탭)하면 아래 기입 폼에 시작일로 들어가고,
 이어서 다른 날을 더블클릭하면 기간이 됩니다.</p>
 {_calendar_section(dated, now.date()) or '<p class="empty">기록 없음</p>'}
-{_add_form()}
+<h2>지난 휴가 ({len(past)}건)</h2>
+{table(past, "tbl-past")}
 """
     if review:
         doc += f"<h2>확인 필요 — 날짜를 못 읽은 보고 ({len(review)}건)</h2>\n{table(review)}\n"
+    doc += _add_form(stamp)
     doc += "</div></body></html>\n"
 
     OUT_PATH.parent.mkdir(parents=True, exist_ok=True)
