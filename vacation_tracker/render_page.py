@@ -116,6 +116,24 @@ tr.pending .badge,.chip.pending{border-style:dashed}
   padding-left:8px;word-break:break-all}
 #chip-pop .meta2{color:#8a94a0;font-size:11.5px;margin-top:6px}
 #chip-pop .close{position:absolute;top:6px;right:9px;color:#8a94a0;cursor:pointer;font-size:14px}
+/* 좁은 화면: 4열 표를 카드형으로 — 셀이 세로로 짜부라지는 것 방지 */
+@media(max-width:640px){
+  body{padding:18px 12px 48px}
+  table:not(.cal) thead{display:none}
+  table:not(.cal),table:not(.cal) tbody{display:block;width:100%}
+  table:not(.cal) tbody tr{display:flex;flex-wrap:wrap;align-items:center;gap:2px 8px;
+    padding:10px 2px;border-bottom:1px solid #edf0f4}
+  table:not(.cal) tbody td{display:block;border:none;padding:0}
+  td.c-name{order:1;font-size:15px}
+  td.c-kind{order:2}
+  td.c-span{order:3;margin-left:auto;color:#555e69;font-size:13px;white-space:nowrap}
+  td.c-note{order:4;flex-basis:100%;font-size:13.5px}
+  tr.empty-row td{flex-basis:100%}
+  .cal td{height:46px;padding:3px 3px}
+  .chip{font-size:10.5px;padding:1px 3px}
+  .cal .d{font-size:10.5px}
+  #cal-label{min-width:0}
+}
 """
 
 # 달력 칩 색 구분: 출장·샵투어 계열은 주황, 나머지(휴가·연차·반차…)는 파랑.
@@ -146,9 +164,9 @@ def _row(entry: dict, today: str) -> str:
         origin = f"{msg_date} · ✍️ 직접 기입"
     else:
         origin = f"{msg_date} · “{html.escape(str(entry.get('text') or '')[:140])}”"
-    return (f"<tr{active}><td class=\"name\">{html.escape(str(entry.get('name') or '?'))}</td>"
-            f"<td>{_span(entry)}</td><td>{badge}</td>"
-            f"<td>{note}<div class=\"src\">{origin}</div></td></tr>")
+    return (f"<tr{active}><td class=\"c-name name\">{html.escape(str(entry.get('name') or '?'))}</td>"
+            f"<td class=\"c-span\">{_span(entry)}</td><td class=\"c-kind\">{badge}</td>"
+            f"<td class=\"c-note\">{note}<div class=\"src\">{origin}</div></td></tr>")
 
 
 def _is_trip(kind: str) -> bool:
@@ -283,9 +301,9 @@ function localApply(en){
     const empty=tbody.querySelector('.empty-row');if(empty)empty.remove();
     const tr=document.createElement('tr');tr.className='pending';
     const span=en.end&&en.end!==en.start?en.start+' ~ '+en.end:en.start;
-    tr.innerHTML='<td class="name">'+escText(en.name)+'</td><td>'+span+'</td>'
-      +'<td><span class="badge'+(isTrip(en.kind)?' trip':'')+'">'+escText(en.kind)+'</span></td>'
-      +'<td>'+escText(en.note||'')+'<div class="src">방금 · ✍️ 직접 기입 (서버 반영 중…)</div></td>';
+    tr.innerHTML='<td class="c-name name">'+escText(en.name)+'</td><td class="c-span">'+span+'</td>'
+      +'<td class="c-kind"><span class="badge'+(isTrip(en.kind)?' trip':'')+'">'+escText(en.kind)+'</span></td>'
+      +'<td class="c-note">'+escText(en.note||'')+'<div class="src">방금 · ✍️ 직접 기입 (서버 반영 중…)</div></td>';
     tbody.prepend(tr);
   }
   let day=new Date(en.start+'T00:00:00');const last=new Date((en.end||en.start)+'T00:00:00');
