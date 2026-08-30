@@ -1,6 +1,6 @@
 """entries.json → 대시보드 페이지(vacation_report.html).
 
-표준 라이브러리만 쓴다. 다른 리포트 페이지들과 같은 다크 테마.
+표준 라이브러리만 쓴다. 다른 리포트 페이지들과 같은 흰 배경 라이트 테마.
 """
 
 from __future__ import annotations
@@ -55,69 +55,67 @@ def friend_names() -> list[str]:
 WEEKDAY_KO = "월화수목금토일"
 
 PAGE_CSS = """
-:root{color-scheme:dark}
-body{margin:0;padding:28px 24px 60px;background:#0d1117;color:#d8dee9;
+:root{color-scheme:light}
+body{margin:0;padding:28px 24px 60px;background:#fff;color:#333c46;
   font-family:'Pretendard','Malgun Gothic','Apple SD Gothic Neo',sans-serif;line-height:1.7;font-size:15px}
 .wrap{max-width:900px;margin:0 auto}
-h1{font-size:21px;color:#e8edf5;margin:0 0 4px}
-.meta{color:#8b96a8;font-size:12.5px;margin-bottom:22px}
-h2{font-size:16.5px;color:#7fb4ff;margin:30px 0 10px;padding-bottom:6px;border-bottom:1px solid #223046}
+h1{font-size:21px;color:#1f2937;margin:0 0 4px}
+.meta{color:#8a94a0;font-size:12.5px;margin-bottom:22px}
+h2{font-size:16.5px;color:#2b5f8a;margin:30px 0 10px;padding-bottom:6px;border-bottom:1px solid #e3e8ee}
 table{width:100%;border-collapse:collapse;font-size:14px}
-th,td{padding:8px 10px;border-bottom:1px solid #1c2534;text-align:left;vertical-align:top}
-th{color:#8b96a8;font-weight:600;font-size:12.5px}
-tr.today td{background:#14202f}
+th,td{padding:8px 10px;border-bottom:1px solid #edf0f4;text-align:left;vertical-align:top}
+th{color:#8a94a0;font-weight:600;font-size:12.5px}
+tr.today td{background:#eef5ff}
 .badge{display:inline-block;padding:1px 8px;border-radius:20px;font-size:12px;
-  background:#1d2a3d;color:#9fc1ff;border:1px solid #2c3a52;white-space:nowrap}
-.badge.review{background:#3d2626;color:#ffb3b3;border-color:#5a3535}
-.src{color:#8b96a8;font-size:12.5px}
-.name{font-weight:700;color:#e8edf5;white-space:nowrap}
-.empty{color:#8b96a8;padding:18px 0}
+  background:#e8f0fe;color:#2b5f8a;border:1px solid #c9dcf5;white-space:nowrap}
+.badge.review{background:#fdecec;color:#a43c31;border-color:#f2cfcb}
+.src{color:#8a94a0;font-size:12.5px}
+.name{font-weight:700;color:#1f2937;white-space:nowrap}
+.empty{color:#8a94a0;padding:18px 0}
 .cal{width:100%;border-collapse:collapse;table-layout:fixed;margin:6px 0 26px;font-size:12.5px}
-.cal th{padding:6px 4px;border-bottom:1px solid #223046;color:#8b96a8;font-size:12px;text-align:center}
-.cal th.sun,.cal td.sun .d{color:#ff8f8f}
-.cal th.sat,.cal td.sat .d{color:#7fb4ff}
-.cal td{border:1px solid #1c2534;vertical-align:top;padding:4px 5px;height:56px}
-.cal td.blank{background:#0a0e14;border-color:#141b26}
+.cal th{padding:6px 4px;border-bottom:1px solid #e3e8ee;color:#8a94a0;font-size:12px;text-align:center}
+.cal th.sun,.cal td.sun .d{color:#d05656}
+.cal th.sat,.cal td.sat .d{color:#2b6cb0}
+.cal td{border:1px solid #e8ecf1;vertical-align:top;padding:4px 5px;height:56px}
+.cal td.blank{background:#f4f6f9;border-color:#eef1f5}
 .cal td[data-date]{cursor:pointer}
-.cal td[data-date]:hover{background:#121a27}
-.cal td.today{background:#14202f;box-shadow:inset 0 0 0 1px #2c3a52}
-.cal .d{color:#8b96a8;font-size:11.5px;margin-bottom:3px}
-.chip{display:block;margin:2px 0;padding:1px 5px;border-radius:6px;background:#1d2a3d;
-  color:#cfe0ff;border:1px solid #2c3a52;font-size:11.5px;white-space:nowrap;
+.cal td[data-date]:hover{background:#f0f5fb}
+.cal td.today{background:#eaf2ff;box-shadow:inset 0 0 0 1px #bcd4f0}
+.cal .d{color:#8a94a0;font-size:11.5px;margin-bottom:3px}
+.chip{display:block;margin:2px 0;padding:1px 5px;border-radius:6px;background:#e8f0fe;
+  color:#2b5f8a;border:1px solid #c9dcf5;font-size:11.5px;white-space:nowrap;
   overflow:hidden;text-overflow:ellipsis}
-.chip.trip{background:#3a2f1d;color:#ffd9a0;border-color:#55452c}
-.cal-title{font-size:15px;color:#e8edf5;margin:4px 0 6px;font-weight:700}
+.chip.trip{background:#fff3e0;color:#a05a1f;border-color:#f0d9b5}
+.cal-title{font-size:15px;color:#1f2937;margin:4px 0 6px;font-weight:700}
 #cal-strip{display:grid;grid-template-columns:1fr 1fr;gap:18px;align-items:start}
 @media(max-width:700px){#cal-strip{grid-template-columns:1fr}}
 .cal-month[hidden]{display:none}
 .cal-nav{display:flex;align-items:center;gap:12px;margin:10px 0 8px}
-.cal-nav button{background:#161d29;color:#cfe0ff;border:1px solid #2c3a52;border-radius:8px;
+.cal-nav button{background:#fff;color:#2b5f8a;border:1px solid #d4dbe3;border-radius:8px;
   padding:5px 14px;font-size:14px;cursor:pointer}
-.cal-nav button:hover{border-color:#3d5175}
+.cal-nav button:hover{border-color:#9fb6cc;background:#f5f8fb}
 .cal-nav button:disabled{opacity:.35;cursor:default}
-#cal-label{font-size:14.5px;color:#e8edf5;font-weight:700;min-width:180px;text-align:center}
+#cal-label{font-size:14.5px;color:#1f2937;font-weight:700;min-width:180px;text-align:center}
 .addform{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:10px 0 6px}
-.addform input,.addform select{background:#161d29;color:#d8dee9;border:1px solid #2c3a52;
+.addform input,.addform select{background:#fff;color:#333c46;border:1px solid #cfd6de;
   border-radius:8px;padding:7px 10px;font-size:13.5px;font-family:inherit}
-.addform input[type=date]{color-scheme:dark}
-.addform button{background:#1d2a3d;color:#cfe0ff;border:1px solid #2c3a52;border-radius:8px;
+.addform button{background:#e8f0fe;color:#2b5f8a;border:1px solid #c9dcf5;border-radius:8px;
   padding:7px 14px;font-size:13.5px;cursor:pointer}
-.addform button:hover{border-color:#3d5175}
+.addform button:hover{border-color:#9fb6cc}
 .addform button:disabled{opacity:.5;cursor:default}
-#add-status{color:#8b96a8;font-size:12.5px;margin:4px 0 0}
-.form-hint{color:#8b96a8;font-size:12.5px;margin:2px 0 0}
-.badge.trip{background:#3a2f1d;color:#ffd9a0;border-color:#55452c}
+#add-status{color:#8a94a0;font-size:12.5px;margin:4px 0 0}
+.form-hint{color:#8a94a0;font-size:12.5px;margin:2px 0 0}
+.badge.trip{background:#fff3e0;color:#a05a1f;border-color:#f0d9b5}
 tr.pending td{opacity:.75}
 tr.pending .badge,.chip.pending{border-style:dashed}
-#chip-pop{position:fixed;z-index:50;max-width:320px;background:#151d2b;color:#d8dee9;
-  border:1px solid #35486a;border-radius:12px;padding:12px 14px;font-size:13px;line-height:1.6;
-  box-shadow:0 10px 30px rgba(0,0,0,.55)}
-#chip-pop .t{font-weight:700;color:#e8edf5;font-size:14px;margin-bottom:2px}
-#chip-pop .quote{color:#8b96a8;font-size:12.5px;margin-top:6px;border-left:2px solid #2c3a52;
+#chip-pop{position:fixed;z-index:50;max-width:320px;background:#fff;color:#333c46;
+  border:1px solid #d4dbe3;border-radius:12px;padding:12px 14px;font-size:13px;line-height:1.6;
+  box-shadow:0 10px 30px rgba(30,41,59,.18)}
+#chip-pop .t{font-weight:700;color:#1f2937;font-size:14px;margin-bottom:2px}
+#chip-pop .quote{color:#6b7683;font-size:12.5px;margin-top:6px;border-left:2px solid #d4dbe3;
   padding-left:8px;word-break:break-all}
-#chip-pop .meta2{color:#8b96a8;font-size:11.5px;margin-top:6px}
-#chip-pop .close{position:absolute;top:6px;right:9px;color:#8b96a8;cursor:pointer;font-size:14px}
-
+#chip-pop .meta2{color:#8a94a0;font-size:11.5px;margin-top:6px}
+#chip-pop .close{position:absolute;top:6px;right:9px;color:#8a94a0;cursor:pointer;font-size:14px}
 """
 
 # 달력 칩 색 구분: 출장·샵투어 계열은 주황, 나머지(휴가·연차·반차…)는 파랑.
