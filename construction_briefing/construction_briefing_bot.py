@@ -640,7 +640,7 @@ def write_archive(md_report: str, now: datetime, generator: str | None = None) -
     date_str = now.strftime("%Y-%m-%d")
     gen_label = generator or f"Gemini({LAST_USED_MODEL})"
     body = report_to_page_html(md_report)
-    page = f"""<!DOCTYPE html><html lang="ko"><head><meta charset="utf-8">
+    page = f"""<!DOCTYPE html><html lang="ko"><head><meta charset="utf-8"><base target="_blank">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>글로벌 건설기계 브리핑 {date_str}</title><style>{PAGE_CSS}</style></head>
 <body><div class="wrap">

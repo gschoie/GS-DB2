@@ -7,7 +7,9 @@ name: 액티브 ETF 매매동향
 on:
   workflow_dispatch:
   schedule:
-    - cron: "17 0-12 * * 1-5"  # UTC 00~12시 매시 17분 = KST 09~21시, 월~금 (정각은 GitHub 혼잡으로 자주 스킵됨)
+    - cron: "17 0-7 * * 1-5"   # UTC 00~07시 매시 17분 = KST 09~16시(장중~마감 직후), 월~금
+    # 정시성은 GAS 시계(gas/dispatch_proxy.gs SCHEDULE)가 담당 — 이 크론은 안전망이다.
+    # 시각을 바꿀 때는 GAS SCHEDULE과 반드시 같이 고칠 것.
 
 permissions:
   contents: write
@@ -17,7 +19,35 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  # GAS 시계(gas/dispatch_proxy.gs의 tick)가 정시에 workflow_dispatch로 쏘고,
+  # GitHub 크론은 안전망으로 남긴다. 크론이 뒤늦게 돌 때 같은 일을 두 번 하지
+  # 않도록, 최근 45분 내에 dispatch 실행이 이미 있었으면 이 예약 실행은 건너뛴다.
+  # (매시 · 간격 60분) 수동 버튼(dispatch)은 언제나 그대로 실행된다.
+  guard:
+    runs-on: ubuntu-latest
+    permissions:
+      actions: read
+    outputs:
+      skip: ${{ steps.check.outputs.skip }}
+    steps:
+      - name: 최근 dispatch 실행 확인
+        id: check
+        if: github.event_name == 'schedule'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          since=$(date -u -d '-45 minutes' +%Y-%m-%dT%H:%M)
+          n=$(gh api "repos/${{ github.repository }}/actions/workflows/etf-holdings.yml/runs?event=workflow_dispatch&created=%3E${since}" \
+                --jq '[.workflow_runs[] | select(.conclusion=="success" or .status=="in_progress" or .status=="queued")] | length' || echo 0)
+          echo "최근 45분 내 dispatch 실행 ${n:-0}건"
+          if [ "${n:-0}" -gt 0 ]; then
+            echo "::notice::GAS가 이미 실행했습니다 — 이 예약 실행은 건너뜁니다"
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+          fi
+
   track:
+    needs: guard
+    if: ${{ always() && needs.guard.outputs.skip != 'true' }}
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:

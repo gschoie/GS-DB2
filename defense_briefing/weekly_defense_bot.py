@@ -217,7 +217,7 @@ def write_archive(md_report: str, period_label: str, now: datetime) -> None:
     WEEKLY_DIR.mkdir(parents=True, exist_ok=True)
     date_str = now.strftime("%Y-%m-%d")
     body = report_to_page_html(md_report)
-    page = f"""<!DOCTYPE html><html lang="ko"><head><meta charset="utf-8">
+    page = f"""<!DOCTYPE html><html lang="ko"><head><meta charset="utf-8"><base target="_blank">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>글로벌 방산 주간정리 {date_str}</title><style>{PAGE_CSS}</style></head>
 <body><div class="wrap">
@@ -263,7 +263,7 @@ hr{border:none;border-top:2px solid #999;margin:28px 0}
   font-size:12.5px;color:#444;margin-bottom:18px}
 @media print{.note{display:none}}
 """
-    page = f"""<!DOCTYPE html><html lang="ko"><head><meta charset="utf-8">
+    page = f"""<!DOCTYPE html><html lang="ko"><head><meta charset="utf-8"><base target="_blank">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>글로벌 방산 월간 정리 (4주 묶음)</title><style>{light_css}</style></head>
 <body><div class="wrap">

@@ -205,7 +205,7 @@ def write_archive(date_str: str) -> None:
     md_path = ARCHIVE_DIR / f"{date_str}.md"
     md_report = md_path.read_text(encoding="utf-8")
     body = report_to_page_html(md_report)
-    page = f"""<!DOCTYPE html><html lang="ko"><head><meta charset="utf-8">
+    page = f"""<!DOCTYPE html><html lang="ko"><head><meta charset="utf-8"><base target="_blank">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Claude 방산 브리핑 {date_str}</title><style>{PAGE_CSS}</style></head>
 <body><div class="wrap">

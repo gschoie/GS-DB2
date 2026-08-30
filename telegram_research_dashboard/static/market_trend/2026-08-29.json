@@ -1,0 +1,942 @@
+{
+ "date": "2026-08-29",
+ "meta": {
+  "window": "08-28 06:00~08-29 06:00 KST",
+  "engine": "Gemini(gemini-flash-lite-latest)",
+  "generated_at": "2026-08-29T12:16+09:00"
+ },
+ "stats": {
+  "channels": 96,
+  "messages": 1091,
+  "groups": 995
+ },
+ "one_liner": "엔비디아 등 기술주 어닝 서프라이즈와 잭슨홀 케빈 워시 연준 의장의 매파적 발언 경계감 속, 대형주 유상증자와 베네수엘라 이슈 등이 맞물린 혼조세",
+ "themes": [
+  {
+   "name": "잭슨홀 미팅과 케빈 워시 연준 의장 발언 경계",
+   "narrative": "엔비디아와 세일즈포스 등 빅테크의 강력한 실적 발표로 증시가 지지받았으나, 밤 11시 예정된 잭슨홀 심포지엄에서 케빈 워시 연준 의장의 매파적 발언 가능성과 금융여건 제약성 평가에 대한 경계감이 커지고 있다.",
+   "status": "new",
+   "strength": 5,
+   "keywords": [
+    "매파적",
+    "연준 의장",
+    "워시",
+    "의장 잭슨홀",
+    "워시 연준",
+    "금융여건",
+    "물가 안정"
+   ],
+   "evidence": [
+    {
+     "channel": "한화투자증권 경제 임혜윤",
+     "quote": "11월과 내년 2월에 각각 25bp 인상할 것으로 예상하며 이번 금통위를 ‘단기적으로 비둘기파적, 중장기적으로 매파적’이라고 평가"
+    },
+    {
+     "channel": "키움증권 리서치센터",
+     "quote": "이제 주식시장은 잭슨홀 미팅(28일, 밤 11시)에서 케빈 워시 의장의 연설에 집중할 예정입니다."
+    },
+    {
+     "channel": "미국 주식 인사이더 🇺🇸",
+     "quote": "연준 의장 케빈 워시는 잭슨홀 연설에서 최근 인플레이션 지표가 예상보다 개선됐지만 기조적 물가 흐름이 의미 있게 바뀌었다고 보기 어렵다며..."
+    }
+   ]
+  },
+  {
+   "name": "베네수엘라 OPEC 탈퇴 및 정유·에너지 공급망 다변화",
+   "narrative": "베네수엘라의 OPEC 탈퇴 검토 및 미국 기업의 대형 유전 지분 확보 추진 보도가 나오면서 정유주 전반에 공급망 다변화 기대감이 유입되고 S-Oil 등이 강세를 보였다.",
+   "status": "new",
+   "strength": 4,
+   "keywords": [
+    "베네수엘라",
+    "정유",
+    "S-Oil",
+    "유전"
+   ],
+   "evidence": [
+    {
+     "channel": "하나 중국/신흥국 전략 김경환",
+     "quote": "베네수엘라, OPEC 탈퇴 가능성 검토"
+    },
+    {
+     "channel": "신한 리서치",
+     "quote": "#특징업종: 1)정유: 베네수엘라 OPEC 탈퇴 검토에 공급망 다변화 기대(S-Oil +9.1%, GS +4.9%)"
+    }
+   ]
+  },
+  {
+   "name": "삼성바이오로직스 대규모 유상증자 여파와 대형주 악재",
+   "narrative": "삼성바이오로직스가 스위스 바이오 기업 인수를 위해 약 3조 원 규모의 유상증자를 결정하면서 주가가 급락했고, 국내 지수 전반에 하방 압력을 가중시켰다.",
+   "status": "new",
+   "strength": 4,
+   "keywords": [
+    "삼성바이오로직스",
+    "유상증자"
+   ],
+   "evidence": [
+    {
+     "channel": "빠르고 정확한 주식정보방",
+     "quote": "📌 삼성바이오로직스(시가총액: 73조 7,878억) #A207940 📁 주요사항보고서(유상증자결정)"
+    },
+    {
+     "channel": "epic AI - 투자 어시스턴트",
+     "quote": "삼성바이오로직스(-6.78%, 1,486,000원)도 스위스 바이오 기업 인수를 위한 약 3조 원 규모의 유상증자 결정 여파로 급락하며 하방 압력을 가중시켰습니다."
+    }
+   ]
+  },
+  {
+   "name": "글로벌 AI·반도체 실적 호조 및 소부장·전력기기 모멘텀",
+   "narrative": "엔비디아, 마벨, 크라우드스트라이크 등의 어닝 서프라이즈와 AI 인프라 투자 확대 기조가 이어지는 가운데, 국내 전력기기와 반도체 소부장 기업들의 수주 및 실적 기대감이 지속되고 있다.",
+   "status": "ongoing",
+   "strength": 4,
+   "keywords": [
+    "어닝",
+    "Marvell",
+    "CrowdStrike",
+    "OPM",
+    "강세 지속"
+   ],
+   "evidence": [
+    {
+     "channel": "키움증권 리서치센터",
+     "quote": "엔비디아(+8.7%), 세일즈포스(+22.6%)의 어닝 서프라이즈에 따른 AI 모멘텀이 증시 상승은 견인했네요."
+    },
+    {
+     "channel": "여의도스토리 Ver2.0",
+     "quote": "- 2Q26 매출액은 351억원(YoY +29.6%), 영업이익은 84억원(YoY +163.1%, OPM +23.9%)을 기록하며, 기존 추정치를 크게 상회."
+    }
+   ]
+  }
+ ],
+ "community_mood": {
+  "score": -25,
+  "summary": "미국 증시 호조와 별개로 삼성전자 급락 및 야간선물(야선) 변동성, 잭슨홀 경계감으로 인해 국내 증시 투자자들 사이에서는 불안감과 자조 섞인 반응이 교차하고 있다.",
+  "hot_stocks": [
+   {
+    "name": "삼성바이오로직스",
+    "score": -70,
+    "reason": "약 3조 원 규모의 대규모 유상증자 결정 여파로 종토방 등에서 우려와 매물 출하가 집중됨."
+   },
+   {
+    "name": "알테오젠",
+    "score": 60,
+    "reason": "키트루다SC 마일스톤 유입 기대감과 잭슨홀 미팅 관련 내용으로 투자자들의 관심이 높음."
+   },
+   {
+    "name": "가온전선",
+    "score": 50,
+    "reason": "네이버 종토방에서 급증 키워드 및 높은 글 수를 기록하며 단기 관심주로 부각됨."
+   },
+   {
+    "name": "두산에너빌리티",
+    "score": -20,
+    "reason": "네팔 관련 사고 소식과 금전적 피해 우려가 커뮤니티에서 공유됨."
+   }
+  ]
+ },
+ "signals": {
+  "spikes": [
+   {
+    "term": "매파적",
+    "count": 20,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "베네수엘라",
+    "count": 18,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "정유",
+    "count": 16,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "삼성바이오로직스",
+    "count": 16,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "연준 의장",
+    "count": 44,
+    "burst": 12.575038457594093,
+    "base_daily": 3.4,
+    "new": false
+   },
+   {
+    "term": "워시",
+    "count": 61,
+    "burst": 8.135668820291936,
+    "base_daily": 7.4,
+    "new": false
+   },
+   {
+    "term": "의장 잭슨홀",
+    "count": 21,
+    "burst": 42.01206030150754,
+    "base_daily": 0.4,
+    "new": false
+   },
+   {
+    "term": "S-Oil",
+    "count": 14,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "유상증자",
+    "count": 31,
+    "burst": 20.672601100741804,
+    "base_daily": 1.4,
+    "new": false
+   },
+   {
+    "term": "등과",
+    "count": 13,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "강화하",
+    "count": 12,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "의장 연설",
+    "count": 12,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "어닝",
+    "count": 12,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "워시 연준",
+    "count": 35,
+    "burst": 13.24704604101589,
+    "base_daily": 2.6,
+    "new": false
+   },
+   {
+    "term": "OPM",
+    "count": 11,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "Marvell",
+    "count": 11,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "유전",
+    "count": 11,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "CrowdStrike",
+    "count": 11,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "금융여건",
+    "count": 11,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "NASA",
+    "count": 11,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "서로",
+    "count": 11,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "개월간",
+    "count": 11,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "강세 지속",
+    "count": 11,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "인플레",
+    "count": 11,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "물가 안정",
+    "count": 10,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   }
+  ],
+  "top_posts": [
+   {
+    "channels": 5,
+    "channel": "빠르고 정확한 주식정보방",
+    "head": "📌 삼성바이오로직스(시가총액: 73조 7,878억) #A207940 📁 주요사항보고서(유상증자결정) 2026.08.28 07:52:44 (현재가 : 1,594,000원, -0.31%) 증자방식 : 주주배정후실권주일반공모 증자비율 : 0.05주/1주당 발표일자 : 2026.08.28 기준일자 : 2026-10-06 청약일자…",
+    "url": "https://t.me/fastest_info1/26182",
+    "time_kst": "08-28 07:56"
+   },
+   {
+    "channels": 5,
+    "channel": "서화백의 그림놀이 🚀",
+    "head": "이 타이밍에 골삭에서 한국 전력기기에 대해 이닛 • 효성중공업 Buy, 목표주가 4,160,000원, 현재가 2,797,000원 대비 상승여력 48.7% • HD현대일렉트릭 Neutral, 목표주가 850,000원, 현재가 733,000원 대비 상승여력 16.0% • LS일렉트릭 Neutral, 목표주가 230,000원,…",
+    "url": "https://t.me/easobi/16535",
+    "time_kst": "08-28 07:23"
+   },
+   {
+    "channels": 4,
+    "channel": "키움증권 리서치센터",
+    "head": "[8/28, 장 시작 전 생각: 심리적인 모멘텀, 키움 한지영] - 다우 +0.2%, S&P500 +0.7%, 나스닥 +1.6% - 엔비디아 +8.7%, 세일즈포스 +22.6%, 마이크론 -0.3% - 미 10년물 금리 4.67%, 미 30년물 금리 5.19%, WTI 83.6달러 1. 미국 증시는 강세로 마감했습니다.…",
+    "url": "https://t.me/KiwoomResearch/23919",
+    "time_kst": "08-28 07:40"
+   },
+   {
+    "channels": 4,
+    "channel": "여의도스토리 Ver2.0-习近平是个狗东西",
+    "head": "[현대차증권 전기전자/디스플레이 김종배] 오킨스전자 BUY/TP 28,000(유지/유지) CLT 확장 스토리의 최대 수혜주 ■ 투자포인트 및 결론 - CLT 장비의 빠른 확대 기대감과 더불어 동사의 BI 소켓 및 컨넥터 역시 눈높이가 올라갈 수밖에 없는 상황. CLT 장비는 높은 Para 수와 Burn-in Test, L…",
+    "url": "https://t.me/YeouidoStory2/116678",
+    "time_kst": "08-28 08:41"
+   },
+   {
+    "channels": 4,
+    "channel": "AWAKE - 실시간 주식 공시 정리채널",
+    "head": "2026.08.28 14:39:33 기업명: 한화엔진(시가총액: 3조 9,596억) A082740 보고서명: 단일판매ㆍ공급계약체결 계약상대 : 한화오션(주) 계약내용 : ( 기타 판매ㆍ공급계약 ) 선박용 엔진 공급지역 : 국내 계약금액 : 1,289억 계약시작 : 2026-08-28 계약종료 : 2029-10-08 계약기…",
+    "url": "https://t.me/darthacking/152238",
+    "time_kst": "08-28 14:39"
+   },
+   {
+    "channels": 3,
+    "channel": "키움증권 해외선물 톡톡",
+    "head": "제목 : 日언론 \"韓, 반도체 대호황에 들떠 있을 때 아냐\" 진단 *이데일리FX* - 韓반도체 기업, 제조 장비 60%는 수입 의존 - 역대급 이익 내도 투자·고용 확대에 한계 - 반도체 호황 양극화 문제 더 키울 수도 - 호황 온기 확산 중요한 시점…韓 갈림길 서 [이데일리 임유경 기자] 일본 아사히신문이 한국 경제에…",
+    "url": "https://t.me/kwtok/414500",
+    "time_kst": "08-28 12:42"
+   },
+   {
+    "channels": 3,
+    "channel": "가치투자클럽",
+    "head": "✅ 국민성장펀드 17.9조 어디로 갔나 국민성장펀드의 올해 승인·결성액이 17조9000억원으로 늘었습니다. 연간 계획 30조원의 59.7%입니다. 전체 목표의 절반을 넘어섰지만 자금 공급 방식별로 속도 차이가 큽니다. 직접투자는 연간 목표의 94%를 채운 반면 간접투자는 23% 수준입니다. 이번 추가 지원으로 투자 영역도…",
+    "url": "https://t.me/corevalue/46752",
+    "time_kst": "08-28 14:12"
+   },
+   {
+    "channels": 3,
+    "channel": "우주방산AI로봇 아카이브",
+    "head": "웨스팅하우스 ‘지분 인수’ 3大 조건[포럼] 1. 배경 및 제안 배경 글로벌 원전 시장 지형: 탄소중립 및 AI 데이터센터 전력 수요 폭증으로 '원전 르네상스'가 도래했으나, 글로벌 수출 시장의 70% 이상을 러시아·중국이 장악한 상황입니다. 미국의 제안: 원천기술은 있지만 시공 공급망이 와해된 미국 정부가 세계 최고 수…",
+    "url": "https://t.me/defence_24/6064",
+    "time_kst": "08-28 11:36"
+   },
+   {
+    "channels": 3,
+    "channel": "[ IT는 SK ]",
+    "head": "최근 배터리 알박(알루미늄박) 쇼티지 의견 관련해서는 아래 노트 참고 부탁드립니다. ------------------------------------ 배터리 (알루미늄박) - LFP·ESS 증산? 코팅알박이 부족 [ SK증권 박형우, 정영환 ] IT하드웨어, 배터리 ▶️ 결론 - 27년, 28년 한국산 알박 쇼티지 가능성…",
+    "url": "https://t.me/skitteam/4547",
+    "time_kst": "08-28 10:18"
+   },
+   {
+    "channels": 3,
+    "channel": "우주방산AI로봇 아카이브",
+    "head": "홀텍, SMR-300 실증 착수…현대건설, 美 원전 인허가 연동 - 실제 원자로 3분의 1 크기 시험시설 구축으로 열수력 데이터 확보 - 2027년 설비 헌정 뒤 가압경수형 SMR-300 출력 증강 시험 착수 - 현대건설 참여 미시간 파이오니어 1·2호기 2030년대 초 가동 목표 미국 홀텍 인터내셔널이 2026년 8월…",
+    "url": "https://t.me/defence_24/6062",
+    "time_kst": "08-28 08:36"
+   },
+   {
+    "channels": 2,
+    "channel": "다올투자증권 리서치센터",
+    "head": "#Marvell FY2Q27 컨퍼런스콜 주요 Comment 및 Q&A 요약 _다올 반도체/소부장 고영민 ▶️ 주요 Comment » 데이터센터 - 당분기 +18% QoQ, +46% YoY로 성장 가속화 (전분기 +11% QoQ, +27% YoY) - 3Q Data Center 매출은 +20% 이상 QoQ, 약 +75% Y…",
+    "url": "https://t.me/daolresearch/14978",
+    "time_kst": "08-28 07:16"
+   },
+   {
+    "channels": 2,
+    "channel": "[신한 리서치본부] IT(반도체/전기전자/디스플레이)",
+    "head": "[신한투자증권 IT팀 오강호, 김형태, 박현우, 송혜수, 김예성] 8/28(금) 🕗Daily IT 예습하기 ✅ 반도체/장비 ▶️ 엔비디아 \"AI 인프라 호황에 내년 매출 70% 이상 성장 전망\" (ZDNET) https://alie.kr/5fFF6WS ▶️ 와이씨, 삼성전자와 622억원 웨이퍼 테스터 공급계약…작년 매출…",
+    "url": "https://t.me/c/1355104422/7365",
+    "time_kst": "08-28 07:32"
+   },
+   {
+    "channels": 2,
+    "channel": "서화백의 AI놀이🚀",
+    "head": "📝 텔레그램 심층 분석 Report (07시 06분) 기준 🌡️ 센티먼트 환호 (+75) 💡 요약 NVIDIA의 기록적인 실적 발표와 강력한 AI 수요 전망이 시장 전반의 기술주 랠리를 주도하며 긍정적인 분위기를 형성하고 있습니다. 전반적인 기업 실적이 양호하며, 주요 기술 기업들의 주가 상승이 두드러집니다. 🗣️ Top…",
+    "url": "https://t.me/easobi_ai/19910",
+    "time_kst": "08-28 07:06"
+   },
+   {
+    "channels": 2,
+    "channel": "키움증권 미국주식 톡톡",
+    "head": "[키움 미국전략/주식 김승혁] 🌏US Daily (8/28) (8/27 종가기준) - 주요 지수 수익률 S&P500 7,730.99 / 0.72% NASDAQ 종합 26,541.35 / 1.57% 다우산업 53,569.44 / 0.20% 러셀2000 3,014.34 / 0.28% 필라델피아 반도체 11,882.17 / 2…",
+    "url": "https://t.me/kwusa/60545",
+    "time_kst": "08-28 07:27"
+   },
+   {
+    "channels": 2,
+    "channel": "서화백의 AI놀이🚀",
+    "head": "2026년 8월 27일 글로벌 마감 시황 브리핑 📈📉 미국 증시 3대 지수 요약 및 시황 본문 미국 증시는 견조한 기술 기업들의 실적 발표에 힘입어 주요 지수들이 상승 마감하며 한 주를 긍정적으로 전환했습니다. 특히 나스닥 종합 지수는 1.57% 상승하며 가장 큰 폭의 오름세를 기록했으며, S&P 500 지수는 0.72%…",
+    "url": "https://t.me/easobi_ai/19907",
+    "time_kst": "08-28 06:30"
+   }
+  ]
+ },
+ "community": {
+  "source": "네이버 종목토론실",
+  "universe": 40,
+  "posts": 2771,
+  "search_top": [
+   {
+    "code": "005930",
+    "name": "삼성전자",
+    "rank": 1
+   },
+   {
+    "code": "000660",
+    "name": "SK하이닉스",
+    "rank": 2
+   },
+   {
+    "code": "034020",
+    "name": "두산에너빌리티",
+    "rank": 3
+   },
+   {
+    "code": "009150",
+    "name": "삼성전기",
+    "rank": 4
+   },
+   {
+    "code": "006400",
+    "name": "삼성SDI",
+    "rank": 5
+   },
+   {
+    "code": "005380",
+    "name": "현대차",
+    "rank": 6
+   },
+   {
+    "code": "035420",
+    "name": "NAVER",
+    "rank": 7
+   },
+   {
+    "code": "196170",
+    "name": "알테오젠",
+    "rank": 8
+   },
+   {
+    "code": "002990",
+    "name": "금호건설",
+    "rank": 9
+   },
+   {
+    "code": "066570",
+    "name": "LG전자",
+    "rank": 10
+   }
+  ],
+  "hot_stocks": [
+   {
+    "code": "000500",
+    "name": "가온전선",
+    "posts": 212,
+    "capped": true,
+    "burst": 99.0,
+    "base_daily": 0.0
+   },
+   {
+    "code": "207940",
+    "name": "삼성바이오로직스",
+    "posts": 140,
+    "capped": true,
+    "burst": 98.0,
+    "base_daily": 1.4
+   },
+   {
+    "code": "373220",
+    "name": "LG에너지솔루션",
+    "posts": 35,
+    "capped": false,
+    "burst": 70.0,
+    "base_daily": 0.0
+   },
+   {
+    "code": "001210",
+    "name": "금호전기",
+    "posts": 145,
+    "capped": true,
+    "burst": 13.4,
+    "base_daily": 10.9
+   },
+   {
+    "code": "007390",
+    "name": "네이처셀",
+    "posts": 151,
+    "capped": true,
+    "burst": 7.1,
+    "base_daily": 21.1
+   },
+   {
+    "code": "002990",
+    "name": "금호건설",
+    "posts": 172,
+    "capped": true,
+    "burst": 3.7,
+    "base_daily": 46.7
+   },
+   {
+    "code": "078340",
+    "name": "컴투스",
+    "posts": 124,
+    "capped": true,
+    "burst": 2.7,
+    "base_daily": 45.9
+   },
+   {
+    "code": "047040",
+    "name": "대우건설",
+    "posts": 138,
+    "capped": true,
+    "burst": 2.4,
+    "base_daily": 57.0
+   },
+   {
+    "code": "006400",
+    "name": "삼성SDI",
+    "posts": 201,
+    "capped": true,
+    "burst": 1.7,
+    "base_daily": 119.0
+   },
+   {
+    "code": "066970",
+    "name": "엘앤에프",
+    "posts": 73,
+    "capped": false,
+    "burst": 2.5,
+    "base_daily": 29.1
+   },
+   {
+    "code": "028300",
+    "name": "HLB",
+    "posts": 125,
+    "capped": true,
+    "burst": 1.9,
+    "base_daily": 67.4
+   },
+   {
+    "code": "035420",
+    "name": "NAVER",
+    "posts": 189,
+    "capped": true,
+    "burst": 1.5,
+    "base_daily": 122.1
+   }
+  ],
+  "keywords": [
+   {
+    "term": "유증",
+    "count": 20,
+    "burst": 99.0,
+    "new": true
+   },
+   {
+    "term": "많이",
+    "count": 17,
+    "burst": 99.0,
+    "new": true
+   },
+   {
+    "term": "배당금",
+    "count": 16,
+    "burst": 99.0,
+    "new": true
+   },
+   {
+    "term": "개미",
+    "count": 16,
+    "burst": 99.0,
+    "new": true
+   },
+   {
+    "term": "역시",
+    "count": 16,
+    "burst": 99.0,
+    "new": true
+   },
+   {
+    "term": "개잡주",
+    "count": 14,
+    "burst": 99.0,
+    "new": true
+   },
+   {
+    "term": "카카오",
+    "count": 14,
+    "burst": 99.0,
+    "new": true
+   },
+   {
+    "term": "배당",
+    "count": 12,
+    "burst": 99.0,
+    "new": true
+   },
+   {
+    "term": "거래량",
+    "count": 11,
+    "burst": 99.0,
+    "new": true
+   },
+   {
+    "term": "잭슨홀",
+    "count": 11,
+    "burst": 99.0,
+    "new": true
+   },
+   {
+    "term": "넥장",
+    "count": 11,
+    "burst": 99.0,
+    "new": true
+   },
+   {
+    "term": "노조",
+    "count": 10,
+    "burst": 99.0,
+    "new": true
+   },
+   {
+    "term": "가자",
+    "count": 10,
+    "burst": 99.0,
+    "new": true
+   },
+   {
+    "term": "개인",
+    "count": 10,
+    "burst": 99.0,
+    "new": true
+   },
+   {
+    "term": "이렇게",
+    "count": 10,
+    "burst": 99.0,
+    "new": true
+   }
+  ],
+  "top_liked": [
+   {
+    "code": "034020",
+    "name": "두산에너빌리티",
+    "title": "네팔 사고와 두에빌의 금전적 피해 예...[2]",
+    "views": 2510,
+    "likes": 96,
+    "url": "https://finance.naver.com/item/board_read.naver?code=034020&nid=428638163",
+    "time_kst": "08-28 23:38"
+   },
+   {
+    "code": "010170",
+    "name": "대한광통신",
+    "title": "120일선 지지 받고 폭등[7]",
+    "views": 1806,
+    "likes": 92,
+    "url": "https://finance.naver.com/item/board_read.naver?code=010170&nid=428625457",
+    "time_kst": "08-28 16:15"
+   },
+   {
+    "code": "007390",
+    "name": "네이처셀",
+    "title": "일본 미국에서 아프리카남미까지.[15]",
+    "views": 1469,
+    "likes": 90,
+    "url": "https://finance.naver.com/item/board_read.naver?code=007390&nid=428641908",
+    "time_kst": "08-29 05:24"
+   },
+   {
+    "code": "196170",
+    "name": "알테오젠",
+    "title": "오늘 잭슨홀 미팅에서 케빈워시 발언 내용[5]",
+    "views": 2210,
+    "likes": 84,
+    "url": "https://finance.naver.com/item/board_read.naver?code=196170&nid=428638378",
+    "time_kst": "08-28 23:48"
+   },
+   {
+    "code": "196170",
+    "name": "알테오젠",
+    "title": "알테, 키트루다SC 마일스톤 1.5조  중 올해...[2]",
+    "views": 1140,
+    "likes": 79,
+    "url": "https://finance.naver.com/item/board_read.naver?code=196170&nid=428635306",
+    "time_kst": "08-28 22:03"
+   }
+  ],
+  "top_rising": [
+   {
+    "code": "007390",
+    "name": "네이처셀",
+    "title": "일본 미국에서 아프리카남미까지.[15]",
+    "views": 1469,
+    "likes": 90,
+    "url": "https://finance.naver.com/item/board_read.naver?code=007390&nid=428641908",
+    "time_kst": "08-29 05:24",
+    "views_per_hour": 214.8
+   },
+   {
+    "code": "034020",
+    "name": "두산에너빌리티",
+    "title": "네팔 사고와 두에빌의 금전적 피해 예...[2]",
+    "views": 2510,
+    "likes": 96,
+    "url": "https://finance.naver.com/item/board_read.naver?code=034020&nid=428638163",
+    "time_kst": "08-28 23:38",
+    "views_per_hour": 199.1
+   },
+   {
+    "code": "196170",
+    "name": "알테오젠",
+    "title": "오늘 잭슨홀 미팅에서 케빈워시 발언 내용[5]",
+    "views": 2210,
+    "likes": 84,
+    "url": "https://finance.naver.com/item/board_read.naver?code=196170&nid=428638378",
+    "time_kst": "08-28 23:48",
+    "views_per_hour": 177.7
+   },
+   {
+    "code": "005380",
+    "name": "현대차",
+    "title": "현대차 로봇,엔비디아 협업. 월요일 ...[5]",
+    "views": 2844,
+    "likes": 32,
+    "url": "https://finance.naver.com/item/board_read.naver?code=005380&nid=428630123",
+    "time_kst": "08-28 18:11",
+    "views_per_hour": 157.5
+   },
+   {
+    "code": "002990",
+    "name": "금호건설",
+    "title": "금호건설 호재 나왔네요. 삼성전자 공장 추가[7]",
+    "views": 2663,
+    "likes": 54,
+    "url": "https://finance.naver.com/item/board_read.naver?code=002990&nid=428629923",
+    "time_kst": "08-28 18:05",
+    "views_per_hour": 146.7
+   }
+  ]
+ },
+ "community_dc": {
+  "source": "DC인사이드",
+  "galleries": [
+   {
+    "id": "krstock",
+    "name": "국내주식갤러리",
+    "posts": 1512,
+    "capped": true,
+    "burst": 1.9,
+    "base_daily": 787.6
+   },
+   {
+    "id": "stockus",
+    "name": "해외주식갤러리",
+    "posts": 0,
+    "capped": false,
+    "burst": 0.0,
+    "base_daily": 2508.3
+   }
+  ],
+  "posts_sampled": 271,
+  "keywords": [
+   {
+    "term": "하메네",
+    "count": 13,
+    "burst": 99.0,
+    "new": true
+   },
+   {
+    "term": "반도체",
+    "count": 5,
+    "burst": 99.0,
+    "new": true
+   },
+   {
+    "term": "월에",
+    "count": 5,
+    "burst": 99.0,
+    "new": true
+   },
+   {
+    "term": "야선",
+    "count": 13,
+    "burst": 13.6,
+    "new": false
+   },
+   {
+    "term": "국장",
+    "count": 9,
+    "burst": 13.8,
+    "new": false
+   },
+   {
+    "term": "트럼프",
+    "count": 5,
+    "burst": 3.4,
+    "new": false
+   },
+   {
+    "term": "삼성전자",
+    "count": 6,
+    "burst": 2.4,
+    "new": false
+   }
+  ],
+  "top_recommended": [
+   {
+    "gallery": "해외주식갤러리",
+    "title": "난 그냥 미국에 내 인생 올인함",
+    "views": 12122,
+    "recommend": 214,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=17599164&exception_mode=recommend&page=1",
+    "time_kst": "08-28 18:34"
+   },
+   {
+    "gallery": "해외주식갤러리",
+    "title": "이건 누가만들거야 시발 ㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋ",
+    "views": 15880,
+    "recommend": 178,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=17597058&exception_mode=recommend&page=1",
+    "time_kst": "08-28 14:28"
+   },
+   {
+    "gallery": "해외주식갤러리",
+    "title": "환혁수",
+    "views": 11048,
+    "recommend": 176,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=17597659&exception_mode=recommend&page=1",
+    "time_kst": "08-28 15:28"
+   },
+   {
+    "gallery": "해외주식갤러리",
+    "title": "램혁수 애니 뭐냐 씨발ㅋㅋㅋㅋㅋㅋㅋ",
+    "views": 7836,
+    "recommend": 172,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=17604649&exception_mode=recommend&page=1",
+    "time_kst": "08-29 02:23"
+   },
+   {
+    "gallery": "해외주식갤러리",
+    "title": "반도체 개좆된 이유",
+    "views": 13559,
+    "recommend": 154,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=17599826&exception_mode=recommend&page=1",
+    "time_kst": "08-28 20:06"
+   }
+  ],
+  "top_viewed": [
+   {
+    "gallery": "국내주식갤러리",
+    "title": "램혁수 애니 개웃기노ㅋㅋㅋㅋㅋㅋㅋ",
+    "views": 3388,
+    "recommend": 34,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3362764&page=14",
+    "time_kst": "08-29 05:14"
+   },
+   {
+    "gallery": "국내주식갤러리",
+    "title": "속보) 트럼프 긴급 행정명령 서명",
+    "views": 1180,
+    "recommend": 6,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3362743&page=15",
+    "time_kst": "08-29 04:34"
+   },
+   {
+    "gallery": "국내주식갤러리",
+    "title": "야선은 왜 갑자기 4%찍은거임?",
+    "views": 1019,
+    "recommend": 3,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3362754&page=15",
+    "time_kst": "08-29 04:54"
+   },
+   {
+    "gallery": "국내주식갤러리",
+    "title": "야선 차트 존나웃기네 ㅋㅋㅋ",
+    "views": 870,
+    "recommend": 0,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3362767&page=14",
+    "time_kst": "08-29 05:18"
+   },
+   {
+    "gallery": "국내주식갤러리",
+    "title": "흠 월요일은 국장 오르겠구만",
+    "views": 763,
+    "recommend": 0,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3362731&page=15",
+    "time_kst": "08-29 04:01"
+   },
+   {
+    "gallery": "국내주식갤러리",
+    "title": "삼전샀는데 좆댔다",
+    "views": 693,
+    "recommend": 0,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3362706&page=15",
+    "time_kst": "08-29 03:33"
+   },
+   {
+    "gallery": "국내주식갤러리",
+    "title": "야선차트 딱 이거 아님?",
+    "views": 665,
+    "recommend": 2,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3362777&page=14",
+    "time_kst": "08-29 05:43"
+   },
+   {
+    "gallery": "국내주식갤러리",
+    "title": "종베단 ㅈ된거임?",
+    "views": 645,
+    "recommend": 1,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3362721&page=15",
+    "time_kst": "08-29 03:54"
+   }
+  ]
+ }
+}
