@@ -340,24 +340,25 @@ function sendThreeDayDigest() {
     `채널 ${names.length}개 · 영상 ${rows.length}건`,
     ''
   ];
-  // 채널 몇 곳 안 되니 제목 바로 밑에 링크를 붙여, 이 통만 보고도 바로 열 수 있게 한다.
   names.forEach(function (name) {
     lines.push('<b>' + escapeHtml_(name) + '</b>');
     byChannel[name].forEach(function (row) {
       lines.push('• ' + escapeHtml_(row.t || ''));
-      if (row.u) lines.push(row.u);
     });
     lines.push('');
   });
-  lines.push('↓ 다음 메시지(주소만)를 통째로 복사해 NotebookLM 소스에 붙여넣으세요');
+  lines.push('↓ 다음 메시지를 통째로 복사해 NotebookLM 소스에 붙여넣으세요');
   sendChunked_(lines, false);
 
-  // 2) 붙여넣는 판 — 주소만. 다른 글자가 섞이면 복사가 번거로워진다.
+  // 2) 붙여넣는 판 — 채널 이름 한 줄 밑에 그 채널 주소들. NotebookLM은 붙여넣은
+  // 글에서 유튜브 주소만 골라 읽으므로 채널 이름 줄이 섞여 있어도 문제없다.
   const urls = [];
   names.forEach(function (name) {
+    urls.push('[' + name + ']');
     byChannel[name].forEach(function (row) {
       if (row.u) urls.push(row.u);
     });
+    urls.push('');
   });
   sendChunked_(urls, true);
 
