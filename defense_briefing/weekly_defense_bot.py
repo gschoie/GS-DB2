@@ -74,8 +74,12 @@ def collect_daily_briefs(now: datetime, days: int = 7) -> tuple[str, list[str]]:
     return "\n\n".join(blocks), used_dates
 
 
-def fetch_weekly_prices() -> list[dict]:
-    """유니버스 전 종목의 주간(약 5거래일) 등락률·시총을 확정 조회한다."""
+def fetch_weekly_prices(asof: str | None = None) -> list[dict]:
+    """유니버스 전 종목의 주간(약 5거래일) 등락률·시총을 확정 조회한다.
+
+    asof(YYYY-MM-DD)를 주면 그 날짜까지의 종가만 사용한다 — 지난 주차 소급
+    재생성(--for-date)용. 시총은 현재값이라 소급 시 참고치로만 쓴다.
+    """
     rows = []
     for ticker, name, country, sector in UNIVERSE:
         row = {"ticker": ticker, "name": name, "country": country, "sector": sector,
@@ -83,8 +87,11 @@ def fetch_weekly_prices() -> list[dict]:
         for attempt in range(2):
             try:
                 t = yf.Ticker(ticker)
-                hist = t.history(period="15d", interval="1d", auto_adjust=False)
+                period = "40d" if asof else "15d"
+                hist = t.history(period=period, interval="1d", auto_adjust=False)
                 closes = hist["Close"].dropna()
+                if asof and len(closes):
+                    closes = closes[closes.index.strftime("%Y-%m-%d") <= asof]
                 if len(closes) >= 2:
                     base_idx = -6 if len(closes) >= 6 else 0
                     row["close"] = float(closes.iloc[-1])
@@ -144,9 +151,10 @@ SYSTEM_PROMPT = """당신은 글로벌 방산 섹터를 담당하는 증권사 �
 1. ## 주간 핵심 테마 — 이번 주를 관통한 테마 3~5개. 각 테마 2~3문장, 반복 이슈는 묶어서
 2. ## 계약·수주·프로그램 — 이번 주 확정·진전된 계약/수주/선정/취소를 목록으로 (국가 | 프로그램 | 업체 | 금액·수량 | 날짜). 한국 기업 관련 건은 빠짐없이. 각 행은 " | " 구분 일반 텍스트 줄로 (마크다운 표 문법 |---| 금지)
 3. ## 주간 주가 리뷰 — [확정 주간 시세표] 기준. 주간 상승·하락 상위와 그 배경을 데일리 브리핑의 뉴스로 연결. ±15% 이상은 반드시 별도 설명
-4. ## 정책·지정학 — 국방예산, 전쟁·긴장, 규제·수출승인 흐름
-5. ## 한국 방산 종합 — 한국 기업들 관련 한 주 소식 종합과 수주 파이프라인 관점의 평가
-6. ## 다음 주 관전 포인트 — 데일리 브리핑에서 예고된 일정·이벤트 기반 3~5개 (모음에 근거 없는 일정 창작 금지)
+4. ## 섹터별 정리 — 일간 브리핑과 같은 5개 하위 섹터로 구분: ### 항공우주 / ### 지상무기 / ### 미사일·방공 / ### 해군·조선 / ### 전자·센서·C4ISR. 각 섹터에 이번 주 관련 사건·계약·주가 흐름을 불릿 2~5개로 정리하고, 소식이 없는 섹터는 "- 특이사항 없음." 한 줄로
+5. ## 정책·지정학 — 국방예산, 전쟁·긴장, 규제·수출승인 흐름
+6. ## 한국 방산 종합 — 한국 기업들 관련 한 주 소식 종합과 수주 파이프라인 관점의 평가
+7. ## 다음 주 관전 포인트 — 데일리 브리핑에서 예고된 일정·이벤트 기반 3~5개 (모음에 근거 없는 일정 창작 금지)
 
 굵은 강조는 **텍스트**, 링크는 [매체명](URL) 마크다운. 마크다운 표(|---|)와 HTML 태그 금지."""
 
@@ -364,16 +372,23 @@ else fr.srcdoc='<body style="background:#0d1117;color:#8b96a8;font-family:sans-s
     print(f"[인덱스] defense_weekly_report.html 갱신 (누적 {len(dates)}주)")
 
 
-def main() -> None:
-    now = datetime.now(KST)
+def main(for_date: str | None = None) -> None:
+    """for_date(YYYY-MM-DD)를 주면 그 날짜 기준으로 지난 주차를 소급 재생성한다.
+    소급 생성 시 텔레그램은 보내지 않는다 (지난 주 정리 재발송 방지)."""
+    if for_date:
+        now = datetime.strptime(for_date, "%Y-%m-%d").replace(
+            hour=11, minute=50, tzinfo=KST)
+    else:
+        now = datetime.now(KST)
     period_label = (f"{(now - timedelta(days=6)).strftime('%m/%d')}"
                     f"~{now.strftime('%m/%d')}")
-    print(f"=== 방산 주간 정리 시작: {now:%Y-%m-%d %H:%M} KST / 기간 {period_label} / model={MODEL} ===")
+    mode = f"소급({for_date})" if for_date else "정기"
+    print(f"=== 방산 주간 정리 시작({mode}): {now:%Y-%m-%d %H:%M} KST / 기간 {period_label} / model={MODEL} ===")
     briefs_text, used_dates = collect_daily_briefs(now)
     print(f"[수집] 일간 브리핑 {len(used_dates)}일치 ({', '.join(used_dates)})")
     if len(used_dates) < 3:
         raise RuntimeError("일간 브리핑이 3일치 미만 — 주간 정리를 만들기에 부족, 중단")
-    rows = fetch_weekly_prices()
+    rows = fetch_weekly_prices(asof=for_date)
     ok = sum(1 for r in rows if r["close"] is not None)
     print(f"[주간시세] {ok}/{len(rows)} 종목 조회 성공")
     price_table = weekly_price_table_text(rows)
@@ -381,15 +396,20 @@ def main() -> None:
     write_archive(report, period_label, now)
     write_last4_bundle()
     write_index()
-    try:
-        send_weekly_telegram(report, period_label, now)
-    except Exception as exc:
-        print(f"[텔레그램] 발송 실패(아카이브는 정상): {exc}", file=sys.stderr)
+    if for_date:
+        print("[텔레그램] 소급 재생성 — 발송 생략")
+    else:
+        try:
+            send_weekly_telegram(report, period_label, now)
+        except Exception as exc:
+            print(f"[텔레그램] 발송 실패(아카이브는 정상): {exc}", file=sys.stderr)
     print("=== 완료 ===")
 
 
 if __name__ == "__main__":
     if "--init" in sys.argv:  # 인덱스만 재생성 (첫 배포용 플레이스홀더)
         write_index()
+    elif "--for-date" in sys.argv:  # 지난 토요일 주차 소급 재생성
+        main(for_date=sys.argv[sys.argv.index("--for-date") + 1])
     else:
         main()

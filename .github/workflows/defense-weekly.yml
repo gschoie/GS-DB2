@@ -5,6 +5,11 @@ name: 글로벌 방산 주간정리
 # 최근 4주 묶음(last4weeks.md/.html)도 함께 갱신 — 월간 세미나(NotebookLM) 소스.
 on:
   workflow_dispatch:
+    inputs:
+      for_date:
+        description: "소급 재생성할 토요일 날짜(YYYY-MM-DD). 비우면 오늘 기준 정기 생성"
+        required: false
+        default: ""
   schedule:
     # UTC 02:50 = KST 11:50 (토). 큐 지연 감안 시 실생성 ~12시 전후.
     - cron: "50 2 * * 6"
@@ -43,7 +48,12 @@ jobs:
           # 일간 방산 브리핑과 같은 텔레그램 채널(GS K-Defence NEWS)로 요약+링크 발송
           TELEGRAM_BOT_TOKEN: ${{ secrets.KDEF_TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.KDEF_TELEGRAM_CHAT_ID }}
-        run: python weekly_defense_bot.py
+        run: |
+          if [ -n "${{ inputs.for_date }}" ]; then
+            python weekly_defense_bot.py --for-date "${{ inputs.for_date }}"
+          else
+            python weekly_defense_bot.py
+          fi
 
       - name: 아카이브 커밋 및 푸시
         run: |
