@@ -76,6 +76,9 @@ tr.pending .badge,.chip.pending{border-style:dashed}
   border-radius:7px;padding:3px 10px;font-size:12px;cursor:pointer}
 #chip-pop .pop-acts button:hover{border-color:#9fb6cc}
 tr.removed{opacity:.35;text-decoration:line-through}
+td.c-kind .badge:not(.review){cursor:pointer}
+.kind-sel{background:#fff;color:#333c46;border:1px solid #cfd6de;border-radius:8px;
+  padding:2px 6px;font-size:12.5px;font-family:inherit}
 /* 좁은 화면: 4열 표를 카드형으로 — 셀이 세로로 짜부라지는 것 방지 */
 @media(max-width:640px){
   body{padding:18px 12px 48px}
@@ -98,11 +101,11 @@ tr.removed{opacity:.35;text-decoration:line-through}
 <body><div class="wrap">
 <h1>🏖️ 팀원 휴가 일정 체크</h1>
 <p class="meta">지정한 팀원들과의 텔레그램 1:1 대화에서 휴가·출장 보고를 자동으로 잡아 정리 ·
-갱신 2026-08-31 13:12 KST · 총 9건
+갱신 2026-08-31 14:02 KST · 총 9건
 <button id="run-btn" class="run-btn" onclick="runScan()">🔄 지금 수집</button>
 <span id="run-status"></span></p>
 <h2>다가오는 휴가/출장 (4건)</h2>
-<table id="tbl-upcoming"><thead><tr><th>이름</th><th>기간</th><th>종류</th><th>메모 · 원문</th></tr></thead><tbody><tr data-uid="5161870927:1206274"><td class="c-name name">이정우</td><td class="c-span">09/10(목) ~ 09/13(일) · 4일</td><td class="c-kind"><span class="badge">휴가</span></td><td class="c-note"><span class="acts"><button class="act" data-act="note" title="메모 수정">✏️</button><button class="act" data-act="del" title="삭제">🗑</button></span><span class="note-text">일본여행</span><div class="src">2026-08-31 12:31 · “저 10-13 일본여행을 잡아놔서 15일로... 발간 타겟해보겠습니다...”</div></td></tr><tr data-uid="1705032027:1205838"><td class="c-name name">이다연</td><td class="c-span">09/15(화) ~ 09/18(금) · 4일</td><td class="c-kind"><span class="badge">출장</span></td><td class="c-note"><span class="acts"><button class="act" data-act="note" title="메모 수정">✏️</button><button class="act" data-act="del" title="삭제">🗑</button></span><span class="note-text">카자흐스탄 출장</span><div class="src">2026-08-30 21:14 · “나: 아~ 카자흐스탄 출장은 언제~언제라궁 → 9/15화-9/18금 입니당”</div></td></tr><tr data-uid="manual:20260830210340"><td class="c-name name">김지원</td><td class="c-span">09/16(수) ~ 09/18(금) · 3일</td><td class="c-kind"><span class="badge">연차</span></td><td class="c-note"><span class="acts"><button class="act" data-act="note" title="메모 수정">✏️</button><button class="act" data-act="del" title="삭제">🗑</button></span><span class="note-text">신한지주 홍콩</span><div class="src">2026-08-30 21:03 · ✍️ 직접 기입</div></td></tr><tr data-uid="manual:20260831130025"><td class="c-name name">이정우</td><td class="c-span">10/13(화) ~ 10/15(목) · 3일</td><td class="c-kind"><span class="badge">연차</span></td><td class="c-note"><span class="acts"><button class="act" data-act="note" title="메모 수정">✏️</button><button class="act" data-act="del" title="삭제">🗑</button></span><span class="note-text">일본여행</span><div class="src">2026-08-31 13:00 · ✍️ 직접 기입</div></td></tr></tbody></table>
+<table id="tbl-upcoming"><thead><tr><th>이름</th><th>기간</th><th>종류</th><th>메모 · 원문</th></tr></thead><tbody><tr data-uid="5161870927:1206274"><td class="c-name name">이정우</td><td class="c-span">09/10(목) ~ 09/13(일) · 4일</td><td class="c-kind"><span class="badge">휴가</span></td><td class="c-note"><span class="acts"><button class="act" data-act="note" title="메모 수정">✏️</button><button class="act" data-act="del" title="삭제">🗑</button></span><span class="note-text">일본여행</span><div class="src">2026-08-31 12:31 · “저 10-13 일본여행을 잡아놔서 15일로... 발간 타겟해보겠습니다...”</div></td></tr><tr data-uid="1705032027:1205838"><td class="c-name name">이다연</td><td class="c-span">09/15(화) ~ 09/18(금) · 4일</td><td class="c-kind"><span class="badge trip">출장</span></td><td class="c-note"><span class="acts"><button class="act" data-act="note" title="메모 수정">✏️</button><button class="act" data-act="del" title="삭제">🗑</button></span><span class="note-text">카자흐스탄 출장</span><div class="src">2026-08-30 21:14 · “나: 아~ 카자흐스탄 출장은 언제~언제라궁 → 9/15화-9/18금 입니당”</div></td></tr><tr data-uid="manual:20260830210340"><td class="c-name name">김지원</td><td class="c-span">09/16(수) ~ 09/18(금) · 3일</td><td class="c-kind"><span class="badge">연차</span></td><td class="c-note"><span class="acts"><button class="act" data-act="note" title="메모 수정">✏️</button><button class="act" data-act="del" title="삭제">🗑</button></span><span class="note-text">신한지주 홍콩</span><div class="src">2026-08-30 21:03 · ✍️ 직접 기입</div></td></tr><tr data-uid="manual:20260831130025"><td class="c-name name">이정우</td><td class="c-span">10/13(화) ~ 10/15(목) · 3일</td><td class="c-kind"><span class="badge">연차</span></td><td class="c-note"><span class="acts"><button class="act" data-act="note" title="메모 수정">✏️</button><button class="act" data-act="del" title="삭제">🗑</button></span><span class="note-text">일본여행</span><div class="src">2026-08-31 13:00 · ✍️ 직접 기입</div></td></tr></tbody></table>
 <h2>📅 달력</h2>
 <p class="form-hint">날짜를 더블클릭(모바일: 두 번 탭)하면 아래 기입 폼에 시작일로 들어가고,
 이어서 다른 날을 더블클릭하면 기간이 됩니다.</p>
@@ -125,7 +128,8 @@ rebuild-page로 되돌립니다.</p>
 <p id="add-status"></p>
 <script>
 const EP="https://script.google.com/macros/s/AKfycbx3RjIjtlO2Z6fIYo2T3LhJrFg9Wp2hS7dMS3Is52-JVF1hizoCWewbQ1uM_v5sdhR2jw/exec";
-const PAGE_STAMP="2026-08-31 13:12";
+const PAGE_STAMP="2026-08-31 14:02";
+const KINDS=["연차", "반차", "오전반차", "오후반차", "휴가", "여행", "출장", "해외출장", "샵투어", "휴무", "병가", "기타"];
 
 const $id=i=>document.getElementById(i);
 function escText(t){const d=document.createElement('div');d.textContent=t==null?'':t;return d.innerHTML}
@@ -243,6 +247,31 @@ async function editNote(uid,current){
       .forEach(el=>{el.dataset.note=value.trim()});
   }
 }
+// 종류 배지 클릭 → 인라인 선택으로 교체, 고르면 저장 ('확인 필요' 배지는 제외)
+document.addEventListener('click',ev=>{
+  const badge=ev.target.closest('td.c-kind .badge:not(.review)');if(!badge)return;
+  const row=badge.closest('tr[data-uid]');if(!row||!row.dataset.uid)return;
+  const cur=badge.textContent.trim();
+  const sel=document.createElement('select');sel.className='kind-sel';
+  sel.innerHTML=[...new Set([cur,...KINDS])].map(k=>'<option'+(k===cur?' selected':'')+'>'+escText(k)+'</option>').join('');
+  badge.replaceWith(sel);sel.focus();
+  let done=false;
+  const finish=commit=>{
+    if(done)return;done=true;
+    const v=commit?sel.value:cur;
+    const nb=document.createElement('span');
+    nb.className='badge'+(isTrip(v)?' trip':'');nb.textContent=v;
+    sel.replaceWith(nb);
+    if(commit&&v!==cur){
+      sendOp({op:'kind',uid:row.dataset.uid,kind:v});
+      document.querySelectorAll('.chip[data-uid="'+CSS.escape(row.dataset.uid)+'"]').forEach(c=>{
+        c.dataset.kind=v;c.title=v+' — 눌러서 상세 보기';c.classList.toggle('trip',isTrip(v));});
+    }
+  };
+  sel.addEventListener('change',()=>finish(true));
+  sel.addEventListener('blur',()=>finish(sel.value!==cur));
+});
+
 // 표 행의 ✏️/🗑 (이벤트 위임)
 document.addEventListener('click',ev=>{
   const btn=ev.target.closest('.act');if(!btn)return;
@@ -321,7 +350,7 @@ document.addEventListener('dblclick',ev=>{
 });
 </script>
 <h2>지난 휴가/출장 (4건)</h2>
-<table id="tbl-past"><thead><tr><th>이름</th><th>기간</th><th>종류</th><th>메모 · 원문</th></tr></thead><tbody><tr data-uid="manual:20260830205128"><td class="c-name name">김혜영</td><td class="c-span">08/26(수) ~ 08/29(토) · 4일</td><td class="c-kind"><span class="badge">출장</span></td><td class="c-note"><span class="acts"><button class="act" data-act="note" title="메모 수정">✏️</button><button class="act" data-act="del" title="삭제">🗑</button></span><span class="note-text">독일 크래프톤 출장</span><div class="src">2026-08-30 20:51 · ✍️ 직접 기입</div></td></tr><tr data-uid="5460814526:1197039"><td class="c-name name">김연미</td><td class="c-span">08/18(화)</td><td class="c-kind"><span class="badge">오전반차</span></td><td class="c-note"><span class="acts"><button class="act" data-act="note" title="메모 수정">✏️</button><button class="act" data-act="del" title="삭제">🗑</button></span><span class="note-text">휴가 가기 전 오전반차</span><div class="src">2026-08-14 14:33 · “팀장님 ~~ 네이트온 드렸는데용 저 다음주화요일 오전반차라서 휴가가기 전에 다시 말씀드립니다..!! 기업팀 회의 소집하신 거랑 겹치는데,,ㅜㅜ 꼭 가야하는 휴가는 아니라서, 필요하시면 일정 조정하겠습니닷”</div></td></tr><tr data-uid="871525020:1198098"><td class="c-name name">고영민</td><td class="c-span">08/18(화)</td><td class="c-kind"><span class="badge">휴가</span></td><td class="c-note"><span class="acts"><button class="act" data-act="note" title="메모 수정">✏️</button><button class="act" data-act="del" title="삭제">🗑</button></span><span class="note-text">스튜디오 촬영</span><div class="src">2026-08-17 11:00 · “저 내일 휴가임다 스튜디오 촬영!”</div></td></tr><tr data-uid="1705032027:1195996"><td class="c-name name">이다연</td><td class="c-span">08/13(목)</td><td class="c-kind"><span class="badge">오전반차</span></td><td class="c-note"><span class="acts"><button class="act" data-act="note" title="메모 수정">✏️</button><button class="act" data-act="del" title="삭제">🗑</button></span><span class="note-text">목요일(당일) 오전반차</span><div class="src">2026-08-13 00:36 · “팀장님 늦게 말씀드려 죄송한데요... 저 목요일 (이제 오늘) 오전반차 쓰고 싶습니다”</div></td></tr></tbody></table>
+<table id="tbl-past"><thead><tr><th>이름</th><th>기간</th><th>종류</th><th>메모 · 원문</th></tr></thead><tbody><tr data-uid="manual:20260830205128"><td class="c-name name">김혜영</td><td class="c-span">08/26(수) ~ 08/29(토) · 4일</td><td class="c-kind"><span class="badge trip">출장</span></td><td class="c-note"><span class="acts"><button class="act" data-act="note" title="메모 수정">✏️</button><button class="act" data-act="del" title="삭제">🗑</button></span><span class="note-text">독일 크래프톤 출장</span><div class="src">2026-08-30 20:51 · ✍️ 직접 기입</div></td></tr><tr data-uid="5460814526:1197039"><td class="c-name name">김연미</td><td class="c-span">08/18(화)</td><td class="c-kind"><span class="badge">오전반차</span></td><td class="c-note"><span class="acts"><button class="act" data-act="note" title="메모 수정">✏️</button><button class="act" data-act="del" title="삭제">🗑</button></span><span class="note-text">휴가 가기 전 오전반차</span><div class="src">2026-08-14 14:33 · “팀장님 ~~ 네이트온 드렸는데용 저 다음주화요일 오전반차라서 휴가가기 전에 다시 말씀드립니다..!! 기업팀 회의 소집하신 거랑 겹치는데,,ㅜㅜ 꼭 가야하는 휴가는 아니라서, 필요하시면 일정 조정하겠습니닷”</div></td></tr><tr data-uid="871525020:1198098"><td class="c-name name">고영민</td><td class="c-span">08/18(화)</td><td class="c-kind"><span class="badge">휴가</span></td><td class="c-note"><span class="acts"><button class="act" data-act="note" title="메모 수정">✏️</button><button class="act" data-act="del" title="삭제">🗑</button></span><span class="note-text">스튜디오 촬영</span><div class="src">2026-08-17 11:00 · “저 내일 휴가임다 스튜디오 촬영!”</div></td></tr><tr data-uid="1705032027:1195996"><td class="c-name name">이다연</td><td class="c-span">08/13(목)</td><td class="c-kind"><span class="badge">오전반차</span></td><td class="c-note"><span class="acts"><button class="act" data-act="note" title="메모 수정">✏️</button><button class="act" data-act="del" title="삭제">🗑</button></span><span class="note-text">목요일(당일) 오전반차</span><div class="src">2026-08-13 00:36 · “팀장님 늦게 말씀드려 죄송한데요... 저 목요일 (이제 오늘) 오전반차 쓰고 싶습니다”</div></td></tr></tbody></table>
 <h2>확인 필요 — 날짜를 못 읽은 보고 (1건)</h2>
 <table><thead><tr><th>이름</th><th>기간</th><th>종류</th><th>메모 · 원문</th></tr></thead><tbody><tr data-uid="1705032027:1204638"><td class="c-name name">이다연</td><td class="c-span">날짜 미상</td><td class="c-kind"><span class="badge review">확인 필요</span></td><td class="c-note"><span class="acts"><button class="act" data-act="note" title="메모 수정">✏️</button><button class="act" data-act="del" title="삭제">🗑</button></span><span class="note-text">다음주 kt 데이터센터 투어 출장</span><div class="src">2026-08-27 17:27 · “팀장님 그리고 담주에 kt 데이터센터 투어 가는 거 잇는데
 
