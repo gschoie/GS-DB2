@@ -52,6 +52,11 @@ tr.today td{background:#eef5ff}
 .addform button:disabled{opacity:.5;cursor:default}
 #add-status{color:#8a94a0;font-size:12.5px;margin:4px 0 0}
 .form-hint{color:#8a94a0;font-size:12.5px;margin:2px 0 0}
+.run-btn{background:#e8f0fe;color:#2b5f8a;border:1px solid #c9dcf5;border-radius:8px;
+  padding:3px 10px;font-size:12.5px;cursor:pointer;margin-left:8px;vertical-align:middle}
+.run-btn:hover{border-color:#9fb6cc}
+.run-btn:disabled{opacity:.5;cursor:default}
+#run-status{font-size:12px;color:#8a94a0;margin-left:6px}
 .badge.trip{background:#fff3e0;color:#a05a1f;border-color:#f0d9b5}
 tr.pending td{opacity:.75}
 tr.pending .badge,.chip.pending{border-style:dashed}
@@ -85,7 +90,9 @@ tr.pending .badge,.chip.pending{border-style:dashed}
 <body><div class="wrap">
 <h1>🏖️ 팀원 휴가 일정 체크</h1>
 <p class="meta">지정한 팀원들과의 텔레그램 1:1 대화에서 휴가·출장 보고를 자동으로 잡아 정리 ·
-갱신 2026-08-31 13:01 KST · 총 8건</p>
+갱신 2026-08-31 13:05 KST · 총 8건
+<button id="run-btn" class="run-btn" onclick="runScan()">🔄 지금 수집</button>
+<span id="run-status"></span></p>
 <h2>다가오는 휴가 (3건)</h2>
 <table id="tbl-upcoming"><thead><tr><th>이름</th><th>기간</th><th>종류</th><th>메모 · 원문</th></tr></thead><tbody><tr><td class="c-name name">이다연</td><td class="c-span">09/15(화) ~ 09/18(금) · 4일</td><td class="c-kind"><span class="badge">출장</span></td><td class="c-note">카자흐스탄 출장<div class="src">2026-08-30 21:14 · “나: 아~ 카자흐스탄 출장은 언제~언제라궁 → 9/15화-9/18금 입니당”</div></td></tr><tr><td class="c-name name">김지원</td><td class="c-span">09/16(수) ~ 09/18(금) · 3일</td><td class="c-kind"><span class="badge">연차</span></td><td class="c-note">신한지주 홍콩<div class="src">2026-08-30 21:03 · ✍️ 직접 기입</div></td></tr><tr><td class="c-name name">이정우</td><td class="c-span">10/13(화) ~ 10/15(목) · 3일</td><td class="c-kind"><span class="badge">연차</span></td><td class="c-note">일본여행<div class="src">2026-08-31 13:00 · ✍️ 직접 기입</div></td></tr></tbody></table>
 <h2>📅 달력</h2>
@@ -110,7 +117,7 @@ rebuild-page로 되돌립니다.</p>
 <p id="add-status"></p>
 <script>
 const EP="https://script.google.com/macros/s/AKfycbx3RjIjtlO2Z6fIYo2T3LhJrFg9Wp2hS7dMS3Is52-JVF1hizoCWewbQ1uM_v5sdhR2jw/exec";
-const PAGE_STAMP="2026-08-31 13:01";
+const PAGE_STAMP="2026-08-31 13:05";
 
 const $id=i=>document.getElementById(i);
 function escText(t){const d=document.createElement('div');d.textContent=t==null?'':t;return d.innerHTML}
@@ -177,6 +184,20 @@ async function addEntry(){
     watchDeploy();
   }catch(e){status.textContent='실패: '+e.message}
   finally{btn.disabled=false}
+}
+
+// '지금 수집' 버튼: 스케줄(08:30·18:30)을 기다리지 않고 텔레그램 수집을 즉시 돌린다.
+async function runScan(){
+  const btn=$id('run-btn'),status=$id('run-status');
+  btn.disabled=true;status.textContent='요청 중…';
+  try{
+    const r=await fetch(EP,{method:'POST',body:JSON.stringify({workflow:'vacation',mode:'run'})});
+    try{const d=await r.json();
+      if(d&&d.ok===false){status.textContent='⚠ 거절 '+(d.code||'?')+' — '+(d.error||'GAS 프록시 확인 필요');btn.disabled=false;return}
+    }catch(e){}
+    status.textContent='✅ 수집 중 — 2~3분 뒤 새 데이터가 오면 자동 새로고침됩니다';
+    watchDeploy();
+  }catch(e){status.textContent='실패: '+e.message;btn.disabled=false}
 }
 
 // 이름 칩 클릭 → 상세 팝업 (기간·종류·메모·원문). 바깥 클릭/Esc/× 로 닫는다.

@@ -49,8 +49,11 @@ function buildInputs(key, body) {
     comment:  String(body.comment || ''),
   };
   if (key === 'recipe') return { yt_url: String(body.yt_url || '') };
-  // 휴가/출장 직접 기입: 페이지 폼이 entry(JSON 문자열)를 넘긴다. mode=add 고정.
-  if (key === 'vacation') return { mode: 'add', entry: String(body.entry || '') };
+  // 휴가/출장: 기입 폼은 entry(JSON)와 함께 mode=add, '지금 수집' 버튼은 mode=run.
+  if (key === 'vacation') return {
+    mode: body.mode === 'run' ? 'run' : 'add',
+    entry: String(body.entry || ''),
+  };
   // 밸류에이션: 비워 두면 정기 수집, lookup 에 티커를 넣으면 임시 조회만 돈다.
   if (key === 'valuation') return {
     only:   String(body.only || ''),
@@ -78,7 +81,7 @@ function doPost(e) {
     if (key === 'recipe' && !body.yt_url) {
       return json({ ok: false, code: 400, wf: wf, error: 'yt_url이 비어 있습니다' });
     }
-    if (key === 'vacation' && !body.entry) {
+    if (key === 'vacation' && body.mode !== 'run' && !body.entry) {
       return json({ ok: false, code: 400, wf: wf, error: 'entry가 비어 있습니다' });
     }
 
