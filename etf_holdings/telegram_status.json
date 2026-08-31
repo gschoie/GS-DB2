@@ -1,5 +1,5 @@
 {
-  "when_utc": "2026-08-30 22:42:33Z",
+  "when_utc": "2026-08-31 01:30:34Z",
   "ok": true,
   "note": "forced_heartbeat",
   "chat_id_tail": "5171",
@@ -7,7 +7,7 @@
   "response": {
     "ok": true,
     "result": {
-      "message_id": 218,
+      "message_id": 221,
       "from": {
         "id": 8875725998,
         "is_bot": true,
@@ -21,8 +21,8 @@
         "username": "gschoie",
         "type": "private"
       },
-      "date": 1788129753,
-      "text": "🧩 액티브 ETF 구성 변화 · 구성 기준일 2026-08-28\n\n오늘(2026-08-28 → 2026-08-28) 유의미한 구성 변화 없음 ✅ (수동 갱신 확인)\n\n전체 › 대시보드\n🎴 GS Research Desk · 액티브 ETF 트래커",
+      "date": 1788139833,
+      "text": "🧩 액티브 ETF 구성 변화 · 구성 기준일 —\n\n오늘(2026-08-28 → —) 유의미한 구성 변화 없음 ✅ (수동 갱신 확인)\n\n전체 › 대시보드\n🎴 GS Research Desk · 액티브 ETF 트래커",
       "entities": [
         {
           "offset": 0,
@@ -30,7 +30,7 @@
           "type": "bold"
         },
         {
-          "offset": 99,
+          "offset": 81,
           "length": 4,
           "type": "text_link",
           "url": "https://gschoie.github.io/GS-DB2/etf_holdings_report.html"
