@@ -121,6 +121,14 @@ tr.pending .badge,.chip.pending{border-style:dashed}
   padding-left:8px;word-break:break-all}
 #chip-pop .meta2{color:#8a94a0;font-size:11.5px;margin-top:6px}
 #chip-pop .close{position:absolute;top:6px;right:9px;color:#8a94a0;cursor:pointer;font-size:14px}
+.acts{float:right;margin-left:8px;white-space:nowrap}
+.act{background:none;border:none;cursor:pointer;font-size:13px;opacity:.4;padding:0 3px}
+.act:hover{opacity:1}
+#chip-pop .pop-acts{margin-top:8px;display:flex;gap:8px}
+#chip-pop .pop-acts button{background:#f5f8fb;color:#2b5f8a;border:1px solid #d4dbe3;
+  border-radius:7px;padding:3px 10px;font-size:12px;cursor:pointer}
+#chip-pop .pop-acts button:hover{border-color:#9fb6cc}
+tr.removed{opacity:.35;text-decoration:line-through}
 /* 좁은 화면: 4열 표를 카드형으로 — 셀이 세로로 짜부라지는 것 방지 */
 @media(max-width:640px){
   body{padding:18px 12px 48px}
@@ -169,9 +177,14 @@ def _row(entry: dict, today: str) -> str:
         origin = f"{msg_date} · ✍️ 직접 기입"
     else:
         origin = f"{msg_date} · “{html.escape(str(entry.get('text') or '')[:140])}”"
-    return (f"<tr{active}><td class=\"c-name name\">{html.escape(str(entry.get('name') or '?'))}</td>"
+    uid = html.escape(str(entry.get("uid") or ""), quote=True)
+    acts = ('<span class="acts"><button class="act" data-act="note" title="메모 수정">✏️</button>'
+            '<button class="act" data-act="del" title="삭제">🗑</button></span>') if uid else ""
+    return (f'<tr{active} data-uid="{uid}"><td class="c-name name">'
+            f"{html.escape(str(entry.get('name') or '?'))}</td>"
             f"<td class=\"c-span\">{_span(entry)}</td><td class=\"c-kind\">{badge}</td>"
-            f"<td class=\"c-note\">{note}<div class=\"src\">{origin}</div></td></tr>")
+            f"<td class=\"c-note\">{acts}<span class=\"note-text\">{note}</span>"
+            f"<div class=\"src\">{origin}</div></td></tr>")
 
 
 def _is_trip(kind: str) -> bool:
@@ -189,6 +202,7 @@ def _chip_html(entry: dict) -> str:
             f' data-kind="{attr(entry.get("kind"))}" data-note="{attr(entry.get("note"))}"'
             f' data-text="{attr(str(entry.get("text") or "")[:200])}"'
             f' data-when="{attr(when)}" data-source="{attr(source)}"'
+            f' data-uid="{attr(entry.get("uid"))}"'
             f' title="{attr(entry.get("kind"))} — 눌러서 상세 보기">'
             f'{html.escape(str(entry.get("name") or "?"))}</span>')
 
@@ -375,6 +389,50 @@ async function runScan(){
   }catch(e){status.textContent='실패: '+e.message;btn.disabled=false}
 }
 
+// 삭제·메모 수정 — 기입과 같은 경로(entry에 op를 얹음)라 GAS 변경 불필요.
+async function sendOp(payload){
+  const status=$id('add-status');
+  status.textContent='요청 중…';
+  try{
+    const r=await fetch(EP,{method:'POST',body:JSON.stringify({workflow:'vacation',entry:JSON.stringify(payload)})});
+    try{const d=await r.json();
+      if(d&&d.ok===false){status.textContent='⚠ 거절 '+(d.code||'?')+' — '+(d.error||'GAS 프록시 확인 필요');return false}
+    }catch(e){}
+    status.textContent='✅ 반영 요청됨 — 화면에 우선 적용했고, 서버 반영 후 자동 새로고침됩니다';
+    watchDeploy();
+    return true;
+  }catch(e){status.textContent='실패: '+e.message;return false}
+}
+async function delEntry(uid){
+  if(!uid||!confirm('이 항목을 삭제할까요?'))return;
+  hidePop();
+  if(await sendOp({op:'delete',uid:uid})){
+    document.querySelectorAll('[data-uid="'+CSS.escape(uid)+'"]').forEach(el=>{
+      if(el.tagName==='TR')el.classList.add('removed');else el.remove();
+    });
+  }
+}
+async function editNote(uid,current){
+  if(!uid)return;
+  const value=prompt('메모 수정',current||'');
+  if(value===null)return;
+  hidePop();
+  if(await sendOp({op:'note',uid:uid,note:value.trim()})){
+    document.querySelectorAll('tr[data-uid="'+CSS.escape(uid)+'"] .note-text')
+      .forEach(el=>{el.textContent=value.trim()});
+    document.querySelectorAll('.chip[data-uid="'+CSS.escape(uid)+'"]')
+      .forEach(el=>{el.dataset.note=value.trim()});
+  }
+}
+// 표 행의 ✏️/🗑 (이벤트 위임)
+document.addEventListener('click',ev=>{
+  const btn=ev.target.closest('.act');if(!btn)return;
+  const row=btn.closest('[data-uid]');if(!row)return;
+  const uid=row.dataset.uid;
+  if(btn.dataset.act==='del')delEntry(uid);
+  else editNote(uid,(row.querySelector('.note-text')||{}).textContent||'');
+});
+
 // 이름 칩 클릭 → 상세 팝업 (기간·종류·메모·원문). 바깥 클릭/Esc/× 로 닫는다.
 let chipPop=null;
 function hidePop(){if(chipPop){chipPop.remove();chipPop=null}}
@@ -387,7 +445,10 @@ function showPop(chip){
     +'<span class="badge'+(isTrip(d.kind)?' trip':'')+'">'+escText(d.kind||'휴가')+'</span>'
     +(d.note?'<div>'+escText(d.note)+'</div>':'')
     +(d.text&&d.text!==d.note?'<div class="quote">“'+escText(d.text)+'”</div>':'')
-    +'<div class="meta2">'+escText(d.when)+' · '+escText(d.source||'')+'</div>';
+    +'<div class="meta2">'+escText(d.when)+' · '+escText(d.source||'')+'</div>'
+    +(d.uid?'<div class="pop-acts">'
+      +'<button onclick="editNote('+JSON.stringify(d.uid)+','+JSON.stringify(d.note||'')+')">✏️ 메모 수정</button>'
+      +'<button onclick="delEntry('+JSON.stringify(d.uid)+')">🗑 삭제</button></div>':'');
   document.body.appendChild(chipPop);
   const r=chip.getBoundingClientRect(),pw=chipPop.offsetWidth,ph=chipPop.offsetHeight;
   let left=Math.min(Math.max(8,r.left),window.innerWidth-pw-8);
@@ -444,7 +505,7 @@ document.addEventListener('dblclick',ev=>{
 
 
 def build_page(store: dict) -> Path:
-    entries = list((store.get("entries") or {}).values())
+    entries = [dict(value, uid=key) for key, value in (store.get("entries") or {}).items()]
     now = datetime.now(KST)
     today = now.strftime("%Y-%m-%d")
 
