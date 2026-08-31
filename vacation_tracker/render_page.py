@@ -21,8 +21,8 @@ CONFIG_PATH = Path(__file__).resolve().parent / "config.yml"
 # app.js의 DISPATCH_ENDPOINT와 같은 주소 — 바꿀 땐 두 곳을 같이 고칠 것.
 DISPATCH_ENDPOINT = "https://script.google.com/macros/s/AKfycbx3RjIjtlO2Z6fIYo2T3LhJrFg9Wp2hS7dMS3Is52-JVF1hizoCWewbQ1uM_v5sdhR2jw/exec"
 
-KIND_OPTIONS = ["연차", "반차", "오전반차", "오후반차", "휴가", "출장", "해외출장",
-                "샵투어", "휴무", "병가", "기타"]
+KIND_OPTIONS = ["연차", "반차", "오전반차", "오후반차", "휴가", "여행", "출장",
+                "해외출장", "샵투어", "휴무", "병가", "기타"]
 
 
 def friend_names() -> list[str]:
@@ -264,7 +264,8 @@ def _add_form(stamp: str) -> str:
     stamp는 이 페이지의 갱신 시각 — 제출 뒤 배포본의 갱신 시각이 달라지면
     자동 새로고침한다. 그 사이 화면에는 점선(pending) 스타일로 즉시 그려 둔다.
     """
-    name_options = "".join(f'<option value="{html.escape(n)}">' for n in friend_names() if n)
+    name_options = "".join(f'<option value="{html.escape(n)}">'
+                           for n in sorted({n for n in friend_names() if n}))
     kind_options = "".join(f"<option>{k}</option>" for k in KIND_OPTIONS)
     head = f"""
 <h2>✍️ 직접 기입</h2>

@@ -159,5 +159,16 @@ class KazakhDates(unittest.TestCase):
         # "9/15화-9/18금 입니당" — 요일 붙은 슬래시 구간
         self.assertEqual(extract_dates("9/15화-9/18금 입니당", BASE),
                          (date(2026, 9, 15), date(2026, 9, 18)))
+
+
+class TravelKeyword(unittest.TestCase):
+    def test_travel_report_is_candidate(self):
+        self.assertEqual(detect_kind("다음주 제주 여행 갑니다"), "여행")
+        self.assertTrue(is_candidate("9/5~9/7 여행 다녀올게요"))
+
+    def test_travel_smalltalk_is_not(self):
+        self.assertFalse(is_candidate("여행 가고 싶다"))
+        self.assertFalse(is_candidate("여행 어땠어?"))
+        self.assertFalse(is_candidate("여행사 추천 좀"))
 if __name__ == "__main__":
     unittest.main()
