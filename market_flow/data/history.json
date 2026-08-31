@@ -7348,47 +7348,62 @@
       "foreign": 2381,
       "inst_total": -350
      }
+    },
+    "1640": {
+     "individual": -1464,
+     "foreign": -6434,
+     "institution": -7891,
+     "arb": -984,
+     "nonarb": -2718,
+     "program": -3702,
+     "time": "19:38",
+     "kospi": 6820.02,
+     "chg_pct": 0.46,
+     "futures": {
+      "foreign": 1377,
+      "inst_total": 134
+     }
     }
    },
    "confirmed": {
     "investor": {
-     "individual": -1443,
-     "foreign": -6399,
-     "inst_total": -7931,
-     "fin_invest": -2475,
+     "individual": -1464,
+     "foreign": -6434,
+     "inst_total": -7891,
+     "fin_invest": -2435,
      "insurance": 167,
      "asset_mgmt": -5495,
      "bank": 12,
      "other_fin": 217,
      "pension": -357,
-     "other_corp": 15773
+     "other_corp": 15790
     },
     "program": {
      "arb_buy": 3373,
-     "arb_sell": 4349,
-     "arb_net": -976,
-     "nonarb_buy": 121087,
-     "nonarb_sell": 123822,
-     "nonarb_net": -2734,
-     "total_buy": 124460,
-     "total_sell": 128171,
-     "total_net": -3710
+     "arb_sell": 4357,
+     "arb_net": -984,
+     "nonarb_buy": 121182,
+     "nonarb_sell": 123899,
+     "nonarb_net": -2718,
+     "total_buy": 124555,
+     "total_sell": 128256,
+     "total_net": -3702
     },
     "futures": {
-     "individual": -1454,
-     "foreign": 2381,
-     "inst_total": -350,
-     "fin_invest": -140,
-     "insurance": -266,
-     "asset_mgmt": 77,
+     "individual": -1162,
+     "foreign": 1377,
+     "inst_total": 134,
+     "fin_invest": -147,
+     "insurance": -280,
+     "asset_mgmt": 797,
      "bank": 7,
-     "other_fin": 6,
-     "pension": -34,
-     "other_corp": -577
+     "other_fin": 8,
+     "pension": -251,
+     "other_corp": -349
     }
    },
    "group_1d": {
-    "time": "15:37",
+    "time": "19:38",
     "groups": [
      [
       "2차전지",
@@ -7498,7 +7513,7 @@
     ]
    },
    "stock_flow": {
-    "time": "15:37",
+    "time": "19:38",
     "buy": [
      [
       "SK하이닉스",
@@ -8346,20 +8361,20 @@
      ],
      [
       "15:20",
-      -1427,
-      2360,
-      -348
+      -1453,
+      2379,
+      -341
      ],
      [
       "15:30",
-      -1427,
-      2360,
-      -348
+      -1143,
+      1725,
+      4
      ]
     ]
    }
   }
  },
- "updated_kst": "2026-08-31 15:37",
+ "updated_kst": "2026-08-31 19:39",
  "futures_unit": "계약"
 }
