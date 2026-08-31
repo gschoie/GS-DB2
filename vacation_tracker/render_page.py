@@ -67,7 +67,7 @@ th,td{padding:8px 10px;border-bottom:1px solid #edf0f4;text-align:left;vertical-
 th{color:#8a94a0;font-weight:600;font-size:12.5px}
 tr.today td{background:#eef5ff}
 .badge{display:inline-block;padding:1px 8px;border-radius:20px;font-size:12px;
-  background:#e8f0fe;color:#2b5f8a;border:1px solid #c9dcf5;white-space:nowrap}
+  background:#fff7d6;color:#8a6d1a;border:1px solid #ecd98f;white-space:nowrap}
 .badge.review{background:#fdecec;color:#a43c31;border-color:#f2cfcb}
 .src{color:#8a94a0;font-size:12.5px}
 .name{font-weight:700;color:#1f2937;white-space:nowrap}
@@ -82,10 +82,10 @@ tr.today td{background:#eef5ff}
 .cal td[data-date]:hover{background:#f0f5fb}
 .cal td.today{background:#eaf2ff;box-shadow:inset 0 0 0 1px #bcd4f0}
 .cal .d{color:#8a94a0;font-size:11.5px;margin-bottom:3px}
-.chip{display:block;margin:2px 0;padding:1px 5px;border-radius:6px;background:#e8f0fe;
-  color:#2b5f8a;border:1px solid #c9dcf5;font-size:11.5px;white-space:nowrap;
+.chip{display:block;margin:2px 0;padding:1px 5px;border-radius:6px;background:#fff7d6;
+  color:#8a6d1a;border:1px solid #ecd98f;font-size:11.5px;white-space:nowrap;
   overflow:hidden;text-overflow:ellipsis}
-.chip.trip{background:#fff3e0;color:#a05a1f;border-color:#f0d9b5}
+.chip.trip{background:#e8f0fe;color:#2b5f8a;border-color:#c9dcf5}
 .cal-title{font-size:15px;color:#1f2937;margin:4px 0 6px;font-weight:700}
 #cal-strip{display:grid;grid-template-columns:1fr 1fr;gap:18px;align-items:start}
 @media(max-width:700px){#cal-strip{grid-template-columns:1fr}}
@@ -110,7 +110,7 @@ tr.today td{background:#eef5ff}
 .run-btn:hover{border-color:#9fb6cc}
 .run-btn:disabled{opacity:.5;cursor:default}
 #run-status{font-size:12px;color:#8a94a0;margin-left:6px}
-.badge.trip{background:#fff3e0;color:#a05a1f;border-color:#f0d9b5}
+.badge.trip{background:#e8f0fe;color:#2b5f8a;border-color:#c9dcf5}
 tr.pending td{opacity:.75}
 tr.pending .badge,.chip.pending{border-style:dashed}
 #chip-pop{position:fixed;z-index:50;max-width:320px;background:#fff;color:#333c46;
@@ -141,7 +141,7 @@ tr.pending .badge,.chip.pending{border-style:dashed}
 }
 """
 
-# 달력 칩 색 구분: 출장·샵투어 계열은 주황, 나머지(휴가·연차·반차…)는 파랑.
+# 달력 칩 색 구분: 휴가·연차 계열은 노랑, 출장·샵투어 계열은 파랑.
 TRIP_KINDS = ("출장", "샵투어", "투어")
 
 
@@ -473,7 +473,7 @@ def build_page(store: dict) -> Path:
 갱신 {stamp} KST · 총 {len(entries)}건
 <button id="run-btn" class="run-btn" onclick="runScan()">🔄 지금 수집</button>
 <span id="run-status"></span></p>
-<h2>다가오는 휴가 ({len(upcoming)}건)</h2>
+<h2>다가오는 휴가/출장 ({len(upcoming)}건)</h2>
 {table(upcoming, "tbl-upcoming")}
 <h2>📅 달력</h2>
 <p class="form-hint">날짜를 더블클릭(모바일: 두 번 탭)하면 아래 기입 폼에 시작일로 들어가고,
@@ -482,7 +482,7 @@ def build_page(store: dict) -> Path:
 """
     doc += _add_form(stamp)
     doc += f"""
-<h2>지난 휴가 ({len(past)}건)</h2>
+<h2>지난 휴가/출장 ({len(past)}건)</h2>
 {table(past, "tbl-past")}
 """
     if review:
