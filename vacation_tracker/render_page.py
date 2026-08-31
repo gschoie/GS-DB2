@@ -105,6 +105,11 @@ tr.today td{background:#eef5ff}
 .addform button:disabled{opacity:.5;cursor:default}
 #add-status{color:#8a94a0;font-size:12.5px;margin:4px 0 0}
 .form-hint{color:#8a94a0;font-size:12.5px;margin:2px 0 0}
+.run-btn{background:#e8f0fe;color:#2b5f8a;border:1px solid #c9dcf5;border-radius:8px;
+  padding:3px 10px;font-size:12.5px;cursor:pointer;margin-left:8px;vertical-align:middle}
+.run-btn:hover{border-color:#9fb6cc}
+.run-btn:disabled{opacity:.5;cursor:default}
+#run-status{font-size:12px;color:#8a94a0;margin-left:6px}
 .badge.trip{background:#fff3e0;color:#a05a1f;border-color:#f0d9b5}
 tr.pending td{opacity:.75}
 tr.pending .badge,.chip.pending{border-style:dashed}
@@ -356,6 +361,20 @@ async function addEntry(){
   finally{btn.disabled=false}
 }
 
+// '지금 수집' 버튼: 스케줄(08:30·18:30)을 기다리지 않고 텔레그램 수집을 즉시 돌린다.
+async function runScan(){
+  const btn=$id('run-btn'),status=$id('run-status');
+  btn.disabled=true;status.textContent='요청 중…';
+  try{
+    const r=await fetch(EP,{method:'POST',body:JSON.stringify({workflow:'vacation',mode:'run'})});
+    try{const d=await r.json();
+      if(d&&d.ok===false){status.textContent='⚠ 거절 '+(d.code||'?')+' — '+(d.error||'GAS 프록시 확인 필요');btn.disabled=false;return}
+    }catch(e){}
+    status.textContent='✅ 수집 중 — 2~3분 뒤 새 데이터가 오면 자동 새로고침됩니다';
+    watchDeploy();
+  }catch(e){status.textContent='실패: '+e.message;btn.disabled=false}
+}
+
 // 이름 칩 클릭 → 상세 팝업 (기간·종류·메모·원문). 바깥 클릭/Esc/× 로 닫는다.
 let chipPop=null;
 function hidePop(){if(chipPop){chipPop.remove();chipPop=null}}
@@ -451,7 +470,9 @@ def build_page(store: dict) -> Path:
 <body><div class="wrap">
 <h1>🏖️ 팀원 휴가 일정 체크</h1>
 <p class="meta">지정한 팀원들과의 텔레그램 1:1 대화에서 휴가·출장 보고를 자동으로 잡아 정리 ·
-갱신 {stamp} KST · 총 {len(entries)}건</p>
+갱신 {stamp} KST · 총 {len(entries)}건
+<button id="run-btn" class="run-btn" onclick="runScan()">🔄 지금 수집</button>
+<span id="run-status"></span></p>
 <h2>다가오는 휴가 ({len(upcoming)}건)</h2>
 {table(upcoming, "tbl-upcoming")}
 <h2>📅 달력</h2>
