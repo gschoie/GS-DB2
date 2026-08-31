@@ -181,9 +181,12 @@ function checkNewVideos() {
           const safeTitle = escapeHtml_(videoTitle);
           const safeSummary = escapeHtml_(aiSummary);
 
-          // 텔레그램 메시지 조립
+          // 텔레그램 메시지 조립 — 쇼츠는 머리말로 구분한다
+          const header = isShorts_(videoUrl)
+            ? `🎬 <b>새로운 방산 쇼츠 업로드!</b>`
+            : `📺 <b>새로운 방산 영상 업로드!</b>`;
           const message =
-            `📺 <b>새로운 방산 영상 업로드!</b>\n\n` +
+            header + `\n\n` +
             `• <b>채널:</b> ${channel.name}\n` +
             `• <b>제목:</b> <b>${safeTitle}</b>\n\n` +
             `• <b>제미나이 AI 핵심 요약:</b>\n${safeSummary}\n\n` +

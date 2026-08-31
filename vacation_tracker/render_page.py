@@ -21,8 +21,8 @@ CONFIG_PATH = Path(__file__).resolve().parent / "config.yml"
 # app.js의 DISPATCH_ENDPOINT와 같은 주소 — 바꿀 땐 두 곳을 같이 고칠 것.
 DISPATCH_ENDPOINT = "https://script.google.com/macros/s/AKfycbx3RjIjtlO2Z6fIYo2T3LhJrFg9Wp2hS7dMS3Is52-JVF1hizoCWewbQ1uM_v5sdhR2jw/exec"
 
-KIND_OPTIONS = ["연차", "반차", "오전반차", "오후반차", "휴가", "출장", "해외출장",
-                "샵투어", "휴무", "병가", "기타"]
+KIND_OPTIONS = ["연차", "반차", "오전반차", "오후반차", "휴가", "여행", "출장",
+                "해외출장", "샵투어", "휴무", "병가", "기타"]
 
 
 def friend_names() -> list[str]:
@@ -67,7 +67,7 @@ th,td{padding:8px 10px;border-bottom:1px solid #edf0f4;text-align:left;vertical-
 th{color:#8a94a0;font-weight:600;font-size:12.5px}
 tr.today td{background:#eef5ff}
 .badge{display:inline-block;padding:1px 8px;border-radius:20px;font-size:12px;
-  background:#e8f0fe;color:#2b5f8a;border:1px solid #c9dcf5;white-space:nowrap}
+  background:#fff7d6;color:#8a6d1a;border:1px solid #ecd98f;white-space:nowrap}
 .badge.review{background:#fdecec;color:#a43c31;border-color:#f2cfcb}
 .src{color:#8a94a0;font-size:12.5px}
 .name{font-weight:700;color:#1f2937;white-space:nowrap}
@@ -82,10 +82,10 @@ tr.today td{background:#eef5ff}
 .cal td[data-date]:hover{background:#f0f5fb}
 .cal td.today{background:#eaf2ff;box-shadow:inset 0 0 0 1px #bcd4f0}
 .cal .d{color:#8a94a0;font-size:11.5px;margin-bottom:3px}
-.chip{display:block;margin:2px 0;padding:1px 5px;border-radius:6px;background:#e8f0fe;
-  color:#2b5f8a;border:1px solid #c9dcf5;font-size:11.5px;white-space:nowrap;
+.chip{display:block;margin:2px 0;padding:1px 5px;border-radius:6px;background:#fff7d6;
+  color:#8a6d1a;border:1px solid #ecd98f;font-size:11.5px;white-space:nowrap;
   overflow:hidden;text-overflow:ellipsis}
-.chip.trip{background:#fff3e0;color:#a05a1f;border-color:#f0d9b5}
+.chip.trip{background:#e8f0fe;color:#2b5f8a;border-color:#c9dcf5}
 .cal-title{font-size:15px;color:#1f2937;margin:4px 0 6px;font-weight:700}
 #cal-strip{display:grid;grid-template-columns:1fr 1fr;gap:18px;align-items:start}
 @media(max-width:700px){#cal-strip{grid-template-columns:1fr}}
@@ -105,7 +105,12 @@ tr.today td{background:#eef5ff}
 .addform button:disabled{opacity:.5;cursor:default}
 #add-status{color:#8a94a0;font-size:12.5px;margin:4px 0 0}
 .form-hint{color:#8a94a0;font-size:12.5px;margin:2px 0 0}
-.badge.trip{background:#fff3e0;color:#a05a1f;border-color:#f0d9b5}
+.run-btn{background:#e8f0fe;color:#2b5f8a;border:1px solid #c9dcf5;border-radius:8px;
+  padding:3px 10px;font-size:12.5px;cursor:pointer;margin-left:8px;vertical-align:middle}
+.run-btn:hover{border-color:#9fb6cc}
+.run-btn:disabled{opacity:.5;cursor:default}
+#run-status{font-size:12px;color:#8a94a0;margin-left:6px}
+.badge.trip{background:#e8f0fe;color:#2b5f8a;border-color:#c9dcf5}
 tr.pending td{opacity:.75}
 tr.pending .badge,.chip.pending{border-style:dashed}
 #chip-pop{position:fixed;z-index:50;max-width:320px;background:#fff;color:#333c46;
@@ -116,6 +121,17 @@ tr.pending .badge,.chip.pending{border-style:dashed}
   padding-left:8px;word-break:break-all}
 #chip-pop .meta2{color:#8a94a0;font-size:11.5px;margin-top:6px}
 #chip-pop .close{position:absolute;top:6px;right:9px;color:#8a94a0;cursor:pointer;font-size:14px}
+.acts{float:right;margin-left:8px;white-space:nowrap}
+.act{background:none;border:none;cursor:pointer;font-size:13px;opacity:.4;padding:0 3px}
+.act:hover{opacity:1}
+#chip-pop .pop-acts{margin-top:8px;display:flex;gap:8px}
+#chip-pop .pop-acts button{background:#f5f8fb;color:#2b5f8a;border:1px solid #d4dbe3;
+  border-radius:7px;padding:3px 10px;font-size:12px;cursor:pointer}
+#chip-pop .pop-acts button:hover{border-color:#9fb6cc}
+tr.removed{opacity:.35;text-decoration:line-through}
+td.c-kind .badge:not(.review){cursor:pointer}
+.kind-sel{background:#fff;color:#333c46;border:1px solid #cfd6de;border-radius:8px;
+  padding:2px 6px;font-size:12.5px;font-family:inherit}
 /* 좁은 화면: 4열 표를 카드형으로 — 셀이 세로로 짜부라지는 것 방지 */
 @media(max-width:640px){
   body{padding:18px 12px 48px}
@@ -136,7 +152,7 @@ tr.pending .badge,.chip.pending{border-style:dashed}
 }
 """
 
-# 달력 칩 색 구분: 출장·샵투어 계열은 주황, 나머지(휴가·연차·반차…)는 파랑.
+# 달력 칩 색 구분: 휴가·연차 계열은 노랑, 출장·샵투어 계열은 파랑.
 TRIP_KINDS = ("출장", "샵투어", "투어")
 
 
@@ -157,16 +173,22 @@ def _row(entry: dict, today: str) -> str:
     start, end = entry.get("start"), entry.get("end") or entry.get("start")
     active = ' class="today"' if start and start <= today <= (end or start) else ""
     badge = ('<span class="badge review">확인 필요</span>' if entry.get("needs_review")
-             else f'<span class="badge">{html.escape(str(entry.get("kind") or "휴가"))}</span>')
+             else f'<span class="badge{" trip" if _is_trip(entry.get("kind")) else ""}">'
+                  f'{html.escape(str(entry.get("kind") or "휴가"))}</span>')
     note = html.escape(str(entry.get("note") or ""))
     msg_date = str(entry.get("msg_date") or "")[:16].replace("T", " ")
     if entry.get("engine") == "manual":
         origin = f"{msg_date} · ✍️ 직접 기입"
     else:
         origin = f"{msg_date} · “{html.escape(str(entry.get('text') or '')[:140])}”"
-    return (f"<tr{active}><td class=\"c-name name\">{html.escape(str(entry.get('name') or '?'))}</td>"
+    uid = html.escape(str(entry.get("uid") or ""), quote=True)
+    acts = ('<span class="acts"><button class="act" data-act="note" title="메모 수정">✏️</button>'
+            '<button class="act" data-act="del" title="삭제">🗑</button></span>') if uid else ""
+    return (f'<tr{active} data-uid="{uid}"><td class="c-name name">'
+            f"{html.escape(str(entry.get('name') or '?'))}</td>"
             f"<td class=\"c-span\">{_span(entry)}</td><td class=\"c-kind\">{badge}</td>"
-            f"<td class=\"c-note\">{note}<div class=\"src\">{origin}</div></td></tr>")
+            f"<td class=\"c-note\">{acts}<span class=\"note-text\">{note}</span>"
+            f"<div class=\"src\">{origin}</div></td></tr>")
 
 
 def _is_trip(kind: str) -> bool:
@@ -184,6 +206,7 @@ def _chip_html(entry: dict) -> str:
             f' data-kind="{attr(entry.get("kind"))}" data-note="{attr(entry.get("note"))}"'
             f' data-text="{attr(str(entry.get("text") or "")[:200])}"'
             f' data-when="{attr(when)}" data-source="{attr(source)}"'
+            f' data-uid="{attr(entry.get("uid"))}"'
             f' title="{attr(entry.get("kind"))} — 눌러서 상세 보기">'
             f'{html.escape(str(entry.get("name") or "?"))}</span>')
 
@@ -264,7 +287,8 @@ def _add_form(stamp: str) -> str:
     stamp는 이 페이지의 갱신 시각 — 제출 뒤 배포본의 갱신 시각이 달라지면
     자동 새로고침한다. 그 사이 화면에는 점선(pending) 스타일로 즉시 그려 둔다.
     """
-    name_options = "".join(f'<option value="{html.escape(n)}">' for n in friend_names() if n)
+    name_options = "".join(f'<option value="{html.escape(n)}">'
+                           for n in sorted({n for n in friend_names() if n}))
     kind_options = "".join(f"<option>{k}</option>" for k in KIND_OPTIONS)
     head = f"""
 <h2>✍️ 직접 기입</h2>
@@ -285,6 +309,7 @@ rebuild-page로 되돌립니다.</p>
 <script>
 const EP={json.dumps(DISPATCH_ENDPOINT)};
 const PAGE_STAMP={json.dumps(stamp)};
+const KINDS={json.dumps(KIND_OPTIONS, ensure_ascii=False)};
 """
     # 아래는 순수 JS — f-string 이스케이프(중괄호 겹침)를 피하려고 분리해 둔다.
     script = """
@@ -355,6 +380,89 @@ async function addEntry(){
   finally{btn.disabled=false}
 }
 
+// '지금 수집' 버튼: 스케줄(08:30·18:30)을 기다리지 않고 텔레그램 수집을 즉시 돌린다.
+async function runScan(){
+  const btn=$id('run-btn'),status=$id('run-status');
+  btn.disabled=true;status.textContent='요청 중…';
+  try{
+    const r=await fetch(EP,{method:'POST',body:JSON.stringify({workflow:'vacation',mode:'run'})});
+    try{const d=await r.json();
+      if(d&&d.ok===false){status.textContent='⚠ 거절 '+(d.code||'?')+' — '+(d.error||'GAS 프록시 확인 필요');btn.disabled=false;return}
+    }catch(e){}
+    status.textContent='✅ 수집 중 — 2~3분 뒤 새 데이터가 오면 자동 새로고침됩니다';
+    watchDeploy();
+  }catch(e){status.textContent='실패: '+e.message;btn.disabled=false}
+}
+
+// 삭제·메모 수정 — 기입과 같은 경로(entry에 op를 얹음)라 GAS 변경 불필요.
+async function sendOp(payload){
+  const status=$id('add-status');
+  status.textContent='요청 중…';
+  try{
+    const r=await fetch(EP,{method:'POST',body:JSON.stringify({workflow:'vacation',entry:JSON.stringify(payload)})});
+    try{const d=await r.json();
+      if(d&&d.ok===false){status.textContent='⚠ 거절 '+(d.code||'?')+' — '+(d.error||'GAS 프록시 확인 필요');return false}
+    }catch(e){}
+    status.textContent='✅ 반영 요청됨 — 화면에 우선 적용했고, 서버 반영 후 자동 새로고침됩니다';
+    watchDeploy();
+    return true;
+  }catch(e){status.textContent='실패: '+e.message;return false}
+}
+async function delEntry(uid){
+  if(!uid||!confirm('이 항목을 삭제할까요?'))return;
+  hidePop();
+  if(await sendOp({op:'delete',uid:uid})){
+    document.querySelectorAll('[data-uid="'+CSS.escape(uid)+'"]').forEach(el=>{
+      if(el.tagName==='TR')el.classList.add('removed');else el.remove();
+    });
+  }
+}
+async function editNote(uid,current){
+  if(!uid)return;
+  const value=prompt('메모 수정',current||'');
+  if(value===null)return;
+  hidePop();
+  if(await sendOp({op:'note',uid:uid,note:value.trim()})){
+    document.querySelectorAll('tr[data-uid="'+CSS.escape(uid)+'"] .note-text')
+      .forEach(el=>{el.textContent=value.trim()});
+    document.querySelectorAll('.chip[data-uid="'+CSS.escape(uid)+'"]')
+      .forEach(el=>{el.dataset.note=value.trim()});
+  }
+}
+// 종류 배지 클릭 → 인라인 선택으로 교체, 고르면 저장 ('확인 필요' 배지는 제외)
+document.addEventListener('click',ev=>{
+  const badge=ev.target.closest('td.c-kind .badge:not(.review)');if(!badge)return;
+  const row=badge.closest('tr[data-uid]');if(!row||!row.dataset.uid)return;
+  const cur=badge.textContent.trim();
+  const sel=document.createElement('select');sel.className='kind-sel';
+  sel.innerHTML=[...new Set([cur,...KINDS])].map(k=>'<option'+(k===cur?' selected':'')+'>'+escText(k)+'</option>').join('');
+  badge.replaceWith(sel);sel.focus();
+  let done=false;
+  const finish=commit=>{
+    if(done)return;done=true;
+    const v=commit?sel.value:cur;
+    const nb=document.createElement('span');
+    nb.className='badge'+(isTrip(v)?' trip':'');nb.textContent=v;
+    sel.replaceWith(nb);
+    if(commit&&v!==cur){
+      sendOp({op:'kind',uid:row.dataset.uid,kind:v});
+      document.querySelectorAll('.chip[data-uid="'+CSS.escape(row.dataset.uid)+'"]').forEach(c=>{
+        c.dataset.kind=v;c.title=v+' — 눌러서 상세 보기';c.classList.toggle('trip',isTrip(v));});
+    }
+  };
+  sel.addEventListener('change',()=>finish(true));
+  sel.addEventListener('blur',()=>finish(sel.value!==cur));
+});
+
+// 표 행의 ✏️/🗑 (이벤트 위임)
+document.addEventListener('click',ev=>{
+  const btn=ev.target.closest('.act');if(!btn)return;
+  const row=btn.closest('[data-uid]');if(!row)return;
+  const uid=row.dataset.uid;
+  if(btn.dataset.act==='del')delEntry(uid);
+  else editNote(uid,(row.querySelector('.note-text')||{}).textContent||'');
+});
+
 // 이름 칩 클릭 → 상세 팝업 (기간·종류·메모·원문). 바깥 클릭/Esc/× 로 닫는다.
 let chipPop=null;
 function hidePop(){if(chipPop){chipPop.remove();chipPop=null}}
@@ -367,7 +475,10 @@ function showPop(chip){
     +'<span class="badge'+(isTrip(d.kind)?' trip':'')+'">'+escText(d.kind||'휴가')+'</span>'
     +(d.note?'<div>'+escText(d.note)+'</div>':'')
     +(d.text&&d.text!==d.note?'<div class="quote">“'+escText(d.text)+'”</div>':'')
-    +'<div class="meta2">'+escText(d.when)+' · '+escText(d.source||'')+'</div>';
+    +'<div class="meta2">'+escText(d.when)+' · '+escText(d.source||'')+'</div>'
+    +(d.uid?'<div class="pop-acts">'
+      +'<button onclick="editNote('+JSON.stringify(d.uid)+','+JSON.stringify(d.note||'')+')">✏️ 메모 수정</button>'
+      +'<button onclick="delEntry('+JSON.stringify(d.uid)+')">🗑 삭제</button></div>':'');
   document.body.appendChild(chipPop);
   const r=chip.getBoundingClientRect(),pw=chipPop.offsetWidth,ph=chipPop.offsetHeight;
   let left=Math.min(Math.max(8,r.left),window.innerWidth-pw-8);
@@ -424,7 +535,7 @@ document.addEventListener('dblclick',ev=>{
 
 
 def build_page(store: dict) -> Path:
-    entries = list((store.get("entries") or {}).values())
+    entries = [dict(value, uid=key) for key, value in (store.get("entries") or {}).items()]
     now = datetime.now(KST)
     today = now.strftime("%Y-%m-%d")
 
@@ -450,8 +561,10 @@ def build_page(store: dict) -> Path:
 <body><div class="wrap">
 <h1>🏖️ 팀원 휴가 일정 체크</h1>
 <p class="meta">지정한 팀원들과의 텔레그램 1:1 대화에서 휴가·출장 보고를 자동으로 잡아 정리 ·
-갱신 {stamp} KST · 총 {len(entries)}건</p>
-<h2>다가오는 휴가 ({len(upcoming)}건)</h2>
+갱신 {stamp} KST · 총 {len(entries)}건
+<button id="run-btn" class="run-btn" onclick="runScan()">🔄 지금 수집</button>
+<span id="run-status"></span></p>
+<h2>다가오는 휴가/출장 ({len(upcoming)}건)</h2>
 {table(upcoming, "tbl-upcoming")}
 <h2>📅 달력</h2>
 <p class="form-hint">날짜를 더블클릭(모바일: 두 번 탭)하면 아래 기입 폼에 시작일로 들어가고,
@@ -460,7 +573,7 @@ def build_page(store: dict) -> Path:
 """
     doc += _add_form(stamp)
     doc += f"""
-<h2>지난 휴가 ({len(past)}건)</h2>
+<h2>지난 휴가/출장 ({len(past)}건)</h2>
 {table(past, "tbl-past")}
 """
     if review:

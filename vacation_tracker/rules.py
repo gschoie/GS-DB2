@@ -30,6 +30,7 @@ KIND_PATTERNS: list[tuple[str, str]] = [
     (r"해외\s*출장", "해외출장"),
     (r"출장", "출장"),
     (r"[샵숍]\s*투어", "샵투어"),
+    (r"여행", "여행"),
     (r"휴무", "휴무"),
     (r"오프", "오프"),
     (r"휴가", "휴가"),
@@ -39,7 +40,8 @@ _KIND_RES = [(re.compile(pattern), label) for pattern, label in KIND_PATTERNS]
 
 # 잡담 오탐 컷: 휴가 단어가 있어도 남 얘기·과거 회상·질문이면 보고가 아니다.
 # 과하게 거르면 놓치므로 확실한 것만 — 나머지는 Gemini 또는 needs_review가 받는다.
-_NEGATIVE_RE = re.compile(r"휴가철|휴가지\s*추천|휴가\s*어땠|휴가\s*잘\s*다녀|휴가\s*는\s*어디")
+_NEGATIVE_RE = re.compile(r"휴가철|휴가지\s*추천|휴가\s*어땠|휴가\s*잘\s*다녀|휴가\s*는\s*어디"
+                          r"|여행\s*가고\s*싶|여행\s*어땠|여행\s*잘\s*다녀|여행지\s*추천|여행사")
 
 
 def detect_kind(text: str) -> str | None:
@@ -191,6 +193,10 @@ def pick_candidates(messages: list[dict], window: int = 10, hours: float = 12.0)
         if msg.get("out"):
             continue
         if kind:
+            # '여행'은 잡담이 흔해서 같은 메시지에 날짜가 있을 때만 직접 후보로.
+            # (키워드 트리거로는 남으니, 이어지는 날짜 답변은 맥락으로 잡힌다.)
+            if kind == "여행" and not has_date(text):
+                continue
             picked.append({"index": index, "trigger": "keyword", "kind_hint": kind})
         elif (last_kw and (index - last_kw[0]) <= window
               and (msg["dt"] - last_kw[1]).total_seconds() <= hours * 3600

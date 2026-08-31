@@ -400,6 +400,36 @@ def run(dry_run: bool = False, probe: bool = False) -> None:
         notify(new_entries)
 
 
+def _apply_op(op: str, body: dict) -> None:
+    """페이지에서 온 삭제·메모 수정 한 건을 entries.json에 반영하고 페이지 재생성."""
+    uid = str(body.get("uid") or "").strip()
+    if not uid:
+        raise SystemExit("uid가 비어 있습니다")
+    store = load_json(ENTRIES_PATH, {"entries": {}})
+    entry = store["entries"].get(uid)
+    if entry is None:
+        # 이미 지워졌거나 uid가 틀림 — 실패로 죽지 않고 페이지만 다시 굽는다(멱등).
+        print(f"[경고] uid를 찾지 못했습니다: {uid} — 변경 없음")
+    elif op == "delete":
+        store["entries"].pop(uid)
+        print(f"삭제: {entry.get('name')} {entry.get('start')}~{entry.get('end')} ({uid})")
+    elif op == "note":
+        entry["note"] = str(body.get("note") or "").strip()
+        print(f"메모 수정: {entry.get('name')} ({uid}) → {entry['note']!r}")
+    elif op == "kind":
+        kind = str(body.get("kind") or "").strip()
+        if not kind:
+            raise SystemExit("kind가 비어 있습니다")
+        entry["kind"] = kind
+        print(f"종류 수정: {entry.get('name')} ({uid}) → {kind}")
+    else:
+        raise SystemExit(f"알 수 없는 op: {op!r}")
+    save_json(ENTRIES_PATH, store)
+    from render_page import build_page
+
+    build_page(store)
+
+
 def add_manual(raw: str) -> None:
     """대시보드 기입 폼에서 온 항목 한 건을 entries.json에 붙이고 페이지를 다시 굽는다.
 
@@ -410,6 +440,13 @@ def add_manual(raw: str) -> None:
         body = json.loads(raw or "{}")
     except json.JSONDecodeError as exc:
         raise SystemExit(f"entry가 JSON이 아닙니다: {exc}")
+
+    # 같은 경로로 삭제·메모 수정도 받는다 — {"op":"delete"|"note","uid":...,"note":...}.
+    # GAS 라우트를 안 바꾸려고 add에 op를 얹었다(entry만 있으면 통과).
+    op = str(body.get("op") or "").strip()
+    if op:
+        return _apply_op(op, body)
+
     name = str(body.get("name") or "").strip()
     start = str(body.get("start") or "").strip()
     if not name or not start:
