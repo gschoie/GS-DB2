@@ -416,6 +416,12 @@ def _apply_op(op: str, body: dict) -> None:
     elif op == "note":
         entry["note"] = str(body.get("note") or "").strip()
         print(f"메모 수정: {entry.get('name')} ({uid}) → {entry['note']!r}")
+    elif op == "kind":
+        kind = str(body.get("kind") or "").strip()
+        if not kind:
+            raise SystemExit("kind가 비어 있습니다")
+        entry["kind"] = kind
+        print(f"종류 수정: {entry.get('name')} ({uid}) → {kind}")
     else:
         raise SystemExit(f"알 수 없는 op: {op!r}")
     save_json(ENTRIES_PATH, store)

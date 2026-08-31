@@ -129,6 +129,9 @@ tr.pending .badge,.chip.pending{border-style:dashed}
   border-radius:7px;padding:3px 10px;font-size:12px;cursor:pointer}
 #chip-pop .pop-acts button:hover{border-color:#9fb6cc}
 tr.removed{opacity:.35;text-decoration:line-through}
+td.c-kind .badge:not(.review){cursor:pointer}
+.kind-sel{background:#fff;color:#333c46;border:1px solid #cfd6de;border-radius:8px;
+  padding:2px 6px;font-size:12.5px;font-family:inherit}
 /* 좁은 화면: 4열 표를 카드형으로 — 셀이 세로로 짜부라지는 것 방지 */
 @media(max-width:640px){
   body{padding:18px 12px 48px}
@@ -170,7 +173,8 @@ def _row(entry: dict, today: str) -> str:
     start, end = entry.get("start"), entry.get("end") or entry.get("start")
     active = ' class="today"' if start and start <= today <= (end or start) else ""
     badge = ('<span class="badge review">확인 필요</span>' if entry.get("needs_review")
-             else f'<span class="badge">{html.escape(str(entry.get("kind") or "휴가"))}</span>')
+             else f'<span class="badge{" trip" if _is_trip(entry.get("kind")) else ""}">'
+                  f'{html.escape(str(entry.get("kind") or "휴가"))}</span>')
     note = html.escape(str(entry.get("note") or ""))
     msg_date = str(entry.get("msg_date") or "")[:16].replace("T", " ")
     if entry.get("engine") == "manual":
@@ -305,6 +309,7 @@ rebuild-page로 되돌립니다.</p>
 <script>
 const EP={json.dumps(DISPATCH_ENDPOINT)};
 const PAGE_STAMP={json.dumps(stamp)};
+const KINDS={json.dumps(KIND_OPTIONS, ensure_ascii=False)};
 """
     # 아래는 순수 JS — f-string 이스케이프(중괄호 겹침)를 피하려고 분리해 둔다.
     script = """
@@ -424,6 +429,31 @@ async function editNote(uid,current){
       .forEach(el=>{el.dataset.note=value.trim()});
   }
 }
+// 종류 배지 클릭 → 인라인 선택으로 교체, 고르면 저장 ('확인 필요' 배지는 제외)
+document.addEventListener('click',ev=>{
+  const badge=ev.target.closest('td.c-kind .badge:not(.review)');if(!badge)return;
+  const row=badge.closest('tr[data-uid]');if(!row||!row.dataset.uid)return;
+  const cur=badge.textContent.trim();
+  const sel=document.createElement('select');sel.className='kind-sel';
+  sel.innerHTML=[...new Set([cur,...KINDS])].map(k=>'<option'+(k===cur?' selected':'')+'>'+escText(k)+'</option>').join('');
+  badge.replaceWith(sel);sel.focus();
+  let done=false;
+  const finish=commit=>{
+    if(done)return;done=true;
+    const v=commit?sel.value:cur;
+    const nb=document.createElement('span');
+    nb.className='badge'+(isTrip(v)?' trip':'');nb.textContent=v;
+    sel.replaceWith(nb);
+    if(commit&&v!==cur){
+      sendOp({op:'kind',uid:row.dataset.uid,kind:v});
+      document.querySelectorAll('.chip[data-uid="'+CSS.escape(row.dataset.uid)+'"]').forEach(c=>{
+        c.dataset.kind=v;c.title=v+' — 눌러서 상세 보기';c.classList.toggle('trip',isTrip(v));});
+    }
+  };
+  sel.addEventListener('change',()=>finish(true));
+  sel.addEventListener('blur',()=>finish(sel.value!==cur));
+});
+
 // 표 행의 ✏️/🗑 (이벤트 위임)
 document.addEventListener('click',ev=>{
   const btn=ev.target.closest('.act');if(!btn)return;
