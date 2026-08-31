@@ -193,6 +193,10 @@ def pick_candidates(messages: list[dict], window: int = 10, hours: float = 12.0)
         if msg.get("out"):
             continue
         if kind:
+            # '여행'은 잡담이 흔해서 같은 메시지에 날짜가 있을 때만 직접 후보로.
+            # (키워드 트리거로는 남으니, 이어지는 날짜 답변은 맥락으로 잡힌다.)
+            if kind == "여행" and not has_date(text):
+                continue
             picked.append({"index": index, "trigger": "keyword", "kind_hint": kind})
         elif (last_kw and (index - last_kw[0]) <= window
               and (msg["dt"] - last_kw[1]).total_seconds() <= hours * 3600
