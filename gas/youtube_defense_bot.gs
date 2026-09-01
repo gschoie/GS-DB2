@@ -24,6 +24,10 @@ const PROPS = PropertiesService.getScriptProperties();
 // 3일 모음 버퍼가 쓰는 속성 키 앞머리. LAST_VIDEO_ 와 섞이지 않는다.
 const DIGEST_PREFIX = 'DIGEST_';
 
+// 마지막 모음 발송 시각(밀리초). 자동 트리거는 이걸 보고 3일이 안 찼으면 건너뛴다.
+// 수동 갱신도 발송이므로 여기 찍힌다 — 즉 수동으로 뽑으면 그때부터 다시 3일을 센다.
+const LAST_DIGEST_KEY = 'LAST_DIGEST_AT';
+
 // 모음을 대시보드에도 남길 곳 (GS-DB2 의 '유튜브 3일 모음' 워크플로).
 const DASHBOARD_OWNER = 'gschoie';
 const DASHBOARD_REPO = 'GS-DB2';
@@ -69,20 +73,38 @@ function checkSetup() {
   });
   const buffered = digestKeys_().length;
   Logger.log('3일 모음 버퍼: ' + buffered + '건');
+  const last = Number(PROPS.getProperty(LAST_DIGEST_KEY) || 0);
+  Logger.log('마지막 모음 발송: ' + (last ? new Date(last) : '기록 없음 — 다음 아침 트리거 때 발송'));
   Logger.log('GH_TOKEN: ' + (PROPS.getProperty('GH_TOKEN')
     ? '✅ 설정됨 — 대시보드에도 남깁니다'
     : '— 없음 (텔레그램만 발송. 대시보드에 남기려면 넣으세요)'));
 }
 
-// 3일 모음 트리거를 건다. 한 번만 실행하면 된다(여러 번 눌러도 중복되지 않는다).
+// 모음 트리거를 건다. 한 번만 실행하면 된다(여러 번 눌러도 중복되지 않는다).
+// 트리거 자체는 매일 아침 돌고, 실제 발송 여부는 scheduledDigest 가 마지막 발송
+// 시각으로 판단한다 — 그래야 수동 갱신 뒤 다음 자동 발송이 정확히 3일 뒤가 된다.
+// (GAS의 everyDays(3)는 기준점을 못 옮긴다)
 function installDigestTrigger() {
   ScriptApp.getProjectTriggers().forEach(function (trigger) {
-    if (trigger.getHandlerFunction() === 'sendThreeDayDigest') {
+    const handler = trigger.getHandlerFunction();
+    if (handler === 'sendThreeDayDigest' || handler === 'scheduledDigest') {
       ScriptApp.deleteTrigger(trigger);
     }
   });
-  ScriptApp.newTrigger('sendThreeDayDigest').timeBased().everyDays(3).atHour(7).create();
-  Logger.log('3일마다 오전 7시에 sendThreeDayDigest 가 돌도록 걸었습니다.');
+  ScriptApp.newTrigger('scheduledDigest').timeBased().everyDays(1).atHour(7).create();
+  Logger.log('매일 오전 7시에 확인해서, 마지막 발송에서 3일이 지났을 때만 모음을 보냅니다.');
+}
+
+// 자동 트리거 전용 — 마지막 발송(수동 포함)에서 3일이 안 지났으면 조용히 넘어간다.
+function scheduledDigest() {
+  const last = Number(PROPS.getProperty(LAST_DIGEST_KEY) || 0);
+  const threeDays = 3 * 24 * 3600 * 1000;
+  const grace = 6 * 3600 * 1000;  // 트리거 시각이 조금 일찍 와도 하루를 통째로 밀리지 않게
+  if (last > 0 && Date.now() - last < threeDays - grace) {
+    Logger.log('마지막 발송 ' + new Date(last) + ' — 3일이 안 지나 건너뜁니다.');
+    return;
+  }
+  sendThreeDayDigest();
 }
 
 
@@ -374,6 +396,7 @@ function sendThreeDayDigest() {
 
   // 보낸 뒤에만 비운다. 위에서 예외가 나면 버퍼가 남아 다음 회차에 다시 실린다.
   keys.forEach(function (key) { PROPS.deleteProperty(key); });
+  PROPS.setProperty(LAST_DIGEST_KEY, String(Date.now()));
   Logger.log('3일 모음 발송 완료 — 채널 ' + names.length + '개 · 영상 ' + rows.length + '건');
 }
 
