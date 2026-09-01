@@ -6,6 +6,15 @@ name: ETF 섹터 신호
 # 실제 실행은 그보다 늦을 수 있다.
 on:
   workflow_dispatch:
+    inputs:
+      mode:
+        description: "실행 모드 (auto = 일요일이면 월~금 누적, 그 외 daily)"
+        type: choice
+        default: auto
+        options: [auto, daily, weekly]
+      via:
+        description: "호출 주체 — scheduler면 '신호 없음' 확인 메시지를 보내지 않는다"
+        default: ""
   schedule:
     - cron: "0 22 * * *"   # 22:00 UTC = 한국 07:00 (다음 날)
 
@@ -62,7 +71,19 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
+      # 일요일은 새 시세가 없다(금요일 종가 그대로) → 스캔 대신 월~금 누적 정리를 보낸다.
+      - name: 실행 모드 판정 (일요일 = 월~금 누적)
+        id: mode
+        run: |
+          want="${{ inputs.mode || 'auto' }}"
+          if [ "$want" = "auto" ]; then
+            if [ "$(TZ=Asia/Seoul date +%u)" = "7" ]; then want=weekly; else want=daily; fi
+          fi
+          echo "value=$want" >> "$GITHUB_OUTPUT"
+          echo "실행 모드: $want ($(TZ=Asia/Seoul date '+%m-%d %a'))"
+
       - name: 55개 ETF 스캔
+        if: steps.mode.outputs.value != 'weekly'
         working-directory: etf_signal
         env:
           KIS_APP_KEY: ${{ secrets.KIS_APP_KEY }}
@@ -70,6 +91,7 @@ jobs:
         run: python etf_signal.py
 
       - name: HTML 신호판 생성 (대시보드 static)
+        if: steps.mode.outputs.value != 'weekly'
         working-directory: etf_signal
         env:
           ETF_REPORT_OUT: ../telegram_research_dashboard/static/etf_signal_report.html
@@ -82,9 +104,17 @@ jobs:
           TELEGRAM_CHAT_ID: ${{ secrets.ETF_TELEGRAM_CHAT_ID }}
         # 수동 실행(🔄 ETF 갱신)이면 --force 로 신호가 없어도 확인 메시지를 보낸다.
         # 전송 결과는 telegram_status.json 에 남아 커밋되므로 원인 진단 가능.
-        run: python etf_telegram.py ${{ github.event_name == 'workflow_dispatch' && '--force' || '' }}
+        # GAS 스케줄러도 workflow_dispatch로 오므로 event_name만으로는 사람과 구분이 안 된다
+        # → via=scheduler면 --force를 빼서 '신호 없음' 확인 메시지가 매일 오지 않게 한다.
+        run: |
+          if [ "${{ steps.mode.outputs.value }}" = "weekly" ]; then
+            python etf_telegram.py --weekly
+          else
+            python etf_telegram.py ${{ (github.event_name == 'workflow_dispatch' && inputs.via != 'scheduler') && '--force' || '' }}
+          fi
 
       - name: 신호판 커밋 및 푸시 (→ Pages 재배포)
+        if: steps.mode.outputs.value != 'weekly'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
