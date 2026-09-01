@@ -337,8 +337,18 @@ function sendThreeDayDigest() {
       Logger.log('3일 모음: 못 읽는 항목 하나를 건너뜁니다 — ' + key);
     }
   });
-  if (rows.length === 0) {
+  // 담는 길목에서 이미 거르지만, 예전 코드가 담아 둔 쇼츠가 버퍼에 남아 있을 수
+  // 있어 보내는 길목에서도 한 번 더 거른다.
+  const kept = DIGEST_SKIP_SHORTS
+    ? rows.filter(function (row) { return !isShorts_(row.u); })
+    : rows;
+  if (kept.length < rows.length) {
+    Logger.log('버퍼에 남아 있던 쇼츠 ' + (rows.length - kept.length) + '건을 버립니다.');
+  }
+
+  if (kept.length === 0) {
     keys.forEach(function (key) { PROPS.deleteProperty(key); });
+    Logger.log('걸러내고 나니 보낼 영상이 없습니다.');
     return;
   }
 
@@ -347,7 +357,7 @@ function sendThreeDayDigest() {
   WATCH_CHANNELS.forEach(function (channel, index) { order[channel.name] = index; });
 
   const byChannel = {};
-  rows.forEach(function (row) {
+  kept.forEach(function (row) {
     const name = row.ch || '(채널 미상)';
     if (!byChannel[name]) byChannel[name] = [];
     byChannel[name].push(row);
@@ -362,7 +372,7 @@ function sendThreeDayDigest() {
   const stamp = Utilities.formatDate(new Date(), 'Asia/Seoul', 'M월 d일');
   let lines = [
     `📻 <b>3일 모음 · ${stamp}</b>`,
-    `채널 ${names.length}개 · 영상 ${rows.length}건`,
+    `채널 ${names.length}개 · 영상 ${kept.length}건`,
     ''
   ];
   names.forEach(function (name) {
@@ -389,7 +399,7 @@ function sendThreeDayDigest() {
 
   // 대시보드에도 남긴다. 실패해도 텔레그램은 이미 나갔으므로 버퍼를 붙들지 않는다.
   try {
-    pushDigestToDashboard_(names, byChannel, rows);
+    pushDigestToDashboard_(names, byChannel, kept);
   } catch (error) {
     Logger.log('대시보드 전달 실패 (텔레그램은 정상 발송됨): ' + error.toString());
   }
@@ -397,7 +407,7 @@ function sendThreeDayDigest() {
   // 보낸 뒤에만 비운다. 위에서 예외가 나면 버퍼가 남아 다음 회차에 다시 실린다.
   keys.forEach(function (key) { PROPS.deleteProperty(key); });
   PROPS.setProperty(LAST_DIGEST_KEY, String(Date.now()));
-  Logger.log('3일 모음 발송 완료 — 채널 ' + names.length + '개 · 영상 ' + rows.length + '건');
+  Logger.log('3일 모음 발송 완료 — 채널 ' + names.length + '개 · 영상 ' + kept.length + '건');
 }
 
 // 모음을 GS-DB2 의 워크플로로 넘겨 대시보드 페이지를 만들게 한다.
