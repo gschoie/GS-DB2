@@ -199,6 +199,14 @@
     - GAS 쪽 고친 것: 키를 소스에서 빼 스크립트 속성으로(`secret_()`), 내부 함수는
       밑줄 접미사로 실행 드롭다운에서 감춤, 기록해 둔 영상이 피드에서 사라지면
       피드 15건이 통째로 나가고 제미나이도 15번 호출되던 문제에 상한(5건).
+    - **3일 간격은 마지막 발송 기준**: 트리거는 매일 07시에 돌고(`scheduledDigest`),
+      `LAST_DIGEST_AT`에서 3일(−6h 여유)이 안 지났으면 건너뛴다. 수동 갱신도 발송이므로
+      그 시점부터 다시 3일을 센다. GAS everyDays(3)는 기준점을 못 옮겨 이렇게 했다.
+    - **수동 갱신 버튼**: ytdigest 뷰의 `🔄 모음 갱신` → 유튜브 GAS 프로젝트를 웹 앱으로
+      배포한 주소(app.js `YTDIGEST_ENDPOINT`)에 POST {action:'send_digest'} → 최근 3일치를
+      피드에서 다시 채워 즉시 발송(텔레그램 두 통 + 대시보드). LockService로 동시 실행 방지.
+      dispatch_proxy를 거치지 않는 이유: 모음 데이터가 그 프로젝트의 스크립트 속성 버퍼에
+      있어 GitHub 워크플로로는 만들 수 없다. 웹앱 코드 갱신은 '배포 관리 → 새 버전'으로만.
     - 사용자 설치: 스크립트 속성 `TELEGRAM_TOKEN`·`TELEGRAM_CHAT_ID`·`GEMINI_API_KEY`
       (+대시보드까지 쓰려면 `GH_TOKEN`) → `checkSetup()` → `installDigestTrigger()`.
       `fillBufferFromFeeds(3)`로 3일 안 기다리고 바로 시험해 볼 수 있다.
@@ -223,5 +231,14 @@
       자동 새로고침. 달력은 2개월 나란히 + ◀▶ 이동(이번 달~+6개월 연속 렌더),
       날짜 더블클릭 두 번으로 기간 입력. 순서: 다가오는 → 달력 → 기입 → 지난 → 확인필요.
       친구 매칭은 표시 이름 포함 일치('다리' 수식어 우선). 검증: 김혜영 독일 출장 기입 E2E 성공.
+
+17. **친환경 에너지·FDC 브리핑 신설** (9/1): `energy_briefing/` — 건기 초기와 같은
+    Gemini 단일 파이프라인(RSS→Gemini flash-latest), 시세·텔레그램 없음(대시보드 전용).
+    주제 5축: 친환경 선박 추진(암모니아·액화수소·원자력/SMR) / FDC / FLNG·FSRU /
+    LNG 액화 FID / 미국 발전원 투자(가스복합·신재생·SMR). 시사점은 한국 조선 3사 관점.
+    `energy-briefing.yml` 매일 UTC 21:40(KST 06:40), 키는 ENERGY_ → CONSTRUCTION_ →
+    GEMINI_API_KEY 폴백. 산출물 `static/energy_daily/` + `energy_briefing_report.html`.
+    사이드바 `🌊 친환경E·FDC.브리핑`, overview 1행을 네이버Top7|친환경FDC|Claude방산
+    33%씩으로 재배치(energyBrief 카드).
 
 이후 작업은 git log와 이 파일을 갱신하며 이어간다.
