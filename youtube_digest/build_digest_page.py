@@ -106,6 +106,16 @@ def all_urls(channels: list) -> list:
     return [video["u"] for group in channels for video in group["videos"]]
 
 
+def grouped_urls(channels: list) -> str:
+    """복사용 주소 목록 — 텔레그램 둘째 통과 같은 모양(채널 이름 밑에 그 채널 주소들)."""
+    blocks = []
+    for group in channels:
+        lines = [f"[{group['name']}]"]
+        lines.extend(video["u"] for video in group["videos"])
+        blocks.append("\n".join(lines))
+    return "\n\n".join(blocks)
+
+
 def render_markdown(payload: dict) -> str:
     channels = payload["channels"]
     total = len(all_urls(channels))
@@ -127,7 +137,7 @@ def render_markdown(payload: dict) -> str:
         lines.append("")
     lines.append("## 주소만")
     lines.append("")
-    lines.extend(all_urls(channels))
+    lines.append(grouped_urls(channels))
     lines.append("")
     return "\n".join(lines)
 
@@ -165,7 +175,7 @@ def render_page(payload: dict) -> str:
         '<button id="copy">전체 복사</button>',
         f'<a href="{html.escape(date)}.md" download>⬇ .md</a>',
         "</div>",
-        f'<textarea id="urls" readonly>{html.escape(chr(10).join(urls))}</textarea>',
+        f'<textarea id="urls" readonly>{html.escape(grouped_urls(channels))}</textarea>',
         '<p class="hint">NotebookLM은 자막이 있는 공개 영상만 소스로 받습니다. '
         "자막 없는 영상은 추가 단계에서 거절됩니다.</p>",
         "</div>",
@@ -257,7 +267,7 @@ def main() -> int:
             (OUT_DIR / f"{date}.html").write_text(render_page(payload), encoding="utf-8")
             (OUT_DIR / f"{date}.md").write_text(render_markdown(payload), encoding="utf-8")
             (OUT_DIR / f"{date}.txt").write_text(
-                "\n".join(all_urls(payload["channels"])) + "\n", encoding="utf-8"
+                grouped_urls(payload["channels"]) + "\n", encoding="utf-8"
             )
             total = len(all_urls(payload["channels"]))
             print(f"{date}: 채널 {len(payload['channels'])}개 · 영상 {total}건 기록")
