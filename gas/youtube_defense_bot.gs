@@ -455,6 +455,54 @@ function sendChunked_(lines, plain) {
 }
 
 
+// === 대시보드 수동 갱신 (웹 앱) ===
+//
+// 대시보드의 '🔄 모음 갱신' 버튼이 이 프로젝트의 웹앱 주소를 POST {action:'send_digest'}
+// 로 부른다. 최근 3일치를 피드에서 다시 채워 즉시 발송한다(텔레그램 + 대시보드).
+//
+// 설치(1회): 배포 → 새 배포 → 유형 '웹 앱' → 실행 계정 '나' → 액세스 '모든 사용자'
+// → 배포. 나온 /exec 주소를 대시보드 app.js 의 YTDIGEST_ENDPOINT 에 넣는다.
+// 이후 코드가 바뀌면 '배포 관리 → 새 버전'으로만 갱신할 것 (새 배포 금지 — 주소가 바뀐다).
+
+function doPost(e) {
+  const out = { ok: false };
+  try {
+    let body = {};
+    try {
+      body = JSON.parse((e && e.postData && e.postData.contents) || '{}');
+    } catch (ignored) {}
+    if (body.action !== 'send_digest') {
+      out.error = 'unknown action';
+      return jsonOut_(out);
+    }
+
+    // 더블클릭·자동 트리거와의 동시 실행 방지
+    const lock = LockService.getScriptLock();
+    if (!lock.tryLock(5000)) {
+      out.error = '이미 실행 중입니다 — 잠시 뒤 다시 눌러 주세요';
+      return jsonOut_(out);
+    }
+    try {
+      fillBufferFromFeeds(3);
+      const count = digestKeys_().length;   // 발송하면 버퍼가 비워지므로 먼저 센다
+      if (count > 0) sendThreeDayDigest();
+      out.ok = true;
+      out.videos = count;
+    } finally {
+      lock.releaseLock();
+    }
+  } catch (error) {
+    out.error = String(error);
+  }
+  return jsonOut_(out);
+}
+
+function jsonOut_(payload) {
+  return ContentService.createTextOutput(JSON.stringify(payload))
+    .setMimeType(ContentService.MimeType.JSON);
+}
+
+
 // === 제미나이 API 호출 및 요약 함수 ===
 
 function askGeminiSummary_(title, text) {

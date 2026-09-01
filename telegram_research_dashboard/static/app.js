@@ -339,6 +339,21 @@ async function sendMzDiary(){
   box.hidden=false;$('#mzdiary-note').value='';MZDIARY_IMGS.length=0;renderMzdiaryPreviews();const fi=$('#mzdiary-photos');if(fi)fi.value='';
  }catch(e){status.textContent='실패: '+e.message}
  finally{btn.disabled=false}}
+const YTDIGEST_ENDPOINT='';/* 유튜브 3일 모음 GAS 웹앱(/exec) 주소. gas/youtube_defense_bot.gs 를 '웹 앱'으로 배포해 나온 주소를 넣는다. 비어 있으면 버튼이 안내만 한다 */
+async function dispatchYtDigest(){
+ const btn=$('#ytdigest-refresh'),status=$('#ytdigest-status');
+ if(!YTDIGEST_ENDPOINT){status.textContent='⚠ 웹앱 주소 미설정 — youtube_defense_bot.gs 를 웹 앱으로 배포하고 그 주소를 app.js 의 YTDIGEST_ENDPOINT 에 넣어야 합니다';return}
+ status.textContent='모으는 중… (30초쯤)';btn.disabled=true;
+ try{
+  const r=await fetch(YTDIGEST_ENDPOINT,{method:'POST',body:JSON.stringify({action:'send_digest'})});
+  const d=await r.json();
+  if(d&&d.ok){
+   if(d.videos){status.textContent=`✅ ${d.videos}건 발송 — 텔레그램 확인, 대시보드는 1~2분 뒤 자동 새로고침`;
+    const f=$('#ytdigest-frame');setTimeout(()=>{f.src='youtube_digest_report.html?t='+Date.now();status.textContent='✅ 갱신됨'},100000)}
+   else status.textContent='최근 3일에 새 영상이 없습니다';}
+  else status.textContent='⚠ '+((d&&d.error)||'실패');}
+ catch(e){status.textContent='실패: '+e.message}
+ finally{btn.disabled=false}}
 async function dispatchEtf(){
  const btn=$('#etf-refresh'),status=$('#etf-status');
  if(await dispatchWorkflow({workflow:'etf'},status,btn))
@@ -428,6 +443,7 @@ $('#mzdiary-previews')?.addEventListener('click',e=>{const b=e.target.closest('[
 $('#mzdiary-endpoint-save')?.addEventListener('click',()=>{const v=($('#mzdiary-endpoint')?.value||'').trim();if(!/^https:\/\/script\.google\.com\/.+\/exec$/.test(v)){alert('GAS 웹앱 /exec URL 형식이 아닙니다.');return}try{localStorage.setItem(MZDIARY_EP_KEY,v)}catch{}$('#mzdiary-status').textContent='☁ URL 저장됨 — 이제 기록할 수 있습니다';const st=$('#mzdiary-setup');if(st)st.open=false});
 {const _mep=$('#mzdiary-endpoint');if(_mep)_mep.value=mzdiaryEndpoint();}
 $('#etf-refresh')?.addEventListener('click',dispatchEtf);
+$('#ytdigest-refresh')?.addEventListener('click',dispatchYtDigest);
 $('#holdings-refresh')?.addEventListener('click',dispatchHoldings);
 $('#news-refresh')?.addEventListener('click',dispatchNews);
 $('#reports-refresh')?.addEventListener('click',dispatchReports);
