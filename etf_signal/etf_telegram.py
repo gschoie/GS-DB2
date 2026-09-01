@@ -113,6 +113,110 @@ def build_message(payload):
     lines += [f'전체 신호판 › <a href="{DASH_URL}">대시보드</a>', SIGNATURE]
     return "\n".join(lines)
 
+WD_KO = "월화수목금토일"
+
+
+def _week_range(today=None):
+    """일요일에 도는 주간 정리가 다루는 구간 = 직전 월~금. (월, 금) date 쌍."""
+    today = today or datetime.date.today()
+    # 일요일(weekday 6) 기준 6일 전이 월요일. 다른 요일에 수동 실행해도 '가장 최근 월~금'.
+    monday = today - datetime.timedelta(days=(today.weekday() + 1) % 7 + 6)
+    if today.weekday() != 6:
+        monday = today - datetime.timedelta(days=today.weekday() + 7)
+    return monday, monday + datetime.timedelta(days=4)
+
+
+def load_week(start, end):
+    """history/<거래일>.json 을 월~금 구간만큼 읽는다. 휴장일 파일은 없으므로 건너뛴다."""
+    days = []
+    d = start
+    while d <= end:
+        path = os.path.join(HERE, "history", f"{d.isoformat()}.json")
+        if os.path.exists(path):
+            with open(path, encoding="utf-8") as f:
+                days.append((d, json.load(f)))
+        d += datetime.timedelta(days=1)
+    return days
+
+
+def _tally(days, flag):
+    """주중에 그 신호가 뜬 종목을 모은다. {code: {name, group, 요일들, 마지막 신호}}"""
+    picked = {}
+    for day, payload in days:
+        for s in payload.get("signals") or []:
+            if not s.get(flag) or not _keep(s):
+                continue
+            row = picked.setdefault(s["code"], {"name": s["name"], "group": s["group"],
+                                                "days": [], "last": s})
+            row["days"].append(WD_KO[day.weekday()])
+            row["last"] = s
+    return picked
+
+
+def _week_returns(days):
+    """주 첫 거래일 종가 → 마지막 거래일 종가 등락률. {code: (name, pct)}"""
+    if len(days) < 2:
+        return {}
+    first = {s["code"]: s for s in (days[0][1].get("signals") or [])}
+    last = {s["code"]: s for s in (days[-1][1].get("signals") or [])}
+    out = {}
+    for code, s in last.items():
+        base = first.get(code, {}).get("close")
+        if base:
+            out[code] = (s["name"], (s["close"] - base) / base * 100)
+    return out
+
+
+def weekly_message(today=None):
+    """일요일 발송용 '월~금 누적' 정리. 한 주 동안 뜬 신호를 종목별로 묶어 보여준다.
+
+    매일 발송은 '그날 뜬 신호'만 보여주므로 주 중에 흘려보낸 것을 놓치기 쉽다.
+    주말에 한 번 몰아 보면 '이번 주에 어떤 종목이 몇 번 신호를 냈나'가 남는다.
+    """
+    start, end = _week_range(today)
+    days = load_week(start, end)
+    if not days:
+        return None
+
+    span = f"{start:%m/%d}~{end:%m/%d}"
+    lines = [f"<b>📡 ETF/섹터 신호 · 월~금 누적</b> · {span} ({len(days)}거래일)", ""]
+
+    buys, sells, adxs = _tally(days, "alert"), _tally(days, "alert_sell"), _tally(days, "alert_adx")
+    rets = _week_returns(days)
+
+    def block(title, picked, icon):
+        if not picked:
+            return []
+        rows = sorted(picked.values(), key=lambda r: (-len(r["days"]), r["name"]))[:8]
+        out = [f"{title} <b>{len(picked)}</b>개", ""]
+        for r in rows:
+            code = next(c for c, v in picked.items() if v is r)
+            pct = rets.get(code, (None, None))[1]
+            move = f" · 주간 {pct:+.1f}%" if pct is not None else ""
+            out += [f"{icon} <b>{esc(r['name'])}</b> · {esc(r['group'])}",
+                    f"   {esc('·'.join(r['days']))}요일 {len(r['days'])}회{move}", ""]
+        if len(picked) > len(rows):
+            out += [f"   … 외 {len(picked) - len(rows)}개", ""]
+        return out
+
+    body = (block("★ 매수 신호", buys, "🟢")
+            + block("▼ 매도 경고", sells, "🔴")
+            + block("⚡ 추세 강도", adxs, "⚡"))
+    if not body:
+        lines += ["이번 주 새 신호 없음 ✅", ""]
+    else:
+        lines += body
+
+    if rets:
+        ranked = sorted(rets.values(), key=lambda x: -x[1])
+        top = " · ".join(f"{esc(n)} {p:+.1f}%" for n, p in ranked[:3])
+        bottom = " · ".join(f"{esc(n)} {p:+.1f}%" for n, p in ranked[-3:][::-1])
+        lines += [f"📈 주간 상승 {top}", f"📉 주간 하락 {bottom}", ""]
+
+    lines += [f'전체 신호판 › <a href="{DASH_URL}">대시보드</a>', SIGNATURE]
+    return "\n".join(lines)
+
+
 def heartbeat_message(payload):
     asof = payload["signals"][0]["asof"] if payload.get("signals") else "-"
     return "\n".join([
@@ -159,8 +263,27 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--dry-run", action="store_true", help="발송 없이 메시지만 출력")
     ap.add_argument("--force", action="store_true", help="신호 없어도 확인 메시지 발송(수동 갱신)")
+    ap.add_argument("--weekly", action="store_true",
+                    help="월~금 누적 정리 발송(일요일). signals.json 대신 history를 읽는다")
     args = ap.parse_args()
     _load_env()
+
+    if args.weekly:
+        msg = weekly_message()
+        if msg is None:
+            print("주간 history 없음 → 발송 생략")
+            _write_status(True, "weekly_no_history")
+            return
+        if args.dry_run:
+            print("─── 미리보기 (HTML 태그 포함) ───\n")
+            print(msg)
+            return
+        res = send(msg)
+        ok = bool(res.get("ok"))
+        _write_status(ok, "weekly_sent" if ok else "send_failed", res)
+        print("텔레그램 전송 완료" if ok else f"⚠️ 텔레그램 전송 실패: {res}")
+        return
+
     with open(os.path.join(HERE, "signals.json"), encoding="utf-8") as f:
         payload = json.load(f)
     msg = build_message(payload)

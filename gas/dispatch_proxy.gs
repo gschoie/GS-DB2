@@ -142,14 +142,18 @@ const TZ = 'Asia/Seoul';
 const GRACE_MIN = 60;   // 트리거가 밀리거나 실패해도 목표 시각 +60분까지는 따라 쏜다
 
 // wf: 위 WF 매핑의 키 / hours·minute: KST 발사 시각 / days: daily·weekday·mon~sun
+// inputs: 워크플로가 선언한 입력만 넣을 것 — 선언 안 된 키를 보내면 GitHub이 422로 거절한다
 const SCHEDULE = [
   { wf: 'trend',     hours: [6],      minute: 30, days: 'daily',   label: '시장관심.내러티브' },
-  { wf: 'etf',       hours: [7],      minute: 0,  days: 'daily',   label: 'ETF/섹터 신호' },
+  // 일요일은 워크플로가 스스로 '월~금 누적' 모드로 바꾼다(mode 입력 기본값 auto)
+  { wf: 'etf',       hours: [7],      minute: 0,  days: 'daily',   label: 'ETF/섹터 신호',
+                     inputs: { via: 'scheduler' } },
   { wf: 'flow',      hours: [10, 13], minute: 0,  days: 'weekday', label: '시장 수급' },
   { wf: 'flow',      hours: [15],     minute: 40, days: 'weekday', label: '시장 수급(마감 잠정)' },
   { wf: 'flow',      hours: [16],     minute: 40, days: 'weekday', label: '시장 수급(확정)' },
   { wf: 'holdings',  hours: [9, 10, 11, 12, 13, 14, 15, 16],   // 장중~마감 직후까지만
-                     minute: 17, days: 'weekday', label: '액티브ETF 매매동향' },
+                     minute: 17, days: 'weekday', label: '액티브ETF 매매동향',
+                     inputs: { via: 'scheduler' } },
   { wf: 'consensus', hours: [17],     minute: 0,  days: 'fri,sat', label: '코스피200 컨센' },
 ];
 
@@ -176,7 +180,7 @@ function tick() {
       const slot = row.wf + '@' + pad2_(hour) + ':' + pad2_(row.minute);
       if (fired[slot] === today) return;          // 오늘 이 슬롯은 이미 쐈다
 
-      const res = fireWorkflow(row.wf, {});
+      const res = fireWorkflow(row.wf, row.inputs || {});
       Logger.log('%s %s → %s', slot, row.label || '', res.ok ? 'OK' : 'FAIL ' + res.error);
       if (res.ok) { fired[slot] = today; changed = true; }
       // 실패하면 기록하지 않는다 → 다음 틱에서 GRACE_MIN 안까지 자동 재시도
