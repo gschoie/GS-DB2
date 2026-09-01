@@ -1,13 +1,13 @@
 {
-  "when_utc": "2026-08-30 22:45:26Z",
+  "when_utc": "2026-09-01 02:02:53Z",
   "ok": true,
-  "note": "forced_heartbeat",
+  "note": "alert_sent",
   "chat_id_tail": "5171",
   "token_set": true,
   "response": {
     "ok": true,
     "result": {
-      "message_id": 219,
+      "message_id": 231,
       "from": {
         "id": 8875725998,
         "is_bot": true,
@@ -21,8 +21,8 @@
         "username": "gschoie",
         "type": "private"
       },
-      "date": 1788129926,
-      "text": "📡 ETF/섹터 신호 · 2026-08-28 (전일 확정)\n\n오늘 새 신호 없음 ✅ (수동 갱신 확인)\n\n전체 신호판 › 대시보드\n🎴 GS Research Desk · ETF/섹터 신호",
+      "date": 1788228173,
+      "text": "📡 ETF/섹터 신호 · 2026-08-31 (전일 확정)\n\n★ 매수 신호(골든크로스) 1개\n\n🟢 KODEX 에너지화학 · 화학\n   ＋DI가 −DI 상향돌파·추세전환 · Stochastic 골든크로스\n   ADX 15.0 · %K 59.9/51.1 · 수급 중립\n   [B] 거래대금 1.64배 · 상대강도 상위 21%\n\n⚡ 추세 강도 1개 (강력 1)\n\n⚡ TIGER 차이나항셍테크 · 해외지수\n   ADX 25 상향돌파 · 하락추세 강화(강력)\n   ADX 25.5 · %K 10.5/13.1 · 수급 중립\n   [A] 상대강도 하위 2% · ADX 하락추세 · 52주 신저가권\n\n전체 신호판 › 대시보드\n🎴 GS Research Desk · ETF/섹터 신호",
       "entities": [
         {
           "offset": 0,
@@ -30,7 +30,27 @@
           "type": "bold"
         },
         {
-          "offset": 69,
+          "offset": 50,
+          "length": 1,
+          "type": "bold"
+        },
+        {
+          "offset": 57,
+          "length": 11,
+          "type": "bold"
+        },
+        {
+          "offset": 191,
+          "length": 1,
+          "type": "bold"
+        },
+        {
+          "offset": 204,
+          "length": 13,
+          "type": "bold"
+        },
+        {
+          "offset": 339,
           "length": 4,
           "type": "text_link",
           "url": "https://gschoie.github.io/GS-DB2/etf_signal_report.html"

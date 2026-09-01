@@ -24,6 +24,10 @@ const PROPS = PropertiesService.getScriptProperties();
 // 3일 모음 버퍼가 쓰는 속성 키 앞머리. LAST_VIDEO_ 와 섞이지 않는다.
 const DIGEST_PREFIX = 'DIGEST_';
 
+// 마지막 모음 발송 시각(밀리초). 자동 트리거는 이걸 보고 3일이 안 찼으면 건너뛴다.
+// 수동 갱신도 발송이므로 여기 찍힌다 — 즉 수동으로 뽑으면 그때부터 다시 3일을 센다.
+const LAST_DIGEST_KEY = 'LAST_DIGEST_AT';
+
 // 모음을 대시보드에도 남길 곳 (GS-DB2 의 '유튜브 3일 모음' 워크플로).
 const DASHBOARD_OWNER = 'gschoie';
 const DASHBOARD_REPO = 'GS-DB2';
@@ -39,6 +43,7 @@ const MAX_NEW_PER_RUN = 5;
 const DIGEST_SKIP_SHORTS = true;
 
 // 구독할 방산 채널 목록 (총 7개 채널)
+// digest: false 를 단 채널은 낱개 알림만 오고 3일 모음에는 담지 않는다.
 const WATCH_CHANNELS = [
   { name: '샤를세환', id: 'UCVNAlg66t3JhkzT5JntclLg' },
   { name: 'KKMD', id: 'UCLDV9mI3tOQCrdPUWjogQZA' },
@@ -46,7 +51,7 @@ const WATCH_CHANNELS = [
   { name: '슈퍼소닉', id: 'UCXK_itQ6_JKltErZW_sQojQ' },
   { name: '밀덕', id: 'UCV-slcYbZrNCowaVd3cQaHQ' },
   { name: 'KFN+', id: 'UCObL9hob3R03QSZU5olJZiQ' },
-  { name: 'KFN1', id: 'UCXNMgSZqmfX1_K8Uf4l4sog' }
+  { name: 'KFN1', id: 'UCXNMgSZqmfX1_K8Uf4l4sog', digest: false }
 ];
 
 
@@ -69,20 +74,38 @@ function checkSetup() {
   });
   const buffered = digestKeys_().length;
   Logger.log('3일 모음 버퍼: ' + buffered + '건');
+  const last = Number(PROPS.getProperty(LAST_DIGEST_KEY) || 0);
+  Logger.log('마지막 모음 발송: ' + (last ? new Date(last) : '기록 없음 — 다음 아침 트리거 때 발송'));
   Logger.log('GH_TOKEN: ' + (PROPS.getProperty('GH_TOKEN')
     ? '✅ 설정됨 — 대시보드에도 남깁니다'
     : '— 없음 (텔레그램만 발송. 대시보드에 남기려면 넣으세요)'));
 }
 
-// 3일 모음 트리거를 건다. 한 번만 실행하면 된다(여러 번 눌러도 중복되지 않는다).
+// 모음 트리거를 건다. 한 번만 실행하면 된다(여러 번 눌러도 중복되지 않는다).
+// 트리거 자체는 매일 아침 돌고, 실제 발송 여부는 scheduledDigest 가 마지막 발송
+// 시각으로 판단한다 — 그래야 수동 갱신 뒤 다음 자동 발송이 정확히 3일 뒤가 된다.
+// (GAS의 everyDays(3)는 기준점을 못 옮긴다)
 function installDigestTrigger() {
   ScriptApp.getProjectTriggers().forEach(function (trigger) {
-    if (trigger.getHandlerFunction() === 'sendThreeDayDigest') {
+    const handler = trigger.getHandlerFunction();
+    if (handler === 'sendThreeDayDigest' || handler === 'scheduledDigest') {
       ScriptApp.deleteTrigger(trigger);
     }
   });
-  ScriptApp.newTrigger('sendThreeDayDigest').timeBased().everyDays(3).atHour(7).create();
-  Logger.log('3일마다 오전 7시에 sendThreeDayDigest 가 돌도록 걸었습니다.');
+  ScriptApp.newTrigger('scheduledDigest').timeBased().everyDays(1).atHour(7).create();
+  Logger.log('매일 오전 7시에 확인해서, 마지막 발송에서 3일이 지났을 때만 모음을 보냅니다.');
+}
+
+// 자동 트리거 전용 — 마지막 발송(수동 포함)에서 3일이 안 지났으면 조용히 넘어간다.
+function scheduledDigest() {
+  const last = Number(PROPS.getProperty(LAST_DIGEST_KEY) || 0);
+  const threeDays = 3 * 24 * 3600 * 1000;
+  const grace = 6 * 3600 * 1000;  // 트리거 시각이 조금 일찍 와도 하루를 통째로 밀리지 않게
+  if (last > 0 && Date.now() - last < threeDays - grace) {
+    Logger.log('마지막 발송 ' + new Date(last) + ' — 3일이 안 지나 건너뜁니다.');
+    return;
+  }
+  sendThreeDayDigest();
 }
 
 
@@ -174,16 +197,22 @@ function checkNewVideos() {
 
           // 3일 모음 버퍼에 적립 — 발송 전에 넣어 둔다.
           // 텔레그램 전송이 실패해도 링크는 남아 다음 모음에 실린다.
-          const publishedAt = new Date(entry.getChildText('published', atom)).getTime();
-          bufferForDigest_(channel.name, videoId, videoTitle, videoUrl, publishedAt);
+          // (digest: false 채널은 알림만 보내고 모음에는 담지 않는다)
+          if (channel.digest !== false) {
+            const publishedAt = new Date(entry.getChildText('published', atom)).getTime();
+            bufferForDigest_(channel.name, videoId, videoTitle, videoUrl, publishedAt);
+          }
 
           // HTML 특수문자 충돌 방지를 위한 안전치환 (< 와 > 부품 보호)
           const safeTitle = escapeHtml_(videoTitle);
           const safeSummary = escapeHtml_(aiSummary);
 
-          // 텔레그램 메시지 조립
+          // 텔레그램 메시지 조립 — 쇼츠는 머리말로 구분한다
+          const header = isShorts_(videoUrl)
+            ? `🎬 <b>새로운 방산 쇼츠 업로드!</b>`
+            : `📺 <b>새로운 방산 영상 업로드!</b>`;
           const message =
-            `📺 <b>새로운 방산 영상 업로드!</b>\n\n` +
+            header + `\n\n` +
             `• <b>채널:</b> ${channel.name}\n` +
             `• <b>제목:</b> <b>${safeTitle}</b>\n\n` +
             `• <b>제미나이 AI 핵심 요약:</b>\n${safeSummary}\n\n` +
@@ -261,6 +290,7 @@ function fillBufferFromFeeds(days) {
   let skipped = 0;
 
   WATCH_CHANNELS.forEach(function (channel) {
+    if (channel.digest === false) return;  // 모음 제외 채널
     try {
       const url = 'https://www.youtube.com/feeds/videos.xml?channel_id=' + channel.id;
       const xml = XmlService.parse(UrlFetchApp.fetch(url).getContentText());
@@ -312,8 +342,24 @@ function sendThreeDayDigest() {
       Logger.log('3일 모음: 못 읽는 항목 하나를 건너뜁니다 — ' + key);
     }
   });
-  if (rows.length === 0) {
+  // 담는 길목에서 이미 거르지만, 예전 코드가 담아 둔 것(쇼츠·모음 제외 채널)이
+  // 버퍼에 남아 있을 수 있어 보내는 길목에서도 한 번 더 거른다.
+  const noDigest = {};
+  WATCH_CHANNELS.forEach(function (channel) {
+    if (channel.digest === false) noDigest[channel.name] = true;
+  });
+  const kept = rows.filter(function (row) {
+    if (DIGEST_SKIP_SHORTS && isShorts_(row.u)) return false;
+    if (noDigest[row.ch]) return false;
+    return true;
+  });
+  if (kept.length < rows.length) {
+    Logger.log('모음에서 ' + (rows.length - kept.length) + '건 제외(쇼츠·모음 제외 채널 잔재).');
+  }
+
+  if (kept.length === 0) {
     keys.forEach(function (key) { PROPS.deleteProperty(key); });
+    Logger.log('걸러내고 나니 보낼 영상이 없습니다.');
     return;
   }
 
@@ -322,7 +368,7 @@ function sendThreeDayDigest() {
   WATCH_CHANNELS.forEach(function (channel, index) { order[channel.name] = index; });
 
   const byChannel = {};
-  rows.forEach(function (row) {
+  kept.forEach(function (row) {
     const name = row.ch || '(채널 미상)';
     if (!byChannel[name]) byChannel[name] = [];
     byChannel[name].push(row);
@@ -337,7 +383,7 @@ function sendThreeDayDigest() {
   const stamp = Utilities.formatDate(new Date(), 'Asia/Seoul', 'M월 d일');
   let lines = [
     `📻 <b>3일 모음 · ${stamp}</b>`,
-    `채널 ${names.length}개 · 영상 ${rows.length}건`,
+    `채널 ${names.length}개 · 영상 ${kept.length}건`,
     ''
   ];
   names.forEach(function (name) {
@@ -364,14 +410,15 @@ function sendThreeDayDigest() {
 
   // 대시보드에도 남긴다. 실패해도 텔레그램은 이미 나갔으므로 버퍼를 붙들지 않는다.
   try {
-    pushDigestToDashboard_(names, byChannel, rows);
+    pushDigestToDashboard_(names, byChannel, kept);
   } catch (error) {
     Logger.log('대시보드 전달 실패 (텔레그램은 정상 발송됨): ' + error.toString());
   }
 
   // 보낸 뒤에만 비운다. 위에서 예외가 나면 버퍼가 남아 다음 회차에 다시 실린다.
   keys.forEach(function (key) { PROPS.deleteProperty(key); });
-  Logger.log('3일 모음 발송 완료 — 채널 ' + names.length + '개 · 영상 ' + rows.length + '건');
+  PROPS.setProperty(LAST_DIGEST_KEY, String(Date.now()));
+  Logger.log('3일 모음 발송 완료 — 채널 ' + names.length + '개 · 영상 ' + kept.length + '건');
 }
 
 // 모음을 GS-DB2 의 워크플로로 넘겨 대시보드 페이지를 만들게 한다.
@@ -449,6 +496,54 @@ function sendChunked_(lines, plain) {
   if (buffer.length > 0) {
     sendTelegramMessage_(buffer.join('\n'), { plain: plain, noPreview: true });
   }
+}
+
+
+// === 대시보드 수동 갱신 (웹 앱) ===
+//
+// 대시보드의 '🔄 모음 갱신' 버튼이 이 프로젝트의 웹앱 주소를 POST {action:'send_digest'}
+// 로 부른다. 최근 3일치를 피드에서 다시 채워 즉시 발송한다(텔레그램 + 대시보드).
+//
+// 설치(1회): 배포 → 새 배포 → 유형 '웹 앱' → 실행 계정 '나' → 액세스 '모든 사용자'
+// → 배포. 나온 /exec 주소를 대시보드 app.js 의 YTDIGEST_ENDPOINT 에 넣는다.
+// 이후 코드가 바뀌면 '배포 관리 → 새 버전'으로만 갱신할 것 (새 배포 금지 — 주소가 바뀐다).
+
+function doPost(e) {
+  const out = { ok: false };
+  try {
+    let body = {};
+    try {
+      body = JSON.parse((e && e.postData && e.postData.contents) || '{}');
+    } catch (ignored) {}
+    if (body.action !== 'send_digest') {
+      out.error = 'unknown action';
+      return jsonOut_(out);
+    }
+
+    // 더블클릭·자동 트리거와의 동시 실행 방지
+    const lock = LockService.getScriptLock();
+    if (!lock.tryLock(5000)) {
+      out.error = '이미 실행 중입니다 — 잠시 뒤 다시 눌러 주세요';
+      return jsonOut_(out);
+    }
+    try {
+      fillBufferFromFeeds(3);
+      const count = digestKeys_().length;   // 발송하면 버퍼가 비워지므로 먼저 센다
+      if (count > 0) sendThreeDayDigest();
+      out.ok = true;
+      out.videos = count;
+    } finally {
+      lock.releaseLock();
+    }
+  } catch (error) {
+    out.error = String(error);
+  }
+  return jsonOut_(out);
+}
+
+function jsonOut_(payload) {
+  return ContentService.createTextOutput(JSON.stringify(payload))
+    .setMimeType(ContentService.MimeType.JSON);
 }
 
 

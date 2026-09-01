@@ -1,0 +1,222 @@
+{
+ "source": "DC인사이드",
+ "galleries": [
+  {
+   "id": "krstock",
+   "name": "국내주식갤러리",
+   "posts": 1256,
+   "capped": true,
+   "burst": 1.5,
+   "base_daily": 843.6
+  },
+  {
+   "id": "stockus",
+   "name": "해외주식갤러리",
+   "posts": 3834,
+   "capped": true,
+   "burst": 2.0,
+   "base_daily": 1936.0
+  }
+ ],
+ "posts_sampled": 518,
+ "keywords": [
+  {
+   "term": "고프",
+   "count": 20,
+   "burst": 99.0,
+   "new": true
+  },
+  {
+   "term": "미장",
+   "count": 10,
+   "burst": 96.2,
+   "new": true
+  },
+  {
+   "term": "양닉",
+   "count": 9,
+   "burst": 86.6,
+   "new": true
+  },
+  {
+   "term": "뭐임",
+   "count": 9,
+   "burst": 86.6,
+   "new": true
+  },
+  {
+   "term": "막판",
+   "count": 8,
+   "burst": 77.0,
+   "new": true
+  },
+  {
+   "term": "갑자기",
+   "count": 8,
+   "burst": 77.0,
+   "new": true
+  },
+  {
+   "term": "반도치",
+   "count": 7,
+   "burst": 67.4,
+   "new": true
+  },
+  {
+   "term": "SK하이닉스",
+   "count": 7,
+   "burst": 67.4,
+   "new": true
+  },
+  {
+   "term": "일본",
+   "count": 7,
+   "burst": 67.4,
+   "new": true
+  },
+  {
+   "term": "뭐야",
+   "count": 6,
+   "burst": 57.7,
+   "new": true
+  },
+  {
+   "term": "msci",
+   "count": 6,
+   "burst": 57.7,
+   "new": true
+  },
+  {
+   "term": "씨발",
+   "count": 5,
+   "burst": 48.1,
+   "new": true
+  },
+  {
+   "term": "역주석",
+   "count": 5,
+   "burst": 48.1,
+   "new": true
+  },
+  {
+   "term": "샌디",
+   "count": 33,
+   "burst": 10.2,
+   "new": false
+  },
+  {
+   "term": "반도체",
+   "count": 16,
+   "burst": 14.0,
+   "new": false
+  }
+ ],
+ "top_recommended": [
+  {
+   "gallery": "해외주식갤러리",
+   "title": "이놈쉑들 '주주환원해라~' 그렇게 소리치더니",
+   "views": 11036,
+   "recommend": 205,
+   "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=17622887&exception_mode=recommend&page=1",
+   "time_kst": "08-31 16:45"
+  },
+  {
+   "gallery": "해외주식갤러리",
+   "title": "태~원 근황ㅋㅋㅋ",
+   "views": 10677,
+   "recommend": 160,
+   "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=17624795&exception_mode=recommend&page=1",
+   "time_kst": "08-31 20:48"
+  },
+  {
+   "gallery": "해외주식갤러리",
+   "title": "비와이뭐임ㅋㅋ",
+   "views": 10671,
+   "recommend": 147,
+   "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=17622495&exception_mode=recommend&page=1",
+   "time_kst": "08-31 15:49"
+  },
+  {
+   "gallery": "해외주식갤러리",
+   "title": "진짜상남자는 voo 산다",
+   "views": 10719,
+   "recommend": 139,
+   "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=17623763&exception_mode=recommend&page=1",
+   "time_kst": "08-31 18:23"
+  },
+  {
+   "gallery": "해외주식갤러리",
+   "title": "최태원 절대 용서 못함",
+   "views": 11938,
+   "recommend": 129,
+   "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=17624854&exception_mode=recommend&page=1",
+   "time_kst": "08-31 20:56"
+  }
+ ],
+ "top_viewed": [
+  {
+   "gallery": "국내주식갤러리",
+   "title": "다튀어라 좆됐다 ㅋㅋㅋㅋ",
+   "views": 4491,
+   "recommend": 12,
+   "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3376837&page=21",
+   "time_kst": "09-01 02:39"
+  },
+  {
+   "gallery": "국내주식갤러리",
+   "title": "내일 자고 일어난 롱숭이...ㄹㅇ",
+   "views": 4423,
+   "recommend": 15,
+   "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3376795&page=22",
+   "time_kst": "09-01 01:51"
+  },
+  {
+   "gallery": "국내주식갤러리",
+   "title": "월가 병신들이 선을 넘었네 ㅋㅋㅋ",
+   "views": 675,
+   "recommend": 2,
+   "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3376912&page=20",
+   "time_kst": "09-01 04:59"
+  },
+  {
+   "gallery": "국내주식갤러리",
+   "title": "야선은 왜 음전인지 이해가 안가네",
+   "views": 622,
+   "recommend": 0,
+   "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3376939&page=19",
+   "time_kst": "09-01 05:50"
+  },
+  {
+   "gallery": "국내주식갤러리",
+   "title": "매크로+반도체 뷰",
+   "views": 622,
+   "recommend": 5,
+   "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3376844&page=21",
+   "time_kst": "09-01 02:59"
+  },
+  {
+   "gallery": "국내주식갤러리",
+   "title": "지금의 야선 실황",
+   "views": 616,
+   "recommend": 0,
+   "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3376811&page=22",
+   "time_kst": "09-01 02:10"
+  },
+  {
+   "gallery": "국내주식갤러리",
+   "title": "하닉 곧 방향 나올거같은데",
+   "views": 614,
+   "recommend": 0,
+   "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3376852&page=21",
+   "time_kst": "09-01 03:15"
+  },
+  {
+   "gallery": "국내주식갤러리",
+   "title": "오늘하닉갭몇퍼냐",
+   "views": 595,
+   "recommend": 0,
+   "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3376929&page=19",
+   "time_kst": "09-01 05:16"
+  }
+ ]
+}

@@ -159,5 +159,31 @@ class KazakhDates(unittest.TestCase):
         # "9/15화-9/18금 입니당" — 요일 붙은 슬래시 구간
         self.assertEqual(extract_dates("9/15화-9/18금 입니당", BASE),
                          (date(2026, 9, 15), date(2026, 9, 18)))
+
+
+class TravelKeyword(unittest.TestCase):
+    def test_travel_report_is_candidate(self):
+        self.assertEqual(detect_kind("다음주 제주 여행 갑니다"), "여행")
+        self.assertTrue(is_candidate("9/5~9/7 여행 다녀올게요"))
+
+    def test_travel_needs_date_to_be_direct_candidate(self):
+        from rules import pick_candidates
+        from datetime import timedelta
+        mk = lambda *rows: [{"out": o, "text": s, "dt": BASE + timedelta(minutes=10 * i)}
+                            for i, (o, s) in enumerate(rows)]
+        # 날짜 없는 '여행'은 직접 후보 아님
+        self.assertEqual(pick_candidates(mk((False, "여행이나 갈까"))), [])
+        # 여행 + 날짜 → 직접 후보
+        picked = pick_candidates(mk((False, "9/5~9/7 여행 다녀올게요")))
+        self.assertEqual([p["trigger"] for p in picked], ["keyword"])
+        # 날짜 없는 '여행' 뒤 날짜 답 → 맥락 후보
+        picked = pick_candidates(mk((False, "저 여행 다녀오려구요"), (False, "9/5부터 9/7까지요")))
+        self.assertEqual([p["trigger"] for p in picked], ["context"])
+        self.assertEqual(picked[0]["kind_hint"], "여행")
+
+    def test_travel_smalltalk_is_not(self):
+        self.assertFalse(is_candidate("여행 가고 싶다"))
+        self.assertFalse(is_candidate("여행 어땠어?"))
+        self.assertFalse(is_candidate("여행사 추천 좀"))
 if __name__ == "__main__":
     unittest.main()
