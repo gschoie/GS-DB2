@@ -339,7 +339,7 @@ async function sendMzDiary(){
   box.hidden=false;$('#mzdiary-note').value='';MZDIARY_IMGS.length=0;renderMzdiaryPreviews();const fi=$('#mzdiary-photos');if(fi)fi.value='';
  }catch(e){status.textContent='실패: '+e.message}
  finally{btn.disabled=false}}
-const YTDIGEST_ENDPOINT='';/* 유튜브 3일 모음 GAS 웹앱(/exec) 주소. gas/youtube_defense_bot.gs 를 '웹 앱'으로 배포해 나온 주소를 넣는다. 비어 있으면 버튼이 안내만 한다 */
+const YTDIGEST_ENDPOINT='https://script.google.com/macros/s/AKfycbzHewpw6PVYfy_iYNlEBV77-SiIveomyGtHkC_OSKTZILwVunRGpwT_-be4RC8DQPk/exec';/* 유튜브 3일 모음 GAS 웹앱(/exec) 주소. gas/youtube_defense_bot.gs 를 '웹 앱'으로 배포해 나온 주소를 넣는다. 비어 있으면 버튼이 안내만 한다 */
 async function dispatchYtDigest(){
  const btn=$('#ytdigest-refresh'),status=$('#ytdigest-status');
  if(!YTDIGEST_ENDPOINT){status.textContent='⚠ 웹앱 주소 미설정 — youtube_defense_bot.gs 를 웹 앱으로 배포하고 그 주소를 app.js 의 YTDIGEST_ENDPOINT 에 넣어야 합니다';return}
