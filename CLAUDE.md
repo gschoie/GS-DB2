@@ -199,6 +199,11 @@
     - GAS 쪽 고친 것: 키를 소스에서 빼 스크립트 속성으로(`secret_()`), 내부 함수는
       밑줄 접미사로 실행 드롭다운에서 감춤, 기록해 둔 영상이 피드에서 사라지면
       피드 15건이 통째로 나가고 제미나이도 15번 호출되던 문제에 상한(5건).
+    - **수동 갱신 버튼**: ytdigest 뷰의 `🔄 모음 갱신` → 유튜브 GAS 프로젝트를 웹 앱으로
+      배포한 주소(app.js `YTDIGEST_ENDPOINT`)에 POST {action:'send_digest'} → 최근 3일치를
+      피드에서 다시 채워 즉시 발송(텔레그램 두 통 + 대시보드). LockService로 동시 실행 방지.
+      dispatch_proxy를 거치지 않는 이유: 모음 데이터가 그 프로젝트의 스크립트 속성 버퍼에
+      있어 GitHub 워크플로로는 만들 수 없다. 웹앱 코드 갱신은 '배포 관리 → 새 버전'으로만.
     - 사용자 설치: 스크립트 속성 `TELEGRAM_TOKEN`·`TELEGRAM_CHAT_ID`·`GEMINI_API_KEY`
       (+대시보드까지 쓰려면 `GH_TOKEN`) → `checkSetup()` → `installDigestTrigger()`.
       `fillBufferFromFeeds(3)`로 3일 안 기다리고 바로 시험해 볼 수 있다.
