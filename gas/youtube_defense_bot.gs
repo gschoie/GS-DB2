@@ -43,6 +43,7 @@ const MAX_NEW_PER_RUN = 5;
 const DIGEST_SKIP_SHORTS = true;
 
 // 구독할 방산 채널 목록 (총 7개 채널)
+// digest: false 를 단 채널은 낱개 알림만 오고 3일 모음에는 담지 않는다.
 const WATCH_CHANNELS = [
   { name: '샤를세환', id: 'UCVNAlg66t3JhkzT5JntclLg' },
   { name: 'KKMD', id: 'UCLDV9mI3tOQCrdPUWjogQZA' },
@@ -50,7 +51,7 @@ const WATCH_CHANNELS = [
   { name: '슈퍼소닉', id: 'UCXK_itQ6_JKltErZW_sQojQ' },
   { name: '밀덕', id: 'UCV-slcYbZrNCowaVd3cQaHQ' },
   { name: 'KFN+', id: 'UCObL9hob3R03QSZU5olJZiQ' },
-  { name: 'KFN1', id: 'UCXNMgSZqmfX1_K8Uf4l4sog' }
+  { name: 'KFN1', id: 'UCXNMgSZqmfX1_K8Uf4l4sog', digest: false }
 ];
 
 
@@ -196,8 +197,11 @@ function checkNewVideos() {
 
           // 3일 모음 버퍼에 적립 — 발송 전에 넣어 둔다.
           // 텔레그램 전송이 실패해도 링크는 남아 다음 모음에 실린다.
-          const publishedAt = new Date(entry.getChildText('published', atom)).getTime();
-          bufferForDigest_(channel.name, videoId, videoTitle, videoUrl, publishedAt);
+          // (digest: false 채널은 알림만 보내고 모음에는 담지 않는다)
+          if (channel.digest !== false) {
+            const publishedAt = new Date(entry.getChildText('published', atom)).getTime();
+            bufferForDigest_(channel.name, videoId, videoTitle, videoUrl, publishedAt);
+          }
 
           // HTML 특수문자 충돌 방지를 위한 안전치환 (< 와 > 부품 보호)
           const safeTitle = escapeHtml_(videoTitle);
@@ -286,6 +290,7 @@ function fillBufferFromFeeds(days) {
   let skipped = 0;
 
   WATCH_CHANNELS.forEach(function (channel) {
+    if (channel.digest === false) return;  // 모음 제외 채널
     try {
       const url = 'https://www.youtube.com/feeds/videos.xml?channel_id=' + channel.id;
       const xml = XmlService.parse(UrlFetchApp.fetch(url).getContentText());
@@ -337,13 +342,19 @@ function sendThreeDayDigest() {
       Logger.log('3일 모음: 못 읽는 항목 하나를 건너뜁니다 — ' + key);
     }
   });
-  // 담는 길목에서 이미 거르지만, 예전 코드가 담아 둔 쇼츠가 버퍼에 남아 있을 수
-  // 있어 보내는 길목에서도 한 번 더 거른다.
-  const kept = DIGEST_SKIP_SHORTS
-    ? rows.filter(function (row) { return !isShorts_(row.u); })
-    : rows;
+  // 담는 길목에서 이미 거르지만, 예전 코드가 담아 둔 것(쇼츠·모음 제외 채널)이
+  // 버퍼에 남아 있을 수 있어 보내는 길목에서도 한 번 더 거른다.
+  const noDigest = {};
+  WATCH_CHANNELS.forEach(function (channel) {
+    if (channel.digest === false) noDigest[channel.name] = true;
+  });
+  const kept = rows.filter(function (row) {
+    if (DIGEST_SKIP_SHORTS && isShorts_(row.u)) return false;
+    if (noDigest[row.ch]) return false;
+    return true;
+  });
   if (kept.length < rows.length) {
-    Logger.log('버퍼에 남아 있던 쇼츠 ' + (rows.length - kept.length) + '건을 버립니다.');
+    Logger.log('모음에서 ' + (rows.length - kept.length) + '건 제외(쇼츠·모음 제외 채널 잔재).');
   }
 
   if (kept.length === 0) {
