@@ -34,7 +34,7 @@ def _fetch(url: str, timeout: int = 20) -> str:
         return response.read().decode(charset, errors="replace")
 
 
-def naver_global_top(limit: int = 5) -> list[dict]:
+def naver_global_top(limit: int = 10) -> list[dict]:
     src = _fetch(NAVER_GLOBAL_ECON)
     items, seen = [], set()
     for match in re.finditer(r'<a\b[^>]*\bclass="[^"]*sa_text_title[^"]*"[^>]*>(.*?)</a>', src, re.S):
