@@ -115,7 +115,7 @@ sources:
   - key: watchlist_all
     name: 관심종목 코멘트
     type: telegram_account
-    enabled: false
+    enabled: true    # 2026-08 WATCHLIST_TELEGRAM_* 시크릿 등록 완료 후 켬
     match_any: *watchlist_keywords
     push: hit
     route: watchlist
