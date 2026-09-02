@@ -213,3 +213,19 @@ class SpacedKeywords(unittest.TestCase):
         self.assertEqual(entry["start"], "2026-09-14")
         self.assertEqual(entry["end"], "2026-09-16")
         self.assertFalse(entry["needs_review"])
+
+
+class OwnMessages(unittest.TestCase):
+    """include_own: 내가 대신 적은 메시지도 그 대화 상대의 일정 후보."""
+
+    def _msgs(self, *rows):
+        from datetime import timedelta
+        return [{"out": out, "text": text, "dt": BASE + timedelta(minutes=10 * i)}
+                for i, (out, text) in enumerate(rows)]
+
+    def test_own_note_picked_when_allowed(self):
+        from rules import pick_candidates
+        msgs = self._msgs((True, "너 9/14,15,16 휴가"))
+        self.assertEqual(pick_candidates(msgs), [])  # 기본은 제외
+        picked = pick_candidates(msgs, allow_own=True)
+        self.assertEqual([p["trigger"] for p in picked], ["keyword"])

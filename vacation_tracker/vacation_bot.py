@@ -57,7 +57,10 @@ GEMINI_SYSTEM_PROMPT = """너는 텔레그램 대화에서 '자리 비움 보고
 - 일부 메시지에는 (맥락)으로 직전 대화가 붙어 있다. '나'는 계정 주인이다.
   맥락의 질문(예: "출장 언제야?")에 대한 날짜 답변이면 보낸 사람의 자리 비움 보고로
   vacation=true로 판정하고, 종류(kind)는 맥락에서 찾아라.
-- note에는 장소·목적 같은 부가 정보(예: "카자흐스탄 출장")를 짧게 담아라."""
+- note에는 장소·목적 같은 부가 정보(예: "카자흐스탄 출장")를 짧게 담아라.
+- "(계정 주인이 대신 적음)" 표시가 있으면 계정 주인이 그 대화 상대의 일정을 기록해 둔 것 —
+  표시된 이름(그 대화 상대)의 자리 비움으로 판정하라. 단 확정된 일정 진술일 때만
+  (단순 질문 "언제 가?"는 false)."""
 
 
 # ── 설정·상태 ──────────────────────────────────────────────────────────────
@@ -215,10 +218,8 @@ async def _scan(config: dict, state: dict, probe: bool = False) -> list[dict]:
                 timeline.append({"id": message.id, "out": bool(message.out),
                                  "text": (message.message or "").strip(), "dt": posted})
             timeline.reverse()  # 시간순으로
-            if include_own:
-                for item in timeline:
-                    item["out"] = False  # 내 보고도 후보로 (이름은 이 대화의 친구로 붙는다)
-            picked = pick_candidates(timeline)
+            # include_own=True: 내가 대신 적은 메시지도 이 대화 상대의 일정 후보가 된다.
+            picked = pick_candidates(timeline, allow_own=include_own)
             for pick in picked:
                 msg = timeline[pick["index"]]
                 context_lines = [
@@ -234,6 +235,7 @@ async def _scan(config: dict, state: dict, probe: bool = False) -> list[dict]:
                     "context": "\n".join(context_lines),
                     "kind_hint": pick["kind_hint"],
                     "trigger": pick["trigger"],
+                    "by_me": bool(msg["out"]),
                 })
             chat_state["last_id"] = newest_id
             print(f"  · {name}: 후보 {len(picked)}건 (마지막 메시지 id {newest_id})")
@@ -260,7 +262,8 @@ def _gemini_extract(candidates: list[dict]) -> dict[int, dict] | None:
     lines = []
     for index, cand in enumerate(candidates):
         stamp = datetime.fromisoformat(cand["msg_date"])
-        block = (f"[{index}] {cand['name']} · {stamp.strftime('%Y-%m-%d')}"
+        who = f"{cand['name']} (계정 주인이 대신 적음)" if cand.get("by_me") else cand["name"]
+        block = (f"[{index}] {who} · {stamp.strftime('%Y-%m-%d')}"
                  f"({WEEKDAY_KO[stamp.weekday()]}) {stamp.strftime('%H:%M')}")
         if cand.get("context"):
             block += f"\n(맥락)\n{cand['context']}"
