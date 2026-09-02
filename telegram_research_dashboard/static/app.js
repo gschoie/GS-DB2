@@ -127,9 +127,11 @@ function overviewTone(r){const op=r.opinion&&!['명시 없음','없음',''].incl
 document.addEventListener('click',e=>{const co=e.target.closest('#tone-latest .tone-co');if(!co||!co.dataset.co)return;e.preventDefault();e.stopPropagation();view('tone');const f=$('#tone-frame');if(f)f.src=TONE_SITE+'?t='+Date.now()+'#co='+encodeURIComponent(co.dataset.co)});
 function overviewUnion(p){return `<a class="mini-line" href="${esc(p.url||'#')}" target="_blank" rel="noopener"><b class="rk-s">${p.rank}</b><span>${esc(p.title)}</span><small>조회 ${Number(p.views).toLocaleString()} · 댓글 ${p.comments}</small></a>`}
 function overviewMacro(x,i){return miniRow(`<b class="rk">${i+1}</b>`,`<p class="mini-title">${esc(x.title)}</p>`,x.url)}
-const MACRO_ENDPOINT='https://script.google.com/macros/s/AKfycbxNClBzJoE35VSwcCNgMEJ_PvFCBphH87g4gq7xDiGXhO5x-fd-IMpNL6Ly0oURJzEN/exec';/* 네이버 Top5 실시간 JSON(GAS). 비면 배포 데이터만 사용 */
+const MACRO_ENDPOINT='https://script.google.com/macros/s/AKfycbxNClBzJoE35VSwcCNgMEJ_PvFCBphH87g4gq7xDiGXhO5x-fd-IMpNL6Ly0oURJzEN/exec';/* 네이버 실시간 JSON(GAS, 5건). 배포 데이터와 합쳐 10줄을 채운다 */
 const decodeEnt=s=>{const t=document.createElement('textarea');t.innerHTML=s||'';return t.value};
-async function fetchLiveMacro(){if(!MACRO_ENDPOINT)return;try{const r=await fetch(MACRO_ENDPOINT,{cache:'no-store'});if(!r.ok)return;const d=await r.json();const items=(d.global_economy||d.items||[]).map(x=>({title:decodeEnt(x.title),url:x.url}));if(items.length&&$('#macro-global'))$('#macro-global').innerHTML=items.slice(0,10).map(overviewMacro).join('')}catch{}}
+// GAS 실시간분은 5건뿐이라 그대로 덮으면 목록이 늘 5줄이 된다 → 실시간분을 앞에 두고
+// 배포 데이터(최대 10건)로 뒤를 채운다(주소 기준 중복 제거).
+async function fetchLiveMacro(){if(!MACRO_ENDPOINT)return;try{const r=await fetch(MACRO_ENDPOINT,{cache:'no-store'});if(!r.ok)return;const d=await r.json();const live=(d.global_economy||d.items||[]).map(x=>({title:decodeEnt(x.title),url:x.url}));if(!live.length||!$('#macro-global'))return;const seen=new Set(live.map(x=>x.url)),merged=[...live];for(const x of (window.__DASHBOARD_DATA__?.macro?.global_economy||[])){if(merged.length>=10)break;if(x.url&&!seen.has(x.url)){seen.add(x.url);merged.push(x)}}$('#macro-global').innerHTML=merged.slice(0,10).map(overviewMacro).join('')}catch{}}
 async function load(){
  const reportQs=new URLSearchParams({q:state.q,company:state.reportCompany,type:state.reportType,weekly:state.weeklyFolder});
  const newsQs=new URLSearchParams({q:state.q,nq:state.newsQ,company:state.newsCompany});
