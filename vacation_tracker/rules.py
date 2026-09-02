@@ -44,10 +44,20 @@ _NEGATIVE_RE = re.compile(r"휴가철|휴가지\s*추천|휴가\s*어땠|휴가\
                           r"|여행\s*가고\s*싶|여행\s*어땠|여행\s*잘\s*다녀|여행지\s*추천|여행사")
 
 
+# 키워드 판별용 압축: 글자 사이 공백·점을 걷어낸다 — "휴 가"·"휴.가"도 휴가로.
+# 날짜 파싱은 원문을 쓰므로 "9.14" 같은 표기는 영향 없다.
+_SEP_RE = re.compile(r"[\s.·・]+")
+
+
+def _compact(text: str) -> str:
+    return _SEP_RE.sub("", text or "")
+
+
 def detect_kind(text: str) -> str | None:
-    """휴가 종류 단어를 찾는다. 없으면 None — 후보 아님."""
+    """휴가 종류 단어를 찾는다(공백·점 무시). 없으면 None — 후보 아님."""
+    compacted = _compact(text)
     for pattern, label in _KIND_RES:
-        if pattern.search(text):
+        if pattern.search(compacted):
             return label
     return None
 
@@ -56,7 +66,7 @@ def is_candidate(text: str) -> bool:
     """휴가 보고 '후보' 메시지인지. 넓게 잡고, 정밀 판정은 다음 단계가 한다."""
     if not text or not text.strip():
         return False
-    if _NEGATIVE_RE.search(text):
+    if _NEGATIVE_RE.search(_compact(text)):
         return False
     return detect_kind(text) is not None
 
@@ -70,6 +80,9 @@ _DATE_TOKEN = re.compile(
 _REL_TOKEN = re.compile(r"오늘|내일|모레|글피")
 _REL_DAYS = {"오늘": 0, "내일": 1, "모레": 2, "글피": 3}
 _WEEKDAY_TOKEN = re.compile(r"(이번\s*주|다음\s*주|담주|차주|내주)?\s*([월화수목금토일])요일")
+_DATE_LIST = re.compile(
+    r"(?:(\d{4})\s*[년./-]\s*)?(\d{1,2})\s*[월/.]\s*(\d{1,2})\s*일?((?:\s*,\s*\d{1,2}){1,10})"
+)
 _DURATION = re.compile(r"(\d{1,2})\s*일\s*(?:간|동안)")
 _WEEKDAYS = "월화수목금토일"
 
@@ -113,6 +126,17 @@ def extract_dates(text: str, base: datetime) -> tuple[date | None, date | None]:
     "8/31부터 3일간"처럼 기간 표현이 붙으면 종료일을 늘린다.
     """
     base_date = base.astimezone(KST).date() if base.tzinfo else base.date()
+
+    # "9/14,15,16"·"9월 14, 15, 16일" 같은 나열은 같은 달의 연속 날짜 목록으로 읽는다.
+    listing = _DATE_LIST.search(text)
+    if listing:
+        month = int(listing.group(2))
+        days = [int(listing.group(3))] + [int(d) for d in re.findall(r"\d{1,2}", listing.group(4))]
+        resolved = [_resolve_md(listing.group(1), month, day, base_date) for day in days]
+        resolved = [d for d in resolved if d]
+        if len(resolved) >= 2:
+            return min(resolved), max(resolved)
+
     found: list[tuple[int, date, str]] = []
 
     for match in _DATE_TOKEN.finditer(text):
@@ -171,7 +195,8 @@ def has_date(text: str) -> bool:
                 or _WEEKDAY_TOKEN.search(text))
 
 
-def pick_candidates(messages: list[dict], window: int = 10, hours: float = 12.0) -> list[dict]:
+def pick_candidates(messages: list[dict], window: int = 10, hours: float = 12.0,
+                    allow_own: bool = False) -> list[dict]:
     """시간순 메시지에서 후보를 고른다.
 
     messages: [{"out": bool, "text": str, "dt": datetime}, ...] (시간순)
@@ -179,7 +204,8 @@ def pick_candidates(messages: list[dict], window: int = 10, hours: float = 12.0)
       - keyword: 친구 메시지에 휴가·출장 키워드가 직접 있음
       - context: 직전 window개·hours시간 안에 (누구든) 키워드를 말했고,
                  친구가 날짜가 든 메시지로 답함
-    내(out) 메시지는 후보가 되지 않고 맥락(키워드 트리거)으로만 쓰인다.
+    내(out) 메시지는 기본적으로 후보가 되지 않고 맥락(키워드 트리거)으로만 쓰이며,
+    allow_own=True면 내 메시지도 후보가 된다(그 대화 상대의 일정을 내가 대신 적는 관행).
     """
     picked: list[dict] = []
     last_kw: tuple[int, object, str] | None = None  # (index, dt, kind)
@@ -187,10 +213,10 @@ def pick_candidates(messages: list[dict], window: int = 10, hours: float = 12.0)
         text = (msg.get("text") or "").strip()
         if not text:
             continue
-        kind = None if _NEGATIVE_RE.search(text) else detect_kind(text)
+        kind = None if _NEGATIVE_RE.search(_compact(text)) else detect_kind(text)
         if kind:
             last_kw = (index, msg["dt"], kind)
-        if msg.get("out"):
+        if msg.get("out") and not allow_own:
             continue
         if kind:
             # '여행'은 잡담이 흔해서 같은 메시지에 날짜가 있을 때만 직접 후보로.

@@ -6,6 +6,10 @@ name: 액티브 ETF 매매동향
 # (KRX 장마감 기준이라 보통 저녁에 갱신 예상 — 실제 시각은 런 기록으로 드러남. 이후 창을 좁혀도 됨.)
 on:
   workflow_dispatch:
+    inputs:
+      via:
+        description: "호출 주체 — scheduler면 '변화 없음' 확인 메시지를 보내지 않는다"
+        default: ""
   schedule:
     - cron: "17 0-7 * * 1-5"   # UTC 00~07시 매시 17분 = KST 09~16시(장중~마감 직후), 월~금
     # 정시성은 GAS 시계(gas/dispatch_proxy.gs SCHEDULE)가 담당 — 이 크론은 안전망이다.
@@ -103,7 +107,9 @@ jobs:
         env:
           TELEGRAM_BOT_TOKEN: ${{ secrets.ETF_TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.ETF_TELEGRAM_CHAT_ID }}
-        run: python telegram_notify.py ${{ github.event_name == 'workflow_dispatch' && '--force' || '' }}
+        # GAS 스케줄러도 workflow_dispatch로 오므로, via=scheduler면 --force를 뺀다
+        # (안 그러면 '변화 없음' 확인 메시지가 하루 8번 온다).
+        run: python telegram_notify.py ${{ (github.event_name == 'workflow_dispatch' && inputs.via != 'scheduler') && '--force' || '' }}
 
       - name: 처리 기준일 state 갱신
         if: steps.watch.outputs.should_run == 'true'

@@ -232,4 +232,13 @@
       날짜 더블클릭 두 번으로 기간 입력. 순서: 다가오는 → 달력 → 기입 → 지난 → 확인필요.
       친구 매칭은 표시 이름 포함 일치('다리' 수식어 우선). 검증: 김혜영 독일 출장 기입 E2E 성공.
 
+17. **친환경 에너지·FDC 브리핑 신설** (9/1): `energy_briefing/` — 건기 초기와 같은
+    Gemini 단일 파이프라인(RSS→Gemini flash-latest), 시세·텔레그램 없음(대시보드 전용).
+    주제 5축: 친환경 선박 추진(암모니아·액화수소·원자력/SMR) / FDC / FLNG·FSRU /
+    LNG 액화 FID / 미국 발전원 투자(가스복합·신재생·SMR). 시사점은 한국 조선 3사 관점.
+    `energy-briefing.yml` 매일 UTC 21:40(KST 06:40), 키는 ENERGY_ → CONSTRUCTION_ →
+    GEMINI_API_KEY 폴백. 산출물 `static/energy_daily/` + `energy_briefing_report.html`.
+    사이드바 `🌊 친환경E·FDC.브리핑`, overview 1행을 네이버Top7|친환경FDC|Claude방산
+    33%씩으로 재배치(energyBrief 카드).
+
 이후 작업은 git log와 이 파일을 갱신하며 이어간다.
