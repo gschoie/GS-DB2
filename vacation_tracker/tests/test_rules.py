@@ -187,3 +187,29 @@ class TravelKeyword(unittest.TestCase):
         self.assertFalse(is_candidate("여행사 추천 좀"))
 if __name__ == "__main__":
     unittest.main()
+
+
+class SpacedKeywords(unittest.TestCase):
+    """"휴 가"·"휴.가"처럼 갈라 쓴 키워드도 잡는다 (스쿠버다이빙 세부 휴가 사례)."""
+
+    def test_spaced_and_dotted(self):
+        self.assertEqual(detect_kind("휴 가 입니다"), "휴가")
+        self.assertEqual(detect_kind("휴.가... 갑니다"), "휴가")
+        self.assertEqual(detect_kind("연 차 쓸게요"), "연차")
+        self.assertEqual(detect_kind("출 장 다녀옵니다"), "출장")
+        self.assertTrue(is_candidate("휴 가 입니다"))
+
+    def test_spaced_smalltalk_still_cut(self):
+        self.assertFalse(is_candidate("휴가 잘 다녀 왔어?"))
+
+    def test_day_listing_range(self):
+        # "9/14,15,16" → 9/14~9/16
+        self.assertEqual(extract_dates("9/14,15,16", BASE),
+                         (date(2026, 9, 14), date(2026, 9, 16)))
+
+    def test_scuba_case_end_to_end(self):
+        entry = rule_extract("휴 가 입니다\n\n9/14,15,16\n\n세 부 에서 스쿠버다이빙합니다", BASE)
+        self.assertEqual(entry["kind"], "휴가")
+        self.assertEqual(entry["start"], "2026-09-14")
+        self.assertEqual(entry["end"], "2026-09-16")
+        self.assertFalse(entry["needs_review"])
