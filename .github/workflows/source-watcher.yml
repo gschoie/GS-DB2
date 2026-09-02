@@ -77,6 +77,9 @@ jobs:
           # SPYING_* 시크릿이 비어 있으면 옛 이름(SHIP_*)으로 폴백한다.
           SPYING_TELEGRAM_BOT_TOKEN: ${{ secrets.SPYING_TELEGRAM_BOT_TOKEN || secrets.SHIP_TELEGRAM_BOT_TOKEN }}
           SPYING_TELEGRAM_CHAT_ID: ${{ secrets.SPYING_TELEGRAM_CHAT_ID || secrets.SHIP_TELEGRAM_CHAT_ID }}
+          # 관심종목 코멘트(route: watchlist)는 또 다른 봇으로 갈라 보낸다.
+          WATCHLIST_TELEGRAM_BOT_TOKEN: ${{ secrets.WATCHLIST_TELEGRAM_BOT_TOKEN }}
+          WATCHLIST_TELEGRAM_CHAT_ID: ${{ secrets.WATCHLIST_TELEGRAM_CHAT_ID }}
           # telegram_account 소스(내 계정으로 전 채널 훑기)용.
           # TELEGRAM_SESSION_STRING은 위 복호화 단계가 GITHUB_ENV로 넘긴다.
           TELEGRAM_API_ID: ${{ secrets.TELEGRAM_API_ID }}

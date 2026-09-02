@@ -57,7 +57,10 @@ GEMINI_SYSTEM_PROMPT = """너는 텔레그램 대화에서 '자리 비움 보고
 - 일부 메시지에는 (맥락)으로 직전 대화가 붙어 있다. '나'는 계정 주인이다.
   맥락의 질문(예: "출장 언제야?")에 대한 날짜 답변이면 보낸 사람의 자리 비움 보고로
   vacation=true로 판정하고, 종류(kind)는 맥락에서 찾아라.
-- note에는 장소·목적 같은 부가 정보(예: "카자흐스탄 출장")를 짧게 담아라."""
+- note에는 장소·목적 같은 부가 정보(예: "카자흐스탄 출장")를 짧게 담아라.
+- "(계정 주인이 대신 적음)" 표시가 있으면 계정 주인이 그 대화 상대의 일정을 기록해 둔 것 —
+  표시된 이름(그 대화 상대)의 자리 비움으로 판정하라. 단 확정된 일정 진술일 때만
+  (단순 질문 "언제 가?"는 false)."""
 
 
 # ── 설정·상태 ──────────────────────────────────────────────────────────────
@@ -215,10 +218,8 @@ async def _scan(config: dict, state: dict, probe: bool = False) -> list[dict]:
                 timeline.append({"id": message.id, "out": bool(message.out),
                                  "text": (message.message or "").strip(), "dt": posted})
             timeline.reverse()  # 시간순으로
-            if include_own:
-                for item in timeline:
-                    item["out"] = False  # 내 보고도 후보로 (이름은 이 대화의 친구로 붙는다)
-            picked = pick_candidates(timeline)
+            # include_own=True: 내가 대신 적은 메시지도 이 대화 상대의 일정 후보가 된다.
+            picked = pick_candidates(timeline, allow_own=include_own)
             for pick in picked:
                 msg = timeline[pick["index"]]
                 context_lines = [
@@ -234,6 +235,7 @@ async def _scan(config: dict, state: dict, probe: bool = False) -> list[dict]:
                     "context": "\n".join(context_lines),
                     "kind_hint": pick["kind_hint"],
                     "trigger": pick["trigger"],
+                    "by_me": bool(msg["out"]),
                 })
             chat_state["last_id"] = newest_id
             print(f"  · {name}: 후보 {len(picked)}건 (마지막 메시지 id {newest_id})")
@@ -260,7 +262,8 @@ def _gemini_extract(candidates: list[dict]) -> dict[int, dict] | None:
     lines = []
     for index, cand in enumerate(candidates):
         stamp = datetime.fromisoformat(cand["msg_date"])
-        block = (f"[{index}] {cand['name']} · {stamp.strftime('%Y-%m-%d')}"
+        who = f"{cand['name']} (계정 주인이 대신 적음)" if cand.get("by_me") else cand["name"]
+        block = (f"[{index}] {who} · {stamp.strftime('%Y-%m-%d')}"
                  f"({WEEKDAY_KO[stamp.weekday()]}) {stamp.strftime('%H:%M')}")
         if cand.get("context"):
             block += f"\n(맥락)\n{cand['context']}"
@@ -380,7 +383,24 @@ def run(dry_run: bool = False, probe: bool = False) -> None:
 
     store = load_json(ENTRIES_PATH, {"entries": {}})
     known = store["entries"]
-    new_entries = [entry for entry in entries if entry["uid"] not in known]
+    # 같은 휴가가 여러 메시지에 걸쳐 보고되면(예: "휴가 입니다"/"9/14,15,16"/"세부에서…")
+    # 메시지마다 항목이 생긴다 — 이름+기간이 같으면 한 건으로 취급한다.
+    def span_key(entry: dict):
+        return (entry.get("name"), entry.get("start"), entry.get("end"))
+
+    seen_spans = {span_key(v) for v in known.values() if v.get("start")}
+    new_entries = []
+    for entry in entries:
+        if entry["uid"] in known:
+            seen_spans.add(span_key(entry))
+            continue
+        if entry.get("start") and span_key(entry) in seen_spans:
+            print(f"  · 중복 스킵: {entry['name']} {entry.get('start')}~{entry.get('end')}")
+            entry["_skip"] = True
+            continue
+        seen_spans.add(span_key(entry))
+        new_entries.append(entry)
+    entries = [e for e in entries if not e.get("_skip")]
     print(f"확정 {len(entries)}건, 그중 신규 {len(new_entries)}건")
 
     if dry_run:

@@ -1,52 +1,12 @@
 {
-  "date": "2026-09-01",
-  "prev_date": "2026-08-31",
-  "generated_at": "2026-09-01 19:04",
-  "base_date": "2026-09-01",
-  "prev_base_date": "2026-08-31",
+  "date": "2026-09-02",
+  "prev_date": "2026-09-01",
+  "generated_at": "2026-09-02 18:36",
+  "base_date": "2026-09-02",
+  "prev_base_date": "2026-09-01",
   "same_base": false,
   "first_run": false,
   "etfs": [
-    {
-      "code": "0163Y0",
-      "label": "KoAct 코스닥액티브",
-      "group": "KoAct",
-      "flow_factor": 1.0,
-      "new": [
-        {
-          "key": "043260",
-          "name": "성호전자",
-          "code": "043260",
-          "weight": 2.9,
-          "shares": 764.0
-        },
-        {
-          "key": "183300",
-          "name": "코미코",
-          "code": "183300",
-          "weight": 2.68,
-          "shares": 454.0
-        }
-      ],
-      "gone": [
-        {
-          "key": "214450",
-          "name": "파마리서치",
-          "code": "214450",
-          "weight_prev": 2.78,
-          "shares_prev": 27.0
-        },
-        {
-          "key": "403870",
-          "name": "HPSP",
-          "code": "403870",
-          "weight_prev": 2.7,
-          "shares_prev": 237.0
-        }
-      ],
-      "moves": [],
-      "has_weight": true
-    },
     {
       "code": "410870",
       "label": "TIME K컬처액티브",
@@ -54,20 +14,20 @@
       "flow_factor": 1.0,
       "new": [
         {
-          "key": "226950",
-          "name": "올릭스",
-          "code": "226950",
-          "weight": 3.92,
-          "shares": 386.0
+          "key": "259960",
+          "name": "크래프톤",
+          "code": "259960",
+          "weight": 5.58,
+          "shares": 241.0
         }
       ],
       "gone": [
         {
-          "key": "004370",
-          "name": "농심",
-          "code": "004370",
-          "weight_prev": 4.06,
-          "shares_prev": 93.0
+          "key": "226950",
+          "name": "올릭스",
+          "code": "226950",
+          "weight_prev": 3.92,
+          "shares_prev": 386.0
         }
       ],
       "moves": [
@@ -75,48 +35,36 @@
           "key": "003230",
           "name": "삼양식품",
           "code": "003230",
-          "shares_now": 70.0,
-          "shares_prev": 56.0,
-          "active_share_pct": 25.0,
-          "active_weight_pp": 2.12,
-          "weight_now": 10.53,
-          "weight_prev": 8.39,
-          "headline": false
-        },
-        {
-          "key": "278470",
-          "name": "에이피알",
-          "code": "278470",
-          "shares_now": 120.0,
-          "shares_prev": 143.0,
-          "active_share_pct": -16.1,
-          "active_weight_pp": -1.04,
-          "weight_now": 5.48,
-          "weight_prev": 6.39,
+          "shares_now": 82.0,
+          "shares_prev": 70.0,
+          "active_share_pct": 17.1,
+          "active_weight_pp": 2.07,
+          "weight_now": 12.27,
+          "weight_prev": 10.53,
           "headline": false
         },
         {
           "key": "241710",
           "name": "코스메카코리아",
           "code": "241710",
-          "shares_now": 472.0,
-          "shares_prev": 543.0,
-          "active_share_pct": -13.1,
-          "active_weight_pp": -1.03,
-          "weight_now": 6.95,
-          "weight_prev": 8.09,
+          "shares_now": 372.0,
+          "shares_prev": 472.0,
+          "active_share_pct": -21.2,
+          "active_weight_pp": -1.24,
+          "weight_now": 5.27,
+          "weight_prev": 6.95,
           "headline": false
         },
         {
           "key": "257720",
           "name": "실리콘투",
           "code": "257720",
-          "shares_now": 1908.0,
-          "shares_prev": 2109.0,
-          "active_share_pct": -9.5,
-          "active_weight_pp": -1.05,
-          "weight_now": 10.16,
-          "weight_prev": 10.88,
+          "shares_now": 1616.0,
+          "shares_prev": 1908.0,
+          "active_share_pct": -15.3,
+          "active_weight_pp": -1.26,
+          "weight_now": 8.41,
+          "weight_prev": 10.16,
           "headline": false
         }
       ],
@@ -129,46 +77,124 @@
       "flow_factor": 1.0,
       "new": [
         {
-          "key": "373220",
-          "name": "LG에너지솔루션",
-          "code": "373220",
-          "weight": 1.48,
-          "shares": 100.0
+          "key": "055550",
+          "name": "신한지주",
+          "code": "055550",
+          "weight": 1.46,
+          "shares": 335.0
         }
       ],
       "gone": [
         {
-          "key": "034020",
-          "name": "두산에너빌리티",
-          "code": "034020",
-          "weight_prev": 1.55,
-          "shares_prev": 450.0
+          "key": "373220",
+          "name": "LG에너지솔루션",
+          "code": "373220",
+          "weight_prev": 1.48,
+          "shares_prev": 100.0
         }
       ],
       "moves": [],
       "has_weight": true
     },
     {
-      "code": "463050",
-      "label": "TIME K바이오액티브",
+      "code": "426020",
+      "label": "TIME 미국S&P500액티브",
       "group": "TIME(구 TIMEFOLIO)",
       "flow_factor": 1.0,
       "new": [
         {
-          "key": "068760",
-          "name": "셀트리온제약",
-          "code": "068760",
-          "weight": 4.1,
-          "shares": 632.0
+          "key": "CHEVRON CORP",
+          "name": "CHEVRON CORP",
+          "code": "",
+          "weight": 0.0,
+          "shares": 55.0
         }
       ],
       "gone": [
         {
-          "key": "237690",
-          "name": "에스티팜",
-          "code": "237690",
-          "weight_prev": 4.08,
-          "shares_prev": 246.0
+          "key": "NEWMONT CORP",
+          "name": "NEWMONT CORP",
+          "code": "",
+          "weight_prev": 0.0,
+          "shares_prev": 51.0
+        }
+      ],
+      "moves": [],
+      "has_weight": false
+    },
+    {
+      "code": "426030",
+      "label": "TIME 미국나스닥100액티브",
+      "group": "TIME(구 TIMEFOLIO)",
+      "flow_factor": 1.0,
+      "new": [
+        {
+          "key": "BLOOM ENERGY CORP- A",
+          "name": "BLOOM ENERGY CORP- A",
+          "code": "",
+          "weight": 0.0,
+          "shares": 97.0
+        }
+      ],
+      "gone": [
+        {
+          "key": "MARVELL TECHNOLOGY INC",
+          "name": "MARVELL TECHNOLOGY INC",
+          "code": "",
+          "weight_prev": 0.0,
+          "shares_prev": 104.0
+        }
+      ],
+      "moves": [],
+      "has_weight": false
+    },
+    {
+      "code": "456600",
+      "label": "TIME 글로벌AI인공지능액티브",
+      "group": "TIME(구 TIMEFOLIO)",
+      "flow_factor": 1.0,
+      "new": [
+        {
+          "key": "SERVICENOW INC",
+          "name": "SERVICENOW INC",
+          "code": "",
+          "weight": 0.0,
+          "shares": 167.0
+        }
+      ],
+      "gone": [
+        {
+          "key": "KIOXIA HOLDINGS CORP",
+          "name": "KIOXIA HOLDINGS CORP",
+          "code": "",
+          "weight_prev": 0.0,
+          "shares_prev": 153.0
+        }
+      ],
+      "moves": [],
+      "has_weight": false
+    },
+    {
+      "code": "0163Y0",
+      "label": "KoAct 코스닥액티브",
+      "group": "KoAct",
+      "flow_factor": 1.0,
+      "new": [
+        {
+          "key": "403870",
+          "name": "HPSP",
+          "code": "403870",
+          "weight": 2.75,
+          "shares": 237.0
+        }
+      ],
+      "gone": [
+        {
+          "key": "183300",
+          "name": "코미코",
+          "code": "183300",
+          "weight_prev": 2.68,
+          "shares_prev": 454.0
         }
       ],
       "moves": [],
@@ -181,73 +207,24 @@
       "flow_factor": 1.0,
       "new": [
         {
-          "key": "403870",
-          "name": "HPSP",
-          "code": "403870",
-          "weight": 2.94,
-          "shares": 207.0
-        }
-      ],
-      "gone": [
-        {
           "key": "319660",
           "name": "피에스케이",
           "code": "319660",
-          "weight_prev": 2.96,
-          "shares_prev": 80.0
-        }
-      ],
-      "moves": [],
-      "has_weight": true
-    },
-    {
-      "code": "472150",
-      "label": "TIGER 배당커버드콜액티브",
-      "group": "TIGER",
-      "flow_factor": 1.0,
-      "new": [
-        {
-          "key": "010120",
-          "name": "LS ELECTRIC",
-          "code": "010120",
-          "weight": 1.65,
-          "shares": 16.0
+          "weight": 2.88,
+          "shares": 80.0
         }
       ],
       "gone": [
         {
-          "key": "012450",
-          "name": "한화에어로스페이스",
-          "code": "012450",
-          "weight_prev": 1.73,
-          "shares_prev": 3.0
+          "key": "131290",
+          "name": "티에스이",
+          "code": "131290",
+          "weight_prev": 3.42,
+          "shares_prev": 51.0
         }
       ],
       "moves": [],
       "has_weight": true
-    },
-    {
-      "code": "426020",
-      "label": "TIME 미국S&P500액티브",
-      "group": "TIME(구 TIMEFOLIO)",
-      "flow_factor": 1.0,
-      "new": [],
-      "gone": [],
-      "moves": [
-        {
-          "key": "NEXTERA ENERGY INC",
-          "name": "NEXTERA ENERGY INC",
-          "code": "",
-          "shares_now": 58.0,
-          "shares_prev": 85.0,
-          "active_share_pct": -31.8,
-          "active_weight_pp": null,
-          "weight_now": 0.0,
-          "weight_prev": 0.0,
-          "headline": false
-        }
-      ],
-      "has_weight": false
     }
   ],
   "thresholds": {
@@ -259,7 +236,7 @@
     "etfs_changed": 7,
     "new_total": 7,
     "gone_total": 7,
-    "moves_total": 5,
+    "moves_total": 3,
     "universe": 20
   }
 }

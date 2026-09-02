@@ -14,14 +14,14 @@ iframe{width:100%;height:calc(100vh - 110px);border:1px solid #223046;border-rad
 </style></head><body>
 <div class="bar">
   <h1>📺 방산 유튜브 3일 모음 <small style="font-size:11px;color:#8b96a8">3일마다 07:00</small></h1>
-  <a class="bundle" id="mdlink" href="youtube_digest/2026-09-01.md" download title="NotebookLM 업로드용 마크다운">⬇ .md</a>
+  <a class="bundle" id="mdlink" href="youtube_digest/2026-09-02.md" download title="NotebookLM 업로드용 마크다운">⬇ .md</a>
   <button id="prev" title="이전 회차">◀</button>
   <select id="dsel"></select>
   <button id="next" title="다음 회차">▶</button>
 </div>
 <iframe id="frame" title="유튜브 3일 모음"></iframe>
 <script>
-const DATES=["2026-09-01", "2026-08-30"];
+const DATES=["2026-09-02", "2026-09-01", "2026-08-30"];
 const sel=document.getElementById('dsel'),fr=document.getElementById('frame');
 DATES.forEach(d=>{const o=document.createElement('option');o.value=d;o.textContent=d+' ('+'일월화수목금토'[new Date(d+'T00:00:00').getDay()]+')';sel.appendChild(o)});
 function load(){fr.src='youtube_digest/'+sel.value+'.html';document.getElementById('mdlink').href='youtube_digest/'+sel.value+'.md'}
