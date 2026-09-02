@@ -383,7 +383,24 @@ def run(dry_run: bool = False, probe: bool = False) -> None:
 
     store = load_json(ENTRIES_PATH, {"entries": {}})
     known = store["entries"]
-    new_entries = [entry for entry in entries if entry["uid"] not in known]
+    # 같은 휴가가 여러 메시지에 걸쳐 보고되면(예: "휴가 입니다"/"9/14,15,16"/"세부에서…")
+    # 메시지마다 항목이 생긴다 — 이름+기간이 같으면 한 건으로 취급한다.
+    def span_key(entry: dict):
+        return (entry.get("name"), entry.get("start"), entry.get("end"))
+
+    seen_spans = {span_key(v) for v in known.values() if v.get("start")}
+    new_entries = []
+    for entry in entries:
+        if entry["uid"] in known:
+            seen_spans.add(span_key(entry))
+            continue
+        if entry.get("start") and span_key(entry) in seen_spans:
+            print(f"  · 중복 스킵: {entry['name']} {entry.get('start')}~{entry.get('end')}")
+            entry["_skip"] = True
+            continue
+        seen_spans.add(span_key(entry))
+        new_entries.append(entry)
+    entries = [e for e in entries if not e.get("_skip")]
     print(f"확정 {len(entries)}건, 그중 신규 {len(new_entries)}건")
 
     if dry_run:
