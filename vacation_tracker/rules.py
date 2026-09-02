@@ -195,7 +195,8 @@ def has_date(text: str) -> bool:
                 or _WEEKDAY_TOKEN.search(text))
 
 
-def pick_candidates(messages: list[dict], window: int = 10, hours: float = 12.0) -> list[dict]:
+def pick_candidates(messages: list[dict], window: int = 10, hours: float = 12.0,
+                    allow_own: bool = False) -> list[dict]:
     """시간순 메시지에서 후보를 고른다.
 
     messages: [{"out": bool, "text": str, "dt": datetime}, ...] (시간순)
@@ -203,7 +204,8 @@ def pick_candidates(messages: list[dict], window: int = 10, hours: float = 12.0)
       - keyword: 친구 메시지에 휴가·출장 키워드가 직접 있음
       - context: 직전 window개·hours시간 안에 (누구든) 키워드를 말했고,
                  친구가 날짜가 든 메시지로 답함
-    내(out) 메시지는 후보가 되지 않고 맥락(키워드 트리거)으로만 쓰인다.
+    내(out) 메시지는 기본적으로 후보가 되지 않고 맥락(키워드 트리거)으로만 쓰이며,
+    allow_own=True면 내 메시지도 후보가 된다(그 대화 상대의 일정을 내가 대신 적는 관행).
     """
     picked: list[dict] = []
     last_kw: tuple[int, object, str] | None = None  # (index, dt, kind)
@@ -214,7 +216,7 @@ def pick_candidates(messages: list[dict], window: int = 10, hours: float = 12.0)
         kind = None if _NEGATIVE_RE.search(_compact(text)) else detect_kind(text)
         if kind:
             last_kw = (index, msg["dt"], kind)
-        if msg.get("out"):
+        if msg.get("out") and not allow_own:
             continue
         if kind:
             # '여행'은 잡담이 흔해서 같은 메시지에 날짜가 있을 때만 직접 후보로.

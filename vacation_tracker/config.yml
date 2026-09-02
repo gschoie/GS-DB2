@@ -32,5 +32,6 @@ friends:
 lookback_days: 30
 # 대화당 한 번에 읽는 최대 메시지 수 (증분이라 평소엔 몇 건 안 된다)
 per_chat_limit: 300
-# 내가 보낸 메시지도 볼지 (기본: 친구의 보고만)
-include_own_messages: false
+# 내가 보낸 메시지도 후보로 볼지 — 내가 대화창에 상대 일정을 대신 적어두는 관행 지원.
+# 켜면 내 메시지도 '그 대화 상대'의 휴가/출장으로 판정된다 (질문은 Gemini가 걸러냄).
+include_own_messages: true
