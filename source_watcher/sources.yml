@@ -67,6 +67,14 @@ x_ship_keywords: &ship_keywords
   조선업황: [신조선가, 클락슨, Clarksons, 선가지수, LNG운반선, LNG선, 컨테이너선, VLCC, 탱커, 조선업, 조선주, 조선섹터]
   함정·MRO: [함정, 특수선, KDDX, 잠수함, 필리조선소, 한화필리, MASGA, 마스가, 존스법, Jones Act]
 
+# 관심종목 염탐(watchlist_all)용 낱말. **그때 그때 관심 있는 투자대상으로 자유롭게
+# 갈아끼우는 목록**이다 — 조선 목록(위)은 상설, 여기는 회전. 형식은 똑같다:
+# 왼쪽이 알림 머리에 찍히는 이름, 오른쪽이 별칭·종목코드(글자 그대로 찾음).
+# 아래는 자리를 잡아둔 예시다. 지우고 지금 관심 대상으로 바꿀 것.
+x_watchlist_keywords: &watchlist_keywords
+  두산에너빌리티: [두산에너빌리티, 두산에너, "034020"]
+  전력기기: [HD현대일렉트릭, 효성중공업, 변압기, "267260"]
+
 sources:
   # ── 조선 코멘트 감시 ────────────────────────────────────────────────────
   # 내 텔레그램 계정이 구독한 **모든** 채널을 훑어, 위 낱말이 든 글의 걸린 문장만
@@ -95,6 +103,30 @@ sources:
       - "@HI_GS"
       - "GS의 조선/기계/방산 「바담」"
     # include_groups: true                      # 채널 말고 토론 그룹까지 포함하려면
+
+  # ── 관심종목 염탐 ──────────────────────────────────────────────────────
+  # 조선 감시(ship_all)의 복제판. 같은 계정 세션으로 같은 채널들을 훑되,
+  # 낱말만 x_watchlist_keywords(그때 그때 관심 있는 투자대상)로 갈아끼운다.
+  # 발송은 조선과 다른 봇으로 — 시크릿 WATCHLIST_TELEGRAM_BOT_TOKEN/_CHAT_ID.
+  #
+  # 켜는 법: ① @BotFather로 봇 생성 → ② 봇에게 아무 말 보내고 getUpdates로 chat_id
+  # 확인 → ③ 위 시크릿 2개 등록 → ④ 여기 enabled를 true로 (시크릿 없이 켜면
+  # 기본 봇(메르·개장전 방)으로 새 나가니 순서를 지킬 것)
+  - key: watchlist_all
+    name: 관심종목 코멘트
+    type: telegram_account
+    enabled: false
+    match_any: *watchlist_keywords
+    push: hit
+    route: watchlist
+    dedupe_scope: watchlist   # 조선과 별개 묶음 — 같은 글이 양쪽에 걸리면 양쪽 봇에 각각 간다
+    tags: [관심종목]
+    lookback_hours: 24
+    max_per_run: 8
+    exclude_any: [휴장, 공지]
+    exclude_chats:
+      - "@HI_GS"
+      - "GS의 조선/기계/방산 「바담」"
 
   # 네이버 블로그는 rss.blog.naver.com/<블로그ID>.xml 로 RSS를 준다.
   # 본문이 iframe(PostView.naver) 안에 있어 RSS 요약분만 오므로 전문은 원문 링크로 본다.
