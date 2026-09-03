@@ -552,7 +552,9 @@ document.addEventListener('click',e=>{const chip=e.target.closest('.company-chip
 load().catch(e=>document.body.insertAdjacentHTML('beforeend',`<p class="empty">데이터를 불러오지 못했습니다: ${esc(e.message)}</p>`));
 // URL 해시로 특정 뷰 바로 열기(예: /#tone → 리서치 톤을 별도 창으로). 로드 후 해시가 바뀌어도 반영.
 // ?focus=1 로 들어오면 표만 보이게(사이드바·헤더·설명문 숨김). '전체 대시보드' 링크로 복귀.
-if(new URLSearchParams(location.search).has('focus'))document.body.classList.add('focus-mode');
+if(new URLSearchParams(location.search).has('focus')){document.body.classList.add('focus-mode');
+ // 링크로 연 화면은 그 항목 전용 — 항목 선택·추가·이름변경·삭제·보관을 잠근다.
+ const sel=$('#task-item');if(sel)sel.disabled=true;}
 function applyHashView(){const raw=location.hash.slice(1);if(!raw)return;const cut=raw.indexOf(':');
  const hashView=decodeURIComponent(cut>-1?raw.slice(0,cut):raw),arg=cut>-1?decodeURIComponent(raw.slice(cut+1)):'';
  if(!document.getElementById(hashView)?.classList.contains('view'))return;

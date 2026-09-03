@@ -223,3 +223,7 @@ body.focus-mode .sidebar,body.focus-mode>main>header,body.focus-mode .archive-in
 body.focus-mode main{margin-left:0;padding:14px 18px 40px}
 body.focus-mode .focus-exit{display:inline-block;float:right;font-size:11px;color:#6c746f;text-decoration:none;border:1px solid var(--line);background:#fff;border-radius:6px;padding:5px 10px;margin:0 0 10px}
 body.focus-mode .focus-exit:hover{color:#173f35;background:#f2f5f1}
+/* 집중 화면은 링크가 가리키는 항목 전용 — 항목을 바꾸는 조작은 감춘다. */
+body.focus-mode #task-add,body.focus-mode #task-rename,body.focus-mode #task-del,
+body.focus-mode #task-archive,body.focus-mode #task-archive-box{display:none}
+body.focus-mode #task-item{appearance:none;-webkit-appearance:none;border-color:transparent;background:#eef2ee;color:#2c463d;font-weight:700;opacity:1;cursor:default;padding-right:10px}
