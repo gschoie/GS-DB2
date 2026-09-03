@@ -216,3 +216,10 @@ a.rep-title:hover{color:#386453;text-decoration:underline}
 .task-arch-item:hover{background:#f2f5f1}
 .task-arch-restore{border:0;border-left:1px solid #e3e8e2;background:#f2f5f1;color:#2e6250;padding:7px 10px;font-size:11px;font-weight:700;cursor:pointer;white-space:nowrap}
 .task-arch-restore:hover{background:#2e6250;color:#fff}
+
+/* 항목 링크(?focus=1)로 연 화면: 사이드바·헤더·설명문을 걷어내고 표만 보여준다. */
+.focus-exit{display:none}
+body.focus-mode .sidebar,body.focus-mode>main>header,body.focus-mode .archive-intro{display:none}
+body.focus-mode main{margin-left:0;padding:14px 18px 40px}
+body.focus-mode .focus-exit{display:inline-block;float:right;font-size:11px;color:#6c746f;text-decoration:none;border:1px solid var(--line);background:#fff;border-radius:6px;padding:5px 10px;margin:0 0 10px}
+body.focus-mode .focus-exit:hover{color:#173f35;background:#f2f5f1}
