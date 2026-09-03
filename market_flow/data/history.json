@@ -8403,13 +8403,13 @@
      }
     },
     "1640": {
-     "individual": -9551,
-     "foreign": -4232,
-     "institution": -2153,
+     "individual": -9552,
+     "foreign": 414,
+     "institution": 9143,
      "arb": 52,
-     "nonarb": -4051,
-     "program": -4000,
-     "time": "17:39",
+     "nonarb": -4040,
+     "program": -3988,
+     "time": "20:40",
      "kospi": 6579.48,
      "chg_pct": 0.26,
      "futures": {
@@ -8420,27 +8420,27 @@
    },
    "confirmed": {
     "investor": {
-     "individual": -9551,
-     "foreign": -4232,
-     "inst_total": -2153,
-     "fin_invest": -1015,
+     "individual": -9552,
+     "foreign": 414,
+     "inst_total": 9143,
+     "fin_invest": 10281,
      "insurance": 202,
      "asset_mgmt": -1077,
      "bank": 18,
      "other_fin": 163,
      "pension": -444,
-     "other_corp": 15936
+     "other_corp": -6
     },
     "program": {
      "arb_buy": 4489,
      "arb_sell": 4437,
      "arb_net": 52,
-     "nonarb_buy": 50887,
+     "nonarb_buy": 50899,
      "nonarb_sell": 54939,
-     "nonarb_net": -4051,
-     "total_buy": 55376,
+     "nonarb_net": -4040,
+     "total_buy": 55388,
      "total_sell": 59376,
-     "total_net": -3999
+     "total_net": -3988
     },
     "futures": {
      "individual": -1450,
@@ -8456,7 +8456,7 @@
     }
    },
    "group_1d": {
-    "time": "17:40",
+    "time": "20:40",
     "groups": [
      [
       "건설",
@@ -8566,7 +8566,7 @@
     ]
    },
    "stock_flow": {
-    "time": "17:40",
+    "time": "20:40",
     "buy": [
      [
       "삼성중공업",
@@ -9428,6 +9428,6 @@
    }
   }
  },
- "updated_kst": "2026-09-03 17:40",
+ "updated_kst": "2026-09-03 20:40",
  "futures_unit": "계약"
 }
