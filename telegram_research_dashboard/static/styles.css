@@ -54,7 +54,10 @@
 .row-title{flex-wrap:wrap;row-gap:4px}.company-chip,.news-company-chip,.press-company-chip{border:0;background:#edf1ed;color:#2c463d;font-family:inherit;font-size:11px;font-weight:700;line-height:1.3;border-radius:10px;padding:3px 8px;cursor:pointer}.company-chip:hover,.news-company-chip:hover,.press-company-chip:hover{background:var(--green);color:#fff}.news-company-chip,.press-company-chip{margin:1px 3px 1px 0;white-space:nowrap}.news-company-chip.active,.press-company-chip.active{background:var(--green);color:#fff}
 .news-filters{display:flex;gap:8px;align-items:center}#news-search{width:230px;max-width:45vw}
 
-a.todo-feedback{display:inline-flex;margin:0 0 14px}
+/* 수명 피드백: 초록 버튼들 사이에서 바로 눈에 띄도록 골드 알약 배지로 */
+a.todo-feedback{display:inline-flex;margin:0 0 14px;font-size:12px;font-weight:700;letter-spacing:.01em;padding:9px 18px;border-radius:999px;color:#3d2c07;border:1px solid #d7ab46;background:linear-gradient(135deg,#fbe9a8 0%,#f0c75c 45%,#dda32f 100%);box-shadow:0 2px 7px rgba(178,127,28,.26),inset 0 1px 0 rgba(255,255,255,.7);transition:box-shadow .15s,transform .15s,filter .15s}
+a.todo-feedback:hover{filter:brightness(1.04);transform:translateY(-1px);box-shadow:0 5px 14px rgba(178,127,28,.36),inset 0 1px 0 rgba(255,255,255,.75)}
+a.todo-feedback:active{transform:translateY(0);box-shadow:0 1px 4px rgba(178,127,28,.3),inset 0 1px 0 rgba(255,255,255,.6)}
 .remember-result{white-space:pre-wrap;border:1px solid rgba(148,163,184,.35);border-radius:12px;padding:14px 16px;margin-top:12px;font-size:13px;line-height:1.65;max-width:720px}
 .remember-result a{font-weight:600}
 
