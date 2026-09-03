@@ -1,5 +1,5 @@
 {
-  "when_utc": "2026-09-03 05:26:58Z",
+  "when_utc": "2026-09-03 08:40:27Z",
   "ok": true,
   "note": "sent",
   "chat_id_tail": "5171",
@@ -7,7 +7,7 @@
   "response": {
     "ok": true,
     "result": {
-      "message_id": 252,
+      "message_id": 253,
       "from": {
         "id": 8875725998,
         "is_bot": true,
@@ -21,8 +21,8 @@
         "username": "gschoie",
         "type": "private"
       },
-      "date": 1788413218,
-      "text": "💹 시장 수급 · 9/3(목) 13:00\nKOSPI 6,468.29 🔻1.44%\n\n개인 -6,345억 (-6,711)\n외국인 -5,165억 (-2,746)\n기관 -3,047억 (-2,903)\n\n프로그램 -5,079억 = 차익 -255 · 비차익 -4,824\n\nK200선물 외인 +2,067계약 (+2,019) · 기관 -1,233계약 (-1,048)\n\n( ) 안은 10:00 대비 증감\n\n✅ 외국인 순매수 상위 (14:26 가집계)\n(+6.6%) 삼성중공업 +245억\n(+3.5%) 한화오션 +203억\n(+0.9%) 기아 +195억\n(-0.1%) 현대차 +166억\n(-5.2%) 삼양식품 +140억\n(-1.7%) 미래에셋증권 +130억\n(+2.0%) POSCO홀딩스 +118억\n\n❌ 외국인 순매도 상위\n(-3.2%) SK하이닉스 -4,355억\n(-5.9%) 삼성전기 -1,225억\n(-5.0%) 알테오젠 -655억\n(-4.3%) SK텔레콤 -276억\n(-0.9%) 우리금융지주 -270억\n(-2.8%) 삼성전자우 -251억\n(-2.5%) HD현대일렉트릭 -236억\n\n✅ 기관 순매수 상위\n(+2.3%) 신한지주 +349억\n(+3.5%) KB금융 +334억\n(+6.6%) 삼성중공업 +143억\n(+5.0%) 삼성화재 +124억\n(+2.1%) 하나금융지주 +121억\n(+2.5%) 두산에너빌리티 +107억\n(-0.3%) 현대차 +106억\n\n❌ 기관 순매도 상위\n(-3.2%) SK하이닉스 -1,249억\n(-2.6%) 삼성전자 -715억\n(-2.2%) 삼성SDI -95억\n(-6.0%) 삼성전기 -92억\n(-5.0%) 알테오젠 -82억\n(-6.2%) 심텍 -79억\n(-7.3%) OCI홀딩스 -72억\n\n상세 차트 › 대시보드\n🎴 GS Research Desk · 시장 수급",
+      "date": 1788424827,
+      "text": "💹 시장 수급 · 9/3(목) 16:40 · 확정\nKOSPI 6,579.48 🔺0.26%\n\n개인 -9,551억 (-3,206)\n외국인 -4,232억 (+933)\n기관 -2,153억 (+894)\n\n프로그램 -4,000억 = 차익 +52 · 비차익 -4,051\n\nK200선물 외인 +3,077계약 (+1,010) · 기관 -1,211계약 (+22)\n\n( ) 안은 13:00 대비 증감\n\n✅ 외국인 순매수 상위 (17:40 가집계)\n(+8.6%) 삼성중공업 +250억\n(+5.5%) 한화오션 +207억\n(+2.4%) 기아 +197억\n(+1.5%) 현대차 +169억\n(-3.5%) 삼양식품 +142억\n(+0.6%) 미래에셋증권 +133억\n(+3.6%) POSCO홀딩스 +120억\n\n❌ 외국인 순매도 상위\n(-1.1%) SK하이닉스 -4,453억\n(-3.7%) 삼성전기 -1,254억\n(-5.2%) 알테오젠 -654억\n(-2.6%) SK텔레콤 -281억\n(+0.4%) 우리금융지주 -274억\n(-0.8%) 삼성전자우 -256억\n(-0.7%) HD현대일렉트릭 -240억\n\n✅ 기관 순매수 상위\n(+3.6%) 신한지주 +354억\n(+5.2%) KB금융 +340억\n(+8.6%) 삼성중공업 +145억\n(+0.4%) 우리금융지주 +135억\n(+6.8%) 삼성화재 +126억\n(+3.4%) 하나금융지주 +123억\n(+3.4%) 두산에너빌리티 +108억\n\n❌ 기관 순매도 상위\n(-1.1%) SK하이닉스 -1,277억\n(-0.2%) 삼성전자 -732억\n(+0.2%) 삼성SDI -97억\n(-3.7%) 삼성전기 -94억\n(-5.2%) 알테오젠 -82억\n(-4.8%) 심텍 -80억\n(-5.6%) OCI홀딩스 -73억\n\n상세 차트 › 대시보드\n🎴 GS Research Desk · 시장 수급",
       "entities": [
         {
           "offset": 3,
@@ -30,27 +30,27 @@
           "type": "bold"
         },
         {
-          "offset": 30,
+          "offset": 35,
           "length": 8,
           "type": "bold"
         },
         {
-          "offset": 51,
+          "offset": 56,
           "length": 7,
           "type": "bold"
         },
         {
-          "offset": 72,
+          "offset": 77,
           "length": 7,
           "type": "bold"
         },
         {
-          "offset": 92,
+          "offset": 95,
           "length": 7,
           "type": "bold"
         },
         {
-          "offset": 115,
+          "offset": 116,
           "length": 7,
           "type": "bold"
         },
@@ -60,127 +60,127 @@
           "type": "bold"
         },
         {
-          "offset": 199,
+          "offset": 196,
           "length": 18,
           "type": "italic"
         },
         {
-          "offset": 221,
+          "offset": 218,
           "length": 10,
           "type": "bold"
         },
         {
-          "offset": 232,
+          "offset": 229,
           "length": 11,
           "type": "italic"
         },
         {
-          "offset": 258,
+          "offset": 255,
           "length": 5,
           "type": "bold"
         },
         {
-          "offset": 277,
+          "offset": 274,
           "length": 5,
           "type": "bold"
         },
         {
-          "offset": 294,
+          "offset": 291,
           "length": 5,
           "type": "bold"
         },
         {
-          "offset": 312,
+          "offset": 309,
           "length": 5,
           "type": "bold"
         },
         {
-          "offset": 331,
+          "offset": 328,
           "length": 5,
           "type": "bold"
         },
         {
-          "offset": 352,
+          "offset": 349,
           "length": 5,
           "type": "bold"
         },
         {
-          "offset": 375,
+          "offset": 372,
           "length": 5,
           "type": "bold"
         },
         {
-          "offset": 384,
+          "offset": 381,
           "length": 10,
           "type": "bold"
         },
         {
-          "offset": 410,
+          "offset": 407,
           "length": 7,
           "type": "bold"
         },
         {
-          "offset": 431,
+          "offset": 428,
           "length": 7,
           "type": "bold"
         },
         {
-          "offset": 452,
+          "offset": 449,
           "length": 5,
           "type": "bold"
         },
         {
-          "offset": 472,
+          "offset": 469,
           "length": 5,
           "type": "bold"
         },
         {
-          "offset": 493,
+          "offset": 490,
           "length": 5,
           "type": "bold"
         },
         {
-          "offset": 513,
+          "offset": 510,
           "length": 5,
           "type": "bold"
         },
         {
-          "offset": 536,
+          "offset": 533,
           "length": 5,
           "type": "bold"
         },
         {
-          "offset": 545,
+          "offset": 542,
           "length": 9,
           "type": "bold"
         },
         {
-          "offset": 568,
+          "offset": 565,
           "length": 5,
           "type": "bold"
         },
         {
-          "offset": 587,
+          "offset": 584,
           "length": 5,
           "type": "bold"
         },
         {
-          "offset": 607,
+          "offset": 604,
           "length": 5,
           "type": "bold"
         },
         {
-          "offset": 626,
+          "offset": 625,
           "length": 5,
           "type": "bold"
         },
         {
-          "offset": 647,
+          "offset": 644,
           "length": 5,
           "type": "bold"
         },
         {
-          "offset": 669,
+          "offset": 665,
           "length": 5,
           "type": "bold"
         },
