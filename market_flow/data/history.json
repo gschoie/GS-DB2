@@ -8739,13 +8739,13 @@
      }
     },
     "1640": {
-     "individual": -37231,
-     "foreign": 4798,
-     "institution": 16692,
+     "individual": -37229,
+     "foreign": 4796,
+     "institution": 16694,
      "arb": 2609,
-     "nonarb": -1937,
-     "program": 671,
-     "time": "17:34",
+     "nonarb": -1930,
+     "program": 679,
+     "time": "20:41",
      "kospi": 6687.21,
      "chg_pct": 1.64,
      "futures": {
@@ -8756,27 +8756,27 @@
    },
    "confirmed": {
     "investor": {
-     "individual": -37231,
-     "foreign": 4798,
-     "inst_total": 16692,
-     "fin_invest": 11868,
+     "individual": -37229,
+     "foreign": 4796,
+     "inst_total": 16694,
+     "fin_invest": 11870,
      "insurance": 359,
      "asset_mgmt": 3370,
      "bank": 27,
      "other_fin": 220,
      "pension": 846,
-     "other_corp": 15742
+     "other_corp": 15739
     },
     "program": {
      "arb_buy": 4714,
      "arb_sell": 2105,
      "arb_net": 2609,
-     "nonarb_buy": 48055,
+     "nonarb_buy": 48063,
      "nonarb_sell": 49993,
-     "nonarb_net": -1937,
-     "total_buy": 52769,
+     "nonarb_net": -1930,
+     "total_buy": 52777,
      "total_sell": 52098,
-     "total_net": 672
+     "total_net": 679
     },
     "futures": {
      "individual": -395,
@@ -8792,7 +8792,7 @@
     }
    },
    "group_1d": {
-    "time": "17:34",
+    "time": "20:41",
     "groups": [
      [
       "로봇",
@@ -8902,7 +8902,7 @@
     ]
    },
    "stock_flow": {
-    "time": "17:34",
+    "time": "20:41",
     "buy": [
      [
       "SK하이닉스",
@@ -9764,6 +9764,6 @@
    }
   }
  },
- "updated_kst": "2026-09-04 17:35",
+ "updated_kst": "2026-09-04 20:42",
  "futures_unit": "계약"
 }
