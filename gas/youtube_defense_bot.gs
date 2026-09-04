@@ -44,6 +44,7 @@ const DIGEST_SKIP_SHORTS = true;
 
 // 구독할 방산 채널 목록 (총 7개 채널)
 // digest: false 를 단 채널은 낱개 알림만 오고 3일 모음에는 담지 않는다.
+// exclude: /정규식/ 을 단 채널은 제목이 걸리는 영상을 통째로 건너뛴다(알림·모음 모두).
 const WATCH_CHANNELS = [
   { name: '샤를세환', id: 'UCVNAlg66t3JhkzT5JntclLg' },
   { name: 'KKMD', id: 'UCLDV9mI3tOQCrdPUWjogQZA' },
@@ -51,7 +52,7 @@ const WATCH_CHANNELS = [
   { name: '슈퍼소닉', id: 'UCXK_itQ6_JKltErZW_sQojQ' },
   { name: '밀덕', id: 'UCV-slcYbZrNCowaVd3cQaHQ' },
   { name: 'KFN+', id: 'UCObL9hob3R03QSZU5olJZiQ' },
-  { name: 'KFN1', id: 'UCXNMgSZqmfX1_K8Uf4l4sog', digest: false }
+  { name: 'KFN1', id: 'UCXNMgSZqmfX1_K8Uf4l4sog', digest: false, exclude: /이슈&국방/ }
 ];
 
 
@@ -181,6 +182,12 @@ function checkNewVideos() {
           let videoTitle = entry.getChildText('title', atom);
           const videoUrl = entry.getChild('link', atom).getAttribute('href').getValue();
 
+          // 채널별 제목 예외 — 걸리면 알림도 모음도 없이 조용히 넘어간다
+          if (channel.exclude && channel.exclude.test(videoTitle)) {
+            Logger.log(`제목 예외로 건너뜀 (${channel.name}): ${videoTitle}`);
+            return;
+          }
+
           const mediaGroup = entry.getChild('group', media);
           let description = '';
           if (mediaGroup) {
@@ -305,6 +312,7 @@ function fillBufferFromFeeds(days) {
         if (isBuffered_(videoId)) return;
 
         const title = entry.getChildText('title', atom);
+        if (channel.exclude && channel.exclude.test(title)) return;
         const link = entry.getChild('link', atom).getAttribute('href').getValue();
         if (bufferForDigest_(channel.name, videoId, title, link, published)) {
           added++;
