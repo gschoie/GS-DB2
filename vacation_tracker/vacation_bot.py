@@ -46,7 +46,7 @@ GEMINI_SYSTEM_PROMPT = """너는 텔레그램 대화에서 '자리 비움 보고
 메시지마다 아래를 판정해 JSON 배열로만 답하라(설명 금지):
 [{"i": <메시지 번호>, "vacation": true|false, "start": "YYYY-MM-DD"|null,
   "end": "YYYY-MM-DD"|null, "kind": "연차|반차|오전반차|오후반차|휴가|출장|해외출장|병가|휴무|기타",
-  "note": "짧은 메모(선택)"}]
+  "note": "짧은 메모(선택)", "who": "상대"|"본인"}]
 
 판정 기준:
 - vacation=true는 '보낸 사람 본인이 자리를 비운다는 보고'만. 남 얘기, 과거 회상,
@@ -58,9 +58,10 @@ GEMINI_SYSTEM_PROMPT = """너는 텔레그램 대화에서 '자리 비움 보고
   맥락의 질문(예: "출장 언제야?")에 대한 날짜 답변이면 보낸 사람의 자리 비움 보고로
   vacation=true로 판정하고, 종류(kind)는 맥락에서 찾아라.
 - note에는 장소·목적 같은 부가 정보(예: "카자흐스탄 출장")를 짧게 담아라.
-- "(계정 주인이 대신 적음)" 표시가 있으면 계정 주인이 그 대화 상대의 일정을 기록해 둔 것 —
-  표시된 이름(그 대화 상대)의 자리 비움으로 판정하라. 단 확정된 일정 진술일 때만
-  (단순 질문 "언제 가?"는 false)."""
+- "(계정 주인이 대신 적음)" 표시가 있으면 who를 판정하라: 계정 주인이 자기 자신의
+  일정을 말하면("나/저 휴가임", "내가 월요일 연차") who="본인" — 이 일정은 계정 주인의 것이다.
+  상대의 일정을 적어 둔 것이면("너 9/14 휴가", "OO 출장 9/1") who="상대".
+  그 외 메시지는 who="상대"로 두면 된다. 단순 질문("언제 가?")은 vacation=false."""
 
 
 # ── 설정·상태 ──────────────────────────────────────────────────────────────
@@ -300,7 +301,15 @@ def _gemini_extract(candidates: list[dict]) -> dict[int, dict] | None:
     return None
 
 
-def extract(candidates: list[dict]) -> list[dict]:
+def resolve_entry_name(cand: dict, verdict: dict | None, owner: str) -> str:
+    """항목이 붙을 사람 이름. 내가 쓴 메시지를 Gemini가 '본인 일정'으로 판정하면
+    계정 주인(owner) 이름으로 — "나 휴가임"이 대화 상대 일정으로 붙는 오귀속 방지."""
+    if owner and cand.get("by_me") and str((verdict or {}).get("who") or "").strip() == "본인":
+        return owner
+    return cand["name"]
+
+
+def extract(candidates: list[dict], owner: str = "") -> list[dict]:
     """후보 → 확정 항목. Gemini가 '보고 아님'이라 한 건은 버린다."""
     verdicts = _gemini_extract(candidates) if candidates else {}
     entries: list[dict] = []
@@ -328,7 +337,8 @@ def extract(candidates: list[dict]) -> list[dict]:
         display_text = cand["text"]
         if cand.get("trigger") == "context" and cand.get("context"):
             display_text = f"{cand['context'].splitlines()[-1]} → {cand['text']}"
-        entry.update(uid=cand["uid"], name=cand["name"], text=display_text,
+        entry.update(uid=cand["uid"], name=resolve_entry_name(cand, verdict, owner),
+                     text=display_text,
                      msg_date=cand["msg_date"],
                      detected_at=datetime.now(KST).isoformat(timespec="minutes"))
         entries.append(entry)
@@ -379,7 +389,9 @@ def run(dry_run: bool = False, probe: bool = False) -> None:
 
     candidates = asyncio.run(_scan(config, state))
     print(f"후보 {len(candidates)}건")
-    entries = extract(candidates)
+    owner = str(config.get("owner_name") or "").strip() or next(
+        (f["name"] for f in config["friends"] if f.get("scan") is False), "")
+    entries = extract(candidates, owner=owner)
 
     store = load_json(ENTRIES_PATH, {"entries": {}})
     known = store["entries"]
@@ -442,6 +454,28 @@ def _apply_op(op: str, body: dict) -> None:
             raise SystemExit("kind가 비어 있습니다")
         entry["kind"] = kind
         print(f"종류 수정: {entry.get('name')} ({uid}) → {kind}")
+    elif op == "update":
+        # 폼 전체 편집: 이름·종류·날짜·메모를 한 번에. 빈 이름/종류는 기존 값 유지.
+        for field in ("name", "kind"):
+            value = str(body.get(field) or "").strip()
+            if value:
+                entry[field] = value
+        if "note" in body:
+            entry["note"] = str(body.get("note") or "").strip()
+        start = str(body.get("start") or "").strip()
+        if start:
+            end = str(body.get("end") or "").strip() or start
+            try:
+                datetime.strptime(start, "%Y-%m-%d")
+                datetime.strptime(end, "%Y-%m-%d")
+            except ValueError as exc:
+                raise SystemExit(f"날짜 형식이 틀렸습니다(YYYY-MM-DD): {exc}")
+            if end < start:
+                start, end = end, start
+            entry["start"], entry["end"] = start, end
+            entry["needs_review"] = False
+        print(f"항목 수정: {entry.get('name')} {entry.get('start')}~{entry.get('end')} "
+              f"{entry.get('kind')} ({uid})")
     else:
         raise SystemExit(f"알 수 없는 op: {op!r}")
     save_json(ENTRIES_PATH, store)

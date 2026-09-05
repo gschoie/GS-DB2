@@ -1,0 +1,346 @@
+{
+ "source": "네이버 종목토론실",
+ "universe": 40,
+ "posts": 3109,
+ "search_top": [
+  {
+   "code": "005930",
+   "name": "삼성전자",
+   "rank": 1
+  },
+  {
+   "code": "000660",
+   "name": "SK하이닉스",
+   "rank": 2
+  },
+  {
+   "code": "009150",
+   "name": "삼성전기",
+   "rank": 3
+  },
+  {
+   "code": "108490",
+   "name": "로보티즈",
+   "rank": 4
+  },
+  {
+   "code": "005380",
+   "name": "현대차",
+   "rank": 5
+  },
+  {
+   "code": "034020",
+   "name": "두산에너빌리티",
+   "rank": 6
+  },
+  {
+   "code": "006400",
+   "name": "삼성SDI",
+   "rank": 7
+  },
+  {
+   "code": "196170",
+   "name": "알테오젠",
+   "rank": 8
+  },
+  {
+   "code": "035420",
+   "name": "NAVER",
+   "rank": 9
+  },
+  {
+   "code": "042700",
+   "name": "한미반도체",
+   "rank": 10
+  }
+ ],
+ "hot_stocks": [
+  {
+   "code": "000660",
+   "name": "SK하이닉스",
+   "posts": 763,
+   "capped": true,
+   "burst": 99.0,
+   "base_daily": 0.0
+  },
+  {
+   "code": "005930",
+   "name": "삼성전자",
+   "posts": 545,
+   "capped": true,
+   "burst": 99.0,
+   "base_daily": 0.0
+  },
+  {
+   "code": "030530",
+   "name": "원익홀딩스",
+   "posts": 205,
+   "capped": true,
+   "burst": 99.0,
+   "base_daily": 0.0
+  },
+  {
+   "code": "386380",
+   "name": "스카이랩스",
+   "posts": 191,
+   "capped": true,
+   "burst": 99.0,
+   "base_daily": 0.0
+  },
+  {
+   "code": "003490",
+   "name": "대한항공",
+   "posts": 152,
+   "capped": true,
+   "burst": 99.0,
+   "base_daily": 0.0
+  },
+  {
+   "code": "108490",
+   "name": "로보티즈",
+   "posts": 166,
+   "capped": true,
+   "burst": 14.2,
+   "base_daily": 11.7
+  },
+  {
+   "code": "036930",
+   "name": "주성엔지니어링",
+   "posts": 64,
+   "capped": false,
+   "burst": 5.6,
+   "base_daily": 11.4
+  },
+  {
+   "code": "263750",
+   "name": "펄어비스",
+   "posts": 180,
+   "capped": true,
+   "burst": 2.7,
+   "base_daily": 66.9
+  },
+  {
+   "code": "005490",
+   "name": "POSCO홀딩스",
+   "posts": 168,
+   "capped": true,
+   "burst": 1.6,
+   "base_daily": 105.0
+  },
+  {
+   "code": "042700",
+   "name": "한미반도체",
+   "posts": 145,
+   "capped": true,
+   "burst": 1.7,
+   "base_daily": 84.3
+  },
+  {
+   "code": "011070",
+   "name": "LG이노텍",
+   "posts": 150,
+   "capped": true,
+   "burst": 1.5,
+   "base_daily": 102.4
+  },
+  {
+   "code": "079550",
+   "name": "LIG넥스원",
+   "posts": 94,
+   "capped": false,
+   "burst": 1.6,
+   "base_daily": 60.1
+  }
+ ],
+ "keywords": [
+  {
+   "term": "기관",
+   "count": 35,
+   "burst": 99.0,
+   "new": true
+  },
+  {
+   "term": "로봇",
+   "count": 21,
+   "burst": 99.0,
+   "new": true
+  },
+  {
+   "term": "외인",
+   "count": 21,
+   "burst": 99.0,
+   "new": true
+  },
+  {
+   "term": "폭등",
+   "count": 18,
+   "burst": 99.0,
+   "new": true
+  },
+  {
+   "term": "월욜",
+   "count": 17,
+   "burst": 99.0,
+   "new": true
+  },
+  {
+   "term": "AI",
+   "count": 16,
+   "burst": 99.0,
+   "new": true
+  },
+  {
+   "term": "네이버",
+   "count": 16,
+   "burst": 99.0,
+   "new": true
+  },
+  {
+   "term": "외국인",
+   "count": 15,
+   "burst": 99.0,
+   "new": true
+  },
+  {
+   "term": "SK하이닉스",
+   "count": 13,
+   "burst": 99.0,
+   "new": true
+  },
+  {
+   "term": "얼마나",
+   "count": 11,
+   "burst": 99.0,
+   "new": true
+  },
+  {
+   "term": "봐라",
+   "count": 11,
+   "burst": 99.0,
+   "new": true
+  },
+  {
+   "term": "수익",
+   "count": 10,
+   "burst": 99.0,
+   "new": true
+  },
+  {
+   "term": "속보",
+   "count": 10,
+   "burst": 99.0,
+   "new": true
+  },
+  {
+   "term": "삼전닉스",
+   "count": 10,
+   "burst": 99.0,
+   "new": true
+  },
+  {
+   "term": "주주들",
+   "count": 10,
+   "burst": 99.0,
+   "new": true
+  }
+ ],
+ "top_liked": [
+  {
+   "code": "007390",
+   "name": "네이처셀",
+   "title": "라대표님께~~![10]",
+   "views": 966,
+   "likes": 137,
+   "url": "https://finance.naver.com/item/board_read.naver?code=007390&nid=428970672",
+   "time_kst": "09-04 16:05"
+  },
+  {
+   "code": "010170",
+   "name": "대한광통신",
+   "title": "애들아~~~ Metro Connect ...[13]",
+   "views": 1203,
+   "likes": 101,
+   "url": "https://finance.naver.com/item/board_read.naver?code=010170&nid=428948237",
+   "time_kst": "09-04 11:30"
+  },
+  {
+   "code": "007390",
+   "name": "네이처셀",
+   "title": "김승원 후보자가쏘아올린작은공[4]",
+   "views": 735,
+   "likes": 100,
+   "url": "https://finance.naver.com/item/board_read.naver?code=007390&nid=428975464",
+   "time_kst": "09-04 18:01"
+  },
+  {
+   "code": "007390",
+   "name": "네이처셀",
+   "title": "일본·미국 터지고 하늘까지 돕는 네이처셀, 역대급...[6]",
+   "views": 606,
+   "likes": 98,
+   "url": "https://finance.naver.com/item/board_read.naver?code=007390&nid=428984575",
+   "time_kst": "09-05 00:48"
+  },
+  {
+   "code": "007390",
+   "name": "네이처셀",
+   "title": "드디어 진실 밝혀지고 항소 중도 포기하나...[2]",
+   "views": 948,
+   "likes": 90,
+   "url": "https://finance.naver.com/item/board_read.naver?code=007390&nid=428976816",
+   "time_kst": "09-04 18:51"
+  }
+ ],
+ "top_rising": [
+  {
+   "code": "000660",
+   "name": "SK하이닉스",
+   "title": "야선 4% 돌파했네요[3]",
+   "views": 2566,
+   "likes": 61,
+   "url": "https://finance.naver.com/item/board_read.naver?code=000660&nid=428986178",
+   "time_kst": "09-05 05:05",
+   "views_per_hour": 836.3
+  },
+  {
+   "code": "000660",
+   "name": "SK하이닉스",
+   "title": "월요일 하닉 예상시초가라는데????횽들 172...",
+   "views": 432,
+   "likes": 27,
+   "url": "https://finance.naver.com/item/board_read.naver?code=000660&nid=428986388",
+   "time_kst": "09-05 05:54",
+   "views_per_hour": 191.9
+  },
+  {
+   "code": "000660",
+   "name": "SK하이닉스",
+   "title": "금리인상 부담인데 반도체 오르는 이유가?[1]",
+   "views": 519,
+   "likes": 3,
+   "url": "https://finance.naver.com/item/board_read.naver?code=000660&nid=428986080",
+   "time_kst": "09-05 04:53",
+   "views_per_hour": 158.8
+  },
+  {
+   "code": "005930",
+   "name": "삼성전자",
+   "title": "다시봐도...[3]",
+   "views": 340,
+   "likes": 5,
+   "url": "https://finance.naver.com/item/board_read.naver?code=005930&nid=428986351",
+   "time_kst": "09-05 05:46",
+   "views_per_hour": 142.6
+  },
+  {
+   "code": "006400",
+   "name": "삼성SDI",
+   "title": "❤️현시각 미국 미 8월 고용 16.2만명 증가...[6]",
+   "views": 1211,
+   "likes": 8,
+   "url": "https://finance.naver.com/item/board_read.naver?code=006400&nid=428982196",
+   "time_kst": "09-04 22:50",
+   "views_per_hour": 130.0
+  }
+ ]
+}

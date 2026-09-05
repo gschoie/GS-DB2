@@ -7,6 +7,9 @@
 #     username: junbeom_lee
 # 매칭이 되는지는 워크플로 mode=probe로 확인할 수 있다(메시지는 읽지 않는다).
 
+# "나/저 휴가임"처럼 내가 내 일정을 말한 메시지가 붙을 이름 (Gemini who=본인 판정 시)
+owner_name: 최광식
+
 friends:
   # scan: false = 텔레그램 수집은 안 하고, 기입 폼의 이름 목록에만 올린다 (본인 등).
   - name: 최광식
