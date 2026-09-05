@@ -37,7 +37,7 @@ iframe{width:100%;height:calc(100vh - 110px);border:1px solid #24443a;border-rad
 </div>
 <iframe id="frame" title="브리핑"></iframe>
 <script>
-const DATES=["2026-09-05", "2026-09-04", "2026-09-03", "2026-09-02", "2026-09-01"];
+const DATES=["2026-09-06", "2026-09-05", "2026-09-04", "2026-09-03", "2026-09-02", "2026-09-01"];
 const sel=document.getElementById('dsel'),fr=document.getElementById('frame');
 DATES.forEach(d=>{const o=document.createElement('option');o.value=d;o.textContent=d+' ('+'일월화수목금토'[new Date(d+'T00:00:00').getDay()]+')';sel.appendChild(o)});
 function load(){fr.src='energy_daily/'+sel.value+'.html'}
