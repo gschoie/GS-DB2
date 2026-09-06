@@ -206,6 +206,14 @@
     - **3일 간격은 마지막 발송 기준**: 트리거는 매일 07시에 돌고(`scheduledDigest`),
       `LAST_DIGEST_AT`에서 3일(−6h 여유)이 안 지났으면 건너뛴다. 수동 갱신도 발송이므로
       그 시점부터 다시 3일을 센다. GAS everyDays(3)는 기준점을 못 옮겨 이렇게 했다.
+    - **주간(평일) 모음**: 3일 모음과 별개로, 월~금 아침(8시대, `scheduledWeekly`)에
+      '지난 7일'의 **일반 영상만**(쇼츠·라이브 제목 휴리스틱 제외) 채널별로 보낸다.
+      대상은 weekly:false 를 안 단 5곳(샤를세환·KKMD·까치살모·슈퍼소닉·KFN+).
+      `WEEKLY_` 롤링 로그는 발송해도 안 비우고 7일 지난 것만 청소 — 같은 영상이
+      평일마다 다시 실리는 게 정상(그날 기준 스냅샷). 피드 15개 한도는
+      checkNewVideos 가 지나갈 때마다 로그에 적립해 메운다. 대시보드는 같은
+      workflow_dispatch 에 kind:'weekly' 로 실려 `static/youtube_weekly/` +
+      사이드바 `🗞 ┗방산유튜브.주간(평일)`. installWeeklyTrigger() 1회 실행 필요.
     - **수동 갱신 버튼**: ytdigest 뷰의 `🔄 모음 갱신` → 유튜브 GAS 프로젝트를 웹 앱으로
       배포한 주소(app.js `YTDIGEST_ENDPOINT`)에 POST {action:'send_digest'} → 최근 3일치를
       피드에서 다시 채워 즉시 발송(텔레그램 두 통 + 대시보드). LockService로 동시 실행 방지.
