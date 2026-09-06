@@ -293,7 +293,7 @@ def _add_form(stamp: str) -> str:
     stamp는 이 페이지의 갱신 시각 — 제출 뒤 배포본의 갱신 시각이 달라지면
     자동 새로고침한다. 그 사이 화면에는 점선(pending) 스타일로 즉시 그려 둔다.
     """
-    name_options = "".join(f'<option value="{html.escape(n)}">'
+    name_options = "".join(f"<option>{html.escape(n)}</option>"
                            for n in sorted({n for n in friend_names() if n}))
     kind_options = "".join(f"<option>{k}</option>" for k in KIND_OPTIONS)
     head = f"""
@@ -302,8 +302,12 @@ def _add_form(stamp: str) -> str:
 1~2분 뒤 서버 반영이 끝나면 자동 새로고침됩니다. 잘못 넣은 건 entries.json에서 지우고
 rebuild-page로 되돌립니다.</p>
 <div class="addform">
-  <input id="add-name" list="add-names" placeholder="이름" style="width:110px">
-  <datalist id="add-names">{name_options}</datalist>
+  <select id="add-name" style="width:120px" onchange="nameChanged()">
+    <option value="" disabled selected>이름 선택</option>
+    {name_options}
+    <option value="__free__">직접 입력…</option>
+  </select>
+  <input id="add-name-free" placeholder="이름 직접 입력" style="width:110px" hidden>
   <select id="add-kind">{kind_options}</select>
   <input id="add-start" type="date" title="시작일">
   <span>~</span>
@@ -323,6 +327,26 @@ const KINDS={json.dumps(KIND_OPTIONS, ensure_ascii=False)};
 const $id=i=>document.getElementById(i);
 function escText(t){const d=document.createElement('div');d.textContent=t==null?'':t;return d.innerHTML}
 function isTrip(kind){return /출장|투어/.test(kind||'')}
+
+// 이름은 <select>에서 고른다. '직접 입력…'을 고르면 옆 텍스트 칸이 나타난다.
+// (datalist는 수정 모드에서 기존 이름이 미리 채워지면 목록이 그 값으로 걸러져
+//  다른 사람을 고를 수 없었다.)
+function nameChanged(){
+  const free=$id('add-name-free');
+  free.hidden=$id('add-name').value!=='__free__';
+  if(!free.hidden)free.focus();
+}
+function nameVal(){
+  const v=$id('add-name').value;
+  return v==='__free__'?$id('add-name-free').value.trim():v;
+}
+function setNameVal(name){
+  const sel=$id('add-name'),free=$id('add-name-free');
+  if([...sel.options].some(o=>o.value===name&&o.value!=='__free__')){
+    sel.value=name;free.hidden=true;free.value='';
+  }else if(name){sel.value='__free__';free.hidden=false;free.value=name}
+  else{sel.value='';free.hidden=true;free.value=''}
+}
 
 // 제출 직후 화면에 임시(pending)로 그린다 — 서버 반영 전에도 바로 보이게.
 function localApply(en){
@@ -367,7 +391,7 @@ async function watchDeploy(){
 }
 
 async function addEntry(){
-  const name=$id('add-name').value.trim(), start=$id('add-start').value;
+  const name=nameVal(), start=$id('add-start').value;
   const status=$id('add-status'), btn=$id('add-btn');
   if(!name||!start){status.textContent='⚠ 이름과 시작일은 필수입니다';return}
   // 종료<시작이면 서버(add_manual)가 자동으로 뒤집는다.
@@ -447,7 +471,7 @@ function ensureKindOption(value){
 }
 function startEdit(row){
   EDIT_UID=row.dataset.uid;
-  $id('add-name').value=row.dataset.name||'';
+  setNameVal(row.dataset.name||'');
   ensureKindOption(row.dataset.kind);
   $id('add-kind').value=row.dataset.kind||'휴가';
   $id('add-start').value=row.dataset.start||'';
@@ -460,7 +484,8 @@ function startEdit(row){
 }
 function cancelEdit(){
   EDIT_UID=null;
-  ['add-name','add-start','add-end','add-note'].forEach(i=>{$id(i).value=''});
+  setNameVal('');
+  ['add-start','add-end','add-note'].forEach(i=>{$id(i).value=''});
   $id('add-btn').textContent='추가';
   $id('edit-cancel').hidden=true;
   $id('add-status').textContent='';
@@ -533,10 +558,18 @@ function showPop(chip){
     +'<span class="badge'+(isTrip(d.kind)?' trip':'')+'">'+escText(d.kind||'휴가')+'</span>'
     +(d.note?'<div>'+escText(d.note)+'</div>':'')
     +(d.text&&d.text!==d.note?'<div class="quote">“'+escText(d.text)+'”</div>':'')
-    +'<div class="meta2">'+escText(d.when)+' · '+escText(d.source||'')+'</div>'
-    +(d.uid?'<div class="pop-acts">'
-      +'<button onclick="editNote('+JSON.stringify(d.uid)+','+JSON.stringify(d.note||'')+')">✏️ 메모 수정</button>'
-      +'<button onclick="delEntry('+JSON.stringify(d.uid)+')">🗑 삭제</button></div>':'');
+    +'<div class="meta2">'+escText(d.when)+' · '+escText(d.source||'')+'</div>';
+  // 버튼은 DOM으로 붙인다 — innerHTML 문자열의 onclick 속성에 따옴표 있는 uid를
+  // 넣으면 속성이 조기 종료되어 클릭이 조용히 죽는다(이지수 9/18 삭제 안 되던 원인).
+  if(d.uid){
+    const uid=d.uid,note=d.note||'';
+    const acts=document.createElement('div');acts.className='pop-acts';
+    const eb=document.createElement('button');eb.textContent='✏️ 메모 수정';
+    eb.addEventListener('click',()=>editNote(uid,note));
+    const db=document.createElement('button');db.textContent='🗑 삭제';
+    db.addEventListener('click',()=>delEntry(uid));
+    acts.append(eb,db);chipPop.appendChild(acts);
+  }
   document.body.appendChild(chipPop);
   const r=chip.getBoundingClientRect(),pw=chipPop.offsetWidth,ph=chipPop.offsetHeight;
   let left=Math.min(Math.max(8,r.left),window.innerWidth-pw-8);
