@@ -27,8 +27,23 @@ from pathlib import Path
 
 KST = timezone(timedelta(hours=9), name="KST")
 ROOT = Path(__file__).resolve().parent.parent
-OUT_DIR = ROOT / "telegram_research_dashboard" / "static" / "youtube_digest"
-INDEX_PATH = ROOT / "telegram_research_dashboard" / "static" / "youtube_digest_report.html"
+STATIC = ROOT / "telegram_research_dashboard" / "static"
+
+# 두 종류의 모음이 같은 골격을 쓴다. payload 의 kind 로 갈린다.
+KINDS = {
+    "digest": {
+        "dir": "youtube_digest",
+        "index": "youtube_digest_report.html",
+        "title": "방산 유튜브 3일 모음",
+        "sub": "3일마다 07:00",
+    },
+    "weekly": {
+        "dir": "youtube_weekly",
+        "index": "youtube_weekly_report.html",
+        "title": "방산 유튜브 주간 모음",
+        "sub": "평일 아침 · 지난 7일 (쇼츠·라이브 제외)",
+    },
+}
 
 DATE_RE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
 
@@ -116,11 +131,11 @@ def grouped_urls(channels: list) -> str:
     return "\n\n".join(blocks)
 
 
-def render_markdown(payload: dict) -> str:
+def render_markdown(payload: dict, cfg: dict) -> str:
     channels = payload["channels"]
     total = len(all_urls(channels))
     lines = [
-        f"# 방산 유튜브 3일 모음 {payload['date']}",
+        f"# {cfg['title']} {payload['date']}",
         "",
         f"- 채널 {len(channels)}개 · 영상 {total}건",
     ]
@@ -142,14 +157,14 @@ def render_markdown(payload: dict) -> str:
     return "\n".join(lines)
 
 
-def render_page(payload: dict) -> str:
+def render_page(payload: dict, cfg: dict) -> str:
     channels = payload["channels"]
     urls = all_urls(channels)
     date = payload["date"]
 
     body = [
         '<div class="wrap">',
-        f"<h1>📺 방산 유튜브 3일 모음 · {html.escape(date)}</h1>",
+        f"<h1>📺 {cfg['title']} · {html.escape(date)}</h1>",
     ]
     meta = f"채널 {len(channels)}개 · 영상 {len(urls)}건"
     if payload.get("from"):
@@ -192,18 +207,19 @@ def render_page(payload: dict) -> str:
     return (
         '<!DOCTYPE html><html lang="ko"><head><meta charset="utf-8">\n'
         '<meta name="viewport" content="width=device-width,initial-scale=1">\n'
-        f"<title>방산 유튜브 3일 모음 {html.escape(date)}</title>"
+        f"<title>{cfg['title']} {html.escape(date)}</title>"
         f"<style>{PAGE_CSS}</style></head><body>\n"
         + "\n".join(body)
         + "\n</body></html>\n"
     )
 
 
-def render_index(dates: list) -> str:
+def render_index(dates: list, cfg: dict) -> str:
     latest = dates[0] if dates else ""
+    kind_dir = cfg["dir"]
     return f"""<!DOCTYPE html><html lang="ko"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>방산 유튜브 3일 모음</title><style>
+<title>{cfg['title']}</title><style>
 :root{{color-scheme:dark}}
 body{{margin:0;padding:16px;background:#0d1117;color:#d8dee9;
   font-family:'Pretendard','Malgun Gothic','Apple SD Gothic Neo',sans-serif}}
@@ -216,8 +232,8 @@ select,button{{background:#161d29;color:#d8dee9;border:1px solid #2c3a52;border-
 iframe{{width:100%;height:calc(100vh - 110px);border:1px solid #223046;border-radius:10px;background:#0d1117}}
 </style></head><body>
 <div class="bar">
-  <h1>📺 방산 유튜브 3일 모음 <small style="font-size:11px;color:#8b96a8">3일마다 07:00</small></h1>
-  <a class="bundle" id="mdlink" href="youtube_digest/{latest}.md" download title="NotebookLM 업로드용 마크다운">⬇ .md</a>
+  <h1>📺 {cfg['title']} <small style="font-size:11px;color:#8b96a8">{cfg['sub']}</small></h1>
+  <a class="bundle" id="mdlink" href="{kind_dir}/{latest}.md" download title="NotebookLM 업로드용 마크다운">⬇ .md</a>
   <button id="prev" title="이전 회차">◀</button>
   <select id="dsel"></select>
   <button id="next" title="다음 회차">▶</button>
@@ -227,54 +243,71 @@ iframe{{width:100%;height:calc(100vh - 110px);border:1px solid #223046;border-ra
 const DATES={json.dumps(dates, ensure_ascii=False)};
 const sel=document.getElementById('dsel'),fr=document.getElementById('frame');
 DATES.forEach(d=>{{const o=document.createElement('option');o.value=d;o.textContent=d+' ('+'일월화수목금토'[new Date(d+'T00:00:00').getDay()]+')';sel.appendChild(o)}});
-function load(){{fr.src='youtube_digest/'+sel.value+'.html';document.getElementById('mdlink').href='youtube_digest/'+sel.value+'.md'}}
+function load(){{fr.src='{kind_dir}/'+sel.value+'.html';document.getElementById('mdlink').href='{kind_dir}/'+sel.value+'.md'}}
 sel.onchange=load;
 document.getElementById('prev').onclick=()=>{{if(sel.selectedIndex<DATES.length-1){{sel.selectedIndex++;load()}}}};
 document.getElementById('next').onclick=()=>{{if(sel.selectedIndex>0){{sel.selectedIndex--;load()}}}};
 if(DATES.length)load();
-else fr.srcdoc='<body style="background:#0d1117;color:#8b96a8;font-family:sans-serif;display:flex;align-items:center;justify-content:center;height:100vh;margin:0">아직 모음이 없습니다 — 3일마다 자동 생성됩니다.</body>';
+else fr.srcdoc='<body style="background:#0d1117;color:#8b96a8;font-family:sans-serif;display:flex;align-items:center;justify-content:center;height:100vh;margin:0">아직 모음이 없습니다 — 자동 생성을 기다리는 중.</body>';
 </script></body></html>
 """
 
 
-def known_dates() -> list:
-    if not OUT_DIR.is_dir():
+def known_dates(out_dir: Path) -> list:
+    if not out_dir.is_dir():
         return []
-    dates = {p.stem for p in OUT_DIR.glob("*.html") if DATE_RE.match(p.stem)}
+    dates = {p.stem for p in out_dir.glob("*.html") if DATE_RE.match(p.stem)}
     return sorted(dates, reverse=True)
+
+
+def reindex(kind: str) -> None:
+    cfg = KINDS[kind]
+    out_dir = STATIC / cfg["dir"]
+    out_dir.mkdir(parents=True, exist_ok=True)
+    dates = known_dates(out_dir)
+    (STATIC / cfg["index"]).write_text(render_index(dates, cfg), encoding="utf-8")
+    print(f"{kind} 인덱스 갱신 — 회차 {len(dates)}개")
 
 
 def main() -> int:
     cli = argparse.ArgumentParser(description="유튜브 3일 모음 대시보드 페이지 생성")
     cli.add_argument("--payload-file", help="JSON 파일 경로. 없으면 표준입력에서 읽는다")
     cli.add_argument("--reindex-only", action="store_true",
-                     help="새 회차 없이 인덱스만 다시 만든다")
+                     help="새 회차 없이 인덱스만 다시 만든다 (두 종류 모두)")
     args = cli.parse_args()
 
-    OUT_DIR.mkdir(parents=True, exist_ok=True)
+    if args.reindex_only:
+        for kind in KINDS:
+            reindex(kind)
+        return 0
 
-    if not args.reindex_only:
-        raw = (
-            Path(args.payload_file).read_text(encoding="utf-8")
-            if args.payload_file
-            else sys.stdin.read()
+    raw = (
+        Path(args.payload_file).read_text(encoding="utf-8")
+        if args.payload_file
+        else sys.stdin.read()
+    )
+    payload = load_payload(raw)
+    kind = str(payload.get("kind") or "digest")
+    if kind not in KINDS:
+        print(f"모르는 kind '{kind}' — digest 로 처리합니다.")
+        kind = "digest"
+    cfg = KINDS[kind]
+    out_dir = STATIC / cfg["dir"]
+    out_dir.mkdir(parents=True, exist_ok=True)
+
+    if not payload["channels"]:
+        print("영상이 없어 페이지를 만들지 않습니다 — 인덱스만 갱신합니다.")
+    else:
+        date = payload["date"]
+        (out_dir / f"{date}.html").write_text(render_page(payload, cfg), encoding="utf-8")
+        (out_dir / f"{date}.md").write_text(render_markdown(payload, cfg), encoding="utf-8")
+        (out_dir / f"{date}.txt").write_text(
+            grouped_urls(payload["channels"]) + "\n", encoding="utf-8"
         )
-        payload = load_payload(raw)
-        if not payload["channels"]:
-            print("영상이 없어 페이지를 만들지 않습니다 — 인덱스만 갱신합니다.")
-        else:
-            date = payload["date"]
-            (OUT_DIR / f"{date}.html").write_text(render_page(payload), encoding="utf-8")
-            (OUT_DIR / f"{date}.md").write_text(render_markdown(payload), encoding="utf-8")
-            (OUT_DIR / f"{date}.txt").write_text(
-                grouped_urls(payload["channels"]) + "\n", encoding="utf-8"
-            )
-            total = len(all_urls(payload["channels"]))
-            print(f"{date}: 채널 {len(payload['channels'])}개 · 영상 {total}건 기록")
+        total = len(all_urls(payload["channels"]))
+        print(f"[{kind}] {date}: 채널 {len(payload['channels'])}개 · 영상 {total}건 기록")
 
-    dates = known_dates()
-    INDEX_PATH.write_text(render_index(dates), encoding="utf-8")
-    print(f"인덱스 갱신 — 회차 {len(dates)}개")
+    reindex(kind)
     return 0
 
 
