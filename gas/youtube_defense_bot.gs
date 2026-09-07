@@ -3,7 +3,7 @@
 // 트리거 두 개로 돈다.
 //   checkNewVideos()      — 새 영상 감지 → 제미나이 요약 → 텔레그램 낱개 발송 (자주)
 //   sendThreeDayDigest()  — 3일치 링크를 모아 한 번에 발송 (NotebookLM 소스용)
-//   sendWeeklyList()      — 지난 7일의 일반 영상만(쇼츠·라이브 제외) 평일 아침마다
+//   sendWeeklyList()      — 요일별 담당 채널 1개의 지난 7일 일반 영상(쇼츠·라이브 제외)을 매일(월~토) 아침마다
 //
 // 손으로 한 번씩 돌리는 것들
 //   checkSetup()          — 스크립트 속성이 제대로 들어갔는지 확인
@@ -25,7 +25,7 @@ const PROPS = PropertiesService.getScriptProperties();
 // 3일 모음 버퍼가 쓰는 속성 키 앞머리. LAST_VIDEO_ 와 섞이지 않는다.
 const DIGEST_PREFIX = 'DIGEST_';
 
-// 주간(평일) 모음 — 지난 7일 창의 롤링 로그. 3일 모음 버퍼와 달리 발송해도 비우지
+// 주간(요일 로테이션) 모음 — 지난 7일 창의 롤링 로그. 3일 모음 버퍼와 달리 발송해도 비우지
 // 않고, 7일이 지난 항목만 청소한다. 피드가 채널당 최근 15개만 주므로, 다작 채널의
 // 7일치가 잘리지 않도록 checkNewVideos 가 지나갈 때마다 여기에도 적어 둔다.
 const WEEKLY_PREFIX = 'WEEKLY_';
@@ -63,8 +63,20 @@ const WATCH_CHANNELS = [
   { name: '슈퍼소닉', id: 'UCXK_itQ6_JKltErZW_sQojQ' },
   { name: '밀덕', id: 'UCV-slcYbZrNCowaVd3cQaHQ', weekly: false },
   { name: 'KFN+', id: 'UCObL9hob3R03QSZU5olJZiQ' },
-  { name: 'KFN1', id: 'UCXNMgSZqmfX1_K8Uf4l4sog', digest: false, weekly: false, exclude: /이슈&국방/ }
+  { name: 'KFN1', id: 'UCXNMgSZqmfX1_K8Uf4l4sog', digest: false, exclude: /이슈&국방/ }
 ];
+
+// 주간 모음 요일별 로테이션 — 매일 그날 담당 채널 1개의 지난 7일치만 보낸다.
+// 키는 KST 요일(1=월 … 6=토). 일요일(7)은 쉰다.
+// 이름은 WATCH_CHANNELS 의 name 과 글자까지 같아야 한다.
+const WEEKLY_ROTATION = {
+  1: '샤를세환',
+  2: 'KKMD',
+  3: '까치살모',
+  4: '슈퍼소닉',
+  5: 'KFN+',
+  6: 'KFN1'
+};
 
 
 // === 설정 ===
@@ -445,7 +457,8 @@ function sendThreeDayDigest() {
 
 // 모음을 GS-DB2 의 워크플로로 넘겨 대시보드 페이지를 만들게 한다.
 // GH_TOKEN 이 없으면 조용히 건너뛴다 — 텔레그램만 쓰는 것도 정상 운용이다.
-function pushDigestToDashboard_(names, byChannel, rows, kind) {
+// label 은 페이지 제목에 덧붙는 꼬리표(주간 모음의 '오늘의 채널') — 없으면 생략.
+function pushDigestToDashboard_(names, byChannel, rows, kind, label) {
   const token = PROPS.getProperty('GH_TOKEN');
   if (!token) {
     Logger.log('GH_TOKEN 이 없어 대시보드에는 남기지 않습니다.');
@@ -465,6 +478,7 @@ function pushDigestToDashboard_(names, byChannel, rows, kind) {
   const payload = {
     kind: kind ? kind : 'digest',
     date: day(Date.now()),
+    label: label ? String(label) : '',
     from: earliest ? day(earliest) : '',
     channels: names.map(function (name) {
       return {
@@ -522,12 +536,13 @@ function sendChunked_(lines, plain) {
 }
 
 
-// === 주간(평일) 모음 — 지난 7일의 일반 영상만 ===
+// === 주간 모음 — 요일별 채널 로테이션, 그날 담당 채널의 지난 7일 ===
 //
-// 3일 모음과 별개로, 월~금 아침마다 '지난 7일' 창을 통째로 보낸다. 쇼츠와
-// 라이브(제목 휴리스틱)는 빼고, weekly: false 채널(밀덕·KFN1)도 뺀다.
-// 로그는 발송 후에도 비우지 않는 롤링 창이라, 같은 영상이 평일마다 다시 실리는
-// 것이 정상이다(그날 기준 최근 7일 스냅샷).
+// 3일 모음과 별개로, 월~토 아침마다 WEEKLY_ROTATION 에 적힌 그날 담당 채널
+// 1개의 '지난 7일' 창을 보낸다. 쇼츠와 라이브(제목 휴리스틱)는 빼고,
+// weekly: false 채널(밀덕)은 로그 자체에서 뺀다. 로그는 발송 후에도 비우지
+// 않는 롤링 창(그날 기준 최근 7일 스냅샷)이라, 채널당 주 1회 발송이면
+// 영상 하나가 정확히 한 번씩 실린다.
 
 function weeklyKeys_() {
   const all = PROPS.getProperties();
@@ -560,7 +575,19 @@ function logForWeekly_(channel, videoId, title, url, whenMillis) {
   }));
 }
 
-function sendWeeklyList() {
+// KST 요일에 맞는 오늘의 로테이션 채널 이름. 일요일이면 null.
+function todaysWeeklyChannel_() {
+  const dayOfWeek = Number(Utilities.formatDate(new Date(), 'Asia/Seoul', 'u')); // 1=월 … 7=일
+  return WEEKLY_ROTATION[dayOfWeek] || null;
+}
+
+// channelName 을 주면 그 채널을, 안 주면 오늘 담당 채널을 보낸다.
+function sendWeeklyList(channelName) {
+  const target = (typeof channelName === 'string' && channelName) ? channelName : todaysWeeklyChannel_();
+  if (!target) {
+    Logger.log('주간 모음: 오늘(일요일)은 담당 채널이 없습니다.');
+    return;
+  }
   const cutoff = Date.now() - WEEKLY_DAYS * 24 * 3600 * 1000;
 
   // 1. 창 밖으로 밀린 항목 청소
@@ -569,9 +596,11 @@ function sendWeeklyList() {
     if (!millis || millis < cutoff) PROPS.deleteProperty(key);
   });
 
-  // 2. 피드에서 빠진 것 보충 — 처음 켠 날과 checkNewVideos 공백을 메운다
+  // 2. 피드에서 빠진 것 보충 — 처음 켠 날과 checkNewVideos 공백을 메운다.
+  //    오늘 담당 채널만 긁으면 충분하다(다른 채널은 각자 담당 요일에 보충된다).
   WATCH_CHANNELS.forEach(function (channel) {
     if (channel.weekly === false) return;
+    if (channel.name !== target) return;
     try {
       const url = 'https://www.youtube.com/feeds/videos.xml?channel_id=' + channel.id;
       const xml = XmlService.parse(UrlFetchApp.fetch(url).getContentText());
@@ -590,41 +619,32 @@ function sendWeeklyList() {
     }
   });
 
-  // 3. 채널별로 묶기 (설정 순서)
+  // 3. 로그에서 오늘 담당 채널 것만 골라 묶는다
   const fresh = PROPS.getProperties();
   const rows = [];
   weeklyKeys_().forEach(function (key) {
     try {
       const row = JSON.parse(fresh[key]);
+      if ((row.ch || '') !== target) return;
       const millis = Number(key.split('_')[1]);
       if (millis) row.p = new Date(millis).toISOString();
       rows.push(row);
     } catch (e) {}
   });
   if (rows.length === 0) {
-    Logger.log('주간 모음: 지난 7일에 담을 영상이 없습니다.');
+    Logger.log('주간 모음: ' + target + ' 채널의 지난 7일 영상이 없습니다.');
     return;
   }
 
-  const order = {};
-  WATCH_CHANNELS.forEach(function (channel, index) { order[channel.name] = index; });
   const byChannel = {};
-  rows.forEach(function (row) {
-    const name = row.ch || '(채널 미상)';
-    if (!byChannel[name]) byChannel[name] = [];
-    byChannel[name].push(row);
-  });
-  const names = Object.keys(byChannel).sort(function (a, b) {
-    const ra = (a in order) ? order[a] : 99;
-    const rb = (b in order) ? order[b] : 99;
-    return ra - rb;
-  });
+  byChannel[target] = rows;
+  const names = [target];
 
   // 4. 텔레그램 두 통 — 3일 모음과 같은 짝(읽는 판 + 주소만)
   const stamp = Utilities.formatDate(new Date(), 'Asia/Seoul', 'M월 d일');
   let lines = [
-    `🗞 <b>주간 영상 모음 · ${stamp}</b>`,
-    `지난 7일 · 채널 ${names.length}개 · 영상 ${rows.length}건 (쇼츠·라이브 제외)`,
+    `🗞 <b>주간 영상 모음 · ${stamp} · ${escapeHtml_(target)}</b>`,
+    `지난 7일 · 영상 ${rows.length}건 (쇼츠·라이브 제외)`,
     ''
   ];
   names.forEach(function (name) {
@@ -649,18 +669,19 @@ function sendWeeklyList() {
 
   // 5. 대시보드에도 남긴다 — 실패해도 텔레그램은 이미 나갔다
   try {
-    pushDigestToDashboard_(names, byChannel, rows, 'weekly');
+    pushDigestToDashboard_(names, byChannel, rows, 'weekly', target);
   } catch (error) {
     Logger.log('주간 모음 대시보드 전달 실패 (텔레그램은 정상 발송됨): ' + error.toString());
   }
-  Logger.log('주간 모음 발송 완료 — 채널 ' + names.length + '개 · 영상 ' + rows.length + '건');
+  Logger.log('주간 모음 발송 완료 — ' + target + ' · 영상 ' + rows.length + '건');
 }
 
-// 자동 트리거 전용 — 주말이면 넘어간다.
+// 자동 트리거 전용 — 일요일만 쉰다. 어느 채널을 보낼지는 sendWeeklyList 가
+// WEEKLY_ROTATION 에서 스스로 고른다.
 function scheduledWeekly() {
   const dayOfWeek = Number(Utilities.formatDate(new Date(), 'Asia/Seoul', 'u')); // 1=월 … 7=일
-  if (dayOfWeek > 5) {
-    Logger.log('주말 — 주간 모음은 평일에만 보냅니다.');
+  if (dayOfWeek === 7) {
+    Logger.log('일요일 — 주간 모음 로테이션은 월~토에만 보냅니다.');
     return;
   }
   sendWeeklyList();
@@ -675,7 +696,7 @@ function installWeeklyTrigger() {
     }
   });
   ScriptApp.newTrigger('scheduledWeekly').timeBased().everyDays(1).atHour(8).create();
-  Logger.log('매일 오전 8시대에 확인해서, 평일에만 주간 모음을 보냅니다.');
+  Logger.log('매일 오전 8시대에 그날 담당 채널의 주간 모음을 보냅니다 (일요일 제외).');
 }
 
 
@@ -708,9 +729,14 @@ function doPost(e) {
     }
     try {
       if (body.action === 'send_weekly') {
-        sendWeeklyList();
+        const channel = todaysWeeklyChannel_();
+        if (!channel) {
+          out.error = '일요일은 담당 채널이 없습니다 — 월~토에 눌러 주세요';
+          return jsonOut_(out);
+        }
+        sendWeeklyList(channel);
         out.ok = true;
-        out.videos = weeklyKeys_().length;
+        out.channel = channel;
       } else {
         fillBufferFromFeeds(3);
         const count = digestKeys_().length;   // 발송하면 버퍼가 비워지므로 먼저 센다

@@ -253,4 +253,13 @@
     사이드바 `🌊 친환경E·FDC.브리핑`, overview 1행을 네이버Top7|친환경FDC|Claude방산
     33%씩으로 재배치(energyBrief 카드).
 
+18. **유튜브 주간 모음 → 요일별 채널 로테이션** (9/7): 기존 '전 채널 × 지난 7일(평일)'을
+    '그날 담당 채널 1개 × 지난 7일(월~토)'로 변경. `gas/youtube_defense_bot.gs`에
+    `WEEKLY_ROTATION` (월=샤를세환, 화=KKMD, 수=까치살모, 목=슈퍼소닉, 금=KFN+,
+    토=KFN1) 추가, KFN1의 weekly:false 해제(exclude:/이슈&국방/ 유지, 밀덕은 계속 제외),
+    `scheduledWeekly`는 일요일만 쉼. 주간 보충 긁기도 담당 채널만. 텔레그램 헤더와
+    대시보드 payload에 오늘의 채널 표기(payload.label → 페이지 h1/md 제목 꼬리표,
+    `youtube_digest/build_digest_page.py`). GAS는 정본만 갱신 — 사용자가 Apps Script에
+    재붙여넣기 필요(웹앱 doPost도 바뀌어 '배포 관리 → 새 버전' 필요, 새 배포 금지).
+
 이후 작업은 git log와 이 파일을 갱신하며 이어간다.
