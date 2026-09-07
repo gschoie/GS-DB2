@@ -262,4 +262,12 @@
     `youtube_digest/build_digest_page.py`). GAS는 정본만 갱신 — 사용자가 Apps Script에
     재붙여넣기 필요(웹앱 doPost도 바뀌어 '배포 관리 → 새 버전' 필요, 새 배포 금지).
 
+19. **방산 브리핑 → NotebookLM 구글 문서 동기화(③안)** (9/7): `gas/defense_notebooklm_doc.gs`
+    신설 — 새 Apps Script 프로젝트(기존 봇과 분리, 문서 권한 재승인 회피)에서 매일 08시대
+    raw.githubusercontent 로 defense_daily·claude_defense 최근 30일 md를 fetchAll(404 스킵)로
+    긁어 고정 구글 문서 하나에 setText 로 덮어씀. 문서는 첫 실행 때 자동 생성, ID는 스크립트
+    속성 NOTEBOOKLM_DOC_ID. 리포 공개라 토큰 불필요(비공개 전환 시 GH_TOKEN 속성 지원).
+    사용자는 NotebookLM 노트북('Global Defense → 한달 뉴스 PPT')에 그 문서를 Google Docs
+    소스로 1회 추가 후 매일 '동기화' 버튼만 누르면 됨.
+
 이후 작업은 git log와 이 파일을 갱신하며 이어간다.
