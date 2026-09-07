@@ -207,7 +207,10 @@ function renderTaskList(desired){fillTaskItems(desired);const st=taskLoad()[task
 // 주소 복사만으로도 그 항목이 열리는 링크가 된다(history를 늘리지 않도록 replaceState).
 // 링크로 열면 사이드바·헤더 없이 표만 보이는 집중 화면(focus=1)으로 연다.
 function taskDeepLink(item){return location.origin+location.pathname+'?focus=1#tasklist:'+encodeURIComponent(item||taskCurrentItem())}
-function syncTaskHash(){if(!$('#tasklist')?.classList.contains('active'))return;const want='#tasklist:'+encodeURIComponent(taskCurrentItem());if(location.hash!==want){try{history.replaceState(null,'',want)}catch{}}}
+function syncTaskHash(){if(!$('#tasklist')?.classList.contains('active'))return;
+ // 항목 없이 연 집중 화면(📬 버튼)은 주소에 항목을 박지 않는다 — 새로고침 때
+ // 항목 잠금으로 바뀌어 버리는 것을 막는다. 항목 링크로 연 창은 이미 항목이 박혀 있다.
+ if(document.body.classList.contains('focus-mode')&&!document.body.classList.contains('item-locked'))return;const want='#tasklist:'+encodeURIComponent(taskCurrentItem());if(location.hash!==want){try{history.replaceState(null,'',want)}catch{}}}
 function taskUpdate(name,field,value){const s=taskLoad(),it=taskCurrentItem();(s[it]=s[it]||{})[name]=s[it][name]||{};s[it][name][field]=value;taskSave(s);renderTaskSummary()}
 /* ── TO-DO: 한 줄 할 일 + 체크 + 등록시각 + 이미지 첨부 + 그룹. 수명 피드백과 같은 GAS 번들(todos·todoGroups·todoArchive 필드)로 동기화 ── */
 const TODO_KEY='hi_todo_v1',TODO_GROUPS_KEY='hi_todo_groups_v1',TODO_ARCH_KEY='hi_todo_archive_v1',TODO_IMG_MAX=4;/* 동기화 저장소 한도(실측 500KB) 보호 — 항목당 사진 4장 */
@@ -421,9 +424,6 @@ function closeOtherNavGroups(el){const mine=el.closest?.('details.nav-group');$$
 // 좁은 화면(≤950px)에서는 서브메뉴가 화면을 덮는 플라이아웃이라, 메뉴를 고르면 자기 그룹도 닫는다.
 function closeNavFlyout(el){if(!matchMedia('(max-width:950px)').matches)return;const g=el.closest?.('details.nav-group');if(g&&g.open){g.open=false;g.querySelectorAll('details.nav-subgroup').forEach(s=>s.open=false)}}
 $$('.nav').forEach(b=>b.onclick=()=>{closeOtherNavGroups(b);closeNavFlyout(b);view(b.dataset.view)});$$('[data-go]').forEach(b=>b.onclick=()=>view(b.dataset.go));
-// 좁은 화면에서는 HTML의 기본 펼침(open) 그룹이 첫 화면을 덮는 플라이아웃이 된다
-// (새 탭으로 열리는 링크마다 재현) → 로드 시 접고 시작한다. PC는 기본 펼침 유지.
-if(matchMedia('(max-width:950px)').matches)$$('details.nav-group[open]').forEach(d=>{d.open=false;d.querySelectorAll('details.nav-subgroup').forEach(s=>s.open=false)});
 // 서브메뉴 안의 일반 링크(외부 링크 등)를 눌러도 모바일 플라이아웃은 닫는다.
 document.addEventListener('click',e=>{const a=e.target.closest?.('.nav-submenu a');if(a)closeNavFlyout(a)});
 // 한 메뉴 그룹을 열면 나머지 그룹의 서브메뉴는 닫는다(모바일·PC 공통, 아코디언).
@@ -553,8 +553,10 @@ load().catch(e=>document.body.insertAdjacentHTML('beforeend',`<p class="empty">�
 // URL 해시로 특정 뷰 바로 열기(예: /#tone → 리서치 톤을 별도 창으로). 로드 후 해시가 바뀌어도 반영.
 // ?focus=1 로 들어오면 표만 보이게(사이드바·헤더·설명문 숨김). '전체 대시보드' 링크로 복귀.
 if(new URLSearchParams(location.search).has('focus')){document.body.classList.add('focus-mode');
- // 링크로 연 화면은 그 항목 전용 — 항목 선택·추가·이름변경·삭제·보관을 잠근다.
- const sel=$('#task-item');if(sel)sel.disabled=true;}
+ // 항목을 지정한 링크(#tasklist:항목)로 열었을 때만 그 항목 전용으로 잠근다.
+ // 항목 없이 연 경우(TO-DO의 📬 버튼)는 평소처럼 항목을 고를 수 있어야 한다.
+ if(/^#tasklist:/.test(location.hash)){document.body.classList.add('item-locked');
+  const sel=$('#task-item');if(sel)sel.disabled=true}}
 function applyHashView(){const raw=location.hash.slice(1);if(!raw)return;const cut=raw.indexOf(':');
  const hashView=decodeURIComponent(cut>-1?raw.slice(0,cut):raw),arg=cut>-1?decodeURIComponent(raw.slice(cut+1)):'';
  if(!document.getElementById(hashView)?.classList.contains('view'))return;
