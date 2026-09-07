@@ -8,9 +8,11 @@
 // 설치(1회) — 기존 봇 프로젝트에 섞지 말고 새 Apps Script 프로젝트를 쓸 것.
 // (문서 권한이 새로 필요해서, 웹앱이 붙어 있는 프로젝트에 넣으면 재승인이 걸린다)
 //   1. script.google.com → 새 프로젝트 → 이 파일 붙여넣기
-//   2. updateNotebookLmDoc() 한 번 실행 → 권한 승인 → 실행 로그의 문서 주소 확인
-//   3. installNotebookLmTrigger() 한 번 실행 → 매일 아침 8시대 자동 갱신
-//   4. NotebookLM → 소스 추가 → Google Docs → 위 문서 선택
+//   2. 편집기 왼쪽 '서비스(Services)'의 + → 'Google Drive API' 추가(식별자 Drive 그대로)
+//      — 30일치 텍스트가 커서 DocumentApp.setText 로는 실패한다. Drive 로 통째 교체한다.
+//   3. updateNotebookLmDoc() 한 번 실행 → 권한 승인 → 실행 로그의 문서 주소 확인
+//   4. installNotebookLmTrigger() 한 번 실행 → 매일 아침 8시대 자동 갱신
+//   5. NotebookLM → 소스 추가 → Google Docs → 위 문서 선택
 //      이후에는 NotebookLM에서 그 소스를 열고 '동기화'만 누르면 최신 30일치가 된다.
 //
 // 문서는 처음 실행할 때 스크립트가 직접 만들고, ID를 스크립트 속성(NOTEBOOKLM_DOC_ID)에
@@ -78,10 +80,21 @@ function updateNotebookLmDoc() {
     + '이 문서는 매일 자동으로 다시 쓰입니다 — 직접 고치지 마세요.\n'
     + 'NotebookLM에서는 이 소스를 열고 [동기화]만 누르면 됩니다.\n\n';
 
-  const doc = openOrCreateDoc_();
-  doc.getBody().setText(header + chunks.join('\n\n'));
-  doc.saveAndClose();
-  Logger.log('문서 갱신 완료 — 브리핑 ' + chunks.length + '건: ' + doc.getUrl());
+  const docId = openOrCreateDocId_();
+  writeDocText_(docId, header + chunks.join('\n\n'));
+  Logger.log('문서 갱신 완료 — 브리핑 ' + chunks.length + '건: '
+    + 'https://docs.google.com/document/d/' + docId);
+}
+
+// 문서 내용을 통째로 교체한다. 30일치는 수십만 자라 DocumentApp.setText 가
+// 'Service Documents failed' 로 죽는다 — Drive API 미디어 업로드는 크기에 안전하고,
+// text/plain 을 올리면 구글 문서 내용으로 자동 변환된다.
+function writeDocText_(docId, text) {
+  if (typeof Drive === 'undefined') {
+    throw new Error("Drive API 서비스가 없습니다. 편집기 왼쪽 '서비스' + 에서 "
+      + "'Google Drive API'(식별자 Drive)를 추가한 뒤 다시 실행하세요.");
+  }
+  Drive.Files.update({}, docId, Utilities.newBlob(text, 'text/plain'));
 }
 
 // 오늘(KST)부터 거꾸로 days일치 날짜 문자열. 최신이 먼저다.
@@ -95,12 +108,13 @@ function recentDates_(days) {
   return dates;
 }
 
-// 속성에 적힌 문서를 연다. 없거나 지워졌으면 새로 만들어 ID를 적어 둔다.
-function openOrCreateDoc_() {
+// 속성에 적힌 문서 ID를 돌려준다. 없거나 지워졌으면 새로 만들어 ID를 적어 둔다.
+function openOrCreateDocId_() {
   const saved = NLM_PROPS.getProperty(NLM_DOC_ID_KEY);
   if (saved) {
     try {
-      return DocumentApp.openById(saved);
+      DocumentApp.openById(saved);  // 살아 있는지 확인만
+      return saved;
     } catch (error) {
       Logger.log('저장된 문서(' + saved + ')를 열 수 없어 새로 만듭니다: ' + error);
     }
@@ -108,7 +122,7 @@ function openOrCreateDoc_() {
   const doc = DocumentApp.create(NLM_DOC_TITLE);
   NLM_PROPS.setProperty(NLM_DOC_ID_KEY, doc.getId());
   Logger.log('새 문서를 만들었습니다 — NotebookLM 소스로 이 문서를 추가하세요: ' + doc.getUrl());
-  return doc;
+  return doc.getId();
 }
 
 // 갱신 트리거를 건다. 한 번만 실행하면 된다(여러 번 눌러도 중복되지 않는다).
