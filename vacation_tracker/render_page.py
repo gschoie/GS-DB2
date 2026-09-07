@@ -129,6 +129,8 @@ tr.pending .badge,.chip.pending{border-style:dashed}
   border-radius:7px;padding:3px 10px;font-size:12px;cursor:pointer}
 #chip-pop .pop-acts button:hover{border-color:#9fb6cc}
 tr.removed{opacity:.35;text-decoration:line-through}
+#edit-cancel{background:#fff;color:#8a94a0;border:1px solid #d4dbe3;border-radius:8px;
+  padding:7px 12px;font-size:13.5px;cursor:pointer}
 td.c-kind .badge:not(.review){cursor:pointer}
 .kind-sel{background:#fff;color:#333c46;border:1px solid #cfd6de;border-radius:8px;
   padding:2px 6px;font-size:12.5px;font-family:inherit}
@@ -182,9 +184,13 @@ def _row(entry: dict, today: str) -> str:
     else:
         origin = f"{msg_date} · “{html.escape(str(entry.get('text') or '')[:140])}”"
     uid = html.escape(str(entry.get("uid") or ""), quote=True)
-    acts = ('<span class="acts"><button class="act" data-act="note" title="메모 수정">✏️</button>'
+    attr = lambda v: html.escape(str(v or ""), quote=True)
+    data = (f' data-name="{attr(entry.get("name"))}" data-kind="{attr(entry.get("kind"))}"'
+            f' data-start="{attr(entry.get("start"))}" data-end="{attr(entry.get("end"))}"'
+            f' data-note="{attr(entry.get("note"))}"')
+    acts = ('<span class="acts"><button class="act" data-act="edit" title="항목 수정">✏️</button>'
             '<button class="act" data-act="del" title="삭제">🗑</button></span>') if uid else ""
-    return (f'<tr{active} data-uid="{uid}"><td class="c-name name">'
+    return (f'<tr{active} data-uid="{uid}"{data}><td class="c-name name">'
             f"{html.escape(str(entry.get('name') or '?'))}</td>"
             f"<td class=\"c-span\">{_span(entry)}</td><td class=\"c-kind\">{badge}</td>"
             f"<td class=\"c-note\">{acts}<span class=\"note-text\">{note}</span>"
@@ -287,7 +293,7 @@ def _add_form(stamp: str) -> str:
     stamp는 이 페이지의 갱신 시각 — 제출 뒤 배포본의 갱신 시각이 달라지면
     자동 새로고침한다. 그 사이 화면에는 점선(pending) 스타일로 즉시 그려 둔다.
     """
-    name_options = "".join(f'<option value="{html.escape(n)}">'
+    name_options = "".join(f"<option>{html.escape(n)}</option>"
                            for n in sorted({n for n in friend_names() if n}))
     kind_options = "".join(f"<option>{k}</option>" for k in KIND_OPTIONS)
     head = f"""
@@ -296,14 +302,19 @@ def _add_form(stamp: str) -> str:
 1~2분 뒤 서버 반영이 끝나면 자동 새로고침됩니다. 잘못 넣은 건 entries.json에서 지우고
 rebuild-page로 되돌립니다.</p>
 <div class="addform">
-  <input id="add-name" list="add-names" placeholder="이름" style="width:110px">
-  <datalist id="add-names">{name_options}</datalist>
+  <select id="add-name" style="width:120px" onchange="nameChanged()">
+    <option value="" disabled selected>이름 선택</option>
+    {name_options}
+    <option value="__free__">직접 입력…</option>
+  </select>
+  <input id="add-name-free" placeholder="이름 직접 입력" style="width:110px" hidden>
   <select id="add-kind">{kind_options}</select>
   <input id="add-start" type="date" title="시작일">
   <span>~</span>
   <input id="add-end" type="date" title="종료일 (비우면 하루)">
   <input id="add-note" placeholder="메모 (선택)" style="flex:1;min-width:140px">
   <button id="add-btn" onclick="addEntry()">추가</button>
+  <button id="edit-cancel" onclick="cancelEdit()" hidden>취소</button>
 </div>
 <p id="add-status"></p>
 <script>
@@ -316,6 +327,26 @@ const KINDS={json.dumps(KIND_OPTIONS, ensure_ascii=False)};
 const $id=i=>document.getElementById(i);
 function escText(t){const d=document.createElement('div');d.textContent=t==null?'':t;return d.innerHTML}
 function isTrip(kind){return /출장|투어/.test(kind||'')}
+
+// 이름은 <select>에서 고른다. '직접 입력…'을 고르면 옆 텍스트 칸이 나타난다.
+// (datalist는 수정 모드에서 기존 이름이 미리 채워지면 목록이 그 값으로 걸러져
+//  다른 사람을 고를 수 없었다.)
+function nameChanged(){
+  const free=$id('add-name-free');
+  free.hidden=$id('add-name').value!=='__free__';
+  if(!free.hidden)free.focus();
+}
+function nameVal(){
+  const v=$id('add-name').value;
+  return v==='__free__'?$id('add-name-free').value.trim():v;
+}
+function setNameVal(name){
+  const sel=$id('add-name'),free=$id('add-name-free');
+  if([...sel.options].some(o=>o.value===name&&o.value!=='__free__')){
+    sel.value=name;free.hidden=true;free.value='';
+  }else if(name){sel.value='__free__';free.hidden=false;free.value=name}
+  else{sel.value='';free.hidden=true;free.value=''}
+}
 
 // 제출 직후 화면에 임시(pending)로 그린다 — 서버 반영 전에도 바로 보이게.
 function localApply(en){
@@ -360,12 +391,13 @@ async function watchDeploy(){
 }
 
 async function addEntry(){
-  const name=$id('add-name').value.trim(), start=$id('add-start').value;
+  const name=nameVal(), start=$id('add-start').value;
   const status=$id('add-status'), btn=$id('add-btn');
   if(!name||!start){status.textContent='⚠ 이름과 시작일은 필수입니다';return}
   // 종료<시작이면 서버(add_manual)가 자동으로 뒤집는다.
   const entry={name:name,start:start,end:$id('add-end').value||start,
     kind:$id('add-kind').value,note:$id('add-note').value.trim()};
+  if(EDIT_UID){await saveEdit(entry);return}
   status.textContent='요청 중…';btn.disabled=true;
   try{
     const r=await fetch(EP,{method:'POST',body:JSON.stringify({workflow:'vacation',entry:JSON.stringify(entry)})});
@@ -429,6 +461,58 @@ async function editNote(uid,current){
       .forEach(el=>{el.dataset.note=value.trim()});
   }
 }
+// 행 ✏️ → 기입 폼으로 항목 전체(이름·종류·날짜·메모) 편집
+let EDIT_UID=null;
+function ensureKindOption(value){
+  const sel=$id('add-kind');
+  if(value&&![...sel.options].some(o=>o.value===value)){
+    const opt=document.createElement('option');opt.textContent=value;sel.appendChild(opt);
+  }
+}
+function startEdit(row){
+  EDIT_UID=row.dataset.uid;
+  setNameVal(row.dataset.name||'');
+  ensureKindOption(row.dataset.kind);
+  $id('add-kind').value=row.dataset.kind||'휴가';
+  $id('add-start').value=row.dataset.start||'';
+  $id('add-end').value=row.dataset.end||'';
+  $id('add-note').value=row.dataset.note||'';
+  $id('add-btn').textContent='수정 저장';
+  $id('edit-cancel').hidden=false;
+  $id('add-status').textContent='✏️ '+(row.dataset.name||'')+' 항목 수정 중 — 이름·종류·날짜·메모를 고치고 저장하세요';
+  document.querySelector('.addform').scrollIntoView({behavior:'smooth',block:'center'});
+}
+function cancelEdit(){
+  EDIT_UID=null;
+  setNameVal('');
+  ['add-start','add-end','add-note'].forEach(i=>{$id(i).value=''});
+  $id('add-btn').textContent='추가';
+  $id('edit-cancel').hidden=true;
+  $id('add-status').textContent='';
+}
+async function saveEdit(entry){
+  const uid=EDIT_UID;
+  const ok=await sendOp({op:'update',uid:uid,name:entry.name,kind:entry.kind,
+    start:entry.start,end:entry.end,note:entry.note});
+  if(!ok)return;
+  const row=document.querySelector('tr[data-uid="'+CSS.escape(uid)+'"]');
+  if(row){
+    row.classList.add('pending');
+    Object.assign(row.dataset,{name:entry.name,kind:entry.kind,start:entry.start,end:entry.end,note:entry.note});
+    const nameCell=row.querySelector('.c-name');if(nameCell)nameCell.textContent=entry.name;
+    const span=row.querySelector('.c-span');if(span)span.textContent=entry.start+(entry.end!==entry.start?' ~ '+entry.end:'');
+    const badge=row.querySelector('.c-kind .badge');
+    if(badge){badge.textContent=entry.kind;badge.className='badge'+(isTrip(entry.kind)?' trip':'')}
+    const note=row.querySelector('.note-text');if(note)note.textContent=entry.note;
+  }
+  document.querySelectorAll('.chip[data-uid="'+CSS.escape(uid)+'"]').forEach(c=>{
+    c.textContent=entry.name;c.dataset.name=entry.name;c.dataset.kind=entry.kind;
+    c.dataset.note=entry.note;c.classList.toggle('trip',isTrip(entry.kind));c.classList.add('pending');
+  });
+  cancelEdit();
+  $id('add-status').textContent='✅ 수정 요청됨 — 화면에 우선 적용했고, 서버 반영 후 자동 새로고침됩니다';
+}
+
 // 종류 배지 클릭 → 인라인 선택으로 교체, 고르면 저장 ('확인 필요' 배지는 제외)
 document.addEventListener('click',ev=>{
   const badge=ev.target.closest('td.c-kind .badge:not(.review)');if(!badge)return;
@@ -458,9 +542,8 @@ document.addEventListener('click',ev=>{
 document.addEventListener('click',ev=>{
   const btn=ev.target.closest('.act');if(!btn)return;
   const row=btn.closest('[data-uid]');if(!row)return;
-  const uid=row.dataset.uid;
-  if(btn.dataset.act==='del')delEntry(uid);
-  else editNote(uid,(row.querySelector('.note-text')||{}).textContent||'');
+  if(btn.dataset.act==='del')delEntry(row.dataset.uid);
+  else startEdit(row);
 });
 
 // 이름 칩 클릭 → 상세 팝업 (기간·종류·메모·원문). 바깥 클릭/Esc/× 로 닫는다.
@@ -475,10 +558,18 @@ function showPop(chip){
     +'<span class="badge'+(isTrip(d.kind)?' trip':'')+'">'+escText(d.kind||'휴가')+'</span>'
     +(d.note?'<div>'+escText(d.note)+'</div>':'')
     +(d.text&&d.text!==d.note?'<div class="quote">“'+escText(d.text)+'”</div>':'')
-    +'<div class="meta2">'+escText(d.when)+' · '+escText(d.source||'')+'</div>'
-    +(d.uid?'<div class="pop-acts">'
-      +'<button onclick="editNote('+JSON.stringify(d.uid)+','+JSON.stringify(d.note||'')+')">✏️ 메모 수정</button>'
-      +'<button onclick="delEntry('+JSON.stringify(d.uid)+')">🗑 삭제</button></div>':'');
+    +'<div class="meta2">'+escText(d.when)+' · '+escText(d.source||'')+'</div>';
+  // 버튼은 DOM으로 붙인다 — innerHTML 문자열의 onclick 속성에 따옴표 있는 uid를
+  // 넣으면 속성이 조기 종료되어 클릭이 조용히 죽는다(이지수 9/18 삭제 안 되던 원인).
+  if(d.uid){
+    const uid=d.uid,note=d.note||'';
+    const acts=document.createElement('div');acts.className='pop-acts';
+    const eb=document.createElement('button');eb.textContent='✏️ 메모 수정';
+    eb.addEventListener('click',()=>editNote(uid,note));
+    const db=document.createElement('button');db.textContent='🗑 삭제';
+    db.addEventListener('click',()=>delEntry(uid));
+    acts.append(eb,db);chipPop.appendChild(acts);
+  }
   document.body.appendChild(chipPop);
   const r=chip.getBoundingClientRect(),pw=chipPop.offsetWidth,ph=chipPop.offsetHeight;
   let left=Math.min(Math.max(8,r.left),window.innerWidth-pw-8);
