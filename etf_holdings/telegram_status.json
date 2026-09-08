@@ -1,5 +1,5 @@
 {
-  "when_utc": "2026-09-07 10:15:26Z",
+  "when_utc": "2026-09-08 09:39:54Z",
   "ok": true,
   "note": "change_sent",
   "chat_id_tail": "5171",
@@ -7,7 +7,7 @@
   "response": {
     "ok": true,
     "result": {
-      "message_id": 279,
+      "message_id": 288,
       "from": {
         "id": 8875725998,
         "is_bot": true,
@@ -21,8 +21,8 @@
         "username": "gschoie",
         "type": "private"
       },
-      "date": 1788776126,
-      "text": "🧩 액티브 ETF 구성 변화 · 구성 기준일 2026-09-07 (KRX 장마감)\n\n변화 ETF 8개 · 진입 11·이탈 11·실매매 2\n\n🟢 KoAct 코스닥액티브 · KoAct\n   ⊕ 진입: 이오테크닉스, 로보티즈\n   ⊖ 이탈: 코미코, 리노공업\n🟢 KoAct 배당성장액티브 · KoAct\n   ⊕ 진입: HD현대, NAVER\n   ⊖ 이탈: 키움증권, 하나금융지주\n🟢 TIGER 코리아테크액티브 · TIGER\n   ⊕ 진입: 테스, 피에스케이\n   ⊖ 이탈: 티에스이, 엘앤에프\n🟢 TIGER AI코리아그로스액티브 · TIGER\n   ⊕ 진입: 삼성생명, 기아\n   ⊖ 이탈: 한화에어로스페이스, 삼성SDI\n🟢 TIME 코스피액티브 · TIME(구 TIMEFOLIO)\n   ⊕ 진입: 메리츠금융지주\n   ⊖ 이탈: SK텔레콤\n   ▽ 삼성전기 계약수 −30% · 비중 −0.8%p\n🟢 TIME 코스닥액티브 · TIME(구 TIMEFOLIO)\n   ⊕ 진입: 이오테크닉스\n   ⊖ 이탈: 제주반도체\n🟢 KODEX 로봇액티브 · KODEX\n   ⊕ 진입: 에스피지\n   ⊖ 이탈: 삼성에스디에스\n🟢 KoAct 글로벌AI&로봇액티브 · KoAct\n   ▽ 삼성전기 계약수 −62%\n\n전체 상세 › 대시보드\n🎴 GS Research Desk · 액티브 ETF 트래커",
+      "date": 1788860394,
+      "text": "🧩 액티브 ETF 구성 변화 · 구성 기준일 2026-09-08 (KRX 장마감)\n\n변화 ETF 10개 · 진입 10·이탈 10·실매매 1\n\n🟢 TIME K컬처액티브 · TIME(구 TIMEFOLIO)\n   ⊕ 진입: 에이피알\n   ⊖ 이탈: 코스메카코리아\n   ▽ 실리콘투 계약수 −31% · 비중 −1.7%p\n🟢 TIME 코스피액티브 · TIME(구 TIMEFOLIO)\n   ⊕ 진입: 두산에너빌리티\n   ⊖ 이탈: 신한지주\n🟢 TIME K바이오액티브 · TIME(구 TIMEFOLIO)\n   ⊕ 진입: 리가켐바이오\n   ⊖ 이탈: 에스티팜\n🟢 KoAct 코스닥액티브 · KoAct\n   ⊕ 진입: 코미코\n   ⊖ 이탈: 로보티즈\n🟢 KoAct 배당성장액티브 · KoAct\n   ⊕ 진입: 하나금융지주\n   ⊖ 이탈: NAVER\n🟢 KODEX 로봇액티브 · KODEX\n   ⊕ 진입: 삼성에스디에스\n   ⊖ 이탈: 현대차\n🟢 TIGER 코리아테크액티브 · TIGER\n   ⊕ 진입: 이수페타시스\n   ⊖ 이탈: 피에스케이\n🟢 TIGER 배당커버드콜액티브 · TIGER\n   ⊕ 진입: LS ELECTRIC\n   ⊖ 이탈: 한화에어로스페이스\n🟢 TIGER AI코리아그로스액티브 · TIGER\n   ⊕ 진입: 삼성물산\n   ⊖ 이탈: 기아\n🟢 SOL 코리아메가테크액티브 · SOL\n   ⊕ 진입: 효성중공업\n   ⊖ 이탈: HD현대일렉트릭\n\n전체 상세 › 대시보드\n🎴 GS Research Desk · 액티브 ETF 트래커",
       "entities": [
         {
           "offset": 0,
@@ -31,51 +31,61 @@
         },
         {
           "offset": 55,
-          "length": 1,
+          "length": 2,
           "type": "bold"
         },
         {
-          "offset": 82,
+          "offset": 83,
+          "length": 11,
+          "type": "bold"
+        },
+        {
+          "offset": 180,
+          "length": 11,
+          "type": "bold"
+        },
+        {
+          "offset": 246,
           "length": 12,
           "type": "bold"
         },
         {
-          "offset": 147,
+          "offset": 312,
+          "length": 12,
+          "type": "bold"
+        },
+        {
+          "offset": 363,
           "length": 13,
           "type": "bold"
         },
         {
-          "offset": 215,
+          "offset": 419,
+          "length": 11,
+          "type": "bold"
+        },
+        {
+          "offset": 472,
           "length": 14,
           "type": "bold"
         },
         {
-          "offset": 280,
+          "offset": 529,
+          "length": 15,
+          "type": "bold"
+        },
+        {
+          "offset": 596,
           "length": 17,
           "type": "bold"
         },
         {
-          "offset": 353,
-          "length": 11,
+          "offset": 651,
+          "length": 14,
           "type": "bold"
         },
         {
-          "offset": 451,
-          "length": 11,
-          "type": "bold"
-        },
-        {
-          "offset": 517,
-          "length": 11,
-          "type": "bold"
-        },
-        {
-          "offset": 571,
-          "length": 17,
-          "type": "bold"
-        },
-        {
-          "offset": 625,
+          "offset": 714,
           "length": 4,
           "type": "text_link",
           "url": "https://gschoie.github.io/GS-DB2/etf_holdings_report.html"
