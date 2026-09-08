@@ -205,10 +205,12 @@ def generate_report(news_text: str, now: datetime) -> str:
         "위 뉴스 목록을 바탕으로 친환경 에너지·FDC 데일리 브리핑을 작성해 주세요. "
         "목록에 없는 사건을 새 뉴스처럼 쓰지 마세요."
     )
+    # 2.5 계열은 내부 사고(thinking) 토큰이 max_output_tokens 예산을 같이 쓴다 —
+    # 한도가 작으면 본문이 중간에 잘리므로 넉넉히 잡는다.
     config = genai_types.GenerateContentConfig(
         system_instruction=system,
         temperature=0.3,
-        max_output_tokens=16384,
+        max_output_tokens=32768,
     )
     models = list(dict.fromkeys([MODEL, "gemini-2.5-flash"]))
     response, used_model = None, None
@@ -217,9 +219,14 @@ def generate_report(news_text: str, now: datetime) -> str:
             try:
                 response = client.models.generate_content(model=model, contents=user, config=config)
                 if response.text and response.text.strip():
-                    used_model = model
-                    break
-                print(f"[Gemini:{model}] 빈 응답 (시도 {attempt + 1})", file=sys.stderr)
+                    # 마지막 섹션(시사점)이 없으면 잘린 응답 — 성공으로 치지 않는다
+                    if "시사점" in response.text:
+                        used_model = model
+                        break
+                    print(f"[Gemini:{model}] 응답 잘림(시사점 섹션 없음, 시도 {attempt + 1})",
+                          file=sys.stderr)
+                else:
+                    print(f"[Gemini:{model}] 빈 응답 (시도 {attempt + 1})", file=sys.stderr)
             except Exception as e:
                 print(f"[Gemini:{model} 오류] 시도 {attempt + 1}: {e}", file=sys.stderr)
             time.sleep(30 * (attempt + 1))
