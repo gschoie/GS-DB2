@@ -9441,13 +9441,13 @@
      }
     },
     "1640": {
-     "individual": -30331,
+     "individual": -30329,
      "foreign": 6316,
      "institution": 6427,
      "arb": -444,
-     "nonarb": 1233,
-     "program": 789,
-     "time": "17:40",
+     "nonarb": 1252,
+     "program": 808,
+     "time": "20:42",
      "kospi": 6954.52,
      "chg_pct": -0.58,
      "futures": {
@@ -9458,7 +9458,7 @@
    },
    "confirmed": {
     "investor": {
-     "individual": -30331,
+     "individual": -30329,
      "foreign": 6316,
      "inst_total": 6427,
      "fin_invest": 7643,
@@ -9467,18 +9467,18 @@
      "bank": 154,
      "other_fin": 206,
      "pension": -2370,
-     "other_corp": 17587
+     "other_corp": 17586
     },
     "program": {
      "arb_buy": 4382,
      "arb_sell": 4825,
      "arb_net": -444,
-     "nonarb_buy": 61270,
+     "nonarb_buy": 61289,
      "nonarb_sell": 60038,
-     "nonarb_net": 1233,
-     "total_buy": 65652,
+     "nonarb_net": 1252,
+     "total_buy": 65671,
      "total_sell": 64863,
-     "total_net": 789
+     "total_net": 808
     },
     "futures": {
      "individual": 2905,
@@ -9494,7 +9494,7 @@
     }
    },
    "group_1d": {
-    "time": "17:41",
+    "time": "20:42",
     "groups": [
      [
       "건설",
@@ -9604,7 +9604,7 @@
     ]
    },
    "stock_flow": {
-    "time": "17:41",
+    "time": "20:42",
     "buy": [
      [
       "삼성전자",
@@ -10466,6 +10466,6 @@
    }
   }
  },
- "updated_kst": "2026-09-08 17:41",
+ "updated_kst": "2026-09-08 20:42",
  "futures_unit": "계약"
 }
