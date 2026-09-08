@@ -14,6 +14,9 @@
    "channels": [{"name": "샤를세환",
                  "videos": [{"t": "제목", "u": "주소", "p": "2026-08-26T12:00:00Z"}]}]}
 
+선택 필드 "label" 은 제목에 덧붙는 꼬리표다 — 주간 모음(요일별 채널 로테이션)이
+그날 담당 채널 이름을 넣어 보낸다.
+
 표준 라이브러리만 쓴다.
 """
 
@@ -41,7 +44,7 @@ KINDS = {
         "dir": "youtube_weekly",
         "index": "youtube_weekly_report.html",
         "title": "방산 유튜브 주간 모음",
-        "sub": "평일 아침 · 지난 7일 (쇼츠·라이브 제외)",
+        "sub": "월~토 아침 · 요일별 채널 1개 · 지난 7일 (쇼츠·라이브 제외)",
     },
 }
 
@@ -102,6 +105,7 @@ def load_payload(raw: str) -> dict:
         if videos:
             channels.append({"name": str(group.get("name") or "(채널 미상)"), "videos": videos})
     payload["channels"] = channels
+    payload["label"] = str(payload.get("label") or "").strip()
     return payload
 
 
@@ -134,8 +138,9 @@ def grouped_urls(channels: list) -> str:
 def render_markdown(payload: dict, cfg: dict) -> str:
     channels = payload["channels"]
     total = len(all_urls(channels))
+    tail = f" · {payload['label']}" if payload.get("label") else ""
     lines = [
-        f"# {cfg['title']} {payload['date']}",
+        f"# {cfg['title']} {payload['date']}{tail}",
         "",
         f"- 채널 {len(channels)}개 · 영상 {total}건",
     ]
@@ -162,9 +167,10 @@ def render_page(payload: dict, cfg: dict) -> str:
     urls = all_urls(channels)
     date = payload["date"]
 
+    tail = f" · {html.escape(payload['label'])}" if payload.get("label") else ""
     body = [
         '<div class="wrap">',
-        f"<h1>📺 {cfg['title']} · {html.escape(date)}</h1>",
+        f"<h1>📺 {cfg['title']} · {html.escape(date)}{tail}</h1>",
     ]
     meta = f"채널 {len(channels)}개 · 영상 {len(urls)}건"
     if payload.get("from"):
@@ -207,7 +213,7 @@ def render_page(payload: dict, cfg: dict) -> str:
     return (
         '<!DOCTYPE html><html lang="ko"><head><meta charset="utf-8">\n'
         '<meta name="viewport" content="width=device-width,initial-scale=1">\n'
-        f"<title>{cfg['title']} {html.escape(date)}</title>"
+        f"<title>{cfg['title']} {html.escape(date)}{tail}</title>"
         f"<style>{PAGE_CSS}</style></head><body>\n"
         + "\n".join(body)
         + "\n</body></html>\n"

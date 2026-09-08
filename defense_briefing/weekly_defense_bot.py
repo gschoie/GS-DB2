@@ -193,7 +193,7 @@ def generate_weekly_report(briefs_text: str, price_table: str,
         temperature=0.3,
         max_output_tokens=16384,
     )
-    models = list(dict.fromkeys([MODEL, "gemini-2.5-flash"]))
+    models = list(dict.fromkeys([MODEL, "gemini-2.5-flash", "gemini-flash-latest"]))
     used_model, response = None, None
     for model in models:
         for attempt in range(2):

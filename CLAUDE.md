@@ -253,4 +253,27 @@
     사이드바 `🌊 친환경E·FDC.브리핑`, overview 1행을 네이버Top7|친환경FDC|Claude방산
     33%씩으로 재배치(energyBrief 카드).
 
+18. **유튜브 주간 모음 → 요일별 채널 로테이션** (9/7): 기존 '전 채널 × 지난 7일(평일)'을
+    '그날 담당 채널 1개 × 지난 7일(월~토)'로 변경. `gas/youtube_defense_bot.gs`에
+    `WEEKLY_ROTATION` (월=샤를세환, 화=KKMD, 수=까치살모, 목=슈퍼소닉, 금=KFN+,
+    토=KFN1) 추가, KFN1의 weekly:false 해제(exclude:/이슈&국방/ 유지, 밀덕은 계속 제외),
+    `scheduledWeekly`는 일요일만 쉼. 주간 보충 긁기도 담당 채널만. 텔레그램 헤더와
+    대시보드 payload에 오늘의 채널 표기(payload.label → 페이지 h1/md 제목 꼬리표,
+    `youtube_digest/build_digest_page.py`). GAS는 정본만 갱신 — 사용자가 Apps Script에
+    재붙여넣기 필요(웹앱 doPost도 바뀌어 '배포 관리 → 새 버전' 필요, 새 배포 금지).
+
+19. **방산 브리핑 → NotebookLM 구글 문서 동기화(③안)** (9/7): `gas/defense_notebooklm_doc.gs`
+    신설 — 새 Apps Script 프로젝트(기존 봇과 분리, 문서 권한 재승인 회피)에서 매일 08시대
+    raw.githubusercontent 로 defense_daily·claude_defense 최근 30일 md를 fetchAll(404 스킵)로
+    긁어 고정 구글 문서 하나에 덮어씀 — 30일치(수십만 자)는 DocumentApp.setText 가
+    'Service Documents failed' 로 죽어서, Drive 고급 서비스(Drive.Files.update +
+    text/plain 블롭, v2·v3 모두 동작)로 내용을 통째 교체(서비스 목록 이름은 'Drive API'). 문서는 첫 실행 때 자동 생성, ID는 스크립트
+    속성 NOTEBOOKLM_DOC_ID. 리포 공개라 토큰 불필요(비공개 전환 시 GH_TOKEN 속성 지원).
+    사용자는 NotebookLM 노트북('Global Defense → 한달 뉴스 PPT')에 그 문서를 Google Docs
+    소스로 1회 추가 후 매일 '동기화' 버튼만 누르면 됨. 이후 '계속 쌓고 싶다' 요청으로
+    월간 누적 문서 추가(9/8): '방산 브리핑 YYYY-MM' 문서를 매일 1일~오늘로 갱신,
+    달이 바뀌면 새 문서 생성·지난달은 얼려져 영구 보존(문서당 ~100만 자 한도 때문에
+    단일 무한 누적 대신 월별 분할). 속성 NOTEBOOKLM_DOC_ID_YYYY-MM. 매달 1일 새
+    문서를 소스로 1회 추가 필요.
+
 이후 작업은 git log와 이 파일을 갱신하며 이어간다.
