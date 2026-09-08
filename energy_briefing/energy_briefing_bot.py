@@ -4,7 +4,8 @@
 매일 아침(KST 06:40 목표) 실행되어:
   1. 구글뉴스 RSS로 지난 24시간 기사를 수집하고 (주제: 친환경 선박 추진 —
      암모니아·액화수소·원자력(SMR), FDC(Floating Data Center), FLNG,
-     LNG 액화 프로젝트 FID, 미국 발전원 투자 — 가스복합·신재생·SMR)
+     LNG 액화 프로젝트 FID, 미국 발전원 투자 — 가스복합·신재생·SMR,
+     미국·한국 데이터센터 투자 — 하이퍼스케일러 capex·국내 DC 건설)
   2. Gemini API가 이 목록만 근거로 데일리 브리핑을 작성한 뒤
   3. 대시보드 static/energy_daily/YYYY-MM-DD.html 로 날짜별 아카이브를 남긴다.
 
@@ -37,7 +38,8 @@ LAST_USED_MODEL = MODEL
 
 # ── 구글뉴스 RSS 수집 (지난 24시간) ──────────────────────────────────────
 # 주제 축: ① 친환경 선박 추진(암모니아·액화수소·원자력/SMR) ② FDC
-# ③ FLNG·FSRU ④ LNG 액화 FID ⑤ 미국 발전원 투자(가스복합·신재생·SMR).
+# ③ FLNG·FSRU ④ LNG 액화 FID ⑤ 미국 발전원 투자(가스복합·신재생·SMR)
+# ⑥ 미국·한국 데이터센터 투자(하이퍼스케일러 capex·신규 캠퍼스·전력 조달·국내 DC).
 # 'SMR'·'ammonia' 같은 다의어는 선박·발전 문맥을 함께 요구한다.
 
 NEWS_QUERIES = [
@@ -77,9 +79,19 @@ NEWS_QUERIES = [
     ('("small modular reactor" OR NuScale OR "X-energy" OR TerraPower OR Oklo '
      'OR "Kairos Power" OR ("SMR" AND (nuclear OR reactor OR utility OR "data center"))) when:1d',
      "en-US", "US", "US:en"),
+    # 미국 데이터센터 투자 — 하이퍼스케일러 capex·신규 캠퍼스·전력 조달 (투자 문맥 한정)
+    ('(("data center" OR datacenter OR "AI data center") '
+     'AND (Microsoft OR Google OR Amazon OR AWS OR Meta OR OpenAI OR Oracle OR xAI '
+     'OR hyperscaler OR "United States") '
+     'AND (investment OR capex OR "capital expenditure" OR construction OR campus '
+     'OR gigawatt OR megawatt OR "power purchase" OR "power agreement" OR billion)) when:1d',
+     "en-US", "US", "US:en"),
     # 국내 보도 — 조선 3사 친환경·FLNG·SMR 문맥
     ("암모니아 추진선 OR 수소 추진선 OR 원자력 추진선 OR FLNG OR 해상 데이터센터 "
      "OR 부유식 데이터센터 OR 소형모듈원전 OR LNG 액화 when:1d", "ko", "KR", "KR:ko"),
+    # 국내 보도 — 데이터센터 투자·건설 (전력 인프라 문맥 포함)
+    ("데이터센터 투자 OR 데이터센터 건설 OR 데이터센터 착공 OR AI 데이터센터 "
+     "OR 데이터센터 전력 when:1d", "ko", "KR", "KR:ko"),
 ]
 
 # 오검색 컷: 비료·농업용 암모니아, 가정용 수소차 등 (선박·발전 신호 없으면 버림)
@@ -134,17 +146,18 @@ def news_list_text(items: list[dict]) -> str:
 
 SYSTEM_PROMPT = """당신은 조선·에너지 인프라 섹터를 담당하는 증권사 리서치 어시스턴트(RA)입니다.
 매일 아침 한국의 조선 담당 애널리스트에게 보내는 '친환경 에너지·FDC 데일리 브리핑'을 작성합니다.
-추적 주제는 다섯 가지입니다: ① 친환경 선박 추진 기술(암모니아 추진·액화수소 추진·원자력/SMR 추진)
+추적 주제는 여섯 가지입니다: ① 친환경 선박 추진 기술(암모니아 추진·액화수소 추진·원자력/SMR 추진)
 ② FDC(Floating Data Center, 해상 데이터센터) ③ FLNG(Floating LNG)·FSRU
-④ LNG 액화 프로젝트의 FID(최종투자결정) 동향 ⑤ 미국의 발전원 투자(가스복합화력·신재생·SMR).
+④ LNG 액화 프로젝트의 FID(최종투자결정) 동향 ⑤ 미국의 발전원 투자(가스복합화력·신재생·SMR)
+⑥ 미국·한국의 데이터센터 투자(하이퍼스케일러 capex·신규 캠퍼스·전력 조달, 국내 DC 건설·투자).
 
 [필수 원칙 — 최신성이 가장 중요합니다]
 - **뉴스 사실관계는 반드시 함께 제공되는 [지난 24시간 뉴스 목록]에 있는 기사만 근거로 쓰세요.** 목록에 없는 사건을 당신의 기억(학습 데이터)에서 꺼내 새 뉴스처럼 쓰는 것을 절대 금지합니다. 과거의 수주·FID·계약 소식을 오늘 뉴스처럼 서술하면 안 됩니다.
 - 각 이슈에는 뉴스 목록에 표기된 보도 시각(월/일)을 함께 적으세요.
-- 다섯 주제와 무관한 기사(비료용 암모니아, 수소차, 일반 IT 데이터센터 등)는 버리세요.
+- 여섯 주제와 무관한 기사(비료용 암모니아, 수소차 등)는 버리세요. 데이터센터는 **투자·건설·전력 조달** 동향만 다루고, 단순 서비스·요금·장애·보안 기사는 버리세요.
 - **최종 리포트 본문만 출력하세요.** 계획·사고 과정·코드 블록 금지. 응답의 첫 글자는 반드시 서두 문장("친환경 에너지·FDC 분야에서...")으로 시작해야 합니다.
 - 수치·계약금액·선박 수·용량(GW·mtpa)·일정을 우선 제시하고, 사실과 해석을 구분하세요. 확인되지 않은 보도·루머는 "[미확인]" 표시.
-- **뉴스의 함의를 끝까지 해석하세요.** FID 승인 → 신조 발주(LNG운반선·FLNG) 경로, 미국 전력난·데이터센터 수요 → 가스터빈/SMR/해상 발전 경로, 친환경 연료 규제(IMO) → 이중연료 신조 교체 수요 경로를 짚고, 한국 조선 3사(HD한국조선해양·한화오션·삼성중공업)와 기자재 업체에 수혜·경쟁 관점을 연결하세요.
+- **뉴스의 함의를 끝까지 해석하세요.** FID 승인 → 신조 발주(LNG운반선·FLNG) 경로, 미국 전력난·데이터센터 수요 → 가스터빈/SMR/해상 발전 경로, 데이터센터 투자 확대 → 전력 조달(가스·SMR·PPA)·FDC 대안 경로, 친환경 연료 규제(IMO) → 이중연료 신조 교체 수요 경로를 짚고, 한국 조선 3사(HD한국조선해양·한화오션·삼성중공업)와 기자재 업체에 수혜·경쟁 관점을 연결하세요.
 - 뉴스 항목마다 출처 매체명과 원문 링크(목록의 URL 그대로)를 마크다운 링크로 붙이세요.
 - 한국어로 간결하게 작성하되, 기업명·프로젝트명은 공식 영문명을 병기하세요.
 - 동일 뉴스 반복 금지.
@@ -156,7 +169,8 @@ SYSTEM_PROMPT = """당신은 조선·에너지 인프라 섹터를 담당하는 
 3. ## FDC (Floating Data Center) — 프로젝트·투자·기술 동향. 없으면 "- 특이사항 없음."
 4. ## FLNG · LNG 액화 FID — FLNG/FSRU 발주·건조·배치 소식과 액화 프로젝트 FID 동향. FID 관련 건은 "프로젝트 | 국가 | 운영사 | 규모(mtpa) | 단계 | 날짜" 형태의 일반 텍스트 줄로 (마크다운 표 문법 |---| 금지)
 5. ## 미국 발전원 투자 — ### 가스복합화력 / ### 신재생 / ### SMR 하위 구분. 투자·발주·승인·전력구매계약 소식. 없는 항목은 "- 특이사항 없음."
-6. ## 한국 조선·기자재 시사점 — HD한국조선해양·한화오션·삼성중공업 및 기자재 관점의 수혜·경쟁 포인트 3개 이내
+6. ## 데이터센터 투자 (미국·한국) — ### 미국 / ### 한국 하위 구분. 하이퍼스케일러 capex·신규 캠퍼스·전력 조달(PPA·자가발전)·국내 DC 건설·투자 소식. 없는 항목은 "- 특이사항 없음."
+7. ## 한국 조선·기자재 시사점 — HD한국조선해양·한화오션·삼성중공업 및 기자재 관점의 수혜·경쟁 포인트 3개 이내
 
 굵은 강조는 **텍스트**, 링크는 [매체명](URL) 형식의 마크다운을 사용하세요. 마크다운 표(|---|)와 HTML 태그는 사용하지 마세요."""
 
@@ -332,7 +346,7 @@ def write_archive(md_report: str, now: datetime) -> None:
 <title>친환경 에너지·FDC 브리핑 {date_str}</title><style>{PAGE_CSS}</style></head>
 <body><div class="wrap">
 <h1>🌊 친환경 에너지·FDC 데일리 브리핑</h1>
-<div class="meta">기준: {now.strftime('%Y-%m-%d %H:00')} KST · 생성: Gemini({LAST_USED_MODEL}) + 구글뉴스 RSS · 주제: 친환경 선박(암모니아·수소·원자력)/FDC/FLNG·LNG FID/미국 발전원</div>
+<div class="meta">기준: {now.strftime('%Y-%m-%d %H:00')} KST · 생성: Gemini({LAST_USED_MODEL}) + 구글뉴스 RSS · 주제: 친환경 선박(암모니아·수소·원자력)/FDC/FLNG·LNG FID/미국 발전원/미·한 데이터센터</div>
 {body}
 </div></body></html>"""
     (ARCHIVE_DIR / f"{date_str}.html").write_text(page, encoding="utf-8")
