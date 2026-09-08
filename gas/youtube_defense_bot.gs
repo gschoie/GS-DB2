@@ -139,10 +139,8 @@ function scheduledDigest() {
 function checkNewVideos() {
   WATCH_CHANNELS.forEach(channel => {
     try {
-      // 1. 유튜브 RSS 피드를 통해 최근 영상 목록 가져오기
-      const url = `https://www.youtube.com/feeds/videos.xml?channel_id=${channel.id}`;
-      const response = UrlFetchApp.fetch(url);
-      const xml = XmlService.parse(response.getContentText());
+      // 1. 유튜브 RSS 피드를 통해 최근 영상 목록 가져오기 (차단 시 재시도)
+      const xml = fetchFeedXml_(channel.id);
       const root = xml.getRootElement();
       const atom = XmlService.getNamespace('http://www.w3.org/2005/Atom');
       const media = XmlService.getNamespace('media', 'http://search.yahoo.com/mrss/');
@@ -282,6 +280,24 @@ function digestKeys_() {
 
 // 유튜브 피드는 쇼츠를 .../shorts/<id> 주소로 준다. 확실한 판별법은 이것뿐이라
 // 최선의 추정이다 — 피드가 쇼츠를 watch?v= 로 주면 걸러지지 않는다.
+// 유튜브 RSS 피드를 XmlService 문서로 가져온다. 러너 IP가 간헐 차단(404·429·5xx)되므로
+// 잠깐 쉬었다 다시 친다 — 한 번 막혔다고 그 채널을 통째로 놓치지 않게.
+function fetchFeedXml_(channelId) {
+  const url = 'https://www.youtube.com/feeds/videos.xml?channel_id=' + channelId;
+  let lastCode = 0;
+  for (let attempt = 0; attempt < 3; attempt++) {
+    const res = UrlFetchApp.fetch(url, {
+      muteHttpExceptions: true,
+      headers: { 'Accept-Language': 'ko-KR,ko;q=0.9,en;q=0.8' }
+    });
+    lastCode = res.getResponseCode();
+    if (lastCode === 200) return XmlService.parse(res.getContentText());
+    if (lastCode !== 404 && lastCode !== 429 && lastCode < 500) break; // 영구 오류는 재시도 무의미
+    Utilities.sleep(1500 * (attempt + 1));
+  }
+  throw new Error('피드 HTTP ' + lastCode);
+}
+
 function isShorts_(url) {
   return String(url).indexOf('/shorts/') !== -1;
 }
@@ -325,8 +341,7 @@ function fillBufferFromFeeds(days) {
   WATCH_CHANNELS.forEach(function (channel) {
     if (channel.digest === false) return;  // 모음 제외 채널
     try {
-      const url = 'https://www.youtube.com/feeds/videos.xml?channel_id=' + channel.id;
-      const xml = XmlService.parse(UrlFetchApp.fetch(url).getContentText());
+      const xml = fetchFeedXml_(channel.id);
       const atom = XmlService.getNamespace('http://www.w3.org/2005/Atom');
       const entries = xml.getRootElement().getChildren('entry', atom);
 
@@ -602,8 +617,7 @@ function sendWeeklyList(channelName) {
     if (channel.weekly === false) return;
     if (channel.name !== target) return;
     try {
-      const url = 'https://www.youtube.com/feeds/videos.xml?channel_id=' + channel.id;
-      const xml = XmlService.parse(UrlFetchApp.fetch(url).getContentText());
+      const xml = fetchFeedXml_(channel.id);
       const atom = XmlService.getNamespace('http://www.w3.org/2005/Atom');
       xml.getRootElement().getChildren('entry', atom).forEach(function (entry) {
         const published = new Date(entry.getChildText('published', atom)).getTime();
