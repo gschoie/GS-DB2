@@ -748,8 +748,8 @@ table{{min-width:760px}}}}
 <button id="btn-next" title="다음 기준일 (→)">▶</button>
 <span class="hint">← → 키로도 이동 · 과거 {ndays}일 조회</span>
 </div>
-<div id="day"></div>
 {weekly}
+<div id="day"></div>
 
 <p class="legend">
 <b>추세</b> +DI&gt;−DI &amp; ADX&gt;20 = 상승추세, −DI&gt;+DI &amp; ADX&gt;20 = 하락추세 ·
