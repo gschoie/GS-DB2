@@ -231,6 +231,7 @@ async def _scan(config: dict, state: dict, probe: bool = False) -> tuple[list[di
                     att_hits.append({
                         "name": name,
                         "month": att["month"],
+                        "explicit": bool(att.get("explicit")),
                         "uid": f"{entity.id}:{msg['id']}",
                         "text": msg["text"],
                         "msg_date": msg["dt"].astimezone(KST).isoformat(timespec="minutes"),
@@ -539,7 +540,7 @@ def add_manual(raw: str) -> None:
     # 같은 경로로 삭제·메모 수정도 받는다 — {"op":"delete"|"note","uid":...,"note":...}.
     # GAS 라우트를 안 바꾸려고 add에 op를 얹었다(entry만 있으면 통과).
     op = str(body.get("op") or "").strip()
-    if op == "att":  # 근태 페이지 체크박스 토글 — 근태 상태·페이지만 건드린다.
+    if op.startswith("att"):  # 근태 페이지 op(att/att-open/att-close) — 근태 상태·페이지만.
         import attendance
 
         return attendance.apply_op(body)
