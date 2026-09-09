@@ -709,8 +709,8 @@ function installWeeklyTrigger() {
       ScriptApp.deleteTrigger(trigger);
     }
   });
-  ScriptApp.newTrigger('scheduledWeekly').timeBased().everyDays(1).atHour(11).create();
-  Logger.log('매일 오전 11시대에 그날 담당 채널의 주간 모음을 보냅니다 (일요일 제외).');
+  ScriptApp.newTrigger('scheduledWeekly').timeBased().everyDays(1).atHour(8).create();
+  Logger.log('매일 오전 8시대에 그날 담당 채널의 주간 모음을 보냅니다 (일요일 제외).');
 }
 
 
