@@ -287,7 +287,7 @@ def generate_report(price_table: str, news_text: str, now: datetime) -> str:
         max_output_tokens=16384,
     )
     # 1순위 모델(보통 pro) 실패 시 flash로 폴백 — 무료 티어 쿼터로 브리핑이 끊기지 않게
-    models = list(dict.fromkeys([MODEL, "gemini-2.5-flash"]))
+    models = list(dict.fromkeys([MODEL, "gemini-2.5-flash", "gemini-flash-latest"]))
     response, used_model = None, None
     for model in models:
         for attempt in range(2):  # 429/503 대비 재시도

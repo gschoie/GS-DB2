@@ -464,6 +464,67 @@ def archive(payload):
         json.dump(slim, f, ensure_ascii=False)
 
 
+
+def weekly_html():
+    """이번 주 신호 누적 — 일요일 텔레그램 '월~금 누적'과 같은 집계를 화면에도 둔다.
+
+    날짜 네비게이션과 무관한 고정 블록이다(항상 가장 최근 주). 토요일 스캔이 금요일
+    데이터를 채우면서 그 주가 완성되므로, 일요일에 페이지를 다시 굽지 않아도 된다.
+    집계 로직은 etf_telegram과 공유해 화면과 텔레그램이 어긋나지 않게 한다.
+    """
+    try:
+        import etf_telegram as tg
+    except Exception as exc:                      # 집계가 깨져도 신호판 자체는 나가야 한다
+        print("주간 누적 생략:", exc)
+        return ""
+
+    today = datetime.date.today()
+    monday = today - datetime.timedelta(days=today.weekday())
+    days = tg.load_week(monday, monday + datetime.timedelta(days=4))
+    if not days:            # 월요일 아침처럼 이번 주 거래일 파일이 아직 없으면 지난주
+        monday -= datetime.timedelta(days=7)
+        days = tg.load_week(monday, monday + datetime.timedelta(days=4))
+    if not days:
+        return ""
+
+    rets = tg._week_returns(days)
+    rows = []
+    for label, picked, icon in (("추세", tg._tally(days, "alert_adx"), "⚡"),
+                                ("매수", tg._tally(days, "alert"), "🟢"),
+                                ("매도", tg._tally(days, "alert_sell"), "🔴")):
+        for code, r in sorted(picked.items(), key=lambda kv: (-len(kv[1]["days"]), kv[1]["name"])):
+            move = rets.get(code, (None, None))[1]
+            move_td = "—" if move is None else format(move, "+.1f") + "%"
+            cls = "" if move is None else (" class=\"g\"" if move > 0 else " class=\"r\"")
+            rows.append(
+                "<tr><td>" + icon + " " + esc(label) + "</td>"
+                "<td><b>" + esc(r["name"]) + "</b></td>"
+                "<td>" + esc(r["group"]) + "</td>"
+                "<td>" + esc("·".join(r["days"])) + "</td>"
+                "<td>" + str(len(r["days"])) + "회</td>"
+                "<td" + cls + ">" + move_td + "</td></tr>")
+
+    span = format(days[0][0], "%m/%d") + "~" + format(days[-1][0], "%m/%d")
+    head = ("<summary>📅 이번 주 누적 · " + span + " (" + str(len(days)) +
+            "거래일) — 주중에 흘려보낸 신호를 한 번에</summary>")
+
+    if not rows:
+        body = "<p class=\"sub\">이번 주 새 신호 없음 ✅</p>"
+    else:
+        body = ("<div class=\"tablewrap\"><table class=\"board\">"
+                "<thead><tr><th>종류</th><th>종목</th><th>그룹</th><th>발생 요일</th>"
+                "<th>횟수</th><th>주간 등락</th></tr></thead><tbody>"
+                + "".join(rows) + "</tbody></table></div>")
+
+    if rets:
+        ranked = sorted(rets.values(), key=lambda x: -x[1])
+        up = " · ".join(esc(n) + " " + format(p, "+.1f") + "%" for n, p in ranked[:3])
+        down = " · ".join(esc(n) + " " + format(p, "+.1f") + "%" for n, p in ranked[-3:][::-1])
+        body += "<p class=\"sub\">📈 주간 상승 " + up + "<br>📉 주간 하락 " + down + "</p>"
+
+    return "<details class=\"logic\" open>" + head + "<div class=\"logic-body\">" + body + "</div></details>"
+
+
 def build(payload):
     global SPARKS
     SPARKS = {str(s.get("code")): ((s.get("history") or {}).get("close") or [])
@@ -512,6 +573,7 @@ def build(payload):
     charts_json = json.dumps(charts, ensure_ascii=False).replace("</", "<\\/")
 
     return TEMPLATE.format(nav_opts="".join(date_opts), pages_json=pages_json,
+                           weekly=weekly_html(),
                            dates_json=dates_json, ndays=len(nav_dates),
                            charts_json=charts_json)
 
@@ -686,6 +748,7 @@ table{{min-width:760px}}}}
 <button id="btn-next" title="다음 기준일 (→)">▶</button>
 <span class="hint">← → 키로도 이동 · 과거 {ndays}일 조회</span>
 </div>
+{weekly}
 <div id="day"></div>
 
 <p class="legend">
