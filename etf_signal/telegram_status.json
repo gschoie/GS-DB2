@@ -1,5 +1,5 @@
 {
-  "when_utc": "2026-09-07 23:53:44Z",
+  "when_utc": "2026-09-08 23:49:20Z",
   "ok": true,
   "note": "alert_sent",
   "chat_id_tail": "5171",
@@ -7,7 +7,7 @@
   "response": {
     "ok": true,
     "result": {
-      "message_id": 284,
+      "message_id": 293,
       "from": {
         "id": 8875725998,
         "is_bot": true,
@@ -21,8 +21,8 @@
         "username": "gschoie",
         "type": "private"
       },
-      "date": 1788825224,
-      "text": "📡 ETF/섹터 신호 · 2026-09-07 (전일 확정)\n\n★ 매수 신호(골든크로스) 1개\n\n🟢 TIGER 지주회사 · 금융\n   ＋DI가 −DI 상향돌파·추세전환 · Stochastic 골든크로스\n   ADX 12.5 · %K 78.8/70.0 · 수급 중립\n   [B] 상대강도 상위 14% · 외인·기관 연속 순매수 9일\n\n▼ 매도 경고(데드크로스) 1개\n\n🔴 KODEX 인버스 · 인버스/숏\n   ＋DI가 −DI 하향이탈·추세꺾임 · Stochastic 데드크로스\n   ADX 10.6 · %K 41.2/55.0 · 수급 중립\n   [B] 상대강도 하위 2% · 외인·기관 연속 순매도 5일\n\n전체 신호판 › 대시보드\n🎴 GS Research Desk · ETF/섹터 신호",
+      "date": 1788911360,
+      "text": "📡 ETF/섹터 신호 · 2026-09-08 (전일 확정)\n\n★ 매수 신호(골든크로스) 2개\n\n🟢 KODEX 반도체 · 반도체/AI\n   ＋DI가 −DI 상향돌파·추세전환 · 외인·기관 동반 순매수\n   ADX 14.7 · %K 72.8/54.1 · 외인·기관 쌍끌이\n   [B] 상대강도 상위 2% · 외인·기관 연속 순매수 5일\n\n🟢 KODEX AI반도체TOP2플러스 · 반도체/AI\n   ＋DI가 −DI 상향돌파·추세전환 · 외인·기관 동반 순매수\n   ADX 13.6 · %K 68.4/46.5 · 외인·기관 쌍끌이\n   [B] 상대강도 상위 4% · 외인·기관 연속 순매수 8일\n\n전체 신호판 › 대시보드\n🎴 GS Research Desk · ETF/섹터 신호",
       "entities": [
         {
           "offset": 0,
@@ -36,21 +36,16 @@
         },
         {
           "offset": 57,
-          "length": 10,
-          "type": "bold"
-        },
-        {
-          "offset": 202,
-          "length": 1,
-          "type": "bold"
-        },
-        {
-          "offset": 209,
           "length": 9,
           "type": "bold"
         },
         {
-          "offset": 349,
+          "offset": 192,
+          "length": 18,
+          "type": "bold"
+        },
+        {
+          "offset": 342,
           "length": 4,
           "type": "text_link",
           "url": "https://gschoie.github.io/GS-DB2/etf_signal_report.html"
