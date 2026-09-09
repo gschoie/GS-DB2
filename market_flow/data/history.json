@@ -9808,12 +9808,12 @@
     },
     "1640": {
      "individual": -22879,
-     "foreign": -4351,
+     "foreign": -4348,
      "institution": 9422,
      "arb": 265,
-     "nonarb": -3486,
-     "program": -3220,
-     "time": "17:45",
+     "nonarb": -3333,
+     "program": -3068,
+     "time": "20:47",
      "kospi": 7051.64,
      "chg_pct": 1.4,
      "futures": {
@@ -9825,7 +9825,7 @@
    "confirmed": {
     "investor": {
      "individual": -22879,
-     "foreign": -4351,
+     "foreign": -4348,
      "inst_total": 9422,
      "fin_invest": 7347,
      "insurance": 78,
@@ -9833,18 +9833,18 @@
      "bank": -112,
      "other_fin": 58,
      "pension": -411,
-     "other_corp": 17807
+     "other_corp": 17804
     },
     "program": {
      "arb_buy": 4433,
      "arb_sell": 4167,
      "arb_net": 265,
-     "nonarb_buy": 67258,
-     "nonarb_sell": 70744,
-     "nonarb_net": -3486,
-     "total_buy": 71691,
-     "total_sell": 74911,
-     "total_net": -3221
+     "nonarb_buy": 67428,
+     "nonarb_sell": 70762,
+     "nonarb_net": -3333,
+     "total_buy": 71861,
+     "total_sell": 74929,
+     "total_net": -3068
     },
     "futures": {
      "individual": -1073,
@@ -9860,7 +9860,7 @@
     }
    },
    "group_1d": {
-    "time": "17:46",
+    "time": "20:47",
     "groups": [
      [
       "2차전지",
@@ -9970,7 +9970,7 @@
     ]
    },
    "stock_flow": {
-    "time": "17:46",
+    "time": "20:47",
     "buy": [
      [
       "SK하이닉스",
@@ -10832,6 +10832,6 @@
    }
   }
  },
- "updated_kst": "2026-09-09 17:46",
+ "updated_kst": "2026-09-09 20:48",
  "futures_unit": "계약"
 }
