@@ -92,7 +92,8 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add vacation_tracker/state telegram_research_dashboard/static/vacation_report.html
+          git add vacation_tracker/state telegram_research_dashboard/static/vacation_report.html \
+            telegram_research_dashboard/static/attendance_report.html
           if git diff --cached --quiet; then
             echo "변경 없음 — 커밋 생략"
             exit 0
