@@ -257,13 +257,21 @@ function renderTodoArch(){const box=$('#todo-arch-list');if(!box)return;const a=
 function renderTodo(){renderTodoArch();const box=$('#todo-list');if(!box)return;fillTodoGroups();const a=todoLoad(),groups=todoGroups();
  if(!a.length&&!groups.length){box.innerHTML='<p class="empty">할 일을 한 줄 적고 ＋추가를 누르세요.</p>';return}
  const row=(t,i)=>{const imgs=todoImgs(t);
-  return `<div class="todo-row${t.done?' done':''}" data-i="${i}"><span class="todo-grip" draggable="true" title="드래그해서 다른 그룹으로 이동">⠿</span><input type="checkbox" ${t.done?'checked':''}><span class="todo-text">${esc(t.text)}${imgs?`<span class="todo-thumbs">${imgs}</span>`:''}</span><span class="todo-ts"${t.doneTs?` title="완료 ${todoFmt(t.doneTs)}"`:''}>${todoFmt(t.ts)}</span><button class="todo-edit" type="button" title="내용 수정">✎</button><button class="todo-del" type="button" title="삭제">✕</button><button class="todo-arch-one" type="button" title="이 항목만 보관함으로 이동 (삭제 아님)">📦</button></div>`};
+  return `<div class="todo-row${t.done?' done':''}" data-i="${i}"><span class="todo-grip" draggable="true" title="드래그해서 다른 그룹으로 이동">⠿</span><input type="checkbox" ${t.done?'checked':''}><span class="todo-text">${esc(t.text)}${imgs?`<span class="todo-thumbs">${imgs}</span>`:''}</span><span class="todo-ts"${t.doneTs?` title="완료 ${todoFmt(t.doneTs)}"`:''}>${todoFmt(t.ts)}</span><button class="todo-move" type="button" data-mv="-1" title="같은 그룹 안에서 위로">▲</button><button class="todo-move" type="button" data-mv="1" title="같은 그룹 안에서 아래로">▼</button><button class="todo-edit" type="button" title="내용 수정">✎</button><button class="todo-del" type="button" title="삭제">✕</button><button class="todo-arch-one" type="button" title="이 항목만 보관함으로 이동 (삭제 아님)">📦</button></div>`};
  const names=['기본',...groups],buckets=Object.fromEntries(names.map(n=>[n,[]]));
  a.forEach((t,i)=>{buckets[t.group&&names.includes(t.group)?t.group:'기본'].push([t,i])});
  box.innerHTML=names.map(n=>{const list=buckets[n],undone=list.filter(([t])=>!t.done).length;
   const grip=n==='기본'?'':`<span class="todo-g-grip" draggable="true" data-g="${esc(n)}" title="드래그해서 그룹 순서 변경">⠿</span>`;
   const tools=n==='기본'?'':`<span class="todo-g-tools"><button type="button" class="todo-g-ren" data-g="${esc(n)}" title="그룹 이름 변경">✎</button><button type="button" class="todo-g-del" data-g="${esc(n)}" title="그룹 삭제 (항목은 기본으로 이동)">✕</button></span>`;
   return `<details class="todo-group" data-g="${esc(n)}" open><summary>${grip}<span>${esc(n)}</span><em>${undone}/${list.length}</em>${tools}</summary>${list.map(([t,i])=>row(t,i)).join('')||'<p class="empty todo-empty">이 그룹에 할 일이 없습니다.</p>'}</details>`}).join('')}
+// 같은 그룹 안에서 한 칸 이동. 저장 순서(플랫 배열)가 곧 그룹 안 순서라,
+// 다른 그룹 항목은 건너뛰고 같은 그룹의 이웃을 찾아 그 자리로 옮긴다.
+function todoGroupKey(t,names){return t.group&&names.includes(t.group)?t.group:'기본'}
+function todoMove(i,dir){const a=todoLoad(),t=a[i];if(!t)return;
+ const names=['기본',...todoGroups()],g=todoGroupKey(t,names);
+ let j=i+dir;while(j>=0&&j<a.length&&todoGroupKey(a[j],names)!==g)j+=dir;
+ if(j<0||j>=a.length)return;/* 그룹 안에서 이미 끝 */
+ a.splice(i,1);a.splice(j,0,t);todoSave(a)}
 function todoAdd(){const inp=$('#todo-input'),text=(inp?.value||'').trim();if(!text&&!TODO_PEND.length)return;
  const a=todoLoad(),g=$('#todo-group')?.value||'',t={text:text||'(사진 메모)',ts:Date.now(),done:false};
  if(g)t.group=g;if(TODO_PEND.length)t.imgs=TODO_PEND.slice();
@@ -486,6 +494,7 @@ $('#todo-arch-list')?.addEventListener('click',e=>{
 $('#todo-list')?.addEventListener('change',e=>{const row=e.target.closest('.todo-row');if(!row||e.target.type!=='checkbox')return;const a=todoLoad(),t=a[+row.dataset.i];if(!t)return;t.done=e.target.checked;if(t.done)t.doneTs=Date.now();else delete t.doneTs;todoSave(a)});
 $('#todo-list')?.addEventListener('click',e=>{
  if(e.target.closest('.todo-g-grip')){e.preventDefault();return}/* 그립 클릭이 그룹 접힘 토글로 번지지 않게 */
+ const mv=e.target.closest('.todo-move');if(mv){e.preventDefault();todoMove(+mv.closest('.todo-row').dataset.i,+mv.dataset.mv);return}
  const th=e.target.closest('.todo-thumb');if(th){todoLightbox(th.src);return}
  const ren=e.target.closest('.todo-g-ren');if(ren){e.preventDefault();const cur=ren.dataset.g,name=(prompt('그룹 이름 변경',cur)||'').trim();if(!name||name===cur)return;const g=todoGroups();if(name==='기본'||g.includes(name)){alert('이미 있는 그룹입니다.');return}g[g.indexOf(cur)]=name;todoGroupsStore(g);todoArchStore(todoArchLoad().map(t=>t.group===cur?{...t,group:name}:t));todoSave(todoLoad().map(t=>t.group===cur?{...t,group:name}:t));const sel=$('#todo-group');if(sel)sel.value=name;return}
  const gd=e.target.closest('.todo-g-del');if(gd){e.preventDefault();const cur=gd.dataset.g;if(!confirm(`[${cur}] 그룹을 삭제할까요? 그룹의 할 일은 기본으로 이동합니다.`))return;todoGroupsStore(todoGroups().filter(x=>x!==cur));
@@ -504,9 +513,23 @@ $('#todo-list')?.addEventListener('click',e=>{
 // 드래그 앤 드랍으로 할 일을 다른 그룹에 떨어뜨려 이동
 let TODO_DRAG=-1;
 $('#todo-list')?.addEventListener('dragstart',e=>{const row=e.target.closest('.todo-row');if(!row)return;TODO_DRAG=+row.dataset.i;e.dataTransfer.effectAllowed='move';row.classList.add('dragging')});
-$('#todo-list')?.addEventListener('dragend',()=>{TODO_DRAG=-1;$$('#todo-list .drop-hover,#todo-list .dragging').forEach(x=>x.classList.remove('drop-hover','dragging'))});
-$('#todo-list')?.addEventListener('dragover',e=>{if(TODO_DRAG<0)return;const g=e.target.closest('.todo-group');if(!g)return;e.preventDefault();e.dataTransfer.dropEffect='move';$$('#todo-list .drop-hover').forEach(x=>{if(x!==g)x.classList.remove('drop-hover')});g.classList.add('drop-hover')});
-$('#todo-list')?.addEventListener('drop',e=>{if(TODO_DRAG<0)return;const gEl=e.target.closest('.todo-group');if(!gEl)return;e.preventDefault();
+$('#todo-list')?.addEventListener('dragend',()=>{TODO_DRAG=-1;$$('#todo-list .drop-hover,#todo-list .dragging,#todo-list .drop-before,#todo-list .drop-after').forEach(x=>x.classList.remove('drop-hover','dragging','drop-before','drop-after'))});
+$('#todo-list')?.addEventListener('dragover',e=>{if(TODO_DRAG<0)return;
+ const rowEl=e.target.closest('.todo-row');
+ if(rowEl&&+rowEl.dataset.i!==TODO_DRAG){e.preventDefault();e.dataTransfer.dropEffect='move';
+  const r=rowEl.getBoundingClientRect(),after=e.clientY>r.top+r.height/2;
+  $$('#todo-list .drop-before,#todo-list .drop-after').forEach(x=>x.classList.remove('drop-before','drop-after'));
+  rowEl.classList.add(after?'drop-after':'drop-before');return}
+ const g=e.target.closest('.todo-group');if(!g)return;e.preventDefault();e.dataTransfer.dropEffect='move';$$('#todo-list .drop-hover').forEach(x=>{if(x!==g)x.classList.remove('drop-hover')});g.classList.add('drop-hover')});
+$('#todo-list')?.addEventListener('drop',e=>{if(TODO_DRAG<0)return;
+ const rowEl=e.target.closest('.todo-row');
+ if(rowEl){e.preventDefault();const to=+rowEl.dataset.i,from=TODO_DRAG;TODO_DRAG=-1;
+  const a=todoLoad(),t=a[from],tgt=a[to];if(!t||!tgt||from===to){renderTodo();return}
+  const r=rowEl.getBoundingClientRect(),after=e.clientY>r.top+r.height/2;
+  const names=['기본',...todoGroups()],g=todoGroupKey(tgt,names);
+  if(g==='기본')delete t.group;else t.group=g;/* 다른 그룹 행 위에 놓으면 그 그룹으로 */
+  a.splice(from,1);a.splice(a.indexOf(tgt)+(after?1:0),0,t);todoSave(a);return}
+ const gEl=e.target.closest('.todo-group');if(!gEl)return;e.preventDefault();
  const name=gEl.dataset.g,a=todoLoad(),t=a[TODO_DRAG];TODO_DRAG=-1;if(!t)return;
  const cur=t.group&&['기본',...todoGroups()].includes(t.group)?t.group:'기본';
  if(name===cur){renderTodo();return}
