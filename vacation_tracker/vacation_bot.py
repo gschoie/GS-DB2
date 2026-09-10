@@ -149,7 +149,7 @@ async def _dialog_directory(client, max_chats: int = 500) -> dict[str, object]:
     return directory
 
 
-async def _scan(config: dict, state: dict, probe: bool = False) -> list[dict]:
+async def _scan(config: dict, state: dict, probe: bool = False) -> tuple[list[dict], list[dict]]:
     from adapters import DEVICE_INFO  # source_watcher와 단일 정본
     from telethon import TelegramClient
 
@@ -166,6 +166,7 @@ async def _scan(config: dict, state: dict, probe: bool = False) -> list[dict]:
     client = TelegramClient(_session(), int(api_id), api_hash, **DEVICE_INFO)
     await client.connect()
     candidates: list[dict] = []
+    att_hits: list[dict] = []  # 근태 확인 보고 (attendance.py)
     try:
         if not await client.is_user_authorized():
             raise SystemExit(
@@ -219,6 +220,22 @@ async def _scan(config: dict, state: dict, probe: bool = False) -> list[dict]:
                 timeline.append({"id": message.id, "out": bool(message.out),
                                  "text": (message.message or "").strip(), "dt": posted})
             timeline.reverse()  # 시간순으로
+            # 근태 보고는 상대가 보낸 메시지만 — 내가 쓴 "근태 체크해줘"류는 보고가 아니다.
+            from attendance import detect_attendance
+
+            for msg in timeline:
+                if msg["out"] or not msg["text"]:
+                    continue
+                att = detect_attendance(msg["text"], msg["dt"].astimezone(KST))
+                if att:
+                    att_hits.append({
+                        "name": name,
+                        "month": att["month"],
+                        "explicit": bool(att.get("explicit")),
+                        "uid": f"{entity.id}:{msg['id']}",
+                        "text": msg["text"],
+                        "msg_date": msg["dt"].astimezone(KST).isoformat(timespec="minutes"),
+                    })
             # include_own=True: 내가 대신 적은 메시지도 이 대화 상대의 일정 후보가 된다.
             picked = pick_candidates(timeline, allow_own=include_own)
             for pick in picked:
@@ -242,7 +259,7 @@ async def _scan(config: dict, state: dict, probe: bool = False) -> list[dict]:
             print(f"  · {name}: 후보 {len(picked)}건 (마지막 메시지 id {newest_id})")
     finally:
         await client.disconnect()
-    return candidates
+    return candidates, att_hits
 
 
 # ── 추출 (Gemini → 규칙 폴백) ──────────────────────────────────────────────
@@ -347,7 +364,8 @@ def extract(candidates: list[dict], owner: str = "") -> list[dict]:
 
 # ── 텔레그램 알림 ──────────────────────────────────────────────────────────
 
-def notify(new_entries: list[dict]) -> None:
+def notify(new_entries: list[dict], fresh_att: list[dict] | None = None) -> None:
+    fresh_att = fresh_att or []
     token = os.environ.get("TELEGRAM_BOT_TOKEN", "").strip()
     chat_id = os.environ.get("TELEGRAM_CHAT_ID", "").strip()
     if not token or not chat_id:
@@ -355,15 +373,27 @@ def notify(new_entries: list[dict]) -> None:
         return
     import notify as watcher_notify  # source_watcher의 발송기 재사용 (분할·재시도 포함)
 
-    lines = [f"🏖️ <b>휴가 보고 감지</b> ({len(new_entries)}건)", ""]
-    for entry in sorted(new_entries, key=lambda e: (e.get("start") or "9999", e["name"])):
-        lines.append(f"<b>{watcher_notify.escape(entry['name'])}</b> — {span_label(entry)}")
-        snippet = entry["text"][:120]
-        lines.append(f"└ \"{watcher_notify.escape(snippet)}\"")
-        lines.append("")
-    lines.append('전체 일정: <a href="https://gschoie.github.io/GS-DB2/vacation_report.html">대시보드</a>')
+    lines: list[str] = []
+    if new_entries:
+        lines += [f"🏖️ <b>휴가 보고 감지</b> ({len(new_entries)}건)", ""]
+        for entry in sorted(new_entries, key=lambda e: (e.get("start") or "9999", e["name"])):
+            lines.append(f"<b>{watcher_notify.escape(entry['name'])}</b> — {span_label(entry)}")
+            snippet = entry["text"][:120]
+            lines.append(f"└ \"{watcher_notify.escape(snippet)}\"")
+            lines.append("")
+        lines.append('전체 일정: <a href="https://gschoie.github.io/GS-DB2/vacation_report.html">대시보드</a>')
+    if fresh_att:
+        if lines:
+            lines.append("")
+        lines += [f"✅ <b>근태 확인</b> ({len(fresh_att)}건)", ""]
+        for hit in sorted(fresh_att, key=lambda h: (h["month"], h["name"])):
+            month = f"{int(hit['month'][5:7])}월"
+            lines.append(f"<b>{watcher_notify.escape(hit['name'])}</b> — {month} 근태 확인")
+            lines.append(f"└ \"{watcher_notify.escape(hit['text'][:120])}\"")
+            lines.append("")
+        lines.append('근태 현황: <a href="https://gschoie.github.io/GS-DB2/attendance_report.html">대시보드</a>')
     watcher_notify.send("\n".join(lines), token=token, chat_id=chat_id)
-    print(f"[알림] {len(new_entries)}건 발송")
+    print(f"[알림] 휴가 {len(new_entries)}건 + 근태 {len(fresh_att)}건 발송")
 
 
 def span_label(entry: dict) -> str:
@@ -387,8 +417,8 @@ def run(dry_run: bool = False, probe: bool = False) -> None:
         asyncio.run(_scan(config, state, probe=True))
         return
 
-    candidates = asyncio.run(_scan(config, state))
-    print(f"후보 {len(candidates)}건")
+    candidates, att_hits = asyncio.run(_scan(config, state))
+    print(f"후보 {len(candidates)}건, 근태 보고 {len(att_hits)}건")
     owner = str(config.get("owner_name") or "").strip() or next(
         (f["name"] for f in config["friends"] if f.get("scan") is False), "")
     entries = extract(candidates, owner=owner)
@@ -418,6 +448,8 @@ def run(dry_run: bool = False, probe: bool = False) -> None:
     if dry_run:
         for entry in entries:
             print(f"  - {entry['name']} {span_label(entry)} [{entry['engine']}] :: {entry['text'][:60]}")
+        for hit in att_hits:
+            print(f"  - [근태] {hit['name']} {hit['month']} :: {hit['text'][:60]}")
         return
 
     for entry in entries:
@@ -425,11 +457,21 @@ def run(dry_run: bool = False, probe: bool = False) -> None:
     save_json(ENTRIES_PATH, store)
     save_json(STATE_PATH, state)
 
+    import attendance
+
+    att_store = attendance.load_store()
+    fresh_att = attendance.record_hits(att_store, att_hits)
+    attendance.save_store(att_store)
+    attendance.build_page(att_store)
+    if fresh_att:
+        print(f"근태 신규 확인 {len(fresh_att)}건: "
+              + ", ".join(f"{h['name']}({h['month']})" for h in fresh_att))
+
     from render_page import build_page
 
     build_page(store)
-    if new_entries:
-        notify(new_entries)
+    if new_entries or fresh_att:
+        notify(new_entries, fresh_att)
 
 
 def _apply_op(op: str, body: dict) -> None:
@@ -498,6 +540,10 @@ def add_manual(raw: str) -> None:
     # 같은 경로로 삭제·메모 수정도 받는다 — {"op":"delete"|"note","uid":...,"note":...}.
     # GAS 라우트를 안 바꾸려고 add에 op를 얹었다(entry만 있으면 통과).
     op = str(body.get("op") or "").strip()
+    if op.startswith("att"):  # 근태 페이지 op(att/att-open/att-close) — 근태 상태·페이지만.
+        import attendance
+
+        return attendance.apply_op(body)
     if op:
         return _apply_op(op, body)
 
@@ -563,6 +609,9 @@ def main() -> None:
         from render_page import build_page
 
         build_page(load_json(ENTRIES_PATH, {"entries": {}}))
+        import attendance
+
+        attendance.build_page()
     else:
         run(dry_run=args.dry_run, probe=args.probe)
 

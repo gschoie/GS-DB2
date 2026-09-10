@@ -109,8 +109,14 @@
           <button class="nav" data-view="collab">🤝 섹터 콜라보 레이더</button>
           <div class="nav-sep"></div>
           <a href="https://gemini.google.com/gem/a7f3fb1d0136" target="_blank" rel="noopener">🤔 답.안한님.찾기</a>
-          <button class="nav" data-view="tasklist">📬 수명 피드백.확인</button>
-          <button class="nav" data-view="vacation">🏖️ ┗휴가/출장.계획</button>
+          <details class="nav-subgroup">
+            <summary>🗂️ 팀원.체크</summary>
+            <div class="nav-submenu-2">
+              <button class="nav" data-view="tasklist">📬 수명 피드백.확인</button>
+              <button class="nav" data-view="vacation">🏖️ 휴가/출장.계획</button>
+              <button class="nav" data-view="attendance">✅ 근태.체크(월)</button>
+            </div>
+          </details>
           <div class="nav-sep"></div>
           <a href="https://corpday-calendar.animsam09.workers.dev/" target="_blank" rel="noopener">📆 코퍼레잇데이.DAOL</a>
         </div>
@@ -386,12 +392,16 @@
       <iframe id="ytdigest-frame" class="union-board-frame" title="방산 유튜브 3일 모음" loading="lazy"></iframe>
     </section>
     <section id="ytweekly" class="view">
-      <div class="archive-intro"><div><p class="eyebrow">DEFENSE YOUTUBE · WEEKLY</p><h2>방산 유튜브 주간 모음</h2></div><div class="etf-actions"><span>샤를세환·KKMD·까치살모·슈퍼소닉·KFN+ 5개 채널의 지난 7일 일반 영상만(쇼츠·라이브 제외) 평일 아침마다 갱신됩니다. 텔레그램으로도 같이 갑니다.</span><a class="panel-more" href="youtube_weekly_report.html" target="_blank" rel="noopener">새 창으로 ↗</a></div></div>
+      <div class="archive-intro"><div><p class="eyebrow">DEFENSE YOUTUBE · WEEKLY</p><h2>방산 유튜브 주간 모음</h2></div><div class="etf-actions"><span>샤를세환·KKMD·까치살모·슈퍼소닉·KFN+ 요일별 담당 채널(월 샤를세환·화 KKMD·수 까치살모·목 슈퍼소닉·금 KFN+·토 KFN1)의 지난 7일 일반 영상만(쇼츠·라이브 제외)을 월~토 오전 8시에 보냅니다. 텔레그램으로도 같이 갑니다.</span><a class="panel-more" href="youtube_weekly_report.html" target="_blank" rel="noopener">새 창으로 ↗</a></div></div>
       <iframe id="ytweekly-frame" class="union-board-frame" title="방산 유튜브 주간 모음" loading="lazy"></iframe>
     </section>
     <section id="vacation" class="view">
       <div class="archive-intro"><div><p class="eyebrow">FRIENDS · VACATION</p><h2>휴가/출장 계획</h2></div><div class="etf-actions"><span>지정한 친구들과의 텔레그램 1:1 대화에서 휴가·연차·반차·출장·샵투어 보고를 하루 2회(08:30·18:30) 자동으로 잡아 정리합니다. 새 보고가 잡히면 텔레그램으로도 알립니다.</span><a class="panel-more" href="vacation_report.html" target="_blank" rel="noopener">새 창으로 ↗</a></div></div>
       <iframe id="vacation-frame" class="union-board-frame" title="친구 휴가 일정" loading="lazy"></iframe>
+    </section>
+    <section id="attendance" class="view">
+      <div class="archive-intro"><div><p class="eyebrow">TEAM · ATTENDANCE</p><h2>월별 근태 체크</h2></div><div class="etf-actions"><span>팀원들이 텔레그램 1:1로 보낸 "근태 완벽합니다" 보고를 자동으로 잡아 월별로 체크합니다. 구두 보고는 확인 칸을 눌러 수동 토글하세요.</span><a class="panel-more" href="attendance_report.html" target="_blank" rel="noopener">새 창으로 ↗</a></div></div>
+      <iframe id="attendance-frame" class="union-board-frame" title="월별 근태 체크" loading="lazy"></iframe>
     </section>
 
     <section id="construction" class="view">
