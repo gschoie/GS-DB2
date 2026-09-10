@@ -1,5 +1,5 @@
 {
-  "when_utc": "2026-09-09 23:41:00Z",
+  "when_utc": "2026-09-10 23:34:47Z",
   "ok": true,
   "note": "alert_sent",
   "chat_id_tail": "5171",
@@ -7,7 +7,7 @@
   "response": {
     "ok": true,
     "result": {
-      "message_id": 305,
+      "message_id": 312,
       "from": {
         "id": 8875725998,
         "is_bot": true,
@@ -21,8 +21,8 @@
         "username": "gschoie",
         "type": "private"
       },
-      "date": 1788997260,
-      "text": "📡 ETF/섹터 신호 · 2026-09-09 (전일 확정)\n\n★ 매수 신호(골든크로스) 1개\n\n🟢 KODEX 2차전지산업 · 2차전지\n   ＋DI가 −DI 상향돌파·추세전환 · Stochastic 골든크로스 · 외인·기관 동반 순매수\n   ADX 12.0 · %K 56.1/51.6 · 외인·기관 쌍끌이\n   [B] 거래대금 2.36배 · 상대강도 상위 20%\n\n⚡ 추세 강도 1개\n\n🔻 KODEX 자동차 · 자동차\n   ADX 20 상향돌파 · 하락추세 확립(확인)\n   ADX 20.1 · %K 17.1/16.2 · 수급 중립\n   [B] 상대강도 하위 29% · ADX 하락추세\n\n전체 신호판 › 대시보드\n🎴 GS Research Desk · ETF/섹터 신호",
+      "date": 1789083286,
+      "text": "📡 ETF/섹터 신호 · 2026-09-10 (전일 확정)\n\n⚡ 추세 강도 1개\n\n🔻 TIME K바이오액티브 · 바이오/헬스케어\n   ADX 20 상향돌파 · 하락추세 확립(확인)\n   ADX 20.8 · %K 12.7/13.1 · 수급 중립\n   [B] 상대강도 하위 2% · ADX 하락추세\n\n전체 신호판 › 대시보드\n🎴 GS Research Desk · ETF/섹터 신호",
       "entities": [
         {
           "offset": 0,
@@ -30,27 +30,17 @@
           "type": "bold"
         },
         {
-          "offset": 50,
+          "offset": 43,
           "length": 1,
           "type": "bold"
         },
         {
-          "offset": 57,
+          "offset": 50,
           "length": 12,
           "type": "bold"
         },
         {
-          "offset": 213,
-          "length": 1,
-          "type": "bold"
-        },
-        {
-          "offset": 220,
-          "length": 9,
-          "type": "bold"
-        },
-        {
-          "offset": 340,
+          "offset": 177,
           "length": 4,
           "type": "text_link",
           "url": "https://gschoie.github.io/GS-DB2/etf_signal_report.html"
