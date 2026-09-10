@@ -170,7 +170,7 @@ a.rep-title:hover{color:#386453;text-decoration:underline}
   .todo-row{flex-wrap:wrap;row-gap:3px;column-gap:10px}
   .todo-text{flex:1 1 55%;min-width:55%}
   .todo-ts{margin-left:45px}/* 그립+체크박스 폭만큼 들여써 텍스트와 정렬 */
-  .todo-edit{margin-left:auto}
+  .todo-move[data-mv="-1"]{margin-left:auto}
   .todo-row.arch .todo-text{flex-basis:100%;min-width:100%}
   .todo-row.arch .todo-ts{margin-left:0}
   .todo-row.arch .todo-restore{margin-left:auto}
@@ -229,3 +229,8 @@ body.item-locked #task-archive,body.item-locked #task-archive-box{display:none}
 body.item-locked #task-item{appearance:none;-webkit-appearance:none;border-color:transparent;background:#eef2ee;color:#2c463d;font-weight:700;opacity:1;cursor:default;padding-right:10px}
 /* TO-DO 상단 팀원.체크 바로가기 3종 — 좁은 화면에서는 줄바꿈된다. */
 .todo-shortcuts{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 14px}
+/* 그룹 안 순서 조정: ▲▼ 버튼(폰 포함 어디서나) + PC는 행끼리 드래그 삽입 */
+.todo-move{border:0;background:none;color:#b7bdb8;font-size:11px;cursor:pointer;padding:2px 3px;flex:none;line-height:1}
+.todo-move:hover{color:#173f35}
+.todo-row.drop-before{box-shadow:inset 0 2px 0 #2e6250}
+.todo-row.drop-after{box-shadow:inset 0 -2px 0 #2e6250}
