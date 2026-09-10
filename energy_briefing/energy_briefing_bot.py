@@ -81,17 +81,25 @@ NEWS_QUERIES = [
      "en-US", "US", "US:en"),
     # 미국 데이터센터 투자 — 하이퍼스케일러 capex·신규 캠퍼스·전력 조달 (투자 문맥 한정)
     ('(("data center" OR datacenter OR "AI data center") '
-     'AND (Microsoft OR Google OR Amazon OR AWS OR Meta OR OpenAI OR Oracle OR xAI '
-     'OR hyperscaler OR "United States") '
+     'AND (Microsoft OR Google OR Amazon OR AWS OR Meta OR OpenAI OR Anthropic '
+     'OR Alphabet OR Oracle OR xAI OR hyperscaler OR "United States") '
      'AND (investment OR capex OR "capital expenditure" OR construction OR campus '
      'OR gigawatt OR megawatt OR "power purchase" OR "power agreement" OR billion)) when:1d',
      "en-US", "US", "US:en"),
+    # DC 사업자 전력 공급 계약 — AI 기업·하이퍼스케일러의 PPA·전력 조달 딜
+    ('((Anthropic OR OpenAI OR Alphabet OR Google OR Meta OR Microsoft OR Amazon '
+     'OR xAI OR Oracle) AND ("power purchase agreement" OR "PPA" OR "power supply" '
+     'OR "power deal" OR "energy agreement" OR "electricity supply" OR "nuclear power" '
+     'OR "power contract")) when:1d', "en-US", "US", "US:en"),
+    # MOUSTERIAN 프로젝트 추적 — 에너지·DC 문맥 한정 (구석기 무스테리안 고고학 기사 컷)
+    ('(Mousterian AND ("data center" OR datacenter OR energy OR power OR nuclear '
+     'OR gigawatt OR AI)) when:1d', "en-US", "US", "US:en"),
     # 국내 보도 — 조선 3사 친환경·FLNG·SMR 문맥
     ("암모니아 추진선 OR 수소 추진선 OR 원자력 추진선 OR FLNG OR 해상 데이터센터 "
      "OR 부유식 데이터센터 OR 소형모듈원전 OR LNG 액화 when:1d", "ko", "KR", "KR:ko"),
     # 국내 보도 — 데이터센터 투자·건설 (전력 인프라 문맥 포함)
     ("데이터센터 투자 OR 데이터센터 건설 OR 데이터센터 착공 OR AI 데이터센터 "
-     "OR 데이터센터 전력 when:1d", "ko", "KR", "KR:ko"),
+     "OR 데이터센터 전력 OR 무스테리안 when:1d", "ko", "KR", "KR:ko"),
 ]
 
 # 오검색 컷: 비료·농업용 암모니아, 가정용 수소차 등 (선박·발전 신호 없으면 버림)
@@ -149,7 +157,9 @@ SYSTEM_PROMPT = """당신은 조선·에너지 인프라 섹터를 담당하는 
 추적 주제는 여섯 가지입니다: ① 친환경 선박 추진 기술(암모니아 추진·액화수소 추진·원자력/SMR 추진)
 ② FDC(Floating Data Center, 해상 데이터센터) ③ FLNG(Floating LNG)·FSRU
 ④ LNG 액화 프로젝트의 FID(최종투자결정) 동향 ⑤ 미국의 발전원 투자(가스복합화력·신재생·SMR)
-⑥ 미국·한국의 데이터센터 투자(하이퍼스케일러 capex·신규 캠퍼스·전력 조달, 국내 DC 건설·투자).
+⑥ 미국·한국의 데이터센터 투자(하이퍼스케일러 capex·신규 캠퍼스·전력 조달, 국내 DC 건설·투자)
+— AI·DC 사업자(앤쓰로픽 Anthropic·OpenAI·알파벳 Alphabet·메타 Meta·마이크로소프트·아마존 등)의
+전력 공급 계약(PPA·원전·가스 등)과 'Mousterian(무스테리안)' 관련 소식을 특히 챙기세요.
 
 [필수 원칙 — 최신성이 가장 중요합니다]
 - **뉴스 사실관계는 반드시 함께 제공되는 [지난 24시간 뉴스 목록]에 있는 기사만 근거로 쓰세요.** 목록에 없는 사건을 당신의 기억(학습 데이터)에서 꺼내 새 뉴스처럼 쓰는 것을 절대 금지합니다. 과거의 수주·FID·계약 소식을 오늘 뉴스처럼 서술하면 안 됩니다.
@@ -169,7 +179,7 @@ SYSTEM_PROMPT = """당신은 조선·에너지 인프라 섹터를 담당하는 
 3. ## FDC (Floating Data Center) — 프로젝트·투자·기술 동향. 없으면 "- 특이사항 없음."
 4. ## FLNG · LNG 액화 FID — FLNG/FSRU 발주·건조·배치 소식과 액화 프로젝트 FID 동향. FID 관련 건은 "프로젝트 | 국가 | 운영사 | 규모(mtpa) | 단계 | 날짜" 형태의 일반 텍스트 줄로 (마크다운 표 문법 |---| 금지)
 5. ## 미국 발전원 투자 — ### 가스복합화력 / ### 신재생 / ### SMR 하위 구분. 투자·발주·승인·전력구매계약 소식. 없는 항목은 "- 특이사항 없음."
-6. ## 데이터센터 투자 (미국·한국) — ### 미국 / ### 한국 하위 구분. 하이퍼스케일러 capex·신규 캠퍼스·전력 조달(PPA·자가발전)·국내 DC 건설·투자 소식. 없는 항목은 "- 특이사항 없음."
+6. ## 데이터센터 투자 (미국·한국) — ### 미국 / ### 한국 하위 구분. 하이퍼스케일러 capex·신규 캠퍼스·국내 DC 건설·투자와 AI·DC 사업자(앤쓰로픽·OpenAI·알파벳·메타 등)의 전력 공급 계약(PPA·원전·가스터빈·자가발전) 소식. 없는 항목은 "- 특이사항 없음."
 7. ## 한국 조선·기자재 시사점 — HD한국조선해양·한화오션·삼성중공업 및 기자재 관점의 수혜·경쟁 포인트 3개 이내
 
 굵은 강조는 **텍스트**, 링크는 [매체명](URL) 형식의 마크다운을 사용하세요. 마크다운 표(|---|)와 HTML 태그는 사용하지 마세요."""
