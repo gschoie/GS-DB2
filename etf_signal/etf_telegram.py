@@ -6,7 +6,7 @@
 전송 결과(성공/에러 원문)는 telegram_status.json 에 남긴다(원인 진단용).
 필수 환경변수: TELEGRAM_BOT_TOKEN, TELEGRAM_CHAT_ID
 """
-import os, json, html, argparse, datetime, urllib.request, urllib.error
+import os, json, glob, html, argparse, datetime, urllib.request, urllib.error
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 DASH_URL = "https://gschoie.github.io/GS-DB2/etf_signal_report.html"
@@ -139,6 +139,24 @@ def load_week(start, end):
     return days
 
 
+def load_recent(n=10):
+    """history/<거래일>.json 을 최신부터 n개. 달력 주가 아니라 **직전 n영업일**이 필요할 때.
+
+    월·화에는 '이번 주'가 1~2거래일밖에 안 돼 표가 얇아진다 — 창을 거래일 수로 고정하면
+    무슨 요일에 봐도 같은 두께로 보인다. 휴장일은 파일 자체가 없으므로 자동으로 빠진다.
+    """
+    days = []
+    for path in sorted(glob.glob(os.path.join(HERE, "history", "*.json")))[-n:]:
+        stem = os.path.splitext(os.path.basename(path))[0]
+        try:
+            day = datetime.date.fromisoformat(stem)
+        except ValueError:
+            continue
+        with open(path, encoding="utf-8") as f:
+            days.append((day, json.load(f)))
+    return days
+
+
 def _tally(days, flag):
     """주중에 그 신호가 뜬 종목을 모은다. {code: {name, group, 요일들, 마지막 신호}}"""
     picked = {}
@@ -147,8 +165,9 @@ def _tally(days, flag):
             if not s.get(flag) or not _keep(s):
                 continue
             row = picked.setdefault(s["code"], {"name": s["name"], "group": s["group"],
-                                                "days": [], "last": s})
-            row["days"].append(WD_KO[day.weekday()])
+                                                "days": [], "dates": [], "last": s})
+            row["days"].append(WD_KO[day.weekday()])   # 한 주짜리 창(주간 텔레그램)용
+            row["dates"].append(day)                   # 여러 주에 걸친 창(화면)용
             row["last"] = s
     return picked
 

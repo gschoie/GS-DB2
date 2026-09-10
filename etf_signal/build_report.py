@@ -9,6 +9,8 @@ HIST_DIR = os.path.join(HERE, "history")
 MAX_DAYS = 15  # 네비게이션으로 볼 수 있는 과거 일수(페이지 용량 상한)
 # 예약 시각. .github/workflows/etf-signal.yml 의 cron(0 22 * * * = KST 07:00)과 맞춰 둘 것.
 SCHEDULE_TIME = "매일 오전 7시"
+# 화면 상단 누적 블록이 훑는 거래일 수. 5로 줄이면 "지난 한 주" 느낌이 된다.
+TRAIL_DAYS = 10
 
 def sched_badge(actual):
     """'정기 업데이트 예약 시각 · 실제로 돌아간 시각'을 함께 보여준다.
@@ -465,12 +467,19 @@ def archive(payload):
 
 
 
-def weekly_html():
-    """이번 주 신호 누적 — 일요일 텔레그램 '월~금 누적'과 같은 집계를 화면에도 둔다.
+def _when(row, cap=3):
+    """신호가 뜬 날. 창이 2주에 걸치면 요일만으론 구분이 안 돼 날짜로 적는다."""
+    dates = row.get("dates") or []
+    shown = "·".join(format(d, "%m/%d") for d in dates[-cap:])
+    return shown + ("…" if len(dates) > cap else "")
 
-    날짜 네비게이션과 무관한 고정 블록이다(항상 가장 최근 주). 토요일 스캔이 금요일
-    데이터를 채우면서 그 주가 완성되므로, 일요일에 페이지를 다시 굽지 않아도 된다.
-    집계 로직은 etf_telegram과 공유해 화면과 텔레그램이 어긋나지 않게 한다.
+
+def weekly_html():
+    """최근 TRAIL_DAYS 거래일 신호 누적 — 화면 상단 고정 블록.
+
+    달력 주(월~금)로 자르면 월·화에는 1~2거래일밖에 안 잡혀 표가 얇아진다. 창을
+    거래일 수로 고정해 무슨 요일에 봐도 같은 두께로 보이게 한다. 집계 함수는
+    일요일 텔레그램('월~금 누적')과 공유하고, 창만 다르게 준다.
     """
     try:
         import etf_telegram as tg
@@ -478,12 +487,7 @@ def weekly_html():
         print("주간 누적 생략:", exc)
         return ""
 
-    today = datetime.date.today()
-    monday = today - datetime.timedelta(days=today.weekday())
-    days = tg.load_week(monday, monday + datetime.timedelta(days=4))
-    if not days:            # 월요일 아침처럼 이번 주 거래일 파일이 아직 없으면 지난주
-        monday -= datetime.timedelta(days=7)
-        days = tg.load_week(monday, monday + datetime.timedelta(days=4))
+    days = tg.load_recent(TRAIL_DAYS)
     if not days:
         return ""
 
@@ -500,27 +504,27 @@ def weekly_html():
                 "<tr><td>" + icon + " " + esc(label) + "</td>"
                 "<td><b>" + esc(r["name"]) + "</b></td>"
                 "<td>" + esc(r["group"]) + "</td>"
-                "<td>" + esc("·".join(r["days"])) + "</td>"
+                "<td>" + esc(_when(r)) + "</td>"
                 "<td>" + str(len(r["days"])) + "회</td>"
                 "<td" + cls + ">" + move_td + "</td></tr>")
 
     span = format(days[0][0], "%m/%d") + "~" + format(days[-1][0], "%m/%d")
-    head = ("<summary>📅 이번 주 누적 · " + span + " (" + str(len(days)) +
-            "거래일) — 주중에 흘려보낸 신호를 한 번에</summary>")
+    head = ("<summary>📅 최근 " + str(len(days)) + "영업일 누적 · " + span +
+            " — 그날 흘려보낸 신호를 한 번에</summary>")
 
     if not rows:
-        body = "<p class=\"sub\">이번 주 새 신호 없음 ✅</p>"
+        body = "<p class=\"sub\">이 기간 새 신호 없음 ✅</p>"
     else:
         body = ("<div class=\"tablewrap\"><table class=\"board\">"
-                "<thead><tr><th>종류</th><th>종목</th><th>그룹</th><th>발생 요일</th>"
-                "<th>횟수</th><th>주간 등락</th></tr></thead><tbody>"
+                "<thead><tr><th>종류</th><th>종목</th><th>그룹</th><th>발생일</th>"
+                "<th>횟수</th><th>기간 등락</th></tr></thead><tbody>"
                 + "".join(rows) + "</tbody></table></div>")
 
     if rets:
         ranked = sorted(rets.values(), key=lambda x: -x[1])
         up = " · ".join(esc(n) + " " + format(p, "+.1f") + "%" for n, p in ranked[:3])
         down = " · ".join(esc(n) + " " + format(p, "+.1f") + "%" for n, p in ranked[-3:][::-1])
-        body += "<p class=\"sub\">📈 주간 상승 " + up + "<br>📉 주간 하락 " + down + "</p>"
+        body += "<p class=\"sub\">📈 기간 상승 " + up + "<br>📉 기간 하락 " + down + "</p>"
 
     return "<details class=\"logic\" open>" + head + "<div class=\"logic-body\">" + body + "</div></details>"
 
