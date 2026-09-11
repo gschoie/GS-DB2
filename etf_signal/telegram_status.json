@@ -1,5 +1,5 @@
 {
-  "when_utc": "2026-09-10 23:34:47Z",
+  "when_utc": "2026-09-11 23:42:09Z",
   "ok": true,
   "note": "alert_sent",
   "chat_id_tail": "5171",
@@ -7,7 +7,7 @@
   "response": {
     "ok": true,
     "result": {
-      "message_id": 312,
+      "message_id": 315,
       "from": {
         "id": 8875725998,
         "is_bot": true,
@@ -21,8 +21,8 @@
         "username": "gschoie",
         "type": "private"
       },
-      "date": 1789083286,
-      "text": "📡 ETF/섹터 신호 · 2026-09-10 (전일 확정)\n\n⚡ 추세 강도 1개\n\n🔻 TIME K바이오액티브 · 바이오/헬스케어\n   ADX 20 상향돌파 · 하락추세 확립(확인)\n   ADX 20.8 · %K 12.7/13.1 · 수급 중립\n   [B] 상대강도 하위 2% · ADX 하락추세\n\n전체 신호판 › 대시보드\n🎴 GS Research Desk · ETF/섹터 신호",
+      "date": 1789170129,
+      "text": "📡 ETF/섹터 신호 · 2026-09-11 (전일 확정)\n\n★ 매수 신호(골든크로스) 1개\n\n🟢 SOL 조선기자재 · 조선\n   ＋DI가 −DI 상향돌파·추세전환 · 외인·기관 동반 순매수\n   ADX 9.9 · %K 77.5/65.1 · 외인·기관 쌍끌이\n   [B] 거래대금 1.71배 · 상대강도 상위 25%\n\n⚡ 추세 강도 1개\n\n🔻 TIGER 바이오TOP10 · 바이오/헬스케어\n   ADX 20 상향돌파 · 하락추세 확립(확인)\n   ADX 20.6 · %K 11.0/9.7 · 수급 중립\n   [B] 상대강도 하위 9% · ADX 하락추세 · 외인·기관 연속 순매도 6일\n\n전체 신호판 › 대시보드\n🎴 GS Research Desk · ETF/섹터 신호",
       "entities": [
         {
           "offset": 0,
@@ -30,17 +30,27 @@
           "type": "bold"
         },
         {
-          "offset": 43,
+          "offset": 50,
           "length": 1,
           "type": "bold"
         },
         {
-          "offset": 50,
-          "length": 12,
+          "offset": 57,
+          "length": 9,
           "type": "bold"
         },
         {
-          "offset": 177,
+          "offset": 188,
+          "length": 1,
+          "type": "bold"
+        },
+        {
+          "offset": 195,
+          "length": 14,
+          "type": "bold"
+        },
+        {
+          "offset": 341,
           "length": 4,
           "type": "text_link",
           "url": "https://gschoie.github.io/GS-DB2/etf_signal_report.html"
