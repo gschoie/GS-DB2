@@ -1,5 +1,5 @@
 # 글로벌 방산 월간 정리 (최근 4주 주간 정리본 묶음)
-수록 주간: 2026-08-24, 2026-08-29, 2026-09-05
+수록 주간: 2026-08-24, 2026-08-29, 2026-09-05, 2026-09-12
 
 # 글로벌 방산 주간 정리 2026-08-24
 (기간: 08/18~08/24)
@@ -354,3 +354,110 @@
 *   **미-이란 호르무즈 해협 긴장 완화 여부**: 오만 중재를 통한 '임시 항로' 트랙의 성사 여부와 미국의 봉쇄 완화 응답이 나올지 주목됩니다. 이는 유가 흐름과 중동 지역의 지정학적 긴장 완화 신호로 작용할 수 있습니다.
 *   **러시아의 우크라이나 에너지 인프라 타격 확산 범위**: 러시아가 오데사 에너지 시설을 이틀 연속 타격하며 '에너지 겨울' 캠페인을 개시한 가운데, 타격 범위가 전력망 전반으로 확산될지 여부가 유럽 방공 수요에 영향을 미칠 변수입니다.
 *   **태국 차기 호위함 최종 발표**: 한화오션 (Hanwha Ocean)의 태국 호위함 사업은 선정 절차가 완료된 상태에서 정치적 지연이 이어지고 있습니다. 최종 발표 시 한화오션의 동남아 교두보 확정 및 추가 확장 옵션이 주가에 반영될 촉매로 작용할 수 있습니다.
+
+---
+
+# 글로벌 방산 주간 정리 2026-09-12
+(기간: 09/06~09/12)
+
+글로벌 방산 업종의 지난 한 주(09/06~09/12) 주요 흐름을 정리해 드립니다.
+
+## 주간 핵심 테마
+1.  **중동 지정학적 긴장 격화와 유가 변동성**: 미국과 이란 간 유조선 상호 타격이 격화되고 예멘 후티 반군이 사우디 본토 에너지 시설을 공격하며 중동 지역의 군사적 긴장이 최고조에 달했습니다. 이에 따라 국제 유가(WTI)는 주간 9.4% 급등하며 $100선을 돌파했으나, 주말 이란과 걸프국 간 호르무즈 해협 논의가 예고되며 외교적 해법 모색의 신호도 나타났습니다.
+2.  **K-방산 수출 모멘텀 지속 및 리스크 부각**: 한화에어로스페이스(Hanwha Aerospace)가 크로아티아와 6,410억원 규모의 천무(Chunmoo) 다연장로켓 수출 계약을 체결하며 유럽 시장 확대를 이어갔습니다. 한화오션(Hanwha Ocean)은 태국 차세대 호위함 사업 우선협상대상자로 선정되었으나, 태국 의회의 계약 연기 촉구로 본계약 체결에 대한 불확실성이 부각되었습니다. 현대로템(Hyundai Rotem)은 폴란드형 K2 전차(K2PL)를 공개하며 현지화 전략을 강화했습니다.
+3.  **우크라이나 전쟁 장기화와 방공 시스템 수요**: 미국 특사 및 정상 간 종전 협상 시도가 있었으나 돌파구 없이 러시아의 공습이 재개되며 전쟁 장기화가 예상됩니다. 이에 따라 우크라이나의 PAC-3 Patriot 등 방공 시스템 추가 요청과 서방 국가들의 미사일 요격기 생산 증대 계획이 지속적으로 발표되며 관련 기업들의 수혜가 기대됩니다.
+4.  **글로벌 국방 예산 및 첨단 기술 투자 확대**: 미국은 사우디아라비아에 대규모 무기 판매를 승인하고 F-15EX Eagle II 전투기 증강 및 IFPC Inc 2 사업을 추진하는 등 국방력 강화에 나섰습니다. 또한 미 우주군이 극초음속 미사일 추적 위성 개발을 가속화하고 AI 기반 위협 추적 도구를 모색하는 등 미래 기술 투자도 활발했습니다.
+5.  **인플레이션 및 금리 인상 우려의 시장 영향**: 주간 PPI가 에너지 가격 상승으로 연준 목표치를 크게 상회하고, 미 8월 CPI도 컨센서스에 부합하며 다음 주 FOMC의 금리 인상 확률이 약 70%로 높아졌습니다. 이는 방산 섹터 전반의 밸류에이션에 부담으로 작용하며, 유가 상승과 금리 인상 우려가 복합적으로 시장에 영향을 미쳤습니다.
+
+## 계약·수주·프로그램
+*   사우디아라비아 | 폭탄 및 JDAM-ER 유도 키트 | Boeing | 잠재적 $50억 | 09/06
+*   Elbit Systems | ISR 및 타겟팅 페이로드 | Elbit Systems | (금액 미공개) | 09/06
+*   사우디아라비아 | 스마트 폭탄 및 전차 엔진 | General Dynamics, GE Aerospace, Howmet Aerospace | $57.5억 | 09/07
+*   미 육군 | MCT-30 포탑 부품 | American Rheinmetall (Rheinmetall 자회사) | (금액 미공개) | 09/07
+*   가와사키중공업 (KHI) | AI 기반 항공 방어 시스템 개발 | 가와사키중공업 (KHI) | 다년 간 다백만 달러 | 09/08
+*   한화오션 (Hanwha Ocean) | LNG 이중연료 컨테이너선 6척 | 한화오션 (Hanwha Ocean) | ₩1조 5,527억 (상선) | 09/08
+*   록히드마틴 (Lockheed Martin) | PAC-3 MSE 미사일 추진체 | L3Harris | $47억 | 09/09
+*   한화오션 (Hanwha Ocean) | 태국 차세대 호위함 사업 우선협상대상자 선정 | 한화오션 (Hanwha Ocean) | ₩6,833억 | 09/09
+*   한화에어로스페이스 (Hanwha Aerospace) | 천무(Chunmoo) 다연장로켓 | 한화에어로스페이스 (Hanwha Aerospace) | ₩6,410억 | 09/11
+*   미 해군 | MK 41 수직발사체계(VLS) 전자장치 | Leonardo DRS | (금액 미공개) | 09/11
+*   미사일우주정보센터(MSIC) | COMET 미사일 정보 | Radiance Technologies | $140억 | 09/11
+*   미 국방부 | 방산 계약 2건 | Northrop Grumman | $3,870만 | 09/12
+
+## 주간 주가 리뷰
+지난 한 주간 글로벌 방산 섹터는 혼조세를 보였습니다. 미국 시장은 유가 상승과 금리 인상 우려로 전반적인 하락세를 보였으나, 한국 방산주는 일부 종목에서 강세를 나타냈습니다.
+
+**주간 상승 상위 종목:**
+*   **HD현대중공업 (HD HHI) (한국) | +9.74%**: 하나증권의 주간 추천주로 선정되며 투자 심리가 개선되었고, 1조원대 발전엔진 및 SMR 생산기지 설비 투자 결정 소식도 긍정적으로 작용했습니다.
+*   **LIG넥스원 (LIG Nex1) (한국) | +3.99%**: 체코 국방부 장관의 L-SAM 등 한국형 방공 시스템 시찰 소식에 유럽 시장 수출 기대감이 반영되었습니다.
+*   **Elbit Systems (이스라엘) | +3.82%**: 특별한 개별 뉴스는 없었으나, 중동 지정학적 긴장 고조에 따른 수혜 기대감이 작용한 것으로 보입니다.
+*   **한국항공우주 (KAI) (한국) | +3.16%**: 한화그룹의 지분 인수 이슈 및 완제기 수출 기대감 속에서 강세를 보였습니다.
+*   **한화시스템 (Hanwha Systems) (한국) | +3.05%**: 한화오션의 태국 호위함 우선협상대상자 선정 소식 등 K-방산 수출 모멘텀에 동반 상승했습니다.
+*   **한화에어로스페이스 (Hanwha Aerospace) (한국) | +2.46%**: 크로아티아 천무(Chunmoo) 수출 계약 체결이라는 대형 호재가 주가에 긍정적으로 반영되었습니다.
+*   **Textron (미국) | +2.05%**: 특별한 개별 뉴스는 없었으나, 시장 전반의 수급 요인으로 상승했습니다.
+
+**주간 하락 상위 종목:**
+*   **Howmet Aerospace (HWM) (미국) | -11.85%**: 주간 10% 이상 하락했으나, 주가 변동을 설명할 만한 구체적인 공시나 뉴스는 확인되지 않았습니다. 시장의 수급 요인에 의한 변동으로 추정됩니다.
+*   **Rheinmetall (독일) | -7.44%**: 우크라이나 종전 협상 시도에 따른 '휴전 디스카운트' 우려와 JPMorgan의 'Negative Catalyst Watch' 지정 등 복합적인 요인으로 하락했습니다.
+*   **L3Harris (LHX) (미국) | -6.33%**: 록히드마틴으로부터 PAC-3 MSE 미사일 추진체 47억 달러 계약을 수주했음에도 불구하고, 시장 전반의 약세와 수급 요인으로 하락했습니다.
+*   **Hensoldt (독일) | -6.26%**: 유럽 방산 섹터 전반의 차익 실현 매물 출회와 단기 밸류에이션 부담으로 하락했습니다.
+*   **가와사키중공업 (KHI) (일본) | -4.71%**: AI 기반 항공 방어 시스템 계약 소식에도 불구하고, 일본 방산·기계 업종 전반의 차익 매물 출회로 하락했습니다.
+*   **Saab (스웨덴) | -4.37%**: 유럽 방산 섹터의 전반적인 약세와 수급 요인으로 하락했습니다.
+*   **Huntington Ingalls (HII) (미국) | -3.80%**: 특별한 개별 뉴스는 없었으나, 시장 전반의 약세에 동조하여 하락했습니다.
+*   **Thales (프랑스) | -3.37%**: 유럽 방산 섹터의 동반 약세와 수급 요인으로 하락했습니다.
+
+## 섹터별 정리
+
+### 항공우주
+*   Boeing (BA)은 사우디아라비아의 50억 달러 규모 폭탄 및 JDAM-ER 유도 키트 도입 추진(09/06)과 미 공군의 F-15EX Eagle II 전투기 268대 증강 계획(09/07)에 따른 수혜가 예상되었습니다. 미 육군 IFPC Inc 2 차기 단계 후보로 안두릴(Anduril)과 함께 선정되었습니다(09/11).
+*   Lockheed Martin (LMT)은 독일 최초의 F-35A 전투기 첫 비행 성공(09/09)과 미 육군 IFPC Inc 2 차기 단계 후보 선정(09/11) 소식이 있었습니다. L3Harris에 47억 달러 규모의 PAC-3 MSE 미사일 추진체 계약을 발주했습니다(09/09).
+*   Saab (스웨덴)의 Gripen F 전투기가 브라질 조종사와 첫 비행을 성공적으로 마쳤으며(09/06), 네덜란드의 GlobalEye 도입 참여 및 2억 6,000만 유로 규모 스텔스 무인 협동전투기(Loyal Wingman) 연구 계약을 수주했습니다(09/11).
+*   Northrop Grumman (NOC)은 새로운 추진체 혁신 센터를 개소하고(09/09), 미 국방부로부터 총 3,870만 달러 규모의 계약을 수주했습니다(09/12).
+*   한국항공우주 (KAI)는 '주인 없는 KAI' 상황과 전략적 주주의 필요성에 대한 분석 기사가 보도되었습니다(09/09).
+
+### 지상무기
+*   현대로템 (Hyundai Rotem)은 폴란드 키엘체 MSPO 2026 방산 전시회에서 폴란드 현지 장비를 탑재한 폴란드형 K2 전차(K2PL)를 최초 공개하며 현지화 전략을 본격화했습니다(09/08). 또한 폴란드 제철소와 MOU를 체결하고 현지 생산형 K2 전차 제작에 합의했습니다(09/11).
+*   한화에어로스페이스 (Hanwha Aerospace)는 크로아티아 국방부와 6,410억원 규모의 천무(Chunmoo) 다연장로켓 수출 계약을 공식 체결하며 유럽 시장 확대를 이어갔습니다(09/11) [데이터투자](https://news.google.com/rss/articles/CBMic0FVX3lxTE1rSkJnd28zZmwzYnpvMm1aRWI3dzRmVFYwMG5BQ3BNS3lidTA5cl9IRHhYczRtUmJjQ3R0VjhWWkpTSXhjNkp6M3B6M3NTUFVySzV1N0VCQVVNN1VaYlNsUWR2VkFFQmJPbnZRcjJuQUp0azA?oc=5).
+*   Rheinmetall (독일)은 무인 항공기 'Ghost Bat' 프로그램에 참여한다고 발표했으며(09/06), 자회사 American Rheinmetall이 Kongsberg의 MCT-30 포탑 부품 공급 계약을 수주했습니다(09/07).
+
+### 미사일·방공
+*   미국은 이란 해군 함정에 대한 미사일 공격 시도에 대응하여 이란 유조선 5척을 파괴했으며(09/09), 이란은 요르단 내 미군 기지에 대한 미사일 공격 주장을 재차 제기하며 중동 지역의 긴장이 고조되었습니다 [BNO News](https://news.google.com/rss/articles/CBMisAFBVV95cUxONmI2c05UV3BYVE1idWdGcS1vSmhhaGIyamhyNDd1S1RObENYelkwRmpzdGJIN05NeWVCSEhGNlRpeTZGU3hIdi01Y2NmRUtfajRfQnUzNm5fNEFWd19VVXh3NGVEbU1fSFY1T1A0cjhIR1RObW1HbU1KSmJ3RHh0U2dlRmZLeVdPTDZ4ZmdWbllYQ2NMZXFEb0JnUExqcl9uT3NGS0NoWV85VHNSMWxsYQ?oc=5). 예멘 후티 반군이 사우디 남부 Aramco 시설들을 드론·탄도미사일로 타격하며 73명이 부상했습니다(09/08) [CNN](https://www.cnn.com/2026/09/08/middleeast/houthis-attack-saudi-arabia-yemen-intl-hnk).
+*   RTX (미국)는 우크라이나의 PAC-3 Patriot 방공 시스템 추가 요청 및 미국의 2027년 Patriot 미사일 생산량 증대 계획에 따라 수혜가 예상됩니다(09/07).
+*   LIG넥스원 (LIG Nex1)은 체코 국방부 장관의 L-SAM 등 한국형 방공 시스템 시찰 소식에 힘입어 주가가 상승했습니다(09/08) [네이트](https://news.google.com/rss/articles/CBMieEFVX3lxTE9BUHFDR1FWdlNYZDdidEFQQzM4UkszVVB6UDkxM21yQzZ0Ql9sd0tIOHNNaEdWb1ZOdWhPMjNUSTFVNW9MSkZ3dEVMQ3UtWElQaG5Lc09JV2MxUUJ1T3F3RVR6emp3M1A3cEdfdmR2TjJaLXBGcUIybQ?oc=5).
+*   우크라이나 젤렌스키 대통령은 2027년 초까지 Freyja 요격기 및 발사기를 자체 생산할 수 있다고 밝히며 유럽 산업계의 지원을 요청했습니다(09/12) [Defence Industry Europe](https://news.google.com/rss/articles/CBMi-wFBVV95cUxOWmt2OHFSRndtT1hEU0VWMWVQRFhlZ2tLalNFMmlZcnVZX2Y4RTBONksyZVZ0SUdDVHZkTmtLWU5TSUZZMWRrUG9sOHF1bENLSmpwQVBiODVGbVFOS3VtTHRuQnNrZDc5WkhyNFdSU3hRWVRJc21oenppbTFTZ1BHd0FhTFlhRGU4d09EOHBwUkFUdnhlUmxFX0F3ZnhSZUxGWlpqVTJKbkxCSEt5RVI3X2l3UzVsVW5FUmJZLUVzcGhTRHhSNVNzTG44bE5EOEgyRmlIV2JNaHBUd2FQMGhoY1hLNENORmI1OEFDNTQ4Uk5sakhYTXJ2MFA?oc=5).
+
+### 해군·조선
+*   한화오션 (Hanwha Ocean)은 6,833억 원 규모의 태국 차세대 호위함 사업 우선협상대상자로 선정되었으나(09/09) [디일렉](https://news.google.com/rss/articles/CBMiZkFVX3lxTE5HSC1UU0g3UzJWby1wLUw0dGk3d25vNGNLbmVEeXVVNXJGbHk2SkJKWmY2TFlyN0JWbV9LZTlhaTN5cFUyLWNfMnhVbjlSWmxVejZUU0hGUlJiZVBpVU1xODZYRlhiZw?oc=5), 태국 하원 군사위원회가 계약 체결 연기를 촉구하며 불확실성이 커졌습니다(09/11) [KPI뉴스](https://news.google.com/rss/articles/CBMiU0FVX3lxTFBEMGxTUG9ITkxCdFJDWVRpR0w0ZWltampnb0RIV0VaZHBiRWVuR2ZtZGZrNC1YOHlJV2V0YVlQOFo0QnExOUYzRHpxSU05TEc5R25z0gFTQVVfeXFMUEQwbFNQb0hOTEJ0UkNZVGlHTDRlaW1qamdvR0hXRVpkcGJFZW5HZm1kZms0LVg4eUlXZXRhWVA4WjRCcTE5RjNEenFJTTlMRzlHbnM?oc=5). 또한 양밍해운으로부터 1조 5,527억원 규모의 LNG 이중연료 컨테이너선 6척을 수주했습니다(09/08).
+*   HD현대중공업 (HD HHI)은 세계 최초로 에탄올 연료 추진 대형 엔진 R&D 테스트를 완료했으며(09/08), 울산 온산에 1조 722억원 규모의 발전엔진 기지 및 SMR 생산력 확충 투자를 단행했습니다(09/11) [퍼블릭뉴스통신](https://news.google.com/rss/articles/CBMia0FVX3lxTE9TU3hJWmtpeFpOcVVmVkYtcEhWdjdGMkFKYl9qX1Y3QkJPRVVZSXJCZWgzb0RUMWFaVjNiZmsyNE5OaFBvTDY5UjRPazByUnc1VE5GT0NDQVU2bGkyN05qWk9YQVI5TTZjYnB3?oc=5). 국내 조선업계의 추석 이후 공동 파업 가능성이 제기되어 단기적인 불확실성이 존재합니다(09/12) [IT조선](https://news.google.com/rss/articles/CBMicEFVX3lxTE9zdkZOajlaeDNTaG52S2NKMzBwaHRvZlV0a0Q2b3JRcDJ5X1FnVTN4c1oxc29FSEdJRUpSR3JPMWtCa2dOX0Zvb3U3VmZMQTBEUU8xb3VaN0dkT184R3VJVXoxbUlfTmRBLS0zTHU3Y23SAXRBVV95cUxQWXd3bUh0YllYUlBTRW40Z1VKM05Yb2V5WEhFRW5YTDVaV3pxd2dHRUdubm5JUGZnOXEwd01GVU5WM3NodTNiZlA2WnFzWmJhVlAyVTBMNExOWWhGVUItWUVQNnU5QVdTZ0F2NHZwRkUydnNPSQ?oc=5).
+*   NATO는 미국 없이 러시아 핵잠수함 방어 훈련을 실시했으며(09/06), 해저 케이블 절단을 시도하던 러시아 해군 정찰 잠수함의 공작을 사전에 차단하는 해저 인프라 방어 작전에 성공했습니다(09/11) [Semafor](https://news.google.com/rss/articles/CBMiogFBVV95cUxPZWtHZHROMnJtek9BTVlrZW1MajY5VEd5VHlrbUQ1emthVFhXYV9yaHVwUG0tQ203Y182MEh2OW84aXZNaUoxVDBkOTBER2tTSkVIcWlsYXRHbGhvUHRvUXBBSWJ5LVhpSlA4ajZxaFNEZ2pBOFMtS1lFTmRnblRuOWszUU9IeVBvZDNGc3Z6MGpNZThjZndnSktId0I4YmVqQUE?oc=5).
+
+### 전자·센서·C4ISR
+*   Elbit Systems (이스라엘)는 ISR(정보, 감시, 정찰) 및 타겟팅 페이로드 계약을 수주했습니다(09/06) [asiapacificdefencereporter.com](https://news.google.com/rss/articles/CBMimwFBVV95cUxOUm9sODhmNV9naHlDMlJaeWswcThKSHB6ZURXdVdCdUlQWFkwZnl2bGc3TllHdTRFSTJUYUhFMXJCRjlPSXc5WjRBVGR2dkUzVEZFWlFFZG1RNGdsdHZEMWpkM1FsMDkxXzZodkZvME5vSVgtOUdiZF81cGtZUVhROWJpTm90aWdvZ1FUczExYXllblNCSGNMVlZ5UQ?oc=5).
+*   한화시스템 (Hanwha Systems)은 목포시와 무인수상정(USV) 자율운항 거점 구축을 위한 산업 생태계 조성에 협력합니다(09/06) [매일일보](https://news.google.com/rss/articles/CBMiZEFVX3lxTFBremk4eGFFRkg1SlVlcklDNEpJbGFYbnlDRWRjaC0yYktIaFR6S0lnNEw3LU5Na0dEVFdJNy1ycnZPa1lsNy1ta0M1emZiSlNmOWFqQ0tzWkRyRUN6UGFSOTBFZFLSAWhBVV95cUxNVTU3ZGdpQ2xRSFJCRnhZdnptZXk1SU9aMzlldUtBbzJFRzdiQWIxUkt2YUN4UVNZaFVVbFlsdzNEbUI3eTdzaEtNUGt4X3MtUEVpOXFUdzNfb2ZUUUZWZExiY0h2RjN1Qg?oc=5).
+*   미 우주군이 극초음속 미사일 추적 위성 개발 이정표를 달성했으며(09/12), 미 국방부가 우주 및 미사일 위협을 추적하기 위한 AI 도구를 모색하고 있습니다(09/12) [executivegov.com](https://news.google.com/rss/articles/CBMifEFVV3lxTE9JRVYtaWt1M3YtYnZaaGhHSlBZVnlwTzR4WnZacTRkeUZEM3IzcU9MalpQQTFHV2s4Mkl0Ymw5VFJoa3FfY09hTkNHcnhvdWZfZ0lfalhFQURZZGVsSk02bUNOZVdiSzdNbnJLRm9RQXdPem9LWjhhYmVhLVc?oc=5).
+
+## 정책·지정학
+*   **중동 긴장 고조와 외교적 신호**: 미국은 이란 유조선 5척을 파괴하고 이란은 미군함 및 유조선, 요르단 미군기지를 공격하며 군사적 긴장이 최고조에 달했습니다. 예멘 후티 반군이 사우디 Aramco 시설을 공격하며 전쟁의 '지역화'가 시작되었습니다. 그러나 주말 이란과 걸프국 간 호르무즈 해협 통항 논의를 위한 오만 회동이 예고되며 외교적 해법 모색의 신호도 나타났습니다(09/11).
+*   **우크라이나 전쟁과 종전 협상**: 미국 특사 Witkoff·Kushner가 젤렌스키 대통령과 회동하여 '리프레시된' 평화안을 논의했으나 돌파구는 없었습니다. 트럼프-푸틴, 트럼프-젤렌스키 간 통화가 이어졌으나 러시아는 72시간 공습 중지 이후 키이우 공습을 재개하며 전쟁 지속 의지를 보였습니다(09/08). 우크라이나는 PAC-3 Patriot 등 방공 시스템 추가 확보를 지속적으로 요청하고 있습니다.
+*   **미국 국방 예산 및 조달**: 미국은 사우디아라비아에 57.5억 달러 규모의 스마트 폭탄 및 전차 엔진 판매를 승인했으며(09/07), 미 공군의 F-15EX Eagle II 전투기 전력을 268대로 증강하는 369억 달러 규모의 프로그램을 계획하고 있습니다(09/07). 미 육군 IFPC Inc 2 사업의 차기 단계 후보를 선정하는 등 단거리 방공망 강화도 추진 중입니다(09/11).
+*   **인도 국방 조달 확대**: 인도는 레이더, 헬기 등 3군 조달을 위한 116.4억 달러(약 1.1조 루피) 규모의 무기 조달 원칙을 승인했으며, 98%를 자국 산업에서 조달할 계획입니다(09/08).
+*   **북한 미사일 발사**: 북한이 동해상으로 미확인 발사체를 발사하며 역내 지정학적 긴장을 고조시켰습니다(09/12).
+*   **NATO 방위 역량 강화**: NATO는 미국 없이 러시아 핵잠수함 방어 훈련을 실시하고(09/06), 해저 인프라 방어 작전을 성공적으로 수행하는 등 유럽 방위 역량 강화에 집중하고 있습니다(09/11).
+
+## 한국 방산 종합
+지난 한 주간 한국 방산 기업들은 유럽 및 동남아 시장에서 중요한 수주 소식과 함께 미래 성장 동력 확보를 위한 노력을 이어갔습니다.
+
+*   **한화에어로스페이스 (Hanwha Aerospace)**는 크로아티아와 6,410억원 규모의 천무(Chunmoo) 다연장로켓 수출 계약을 체결하며 폴란드에 이어 유럽 시장 내 K-방산의 영향력을 확대했습니다. 이는 유럽의 지속적인 포병 및 방공 시스템 수요에 대한 한국 기업의 경쟁력을 입증하는 사례입니다.
+*   **한화오션 (Hanwha Ocean)**은 태국 차세대 호위함 사업 우선협상대상자로 선정되며 동남아 함정 시장 진출의 교두보를 마련했으나, 태국 하원 군사위원회의 계약 연기 촉구로 본계약 체결에 정치적 리스크가 부각되었습니다. 상선 부문에서는 1조 5,527억원 규모의 LNG 이중연료 컨테이너선 6척을 수주하며 실적 하방을 지지했습니다.
+*   **현대로템 (Hyundai Rotem)**은 폴란드 MSPO 방산 전시회에서 폴란드형 K2 전차(K2PL)를 최초 공개하며 폴란드 2차 이행계약 및 유럽 시장 확대를 위한 현지화 전략을 강화했습니다. 폴란드 제철소와 MOU를 체결하며 현지 공급망 구축에도 나섰습니다.
+*   **LIG넥스원 (LIG Nex1)**은 체코 국방부 장관의 L-SAM 등 한국형 방공 시스템 시찰로 유럽 시장 수출 기대감을 높였습니다.
+*   **HD현대중공업 (HD HHI)**은 1조 722억원 규모의 발전엔진 및 SMR 생산기지 투자를 결정하며 미래 에너지 전환 및 함정 전동화 역량 강화에 나섰습니다. 하나증권의 주간 추천주로 선정되며 주가가 크게 상승했으나, 국내 조선업계의 추석 이후 공동 파업 가능성이 제기되어 단기적인 불확실성이 존재합니다.
+*   **한국항공우주 (KAI)**는 '주인 없는 KAI' 상황과 전략적 주주의 필요성에 대한 논의가 이어졌습니다.
+*   **한화시스템 (Hanwha Systems)**은 목포시와 무인수상정(USV) 자율운항 거점 구축 협력을 통해 미래 해양 무인체계 시장에서의 경쟁력을 강화하고 있습니다.
+
+전반적으로 한국 방산은 유럽 시장에서 대규모 계약을 성사시키며 성장 모멘텀을 이어갔으나, 일부 계약에서 정치적 리스크가 부각되는 등 해외 수주 환경의 복잡성도 드러났습니다. 조선업계의 파업 가능성은 단기적인 실적 변동성을 야기할 수 있는 요인입니다.
+
+## 다음 주 관전 포인트
+*   **FOMC (9/15~9/16) 금리 인상 결정**: 미 8월 CPI가 컨센서스에 부합했음에도 금리 인상 확률이 약 70%로 높아진 가운데, 다음 주 FOMC의 25bp 인상 여부가 방산 섹터 밸류에이션을 포함한 전반적인 시장 흐름에 결정적인 영향을 미칠 것입니다.
+*   **이란-걸프국 호르무즈 해협 논의**: 이란과 걸프국 간 호르무즈 해협 통항 문제를 논의하기 위한 오만 회동이 예고되었습니다. 회동의 성사 여부와 논의 진전 상황이 유가 변동성 및 중동 지역의 지정학적 긴장 완화에 중요한 변수가 될 것입니다.
+*   **한화오션 (Hanwha Ocean) 태국 호위함 계약 진행 상황**: 태국 하원 군사위원회의 계약 연기 촉구 이후 한화오션과 태국 정부 간의 본계약 협상 진행 상황 및 정치적 리스크 해소 여부가 주가에 중요한 영향을 미칠 것입니다.
+*   **미국 및 사우디아라비아의 후티 반군 공격 대응**: 예멘 후티 반군의 사우디 Aramco 시설 공격에 대한 미국과 사우디아라비아의 대응이 중동 지역의 추가 확전 여부와 방공 시스템 수요에 영향을 미칠 것입니다.
