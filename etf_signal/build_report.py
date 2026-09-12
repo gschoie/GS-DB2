@@ -474,12 +474,15 @@ def _when(row, cap=3):
     return shown + ("…" if len(dates) > cap else "")
 
 
-def weekly_html():
-    """최근 TRAIL_DAYS 거래일 신호 누적 — 화면 상단 고정 블록.
+def weekly_html(end=None):
+    """end 시점까지 TRAIL_DAYS 거래일의 신호 누적 — 날짜 네비게이션과 함께 움직인다.
 
     달력 주(월~금)로 자르면 월·화에는 1~2거래일밖에 안 잡혀 표가 얇아진다. 창을
     거래일 수로 고정해 무슨 요일에 봐도 같은 두께로 보이게 한다. 집계 함수는
     일요일 텔레그램('월~금 누적')과 공유하고, 창만 다르게 준다.
+
+    end(YYYY-MM-DD)를 주면 **그날로 끝나는** 창이다. 과거 일자를 조회할 때 누적만
+    최신으로 남아 있으면 그날 화면과 앞뒤가 안 맞는다 — 일자마다 창을 다시 잡는다.
     """
     try:
         import etf_telegram as tg
@@ -487,7 +490,12 @@ def weekly_html():
         print("주간 누적 생략:", exc)
         return ""
 
-    days = tg.load_recent(TRAIL_DAYS)
+    if isinstance(end, str):
+        try:
+            end = datetime.date.fromisoformat(end)
+        except ValueError:
+            end = None
+    days = tg.load_recent(TRAIL_DAYS, end)
     if not days:
         return ""
 
@@ -521,16 +529,22 @@ def weekly_html():
             stage = r["last"].get("adx_stage") if label.startswith("추세") else 0
             badge = ('<span class="mini bolt2">25↑</span>' if stage == 2 else
                      '<span class="mini bolt1">20↑</span>' if stage == 1 else "")
+            # 종목 칸은 일별 표와 같은 구성 — 이름은 네이버 차트로, 옆에 '추세' 버튼
+            # (모달 차트)과 스파크라인. 여기서 눈에 걸린 종목을 바로 열어보게 한다.
+            s = r["last"]
             rows.append(
                 "<tr><td class=\"" + side + "\">" + icon + " " + esc(label) + badge + "</td>"
-                "<td><b>" + esc(r["name"]) + "</b></td>"
-                "<td>" + esc(r["group"]) + "</td>"
+                "<td class=\"etf\"><div class=\"etf-row\"><b>" + name_link(s) + "</b>"
+                "<button class=\"btn-chart\" data-code=\"" + esc(str(s.get("code") or "")) +
+                "\" title=\"최근 120거래일 가격 · 신호 발생 시점\">추세</button></div></td>"
+                "<td class=\"grp\">" + esc(r["group"]) + mini_spark(s, 46, 13) + "</td>"
                 "<td>" + esc(_when(r)) + "</td>"
                 "<td>" + str(len(r["days"])) + "회</td>"
                 "<td" + cls + ">" + move_td + "</td></tr>")
 
+    # '최근'이라고 쓰면 과거 일자를 조회할 때 거짓말이 된다 — 창의 끝을 날짜로 말한다.
     span = format(days[0][0], "%m/%d") + "~" + format(days[-1][0], "%m/%d")
-    head = ("<summary>📅 최근 " + str(len(days)) + "영업일 누적 · " + span +
+    head = ("<summary>📅 직전 " + str(len(days)) + "영업일 누적 · " + span +
             " — 그날 흘려보낸 신호를 한 번에</summary>")
 
     if not rows:
@@ -600,8 +614,12 @@ def build(payload):
             charts[s["code"]] = {"name": s["name"], **h}
     charts_json = json.dumps(charts, ensure_ascii=False).replace("</", "<\\/")
 
+    # 누적 블록도 일자마다 — 과거를 조회하면 그 시점으로 끝나는 창을 보여준다.
+    weeklies = {d: weekly_html(d) for d in nav_dates}
+    weeklies_json = json.dumps(weeklies, ensure_ascii=False).replace("</", "<\\/")
+
     return TEMPLATE.format(nav_opts="".join(date_opts), pages_json=pages_json,
-                           weekly=weekly_html(),
+                           weeklies_json=weeklies_json,
                            dates_json=dates_json, ndays=len(nav_dates),
                            charts_json=charts_json)
 
@@ -744,6 +762,8 @@ padding:7px 15px;font-size:13px;cursor:pointer;line-height:1}}
 padding:7px 9px;font-size:12px}}
 .nav .hint{{margin-left:auto;font-size:10px;color:#9aa19d}}
 .etf-row{{display:flex;align-items:center;justify-content:space-between;gap:8px}}
+/* 누적 블록의 그룹 칸 — 그룹명 옆에 스파크라인을 한 칸 띄워 붙인다 */
+td.grp .spark{{margin-left:6px}}
 .btn-chart{{background:#eef3ec;color:#3d554a;border:1px solid #d3dcd2;border-radius:10px;
 padding:2px 8px;font-size:10px;font-weight:700;cursor:pointer;white-space:nowrap;line-height:1.5}}
 .btn-chart:hover{{background:#e3f3e7;border-color:#8fae9c;color:#286342}}
@@ -776,7 +796,7 @@ table{{min-width:760px}}}}
 <button id="btn-next" title="다음 기준일 (→)">▶</button>
 <span class="hint">← → 키로도 이동 · 과거 {ndays}일 조회</span>
 </div>
-{weekly}
+<div id="weekly"></div>
 <div id="day"></div>
 
 <p class="legend">
@@ -885,6 +905,7 @@ function initStats(){{
   }});
 }}
 var PAGES = {pages_json};
+var WEEKLIES = {weeklies_json};   /* 기준일 → 그날로 끝나는 트레일링 누적 블록 */
 var DATES = {dates_json};
 var idx = DATES.length - 1;
 var sel = document.getElementById("sel-date");
@@ -892,6 +913,13 @@ var prev = document.getElementById("btn-prev");
 var next = document.getElementById("btn-next");
 function show(i) {{
   idx = Math.max(0, Math.min(i, DATES.length - 1));
+  var wrap = document.getElementById("weekly");
+  /* 접어둔 상태는 날짜를 옮겨도 유지한다 — 매번 펼쳐지면 성가시다 */
+  var old = wrap.querySelector("details");
+  var wasOpen = old ? old.open : true;
+  wrap.innerHTML = WEEKLIES[DATES[idx]] || "";
+  var now = wrap.querySelector("details");
+  if (now) now.open = wasOpen;
   document.getElementById("day").innerHTML = PAGES[DATES[idx]];
   sel.value = DATES[idx];
   prev.disabled = idx === 0;
