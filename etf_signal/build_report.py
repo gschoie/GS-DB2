@@ -495,22 +495,34 @@ def weekly_html():
     rows = []
     # ADX는 강도만 재는 지표라 alert_adx 에 상승·하락이 함께 들어온다. 한 덩어리로
     # 찍으면 '하락 추세가 굳었다'가 매수 바로 옆에 방향 없이 붙어 매수처럼 읽힌다
-    # → adx_up 으로 갈라 상승은 매수 위, 하락은 매도 아래에 둔다.
+    # → adx_up 으로 갈라 매수편·매도편으로 이름까지 붙인다. ADX 상향돌파 자체는
+    # 진입 트리거가 아니라 '가던 방향이 굳었다'는 확인이므로 골든/데드와 아이콘(⚡)은
+    # 구분해 두고, 읽는 사람이 어느 편인지만 바로 알게 한다.
     up_adx = lambda s: bool(s.get("adx_up"))
-    for label, picked, icon in (("추세↑", tg._tally(days, "alert_adx", up_adx), "⚡"),
-                                ("매수", tg._tally(days, "alert"), "🟢"),
-                                ("매도", tg._tally(days, "alert_sell"), "🔴"),
-                                ("추세↓", tg._tally(days, "alert_adx",
-                                                   lambda s: not up_adx(s)), "⚡")):
-        for code, r in sorted(picked.items(), key=lambda kv: (-len(kv[1]["days"]), kv[1]["name"])):
+    for label, picked, icon, side in (
+            ("추세(매수)", tg._tally(days, "alert_adx", up_adx), "⚡", "pos"),
+            ("매수", tg._tally(days, "alert"), "🟢", "pos"),
+            ("매도", tg._tally(days, "alert_sell"), "🔴", "neg"),
+            ("추세(매도)", tg._tally(days, "alert_adx",
+                                  lambda s: not up_adx(s)), "⚡", "neg")):
+        # 추세는 강도(25 강력 → 20 확인)가 먼저다 — 일별 표의 정렬과 맞춘다.
+        is_adx = label.startswith("추세")
+
+        def order(kv, _adx=is_adx):
+            stage = (kv[1]["last"].get("adx_stage") or 0) if _adx else 0
+            return (-stage, -len(kv[1]["days"]), kv[1]["name"])
+
+        for code, r in sorted(picked.items(), key=order):
             move = rets.get(code, (None, None))[1]
             move_td = "—" if move is None else format(move, "+.1f") + "%"
-            cls = "" if move is None else (" class=\"g\"" if move > 0 else " class=\"r\"")
+            # td.r 은 우측정렬 규칙이라 색이 안 붙는다 — 색은 전역 .pos/.neg 로 준다.
+            cls = " class=\"r\"" if move is None else \
+                  " class=\"r " + ("pos" if move > 0 else "neg") + "\""
             stage = r["last"].get("adx_stage") if label.startswith("추세") else 0
             badge = ('<span class="mini bolt2">25↑</span>' if stage == 2 else
                      '<span class="mini bolt1">20↑</span>' if stage == 1 else "")
             rows.append(
-                "<tr><td>" + icon + " " + esc(label) + badge + "</td>"
+                "<tr><td class=\"" + side + "\">" + icon + " " + esc(label) + badge + "</td>"
                 "<td><b>" + esc(r["name"]) + "</b></td>"
                 "<td>" + esc(r["group"]) + "</td>"
                 "<td>" + esc(_when(r)) + "</td>"
@@ -526,8 +538,11 @@ def weekly_html():
     else:
         body = ("<div class=\"tablewrap\"><table class=\"board\">"
                 "<thead><tr><th>종류</th><th>종목</th><th>그룹</th><th>발생일</th>"
-                "<th>횟수</th><th>기간 등락</th></tr></thead><tbody>"
-                + "".join(rows) + "</tbody></table></div>")
+                "<th>횟수</th><th class=\"r\">기간 등락</th></tr></thead><tbody>"
+                + "".join(rows) + "</tbody></table></div>"
+                "<p class=\"sub\">⚡ 추세 = ADX 상향돌파(20 확인 · 25 강력). "
+                "진입 트리거가 아니라 <b>가던 방향이 굳었다</b>는 확인이고, "
+                "방향은 DI로 갈라 매수편·매도편으로 나눠 적었다.</p>")
 
     if rets:
         ranked = sorted(rets.values(), key=lambda x: -x[1])
