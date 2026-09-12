@@ -157,12 +157,18 @@ def load_recent(n=10):
     return days
 
 
-def _tally(days, flag):
-    """주중에 그 신호가 뜬 종목을 모은다. {code: {name, group, 요일들, 마지막 신호}}"""
+def _tally(days, flag, where=None):
+    """주중에 그 신호가 뜬 종목을 모은다. {code: {name, group, 요일들, 마지막 신호}}
+
+    where: 신호 1건을 더 걸러내는 술어. ADX(추세 강도)는 **방향이 없는 지표**라
+    alert_adx 하나에 상승·하락이 섞여 들어온다 — adx_up 으로 갈라 담을 때 쓴다.
+    """
     picked = {}
     for day, payload in days:
         for s in payload.get("signals") or []:
             if not s.get(flag) or not _keep(s):
+                continue
+            if where and not where(s):
                 continue
             row = picked.setdefault(s["code"], {"name": s["name"], "group": s["group"],
                                                 "days": [], "dates": [], "last": s})

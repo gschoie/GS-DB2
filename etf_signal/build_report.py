@@ -493,15 +493,24 @@ def weekly_html():
 
     rets = tg._week_returns(days)
     rows = []
-    for label, picked, icon in (("추세", tg._tally(days, "alert_adx"), "⚡"),
+    # ADX는 강도만 재는 지표라 alert_adx 에 상승·하락이 함께 들어온다. 한 덩어리로
+    # 찍으면 '하락 추세가 굳었다'가 매수 바로 옆에 방향 없이 붙어 매수처럼 읽힌다
+    # → adx_up 으로 갈라 상승은 매수 위, 하락은 매도 아래에 둔다.
+    up_adx = lambda s: bool(s.get("adx_up"))
+    for label, picked, icon in (("추세↑", tg._tally(days, "alert_adx", up_adx), "⚡"),
                                 ("매수", tg._tally(days, "alert"), "🟢"),
-                                ("매도", tg._tally(days, "alert_sell"), "🔴")):
+                                ("매도", tg._tally(days, "alert_sell"), "🔴"),
+                                ("추세↓", tg._tally(days, "alert_adx",
+                                                   lambda s: not up_adx(s)), "⚡")):
         for code, r in sorted(picked.items(), key=lambda kv: (-len(kv[1]["days"]), kv[1]["name"])):
             move = rets.get(code, (None, None))[1]
             move_td = "—" if move is None else format(move, "+.1f") + "%"
             cls = "" if move is None else (" class=\"g\"" if move > 0 else " class=\"r\"")
+            stage = r["last"].get("adx_stage") if label.startswith("추세") else 0
+            badge = ('<span class="mini bolt2">25↑</span>' if stage == 2 else
+                     '<span class="mini bolt1">20↑</span>' if stage == 1 else "")
             rows.append(
-                "<tr><td>" + icon + " " + esc(label) + "</td>"
+                "<tr><td>" + icon + " " + esc(label) + badge + "</td>"
                 "<td><b>" + esc(r["name"]) + "</b></td>"
                 "<td>" + esc(r["group"]) + "</td>"
                 "<td>" + esc(_when(r)) + "</td>"
