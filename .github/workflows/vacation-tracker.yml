@@ -13,7 +13,7 @@ on:
         # probe = 친구 이름이 실제 대화로 매칭되는지 확인(메시지 안 읽음)
         # dry-run = 수집·추출까지만, 상태·페이지·발송 없음
         # add = 대시보드 기입 폼에서 온 항목 1건 추가 (entry 입력 필요)
-        options: [run, dry-run, probe, rebuild-page, add]
+        options: [run, dry-run, probe, rebuild-page, add, indepth-backfill]
       entry:
         description: '직접 기입 JSON {"name","start","end","kind","note"} — mode=add 전용'
         type: string
@@ -83,6 +83,7 @@ jobs:
             dry-run)      python vacation_bot.py --dry-run ;;
             rebuild-page) python vacation_bot.py --rebuild-page ;;
             add)          python vacation_bot.py --add "$ENTRY" ;;
+            indepth-backfill) python vacation_bot.py --indepth-backfill ;;
             *)            python vacation_bot.py ;;
           esac
 
@@ -93,7 +94,8 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add vacation_tracker/state telegram_research_dashboard/static/vacation_report.html \
-            telegram_research_dashboard/static/attendance_report.html
+            telegram_research_dashboard/static/attendance_report.html \
+            telegram_research_dashboard/static/indepth_report.html
           if git diff --cached --quiet; then
             echo "변경 없음 — 커밋 생략"
             exit 0

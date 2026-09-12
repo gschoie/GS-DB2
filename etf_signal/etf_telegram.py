@@ -139,30 +139,49 @@ def load_week(start, end):
     return days
 
 
-def load_recent(n=10):
+_HIST = {}   # path → payload. 화면은 날짜마다 창을 다시 잡아 같은 파일을 여러 번 읽는다.
+
+
+def load_recent(n=10, end=None):
     """history/<거래일>.json 을 최신부터 n개. 달력 주가 아니라 **직전 n영업일**이 필요할 때.
 
     월·화에는 '이번 주'가 1~2거래일밖에 안 돼 표가 얇아진다 — 창을 거래일 수로 고정하면
     무슨 요일에 봐도 같은 두께로 보인다. 휴장일은 파일 자체가 없으므로 자동으로 빠진다.
+
+    end: 그날까지의 창(그날 포함). 화면에서 과거 일자를 조회할 때 **그 시점 기준의**
+    누적을 보여주기 위한 것 — 안 주면 최신까지.
     """
     days = []
-    for path in sorted(glob.glob(os.path.join(HERE, "history", "*.json")))[-n:]:
+    for path in sorted(glob.glob(os.path.join(HERE, "history", "*.json"))):
         stem = os.path.splitext(os.path.basename(path))[0]
         try:
             day = datetime.date.fromisoformat(stem)
         except ValueError:
             continue
-        with open(path, encoding="utf-8") as f:
-            days.append((day, json.load(f)))
-    return days
+        if end and day > end:
+            continue
+        days.append((day, path))
+    out = []
+    for day, path in days[-n:]:
+        if path not in _HIST:
+            with open(path, encoding="utf-8") as f:
+                _HIST[path] = json.load(f)
+        out.append((day, _HIST[path]))
+    return out
 
 
-def _tally(days, flag):
-    """주중에 그 신호가 뜬 종목을 모은다. {code: {name, group, 요일들, 마지막 신호}}"""
+def _tally(days, flag, where=None):
+    """주중에 그 신호가 뜬 종목을 모은다. {code: {name, group, 요일들, 마지막 신호}}
+
+    where: 신호 1건을 더 걸러내는 술어. ADX(추세 강도)는 **방향이 없는 지표**라
+    alert_adx 하나에 상승·하락이 섞여 들어온다 — adx_up 으로 갈라 담을 때 쓴다.
+    """
     picked = {}
     for day, payload in days:
         for s in payload.get("signals") or []:
             if not s.get(flag) or not _keep(s):
+                continue
+            if where and not where(s):
                 continue
             row = picked.setdefault(s["code"], {"name": s["name"], "group": s["group"],
                                                 "days": [], "dates": [], "last": s})

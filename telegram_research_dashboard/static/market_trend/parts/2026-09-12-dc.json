@@ -1,0 +1,222 @@
+{
+ "source": "DC인사이드",
+ "galleries": [
+  {
+   "id": "krstock",
+   "name": "국내주식갤러리",
+   "posts": 1250,
+   "capped": true,
+   "burst": 0.9,
+   "base_daily": 1417.4
+  },
+  {
+   "id": "stockus",
+   "name": "해외주식갤러리",
+   "posts": 3048,
+   "capped": true,
+   "burst": 0.9,
+   "base_daily": 3356.7
+  }
+ ],
+ "posts_sampled": 559,
+ "keywords": [
+  {
+   "term": "이유",
+   "count": 10,
+   "burst": 99.0,
+   "new": true
+  },
+  {
+   "term": "사우디",
+   "count": 8,
+   "burst": 99.0,
+   "new": true
+  },
+  {
+   "term": "오라클",
+   "count": 6,
+   "burst": 84.4,
+   "new": true
+  },
+  {
+   "term": "보면",
+   "count": 6,
+   "burst": 84.4,
+   "new": true
+  },
+  {
+   "term": "엔비",
+   "count": 6,
+   "burst": 84.4,
+   "new": true
+  },
+  {
+   "term": "금리인상",
+   "count": 5,
+   "burst": 70.4,
+   "new": true
+  },
+  {
+   "term": "같음",
+   "count": 5,
+   "burst": 70.4,
+   "new": true
+  },
+  {
+   "term": "석유",
+   "count": 5,
+   "burst": 70.4,
+   "new": true
+  },
+  {
+   "term": "첫사랑",
+   "count": 5,
+   "burst": 70.4,
+   "new": true
+  },
+  {
+   "term": "미장",
+   "count": 7,
+   "burst": 6.6,
+   "new": false
+  },
+  {
+   "term": "아이온큐",
+   "count": 7,
+   "burst": 6.6,
+   "new": false
+  },
+  {
+   "term": "존나",
+   "count": 8,
+   "burst": 5.4,
+   "new": false
+  },
+  {
+   "term": "금리",
+   "count": 10,
+   "burst": 4.3,
+   "new": false
+  },
+  {
+   "term": "지금",
+   "count": 14,
+   "burst": 3.3,
+   "new": false
+  },
+  {
+   "term": "야선",
+   "count": 14,
+   "burst": 3.0,
+   "new": false
+  }
+ ],
+ "top_recommended": [
+  {
+   "gallery": "해외주식갤러리",
+   "title": "제미나이 이게뭐노?",
+   "views": 10248,
+   "recommend": 381,
+   "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=17725966&exception_mode=recommend&page=1",
+   "time_kst": "09-11 19:40"
+  },
+  {
+   "gallery": "해외주식갤러리",
+   "title": "미주갤의 충격적인 과거....JPG",
+   "views": 8291,
+   "recommend": 154,
+   "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=17722637&exception_mode=recommend&page=1",
+   "time_kst": "09-11 10:52"
+  },
+  {
+   "gallery": "해외주식갤러리",
+   "title": "가장 무해한 AI는 제미나이입니다...구글사세요...",
+   "views": 7094,
+   "recommend": 141,
+   "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=17724304&exception_mode=recommend&page=1",
+   "time_kst": "09-11 15:10"
+  },
+  {
+   "gallery": "해외주식갤러리",
+   "title": "cpi 발표를 왜하는거임?",
+   "views": 7713,
+   "recommend": 133,
+   "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=17726290&exception_mode=recommend&page=1",
+   "time_kst": "09-11 20:27"
+  },
+  {
+   "gallery": "해외주식갤러리",
+   "title": "달러가 병신인게 달러들고 편의점가니깐 아무도 안받음",
+   "views": 7985,
+   "recommend": 131,
+   "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=17726363&exception_mode=recommend&page=1",
+   "time_kst": "09-11 20:39"
+  }
+ ],
+ "top_viewed": [
+  {
+   "gallery": "해외주식갤러리",
+   "title": "9/11 (장중 브리핑) 📈 인상이라는데 왜 오르는거냐고!?",
+   "views": 2302,
+   "recommend": 24,
+   "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=17730571&page=12",
+   "time_kst": "09-12 04:02"
+  },
+  {
+   "gallery": "국내주식갤러리",
+   "title": "월요일 하닉 190 확진임?",
+   "views": 652,
+   "recommend": 0,
+   "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3468804&page=4",
+   "time_kst": "09-12 03:27"
+  },
+  {
+   "gallery": "국내주식갤러리",
+   "title": "이제 오히려 금리인상을 안하는게 악재가 됬네",
+   "views": 576,
+   "recommend": 0,
+   "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3468835&page=3",
+   "time_kst": "09-12 04:22"
+  },
+  {
+   "gallery": "국내주식갤러리",
+   "title": "월요일 얼마나 떨어질지 감도 안온다",
+   "views": 554,
+   "recommend": 0,
+   "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3468837&page=3",
+   "time_kst": "09-12 04:31"
+  },
+  {
+   "gallery": "국내주식갤러리",
+   "title": "다끝나따,,,",
+   "views": 537,
+   "recommend": 0,
+   "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3468843&page=3",
+   "time_kst": "09-12 05:01"
+  },
+  {
+   "gallery": "국내주식갤러리",
+   "title": "세상은 참 불공평 하단 말이지...",
+   "views": 450,
+   "recommend": 0,
+   "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3468840&page=3",
+   "time_kst": "09-12 04:38"
+  },
+  {
+   "gallery": "국내주식갤러리",
+   "title": "주식 코인 5년하면서 안해본매매법이없음",
+   "views": 449,
+   "recommend": 1,
+   "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3468798&page=4",
+   "time_kst": "09-12 03:09"
+  },
+  {
+   "gallery": "국내주식갤러리",
+   "title": "점점 쎄하죠?",
+   "views": 439,
+   "recommend": 0,
+   "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3468800&page=4",
+   "time_kst": "09-12 03:15"
+  }
+ ]
+}

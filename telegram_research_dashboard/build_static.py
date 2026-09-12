@@ -274,6 +274,9 @@ def build() -> Path:
     attendance_report = ROOT / "static" / "attendance_report.html"
     if attendance_report.exists():
         shutil.copy2(attendance_report, OUTPUT.parent / "attendance_report.html")
+    indepth_report = ROOT / "static" / "indepth_report.html"
+    if indepth_report.exists():
+        shutil.copy2(indepth_report, OUTPUT.parent / "indepth_report.html")
     weekly_yt_index = ROOT / "static" / "youtube_weekly_report.html"
     if weekly_yt_index.exists():
         shutil.copy2(weekly_yt_index, OUTPUT.parent / "youtube_weekly_report.html")
