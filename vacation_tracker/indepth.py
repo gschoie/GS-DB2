@@ -14,12 +14,13 @@ Gemini가 없으면 강한 키워드(인뎁스·커버리지·개시·발간)만
 
 from __future__ import annotations
 
+import calendar as _calmod
 import html
 import json
 import os
 import re
 import sys
-from datetime import datetime, timedelta
+from datetime import date, datetime, timedelta
 from pathlib import Path
 
 from rules import KST, _compact
@@ -293,12 +294,42 @@ tr.removed{display:none}
 .acts button:hover{opacity:1}
 .empty{color:#8a94a0;padding:18px 0}
 .hint{color:#8a94a0;font-size:12.5px;margin-top:16px}
+details.sec{margin-top:26px}
+details.sec>summary{font-size:16.5px;color:#2b5f8a;font-weight:700;cursor:pointer;
+  padding-bottom:6px;border-bottom:1px solid #e3e8ee;list-style-position:inside;user-select:none}
+details.sec>summary:hover{color:#1f4a6e}
+details.sec[open]>summary{margin-bottom:10px}
+.cal{width:100%;border-collapse:collapse;table-layout:fixed;margin:6px 0 8px;font-size:12.5px}
+.cal th{padding:6px 4px;border-bottom:1px solid #e3e8ee;color:#8a94a0;font-size:12px;text-align:center}
+.cal th.sun,.cal td.sun .d{color:#d05656}
+.cal th.sat,.cal td.sat .d{color:#2b6cb0}
+.cal td{border:1px solid #e8ecf1;vertical-align:top;padding:4px 5px;height:52px}
+.cal td.blank{background:#f4f6f9;border-color:#eef1f5}
+.cal td.today{background:#eaf2ff;box-shadow:inset 0 0 0 1px #bcd4f0}
+.cal .d{color:#8a94a0;font-size:11.5px;margin-bottom:3px}
+.chip{display:block;margin:2px 0;padding:1px 5px;border-radius:6px;background:#e8f0fe;
+  color:#2b5f8a;border:1px solid #c9dcf5;font-size:11.5px;white-space:nowrap;
+  overflow:hidden;text-overflow:ellipsis;cursor:pointer}
+.chip.fin{background:#eef1f5;color:#7b8694;border-color:#dbe1e8;text-decoration:line-through}
+.cal-title{font-size:15px;color:#1f2937;margin:4px 0 6px;font-weight:700}
+#cal-strip{display:grid;grid-template-columns:1fr 1fr;gap:18px;align-items:start}
+.cal-nav{display:flex;align-items:center;gap:10px;margin:4px 0 8px}
+.cal-nav button{background:#f5f8fb;border:1px solid #d4dbe3;border-radius:8px;
+  padding:3px 12px;font-size:14px;cursor:pointer;color:#2b5f8a}
+.cal-nav button:disabled{opacity:.35;cursor:default}
+.cal-nav span{font-weight:700;color:#1f2937}
+#chip-pop{position:fixed;z-index:50;max-width:340px;background:#fff;border:1px solid #cfd8e3;
+  border-radius:12px;box-shadow:0 8px 28px rgba(30,45,60,.18);padding:12px 14px;font-size:13.5px}
+#chip-pop .t{font-weight:700;color:#1f2937;margin-bottom:4px}
+#chip-pop .quote{color:#57616c;margin-top:6px;font-size:12.5px}
+#chip-pop .close{float:right;cursor:pointer;color:#8a94a0}
 @media (max-width:640px){
   body{padding:18px 10px 50px}
-  table,thead,tbody,tr,th,td{display:block}
-  thead{display:none}
-  tr{border:1px solid #e3e8ee;border-radius:10px;margin-bottom:10px;padding:8px 10px}
-  td{border:none;padding:2px 0}
+  table.lst,table.lst thead,table.lst tbody,table.lst tr,table.lst th,table.lst td{display:block}
+  table.lst thead{display:none}
+  table.lst tr{border:1px solid #e3e8ee;border-radius:10px;margin-bottom:10px;padding:8px 10px}
+  table.lst td{border:none;padding:2px 0}
+  #cal-strip{grid-template-columns:1fr}
 }
 """
 
@@ -344,9 +375,96 @@ def _row(uid: str, entry: dict) -> str:
 def _table(entries: list[tuple[str, dict]], empty_msg: str) -> str:
     if not entries:
         return f'<p class="empty">{empty_msg}</p>'
-    head = ('<table><thead><tr><th>이름</th><th>주제</th><th>예정</th><th>종류</th>'
+    head = ('<table class="lst"><thead><tr><th>이름</th><th>주제</th><th>예정</th><th>종류</th>'
             '<th>발간</th><th>메모 · 원문</th></tr></thead><tbody>')
     return head + "".join(_row(uid, e) for uid, e in entries) + "</tbody></table>"
+
+
+def _section(title: str, count: int, inner: str, is_open: bool) -> str:
+    """접을 수 있는 섹션 — summary가 h2 역할."""
+    return (f'<details class="sec"{" open" if is_open else ""}>'
+            f'<summary>{title} ({count}건)</summary>{inner}</details>')
+
+
+def _chip(entry: dict) -> str:
+    label = entry.get("name") or ""
+    if entry.get("topic"):
+        label += f"·{entry['topic']}"
+    cls = "chip fin" if entry.get("done") else "chip"
+    return (f'<span class="{cls}"'
+            f' data-name="{html.escape(entry.get("name") or "")}"'
+            f' data-topic="{html.escape(entry.get("topic") or "")}"'
+            f' data-kind="{html.escape(entry.get("kind") or "")}"'
+            f' data-target="{html.escape(entry.get("target") or "")}"'
+            f' data-note="{html.escape(entry.get("note") or "")}"'
+            f' data-text="{html.escape((entry.get("text") or "")[:200])}"'
+            f' title="{html.escape(entry.get("topic") or "")} — 눌러서 상세 보기">'
+            f'{html.escape(label[:14])}</span>')
+
+
+def _calendar(entries: list[dict], today_d: date) -> str:
+    """발간 예정일(target)이 있는 항목을 월별 달력에 칩으로. ◀▶ 두 달씩 이동."""
+    per_day: dict[date, list[dict]] = {}
+    for entry in entries:
+        if not entry.get("target"):
+            continue
+        try:
+            per_day.setdefault(date.fromisoformat(entry["target"]), []).append(entry)
+        except ValueError:
+            continue
+
+    def shift(pair, k):
+        year, month = pair
+        month += k
+        while month > 12:
+            year, month = year + 1, month - 12
+        while month < 1:
+            year, month = year - 1, month + 12
+        return year, month
+
+    have = {(d.year, d.month) for d in per_day}
+    current = (today_d.year, today_d.month)
+    lo = min(have | {current})
+    hi = max(have | {shift(current, 3)})
+    months = []
+    cursor = lo
+    while cursor <= hi and len(months) < 18:
+        months.append(cursor)
+        cursor = shift(cursor, 1)
+    grid = _calmod.Calendar(firstweekday=6)  # 일요일 시작
+    parts = []
+    for year, month in months:
+        rows = []
+        for week in grid.monthdatescalendar(year, month):
+            cells = []
+            for day in week:
+                cls = []
+                if day.weekday() == 6:
+                    cls.append("sun")
+                elif day.weekday() == 5:
+                    cls.append("sat")
+                if day.month != month:
+                    cells.append(f'<td class="blank {" ".join(cls)}"></td>')
+                    continue
+                if day == today_d:
+                    cls.append("today")
+                chips = "".join(_chip(e) for e in per_day.get(day, ()))
+                cells.append(f'<td class="{" ".join(cls)}">'
+                             f'<div class="d">{day.day}</div>{chips}</td>')
+            rows.append("<tr>" + "".join(cells) + "</tr>")
+        head = "".join(
+            f'<th class="{cls}">{label}</th>'
+            for label, cls in (("일", "sun"), ("월", ""), ("화", ""), ("수", ""),
+                               ("목", ""), ("금", ""), ("토", "sat"))
+        )
+        parts.append(f'<div class="cal-month" data-ym="{year}-{month:02d}" hidden>'
+                     f'<div class="cal-title">{year}년 {month}월</div>'
+                     f'<table class="cal"><thead><tr>{head}</tr></thead>'
+                     f'<tbody>{"".join(rows)}</tbody></table></div>')
+    nav = ('<div class="cal-nav"><button id="cal-prev" onclick="calMove(-1)">◀</button>'
+           '<span id="cal-label"></span>'
+           '<button id="cal-next" onclick="calMove(1)">▶</button></div>')
+    return nav + '<div id="cal-strip">' + "".join(parts) + "</div>"
 
 
 def build_page(store: dict | None = None) -> None:
@@ -375,12 +493,11 @@ def build_page(store: dict | None = None) -> None:
 갱신 {stamp} KST · 총 {len(items)}건
 <button id="run-btn" class="run-btn" onclick="runScan()">🔄 지금 수집</button>
 <span id="run-status"></span></p>
-<h2>발간 예정 ({len(upcoming)}건)</h2>
-{_table(upcoming, "잡힌 발간 계획이 없습니다.")}
-<h2>확인 필요 ({len(review)}건)</h2>
-{_table(review, "확인할 항목이 없습니다.")}
-<h2>지난 계획 · 발간 완료 ({len(past)}건)</h2>
-{_table(past, "아직 없습니다.")}
+{_section("📌 발간 예정", len(upcoming), _table(upcoming, "잡힌 발간 계획이 없습니다."), True)}
+{_section("🗓️ 발간 달력", sum(1 for _, e in items if e.get("target")),
+          _calendar([e for _, e in items], now.date()), True)}
+{_section("❓ 확인 필요", len(review), _table(review, "확인할 항목이 없습니다."), bool(review))}
+{_section("🗄️ 지난 계획 · 발간 완료", len(past), _table(past, "아직 없습니다."), False)}
 <p id="idx-status"></p>
 <p class="hint">발간 칸 ☐를 누르면 완료 처리(✅), ✏️는 메모, 🗑는 삭제.
 "인뎁스"라고 안 적어도 발간·커버리지·자료 작성 맥락이면 잡습니다 — 잘못 잡힌 건 지워 주세요.</p>
@@ -472,6 +589,61 @@ document.addEventListener('click',async ev=>{
     }
   }
 });
+
+// 달력 페이저 — 두 달씩 보여주고 ◀▶로 한 달 이동
+const calMonths=[...document.querySelectorAll('.cal-month')];
+let calIdx=0;
+function calRender(){
+  const maxIdx=Math.max(0,calMonths.length-2);
+  calIdx=Math.min(Math.max(0,calIdx),maxIdx);
+  calMonths.forEach((m,i)=>{m.hidden=!(i===calIdx||i===calIdx+1)});
+  const first=calMonths[calIdx],second=calMonths[calIdx+1];
+  const label=$id('cal-label');
+  if(label&&first){
+    const name=el=>el.querySelector('.cal-title').textContent;
+    label.textContent=second?name(first)+' · '+name(second):name(first);
+  }
+  const prev=$id('cal-prev'),next=$id('cal-next');
+  if(prev)prev.disabled=calIdx<=0;
+  if(next)next.disabled=calIdx>=maxIdx;
+}
+function calMove(step){calIdx+=step;calRender()}
+if(calMonths.length){
+  const nowYm=new Date().toLocaleDateString('sv').slice(0,7);
+  const at=calMonths.findIndex(m=>m.dataset.ym===nowYm);
+  calIdx=at>=0?at:0;
+  calRender();
+}
+
+// 달력 칩 클릭 → 상세 팝업 (읽기 전용 — 편집은 표에서)
+let chipPop=null;
+function hidePop(){if(chipPop){chipPop.remove();chipPop=null}}
+function showPop(chip){
+  hidePop();
+  const d=chip.dataset;
+  chipPop=document.createElement('div');chipPop.id='chip-pop';
+  const close=document.createElement('span');close.className='close';close.textContent='✕';
+  close.addEventListener('click',hidePop);
+  const t=document.createElement('div');t.className='t';
+  t.textContent=d.name+(d.topic?' — '+d.topic:'');
+  const meta=document.createElement('div');
+  meta.textContent=(d.kind||'')+(d.target?' · '+d.target:'');
+  chipPop.append(close,t,meta);
+  if(d.note){const n=document.createElement('div');n.textContent='📝 '+d.note;chipPop.appendChild(n)}
+  if(d.text){const q=document.createElement('div');q.className='quote';
+    q.textContent='“'+d.text+'”';chipPop.appendChild(q)}
+  document.body.appendChild(chipPop);
+  const r=chip.getBoundingClientRect(),pw=chipPop.offsetWidth,ph=chipPop.offsetHeight;
+  let left=Math.min(Math.max(8,r.left),window.innerWidth-pw-8);
+  let top=r.bottom+6;if(top+ph>window.innerHeight-8)top=Math.max(8,r.top-ph-6);
+  chipPop.style.left=left+'px';chipPop.style.top=top+'px';
+}
+document.addEventListener('click',ev=>{
+  const chip=ev.target.closest('.chip');
+  if(chip){showPop(chip);return}
+  if(!ev.target.closest('#chip-pop'))hidePop();
+});
+document.addEventListener('keydown',ev=>{if(ev.key==='Escape')hidePop()});
 </script></body></html>
 """
     OUT_PATH.write_text(body + script, encoding="utf-8")
