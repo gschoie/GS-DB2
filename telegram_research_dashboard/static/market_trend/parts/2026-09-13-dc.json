@@ -1,0 +1,222 @@
+{
+ "source": "DC인사이드",
+ "galleries": [
+  {
+   "id": "krstock",
+   "name": "국내주식갤러리",
+   "posts": 1205,
+   "capped": true,
+   "burst": 0.9,
+   "base_daily": 1316.4
+  },
+  {
+   "id": "stockus",
+   "name": "해외주식갤러리",
+   "posts": 2234,
+   "capped": true,
+   "burst": 0.7,
+   "base_daily": 3141.3
+  }
+ ],
+ "posts_sampled": 573,
+ "keywords": [
+  {
+   "term": "AI",
+   "count": 25,
+   "burst": 99.0,
+   "new": true
+  },
+  {
+   "term": "중국",
+   "count": 11,
+   "burst": 99.0,
+   "new": true
+  },
+  {
+   "term": "너네",
+   "count": 9,
+   "burst": 99.0,
+   "new": true
+  },
+  {
+   "term": "속도",
+   "count": 8,
+   "burst": 99.0,
+   "new": true
+  },
+  {
+   "term": "내가",
+   "count": 8,
+   "burst": 99.0,
+   "new": true
+  },
+  {
+   "term": "강남",
+   "count": 8,
+   "burst": 99.0,
+   "new": true
+  },
+  {
+   "term": "디아",
+   "count": 7,
+   "burst": 95.8,
+   "new": true
+  },
+  {
+   "term": "스타",
+   "count": 7,
+   "burst": 95.8,
+   "new": true
+  },
+  {
+   "term": "블리즈컨",
+   "count": 7,
+   "burst": 95.8,
+   "new": true
+  },
+  {
+   "term": "다들",
+   "count": 6,
+   "burst": 82.2,
+   "new": true
+  },
+  {
+   "term": "이미",
+   "count": 5,
+   "burst": 68.5,
+   "new": true
+  },
+  {
+   "term": "개발",
+   "count": 5,
+   "burst": 68.5,
+   "new": true
+  },
+  {
+   "term": "시대",
+   "count": 5,
+   "burst": 68.5,
+   "new": true
+  },
+  {
+   "term": "블리자드",
+   "count": 5,
+   "burst": 68.5,
+   "new": true
+  },
+  {
+   "term": "애들",
+   "count": 5,
+   "burst": 68.5,
+   "new": true
+  }
+ ],
+ "top_recommended": [
+  {
+   "gallery": "해외주식갤러리",
+   "title": "미주갤 서식하는 짱깨들이 온갖글은 다 념보내더니  ㅋㅋ",
+   "views": 7207,
+   "recommend": 189,
+   "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=17732696&exception_mode=recommend&page=1",
+   "time_kst": "09-12 13:11"
+  },
+  {
+   "gallery": "해외주식갤러리",
+   "title": "속보) 트럼프, 미국에 공장만 세우면 친중하겠다",
+   "views": 8246,
+   "recommend": 157,
+   "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=17733417&exception_mode=recommend&page=1",
+   "time_kst": "09-12 15:43"
+  },
+  {
+   "gallery": "해외주식갤러리",
+   "title": "토스 <-- 이새끼들 드립은 아무도 못이기겠네 ㅋㅋㅋㅋ",
+   "views": 8557,
+   "recommend": 113,
+   "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=17733961&exception_mode=recommend&page=1",
+   "time_kst": "09-12 17:44"
+  },
+  {
+   "gallery": "해외주식갤러리",
+   "title": "열의 아홉 차트 보는 사람들 특징",
+   "views": 9798,
+   "recommend": 112,
+   "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=17731494&exception_mode=recommend&page=1",
+   "time_kst": "09-12 09:49"
+  },
+  {
+   "gallery": "해외주식갤러리",
+   "title": "트럼프, 내가 주식으로 돈을 번것은 미국을 위한것이다",
+   "views": 6262,
+   "recommend": 104,
+   "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=17735086&exception_mode=recommend&page=1",
+   "time_kst": "09-12 21:36"
+  }
+ ],
+ "top_viewed": [
+  {
+   "gallery": "국내주식갤러리",
+   "title": "이 뉴스 뜨고 코랩 삼닉 지옥 가는중 ㅋㅋㅋ",
+   "views": 454,
+   "recommend": 0,
+   "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3471330&page=4",
+   "time_kst": "09-13 05:14"
+  },
+  {
+   "gallery": "국내주식갤러리",
+   "title": "다음주 월요일 국장 궁금하네...",
+   "views": 389,
+   "recommend": 1,
+   "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3471130&page=8",
+   "time_kst": "09-13 00:53"
+  },
+  {
+   "gallery": "국내주식갤러리",
+   "title": "둘이 같은 작가인가",
+   "views": 384,
+   "recommend": 0,
+   "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3471113&page=8",
+   "time_kst": "09-13 00:45"
+  },
+  {
+   "gallery": "국내주식갤러리",
+   "title": "램혁수들에게 초초초 대형악재 떴다 초비상 ㅋㅋ",
+   "views": 382,
+   "recommend": 1,
+   "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3471332&page=4",
+   "time_kst": "09-13 05:19"
+  },
+  {
+   "gallery": "해외주식갤러리",
+   "title": "속보) 블리자드, 블리즈컨에서 스타크래프트 차기작 발표",
+   "views": 372,
+   "recommend": 1,
+   "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=17736487&page=10",
+   "time_kst": "09-13 02:50"
+  },
+  {
+   "gallery": "국내주식갤러리",
+   "title": "반도체 개 좆됐네 시발 ㅋㅋㅋㅋㅋㅋㅋ",
+   "views": 367,
+   "recommend": 0,
+   "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3471345&page=3",
+   "time_kst": "09-13 05:30"
+  },
+  {
+   "gallery": "국내주식갤러리",
+   "title": "월요일 어떻게 되나요",
+   "views": 356,
+   "recommend": 0,
+   "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3471312&page=4",
+   "time_kst": "09-13 04:25"
+  },
+  {
+   "gallery": "국내주식갤러리",
+   "title": "삼전 월세 그거 삥땅친거 결과나온듯",
+   "views": 353,
+   "recommend": 0,
+   "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3471161&page=7",
+   "time_kst": "09-13 01:23"
+  }
+ ]
+}
