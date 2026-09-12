@@ -149,7 +149,12 @@ async def _dialog_directory(client, max_chats: int = 500) -> dict[str, object]:
     return directory
 
 
-async def _scan(config: dict, state: dict, probe: bool = False) -> tuple[list[dict], list[dict]]:
+async def _scan(config: dict, state: dict, probe: bool = False,
+                backfill_days: int | None = None,
+                ) -> tuple[list[dict], list[dict], list[dict]]:
+    """대화 스캔. backfill_days가 있으면 인뎁스 소급 모드 — last_id를 무시하고
+    그 날짜 창을 통째로 읽되 상태(last_id)는 건드리지 않는다(휴가·근태 수집과 무관).
+    """
     from adapters import DEVICE_INFO  # source_watcher와 단일 정본
     from telethon import TelegramClient
 
@@ -158,8 +163,9 @@ async def _scan(config: dict, state: dict, probe: bool = False) -> tuple[list[di
     if not api_id or not api_hash:
         raise SystemExit("TELEGRAM_API_ID/TELEGRAM_API_HASH가 필요합니다 (my.telegram.org 발급).")
 
-    lookback_days = int(config.get("lookback_days") or 14)
-    per_chat_limit = int(config.get("per_chat_limit") or 200)
+    lookback_days = backfill_days or int(config.get("lookback_days") or 14)
+    per_chat_limit = (int(config.get("backfill_limit") or 4000) if backfill_days
+                      else int(config.get("per_chat_limit") or 200))
     include_own = bool(config.get("include_own_messages"))
     since = datetime.now(timezone.utc) - timedelta(days=lookback_days)
 
@@ -167,6 +173,7 @@ async def _scan(config: dict, state: dict, probe: bool = False) -> tuple[list[di
     await client.connect()
     candidates: list[dict] = []
     att_hits: list[dict] = []  # 근태 확인 보고 (attendance.py)
+    idx_cands: list[dict] = []  # 인뎁스/발간 계획 후보 (indepth.py)
     try:
         if not await client.is_user_authorized():
             raise SystemExit(
@@ -205,7 +212,7 @@ async def _scan(config: dict, state: dict, probe: bool = False) -> tuple[list[di
 
             chat_state = chats.setdefault(chat_key, {})
             chat_state["name"] = name
-            last_id = int(chat_state.get("last_id") or 0)
+            last_id = 0 if backfill_days else int(chat_state.get("last_id") or 0)
             newest_id = last_id
             # min_id로 지난번 이후 새 메시지만. 첫 실행은 lookback 창으로 제한.
             # 내 메시지도 모아 둔다 — "출장 언제야?"(내 질문) → "9/15-9/18"(친구 답)처럼
@@ -220,46 +227,69 @@ async def _scan(config: dict, state: dict, probe: bool = False) -> tuple[list[di
                 timeline.append({"id": message.id, "out": bool(message.out),
                                  "text": (message.message or "").strip(), "dt": posted})
             timeline.reverse()  # 시간순으로
-            # 근태 보고는 상대가 보낸 메시지만 — 내가 쓴 "근태 체크해줘"류는 보고가 아니다.
-            from attendance import detect_attendance
+            picked = []
+            if not backfill_days:
+                # 근태 보고는 상대가 보낸 메시지만 — 내가 쓴 "근태 체크해줘"류는 보고가 아니다.
+                from attendance import detect_attendance
 
-            for msg in timeline:
-                if msg["out"] or not msg["text"]:
-                    continue
-                att = detect_attendance(msg["text"], msg["dt"].astimezone(KST))
-                if att:
-                    att_hits.append({
-                        "name": name,
-                        "month": att["month"],
-                        "explicit": bool(att.get("explicit")),
+                for msg in timeline:
+                    if msg["out"] or not msg["text"]:
+                        continue
+                    att = detect_attendance(msg["text"], msg["dt"].astimezone(KST))
+                    if att:
+                        att_hits.append({
+                            "name": name,
+                            "month": att["month"],
+                            "explicit": bool(att.get("explicit")),
+                            "uid": f"{entity.id}:{msg['id']}",
+                            "text": msg["text"],
+                            "msg_date": msg["dt"].astimezone(KST).isoformat(timespec="minutes"),
+                        })
+                # include_own=True: 내가 대신 적은 메시지도 이 대화 상대의 일정 후보가 된다.
+                picked = pick_candidates(timeline, allow_own=include_own)
+                for pick in picked:
+                    msg = timeline[pick["index"]]
+                    context_lines = [
+                        f"{'나' if prev['out'] else name}: {prev['text'][:120]}"
+                        for prev in timeline[max(0, pick["index"] - 10):pick["index"]]
+                        if prev["text"]
+                    ]
+                    candidates.append({
                         "uid": f"{entity.id}:{msg['id']}",
+                        "name": name,
                         "text": msg["text"],
                         "msg_date": msg["dt"].astimezone(KST).isoformat(timespec="minutes"),
+                        "context": "\n".join(context_lines),
+                        "kind_hint": pick["kind_hint"],
+                        "trigger": pick["trigger"],
+                        "by_me": bool(msg["out"]),
                     })
-            # include_own=True: 내가 대신 적은 메시지도 이 대화 상대의 일정 후보가 된다.
-            picked = pick_candidates(timeline, allow_own=include_own)
-            for pick in picked:
+                chat_state["last_id"] = newest_id  # 백필은 상태를 건드리지 않는다
+            # 인뎁스/발간 계획 후보 — 일반·백필 공통
+            from indepth import pick_indepth_candidates
+
+            idx_picked = pick_indepth_candidates(timeline)
+            for pick in idx_picked:
                 msg = timeline[pick["index"]]
                 context_lines = [
                     f"{'나' if prev['out'] else name}: {prev['text'][:120]}"
                     for prev in timeline[max(0, pick["index"] - 10):pick["index"]]
                     if prev["text"]
                 ]
-                candidates.append({
+                idx_cands.append({
                     "uid": f"{entity.id}:{msg['id']}",
                     "name": name,
                     "text": msg["text"],
                     "msg_date": msg["dt"].astimezone(KST).isoformat(timespec="minutes"),
                     "context": "\n".join(context_lines),
-                    "kind_hint": pick["kind_hint"],
                     "trigger": pick["trigger"],
                     "by_me": bool(msg["out"]),
                 })
-            chat_state["last_id"] = newest_id
-            print(f"  · {name}: 후보 {len(picked)}건 (마지막 메시지 id {newest_id})")
+            print(f"  · {name}: 후보 {len(picked)}건, 발간계획 후보 {len(idx_picked)}건"
+                  f" (마지막 메시지 id {newest_id})")
     finally:
         await client.disconnect()
-    return candidates, att_hits
+    return candidates, att_hits, idx_cands
 
 
 # ── 추출 (Gemini → 규칙 폴백) ──────────────────────────────────────────────
@@ -364,8 +394,10 @@ def extract(candidates: list[dict], owner: str = "") -> list[dict]:
 
 # ── 텔레그램 알림 ──────────────────────────────────────────────────────────
 
-def notify(new_entries: list[dict], fresh_att: list[dict] | None = None) -> None:
+def notify(new_entries: list[dict], fresh_att: list[dict] | None = None,
+           fresh_idx: list[dict] | None = None) -> None:
     fresh_att = fresh_att or []
+    fresh_idx = fresh_idx or []
     token = os.environ.get("TELEGRAM_BOT_TOKEN", "").strip()
     chat_id = os.environ.get("TELEGRAM_CHAT_ID", "").strip()
     if not token or not chat_id:
@@ -392,8 +424,20 @@ def notify(new_entries: list[dict], fresh_att: list[dict] | None = None) -> None
             lines.append(f"└ \"{watcher_notify.escape(hit['text'][:120])}\"")
             lines.append("")
         lines.append('근태 현황: <a href="https://gschoie.github.io/GS-DB2/attendance_report.html">대시보드</a>')
+    if fresh_idx:
+        if lines:
+            lines.append("")
+        lines += [f"📚 <b>발간 계획 감지</b> ({len(fresh_idx)}건)", ""]
+        for entry in sorted(fresh_idx, key=lambda e: (e.get("target") or "9999", e["name"])):
+            when = entry.get("target") or entry.get("target_text") or "시점 미정"
+            topic = entry.get("topic") or "주제 미상"
+            lines.append(f"<b>{watcher_notify.escape(entry['name'])}</b> — "
+                         f"{watcher_notify.escape(topic)} ({watcher_notify.escape(str(when))})")
+            lines.append(f"└ \"{watcher_notify.escape(entry['text'][:120])}\"")
+            lines.append("")
+        lines.append('발간 계획: <a href="https://gschoie.github.io/GS-DB2/indepth_report.html">대시보드</a>')
     watcher_notify.send("\n".join(lines), token=token, chat_id=chat_id)
-    print(f"[알림] 휴가 {len(new_entries)}건 + 근태 {len(fresh_att)}건 발송")
+    print(f"[알림] 휴가 {len(new_entries)}건 + 근태 {len(fresh_att)}건 + 발간계획 {len(fresh_idx)}건 발송")
 
 
 def span_label(entry: dict) -> str:
@@ -417,8 +461,8 @@ def run(dry_run: bool = False, probe: bool = False) -> None:
         asyncio.run(_scan(config, state, probe=True))
         return
 
-    candidates, att_hits = asyncio.run(_scan(config, state))
-    print(f"후보 {len(candidates)}건, 근태 보고 {len(att_hits)}건")
+    candidates, att_hits, idx_cands = asyncio.run(_scan(config, state))
+    print(f"후보 {len(candidates)}건, 근태 보고 {len(att_hits)}건, 발간계획 후보 {len(idx_cands)}건")
     owner = str(config.get("owner_name") or "").strip() or next(
         (f["name"] for f in config["friends"] if f.get("scan") is False), "")
     entries = extract(candidates, owner=owner)
@@ -450,6 +494,8 @@ def run(dry_run: bool = False, probe: bool = False) -> None:
             print(f"  - {entry['name']} {span_label(entry)} [{entry['engine']}] :: {entry['text'][:60]}")
         for hit in att_hits:
             print(f"  - [근태] {hit['name']} {hit['month']} :: {hit['text'][:60]}")
+        for cand in idx_cands:
+            print(f"  - [발간계획 후보] {cand['name']} :: {cand['text'][:60]}")
         return
 
     for entry in entries:
@@ -467,11 +513,40 @@ def run(dry_run: bool = False, probe: bool = False) -> None:
         print(f"근태 신규 확인 {len(fresh_att)}건: "
               + ", ".join(f"{h['name']}({h['month']})" for h in fresh_att))
 
+    import indepth
+
+    idx_store = indepth.load_store()
+    # 아는 uid는 Gemini에 다시 묻지 않는다(수동 수정 보호 + 호출 절약).
+    idx_new_cands = [c for c in idx_cands if c["uid"] not in idx_store.get("entries", {})]
+    fresh_idx = indepth.record(idx_store, indepth.extract(idx_new_cands))
+    indepth.save_store(idx_store)
+    indepth.build_page(idx_store)
+    if fresh_idx:
+        print(f"발간계획 신규 {len(fresh_idx)}건: "
+              + ", ".join(f"{e['name']}({e.get('topic') or '?'})" for e in fresh_idx))
+
     from render_page import build_page
 
     build_page(store)
-    if new_entries or fresh_att:
-        notify(new_entries, fresh_att)
+    if new_entries or fresh_att or fresh_idx:
+        notify(new_entries, fresh_att, fresh_idx)
+
+
+def run_indepth_backfill(days: int = 92) -> None:
+    """지난 석 달 대화에서 발간 계획만 소급 수집. last_id·휴가·근태는 건드리지 않는다."""
+    config = load_config()
+    state = load_json(STATE_PATH, {"chats": {}})  # 읽기만 — 저장하지 않는다
+    _, _, idx_cands = asyncio.run(_scan(config, state, backfill_days=days))
+    print(f"백필 발간계획 후보 {len(idx_cands)}건 (지난 {days}일)")
+
+    import indepth
+
+    idx_store = indepth.load_store()
+    new_cands = [c for c in idx_cands if c["uid"] not in idx_store.get("entries", {})]
+    fresh = indepth.record(idx_store, indepth.extract(new_cands))
+    indepth.save_store(idx_store)
+    indepth.build_page(idx_store)
+    print(f"백필 확정 {len(fresh)}건 (총 {len(idx_store['entries'])}건) — 텔레그램 발송 없음(대시보드만)")
 
 
 def _apply_op(op: str, body: dict) -> None:
@@ -544,6 +619,10 @@ def add_manual(raw: str) -> None:
         import attendance
 
         return attendance.apply_op(body)
+    if op.startswith("idx"):  # 발간계획 페이지 op(idx-done/idx-note/idx-del)
+        import indepth
+
+        return indepth.apply_op(body)
     if op:
         return _apply_op(op, body)
 
@@ -599,12 +678,16 @@ def main() -> None:
     parser.add_argument("--dry-run", action="store_true")
     parser.add_argument("--rebuild-page", action="store_true")
     parser.add_argument("--add", metavar="JSON", help='직접 기입 {"name","start","end","kind","note"}')
+    parser.add_argument("--indepth-backfill", action="store_true",
+                        help="지난 석 달 대화에서 발간 계획 소급 수집 (last_id 불변)")
     args = parser.parse_args()
 
     if args.check:
         check()
     elif args.add is not None:
         add_manual(args.add)
+    elif args.indepth_backfill:
+        run_indepth_backfill()
     elif args.rebuild_page:
         from render_page import build_page
 
@@ -612,6 +695,9 @@ def main() -> None:
         import attendance
 
         attendance.build_page()
+        import indepth
+
+        indepth.build_page()
     else:
         run(dry_run=args.dry_run, probe=args.probe)
 

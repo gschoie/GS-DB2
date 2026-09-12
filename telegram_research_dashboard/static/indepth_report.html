@@ -1,0 +1,144 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>인뎁스/자료 발간 계획</title><style>
+:root{color-scheme:light}
+body{margin:0;padding:28px 24px 60px;background:#fff;color:#333c46;
+  font-family:'Pretendard','Malgun Gothic','Apple SD Gothic Neo',sans-serif;line-height:1.7;font-size:15px}
+.wrap{max-width:900px;margin:0 auto}
+h1{font-size:21px;color:#1f2937;margin:0 0 4px}
+.meta{color:#8a94a0;font-size:12.5px;margin-bottom:22px}
+.run-btn{background:#f5f8fb;border:1px solid #d4dbe3;border-radius:8px;padding:2px 10px;
+  font-size:12.5px;cursor:pointer;color:#2b5f8a;margin-left:8px}
+h2{font-size:16.5px;color:#2b5f8a;margin:30px 0 10px;padding-bottom:6px;border-bottom:1px solid #e3e8ee}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th,td{padding:8px 10px;border-bottom:1px solid #edf0f4;text-align:left;vertical-align:top}
+th{color:#8a94a0;font-weight:600;font-size:12.5px}
+.name{font-weight:700;color:#1f2937;white-space:nowrap}
+.topic{font-weight:600;color:#2b5f8a}
+.badge{display:inline-block;padding:1px 8px;border-radius:20px;font-size:12px;
+  background:#e8f0fe;color:#2b5f8a;border:1px solid #c9dcf5;white-space:nowrap}
+.badge.review{background:#fdecec;color:#a43c31;border-color:#f2cfcb}
+.tgt{white-space:nowrap}
+.tgt .vague{color:#8a6d1a}
+.chk{font-size:17px;cursor:pointer;user-select:none;display:inline-block;min-width:24px;text-align:center}
+.chk.on{color:#2b7a4b}
+.chk.off{color:#c3ccd6}
+tr.pending td{opacity:.55}
+tr.removed{display:none}
+.src{color:#8a94a0;font-size:12.5px}
+.note-x{color:#8a6d1a;font-size:13px}
+.acts{float:right;white-space:nowrap}
+.acts button{background:none;border:none;cursor:pointer;font-size:13px;opacity:.45;padding:0 3px}
+.acts button:hover{opacity:1}
+.empty{color:#8a94a0;padding:18px 0}
+.hint{color:#8a94a0;font-size:12.5px;margin-top:16px}
+@media (max-width:640px){
+  body{padding:18px 10px 50px}
+  table,thead,tbody,tr,th,td{display:block}
+  thead{display:none}
+  tr{border:1px solid #e3e8ee;border-radius:10px;margin-bottom:10px;padding:8px 10px}
+  td{border:none;padding:2px 0}
+}
+</style></head><body><div class="wrap">
+<h1>📚 인뎁스/자료 발간 계획</h1>
+<p class="meta">팀원들과의 텔레그램 1:1 대화에서 자료 발간 계획을 자동으로 잡아 정리 ·
+갱신 2026-09-12 19:13 KST · 총 0건
+<button id="run-btn" class="run-btn" onclick="runScan()">🔄 지금 수집</button>
+<span id="run-status"></span></p>
+<h2>발간 예정 (0건)</h2>
+<p class="empty">잡힌 발간 계획이 없습니다.</p>
+<h2>확인 필요 (0건)</h2>
+<p class="empty">확인할 항목이 없습니다.</p>
+<h2>지난 계획 · 발간 완료 (0건)</h2>
+<p class="empty">아직 없습니다.</p>
+<p id="idx-status"></p>
+<p class="hint">발간 칸 ☐를 누르면 완료 처리(✅), ✏️는 메모, 🗑는 삭제.
+"인뎁스"라고 안 적어도 발간·커버리지·자료 작성 맥락이면 잡습니다 — 잘못 잡힌 건 지워 주세요.</p>
+</div>
+<script>
+const EP="https://script.google.com/macros/s/AKfycbx3RjIjtlO2Z6fIYo2T3LhJrFg9Wp2hS7dMS3Is52-JVF1hizoCWewbQ1uM_v5sdhR2jw/exec";
+const PAGE_STAMP="2026-09-12 19:13";
+</script>
+<script>
+
+const $id=i=>document.getElementById(i);
+
+async function watchDeploy(){
+  for(let i=0;i<24;i++){
+    await new Promise(r=>setTimeout(r,15000));
+    try{
+      const r=await fetch('indepth_report.html?t='+Date.now(),{cache:'no-store'});
+      const m=(await r.text()).match(/갱신 ([0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2})/);
+      if(m&&m[1]!==PAGE_STAMP){location.reload();return}
+    }catch(e){}
+  }
+  const s=$id('idx-status');
+  if(s)s.textContent='서버 반영 확인이 오래 걸립니다 — 잠시 뒤 수동 새로고침해 주세요';
+}
+
+async function sendOp(payload){
+  const status=$id('idx-status');
+  status.textContent='요청 중…';
+  try{
+    const r=await fetch(EP,{method:'POST',
+      body:JSON.stringify({workflow:'vacation',entry:JSON.stringify(payload)})});
+    try{const d=await r.json();
+      if(d&&d.ok===false){status.textContent='⚠ 거절 '+(d.code||'?')+' — '+(d.error||'GAS 프록시 확인 필요');return false}
+    }catch(e){}
+    status.textContent='✅ 반영 요청됨 — 서버 반영이 끝나면 자동 새로고침됩니다';
+    watchDeploy();
+    return true;
+  }catch(e){status.textContent='실패: '+e.message;return false}
+}
+
+async function runScan(){
+  const btn=$id('run-btn'),status=$id('run-status');
+  btn.disabled=true;status.textContent='요청 중…';
+  try{
+    const r=await fetch(EP,{method:'POST',body:JSON.stringify({workflow:'vacation',mode:'run'})});
+    try{const d=await r.json();
+      if(d&&d.ok===false){status.textContent='⚠ 거절 '+(d.code||'?')+' — '+(d.error||'GAS 프록시 확인 필요');btn.disabled=false;return}
+    }catch(e){}
+    status.textContent='✅ 수집 중 — 2~3분 뒤 자동 새로고침됩니다';
+    watchDeploy();
+  }catch(e){status.textContent='실패: '+e.message;btn.disabled=false}
+}
+
+// 발간 완료 토글
+document.addEventListener('click',async ev=>{
+  const chk=ev.target.closest('.chk');if(!chk)return;
+  const row=chk.closest('tr');if(!row||!row.dataset.uid)return;
+  const next=row.dataset.done!=='1';
+  if(!confirm((next?'발간 완료 처리':'완료 해제')+'할까요?'))return;
+  if(!await sendOp({op:'idx-done',uid:row.dataset.uid,done:next}))return;
+  row.dataset.done=next?'1':'0';
+  row.classList.add('pending');
+  chk.textContent=next?'✅':'☐';
+  chk.classList.toggle('on',next);chk.classList.toggle('off',!next);
+});
+
+// ✏️ 메모 / 🗑 삭제
+document.addEventListener('click',async ev=>{
+  const btn=ev.target.closest('.acts button');if(!btn)return;
+  const row=btn.closest('tr');if(!row||!row.dataset.uid)return;
+  if(btn.dataset.act==='del'){
+    if(!confirm('이 항목을 삭제할까요?'))return;
+    if(!await sendOp({op:'idx-del',uid:row.dataset.uid}))return;
+    row.classList.add('removed');
+  }else{
+    const value=prompt('메모',row.dataset.note||'');
+    if(value===null)return;
+    if(!await sendOp({op:'idx-note',uid:row.dataset.uid,note:value.trim()}))return;
+    row.dataset.note=value.trim();
+    row.classList.add('pending');
+    const cell=row.querySelector('.c-note');
+    let el=cell.querySelector('.note-x');
+    if(!value.trim()){if(el)el.remove()}
+    else{
+      if(!el){el=document.createElement('div');el.className='note-x';
+        cell.insertBefore(el,cell.querySelector('.src'))}
+      el.textContent='📝 '+value.trim();
+    }
+  }
+});
+</script></body></html>
