@@ -333,7 +333,7 @@ details.sec[open]>summary{margin-bottom:10px}
 .chip.dragging{opacity:.4}
 .cal td.drop-hover{background:#eaf6ec;box-shadow:inset 0 0 0 2px #7cc79a}
 .cal-title{font-size:15px;color:#1f2937;margin:4px 0 6px;font-weight:700}
-#cal-strip{display:grid;grid-template-columns:1fr 1fr;gap:18px;align-items:start}
+#cal-strip{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;align-items:start}
 .cal-nav{display:flex;align-items:center;gap:10px;margin:4px 0 8px}
 .cal-nav button{background:#f5f8fb;border:1px solid #d4dbe3;border-radius:8px;
   padding:3px 12px;font-size:14px;cursor:pointer;color:#2b5f8a}
@@ -691,18 +691,19 @@ document.addEventListener('click',async ev=>{
   }
 });
 
-// 달력 페이저 — 두 달씩 보여주고 ◀▶로 한 달 이동
+// 달력 페이저 — 석 달씩 보여주고 ◀▶로 한 달 이동
+const CAL_SHOW=3;
 const calMonths=[...document.querySelectorAll('.cal-month')];
 let calIdx=0;
 function calRender(){
-  const maxIdx=Math.max(0,calMonths.length-2);
+  const maxIdx=Math.max(0,calMonths.length-CAL_SHOW);
   calIdx=Math.min(Math.max(0,calIdx),maxIdx);
-  calMonths.forEach((m,i)=>{m.hidden=!(i===calIdx||i===calIdx+1)});
-  const first=calMonths[calIdx],second=calMonths[calIdx+1];
+  calMonths.forEach((m,i)=>{m.hidden=!(i>=calIdx&&i<calIdx+CAL_SHOW)});
+  const shown=calMonths.slice(calIdx,calIdx+CAL_SHOW);
   const label=$id('cal-label');
-  if(label&&first){
+  if(label&&shown.length){
     const name=el=>el.querySelector('.cal-title').textContent;
-    label.textContent=second?name(first)+' · '+name(second):name(first);
+    label.textContent=shown.map(name).join(' · ');
   }
   const prev=$id('cal-prev'),next=$id('cal-next');
   if(prev)prev.disabled=calIdx<=0;
