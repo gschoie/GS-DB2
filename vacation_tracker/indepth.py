@@ -345,7 +345,7 @@ details.sec[open]>summary{margin-bottom:10px}
 .chip.dragging{opacity:.4}
 .cal td.drop-hover{background:#eaf6ec;box-shadow:inset 0 0 0 2px #7cc79a}
 .cal-title{font-size:15px;color:#1f2937;margin:4px 0 6px;font-weight:700}
-#cal-strip{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;align-items:start}
+#cal-strip{display:grid;grid-template-columns:1fr 1fr;gap:18px;align-items:start}
 .cal-nav{display:flex;align-items:center;gap:10px;margin:4px 0 8px}
 .cal-nav button{background:#f5f8fb;border:1px solid #d4dbe3;border-radius:8px;
   padding:3px 12px;font-size:14px;cursor:pointer;color:#2b5f8a}
@@ -731,8 +731,8 @@ document.addEventListener('click',ev=>{
   sel.addEventListener('blur',()=>finish(sel.value!==cur));
 });
 
-// 달력 페이저 — 석 달씩 보여주고 ◀▶로 한 달 이동
-const CAL_SHOW=3;
+// 달력 페이저 — 두 달씩 보여주고 ◀▶로 한 달 이동
+const CAL_SHOW=2;
 const calMonths=[...document.querySelectorAll('.cal-month')];
 let calIdx=0;
 function calRender(){
