@@ -9,7 +9,7 @@ Gemini가 문맥으로 '발간 계획인가'를 판정해 {주제, 예정일, �
 Gemini가 없으면 강한 키워드(인뎁스·커버리지·개시·발간)만 needs_review로 남긴다.
 
 저장 state/indepth.json, 화면 static/indepth_report.html. 완료✓·메모·삭제는
-기입 폼과 같은 GAS 경로에 op(idx-done/idx-note/idx-del)를 얹는다 — GAS 변경 없음.
+기입 폼과 같은 GAS 경로에 op(idx-done/idx-note/idx-target/idx-del)를 얹는다 — GAS 변경 없음.
 """
 
 from __future__ import annotations
@@ -97,7 +97,10 @@ GEMINI_IDX_PROMPT = """너는 증권사 리서치팀장의 텔레그램 1:1 대�
   남의 자료 공유, 이미 발간된 자료 링크, 자료 요청("자료 보내줘"), 단순 질문은 false.
 - 맥락의 질문(예: "인뎁스 언제 나와?")에 대한 답이면 plan=true — 주제·종류는 맥락에서 찾아라.
 - "내일", "다음주 금요일" 같은 상대 시점은 메시지의 보낸 시각 기준으로 target을 계산한다.
-  "9월 중", "추석 전"처럼 특정일이 없으면 target=null로 두고 target_text에 그대로 남겨라.
+- "9월 중", "9월 마지막주~10월 첫째주쯤", "추석 전"처럼 모호하거나 구간인 표현도
+  그 표현이 가리키는 **적당한 대표 날짜 하나**를 target으로 추정해 채워라
+  (구간이면 중간~끝 무렵, "N월 중"이면 그 달 중순). 원문 표현은 target_text에 그대로
+  남겨라. 시점 언급이 아예 없을 때만 target=null.
 - topic은 종목명/산업명 위주로 짧게. 정 모르겠으면 빈 문자열."""
 
 
@@ -250,6 +253,20 @@ def apply_op(body: dict) -> None:
     elif op == "idx-note":
         entry["note"] = str(body.get("note") or "").strip()
         print(f"발간계획 메모: {entry.get('name')} ({uid}) → {entry['note']!r}")
+    elif op == "idx-target":
+        # 날짜 수정. 빈 값이면 날짜를 지운다(시점 표현만 남음). 원문 표현은 보존.
+        target = str(body.get("target") or "").strip()
+        if target:
+            try:
+                datetime.strptime(target, "%Y-%m-%d")
+            except ValueError as exc:
+                raise SystemExit(f"날짜 형식이 틀렸습니다(YYYY-MM-DD): {exc}")
+            entry["target"] = target
+        else:
+            entry["target"] = None
+        entry["needs_review"] = False
+        print(f"발간계획 날짜: {entry.get('name')} {entry.get('topic')!r} ({uid}) → "
+              f"{entry['target'] or '미정'}")
     elif op == "idx-done":
         entry["done"] = bool(body.get("done"))
         print(f"발간계획 {'완료' if entry['done'] else '완료 해제'}: "
@@ -311,6 +328,7 @@ details.sec[open]>summary{margin-bottom:10px}
   color:#2b5f8a;border:1px solid #c9dcf5;font-size:11.5px;white-space:nowrap;
   overflow:hidden;text-overflow:ellipsis;cursor:pointer}
 .chip.fin{background:#eef1f5;color:#7b8694;border-color:#dbe1e8;text-decoration:line-through}
+.chip.pending{opacity:.55;border-style:dashed}
 .cal-title{font-size:15px;color:#1f2937;margin:4px 0 6px;font-weight:700}
 #cal-strip{display:grid;grid-template-columns:1fr 1fr;gap:18px;align-items:start}
 .cal-nav{display:flex;align-items:center;gap:10px;margin:4px 0 8px}
@@ -323,6 +341,10 @@ details.sec[open]>summary{margin-bottom:10px}
 #chip-pop .t{font-weight:700;color:#1f2937;margin-bottom:4px}
 #chip-pop .quote{color:#57616c;margin-top:6px;font-size:12.5px}
 #chip-pop .close{float:right;cursor:pointer;color:#8a94a0}
+#chip-pop .pop-acts{margin-top:8px;display:flex;gap:8px;flex-wrap:wrap}
+#chip-pop .pop-acts button{background:#f5f8fb;color:#2b5f8a;border:1px solid #d4dbe3;
+  border-radius:8px;padding:3px 10px;font-size:12.5px;cursor:pointer}
+#chip-pop .pop-acts button:hover{border-color:#9fb6cc}
 @media (max-width:640px){
   body{padding:18px 10px 50px}
   table.lst,table.lst thead,table.lst tbody,table.lst tr,table.lst th,table.lst td{display:block}
@@ -337,7 +359,11 @@ details.sec[open]>summary{margin-bottom:10px}
 def _fmt_target(entry: dict) -> str:
     if entry.get("target"):
         dt = datetime.fromisoformat(entry["target"])
-        return f"{dt.strftime('%m/%d')}({WEEKDAY_KO[dt.weekday()]})"
+        label = f"{dt.strftime('%m/%d')}({WEEKDAY_KO[dt.weekday()]})"
+        if entry.get("target_text"):  # 모호한 표현에서 추정한 날짜 — ≈로 표시
+            label += (f'<span class="vague" title="원문: '
+                      f'{html.escape(entry["target_text"])}">≈</span>')
+        return label
     if entry.get("target_text"):
         return f'<span class="vague">{html.escape(entry["target_text"])}</span>'
     return '<span class="vague">미정</span>'
@@ -358,13 +384,14 @@ def _row(uid: str, entry: dict) -> str:
     note = str(entry.get("note") or "")
     note_html = f'<div class="note-x">📝 {html.escape(note)}</div>' if note else ""
     return (f'<tr data-uid="{html.escape(uid)}" data-done="{1 if done else 0}"'
-            f' data-note="{html.escape(note)}">'
+            f' data-note="{html.escape(note)}" data-target="{html.escape(entry.get("target") or "")}">'
             f'<td class="c-name name">{html.escape(entry.get("name") or "")}</td>'
             f'<td class="c-topic topic">{html.escape(entry.get("topic") or "—")}</td>'
             f'<td class="c-tgt tgt">{_fmt_target(entry)}</td>'
             f'<td class="c-kind">{badge}</td>'
             f'<td class="c-done">{mark}</td>'
             f'<td class="c-note"><span class="acts">'
+            f'<button data-act="target" title="날짜 수정">📅</button>'
             f'<button data-act="note" title="메모">✏️</button>'
             f'<button data-act="del" title="삭제">🗑</button></span>'
             f'{note_html}'
@@ -386,12 +413,14 @@ def _section(title: str, count: int, inner: str, is_open: bool) -> str:
             f'<summary>{title} ({count}건)</summary>{inner}</details>')
 
 
-def _chip(entry: dict) -> str:
+def _chip(uid: str, entry: dict) -> str:
     label = entry.get("name") or ""
     if entry.get("topic"):
         label += f"·{entry['topic']}"
     cls = "chip fin" if entry.get("done") else "chip"
     return (f'<span class="{cls}"'
+            f' data-uid="{html.escape(uid)}"'
+            f' data-done="{1 if entry.get("done") else 0}"'
             f' data-name="{html.escape(entry.get("name") or "")}"'
             f' data-topic="{html.escape(entry.get("topic") or "")}"'
             f' data-kind="{html.escape(entry.get("kind") or "")}"'
@@ -402,14 +431,14 @@ def _chip(entry: dict) -> str:
             f'{html.escape(label[:14])}</span>')
 
 
-def _calendar(entries: list[dict], today_d: date) -> str:
+def _calendar(items: list[tuple[str, dict]], today_d: date) -> str:
     """발간 예정일(target)이 있는 항목을 월별 달력에 칩으로. ◀▶ 두 달씩 이동."""
-    per_day: dict[date, list[dict]] = {}
-    for entry in entries:
+    per_day: dict[date, list[tuple[str, dict]]] = {}
+    for uid, entry in items:
         if not entry.get("target"):
             continue
         try:
-            per_day.setdefault(date.fromisoformat(entry["target"]), []).append(entry)
+            per_day.setdefault(date.fromisoformat(entry["target"]), []).append((uid, entry))
         except ValueError:
             continue
 
@@ -448,7 +477,7 @@ def _calendar(entries: list[dict], today_d: date) -> str:
                     continue
                 if day == today_d:
                     cls.append("today")
-                chips = "".join(_chip(e) for e in per_day.get(day, ()))
+                chips = "".join(_chip(u, e) for u, e in per_day.get(day, ()))
                 cells.append(f'<td class="{" ".join(cls)}">'
                              f'<div class="d">{day.day}</div>{chips}</td>')
             rows.append("<tr>" + "".join(cells) + "</tr>")
@@ -495,7 +524,7 @@ def build_page(store: dict | None = None) -> None:
 <span id="run-status"></span></p>
 {_section("📌 발간 예정", len(upcoming), _table(upcoming, "잡힌 발간 계획이 없습니다."), True)}
 {_section("🗓️ 발간 달력", sum(1 for _, e in items if e.get("target")),
-          _calendar([e for _, e in items], now.date()), True)}
+          _calendar(items, now.date()), True)}
 {_section("❓ 확인 필요", len(review), _table(review, "확인할 항목이 없습니다."), bool(review))}
 {_section("🗄️ 지난 계획 · 발간 완료", len(past), _table(past, "아직 없습니다."), False)}
 <p id="idx-status"></p>
@@ -539,6 +568,28 @@ async function sendOp(payload){
   }catch(e){status.textContent='실패: '+e.message;return false}
 }
 
+function normDate(s){
+  s=(s||'').trim();
+  if(!s)return '';
+  let m=s.match(/^(\d{4})-(\d{1,2})-(\d{1,2})$/);
+  if(m)return m[1]+'-'+m[2].padStart(2,'0')+'-'+m[3].padStart(2,'0');
+  m=s.match(/^(\d{1,2})[\/.](\d{1,2})$/);
+  if(m)return new Date().getFullYear()+'-'+m[1].padStart(2,'0')+'-'+m[2].padStart(2,'0');
+  return null;
+}
+async function editTarget(uid,current){
+  const value=prompt('발간 예정일 (YYYY-MM-DD 또는 9/29 형식, 비우면 미정)',current||'');
+  if(value===null)return;
+  const norm=normDate(value);
+  if(norm===null){alert('날짜 형식을 못 읽었습니다: '+value);return}
+  if(!await sendOp({op:'idx-target',uid:uid,target:norm}))return;
+  const row=document.querySelector('tr[data-uid="'+CSS.escape(uid)+'"]');
+  if(row){row.dataset.target=norm;row.classList.add('pending');
+    const t=row.querySelector('.c-tgt');if(t)t.textContent=norm||'미정'}
+  document.querySelectorAll('.chip[data-uid="'+CSS.escape(uid)+'"]').forEach(c=>{
+    c.dataset.target=norm;c.classList.add('pending')});
+}
+
 async function runScan(){
   const btn=$id('run-btn'),status=$id('run-status');
   btn.disabled=true;status.textContent='요청 중…';
@@ -565,7 +616,7 @@ document.addEventListener('click',async ev=>{
   chk.classList.toggle('on',next);chk.classList.toggle('off',!next);
 });
 
-// ✏️ 메모 / 🗑 삭제
+// 📅 날짜 / ✏️ 메모 / 🗑 삭제
 document.addEventListener('click',async ev=>{
   const btn=ev.target.closest('.acts button');if(!btn)return;
   const row=btn.closest('tr');if(!row||!row.dataset.uid)return;
@@ -573,6 +624,8 @@ document.addEventListener('click',async ev=>{
     if(!confirm('이 항목을 삭제할까요?'))return;
     if(!await sendOp({op:'idx-del',uid:row.dataset.uid}))return;
     row.classList.add('removed');
+  }else if(btn.dataset.act==='target'){
+    editTarget(row.dataset.uid,row.dataset.target||'');
   }else{
     const value=prompt('메모',row.dataset.note||'');
     if(value===null)return;
@@ -615,7 +668,7 @@ if(calMonths.length){
   calRender();
 }
 
-// 달력 칩 클릭 → 상세 팝업 (읽기 전용 — 편집은 표에서)
+// 달력 칩 클릭 → 상세 팝업 (날짜·메모·완료·삭제 편집 가능)
 let chipPop=null;
 function hidePop(){if(chipPop){chipPop.remove();chipPop=null}}
 function showPop(chip){
@@ -632,6 +685,41 @@ function showPop(chip){
   if(d.note){const n=document.createElement('div');n.textContent='📝 '+d.note;chipPop.appendChild(n)}
   if(d.text){const q=document.createElement('div');q.className='quote';
     q.textContent='“'+d.text+'”';chipPop.appendChild(q)}
+  if(d.uid){
+    const uid=d.uid,isDone=d.done==='1';
+    const acts=document.createElement('div');acts.className='pop-acts';
+    const mk=(label,fn)=>{const b=document.createElement('button');b.textContent=label;
+      b.addEventListener('click',fn);acts.appendChild(b)};
+    mk('📅 날짜',()=>{hidePop();editTarget(uid,d.target||'')});
+    mk('✏️ 메모',async()=>{
+      const value=prompt('메모',d.note||'');
+      if(value===null)return;
+      hidePop();
+      if(!await sendOp({op:'idx-note',uid:uid,note:value.trim()}))return;
+      document.querySelectorAll('.chip[data-uid="'+CSS.escape(uid)+'"]').forEach(c=>{c.dataset.note=value.trim()});
+      const row=document.querySelector('tr[data-uid="'+CSS.escape(uid)+'"]');
+      if(row){row.dataset.note=value.trim();row.classList.add('pending')}
+    });
+    mk(isDone?'↩️ 완료 해제':'✅ 발간 완료',async()=>{
+      hidePop();
+      if(!await sendOp({op:'idx-done',uid:uid,done:!isDone}))return;
+      document.querySelectorAll('.chip[data-uid="'+CSS.escape(uid)+'"]').forEach(c=>{
+        c.dataset.done=!isDone?'1':'0';c.classList.toggle('fin',!isDone)});
+      const row=document.querySelector('tr[data-uid="'+CSS.escape(uid)+'"]');
+      if(row){row.dataset.done=!isDone?'1':'0';row.classList.add('pending');
+        const chk=row.querySelector('.chk');
+        if(chk){chk.textContent=!isDone?'✅':'☐';chk.classList.toggle('on',!isDone);chk.classList.toggle('off',isDone)}}
+    });
+    mk('🗑 삭제',async()=>{
+      if(!confirm('이 항목을 삭제할까요?'))return;
+      hidePop();
+      if(!await sendOp({op:'idx-del',uid:uid}))return;
+      document.querySelectorAll('.chip[data-uid="'+CSS.escape(uid)+'"]').forEach(c=>c.remove());
+      const row=document.querySelector('tr[data-uid="'+CSS.escape(uid)+'"]');
+      if(row)row.classList.add('removed');
+    });
+    chipPop.appendChild(acts);
+  }
   document.body.appendChild(chipPop);
   const r=chip.getBoundingClientRect(),pw=chipPop.offsetWidth,ph=chipPop.offsetHeight;
   let left=Math.min(Math.max(8,r.left),window.innerWidth-pw-8);
