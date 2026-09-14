@@ -329,6 +329,9 @@ details.sec[open]>summary{margin-bottom:10px}
   overflow:hidden;text-overflow:ellipsis;cursor:pointer}
 .chip.fin{background:#eef1f5;color:#7b8694;border-color:#dbe1e8;text-decoration:line-through}
 .chip.pending{opacity:.55;border-style:dashed}
+.chip{cursor:grab}
+.chip.dragging{opacity:.4}
+.cal td.drop-hover{background:#eaf6ec;box-shadow:inset 0 0 0 2px #7cc79a}
 .cal-title{font-size:15px;color:#1f2937;margin:4px 0 6px;font-weight:700}
 #cal-strip{display:grid;grid-template-columns:1fr 1fr;gap:18px;align-items:start}
 .cal-nav{display:flex;align-items:center;gap:10px;margin:4px 0 8px}
@@ -418,7 +421,7 @@ def _chip(uid: str, entry: dict) -> str:
     if entry.get("topic"):
         label += f"·{entry['topic']}"
     cls = "chip fin" if entry.get("done") else "chip"
-    return (f'<span class="{cls}"'
+    return (f'<span class="{cls}" draggable="true"'
             f' data-uid="{html.escape(uid)}"'
             f' data-done="{1 if entry.get("done") else 0}"'
             f' data-name="{html.escape(entry.get("name") or "")}"'
@@ -478,7 +481,7 @@ def _calendar(items: list[tuple[str, dict]], today_d: date) -> str:
                 if day == today_d:
                     cls.append("today")
                 chips = "".join(_chip(u, e) for u, e in per_day.get(day, ()))
-                cells.append(f'<td class="{" ".join(cls)}">'
+                cells.append(f'<td class="{" ".join(cls)}" data-date="{day.isoformat()}">'
                              f'<div class="d">{day.day}</div>{chips}</td>')
             rows.append("<tr>" + "".join(cells) + "</tr>")
         head = "".join(
@@ -528,7 +531,8 @@ def build_page(store: dict | None = None) -> None:
 {_section("❓ 확인 필요", len(review), _table(review, "확인할 항목이 없습니다."), bool(review))}
 {_section("🗄️ 지난 계획 · 발간 완료", len(past), _table(past, "아직 없습니다."), False)}
 <p id="idx-status"></p>
-<p class="hint">발간 칸 ☐를 누르면 완료 처리(✅), ✏️는 메모, 🗑는 삭제.
+<p class="hint">발간 칸 ☐를 누르면 완료 처리(✅), 📅는 날짜 수정, ✏️는 메모, 🗑는 삭제.
+달력 칩은 <b>끌어다 다른 날짜에 놓으면</b> 예정일이 옮겨집니다(모바일은 📅 버튼).
 "인뎁스"라고 안 적어도 발간·커버리지·자료 작성 맥락이면 잡습니다 — 잘못 잡힌 건 지워 주세요.</p>
 </div>
 <script>
@@ -577,18 +581,62 @@ function normDate(s){
   if(m)return new Date().getFullYear()+'-'+m[1].padStart(2,'0')+'-'+m[2].padStart(2,'0');
   return null;
 }
+async function setTarget(uid,norm){
+  if(!await sendOp({op:'idx-target',uid:uid,target:norm}))return false;
+  const row=document.querySelector('tr[data-uid="'+CSS.escape(uid)+'"]');
+  if(row){row.dataset.target=norm;row.classList.add('pending');
+    const t=row.querySelector('.c-tgt');if(t)t.textContent=norm||'미정'}
+  document.querySelectorAll('.chip[data-uid="'+CSS.escape(uid)+'"]').forEach(c=>{
+    c.dataset.target=norm;c.classList.add('pending');
+    // 새 날짜 칸이 화면에 있으면 칩을 그리로 옮겨 바로 보이게 한다.
+    const cell=norm?document.querySelector('td[data-date="'+norm+'"]'):null;
+    if(cell&&c.parentElement!==cell)cell.appendChild(c);
+  });
+  return true;
+}
 async function editTarget(uid,current){
   const value=prompt('발간 예정일 (YYYY-MM-DD 또는 9/29 형식, 비우면 미정)',current||'');
   if(value===null)return;
   const norm=normDate(value);
   if(norm===null){alert('날짜 형식을 못 읽었습니다: '+value);return}
-  if(!await sendOp({op:'idx-target',uid:uid,target:norm}))return;
-  const row=document.querySelector('tr[data-uid="'+CSS.escape(uid)+'"]');
-  if(row){row.dataset.target=norm;row.classList.add('pending');
-    const t=row.querySelector('.c-tgt');if(t)t.textContent=norm||'미정'}
-  document.querySelectorAll('.chip[data-uid="'+CSS.escape(uid)+'"]').forEach(c=>{
-    c.dataset.target=norm;c.classList.add('pending')});
+  await setTarget(uid,norm);
 }
+
+// 달력 칩 드래그&드랍 → 발간 예정일 이동 (모바일은 📅 버튼 이용)
+let dragUid=null,dragging=false;
+document.addEventListener('dragstart',ev=>{
+  const chip=ev.target.closest('.chip');if(!chip||!chip.dataset.uid)return;
+  dragUid=chip.dataset.uid;dragging=true;
+  chip.classList.add('dragging');
+  ev.dataTransfer.effectAllowed='move';
+  try{ev.dataTransfer.setData('text/plain',dragUid)}catch(e){}
+});
+document.addEventListener('dragend',ev=>{
+  const chip=ev.target.closest('.chip');if(chip)chip.classList.remove('dragging');
+  document.querySelectorAll('.drop-hover').forEach(c=>c.classList.remove('drop-hover'));
+  setTimeout(()=>{dragging=false},50);  // 드래그 직후 클릭이 팝업을 띄우지 않게
+  dragUid=null;
+});
+document.addEventListener('dragover',ev=>{
+  const cell=ev.target.closest('td[data-date]');
+  if(!cell||!dragUid)return;
+  ev.preventDefault();
+  ev.dataTransfer.dropEffect='move';
+  document.querySelectorAll('.drop-hover').forEach(c=>{if(c!==cell)c.classList.remove('drop-hover')});
+  cell.classList.add('drop-hover');
+});
+document.addEventListener('drop',async ev=>{
+  const cell=ev.target.closest('td[data-date]');
+  if(!cell||!dragUid)return;
+  ev.preventDefault();
+  const uid=dragUid,dateStr=cell.dataset.date;
+  cell.classList.remove('drop-hover');
+  const chip=document.querySelector('.chip[data-uid="'+CSS.escape(uid)+'"]');
+  const name=chip?chip.dataset.name:'';
+  if(chip&&chip.dataset.target===dateStr)return;  // 같은 칸
+  if(!confirm((name?name+' — ':'')+'발간 예정일을 '+dateStr+'로 옮길까요?'))return;
+  await setTarget(uid,dateStr);
+});
 
 async function runScan(){
   const btn=$id('run-btn'),status=$id('run-status');
@@ -727,6 +775,7 @@ function showPop(chip){
   chipPop.style.left=left+'px';chipPop.style.top=top+'px';
 }
 document.addEventListener('click',ev=>{
+  if(dragging)return;  // 드래그 마무리 클릭은 무시
   const chip=ev.target.closest('.chip');
   if(chip){showPop(chip);return}
   if(!ev.target.closest('#chip-pop'))hidePop();
