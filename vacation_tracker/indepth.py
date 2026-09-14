@@ -31,6 +31,8 @@ OUT_PATH = HERE.parent / "telegram_research_dashboard" / "static" / "indepth_rep
 
 WEEKDAY_KO = "월화수목금토일"
 
+KIND_OPTIONS = ["인뎁스", "Semi-인뎁스", "개시", "산업", "스몰캡", "탐방", "기타"]
+
 # 프리필터는 관대하게 — 최종 판정은 Gemini가 한다. compact 텍스트(공백·점 제거) 기준.
 _KEYWORD_RE = re.compile(
     r"인뎁스|인댑스|indepth|커버리지|개시보고|이니시|발간|스몰캡자료|산업자료|탐방자료"
@@ -90,7 +92,7 @@ GEMINI_IDX_PROMPT = """너는 증권사 리서치팀장의 텔레그램 1:1 대�
 메시지마다 아래를 판정해 JSON 배열로만 답하라(설명 금지):
 [{"i": <메시지 번호>, "plan": true|false, "topic": "주제(종목·산업, 짧게)",
   "target": "YYYY-MM-DD"|null, "target_text": "원문의 시점 표현(없으면 빈 문자열)",
-  "kind": "인뎁스|개시|산업|스몰캡|탐방|기타"}]
+  "kind": "인뎁스|Semi-인뎁스|개시|산업|스몰캡|탐방|기타"}]
 
 판정 기준:
 - plan=true는 그 대화 상대(분석원)가 자기 자료의 발간 계획·진행 상황을 말한 것만.
@@ -101,7 +103,8 @@ GEMINI_IDX_PROMPT = """너는 증권사 리서치팀장의 텔레그램 1:1 대�
   그 표현이 가리키는 **적당한 대표 날짜 하나**를 target으로 추정해 채워라
   (구간이면 중간~끝 무렵, "N월 중"이면 그 달 중순). 원문 표현은 target_text에 그대로
   남겨라. 시점 언급이 아예 없을 때만 target=null.
-- topic은 종목명/산업명 위주로 짧게. 정 모르겠으면 빈 문자열."""
+- topic은 종목명/산업명 위주로 짧게. 정 모르겠으면 빈 문자열.
+- '세미 인뎁스'·'세미'라고 말하면 kind=Semi-인뎁스."""
 
 
 def _gemini_extract(candidates: list[dict]) -> dict[int, dict] | None:
@@ -253,6 +256,13 @@ def apply_op(body: dict) -> None:
     elif op == "idx-note":
         entry["note"] = str(body.get("note") or "").strip()
         print(f"발간계획 메모: {entry.get('name')} ({uid}) → {entry['note']!r}")
+    elif op == "idx-kind":
+        kind = str(body.get("kind") or "").strip()
+        if not kind:
+            raise SystemExit("kind가 비어 있습니다")
+        entry["kind"] = kind
+        entry["needs_review"] = False
+        print(f"발간계획 분류: {entry.get('name')} {entry.get('topic')!r} ({uid}) → {kind}")
     elif op == "idx-target":
         # 날짜 수정. 빈 값이면 날짜를 지운다(시점 표현만 남음). 원문 표현은 보존.
         target = str(body.get("target") or "").strip()
@@ -297,6 +307,8 @@ th{color:#8a94a0;font-weight:600;font-size:12.5px}
 .badge{display:inline-block;padding:1px 8px;border-radius:20px;font-size:12px;
   background:#e8f0fe;color:#2b5f8a;border:1px solid #c9dcf5;white-space:nowrap}
 .badge.review{background:#fdecec;color:#a43c31;border-color:#f2cfcb}
+td.c-kind .badge:not(.review){cursor:pointer}
+.kind-sel{font-size:12px;padding:1px 4px;border:1px solid #c9dcf5;border-radius:8px;background:#fff;color:#2b5f8a;font-family:inherit}
 .tgt{white-space:nowrap}
 .tgt .vague{color:#8a6d1a}
 .chk{font-size:17px;cursor:pointer;user-select:none;display:inline-block;min-width:24px;text-align:center}
@@ -538,6 +550,7 @@ def build_page(store: dict | None = None) -> None:
 <script>
 const EP={json.dumps(DISPATCH_ENDPOINT)};
 const PAGE_STAMP={json.dumps(stamp)};
+const KINDS={json.dumps(KIND_OPTIONS, ensure_ascii=False)};
 </script>
 <script>
 """
@@ -689,6 +702,33 @@ document.addEventListener('click',async ev=>{
       el.textContent='📝 '+value.trim();
     }
   }
+});
+
+// 종류 배지 클릭 → 드롭다운으로 분류 변경 (인뎁스/Semi-인뎁스/개시 등, '확인 필요'는 제외)
+document.addEventListener('click',ev=>{
+  const badge=ev.target.closest('td.c-kind .badge:not(.review)');if(!badge)return;
+  const row=badge.closest('tr[data-uid]');if(!row||!row.dataset.uid)return;
+  const cur=badge.textContent.trim();
+  const sel=document.createElement('select');sel.className='kind-sel';
+  [...new Set([cur,...KINDS])].forEach(k=>{
+    const o=document.createElement('option');o.textContent=k;o.selected=(k===cur);
+    sel.appendChild(o);
+  });
+  badge.replaceWith(sel);sel.focus();
+  let done=false;
+  const finish=commit=>{
+    if(done)return;done=true;
+    const v=commit?sel.value:cur;
+    const nb=document.createElement('span');nb.className='badge';nb.textContent=v;
+    sel.replaceWith(nb);
+    if(commit&&v!==cur){
+      sendOp({op:'idx-kind',uid:row.dataset.uid,kind:v});
+      row.classList.add('pending');
+      document.querySelectorAll('.chip[data-uid="'+CSS.escape(row.dataset.uid)+'"]').forEach(c=>{c.dataset.kind=v});
+    }
+  };
+  sel.addEventListener('change',()=>finish(true));
+  sel.addEventListener('blur',()=>finish(sel.value!==cur));
 });
 
 // 달력 페이저 — 석 달씩 보여주고 ◀▶로 한 달 이동
