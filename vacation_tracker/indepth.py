@@ -519,7 +519,14 @@ def build_page(store: dict | None = None) -> None:
     today = now.strftime("%Y-%m-%d")
     stamp = now.strftime("%Y-%m-%d %H:%M")
 
-    items = list(store.get("entries", {}).items())
+    from render_page import former_names
+
+    former = set(former_names())
+    all_items = list(store.get("entries", {}).items())
+    former_items = sorted(((u, e) for u, e in all_items if (e.get("name") or "") in former),
+                          key=lambda x: x[1].get("target") or x[1].get("msg_date") or "",
+                          reverse=True)
+    items = [(u, e) for u, e in all_items if (e.get("name") or "") not in former]
     review = [(u, e) for u, e in items if e.get("needs_review") and not e.get("done")]
     upcoming = [(u, e) for u, e in items if not e.get("needs_review") and not e.get("done")
                 and (not e.get("target") or e["target"] >= today)]
@@ -542,6 +549,7 @@ def build_page(store: dict | None = None) -> None:
           _calendar(items, now.date()), True)}
 {_section("❓ 확인 필요", len(review), _table(review, "확인할 항목이 없습니다."), bool(review))}
 {_section("🗄️ 지난 계획 · 발간 완료", len(past), _table(past, "아직 없습니다."), False)}
+{_section("🗄️ 퇴사자", len(former_items), _table(former_items, "없습니다."), False) if former_items else ""}
 <p id="idx-status"></p>
 <p class="hint">발간 칸 ☐를 누르면 완료 처리(✅), 📅는 날짜 수정, ✏️는 메모, 🗑는 삭제.
 달력 칩은 <b>끌어다 다른 날짜에 놓으면</b> 예정일이 옮겨집니다(모바일은 📅 버튼).
