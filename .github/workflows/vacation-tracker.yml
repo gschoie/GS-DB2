@@ -101,12 +101,25 @@ jobs:
             exit 0
           fi
           git commit -m "chore(vacation): 휴가 일정 갱신 $(TZ=Asia/Seoul date +'%Y-%m-%d %H:%M')"
+          # push 재시도: 버튼 연타로 run이 겹치면 생성 페이지에서 rebase가 충돌해
+          # op가 통째로 유실되던 사고(9/15) 방지 — 내 커밋 우선(-X theirs)으로 리베이스한 뒤
+          # 병합된 상태로 페이지를 다시 구워 amend하고 다시 민다.
           for i in 1 2 3 4 5; do
             if git push origin HEAD:main; then
               exit 0
             fi
-            git pull --rebase --autostash origin main
-            sleep 5
+            git rebase --abort 2>/dev/null || true
+            if ! git pull --rebase --autostash -X theirs origin main; then
+              git rebase --abort 2>/dev/null || true
+              sleep 5
+              continue
+            fi
+            (cd vacation_tracker && python vacation_bot.py --rebuild-page)
+            git add vacation_tracker/state telegram_research_dashboard/static/vacation_report.html \
+              telegram_research_dashboard/static/attendance_report.html \
+              telegram_research_dashboard/static/indepth_report.html
+            git commit --amend --no-edit
+            sleep 3
           done
           echo "push 실패" >&2
           exit 1

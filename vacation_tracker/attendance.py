@@ -241,6 +241,8 @@ tr.pending td{opacity:.55}
   opacity:.45;padding:0 2px}
 .note-btn:hover{opacity:1}
 .hint{color:#8a94a0;font-size:12.5px;margin-top:16px}
+details.former{margin-top:14px}
+details.former>summary{font-size:13.5px;color:#8a94a0;font-weight:700;cursor:pointer;user-select:none}
 @media (max-width:640px){
   body{padding:18px 10px 50px}
   th.h-when,td.c-when{display:none}
@@ -248,46 +250,52 @@ tr.pending td{opacity:.55}
 """
 
 
-def _month_table(month: str, slot: dict, names: list[str], status: str) -> str:
-    rows = []
-    for name in names:
-        rec = slot.get(name) or {}
-        checked = bool(rec.get("checked"))
-        mark = ('<span class="chk on">✅</span>' if checked
-                else '<span class="chk off">☐</span>')
-        when = ""
-        if rec.get("msg_date"):
-            try:
-                dt = datetime.fromisoformat(rec["msg_date"])
-                when = dt.strftime("%m/%d %H:%M")
-            except ValueError:
-                when = rec["msg_date"]
-        note = str(rec.get("note") or "")
-        parts = []
-        if checked:
-            if rec.get("source") == "telegram" and rec.get("text"):
-                parts.append('<span class="srcb auto">자동</span> '
-                             f'“{html.escape(rec["text"][:140])}”')
-            else:
-                parts.append('<span class="srcb">수동</span> '
-                             '<span class="manual">수동 체크</span>')
-        if note:
-            parts.append(f'<span class="note-x">📝 {html.escape(note)}</span>')
-        quote = "<br>".join(parts)
-        rows.append(
-            f'<tr data-name="{html.escape(name)}" data-checked="{1 if checked else 0}"'
-            f' data-note="{html.escape(note)}">'
-            f'<td class="c-name name">{html.escape(name)}</td>'
-            f'<td class="c-chk">{mark}</td>'
-            f'<td class="c-when when">{html.escape(when)}</td>'
-            f'<td class="c-quote quote"><button class="note-btn" title="내용 메모">✏️</button>'
-            f'<span class="q-body">{quote}</span></td></tr>')
+def _att_row(name: str, rec: dict) -> str:
+    checked = bool(rec.get("checked"))
+    mark = ('<span class="chk on">✅</span>' if checked
+            else '<span class="chk off">☐</span>')
+    when = ""
+    if rec.get("msg_date"):
+        try:
+            when = datetime.fromisoformat(rec["msg_date"]).strftime("%m/%d %H:%M")
+        except ValueError:
+            when = rec["msg_date"]
+    note = str(rec.get("note") or "")
+    parts = []
+    if checked:
+        if rec.get("source") == "telegram" and rec.get("text"):
+            parts.append('<span class="srcb auto">자동</span> '
+                         f'“{html.escape(rec["text"][:140])}”')
+        else:
+            parts.append('<span class="srcb">수동</span> '
+                         '<span class="manual">수동 체크</span>')
+    if note:
+        parts.append(f'<span class="note-x">📝 {html.escape(note)}</span>')
+    quote = "<br>".join(parts)
+    return (
+        f'<tr data-name="{html.escape(name)}" data-checked="{1 if checked else 0}"'
+        f' data-note="{html.escape(note)}">'
+        f'<td class="c-name name">{html.escape(name)}</td>'
+        f'<td class="c-chk">{mark}</td>'
+        f'<td class="c-when when">{html.escape(when)}</td>'
+        f'<td class="c-quote quote"><button class="note-btn" title="내용 메모">✏️</button>'
+        f'<span class="q-body">{quote}</span></td></tr>')
+
+
+def _month_table(month: str, slot: dict, names: list[str], status: str,
+                 former: list[str] | None = None) -> str:
+    rows = [_att_row(name, slot.get(name) or {}) for name in names]
     done = sum(1 for n in names if (slot.get(n) or {}).get("checked"))
+    former_html = ""
+    f_rows = [_att_row(name, slot[name]) for name in (former or []) if slot.get(name)]
+    if f_rows:
+        former_html = (f'<details class="former"><summary>🗄️ 퇴사자 ({len(f_rows)}명)</summary>'
+                       '<table><tbody>' + "".join(f_rows) + '</tbody></table></details>')
     return (f'<div class="att-month" data-month="{month}" data-done="{done}"'
             f' data-status="{status}" hidden>'
             '<table><thead><tr><th>이름</th><th>확인</th>'
             '<th class="h-when">시각</th><th>내용</th></tr></thead>'
-            f'<tbody>{"".join(rows)}</tbody></table></div>')
+            f'<tbody>{"".join(rows)}</tbody></table>{former_html}</div>')
 
 
 def _prev_month(ym: str) -> str:
@@ -310,8 +318,11 @@ def build_page(store: dict | None = None) -> None:
     def month_status(m: str) -> str:
         return campaigns.get(m, {}).get("status") or "none"
 
+    from render_page import former_names
+
+    former = former_names()
     tables = "".join(_month_table(m, store.get("months", {}).get(m, {}), names,
-                                  month_status(m))
+                                  month_status(m), former)
                      for m in months)
 
     # 체크 기간 컨트롤 — 열려 있으면 마감·지금 수집, 아니면 대상 월 선택 + 시작.

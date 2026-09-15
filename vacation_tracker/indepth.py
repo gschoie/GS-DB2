@@ -31,6 +31,8 @@ OUT_PATH = HERE.parent / "telegram_research_dashboard" / "static" / "indepth_rep
 
 WEEKDAY_KO = "월화수목금토일"
 
+KIND_OPTIONS = ["인뎁스", "Semi-인뎁스", "개시", "산업", "스몰캡", "탐방", "기타"]
+
 # 프리필터는 관대하게 — 최종 판정은 Gemini가 한다. compact 텍스트(공백·점 제거) 기준.
 _KEYWORD_RE = re.compile(
     r"인뎁스|인댑스|indepth|커버리지|개시보고|이니시|발간|스몰캡자료|산업자료|탐방자료"
@@ -90,7 +92,7 @@ GEMINI_IDX_PROMPT = """너는 증권사 리서치팀장의 텔레그램 1:1 대�
 메시지마다 아래를 판정해 JSON 배열로만 답하라(설명 금지):
 [{"i": <메시지 번호>, "plan": true|false, "topic": "주제(종목·산업, 짧게)",
   "target": "YYYY-MM-DD"|null, "target_text": "원문의 시점 표현(없으면 빈 문자열)",
-  "kind": "인뎁스|개시|산업|스몰캡|탐방|기타"}]
+  "kind": "인뎁스|Semi-인뎁스|개시|산업|스몰캡|탐방|기타"}]
 
 판정 기준:
 - plan=true는 그 대화 상대(분석원)가 자기 자료의 발간 계획·진행 상황을 말한 것만.
@@ -101,7 +103,8 @@ GEMINI_IDX_PROMPT = """너는 증권사 리서치팀장의 텔레그램 1:1 대�
   그 표현이 가리키는 **적당한 대표 날짜 하나**를 target으로 추정해 채워라
   (구간이면 중간~끝 무렵, "N월 중"이면 그 달 중순). 원문 표현은 target_text에 그대로
   남겨라. 시점 언급이 아예 없을 때만 target=null.
-- topic은 종목명/산업명 위주로 짧게. 정 모르겠으면 빈 문자열."""
+- topic은 종목명/산업명 위주로 짧게. 정 모르겠으면 빈 문자열.
+- '세미 인뎁스'·'세미'라고 말하면 kind=Semi-인뎁스."""
 
 
 def _gemini_extract(candidates: list[dict]) -> dict[int, dict] | None:
@@ -238,8 +241,38 @@ def record(store: dict, entries: list[dict]) -> list[dict]:
 
 
 def apply_op(body: dict) -> None:
-    """페이지에서 온 op 한 건: idx-del / idx-note / idx-done."""
+    """페이지에서 온 op 한 건: idx-add / idx-del / idx-note / idx-target / idx-kind / idx-done."""
     op = str(body.get("op") or "").strip()
+    if op == "idx-add":
+        # 달력 더블클릭 기입: {"op":"idx-add","name","topic","kind","target":"YYYY-MM-DD"}
+        name = str(body.get("name") or "").strip()
+        target = str(body.get("target") or "").strip()
+        if not name or not target:
+            raise SystemExit("name과 target(YYYY-MM-DD)은 필수입니다")
+        try:
+            datetime.strptime(target, "%Y-%m-%d")
+        except ValueError as exc:
+            raise SystemExit(f"날짜 형식이 틀렸습니다(YYYY-MM-DD): {exc}")
+        now_dt = datetime.now(KST)
+        store = load_store()
+        uid = f"manual:{now_dt.strftime('%Y%m%d%H%M%S')}"
+        store["entries"][uid] = {
+            "name": name,
+            "topic": str(body.get("topic") or "").strip(),
+            "kind": str(body.get("kind") or "인뎁스").strip() or "인뎁스",
+            "target": target,
+            "target_text": "",
+            "note": str(body.get("note") or "").strip(),
+            "text": "직접 기입",
+            "done": False,
+            "needs_review": False,
+            "engine": "manual",
+            "msg_date": now_dt.isoformat(timespec="minutes"),
+            "detected_at": now_dt.isoformat(timespec="minutes"),
+        }
+        save_store(store)
+        print(f"발간계획 직접 기입: {name} {store['entries'][uid]['topic']!r} {target} ({uid})")
+        return build_page(store)
     uid = str(body.get("uid") or "").strip()
     if not uid:
         raise SystemExit("uid가 비어 있습니다")
@@ -253,6 +286,13 @@ def apply_op(body: dict) -> None:
     elif op == "idx-note":
         entry["note"] = str(body.get("note") or "").strip()
         print(f"발간계획 메모: {entry.get('name')} ({uid}) → {entry['note']!r}")
+    elif op == "idx-kind":
+        kind = str(body.get("kind") or "").strip()
+        if not kind:
+            raise SystemExit("kind가 비어 있습니다")
+        entry["kind"] = kind
+        entry["needs_review"] = False
+        print(f"발간계획 분류: {entry.get('name')} {entry.get('topic')!r} ({uid}) → {kind}")
     elif op == "idx-target":
         # 날짜 수정. 빈 값이면 날짜를 지운다(시점 표현만 남음). 원문 표현은 보존.
         target = str(body.get("target") or "").strip()
@@ -297,6 +337,8 @@ th{color:#8a94a0;font-weight:600;font-size:12.5px}
 .badge{display:inline-block;padding:1px 8px;border-radius:20px;font-size:12px;
   background:#e8f0fe;color:#2b5f8a;border:1px solid #c9dcf5;white-space:nowrap}
 .badge.review{background:#fdecec;color:#a43c31;border-color:#f2cfcb}
+td.c-kind .badge:not(.review){cursor:pointer}
+.kind-sel{font-size:12px;padding:1px 4px;border:1px solid #c9dcf5;border-radius:8px;background:#fff;color:#2b5f8a;font-family:inherit}
 .tgt{white-space:nowrap}
 .tgt .vague{color:#8a6d1a}
 .chk{font-size:17px;cursor:pointer;user-select:none;display:inline-block;min-width:24px;text-align:center}
@@ -348,6 +390,8 @@ details.sec[open]>summary{margin-bottom:10px}
 #chip-pop .pop-acts button{background:#f5f8fb;color:#2b5f8a;border:1px solid #d4dbe3;
   border-radius:8px;padding:3px 10px;font-size:12.5px;cursor:pointer}
 #chip-pop .pop-acts button:hover{border-color:#9fb6cc}
+#chip-pop input,#chip-pop select{border:1px solid #d4dbe3;border-radius:8px;padding:3px 8px;font-size:13px;font-family:inherit;margin-top:6px;width:100%;box-sizing:border-box}
+#chip-pop .pop-acts select{width:auto}
 @media (max-width:640px){
   body{padding:18px 10px 50px}
   table.lst,table.lst thead,table.lst tbody,table.lst tr,table.lst th,table.lst td{display:block}
@@ -501,13 +545,23 @@ def _calendar(items: list[tuple[str, dict]], today_d: date) -> str:
 
 def build_page(store: dict | None = None) -> None:
     from render_page import DISPATCH_ENDPOINT
+    from attendance import _team_names
+
+    team_names = _team_names()
 
     store = store if store is not None else load_store()
     now = datetime.now(KST)
     today = now.strftime("%Y-%m-%d")
     stamp = now.strftime("%Y-%m-%d %H:%M")
 
-    items = list(store.get("entries", {}).items())
+    from render_page import former_names
+
+    former = set(former_names())
+    all_items = list(store.get("entries", {}).items())
+    former_items = sorted(((u, e) for u, e in all_items if (e.get("name") or "") in former),
+                          key=lambda x: x[1].get("target") or x[1].get("msg_date") or "",
+                          reverse=True)
+    items = [(u, e) for u, e in all_items if (e.get("name") or "") not in former]
     review = [(u, e) for u, e in items if e.get("needs_review") and not e.get("done")]
     upcoming = [(u, e) for u, e in items if not e.get("needs_review") and not e.get("done")
                 and (not e.get("target") or e["target"] >= today)]
@@ -530,14 +584,18 @@ def build_page(store: dict | None = None) -> None:
           _calendar(items, now.date()), True)}
 {_section("❓ 확인 필요", len(review), _table(review, "확인할 항목이 없습니다."), bool(review))}
 {_section("🗄️ 지난 계획 · 발간 완료", len(past), _table(past, "아직 없습니다."), False)}
+{_section("🗄️ 퇴사자", len(former_items), _table(former_items, "없습니다."), False) if former_items else ""}
 <p id="idx-status"></p>
 <p class="hint">발간 칸 ☐를 누르면 완료 처리(✅), 📅는 날짜 수정, ✏️는 메모, 🗑는 삭제.
 달력 칩은 <b>끌어다 다른 날짜에 놓으면</b> 예정일이 옮겨집니다(모바일은 📅 버튼).
+날짜 칸을 <b>더블클릭</b>하면 그 날짜로 새 발간 계획을 직접 기입할 수 있습니다.
 "인뎁스"라고 안 적어도 발간·커버리지·자료 작성 맥락이면 잡습니다 — 잘못 잡힌 건 지워 주세요.</p>
 </div>
 <script>
 const EP={json.dumps(DISPATCH_ENDPOINT)};
 const PAGE_STAMP={json.dumps(stamp)};
+const KINDS={json.dumps(KIND_OPTIONS, ensure_ascii=False)};
+const NAMES={json.dumps(team_names, ensure_ascii=False)};
 </script>
 <script>
 """
@@ -691,18 +749,46 @@ document.addEventListener('click',async ev=>{
   }
 });
 
+// 종류 배지 클릭 → 드롭다운으로 분류 변경 (인뎁스/Semi-인뎁스/개시 등, '확인 필요'는 제외)
+document.addEventListener('click',ev=>{
+  const badge=ev.target.closest('td.c-kind .badge:not(.review)');if(!badge)return;
+  const row=badge.closest('tr[data-uid]');if(!row||!row.dataset.uid)return;
+  const cur=badge.textContent.trim();
+  const sel=document.createElement('select');sel.className='kind-sel';
+  [...new Set([cur,...KINDS])].forEach(k=>{
+    const o=document.createElement('option');o.textContent=k;o.selected=(k===cur);
+    sel.appendChild(o);
+  });
+  badge.replaceWith(sel);sel.focus();
+  let done=false;
+  const finish=commit=>{
+    if(done)return;done=true;
+    const v=commit?sel.value:cur;
+    const nb=document.createElement('span');nb.className='badge';nb.textContent=v;
+    sel.replaceWith(nb);
+    if(commit&&v!==cur){
+      sendOp({op:'idx-kind',uid:row.dataset.uid,kind:v});
+      row.classList.add('pending');
+      document.querySelectorAll('.chip[data-uid="'+CSS.escape(row.dataset.uid)+'"]').forEach(c=>{c.dataset.kind=v});
+    }
+  };
+  sel.addEventListener('change',()=>finish(true));
+  sel.addEventListener('blur',()=>finish(sel.value!==cur));
+});
+
 // 달력 페이저 — 두 달씩 보여주고 ◀▶로 한 달 이동
+const CAL_SHOW=2;
 const calMonths=[...document.querySelectorAll('.cal-month')];
 let calIdx=0;
 function calRender(){
-  const maxIdx=Math.max(0,calMonths.length-2);
+  const maxIdx=Math.max(0,calMonths.length-CAL_SHOW);
   calIdx=Math.min(Math.max(0,calIdx),maxIdx);
-  calMonths.forEach((m,i)=>{m.hidden=!(i===calIdx||i===calIdx+1)});
-  const first=calMonths[calIdx],second=calMonths[calIdx+1];
+  calMonths.forEach((m,i)=>{m.hidden=!(i>=calIdx&&i<calIdx+CAL_SHOW)});
+  const shown=calMonths.slice(calIdx,calIdx+CAL_SHOW);
   const label=$id('cal-label');
-  if(label&&first){
+  if(label&&shown.length){
     const name=el=>el.querySelector('.cal-title').textContent;
-    label.textContent=second?name(first)+' · '+name(second):name(first);
+    label.textContent=shown.map(name).join(' · ');
   }
   const prev=$id('cal-prev'),next=$id('cal-next');
   if(prev)prev.disabled=calIdx<=0;
@@ -780,6 +866,43 @@ document.addEventListener('click',ev=>{
   if(chip){showPop(chip);return}
   if(!ev.target.closest('#chip-pop'))hidePop();
 });
+// 달력 더블클릭 → 그 날짜로 발간 계획 직접 기입
+document.addEventListener('dblclick',ev=>{
+  const cell=ev.target.closest('td[data-date]');if(!cell)return;
+  if(ev.target.closest('.chip'))return;  // 칩 더블클릭은 기입 아님
+  hidePop();
+  const dateStr=cell.dataset.date;
+  chipPop=document.createElement('div');chipPop.id='chip-pop';
+  const close=document.createElement('span');close.className='close';close.textContent='✕';
+  close.addEventListener('click',hidePop);
+  const t=document.createElement('div');t.className='t';t.textContent='✍️ '+dateStr+' 발간 계획 기입';
+  const topic=document.createElement('input');topic.placeholder='주제 (종목·산업)';
+  const nameSel=document.createElement('select');
+  NAMES.forEach(n=>{const o=document.createElement('option');o.textContent=n;nameSel.appendChild(o)});
+  const kindSel=document.createElement('select');
+  KINDS.forEach(k=>{const o=document.createElement('option');o.textContent=k;kindSel.appendChild(o)});
+  const btn=document.createElement('button');btn.textContent='추가';
+  btn.addEventListener('click',async()=>{
+    btn.disabled=true;
+    const payload={op:'idx-add',name:nameSel.value,topic:topic.value.trim(),
+      kind:kindSel.value,target:dateStr};
+    if(!await sendOp(payload)){btn.disabled=false;return}
+    hidePop();
+    const chip=document.createElement('span');chip.className='chip pending';
+    chip.textContent=nameSel.value+(topic.value.trim()?'\u00b7'+topic.value.trim():'');
+    cell.appendChild(chip);
+  });
+  const acts=document.createElement('div');acts.className='pop-acts';
+  acts.append(nameSel,kindSel,btn);
+  chipPop.append(close,t,topic,acts);
+  document.body.appendChild(chipPop);
+  const r=cell.getBoundingClientRect(),pw=chipPop.offsetWidth,ph=chipPop.offsetHeight;
+  let left=Math.min(Math.max(8,r.left),window.innerWidth-pw-8);
+  let top=r.bottom+6;if(top+ph>window.innerHeight-8)top=Math.max(8,r.top-ph-6);
+  chipPop.style.left=left+'px';chipPop.style.top=top+'px';
+  topic.focus();
+});
+
 document.addEventListener('keydown',ev=>{if(ev.key==='Escape')hidePop()});
 </script></body></html>
 """
