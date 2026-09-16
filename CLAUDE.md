@@ -383,6 +383,16 @@
     - 렌더러는 claude_brief_publish.py 임포트 재사용(`gpt_brief_publish.py`, 발행·인덱스·
       텔레그램). deploy-pages workflow_run에 "ChatGPT 방산 브리핑" 추가, build_static 복사
       추가. **GAS 정본 갱신 필요** — Apps Script 재붙여넣기 + '배포 관리 → 새 버전'(새 배포 금지).
+    - **(9/17 저녁 A안 전환) OpenAI API는 유료(무료 티어 없음)라 자동 작성 주체를
+      Claude 예약 세션으로 교체** — 건설기계와 동일 구조. chatgpt-brief.yml 크론(05:55)은
+      **수집 전용**(`chatgpt_briefing_bot.py` 기본 모드 = collect_only →
+      `chatgpt_briefing/inputs/<날짜>.json`, 7일 보관), 작성은 루틴 [6.5] 단계가
+      inputs(news_list·price_table)만 근거로 수행 → 두 브랜치 push → claude-brief-ingest가
+      chatgpt_defense도 main으로 나르고 RSS판 텔레그램 발송(send_gpt 가드).
+      명칭도 정직하게 **'RSS판'**으로 변경(사이드바 `🧠 글로벌방산.브리핑(RSS)`, 페이지
+      h1·텔레 헤더 동일) — 작성자는 클로드지만 웹서치판(클)과 달리 RSS 목록만 근거라
+      소스 관점이 다름. ChatGPT 앱 산출물은 폼/inbox 수동 등록으로 여전히 우선 적용.
+      OpenAI 경로는 봇 `--api` 플래그로만 잔존(키 등록 시 사용 가능).
 
 24. **크론 안전망 가드가 중복 발송을 못 막던 버그** (9/16): 수급이 하루 4회인데 저녁에
     18:08·20:58·21:48 세 번 더 돌아 텔레그램이 계속 왔다.

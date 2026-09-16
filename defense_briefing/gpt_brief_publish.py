@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""ChatGPT 글로벌 방산 브리핑 발행 도구 (Gemini·Claude에 이은 3탄).
+"""방산 브리핑 RSS판(3탄) 발행 도구 — Claude 세션 작성분·ChatGPT 앱 등록분 공용.
 
 사용자가 ChatGPT(스케줄 태스크)로 받아 본 브리핑 마크다운을 리포로 넘기면,
 Gemini(defense_daily)·Claude(claude_defense)와 같은 방식으로 날짜별 아카이브
@@ -60,10 +60,10 @@ def write_archive(date_str: str) -> None:
     body = cbp.report_to_page_html(md_report)
     page = f"""<!DOCTYPE html><html lang="ko"><head><meta charset="utf-8"><base target="_blank">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>ChatGPT 방산 브리핑 {date_str}</title><style>{cbp.PAGE_CSS}</style></head>
+<title>방산 브리핑 RSS판 {date_str}</title><style>{cbp.PAGE_CSS}</style></head>
 <body><div class="wrap">
-<h1>🧠 ChatGPT 글로벌 방산 브리핑</h1>
-<div class="meta">기준: {cbp.date_label(date_str)} · 생성: ChatGPT(OpenAI API) + 구글뉴스 RSS + yfinance 확정 시세 — Gemini·Claude 브리핑과 별도 관점의 3탄 (수동 등록분은 ChatGPT 앱 산출물)</div>
+<h1>🧠 글로벌 방산 브리핑 (RSS판)</h1>
+<div class="meta">기준: {cbp.date_label(date_str)} · 생성: Claude 예약 세션 — 구글뉴스 RSS(24h)+yfinance 확정 시세만 근거(제미나이판과 같은 지침)로 쓴 3탄 · 수동 등록분은 ChatGPT 앱 산출물</div>
 {body}
 </div></body></html>"""
     (ARCHIVE_DIR / f"{date_str}.html").write_text(page, encoding="utf-8")
@@ -76,7 +76,7 @@ def write_index() -> None:
     dates_js = json.dumps(dates, ensure_ascii=False)
     index = f"""<!DOCTYPE html><html lang="ko"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>ChatGPT 방산 브리핑</title><style>
+<title>방산 브리핑 RSS판</title><style>
 {cbp.PAGE_CSS}
 .bar{{display:flex;gap:10px;align-items:center;max-width:860px;margin:0 auto 10px;flex-wrap:wrap}}
 .bar h1{{font-size:17px;margin:0;flex:1;min-width:200px}}
@@ -94,13 +94,13 @@ details.paste summary{{cursor:pointer;padding:9px 14px;color:#c9a86a;font-size:1
 .hint{{font-size:11.5px;color:#66748a}}
 </style></head><body>
 <div class="bar">
-  <h1>🧠 ChatGPT 글로벌 방산 브리핑</h1>
+  <h1>🧠 글로벌 방산 브리핑 (RSS판)</h1>
   <button id="prev" title="이전 날짜">◀</button>
   <select id="dsel"></select>
   <button id="next" title="다음 날짜">▶</button>
 </div>
 <details class="paste">
-  <summary>✍️ 새 브리핑 등록 (ChatGPT 답변 붙여넣기)</summary>
+  <summary>✍️ ChatGPT 앱 브리핑 직접 등록 (자동 생성보다 우선 적용)</summary>
   <div class="paste-body">
     <div class="paste-row">
       <label for="p-date" style="font-size:12.5px;color:#8b96a8">브리핑 날짜</label>
@@ -124,7 +124,7 @@ sel.onchange=load;
 document.getElementById('prev').onclick=()=>{{if(sel.selectedIndex<DATES.length-1){{sel.selectedIndex++;load()}}}};
 document.getElementById('next').onclick=()=>{{if(sel.selectedIndex>0){{sel.selectedIndex--;load()}}}};
 if(DATES.length)load();
-else fr.srcdoc='<body style="background:#0d1117;color:#8b96a8;font-family:sans-serif;display:flex;align-items:center;justify-content:center;height:100vh;margin:0">아직 등록된 브리핑이 없습니다 — 위 ✍️ 폼에 ChatGPT 브리핑을 붙여넣으면 첫 페이지가 생깁니다.</body>';
+else fr.srcdoc='<body style="background:#0d1117;color:#8b96a8;font-family:sans-serif;display:flex;align-items:center;justify-content:center;height:100vh;margin:0">아직 브리핑이 없습니다 — 매일 아침 자동 생성되며, ✍️ 폼으로 ChatGPT 앱 브리핑을 직접 등록할 수도 있습니다.</body>';
 document.getElementById('p-date').value=new Date().toLocaleDateString('sv');
 async function submitBrief(){{
   const btn=document.getElementById('p-btn'),st=document.getElementById('paste-status');
@@ -204,7 +204,7 @@ def send_telegram(date_str: str) -> None:
     mode = os.environ.get("TELEGRAM_MODE", "summary")  # summary | full
     md_body = md_report if mode == "full" else cbp.extract_summary(md_report)
     body = cbp.to_telegram_html(md_body)
-    header = f"🧠 <b>ChatGPT 글로벌 방산 브리핑</b> | {cbp.date_label(date_str)}\n"
+    header = f"🧠 <b>글로벌 방산 브리핑 (RSS판)</b> | {cbp.date_label(date_str)}\n"
     footer = ""
     if mode != "full":
         footer = (f'\n\n📊 <a href="{base_url}/chatgpt_defense/{date_str}.html">'
