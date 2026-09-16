@@ -72,8 +72,11 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add telegram_research_dashboard/static/chatgpt_defense \
-                  telegram_research_dashboard/static/chatgpt_defense_report.html
+          # 스킵 실행에서는 chatgpt_defense 디렉터리가 아직 없을 수 있다 — 있는 것만 add
+          if [ -d telegram_research_dashboard/static/chatgpt_defense ]; then
+            git add telegram_research_dashboard/static/chatgpt_defense
+          fi
+          git add telegram_research_dashboard/static/chatgpt_defense_report.html
           git add -A chatgpt_briefing/inbox
           if git diff --cached --quiet; then
             echo "No changes to commit."
