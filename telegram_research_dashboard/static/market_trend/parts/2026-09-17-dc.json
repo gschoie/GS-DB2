@@ -1,0 +1,222 @@
+{
+ "source": "DC인사이드",
+ "galleries": [
+  {
+   "id": "krstock",
+   "name": "국내주식갤러리",
+   "posts": 3721,
+   "capped": true,
+   "burst": 2.7,
+   "base_daily": 1367.3
+  },
+  {
+   "id": "stockus",
+   "name": "해외주식갤러리",
+   "posts": 5716,
+   "capped": true,
+   "burst": 1.7,
+   "base_daily": 3344.9
+  }
+ ],
+ "posts_sampled": 554,
+ "keywords": [
+  {
+   "term": "워시",
+   "count": 9,
+   "burst": 99.0,
+   "new": true
+  },
+  {
+   "term": "하락장",
+   "count": 8,
+   "burst": 99.0,
+   "new": true
+  },
+  {
+   "term": "환율",
+   "count": 7,
+   "burst": 99.0,
+   "new": true
+  },
+  {
+   "term": "양전",
+   "count": 7,
+   "burst": 99.0,
+   "new": true
+  },
+  {
+   "term": "모두",
+   "count": 6,
+   "burst": 85.2,
+   "new": true
+  },
+  {
+   "term": "채권",
+   "count": 6,
+   "burst": 85.2,
+   "new": true
+  },
+  {
+   "term": "이정도면",
+   "count": 5,
+   "burst": 71.0,
+   "new": true
+  },
+  {
+   "term": "일본",
+   "count": 5,
+   "burst": 71.0,
+   "new": true
+  },
+  {
+   "term": "숏충",
+   "count": 5,
+   "burst": 71.0,
+   "new": true
+  },
+  {
+   "term": "금리인상",
+   "count": 22,
+   "burst": 28.4,
+   "new": false
+  },
+  {
+   "term": "금리",
+   "count": 24,
+   "burst": 6.4,
+   "new": false
+  },
+  {
+   "term": "아니",
+   "count": 9,
+   "burst": 9.8,
+   "new": false
+  },
+  {
+   "term": "지금",
+   "count": 15,
+   "burst": 4.0,
+   "new": false
+  },
+  {
+   "term": "연준",
+   "count": 5,
+   "burst": 6.5,
+   "new": false
+  },
+  {
+   "term": "야선",
+   "count": 7,
+   "burst": 3.4,
+   "new": false
+  }
+ ],
+ "top_recommended": [
+  {
+   "gallery": "해외주식갤러리",
+   "title": "진지하게 트럼프일가는 모조리 참수형하긴 해야됨",
+   "views": 7036,
+   "recommend": 217,
+   "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=17763117&exception_mode=recommend&page=1",
+   "time_kst": "09-16 06:55"
+  },
+  {
+   "gallery": "해외주식갤러리",
+   "title": "미국부채 다른 나라도 비슷하구만 뭘...",
+   "views": 9806,
+   "recommend": 171,
+   "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=17764610&exception_mode=recommend&page=1",
+   "time_kst": "09-16 11:10"
+  },
+  {
+   "gallery": "해외주식갤러리",
+   "title": "결국 랩틸리언에게 지배당하고 만 인류...txt",
+   "views": 7621,
+   "recommend": 149,
+   "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=17767595&exception_mode=recommend&page=1",
+   "time_kst": "09-16 19:33"
+  },
+  {
+   "gallery": "해외주식갤러리",
+   "title": "\"저...케빈워시 의장...\"",
+   "views": 12302,
+   "recommend": 116,
+   "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=17765684&exception_mode=recommend&page=1",
+   "time_kst": "09-16 14:25"
+  },
+  {
+   "gallery": "해외주식갤러리",
+   "title": "클래러티 부결 존나 웃긴게 뭐냐면 ㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋ",
+   "views": 9810,
+   "recommend": 114,
+   "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=17764597&exception_mode=recommend&page=1",
+   "time_kst": "09-16 11:08"
+  }
+ ],
+ "top_viewed": [
+  {
+   "gallery": "해외주식갤러리",
+   "title": "토스증권 이 사람 뭐냐 ㄷㄷㄷㄷ...",
+   "views": 3535,
+   "recommend": 26,
+   "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=17772130&page=17",
+   "time_kst": "09-17 04:58"
+  },
+  {
+   "gallery": "국내주식갤러리",
+   "title": "이번주 웃음벨이였던거ㅋㅋㅋㅋㅋ",
+   "views": 2629,
+   "recommend": 20,
+   "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3499435&page=13",
+   "time_kst": "09-17 04:29"
+  },
+  {
+   "gallery": "국내주식갤러리",
+   "title": "케빈 워시 연준 의장 9월 FOMC 기자회견 주요 질의",
+   "views": 632,
+   "recommend": 7,
+   "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3499516&page=11",
+   "time_kst": "09-17 04:55"
+  },
+  {
+   "gallery": "국내주식갤러리",
+   "title": "지금 인났는데 금리 인상에 + 매파적 발언까지 뜬고임?",
+   "views": 586,
+   "recommend": 0,
+   "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3499591&page=10",
+   "time_kst": "09-17 05:43"
+  },
+  {
+   "gallery": "해외주식갤러리",
+   "title": "트럼프...금리 인하 요구 ㅋㅋㅋㅋ",
+   "views": 582,
+   "recommend": 4,
+   "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=17772326&page=13",
+   "time_kst": "09-17 05:51"
+  },
+  {
+   "gallery": "국내주식갤러리",
+   "title": "결국 대폭락은 없었네요",
+   "views": 549,
+   "recommend": 0,
+   "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3499563&page=10",
+   "time_kst": "09-17 05:25"
+  },
+  {
+   "gallery": "국내주식갤러리",
+   "title": "씹년물 재발기 ㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋ",
+   "views": 533,
+   "recommend": 0,
+   "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3499618&page=9",
+   "time_kst": "09-17 05:58"
+  },
+  {
+   "gallery": "국내주식갤러리",
+   "title": "근데 진짜 좆될거같다 다들 할말있으면 얼른하셈",
+   "views": 505,
+   "recommend": 0,
+   "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3499604&page=9",
+   "time_kst": "09-17 05:50"
+  }
+ ]
+}
