@@ -1,6 +1,6 @@
 <!DOCTYPE html><html lang="ko"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>ChatGPT 방산 브리핑</title><style>
+<title>방산 브리핑 RSS판</title><style>
 
 :root{color-scheme:dark}
 body{margin:0;padding:28px 24px 60px;background:#0d1117;color:#d8dee9;
@@ -51,13 +51,13 @@ details.paste summary{cursor:pointer;padding:9px 14px;color:#c9a86a;font-size:13
 .hint{font-size:11.5px;color:#66748a}
 </style></head><body>
 <div class="bar">
-  <h1>🧠 ChatGPT 글로벌 방산 브리핑</h1>
+  <h1>🧠 글로벌 방산 브리핑 (RSS판)</h1>
   <button id="prev" title="이전 날짜">◀</button>
   <select id="dsel"></select>
   <button id="next" title="다음 날짜">▶</button>
 </div>
 <details class="paste">
-  <summary>✍️ 새 브리핑 등록 (ChatGPT 답변 붙여넣기)</summary>
+  <summary>✍️ ChatGPT 앱 브리핑 직접 등록 (자동 생성보다 우선 적용)</summary>
   <div class="paste-body">
     <div class="paste-row">
       <label for="p-date" style="font-size:12.5px;color:#8b96a8">브리핑 날짜</label>
@@ -72,7 +72,7 @@ details.paste summary{cursor:pointer;padding:9px 14px;color:#c9a86a;font-size:13
 </details>
 <iframe id="frame" title="브리핑"></iframe>
 <script>
-const DATES=[];
+const DATES=["2026-09-17"];
 const EP="https://script.google.com/macros/s/AKfycbx3RjIjtlO2Z6fIYo2T3LhJrFg9Wp2hS7dMS3Is52-JVF1hizoCWewbQ1uM_v5sdhR2jw/exec";
 const sel=document.getElementById('dsel'),fr=document.getElementById('frame');
 DATES.forEach(d=>{const o=document.createElement('option');o.value=d;o.textContent=d+' ('+'일월화수목금토'[new Date(d+'T00:00:00').getDay()]+')';sel.appendChild(o)});
@@ -81,7 +81,7 @@ sel.onchange=load;
 document.getElementById('prev').onclick=()=>{if(sel.selectedIndex<DATES.length-1){sel.selectedIndex++;load()}};
 document.getElementById('next').onclick=()=>{if(sel.selectedIndex>0){sel.selectedIndex--;load()}};
 if(DATES.length)load();
-else fr.srcdoc='<body style="background:#0d1117;color:#8b96a8;font-family:sans-serif;display:flex;align-items:center;justify-content:center;height:100vh;margin:0">아직 등록된 브리핑이 없습니다 — 위 ✍️ 폼에 ChatGPT 브리핑을 붙여넣으면 첫 페이지가 생깁니다.</body>';
+else fr.srcdoc='<body style="background:#0d1117;color:#8b96a8;font-family:sans-serif;display:flex;align-items:center;justify-content:center;height:100vh;margin:0">아직 브리핑이 없습니다 — 매일 아침 자동 생성되며, ✍️ 폼으로 ChatGPT 앱 브리핑을 직접 등록할 수도 있습니다.</body>';
 document.getElementById('p-date').value=new Date().toLocaleDateString('sv');
 async function submitBrief(){
   const btn=document.getElementById('p-btn'),st=document.getElementById('paste-status');
