@@ -1,8 +1,8 @@
 """커버리지 리서치 요약 아침 모음 — 낱개 알림이 아니라 하루 한 통.
 
-구독 전 채널에는 증권사 보고서를 "[✨ 리서치 요약] 기업명 …" 형태로 요약해 올리는
-글이 하루 수십 건 흐른다. 이 스크립트는 매일 아침(08:30 KST 목표) 지난 하루치에서
-그 요약 글만 골라, 커버리지 산업(조선·방산·기계)에 해당하는 것만 추려 한 통으로 보낸다.
+요약 채널(@ked_epic_ai)에는 증권사 보고서를 "[✨ 리서치 요약] 기업명 …" 형태로 요약해 올리는
+글이 하루 수십 건 흐른다. 이 스크립트는 매일 아침(08:30 KST 목표) 그 채널의 지난 하루치에서
+요약 글만 골라, 커버리지 산업(조선·방산·기계)에 해당하는 것만 추려 한 통으로 보낸다.
 
 ship_all(조선 염탐)과의 관계: 저쪽은 걸리는 즉시 낱개 알림, 여기는 '보고서 요약'
 표식이 붙은 글만 모아 아침 브리핑. 같은 세션·같은 어댑터를 쓰고 발송 봇도 같다(spying).
@@ -46,7 +46,7 @@ MAX_WINDOW_HOURS = 48   # 어제 크론이 통째로 죽었어도 이틀치까�
 
 
 def load_coverage() -> tuple[list[tuple[str, list[str]]], list[str]]:
-    """sources.yml에서 커버리지 낱말 묶음과 내 채널 제외 목록을 읽는다."""
+    """sources.yml에서 커버리지 낱말 묶음과 '요약이 올라오는 채널' 목록을 읽는다."""
     import yaml
 
     raw = yaml.safe_load((BASE_DIR / "sources.yml").read_text(encoding="utf-8")) or {}
@@ -56,11 +56,10 @@ def load_coverage() -> tuple[list[tuple[str, list[str]]], list[str]]:
     if not coverage:
         raise RuntimeError("sources.yml에서 커버리지 낱말을 찾지 못했습니다 (x_ship_keywords)")
 
-    exclude_chats: list[str] = []
-    for source in ws.load_registry():
-        if source.get("key") == "ship_all":
-            exclude_chats = list(source.get("exclude_chats") or [])
-    return ws.keyword_groups(coverage), exclude_chats
+    channels = [str(c) for c in (raw.get("x_research_digest_channels") or []) if str(c).strip()]
+    if not channels:
+        raise RuntimeError("sources.yml에 x_research_digest_channels가 비어 있습니다")
+    return ws.keyword_groups(coverage), channels
 
 
 def coverage_labels(groups: list[tuple[str, list[str]]], text: str) -> list[str]:
@@ -113,11 +112,12 @@ def pick_window_hours(state: dict, now: datetime, override: float | None) -> flo
     return min(max(hours, 1.0), MAX_WINDOW_HOURS)
 
 
-def collect_reports(window_hours: float, exclude_chats: list[str]) -> list[adapters.Item]:
+def collect_reports(window_hours: float, channels: list[str]) -> list[adapters.Item]:
+    # 요약 글은 지정 채널(x_research_digest_channels)에서만 올라온다.
+    # include_chats로 좁히면 다른 방은 히스토리를 아예 요청하지 않아 스캔이 몇 초로 끝난다.
     source = {
         "lookback_hours": window_hours,
-        "exclude_chats": exclude_chats,
-        # 낱개 염탐과 같은 세션·같은 스캔 정책. 그룹은 보지 않는다(보고서 요약은 채널에 돈다).
+        "include_chats": channels,
     }
     items = adapters.collect_telegram_account(source)
     return [item for item in items if MARKER_RE.search(item.title or "")]
@@ -181,11 +181,11 @@ def main(argv: list[str] | None = None) -> int:
         except ValueError:
             pass
 
-    groups, exclude_chats = load_coverage()
+    groups, channels = load_coverage()
     window = pick_window_hours(state, now, args.window_hours)
-    print(f"조회 창 {window:.1f}시간 · 커버리지 묶음 {len(groups)}개 · 제외 방 {len(exclude_chats)}곳")
+    print(f"조회 창 {window:.1f}시간 · 커버리지 묶음 {len(groups)}개 · 대상 채널 {', '.join(channels)}")
 
-    items = collect_reports(window, exclude_chats)
+    items = collect_reports(window, channels)
     print(f"리서치 요약 글 {len(items)}건 수집")
 
     text, count = build_digest(items, groups, now)
