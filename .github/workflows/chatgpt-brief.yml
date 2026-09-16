@@ -1,0 +1,95 @@
+name: ChatGPT 방산 브리핑
+
+# ChatGPT(OpenAI API) 방산 데일리 브리핑 — Gemini 판(defense-briefing.yml)과 같은 골격.
+# 매일 아침 러너가 yfinance 확정 시세 + 구글뉴스 RSS(24h)를 수집하고,
+# 작성만 OpenAI API가 한다(뉴스 근거는 RSS 목록만 — LLM 기억·검색 금지 원칙 동일).
+# 결과는 대시보드(chatgpt_defense) + 방산 채널 텔레그램.
+#
+# 수동 입력 경로 두 가지가 스케줄 생성보다 우선한다(같은 날짜 md가 있으면 API 생성 스킵):
+#   1. 대시보드 chatgpt_defense_report.html 의 ✍️ 폼 → GAS dispatch_proxy(gptbrief)
+#      → workflow_dispatch inputs.content
+#   2. chatgpt_briefing/inbox/YYYY-MM-DD.md 를 main에 커밋 (GitHub 웹/모바일 보조 경로)
+#      — workflow_dispatch의 문자열 입력칸은 한 줄짜리라 여러 줄 md가 뭉개지므로
+#        수동 등록은 파일 커밋으로 한다. 처리 후 inbox 파일은 지워서 재실행을 막는다.
+#
+# 시크릿: OPENAI_API_KEY(필수 — 없으면 API 생성만 건너뜀, 수동 경로는 동작).
+# 텔레그램은 방산 데일리(Gemini)와 같은 채널(KDEF_TELEGRAM_*) 기본,
+# GPT_TELEGRAM_* 시크릿을 만들면 그쪽이 우선한다.
+
+on:
+  workflow_dispatch:
+    inputs:
+      content:
+        description: "브리핑 마크다운 본문 (대시보드 폼이 채움 — 비우면 API 자동 생성)"
+        type: string
+        required: false
+        default: ""
+      date:
+        description: "브리핑 날짜 YYYY-MM-DD (비우면 오늘 KST)"
+        type: string
+        required: false
+        default: ""
+  schedule:
+    # UTC 20:55 = KST 05:55 — Gemini(20:40)와 15분 오프셋, 큐 지연 감안 실도착 ~06시대.
+    - cron: "55 20 * * *"
+  push:
+    branches: ["main"]
+    paths: ["chatgpt_briefing/inbox/*.md"]
+
+permissions:
+  contents: write
+
+concurrency:
+  group: chatgpt-brief
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: 패키지 설치
+        run: pip install -r defense_briefing/requirements.txt
+
+      - name: 생성 또는 수동 입력 발행
+        working-directory: defense_briefing
+        env:
+          # 셸 인자 대신 환경변수로 — 본문에 따옴표·백틱이 있어도 안전하다.
+          CONTENT: ${{ inputs.content }}
+          DATE: ${{ inputs.date }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          OPENAI_MODEL: ${{ vars.OPENAI_MODEL || '' }}
+        run: python chatgpt_briefing_bot.py
+
+      - name: Commit pages
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add telegram_research_dashboard/static/chatgpt_defense \
+                  telegram_research_dashboard/static/chatgpt_defense_report.html
+          git add -A chatgpt_briefing/inbox
+          if git diff --cached --quiet; then
+            echo "No changes to commit."
+          else
+            git commit -m "data: chatgpt 방산 브리핑 $(TZ=Asia/Seoul date +%F)"
+            ok=""
+            for i in 1 2 3; do
+              if git pull --rebase origin main && git push; then ok=1; break; fi
+              sleep $((i * 5))
+            done
+            [ -n "$ok" ] || exit 1
+          fi
+
+      - name: Telegram
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.GPT_TELEGRAM_BOT_TOKEN || secrets.KDEF_TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.GPT_TELEGRAM_CHAT_ID || secrets.KDEF_TELEGRAM_CHAT_ID }}
+        working-directory: defense_briefing
+        run: python gpt_brief_publish.py --send-processed

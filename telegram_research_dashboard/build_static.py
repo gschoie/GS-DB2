@@ -289,6 +289,12 @@ def build() -> Path:
     claude_dir = ROOT / "static" / "claude_defense"
     if claude_dir.is_dir():
         shutil.copytree(claude_dir, OUTPUT.parent / "claude_defense", dirs_exist_ok=True)
+    gpt_index = ROOT / "static" / "chatgpt_defense_report.html"
+    if gpt_index.exists():
+        shutil.copy2(gpt_index, OUTPUT.parent / "chatgpt_defense_report.html")
+    gpt_dir = ROOT / "static" / "chatgpt_defense"
+    if gpt_dir.is_dir():
+        shutil.copytree(gpt_dir, OUTPUT.parent / "chatgpt_defense", dirs_exist_ok=True)
     print(f"생성 완료: {OUTPUT} ({OUTPUT.stat().st_size / 1024 / 1024:.1f} MB)")
     return OUTPUT
 

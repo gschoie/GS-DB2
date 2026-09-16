@@ -364,7 +364,27 @@
       상태(state/research_digest.json)는 발송 성공 뒤에만 커밋.
     - GAS 반영 필요: dispatch_proxy.gs 붙여넣기 → '배포 관리 → 새 버전'.
 
-23. **크론 안전망 가드가 중복 발송을 못 막던 버그** (9/16): 수급이 하루 4회인데 저녁에
+23. **ChatGPT 방산 브리핑 신설 — API 자동 생성 + 수동 등록** (9/16): Gemini(defense_daily)·
+    Claude(claude_defense)에 이은 3탄(`static/chatgpt_defense/` + `chatgpt_defense_report.html`,
+    사이드바 `🧠 글로벌방산.브리핑(GPT)`). 텔레그램은 방산 채널(KDEF_TELEGRAM_*,
+    GPT_TELEGRAM_* 시크릿 있으면 우선)로 요약+링크.
+    - **자동 생성(기본)**: `chatgpt-brief.yml` 크론 UTC 20:55(KST 05:55, Gemini 20:40과
+      15분 오프셋) → `defense_briefing/chatgpt_briefing_bot.py` — Gemini 판과 같은 골격으로
+      defense_briefing_bot의 yfinance 확정 시세·구글뉴스 RSS(24h)·SYSTEM_PROMPT를 그대로
+      재사용하고 **작성만 OpenAI API**(Chat Completions, `OPENAI_API_KEY` 시크릿 필수 —
+      없으면 API 생성만 조용히 스킵). 모델은 `OPENAI_MODEL` 리포 변수로 교체 가능,
+      기본 후보 gpt-5 → gpt-5-mini → gpt-4o 순 404 폴백. temperature·max_tokens는
+      모델 세대별 이름·허용값이 달라 아예 안 보낸다(모델 기본값 사용).
+    - **수동 등록이 자동보다 우선**(같은 날짜 md 있으면 API 생성 스킵): ① 인덱스 페이지
+      ✍️ 폼 붙여넣기 → GAS dispatch_proxy 라우트 `gptbrief` → workflow_dispatch(content·date),
+      ② `chatgpt_briefing/inbox/YYYY-MM-DD.md` 커밋(push 트리거, 처리 후 삭제·README 건너뜀).
+      workflow_dispatch 문자열 입력칸은 한 줄짜리라 여러 줄 md가 뭉개짐 — 수동은 폼/파일로.
+      같은 날짜 재등록 = 페이지 교체 + 텔레 재발송.
+    - 렌더러는 claude_brief_publish.py 임포트 재사용(`gpt_brief_publish.py`, 발행·인덱스·
+      텔레그램). deploy-pages workflow_run에 "ChatGPT 방산 브리핑" 추가, build_static 복사
+      추가. **GAS 정본 갱신 필요** — Apps Script 재붙여넣기 + '배포 관리 → 새 버전'(새 배포 금지).
+
+24. **크론 안전망 가드가 중복 발송을 못 막던 버그** (9/16): 수급이 하루 4회인데 저녁에
     18:08·20:58·21:48 세 번 더 돌아 텔레그램이 계속 왔다.
     - **가드가 `event=workflow_dispatch` 만 셌다.** 무료 러너 크론이 밀리면(그날 실측
       +4.5~5.3시간) 15:40·16:40 두 크론이 나란히 16:10~24:00 슬롯에 떨어지는데,

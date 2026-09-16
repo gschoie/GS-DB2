@@ -39,6 +39,7 @@ const WF = {
   dart:      'dart-shiporder-bot.yml', // 조선 수주공시 → 텔레그램 (입력 필요)
   recipe:    'recipe-bot.yml',         // 유튜브 요리 숏츠 → Notion 레시피 (입력 필요)
   vacation:  'vacation-tracker.yml',   // 휴가/출장 직접 기입 (entry 입력 필요)
+  gptbrief:  'chatgpt-brief.yml',      // ChatGPT 방산 브리핑 붙여넣기 발행 (content 입력 필요)
   research:  'research-digest.yml',    // 커버리지 리서치요약 아침 모음
   // 다른 저장소의 워크플로는 {repo:'owner/name', file:'...'} 형태로 적는다.
   mirror:    { repo: 'DAOL-Securities-Research-Center/DAOL-RESEARCH-TONE', file: 'mirror.yml' }, // 챗봇 미러 즉시 동기화
@@ -56,6 +57,11 @@ function buildInputs(key, body) {
   if (key === 'vacation') return {
     mode: body.mode === 'run' ? 'run' : 'add',
     entry: String(body.entry || ''),
+  };
+  // ChatGPT 방산 브리핑: 대시보드 폼이 마크다운 전문을 content로 넘긴다.
+  if (key === 'gptbrief') return {
+    content: String(body.content || ''),
+    date:    String(body.date || ''),
   };
   // 밸류에이션: 비워 두면 정기 수집, lookup 에 티커를 넣으면 임시 조회만 돈다.
   if (key === 'valuation') return {
@@ -86,6 +92,9 @@ function doPost(e) {
     }
     if (key === 'vacation' && body.mode !== 'run' && !body.entry) {
       return json({ ok: false, code: 400, wf: wf, error: 'entry가 비어 있습니다' });
+    }
+    if (key === 'gptbrief' && !body.content) {
+      return json({ ok: false, code: 400, wf: wf, error: 'content가 비어 있습니다' });
     }
 
     return json(fireWorkflow(key, buildInputs(key, body)));
