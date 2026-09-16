@@ -343,4 +343,19 @@
     - 화면은 **etf-signal.yml 이 다시 돌아야 반영**된다(빌드 산출물이 커밋되는 구조).
       머지만으로는 배포본이 안 바뀐다.
 
+22. **ChatGPT 방산 브리핑 발행 경로 신설** (9/16): 사용자가 ChatGPT 스케줄 태스크로 받는
+    방산 브리핑을 대시보드+텔레그램으로 — Gemini(defense_daily)·Claude(claude_defense)에 이은
+    3탄(`static/chatgpt_defense/` + `chatgpt_defense_report.html`, 사이드바 `🧠 글로벌방산.브리핑(GPT)`).
+    - ChatGPT는 리포에 직접 못 쓰므로 **붙여넣기 발행**: 인덱스 페이지 상단 ✍️ 폼에 md 전문
+      붙여넣기 → GAS dispatch_proxy 신규 라우트 `gptbrief` → `chatgpt-brief.yml`
+      workflow_dispatch(content·date) → `defense_briefing/gpt_brief_publish.py --ingest`가
+      아카이브+인덱스 생성, main 커밋 후 방산 채널(KDEF_TELEGRAM_*, GPT_TELEGRAM_* 우선)로
+      요약+링크 발송. 렌더러는 claude_brief_publish.py 임포트 재사용(표준 라이브러리만).
+    - **보조 경로 = inbox 파일 커밋**: `chatgpt_briefing/inbox/YYYY-MM-DD.md`를 main에 올리면
+      push 트리거로 같은 발행이 돈다(처리 후 inbox 파일 삭제, README는 건너뜀).
+      workflow_dispatch의 문자열 입력칸은 한 줄짜리라 여러 줄 md가 뭉개짐 — 수동은 파일로.
+    - 같은 날짜 재등록 = 페이지 교체 + 텔레 재발송. deploy-pages workflow_run에
+      "ChatGPT 방산 브리핑" 추가, build_static 복사 추가. **GAS 정본이 바뀌었으므로
+      Apps Script 재붙여넣기 + '배포 관리 → 새 버전' 필요**(새 배포 금지).
+
 이후 작업은 git log와 이 파일을 갱신하며 이어간다.
