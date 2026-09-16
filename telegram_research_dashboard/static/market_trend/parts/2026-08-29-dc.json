@@ -1,0 +1,174 @@
+{
+ "source": "DC인사이드",
+ "galleries": [
+  {
+   "id": "krstock",
+   "name": "국내주식갤러리",
+   "posts": 1512,
+   "capped": true,
+   "burst": 1.9,
+   "base_daily": 787.6
+  },
+  {
+   "id": "stockus",
+   "name": "해외주식갤러리",
+   "posts": 0,
+   "capped": false,
+   "burst": 0.0,
+   "base_daily": 2508.3
+  }
+ ],
+ "posts_sampled": 271,
+ "keywords": [
+  {
+   "term": "하메네",
+   "count": 13,
+   "burst": 99.0,
+   "new": true
+  },
+  {
+   "term": "반도체",
+   "count": 5,
+   "burst": 99.0,
+   "new": true
+  },
+  {
+   "term": "월에",
+   "count": 5,
+   "burst": 99.0,
+   "new": true
+  },
+  {
+   "term": "야선",
+   "count": 13,
+   "burst": 13.6,
+   "new": false
+  },
+  {
+   "term": "국장",
+   "count": 9,
+   "burst": 13.8,
+   "new": false
+  },
+  {
+   "term": "트럼프",
+   "count": 5,
+   "burst": 3.4,
+   "new": false
+  },
+  {
+   "term": "삼성전자",
+   "count": 6,
+   "burst": 2.4,
+   "new": false
+  }
+ ],
+ "top_recommended": [
+  {
+   "gallery": "해외주식갤러리",
+   "title": "난 그냥 미국에 내 인생 올인함",
+   "views": 12122,
+   "recommend": 214,
+   "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=17599164&exception_mode=recommend&page=1",
+   "time_kst": "08-28 18:34"
+  },
+  {
+   "gallery": "해외주식갤러리",
+   "title": "이건 누가만들거야 시발 ㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋ",
+   "views": 15880,
+   "recommend": 178,
+   "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=17597058&exception_mode=recommend&page=1",
+   "time_kst": "08-28 14:28"
+  },
+  {
+   "gallery": "해외주식갤러리",
+   "title": "환혁수",
+   "views": 11048,
+   "recommend": 176,
+   "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=17597659&exception_mode=recommend&page=1",
+   "time_kst": "08-28 15:28"
+  },
+  {
+   "gallery": "해외주식갤러리",
+   "title": "램혁수 애니 뭐냐 씨발ㅋㅋㅋㅋㅋㅋㅋ",
+   "views": 7836,
+   "recommend": 172,
+   "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=17604649&exception_mode=recommend&page=1",
+   "time_kst": "08-29 02:23"
+  },
+  {
+   "gallery": "해외주식갤러리",
+   "title": "반도체 개좆된 이유",
+   "views": 13559,
+   "recommend": 154,
+   "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=17599826&exception_mode=recommend&page=1",
+   "time_kst": "08-28 20:06"
+  }
+ ],
+ "top_viewed": [
+  {
+   "gallery": "국내주식갤러리",
+   "title": "램혁수 애니 개웃기노ㅋㅋㅋㅋㅋㅋㅋ",
+   "views": 3388,
+   "recommend": 34,
+   "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3362764&page=14",
+   "time_kst": "08-29 05:14"
+  },
+  {
+   "gallery": "국내주식갤러리",
+   "title": "속보) 트럼프 긴급 행정명령 서명",
+   "views": 1180,
+   "recommend": 6,
+   "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3362743&page=15",
+   "time_kst": "08-29 04:34"
+  },
+  {
+   "gallery": "국내주식갤러리",
+   "title": "야선은 왜 갑자기 4%찍은거임?",
+   "views": 1019,
+   "recommend": 3,
+   "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3362754&page=15",
+   "time_kst": "08-29 04:54"
+  },
+  {
+   "gallery": "국내주식갤러리",
+   "title": "야선 차트 존나웃기네 ㅋㅋㅋ",
+   "views": 870,
+   "recommend": 0,
+   "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3362767&page=14",
+   "time_kst": "08-29 05:18"
+  },
+  {
+   "gallery": "국내주식갤러리",
+   "title": "흠 월요일은 국장 오르겠구만",
+   "views": 763,
+   "recommend": 0,
+   "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3362731&page=15",
+   "time_kst": "08-29 04:01"
+  },
+  {
+   "gallery": "국내주식갤러리",
+   "title": "삼전샀는데 좆댔다",
+   "views": 693,
+   "recommend": 0,
+   "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3362706&page=15",
+   "time_kst": "08-29 03:33"
+  },
+  {
+   "gallery": "국내주식갤러리",
+   "title": "야선차트 딱 이거 아님?",
+   "views": 665,
+   "recommend": 2,
+   "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3362777&page=14",
+   "time_kst": "08-29 05:43"
+  },
+  {
+   "gallery": "국내주식갤러리",
+   "title": "종베단 ㅈ된거임?",
+   "views": 645,
+   "recommend": 1,
+   "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3362721&page=15",
+   "time_kst": "08-29 03:54"
+  }
+ ]
+}

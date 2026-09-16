@@ -18,7 +18,43 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  # GAS 시계(gas/dispatch_proxy.gs의 tick)가 정시에 workflow_dispatch로 쏘고,
+  # GitHub 크론은 안전망으로 남긴다. 크론이 뒤늦게 돌 때 같은 일을 두 번 하지
+  # 않도록, **같은 슬롯 안에서** dispatch 실행이 이미 있었으면 이 예약 실행은 건너뛴다.
+  # 슬롯 경계는 scrape.decide_slot과 같다(11:30 / 14:30 / 16:10 KST) — 단순 분 단위
+  # 창으로 하면 몇 시간 늦은 크론이 다음 슬롯을 덮어써 수급 메시지가 두 번 간다.
+  # 수동 버튼(dispatch)은 언제나 그대로 실행된다.
+  guard:
+    runs-on: ubuntu-latest
+    permissions:
+      actions: read
+    outputs:
+      skip: ${{ steps.check.outputs.skip }}
+    steps:
+      - name: 같은 슬롯의 dispatch 실행 확인
+        id: check
+        if: github.event_name == 'schedule'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          hm=$(TZ=Asia/Seoul date +%H%M)
+          if   [ "$hm" -lt 1130 ]; then slot=1000; from="00:00"
+          elif [ "$hm" -lt 1430 ]; then slot=1300; from="11:30"
+          elif [ "$hm" -lt 1610 ]; then slot=1540; from="14:30"
+          else                          slot=1640; from="16:10"
+          fi
+          since=$(TZ=Asia/Seoul date -u -d "today $from" +%Y-%m-%dT%H:%M)
+          n=$(gh api "repos/${{ github.repository }}/actions/workflows/market-flow.yml/runs?event=workflow_dispatch&created=%3E${since}" \
+                --jq '[.workflow_runs[] | select(.conclusion=="success" or .status=="in_progress" or .status=="queued")] | length' || echo 0)
+          echo "슬롯 ${slot}(${from} KST~) 안의 dispatch 실행 ${n:-0}건"
+          if [ "${n:-0}" -gt 0 ]; then
+            echo "::notice::GAS가 이 슬롯을 이미 처리했습니다 — 예약 실행은 건너뜁니다"
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+          fi
+
   snapshot:
+    needs: guard
+    if: ${{ always() && needs.guard.outputs.skip != 'true' }}
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:

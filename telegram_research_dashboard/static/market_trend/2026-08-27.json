@@ -1,0 +1,911 @@
+{
+ "date": "2026-08-27",
+ "meta": {
+  "window": "08-26 06:00~08-27 06:00 KST",
+  "engine": "Gemini(gemini-2.5-flash)",
+  "generated_at": "2026-08-27T10:00+09:00"
+ },
+ "stats": {
+  "channels": 91,
+  "messages": 1487,
+  "groups": 1389
+ },
+ "one_liner": "SK이노베이션 합병 논란과 중동 긴장 완화가 시장의 주요 테마로 부상한 가운데, 미국 PCE 물가 상승으로 금리 인상 우려가 재점화되었습니다.",
+ "themes": [
+  {
+   "name": "SK이노베이션-SKIET 합병 논란 및 주주 우려",
+   "narrative": "SK이노베이션의 SKIET 흡수합병 발표 후, 분리막 사업의 저마진과 중국 저가 공세 심화로 인한 SKIET의 가치 하락, 그리고 합병으로 인한 기존 주주들의 밸류 희석 우려가 커지고 있다. 이에 주주 보호 정책 필요성이 대두되고 있다.",
+   "status": "new",
+   "strength": 5,
+   "keywords": [
+    "SK 이노베이션",
+    "SKIET",
+    "SK 아이이테크놀로지",
+    "분리막",
+    "합병"
+   ],
+   "evidence": [
+    {
+     "channel": "서화백의 AI놀이🚀",
+     "quote": "IPO 고점 대비 95% 이상 폭락, 분리막 사업의 저마진 및 중국 저가 공세 심화로 미래 불확실성 증대, SK이노베이션과의 합병으로 인한 밸류 희석 우려"
+    },
+    {
+     "channel": "하나증권/에너지화학/윤재성",
+     "quote": "[하나/에너지화학/윤재성] SK이노베이션: SKIET 흡수합병에 따른 기존 주주 보호정책 필요"
+    },
+    {
+     "channel": "서화백의 그림놀이 🚀",
+     "quote": "📉 SK이노베이션 (-30)"
+    }
+   ]
+  },
+  {
+   "name": "중동 지정학적 긴장 완화 및 유가 하락",
+   "narrative": "미국과 이란 간 휴전 합의 보도 및 이란-오만 간 호르무즈 해협 임시 공동 해상 통로 개설 논의로 중동 지역의 지정학적 긴장 완화 기대감이 커지고 있다. 이는 유가 하락 및 해운 업종 약세로 이어졌다.",
+   "status": "new",
+   "strength": 4,
+   "keywords": [
+    "이란 휴전",
+    "이란 오만",
+    "휴전 합의",
+    "호르무즈"
+   ],
+   "evidence": [
+    {
+     "channel": "키움증권 전략/시황 한지영",
+     "quote": "미국의 대이란 경제 제재 발표 이후 군사충돌 가능성 후퇴 및 휴전 기대감 등에 따른 금리 및 유가 하락 속에,"
+    },
+    {
+     "channel": "다올투자증권 리서치센터",
+     "quote": "러시아 국영 통신사 \"美•이란 휴전 합의…호르무즈 항행 자유 포함\""
+    },
+    {
+     "channel": "대신 전략. 돌직구",
+     "quote": "이란 외무부, 이란-오만 공동성명을 통해 호르무즈 해협 내 임시 공동 해상 통로 개설과 기뢰 제거 공동 프로젝트 등 추진을 발표."
+    }
+   ]
+  },
+  {
+   "name": "미국 PCE 물가 상승 및 금리 인상 우려",
+   "narrative": "7월 미국 PCE 물가지수가 전월 대비 0.2%, 전년 동월 대비 3.7% 상승하며 시장 전망치를 상회했고, 변동성이 큰 식품과 에너지를 제외한 근원 PCE 물가도 예상보다 높게 나타나 금리 상승 속도에 대한 우려를 키우고 있다.",
+   "status": "new",
+   "strength": 3,
+   "keywords": [
+    "PCE 물가",
+    "근원",
+    "금리"
+   ],
+   "evidence": [
+    {
+     "channel": "이상헌 부장 iM 지주/ESG/중소형주",
+     "quote": "- 미 상무부는 26일(현지시간) 7월 PCE 가격지수가 전월 대비 0.2% 상승했다고 밝혔다. 전년 동월 대비로는 3.7% 올랐다. 두 수치 모두 시장 전망치를 각각 0.1%p 웃돌았다."
+    },
+    {
+     "channel": "서화백의 AI놀이🚀",
+     "quote": "📝 근원PCE 부합 2년물 하락"
+    },
+    {
+     "channel": "키움증권 전략/시황 한지영",
+     "quote": "앞으로 중요한 것은 금리 상승 속도이기에, 그 속도 변화에 영향력을 행사할 1차 단기 이벤트는 26일 예정된 미국의 7월 PCE 물가가 될 예정입니다"
+    }
+   ]
+  },
+  {
+   "name": "원전 산업 기대감 재점화",
+   "narrative": "미국 정부가 한국에 웨스팅하우스 지분 공동 인수를 제안했다는 소식이 전해지면서 한국전력 등 국내 원전 관련주들의 주가가 강세를 보였다. 두산에너빌리티 또한 국내외 원전 산업 모멘텀 강화 구간에 진입했다는 분석이 나왔다.",
+   "status": "new",
+   "strength": 4,
+   "keywords": [
+    "한국전력",
+    "웨스팅하우스",
+    "원전",
+    "두산에너빌리티"
+   ],
+   "evidence": [
+    {
+     "channel": "epic AI - 투자 어시스턴트",
+     "quote": "강세 업종으로는 전기유틸리티(+6.89%)가 가장 두드러진 상승세를 기록했으며, 이는 미국 정부가 한국에 웨스팅하우스 지분 공동 인수를 제안했다는 소식이 투자심리를 강하게 자극한 결과로 풀이됩니다. 한국전력(+6.42%), 한전기술(+13.63%), 한전산업(+12.74%), SNT에너지(+15.33%), SK아이이테크놀…"
+    },
+    {
+     "channel": "여의도스토리 Ver2.0-习近平是个狗东西",
+     "quote": "한국전력 8%대 급등…'웨스팅하우스 지분 투자' 기대감 [특징주]"
+    },
+    {
+     "channel": "NH투자증권 리서치",
+     "quote": "[NH/이민재] 두산에너빌리티두 - 11월까지 계속될 모멘텀"
+    }
+   ]
+  },
+  {
+   "name": "네팔 홍수 피해 및 한국 기업 영향",
+   "narrative": "네팔에서 대규모 홍수 피해가 발생하여 최소 157명이 사망했으며, 현지 수력발전소 건설 현장에 있던 한국남동발전과 두산에너빌리티 직원 8명이 연락 두절 상태인 것으로 확인되어 우려를 낳고 있다.",
+   "status": "new",
+   "strength": 3,
+   "keywords": [
+    "네팔",
+    "홍수",
+    "한국인"
+   ],
+   "evidence": [
+    {
+     "channel": "미국 주식 인사이더 🇺🇸 (US Stocks Insider)",
+     "quote": "• 네팔에서 대규모 홍수 피해가 발생해 경찰 집계 기준 최소 157명의 사망자가 확인됐다고 발표."
+    },
+    {
+     "channel": "키움증권 해외선물 톡톡",
+     "quote": "제목 : 네팔 홍수에 발전소 짓던 남동발전·두산에너빌 직원 8명 연락 두절(종합) *연합인포*"
+    }
+   ]
+  },
+  {
+   "name": "메타 플랫폼스 청소년 보호 합의",
+   "narrative": "메타 플랫폼스가 소셜미디어의 청소년 유해성 관련 미국 주정부 소송에서 최대 167억 달러 규모의 합의에 도달했으며, 미성년자 이용 시간 제한 및 심야 이용 차단 등 청소년 보호 조치를 도입하기로 했다.",
+   "status": "new",
+   "strength": 2,
+   "keywords": [
+    "청소년",
+    "메타 플랫폼스",
+    "소송"
+   ],
+   "evidence": [
+    {
+     "channel": "사제콩이_서상영",
+     "quote": "메타 플랫폼(+1.07%)은 미국 주정부들과 최대 166.8억 달러 규모의 아동, 청소년 피해 소송 합의했고 이용시간, 야간접속, 알림 기능 등을 변경하기로 했다는 소식에 상승."
+    },
+    {
+     "channel": "미국 주식 인사이더 🇺🇸 (US Stocks Insider)",
+     "quote": "• 메타는 아동·청소년에게 소셜미디어 플랫폼이 유해한 영향을 미쳤다는 미국 주정부들의 소송과 관련해 최대 약 167억 달러 규모의 합의에 도달."
+    }
+   ]
+  }
+ ],
+ "community_mood": {
+  "score": -20,
+  "summary": "SK이노베이션과 SK아이이테크놀로지의 합병 이슈로 인한 주주 가치 훼손 우려와 폭락에 대한 개미 투자자들의 강한 불만과 공포가 나타나고 있다. 반면 알테오젠, 현대건설, 엔비디아 등 일부 종목에 대해서는 긍정적인 기대감이 혼재한다.",
+  "hot_stocks": [
+   {
+    "name": "SK이노베이션",
+    "score": -80,
+    "reason": "SKIET 흡수합병으로 인한 밸류 희석 우려 및 주주 보호 정책 요구가 빗발치고 있다."
+   },
+   {
+    "name": "SK아이이테크놀로지",
+    "score": -70,
+    "reason": "IPO 고점 대비 95% 이상 폭락과 SK이노베이션과의 합병 우려로 투자자들의 불만이 크다."
+   },
+   {
+    "name": "알테오젠",
+    "score": 70,
+    "reason": "무증 이벤트와 주가 상승에 대한 기대감이 높다."
+   },
+   {
+    "name": "현대건설",
+    "score": 60,
+    "reason": "웨스팅하우스 지분 인수 기대감과 주가 15만원 상승 전망에 주목하고 있다."
+   },
+   {
+    "name": "심텍",
+    "score": 40,
+    "reason": "2,700억원 규모의 신규 시설 투자 발표에 긍정적으로 반응하고 있다."
+   },
+   {
+    "name": "한국전력",
+    "score": 30,
+    "reason": "미국 웨스팅하우스 지분 공동 인수 제안 소식에 따른 기대감이 반영되었다."
+   },
+   {
+    "name": "두산에너빌리티",
+    "score": 30,
+    "reason": "국내외 원전 산업 모멘텀 강화 및 수주 기대감에 관심이 높다."
+   },
+   {
+    "name": "현대차",
+    "score": -50,
+    "reason": "주식 전부 매도하라는 부정적인 의견이 인기글로 올라왔다."
+   },
+   {
+    "name": "엔비디아",
+    "score": 50,
+    "reason": "실적 발표 후 숏보다는 롱 포지션 가능성이 높다는 기대감이 형성되었다."
+   }
+  ]
+ },
+ "signals": {
+  "spikes": [
+   {
+    "term": "SK 이노베이션",
+    "count": 42,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "이란 휴전",
+    "count": 25,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "이란 오만",
+    "count": 23,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "주기",
+    "count": 23,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "네팔",
+    "count": 20,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "SKIET",
+    "count": 19,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "SK 아이이테크놀로지",
+    "count": 19,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "아이이테크놀로지",
+    "count": 19,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "이노베이션",
+    "count": 42,
+    "burst": 19.858891288696906,
+    "base_daily": 1.4,
+    "new": false
+   },
+   {
+    "term": "휴전 합의",
+    "count": 18,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "식품",
+    "count": 17,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "벤치마크",
+    "count": 16,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "PCE 물가",
+    "count": 16,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "분리막",
+    "count": 16,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "한국전력",
+    "count": 16,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "기록할",
+    "count": 16,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "한국인",
+    "count": 16,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "홍수",
+    "count": 16,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "Non-GAAP",
+    "count": 16,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "근원",
+    "count": 25,
+    "burst": 35.46230587267304,
+    "base_daily": 0.4,
+    "new": false
+   },
+   {
+    "term": "오만 호르무즈",
+    "count": 15,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "지지선 근처에서",
+    "count": 15,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "단기 장기",
+    "count": 15,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "최적화",
+    "count": 14,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "청소년",
+    "count": 14,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   }
+  ],
+  "top_posts": [
+   {
+    "channels": 5,
+    "channel": "하나증권 리서치",
+    "head": "[하나증권 IT 김민경] 심텍 (222800.KQ/신규): 시설 투자 공시 코멘트 자료: https://cutt.ly/BygQ368Z ■ 2,700억원 규모 시설투자 발표 심텍은 금일 공시를 통해 총 2,742억원 규모의 신규 시설투자를 발표. 투자 목적은 SOCAMM 모듈 기판 전용 공장 신설과 고다층 MSAP 기판 수…",
+    "url": "https://t.me/HanaResearch/20317",
+    "time_kst": "08-26 07:16"
+   },
+   {
+    "channels": 4,
+    "channel": "NH투자증권 리서치",
+    "head": "[NH/이민재] 두산에너빌리티두 [Web발신] [NH/이민재] 두산에너빌리티 두산에너빌리티 - 11월까지 계속될 모멘텀 본문보기: https://m.nhsec.com/c/7sv3z 미국 중간선거 직전까지 국내외 원전산업 내 모멘텀 강화 구간에 진입. 대형원전 및 SMR 시장 내 독보적인 지위에 따라 내년부터 본격적인 수주…",
+    "url": "https://t.me/c/1373336778/47489",
+    "time_kst": "08-26 07:42"
+   },
+   {
+    "channels": 3,
+    "channel": "키움증권 전략/시황 한지영",
+    "head": "[8/26, 장 시작 전 생각: 내부 체력, 키움 한지영] - 다우 +0.3%, S&P500 +0.3%, 나스닥 +0.7% - 마이크론 +2.4%, 엔비디아 +2.2%, 모더나 +14.4% - 미 10년물 금리 4.62%, 미 30년물 금리 5.15%, WTI 유가 81.0달러 1. 미국 증시는 강세로 마감했네요. ﻿8월…",
+    "url": "https://t.me/hedgecat0301/2922",
+    "time_kst": "08-26 07:37"
+   },
+   {
+    "channels": 3,
+    "channel": "메리츠증권 리서치",
+    "head": "📮[메리츠증권 전기전자/IT부품 양승수] 코스텍시스(355150) NDR 후기: 기다리면 (전력반도체) 열린다 ▶ 대량 양산 전에도 견조한 실적 유지 중 - 코스텍시스의 2Q26 실적은 매출액 53억원(-2.0% QoQ, +67.0% YoY), 영업이익 12억원(+22.2% QoQ, +25.4% YoY, OPM 22.2%…",
+    "url": "https://t.me/meritz_research/44509",
+    "time_kst": "08-26 07:46"
+   },
+   {
+    "channels": 3,
+    "channel": "다올투자증권 리서치센터",
+    "head": "[다올투자증권 조선/기계/방산 최광식] 8/26(수) 데일리뉴스 🛳 조선 [TradeWinds] Core Power strikes deal to develop nuclear cargo ship fleet for US amid new dawn for American shipping Adnoc L&S splashes out…",
+    "url": "https://t.me/daolresearch/14956",
+    "time_kst": "08-26 08:03"
+   },
+   {
+    "channels": 3,
+    "channel": "AWAKE - 실시간 주식 공시 정리채널",
+    "head": "2026.08.26 11:01:57 기업명: 에스케이바이오팜(시가총액: 6조 8,524억) A326030 보고서명: 투자판단관련주요경영사항 (뇌전증 신약 후보 물질 Opakalim 등에 대한 라이선스 인 계약) 제목 : 뇌전증 신약 후보 물질 Opakalim(BHV-7000), 기타 칼륨채널(Kv7) 활성화제 화합물 및…",
+    "url": "https://t.me/darthacking/152075",
+    "time_kst": "08-26 11:01"
+   },
+   {
+    "channels": 3,
+    "channel": "키움증권 리서치센터",
+    "head": "이번 자료는 저희 리서치센터 유틸리티 담당 조재원 연구원과 함께 작성했습니다! 국내외 데이터센터 건설에 따른 건설/유틸리티 업종에 대한 수혜 내용을 담았으니 많은 관심 부탁드립니다! ▶️ 보고서: bbn.kiwoom.com/rfCI5680 아래 내용은 보고서 중 건설 부문 요약입니다. ♣️ 건설/유틸리티 산업 인뎁스 자료…",
+    "url": "https://t.me/KiwoomResearch/23893",
+    "time_kst": "08-26 07:34"
+   },
+   {
+    "channels": 3,
+    "channel": "신한 리서치",
+    "head": "[신한투자증권 최승환, 이채윤] 링크솔루션 (474650) - NDR 후기: 첫 파운드리 수주 ▶️ 신한생각: 대전공장 완공 앞두고 의미 있는 수주 획득 - 한화에어로스페이스향 6.6억원 규모의 첫 파운드리 수주 공시. 3D 프린팅 양산 가능 품목이 확인된 유의미한 수주 - 초도물량 성격의 수주는 공장 완공 전에도 다수…",
+    "url": "https://t.me/shinhanresearch/52513",
+    "time_kst": "08-26 08:12"
+   },
+   {
+    "channels": 3,
+    "channel": "🗽엄브렐라(Umbrella Research) 리서치+ 네프콘 옆집부자형 since 2020",
+    "head": "[KB증권 건설/REITs 장문준] [Web발신] [원전] APR 1400. 미국 진출 가능할까 KB증권 건설 장문준 (02-6114-2928) * 미국 측이 한국에 웨스팅하우스 지분 인수를 제안했다는 보도가 있었습니다. * 지분 취득 가능성에 집중하기보다 하반기 중 한국의 원전관련 대미투자와 한-미간 협력구도가 윤곽을…",
+    "url": "https://t.me/umbrellaresearch/41903",
+    "time_kst": "08-26 09:19"
+   },
+   {
+    "channels": 3,
+    "channel": "한투증권 미국/중국전략 정정영",
+    "head": "앤트로픽, 투자자에게 30조달러 이상의 시장 잠재력 공개. IPO 기업가치 목표 약 2조달러 • 앤트로픽 IPO 준비 중. 투자자들에게 30조달러 넘는 잠재시장 규모 공개. 스페이스X 기록 경신 계획 • 2028년 매출 1900억-2000억달러 예상. 목표 기업가치 약 2조달러, 최대 1000억달러 조달 추진. 9-10월…",
+    "url": "https://t.me/G2strategy/32611",
+    "time_kst": "08-26 06:08"
+   },
+   {
+    "channels": 3,
+    "channel": "텐렙",
+    "head": "📌 다스코(시가총액: 645억) #A058730 📁 투자판단관련주요경영사항 2026.08.26 10:05:09 (현재가 : 3,185원, -0.16%) 제목 : 신안 미트라1,2호&호루스 35MW 태양광 발전사업 EPC 공사 및 O&M 우선협상대상자 선정 * 주요내용 - 당사는 신안 미트라1,2호&호루스 태양광 발전사업…",
+    "url": "https://t.me/Ten_level/90859",
+    "time_kst": "08-26 10:06"
+   },
+   {
+    "channels": 2,
+    "channel": "서화백의 AI놀이🚀",
+    "head": "2026년 8월 25일 글로벌 마감 시황 브리핑 📈📉 미국 증시는 화요일 (현지시간) 반도체 주식에 대한 매수세가 재개되면서 완만한 상승세로 마감했습니다. 나스닥 종합 지수는 0.66% 상승하여 주요 지수 중 가장 높은 상승률을 기록했으며, S&P 500 지수는 0.32%, 다우존스 산업평균 지수는 0.30% 각각 상승했…",
+    "url": "https://t.me/easobi_ai/19776",
+    "time_kst": "08-26 06:31"
+   },
+   {
+    "channels": 2,
+    "channel": "[신한 리서치본부] IT(반도체/전기전자/디스플레이)",
+    "head": "[신한투자증권 IT팀 오강호, 김형태, 박현우, 송혜수, 김예성] 8/26(수) 🕗Daily IT 예습하기 ✅ 반도체/장비 ▶️ SK하이닉스 노조, '자사주 60% 성과급' 잠정합의안 부결…재협상 수순 (ZDNET) https://alie.kr/6MuGIoc ▶️ 엔비디아, 스페이스XAI에 베라 CPU 등 공급 (디일렉)…",
+    "url": "https://t.me/c/1355104422/7361",
+    "time_kst": "08-26 08:02"
+   },
+   {
+    "channels": 2,
+    "channel": "서화백의 그림놀이 🚀",
+    "head": "📝 텔레그램 심층 분석 Report (19시 07분) 기준 🌡️ 센티먼트 기대 (+10) 💡 요약 전반적으로 AI, 반도체 산업의 성장 기대감이 높으나, 국내 세제 및 노동 정책, 기업 합병 이슈 등으로 인한 불확실성도 혼재됩니다. 🗣️ Top 키워드: AI(29), 반도체(14), 현대차(10), NVDA(8), 비트코…",
+    "url": "https://t.me/easobi/16517",
+    "time_kst": "08-26 19:07"
+   },
+   {
+    "channels": 2,
+    "channel": "허혜민의 제약/바이오 소식통",
+    "head": "26/08/26 (수) 키움 제약바이오 데일리 💊 [제약/바이오 Analyst 허혜민, RA 김종현] 키움 제약/바이오/의료기기 소식통: t.me/huhpharm <‍📈 주요 지수 등락> * 코스피 +0.68% vs 코스피 제약 -0.89% * 코스닥 +1.7% vs 코스닥 제약 -0.36% * S&P500 +0.32%…",
+    "url": "https://t.me/huhpharm/11656",
+    "time_kst": "08-26 07:47"
+   }
+  ]
+ },
+ "community": {
+  "source": "네이버 종목토론실",
+  "universe": 40,
+  "posts": 2741,
+  "search_top": [
+   {
+    "code": "005930",
+    "name": "삼성전자",
+    "rank": 1
+   },
+   {
+    "code": "000660",
+    "name": "SK하이닉스",
+    "rank": 2
+   },
+   {
+    "code": "034020",
+    "name": "두산에너빌리티",
+    "rank": 3
+   },
+   {
+    "code": "009150",
+    "name": "삼성전기",
+    "rank": 4
+   },
+   {
+    "code": "005380",
+    "name": "현대차",
+    "rank": 5
+   },
+   {
+    "code": "402340",
+    "name": "SK스퀘어",
+    "rank": 6
+   },
+   {
+    "code": "035420",
+    "name": "NAVER",
+    "rank": 7
+   },
+   {
+    "code": "066570",
+    "name": "LG전자",
+    "rank": 8
+   },
+   {
+    "code": "042700",
+    "name": "한미반도체",
+    "rank": 9
+   },
+   {
+    "code": "006400",
+    "name": "삼성SDI",
+    "rank": 10
+   }
+  ],
+  "hot_stocks": [
+   {
+    "code": "012330",
+    "name": "현대모비스",
+    "posts": 214,
+    "capped": true,
+    "burst": 99.0,
+    "base_daily": 0.0
+   },
+   {
+    "code": "361610",
+    "name": "SK아이이테크놀로지",
+    "posts": 179,
+    "capped": true,
+    "burst": 99.0,
+    "base_daily": 0.0
+   },
+   {
+    "code": "222800",
+    "name": "심텍",
+    "posts": 87,
+    "capped": true,
+    "burst": 99.0,
+    "base_daily": 0.0
+   },
+   {
+    "code": "078340",
+    "name": "컴투스",
+    "posts": 219,
+    "capped": true,
+    "burst": 10.6,
+    "base_daily": 20.7
+   },
+   {
+    "code": "096770",
+    "name": "SK이노베이션",
+    "posts": 233,
+    "capped": true,
+    "burst": 6.9,
+    "base_daily": 33.7
+   },
+   {
+    "code": "047040",
+    "name": "대우건설",
+    "posts": 139,
+    "capped": true,
+    "burst": 7.2,
+    "base_daily": 19.3
+   },
+   {
+    "code": "015760",
+    "name": "한국전력",
+    "posts": 131,
+    "capped": true,
+    "burst": 6.8,
+    "base_daily": 19.1
+   },
+   {
+    "code": "128940",
+    "name": "한미약품",
+    "posts": 151,
+    "capped": true,
+    "burst": 3.1,
+    "base_daily": 48.1
+   },
+   {
+    "code": "000720",
+    "name": "현대건설",
+    "posts": 126,
+    "capped": true,
+    "burst": 2.7,
+    "base_daily": 46.6
+   },
+   {
+    "code": "034020",
+    "name": "두산에너빌리티",
+    "posts": 281,
+    "capped": true,
+    "burst": 1.7,
+    "base_daily": 162.6
+   },
+   {
+    "code": "028300",
+    "name": "HLB",
+    "posts": 160,
+    "capped": true,
+    "burst": 1.8,
+    "base_daily": 87.1
+   },
+   {
+    "code": "010170",
+    "name": "대한광통신",
+    "posts": 129,
+    "capped": true,
+    "burst": 1.7,
+    "base_daily": 75.6
+   }
+  ],
+  "keywords": [
+   {
+    "term": "외인",
+    "count": 22,
+    "burst": 99.0,
+    "new": true
+   },
+   {
+    "term": "기관",
+    "count": 18,
+    "burst": 99.0,
+    "new": true
+   },
+   {
+    "term": "외국인",
+    "count": 15,
+    "burst": 99.0,
+    "new": true
+   },
+   {
+    "term": "물량",
+    "count": 14,
+    "burst": 99.0,
+    "new": true
+   },
+   {
+    "term": "이게",
+    "count": 14,
+    "burst": 99.0,
+    "new": true
+   },
+   {
+    "term": "결국",
+    "count": 12,
+    "burst": 99.0,
+    "new": true
+   },
+   {
+    "term": "대차",
+    "count": 12,
+    "burst": 99.0,
+    "new": true
+   },
+   {
+    "term": "네이버",
+    "count": 12,
+    "burst": 99.0,
+    "new": true
+   },
+   {
+    "term": "수주",
+    "count": 10,
+    "burst": 99.0,
+    "new": true
+   },
+   {
+    "term": "참조",
+    "count": 10,
+    "burst": 99.0,
+    "new": true
+   },
+   {
+    "term": "언제",
+    "count": 10,
+    "burst": 99.0,
+    "new": true
+   },
+   {
+    "term": "이노텍",
+    "count": 10,
+    "burst": 99.0,
+    "new": true
+   },
+   {
+    "term": "현대",
+    "count": 9,
+    "burst": 99.0,
+    "new": true
+   },
+   {
+    "term": "SK하이닉스",
+    "count": 9,
+    "burst": 99.0,
+    "new": true
+   },
+   {
+    "term": "국장",
+    "count": 9,
+    "burst": 99.0,
+    "new": true
+   }
+  ],
+  "top_liked": [
+   {
+    "code": "196170",
+    "name": "알테오젠",
+    "title": "이번 무증 이벤트를 보내며...[10]",
+    "views": 1746,
+    "likes": 138,
+    "url": "https://finance.naver.com/item/board_read.naver?code=196170&nid=428493885",
+    "time_kst": "08-26 19:15"
+   },
+   {
+    "code": "010170",
+    "name": "대한광통신",
+    "title": "애들아~~~ 두가지[14]",
+    "views": 2668,
+    "likes": 136,
+    "url": "https://finance.naver.com/item/board_read.naver?code=010170&nid=428464880",
+    "time_kst": "08-26 11:47"
+   },
+   {
+    "code": "096770",
+    "name": "SK이노베이션",
+    "title": "SK이노베이션 국민청원[18]",
+    "views": 905,
+    "likes": 95,
+    "url": "https://finance.naver.com/item/board_read.naver?code=096770&nid=428499559",
+    "time_kst": "08-26 22:44"
+   },
+   {
+    "code": "196170",
+    "name": "알테오젠",
+    "title": "알테오젠 고생했다ᆢ[6]",
+    "views": 846,
+    "likes": 83,
+    "url": "https://finance.naver.com/item/board_read.naver?code=196170&nid=428496177",
+    "time_kst": "08-26 20:36"
+   },
+   {
+    "code": "000720",
+    "name": "현대건설",
+    "title": "금주 15만원 찍는다 찬반 투표[3]",
+    "views": 1089,
+    "likes": 82,
+    "url": "https://finance.naver.com/item/board_read.naver?code=000720&nid=428461362",
+    "time_kst": "08-26 11:13"
+   }
+  ],
+  "top_rising": [
+   {
+    "code": "034020",
+    "name": "두산에너빌리티",
+    "title": "속보 트럼프 에너지장비 서명[2]",
+    "views": 3717,
+    "likes": 41,
+    "url": "https://finance.naver.com/item/board_read.naver?code=034020&nid=428504265",
+    "time_kst": "08-27 05:49",
+    "views_per_hour": 900.8
+   },
+   {
+    "code": "196170",
+    "name": "알테오젠",
+    "title": "단주대금 9월1일[4]",
+    "views": 3892,
+    "likes": 44,
+    "url": "https://finance.naver.com/item/board_read.naver?code=196170&nid=428486254",
+    "time_kst": "08-26 16:06",
+    "views_per_hour": 218.1
+   },
+   {
+    "code": "196170",
+    "name": "알테오젠",
+    "title": "1,243,717 대차 체결 수량은[3]",
+    "views": 1320,
+    "likes": 70,
+    "url": "https://finance.naver.com/item/board_read.naver?code=196170&nid=428503010",
+    "time_kst": "08-27 02:15",
+    "views_per_hour": 171.6
+   },
+   {
+    "code": "035420",
+    "name": "NAVER",
+    "title": "엔비디아 실적 발표 후 시나리오[13]",
+    "views": 2310,
+    "likes": 73,
+    "url": "https://finance.naver.com/item/board_read.naver?code=035420&nid=428494727",
+    "time_kst": "08-26 19:43",
+    "views_per_hour": 162.4
+   },
+   {
+    "code": "005935",
+    "name": "삼성전자우",
+    "title": "22만6 천원에  우선주있는데[14]",
+    "views": 2092,
+    "likes": 17,
+    "url": "https://finance.naver.com/item/board_read.naver?code=005935&nid=428491753",
+    "time_kst": "08-26 18:05",
+    "views_per_hour": 131.9
+   }
+  ]
+ },
+ "community_dc": {
+  "source": "DC인사이드",
+  "galleries": [
+   {
+    "id": "krstock",
+    "name": "국내주식갤러리",
+    "posts": 0,
+    "capped": false,
+    "burst": 0.0,
+    "base_daily": 1491.1
+   },
+   {
+    "id": "stockus",
+    "name": "해외주식갤러리",
+    "posts": 0,
+    "capped": false,
+    "burst": 0.0,
+    "base_daily": 4767.7
+   }
+  ],
+  "posts_sampled": 0,
+  "keywords": [],
+  "top_recommended": [
+   {
+    "gallery": "해외주식갤러리",
+    "title": "이따 컨콜때 젠슨황 이러면 어떻게됨?",
+    "views": 10887,
+    "recommend": 307,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=17575571&exception_mode=recommend&page=1",
+    "time_kst": "08-26 17:34"
+   },
+   {
+    "gallery": "해외주식갤러리",
+    "title": "현대차 주식 전부다 팔고 튀어라 ㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋ",
+    "views": 13148,
+    "recommend": 207,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=17573779&exception_mode=recommend&page=1",
+    "time_kst": "08-26 13:13"
+   },
+   {
+    "gallery": "해외주식갤러리",
+    "title": "[속보] 엔비디아 실적발표, 숏보다는 롱 가능성이 높다",
+    "views": 14165,
+    "recommend": 206,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=17576791&exception_mode=recommend&page=1",
+    "time_kst": "08-26 20:29"
+   },
+   {
+    "gallery": "해외주식갤러리",
+    "title": "워렌버핏 진짜 ㅂㅅ맞노",
+    "views": 12091,
+    "recommend": 202,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=17573608&exception_mode=recommend&page=1",
+    "time_kst": "08-26 12:47"
+   },
+   {
+    "gallery": "해외주식갤러리",
+    "title": "니들 디엠 피싱 조심해라",
+    "views": 9710,
+    "recommend": 190,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=17576487&exception_mode=recommend&page=1",
+    "time_kst": "08-26 19:50"
+   }
+  ],
+  "top_viewed": []
+ }
+}

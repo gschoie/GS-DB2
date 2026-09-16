@@ -127,9 +127,11 @@ function overviewTone(r){const op=r.opinion&&!['명시 없음','없음',''].incl
 document.addEventListener('click',e=>{const co=e.target.closest('#tone-latest .tone-co');if(!co||!co.dataset.co)return;e.preventDefault();e.stopPropagation();view('tone');const f=$('#tone-frame');if(f)f.src=TONE_SITE+'?t='+Date.now()+'#co='+encodeURIComponent(co.dataset.co)});
 function overviewUnion(p){return `<a class="mini-line" href="${esc(p.url||'#')}" target="_blank" rel="noopener"><b class="rk-s">${p.rank}</b><span>${esc(p.title)}</span><small>조회 ${Number(p.views).toLocaleString()} · 댓글 ${p.comments}</small></a>`}
 function overviewMacro(x,i){return miniRow(`<b class="rk">${i+1}</b>`,`<p class="mini-title">${esc(x.title)}</p>`,x.url)}
-const MACRO_ENDPOINT='https://script.google.com/macros/s/AKfycbxNClBzJoE35VSwcCNgMEJ_PvFCBphH87g4gq7xDiGXhO5x-fd-IMpNL6Ly0oURJzEN/exec';/* 네이버 Top5 실시간 JSON(GAS). 비면 배포 데이터만 사용 */
+const MACRO_ENDPOINT='https://script.google.com/macros/s/AKfycbxNClBzJoE35VSwcCNgMEJ_PvFCBphH87g4gq7xDiGXhO5x-fd-IMpNL6Ly0oURJzEN/exec';/* 네이버 실시간 JSON(GAS, 5건). 배포 데이터와 합쳐 10줄을 채운다 */
 const decodeEnt=s=>{const t=document.createElement('textarea');t.innerHTML=s||'';return t.value};
-async function fetchLiveMacro(){if(!MACRO_ENDPOINT)return;try{const r=await fetch(MACRO_ENDPOINT,{cache:'no-store'});if(!r.ok)return;const d=await r.json();const items=(d.global_economy||d.items||[]).map(x=>({title:decodeEnt(x.title),url:x.url}));if(items.length&&$('#macro-global'))$('#macro-global').innerHTML=items.slice(0,7).map(overviewMacro).join('')}catch{}}
+// GAS 실시간분은 5건뿐이라 그대로 덮으면 목록이 늘 5줄이 된다 → 실시간분을 앞에 두고
+// 배포 데이터(최대 10건)로 뒤를 채운다(주소 기준 중복 제거).
+async function fetchLiveMacro(){if(!MACRO_ENDPOINT)return;try{const r=await fetch(MACRO_ENDPOINT,{cache:'no-store'});if(!r.ok)return;const d=await r.json();const live=(d.global_economy||d.items||[]).map(x=>({title:decodeEnt(x.title),url:x.url}));if(!live.length||!$('#macro-global'))return;const seen=new Set(live.map(x=>x.url)),merged=[...live];for(const x of (window.__DASHBOARD_DATA__?.macro?.global_economy||[])){if(merged.length>=10)break;if(x.url&&!seen.has(x.url)){seen.add(x.url);merged.push(x)}}$('#macro-global').innerHTML=merged.slice(0,10).map(overviewMacro).join('')}catch{}}
 async function load(){
  const reportQs=new URLSearchParams({q:state.q,company:state.reportCompany,type:state.reportType,weekly:state.weeklyFolder});
  const newsQs=new URLSearchParams({q:state.q,nq:state.newsQ,company:state.newsCompany});
@@ -145,12 +147,13 @@ async function load(){
  const unionTop=window.__DASHBOARD_DATA__?.union?.monthly||[];
  if($('#union-top'))$('#union-top').innerHTML=unionTop.slice(0,10).map(overviewUnion).join('')||'<p class="empty">노조게시판 데이터가 없습니다.</p>';
  const macro=window.__DASHBOARD_DATA__?.macro||{};
- if($('#macro-global'))$('#macro-global').innerHTML=(macro.global_economy||[]).slice(0,7).map(overviewMacro).join('')||'<p class="empty">매크로 데이터가 없습니다.</p>';
+ if($('#macro-global'))$('#macro-global').innerHTML=(macro.global_economy||[]).slice(0,10).map(overviewMacro).join('')||'<p class="empty">매크로 데이터가 없습니다.</p>';
  fetchLiveMacro();
  const brief=$('#daily-brief');if(brief){const gm='https://gemini.google.com/app/dc1cee4fd9194007?usp=sharing';const body=macro.daily_brief?esc(macro.daily_brief).replace(/\n/g,'<br>'):'<span class="brief-empty">아직 핵심요약이 없습니다. GMN.글로벌방산 문서에 붙여넣으면 여기 표시됩니다.</span>';brief.innerHTML=`<div class="brief-head"><small>GEMINI · 오늘의 핵심요약</small><a href="${gm}" target="_blank" rel="noopener">Gemini 열기 →</a></div><div class="brief-body">${body}</div>`}
  const dbe=$('#defense-brief');if(dbe){const db=window.__DASHBOARD_DATA__?.defenseBrief;if(db&&db.summary){const body=db.summary.split('\n').map(l=>l.trim()).filter(Boolean).map(l=>l.startsWith('## ')?'━ '+l.replace(/^#+\s*/,'').split('—')[0].trim():l.replace(/^\*+\s+/,'• ')).join('\n');dbe.innerHTML=`<div class="brief-head"><small>🌍 글로벌 방산 데일리 브리핑${db.date?' · '+esc(db.date)+(d=>isNaN(d)?'':`(${'일월화수목금토'[d.getDay()]})`)(new Date(db.date+'T00:00:00')):''}</small><a href="defense_briefing_report.html" target="_blank" rel="noopener">전체 브리핑 →</a></div><div class="brief-body">${esc(body).replace(/\n/g,'<br>')}</div>`;dbe.style.display='';}else{dbe.style.display='none';}}
  const cbe=$('#claude-brief');if(cbe){const cb=window.__DASHBOARD_DATA__?.claudeBrief;if(cb&&cb.summary){const body=cb.summary.split('\n').map(l=>l.trim()).filter(Boolean).map(l=>l.startsWith('## ')?'━ '+l.replace(/^#+\s*/,'').split('—')[0].trim():l.replace(/^\*+\s+/,'• ')).join('\n');cbe.innerHTML=`<div class="brief-head"><small>🤖 Claude 방산 브리핑${cb.date?' · '+esc(cb.date)+(d=>isNaN(d)?'':`(${'일월화수목금토'[d.getDay()]})`)(new Date(cb.date+'T00:00:00')):''}</small><a href="claude_defense_report.html" target="_blank" rel="noopener">전체 브리핑 →</a></div><div class="brief-body">${esc(body).replace(/\n/g,'<br>')}</div>`;cbe.style.display='';}else{cbe.style.display='none';}}
  const nbe=$('#construction-brief');if(nbe){const nb=window.__DASHBOARD_DATA__?.constructionBrief;if(nb&&nb.summary){const body=nb.summary.split('\n').map(l=>l.trim()).filter(Boolean).map(l=>l.startsWith('## ')?'━ '+l.replace(/^#+\s*/,'').split('—')[0].trim():l.replace(/^\*+\s+/,'• ')).join('\n');nbe.innerHTML=`<div class="brief-head"><small>🏗️ 글로벌 건설기계 데일리 브리핑${nb.date?' · '+esc(nb.date)+(d=>isNaN(d)?'':`(${'일월화수목금토'[d.getDay()]})`)(new Date(nb.date+'T00:00:00')):''}</small><a href="construction_briefing_report.html" target="_blank" rel="noopener">전체 브리핑 →</a></div><div class="brief-body">${esc(body).replace(/\n/g,'<br>')}</div>`;nbe.style.display='';}else{nbe.style.display='none';}}
+ const ebe=$('#energy-brief');if(ebe){const eb=window.__DASHBOARD_DATA__?.energyBrief;if(eb&&eb.summary){const body=eb.summary.split('\n').map(l=>l.trim()).filter(Boolean).map(l=>l.startsWith('## ')?'━ '+l.replace(/^#+\s*/,'').split('—')[0].trim():l.replace(/^\*+\s+/,'• ')).join('\n');ebe.innerHTML=`<div class="brief-head"><small>🌊 친환경 에너지·FDC 브리핑${eb.date?' · '+esc(eb.date)+(d=>isNaN(d)?'':`(${'일월화수목금토'[d.getDay()]})`)(new Date(eb.date+'T00:00:00')):''}</small><a href="energy_briefing_report.html" target="_blank" rel="noopener">전체 브리핑 →</a></div><div class="brief-body">${esc(body).replace(/\n/g,'<br>')}</div>`;ebe.style.display='';}else{ebe.style.display='none';}}
  const archive=news.reduce((all,n)=>{const d=new Date(n.posted_at),y=String(d.getFullYear()),m=`${String(d.getMonth()+1).padStart(2,'0')}월`;all[y]??={};all[y][m]??=[];all[y][m].push(n);return all},{});
  const years=Object.entries(archive).sort(([a],[b])=>b.localeCompare(a));
  $('#news-list').innerHTML=years.map(([year,months],yi)=>{const count=Object.values(months).reduce((sum,list)=>sum+list.length,0);return `<details class="year-group" ${yi===0||state.newsQ?'open':''}><summary><span>${year}년</span><em>${count.toLocaleString()}건</em></summary><div class="year-content">${Object.entries(months).sort(([a],[b])=>b.localeCompare(a)).map(([month,list],mi)=>`<details class="month-group" ${(yi===0&&mi===0)||state.newsQ?'open':''}><summary class="month-divider"><h3>${month}</h3><span>${list.length}건</span></summary>${newsTable(list)}</details>`).join('')}</div></details>`}).join('')||'<p class="empty">조건에 맞는 뉴스가 없습니다.</p>';
@@ -161,8 +164,10 @@ async function load(){
  renderPressTable();
 }
 function loadUnionBoard(){const frame=$('#union-board-frame'),status=$('#union-board-status');status.textContent='최신 보고서를 불러오는 중';frame.onload=()=>status.textContent='현중 노조게시판 분석 보고서';frame.onerror=()=>status.textContent='hhiun_board_report.html 파일을 확인해 주세요';frame.src=`hhiun_board_report.html?t=${Date.now()}`}
-const TASK_ROSTER=[['팀장',['최광식','이준범']],['지속가능(Sustainability)',['박영도','김지원','이정우','김진영']],['지능화(Intelligence)',['유지웅','고영민','김혜영','김연미','김상혁']],['휴먼/생체(Human)',['이지수','박종현','이다연','임도영','박소현','한수빈']]];
+const TASK_ROSTER=[['팀장',['최광식','이준범']],['지속가능(Sustainability)',['박영도','김지원','이정우','김진영']],['지능화(Intelligence)',['유지웅','남대종','김혜영','김연미','테크RA']],['휴먼/생체(Human)',['이지수','박종현','이다연','임도영','박소현','한수빈']]];
+const TASK_FORMER=['고영민','김상혁'];/* 퇴사자 — 표 하단 접힌 그룹, 기록은 보존 */
 const TASK_ITEMS_DEFAULT=['근태입력','휴가계획','자료제출','컴플라이언스','기타'],TASK_KEY='hi_tasklist_v1',TASK_ITEMS_KEY='hi_tasklist_items_v1',TASK_LAST_KEY='hi_tasklist_last_v1';
+let taskWantItem=null;/* 주소(#tasklist:항목)로 들어온 항목 — 동기화가 끝난 뒤에도 유지 */
 /* 서버 덮어쓰기 가드: 이 브라우저(도메인)가 서버 번들을 한 번이라도 받아본 뒤에만 push를 허용.
    도메인 이관 직후 빈 localStorage 상태에서의 조작이 GAS 사본을 빈 목록으로 덮던 사고(8/18) 방지. */
 const SYNC_SEEDED_KEY='hi_sync_seeded_v1';
@@ -190,15 +195,24 @@ function taskPush(statusSel){if(!TASK_ENDPOINT)return;
 async function taskPull(){if(!TASK_ENDPOINT)return false;const status=$('#task-sync');if(status)status.textContent='불러오는 중…';try{const r=await fetch(TASK_ENDPOINT,{cache:'no-store'});if(!r.ok)throw 0;const b=await r.json()||{};const remoteData=b.data&&typeof b.data==='object'?b.data:{};syncSeeded();if(!Object.keys(remoteData).length&&Object.keys(taskLoad()).length){taskPush();if(status)status.textContent='☁ 이 기기 데이터 업로드됨';return false}if(b.data)localStorage.setItem(TASK_KEY,JSON.stringify(b.data));if(Array.isArray(b.items)&&b.items.length)localStorage.setItem(TASK_ITEMS_KEY,JSON.stringify(b.items));if(Array.isArray(b.todos))localStorage.setItem(TODO_KEY,JSON.stringify(b.todos));if(Array.isArray(b.todoGroups))localStorage.setItem(TODO_GROUPS_KEY,JSON.stringify(b.todoGroups));if(Array.isArray(b.todoArchive))localStorage.setItem(TODO_ARCH_KEY,JSON.stringify(b.todoArchive));if(status)status.textContent='☁ 동기화됨';return true}catch{if(status)status.textContent='이 기기에만 저장(동기화 실패)'}return false}
 function taskCurrentItem(){return $('#task-item')?.value||taskItems()[0]}
 function renderTaskSummary(){const st=taskLoad()[taskCurrentItem()]||{},names=taskAllNames(),pending=names.filter(n=>!st[n]?.done);$('#task-summary').innerHTML=`완료 <b>${names.length-pending.length}</b> / ${names.length}`+(pending.length?` · 미응답: ${esc(pending.join(', '))}`:' · 전원 완료 🎉')}
-let taskSortByName=false;
-const TASK_RA=['이준범','김진영','김상혁','박소현','한수빈'];
+let taskSortByName=false,taskShowFormer=false;
+const TASK_RA=['이준범','김진영','테크RA','박소현','한수빈','김상혁'];
 function renderTaskList(desired){fillTaskItems(desired);const st=taskLoad()[taskCurrentItem()]||{};
  const row=n=>{const r=st[n]||{};return `<tr data-name="${esc(n)}"><td class="task-name"${TASK_RA.includes(n)?' style="color:#9aa0a6"':''}>${esc(n)}</td><td class="task-done"><input type="checkbox" data-f="done" ${r.done?'checked':''}></td><td><input class="task-in" data-f="resp" placeholder="응답내용" value="${esc(r.resp||'')}"></td><td><input class="task-in" data-f="note" placeholder="비고" value="${esc(r.note||'')}"></td></tr>`};
- const body=taskSortByName
+ const formerBlock=`<tr class="task-group task-former-hd" style="cursor:pointer;user-select:none" title="클릭하면 펼치기/접기"><td colspan="4">🗄️ 퇴사자 (${TASK_FORMER.length}) ${taskShowFormer?'▾':'▸'}</td></tr>`+(taskShowFormer?TASK_FORMER.map(row).join(''):'');
+ const body=(taskSortByName
   ?taskAllNames().slice().sort((a,b)=>a.localeCompare(b,'ko')).map(row).join('')
-  :TASK_ROSTER.map(([part,names])=>`<tr class="task-group"><td colspan="4">${esc(part)}</td></tr>`+names.map(row).join('')).join('');
+  :TASK_ROSTER.map(([part,names])=>`<tr class="task-group"><td colspan="4">${esc(part)}</td></tr>`+names.map(row).join('')).join(''))+formerBlock;
  $('#task-table').innerHTML=`<table class="task-table"><thead><tr><th class="task-sort" style="cursor:pointer;user-select:none" title="클릭하면 이름순 ↔ 팀 순서로 전환">이름 ${taskSortByName?'▲':'⇅'}</th><th>완료</th><th>응답내용</th><th>비고</th></tr></thead><tbody>${body}</tbody></table>`;
- $('#task-date').textContent=new Intl.DateTimeFormat('ko-KR',{year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date());renderTaskSummary()}
+ $('#task-date').textContent=new Intl.DateTimeFormat('ko-KR',{year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date());renderTaskSummary();syncTaskHash()}
+// 항목별 주소: #tasklist:<항목>. 화면을 보는 동안 주소창이 늘 현재 항목을 가리키게 해
+// 주소 복사만으로도 그 항목이 열리는 링크가 된다(history를 늘리지 않도록 replaceState).
+// 링크로 열면 사이드바·헤더 없이 표만 보이는 집중 화면(focus=1)으로 연다.
+function taskDeepLink(item){return location.origin+location.pathname+'?focus=1#tasklist:'+encodeURIComponent(item||taskCurrentItem())}
+function syncTaskHash(){if(!$('#tasklist')?.classList.contains('active'))return;
+ // 항목 없이 연 집중 화면(📬 버튼)은 주소에 항목을 박지 않는다 — 새로고침 때
+ // 항목 잠금으로 바뀌어 버리는 것을 막는다. 항목 링크로 연 창은 이미 항목이 박혀 있다.
+ if(document.body.classList.contains('focus-mode')&&!document.body.classList.contains('item-locked'))return;const want='#tasklist:'+encodeURIComponent(taskCurrentItem());if(location.hash!==want){try{history.replaceState(null,'',want)}catch{}}}
 function taskUpdate(name,field,value){const s=taskLoad(),it=taskCurrentItem();(s[it]=s[it]||{})[name]=s[it][name]||{};s[it][name][field]=value;taskSave(s);renderTaskSummary()}
 /* ── TO-DO: 한 줄 할 일 + 체크 + 등록시각 + 이미지 첨부 + 그룹. 수명 피드백과 같은 GAS 번들(todos·todoGroups·todoArchive 필드)로 동기화 ── */
 const TODO_KEY='hi_todo_v1',TODO_GROUPS_KEY='hi_todo_groups_v1',TODO_ARCH_KEY='hi_todo_archive_v1',TODO_IMG_MAX=4;/* 동기화 저장소 한도(실측 500KB) 보호 — 항목당 사진 4장 */
@@ -245,13 +259,21 @@ function renderTodoArch(){const box=$('#todo-arch-list');if(!box)return;const a=
 function renderTodo(){renderTodoArch();const box=$('#todo-list');if(!box)return;fillTodoGroups();const a=todoLoad(),groups=todoGroups();
  if(!a.length&&!groups.length){box.innerHTML='<p class="empty">할 일을 한 줄 적고 ＋추가를 누르세요.</p>';return}
  const row=(t,i)=>{const imgs=todoImgs(t);
-  return `<div class="todo-row${t.done?' done':''}" data-i="${i}"><span class="todo-grip" draggable="true" title="드래그해서 다른 그룹으로 이동">⠿</span><input type="checkbox" ${t.done?'checked':''}><span class="todo-text">${esc(t.text)}${imgs?`<span class="todo-thumbs">${imgs}</span>`:''}</span><span class="todo-ts"${t.doneTs?` title="완료 ${todoFmt(t.doneTs)}"`:''}>${todoFmt(t.ts)}</span><button class="todo-edit" type="button" title="내용 수정">✎</button><button class="todo-del" type="button" title="삭제">✕</button><button class="todo-arch-one" type="button" title="이 항목만 보관함으로 이동 (삭제 아님)">📦</button></div>`};
+  return `<div class="todo-row${t.done?' done':''}" data-i="${i}"><span class="todo-grip" draggable="true" title="드래그해서 다른 그룹으로 이동">⠿</span><input type="checkbox" ${t.done?'checked':''}><span class="todo-text">${esc(t.text)}${imgs?`<span class="todo-thumbs">${imgs}</span>`:''}</span><span class="todo-ts"${t.doneTs?` title="완료 ${todoFmt(t.doneTs)}"`:''}>${todoFmt(t.ts)}</span><button class="todo-move" type="button" data-mv="-1" title="같은 그룹 안에서 위로">▲</button><button class="todo-move" type="button" data-mv="1" title="같은 그룹 안에서 아래로">▼</button><button class="todo-edit" type="button" title="내용 수정">✎</button><button class="todo-del" type="button" title="삭제">✕</button><button class="todo-arch-one" type="button" title="이 항목만 보관함으로 이동 (삭제 아님)">📦</button></div>`};
  const names=['기본',...groups],buckets=Object.fromEntries(names.map(n=>[n,[]]));
  a.forEach((t,i)=>{buckets[t.group&&names.includes(t.group)?t.group:'기본'].push([t,i])});
  box.innerHTML=names.map(n=>{const list=buckets[n],undone=list.filter(([t])=>!t.done).length;
   const grip=n==='기본'?'':`<span class="todo-g-grip" draggable="true" data-g="${esc(n)}" title="드래그해서 그룹 순서 변경">⠿</span>`;
   const tools=n==='기본'?'':`<span class="todo-g-tools"><button type="button" class="todo-g-ren" data-g="${esc(n)}" title="그룹 이름 변경">✎</button><button type="button" class="todo-g-del" data-g="${esc(n)}" title="그룹 삭제 (항목은 기본으로 이동)">✕</button></span>`;
   return `<details class="todo-group" data-g="${esc(n)}" open><summary>${grip}<span>${esc(n)}</span><em>${undone}/${list.length}</em>${tools}</summary>${list.map(([t,i])=>row(t,i)).join('')||'<p class="empty todo-empty">이 그룹에 할 일이 없습니다.</p>'}</details>`}).join('')}
+// 같은 그룹 안에서 한 칸 이동. 저장 순서(플랫 배열)가 곧 그룹 안 순서라,
+// 다른 그룹 항목은 건너뛰고 같은 그룹의 이웃을 찾아 그 자리로 옮긴다.
+function todoGroupKey(t,names){return t.group&&names.includes(t.group)?t.group:'기본'}
+function todoMove(i,dir){const a=todoLoad(),t=a[i];if(!t)return;
+ const names=['기본',...todoGroups()],g=todoGroupKey(t,names);
+ let j=i+dir;while(j>=0&&j<a.length&&todoGroupKey(a[j],names)!==g)j+=dir;
+ if(j<0||j>=a.length)return;/* 그룹 안에서 이미 끝 */
+ a.splice(i,1);a.splice(j,0,t);todoSave(a)}
 function todoAdd(){const inp=$('#todo-input'),text=(inp?.value||'').trim();if(!text&&!TODO_PEND.length)return;
  const a=todoLoad(),g=$('#todo-group')?.value||'',t={text:text||'(사진 메모)',ts:Date.now(),done:false};
  if(g)t.group=g;if(TODO_PEND.length)t.imgs=TODO_PEND.slice();
@@ -262,7 +284,7 @@ async function todoPull(){if(!TASK_ENDPOINT)return false;const status=$('#todo-s
  if(Array.isArray(b.todos)){localStorage.setItem(TODO_KEY,JSON.stringify(b.todos));if(status)status.textContent='☁ 동기화됨';return true}
  // 서버 번들에 아직 todos가 없으면 이 기기 목록을 올려 시드한다
  if(todoLoad().length||todoGroups().length)taskPush('#todo-sync');else if(status)status.textContent='☁ 동기화';return false}catch{if(status)status.textContent='이 기기에만 저장(동기화 실패)'}return false}
-function view(id){$$('.view,.nav').forEach(x=>x.classList.remove('active'));$('#'+id).classList.add('active');$(`.nav[data-view="${id}"]`).classList.add('active');$('#page-title').textContent={todo:'TO-DO 체크리스트',overview:'오늘의 리서치 흐름',reports:'발간 보고서',news:'뉴스.아카이브',press:'보도기사 취합','union-board':'현중 노조게시판',tone:'DAOL 리서치 톤',chatbot:'DAOL 리서치와 챗봇',collab:'섹터 콜라보 레이더',tasklist:'수명 피드백 확인',dart:'조선 수주공시 → 텔레',recipe:'레시피 수집 → Notion',etf:'ETF/섹터.신호 포착',holdings:'액티브 ETF 구성 변화',flow:'시장 수급 동향',trend:'시장관심.내러티브',consensus:'코스피200 컨센서스 추적',defense:'글로벌 방산 데일리 브리핑',defweekly:'글로벌 방산 주간 정리',construction:'글로벌 건설기계 데일리 브리핑',conweekly:'글로벌 건설기계 주간 정리',remember:'리멤버 → Notion 기록',mzdiary:'MZ일기 · 잔고/매매노트'}[id];if(id==='overview')fetchLiveMacro();if(id==='press'){state.pressCompany='';renderPressTable()}if(id==='tone')loadToneFrame();if(id==='union-board')loadUnionBoard();if(id==='tasklist'){renderTaskList();taskPull().then(ok=>{if(ok)renderTaskList()})}if(id==='todo'){renderTodo();todoPull().then(ok=>{if(ok)renderTodo()})}if(id==='etf'){const f=$('#etf-frame');if(!f.getAttribute('src'))f.src='etf_signal_report.html?t='+Date.now()}if(id==='holdings'){const f=$('#holdings-frame');if(!f.getAttribute('src'))f.src='etf_holdings_report.html?t='+Date.now()}if(id==='flow'){const f=$('#flow-frame');if(!f.getAttribute('src'))f.src='market_flow_report.html?t='+Date.now()}if(id==='trend'){const f=$('#trend-frame');if(!f.getAttribute('src'))f.src='market_trend_report.html?t='+Date.now()}if(id==='consensus'){const f=$('#consensus-frame');if(!f.getAttribute('src'))f.src='consensus_revision.html?t='+Date.now()}if(id==='defense'){const f=$('#defense-frame');if(!f.getAttribute('src'))f.src='defense_briefing_report.html?t='+Date.now()}if(id==='defweekly'){const f=$('#defweekly-frame');if(!f.getAttribute('src'))f.src='defense_weekly_report.html?t='+Date.now()}if(id==='construction'){const f=$('#construction-frame');if(!f.getAttribute('src'))f.src='construction_briefing_report.html?t='+Date.now()}if(id==='conweekly'){const f=$('#conweekly-frame');if(!f.getAttribute('src'))f.src='construction_weekly_report.html?t='+Date.now()}if(id==='collab'){const f=$('#collab-frame');if(!f.getAttribute('src'))f.src=TONE_SITE+'daol_collab_radar.html?t='+Date.now()}if(id==='chatbot'){const f=$('#chatbot-frame');if(!f.getAttribute('src'))f.src=TONE_SITE+'chat.html?t='+Date.now()}}
+function view(id){$$('.view,.nav').forEach(x=>x.classList.remove('active'));$('#'+id).classList.add('active');$(`.nav[data-view="${id}"]`).classList.add('active');$('#page-title').textContent={todo:'TO-DO 체크리스트',overview:'오늘의 리서치 흐름',reports:'발간 보고서',news:'뉴스.아카이브',press:'보도기사 취합','union-board':'현중 노조게시판',tone:'DAOL 리서치 톤',chatbot:'DAOL 리서치와 챗봇',collab:'섹터 콜라보 레이더',tasklist:'수명 피드백 확인',dart:'조선 수주공시 → 텔레',recipe:'레시피 수집 → Notion',etf:'ETF/섹터.신호 포착',holdings:'액티브 ETF 구성 변화',flow:'시장 수급 동향',trend:'시장관심.내러티브',consensus:'코스피200 컨센서스 추적',defense:'글로벌 방산 데일리 브리핑',defweekly:'글로벌 방산 주간 정리',ytdigest:'방산 유튜브 3일 모음',ytweekly:'방산 유튜브 주간 모음',vacation:'휴가/출장 계획',attendance:'월별 근태 체크',indepth:'인뎁스/자료 발간 계획',construction:'글로벌 건설기계 데일리 브리핑',conweekly:'글로벌 건설기계 주간 정리',energy:'친환경 에너지·FDC 데일리 브리핑',remember:'리멤버 → Notion 기록',mzdiary:'MZ일기 · 잔고/매매노트'}[id];if(id==='overview')fetchLiveMacro();if(id==='press'){state.pressCompany='';renderPressTable()}if(id==='tone')loadToneFrame();if(id==='union-board')loadUnionBoard();if(id==='tasklist'){renderTaskList(taskWantItem);taskPull().then(ok=>{if(ok)renderTaskList(taskWantItem);taskWantItem=null})}if(id==='todo'){renderTodo();todoPull().then(ok=>{if(ok)renderTodo()})}if(id==='etf'){const f=$('#etf-frame');if(!f.getAttribute('src'))f.src='etf_signal_report.html?t='+Date.now()}if(id==='holdings'){const f=$('#holdings-frame');if(!f.getAttribute('src'))f.src='etf_holdings_report.html?t='+Date.now()}if(id==='flow'){const f=$('#flow-frame');if(!f.getAttribute('src'))f.src='market_flow_report.html?t='+Date.now()}if(id==='trend'){const f=$('#trend-frame');if(!f.getAttribute('src'))f.src='market_trend_report.html?t='+Date.now()}if(id==='consensus'){const f=$('#consensus-frame');if(!f.getAttribute('src'))f.src='consensus_revision.html?t='+Date.now()}if(id==='defense'){const f=$('#defense-frame');if(!f.getAttribute('src'))f.src='defense_briefing_report.html?t='+Date.now()}if(id==='defweekly'){const f=$('#defweekly-frame');if(!f.getAttribute('src'))f.src='defense_weekly_report.html?t='+Date.now()}if(id==='ytdigest'){const f=$('#ytdigest-frame');if(!f.getAttribute('src'))f.src='youtube_digest_report.html?t='+Date.now()}if(id==='ytweekly'){const f=$('#ytweekly-frame');if(!f.getAttribute('src'))f.src='youtube_weekly_report.html?t='+Date.now()}if(id==='vacation'){const f=$('#vacation-frame');if(!f.getAttribute('src'))f.src='vacation_report.html?t='+Date.now()}if(id==='attendance'){const f=$('#attendance-frame');if(!f.getAttribute('src'))f.src='attendance_report.html?t='+Date.now()}if(id==='indepth'){const f=$('#indepth-frame');if(!f.getAttribute('src'))f.src='indepth_report.html?t='+Date.now()}if(id==='construction'){const f=$('#construction-frame');if(!f.getAttribute('src'))f.src='construction_briefing_report.html?t='+Date.now()}if(id==='conweekly'){const f=$('#conweekly-frame');if(!f.getAttribute('src'))f.src='construction_weekly_report.html?t='+Date.now()}if(id==='energy'){const f=$('#energy-frame');if(!f.getAttribute('src'))f.src='energy_briefing_report.html?t='+Date.now()}if(id==='collab'){const f=$('#collab-frame');if(!f.getAttribute('src'))f.src=TONE_SITE+'daol_collab_radar.html?t='+Date.now()}if(id==='chatbot'){const f=$('#chatbot-frame');if(!f.getAttribute('src'))f.src=TONE_SITE+'chat.html?t='+Date.now()}}
 const DISPATCH_ENDPOINT='https://script.google.com/macros/s/AKfycbx3RjIjtlO2Z6fIYo2T3LhJrFg9Wp2hS7dMS3Is52-JVF1hizoCWewbQ1uM_v5sdhR2jw/exec';/* 갱신 버튼 → GitHub Actions 디스패치 GAS 웹앱 (gas/dispatch_proxy.gs). 아래 workflow 키는 그 파일의 WF 매핑과 1:1이어야 한다 */
 async function dispatchWorkflow(payload,status,btn){
  if(status)status.textContent='요청 중…';if(btn)btn.disabled=true;
@@ -339,6 +361,21 @@ async function sendMzDiary(){
   box.hidden=false;$('#mzdiary-note').value='';MZDIARY_IMGS.length=0;renderMzdiaryPreviews();const fi=$('#mzdiary-photos');if(fi)fi.value='';
  }catch(e){status.textContent='실패: '+e.message}
  finally{btn.disabled=false}}
+const YTDIGEST_ENDPOINT='https://script.google.com/macros/s/AKfycbzHewpw6PVYfy_iYNlEBV77-SiIveomyGtHkC_OSKTZILwVunRGpwT_-be4RC8DQPk/exec';/* 유튜브 3일 모음 GAS 웹앱(/exec) 주소. gas/youtube_defense_bot.gs 를 '웹 앱'으로 배포해 나온 주소를 넣는다. 비어 있으면 버튼이 안내만 한다 */
+async function dispatchYtDigest(){
+ const btn=$('#ytdigest-refresh'),status=$('#ytdigest-status');
+ if(!YTDIGEST_ENDPOINT){status.textContent='⚠ 웹앱 주소 미설정 — youtube_defense_bot.gs 를 웹 앱으로 배포하고 그 주소를 app.js 의 YTDIGEST_ENDPOINT 에 넣어야 합니다';return}
+ status.textContent='모으는 중… (30초쯤)';btn.disabled=true;
+ try{
+  const r=await fetch(YTDIGEST_ENDPOINT,{method:'POST',body:JSON.stringify({action:'send_digest'})});
+  const d=await r.json();
+  if(d&&d.ok){
+   if(d.videos){status.textContent=`✅ ${d.videos}건 발송 — 텔레그램 확인, 대시보드는 1~2분 뒤 자동 새로고침`;
+    const f=$('#ytdigest-frame');setTimeout(()=>{f.src='youtube_digest_report.html?t='+Date.now();status.textContent='✅ 갱신됨'},100000)}
+   else status.textContent='최근 3일에 새 영상이 없습니다';}
+  else status.textContent='⚠ '+((d&&d.error)||'실패');}
+ catch(e){status.textContent='실패: '+e.message}
+ finally{btn.disabled=false}}
 async function dispatchEtf(){
  const btn=$('#etf-refresh'),status=$('#etf-status');
  if(await dispatchWorkflow({workflow:'etf'},status,btn))
@@ -394,7 +431,11 @@ async function dispatchTrend(){
    status.textContent='✅ 트렌드 산출 요청됨 — 몇 분 뒤 새로고침';}
 // 클릭한 메뉴가 속하지 않은 그룹의 서브메뉴는 모두 닫는다.
 function closeOtherNavGroups(el){const mine=el.closest?.('details.nav-group');$$('details.nav-group').forEach(o=>{if(o!==mine&&o.open){o.open=false;o.querySelectorAll('details.nav-subgroup').forEach(s=>s.open=false)}});}
-$$('.nav').forEach(b=>b.onclick=()=>{closeOtherNavGroups(b);view(b.dataset.view)});$$('[data-go]').forEach(b=>b.onclick=()=>view(b.dataset.go));
+// 좁은 화면(≤950px)에서는 서브메뉴가 화면을 덮는 플라이아웃이라, 메뉴를 고르면 자기 그룹도 닫는다.
+function closeNavFlyout(el){if(!matchMedia('(max-width:950px)').matches)return;const g=el.closest?.('details.nav-group');if(g&&g.open){g.open=false;g.querySelectorAll('details.nav-subgroup').forEach(s=>s.open=false)}}
+$$('.nav').forEach(b=>b.onclick=()=>{closeOtherNavGroups(b);closeNavFlyout(b);view(b.dataset.view)});$$('[data-go]').forEach(b=>b.onclick=()=>view(b.dataset.go));
+// 서브메뉴 안의 일반 링크(외부 링크 등)를 눌러도 모바일 플라이아웃은 닫는다.
+document.addEventListener('click',e=>{const a=e.target.closest?.('.nav-submenu a');if(a)closeNavFlyout(a)});
 // 한 메뉴 그룹을 열면 나머지 그룹의 서브메뉴는 닫는다(모바일·PC 공통, 아코디언).
 $$('details.nav-group').forEach(d=>d.addEventListener('toggle',()=>{if(!d.open)return;$$('details.nav-group').forEach(o=>{if(o!==d&&o.open){o.open=false;o.querySelectorAll('details.nav-subgroup').forEach(s=>s.open=false)}})}));
 // 같은 그룹 안의 하위 그룹(2단 서브메뉴)도 하나만 열리도록.
@@ -424,6 +465,7 @@ $('#mzdiary-previews')?.addEventListener('click',e=>{const b=e.target.closest('[
 $('#mzdiary-endpoint-save')?.addEventListener('click',()=>{const v=($('#mzdiary-endpoint')?.value||'').trim();if(!/^https:\/\/script\.google\.com\/.+\/exec$/.test(v)){alert('GAS 웹앱 /exec URL 형식이 아닙니다.');return}try{localStorage.setItem(MZDIARY_EP_KEY,v)}catch{}$('#mzdiary-status').textContent='☁ URL 저장됨 — 이제 기록할 수 있습니다';const st=$('#mzdiary-setup');if(st)st.open=false});
 {const _mep=$('#mzdiary-endpoint');if(_mep)_mep.value=mzdiaryEndpoint();}
 $('#etf-refresh')?.addEventListener('click',dispatchEtf);
+$('#ytdigest-refresh')?.addEventListener('click',dispatchYtDigest);
 $('#holdings-refresh')?.addEventListener('click',dispatchHoldings);
 $('#news-refresh')?.addEventListener('click',dispatchNews);
 $('#reports-refresh')?.addEventListener('click',dispatchReports);
@@ -454,6 +496,7 @@ $('#todo-arch-list')?.addEventListener('click',e=>{
 $('#todo-list')?.addEventListener('change',e=>{const row=e.target.closest('.todo-row');if(!row||e.target.type!=='checkbox')return;const a=todoLoad(),t=a[+row.dataset.i];if(!t)return;t.done=e.target.checked;if(t.done)t.doneTs=Date.now();else delete t.doneTs;todoSave(a)});
 $('#todo-list')?.addEventListener('click',e=>{
  if(e.target.closest('.todo-g-grip')){e.preventDefault();return}/* 그립 클릭이 그룹 접힘 토글로 번지지 않게 */
+ const mv=e.target.closest('.todo-move');if(mv){e.preventDefault();todoMove(+mv.closest('.todo-row').dataset.i,+mv.dataset.mv);return}
  const th=e.target.closest('.todo-thumb');if(th){todoLightbox(th.src);return}
  const ren=e.target.closest('.todo-g-ren');if(ren){e.preventDefault();const cur=ren.dataset.g,name=(prompt('그룹 이름 변경',cur)||'').trim();if(!name||name===cur)return;const g=todoGroups();if(name==='기본'||g.includes(name)){alert('이미 있는 그룹입니다.');return}g[g.indexOf(cur)]=name;todoGroupsStore(g);todoArchStore(todoArchLoad().map(t=>t.group===cur?{...t,group:name}:t));todoSave(todoLoad().map(t=>t.group===cur?{...t,group:name}:t));const sel=$('#todo-group');if(sel)sel.value=name;return}
  const gd=e.target.closest('.todo-g-del');if(gd){e.preventDefault();const cur=gd.dataset.g;if(!confirm(`[${cur}] 그룹을 삭제할까요? 그룹의 할 일은 기본으로 이동합니다.`))return;todoGroupsStore(todoGroups().filter(x=>x!==cur));
@@ -472,9 +515,23 @@ $('#todo-list')?.addEventListener('click',e=>{
 // 드래그 앤 드랍으로 할 일을 다른 그룹에 떨어뜨려 이동
 let TODO_DRAG=-1;
 $('#todo-list')?.addEventListener('dragstart',e=>{const row=e.target.closest('.todo-row');if(!row)return;TODO_DRAG=+row.dataset.i;e.dataTransfer.effectAllowed='move';row.classList.add('dragging')});
-$('#todo-list')?.addEventListener('dragend',()=>{TODO_DRAG=-1;$$('#todo-list .drop-hover,#todo-list .dragging').forEach(x=>x.classList.remove('drop-hover','dragging'))});
-$('#todo-list')?.addEventListener('dragover',e=>{if(TODO_DRAG<0)return;const g=e.target.closest('.todo-group');if(!g)return;e.preventDefault();e.dataTransfer.dropEffect='move';$$('#todo-list .drop-hover').forEach(x=>{if(x!==g)x.classList.remove('drop-hover')});g.classList.add('drop-hover')});
-$('#todo-list')?.addEventListener('drop',e=>{if(TODO_DRAG<0)return;const gEl=e.target.closest('.todo-group');if(!gEl)return;e.preventDefault();
+$('#todo-list')?.addEventListener('dragend',()=>{TODO_DRAG=-1;$$('#todo-list .drop-hover,#todo-list .dragging,#todo-list .drop-before,#todo-list .drop-after').forEach(x=>x.classList.remove('drop-hover','dragging','drop-before','drop-after'))});
+$('#todo-list')?.addEventListener('dragover',e=>{if(TODO_DRAG<0)return;
+ const rowEl=e.target.closest('.todo-row');
+ if(rowEl&&+rowEl.dataset.i!==TODO_DRAG){e.preventDefault();e.dataTransfer.dropEffect='move';
+  const r=rowEl.getBoundingClientRect(),after=e.clientY>r.top+r.height/2;
+  $$('#todo-list .drop-before,#todo-list .drop-after').forEach(x=>x.classList.remove('drop-before','drop-after'));
+  rowEl.classList.add(after?'drop-after':'drop-before');return}
+ const g=e.target.closest('.todo-group');if(!g)return;e.preventDefault();e.dataTransfer.dropEffect='move';$$('#todo-list .drop-hover').forEach(x=>{if(x!==g)x.classList.remove('drop-hover')});g.classList.add('drop-hover')});
+$('#todo-list')?.addEventListener('drop',e=>{if(TODO_DRAG<0)return;
+ const rowEl=e.target.closest('.todo-row');
+ if(rowEl){e.preventDefault();const to=+rowEl.dataset.i,from=TODO_DRAG;TODO_DRAG=-1;
+  const a=todoLoad(),t=a[from],tgt=a[to];if(!t||!tgt||from===to){renderTodo();return}
+  const r=rowEl.getBoundingClientRect(),after=e.clientY>r.top+r.height/2;
+  const names=['기본',...todoGroups()],g=todoGroupKey(tgt,names);
+  if(g==='기본')delete t.group;else t.group=g;/* 다른 그룹 행 위에 놓으면 그 그룹으로 */
+  a.splice(from,1);a.splice(a.indexOf(tgt)+(after?1:0),0,t);todoSave(a);return}
+ const gEl=e.target.closest('.todo-group');if(!gEl)return;e.preventDefault();
  const name=gEl.dataset.g,a=todoLoad(),t=a[TODO_DRAG];TODO_DRAG=-1;if(!t)return;
  const cur=t.group&&['기본',...todoGroups()].includes(t.group)?t.group:'기본';
  if(name===cur){renderTodo();return}
@@ -491,6 +548,9 @@ $('#todo-list')?.addEventListener('drop',e=>{if(!TODO_G_DRAG)return;const gEl=e.
  g.splice(target==='기본'?0:g.indexOf(target)+(after?1:0),0,drag);
  todoGroupsStore(g);taskPush('#todo-sync');renderTodo()});
 $('#task-item')?.addEventListener('change',()=>renderTaskList());
+$('#task-link')?.addEventListener('click',async()=>{const url=taskDeepLink(),btn=$('#task-link');
+ try{await navigator.clipboard.writeText(url);const t=btn.textContent;btn.textContent='✅ 복사됨';setTimeout(()=>btn.textContent=t,1500)}
+ catch{prompt('이 주소를 복사하세요 (이 항목이 바로 열립니다)',url)}});
 $('#task-add')?.addEventListener('click',()=>{const name=(prompt('추가할 항목 이름')||'').trim();if(!name)return;const items=taskItems();if(items.includes(name)){alert('이미 있는 항목입니다.');return}items.push(name);saveItems(items);renderTaskList(name)});
 $('#task-rename')?.addEventListener('click',()=>{const items=taskItems(),cur=taskCurrentItem(),name=(prompt('항목 이름 변경',cur)||'').trim();if(!name||name===cur)return;if(items.includes(name)){alert('이미 있는 항목입니다.');return}items[items.indexOf(cur)]=name;saveItems(items);const s=taskLoad();if(s[cur]){s[name]=s[cur];delete s[cur]}if(Array.isArray(s.__archived)){const i=s.__archived.indexOf(cur);if(i>-1)s.__archived[i]=name}taskSave(s);renderTaskList(name)});
 $('#task-del')?.addEventListener('click',()=>{const items=taskItems(),cur=taskCurrentItem();if(items.length<=1){alert('항목이 하나뿐이라 삭제할 수 없습니다.');return}if(!confirm(`[${cur}] 항목과 그 체크 내용을 삭제할까요?`))return;items.splice(items.indexOf(cur),1);saveItems(items);const s=taskLoad();delete s[cur];if(Array.isArray(s.__archived))s.__archived=s.__archived.filter(x=>x!==cur);taskSave(s);renderTaskList(items[0])});
@@ -500,7 +560,7 @@ $('#task-archive')?.addEventListener('click',()=>{const cur=taskCurrentItem(),s=
 $('#task-archive-list')?.addEventListener('click',e=>{const o=e.target.dataset.archOpen,r=e.target.dataset.archRestore;
  if(o)renderTaskList(o);
  else if(r){const s=taskLoad();s.__archived=(Array.isArray(s.__archived)?s.__archived:[]).filter(x=>x!==r);taskSave(s);renderTaskList(r)}});
-$('#task-table')?.addEventListener('click',e=>{if(e.target.closest('th.task-sort')){taskSortByName=!taskSortByName;renderTaskList()}});
+$('#task-table')?.addEventListener('click',e=>{if(e.target.closest('th.task-sort')){taskSortByName=!taskSortByName;renderTaskList();return}if(e.target.closest('tr.task-former-hd')){taskShowFormer=!taskShowFormer;renderTaskList()}});
 $('#task-table')?.addEventListener('change',e=>{const tr=e.target.closest('tr[data-name]');if(tr&&e.target.dataset.f==='done')taskUpdate(tr.dataset.name,'done',e.target.checked)});
 $('#task-table')?.addEventListener('input',e=>{const tr=e.target.closest('tr[data-name]'),f=e.target.dataset.f;if(tr&&(f==='resp'||f==='note'))taskUpdate(tr.dataset.name,f,e.target.value)});
 $('#task-reset')?.addEventListener('click',()=>{if(!confirm(`[${taskCurrentItem()}] 체크·응답·비고를 모두 지울까요?`))return;const s=taskLoad();delete s[taskCurrentItem()];taskSave(s);renderTaskList()});
@@ -516,7 +576,16 @@ document.addEventListener('click',e=>{const chip=e.target.closest('.press-compan
 document.addEventListener('click',e=>{const chip=e.target.closest('.company-chip');if(!chip)return;state.reportCompany=chip.dataset.company;if(state.reportType==='위클리'){state.reportType='';state.weeklyFolder='';$$('[data-type]').forEach(x=>x.classList.toggle('active',x.dataset.type===''));$$('[data-weekly]').forEach(x=>x.classList.toggle('active',x.dataset.weekly===''));$('#weekly-folders').hidden=true;$('#report-company').hidden=false}view('reports');load()});
 load().catch(e=>document.body.insertAdjacentHTML('beforeend',`<p class="empty">데이터를 불러오지 못했습니다: ${esc(e.message)}</p>`));
 // URL 해시로 특정 뷰 바로 열기(예: /#tone → 리서치 톤을 별도 창으로). 로드 후 해시가 바뀌어도 반영.
-function applyHashView(){const hashView=decodeURIComponent(location.hash.slice(1));if(hashView&&document.getElementById(hashView)?.classList.contains('view'))view(hashView)}
+// ?focus=1 로 들어오면 표만 보이게(사이드바·헤더·설명문 숨김). '전체 대시보드' 링크로 복귀.
+if(new URLSearchParams(location.search).has('focus')){document.body.classList.add('focus-mode');
+ // 항목을 지정한 링크(#tasklist:항목)로 열었을 때만 그 항목 전용으로 잠근다.
+ // 항목 없이 연 경우(TO-DO의 📬 버튼)는 평소처럼 항목을 고를 수 있어야 한다.
+ if(/^#tasklist:/.test(location.hash)){document.body.classList.add('item-locked');
+  const sel=$('#task-item');if(sel)sel.disabled=true}}
+function applyHashView(){const raw=location.hash.slice(1);if(!raw)return;const cut=raw.indexOf(':');
+ const hashView=decodeURIComponent(cut>-1?raw.slice(0,cut):raw),arg=cut>-1?decodeURIComponent(raw.slice(cut+1)):'';
+ if(!document.getElementById(hashView)?.classList.contains('view'))return;
+ taskWantItem=hashView==='tasklist'&&arg?arg:null;view(hashView)}
 applyHashView();window.addEventListener('hashchange',applyHashView);
 // 새 배포 감지: 오래 열어둔 탭이 빌드 시점 데이터에 얼어붙는 것 방지. 백그라운드 탭은 조용히 리로드, 보고 있으면 배너로 안내.
 const LOADED_VERSION=window.__DASHBOARD_DATA__?.summary?.updated_at||'';

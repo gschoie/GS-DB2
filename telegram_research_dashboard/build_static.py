@@ -163,11 +163,24 @@ def build() -> Path:
         summary_md = "\n".join(md_lines[:end]).strip()
         if summary_md:
             construction_brief = {"date": latest.stem, "summary": summary_md}
+    # 친환경 에너지·FDC 브리핑: static/energy_daily/<날짜>.md — 같은 방식으로 요약 카드용 절단
+    energy_brief = {}
+    edir = ROOT / "static" / "energy_daily"
+    emd_files = sorted(edir.glob("????-??-??.md")) if edir.is_dir() else []
+    if emd_files:
+        latest = emd_files[-1]
+        md_lines = latest.read_text(encoding="utf-8").splitlines()
+        heads = [i for i, line in enumerate(md_lines) if line.startswith("## ")]
+        end = heads[1] if len(heads) >= 2 else len(md_lines)
+        summary_md = "\n".join(md_lines[:end]).strip()
+        if summary_md:
+            energy_brief = {"date": latest.stem, "summary": summary_md}
     payload = json.dumps(
         {"summary": summary, "reports": reports, "news": news, "companies": companies,
          "reportCompanies": report_companies, "newsTexts": news_texts, "market": market,
          "union": union, "macro": macro, "defenseBrief": defense_brief,
-         "claudeBrief": claude_brief, "constructionBrief": construction_brief},
+         "claudeBrief": claude_brief, "constructionBrief": construction_brief,
+         "energyBrief": energy_brief},
         ensure_ascii=False, separators=(",", ":"),
     ).replace("</", "<\\/").replace("\u2028", "\\u2028").replace("\u2029", "\\u2029")
     html = (ROOT / "static" / "index.html").read_text(encoding="utf-8")
@@ -237,12 +250,39 @@ def build() -> Path:
     construction_dir = ROOT / "static" / "construction_daily"
     if construction_dir.is_dir():
         shutil.copytree(construction_dir, OUTPUT.parent / "construction_daily", dirs_exist_ok=True)
+    energy_index = ROOT / "static" / "energy_briefing_report.html"
+    if energy_index.exists():
+        shutil.copy2(energy_index, OUTPUT.parent / "energy_briefing_report.html")
+    energy_dir = ROOT / "static" / "energy_daily"
+    if energy_dir.is_dir():
+        shutil.copytree(energy_dir, OUTPUT.parent / "energy_daily", dirs_exist_ok=True)
     construction_weekly_index = ROOT / "static" / "construction_weekly_report.html"
     if construction_weekly_index.exists():
         shutil.copy2(construction_weekly_index, OUTPUT.parent / "construction_weekly_report.html")
     construction_weekly_dir = ROOT / "static" / "construction_weekly"
     if construction_weekly_dir.is_dir():
         shutil.copytree(construction_weekly_dir, OUTPUT.parent / "construction_weekly", dirs_exist_ok=True)
+    youtube_index = ROOT / "static" / "youtube_digest_report.html"
+    if youtube_index.exists():
+        shutil.copy2(youtube_index, OUTPUT.parent / "youtube_digest_report.html")
+    youtube_dir = ROOT / "static" / "youtube_digest"
+    if youtube_dir.is_dir():
+        shutil.copytree(youtube_dir, OUTPUT.parent / "youtube_digest", dirs_exist_ok=True)
+    vacation_report = ROOT / "static" / "vacation_report.html"
+    if vacation_report.exists():
+        shutil.copy2(vacation_report, OUTPUT.parent / "vacation_report.html")
+    attendance_report = ROOT / "static" / "attendance_report.html"
+    if attendance_report.exists():
+        shutil.copy2(attendance_report, OUTPUT.parent / "attendance_report.html")
+    indepth_report = ROOT / "static" / "indepth_report.html"
+    if indepth_report.exists():
+        shutil.copy2(indepth_report, OUTPUT.parent / "indepth_report.html")
+    weekly_yt_index = ROOT / "static" / "youtube_weekly_report.html"
+    if weekly_yt_index.exists():
+        shutil.copy2(weekly_yt_index, OUTPUT.parent / "youtube_weekly_report.html")
+    weekly_yt_dir = ROOT / "static" / "youtube_weekly"
+    if weekly_yt_dir.is_dir():
+        shutil.copytree(weekly_yt_dir, OUTPUT.parent / "youtube_weekly", dirs_exist_ok=True)
     claude_index = ROOT / "static" / "claude_defense_report.html"
     if claude_index.exists():
         shutil.copy2(claude_index, OUTPUT.parent / "claude_defense_report.html")

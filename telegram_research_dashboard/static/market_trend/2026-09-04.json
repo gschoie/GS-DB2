@@ -1,0 +1,977 @@
+{
+ "date": "2026-09-04",
+ "meta": {
+  "window": "09-03 06:00~09-04 06:00 KST",
+  "engine": "Gemini(gemini-flash-lite-latest)",
+  "generated_at": "2026-09-04T08:26+09:00"
+ },
+ "stats": {
+  "channels": 97,
+  "messages": 1376,
+  "groups": 1256
+ },
+ "one_liner": "연준 인사의 금리 동결 시사 발언과 고용 지표 부진에 미 국채 금리 급등세가 진정되며 뉴욕증시와 국내 증시가 반등했으나, 중동 지정학적 긴장과 국내 수급 불안도 상존.",
+ "themes": [
+  {
+   "name": "미 연준 금리 동결 시사 및 국채 금리 진정",
+   "narrative": "크리스토퍼 월러 연준 이사 등의 물가 둔화 지속 시 9월 금리 동결 지지 발언과 고용 지표 부진으로 인해 최근 미국 증시를 짓눌렀던 금리 공포가 완화되며 국채 금리 급등세가 진정되고 증시가 반등함.",
+   "status": "new",
+   "strength": 5,
+   "keywords": [
+    "월러",
+    "크리스토퍼",
+    "뉴욕 연은",
+    "진정",
+    "급등세"
+   ],
+   "evidence": [
+    {
+     "channel": "키움증권 해외선물 톡톡",
+     "quote": "월러 연준 이사 \"물가 둔화 지속땐 9월 동결 지지\" - 금리인상 확률 63%→50%…美10년물 4.76%로"
+    },
+    {
+     "channel": "키움증권 전략/시황 한지영",
+     "quote": "뉴욕 연은 총재의 인플레이션 완화 발언, 8월 ADP 민간 고용 부진(3.8만 vs 컨센 4.7만) 등에 따른 미 10년물 금리 급등세 진정"
+    }
+   ]
+  },
+  {
+   "name": "미·이란 중동 갈등 고조 및 원유 공급 우려",
+   "narrative": "미군의 대이란 공습과 이란의 보복 공격으로 쿠웨이트, 요르단 등 미군 시설이 타격을 입으며 중동 내 지정학적 긴장이 고조되고 원유 공급 차질 우려가 지속됨.",
+   "status": "new",
+   "strength": 4,
+   "keywords": [
+    "쿠웨이트",
+    "미치지",
+    "부통령"
+   ],
+   "evidence": [
+    {
+     "channel": "GS의 조선/기계/방산 「바담」",
+     "quote": "미군 이란 공습 단행, 테헤란은 쿠웨이트·바레인·요르단 내 미군 시설에 미사일 및 드론 보복 공격"
+    },
+    {
+     "channel": "epic AI - 투자 어시스턴트",
+     "quote": "미국과 이란의 군사적 긴장이 고조되는 가운데 원유 공급 차질 우려가 이어지며 국제유가가 3거래일 연속 상승했습니다."
+    }
+   ]
+  },
+  {
+   "name": "알테오젠 노바티스 메가딜 및 바이오·AI 실적 호조",
+   "narrative": "알테오젠이 전세계 최초 유전자 치료제 SC 개발로 노바티스와 4.4조원 규모 메가딜을 체결했으며, 스노우플레이크 등 미국 기술주의 실적 호조와 AI 수요 재확인으로 관련 종목들이 강세를 보임.",
+   "status": "ongoing",
+   "strength": 4,
+   "keywords": [
+    "스노우플레이크",
+    "김카니",
+    "기록해 전년"
+   ],
+   "evidence": [
+    {
+     "channel": "텐렙",
+     "quote": "전세계 최초 유전자 치료제 SC 개발, 노바티스와 간다 노바티스와 4.4조원 규모 메가딜 체결."
+    },
+    {
+     "channel": "키움증권 해외선물 톡톡",
+     "quote": "3일(현지시간) 오후장 특징주 AI 데이터 클라우드업체 스노우플레이크(SNOW)가 시장 예상치를 웃돈 2분기 실적과 연간 제품 매출 전망 상향에 주가가 급등했다."
+    }
+   ]
+  },
+  {
+   "name": "정부 대기업 전기료 선납 제안 및 반도체 수급",
+   "narrative": "정부가 삼성전자와 SK하이닉스 등 대기업을 대상으로 5년치 전기료 선납을 제안한 가운데, 반도체 업종을 둘러싼 수급 변동성과 관망세가 엇갈리고 있음.",
+   "status": "new",
+   "strength": 3,
+   "keywords": [
+    "전기료",
+    "선납",
+    "연기금"
+   ],
+   "evidence": [
+    {
+     "channel": "여의도스토리 Ver2.0-习近平是个狗东西",
+     "quote": "[단독] 삼성전자 20조·하이닉스 5조… 정부, 5년치 전기료 선납 제안"
+    },
+    {
+     "channel": "서화백의 그림놀이 🚀",
+     "quote": "요약 AI 및 반도체 산업의 성장 기대와 바이오 신약 개발 성공 소식이 긍정적이나, 대기업 전기료 선납 요구, 글로벌 금리 인상 우려, 국내 증시 수급 불균형 등으로 인해 전반적으로는 관망세가 짙은 혼조 양상"
+    }
+   ]
+  }
+ ],
+ "community_mood": {
+  "score": -35,
+  "summary": "환율 상승과 국장 하락에 대한 불만이 교차하는 가운데, 네이처셀 등 개별 이슈 종목에 대한 관심과 반도체 섹터의 변동성에 대한 우려와 냉소가 섞여 있음.",
+  "hot_stocks": [
+   {
+    "name": "포스코인터내셔널",
+    "score": 10,
+    "reason": "네이버 종토방에서 글 수가 급증하며 투자자들의 높은 관심을 받음."
+   },
+   {
+    "name": "네이처셀",
+    "score": 40,
+    "reason": "일본 치료 재개 및 식약처 관련 공감 글이 다수 올라오며 기대감 반영."
+   },
+   {
+    "name": "펄어비스",
+    "score": -10,
+    "reason": "종토방 글 수 상위에 올랐으나 전반적인 시장 불만과 혼조세 동반."
+   }
+  ]
+ },
+ "signals": {
+  "spikes": [
+   {
+    "term": "월러",
+    "count": 37,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "크리스토퍼",
+    "count": 22,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "미치지",
+    "count": 20,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "쿠웨이트",
+    "count": 20,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "스노우플레이크",
+    "count": 19,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "월러 연준",
+    "count": 19,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "크리스토퍼 월러",
+    "count": 19,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "알래스카",
+    "count": 18,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "폭을",
+    "count": 17,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "뉴욕 연은",
+    "count": 16,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "SEC 제출한",
+    "count": 16,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "윌리엄스 뉴욕",
+    "count": 15,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "월러 이사",
+    "count": 15,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "진정",
+    "count": 14,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "연기금",
+    "count": 14,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "김카니 기자",
+    "count": 14,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "김카니",
+    "count": 14,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "전기료",
+    "count": 13,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "급등세",
+    "count": 13,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "선납",
+    "count": 13,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "부통령",
+    "count": 13,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "기록해 전년",
+    "count": 13,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "기록했다고",
+    "count": 12,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "중반",
+    "count": 12,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "Bank",
+    "count": 12,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   }
+  ],
+  "top_posts": [
+   {
+    "channels": 7,
+    "channel": "텐렙",
+    "head": "『알테오젠(196170.KQ) - 세계 최초 유전자 치료제 SC, 서프라이즈』 기업분석부 엄민용, 이호철 ☎️ 02-3772-1546 ▶️ 신한생각: 전세계 최초 유전자 치료제 SC 개발, 노바티스와 간다 노바티스와 4.4조원 규모 메가딜 체결. 벌써 올해만 4건 L/O 성공했고 하반기 추가 딜 지속 목표. 이번 딜의 의…",
+    "url": "https://t.me/Ten_level/91302",
+    "time_kst": "09-03 07:39"
+   },
+   {
+    "channels": 5,
+    "channel": "[ IT는 SK ]",
+    "head": "[SK증권 반도체 소부장 이동주] 하나머티리얼즈 (Not Rated) 노이즈보다 다가올 호황에 조명 ▶️ 비포 마켓의 대표 Si 파츠 - Si 기반 식각 장비 소모품 파츠류 제조. TEL, SEMES 등을 통해 글로벌 반도체 제조사를 엔드 유저로 공급하는 비포 마켓 내 대표 Si 파츠 업체 - DRAM 미세화, NAND…",
+    "url": "https://t.me/skitteam/4574",
+    "time_kst": "09-03 07:59"
+   },
+   {
+    "channels": 4,
+    "channel": "신한 리서치",
+    "head": "『음식료 – 음식료를 다시 봐야할 이유 』 기업분석부 조상훈 ☎02-3772-2578 ▶ 가격 인상과 원부자재 부담 완화로 실적 개선세 부각 - 최근 증시 변동성이 큰 상황에서 음식료 업종이 방어주로서의 면모가 부각되는 시점 - 7월 이후 음식료 업종 주가는 10.8% 상승하며, 코스피 지수를 33%p 아웃퍼폼 ▶ 원부자…",
+    "url": "https://t.me/shinhanresearch/52617",
+    "time_kst": "09-03 07:19"
+   },
+   {
+    "channels": 4,
+    "channel": "미국 주식 인사이더 🇺🇸 (US Stocks Insider)",
+    "head": "📚 미국 주식 인사이더 책이 출간되었습니다 안녕하세요. 미국 주식 인사이더입니다. 예전에 조심스럽게 말씀드렸던 책이 드디어 출간되었습니다. 이번 책에는 제가 미국 시장을 공부하고, 매일 새벽 시황과 뉴스를 정리하면서 쌓아온 정보를 찾는 방법과 노하우를 정말 아끼지 않고 모두 쏟아부었습니다. 미국 뉴스와 속보를 어디서 가장…",
+    "url": "https://t.me/insidertracking/62778",
+    "time_kst": "09-03 21:39"
+   },
+   {
+    "channels": 4,
+    "channel": "메리츠증권 리서치",
+    "head": "📮[MERITZ Strategy Daily 전략공감2.0] 2026.9.3(목) [채권전략 윤여삼] Strategy Idea: 9월 FOMC 인상? 아직 가봐야 한다 - 잭슨홀 컨퍼런스 워시 의장 발언 매파적 해석, 9월 금리인상 확률 큰 폭으로 증가 - 인플레이션 통제 관점에서 1~2차례 인상은 건전한 대응일 수 있다는…",
+    "url": "https://t.me/meritz_research/44567",
+    "time_kst": "09-03 07:38"
+   },
+   {
+    "channels": 3,
+    "channel": "[신한 리서치본부] IT(반도체/전기전자/디스플레이)",
+    "head": "[신한투자증권 IT팀 오강호, 김형태, 박현우, 송혜수, 김예성] 9/3(목) 🕗Daily IT 예습하기 ✅ 반도체/장비 ▶️ 브로드컴 4분기 매출전망 시장 예상 하회…AI 훈풍 더디게 반영 (디지털데일리) https://alie.kr/9XNwrZP ▶️ 최태원 SK 회장 \"日 키옥시아와 공동생산도 선택지\" (디일렉) h…",
+    "url": "https://t.me/c/1355104422/7373",
+    "time_kst": "09-03 07:40"
+   },
+   {
+    "channels": 3,
+    "channel": "키움증권 전략/시황 한지영",
+    "head": "[9/3, 장 시작 전 생각: 셀온 악순환 탈출, 키움 한지영] - 다우 +0.6%, S&P500 +0.5%, 나스닥 +0.5% - 마이크론 +2.4%, 델 +15.8%, 브로드컴 -0.6%(시간외 약보합) - 미 10년물 금리 4.78%, 30년물 금리 5.26%, WTI 90.7달러 1. 미국 증시는 4거래일만에 반등…",
+    "url": "https://t.me/hedgecat0301/2931",
+    "time_kst": "09-03 07:46"
+   },
+   {
+    "channels": 3,
+    "channel": "다올투자증권 리서치센터",
+    "head": "[다올투자증권 조선/기계/방산 최광식] 9/3(목) 데일리뉴스 🛳 조선 [TradeWinds] Yang Ming inks order for six LNG dual-fuelled container ships at Hanwha Former STX boss Kang Duk-soo returns to shipbuilding wi…",
+    "url": "https://t.me/daolresearch/15020",
+    "time_kst": "09-03 08:19"
+   },
+   {
+    "channels": 3,
+    "channel": "허재환 유진증권 전략",
+    "head": "[Web발신] 안녕하십니까 유진투자증권 허재환입니다 =금리와 앤트로픽= * 금리와 유가가 온통 금융시장을 지배하고 있습니다. * 당장 금리가 안정될만한 돌파구가 안 보입니다. 미국 트럼프, 일본 다카이치, 우리 정부도 재정지출을 결코 줄이지 않을 것입니다. AI 투자와 자금조달도 멈추지 않을 것입니다. * 금리가 높아지면…",
+    "url": "https://t.me/huhjae/4243",
+    "time_kst": "09-03 08:01"
+   },
+   {
+    "channels": 3,
+    "channel": "메리츠증권 리서치",
+    "head": "📮[메리츠증권 ESG 이진아] 2026.9.3 (목) [The ESGverse] Buy the Change, Not the Score (요약본) https://tinyurl.com/mw95ujw2 Part 1. Governance Regime Shift: 자율에서 규율로 - 한국 자본시장의 거버넌스는 기업의 자율적 선언과…",
+    "url": "https://t.me/meritz_research/44570",
+    "time_kst": "09-03 07:39"
+   },
+   {
+    "channels": 3,
+    "channel": "다올 의료기기/화장품 박종현",
+    "head": "[에이피알 수단레드 관련 IR 확인] 회사 측 확인 내용 전달드립니다. • 기사에서 언급된 로트 번호 제품은 싱가포르 내 공식 판매처를 통해 유통된 이력이 없는 것으로 확인 • 수단레드가 검출된 것으로 언급된 Venus Beauty 역시 에이피알의 공식 거래처가 아니며, 현재 가품 가능성을 포함해 유통 경로 및 사실관계…",
+    "url": "https://t.me/alexppark/4694",
+    "time_kst": "09-03 15:10"
+   },
+   {
+    "channels": 3,
+    "channel": "AWAKE - 실시간 주식 공시 정리채널",
+    "head": "2026.09.03 11:10:23 기업명: 티에스아이(시가총액: 712억) A277880 보고서명: 단일판매ㆍ공급계약체결(자율공시) 계약상대 : DJK (DAIICHI JITSUGYO CO., LTD.) 계약내용 : 2차전지 믹싱시스템 공급지역 : 일본 계약금액 : 241억 계약시작 : 2026-09-03 계약종료 :…",
+    "url": "https://t.me/darthacking/152600",
+    "time_kst": "09-03 11:10"
+   },
+   {
+    "channels": 3,
+    "channel": "텐렙",
+    "head": "온코닉테라퓨틱스, GLP-1 비만치료제 '역류성식도염' 부작용 수요 잡는다··자큐보 GERD 실사용 효과 확인 https://m.ls-sec.co.kr/invest/news/view/202609030805003300081414?id=news",
+    "url": "https://t.me/Ten_level/91303",
+    "time_kst": "09-03 08:06"
+   },
+   {
+    "channels": 3,
+    "channel": "텐렙",
+    "head": "✅ [단독] 삼성·SK 신규 팹에 주문 몰렸다…‘워트’ 공장 90% 가동 https://www.hankyung.com/article/202609029959i",
+    "url": "https://t.me/Ten_level/91310",
+    "time_kst": "09-03 09:03"
+   },
+   {
+    "channels": 2,
+    "channel": "신한 리서치",
+    "head": "[신한 자동차/철강금속 박광래] !! 신한 자동차/철강금속 텔레그램 채널 !! → https://t.me/shinhan_park :: 신한 자동차 뉴스 (260903) :: ▶️ 美·캐나다 관세전쟁…현대차·기아 '반사이익' 기대 (한국경제) : 美 정부, 내년 1월부터 캐나다산 완성차 관세를 기존 25%에서 50%로 대폭…",
+    "url": "https://t.me/shinhanresearch/52616",
+    "time_kst": "09-03 06:53"
+   }
+  ]
+ },
+ "community": {
+  "source": "네이버 종목토론실",
+  "universe": 40,
+  "posts": 2820,
+  "search_top": [
+   {
+    "code": "005930",
+    "name": "삼성전자",
+    "rank": 1
+   },
+   {
+    "code": "000660",
+    "name": "SK하이닉스",
+    "rank": 2
+   },
+   {
+    "code": "009150",
+    "name": "삼성전기",
+    "rank": 3
+   },
+   {
+    "code": "196170",
+    "name": "알테오젠",
+    "rank": 4
+   },
+   {
+    "code": "034020",
+    "name": "두산에너빌리티",
+    "rank": 5
+   },
+   {
+    "code": "005380",
+    "name": "현대차",
+    "rank": 6
+   },
+   {
+    "code": "010140",
+    "name": "삼성중공업",
+    "rank": 7
+   },
+   {
+    "code": "006400",
+    "name": "삼성SDI",
+    "rank": 8
+   },
+   {
+    "code": "042660",
+    "name": "한화오션",
+    "rank": 9
+   },
+   {
+    "code": "035420",
+    "name": "NAVER",
+    "rank": 10
+   }
+  ],
+  "hot_stocks": [
+   {
+    "code": "047050",
+    "name": "포스코인터내셔널",
+    "posts": 229,
+    "capped": true,
+    "burst": 99.0,
+    "base_daily": 0.0
+   },
+   {
+    "code": "294570",
+    "name": "쿠콘",
+    "posts": 83,
+    "capped": false,
+    "burst": 99.0,
+    "base_daily": 0.0
+   },
+   {
+    "code": "263750",
+    "name": "펄어비스",
+    "posts": 348,
+    "capped": true,
+    "burst": 20.3,
+    "base_daily": 17.1
+   },
+   {
+    "code": "373220",
+    "name": "LG에너지솔루션",
+    "posts": 63,
+    "capped": false,
+    "burst": 8.0,
+    "base_daily": 7.9
+   },
+   {
+    "code": "000720",
+    "name": "현대건설",
+    "posts": 100,
+    "capped": true,
+    "burst": 5.6,
+    "base_daily": 18.0
+   },
+   {
+    "code": "011070",
+    "name": "LG이노텍",
+    "posts": 177,
+    "capped": true,
+    "burst": 1.9,
+    "base_daily": 91.0
+   },
+   {
+    "code": "196170",
+    "name": "알테오젠",
+    "posts": 243,
+    "capped": true,
+    "burst": 1.6,
+    "base_daily": 156.7
+   },
+   {
+    "code": "066970",
+    "name": "엘앤에프",
+    "posts": 163,
+    "capped": true,
+    "burst": 1.8,
+    "base_daily": 90.4
+   },
+   {
+    "code": "017670",
+    "name": "SK텔레콤",
+    "posts": 165,
+    "capped": true,
+    "burst": 1.7,
+    "base_daily": 96.1
+   },
+   {
+    "code": "007390",
+    "name": "네이처셀",
+    "posts": 145,
+    "capped": true,
+    "burst": 1.7,
+    "base_daily": 85.4
+   },
+   {
+    "code": "010170",
+    "name": "대한광통신",
+    "posts": 136,
+    "capped": true,
+    "burst": 1.6,
+    "base_daily": 84.3
+   },
+   {
+    "code": "047040",
+    "name": "대우건설",
+    "posts": 121,
+    "capped": true,
+    "burst": 1.5,
+    "base_daily": 82.0
+   }
+  ],
+  "keywords": [
+   {
+    "term": "공매",
+    "count": 59,
+    "burst": 99.0,
+    "new": true
+   },
+   {
+    "term": "반도체",
+    "count": 19,
+    "burst": 99.0,
+    "new": true
+   },
+   {
+    "term": "지금",
+    "count": 19,
+    "burst": 99.0,
+    "new": true
+   },
+   {
+    "term": "상한",
+    "count": 16,
+    "burst": 99.0,
+    "new": true
+   },
+   {
+    "term": "미장",
+    "count": 15,
+    "burst": 99.0,
+    "new": true
+   },
+   {
+    "term": "신용",
+    "count": 12,
+    "burst": 99.0,
+    "new": true
+   },
+   {
+    "term": "평단",
+    "count": 11,
+    "burst": 99.0,
+    "new": true
+   },
+   {
+    "term": "때문",
+    "count": 10,
+    "burst": 99.0,
+    "new": true
+   },
+   {
+    "term": "갑자기",
+    "count": 10,
+    "burst": 99.0,
+    "new": true
+   },
+   {
+    "term": "DLC",
+    "count": 10,
+    "burst": 99.0,
+    "new": true
+   },
+   {
+    "term": "한번",
+    "count": 9,
+    "burst": 99.0,
+    "new": true
+   },
+   {
+    "term": "삼성전자",
+    "count": 9,
+    "burst": 99.0,
+    "new": true
+   },
+   {
+    "term": "공매도",
+    "count": 9,
+    "burst": 99.0,
+    "new": true
+   },
+   {
+    "term": "대장",
+    "count": 9,
+    "burst": 99.0,
+    "new": true
+   },
+   {
+    "term": "대장주",
+    "count": 8,
+    "burst": 98.8,
+    "new": true
+   }
+  ],
+  "top_liked": [
+   {
+    "code": "007390",
+    "name": "네이처셀",
+    "title": "너도나도 떠들어 대도록[3]",
+    "views": 518,
+    "likes": 89,
+    "url": "https://finance.naver.com/item/board_read.naver?code=007390&nid=428919283",
+    "time_kst": "09-03 23:45"
+   },
+   {
+    "code": "007390",
+    "name": "네이처셀",
+    "title": "■현상황 분석 ㆍ(낙우 주주님)펌글[3]",
+    "views": 467,
+    "likes": 73,
+    "url": "https://finance.naver.com/item/board_read.naver?code=007390&nid=428916403",
+    "time_kst": "09-03 22:33"
+   },
+   {
+    "code": "007390",
+    "name": "네이처셀",
+    "title": "선한 영향력으로 다시 돌아왔다옹[12]",
+    "views": 800,
+    "likes": 61,
+    "url": "https://finance.naver.com/item/board_read.naver?code=007390&nid=428904669",
+    "time_kst": "09-03 16:34"
+   },
+   {
+    "code": "007390",
+    "name": "네이처셀",
+    "title": "식약처는 오빠전화한통이면되는구나[3]",
+    "views": 289,
+    "likes": 60,
+    "url": "https://finance.naver.com/item/board_read.naver?code=007390&nid=428916897",
+    "time_kst": "09-03 22:40"
+   },
+   {
+    "code": "007390",
+    "name": "네이처셀",
+    "title": "일본치료재개[1]",
+    "views": 169,
+    "likes": 58,
+    "url": "https://finance.naver.com/item/board_read.naver?code=007390&nid=428922896",
+    "time_kst": "09-04 05:58"
+   }
+  ],
+  "top_rising": [
+   {
+    "code": "263750",
+    "name": "펄어비스",
+    "title": "새벽에 눈 떠진 이유가 있었네요[2]",
+    "views": 928,
+    "likes": 46,
+    "url": "https://finance.naver.com/item/board_read.naver?code=263750&nid=428922245",
+    "time_kst": "09-04 04:19",
+    "views_per_hour": 227.2
+   },
+   {
+    "code": "042660",
+    "name": "한화오션",
+    "title": "어제 애널리스트 한화오션 분석[2]",
+    "views": 608,
+    "likes": 15,
+    "url": "https://finance.naver.com/item/board_read.naver?code=042660&nid=428922329",
+    "time_kst": "09-04 04:30",
+    "views_per_hour": 155.9
+   },
+   {
+    "code": "010140",
+    "name": "삼성중공업",
+    "title": "대미투자 1차 루이지에나 LNG프로젝트[3]",
+    "views": 2198,
+    "likes": 54,
+    "url": "https://finance.naver.com/item/board_read.naver?code=010140&nid=428908408",
+    "time_kst": "09-03 17:58",
+    "views_per_hour": 152.3
+   },
+   {
+    "code": "047050",
+    "name": "포스코인터내셔널",
+    "title": "왜 하필 오늘 받았을까를 생각하면 답...[2]",
+    "views": 1632,
+    "likes": 16,
+    "url": "https://finance.naver.com/item/board_read.naver?code=047050&nid=428911512",
+    "time_kst": "09-03 19:28",
+    "views_per_hour": 126.2
+   },
+   {
+    "code": "035420",
+    "name": "NAVER",
+    "title": "형 네이버 710주 진입했다.[4]",
+    "views": 1109,
+    "likes": 14,
+    "url": "https://finance.naver.com/item/board_read.naver?code=035420&nid=428918593",
+    "time_kst": "09-03 23:23",
+    "views_per_hour": 123.0
+   }
+  ]
+ },
+ "community_dc": {
+  "source": "DC인사이드",
+  "galleries": [
+   {
+    "id": "krstock",
+    "name": "국내주식갤러리",
+    "posts": 1440,
+    "capped": true,
+    "burst": 1.2,
+    "base_daily": 1218.6
+   },
+   {
+    "id": "stockus",
+    "name": "해외주식갤러리",
+    "posts": 3950,
+    "capped": true,
+    "burst": 1.3,
+    "base_daily": 3132.3
+   }
+  ],
+  "posts_sampled": 541,
+  "keywords": [
+   {
+    "term": "룰루레몬",
+    "count": 43,
+    "burst": 99.0,
+    "new": true
+   },
+   {
+    "term": "프장",
+    "count": 7,
+    "burst": 79.9,
+    "new": true
+   },
+   {
+    "term": "레깅스",
+    "count": 7,
+    "burst": 79.9,
+    "new": true
+   },
+   {
+    "term": "속슬",
+    "count": 6,
+    "burst": 68.5,
+    "new": true
+   },
+   {
+    "term": "버리",
+    "count": 6,
+    "burst": 68.5,
+    "new": true
+   },
+   {
+    "term": "마이클버리",
+    "count": 5,
+    "burst": 57.1,
+    "new": true
+   },
+   {
+    "term": "스엑",
+    "count": 5,
+    "burst": 57.1,
+    "new": true
+   },
+   {
+    "term": "월가",
+    "count": 5,
+    "burst": 57.1,
+    "new": true
+   },
+   {
+    "term": "그래서",
+    "count": 5,
+    "burst": 57.1,
+    "new": true
+   },
+   {
+    "term": "환율",
+    "count": 5,
+    "burst": 57.1,
+    "new": true
+   },
+   {
+    "term": "솔리다임",
+    "count": 15,
+    "burst": 15.6,
+    "new": false
+   },
+   {
+    "term": "국장",
+    "count": 16,
+    "burst": 9.6,
+    "new": false
+   },
+   {
+    "term": "이유",
+    "count": 14,
+    "burst": 9.4,
+    "new": false
+   },
+   {
+    "term": "트럼프",
+    "count": 10,
+    "burst": 10.4,
+    "new": false
+   },
+   {
+    "term": "야선",
+    "count": 15,
+    "burst": 6.3,
+    "new": false
+   }
+  ],
+  "top_recommended": [
+   {
+    "gallery": "해외주식갤러리",
+    "title": "국장이 답이 없는 이유",
+    "views": 12866,
+    "recommend": 326,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=17654680&exception_mode=recommend&page=1",
+    "time_kst": "09-03 20:05"
+   },
+   {
+    "gallery": "해외주식갤러리",
+    "title": "환율 1550일때 베네수엘라니 나라 좇망했다더니 지랄하고",
+    "views": 8945,
+    "recommend": 258,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=17653408&exception_mode=recommend&page=1",
+    "time_kst": "09-03 16:56"
+   },
+   {
+    "gallery": "해외주식갤러리",
+    "title": "나라가 망해도 상관없으니 환율 파멸적상승 바라면 개추 ㅋㅋ",
+    "views": 8403,
+    "recommend": 256,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=17653913&exception_mode=recommend&page=1",
+    "time_kst": "09-03 18:24"
+   },
+   {
+    "gallery": "해외주식갤러리",
+    "title": "환율 200원 가지고 하루종일 찡찡거리네",
+    "views": 9191,
+    "recommend": 178,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=17653541&exception_mode=recommend&page=1",
+    "time_kst": "09-03 17:15"
+   },
+   {
+    "gallery": "해외주식갤러리",
+    "title": "미주갤새기들 쥇패고싶다",
+    "views": 7166,
+    "recommend": 161,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=17650752&exception_mode=recommend&page=1",
+    "time_kst": "09-03 10:49"
+   }
+  ],
+  "top_viewed": [
+   {
+    "gallery": "해외주식갤러리",
+    "title": "버리에 대한 모든 의문이 풀렸다",
+    "views": 3732,
+    "recommend": 45,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=17658683&page=11",
+    "time_kst": "09-04 05:35"
+   },
+   {
+    "gallery": "해외주식갤러리",
+    "title": "환전 갤랭킹 탑3 가능?",
+    "views": 3399,
+    "recommend": 25,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=17658658&page=12",
+    "time_kst": "09-04 05:24"
+   },
+   {
+    "gallery": "국내주식갤러리",
+    "title": "하닉 솔리다임 팩트",
+    "views": 914,
+    "recommend": 0,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3403588&page=10",
+    "time_kst": "09-04 05:31"
+   },
+   {
+    "gallery": "국내주식갤러리",
+    "title": "반도체 새끼들 사망 ㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋ",
+    "views": 907,
+    "recommend": 0,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3403597&page=9",
+    "time_kst": "09-04 05:51"
+   },
+   {
+    "gallery": "국내주식갤러리",
+    "title": "반도체는 이제 끝이구나.. 호재로 떡을 치는데 ㅋㅋ;",
+    "views": 818,
+    "recommend": 0,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3403557&page=10",
+    "time_kst": "09-04 04:24"
+   },
+   {
+    "gallery": "국내주식갤러리",
+    "title": "야선 +1.92%에 양닉 3% 감아올렸네 하닉 풀롱임?",
+    "views": 807,
+    "recommend": 0,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3403584&page=10",
+    "time_kst": "09-04 05:14"
+   },
+   {
+    "gallery": "국내주식갤러리",
+    "title": "저점을 놓친 대가는 엄청 크구나...",
+    "views": 668,
+    "recommend": 0,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3403518&page=11",
+    "time_kst": "09-04 03:36"
+   },
+   {
+    "gallery": "국내주식갤러리",
+    "title": "뭐 어디까지 구란지 알수가있어야지",
+    "views": 652,
+    "recommend": 0,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3403599&page=9",
+    "time_kst": "09-04 05:55"
+   }
+  ]
+ }
+}

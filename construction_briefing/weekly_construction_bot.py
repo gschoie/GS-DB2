@@ -226,7 +226,7 @@ def write_archive(md_report: str, period_label: str, now: datetime) -> None:
     WEEKLY_DIR.mkdir(parents=True, exist_ok=True)
     date_str = now.strftime("%Y-%m-%d")
     body = report_to_page_html(md_report)
-    page = f"""<!DOCTYPE html><html lang="ko"><head><meta charset="utf-8">
+    page = f"""<!DOCTYPE html><html lang="ko"><head><meta charset="utf-8"><base target="_blank">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>글로벌 건설기계 주간정리 {date_str}</title><style>{PAGE_CSS}</style></head>
 <body><div class="wrap">
@@ -262,7 +262,8 @@ body{margin:0;padding:32px 28px;background:#fff;color:#1a1a1a;
 h1{font-size:20px;margin:24px 0 6px}
 h2{font-size:15.5px;margin:22px 0 8px;padding-bottom:5px;border-bottom:1px solid #ccc;color:#7c4a03}
 a{color:#1d4ed8;text-decoration:none}
-table.ptab{border-collapse:collapse;width:100%;margin:10px 0;font-size:12.5px}
+table.ptab{border-collapse:collapse;width:100%;min-width:560px;margin:10px 0;font-size:12.5px}
+.ptab td{white-space:nowrap}.ptab td:first-child{white-space:normal;min-width:130px}.ptab td:last-child{white-space:normal;min-width:200px}
 .ptab td{border-bottom:1px solid #e2e2e2;padding:5px 8px;text-align:left;vertical-align:top}
 .up{color:#c02626;font-weight:600}.down{color:#1d4ed8;font-weight:600}
 hr{border:none;border-top:2px solid #999;margin:28px 0}
@@ -270,7 +271,7 @@ hr{border:none;border-top:2px solid #999;margin:28px 0}
   font-size:12.5px;color:#444;margin-bottom:18px}
 @media print{.note{display:none}}
 """
-    page = f"""<!DOCTYPE html><html lang="ko"><head><meta charset="utf-8">
+    page = f"""<!DOCTYPE html><html lang="ko"><head><meta charset="utf-8"><base target="_blank">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>글로벌 건설기계 월간 정리 (4주 묶음)</title><style>{light_css}</style></head>
 <body><div class="wrap">
@@ -359,7 +360,7 @@ iframe{{width:100%;height:calc(100vh - 110px);border:1px solid #3a3046;border-ra
 <script>
 const DATES={dates_js};
 const sel=document.getElementById('dsel'),fr=document.getElementById('frame');
-DATES.forEach(d=>{{const o=document.createElement('option');o.value=d;o.textContent=d;sel.appendChild(o)}});
+DATES.forEach(d=>{{const o=document.createElement('option');o.value=d;o.textContent=d+' ('+'일월화수목금토'[new Date(d+'T00:00:00').getDay()]+')';sel.appendChild(o)}});
 function load(){{fr.src='construction_weekly/'+sel.value+'.html'}}
 sel.onchange=load;
 document.getElementById('prev').onclick=()=>{{if(sel.selectedIndex<DATES.length-1){{sel.selectedIndex++;load()}}}};

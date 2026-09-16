@@ -287,7 +287,7 @@ def generate_report(price_table: str, news_text: str, now: datetime) -> str:
         max_output_tokens=16384,
     )
     # 1순위 모델(보통 pro) 실패 시 flash로 폴백 — 무료 티어 쿼터로 브리핑이 끊기지 않게
-    models = list(dict.fromkeys([MODEL, "gemini-2.5-flash"]))
+    models = list(dict.fromkeys([MODEL, "gemini-2.5-flash", "gemini-flash-latest"]))
     response, used_model = None, None
     for model in models:
         for attempt in range(2):  # 429/503 대비 재시도
@@ -449,7 +449,8 @@ b,strong{color:#f0f4fa}
 ul{margin:6px 0;padding-left:22px}
 p{margin:8px 0}
 hr{border:none;border-top:1px solid #223046;margin:20px 0}
-table.ptab{border-collapse:collapse;width:100%;margin:12px 0;font-size:13.5px}
+table.ptab{border-collapse:collapse;width:100%;min-width:560px;margin:12px 0;font-size:13.5px}
+.ptab td{white-space:nowrap}.ptab td:first-child{white-space:normal;min-width:130px}.ptab td:last-child{white-space:normal;min-width:200px}
 .ptab td{border-bottom:1px solid #1d2838;padding:7px 9px;text-align:left;vertical-align:top}
 .ptab tr:first-child td{color:#8b96a8;font-size:12.5px;border-bottom:1px solid #2c3a52}
 .ptab tr:hover td{background:#131a26}
@@ -517,7 +518,7 @@ def write_archive(md_report: str, now: datetime) -> None:
     ARCHIVE_DIR.mkdir(parents=True, exist_ok=True)
     date_str = now.strftime("%Y-%m-%d")
     body = report_to_page_html(md_report)
-    page = f"""<!DOCTYPE html><html lang="ko"><head><meta charset="utf-8">
+    page = f"""<!DOCTYPE html><html lang="ko"><head><meta charset="utf-8"><base target="_blank">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>글로벌 방산 브리핑 {date_str}</title><style>{PAGE_CSS}</style></head>
 <body><div class="wrap">
@@ -557,7 +558,7 @@ iframe{{width:100%;height:calc(100vh - 110px);border:1px solid #223046;border-ra
 <script>
 const DATES={dates_js};
 const sel=document.getElementById('dsel'),fr=document.getElementById('frame');
-DATES.forEach(d=>{{const o=document.createElement('option');o.value=d;o.textContent=d;sel.appendChild(o)}});
+DATES.forEach(d=>{{const o=document.createElement('option');o.value=d;o.textContent=d+' ('+'일월화수목금토'[new Date(d+'T00:00:00').getDay()]+')';sel.appendChild(o)}});
 function load(){{fr.src='defense_daily/'+sel.value+'.html'}}
 sel.onchange=load;
 document.getElementById('prev').onclick=()=>{{if(sel.selectedIndex<DATES.length-1){{sel.selectedIndex++;load()}}}};

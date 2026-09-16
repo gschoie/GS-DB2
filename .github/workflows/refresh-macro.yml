@@ -12,10 +12,10 @@ permissions:
   pages: write
   id-token: write
 
-concurrency:
-  group: pages
-  # 전체 파이프라인(deploy-pages)이 돌고 있으면 취소하지 말고 대기한다.
-  cancel-in-progress: false
+# 주의: 워크플로 레벨 concurrency에 'pages'를 걸지 말 것. 아래 deploy 잡도 같은 그룹을
+# 쓰기 때문에 자기 run이 쥔 자물쇠를 자기 잡이 다시 기다리는 교착이 되어, deploy 잡이
+# 러너도 배정받지 못하고 0초 만에 실패한다(2026-08-23 Pages 원복 이후 78회 연속 실패의 원인).
+# 배포 직렬화는 deploy 잡의 concurrency만으로 충분하다 — 나머지 4개 워크플로와 동일.
 
 jobs:
   build:

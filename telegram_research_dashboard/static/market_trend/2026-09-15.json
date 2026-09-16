@@ -1,0 +1,696 @@
+{
+ "date": "2026-09-15",
+ "meta": {
+  "window": "09-14 06:00~09-15 06:00 KST",
+  "engine": "Gemini(gemini-2.5-flash)",
+  "generated_at": "2026-09-15T08:56+09:00"
+ },
+ "stats": {
+  "channels": 97,
+  "messages": 1226,
+  "groups": 1093
+ },
+ "one_liner": "AI 속도 조절론, 중동 지정학적 리스크, 고금리 우려 속 K-뷰티 및 조선업 강세.",
+ "themes": [
+  {
+   "name": "AI 개발 속도 조절 논란 및 규제",
+   "narrative": "주요 AI 기업 CEO들이 AI 모델 개발 속도 조절을 주장하며 관련주에 단기 변동성을 야기했으나, 트럼프 등 정치권에서는 AI 경쟁 우위를 위해 개발 가속화를 강조하며 규제에 대한 상반된 시각이 나타나고 있다.",
+   "status": "new",
+   "strength": 5,
+   "keywords": [
+    "AI 개발",
+    "조절",
+    "속도조절론",
+    "CEO AI",
+    "AI 규제",
+    "오픈소스"
+   ],
+   "evidence": [
+    {
+     "channel": "키움증권 전략/시황 한지영",
+     "quote": "주말 사이에 있었던 오픈 AI, 앤스로픽 등 주요 AI 기업들의 모델 개발 속도 조절 이슈가 국내외 AI, 반도체주의 변동성 요인으로 작용할 소지가 있음."
+    },
+    {
+     "channel": "대신 전략. 돌직구",
+     "quote": "오늘 급락의 핵심 팩터는 AI 개발 속도 조절 논란. 9월 6일 야쿠프 파호츠키 오픈AI 최고과학자의 에세이(\"기계 지능의 급속한 발전에 아무도 대비하지 않고 있다\")에 이어, 12일(현지시간) 다리오 아모데이 앤스로픽 CEO가 블로그에서 \"AI 모델 개선 속도를 늦춰야 한다\"며 제3자 평가를 포함한 추가 안전장치 도입을…"
+    },
+    {
+     "channel": "미국 주식 인사이더 🇺🇸 (US Stocks Insider)",
+     "quote": "트럼프 대통령은 AI 개발 속도를 늦춰야 한다는 기술업계 일각의 요구를 거부하고, AI 경쟁의 승자가 세계 경쟁에서 우위를 차지할 것이라고 강조."
+    }
+   ]
+  },
+  {
+   "name": "중동 지정학적 리스크 및 고유가 우려",
+   "narrative": "사우디 동서 횡단 송유관 가동 중단 장기화 우려와 이란-걸프 국가 회의 연기 등 중동 지역의 지정학적 불안정성이 고조되며 국제 유가 상승 압력이 확대되고 있다.",
+   "status": "new",
+   "strength": 4,
+   "keywords": [
+    "송유관",
+    "이란 걸프",
+    "고유"
+   ],
+   "evidence": [
+    {
+     "channel": "미국 주식 인사이더 🇺🇸 (US Stocks Insider)",
+     "quote": "사우디아라비아 동서 횡단 송유관 가동 중단이 장기화될 경우 하루 최대 약 400만 배럴, 세계 원유 공급의 약 4%가 차질을 빚을 수 있다는 전망 제기."
+    },
+    {
+     "channel": "대신 전략. 돌직구",
+     "quote": "기대했던 호르무즈 통항 회의가 연기되었고, 사우디 동서 송유관 가동 중단으로 인해 브렌트유 108달러 재돌파한데 이어…"
+    },
+    {
+     "channel": "서화백의 그림놀이 🚀",
+     "quote": "💡 요약 AI 개발 속도 조절론과 고유가 및 금리 인상 등 거시경제적 하방 압력이 시장 전반에 퍼져있어 투자자 불안감이 높다."
+    }
+   ]
+  },
+  {
+   "name": "K-뷰티 수출 호조 및 ODM 업황 강세",
+   "narrative": "미국과 유럽향 화장품 수출이 강세를 보이며 K-뷰티 업황이 호조를 지속하고 있으며, 이에 따라 ODM 기업들의 생산시설 확충과 실적 개선 기대감이 커지고 있다. 일부 기업은 원화 강세로 주가 조정을 겪기도 했다.",
+   "status": "ongoing",
+   "strength": 4,
+   "keywords": [
+    "에이피알",
+    "오리온",
+    "ODM",
+    "있기 때문"
+   ],
+   "evidence": [
+    {
+     "channel": "[한투증권 김명주] 유통/화장품/생활소비재",
+     "quote": "9월 1~10일 화장품 수출 +46.1% YoY, +17.4% MoM. 전월 캐나다 수출 오…"
+    },
+    {
+     "channel": "신한 리서치",
+     "quote": "아마존 내 Top 100위 진입 에이피알(메디큐브) 제품 수 2026년 1월 6~7개→ 6월 16개→ 9월 14개로 타사의 급격한 감소 대비 추세 우상향 트렌드"
+    },
+    {
+     "channel": "신한 리서치",
+     "quote": "ODM: 가파른 K-뷰티 성장에 ODM사 잇따른 생산시설 확충(한국콜마 +2.9%, 코스맥스 +2.0%)"
+    }
+   ]
+  },
+  {
+   "name": "조선 및 방산 산업 수주 모멘텀 지속",
+   "narrative": "조선업은 삼성중공업의 대규모 LNG 운반선 수주 소식으로 강세를 보였고, 방산 산업은 한화에어로스페이스의 수출 모멘텀과 전쟁 헤지 수요 유입으로 수급이 집중되는 모습을 보였다. 원전 관련 '팀코리아'의 미국 시장 진출 기대감도 있다.",
+   "status": "ongoing",
+   "strength": 3,
+   "keywords": [
+    "삼성중공업",
+    "한전",
+    "설비투자"
+   ],
+   "evidence": [
+    {
+     "channel": "신한 리서치",
+     "quote": "KOSPI AI 밸류체인들 부진한 가운데 조선·방산으로 수급 유입됐습니다. … 삼성중공업(+2.8%)은 12억$ 규모의 LNG+원유운반선 6척 수주…"
+    },
+    {
+     "channel": "DAOL 조선/기계/방산 | 최광식",
+     "quote": "「삼성중공업, LNG운반선 4척 수주」"
+    },
+    {
+     "channel": "이상헌 부장 iM 지주/ESG/중소형주",
+     "quote": "대미원전투자 가시화 된다면 웨스팅하우스와 협력 등을 통하여 한전이 주축이 된 팀코리아 원전 공급망의 미국시장 진출 등 수출확대 가속화 ⇒ 팀코리아 낙수효과로 동사 수주 확대되면서 밸류에이션 리레이팅 될 듯"
+    }
+   ]
+  },
+  {
+   "name": "암호화폐 규제 법안(CLARITY Act) 논의 본격화",
+   "narrative": "미국 공화당이 암호화폐 규제에 관한 CLARITY Act의 최종 타협안을 공개하며 9월 15일 표결을 앞두고 있어, 암호화폐 시장의 규제 환경 변화에 대한 관심이 집중되고 있다.",
+   "status": "new",
+   "strength": 3,
+   "keywords": [
+    "CLARITY",
+    "Act"
+   ],
+   "evidence": [
+    {
+     "channel": "유진투자증권 코스닥벤처팀",
+     "quote": "공화당은 9/15 클로처 표결을 앞두고 CLARITY Act 최종 타협안을 공개. 윤리·비수탁 개발자 보호(BRCA)·스테이블코인 보상·소비자보호·이해상충 쟁점을 한 번에 손본 사실상 마지막 제안."
+    },
+    {
+     "channel": "서화백의 AI놀이🚀",
+     "quote": "✅ 트럼프, 암호화폐 규제에 관한 ‘CLARITY 법안’ 표결을 위한 상..."
+    }
+   ]
+  },
+  {
+   "name": "금리 인상 압력 및 매크로 불확실성 지속",
+   "narrative": "미국 8월 CPI가 예상치를 상회하며 FOMC의 금리 인상 가능성이 커지고 있으며, 일부 증권사는 연준의 금리 인상 전망을 상향 조정하는 등 고금리 환경과 매크로 불확실성이 성장주에 부담으로 작용하고 있다.",
+   "status": "ongoing",
+   "strength": 4,
+   "keywords": [
+    "케빈 워시",
+    "TP",
+    "Analyst",
+    "설비투자",
+    "있기 때문"
+   ],
+   "evidence": [
+    {
+     "channel": "김현석(자본주의 바이어스 있는 채널입니다)",
+     "quote": "유안타증권은 '26년 Fed Call을 종전 동결 전망에서 9월과 12월 각 25BP 총 2회 인상으로 수정."
+    },
+    {
+     "channel": "키움증권 전략/시황 한지영",
+     "quote": "FOMC 이후 미 10년물 금리의 향방도 간과할 수 없는 변수. 지난 금요일에 장중 돌파했던 5.0% 레벨에 안착하는 것을 넘어서 추가적인 상방 압력이 발생한다면, 증시 전반에 걸친 멀티플 부담을 높일 수 있기 때문."
+    },
+    {
+     "channel": "iM전략 김준영",
+     "quote": "금리 절대 레벨은 성장주에 부담. AI 투자 및 개발 속도 관련 노이즈로 단기 어수선한 흐름 예상되나 미국 증시는 신고가 갱신 랠리 이어갈 가능성. 주식 자산군 선호도를 줄이기에는 다소 이른 시점."
+    }
+   ]
+  }
+ ],
+ "community_mood": {
+  "score": -40,
+  "summary": "개미 투자자들은 급증하는 금리, 고유가, 그리고 'AI 속도 조절론' 등 거시경제적 불확실성에 대한 큰 불안감을 표출하며 전반적으로 비관적인 시장 전망을 보이고 있으나, 일부는 단기적인 시장 반등과 반도체 사이클 회복 가능성에 주목하고 있다.",
+  "hot_stocks": [
+   {
+    "name": "마이크론",
+    "score": 0,
+    "reason": "메모리 반도체 업황 사이클 종료 여부에 대한 논의가 활발함."
+   },
+   {
+    "name": "하이닉스",
+    "score": 50,
+    "reason": "증권사 목표가 언급과 함께 메모리 반도체 업황 회복 기대감."
+   },
+   {
+    "name": "속슬",
+    "score": 30,
+    "reason": "반도체 섹터의 변동성에 대한 관심과 레버리지 투자 심리."
+   }
+  ]
+ },
+ "signals": {
+  "spikes": [
+   {
+    "term": "상상인증권",
+    "count": 19,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "있기 때문",
+    "count": 15,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "에이피알",
+    "count": 14,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "목표 상상인증권",
+    "count": 14,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "AI 개발",
+    "count": 46,
+    "burst": 11.642143408140932,
+    "base_daily": 3.6,
+    "new": false
+   },
+   {
+    "term": "송유관",
+    "count": 34,
+    "burst": 16.25400698044797,
+    "base_daily": 1.9,
+    "new": false
+   },
+   {
+    "term": "이란 걸프",
+    "count": 13,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "CLARITY",
+    "count": 13,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "Analyst",
+    "count": 13,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "삼성중공업",
+    "count": 13,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "오리온",
+    "count": 13,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "TP",
+    "count": 13,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "AI 규제",
+    "count": 12,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "오픈소스",
+    "count": 12,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "인피니트헬스케어",
+    "count": 12,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "조절",
+    "count": 35,
+    "burst": 12.907593778591034,
+    "base_daily": 2.4,
+    "new": false
+   },
+   {
+    "term": "CEO AI",
+    "count": 11,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "케빈 워시",
+    "count": 11,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "Act",
+    "count": 11,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "Investor",
+    "count": 11,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "설비투자",
+    "count": 11,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "한전",
+    "count": 11,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "고유",
+    "count": 11,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "ODM",
+    "count": 11,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "속도조절론",
+    "count": 20,
+    "burst": 28.683541730202297,
+    "base_daily": 0.6,
+    "new": false
+   }
+  ],
+  "top_posts": [
+   {
+    "channels": 4,
+    "channel": "여의도스토리 Ver2.0-习近平是个狗东西",
+    "head": "[[메리츠 Tech 김선우, 양승수, 김동관]] [메리츠증권 전기전자/IT부품 양승수] 티엘비(356860) : SoCAMM, 다음은 MR-DIMM ▶ 3Q26 Preview: 환율을 상쇄하는 믹스개선 - 3Q26 연결 실적은 매출액 967억원(+40.3% YoY), 영업이익 170억원(+96.5% YoY)을 전망 - 매…",
+    "url": "https://t.me/YeouidoStory2/117262",
+    "time_kst": "09-14 07:53"
+   },
+   {
+    "channels": 4,
+    "channel": "NH투자증권 리서치",
+    "head": "[NH/이민재] 유틸리티유틸리티 [Web발신] [NH/이민재] 유틸리티 유틸리티 - 원전 르네상스의 시작 본문보기: https://m.nhsec.com/c/o6v26 언론보도에 따르면 후속 대미투자 프로젝트로 대형원전 8기 건설 협력(APR1400 포함) 및 웨스팅하우스 지분 인수 방안이 논의되고 있음. 미국 시장 진출…",
+    "url": "https://t.me/c/1373336778/47668",
+    "time_kst": "09-14 07:47"
+   },
+   {
+    "channels": 4,
+    "channel": "메리츠증권 리서치",
+    "head": "📮 [메리츠증권 채권분석 윤여삼] The Bond Weekly: 유가 → 인플레 → 인상 그리고 혼란 2026.9.14(월) - 9월 FOMC 아무리 동결을 주장한다고 해도 기울어 버린 추 - 미국 쫓아 한국 시장금리 오버슈팅 구간, 유가 안정전까지 대기 (자료) https://tinyurl.com/2amdnz8j *동…",
+    "url": "https://t.me/meritz_research/44623",
+    "time_kst": "09-14 07:42"
+   },
+   {
+    "channels": 4,
+    "channel": "텐렙",
+    "head": "* The Information 앤스로픽이 최대 5,170억 달러에 달할 수 있는 컴퓨팅 자원 확보 계약을 마련했다. 이는 투자자들에게 제시했던 2029년까지의 예상 지출액 1,800억 달러를 크게 웃도는 규모다. 이러한 계약상 지출 약정은 앤스로픽이 기업공개(IPO) 가능성을 앞두고 향후 성장에 얼마나 공격적으로 대비하…",
+    "url": "https://t.me/Ten_level/91804",
+    "time_kst": "09-14 06:54"
+   },
+   {
+    "channels": 4,
+    "channel": "미국 주식 인사이더 🇺🇸 (US Stocks Insider)",
+    "head": "삼성전자·SK하이닉스, '25조 전기료 선납' 한전 제안 거절 | 연합뉴스 https://www.yna.co.kr/view/AKR20260914012700003?input=1195m",
+    "url": "https://t.me/insidertracking/63607",
+    "time_kst": "09-14 08:08"
+   },
+   {
+    "channels": 3,
+    "channel": "키움증권 전략/시황 한지영",
+    "head": "[9/14, Kiwoom Weekly, 키움 전략 한지영] \"9월 FOMC를 둘러싼 시장의 수 싸움” ------ <Weekly Three Points> a. 금요일 미국 증시는 8월 CPI 이후 연준의 9월 인상 가능성 확대에도, 호르무즈 해협 통행 재개 기대감에 따른 인한 유가 약세, 오라클(-1.7%) 호실적발 데이…",
+    "url": "https://t.me/hedgecat0301/2938",
+    "time_kst": "09-14 07:30"
+   },
+   {
+    "channels": 3,
+    "channel": "김현석(자본주의 바이어스 있는 채널입니다)",
+    "head": "🧿 [9/14, Conviction Call] 9월, 12월 금리인상으로의 Fed Call 변화와 투자전략 유안타 주식전략 김용구(02-3770-3521) 텔레그램: < https://t.me/ConvictionCall > **Key Takeaways: - '26년 Fed Call 수정, 9월·12월 각 25BP 총 2회…",
+    "url": "https://t.me/kimu_nim/45795",
+    "time_kst": "09-14 08:03"
+   },
+   {
+    "channels": 3,
+    "channel": "[신한 리서치본부] IT(반도체/전기전자/디스플레이)",
+    "head": "[신한투자증권 IT팀 오강호, 김형태, 박현우, 송혜수, 김예성] 9/14 (월) 🕗Daily IT 예습하기 ✅ 반도체/장비 ▶️ 中CXMT, 상하이 신규 팹 설비투자 준비…韓 맹추격 (ZDNET) https://alie.kr/58V4KG8 ▶️ 삼성·CXMT, 중국 AI 스마트폰에 LPDDR5X 공급설…중국산 메모리,…",
+    "url": "https://t.me/c/1355104422/7383",
+    "time_kst": "09-14 07:50"
+   },
+   {
+    "channels": 3,
+    "channel": "이상헌 부장 iM 지주/ESG/중소형주",
+    "head": "* (iM 이상헌) 한전기술(052690) ★ 팀코리아 미국시장 진출 등 수출확대⇒낙수효과 가속화 ▶️대미원전투자 가시화 된다면 웨스팅하우스와 협력 등을 통하여 한전이 주축이 된 팀코리아 원전 공급망의 미국시장 진출 등 수출확대 가속화 ⇒ 팀코리아 낙수효과로 동사 수주 확대되면서 밸류에이션 리레이팅 될 듯 - 지난해 한미…",
+    "url": "https://t.me/INSIGHTVALUELEE/9962",
+    "time_kst": "09-14 07:48"
+   },
+   {
+    "channels": 3,
+    "channel": "다올투자증권 리서치센터",
+    "head": "[다올투자증권 조선/기계/방산 최광식] 9/14(월) 데일리뉴스 🛳 조선 [TradeWinds] Hanwha Ocean claims world first with Singapore's supersize maiden FSRU Investment group snaps up majority stake in GasEntec pa…",
+    "url": "https://t.me/daolresearch/15077",
+    "time_kst": "09-14 08:45"
+   },
+   {
+    "channels": 3,
+    "channel": "iM전략 김준영",
+    "head": "[iM증권 김준영] [주식전략] ★ 침체와 거리가 먼 인상은 나쁜 인상은 아닐 것 ▶️ 8월 물가는 소폭 상회, 시장은 불확실성 해소로 해석 - 헤드라인 전월비 +0.4%로 예상 부합, 근원 CPI +0.3%로 예상치(+0.2%) 소폭 상회. 재화와 서비스 물가 상승률 모두 올해 들어 높은 편 - 기조적 물가는 여전히 2…",
+    "url": "https://t.me/crazyecon/1734",
+    "time_kst": "09-14 07:47"
+   },
+   {
+    "channels": 3,
+    "channel": "[한투증권 김명주] 유통/화장품/생활소비재",
+    "head": "[한투증권 화장품/유통 김명주] 화장품 Bi-weekly(9/14): 환율 효과 vs. 너무나 좋은 업황 텔레그램: https://t.me/kmj_retailcosmetics ★ 미국은 또 다시 올타임하이, 유럽은 당연히 양호 - 9월 1~10일 화장품 수출 +46.1% YoY, +17.4% MoM. 전월 캐나다 수출 오…",
+    "url": "https://t.me/kmj_retailcosmetics/8301",
+    "time_kst": "09-14 08:00"
+   },
+   {
+    "channels": 3,
+    "channel": "신한 리서치",
+    "head": "『화장품; 9월 아마존 랭킹, 수출, 실적 점검 』 기업분석부 박현진 ☎02-3772-1563 ▶ 2Q26보다 더 좋은 3Q26 - 8월 기초 화장품 수출은 전년동기대비(이하 동일) 49% 증가. 7~8월 미국향 수출액 평균 100% 신장. 유럽향 수출액도 평균 95% 신장해 미국과 유럽 수출 초강세 트렌드 - 9월 1~…",
+    "url": "https://t.me/shinhanresearch/52748",
+    "time_kst": "09-14 08:28"
+   },
+   {
+    "channels": 3,
+    "channel": "유진투자증권 코스닥벤처팀",
+    "head": "📌클래리티 업데이트 1. 공화당은 9/15 클로처 표결을 앞두고 CLARITY Act 최종 타협안을 공개. 윤리·비수탁 개발자 보호(BRCA)·스테이블코인 보상·소비자보호·이해상충 쟁점을 한 번에 손본 사실상 마지막 제안. 2. 가장 큰 변화는 윤리조항. 트럼프가 Tillis-Gallego 협상안의 약 80%를 수용하면서…",
+    "url": "https://t.me/SmallCap/9043",
+    "time_kst": "09-14 16:51"
+   },
+   {
+    "channels": 3,
+    "channel": "우주방산AI로봇 아카이브",
+    "head": "*지금은 KRX와 NXT의 현재 가격이 오늘 정규장 종가 대비 얼마나 오르고 내렸는지 확인할 방법이 없습니다. 각 증권사 HTS, MTS에도 ‘금일 종가’를 기준가로 비교해주는 화면이 없고, 네이버, 다음마저 시간외로 거래되는 KRX 현재가가 표시되다 보니 정작 오늘 종목이 얼마에 끝났는지를 알 수가 없습니다. 시장 참여…",
+    "url": "https://t.me/defence_24/6188",
+    "time_kst": "09-14 18:30"
+   }
+  ]
+ },
+ "community_dc": {
+  "source": "DC인사이드",
+  "galleries": [
+   {
+    "id": "krstock",
+    "name": "국내주식갤러리",
+    "posts": 1420,
+    "capped": true,
+    "burst": 1.1,
+    "base_daily": 1333.9
+   },
+   {
+    "id": "stockus",
+    "name": "해외주식갤러리",
+    "posts": 2851,
+    "capped": true,
+    "burst": 0.9,
+    "base_daily": 3167.3
+   }
+  ],
+  "posts_sampled": 570,
+  "keywords": [
+   {
+    "term": "속슬",
+    "count": 23,
+    "burst": 99.0,
+    "new": true
+   },
+   {
+    "term": "마이크론",
+    "count": 9,
+    "burst": 99.0,
+    "new": true
+   },
+   {
+    "term": "노머고",
+    "count": 9,
+    "burst": 99.0,
+    "new": true
+   },
+   {
+    "term": "코인",
+    "count": 6,
+    "burst": 82.0,
+    "new": true
+   },
+   {
+    "term": "이새끼",
+    "count": 5,
+    "burst": 68.3,
+    "new": true
+   },
+   {
+    "term": "코루",
+    "count": 5,
+    "burst": 68.3,
+    "new": true
+   },
+   {
+    "term": "연말",
+    "count": 5,
+    "burst": 68.3,
+    "new": true
+   },
+   {
+    "term": "반도체",
+    "count": 24,
+    "burst": 14.3,
+    "new": false
+   },
+   {
+    "term": "트럼프",
+    "count": 26,
+    "burst": 8.7,
+    "new": false
+   },
+   {
+    "term": "국장",
+    "count": 8,
+    "burst": 7.3,
+    "new": false
+   },
+   {
+    "term": "이란",
+    "count": 11,
+    "burst": 4.3,
+    "new": false
+   },
+   {
+    "term": "삼닉",
+    "count": 8,
+    "burst": 4.8,
+    "new": false
+   },
+   {
+    "term": "타코",
+    "count": 7,
+    "burst": 4.6,
+    "new": false
+   },
+   {
+    "term": "SK하이닉스",
+    "count": 18,
+    "burst": 2.4,
+    "new": false
+   },
+   {
+    "term": "유가",
+    "count": 12,
+    "burst": 1.9,
+    "new": false
+   }
+  ],
+  "top_recommended": [
+   {
+    "gallery": "해외주식갤러리",
+    "title": "메모리값 내려야한다고 주장하던 애플 근황",
+    "views": 13129,
+    "recommend": 171,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=17743830&exception_mode=recommend&page=1",
+    "time_kst": "09-14 08:03"
+   },
+   {
+    "gallery": "해외주식갤러리",
+    "title": "AI 속도 조절론에 대한 마이클 버리 코멘트",
+    "views": 11312,
+    "recommend": 157,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=17747678&exception_mode=recommend&page=1",
+    "time_kst": "09-14 17:21"
+   },
+   {
+    "gallery": "해외주식갤러리",
+    "title": "0.25% 금리 인상이 현실적으로 불가능한 이유",
+    "views": 11368,
+    "recommend": 147,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=17748028&exception_mode=recommend&page=1",
+    "time_kst": "09-14 17:49"
+   },
+   {
+    "gallery": "해외주식갤러리",
+    "title": "요즘 서양에서 뜨는중인 트럼프 밈 ㅋㅋㅋㅋ",
+    "views": 13439,
+    "recommend": 140,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=17746778&exception_mode=recommend&page=1",
+    "time_kst": "09-14 15:44"
+   },
+   {
+    "gallery": "국내주식갤러리",
+    "title": "주식 괜히해서 인생 좆망했으면 개추좀",
+    "views": 10958,
+    "recommend": 130,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3475512&exception_mode=recommend&page=1",
+    "time_kst": "09-14 07:59"
+   }
+  ],
+  "top_viewed": [
+   {
+    "gallery": "국내주식갤러리",
+    "title": "와 대풀롱이네 ㅋㅋㅋㅋㅋㅋㅋㅋㅋ야선 실화냐 ㅋㅋㅋ",
+    "views": 873,
+    "recommend": 0,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3485502&page=21",
+    "time_kst": "09-15 02:19"
+   },
+   {
+    "gallery": "국내주식갤러리",
+    "title": "메모리 반도체 사이클이 끝난게 아니라",
+    "views": 779,
+    "recommend": 0,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3485641&page=19",
+    "time_kst": "09-15 05:50"
+   },
+   {
+    "gallery": "국내주식갤러리",
+    "title": "야선 다 말아올렸네",
+    "views": 695,
+    "recommend": 1,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3485640&page=19",
+    "time_kst": "09-15 05:49"
+   },
+   {
+    "gallery": "국내주식갤러리",
+    "title": "BNK 하이닉스\"148\"",
+    "views": 664,
+    "recommend": 0,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3485588&page=20",
+    "time_kst": "09-15 04:39"
+   },
+   {
+    "gallery": "국내주식갤러리",
+    "title": "오늘 금융주 좆박겠네 ㅋㅋ",
+    "views": 664,
+    "recommend": 0,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3485564&page=20",
+    "time_kst": "09-15 03:36"
+   },
+   {
+    "gallery": "국내주식갤러리",
+    "title": "속보) 십년물 5 돌파",
+    "views": 567,
+    "recommend": 0,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3485630&page=19",
+    "time_kst": "09-15 05:42"
+   },
+   {
+    "gallery": "국내주식갤러리",
+    "title": "아니 뭐 얼마 안떨어졌네- 했는데",
+    "views": 561,
+    "recommend": 0,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3485480&page=22",
+    "time_kst": "09-15 02:03"
+   },
+   {
+    "gallery": "국내주식갤러리",
+    "title": "코스피 오른쪽 어깨 완성 거의 임박",
+    "views": 555,
+    "recommend": 4,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3485327&page=24",
+    "time_kst": "09-15 00:56"
+   }
+  ]
+ }
+}

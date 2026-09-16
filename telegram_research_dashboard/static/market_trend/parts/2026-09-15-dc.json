@@ -1,0 +1,222 @@
+{
+ "source": "DC인사이드",
+ "galleries": [
+  {
+   "id": "krstock",
+   "name": "국내주식갤러리",
+   "posts": 1420,
+   "capped": true,
+   "burst": 1.1,
+   "base_daily": 1333.9
+  },
+  {
+   "id": "stockus",
+   "name": "해외주식갤러리",
+   "posts": 2851,
+   "capped": true,
+   "burst": 0.9,
+   "base_daily": 3167.3
+  }
+ ],
+ "posts_sampled": 570,
+ "keywords": [
+  {
+   "term": "속슬",
+   "count": 23,
+   "burst": 99.0,
+   "new": true
+  },
+  {
+   "term": "마이크론",
+   "count": 9,
+   "burst": 99.0,
+   "new": true
+  },
+  {
+   "term": "노머고",
+   "count": 9,
+   "burst": 99.0,
+   "new": true
+  },
+  {
+   "term": "코인",
+   "count": 6,
+   "burst": 82.0,
+   "new": true
+  },
+  {
+   "term": "이새끼",
+   "count": 5,
+   "burst": 68.3,
+   "new": true
+  },
+  {
+   "term": "코루",
+   "count": 5,
+   "burst": 68.3,
+   "new": true
+  },
+  {
+   "term": "연말",
+   "count": 5,
+   "burst": 68.3,
+   "new": true
+  },
+  {
+   "term": "반도체",
+   "count": 24,
+   "burst": 14.3,
+   "new": false
+  },
+  {
+   "term": "트럼프",
+   "count": 26,
+   "burst": 8.7,
+   "new": false
+  },
+  {
+   "term": "국장",
+   "count": 8,
+   "burst": 7.3,
+   "new": false
+  },
+  {
+   "term": "이란",
+   "count": 11,
+   "burst": 4.3,
+   "new": false
+  },
+  {
+   "term": "삼닉",
+   "count": 8,
+   "burst": 4.8,
+   "new": false
+  },
+  {
+   "term": "타코",
+   "count": 7,
+   "burst": 4.6,
+   "new": false
+  },
+  {
+   "term": "SK하이닉스",
+   "count": 18,
+   "burst": 2.4,
+   "new": false
+  },
+  {
+   "term": "유가",
+   "count": 12,
+   "burst": 1.9,
+   "new": false
+  }
+ ],
+ "top_recommended": [
+  {
+   "gallery": "해외주식갤러리",
+   "title": "메모리값 내려야한다고 주장하던 애플 근황",
+   "views": 13129,
+   "recommend": 171,
+   "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=17743830&exception_mode=recommend&page=1",
+   "time_kst": "09-14 08:03"
+  },
+  {
+   "gallery": "해외주식갤러리",
+   "title": "AI 속도 조절론에 대한 마이클 버리 코멘트",
+   "views": 11312,
+   "recommend": 157,
+   "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=17747678&exception_mode=recommend&page=1",
+   "time_kst": "09-14 17:21"
+  },
+  {
+   "gallery": "해외주식갤러리",
+   "title": "0.25% 금리 인상이 현실적으로 불가능한 이유",
+   "views": 11368,
+   "recommend": 147,
+   "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=17748028&exception_mode=recommend&page=1",
+   "time_kst": "09-14 17:49"
+  },
+  {
+   "gallery": "해외주식갤러리",
+   "title": "요즘 서양에서 뜨는중인 트럼프 밈 ㅋㅋㅋㅋ",
+   "views": 13439,
+   "recommend": 140,
+   "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=17746778&exception_mode=recommend&page=1",
+   "time_kst": "09-14 15:44"
+  },
+  {
+   "gallery": "국내주식갤러리",
+   "title": "주식 괜히해서 인생 좆망했으면 개추좀",
+   "views": 10958,
+   "recommend": 130,
+   "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3475512&exception_mode=recommend&page=1",
+   "time_kst": "09-14 07:59"
+  }
+ ],
+ "top_viewed": [
+  {
+   "gallery": "국내주식갤러리",
+   "title": "와 대풀롱이네 ㅋㅋㅋㅋㅋㅋㅋㅋㅋ야선 실화냐 ㅋㅋㅋ",
+   "views": 873,
+   "recommend": 0,
+   "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3485502&page=21",
+   "time_kst": "09-15 02:19"
+  },
+  {
+   "gallery": "국내주식갤러리",
+   "title": "메모리 반도체 사이클이 끝난게 아니라",
+   "views": 779,
+   "recommend": 0,
+   "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3485641&page=19",
+   "time_kst": "09-15 05:50"
+  },
+  {
+   "gallery": "국내주식갤러리",
+   "title": "야선 다 말아올렸네",
+   "views": 695,
+   "recommend": 1,
+   "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3485640&page=19",
+   "time_kst": "09-15 05:49"
+  },
+  {
+   "gallery": "국내주식갤러리",
+   "title": "BNK 하이닉스\"148\"",
+   "views": 664,
+   "recommend": 0,
+   "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3485588&page=20",
+   "time_kst": "09-15 04:39"
+  },
+  {
+   "gallery": "국내주식갤러리",
+   "title": "오늘 금융주 좆박겠네 ㅋㅋ",
+   "views": 664,
+   "recommend": 0,
+   "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3485564&page=20",
+   "time_kst": "09-15 03:36"
+  },
+  {
+   "gallery": "국내주식갤러리",
+   "title": "속보) 십년물 5 돌파",
+   "views": 567,
+   "recommend": 0,
+   "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3485630&page=19",
+   "time_kst": "09-15 05:42"
+  },
+  {
+   "gallery": "국내주식갤러리",
+   "title": "아니 뭐 얼마 안떨어졌네- 했는데",
+   "views": 561,
+   "recommend": 0,
+   "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3485480&page=22",
+   "time_kst": "09-15 02:03"
+  },
+  {
+   "gallery": "국내주식갤러리",
+   "title": "코스피 오른쪽 어깨 완성 거의 임박",
+   "views": 555,
+   "recommend": 4,
+   "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3485327&page=24",
+   "time_kst": "09-15 00:56"
+  }
+ ]
+}

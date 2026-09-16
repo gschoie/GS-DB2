@@ -282,7 +282,7 @@ def build() -> None:
     dates_json = json.dumps(nav_dates)
 
     page = f"""<!DOCTYPE html>
-<html lang="ko"><head><meta charset="utf-8">
+<html lang="ko"><head><meta charset="utf-8"><base target="_blank">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>시장관심.내러티브</title>
 <style>

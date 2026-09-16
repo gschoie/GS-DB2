@@ -12,19 +12,18 @@
     <nav>
       <button class="nav" data-view="todo">✅ <span>TO-DO</span></button>
       <button class="nav active" data-view="overview">⌂ <span>오늘의 요약</span></button>
-      <details class="nav-group">
-        <summary>✍️ <span>보고서.발간</span></summary>
+      <details class="nav-group" open>
+        <summary>🕊️ <span>광.전보 w/ GEMS</span></summary>
         <div class="nav-submenu">
-          <a href="https://gemini.google.com/gem/7567970d123e?usp=sharing" target="_blank" rel="noopener">🚢 TW번역</a>
-          <a href="https://gemini.google.com/gem/1GASJ9mrURAWeW65vYlPeDgpOuzlTmDOa?usp=sharing" target="_blank" rel="noopener">⏩ 더.축약</a>
+          <a href="https://gemini.google.com/gem/7a05ed301b3e?usp=sharing" target="_blank" rel="noopener">📋 한국기사.요약-텔레</a>
           <div class="nav-sep"></div>
-          <a href="https://notebooklm.google.com/notebook/2137cd2a-f9c6-4122-aa97-b0d46b39d795" target="_blank" rel="noopener">🔮 다올선박.학습</a>
-          <a href="https://notebooklm.google.com/notebook/8236d5a4-937a-41cb-9527-e49d44cd1968" target="_blank" rel="noopener">🗓️ SIN.W.공부</a>
+          <a href="https://gemini.google.com/gem/1otqJGM0XCwFyIGg8kfpRH9RwE1Z29YAK?usp=sharing" target="_blank" rel="noopener">🗞️ 외신 번역/요약/전문</a>
+          <a href="https://gemini.google.com/gem/6de4c11680fc" target="_blank" rel="noopener">┗🔰 해외방산.요약-텔레</a>
           <div class="nav-sep"></div>
-          <a href="https://alldic.daum.net/grammar_checker.do" target="_blank" rel="noopener">✅ DAUM.오탈자</a>
-          <a href="https://gemini.google.com/gem/1VAk4wJP8zKwjfqx8lL9cF7HDakePAEp_?usp=sharing" target="_blank" rel="noopener">🔍 젬.오탈자.체크</a>
+          <a href="https://gemini.google.com/gem/33cb689860fb" target="_blank" rel="noopener">🎬 방산.너튜브 요약</a>
+          <a href="https://gemini.google.com/gem/1GKwQVTvRRwJv6jcdmZp-elAVaHWfzyTk?usp=sharing" target="_blank" rel="noopener">🕵️ 더구루.원본찾기</a>
           <div class="nav-sep"></div>
-          <a href="https://gemini.google.com/gem/faaa023705b8" target="_blank" rel="noopener">🔍 재무제표.점검</a>
+          <button class="nav" data-view="dart">🚢 조선.수주공시-텔레</button>
         </div>
       </details>
       <details class="nav-group">
@@ -32,16 +31,39 @@
         <div class="nav-submenu">
           <button class="nav" data-view="reports">🎴 GS 산출물</button>
           <button class="nav" data-view="news">📚 뉴스.아카이브</button>
-          <button class="nav" data-view="press">▦ ┗보도기사 W취합</button>
           <div class="nav-sep"></div>
           <button class="nav" data-view="union-board">⚓ 현중 노조게시판</button>
           <div class="nav-sep"></div>
           <button class="nav" data-view="defense">🌍 글로벌방산.브리핑(제)</button>
           <a href="claude_defense_report.html" target="_blank" rel="noopener">🌐 글로벌방산.브리핑(클)</a>
-          <button class="nav" data-view="defweekly">🗓️ ┗방산.주간정리(토)</button>
+          <button class="nav" data-view="ytdigest">📺 ┗방산유튜브.3일모음</button>
+          <button class="nav" data-view="ytweekly">🗞 ┗방산유튜브.주간(평일)</button>
           <button class="nav" data-view="construction">🏗️ 글로벌건설기계.브리핑</button>
-          <button class="nav" data-view="conweekly">🗓️ ┗건설기계.주간정리(토)</button>
+          <button class="nav" data-view="energy">🌊 친환경E·FDC.브리핑</button>
           <a href="https://app.raindrop.io/my/0" target="_blank" rel="noopener">💧 RainDrop.4방산</a>
+        </div>
+      </details>
+      <details class="nav-group">
+        <summary>✍️ <span>보고서.발간</span></summary>
+        <div class="nav-submenu">
+          <a href="https://gemini.google.com/gem/7567970d123e?usp=sharing" target="_blank" rel="noopener">🚢 TW번역</a>
+          <a href="https://gemini.google.com/gem/1GASJ9mrURAWeW65vYlPeDgpOuzlTmDOa?usp=sharing" target="_blank" rel="noopener">⏩ 더.축약</a>
+          <div class="nav-sep"></div>
+          <details class="nav-subgroup">
+            <summary>📓 NotebookLM.인그</summary>
+            <div class="nav-submenu-2">
+              <a href="https://notebooklm.google.com/notebook/2137cd2a-f9c6-4122-aa97-b0d46b39d795" target="_blank" rel="noopener">🔮 다올선박.학습</a>
+              <button class="nav" data-view="defweekly">⚔️ 방산.주간정리(토)</button>
+              <button class="nav" data-view="conweekly">🚜 건기.주간정리(토)</button>
+              <button class="nav" data-view="press">🛡️ GS채널기사.W취합</button>
+            </div>
+          </details>
+          <a href="https://notebooklm.google.com/notebook/8236d5a4-937a-41cb-9527-e49d44cd1968" target="_blank" rel="noopener">🗓️ SIN.W.공부</a>
+          <div class="nav-sep"></div>
+          <a href="https://alldic.daum.net/grammar_checker.do" target="_blank" rel="noopener">✅ DAUM.오탈자</a>
+          <a href="https://gemini.google.com/gem/1VAk4wJP8zKwjfqx8lL9cF7HDakePAEp_?usp=sharing" target="_blank" rel="noopener">🔍 젬.오탈자.체크</a>
+          <div class="nav-sep"></div>
+          <a href="https://gemini.google.com/gem/faaa023705b8" target="_blank" rel="noopener">🔍 재무제표.점검</a>
         </div>
       </details>
       <details class="nav-group">
@@ -61,39 +83,13 @@
           <a href="https://github.com/gschoie/ecos-fx-rates/raw/main/output/BOK_exchange_rates.xlsx" target="_blank" rel="noopener">₩ 환율 다운로드</a>
         </div>
       </details>
-      <details class="nav-group" open>
-        <summary>🕊️ <span>광.전보 w/ GEMS</span></summary>
-        <div class="nav-submenu">
-          <a href="https://gemini.google.com/gem/7a05ed301b3e?usp=sharing" target="_blank" rel="noopener">📋 한국기사.요약-텔레</a>
-          <div class="nav-sep"></div>
-          <a href="https://gemini.google.com/gem/1otqJGM0XCwFyIGg8kfpRH9RwE1Z29YAK?usp=sharing" target="_blank" rel="noopener">🗞️ 외신 번역/요약/전문</a>
-          <a href="https://gemini.google.com/gem/6de4c11680fc" target="_blank" rel="noopener">┗🔰 해외방산.요약-텔레</a>
-          <div class="nav-sep"></div>
-          <a href="https://gemini.google.com/gem/33cb689860fb" target="_blank" rel="noopener">🎬 방산.너튜브 요약</a>
-          <a href="https://gemini.google.com/gem/1GKwQVTvRRwJv6jcdmZp-elAVaHWfzyTk?usp=sharing" target="_blank" rel="noopener">🕵️ 더구루.원본찾기</a>
-          <div class="nav-sep"></div>
-          <button class="nav" data-view="dart">🚢 조선.수주공시-텔레</button>
-        </div>
-      </details>
-      <details class="nav-group">
-        <summary>👥 <span>관리/모미</span></summary>
-        <div class="nav-submenu">
-          <button class="nav" data-view="tone">🎯 DAOL 리서치 톤</button>
-          <button class="nav" data-view="chatbot">💬 DAOL 리서치와 챗봇</button>
-          <div class="nav-sep"></div>
-          <a href="https://gemini.google.com/gem/6c5032cc72cc?usp=sharing" target="_blank" rel="noopener">🏢 기업.톺아보기</a>
-          <a href="https://gemini.google.com/gem/13shUpc1kufL35pVoZvXGKGhhcYLnqL7P?usp=sharing" target="_blank" rel="noopener">⏳ 컴플(24H 매매제한).쳌</a>
-          <div class="nav-sep"></div>
-          <a href="https://notebooklm.google.com/notebook/8801c401-d016-4bc2-8c1b-3f205fa66de8" target="_blank" rel="noopener">📈 DAOL.Trading.IDEA</a>
-          <button class="nav" data-view="collab">🤝 섹터 콜라보 레이더</button>
-          <div class="nav-sep"></div>
-          <a href="https://gemini.google.com/gem/a7f3fb1d0136" target="_blank" rel="noopener">🤔 답.안한님.찾기</a>
-          <button class="nav" data-view="tasklist">📬 수명 피드백.확인</button>
-        </div>
-      </details>
       <details class="nav-group">
         <summary>📈 <span>투자</span></summary>
         <div class="nav-submenu">
+          <button class="nav" data-view="chatbot">💬 DAOL 리서치와 챗봇</button>
+          <button class="nav" data-view="tone">🎯 DAOL 리서치 톤</button>
+          <a href="https://gemini.google.com/gem/6c5032cc72cc?usp=sharing" target="_blank" rel="noopener">🏢 기업.톺아보기</a>
+          <div class="nav-sep"></div>
           <button class="nav" data-view="flow">🌊 시장.수급.동향</button>
           <button class="nav" data-view="trend">🧠 시장관심.내러티브</button>
           <button class="nav" data-view="etf">📡 ETF/섹터.신호 포착</button>
@@ -102,6 +98,29 @@
           <div class="nav-sep"></div>
           <button class="nav" data-view="mzdiary">📈 MZ일기</button>
           <a href="https://finance.naver.com/mystock/summary.naver" target="_blank" rel="noopener" onclick="if(/iPhone|iPad|iPod/.test(navigator.userAgent)){window.location.href='googlechromes://finance.naver.com/mystock/summary.naver';return false;}">🖥️ 네이버 전광판</a>
+        </div>
+      </details>
+      <details class="nav-group">
+        <summary>👥 <span>DAOL.관리</span></summary>
+        <div class="nav-submenu">
+          <a href="https://gemini.google.com/gem/13shUpc1kufL35pVoZvXGKGhhcYLnqL7P?usp=sharing" target="_blank" rel="noopener">⏳ 컴플(24H 매매제한).쳌</a>
+          <div class="nav-sep"></div>
+          <a href="https://notebooklm.google.com/notebook/8801c401-d016-4bc2-8c1b-3f205fa66de8" target="_blank" rel="noopener">📈 DAOL.Trading.IDEA</a>
+          <button class="nav" data-view="collab">🤝 섹터 콜라보 레이더</button>
+          <div class="nav-sep"></div>
+          <a href="https://gemini.google.com/gem/a7f3fb1d0136" target="_blank" rel="noopener">🤔 답.안한님.찾기</a>
+          <details class="nav-subgroup">
+            <summary>🗂️ 팀원.체크</summary>
+            <div class="nav-submenu-2">
+              <button class="nav" data-view="tasklist">📬 수명 피드백.확인</button>
+              <button class="nav" data-view="vacation">🏖️ 휴가/출장.계획</button>
+              <button class="nav" data-view="attendance">✅ 근태.체크(월)</button>
+              <button class="nav" data-view="indepth">📚 인뎁스.발간계획</button>
+            </div>
+          </details>
+          <div class="nav-sep"></div>
+          <a href="https://corpday-calendar.animsam09.workers.dev/" target="_blank" rel="noopener">📆 코퍼레잇데이.DAOL</a>
+          <a href="https://daol-analyst-schedule.netlify.app/" target="_blank" rel="noopener">🗓️ 활동관리.DAOL</a>
         </div>
       </details>
       <details class="nav-group">
@@ -142,6 +161,7 @@
               <a href="https://www.99flower.co.kr/prog/shopping/goods_list.php?sub_folder_code=ST-J&root_folder_code=shop&cpage=TopMenu_ST-J" target="_blank" rel="noopener">구구.플라워</a>
             </div>
           </details>
+          <a href="https://m.place.naver.com/my/timeline?tab=RESERVATION" target="_blank" rel="noopener">🧾 네이버.나의.예약</a>
           <div class="nav-sep"></div>
           <a href="https://gemini.google.com/gem/1oIQLXDDosu7gZD41hsLLRXiDPYgZnD3H?usp=sharing" target="_blank" rel="noopener">🗣️ 이쁘게.말하기</a>
           <a href="https://notebooklm.google.com/notebook/505ee4b1-ad05-4673-a06b-1ec106c2b940" target="_blank" rel="noopener">📓 노트북.교육법</a>
@@ -151,13 +171,19 @@
     <div class="secure">● 로컬 대시보드<br><small>공개채널 자료를 이 PC에 정리합니다</small></div>
   </aside>
   <main>
+    <a class="focus-exit" href="./" title="사이드바가 있는 전체 대시보드로">⤢ 전체 대시보드</a>
     <header>
       <div><p class="eyebrow">MARKET INTELLIGENCE</p><h1 id="page-title">오늘의 리서치 흐름</h1></div>
       <div class="header-tools"><div class="search-wrap"><span>⌕</span><input id="search" placeholder="기업, 보고서, 키워드 검색"></div><a class="refresh-btn" href="https://github.com/gschoie/GS-DB2/actions/workflows/deploy-pages.yml" target="_blank" rel="noopener" title="새 창에서 GitHub Actions가 열립니다. 'Run workflow'를 눌러 최신 데이터로 갱신하세요.">🔄 데이터 갱신</a><div class="update-meta"><span></span>최종 업데이트 <strong id="updated-at">확인 중</strong></div></div>
     </header>
 
     <section id="todo" class="view">
-      <a class="refresh-btn todo-feedback" href="#tasklist" target="_blank" rel="noopener" title="새 창에서 수명 피드백 확인이 열립니다">📬 수명 피드백.확인</a>
+      <div class="todo-shortcuts">
+        <a class="refresh-btn todo-feedback" href="?focus=1#tasklist" target="_blank" rel="noopener" title="새 창에서 수명 피드백 확인이 열립니다">📬 수명 피드백.확인</a>
+        <a class="refresh-btn todo-feedback" href="vacation_report.html" target="_blank" rel="noopener" title="새 창에서 휴가/출장 계획이 열립니다">🏖️ 휴가/출장.계획</a>
+        <a class="refresh-btn todo-feedback" href="attendance_report.html" target="_blank" rel="noopener" title="새 창에서 월별 근태 체크가 열립니다">✅ 근태.체크(월)</a>
+        <a class="refresh-btn todo-feedback" href="indepth_report.html" target="_blank" rel="noopener" title="새 창에서 인뎁스/자료 발간 계획이 열립니다">📚 인뎁스.발간계획</a>
+      </div>
       <div class="archive-intro"><div><p class="eyebrow">TO-DO</p><h2>할 일 체크리스트</h2></div><div class="etf-actions"><span>한 줄씩 적고 완료하면 체크 — 그룹으로 묶고, 이미지는 Ctrl+V 붙여넣기·📎 파일선택으로 첨부합니다. <span id="todo-sync" class="task-sync">☁ 동기화</span></span></div></div>
       <div class="todo-form">
         <select id="todo-group" title="추가할 그룹 선택"></select>
@@ -176,9 +202,9 @@
 
     <section id="overview" class="view active">
       <div class="brief-row" style="display:flex;gap:14px;align-items:stretch;flex-wrap:wrap;margin-bottom:14px">
-        <section class="panel" style="flex:45 1 280px;min-width:260px;margin:0"><div class="panel-head"><div><small>MACRO · 글로벌경제</small><h2>네이버 Top 7</h2></div><a class="panel-more" href="https://news.naver.com/breakingnews/section/101/262" target="_blank" rel="noopener">더보기 →</a></div><div id="macro-global"></div></section>
-        <div style="flex:10 1 80px;min-width:0" aria-hidden="true"></div>
-        <div id="claude-brief" class="brief-card" style="flex:45 1 280px;min-width:260px;margin:0"></div>
+        <section class="panel" style="flex:33 1 260px;min-width:250px;margin:0"><div class="panel-head"><div><small>MACRO · 글로벌경제</small><h2>네이버 Top 10</h2></div><a class="panel-more" href="https://news.naver.com/breakingnews/section/101/262" target="_blank" rel="noopener">더보기 →</a></div><div id="macro-global"></div></section>
+        <div id="energy-brief" class="brief-card" style="flex:33 1 260px;min-width:250px;margin:0"></div>
+        <div id="claude-brief" class="brief-card" style="flex:33 1 260px;min-width:250px;margin:0"></div>
       </div>
       <div class="brief-row" style="display:flex;gap:14px;align-items:stretch;flex-wrap:wrap;margin-bottom:14px">
         <div id="construction-brief" class="brief-card" style="flex:45 1 280px;min-width:260px;margin:0"></div>
@@ -258,6 +284,7 @@
         <span id="task-date" class="task-date"></span>
         <span id="task-summary" class="task-summary"></span>
         <span id="task-sync" class="task-sync">☁ 동기화</span>
+        <button id="task-link" type="button" title="이 항목이 바로 열리는 주소를 복사합니다 (즐겨찾기·공유용)">🔗 항목 링크</button>
         <button id="task-copy" type="button">요약 복사</button>
         <button id="task-reset" type="button">이 항목 초기화</button>
         <button id="task-export" type="button">내보내기</button>
@@ -367,10 +394,35 @@
       <div class="archive-intro"><div><p class="eyebrow">GLOBAL DEFENSE · WEEKLY</p><h2>글로벌 방산 주간 정리</h2></div><div class="etf-actions"><span>매주 토요일 11:50, 한 주간의 아침 브리핑 2종(제미나이·클로드)을 종합한 주간 정리본이 쌓입니다. 우측 상단 '4주 묶음'은 월간 세미나(NotebookLM) 소스용.</span><a class="panel-more" href="defense_weekly_report.html" target="_blank" rel="noopener">새 창으로 ↗</a></div></div>
       <iframe id="defweekly-frame" class="union-board-frame" title="글로벌 방산 주간 정리" loading="lazy"></iframe>
     </section>
+    <section id="ytdigest" class="view">
+      <div class="archive-intro"><div><p class="eyebrow">DEFENSE YOUTUBE · 3-DAY</p><h2>방산 유튜브 3일 모음</h2></div><div class="etf-actions"><span>구독 방산 채널 7곳에 올라온 영상 링크를 3일마다 모읍니다. 텔레그램으로도 같이 갑니다. 페이지 아래 '전체 복사'로 주소만 떠서 NotebookLM 소스에 붙여넣으면 오디오 개요로 들을 수 있습니다.</span><button id="ytdigest-refresh" class="refresh-btn" type="button" title="최근 3일치를 지금 다시 모아 발송합니다. 텔레그램으로도 두 통이 같이 갑니다 (30초쯤, 대시보드 반영은 1~2분 뒤).">🔄 모음 갱신</button><span id="ytdigest-status" class="task-sync"></span><a class="panel-more" href="youtube_digest_report.html" target="_blank" rel="noopener">새 창으로 ↗</a></div></div>
+      <iframe id="ytdigest-frame" class="union-board-frame" title="방산 유튜브 3일 모음" loading="lazy"></iframe>
+    </section>
+    <section id="ytweekly" class="view">
+      <div class="archive-intro"><div><p class="eyebrow">DEFENSE YOUTUBE · WEEKLY</p><h2>방산 유튜브 주간 모음</h2></div><div class="etf-actions"><span>샤를세환·KKMD·까치살모·슈퍼소닉·KFN+ 요일별 담당 채널(월 샤를세환·화 KKMD·수 까치살모·목 슈퍼소닉·금 KFN+·토 KFN1)의 지난 7일 일반 영상만(쇼츠·라이브 제외)을 월~토 오전 8시에 보냅니다. 텔레그램으로도 같이 갑니다.</span><a class="panel-more" href="youtube_weekly_report.html" target="_blank" rel="noopener">새 창으로 ↗</a></div></div>
+      <iframe id="ytweekly-frame" class="union-board-frame" title="방산 유튜브 주간 모음" loading="lazy"></iframe>
+    </section>
+    <section id="vacation" class="view">
+      <div class="archive-intro"><div><p class="eyebrow">FRIENDS · VACATION</p><h2>휴가/출장 계획</h2></div><div class="etf-actions"><span>지정한 친구들과의 텔레그램 1:1 대화에서 휴가·연차·반차·출장·샵투어 보고를 하루 2회(08:30·18:30) 자동으로 잡아 정리합니다. 새 보고가 잡히면 텔레그램으로도 알립니다.</span><a class="panel-more" href="vacation_report.html" target="_blank" rel="noopener">새 창으로 ↗</a></div></div>
+      <iframe id="vacation-frame" class="union-board-frame" title="친구 휴가 일정" loading="lazy"></iframe>
+    </section>
+    <section id="attendance" class="view">
+      <div class="archive-intro"><div><p class="eyebrow">TEAM · ATTENDANCE</p><h2>월별 근태 체크</h2></div><div class="etf-actions"><span>팀원들이 텔레그램 1:1로 보낸 "근태 완벽합니다" 보고를 자동으로 잡아 월별로 체크합니다. 구두 보고는 확인 칸을 눌러 수동 토글하세요.</span><a class="panel-more" href="attendance_report.html" target="_blank" rel="noopener">새 창으로 ↗</a></div></div>
+      <iframe id="attendance-frame" class="union-board-frame" title="월별 근태 체크" loading="lazy"></iframe>
+    </section>
+    <section id="indepth" class="view">
+      <div class="archive-intro"><div><p class="eyebrow">TEAM · IN-DEPTH PIPELINE</p><h2>인뎁스/자료 발간 계획</h2></div><div class="etf-actions"><span>팀원들과의 텔레그램 1:1 대화에서 인뎁스·개시·산업자료 등 발간 계획을 자동으로 잡아 정리합니다. "인뎁스"라고 콕 집지 않아도 발간 맥락이면 잡습니다.</span><a class="panel-more" href="indepth_report.html" target="_blank" rel="noopener">새 창으로 ↗</a></div></div>
+      <iframe id="indepth-frame" class="union-board-frame" title="인뎁스 발간 계획" loading="lazy"></iframe>
+    </section>
 
     <section id="construction" class="view">
       <div class="archive-intro"><div><p class="eyebrow">CONSTRUCTION EQUIPMENT · DAILY</p><h2>글로벌 건설기계 데일리 브리핑</h2></div><div class="etf-actions"><span>매일 아침 6시경 지난 24시간 건설기계 뉴스·주가·매크로(금리·금·구리)를 정리해 날짜별로 쌓입니다. HD현대건설기계(디벨론)·두산밥캣 + 글로벌·중국 피어.</span><a class="panel-more" href="construction_briefing_report.html" target="_blank" rel="noopener">새 창으로 ↗</a></div></div>
       <iframe id="construction-frame" class="union-board-frame" title="글로벌 건설기계 데일리 브리핑" loading="lazy"></iframe>
+    </section>
+
+    <section id="energy" class="view">
+      <div class="archive-intro"><div><p class="eyebrow">GREEN ENERGY · FDC · DAILY</p><h2>친환경 에너지·FDC 데일리 브리핑</h2></div><div class="etf-actions"><span>매일 아침 6시 40분경, 친환경 선박(암모니아·수소·원자력/SMR 추진)·FDC·FLNG·LNG 액화 FID·미국 발전원 투자(가스복합·신재생·SMR) 뉴스를 정리해 날짜별로 쌓입니다.</span><a class="panel-more" href="energy_briefing_report.html" target="_blank" rel="noopener">새 창으로 ↗</a></div></div>
+      <iframe id="energy-frame" class="union-board-frame" title="친환경 에너지·FDC 데일리 브리핑" loading="lazy"></iframe>
     </section>
 
     <section id="conweekly" class="view">
