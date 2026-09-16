@@ -1,0 +1,27 @@
+name: 수급 소스 진단 프로브 (일회용)
+
+# market-flow 9/11 전패 원인 진단용 — 러너 IP에서 네이버 페이지 구조를 덤프한다.
+# 원인 파악 후 이 워크플로와 market_flow/probe_naver.py는 삭제할 것.
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: 패키지 설치
+        run: pip install requests beautifulsoup4 lxml
+
+      - name: 프로브 실행
+        working-directory: market_flow
+        run: python probe_naver.py
