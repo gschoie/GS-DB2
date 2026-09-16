@@ -23,6 +23,7 @@ import sys
 from datetime import date, datetime, timedelta
 from pathlib import Path
 
+from holidays import HOLIDAYS
 from rules import KST, _compact
 
 HERE = Path(__file__).resolve().parent
@@ -365,6 +366,8 @@ details.sec[open]>summary{margin-bottom:10px}
 .cal td{border:1px solid #e8ecf1;vertical-align:top;padding:4px 5px;height:52px}
 .cal td.blank{background:#f4f6f9;border-color:#eef1f5}
 .cal td.today{background:#eaf2ff;box-shadow:inset 0 0 0 1px #bcd4f0}
+.cal td.hol .d{color:#d05656}
+.cal .hn{margin-left:4px;font-size:10px;color:#d05656;opacity:.85;font-weight:600}
 .cal .d{color:#8a94a0;font-size:11.5px;margin-bottom:3px}
 .chip{display:block;margin:2px 0;padding:1px 5px;border-radius:6px;background:#e8f0fe;
   color:#2b5f8a;border:1px solid #c9dcf5;font-size:11.5px;white-space:nowrap;
@@ -524,9 +527,14 @@ def _calendar(items: list[tuple[str, dict]], today_d: date) -> str:
                     continue
                 if day == today_d:
                     cls.append("today")
+                holiday = HOLIDAYS.get(day.isoformat())
+                if holiday:
+                    cls.append("hol")
+                label = (f'{day.day}<span class="hn">{holiday}</span>' if holiday
+                         else str(day.day))
                 chips = "".join(_chip(u, e) for u, e in per_day.get(day, ()))
                 cells.append(f'<td class="{" ".join(cls)}" data-date="{day.isoformat()}">'
-                             f'<div class="d">{day.day}</div>{chips}</td>')
+                             f'<div class="d">{label}</div>{chips}</td>')
             rows.append("<tr>" + "".join(cells) + "</tr>")
         head = "".join(
             f'<th class="{cls}">{label}</th>'

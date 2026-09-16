@@ -343,7 +343,28 @@
     - 화면은 **etf-signal.yml 이 다시 돌아야 반영**된다(빌드 산출물이 커밋되는 구조).
       머지만으로는 배포본이 안 바뀐다.
 
-22. **ChatGPT 방산 브리핑 발행 경로 신설** (9/16): 사용자가 ChatGPT 스케줄 태스크로 받는
+22. **수급 수집 복구 — 네이버 옛 PC 페이지 폐쇄 대응** (9/16): market-flow가 9/11부터 전패
+    ("lst_kos_info 블록을 찾지 못함"). 러너 프로브로 원인 특정 — 네이버가 옛 PC 시세
+    메인페이지(`sise_index.naver`)를 신규 SPA(`stock.naver.com/domestic/index/…`)로
+    302 리다이렉트하며 잠정치 블록이 사라짐. **일별·시간대별 데이터 페이지 5종
+    (investorDealTrendDay/Time·programDealTrendDay/Time·선물 sosok=03)은 전부 생존** 확인.
+    → `snapshot_provisional`을 시간대별 페이지 최신 행(누적 잠정) 기반으로 교체, 러너
+    실측으로 일별 페이지와 값 일치 검증. 확정치는 매 실행 30영업일 백필이라 9/11~15
+    공백도 다음 실행에 자동 복구(잠정 슬롯·장중 곡선은 당일 전용이라 소급 불가).
+    같은 finance.naver.com 옛 페이지를 쓰는 다른 모듈이 죽으면 이 리다이렉트를 먼저 의심할 것.
+
+20. **커버리지 리서치요약 아침 모음 신설** (9/16): `source_watcher/research_digest.py` —
+    구독 전 채널의 "[✨ 리서치 요약] …" 글에서 커버리지(조선·방산·기계) 보고서만 추려
+    평일 08:30(KST) 한 통으로 spying 봇(@gs_teleg_trend_bot)에 발송.
+    - 낱말은 x_ship_keywords + `x_research_digest_extra`(기계: HD현대인프라코어·두산에너빌리티 등)
+      합산 — 관리도 sources.yml 한 곳. 내 채널 제외는 ship_all 설정을 그대로 읽는다.
+    - 퍼나른 같은 요약은 제목 지문으로 접고 'n개 채널' 표기. 창은 지난 발송 이후(최대 48h).
+    - 발사는 GAS 스케줄러 `research` 슬롯(08:30 평일)이 정시 담당, `research-digest.yml`
+      크론(UTC 23:30 일~목)은 안전망 — 스크립트의 '오늘 이미 발송(KST)' 가드로 중복 방지.
+      상태(state/research_digest.json)는 발송 성공 뒤에만 커밋.
+    - GAS 반영 필요: dispatch_proxy.gs 붙여넣기 → '배포 관리 → 새 버전'.
+
+23. **ChatGPT 방산 브리핑 발행 경로 신설** (9/16): 사용자가 ChatGPT 스케줄 태스크로 받는
     방산 브리핑을 대시보드+텔레그램으로 — Gemini(defense_daily)·Claude(claude_defense)에 이은
     3탄(`static/chatgpt_defense/` + `chatgpt_defense_report.html`, 사이드바 `🧠 글로벌방산.브리핑(GPT)`).
     - ChatGPT는 리포에 직접 못 쓰므로 **붙여넣기 발행**: 인덱스 페이지 상단 ✍️ 폼에 md 전문

@@ -11,6 +11,7 @@ import json
 from datetime import date, datetime, timedelta
 from pathlib import Path
 
+from holidays import HOLIDAYS
 from rules import KST
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -96,6 +97,8 @@ details.former[open]>summary{margin-bottom:10px}
 .cal td[data-date]{cursor:pointer}
 .cal td[data-date]:hover{background:#f0f5fb}
 .cal td.today{background:#eaf2ff;box-shadow:inset 0 0 0 1px #bcd4f0}
+.cal td.hol .d{color:#d05656}
+.cal .hn{margin-left:4px;font-size:10px;color:#d05656;opacity:.85;font-weight:600}
 .cal .d{color:#8a94a0;font-size:11.5px;margin-bottom:3px}
 .chip{display:block;margin:2px 0;padding:1px 5px;border-radius:6px;background:#fff7d6;
   color:#8a6d1a;border:1px solid #ecd98f;font-size:11.5px;white-space:nowrap;
@@ -282,10 +285,15 @@ def _calendar_section(dated: list[dict], today_d: date) -> str:
                     continue
                 if day == today_d:
                     cls.append("today")
+                holiday = HOLIDAYS.get(day.isoformat())
+                if holiday:
+                    cls.append("hol")
                 attrs = f' data-date="{day.isoformat()}"'
+                label = (f'{day.day}<span class="hn">{holiday}</span>' if holiday
+                         else str(day.day))
                 chips = "".join(_chip_html(e) for e in per_day.get(day, ()))
                 cells.append(f'<td class="{" ".join(cls)}"{attrs}>'
-                             f'<div class="d">{day.day}</div>{chips}</td>')
+                             f'<div class="d">{label}</div>{chips}</td>')
             rows.append("<tr>" + "".join(cells) + "</tr>")
         head = "".join(
             f'<th class="{cls}">{label}</th>'

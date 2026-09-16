@@ -164,7 +164,8 @@ async function load(){
  renderPressTable();
 }
 function loadUnionBoard(){const frame=$('#union-board-frame'),status=$('#union-board-status');status.textContent='최신 보고서를 불러오는 중';frame.onload=()=>status.textContent='현중 노조게시판 분석 보고서';frame.onerror=()=>status.textContent='hhiun_board_report.html 파일을 확인해 주세요';frame.src=`hhiun_board_report.html?t=${Date.now()}`}
-const TASK_ROSTER=[['팀장',['최광식','이준범']],['지속가능(Sustainability)',['박영도','김지원','이정우','김진영']],['지능화(Intelligence)',['유지웅','고영민','김혜영','김연미','김상혁']],['휴먼/생체(Human)',['이지수','박종현','이다연','임도영','박소현','한수빈']]];
+const TASK_ROSTER=[['팀장',['최광식','이준범']],['테크(Tech)',['남대종','김연미','이다연','테크RA']],['지속가능(Sustainability)',['박영도','김지원','김진영']],['지능화(Intelligence)',['유지웅','김혜영','이정우']],['휴먼/생체(Human)',['이지수','박종현','임도영','박소현','한수빈']]];
+const TASK_FORMER=['고영민','김상혁'];/* 퇴사자 — 표 하단 접힌 그룹, 기록은 보존 */
 const TASK_ITEMS_DEFAULT=['근태입력','휴가계획','자료제출','컴플라이언스','기타'],TASK_KEY='hi_tasklist_v1',TASK_ITEMS_KEY='hi_tasklist_items_v1',TASK_LAST_KEY='hi_tasklist_last_v1';
 let taskWantItem=null;/* 주소(#tasklist:항목)로 들어온 항목 — 동기화가 끝난 뒤에도 유지 */
 /* 서버 덮어쓰기 가드: 이 브라우저(도메인)가 서버 번들을 한 번이라도 받아본 뒤에만 push를 허용.
@@ -182,7 +183,7 @@ function fillTaskItems(desired){const sel=$('#task-item');if(!sel)return;const i
  sel.innerHTML=active.map(opt).join('')+(arch.includes(cur)?`<optgroup label="📦 보관함">${opt(cur)}</optgroup>`:'');
  const ab=$('#task-archive');if(ab)ab.textContent=arch.includes(cur)?'보관 해제':'보관';
  const box=$('#task-archive-box');if(box){box.style.display=arch.length?'':'none';const sum=box.querySelector('summary');if(sum)sum.textContent=`📦 보관함 (${arch.length})`;
-  const list=$('#task-archive-list');if(list)list.innerHTML=arch.map(x=>`<span class="task-arch-pair"><button type="button" class="task-arch-item" data-arch-open="${esc(x)}"${x===cur?' style="font-weight:700"':''} title="지난 기록 열람">${esc(x)}</button><button type="button" class="task-arch-restore" data-arch-restore="${esc(x)}" title="진행 중 목록으로 복원">↩ 복원</button></span>`).join('')}
+  const list=$('#task-archive-list');if(list)list.innerHTML=arch.map(x=>`<span class="task-arch-pair"><button type="button" class="task-arch-item" data-arch-open="${esc(x)}"${x===cur?' style="font-weight:700"':''} title="지난 기록 열람">${esc(x)}</button><button type="button" class="task-arch-restore" data-arch-restore="${esc(x)}" title="진행 중 목록으로 복원">↩ 복원</button><button type="button" class="task-arch-del" data-arch-del="${esc(x)}" title="이 항목과 기록을 완전히 삭제">🗑</button></span>`).join('')}
  try{localStorage.setItem(TASK_LAST_KEY,cur)}catch{}}
 const taskAllNames=()=>TASK_ROSTER.flatMap(([,ns])=>ns);
 function taskLoad(){try{return JSON.parse(localStorage.getItem(TASK_KEY))||{}}catch{return{}}}
@@ -194,13 +195,14 @@ function taskPush(statusSel){if(!TASK_ENDPOINT)return;
 async function taskPull(){if(!TASK_ENDPOINT)return false;const status=$('#task-sync');if(status)status.textContent='불러오는 중…';try{const r=await fetch(TASK_ENDPOINT,{cache:'no-store'});if(!r.ok)throw 0;const b=await r.json()||{};const remoteData=b.data&&typeof b.data==='object'?b.data:{};syncSeeded();if(!Object.keys(remoteData).length&&Object.keys(taskLoad()).length){taskPush();if(status)status.textContent='☁ 이 기기 데이터 업로드됨';return false}if(b.data)localStorage.setItem(TASK_KEY,JSON.stringify(b.data));if(Array.isArray(b.items)&&b.items.length)localStorage.setItem(TASK_ITEMS_KEY,JSON.stringify(b.items));if(Array.isArray(b.todos))localStorage.setItem(TODO_KEY,JSON.stringify(b.todos));if(Array.isArray(b.todoGroups))localStorage.setItem(TODO_GROUPS_KEY,JSON.stringify(b.todoGroups));if(Array.isArray(b.todoArchive))localStorage.setItem(TODO_ARCH_KEY,JSON.stringify(b.todoArchive));if(status)status.textContent='☁ 동기화됨';return true}catch{if(status)status.textContent='이 기기에만 저장(동기화 실패)'}return false}
 function taskCurrentItem(){return $('#task-item')?.value||taskItems()[0]}
 function renderTaskSummary(){const st=taskLoad()[taskCurrentItem()]||{},names=taskAllNames(),pending=names.filter(n=>!st[n]?.done);$('#task-summary').innerHTML=`완료 <b>${names.length-pending.length}</b> / ${names.length}`+(pending.length?` · 미응답: ${esc(pending.join(', '))}`:' · 전원 완료 🎉')}
-let taskSortByName=false;
-const TASK_RA=['이준범','김진영','김상혁','박소현','한수빈'];
+let taskSortByName=false,taskShowFormer=false;
+const TASK_RA=['이준범','김진영','테크RA','박소현','한수빈','김상혁'];
 function renderTaskList(desired){fillTaskItems(desired);const st=taskLoad()[taskCurrentItem()]||{};
  const row=n=>{const r=st[n]||{};return `<tr data-name="${esc(n)}"><td class="task-name"${TASK_RA.includes(n)?' style="color:#9aa0a6"':''}>${esc(n)}</td><td class="task-done"><input type="checkbox" data-f="done" ${r.done?'checked':''}></td><td><input class="task-in" data-f="resp" placeholder="응답내용" value="${esc(r.resp||'')}"></td><td><input class="task-in" data-f="note" placeholder="비고" value="${esc(r.note||'')}"></td></tr>`};
- const body=taskSortByName
+ const formerBlock=`<tr class="task-group task-former-hd" style="cursor:pointer;user-select:none" title="클릭하면 펼치기/접기"><td colspan="4">🗄️ 퇴사자 (${TASK_FORMER.length}) ${taskShowFormer?'▾':'▸'}</td></tr>`+(taskShowFormer?TASK_FORMER.map(row).join(''):'');
+ const body=(taskSortByName
   ?taskAllNames().slice().sort((a,b)=>a.localeCompare(b,'ko')).map(row).join('')
-  :TASK_ROSTER.map(([part,names])=>`<tr class="task-group"><td colspan="4">${esc(part)}</td></tr>`+names.map(row).join('')).join('');
+  :TASK_ROSTER.map(([part,names])=>`<tr class="task-group"><td colspan="4">${esc(part)}</td></tr>`+names.map(row).join('')).join(''))+formerBlock;
  $('#task-table').innerHTML=`<table class="task-table"><thead><tr><th class="task-sort" style="cursor:pointer;user-select:none" title="클릭하면 이름순 ↔ 팀 순서로 전환">이름 ${taskSortByName?'▲':'⇅'}</th><th>완료</th><th>응답내용</th><th>비고</th></tr></thead><tbody>${body}</tbody></table>`;
  $('#task-date').textContent=new Intl.DateTimeFormat('ko-KR',{year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date());renderTaskSummary();syncTaskHash()}
 // 항목별 주소: #tasklist:<항목>. 화면을 보는 동안 주소창이 늘 현재 항목을 가리키게 해
@@ -555,10 +557,17 @@ $('#task-del')?.addEventListener('click',()=>{const items=taskItems(),cur=taskCu
 $('#task-archive')?.addEventListener('click',()=>{const cur=taskCurrentItem(),s=taskLoad(),arch=Array.isArray(s.__archived)?s.__archived:[];const wasArch=arch.includes(cur);
  s.__archived=wasArch?arch.filter(x=>x!==cur):[...arch,cur];taskSave(s);
  renderTaskList(wasArch?cur:(taskItems().find(x=>!s.__archived.includes(x))||cur))});
-$('#task-archive-list')?.addEventListener('click',e=>{const o=e.target.dataset.archOpen,r=e.target.dataset.archRestore;
+$('#task-archive-list')?.addEventListener('click',e=>{const o=e.target.dataset.archOpen,r=e.target.dataset.archRestore,d=e.target.dataset.archDel;
  if(o)renderTaskList(o);
- else if(r){const s=taskLoad();s.__archived=(Array.isArray(s.__archived)?s.__archived:[]).filter(x=>x!==r);taskSave(s);renderTaskList(r)}});
-$('#task-table')?.addEventListener('click',e=>{if(e.target.closest('th.task-sort')){taskSortByName=!taskSortByName;renderTaskList()}});
+ else if(r){const s=taskLoad();s.__archived=(Array.isArray(s.__archived)?s.__archived:[]).filter(x=>x!==r);taskSave(s);renderTaskList(r)}
+ // 보관함에서 완전 삭제 — 항목 목록과 그 기록(체크·응답·비고)까지 함께 지운다.
+ else if(d){const items=taskItems().filter(x=>x!==d);
+  if(!items.length){alert('마지막 항목은 삭제할 수 없습니다.');return}
+  if(!confirm(`보관함의 [${d}] 항목을 완전히 삭제할까요?\n그 동안의 체크·응답·비고 기록도 함께 지워지며 되돌릴 수 없습니다.`))return;
+  saveItems(items);const s=taskLoad();delete s[d];
+  if(Array.isArray(s.__archived))s.__archived=s.__archived.filter(x=>x!==d);
+  taskSave(s);renderTaskList()}});
+$('#task-table')?.addEventListener('click',e=>{if(e.target.closest('th.task-sort')){taskSortByName=!taskSortByName;renderTaskList();return}if(e.target.closest('tr.task-former-hd')){taskShowFormer=!taskShowFormer;renderTaskList()}});
 $('#task-table')?.addEventListener('change',e=>{const tr=e.target.closest('tr[data-name]');if(tr&&e.target.dataset.f==='done')taskUpdate(tr.dataset.name,'done',e.target.checked)});
 $('#task-table')?.addEventListener('input',e=>{const tr=e.target.closest('tr[data-name]'),f=e.target.dataset.f;if(tr&&(f==='resp'||f==='note'))taskUpdate(tr.dataset.name,f,e.target.value)});
 $('#task-reset')?.addEventListener('click',()=>{if(!confirm(`[${taskCurrentItem()}] 체크·응답·비고를 모두 지울까요?`))return;const s=taskLoad();delete s[taskCurrentItem()];taskSave(s);renderTaskList()});
