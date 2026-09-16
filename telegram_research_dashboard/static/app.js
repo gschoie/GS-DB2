@@ -164,7 +164,7 @@ async function load(){
  renderPressTable();
 }
 function loadUnionBoard(){const frame=$('#union-board-frame'),status=$('#union-board-status');status.textContent='최신 보고서를 불러오는 중';frame.onload=()=>status.textContent='현중 노조게시판 분석 보고서';frame.onerror=()=>status.textContent='hhiun_board_report.html 파일을 확인해 주세요';frame.src=`hhiun_board_report.html?t=${Date.now()}`}
-const TASK_ROSTER=[['팀장',['최광식','이준범']],['지속가능(Sustainability)',['박영도','김지원','이정우','김진영']],['지능화(Intelligence)',['유지웅','남대종','김혜영','김연미','테크RA']],['휴먼/생체(Human)',['이지수','박종현','이다연','임도영','박소현','한수빈']]];
+const TASK_ROSTER=[['팀장',['최광식','이준범']],['테크(Tech)',['남대종','김연미','이다연','테크RA']],['지속가능(Sustainability)',['박영도','김지원','김진영']],['지능화(Intelligence)',['유지웅','김혜영','이정우']],['휴먼/생체(Human)',['이지수','박종현','임도영','박소현','한수빈']]];
 const TASK_FORMER=['고영민','김상혁'];/* 퇴사자 — 표 하단 접힌 그룹, 기록은 보존 */
 const TASK_ITEMS_DEFAULT=['근태입력','휴가계획','자료제출','컴플라이언스','기타'],TASK_KEY='hi_tasklist_v1',TASK_ITEMS_KEY='hi_tasklist_items_v1',TASK_LAST_KEY='hi_tasklist_last_v1';
 let taskWantItem=null;/* 주소(#tasklist:항목)로 들어온 항목 — 동기화가 끝난 뒤에도 유지 */
