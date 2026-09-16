@@ -515,16 +515,23 @@ def weekly_html(end=None):
                                   lambda s: not up_adx(s)), "⚡", "neg")):
         # 추세는 강도(25 강력 → 20 확인)가 먼저다 — 일별 표의 정렬과 맞춘다.
         is_adx = label.startswith("추세")
+        since = tg._since_signal(days, picked)
 
         def order(kv, _adx=is_adx):
             stage = (kv[1]["last"].get("adx_stage") or 0) if _adx else 0
             return (-stage, -len(kv[1]["days"]), kv[1]["name"])
 
         for code, r in sorted(picked.items(), key=order):
-            move = rets.get(code, (None, None))[1]
-            move_td = "—" if move is None else format(move, "+.1f") + "%"
+            # 신호가 뜬 날 종가 → 기준일 종가. 창 첫날 대비로 재면 마지막 날 뜬
+            # 신호에도 그 앞 9거래일이 섞여 '신호가 일한 구간'이 안 보인다.
+            move = since.get(code)
+            # 기준일에 막 뜬 신호는 경과가 0이다 — +0.0%로 적으면 '안 움직였다'로
+            # 읽히고 색까지 붙는다. 아직 잴 게 없다고 말하는 편이 정확하다.
+            fresh = bool(r.get("entry_day") and r["entry_day"] == days[-1][0])
+            move_td = "당일" if fresh else ("—" if move is None else
+                                           format(move, "+.1f") + "%")
             # td.r 은 우측정렬 규칙이라 색이 안 붙는다 — 색은 전역 .pos/.neg 로 준다.
-            cls = " class=\"r\"" if move is None else \
+            cls = " class=\"r\"" if (fresh or move is None or move == 0) else \
                   " class=\"r " + ("pos" if move > 0 else "neg") + "\""
             stage = r["last"].get("adx_stage") if label.startswith("추세") else 0
             badge = ('<span class="mini bolt2">25↑</span>' if stage == 2 else
@@ -552,9 +559,13 @@ def weekly_html(end=None):
     else:
         body = ("<div class=\"tablewrap\"><table class=\"board\">"
                 "<thead><tr><th>종류</th><th>종목</th><th>그룹</th><th>발생일</th>"
-                "<th>횟수</th><th class=\"r\">기간 등락</th></tr></thead><tbody>"
+                "<th>횟수</th><th class=\"r\">신호 후</th></tr></thead><tbody>"
                 + "".join(rows) + "</tbody></table></div>"
-                "<p class=\"sub\">⚡ 추세 = ADX 상향돌파(20 확인 · 25 강력). "
+                "<p class=\"sub\"><b>신호 후</b> = 신호가 처음 뜬 날 종가 → "
+                + format(days[-1][0], "%m/%d") + " 종가 누적. 신호는 전일 확정 종가로 "
+                "계산해 다음 날 아침에 나가므로 실제 진입은 하루 뒤다 — 이 숫자는 그만큼 "
+                "후하게 잡힌다.<br>"
+                "⚡ 추세 = ADX 상향돌파(20 확인 · 25 강력). "
                 "진입 트리거가 아니라 <b>가던 방향이 굳었다</b>는 확인이고, "
                 "방향은 DI로 갈라 매수편·매도편으로 나눠 적었다.</p>")
 
@@ -562,7 +573,10 @@ def weekly_html(end=None):
         ranked = sorted(rets.values(), key=lambda x: -x[1])
         up = " · ".join(esc(n) + " " + format(p, "+.1f") + "%" for n, p in ranked[:3])
         down = " · ".join(esc(n) + " " + format(p, "+.1f") + "%" for n, p in ranked[-3:][::-1])
-        body += "<p class=\"sub\">📈 기간 상승 " + up + "<br>📉 기간 하락 " + down + "</p>"
+        # 이건 신호와 무관한 '창 전체' 등락이다(56개 전 종목 기준) — 표의 '신호 후'와
+        # 다른 잣대이므로 이름으로 구분해 둔다.
+        body += ("<p class=\"sub\">📈 창 전체(" + span + ") 상승 " + up +
+                 "<br>📉 창 전체 하락 " + down + "</p>")
 
     return "<details class=\"logic\" open>" + head + "<div class=\"logic-body\">" + body + "</div></details>"
 

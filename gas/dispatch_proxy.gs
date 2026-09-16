@@ -41,6 +41,8 @@ const WF = {
   vacation:  'vacation-tracker.yml',   // 휴가/출장 직접 기입 (entry 입력 필요)
   gptbrief:  'chatgpt-brief.yml',      // ChatGPT 방산 브리핑 붙여넣기 발행 (content 입력 필요)
   research:  'research-digest.yml',    // 커버리지 리서치요약 아침 모음
+  // 다른 저장소의 워크플로는 {repo:'owner/name', file:'...'} 형태로 적는다.
+  mirror:    { repo: 'DAOL-Securities-Research-Center/DAOL-RESEARCH-TONE', file: 'mirror.yml' }, // 챗봇 미러 즉시 동기화
 };
 
 // 워크플로별 추가 입력. 선언한 required 입력을 빠짐없이 채워야 422가 안 난다.
@@ -103,14 +105,16 @@ function doPost(e) {
 
 /** 워크플로 하나를 workflow_dispatch로 발사한다. 웹앱(doPost)과 스케줄러(tick)가 같이 쓴다. */
 function fireWorkflow(key, inputs) {
-  const wf = WF[key];
-  if (!wf) return { ok: false, code: 400, wf: null, error: 'unknown workflow key: ' + key };
+  const entry = WF[key];
+  if (!entry) return { ok: false, code: 400, wf: null, error: 'unknown workflow key: ' + key };
+  const wf = typeof entry === 'string' ? entry : entry.file;
+  const repoPath = typeof entry === 'string' ? `${OWNER}/${REPO}` : entry.repo;
 
   const token = PropertiesService.getScriptProperties().getProperty('GH_TOKEN');
   if (!token) return { ok: false, code: 500, wf: wf, error: 'GH_TOKEN 미설정' };
 
   const res = UrlFetchApp.fetch(
-    `https://api.github.com/repos/${OWNER}/${REPO}/actions/workflows/${wf}/dispatches`,
+    `https://api.github.com/repos/${repoPath}/actions/workflows/${wf}/dispatches`,
     { method: 'post', contentType: 'application/json',
       headers: { Authorization: 'Bearer ' + token, Accept: 'application/vnd.github+json' },
       payload: JSON.stringify({ ref: REF, inputs: inputs || {} }),

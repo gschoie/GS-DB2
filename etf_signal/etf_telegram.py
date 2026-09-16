@@ -184,11 +184,35 @@ def _tally(days, flag, where=None):
             if where and not where(s):
                 continue
             row = picked.setdefault(s["code"], {"name": s["name"], "group": s["group"],
-                                                "days": [], "dates": [], "last": s})
+                                                "days": [], "dates": [], "last": s,
+                                                # 창 안에서 **처음** 신호가 뜬 날의 종가.
+                                                # '신호 이후 얼마나 갔나'의 기준점이다.
+                                                "entry": s.get("close"), "entry_day": day})
             row["days"].append(WD_KO[day.weekday()])   # 한 주짜리 창(주간 텔레그램)용
             row["dates"].append(day)                   # 여러 주에 걸친 창(화면)용
             row["last"] = s
     return picked
+
+
+def _since_signal(days, picked):
+    """신호 발생일 종가 → 창 마지막 날 종가 누적 등락률. {code: pct}
+
+    창 첫날 대비(_week_returns)로 재면 신호가 언제 떴든 같은 값이 나온다 —
+    마지막 날 뜬 신호에도 그 앞 9거래일 움직임이 통째로 섞인다. 신호가 일한
+    구간만 보려면 기준점이 '그 신호가 뜬 날'이어야 한다.
+
+    신호는 전일 확정 종가로 계산해 다음 날 아침에 나가므로 실제 진입은 그 다음
+    거래일이다. 여기 숫자는 **신호 난 날 종가 기준**이라 실제보다 하루 이르다.
+    """
+    if not days:
+        return {}
+    last = {s["code"]: s.get("close") for s in (days[-1][1].get("signals") or [])}
+    out = {}
+    for code, row in picked.items():
+        base, now = row.get("entry"), last.get(code)
+        if base and now:
+            out[code] = (now - base) / base * 100
+    return out
 
 
 def _week_returns(days):
