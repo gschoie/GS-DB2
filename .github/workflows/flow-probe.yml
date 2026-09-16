@@ -4,6 +4,9 @@ name: 수급 소스 진단 프로브 (일회용)
 # 원인 파악 후 이 워크플로와 market_flow/probe_naver.py는 삭제할 것.
 on:
   workflow_dispatch:
+  push:
+    branches: [claude/kospi200-consensus-tracking-qwoucl]
+    paths: [market_flow/probe_naver.py]
 
 permissions:
   contents: read
