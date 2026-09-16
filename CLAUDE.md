@@ -214,6 +214,12 @@
       checkNewVideos 가 지나갈 때마다 로그에 적립해 메운다. 대시보드는 같은
       workflow_dispatch 에 kind:'weekly' 로 실려 `static/youtube_weekly/` +
       사이드바 `🗞 ┗방산유튜브.주간(평일)`. installWeeklyTrigger() 1회 실행 필요.
+    - **나우뉴스 밀리터리+ 주간 모음**(`sendNownewsMilitary`): m.nownews.seoul.co.kr 의
+      science/military(최현호의 무기인사이드) 목록에서 지난 31일 기사 링크만 모아
+      일요일 오전 8시대(`scheduledNownews`, `installNownewsTrigger`)에 텔레그램 두 통
+      (제목 목록 + 링크만)으로. NotebookLM 오디오 소스용. 기사 URL의 id 앞 8자리
+      (YYYYMMDD)로 날짜를 판별하므로 마크업이 바뀌어도 링크는 뽑힌다(제목은 best-effort).
+      doPost 에 send_nownews 액션. 매주 롤링(지난 한 달) — 겹침이 정상.
     - **수동 갱신 버튼**: ytdigest 뷰의 `🔄 모음 갱신` → 유튜브 GAS 프로젝트를 웹 앱으로
       배포한 주소(app.js `YTDIGEST_ENDPOINT`)에 POST {action:'send_digest'} → 최근 3일치를
       피드에서 다시 채워 즉시 발송(텔레그램 두 통 + 대시보드). LockService로 동시 실행 방지.

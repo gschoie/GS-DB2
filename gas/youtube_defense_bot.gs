@@ -702,6 +702,148 @@ function scheduledWeekly() {
 }
 
 // 주간 트리거를 건다. 한 번만 실행하면 된다(여러 번 눌러도 중복되지 않는다).
+// === 나우뉴스 밀리터리+ 주간 링크 모음 (일요일 아침) ===
+//
+// m.nownews.seoul.co.kr/newsList/science/military (최현호의 무기인사이드) 목록에서
+// 지난 한 달치 기사 링크만 모아 텔레그램으로 보낸다. NotebookLM 오디오 소스용.
+// 기사 URL은 newsView.php?id=YYYYMMDD60NNNN 꼴이라 ID 앞 8자리로 날짜를 판별한다.
+
+const NOWNEWS_LIST = 'https://m.nownews.seoul.co.kr/newsList/science/military/?cp=nownews';
+const NOWNEWS_VIEW = 'https://nownews.seoul.co.kr/news/newsView.php?id=';
+const NOWNEWS_DAYS = 31;        // 며칠치를 모을지
+const NOWNEWS_MAX_PAGES = 12;   // 목록 페이지 상한 (한 달이면 이 안에 다 들어온다)
+// 기사 ID: 8자리 날짜 + '60' + 숫자. 이 모양이면 마크업이 바뀌어도 링크를 뽑아낸다.
+const NOWNEWS_ID_RE = /\b(\d{8}60\d{3,})\b/g;
+
+// URL 하나를 텍스트로 가져온다(차단 시 재시도).
+function fetchText_(url) {
+  let lastCode = 0;
+  for (let attempt = 0; attempt < 3; attempt++) {
+    const res = UrlFetchApp.fetch(url, {
+      muteHttpExceptions: true,
+      headers: {
+        'Accept-Language': 'ko-KR,ko;q=0.9,en;q=0.8',
+        'User-Agent': 'Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) '
+          + 'AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Mobile Safari/604.1'
+      }
+    });
+    lastCode = res.getResponseCode();
+    if (lastCode === 200) return res.getContentText();
+    if (lastCode !== 404 && lastCode !== 429 && lastCode < 500) break;
+    Utilities.sleep(1500 * (attempt + 1));
+  }
+  throw new Error('HTTP ' + lastCode);
+}
+
+// ID 앞 8자리(YYYYMMDD) → 그날 자정의 밀리초. 못 읽으면 0.
+function nownewsDateMillis_(id) {
+  const y = Number(id.slice(0, 4)), m = Number(id.slice(4, 6)), d = Number(id.slice(6, 8));
+  if (!y || !m || !d) return 0;
+  return new Date(y, m - 1, d).getTime();
+}
+
+// 한 페이지 HTML에서 (id → 제목) 을 뽑는다. 제목은 최선의 추정(없으면 빈 문자열).
+function parseNownewsPage_(html) {
+  const found = {};   // id -> title
+  let match;
+  NOWNEWS_ID_RE.lastIndex = 0;
+  while ((match = NOWNEWS_ID_RE.exec(html)) !== null) {
+    const id = match[1];
+    if (!(id in found)) found[id] = '';
+  }
+  // 제목 best-effort: id 가 든 <a ...>제목</a> 를 찾아 태그를 걷어내고 엔티티를 되돌린다.
+  Object.keys(found).forEach(function (id) {
+    const re = new RegExp('id=' + id + '[^>]*>\\s*([^<]{4,120})<', 'i');
+    const t = html.match(re);
+    if (t) found[id] = unescapeHtml_(t[1].replace(/\s+/g, ' ').trim());
+  });
+  return found;
+}
+
+function sendNownewsMilitary() {
+  const cutoff = Date.now() - NOWNEWS_DAYS * 24 * 3600 * 1000;
+  const seen = {};   // id -> { title, millis }
+
+  for (let page = 1; page <= NOWNEWS_MAX_PAGES; page++) {
+    let html;
+    try {
+      html = fetchText_(NOWNEWS_LIST + '&page=' + page);
+    } catch (error) {
+      Logger.log('나우뉴스 목록 ' + page + '쪽 실패: ' + error.toString());
+      break;
+    }
+    const rows = parseNownewsPage_(html);
+    const ids = Object.keys(rows);
+    if (ids.length === 0) break;   // 더는 기사 없음
+
+    let anyInWindow = false;
+    ids.forEach(function (id) {
+      const millis = nownewsDateMillis_(id);
+      if (millis && millis >= cutoff) {
+        anyInWindow = true;
+        if (!seen[id] || (!seen[id].title && rows[id])) {
+          seen[id] = { title: rows[id], millis: millis };
+        }
+      }
+    });
+    // 이 페이지가 통째로 한 달보다 오래면 더 넘길 필요 없다(목록은 최신순).
+    if (!anyInWindow && page > 1) break;
+    Utilities.sleep(400);
+  }
+
+  const items = Object.keys(seen).map(function (id) {
+    return { id: id, title: seen[id].title, millis: seen[id].millis };
+  }).sort(function (a, b) { return b.millis - a.millis; });   // 최신 먼저
+
+  if (items.length === 0) {
+    Logger.log('나우뉴스: 지난 ' + NOWNEWS_DAYS + '일 기사가 없습니다.');
+    return;
+  }
+
+  const stamp = Utilities.formatDate(new Date(), 'Asia/Seoul', 'M월 d일');
+  const head = [
+    '📰 <b>나우뉴스 밀리터리+ 한 달 모음 · ' + stamp + '</b>',
+    '최근 ' + NOWNEWS_DAYS + '일 · 기사 ' + items.length + '건',
+    ''
+  ];
+  items.forEach(function (it) {
+    const day = Utilities.formatDate(new Date(it.millis), 'Asia/Seoul', 'MM-dd');
+    head.push('• ' + day + ' ' + escapeHtml_(it.title || '(제목 미상)'));
+  });
+  head.push('');
+  head.push('↓ 다음 메시지를 통째로 복사해 NotebookLM 소스에 붙여넣으세요');
+  sendChunked_(head, false);
+
+  const links = items.map(function (it) { return NOWNEWS_VIEW + it.id; });
+  sendChunked_(links, true);
+
+  Logger.log('나우뉴스 밀리터리+ 발송 완료 — 기사 ' + items.length + '건');
+}
+
+// 자동 트리거 전용 — 일요일에만 보낸다.
+function scheduledNownews() {
+  const dayOfWeek = Number(Utilities.formatDate(new Date(), 'Asia/Seoul', 'u')); // 1=월 … 7=일
+  if (dayOfWeek !== 7) {
+    Logger.log('일요일이 아니라 나우뉴스 모음을 건너뜁니다.');
+    return;
+  }
+  sendNownewsMilitary();
+}
+
+// 일요일 오전 8시대 트리거. 한 번만 실행하면 된다(중복 안 생김).
+function installNownewsTrigger() {
+  ScriptApp.getProjectTriggers().forEach(function (trigger) {
+    const handler = trigger.getHandlerFunction();
+    if (handler === 'scheduledNownews' || handler === 'sendNownewsMilitary') {
+      ScriptApp.deleteTrigger(trigger);
+    }
+  });
+  ScriptApp.newTrigger('scheduledNownews').timeBased()
+    .onWeekDay(ScriptApp.WeekDay.SUNDAY).atHour(8).create();
+  Logger.log('일요일 오전 8시대에 나우뉴스 밀리터리+ 한 달 모음을 보냅니다.');
+}
+
+
 function installWeeklyTrigger() {
   ScriptApp.getProjectTriggers().forEach(function (trigger) {
     const handler = trigger.getHandlerFunction();
@@ -730,7 +872,8 @@ function doPost(e) {
     try {
       body = JSON.parse((e && e.postData && e.postData.contents) || '{}');
     } catch (ignored) {}
-    if (body.action !== 'send_digest' && body.action !== 'send_weekly') {
+    if (body.action !== 'send_digest' && body.action !== 'send_weekly'
+        && body.action !== 'send_nownews') {
       out.error = 'unknown action';
       return jsonOut_(out);
     }
@@ -742,7 +885,10 @@ function doPost(e) {
       return jsonOut_(out);
     }
     try {
-      if (body.action === 'send_weekly') {
+      if (body.action === 'send_nownews') {
+        sendNownewsMilitary();
+        out.ok = true;
+      } else if (body.action === 'send_weekly') {
         const channel = todaysWeeklyChannel_();
         if (!channel) {
           out.error = '일요일은 담당 채널이 없습니다 — 월~토에 눌러 주세요';
@@ -840,6 +986,13 @@ function sendTelegramMessage_(text, opts) {
 
 
 // === HTML 특수문자 무력화 안전 함수 ===
+
+// HTML 엔티티를 원문자로 되돌린다. escapeHtml_ 가 다시 감싸므로 이중 이스케이프를 막는다.
+function unescapeHtml_(text) {
+  return String(text)
+    .replace(/&#39;/g, "'").replace(/&quot;/g, '"').replace(/&nbsp;/g, ' ')
+    .replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&');
+}
 
 function escapeHtml_(text) {
   return String(text)
