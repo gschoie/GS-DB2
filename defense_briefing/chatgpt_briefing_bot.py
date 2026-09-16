@@ -1,20 +1,20 @@
 #!/usr/bin/env python3
-"""ChatGPT 글로벌 방산 데일리 브리핑 봇 (Gemini 판과 같은 골격, 작성만 OpenAI API).
+"""방산 브리핑 RSS판(3탄) 봇 — 수집은 러너, 작성은 Claude 예약 세션.
 
 chatgpt-brief.yml 의 단일 진입점. 우선순위:
   1. CONTENT 환경변수(대시보드 붙여넣기 폼) 또는 chatgpt_briefing/inbox/*.md 가 있으면
-     → gpt_brief_publish.ingest() 로 그 본문을 발행 (API 호출 없음, 수동 등록 우선)
-  2. 둘 다 없으면(스케줄 실행) → defense_briefing_bot 의 yfinance 확정 시세 +
-     구글뉴스 RSS 수집을 그대로 재사용해 OpenAI API로 브리핑을 작성·발행
+     → gpt_brief_publish.ingest() 로 그 본문을 발행 (수동 등록 = ChatGPT 앱 산출물, 항상 우선)
+  2. 둘 다 없으면(스케줄 실행) → **수집만** 한다: defense_briefing_bot 의 yfinance 확정
+     시세 + 구글뉴스 RSS(24h)를 chatgpt_briefing/inputs/<날짜>.json 으로 남기고 끝.
+     작성은 Claude 예약 세션이 매일 아침 그 inputs 를 근거로 수행한다(건설기계와 동일 구조
+     — OpenAI API는 유료라 쓰지 않기로 함, 2026-09-17).
+     · 과거 OpenAI API 작성 경로는 --api 플래그로만 남겨둔다(OPENAI_API_KEY 등록 시 사용 가능).
 
 Gemini 판과 동일하게 "숫자는 코드로 확정, 뉴스 근거는 RSS 목록만" 원칙을 지킨다
 (LLM 웹검색·기억은 옛 사건을 새 뉴스처럼 서술하는 사고의 원인 — 07/30·08/01 실증).
 
-같은 날짜 md가 이미 있으면 스케줄 실행은 건너뛴다(수동 등록 보호). --force 로 재생성.
-OPENAI_API_KEY 미설정이면 API 생성만 조용히 건너뛴다(붙여넣기 경로는 계속 동작).
-
-텔레그램 발송은 워크플로의 다음 스텝(gpt_brief_publish --send-processed)이
-.gpt_brief_processed.json 을 읽어 수행한다.
+텔레그램 발송: 수동 발행은 워크플로의 --send-processed 스텝이, 세션 작성분은
+claude-brief-ingest 가 main 반영 후 담당한다.
 """
 from __future__ import annotations
 
@@ -128,12 +128,66 @@ def api_generate(force: bool = False) -> None:
     print("=== 생성 완료 (텔레그램은 다음 스텝의 --send-processed) ===")
 
 
+INPUTS_DIR = pub.REPO / "chatgpt_briefing" / "inputs"
+INPUTS_KEEP_DAYS = 7
+
+FORMAT_NOTE = (
+    "작성 규칙: 뉴스 사실관계는 news_list의 기사만 근거(목록에 없는 사건 금지, 각 항목에 "
+    "[매체명](URL) 링크와 보도 시각), 주가·등락률·시총은 price_table 값만 사용. "
+    "섹션은 claude_defense와 동일 — 서두 고정문 + ## 오늘의 핵심 요약 / ## 주요 주가 동향"
+    "(기업 | 국가 | 기준일 | 등락률 | 시가총액 | 변동 요인) / ## 큰 변동 분석 / ## 섹터별 정리 / "
+    "## 투자 시사점 / ## 향후 24~72시간 관전 포인트. 등락 원인 기사가 없으면 "
+    "'관련 공시·뉴스 미확인 (수급 요인 추정)'로 쓴다."
+)
+
+
+def collect_only() -> None:
+    """스케줄 실행: 시세·뉴스만 수집해 inputs JSON으로 남긴다 (작성은 Claude 세션)."""
+    import defense_briefing_bot as gb
+
+    now = datetime.now(KST)
+    date_str = now.strftime("%Y-%m-%d")
+    print(f"=== RSS판 수집 시작: {now:%Y-%m-%d %H:%M} KST ===")
+    rows = gb.fetch_prices()
+    ok = sum(1 for r in rows if r["close"] is not None)
+    print(f"[시세] {ok}/{len(rows)} 종목 조회 성공")
+    if ok < len(rows) * 0.5:
+        raise RuntimeError("시세 조회 성공률이 50% 미만 — Yahoo 차단 가능성, 중단")
+    news = gb.fetch_news(now)
+    print(f"[뉴스] 지난 24시간 기사 {len(news)}건 수집")
+    if len(news) < 5:
+        print("[경고] 뉴스 수집이 5건 미만 — RSS 차단 가능성", file=sys.stderr)
+
+    INPUTS_DIR.mkdir(parents=True, exist_ok=True)
+    payload = {
+        "date": date_str,
+        "collected_at": now.strftime("%Y-%m-%d %H:%M KST"),
+        "price_table": gb.price_table_text(rows),
+        "news_list": gb.news_list_text(news),
+        "format_note": FORMAT_NOTE,
+    }
+    (INPUTS_DIR / f"{date_str}.json").write_text(
+        json.dumps(payload, ensure_ascii=False, indent=1), encoding="utf-8")
+    print(f"[수집] chatgpt_briefing/inputs/{date_str}.json 저장")
+    # 오래된 inputs 정리 (7일 보관 — construction_briefing과 동일 정책)
+    from datetime import timedelta
+    cutoff = (now - timedelta(days=INPUTS_KEEP_DAYS)).strftime("%Y-%m-%d")
+    for f in sorted(INPUTS_DIR.glob("????-??-??.json")):
+        if f.stem < cutoff:
+            f.unlink()
+            print(f"[정리] inputs/{f.name} 삭제 ({INPUTS_KEEP_DAYS}일 경과)")
+    pub.PROCESSED.write_text("[]", encoding="utf-8")  # 이 실행은 발송 없음
+
+
 def main() -> None:
     if has_manual_input():
-        print("[모드] 수동 입력(폼/inbox) 발행 — API 호출 없음")
+        print("[모드] 수동 입력(폼/inbox) 발행")
         pub.ingest()
         return
-    api_generate(force="--force" in sys.argv)
+    if "--api" in sys.argv:  # 유료 OpenAI 경로 — 키 등록 시에만 명시적으로
+        api_generate(force="--force" in sys.argv)
+        return
+    collect_only()
 
 
 if __name__ == "__main__":
