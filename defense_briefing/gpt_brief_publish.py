@@ -63,7 +63,7 @@ def write_archive(date_str: str) -> None:
 <title>ChatGPT 방산 브리핑 {date_str}</title><style>{cbp.PAGE_CSS}</style></head>
 <body><div class="wrap">
 <h1>🧠 ChatGPT 글로벌 방산 브리핑</h1>
-<div class="meta">기준: {cbp.date_label(date_str)} · 생성: ChatGPT(사용자 스케줄 태스크) — Gemini·Claude 브리핑과 별도 관점의 3탄</div>
+<div class="meta">기준: {cbp.date_label(date_str)} · 생성: ChatGPT(OpenAI API) + 구글뉴스 RSS + yfinance 확정 시세 — Gemini·Claude 브리핑과 별도 관점의 3탄 (수동 등록분은 ChatGPT 앱 산출물)</div>
 {body}
 </div></body></html>"""
     (ARCHIVE_DIR / f"{date_str}.html").write_text(page, encoding="utf-8")
