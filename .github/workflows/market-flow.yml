@@ -20,10 +20,16 @@ concurrency:
 jobs:
   # GAS 시계(gas/dispatch_proxy.gs의 tick)가 정시에 workflow_dispatch로 쏘고,
   # GitHub 크론은 안전망으로 남긴다. 크론이 뒤늦게 돌 때 같은 일을 두 번 하지
-  # 않도록, **같은 슬롯 안에서** dispatch 실행이 이미 있었으면 이 예약 실행은 건너뛴다.
+  # 않도록, **같은 슬롯 안에서** 이미 실행이 있었으면 이 예약 실행은 건너뛴다.
   # 슬롯 경계는 scrape.decide_slot과 같다(11:30 / 14:30 / 16:10 KST) — 단순 분 단위
   # 창으로 하면 몇 시간 늦은 크론이 다음 슬롯을 덮어써 수급 메시지가 두 번 간다.
-  # 수동 버튼(dispatch)은 언제나 그대로 실행된다.
+  #
+  # **dispatch만 세면 안 된다** — 무료 러너 크론은 몇 시간씩 밀려(9/16 실측 +4.5~5.3h)
+  # 15:40·16:40 두 크론이 나란히 16:10~24:00 슬롯에 떨어진다. 앞 실행이 schedule이면
+  # dispatch 검색에 안 잡혀 뒤 크론이 또 돌았고, 그날 16:40 슬롯에서만 18:08·20:58·
+  # 21:48 세 번 발송됐다. 그래서 이벤트를 가리지 않고 자기 run만 빼고 센다.
+  #
+  # 수동 버튼(dispatch)은 이 잡 자체를 건너뛰므로 언제나 그대로 실행된다.
   guard:
     runs-on: ubuntu-latest
     permissions:
@@ -31,7 +37,7 @@ jobs:
     outputs:
       skip: ${{ steps.check.outputs.skip }}
     steps:
-      - name: 같은 슬롯의 dispatch 실행 확인
+      - name: 같은 슬롯의 실행 확인
         id: check
         if: github.event_name == 'schedule'
         env:
@@ -44,11 +50,12 @@ jobs:
           else                          slot=1640; from="16:10"
           fi
           since=$(TZ=Asia/Seoul date -u -d "today $from" +%Y-%m-%dT%H:%M)
-          n=$(gh api "repos/${{ github.repository }}/actions/workflows/market-flow.yml/runs?event=workflow_dispatch&created=%3E${since}" \
-                --jq '[.workflow_runs[] | select(.conclusion=="success" or .status=="in_progress" or .status=="queued")] | length' || echo 0)
-          echo "슬롯 ${slot}(${from} KST~) 안의 dispatch 실행 ${n:-0}건"
+          n=$(gh api "repos/${{ github.repository }}/actions/workflows/market-flow.yml/runs?created=%3E${since}" \
+                --jq "[.workflow_runs[] | select(.id != ${{ github.run_id }}) \
+                       | select(.conclusion==\"success\" or .status==\"in_progress\" or .status==\"queued\")] | length" || echo 0)
+          echo "슬롯 ${slot}(${from} KST~) 안의 선행 실행 ${n:-0}건"
           if [ "${n:-0}" -gt 0 ]; then
-            echo "::notice::GAS가 이 슬롯을 이미 처리했습니다 — 예약 실행은 건너뜁니다"
+            echo "::notice::이 슬롯은 이미 처리됐습니다 — 예약 실행은 건너뜁니다"
             echo "skip=true" >> "$GITHUB_OUTPUT"
           fi
 
