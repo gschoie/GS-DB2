@@ -343,4 +343,14 @@
     - 화면은 **etf-signal.yml 이 다시 돌아야 반영**된다(빌드 산출물이 커밋되는 구조).
       머지만으로는 배포본이 안 바뀐다.
 
+22. **수급 수집 복구 — 네이버 옛 PC 페이지 폐쇄 대응** (9/16): market-flow가 9/11부터 전패
+    ("lst_kos_info 블록을 찾지 못함"). 러너 프로브로 원인 특정 — 네이버가 옛 PC 시세
+    메인페이지(`sise_index.naver`)를 신규 SPA(`stock.naver.com/domestic/index/…`)로
+    302 리다이렉트하며 잠정치 블록이 사라짐. **일별·시간대별 데이터 페이지 5종
+    (investorDealTrendDay/Time·programDealTrendDay/Time·선물 sosok=03)은 전부 생존** 확인.
+    → `snapshot_provisional`을 시간대별 페이지 최신 행(누적 잠정) 기반으로 교체, 러너
+    실측으로 일별 페이지와 값 일치 검증. 확정치는 매 실행 30영업일 백필이라 9/11~15
+    공백도 다음 실행에 자동 복구(잠정 슬롯·장중 곡선은 당일 전용이라 소급 불가).
+    같은 finance.naver.com 옛 페이지를 쓰는 다른 모듈이 죽으면 이 리다이렉트를 먼저 의심할 것.
+
 이후 작업은 git log와 이 파일을 갱신하며 이어간다.
