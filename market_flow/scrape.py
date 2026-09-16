@@ -81,21 +81,24 @@ def kospi_basic():
     }
 
 
-def snapshot_provisional():
-    """시세 메인페이지 lst_kos_info: 개인/외국인/기관 + 차익/비차익/전체 (잠정, 억원)."""
-    soup = get_html(f"{BASE}/sise_index.naver?code=KOSPI")
-    dl = soup.select_one("dl.lst_kos_info")
-    if dl is None:
-        raise RuntimeError("lst_kos_info 블록을 찾지 못함 (페이지 구조 변경?)")
-    vals = []
-    for dd in dl.select("dd.dd"):
-        m = re.search(r"([+\-]?[\d,]+)", dd.get_text())
-        vals.append(num(m.group(1)) if m else None)
-    if len(vals) != 6:
-        raise RuntimeError(f"잠정치 6개 기대, {len(vals)}개 파싱됨: {vals}")
-    ind, frn, inst, arb, nonarb, total = vals
-    return {"individual": ind, "foreign": frn, "institution": inst,
-            "arb": arb, "nonarb": nonarb, "program": total}
+def snapshot_provisional(bizdate):
+    """잠정 스냅샷: 개인/외국인/기관 + 차익/비차익/전체 (억원).
+
+    원래 시세 메인페이지의 lst_kos_info 블록에서 읽었으나, 2026-09-11경 네이버가
+    옛 PC 페이지(sise_index.naver)를 신규 사이트(stock.naver.com SPA)로 리다이렉트하며
+    블록이 사라졌다. 같은 수치를 담은 시간대별 페이지(아직 유지)의 최신 행으로 대체.
+    """
+    soup = get_html(f"{BASE}/investorDealTrendTime.naver?bizdate={bizdate}&page=1")
+    inv = _table_rows(soup, 10)
+    soup = get_html(f"{BASE}/programDealTrendTime.naver?bizdate={bizdate}&page=1")
+    prg = _table_rows(soup, 9)
+    if not inv or not prg:
+        raise RuntimeError(f"시간대별 잠정 표 파싱 실패 (투자자 {len(inv)}행 · "
+                           f"프로그램 {len(prg)}행 — 페이지 구조 변경?)")
+    iv = inv[0][1]      # 첫 행 = 최신 시각 누적치
+    pv = prg[0][1]
+    return {"individual": iv[0], "foreign": iv[1], "institution": iv[2],
+            "arb": pv[2], "nonarb": pv[5], "program": pv[8]}
 
 
 def _table_rows(soup, ncols):
@@ -324,7 +327,7 @@ def main():
     day = hist["days"].setdefault(today, {})
     day["kospi"] = {"close": basic["close"], "chg_pct": basic["chg_pct"]}
 
-    snap = snapshot_provisional()
+    snap = snapshot_provisional(bizdate)
     snap["time"] = t.strftime("%H:%M")
     snap["kospi"] = basic["close"]
     snap["chg_pct"] = basic["chg_pct"]

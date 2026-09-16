@@ -11,6 +11,7 @@ import json
 from datetime import date, datetime, timedelta
 from pathlib import Path
 
+from holidays import HOLIDAYS
 from rules import KST
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -52,6 +53,17 @@ def friend_names() -> list[str]:
                     break
         return names
 
+def former_names() -> list[str]:
+    """config.yml의 퇴사자 목록 — 수집 안 하고 화면 하단 접힌 섹션에만 보관."""
+    try:
+        import yaml
+
+        data = yaml.safe_load(CONFIG_PATH.read_text(encoding="utf-8")) or {}
+        return [str(n) for n in (data.get("former") or []) if n]
+    except Exception:
+        return []
+
+
 WEEKDAY_KO = "월화수목금토일"
 
 PAGE_CSS = """
@@ -72,6 +84,10 @@ tr.today td{background:#eef5ff}
 .src{color:#8a94a0;font-size:12.5px}
 .name{font-weight:700;color:#1f2937;white-space:nowrap}
 .empty{color:#8a94a0;padding:18px 0}
+details.former{margin-top:26px}
+details.former>summary{font-size:15px;color:#8a94a0;font-weight:700;cursor:pointer;
+  padding-bottom:6px;border-bottom:1px solid #e3e8ee;list-style-position:inside;user-select:none}
+details.former[open]>summary{margin-bottom:10px}
 .cal{width:100%;border-collapse:collapse;table-layout:fixed;margin:6px 0 26px;font-size:12.5px}
 .cal th{padding:6px 4px;border-bottom:1px solid #e3e8ee;color:#8a94a0;font-size:12px;text-align:center}
 .cal th.sun,.cal td.sun .d{color:#d05656}
@@ -81,6 +97,8 @@ tr.today td{background:#eef5ff}
 .cal td[data-date]{cursor:pointer}
 .cal td[data-date]:hover{background:#f0f5fb}
 .cal td.today{background:#eaf2ff;box-shadow:inset 0 0 0 1px #bcd4f0}
+.cal td.hol .d{color:#d05656}
+.cal .hn{margin-left:4px;font-size:10px;color:#d05656;opacity:.85;font-weight:600}
 .cal .d{color:#8a94a0;font-size:11.5px;margin-bottom:3px}
 .chip{display:block;margin:2px 0;padding:1px 5px;border-radius:6px;background:#fff7d6;
   color:#8a6d1a;border:1px solid #ecd98f;font-size:11.5px;white-space:nowrap;
@@ -267,10 +285,15 @@ def _calendar_section(dated: list[dict], today_d: date) -> str:
                     continue
                 if day == today_d:
                     cls.append("today")
+                holiday = HOLIDAYS.get(day.isoformat())
+                if holiday:
+                    cls.append("hol")
                 attrs = f' data-date="{day.isoformat()}"'
+                label = (f'{day.day}<span class="hn">{holiday}</span>' if holiday
+                         else str(day.day))
                 chips = "".join(_chip_html(e) for e in per_day.get(day, ()))
                 cells.append(f'<td class="{" ".join(cls)}"{attrs}>'
-                             f'<div class="d">{day.day}</div>{chips}</td>')
+                             f'<div class="d">{label}</div>{chips}</td>')
             rows.append("<tr>" + "".join(cells) + "</tr>")
         head = "".join(
             f'<th class="{cls}">{label}</th>'
@@ -626,7 +649,11 @@ document.addEventListener('dblclick',ev=>{
 
 
 def build_page(store: dict) -> Path:
-    entries = [dict(value, uid=key) for key, value in (store.get("entries") or {}).items()]
+    all_entries = [dict(value, uid=key) for key, value in (store.get("entries") or {}).items()]
+    former = set(former_names())
+    former_entries = sorted((e for e in all_entries if (e.get("name") or "") in former),
+                            key=lambda e: e.get("start") or "", reverse=True)
+    entries = [e for e in all_entries if (e.get("name") or "") not in former]
     now = datetime.now(KST)
     today = now.strftime("%Y-%m-%d")
 
@@ -669,6 +696,9 @@ def build_page(store: dict) -> Path:
 """
     if review:
         doc += f"<h2>확인 필요 — 날짜를 못 읽은 보고 ({len(review)}건)</h2>\n{table(review)}\n"
+    if former_entries:
+        doc += (f'<details class="former"><summary>🗄️ 퇴사자 ({len(former_entries)}건)</summary>'
+                f"{table(former_entries)}</details>\n")
     doc += "</div></body></html>\n"
 
     OUT_PATH.parent.mkdir(parents=True, exist_ok=True)

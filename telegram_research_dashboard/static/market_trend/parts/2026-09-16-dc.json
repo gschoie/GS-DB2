@@ -1,0 +1,222 @@
+{
+ "source": "DC인사이드",
+ "galleries": [
+  {
+   "id": "krstock",
+   "name": "국내주식갤러리",
+   "posts": 1318,
+   "capped": true,
+   "burst": 1.0,
+   "base_daily": 1377.1
+  },
+  {
+   "id": "stockus",
+   "name": "해외주식갤러리",
+   "posts": 3210,
+   "capped": true,
+   "burst": 1.0,
+   "base_daily": 3242.0
+  }
+ ],
+ "posts_sampled": 568,
+ "keywords": [
+  {
+   "term": "ai",
+   "count": 11,
+   "burst": 99.0,
+   "new": true
+  },
+  {
+   "term": "클래리티",
+   "count": 9,
+   "burst": 99.0,
+   "new": true
+  },
+  {
+   "term": "부결",
+   "count": 8,
+   "burst": 99.0,
+   "new": true
+  },
+  {
+   "term": "코인",
+   "count": 39,
+   "burst": 41.4,
+   "new": false
+  },
+  {
+   "term": "법안",
+   "count": 7,
+   "burst": 96.7,
+   "new": true
+  },
+  {
+   "term": "언제",
+   "count": 7,
+   "burst": 96.7,
+   "new": true
+  },
+  {
+   "term": "현대차",
+   "count": 5,
+   "burst": 69.0,
+   "new": true
+  },
+  {
+   "term": "연준",
+   "count": 5,
+   "burst": 69.0,
+   "new": true
+  },
+  {
+   "term": "비트코인",
+   "count": 5,
+   "burst": 69.0,
+   "new": true
+  },
+  {
+   "term": "근대",
+   "count": 5,
+   "burst": 69.0,
+   "new": true
+  },
+  {
+   "term": "존나",
+   "count": 10,
+   "burst": 8.1,
+   "new": false
+  },
+  {
+   "term": "시발",
+   "count": 11,
+   "burst": 7.2,
+   "new": false
+  },
+  {
+   "term": "반도체",
+   "count": 23,
+   "burst": 4.5,
+   "new": false
+  },
+  {
+   "term": "유가",
+   "count": 28,
+   "burst": 3.5,
+   "new": false
+  },
+  {
+   "term": "지금",
+   "count": 12,
+   "burst": 5.7,
+   "new": false
+  }
+ ],
+ "top_recommended": [
+  {
+   "gallery": "해외주식갤러리",
+   "title": "환율 2000원 간절히 원하면 개추",
+   "views": 9163,
+   "recommend": 412,
+   "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=17758501&exception_mode=recommend&page=1",
+   "time_kst": "09-15 17:18"
+  },
+  {
+   "gallery": "해외주식갤러리",
+   "title": "\"아빠, 아빠는 2017년쯤에 뭐하고 있었어..?\"",
+   "views": 12861,
+   "recommend": 253,
+   "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=17757231&exception_mode=recommend&page=1",
+   "time_kst": "09-15 14:38"
+  },
+  {
+   "gallery": "해외주식갤러리",
+   "title": "\"대표님, AI 개발을 지금 당장 중단해야 합니다...\"",
+   "views": 10295,
+   "recommend": 217,
+   "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=17759333&exception_mode=recommend&page=1",
+   "time_kst": "09-15 19:11"
+  },
+  {
+   "gallery": "해외주식갤러리",
+   "title": "AI속도조절 = 성능개선 한계",
+   "views": 10032,
+   "recommend": 184,
+   "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=17754604&exception_mode=recommend&page=1",
+   "time_kst": "09-15 07:07"
+  },
+  {
+   "gallery": "해외주식갤러리",
+   "title": "트럼프, 엔트로픽 CEO에 경고. 착한척 하지마라",
+   "views": 12063,
+   "recommend": 165,
+   "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=17755692&exception_mode=recommend&page=1",
+   "time_kst": "09-15 10:55"
+  }
+ ],
+ "top_viewed": [
+  {
+   "gallery": "국내주식갤러리",
+   "title": "클래리티 법안 절차 표결, 미 상원에서 부결",
+   "views": 810,
+   "recommend": 2,
+   "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3492904&page=8",
+   "time_kst": "09-16 04:10"
+  },
+  {
+   "gallery": "국내주식갤러리",
+   "title": "환율뭐냐 시발",
+   "views": 777,
+   "recommend": 0,
+   "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3492918&page=8",
+   "time_kst": "09-16 04:39"
+  },
+  {
+   "gallery": "국내주식갤러리",
+   "title": "저 법안 부결된거 ㅈㄴ 안좋은거임",
+   "views": 710,
+   "recommend": 2,
+   "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3492891&page=8",
+   "time_kst": "09-16 03:47"
+  },
+  {
+   "gallery": "국내주식갤러리",
+   "title": "오늘 장 무섭다",
+   "views": 694,
+   "recommend": 0,
+   "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3492921&page=8",
+   "time_kst": "09-16 04:51"
+  },
+  {
+   "gallery": "국내주식갤러리",
+   "title": "야선은 도대체 뭐가 문제냐?",
+   "views": 688,
+   "recommend": 0,
+   "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3492899&page=8",
+   "time_kst": "09-16 04:03"
+  },
+  {
+   "gallery": "국내주식갤러리",
+   "title": "잘가랔ㅋㅋㅋㅋㅋㅋㅋ",
+   "views": 682,
+   "recommend": 1,
+   "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3492912&page=8",
+   "time_kst": "09-16 04:29"
+  },
+  {
+   "gallery": "국내주식갤러리",
+   "title": "드디어 옳게 된 세상이 왓구나...",
+   "views": 674,
+   "recommend": 1,
+   "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3492848&page=9",
+   "time_kst": "09-16 02:42"
+  },
+  {
+   "gallery": "국내주식갤러리",
+   "title": "미장 텐버거나옴 ㄷㄷ",
+   "views": 602,
+   "recommend": 0,
+   "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3492843&page=9",
+   "time_kst": "09-16 02:38"
+  }
+ ]
+}

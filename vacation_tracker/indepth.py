@@ -23,6 +23,7 @@ import sys
 from datetime import date, datetime, timedelta
 from pathlib import Path
 
+from holidays import HOLIDAYS
 from rules import KST, _compact
 
 HERE = Path(__file__).resolve().parent
@@ -241,8 +242,38 @@ def record(store: dict, entries: list[dict]) -> list[dict]:
 
 
 def apply_op(body: dict) -> None:
-    """페이지에서 온 op 한 건: idx-del / idx-note / idx-done."""
+    """페이지에서 온 op 한 건: idx-add / idx-del / idx-note / idx-target / idx-kind / idx-done."""
     op = str(body.get("op") or "").strip()
+    if op == "idx-add":
+        # 달력 더블클릭 기입: {"op":"idx-add","name","topic","kind","target":"YYYY-MM-DD"}
+        name = str(body.get("name") or "").strip()
+        target = str(body.get("target") or "").strip()
+        if not name or not target:
+            raise SystemExit("name과 target(YYYY-MM-DD)은 필수입니다")
+        try:
+            datetime.strptime(target, "%Y-%m-%d")
+        except ValueError as exc:
+            raise SystemExit(f"날짜 형식이 틀렸습니다(YYYY-MM-DD): {exc}")
+        now_dt = datetime.now(KST)
+        store = load_store()
+        uid = f"manual:{now_dt.strftime('%Y%m%d%H%M%S')}"
+        store["entries"][uid] = {
+            "name": name,
+            "topic": str(body.get("topic") or "").strip(),
+            "kind": str(body.get("kind") or "인뎁스").strip() or "인뎁스",
+            "target": target,
+            "target_text": "",
+            "note": str(body.get("note") or "").strip(),
+            "text": "직접 기입",
+            "done": False,
+            "needs_review": False,
+            "engine": "manual",
+            "msg_date": now_dt.isoformat(timespec="minutes"),
+            "detected_at": now_dt.isoformat(timespec="minutes"),
+        }
+        save_store(store)
+        print(f"발간계획 직접 기입: {name} {store['entries'][uid]['topic']!r} {target} ({uid})")
+        return build_page(store)
     uid = str(body.get("uid") or "").strip()
     if not uid:
         raise SystemExit("uid가 비어 있습니다")
@@ -335,6 +366,8 @@ details.sec[open]>summary{margin-bottom:10px}
 .cal td{border:1px solid #e8ecf1;vertical-align:top;padding:4px 5px;height:52px}
 .cal td.blank{background:#f4f6f9;border-color:#eef1f5}
 .cal td.today{background:#eaf2ff;box-shadow:inset 0 0 0 1px #bcd4f0}
+.cal td.hol .d{color:#d05656}
+.cal .hn{margin-left:4px;font-size:10px;color:#d05656;opacity:.85;font-weight:600}
 .cal .d{color:#8a94a0;font-size:11.5px;margin-bottom:3px}
 .chip{display:block;margin:2px 0;padding:1px 5px;border-radius:6px;background:#e8f0fe;
   color:#2b5f8a;border:1px solid #c9dcf5;font-size:11.5px;white-space:nowrap;
@@ -360,6 +393,8 @@ details.sec[open]>summary{margin-bottom:10px}
 #chip-pop .pop-acts button{background:#f5f8fb;color:#2b5f8a;border:1px solid #d4dbe3;
   border-radius:8px;padding:3px 10px;font-size:12.5px;cursor:pointer}
 #chip-pop .pop-acts button:hover{border-color:#9fb6cc}
+#chip-pop input,#chip-pop select{border:1px solid #d4dbe3;border-radius:8px;padding:3px 8px;font-size:13px;font-family:inherit;margin-top:6px;width:100%;box-sizing:border-box}
+#chip-pop .pop-acts select{width:auto}
 @media (max-width:640px){
   body{padding:18px 10px 50px}
   table.lst,table.lst thead,table.lst tbody,table.lst tr,table.lst th,table.lst td{display:block}
@@ -492,9 +527,14 @@ def _calendar(items: list[tuple[str, dict]], today_d: date) -> str:
                     continue
                 if day == today_d:
                     cls.append("today")
+                holiday = HOLIDAYS.get(day.isoformat())
+                if holiday:
+                    cls.append("hol")
+                label = (f'{day.day}<span class="hn">{holiday}</span>' if holiday
+                         else str(day.day))
                 chips = "".join(_chip(u, e) for u, e in per_day.get(day, ()))
                 cells.append(f'<td class="{" ".join(cls)}" data-date="{day.isoformat()}">'
-                             f'<div class="d">{day.day}</div>{chips}</td>')
+                             f'<div class="d">{label}</div>{chips}</td>')
             rows.append("<tr>" + "".join(cells) + "</tr>")
         head = "".join(
             f'<th class="{cls}">{label}</th>'
@@ -513,13 +553,23 @@ def _calendar(items: list[tuple[str, dict]], today_d: date) -> str:
 
 def build_page(store: dict | None = None) -> None:
     from render_page import DISPATCH_ENDPOINT
+    from attendance import _team_names
+
+    team_names = _team_names()
 
     store = store if store is not None else load_store()
     now = datetime.now(KST)
     today = now.strftime("%Y-%m-%d")
     stamp = now.strftime("%Y-%m-%d %H:%M")
 
-    items = list(store.get("entries", {}).items())
+    from render_page import former_names
+
+    former = set(former_names())
+    all_items = list(store.get("entries", {}).items())
+    former_items = sorted(((u, e) for u, e in all_items if (e.get("name") or "") in former),
+                          key=lambda x: x[1].get("target") or x[1].get("msg_date") or "",
+                          reverse=True)
+    items = [(u, e) for u, e in all_items if (e.get("name") or "") not in former]
     review = [(u, e) for u, e in items if e.get("needs_review") and not e.get("done")]
     upcoming = [(u, e) for u, e in items if not e.get("needs_review") and not e.get("done")
                 and (not e.get("target") or e["target"] >= today)]
@@ -542,15 +592,18 @@ def build_page(store: dict | None = None) -> None:
           _calendar(items, now.date()), True)}
 {_section("❓ 확인 필요", len(review), _table(review, "확인할 항목이 없습니다."), bool(review))}
 {_section("🗄️ 지난 계획 · 발간 완료", len(past), _table(past, "아직 없습니다."), False)}
+{_section("🗄️ 퇴사자", len(former_items), _table(former_items, "없습니다."), False) if former_items else ""}
 <p id="idx-status"></p>
 <p class="hint">발간 칸 ☐를 누르면 완료 처리(✅), 📅는 날짜 수정, ✏️는 메모, 🗑는 삭제.
 달력 칩은 <b>끌어다 다른 날짜에 놓으면</b> 예정일이 옮겨집니다(모바일은 📅 버튼).
+날짜 칸을 <b>더블클릭</b>하면 그 날짜로 새 발간 계획을 직접 기입할 수 있습니다.
 "인뎁스"라고 안 적어도 발간·커버리지·자료 작성 맥락이면 잡습니다 — 잘못 잡힌 건 지워 주세요.</p>
 </div>
 <script>
 const EP={json.dumps(DISPATCH_ENDPOINT)};
 const PAGE_STAMP={json.dumps(stamp)};
 const KINDS={json.dumps(KIND_OPTIONS, ensure_ascii=False)};
+const NAMES={json.dumps(team_names, ensure_ascii=False)};
 </script>
 <script>
 """
@@ -821,6 +874,43 @@ document.addEventListener('click',ev=>{
   if(chip){showPop(chip);return}
   if(!ev.target.closest('#chip-pop'))hidePop();
 });
+// 달력 더블클릭 → 그 날짜로 발간 계획 직접 기입
+document.addEventListener('dblclick',ev=>{
+  const cell=ev.target.closest('td[data-date]');if(!cell)return;
+  if(ev.target.closest('.chip'))return;  // 칩 더블클릭은 기입 아님
+  hidePop();
+  const dateStr=cell.dataset.date;
+  chipPop=document.createElement('div');chipPop.id='chip-pop';
+  const close=document.createElement('span');close.className='close';close.textContent='✕';
+  close.addEventListener('click',hidePop);
+  const t=document.createElement('div');t.className='t';t.textContent='✍️ '+dateStr+' 발간 계획 기입';
+  const topic=document.createElement('input');topic.placeholder='주제 (종목·산업)';
+  const nameSel=document.createElement('select');
+  NAMES.forEach(n=>{const o=document.createElement('option');o.textContent=n;nameSel.appendChild(o)});
+  const kindSel=document.createElement('select');
+  KINDS.forEach(k=>{const o=document.createElement('option');o.textContent=k;kindSel.appendChild(o)});
+  const btn=document.createElement('button');btn.textContent='추가';
+  btn.addEventListener('click',async()=>{
+    btn.disabled=true;
+    const payload={op:'idx-add',name:nameSel.value,topic:topic.value.trim(),
+      kind:kindSel.value,target:dateStr};
+    if(!await sendOp(payload)){btn.disabled=false;return}
+    hidePop();
+    const chip=document.createElement('span');chip.className='chip pending';
+    chip.textContent=nameSel.value+(topic.value.trim()?'\u00b7'+topic.value.trim():'');
+    cell.appendChild(chip);
+  });
+  const acts=document.createElement('div');acts.className='pop-acts';
+  acts.append(nameSel,kindSel,btn);
+  chipPop.append(close,t,topic,acts);
+  document.body.appendChild(chipPop);
+  const r=cell.getBoundingClientRect(),pw=chipPop.offsetWidth,ph=chipPop.offsetHeight;
+  let left=Math.min(Math.max(8,r.left),window.innerWidth-pw-8);
+  let top=r.bottom+6;if(top+ph>window.innerHeight-8)top=Math.max(8,r.top-ph-6);
+  chipPop.style.left=left+'px';chipPop.style.top=top+'px';
+  topic.focus();
+});
+
 document.addEventListener('keydown',ev=>{if(ev.key==='Escape')hidePop()});
 </script></body></html>
 """

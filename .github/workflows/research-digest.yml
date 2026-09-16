@@ -1,0 +1,93 @@
+name: 커버리지 리서치요약 모음
+
+# 구독 전 채널의 "[✨ 리서치 요약] …" 글에서 커버리지(조선·방산·기계) 보고서만 추려
+# 아침 08:30(KST)에 한 통으로 보낸다. 발사는 GAS 스케줄러(dispatch_proxy)가 정시에 하고,
+# 아래 크론은 무료 러너 지연(CLAUDE.md 17번)을 감안한 안전망이다 — 스크립트가
+# '오늘 이미 발송' 가드를 갖고 있어 둘이 겹쳐도 한 통만 나간다.
+on:
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: "실행 모드"
+        type: choice
+        default: run
+        options: [run, dry-run, force]
+  schedule:
+    # 평일 08:30 KST = 일~목 23:30 UTC
+    - cron: "30 23 * * 0-4"
+
+permissions:
+  contents: write
+
+jobs:
+  digest:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: 패키지 설치
+        working-directory: source_watcher
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: 계정 세션 복호화
+        env:
+          SESSION_PASSPHRASE: ${{ secrets.SESSION_PASSPHRASE }}
+        run: |
+          if [ -f source_watcher/state/session.enc ] && [ -n "$SESSION_PASSPHRASE" ]; then
+            VALUE=$(openssl enc -aes-256-cbc -pbkdf2 -iter 200000 -d \
+              -in source_watcher/state/session.enc -pass env:SESSION_PASSPHRASE)
+            echo "::add-mask::$VALUE"
+            echo "TELEGRAM_SESSION_STRING=$VALUE" >> "$GITHUB_ENV"
+          else
+            echo "세션 없음 — telegram-login.yml로 먼저 로그인하세요" >&2
+            exit 2
+          fi
+
+      - name: 모음 생성·발송
+        working-directory: source_watcher
+        env:
+          # 조선 염탐과 같은 봇(spying)으로 보낸다. 비어 있으면 기본 봇 폴백.
+          SPYING_TELEGRAM_BOT_TOKEN: ${{ secrets.SPYING_TELEGRAM_BOT_TOKEN }}
+          SPYING_TELEGRAM_CHAT_ID: ${{ secrets.SPYING_TELEGRAM_CHAT_ID }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.WATCH_TELEGRAM_BOT_TOKEN || secrets.KDEF_TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.WATCH_TELEGRAM_CHAT_ID || secrets.KDEF_TELEGRAM_CHAT_ID }}
+          TELEGRAM_API_ID: ${{ secrets.TELEGRAM_API_ID }}
+          TELEGRAM_API_HASH: ${{ secrets.TELEGRAM_API_HASH }}
+          MODE: ${{ inputs.mode || 'run' }}
+        run: |
+          FLAGS=""
+          case "$MODE" in
+            dry-run) FLAGS="--dry-run" ;;
+            force)   FLAGS="--force" ;;
+          esac
+          python research_digest.py $FLAGS
+
+      # 발송 성공 뒤에만 커밋 — 실패 run이 '오늘 보냄'을 남기면 그날 모음이 사라진다.
+      - name: 상태 커밋 및 푸시
+        if: ${{ success() && (inputs.mode || 'run') != 'dry-run' }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add source_watcher/state/research_digest.json
+          if git diff --cached --quiet; then
+            echo "변경 없음 — 커밋 생략"
+            exit 0
+          fi
+          git commit -m "chore(watch): 리서치요약 모음 상태 갱신 $(TZ=Asia/Seoul date +'%Y-%m-%d %H:%M')"
+          for i in 1 2 3 4 5; do
+            if git push origin HEAD:main; then
+              exit 0
+            fi
+            git pull --rebase --autostash origin main
+            sleep 5
+          done
+          echo "push 실패" >&2
+          exit 1

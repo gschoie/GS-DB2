@@ -39,6 +39,7 @@ const WF = {
   dart:      'dart-shiporder-bot.yml', // 조선 수주공시 → 텔레그램 (입력 필요)
   recipe:    'recipe-bot.yml',         // 유튜브 요리 숏츠 → Notion 레시피 (입력 필요)
   vacation:  'vacation-tracker.yml',   // 휴가/출장 직접 기입 (entry 입력 필요)
+  research:  'research-digest.yml',    // 커버리지 리서치요약 아침 모음
 };
 
 // 워크플로별 추가 입력. 선언한 required 입력을 빠짐없이 채워야 422가 안 난다.
@@ -155,6 +156,8 @@ const SCHEDULE = [
                      minute: 17, days: 'weekday', label: '액티브ETF 매매동향',
                      inputs: { via: 'scheduler' } },
   { wf: 'consensus', hours: [17],     minute: 0,  days: 'fri,sat', label: '코스피200 컨센' },
+  // 스크립트 자체에 '오늘 이미 발송' 가드가 있어 GitHub 크론 안전망과 겹쳐도 한 통만 간다
+  { wf: 'research',  hours: [8],      minute: 30, days: 'weekday', label: '커버리지 리서치요약 모음' },
 ];
 
 /** 5분마다 도는 본체. 목표 시각을 지난 슬롯 중 오늘 아직 안 쏜 것을 발사한다. */
