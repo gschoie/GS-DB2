@@ -1,5 +1,5 @@
 {
-  "when_utc": "2026-09-17 04:42:03Z",
+  "when_utc": "2026-09-17 05:00:43Z",
   "ok": true,
   "note": "sent",
   "chat_id_tail": "5171",
@@ -7,7 +7,7 @@
   "response": {
     "ok": true,
     "result": {
-      "message_id": 339,
+      "message_id": 340,
       "from": {
         "id": 8875725998,
         "is_bot": true,
@@ -21,8 +21,8 @@
         "username": "gschoie",
         "type": "private"
       },
-      "date": 1789620123,
-      "text": "💹 시장 수급 · 9/17(목) 13:00\nKOSPI 6,770.33 🔺0.78%\n\n개인 +607억\n외국인 -15,456억\n기관 +1,451억\n\n프로그램 -11,444억 = 차익 +1,955 · 비차익 -13,399\n\nK200선물 외인 +1,440계약 · 기관 -977계약\n\n✅ 외국인 순매수 상위 (13:42 가집계)\n(+0.1%) SK스퀘어 +378억\n(+6.4%) 삼성중공업 +351억\n(+11.8%) 한화엔진 +187억\n(+3.1%) 효성중공업 +145억\n(+12.1%) 한화시스템 +140억\n(+3.4%) 가온전선 +137억\n(+6.5%) LIG디펜스앤에어로스페이스 +106억\n\n❌ 외국인 순매도 상위\n(+0.5%) SK하이닉스 -4,170억\n(+1.0%) 삼성전자 -1,736억\n(0.0%) 삼성전자우 -1,156억\n(+3.7%) 두산 -777억\n(-1.7%) 삼성전기 -366억\n(+0.6%) DB하이텍 -219억\n(-0.6%) 삼성SDI -141억\n\n✅ 기관 순매수 상위\n(+3.7%) 두산 +115억\n(0.0%) 삼성전자우 +111억\n(+11.8%) 한화엔진 +87억\n(+6.9%) HD건설기계 +77억\n(+6.9%) 포스코인터내셔널 +77억\n(+0.7%) 하나금융지주 +66억\n(+3.4%) 한미약품 +62억\n\n❌ 기관 순매도 상위\n(+0.5%) SK하이닉스 -1,096억\n(+0.9%) 삼성전자 -488억\n(-1.7%) 삼성전기 -149억\n(+0.1%) SK스퀘어 -82억\n(+0.3%) 현대차 -62억\n(+0.2%) 기아 -58억\n(-0.3%) 에이피알 -46억\n\n상세 차트 › 대시보드\n🎴 GS Research Desk · 시장 수급",
+      "date": 1789621243,
+      "text": "💹 시장 수급 · 9/17(목) 13:00\nKOSPI 6,770.4 🔺0.78%\n\n개인 +11억\n외국인 -16,128억\n기관 +1,832억\n\n프로그램 -11,688억 = 차익 +2,300 · 비차익 -13,988\n\nK200선물 외인 +1,701계약 · 기관 -1,233계약\n\n✅ 외국인 순매수 상위 (14:00 가집계)\n(-0.5%) SK스퀘어 +376억\n(+6.4%) 삼성중공업 +351억\n(+11.1%) 한화엔진 +186억\n(+2.7%) 효성중공업 +144억\n(+11.8%) 한화시스템 +140억\n(+3.2%) 가온전선 +136억\n(+7.2%) LIG디펜스앤에어로스페이스 +107억\n\n❌ 외국인 순매도 상위\n(+0.5%) SK하이닉스 -4,170억\n(+0.8%) 삼성전자 -1,732억\n(+1.1%) 삼성전자우 -1,169억\n(+3.3%) 두산 -774억\n(-1.7%) 삼성전기 -366억\n(+0.3%) DB하이텍 -218억\n(-0.6%) 삼성SDI -141억\n\n✅ 기관 순매수 상위\n(+3.4%) 두산 +115억\n(+1.1%) 삼성전자우 +112억\n(+11.1%) 한화엔진 +87억\n(+6.9%) 포스코인터내셔널 +77억\n(+6.1%) HD건설기계 +77억\n(+0.6%) 하나금융지주 +66억\n(+3.8%) 한미약품 +63억\n\n❌ 기관 순매도 상위\n(+0.5%) SK하이닉스 -1,096억\n(+0.8%) 삼성전자 -488억\n(-1.7%) 삼성전기 -149억\n(-0.5%) SK스퀘어 -81억\n(+0.3%) 현대차 -62억\n(+0.1%) 기아 -58억\n(+0.3%) 에이피알 -46억\n\n상세 차트 › 대시보드\n🎴 GS Research Desk · 시장 수급",
       "entities": [
         {
           "offset": 3,
@@ -31,31 +31,31 @@
         },
         {
           "offset": 31,
-          "length": 8,
-          "type": "bold"
-        },
-        {
-          "offset": 52,
-          "length": 5,
-          "type": "bold"
-        },
-        {
-          "offset": 62,
-          "length": 8,
-          "type": "bold"
-        },
-        {
-          "offset": 74,
           "length": 7,
           "type": "bold"
         },
         {
-          "offset": 88,
+          "offset": 51,
+          "length": 4,
+          "type": "bold"
+        },
+        {
+          "offset": 60,
           "length": 8,
           "type": "bold"
         },
         {
-          "offset": 134,
+          "offset": 72,
+          "length": 7,
+          "type": "bold"
+        },
+        {
+          "offset": 86,
+          "length": 8,
+          "type": "bold"
+        },
+        {
+          "offset": 132,
           "length": 8,
           "type": "bold"
         },
@@ -120,112 +120,112 @@
           "type": "bold"
         },
         {
-          "offset": 401,
+          "offset": 402,
           "length": 7,
           "type": "bold"
         },
         {
-          "offset": 420,
+          "offset": 421,
           "length": 5,
           "type": "bold"
         },
         {
-          "offset": 439,
+          "offset": 440,
           "length": 5,
           "type": "bold"
         },
         {
-          "offset": 459,
+          "offset": 460,
           "length": 5,
           "type": "bold"
         },
         {
-          "offset": 479,
+          "offset": 480,
           "length": 5,
           "type": "bold"
         },
         {
-          "offset": 488,
+          "offset": 489,
           "length": 9,
           "type": "bold"
         },
         {
-          "offset": 509,
+          "offset": 510,
           "length": 5,
           "type": "bold"
         },
         {
-          "offset": 528,
+          "offset": 530,
           "length": 5,
           "type": "bold"
         },
         {
-          "offset": 548,
+          "offset": 550,
           "length": 4,
           "type": "bold"
         },
         {
-          "offset": 568,
+          "offset": 572,
           "length": 4,
           "type": "bold"
         },
         {
-          "offset": 590,
+          "offset": 592,
           "length": 4,
           "type": "bold"
         },
         {
-          "offset": 610,
+          "offset": 612,
           "length": 4,
           "type": "bold"
         },
         {
-          "offset": 628,
+          "offset": 630,
           "length": 4,
           "type": "bold"
         },
         {
-          "offset": 636,
+          "offset": 638,
           "length": 9,
           "type": "bold"
         },
         {
-          "offset": 661,
+          "offset": 663,
           "length": 7,
           "type": "bold"
         },
         {
-          "offset": 682,
+          "offset": 684,
           "length": 5,
           "type": "bold"
         },
         {
-          "offset": 701,
+          "offset": 703,
           "length": 5,
           "type": "bold"
         },
         {
-          "offset": 721,
+          "offset": 723,
           "length": 4,
           "type": "bold"
         },
         {
-          "offset": 738,
+          "offset": 740,
           "length": 4,
           "type": "bold"
         },
         {
-          "offset": 754,
+          "offset": 756,
           "length": 4,
           "type": "bold"
         },
         {
-          "offset": 772,
+          "offset": 774,
           "length": 4,
           "type": "bold"
         },
         {
-          "offset": 786,
+          "offset": 788,
           "length": 4,
           "type": "text_link",
           "url": "https://gschoie.github.io/GS-DB2/market_flow_report.html"
