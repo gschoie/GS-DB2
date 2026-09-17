@@ -1,24 +1,23 @@
 #!/usr/bin/env python3
-"""방산 브리핑 RSS판(3탄) 발행 도구 — Claude 세션 작성분·ChatGPT 앱 등록분 공용.
+"""건설기계 브리핑 GPT판(2탄) 발행 도구 — Claude 세션 작성분·ChatGPT 앱 등록분 공용.
 
-사용자가 ChatGPT(스케줄 태스크)로 받아 본 브리핑 마크다운을 리포로 넘기면,
-Gemini(defense_daily)·Claude(claude_defense)와 같은 방식으로 날짜별 아카이브
-(static/chatgpt_defense/<날짜>.md|.html) + 날짜 인덱스(chatgpt_defense_report.html)를
-만들고, 방산 채널 텔레그램으로 요약+링크를 발송한다.
+기존 건설기계 데일리(construction_daily)는 러너가 수집한 RSS·시세 inputs만 근거로
+쓰는 판이라, GPT판은 소스 관점을 달리해 **웹서치 기반**으로 간다(방산과 반대 구성 —
+방산은 웹서치판이 원조, RSS판이 3탄). 수동 등록(ChatGPT 앱 산출물)이 항상 우선이고,
+등록이 없는 날은 Claude 예약 세션(루틴 [7.5])이 웹서치로 작성한다.
 
-입력 경로 두 가지 — chatgpt-brief.yml 워크플로가 둘 다 처리한다:
-  1. 대시보드 붙여넣기 폼(인덱스 페이지 상단) → GAS dispatch_proxy(gptbrief)
-     → workflow_dispatch inputs.content  (여기엔 환경변수 CONTENT로 들어온다)
-  2. chatgpt_briefing/inbox/YYYY-MM-DD.md 파일을 main에 커밋 (push 트리거)
-     — GitHub 웹/모바일에서 파일로 올리는 보조 경로. 처리 후 inbox에서 지운다.
-     (workflow_dispatch의 문자열 입력칸은 한 줄짜리라 여러 줄 md가 뭉개진다 —
-      수동 경로는 반드시 파일로.)
-
-렌더링 규칙(표·색·링크·모바일 카드)은 claude_brief_publish.py 의 것을 그대로
-임포트해 재사용한다(표준 라이브러리만 필요).
-텔레그램(2026-09-17 변경): 방산 텔레는 통합본 한 통만 방산 채널로 나간다
-(unified_brief_publish.py --send-only, ingest 담당). 이 파일의 send_* 는
+산출물: static/chatgpt_construction/<날짜>.md|.html + chatgpt_construction_report.html
+텔레그램(2026-09-17 변경): 건기 텔레는 통합본 한 통만 매크로_공부 방으로 나간다
+(unified_construction_publish.py --send-only, ingest 담당). 이 파일의 send_* 는
 수동 재발송용 예비 경로로만 남겨둔다(워크플로에서 호출 안 함).
+
+입력 경로 두 가지 — construction-gpt.yml 워크플로가 둘 다 처리한다:
+  1. 대시보드 붙여넣기 폼(인덱스 페이지 상단) → GAS dispatch_proxy(congpt)
+     → workflow_dispatch inputs.content  (환경변수 CONTENT로 들어온다)
+  2. construction_gpt/inbox/YYYY-MM-DD.md 파일을 main에 커밋 (push 트리거)
+     — workflow_dispatch 문자열 입력칸은 한 줄짜리라 여러 줄 md가 뭉개진다.
+
+렌더링 규칙(표·색)은 construction_briefing_bot.py 의 것을 그대로 재사용한다.
 """
 from __future__ import annotations
 
@@ -31,22 +30,20 @@ from datetime import datetime
 from pathlib import Path
 from zoneinfo import ZoneInfo
 
-import claude_brief_publish as cbp  # 같은 디렉터리 — 렌더러·유틸 재사용
+import construction_briefing_bot as cbb  # 같은 디렉터리 — 렌더러·텔레 유틸 재사용
 
 KST = ZoneInfo("Asia/Seoul")
-ROOT = Path(__file__).resolve().parent           # defense_briefing/
+ROOT = Path(__file__).resolve().parent           # construction_briefing/
 REPO = ROOT.parent
 DASH_STATIC = REPO / "telegram_research_dashboard" / "static"
-ARCHIVE_DIR = DASH_STATIC / "chatgpt_defense"
-INDEX_PAGE = DASH_STATIC / "chatgpt_defense_report.html"
-INBOX_DIR = REPO / "chatgpt_briefing" / "inbox"
-# --ingest가 처리한 날짜 목록. 커밋 대상이 아니며(루트에 두고 add 안 함),
-# 뒤이은 --send-processed 스텝이 읽어 그 날짜들만 발송한다.
-PROCESSED = REPO / ".gpt_brief_processed.json"
+ARCHIVE_DIR = DASH_STATIC / "chatgpt_construction"
+INDEX_PAGE = DASH_STATIC / "chatgpt_construction_report.html"
+INBOX_DIR = REPO / "construction_gpt" / "inbox"
+# --ingest가 처리한 날짜 목록 (커밋 대상 아님) — --send-processed가 읽어 발송
+PROCESSED = REPO / ".gpt_construction_processed.json"
 DATE_RE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
 
-# app.js DISPATCH_ENDPOINT · vacation_tracker/render_page.py 와 같은 주소 —
-# GAS 웹앱을 새로 배포(주소 변경)하면 세 곳을 같이 고칠 것.
+# app.js DISPATCH_ENDPOINT 와 같은 주소 — GAS 웹앱 새 배포(주소 변경) 시 같이 고칠 것.
 DISPATCH_ENDPOINT = "https://script.google.com/macros/s/AKfycbx3RjIjtlO2Z6fIYo2T3LhJrFg9Wp2hS7dMS3Is52-JVF1hizoCWewbQ1uM_v5sdhR2jw/exec"
 
 
@@ -54,21 +51,26 @@ def today_kst() -> str:
     return datetime.now(KST).strftime("%Y-%m-%d")
 
 
+def date_label(date_str: str) -> str:
+    d = datetime.strptime(date_str, "%Y-%m-%d")
+    return f"{date_str} ({'월화수목금토일'[d.weekday()]})"
+
+
 # ── 아카이브 페이지 + 인덱스 ──────────────────────────────────────────────
 
 def write_archive(date_str: str) -> None:
     md_report = (ARCHIVE_DIR / f"{date_str}.md").read_text(encoding="utf-8")
-    body = cbp.report_to_page_html(md_report)
+    body = cbb.report_to_page_html(md_report)
     page = f"""<!DOCTYPE html><html lang="ko"><head><meta charset="utf-8"><base target="_blank">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>방산 브리핑 RSS판 {date_str}</title><style>{cbp.PAGE_CSS}</style></head>
+<title>건설기계 브리핑 GPT판 {date_str}</title><style>{cbb.PAGE_CSS}</style></head>
 <body><div class="wrap">
-<h1>🧠 글로벌 방산 브리핑 (RSS판)</h1>
-<div class="meta">기준: {cbp.date_label(date_str)} · 생성: Claude 예약 세션 — 구글뉴스 RSS(24h)+yfinance 확정 시세만 근거(제미나이판과 같은 지침)로 쓴 3탄 · 수동 등록분은 ChatGPT 앱 산출물</div>
+<h1>🧠 글로벌 건설기계 브리핑 (GPT)</h1>
+<div class="meta">기준: {date_label(date_str)} · 생성: Claude 예약 세션 — 웹서치 기반 2탄(기존 데일리는 RSS·확정시세 기반) · 수동 등록분은 ChatGPT 앱 산출물</div>
 {body}
 </div></body></html>"""
     (ARCHIVE_DIR / f"{date_str}.html").write_text(page, encoding="utf-8")
-    print(f"[아카이브] chatgpt_defense/{date_str}.html 생성")
+    print(f"[아카이브] chatgpt_construction/{date_str}.html 생성")
 
 
 def write_index() -> None:
@@ -77,14 +79,14 @@ def write_index() -> None:
     dates_js = json.dumps(dates, ensure_ascii=False)
     index = f"""<!DOCTYPE html><html lang="ko"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>방산 브리핑 RSS판</title><style>
-{cbp.PAGE_CSS}
+<title>건설기계 브리핑 GPT판</title><style>
+{cbb.PAGE_CSS}
 .bar{{display:flex;gap:10px;align-items:center;max-width:860px;margin:0 auto 10px;flex-wrap:wrap}}
 .bar h1{{font-size:17px;margin:0;flex:1;min-width:200px}}
 select,button{{background:#161d29;color:#d8dee9;border:1px solid #2c3a52;border-radius:8px;
   padding:7px 12px;font-size:13.5px;cursor:pointer}}
-iframe{{width:100%;height:calc(100vh - 150px);border:1px solid #223046;border-radius:10px;background:#0d1117}}
-details.paste{{max-width:860px;margin:0 auto 12px;border:1px solid #223046;border-radius:10px;background:#111825}}
+iframe{{width:100%;height:calc(100vh - 150px);border:1px solid #3a3046;border-radius:10px;background:#0d1117}}
+details.paste{{max-width:860px;margin:0 auto 12px;border:1px solid #3a3046;border-radius:10px;background:#111825}}
 details.paste summary{{cursor:pointer;padding:9px 14px;color:#c9a86a;font-size:13.5px}}
 .paste-body{{padding:0 14px 12px;display:flex;flex-direction:column;gap:8px}}
 .paste-body textarea{{width:100%;box-sizing:border-box;min-height:180px;background:#0d1117;color:#d8dee9;
@@ -95,7 +97,7 @@ details.paste summary{{cursor:pointer;padding:9px 14px;color:#c9a86a;font-size:1
 .hint{{font-size:11.5px;color:#66748a}}
 </style></head><body>
 <div class="bar">
-  <h1>🧠 글로벌 방산 브리핑 (RSS판)</h1>
+  <h1>🧠 글로벌 건설기계 브리핑 (GPT)</h1>
   <button id="prev" title="이전 날짜">◀</button>
   <select id="dsel"></select>
   <button id="next" title="다음 날짜">▶</button>
@@ -108,11 +110,11 @@ details.paste summary{{cursor:pointer;padding:9px 14px;color:#c9a86a;font-size:1
       <input id="p-date" type="date">
       <button id="p-btn" onclick="submitBrief()">발행 → 대시보드</button>
     </div>
-    <textarea id="p-md" placeholder="ChatGPT가 만든 브리핑 마크다운 전문을 그대로 붙여넣으세요"></textarea>
+    <textarea id="p-md" placeholder="ChatGPT가 만든 건설기계 브리핑 마크다운 전문을 그대로 붙여넣으세요"></textarea>
     <p id="paste-status"></p>
     <p class="hint">같은 날짜로 다시 등록하면 그 날짜 페이지가 새 내용으로 교체됩니다.
-    텔레그램은 통합본 한 통만 방산 채널로 나갑니다(개별 판 발송 없음).
-    붙여넣기가 안 되는 환경에서는 리포의 <code>chatgpt_briefing/inbox/YYYY-MM-DD.md</code> 파일로 올려도 됩니다.</p>
+    텔레그램은 통합본 한 통만 매크로_공부 방으로 나갑니다(GPT판 개별 발송 없음).
+    붙여넣기가 안 되는 환경에서는 리포의 <code>construction_gpt/inbox/YYYY-MM-DD.md</code> 파일로 올려도 됩니다.</p>
   </div>
 </details>
 <iframe id="frame" title="브리핑"></iframe>
@@ -121,7 +123,7 @@ const DATES={dates_js};
 const EP={json.dumps(DISPATCH_ENDPOINT)};
 const sel=document.getElementById('dsel'),fr=document.getElementById('frame');
 DATES.forEach(d=>{{const o=document.createElement('option');o.value=d;o.textContent=d+' ('+'일월화수목금토'[new Date(d+'T00:00:00').getDay()]+')';sel.appendChild(o)}});
-function load(){{fr.src='chatgpt_defense/'+sel.value+'.html'}}
+function load(){{fr.src='chatgpt_construction/'+sel.value+'.html'}}
 sel.onchange=load;
 document.getElementById('prev').onclick=()=>{{if(sel.selectedIndex<DATES.length-1){{sel.selectedIndex++;load()}}}};
 document.getElementById('next').onclick=()=>{{if(sel.selectedIndex>0){{sel.selectedIndex--;load()}}}};
@@ -135,7 +137,7 @@ async function submitBrief(){{
   if(!date){{st.textContent='⚠ 날짜를 선택하세요';return}}
   btn.disabled=true;st.textContent='전송 중…';
   try{{
-    const r=await fetch(EP,{{method:'POST',body:JSON.stringify({{workflow:'gptbrief',date:date,content:md}})}});
+    const r=await fetch(EP,{{method:'POST',body:JSON.stringify({{workflow:'congpt',date:date,content:md}})}});
     try{{const d=await r.json();
       if(d&&d.ok===false){{st.textContent='⚠ 거절 '+(d.code||'?')+' — '+(d.error||'GAS 프록시 확인 필요');btn.disabled=false;return}}
     }}catch(e){{}}
@@ -145,7 +147,7 @@ async function submitBrief(){{
     if(isNew){{
       let n=0;const t=setInterval(async()=>{{
         n++;if(n>20){{clearInterval(t);return}}
-        try{{const h=await fetch('chatgpt_defense/'+date+'.html',{{method:'HEAD',cache:'no-store'}});
+        try{{const h=await fetch('chatgpt_construction/'+date+'.html',{{method:'HEAD',cache:'no-store'}});
           if(h.ok){{clearInterval(t);location.reload()}}}}catch(e){{}}
       }},20000);
     }}
@@ -153,7 +155,7 @@ async function submitBrief(){{
 }}
 </script></body></html>"""
     INDEX_PAGE.write_text(index, encoding="utf-8")
-    print(f"[인덱스] chatgpt_defense_report.html 갱신 (누적 {len(dates)}일)")
+    print(f"[인덱스] chatgpt_construction_report.html 갱신 (누적 {len(dates)}일)")
 
 
 # ── 입력 수집 (폼 content 또는 inbox 파일) ────────────────────────────────
@@ -168,7 +170,7 @@ def ingest() -> list[str]:
             date_str = today_kst()
         (ARCHIVE_DIR / f"{date_str}.md").write_text(content + "\n", encoding="utf-8")
         dates.append(date_str)
-        print(f"[입력] 폼 content → chatgpt_defense/{date_str}.md ({len(content)}자)")
+        print(f"[입력] 폼 content → chatgpt_construction/{date_str}.md ({len(content)}자)")
     elif INBOX_DIR.is_dir():
         for f in sorted(INBOX_DIR.glob("*.md")):
             if f.name.lower().startswith("readme"):
@@ -181,7 +183,7 @@ def ingest() -> list[str]:
             (ARCHIVE_DIR / f"{date_str}.md").write_text(body + "\n", encoding="utf-8")
             f.unlink()  # 처리한 inbox 파일은 지운다 (커밋 스텝이 삭제까지 반영)
             dates.append(date_str)
-            print(f"[입력] inbox/{f.name} → chatgpt_defense/{date_str}.md ({len(body)}자)")
+            print(f"[입력] inbox/{f.name} → chatgpt_construction/{date_str}.md ({len(body)}자)")
     if not dates:
         print("[입력] 처리할 브리핑 없음 (CONTENT 비어 있고 inbox도 빈 상태)")
     for d in dict.fromkeys(dates):
@@ -191,7 +193,7 @@ def ingest() -> list[str]:
     return dates
 
 
-# ── 텔레그램 (방산 채널 — 시크릿 매핑은 워크플로에서) ─────────────────────
+# ── 텔레그램 (@gs_macro_bot → 'gb 매크로_공부' — 시크릿 매핑은 워크플로에서) ──
 
 def send_telegram(date_str: str) -> None:
     token = os.environ.get("TELEGRAM_BOT_TOKEN", "").strip()
@@ -203,16 +205,12 @@ def send_telegram(date_str: str) -> None:
 
     md_report = (ARCHIVE_DIR / f"{date_str}.md").read_text(encoding="utf-8")
     base_url = os.environ.get("DASHBOARD_BASE_URL", "https://gschoie.github.io/GS-DB2")
-    mode = os.environ.get("TELEGRAM_MODE", "summary")  # summary | full
-    md_body = md_report if mode == "full" else cbp.extract_summary(md_report)
-    body = cbp.to_telegram_html(md_body)
-    header = f"🧠 <b>글로벌 방산 브리핑 (RSS판)</b> | {cbp.date_label(date_str)}\n"
-    footer = ""
-    if mode != "full":
-        footer = (f'\n\n📊 <a href="{base_url}/chatgpt_defense/{date_str}.html">'
-                  "전체 브리핑 보기</a>\n"
-                  "<i>발송 직후엔 반영 중일 수 있어요 — 2~3분 뒤 열어주세요</i>")
-    chunks = cbp.split_chunks(header + body + footer)
+    body = cbb.to_telegram_html(cbb.extract_summary(md_report))
+    header = f"🧠 <b>글로벌 건설기계 브리핑 (GPT)</b> | {date_label(date_str)}\n"
+    footer = (f'\n\n📊 <a href="{base_url}/chatgpt_construction/{date_str}.html">'
+              "전체 브리핑 보기</a>\n"
+              "<i>발송 직후엔 반영 중일 수 있어요 — 2~3분 뒤 열어주세요</i>")
+    chunks = cbb.split_chunks(header + body + footer)
     total = len(chunks)
     for i, chunk in enumerate(chunks, 1):
         suffix = f"\n\n({i}/{total})" if total > 1 else ""

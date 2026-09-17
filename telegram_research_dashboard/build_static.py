@@ -175,10 +175,15 @@ def build() -> Path:
         summary_md = "\n".join(md_lines[:end]).strip()
         if summary_md:
             unified_brief = {"date": latest.stem, "summary": summary_md}
-    # 건설기계 브리핑: static/construction_daily/<날짜>.md — 같은 방식으로 요약 카드용 절단
+    # 건설기계 브리핑: 통합본(construction_unified) 우선 — 단 데일리가 더 최신 날짜면
+    # (아침 통합본 발행 전) 그날은 데일리로 표시한다.
     construction_brief = {}
-    ndir = ROOT / "static" / "construction_daily"
-    nmd_files = sorted(ndir.glob("????-??-??.md")) if ndir.is_dir() else []
+    udir2 = ROOT / "static" / "construction_unified"
+    ddir2 = ROOT / "static" / "construction_daily"
+    uni_files = sorted(udir2.glob("????-??-??.md")) if udir2.is_dir() else []
+    day_files = sorted(ddir2.glob("????-??-??.md")) if ddir2.is_dir() else []
+    con_unified = bool(uni_files) and (not day_files or uni_files[-1].stem >= day_files[-1].stem)
+    nmd_files = uni_files if con_unified else day_files
     if nmd_files:
         latest = nmd_files[-1]
         md_lines = latest.read_text(encoding="utf-8").splitlines()
@@ -186,7 +191,8 @@ def build() -> Path:
         end = heads[1] if len(heads) >= 2 else len(md_lines)
         summary_md = "\n".join(md_lines[:end]).strip()
         if summary_md:
-            construction_brief = {"date": latest.stem, "summary": summary_md}
+            construction_brief = {"date": latest.stem, "summary": summary_md,
+                                  "unified": con_unified}
     # 친환경 에너지·FDC 브리핑: static/energy_daily/<날짜>.md — 같은 방식으로 요약 카드용 절단
     energy_brief = {}
     edir = ROOT / "static" / "energy_daily"
@@ -323,6 +329,18 @@ def build() -> Path:
     unified_index = ROOT / "static" / "defense_unified_report.html"
     if unified_index.exists():
         shutil.copy2(unified_index, OUTPUT.parent / "defense_unified_report.html")
+    congpt_index = ROOT / "static" / "chatgpt_construction_report.html"
+    if congpt_index.exists():
+        shutil.copy2(congpt_index, OUTPUT.parent / "chatgpt_construction_report.html")
+    congpt_dir = ROOT / "static" / "chatgpt_construction"
+    if congpt_dir.is_dir():
+        shutil.copytree(congpt_dir, OUTPUT.parent / "chatgpt_construction", dirs_exist_ok=True)
+    conuni_index = ROOT / "static" / "construction_unified_report.html"
+    if conuni_index.exists():
+        shutil.copy2(conuni_index, OUTPUT.parent / "construction_unified_report.html")
+    conuni_dir = ROOT / "static" / "construction_unified"
+    if conuni_dir.is_dir():
+        shutil.copytree(conuni_dir, OUTPUT.parent / "construction_unified", dirs_exist_ok=True)
     unified_dir = ROOT / "static" / "defense_unified"
     if unified_dir.is_dir():
         shutil.copytree(unified_dir, OUTPUT.parent / "defense_unified", dirs_exist_ok=True)

@@ -1,9 +1,11 @@
 #!/usr/bin/env python3
 """글로벌 방산 주간 정리본 봇.
 
-매주 토요일 KST 11:50 실행. 지난 7일의 아침 브리핑 2종
-(defense_daily = Gemini판, claude_defense = Claude판)의 마크다운 원문을 모아
-Gemini가 주간 정리본 1편을 작성한다. 주간 등락률은 yfinance로 확정 조회해
+매주 토요일 KST 11:50 실행. 지난 7일의 아침 브리핑 마크다운 원문을 모아
+Gemini가 주간 정리본 1편을 작성한다. 소스는 날짜별로 **통합본
+(defense_unified — 제미나이·클로드·RSS 3판 합본, 2026-09-17 신설) 우선**,
+통합본이 없는 날짜만 기존 2종(defense_daily = Gemini판,
+claude_defense = Claude판)으로 보충한다. 주간 등락률은 yfinance로 확정 조회해
 서술이 아닌 데이터로 제공한다 (일간 봇과 같은 원칙).
 
 산출물:
@@ -42,10 +44,12 @@ from defense_briefing_bot import (
 KST = ZoneInfo("Asia/Seoul")
 ROOT = Path(__file__).resolve().parent
 DASH_STATIC = ROOT.parent / "telegram_research_dashboard" / "static"
+# 통합본(3판 합본)이 없는 날짜에만 쓰는 폴백 소스
 DAILY_DIRS = [
     ("Gemini판", DASH_STATIC / "defense_daily"),
     ("Claude판", DASH_STATIC / "claude_defense"),
 ]
+UNIFIED_DIR = DASH_STATIC / "defense_unified"
 WEEKLY_DIR = DASH_STATIC / "defense_weekly"
 INDEX_PAGE = DASH_STATIC / "defense_weekly_report.html"
 
@@ -56,13 +60,21 @@ LAST_USED_MODEL = MODEL
 # ── 입력 수집 ──────────────────────────────────────────────────────────────
 
 def collect_daily_briefs(now: datetime, days: int = 7) -> tuple[str, list[str]]:
-    """지난 days일의 일간 브리핑 md를 (본문 텍스트, 사용된 날짜 목록)으로 반환."""
+    """지난 days일의 일간 브리핑 md를 (본문 텍스트, 사용된 날짜 목록)으로 반환.
+
+    날짜별로 통합본(defense_unified)이 있으면 그 한 편만 쓰고 — 판간 중복
+    제거·[상충] 병기가 이미 돼 있다 — 없는 날짜만 기존 2종으로 보충한다.
+    """
     wanted = [(now - timedelta(days=offset)).strftime("%Y-%m-%d")
               for offset in range(days - 1, -1, -1)]
     blocks, used_dates = [], []
     for date_str in wanted:
-        for label, directory in DAILY_DIRS:
-            path = directory / f"{date_str}.md"
+        unified = UNIFIED_DIR / f"{date_str}.md"
+        if unified.exists():
+            sources = [("통합본", unified)]
+        else:
+            sources = [(label, d / f"{date_str}.md") for label, d in DAILY_DIRS]
+        for label, path in sources:
             if not path.exists():
                 continue
             text = path.read_text(encoding="utf-8").strip()
@@ -139,7 +151,7 @@ SYSTEM_PROMPT = """당신은 글로벌 방산 섹터를 담당하는 증권사 �
 [필수 원칙]
 - **사실관계는 함께 제공되는 [지난 7일 데일리 브리핑 모음]에 있는 내용만 근거로 쓰세요.** 모음에 없는 사건을 당신의 기억에서 꺼내 쓰는 것을 절대 금지합니다.
 - 같은 사건이 여러 날 반복 언급되면 한 번만, 가장 진전된 내용으로 정리하고 최초 보도일(월/일)을 적으세요.
-- Gemini판과 Claude판 두 브리핑이 같은 사건을 다르게 서술하면 더 구체적인 쪽을 따르되, 사실이 상충하면 "[상충]"을 표기하고 양쪽을 병기하세요.
+- 모음에는 날짜별로 통합본 1편, 또는 (통합본이 없던 날짜는) Gemini판·Claude판 2편이 섞여 있습니다. 여러 편이 같은 사건을 다르게 서술하면 더 구체적인 쪽을 따르되, 사실이 상충하면 "[상충]"을 표기하고 양쪽을 병기하세요. 통합본 안에 이미 붙은 "[상충]" 병기와 (제)/(클)/(GPT) 판 표기는 사건을 옮길 때 그대로 유지하세요(임의로 한쪽을 판정하지 말 것).
 - 주간 등락률 수치는 반드시 [확정 주간 시세표]의 값을 사용하세요. 데일리 브리핑 속 일간 등락률을 합산·추정해 주간 수치를 만들지 마세요.
 - 일간 브리핑에 있던 원문 링크는 주간 정리본에서도 핵심 사건 위주로 최대 15개까지 [매체명](URL) 형식으로 유지하세요.
 - 확인되지 않은 보도·루머는 "[미확인]" 표시를 유지하세요.
@@ -230,7 +242,7 @@ def write_archive(md_report: str, period_label: str, now: datetime) -> None:
 <title>글로벌 방산 주간정리 {date_str}</title><style>{PAGE_CSS}</style></head>
 <body><div class="wrap">
 <h1>🗓️ 글로벌 방산 주간 정리</h1>
-<div class="meta">기간: {period_label} · 생성: {now.strftime('%Y-%m-%d %H:%M')} KST · Gemini({LAST_USED_MODEL}) + 데일리 브리핑 2종(제미나이·클로드) + yfinance 주간 시세</div>
+<div class="meta">기간: {period_label} · 생성: {now.strftime('%Y-%m-%d %H:%M')} KST · Gemini({LAST_USED_MODEL}) + 데일리 브리핑(통합본 우선, 없는 날짜는 제미나이·클로드 2종) + yfinance 주간 시세</div>
 {body}
 </div></body></html>"""
     (WEEKLY_DIR / f"{date_str}.html").write_text(page, encoding="utf-8")

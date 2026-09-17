@@ -1,8 +1,10 @@
 #!/usr/bin/env python3
 """글로벌 건설기계 주간 정리본 봇 (weekly_defense_bot과 동일 골격).
 
-매주 토요일 KST 12:10 실행. 지난 7일의 건설기계 데일리 브리핑
-(construction_daily) 마크다운을 모아 Gemini가 주간 정리본 1편을 작성한다.
+매주 토요일 KST 12:10 실행. 지난 7일의 건설기계 브리핑 마크다운을 모아
+Gemini가 주간 정리본 1편을 작성한다. 소스는 날짜별로 **통합본
+(construction_unified — 데일리+GPT판 합본) 우선**, 통합본이 없는 날짜만
+데일리(construction_daily)로 보충한다.
 주간 등락률(약 5거래일)과 매크로 주간 변화는 yfinance로 확정 조회한다.
 
 산출물:
@@ -43,6 +45,7 @@ KST = ZoneInfo("Asia/Seoul")
 ROOT = Path(__file__).resolve().parent
 DASH_STATIC = ROOT.parent / "telegram_research_dashboard" / "static"
 DAILY_DIR = DASH_STATIC / "construction_daily"
+UNIFIED_DIR = DASH_STATIC / "construction_unified"
 WEEKLY_DIR = DASH_STATIC / "construction_weekly"
 INDEX_PAGE = DASH_STATIC / "construction_weekly_report.html"
 
@@ -58,7 +61,10 @@ def collect_daily_briefs(now: datetime, days: int = 7) -> tuple[str, list[str]]:
               for offset in range(days - 1, -1, -1)]
     blocks, used_dates = [], []
     for date_str in wanted:
-        path = DAILY_DIR / f"{date_str}.md"
+        # 통합본(중복 제거·[상충] 병기 완료)이 있으면 그 한 편만, 없으면 데일리 폴백
+        path = UNIFIED_DIR / f"{date_str}.md"
+        if not path.exists():
+            path = DAILY_DIR / f"{date_str}.md"
         if not path.exists():
             continue
         text = path.read_text(encoding="utf-8").strip()

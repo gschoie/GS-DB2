@@ -428,5 +428,47 @@
       Apps Script 재붙여넣기 필요 — NotebookLM 전용 별도 프로젝트).
     - claude-brief-ingest가 defense_unified도 나름(경로별 관대 체크아웃, 텔레 가드 없음).
       build_static 복사·unifiedBrief 추출 추가. deploy는 기존 ingest workflow_run 경로 그대로.
+    - **방산 주간정리 소스 전환** (9/17): weekly_defense_bot의 지난 7일 수집을 날짜별
+      **통합본 우선, 통합본 없는 날짜만 기존 2종(제미나이·클로드) 보충**으로 변경 —
+      통합본 아카이브가 9/17부터라 첫 몇 주는 혼합, 이후 자연히 통합본 100%.
+      SYSTEM_PROMPT에 (제)/(클)/(GPT)·[상충] 표기 유지 지시 추가.
+
+26. **건설기계 GPT판 + 통합본 신설 / 노션 방산 통합본 전환** (9/17): 방산과 동일 구성으로 확장.
+    - GPT판(`static/chatgpt_construction/` + `chatgpt_construction_report.html`,
+      `construction_briefing/gpt_construction_publish.py`): 수동 등록(인덱스 ✍️ 폼 → GAS
+      `congpt` 라우트 → `construction-gpt.yml` workflow_dispatch / `construction_gpt/inbox/*.md`
+      push) 우선, 없는 날은 세션 루틴 [7.5]가 **웹서치 기반**으로 작성 — 기존 데일리가
+      RSS·확정시세 기반이라 방산과 반대 구성으로 차별화. ChatGPT 앱에 넣을 지침 정본은
+      `construction_gpt/CHATGPT_PROMPT.md`(봇 SYSTEM_PROMPT의 웹서치 개작판).
+      텔레는 @gs_macro_bot('gb 매크로_공부') — `CONGPT_TELEGRAM_BOT_TOKEN/CHAT_ID` 시크릿
+      필요(미설정이면 발송만 생략, 발행은 정상).
+    - 통합본(`static/construction_unified/` + `construction_unified_report.html`,
+      `unified_construction_publish.py`, 루틴 [7.6]): 데일리+GPT 2판 합본(같은 사건 1회·
+      (클)/(GPT) 표기·[상충] 병기), 텔레 없음. 오늘의 요약 건기 카드(constructionBrief —
+      통합본 우선, 데일리가 더 최신 날짜면 데일리 표시, unified 플래그로 링크 분기)와
+      노션 입력(제목 "건설기계 브리핑 통합본(2AI) …")의 단일 소스.
+      주간정리(weekly_construction_bot)도 통합본 우선·데일리 폴백으로 전환.
+    - 사이드바 `🏗️ 글로벌건기.브리핑` 서브메뉴{(통합)·(클)·(GPT)}. claude-brief-ingest가
+      두 산출물도 나름(send_congpt 텔레 가드). deploy-pages workflow_run에
+      "건설기계 GPT 브리핑" 추가. **GAS 정본 갱신 필요** — dispatch_proxy.gs 재붙여넣기 +
+      '배포 관리 → 새 버전'(새 배포 금지).
+    - 방산 노션 아카이브도 9/18부터 통합본으로 전환: 루틴 노션 단계를 통합본 발행 뒤([6.6])로
+      옮기고 제목 "방산 브리핑 통합본(3AI) YYYY-MM-DD(요일)"·icon 🛡️·defense_unified 링크.
+      결측 시 클로드판 폴백(기존 제목). 건기 노션도 동일 원리(과거 캐치업은 데일리 그대로).
+    - **가동 확인** (9/17 오후): 사용자 GAS 재붙여넣기 + CONGPT 시크릿 등록 완료 →
+      첫 GPT판(9/17)을 세션이 웹서치로 실발행, ingest 성공·매크로_공부 방 텔레 도착까지
+      E2E 검증("1개 메시지 전송 완료" 로그). 첫 통합본(9/17)도 세션이 수동 실행으로
+      발행·카드 전환까지 검증. 사이드바 라벨은 `┗ 건기.Claude`/`┗ 건기.GPT`로
+      축약(PR #249). ChatGPT 앱은 예약 태스크 결과를 내보내는 API가 없어 **앱 산출물
+      등록은 언제나 수동**(폼/inbox) — 등록이 없으면 세션 자동판이 기본이고, 아침 [7.5]
+      이후 늦게 등록하면 GPT판 페이지만 교체되고 그날 합본에는 반영 안 됨.
+    - **텔레 = 섹터당 통합본 한 통** (9/17 저녁 변경): 건기에 이어 방산도 통일.
+      건기: 매크로_공부 방 발송을 GPT판 → 통합본으로(send_conuni 가드,
+      `unified_construction_publish.py --send-only`, CONGPT_TELEGRAM_*).
+      방산: 제미나이(defense-briefing.yml 시크릿 제거+봇 스킵 가드)·클(CLAUDE_TELEGRAM_*)·
+      RSS판(chatgpt-brief.yml 스텝 제거) 개별 발송 전부 끄고, ingest가 **방산 통합본**
+      한 통을 KDEF_TELEGRAM_*로 발송(send_duni 가드, `unified_brief_publish.py --send-only`).
+      CLAUDE_TELEGRAM_*·GPT_TELEGRAM_* 시크릿은 미사용 잔존. 주간정리 텔레(토, KDEF)는 유지.
+      두 폼(방산 RSS판·건기 GPT판) 문구 '발행 → 대시보드'로 정정.
 
 이후 작업은 git log와 이 파일을 갱신하며 이어간다.
