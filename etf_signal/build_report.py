@@ -507,12 +507,12 @@ def weekly_html(end=None):
     # 진입 트리거가 아니라 '가던 방향이 굳었다'는 확인이므로 골든/데드와 아이콘(⚡)은
     # 구분해 두고, 읽는 사람이 어느 편인지만 바로 알게 한다.
     up_adx = lambda s: bool(s.get("adx_up"))
-    for label, picked, icon, side in (
+    for gi, (label, picked, icon, side) in enumerate((
             ("추세(매수)", tg._tally(days, "alert_adx", up_adx), "⚡", "pos"),
             ("매수", tg._tally(days, "alert"), "🟢", "pos"),
             ("매도", tg._tally(days, "alert_sell"), "🔴", "neg"),
             ("추세(매도)", tg._tally(days, "alert_adx",
-                                  lambda s: not up_adx(s)), "⚡", "neg")):
+                                  lambda s: not up_adx(s)), "⚡", "neg"))):
         # 추세는 강도(25 강력 → 20 확인)가 먼저다 — 일별 표의 정렬과 맞춘다.
         is_adx = label.startswith("추세")
         since = tg._since_signal(days, picked)
@@ -521,7 +521,7 @@ def weekly_html(end=None):
             stage = (kv[1]["last"].get("adx_stage") or 0) if _adx else 0
             return (-stage, -len(kv[1]["days"]), kv[1]["name"])
 
-        for code, r in sorted(picked.items(), key=order):
+        for ri, (code, r) in enumerate(sorted(picked.items(), key=order)):
             # 신호가 뜬 날 종가 → 기준일 종가. 창 첫날 대비로 재면 마지막 날 뜬
             # 신호에도 그 앞 9거래일이 섞여 '신호가 일한 구간'이 안 보인다.
             move = since.get(code)
@@ -531,23 +531,33 @@ def weekly_html(end=None):
             move_td = "당일" if fresh else ("—" if move is None else
                                            format(move, "+.1f") + "%")
             # td.r 은 우측정렬 규칙이라 색이 안 붙는다 — 색은 전역 .pos/.neg 로 준다.
-            cls = " class=\"r\"" if (fresh or move is None or move == 0) else \
-                  " class=\"r " + ("pos" if move > 0 else "neg") + "\""
-            stage = r["last"].get("adx_stage") if label.startswith("추세") else 0
+            cls = "r" if (fresh or move is None or move == 0) else \
+                  "r " + ("pos" if move > 0 else "neg")
+            # 정렬용 값. 경과가 없는 행(당일·—)은 값을 비워 맨 아래로 내린다.
+            mv = "" if (fresh or move is None) else format(move, ".4f")
+            stage = r["last"].get("adx_stage") if is_adx else 0
             badge = ('<span class="mini bolt2">25↑</span>' if stage == 2 else
                      '<span class="mini bolt1">20↑</span>' if stage == 1 else "")
+            # 종류 칸의 정렬값은 '그룹 번호 + 그룹 안 순서' — 이 열로 오름차순
+            # 정렬하면 기본 배치(추세매수→매수→매도→추세매도)로 정확히 되돌아온다.
+            ord_v = str(gi) + "-" + format(ri, "03d")
+            last_day = r["dates"][-1] if r.get("dates") else None
             # 종목 칸은 일별 표와 같은 구성 — 이름은 네이버 차트로, 옆에 '추세' 버튼
             # (모달 차트)과 스파크라인. 여기서 눈에 걸린 종목을 바로 열어보게 한다.
             s = r["last"]
             rows.append(
-                "<tr><td class=\"" + side + "\">" + icon + " " + esc(label) + badge + "</td>"
-                "<td class=\"etf\"><div class=\"etf-row\"><b>" + name_link(s) + "</b>"
+                "<tr><td class=\"" + side + "\" data-v=\"" + ord_v + "\">"
+                + icon + " " + esc(label) + badge + "</td>"
+                "<td class=\"etf\" data-v=\"" + esc(r["name"]) + "\">"
+                "<div class=\"etf-row\"><b>" + name_link(s) + "</b>"
                 "<button class=\"btn-chart\" data-code=\"" + esc(str(s.get("code") or "")) +
                 "\" title=\"최근 120거래일 가격 · 신호 발생 시점\">추세</button></div></td>"
-                "<td class=\"grp\">" + esc(r["group"]) + mini_spark(s, 46, 13) + "</td>"
-                "<td>" + esc(_when(r)) + "</td>"
-                "<td>" + str(len(r["days"])) + "회</td>"
-                "<td" + cls + ">" + move_td + "</td></tr>")
+                "<td class=\"grp\" data-v=\"" + esc(r["group"]) + "\">"
+                + esc(r["group"]) + mini_spark(s, 46, 13) + "</td>"
+                "<td data-v=\"" + (last_day.isoformat() if last_day else "") + "\">"
+                + esc(_when(r)) + "</td>"
+                "<td data-v=\"" + str(len(r["days"])) + "\">" + str(len(r["days"])) + "회</td>"
+                "<td class=\"" + cls + "\" data-v=\"" + mv + "\">" + move_td + "</td></tr>")
 
     # '최근'이라고 쓰면 과거 일자를 조회할 때 거짓말이 된다 — 창의 끝을 날짜로 말한다.
     span = format(days[0][0], "%m/%d") + "~" + format(days[-1][0], "%m/%d")
@@ -558,8 +568,12 @@ def weekly_html(end=None):
         body = "<p class=\"sub\">이 기간 새 신호 없음 ✅</p>"
     else:
         body = ("<div class=\"tablewrap\"><table class=\"board\">"
-                "<thead><tr><th>종류</th><th>종목</th><th>그룹</th><th>발생일</th>"
-                "<th>횟수</th><th class=\"r\">신호 후</th></tr></thead><tbody>"
+                "<thead><tr>"
+                "<th data-type=\"text\" title=\"기본 배치로 되돌리려면 이 열을 오름차순\">종류</th>"
+                "<th data-type=\"text\">종목</th><th data-type=\"text\">그룹</th>"
+                "<th data-type=\"text\">발생일</th>"
+                "<th data-type=\"num\">횟수</th>"
+                "<th class=\"r\" data-type=\"num\">신호 후</th></tr></thead><tbody>"
                 + "".join(rows) + "</tbody></table></div>"
                 "<p class=\"sub\"><b>신호 후</b> = 신호가 처음 뜬 날 종가 → "
                 + format(days[-1][0], "%m/%d") + " 종가 누적. 신호는 전일 확정 종가로 "
@@ -567,7 +581,9 @@ def weekly_html(end=None):
                 "후하게 잡힌다.<br>"
                 "⚡ 추세 = ADX 상향돌파(20 확인 · 25 강력). "
                 "진입 트리거가 아니라 <b>가던 방향이 굳었다</b>는 확인이고, "
-                "방향은 DI로 갈라 매수편·매도편으로 나눠 적었다.</p>")
+                "방향은 DI로 갈라 매수편·매도편으로 나눠 적었다.<br>"
+                "표 머리를 누르면 정렬된다 — <b>종류</b>를 오름차순으로 누르면 "
+                "기본 배치로 돌아온다.</p>")
 
     if rets:
         ranked = sorted(rets.values(), key=lambda x: -x[1])
@@ -832,9 +848,9 @@ ADX는 방향이 없는 강도 지표라 방향은 +DI/−DI로 판정한다(＋
 <div id="modal-body"></div>
 </div></div>
 <script>
-function initSort(){{
+function initSort(root){{
   // 로직 설명 안에도 표가 있어 '#day table'은 그쪽을 먼저 잡는다 — 데이터 표만 지정.
-  var table = document.querySelector('#day table.board');
+  var table = document.querySelector((root || '#day') + ' table.board');
   if(!table) return;
   var tbody = table.tBodies[0];
   var ths = table.tHead.rows[0].cells;
@@ -939,6 +955,7 @@ function show(i) {{
   prev.disabled = idx === 0;
   next.disabled = idx === DATES.length - 1;
   initSort();
+  initSort('#weekly');   /* 누적 블록도 날짜를 옮길 때마다 다시 배선한다 */
   initStats();
 }}
 prev.addEventListener("click", function () {{ show(idx - 1); }});
