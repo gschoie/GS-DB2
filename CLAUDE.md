@@ -462,10 +462,13 @@
       축약(PR #249). ChatGPT 앱은 예약 태스크 결과를 내보내는 API가 없어 **앱 산출물
       등록은 언제나 수동**(폼/inbox) — 등록이 없으면 세션 자동판이 기본이고, 아침 [7.5]
       이후 늦게 등록하면 GPT판 페이지만 교체되고 그날 합본에는 반영 안 됨.
-    - **건기 텔레 = 통합본 한 통** (9/17 저녁 변경): 매크로_공부 방 발송을 GPT판 →
-      **통합본**으로 교체(방산 통합본과 다른 점 — 방산 통합본은 텔레 없음). ingest의
-      send_congpt 가드를 send_conuni(construction_unified md 변경)로 바꾸고
-      `unified_construction_publish.py --send-only`가 CONGPT_TELEGRAM_*로 발송.
-      construction-gpt.yml의 수동 발행 텔레 스텝 제거, GPT판 폼 문구도 '대시보드'로 정정.
+    - **텔레 = 섹터당 통합본 한 통** (9/17 저녁 변경): 건기에 이어 방산도 통일.
+      건기: 매크로_공부 방 발송을 GPT판 → 통합본으로(send_conuni 가드,
+      `unified_construction_publish.py --send-only`, CONGPT_TELEGRAM_*).
+      방산: 제미나이(defense-briefing.yml 시크릿 제거+봇 스킵 가드)·클(CLAUDE_TELEGRAM_*)·
+      RSS판(chatgpt-brief.yml 스텝 제거) 개별 발송 전부 끄고, ingest가 **방산 통합본**
+      한 통을 KDEF_TELEGRAM_*로 발송(send_duni 가드, `unified_brief_publish.py --send-only`).
+      CLAUDE_TELEGRAM_*·GPT_TELEGRAM_* 시크릿은 미사용 잔존. 주간정리 텔레(토, KDEF)는 유지.
+      두 폼(방산 RSS판·건기 GPT판) 문구 '발행 → 대시보드'로 정정.
 
 이후 작업은 git log와 이 파일을 갱신하며 이어간다.

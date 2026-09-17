@@ -387,8 +387,13 @@ def extract_summary(md: str) -> str:
 
 
 def send_telegram(md_report: str, now: datetime) -> None:
-    token = os.environ["TELEGRAM_BOT_TOKEN"]
-    chat_id = os.environ["TELEGRAM_CHAT_ID"]
+    token = os.environ.get("TELEGRAM_BOT_TOKEN", "").strip()
+    chat_id = os.environ.get("TELEGRAM_CHAT_ID", "").strip()
+    if not token or not chat_id:
+        # 2026-09-17부터 방산 텔레는 통합본 한 통만(ingest 담당) — 워크플로가
+        # 시크릿을 안 넘기면 개별 발송은 조용히 생략한다.
+        print("[텔레그램] 시크릿 미설정 — 발송 생략 (방산 텔레는 통합본 한 통)")
+        return
     mode = os.environ.get("TELEGRAM_MODE", "summary")  # summary | full
     base_url = os.environ.get("DASHBOARD_BASE_URL",
                               "https://gschoie.github.io/GS-DB2")

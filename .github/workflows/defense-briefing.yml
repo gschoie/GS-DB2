@@ -41,8 +41,8 @@ jobs:
           # pro가 품질이 좋음(하루 1회라 무료 티어 내). 쿼터 초과 시 flash로 자동 폴백.
           # gemini-2.5-pro 가 404(신규 사용자 제공 중단)로 죽어 3.1 프리뷰로 이동 — flash 폴백 내장
           GEMINI_MODEL: gemini-3.1-pro-preview
-          TELEGRAM_BOT_TOKEN: ${{ secrets.KDEF_TELEGRAM_BOT_TOKEN }}
-          TELEGRAM_CHAT_ID: ${{ secrets.KDEF_TELEGRAM_CHAT_ID }}
+          # 텔레그램 시크릿 제거(2026-09-17) — 방산 텔레는 통합본 한 통만
+          # (claude-brief-ingest 담당). 시크릿이 없으면 봇이 발송을 생략한다.
         run: python defense_briefing_bot.py
 
       # 아카이브 커밋 → deploy-pages가 workflow_run으로 이어서 재배포한다.

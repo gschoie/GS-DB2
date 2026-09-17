@@ -12,8 +12,8 @@ name: ChatGPT 방산 브리핑
 #   2. chatgpt_briefing/inbox/YYYY-MM-DD.md 를 main에 커밋 (push 트리거)
 #      — workflow_dispatch의 문자열 입력칸은 한 줄짜리라 여러 줄 md가 뭉개지므로
 #        수동 등록은 파일 커밋으로 한다. 처리 후 inbox 파일은 지워서 재실행을 막는다.
-# 텔레그램(수동 발행분)은 방산 데일리와 같은 채널(KDEF_TELEGRAM_*) 기본,
-# GPT_TELEGRAM_* 시크릿을 만들면 그쪽이 우선한다.
+# 텔레그램: 방산 텔레는 통합본 한 통만 방산 채널로 나간다(claude-brief-ingest
+# 담당, 2026-09-17 변경) — RSS판 개별 발송은 중복이라 이 워크플로에 없음.
 
 on:
   workflow_dispatch:
@@ -86,10 +86,3 @@ jobs:
             done
             [ -n "$ok" ] || exit 1
           fi
-
-      - name: Telegram (수동 발행분만)
-        env:
-          TELEGRAM_BOT_TOKEN: ${{ secrets.GPT_TELEGRAM_BOT_TOKEN || secrets.KDEF_TELEGRAM_BOT_TOKEN }}
-          TELEGRAM_CHAT_ID: ${{ secrets.GPT_TELEGRAM_CHAT_ID || secrets.KDEF_TELEGRAM_CHAT_ID }}
-        working-directory: defense_briefing
-        run: python gpt_brief_publish.py --send-processed

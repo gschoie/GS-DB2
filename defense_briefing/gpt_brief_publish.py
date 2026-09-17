@@ -15,9 +15,10 @@ Gemini(defense_daily)·Claude(claude_defense)와 같은 방식으로 날짜별 �
       수동 경로는 반드시 파일로.)
 
 렌더링 규칙(표·색·링크·모바일 카드)은 claude_brief_publish.py 의 것을 그대로
-임포트해 재사용한다(표준 라이브러리만 필요). 텔레그램은 방산 데일리와 같은
-채널(KDEF_TELEGRAM_*)을 기본으로 쓰되, GPT_TELEGRAM_* 시크릿이 있으면 그쪽 우선
-(매핑은 워크플로에서 TELEGRAM_BOT_TOKEN/TELEGRAM_CHAT_ID로 넘어온다).
+임포트해 재사용한다(표준 라이브러리만 필요).
+텔레그램(2026-09-17 변경): 방산 텔레는 통합본 한 통만 방산 채널로 나간다
+(unified_brief_publish.py --send-only, ingest 담당). 이 파일의 send_* 는
+수동 재발송용 예비 경로로만 남겨둔다(워크플로에서 호출 안 함).
 """
 from __future__ import annotations
 
@@ -105,11 +106,12 @@ details.paste summary{{cursor:pointer;padding:9px 14px;color:#c9a86a;font-size:1
     <div class="paste-row">
       <label for="p-date" style="font-size:12.5px;color:#8b96a8">브리핑 날짜</label>
       <input id="p-date" type="date">
-      <button id="p-btn" onclick="submitBrief()">발행 → 대시보드 + 텔레그램</button>
+      <button id="p-btn" onclick="submitBrief()">발행 → 대시보드</button>
     </div>
     <textarea id="p-md" placeholder="ChatGPT가 만든 브리핑 마크다운 전문을 그대로 붙여넣으세요"></textarea>
     <p id="paste-status"></p>
-    <p class="hint">같은 날짜로 다시 등록하면 그 날짜 페이지가 새 내용으로 교체됩니다(텔레그램도 다시 발송).
+    <p class="hint">같은 날짜로 다시 등록하면 그 날짜 페이지가 새 내용으로 교체됩니다.
+    텔레그램은 통합본 한 통만 방산 채널로 나갑니다(개별 판 발송 없음).
     붙여넣기가 안 되는 환경에서는 리포의 <code>chatgpt_briefing/inbox/YYYY-MM-DD.md</code> 파일로 올려도 됩니다.</p>
   </div>
 </details>
