@@ -39,7 +39,9 @@ jobs:
             'telegram_research_dashboard/static/construction_daily/' \
             'telegram_research_dashboard/static/construction_briefing_report.html' \
             'telegram_research_dashboard/static/chatgpt_defense/' \
-            'telegram_research_dashboard/static/chatgpt_defense_report.html'; do
+            'telegram_research_dashboard/static/chatgpt_defense_report.html' \
+            'telegram_research_dashboard/static/defense_unified/' \
+            'telegram_research_dashboard/static/defense_unified_report.html'; do
             git checkout origin/claude/defense-brief-daily -- "$p" \
               || echo "skip: $p (브랜치에 없음)"
           done
@@ -53,9 +55,13 @@ jobs:
                   telegram_research_dashboard/static/claude_defense_report.html \
                   telegram_research_dashboard/static/construction_daily \
                   telegram_research_dashboard/static/construction_briefing_report.html \
-                  telegram_research_dashboard/static/chatgpt_defense_report.html
+                  telegram_research_dashboard/static/chatgpt_defense_report.html \
+                  telegram_research_dashboard/static/defense_unified_report.html
           if [ -d telegram_research_dashboard/static/chatgpt_defense ]; then
             git add telegram_research_dashboard/static/chatgpt_defense
+          fi
+          if [ -d telegram_research_dashboard/static/defense_unified ]; then
+            git add telegram_research_dashboard/static/defense_unified
           fi
           if git diff --cached --quiet; then
             echo "변경 없음 — 커밋 생략 (재실행 등)"
@@ -80,6 +86,8 @@ jobs:
               msg="Claude 방산 브리핑 $(TZ=Asia/Seoul date +%Y-%m-%d)"
             elif git diff --cached --name-only | grep -q 'chatgpt_defense/'; then
               msg="방산 브리핑 RSS판 $(TZ=Asia/Seoul date +%Y-%m-%d)"
+            elif git diff --cached --name-only | grep -q 'defense_unified/'; then
+              msg="방산 브리핑 통합본 $(TZ=Asia/Seoul date +%Y-%m-%d)"
             else
               msg="Claude 건설기계 브리핑 $(TZ=Asia/Seoul date +%Y-%m-%d)"
             fi

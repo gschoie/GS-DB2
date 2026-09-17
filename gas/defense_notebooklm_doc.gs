@@ -33,10 +33,10 @@ const NLM_DOC_TITLE = '방산 브리핑 최근 30일 (NotebookLM 동기화용 �
 const NLM_DAYS = 30;
 const NLM_RAW_BASE = 'https://raw.githubusercontent.com/gschoie/GS-DB2/main/'
   + 'telegram_research_dashboard/static/';
-// 브리핑 두 종 — 대시보드 static 폴더 이름과 같아야 한다.
+// 2026-09-17부터 통합본 하나만 쌓는다 (제미나이·클로드·GPT 3판을 세션이 합친
+// defense_unified — 원본 3판은 대시보드에 그대로 있고 문서 적재만 통합본으로).
 const NLM_SOURCES = [
-  { key: 'defense_daily', label: '글로벌 방산 브리핑 (제미나이)' },
-  { key: 'claude_defense', label: 'Claude 방산 브리핑' }
+  { key: 'defense_unified', label: '글로벌 방산 브리핑 (통합)' }
 ];
 
 // 메인 — 트리거가 매일 이 함수 하나만 부른다. 롤링 30일 문서와 이달 월간 문서를
