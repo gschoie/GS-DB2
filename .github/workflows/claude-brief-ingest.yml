@@ -80,7 +80,7 @@ jobs:
             echo "changed=false" >> "$GITHUB_OUTPUT"
             echo "send=false" >> "$GITHUB_OUTPUT"
             echo "send_gpt=false" >> "$GITHUB_OUTPUT"
-            echo "send_congpt=false" >> "$GITHUB_OUTPUT"
+            echo "send_conuni=false" >> "$GITHUB_OUTPUT"
           else
             # 텔레그램은 새 브리핑 md가 실제로 바뀐 판만 — 렌더러 수정이나 다른 판만
             # 바뀐 커밋에서 요약이 중복 발송되는 것을 막는다.
@@ -95,10 +95,11 @@ jobs:
             else
               echo "send_gpt=false" >> "$GITHUB_OUTPUT"
             fi
-            if git diff --cached --name-only | grep -q 'chatgpt_construction/.*\.md$'; then
-              echo "send_congpt=true" >> "$GITHUB_OUTPUT"
+            # 건기 텔레는 통합본 한 통만 (GPT판 개별 발송은 중복이라 없음)
+            if git diff --cached --name-only | grep -q 'construction_unified/.*\.md$'; then
+              echo "send_conuni=true" >> "$GITHUB_OUTPUT"
             else
-              echo "send_congpt=false" >> "$GITHUB_OUTPUT"
+              echo "send_conuni=false" >> "$GITHUB_OUTPUT"
             fi
             if git diff --cached --name-only | grep -q 'claude_defense/'; then
               msg="Claude 방산 브리핑 $(TZ=Asia/Seoul date +%Y-%m-%d)"
@@ -120,7 +121,7 @@ jobs:
           fi
 
       - uses: actions/setup-python@v6
-        if: steps.commit.outputs.send == 'true' || steps.commit.outputs.send_gpt == 'true' || steps.commit.outputs.send_congpt == 'true'
+        if: steps.commit.outputs.send == 'true' || steps.commit.outputs.send_gpt == 'true' || steps.commit.outputs.send_conuni == 'true'
         with:
           python-version: "3.12"
 
@@ -142,12 +143,12 @@ jobs:
           python -m pip install requests
           python defense_briefing/gpt_brief_publish.py --send-only
 
-      - name: 텔레그램 발송 (새 건설기계 GPT판일 때만)
-        if: steps.commit.outputs.send_congpt == 'true'
+      - name: 텔레그램 발송 (새 건설기계 통합본일 때만)
+        if: steps.commit.outputs.send_conuni == 'true'
         env:
           TELEGRAM_BOT_TOKEN: ${{ secrets.CONGPT_TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.CONGPT_TELEGRAM_CHAT_ID }}
         working-directory: construction_briefing
         run: |
           python -m pip install requests
-          python gpt_construction_publish.py --send-only
+          python unified_construction_publish.py --send-only

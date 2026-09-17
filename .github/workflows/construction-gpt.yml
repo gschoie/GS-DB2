@@ -10,8 +10,8 @@ name: 건설기계 GPT 브리핑
 #      → workflow_dispatch inputs.content → 즉시 발행 + 텔레그램
 #   2. construction_gpt/inbox/YYYY-MM-DD.md 를 main에 커밋 (push 트리거)
 #      — workflow_dispatch 문자열 입력칸은 한 줄짜리라 여러 줄 md가 뭉개진다.
-# 텔레그램은 @gs_macro_bot → 'gb 매크로_공부' 채팅방 (CONGPT_TELEGRAM_* 시크릿,
-# 미설정이면 발송만 생략되고 발행은 정상).
+# 텔레그램: 건기 텔레는 통합본 한 통만 매크로_공부 방으로 나간다(claude-brief-ingest
+# 담당, 2026-09-17 변경) — GPT판 개별 발송은 중복이라 이 워크플로에 없음.
 
 on:
   workflow_dispatch:
@@ -76,12 +76,3 @@ jobs:
             done
             [ -n "$ok" ] || exit 1
           fi
-
-      - name: Telegram (수동 발행분만)
-        env:
-          TELEGRAM_BOT_TOKEN: ${{ secrets.CONGPT_TELEGRAM_BOT_TOKEN }}
-          TELEGRAM_CHAT_ID: ${{ secrets.CONGPT_TELEGRAM_CHAT_ID }}
-        working-directory: construction_briefing
-        run: |
-          python -m pip install requests
-          python gpt_construction_publish.py --send-processed

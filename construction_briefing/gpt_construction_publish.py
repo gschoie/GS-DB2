@@ -7,8 +7,9 @@
 등록이 없는 날은 Claude 예약 세션(루틴 [7.5])이 웹서치로 작성한다.
 
 산출물: static/chatgpt_construction/<날짜>.md|.html + chatgpt_construction_report.html
-텔레그램: @gs_macro_bot → 'gb 매크로_공부' 채팅방 (CONGPT_TELEGRAM_* 시크릿,
-워크플로/ingest가 TELEGRAM_BOT_TOKEN/CHAT_ID로 매핑해 넘긴다. 미설정이면 발송 생략).
+텔레그램(2026-09-17 변경): 건기 텔레는 통합본 한 통만 매크로_공부 방으로 나간다
+(unified_construction_publish.py --send-only, ingest 담당). 이 파일의 send_* 는
+수동 재발송용 예비 경로로만 남겨둔다(워크플로에서 호출 안 함).
 
 입력 경로 두 가지 — construction-gpt.yml 워크플로가 둘 다 처리한다:
   1. 대시보드 붙여넣기 폼(인덱스 페이지 상단) → GAS dispatch_proxy(congpt)
@@ -107,11 +108,12 @@ details.paste summary{{cursor:pointer;padding:9px 14px;color:#c9a86a;font-size:1
     <div class="paste-row">
       <label for="p-date" style="font-size:12.5px;color:#8b96a8">브리핑 날짜</label>
       <input id="p-date" type="date">
-      <button id="p-btn" onclick="submitBrief()">발행 → 대시보드 + 텔레그램</button>
+      <button id="p-btn" onclick="submitBrief()">발행 → 대시보드</button>
     </div>
     <textarea id="p-md" placeholder="ChatGPT가 만든 건설기계 브리핑 마크다운 전문을 그대로 붙여넣으세요"></textarea>
     <p id="paste-status"></p>
-    <p class="hint">같은 날짜로 다시 등록하면 그 날짜 페이지가 새 내용으로 교체됩니다(텔레그램도 다시 발송).
+    <p class="hint">같은 날짜로 다시 등록하면 그 날짜 페이지가 새 내용으로 교체됩니다.
+    텔레그램은 통합본 한 통만 매크로_공부 방으로 나갑니다(GPT판 개별 발송 없음).
     붙여넣기가 안 되는 환경에서는 리포의 <code>construction_gpt/inbox/YYYY-MM-DD.md</code> 파일로 올려도 됩니다.</p>
   </div>
 </details>
