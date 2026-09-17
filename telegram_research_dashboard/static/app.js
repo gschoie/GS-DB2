@@ -218,7 +218,7 @@ function renderTaskList(desired){fillTaskItems(desired);const st=taskLoad()[task
  const body=(taskSortByName
   ?taskAllNames().slice().sort((a,b)=>a.localeCompare(b,'ko')).map(row).join('')
   :TASK_ROSTER.map(([part,names])=>`<tr class="task-group"><td colspan="4">${esc(part)}</td></tr>`+names.map(row).join('')).join(''))+formerBlock;
- $('#task-table').innerHTML=`<table class="task-table"><thead><tr><th class="task-sort" style="cursor:pointer;user-select:none" title="클릭하면 이름순 ↔ 팀 순서로 전환">이름 ${taskSortByName?'▲':'⇅'}</th><th>완료</th><th>응답내용</th><th>비고</th></tr></thead><tbody>${body}</tbody></table>`;
+ $('#task-table').innerHTML=`<table class="task-table"><thead><tr><th class="task-sort" style="cursor:pointer;user-select:none" title="클릭하면 이름순 ↔ 팀 순서로 전환">이름 ${taskSortByName?'▲':'⇅'}</th><th class="task-done-all" style="cursor:pointer;user-select:none" title="클릭하면 전원 완료 ↔ 전원 해제">완료 ✓</th><th>응답내용</th><th>비고</th></tr></thead><tbody>${body}</tbody></table>`;
  $('#task-date').textContent=new Intl.DateTimeFormat('ko-KR',{year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date());renderTaskSummary();syncTaskHash()}
 // 항목별 주소: #tasklist:<항목>. 화면을 보는 동안 주소창이 늘 현재 항목을 가리키게 해
 // 주소 복사만으로도 그 항목이 열리는 링크가 된다(history를 늘리지 않도록 replaceState).
@@ -582,7 +582,7 @@ $('#task-archive-list')?.addEventListener('click',e=>{const o=e.target.dataset.a
   saveItems(items);const s=taskLoad();delete s[d];
   if(Array.isArray(s.__archived))s.__archived=s.__archived.filter(x=>x!==d);
   taskSave(s);renderTaskList()}});
-$('#task-table')?.addEventListener('click',e=>{if(e.target.closest('th.task-sort')){taskSortByName=!taskSortByName;renderTaskList();return}if(e.target.closest('tr.task-former-hd')){taskShowFormer=!taskShowFormer;renderTaskList()}});
+$('#task-table')?.addEventListener('click',e=>{if(e.target.closest('th.task-sort')){taskSortByName=!taskSortByName;renderTaskList();return}if(e.target.closest('th.task-done-all')){const s=taskLoad(),it=taskCurrentItem();s[it]=s[it]||{};const names=taskAllNames();const allDone=names.every(n=>s[it][n]?.done);if(!confirm(allDone?'전원 완료를 해제할까요?':'현 명단 전원을 완료 처리할까요?'))return;names.forEach(n=>{(s[it][n]=s[it][n]||{}).done=!allDone});taskSave(s);renderTaskList();return}if(e.target.closest('tr.task-former-hd')){taskShowFormer=!taskShowFormer;renderTaskList()}});
 $('#task-table')?.addEventListener('change',e=>{const tr=e.target.closest('tr[data-name]');if(tr&&e.target.dataset.f==='done')taskUpdate(tr.dataset.name,'done',e.target.checked)});
 $('#task-table')?.addEventListener('input',e=>{const tr=e.target.closest('tr[data-name]'),f=e.target.dataset.f;if(tr&&(f==='resp'||f==='note'))taskUpdate(tr.dataset.name,f,e.target.value)});
 $('#task-reset')?.addEventListener('click',()=>{if(!confirm(`[${taskCurrentItem()}] 체크·응답·비고를 모두 지울까요?`))return;const s=taskLoad();delete s[taskCurrentItem()];taskSave(s);renderTaskList()});
