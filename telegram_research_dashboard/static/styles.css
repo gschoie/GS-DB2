@@ -250,3 +250,17 @@ body.item-locked #task-item{appearance:none;-webkit-appearance:none;border-color
 .todo-move:hover{color:#173f35}
 .todo-row.drop-before{box-shadow:inset 0 2px 0 #2e6250}
 .todo-row.drop-after{box-shadow:inset 0 -2px 0 #2e6250}
+
+/* 브리핑 카드 색 구분 — 바탕은 같은 명도의 어두운 톤으로 묶고 계열만 달리한다.
+   제목·링크·출처 강조색도 카드별로 맞춰 준다(기본 건기 카드는 초록+라임 유지). */
+.brief-card.tone-gemini{background:#1b3357}
+.brief-card.tone-gemini .brief-head small,.brief-card.tone-gemini .brief-head a,
+.brief-card.tone-gemini .brief-src{color:#9cc6ff}
+.brief-card.tone-gemini .brief-src{border-bottom-color:rgba(156,198,255,.5)}
+.brief-card.tone-gpt{background:#3a2a4d}
+.brief-card.tone-gpt .brief-head small,.brief-card.tone-gpt .brief-head a,
+.brief-card.tone-gpt .brief-src{color:#dcb8ff}
+.brief-card.tone-gpt .brief-src{border-bottom-color:rgba(220,184,255,.5)}
+.brief-card.tone-plan{background:#4a2f2a}
+.brief-card.tone-plan .brief-head small,.brief-card.tone-plan .brief-head a,
+.brief-card.tone-plan .brief-src{color:#f3bb92}
