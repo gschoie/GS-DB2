@@ -29,8 +29,9 @@ on:
         required: false
         default: ""
   schedule:
-    # UTC 20:55 = KST 05:55 — Gemini 방산(20:40)과 15분 오프셋. 세션 작성(06:1x~)前 수집 완료 목표.
-    - cron: "55 20 * * *"
+    # UTC 20:05 = KST 05:05 — 미장 마감 직후로 앞당김(2026-09-18, 통합본 06시 완성 목표).
+    # 제미나이 방산(20:00)과 5분 오프셋. 지연 시 세션이 05:25경 수동 트리거로 보완.
+    - cron: "5 20 * * *"
   push:
     branches: ["main"]
     paths: ["chatgpt_briefing/inbox/*.md"]

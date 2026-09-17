@@ -1,12 +1,12 @@
 name: 글로벌 건설기계 브리핑
 
-# 2단 구조 (2026-08-25 개편):
-#   06:10 KST — 수집 전용: 시세·매크로·뉴스를 construction_briefing/inputs/<날짜>.json으로
+# 2단 구조 (2026-08-25 개편, 2026-09-18 앞당김):
+#   05:15 KST — 수집 전용: 시세·매크로·뉴스를 construction_briefing/inputs/<날짜>.json으로
 #               main에 커밋. 해석·작성은 Claude 예약 세션이 이 파일을 읽어 수행하고,
 #               claude-brief-ingest 경유로 main에 브리핑을 올린다.
-#   07:40 KST — Gemini 폴백: 그 시각까지 오늘 브리핑 md가 없으면(Claude 세션 장애 등)
+#   06:20 KST — Gemini 폴백: 그 시각까지 오늘 브리핑 md가 없으면(Claude 세션 장애 등)
 #               Gemini(flash)가 전체 파이프라인으로 대신 작성한다.
-# 방산 브리핑(UTC 20:40)과 오프셋 유지 — 같은 Gemini 키의 분당 한도 충돌 회피.
+# 방산 브리핑(UTC 20:00)과 오프셋 유지 — 같은 Gemini 키의 분당 한도 충돌 회피.
 on:
   workflow_dispatch:
     inputs:
@@ -16,10 +16,12 @@ on:
         options: [collect, full]
         default: collect
   schedule:
-    # UTC 21:10 = KST 06:10 수집. GitHub 큐 지연(보통 5~30분)을 감안하면 실수집 ~06:30.
-    - cron: "10 21 * * *"
-    # UTC 22:40 = KST 07:40 폴백 — 오늘 md가 이미 있으면 아무것도 안 한다.
-    - cron: "40 22 * * *"
+    # UTC 20:15 = KST 05:15 수집 — 미장 마감 직후로 앞당김(2026-09-18, 통합본 06시 완성 목표).
+    # GitHub 큐 지연을 감안하면 실수집 ~05:30, 지연 시 세션이 05:35경 수동 트리거.
+    - cron: "15 20 * * *"
+    # UTC 21:20 = KST 06:20 폴백 — 오늘 md가 이미 있으면 아무것도 안 한다.
+    # (market-trend 06:30 Gemini와 10분 오프셋)
+    - cron: "20 21 * * *"
 
 permissions:
   contents: write
