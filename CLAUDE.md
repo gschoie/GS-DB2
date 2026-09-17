@@ -415,4 +415,18 @@
       그 두 슬롯을 못 쐈다는 뜻. 가드를 고쳐도 슬롯당 1회는 늦은 크론이 대신 처리하므로
       발송 자체는 되지만, 정시성이 필요하면 Apps Script 쪽 트리거 상태를 확인할 것.
 
+25. **방산 브리핑 통합본 신설** (9/17): 3판(제미나이·클로드 웹서치·GPT/RSS)은 각자 그대로
+    두고, 매일 아침 세션 루틴 [6.6]이 세 md를 편집장 관점에서 하나로 합친 **통합본**을
+    추가 발행 — `static/defense_unified/<날짜>.md|.html` + `defense_unified_report.html`
+    (`defense_briefing/unified_brief_publish.py`, 렌더러 재사용·텔레그램 없음).
+    - 통합 문법: 같은 사건은 한 번만(판 표기), 수치 상충은 [상충] 병기, 형식은 일간 브리핑과 동일.
+    - **용도 3곳으로 단일화**: ① 사이드바 🌐 글로벌방산.브리핑 서브메뉴 맨 위
+      `🛡️ 글로벌방산.브리핑(통합)`, ② 오늘의 요약 방산 카드 — 기존 제미나이·클로드 카드
+      2개를 없애고 통합 카드 1개(#unified-brief, payload.unifiedBrief)로(에너지·건기 카드
+      유지, 2행은 건기+데일리 재배분), ③ **NotebookLM 구글DOC 적재 소스 — 통합본만**
+      (`gas/defense_notebooklm_doc.gs` NLM_SOURCES를 defense_unified 하나로; 사용자
+      Apps Script 재붙여넣기 필요 — NotebookLM 전용 별도 프로젝트).
+    - claude-brief-ingest가 defense_unified도 나름(경로별 관대 체크아웃, 텔레 가드 없음).
+      build_static 복사·unifiedBrief 추출 추가. deploy는 기존 ingest workflow_run 경로 그대로.
+
 이후 작업은 git log와 이 파일을 갱신하며 이어간다.
