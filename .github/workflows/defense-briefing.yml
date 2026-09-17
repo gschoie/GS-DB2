@@ -7,7 +7,9 @@ on:
   workflow_dispatch:
   schedule:
     # UTC 20:40 = KST 05:40. GitHub 큐 지연(보통 5~30분)을 감안하면 실발송 ~06시.
-    - cron: "40 20 * * *"
+    # UTC 20:00 = KST 05:00 — 미장 마감(서머타임 05:00 KST) 직후로 앞당김(2026-09-18,
+    # 통합본 06시 완성 목표). GitHub 큐 지연(+15~60분)이 있어 실 실행은 05:15~06:00.
+    - cron: "0 20 * * *"
 
 permissions:
   contents: write
