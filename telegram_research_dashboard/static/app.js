@@ -279,7 +279,7 @@ function renderTodo(){renderTodoArch();const box=$('#todo-list');if(!box)return;
  a.forEach((t,i)=>{buckets[t.group&&names.includes(t.group)?t.group:'기본'].push([t,i])});
  box.innerHTML=names.map(n=>{const list=buckets[n],undone=list.filter(([t])=>!t.done).length;
   const grip=n==='기본'?'':`<span class="todo-g-grip" draggable="true" data-g="${esc(n)}" title="드래그해서 그룹 순서 변경">⠿</span>`;
-  const tools=n==='기본'?'':`<span class="todo-g-tools"><button type="button" class="todo-g-ren" data-g="${esc(n)}" title="그룹 이름 변경">✎</button><button type="button" class="todo-g-del" data-g="${esc(n)}" title="그룹 삭제 (항목은 기본으로 이동)">✕</button></span>`;
+  const tools=`<span class="todo-g-tools"><button type="button" class="todo-g-add" data-g="${esc(n)}" title="이 그룹에 할 일 추가">＋</button>${n==='기본'?'':`<button type="button" class="todo-g-ren" data-g="${esc(n)}" title="그룹 이름 변경">✎</button><button type="button" class="todo-g-del" data-g="${esc(n)}" title="그룹 삭제 (항목은 기본으로 이동)">✕</button>`}</span>`;
   return `<details class="todo-group" data-g="${esc(n)}" open><summary>${grip}<span>${esc(n)}</span><em>${undone}/${list.length}</em>${tools}</summary>${list.map(([t,i])=>row(t,i)).join('')||'<p class="empty todo-empty">이 그룹에 할 일이 없습니다.</p>'}</details>`}).join('')}
 // 같은 그룹 안에서 한 칸 이동. 저장 순서(플랫 배열)가 곧 그룹 안 순서라,
 // 다른 그룹 항목은 건너뛰고 같은 그룹의 이웃을 찾아 그 자리로 옮긴다.
@@ -513,6 +513,7 @@ $('#todo-list')?.addEventListener('click',e=>{
  if(e.target.closest('.todo-g-grip')){e.preventDefault();return}/* 그립 클릭이 그룹 접힘 토글로 번지지 않게 */
  const mv=e.target.closest('.todo-move');if(mv){e.preventDefault();todoMove(+mv.closest('.todo-row').dataset.i,+mv.dataset.mv);return}
  const th=e.target.closest('.todo-thumb');if(th){todoLightbox(th.src);return}
+ const ga=e.target.closest('.todo-g-add');if(ga){e.preventDefault();const g=ga.dataset.g;const text=(prompt(`[${g}] 그룹에 추가할 할 일`)||'').trim();if(!text)return;const a=todoLoad(),t={text:text,ts:Date.now(),done:false};if(g!=='기본')t.group=g;a.unshift(t);todoSave(a);return}
  const ren=e.target.closest('.todo-g-ren');if(ren){e.preventDefault();const cur=ren.dataset.g,name=(prompt('그룹 이름 변경',cur)||'').trim();if(!name||name===cur)return;const g=todoGroups();if(name==='기본'||g.includes(name)){alert('이미 있는 그룹입니다.');return}g[g.indexOf(cur)]=name;todoGroupsStore(g);todoArchStore(todoArchLoad().map(t=>t.group===cur?{...t,group:name}:t));todoSave(todoLoad().map(t=>t.group===cur?{...t,group:name}:t));const sel=$('#todo-group');if(sel)sel.value=name;return}
  const gd=e.target.closest('.todo-g-del');if(gd){e.preventDefault();const cur=gd.dataset.g;if(!confirm(`[${cur}] 그룹을 삭제할까요? 그룹의 할 일은 기본으로 이동합니다.`))return;todoGroupsStore(todoGroups().filter(x=>x!==cur));
   const ungroup=t=>{if(t.group!==cur)return t;const{group,...rest}=t;return rest};
