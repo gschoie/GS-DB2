@@ -218,7 +218,7 @@ function renderTaskList(desired){fillTaskItems(desired);const st=taskLoad()[task
  const body=(taskSortByName
   ?taskAllNames().slice().sort((a,b)=>a.localeCompare(b,'ko')).map(row).join('')
   :TASK_ROSTER.map(([part,names])=>`<tr class="task-group"><td colspan="4">${esc(part)}</td></tr>`+names.map(row).join('')).join(''))+formerBlock;
- $('#task-table').innerHTML=`<table class="task-table"><thead><tr><th class="task-sort" style="cursor:pointer;user-select:none" title="클릭하면 이름순 ↔ 팀 순서로 전환">이름 ${taskSortByName?'▲':'⇅'}</th><th>완료</th><th>응답내용</th><th>비고</th></tr></thead><tbody>${body}</tbody></table>`;
+ $('#task-table').innerHTML=`<table class="task-table"><thead><tr><th class="task-sort" style="cursor:pointer;user-select:none" title="클릭하면 이름순 ↔ 팀 순서로 전환">이름 ${taskSortByName?'▲':'⇅'}</th><th class="task-done-all" style="cursor:pointer;user-select:none" title="클릭하면 전원 완료 ↔ 전원 해제">완료 ✓</th><th>응답내용</th><th>비고</th></tr></thead><tbody>${body}</tbody></table>`;
  $('#task-date').textContent=new Intl.DateTimeFormat('ko-KR',{year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date());renderTaskSummary();syncTaskHash()}
 // 항목별 주소: #tasklist:<항목>. 화면을 보는 동안 주소창이 늘 현재 항목을 가리키게 해
 // 주소 복사만으로도 그 항목이 열리는 링크가 된다(history를 늘리지 않도록 replaceState).
@@ -279,7 +279,7 @@ function renderTodo(){renderTodoArch();const box=$('#todo-list');if(!box)return;
  a.forEach((t,i)=>{buckets[t.group&&names.includes(t.group)?t.group:'기본'].push([t,i])});
  box.innerHTML=names.map(n=>{const list=buckets[n],undone=list.filter(([t])=>!t.done).length;
   const grip=n==='기본'?'':`<span class="todo-g-grip" draggable="true" data-g="${esc(n)}" title="드래그해서 그룹 순서 변경">⠿</span>`;
-  const tools=n==='기본'?'':`<span class="todo-g-tools"><button type="button" class="todo-g-ren" data-g="${esc(n)}" title="그룹 이름 변경">✎</button><button type="button" class="todo-g-del" data-g="${esc(n)}" title="그룹 삭제 (항목은 기본으로 이동)">✕</button></span>`;
+  const tools=`<span class="todo-g-tools"><button type="button" class="todo-g-add" data-g="${esc(n)}" title="이 그룹에 할 일 추가">＋</button>${n==='기본'?'':`<button type="button" class="todo-g-ren" data-g="${esc(n)}" title="그룹 이름 변경">✎</button><button type="button" class="todo-g-del" data-g="${esc(n)}" title="그룹 삭제 (항목은 기본으로 이동)">✕</button>`}</span>`;
   return `<details class="todo-group" data-g="${esc(n)}" open><summary>${grip}<span>${esc(n)}</span><em>${undone}/${list.length}</em>${tools}</summary>${list.map(([t,i])=>row(t,i)).join('')||'<p class="empty todo-empty">이 그룹에 할 일이 없습니다.</p>'}</details>`}).join('')}
 // 같은 그룹 안에서 한 칸 이동. 저장 순서(플랫 배열)가 곧 그룹 안 순서라,
 // 다른 그룹 항목은 건너뛰고 같은 그룹의 이웃을 찾아 그 자리로 옮긴다.
@@ -513,6 +513,7 @@ $('#todo-list')?.addEventListener('click',e=>{
  if(e.target.closest('.todo-g-grip')){e.preventDefault();return}/* 그립 클릭이 그룹 접힘 토글로 번지지 않게 */
  const mv=e.target.closest('.todo-move');if(mv){e.preventDefault();todoMove(+mv.closest('.todo-row').dataset.i,+mv.dataset.mv);return}
  const th=e.target.closest('.todo-thumb');if(th){todoLightbox(th.src);return}
+ const ga=e.target.closest('.todo-g-add');if(ga){e.preventDefault();const g=ga.dataset.g;const text=(prompt(`[${g}] 그룹에 추가할 할 일`)||'').trim();if(!text)return;const a=todoLoad(),t={text:text,ts:Date.now(),done:false};if(g!=='기본')t.group=g;a.unshift(t);todoSave(a);return}
  const ren=e.target.closest('.todo-g-ren');if(ren){e.preventDefault();const cur=ren.dataset.g,name=(prompt('그룹 이름 변경',cur)||'').trim();if(!name||name===cur)return;const g=todoGroups();if(name==='기본'||g.includes(name)){alert('이미 있는 그룹입니다.');return}g[g.indexOf(cur)]=name;todoGroupsStore(g);todoArchStore(todoArchLoad().map(t=>t.group===cur?{...t,group:name}:t));todoSave(todoLoad().map(t=>t.group===cur?{...t,group:name}:t));const sel=$('#todo-group');if(sel)sel.value=name;return}
  const gd=e.target.closest('.todo-g-del');if(gd){e.preventDefault();const cur=gd.dataset.g;if(!confirm(`[${cur}] 그룹을 삭제할까요? 그룹의 할 일은 기본으로 이동합니다.`))return;todoGroupsStore(todoGroups().filter(x=>x!==cur));
   const ungroup=t=>{if(t.group!==cur)return t;const{group,...rest}=t;return rest};
@@ -582,7 +583,7 @@ $('#task-archive-list')?.addEventListener('click',e=>{const o=e.target.dataset.a
   saveItems(items);const s=taskLoad();delete s[d];
   if(Array.isArray(s.__archived))s.__archived=s.__archived.filter(x=>x!==d);
   taskSave(s);renderTaskList()}});
-$('#task-table')?.addEventListener('click',e=>{if(e.target.closest('th.task-sort')){taskSortByName=!taskSortByName;renderTaskList();return}if(e.target.closest('tr.task-former-hd')){taskShowFormer=!taskShowFormer;renderTaskList()}});
+$('#task-table')?.addEventListener('click',e=>{if(e.target.closest('th.task-sort')){taskSortByName=!taskSortByName;renderTaskList();return}if(e.target.closest('th.task-done-all')){const s=taskLoad(),it=taskCurrentItem();s[it]=s[it]||{};const names=taskAllNames();const allDone=names.every(n=>s[it][n]?.done);if(!confirm(allDone?'전원 완료를 해제할까요?':'현 명단 전원을 완료 처리할까요?'))return;names.forEach(n=>{(s[it][n]=s[it][n]||{}).done=!allDone});taskSave(s);renderTaskList();return}if(e.target.closest('tr.task-former-hd')){taskShowFormer=!taskShowFormer;renderTaskList()}});
 $('#task-table')?.addEventListener('change',e=>{const tr=e.target.closest('tr[data-name]');if(tr&&e.target.dataset.f==='done')taskUpdate(tr.dataset.name,'done',e.target.checked)});
 $('#task-table')?.addEventListener('input',e=>{const tr=e.target.closest('tr[data-name]'),f=e.target.dataset.f;if(tr&&(f==='resp'||f==='note'))taskUpdate(tr.dataset.name,f,e.target.value)});
 $('#task-reset')?.addEventListener('click',()=>{if(!confirm(`[${taskCurrentItem()}] 체크·응답·비고를 모두 지울까요?`))return;const s=taskLoad();delete s[taskCurrentItem()];taskSave(s);renderTaskList()});
