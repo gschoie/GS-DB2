@@ -151,6 +151,18 @@ def build() -> Path:
         summary_md = "\n".join(md_lines[:end]).strip()
         if summary_md:
             claude_brief = {"date": latest.stem, "summary": summary_md}
+    # GPT 방산 브리핑: static/chatgpt_defense/<날짜>.md — 오늘의 요약 카드용 첫 섹션만 절단
+    gpt_brief = {}
+    gdir = ROOT / "static" / "chatgpt_defense"
+    gmd_files = sorted(gdir.glob("????-??-??.md")) if gdir.is_dir() else []
+    if gmd_files:
+        latest = gmd_files[-1]
+        md_lines = latest.read_text(encoding="utf-8").splitlines()
+        heads = [i for i, line in enumerate(md_lines) if line.startswith("## ")]
+        end = heads[1] if len(heads) >= 2 else len(md_lines)
+        summary_md = "\n".join(md_lines[:end]).strip()
+        if summary_md:
+            gpt_brief = {"date": latest.stem, "summary": summary_md}
     # 방산 통합본: static/defense_unified/<날짜>.md — 오늘의 요약 방산 카드는 이걸 쓴다
     unified_brief = {}
     udir = ROOT / "static" / "defense_unified"
@@ -191,7 +203,7 @@ def build() -> Path:
         {"summary": summary, "reports": reports, "news": news, "companies": companies,
          "reportCompanies": report_companies, "newsTexts": news_texts, "market": market,
          "union": union, "macro": macro, "defenseBrief": defense_brief,
-         "claudeBrief": claude_brief, "unifiedBrief": unified_brief,
+         "claudeBrief": claude_brief, "unifiedBrief": unified_brief, "gptBrief": gpt_brief,
          "constructionBrief": construction_brief,
          "energyBrief": energy_brief},
         ensure_ascii=False, separators=(",", ":"),
