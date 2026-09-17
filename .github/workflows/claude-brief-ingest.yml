@@ -41,7 +41,11 @@ jobs:
             'telegram_research_dashboard/static/chatgpt_defense/' \
             'telegram_research_dashboard/static/chatgpt_defense_report.html' \
             'telegram_research_dashboard/static/defense_unified/' \
-            'telegram_research_dashboard/static/defense_unified_report.html'; do
+            'telegram_research_dashboard/static/defense_unified_report.html' \
+            'telegram_research_dashboard/static/chatgpt_construction/' \
+            'telegram_research_dashboard/static/chatgpt_construction_report.html' \
+            'telegram_research_dashboard/static/construction_unified/' \
+            'telegram_research_dashboard/static/construction_unified_report.html'; do
             git checkout origin/claude/defense-brief-daily -- "$p" \
               || echo "skip: $p (브랜치에 없음)"
           done
@@ -63,11 +67,20 @@ jobs:
           if [ -d telegram_research_dashboard/static/defense_unified ]; then
             git add telegram_research_dashboard/static/defense_unified
           fi
+          for p in chatgpt_construction construction_unified; do
+            if [ -d "telegram_research_dashboard/static/$p" ]; then
+              git add "telegram_research_dashboard/static/$p"
+            fi
+            if [ -f "telegram_research_dashboard/static/${p}_report.html" ]; then
+              git add "telegram_research_dashboard/static/${p}_report.html"
+            fi
+          done
           if git diff --cached --quiet; then
             echo "변경 없음 — 커밋 생략 (재실행 등)"
             echo "changed=false" >> "$GITHUB_OUTPUT"
             echo "send=false" >> "$GITHUB_OUTPUT"
             echo "send_gpt=false" >> "$GITHUB_OUTPUT"
+            echo "send_congpt=false" >> "$GITHUB_OUTPUT"
           else
             # 텔레그램은 새 브리핑 md가 실제로 바뀐 판만 — 렌더러 수정이나 다른 판만
             # 바뀐 커밋에서 요약이 중복 발송되는 것을 막는다.
@@ -82,12 +95,21 @@ jobs:
             else
               echo "send_gpt=false" >> "$GITHUB_OUTPUT"
             fi
+            if git diff --cached --name-only | grep -q 'chatgpt_construction/.*\.md$'; then
+              echo "send_congpt=true" >> "$GITHUB_OUTPUT"
+            else
+              echo "send_congpt=false" >> "$GITHUB_OUTPUT"
+            fi
             if git diff --cached --name-only | grep -q 'claude_defense/'; then
               msg="Claude 방산 브리핑 $(TZ=Asia/Seoul date +%Y-%m-%d)"
             elif git diff --cached --name-only | grep -q 'chatgpt_defense/'; then
               msg="방산 브리핑 RSS판 $(TZ=Asia/Seoul date +%Y-%m-%d)"
             elif git diff --cached --name-only | grep -q 'defense_unified/'; then
               msg="방산 브리핑 통합본 $(TZ=Asia/Seoul date +%Y-%m-%d)"
+            elif git diff --cached --name-only | grep -q 'chatgpt_construction/'; then
+              msg="건설기계 브리핑 GPT판 $(TZ=Asia/Seoul date +%Y-%m-%d)"
+            elif git diff --cached --name-only | grep -q 'construction_unified/'; then
+              msg="건설기계 브리핑 통합본 $(TZ=Asia/Seoul date +%Y-%m-%d)"
             else
               msg="Claude 건설기계 브리핑 $(TZ=Asia/Seoul date +%Y-%m-%d)"
             fi
@@ -98,7 +120,7 @@ jobs:
           fi
 
       - uses: actions/setup-python@v6
-        if: steps.commit.outputs.send == 'true' || steps.commit.outputs.send_gpt == 'true'
+        if: steps.commit.outputs.send == 'true' || steps.commit.outputs.send_gpt == 'true' || steps.commit.outputs.send_congpt == 'true'
         with:
           python-version: "3.12"
 
@@ -119,3 +141,13 @@ jobs:
         run: |
           python -m pip install requests
           python defense_briefing/gpt_brief_publish.py --send-only
+
+      - name: 텔레그램 발송 (새 건설기계 GPT판일 때만)
+        if: steps.commit.outputs.send_congpt == 'true'
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.CONGPT_TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.CONGPT_TELEGRAM_CHAT_ID }}
+        working-directory: construction_briefing
+        run: |
+          python -m pip install requests
+          python gpt_construction_publish.py --send-only

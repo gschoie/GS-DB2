@@ -433,4 +433,27 @@
       통합본 아카이브가 9/17부터라 첫 몇 주는 혼합, 이후 자연히 통합본 100%.
       SYSTEM_PROMPT에 (제)/(클)/(GPT)·[상충] 표기 유지 지시 추가.
 
+26. **건설기계 GPT판 + 통합본 신설 / 노션 방산 통합본 전환** (9/17): 방산과 동일 구성으로 확장.
+    - GPT판(`static/chatgpt_construction/` + `chatgpt_construction_report.html`,
+      `construction_briefing/gpt_construction_publish.py`): 수동 등록(인덱스 ✍️ 폼 → GAS
+      `congpt` 라우트 → `construction-gpt.yml` workflow_dispatch / `construction_gpt/inbox/*.md`
+      push) 우선, 없는 날은 세션 루틴 [7.5]가 **웹서치 기반**으로 작성 — 기존 데일리가
+      RSS·확정시세 기반이라 방산과 반대 구성으로 차별화. ChatGPT 앱에 넣을 지침 정본은
+      `construction_gpt/CHATGPT_PROMPT.md`(봇 SYSTEM_PROMPT의 웹서치 개작판).
+      텔레는 @gs_macro_bot('gb 매크로_공부') — `CONGPT_TELEGRAM_BOT_TOKEN/CHAT_ID` 시크릿
+      필요(미설정이면 발송만 생략, 발행은 정상).
+    - 통합본(`static/construction_unified/` + `construction_unified_report.html`,
+      `unified_construction_publish.py`, 루틴 [7.6]): 데일리+GPT 2판 합본(같은 사건 1회·
+      (클)/(GPT) 표기·[상충] 병기), 텔레 없음. 오늘의 요약 건기 카드(constructionBrief —
+      통합본 우선, 데일리가 더 최신 날짜면 데일리 표시, unified 플래그로 링크 분기)와
+      노션 입력(제목 "건설기계 브리핑 통합본(2AI) …")의 단일 소스.
+      주간정리(weekly_construction_bot)도 통합본 우선·데일리 폴백으로 전환.
+    - 사이드바 `🏗️ 글로벌건기.브리핑` 서브메뉴{(통합)·(클)·(GPT)}. claude-brief-ingest가
+      두 산출물도 나름(send_congpt 텔레 가드). deploy-pages workflow_run에
+      "건설기계 GPT 브리핑" 추가. **GAS 정본 갱신 필요** — dispatch_proxy.gs 재붙여넣기 +
+      '배포 관리 → 새 버전'(새 배포 금지).
+    - 방산 노션 아카이브도 9/18부터 통합본으로 전환: 루틴 노션 단계를 통합본 발행 뒤([6.6])로
+      옮기고 제목 "방산 브리핑 통합본(3AI) YYYY-MM-DD(요일)"·icon 🛡️·defense_unified 링크.
+      결측 시 클로드판 폴백(기존 제목). 건기 노션도 동일 원리(과거 캐치업은 데일리 그대로).
+
 이후 작업은 git log와 이 파일을 갱신하며 이어간다.
