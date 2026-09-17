@@ -62,11 +62,12 @@ details.paste summary{cursor:pointer;padding:9px 14px;color:#c9a86a;font-size:13
     <div class="paste-row">
       <label for="p-date" style="font-size:12.5px;color:#8b96a8">브리핑 날짜</label>
       <input id="p-date" type="date">
-      <button id="p-btn" onclick="submitBrief()">발행 → 대시보드 + 텔레그램</button>
+      <button id="p-btn" onclick="submitBrief()">발행 → 대시보드</button>
     </div>
     <textarea id="p-md" placeholder="ChatGPT가 만든 브리핑 마크다운 전문을 그대로 붙여넣으세요"></textarea>
     <p id="paste-status"></p>
-    <p class="hint">같은 날짜로 다시 등록하면 그 날짜 페이지가 새 내용으로 교체됩니다(텔레그램도 다시 발송).
+    <p class="hint">같은 날짜로 다시 등록하면 그 날짜 페이지가 새 내용으로 교체됩니다.
+    텔레그램은 통합본 한 통만 방산 채널로 나갑니다(개별 판 발송 없음).
     붙여넣기가 안 되는 환경에서는 리포의 <code>chatgpt_briefing/inbox/YYYY-MM-DD.md</code> 파일로 올려도 됩니다.</p>
   </div>
 </details>

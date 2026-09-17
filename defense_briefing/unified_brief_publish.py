@@ -9,9 +9,12 @@ static/defense_unified/<날짜>.md 로 저장하면, 이 스크립트가 아카�
 
 통합본의 용도: ① 대시보드 '오늘의 요약' 방산 카드(하나로 통일),
 ② NotebookLM 구글 문서 적재 소스(gas/defense_notebooklm_doc.gs — 통합본만 쌓음),
-③ 사이드바 🌐 글로벌방산.브리핑 서브메뉴의 (통합) 페이지.
-원본 3판은 그대로 유지된다(각자 페이지·텔레그램 불변). 통합본 자체는
-텔레그램 발송이 없다(대시보드·문서 적재 전용).
+③ 사이드바 🌐 글로벌방산.브리핑 서브메뉴의 (통합) 페이지, ④ 방산 텔레그램.
+원본 3판은 그대로 유지된다(각자 페이지 불변).
+
+텔레그램(2026-09-17 변경): 방산 텔레는 **통합본 한 통**만 방산 채널
+(KDEF_TELEGRAM_*)로 나간다(ingest가 --send-only 호출). 제미나이·클로드·RSS판의
+개별 발송은 중복이라 전부 제거했다(CLAUDE_TELEGRAM_*·GPT_TELEGRAM_* 미사용).
 
 렌더링은 claude_brief_publish.py 규칙 재사용(표준 라이브러리만).
 main 반영은 claude-brief-ingest 가 다른 판들과 같은 경로로 나른다.
@@ -19,7 +22,10 @@ main 반영은 claude-brief-ingest 가 다른 판들과 같은 경로로 나른�
 from __future__ import annotations
 
 import json
+import os
+import re
 import sys
+import time
 from pathlib import Path
 
 import claude_brief_publish as cbp  # 같은 디렉터리 — 렌더러·유틸 재사용
@@ -82,12 +88,61 @@ else fr.srcdoc='<body style="background:#0d1117;color:#8b96a8;font-family:sans-s
     print(f"[인덱스] defense_unified_report.html 갱신 (누적 {len(dates)}일)")
 
 
+def send_telegram(date_str: str) -> None:
+    token = os.environ.get("TELEGRAM_BOT_TOKEN", "").strip()
+    chat_id = os.environ.get("TELEGRAM_CHAT_ID", "").strip()
+    if not token or not chat_id:
+        print("[텔레그램] TELEGRAM_BOT_TOKEN/CHAT_ID 미설정 — 발송 생략")
+        return
+    import requests
+
+    md_report = (ARCHIVE_DIR / f"{date_str}.md").read_text(encoding="utf-8")
+    base_url = os.environ.get("DASHBOARD_BASE_URL", "https://gschoie.github.io/GS-DB2")
+    body = cbp.to_telegram_html(cbp.extract_summary(md_report))
+    header = f"🛡️ <b>글로벌 방산 브리핑 (통합)</b> | {cbp.date_label(date_str)}\n"
+    footer = (f'\n\n📊 <a href="{base_url}/defense_unified/{date_str}.html">'
+              "전체 통합 브리핑 보기</a>\n"
+              "<i>발송 직후엔 반영 중일 수 있어요 — 2~3분 뒤 열어주세요</i>")
+    chunks = cbp.split_chunks(header + body + footer)
+    total = len(chunks)
+    for i, chunk in enumerate(chunks, 1):
+        suffix = f"\n\n({i}/{total})" if total > 1 else ""
+        for attempt in range(3):
+            resp = requests.post(
+                f"https://api.telegram.org/bot{token}/sendMessage",
+                json={"chat_id": chat_id, "text": chunk + suffix, "parse_mode": "HTML",
+                      "disable_web_page_preview": True},
+                timeout=30,
+            )
+            if resp.ok:
+                break
+            if resp.status_code == 400 and attempt == 0:
+                print(f"[텔레그램 400] {resp.text[:200]} → 평문 재시도", file=sys.stderr)
+                resp = requests.post(
+                    f"https://api.telegram.org/bot{token}/sendMessage",
+                    json={"chat_id": chat_id, "text": re.sub(r"<[^>]+>", "", chunk) + suffix,
+                          "disable_web_page_preview": True},
+                    timeout=30,
+                )
+                if resp.ok:
+                    break
+            time.sleep(5)
+        else:
+            raise RuntimeError(f"텔레그램 전송 실패: {resp.status_code} {resp.text[:300]}")
+        time.sleep(1.2)
+    print(f"[텔레그램] {date_str}: {total}개 메시지 전송 완료")
+
+
 def main() -> None:
     args = sys.argv[1:]
     date_str = args[args.index("--date") + 1] if "--date" in args else None
     if date_str is None:
         mds = sorted(ARCHIVE_DIR.glob("????-??-??.md"))
         date_str = mds[-1].stem if mds else None
+    if "--send-only" in args:
+        if date_str:
+            send_telegram(date_str)
+        return
     if date_str:
         write_archive(date_str)
     write_index()
