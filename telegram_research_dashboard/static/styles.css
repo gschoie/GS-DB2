@@ -264,3 +264,10 @@ body.item-locked #task-item{appearance:none;-webkit-appearance:none;border-color
 .brief-card.tone-plan{background:#4a2f2a}
 .brief-card.tone-plan .brief-head small,.brief-card.tone-plan .brief-head a,
 .brief-card.tone-plan .brief-src{color:#f3bb92}
+
+/* 오늘의 요약 1행(네이버 Top10 | 방산 통합 | 건기 통합): 브리핑 본문이 300px에서 잘리지 않고
+   카드가 stretch로 받은 높이(=네이버 패널)를 끝까지 쓰게 한다. height:0+flex-grow 패턴 —
+   본문은 카드 높이를 키우지 않으면서 남는 공간을 채우고, 넘칠 때만 스크롤.
+   min-height는 모바일에서 행이 세로로 쌓일 때(기준 형제가 없어질 때) 본문이 0으로 붕괴하는 것 방지. */
+#unified-brief,#construction-brief{display:flex;flex-direction:column}
+#unified-brief .brief-body,#construction-brief .brief-body{flex:1 1 auto;height:0;min-height:280px;max-height:none}
