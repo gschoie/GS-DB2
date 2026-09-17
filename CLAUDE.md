@@ -428,5 +428,9 @@
       Apps Script 재붙여넣기 필요 — NotebookLM 전용 별도 프로젝트).
     - claude-brief-ingest가 defense_unified도 나름(경로별 관대 체크아웃, 텔레 가드 없음).
       build_static 복사·unifiedBrief 추출 추가. deploy는 기존 ingest workflow_run 경로 그대로.
+    - **방산 주간정리 소스 전환** (9/17): weekly_defense_bot의 지난 7일 수집을 날짜별
+      **통합본 우선, 통합본 없는 날짜만 기존 2종(제미나이·클로드) 보충**으로 변경 —
+      통합본 아카이브가 9/17부터라 첫 몇 주는 혼합, 이후 자연히 통합본 100%.
+      SYSTEM_PROMPT에 (제)/(클)/(GPT)·[상충] 표기 유지 지시 추가.
 
 이후 작업은 git log와 이 파일을 갱신하며 이어간다.
