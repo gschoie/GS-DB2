@@ -1,5 +1,5 @@
 {
-  "when_utc": "2026-09-17 09:29:51Z",
+  "when_utc": "2026-09-17 22:08:04Z",
   "ok": true,
   "note": "alert_sent",
   "chat_id_tail": "5171",
@@ -7,7 +7,7 @@
   "response": {
     "ok": true,
     "result": {
-      "message_id": 349,
+      "message_id": 352,
       "from": {
         "id": 8875725998,
         "is_bot": true,
@@ -21,8 +21,8 @@
         "username": "gschoie",
         "type": "private"
       },
-      "date": 1789637391,
-      "text": "📡 ETF/섹터 신호 · 2026-09-16 (전일 확정)\n\n⚡ 추세 강도 1개 (강력 1)\n\n⚡ TIME K바이오액티브 · 바이오/헬스케어\n   ADX 25 상향돌파 · 하락추세 강화(강력)\n   ADX 25.4 · %K 9.8/10.0 · 수급 중립\n   [B] 상대강도 하위 4% · ADX 하락추세\n\n전체 신호판 › 대시보드\n🎴 GS Research Desk · ETF/섹터 신호",
+      "date": 1789682884,
+      "text": "📡 ETF/섹터 신호 · 2026-09-17 (전일 확정)\n\n⚡ 추세 강도 2개 (강력 2)\n\n⚡ KODEX 자동차 · 자동차\n   ADX 25 상향돌파 · 하락추세 강화(강력)\n   ADX 25.1 · %K 4.8/5.8 · 수급 중립\n   [B] 상대강도 하위 2% · ADX 하락추세\n\n⚡ TIGER 바이오TOP10 · 바이오/헬스케어\n   ADX 25 상향돌파 · 하락추세 강화(강력) · 외인·기관 동반 순매도\n   ADX 25.3 · %K 7.3/7.5 · 개인몰림 주의\n   [B] 상대강도 하위 5% · ADX 하락추세\n\n전체 신호판 › 대시보드\n🎴 GS Research Desk · ETF/섹터 신호",
       "entities": [
         {
           "offset": 0,
@@ -36,11 +36,16 @@
         },
         {
           "offset": 56,
-          "length": 12,
+          "length": 9,
           "type": "bold"
         },
         {
-          "offset": 182,
+          "offset": 166,
+          "length": 14,
+          "type": "bold"
+        },
+        {
+          "offset": 310,
           "length": 4,
           "type": "text_link",
           "url": "https://gschoie.github.io/GS-DB2/etf_signal_report.html"
