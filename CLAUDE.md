@@ -214,6 +214,12 @@
       checkNewVideos 가 지나갈 때마다 로그에 적립해 메운다. 대시보드는 같은
       workflow_dispatch 에 kind:'weekly' 로 실려 `static/youtube_weekly/` +
       사이드바 `🗞 ┗방산유튜브.주간(평일)`. installWeeklyTrigger() 1회 실행 필요.
+    - **나우뉴스 밀리터리+ 주간 모음**(`sendNownewsMilitary`): m.nownews.seoul.co.kr 의
+      science/military(최현호의 무기인사이드) 목록에서 지난 31일 기사 링크만 모아
+      일요일 오전 8시대(`scheduledNownews`, `installNownewsTrigger`)에 텔레그램 두 통
+      (제목 목록 + 링크만)으로. NotebookLM 오디오 소스용. 기사 URL의 id 앞 8자리
+      (YYYYMMDD)로 날짜를 판별하므로 마크업이 바뀌어도 링크는 뽑힌다(제목은 best-effort).
+      doPost 에 send_nownews 액션. 매주 롤링(지난 한 달) — 겹침이 정상.
     - **수동 갱신 버튼**: ytdigest 뷰의 `🔄 모음 갱신` → 유튜브 GAS 프로젝트를 웹 앱으로
       배포한 주소(app.js `YTDIGEST_ENDPOINT`)에 POST {action:'send_digest'} → 최근 3일치를
       피드에서 다시 채워 즉시 발송(텔레그램 두 통 + 대시보드). LockService로 동시 실행 방지.
@@ -363,5 +369,64 @@
       크론(UTC 23:30 일~목)은 안전망 — 스크립트의 '오늘 이미 발송(KST)' 가드로 중복 방지.
       상태(state/research_digest.json)는 발송 성공 뒤에만 커밋.
     - GAS 반영 필요: dispatch_proxy.gs 붙여넣기 → '배포 관리 → 새 버전'.
+
+23. **ChatGPT 방산 브리핑 신설 — API 자동 생성 + 수동 등록** (9/16): Gemini(defense_daily)·
+    Claude(claude_defense)에 이은 3탄(`static/chatgpt_defense/` + `chatgpt_defense_report.html`,
+    사이드바 `🧠 글로벌방산.브리핑(GPT)`). 텔레그램은 방산 채널(KDEF_TELEGRAM_*,
+    GPT_TELEGRAM_* 시크릿 있으면 우선)로 요약+링크.
+    - **자동 생성(기본)**: `chatgpt-brief.yml` 크론 UTC 20:55(KST 05:55, Gemini 20:40과
+      15분 오프셋) → `defense_briefing/chatgpt_briefing_bot.py` — Gemini 판과 같은 골격으로
+      defense_briefing_bot의 yfinance 확정 시세·구글뉴스 RSS(24h)·SYSTEM_PROMPT를 그대로
+      재사용하고 **작성만 OpenAI API**(Chat Completions, `OPENAI_API_KEY` 시크릿 필수 —
+      없으면 API 생성만 조용히 스킵). 모델은 `OPENAI_MODEL` 리포 변수로 교체 가능,
+      기본 후보 gpt-5 → gpt-5-mini → gpt-4o 순 404 폴백. temperature·max_tokens는
+      모델 세대별 이름·허용값이 달라 아예 안 보낸다(모델 기본값 사용).
+    - **수동 등록이 자동보다 우선**(같은 날짜 md 있으면 API 생성 스킵): ① 인덱스 페이지
+      ✍️ 폼 붙여넣기 → GAS dispatch_proxy 라우트 `gptbrief` → workflow_dispatch(content·date),
+      ② `chatgpt_briefing/inbox/YYYY-MM-DD.md` 커밋(push 트리거, 처리 후 삭제·README 건너뜀).
+      workflow_dispatch 문자열 입력칸은 한 줄짜리라 여러 줄 md가 뭉개짐 — 수동은 폼/파일로.
+      같은 날짜 재등록 = 페이지 교체 + 텔레 재발송.
+    - 렌더러는 claude_brief_publish.py 임포트 재사용(`gpt_brief_publish.py`, 발행·인덱스·
+      텔레그램). deploy-pages workflow_run에 "ChatGPT 방산 브리핑" 추가, build_static 복사
+      추가. **GAS 정본 갱신 필요** — Apps Script 재붙여넣기 + '배포 관리 → 새 버전'(새 배포 금지).
+    - **(9/17 저녁 A안 전환) OpenAI API는 유료(무료 티어 없음)라 자동 작성 주체를
+      Claude 예약 세션으로 교체** — 건설기계와 동일 구조. chatgpt-brief.yml 크론(05:55)은
+      **수집 전용**(`chatgpt_briefing_bot.py` 기본 모드 = collect_only →
+      `chatgpt_briefing/inputs/<날짜>.json`, 7일 보관), 작성은 루틴 [6.5] 단계가
+      inputs(news_list·price_table)만 근거로 수행 → 두 브랜치 push → claude-brief-ingest가
+      chatgpt_defense도 main으로 나르고 RSS판 텔레그램 발송(send_gpt 가드).
+      명칭도 정직하게 **'RSS판'**으로 변경(사이드바 `🧠 글로벌방산.브리핑(RSS)`, 페이지
+      h1·텔레 헤더 동일) — 작성자는 클로드지만 웹서치판(클)과 달리 RSS 목록만 근거라
+      소스 관점이 다름. ChatGPT 앱 산출물은 폼/inbox 수동 등록으로 여전히 우선 적용.
+      OpenAI 경로는 봇 `--api` 플래그로만 잔존(키 등록 시 사용 가능).
+
+24. **크론 안전망 가드가 중복 발송을 못 막던 버그** (9/16): 수급이 하루 4회인데 저녁에
+    18:08·20:58·21:48 세 번 더 돌아 텔레그램이 계속 왔다.
+    - **가드가 `event=workflow_dispatch` 만 셌다.** 무료 러너 크론이 밀리면(그날 실측
+      +4.5~5.3시간) 15:40·16:40 두 크론이 나란히 16:10~24:00 슬롯에 떨어지는데,
+      앞 실행이 schedule 이면 dispatch 검색에 안 잡혀 뒤 크론이 또 돈다. 가드는
+      "GAS가 이미 했나"만 보고 "이 슬롯이 이미 처리됐나"는 안 본 것.
+    - 고침: **이벤트를 가리지 않고** 창 안의 성공·진행중 run 을 세되 `select(.id !=
+      github.run_id)` 로 자기 자신만 뺀다. 실패한 선행 run 은 안 세므로 재시도는 그대로 된다.
+      market-flow(슬롯 경계)·etf-holdings(45분 창) 둘 다 적용 — 크론이 여러 개인
+      워크플로가 이 두 개뿐이다(trend·etf·consensus 는 하루 1~2회라 자기들끼리 안 겹침).
+    - 교훈: **안전망 가드는 "다른 경로가 했나"가 아니라 "이 일이 이미 됐나"를 물어야 한다.**
+    - 남은 관찰: 그날 15:40·16:40 슬롯에 dispatch 가 하나도 없었다 — GAS 스케줄러가
+      그 두 슬롯을 못 쐈다는 뜻. 가드를 고쳐도 슬롯당 1회는 늦은 크론이 대신 처리하므로
+      발송 자체는 되지만, 정시성이 필요하면 Apps Script 쪽 트리거 상태를 확인할 것.
+
+25. **방산 브리핑 통합본 신설** (9/17): 3판(제미나이·클로드 웹서치·GPT/RSS)은 각자 그대로
+    두고, 매일 아침 세션 루틴 [6.6]이 세 md를 편집장 관점에서 하나로 합친 **통합본**을
+    추가 발행 — `static/defense_unified/<날짜>.md|.html` + `defense_unified_report.html`
+    (`defense_briefing/unified_brief_publish.py`, 렌더러 재사용·텔레그램 없음).
+    - 통합 문법: 같은 사건은 한 번만(판 표기), 수치 상충은 [상충] 병기, 형식은 일간 브리핑과 동일.
+    - **용도 3곳으로 단일화**: ① 사이드바 🌐 글로벌방산.브리핑 서브메뉴 맨 위
+      `🛡️ 글로벌방산.브리핑(통합)`, ② 오늘의 요약 방산 카드 — 기존 제미나이·클로드 카드
+      2개를 없애고 통합 카드 1개(#unified-brief, payload.unifiedBrief)로(에너지·건기 카드
+      유지, 2행은 건기+데일리 재배분), ③ **NotebookLM 구글DOC 적재 소스 — 통합본만**
+      (`gas/defense_notebooklm_doc.gs` NLM_SOURCES를 defense_unified 하나로; 사용자
+      Apps Script 재붙여넣기 필요 — NotebookLM 전용 별도 프로젝트).
+    - claude-brief-ingest가 defense_unified도 나름(경로별 관대 체크아웃, 텔레 가드 없음).
+      build_static 복사·unifiedBrief 추출 추가. deploy는 기존 ingest workflow_run 경로 그대로.
 
 이후 작업은 git log와 이 파일을 갱신하며 이어간다.

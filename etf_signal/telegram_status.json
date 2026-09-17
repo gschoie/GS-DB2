@@ -1,5 +1,5 @@
 {
-  "when_utc": "2026-09-15 23:51:29Z",
+  "when_utc": "2026-09-16 23:46:47Z",
   "ok": true,
   "note": "alert_sent",
   "chat_id_tail": "5171",
@@ -7,7 +7,7 @@
   "response": {
     "ok": true,
     "result": {
-      "message_id": 329,
+      "message_id": 338,
       "from": {
         "id": 8875725998,
         "is_bot": true,
@@ -21,8 +21,8 @@
         "username": "gschoie",
         "type": "private"
       },
-      "date": 1789516289,
-      "text": "📡 ETF/섹터 신호 · 2026-09-15 (전일 확정)\n\n★ 매수 신호(골든크로스) 1개\n\n🟢 TIGER 미디어컨텐츠 · 게임/콘텐츠\n   ＋DI가 −DI 상향돌파·추세전환\n   ADX 14.6 · %K 65.2/53.3 · 수급 중립\n   [B] 거래대금 2.31배 · 상대강도 상위 27%\n\n⚡ 추세 강도 2개\n\n🔺 KODEX 은행 · 금융\n   ADX 20 상향돌파 · 상승추세 확립(확인)\n   ADX 20.8 · %K 81.9/77.1 · 수급 중립\n   [A] 상대강도 상위 7% · ADX 상승추세 · 52주 신고가권\n\n🔺 SOL 금융지주플러스고배당 · 금융\n   ADX 20 상향돌파 · 상승추세 확립(확인)\n   ADX 20.0 · %K 83.8/80.1 · 수급 중립\n   [B] 상대강도 상위 9% · ADX 상승추세\n\n전체 신호판 › 대시보드\n🎴 GS Research Desk · ETF/섹터 신호",
+      "date": 1789602407,
+      "text": "📡 ETF/섹터 신호 · 2026-09-16 (전일 확정)\n\n⚡ 추세 강도 1개 (강력 1)\n\n⚡ TIME K바이오액티브 · 바이오/헬스케어\n   ADX 25 상향돌파 · 하락추세 강화(강력)\n   ADX 25.4 · %K 9.8/10.0 · 수급 중립\n   [B] 상대강도 하위 4% · ADX 하락추세\n\n전체 신호판 › 대시보드\n🎴 GS Research Desk · ETF/섹터 신호",
       "entities": [
         {
           "offset": 0,
@@ -30,32 +30,17 @@
           "type": "bold"
         },
         {
-          "offset": 50,
+          "offset": 43,
           "length": 1,
           "type": "bold"
         },
         {
-          "offset": 57,
+          "offset": 56,
           "length": 12,
           "type": "bold"
         },
         {
-          "offset": 177,
-          "length": 1,
-          "type": "bold"
-        },
-        {
-          "offset": 184,
-          "length": 8,
-          "type": "bold"
-        },
-        {
-          "offset": 306,
-          "length": 14,
-          "type": "bold"
-        },
-        {
-          "offset": 429,
+          "offset": 182,
           "length": 4,
           "type": "text_link",
           "url": "https://gschoie.github.io/GS-DB2/etf_signal_report.html"

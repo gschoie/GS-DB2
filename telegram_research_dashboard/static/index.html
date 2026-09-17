@@ -34,10 +34,22 @@
           <div class="nav-sep"></div>
           <button class="nav" data-view="union-board">⚓ 현중 노조게시판</button>
           <div class="nav-sep"></div>
-          <button class="nav" data-view="defense">🌍 글로벌방산.브리핑(제)</button>
-          <a href="claude_defense_report.html" target="_blank" rel="noopener">🌐 글로벌방산.브리핑(클)</a>
-          <button class="nav" data-view="ytdigest">📺 ┗방산유튜브.3일모음</button>
-          <button class="nav" data-view="ytweekly">🗞 ┗방산유튜브.주간(평일)</button>
+          <details class="nav-subgroup">
+            <summary>🌐 글로벌방산.브리핑</summary>
+            <div class="nav-submenu-2">
+              <a href="defense_unified_report.html" target="_blank" rel="noopener">🛡️ 글로벌방산.브리핑(통합)</a>
+              <button class="nav" data-view="defense">🌍 글로벌방산.브리핑(제)</button>
+              <a href="claude_defense_report.html" target="_blank" rel="noopener">🌐 글로벌방산.브리핑(클)</a>
+              <a href="chatgpt_defense_report.html" target="_blank" rel="noopener">🧠 글로벌방산.브리핑(GPT)</a>
+            </div>
+          </details>
+          <details class="nav-subgroup">
+            <summary>📺 방산→오디오.오버뷰</summary>
+            <div class="nav-submenu-2">
+              <button class="nav" data-view="ytdigest">📺 방산유튜브.3일모음</button>
+              <button class="nav" data-view="ytweekly">🗞 방산유튜브.주간(평일)</button>
+            </div>
+          </details>
           <button class="nav" data-view="construction">🏗️ 글로벌건설기계.브리핑</button>
           <button class="nav" data-view="energy">🌊 친환경E·FDC.브리핑</button>
           <a href="https://app.raindrop.io/my/0" target="_blank" rel="noopener">💧 RainDrop.4방산</a>
@@ -204,12 +216,11 @@
       <div class="brief-row" style="display:flex;gap:14px;align-items:stretch;flex-wrap:wrap;margin-bottom:14px">
         <section class="panel" style="flex:33 1 260px;min-width:250px;margin:0"><div class="panel-head"><div><small>MACRO · 글로벌경제</small><h2>네이버 Top 10</h2></div><a class="panel-more" href="https://news.naver.com/breakingnews/section/101/262" target="_blank" rel="noopener">더보기 →</a></div><div id="macro-global"></div></section>
         <div id="energy-brief" class="brief-card" style="flex:33 1 260px;min-width:250px;margin:0"></div>
-        <div id="claude-brief" class="brief-card" style="flex:33 1 260px;min-width:250px;margin:0"></div>
+        <div id="unified-brief" class="brief-card" style="flex:33 1 260px;min-width:250px;margin:0"></div>
       </div>
       <div class="brief-row" style="display:flex;gap:14px;align-items:stretch;flex-wrap:wrap;margin-bottom:14px">
-        <div id="construction-brief" class="brief-card" style="flex:45 1 280px;min-width:260px;margin:0"></div>
-        <div id="daily-brief" class="brief-card" style="flex:10 1 140px;min-width:130px;margin:0"></div>
-        <div id="defense-brief" class="brief-card" style="flex:45 1 280px;min-width:260px;margin:0"></div>
+        <div id="construction-brief" class="brief-card" style="flex:80 1 280px;min-width:260px;margin:0"></div>
+        <div id="daily-brief" class="brief-card" style="flex:20 1 140px;min-width:130px;margin:0"></div>
       </div>
       <div class="grid grid-quad">
         <section class="panel"><div class="panel-head"><div><small>LATEST RESEARCH</small><h2>GS의 발간 보고서</h2></div><button data-go="reports">전체 보기 →</button></div><div id="latest-reports"></div></section>
@@ -264,7 +275,7 @@
     </section>
 
     <section id="chatbot" class="view">
-      <div class="archive-intro tone-intro"><div><p class="eyebrow" style="margin:0">DAOL RESEARCH CHATBOT</p></div><div class="etf-actions"><span style="font-size:11px;color:#8a938d">리포트 1,200여 건 + PDF 원문 근거 Q&amp;A · API 키는 이 브라우저에만 저장</span><a class="panel-more" href="chat_full.html" target="_blank" rel="noopener">새 창으로 ↗</a></div></div>
+      <div class="archive-intro tone-intro"><div><p class="eyebrow" style="margin:0">DAOL RESEARCH CHATBOT</p></div><div class="etf-actions"><span style="font-size:11px;color:#8a938d">리포트 1,200여 건 + PDF 원문 근거 Q&amp;A · API 키는 이 브라우저에만 저장</span><a class="panel-more" href="https://daol-securities-research-center.github.io/DAOL-RESEARCH-TONE/chat.html" target="_blank" rel="noopener">새 창으로 ↗</a></div></div>
       <iframe id="chatbot-frame" class="union-board-frame" title="DAOL 리서치와 챗봇" loading="lazy"></iframe>
     </section>
 

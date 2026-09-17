@@ -25,8 +25,14 @@ concurrency:
 jobs:
   # GAS 시계(gas/dispatch_proxy.gs의 tick)가 정시에 workflow_dispatch로 쏘고,
   # GitHub 크론은 안전망으로 남긴다. 크론이 뒤늦게 돌 때 같은 일을 두 번 하지
-  # 않도록, 최근 45분 내에 dispatch 실행이 이미 있었으면 이 예약 실행은 건너뛴다.
-  # (매시 · 간격 60분) 수동 버튼(dispatch)은 언제나 그대로 실행된다.
+  # 않도록, 최근 45분 내에 이미 실행이 있었으면 이 예약 실행은 건너뛴다.
+  # (매시 · 간격 60분)
+  #
+  # **dispatch만 세면 안 된다** — 크론이 밀리면 여러 시각의 크론이 한 덩어리로
+  # 몰려 떨어지는데, 앞 실행이 schedule이면 dispatch 검색에 안 잡혀 뒤 크론이 또
+  # 돈다(market-flow에서 같은 이유로 한 슬롯에 3번 발송된 적 있음).
+  #
+  # 수동 버튼(dispatch)은 이 잡 자체를 건너뛰므로 언제나 그대로 실행된다.
   guard:
     runs-on: ubuntu-latest
     permissions:
@@ -34,18 +40,19 @@ jobs:
     outputs:
       skip: ${{ steps.check.outputs.skip }}
     steps:
-      - name: 최근 dispatch 실행 확인
+      - name: 최근 실행 확인
         id: check
         if: github.event_name == 'schedule'
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
           since=$(date -u -d '-45 minutes' +%Y-%m-%dT%H:%M)
-          n=$(gh api "repos/${{ github.repository }}/actions/workflows/etf-holdings.yml/runs?event=workflow_dispatch&created=%3E${since}" \
-                --jq '[.workflow_runs[] | select(.conclusion=="success" or .status=="in_progress" or .status=="queued")] | length' || echo 0)
-          echo "최근 45분 내 dispatch 실행 ${n:-0}건"
+          n=$(gh api "repos/${{ github.repository }}/actions/workflows/etf-holdings.yml/runs?created=%3E${since}" \
+                --jq "[.workflow_runs[] | select(.id != ${{ github.run_id }}) \
+                       | select(.conclusion==\"success\" or .status==\"in_progress\" or .status==\"queued\")] | length" || echo 0)
+          echo "최근 45분 내 선행 실행 ${n:-0}건"
           if [ "${n:-0}" -gt 0 ]; then
-            echo "::notice::GAS가 이미 실행했습니다 — 이 예약 실행은 건너뜁니다"
+            echo "::notice::이미 실행됐습니다 — 이 예약 실행은 건너뜁니다"
             echo "skip=true" >> "$GITHUB_OUTPUT"
           fi
 
