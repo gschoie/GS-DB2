@@ -1,7 +1,7 @@
 """커버리지 리서치 요약 아침 모음 — 낱개 알림이 아니라 하루 한 통.
 
 요약 채널(@ked_epic_ai)에는 증권사 보고서를 "[✨ 리서치 요약] 기업명 …" 형태로 요약해 올리는
-글이 하루 수십 건 흐른다. 이 스크립트는 매일 아침(08:30 KST 목표) 그 채널의 지난 하루치에서
+글이 하루 수십 건 흐른다. 이 스크립트는 매일 아침(08:50 KST 목표 — 채널의 아침 목록이 ~08:40에 올라온다) 그 채널의 지난 하루치에서
 요약 글만 골라, 커버리지 산업(조선·방산·기계)에 해당하는 것만 추려 한 통으로 보낸다.
 
 ship_all(조선 염탐)과의 관계: 저쪽은 걸리는 즉시 낱개 알림, 여기는 '보고서 요약'
@@ -36,8 +36,18 @@ BASE_DIR = Path(__file__).resolve().parent
 STATE_PATH = BASE_DIR / "state" / "research_digest.json"
 KST = timezone(timedelta(hours=9))
 
-# 보고서 요약 글의 표식. 채널마다 이모지 유무가 달라 '리서치 요약'만 본다.
-MARKER_RE = re.compile(r"리서치\s*요약")
+# 보고서 글의 표식. 채널이 두 형태로 올린다:
+#   ① "[✨ 리서치 요약] 기업명 …"        — 장중 낱개 요약
+#   ② "[✨ 리서치] 심층 분석 보고서" 등    — 아침(자정~8시 발간분) 번호 목록 한 통
+# ①만 보다가 ②를 통째로 놓쳐 아침 발간분이 한 건도 안 잡혔었다(9/18 발견).
+MARKER_RE = re.compile(r"\[\s*✨\s*리서치|리서치\s*요약")
+# 제목 표시용으로 벗겨낼 머리말
+MARKER_STRIP_RE = re.compile(r"\[\s*✨\s*리서치[^\]]*\]|리서치\s*요약")
+# 목록 글(②)의 항목. 두 형태를 쓴다:
+#   번호  "1. 산업 | [조선] 제목 | SK증권"  — 다음 번호 전까지가 한 항목
+#   불릿  "- 한솔케미칼 | 325,000 | 현대차증권" — 한 줄이 한 항목
+ENTRY_RE = re.compile(r"^\s*\d{1,2}\.\s+(.+?)(?=^\s*\d{1,2}\.\s|\Z)", re.M | re.S)
+BULLET_RE = re.compile(r"^\s*[-•]\s+(.+)$", re.M)
 # 제목 정규화용 — 같은 요약이 여러 채널로 퍼날라진 것을 접는다.
 TITLE_NOISE_RE = re.compile(r"[^0-9a-z가-힣]+")
 
@@ -79,8 +89,40 @@ def coverage_labels(groups: list[tuple[str, list[str]]], text: str) -> list[str]
 
 def title_key(title: str) -> str:
     """퍼나른 같은 요약을 접기 위한 제목 지문. 표식·이모지·문장부호를 걷어낸다."""
-    value = MARKER_RE.sub("", title.casefold())
+    value = MARKER_STRIP_RE.sub("", title.casefold())
     return TITLE_NOISE_RE.sub("", value)
+
+
+def explode_entries(items: list[adapters.Item]) -> list[adapters.Item]:
+    """목록 글(번호 목록 2건 이상)은 보고서 항목별로 쪼갠다. 낱개 요약 글은 그대로.
+
+    아침 '[✨ 리서치] 심층 분석 보고서' 한 통에 여러 산업 보고서가 섞여 있어,
+    글 단위로 매칭하면 조선 한 건 때문에 제약·ESG까지 딸려 오거나 제목이
+    '심층 분석 보고서'로만 찍힌다. 항목 단위로 갈라야 커버리지 것만 제목째 뽑힌다.
+    """
+    exploded: list[adapters.Item] = []
+    for item in items:
+        # 낱개 요약 글("[✨ 리서치 요약] 회사명 …")은 분해하지 않는다 — 제목이 이미
+        # 회사명을 담고 있고, 본문의 '- ' 줄은 목록이 아니라 요약 포인트다.
+        if re.search(r"리서치\s*요약", item.title or ""):
+            exploded.append(item)
+            continue
+        entries = [" ".join(chunk.split()) for chunk in ENTRY_RE.findall(item.body or "")]
+        if not entries:
+            entries = [" ".join(chunk.split()) for chunk in BULLET_RE.findall(item.body or "")]
+        # 목록 항목은 '산업 | 제목 | 증권사'처럼 | 구분자를 쓴다. 요약 포인트류
+        # 불릿을 목록으로 오인하지 않기 위한 조건이며, 목록이 1건짜리 날도 분해한다
+        # (분해해야 표시 제목이 '심층 분석 보고서'가 아니라 보고서 제목이 된다).
+        entries = [entry for entry in entries if len(entry) >= 8 and "|" in entry]
+        if not entries:
+            exploded.append(item)
+            continue
+        for order, entry in enumerate(entries):
+            exploded.append(adapters.Item(
+                uid=f"{item.uid}#{order}", title=entry, url=item.url, body=entry,
+                published_at=item.published_at, origin=item.origin,
+            ))
+    return exploded
 
 
 def load_digest_state() -> dict:
@@ -112,15 +154,33 @@ def pick_window_hours(state: dict, now: datetime, override: float | None) -> flo
     return min(max(hours, 1.0), MAX_WINDOW_HOURS)
 
 
-def collect_reports(window_hours: float, channels: list[str]) -> list[adapters.Item]:
+def looks_like_report_list(body: str) -> bool:
+    """표식 없이 오는 보고서 목록 메시지인지. 채널이 '[✨ 리서치] 심층 분석 보고서'
+    헤더와 번호 목록을 **별개 메시지**로 올려서, 목록 쪽은 제목이 '1. 산업 | …'로
+    시작해 표식 필터에 걸리지 않는다(9/18 확인). '항목 | 항목 | 증권사' 꼴의
+    구분자 있는 번호/불릿 줄이 2개 이상이면 목록으로 본다."""
+    numbered = [chunk for chunk in ENTRY_RE.findall(body or "") if "|" in chunk]
+    if len(numbered) >= 2:
+        return True
+    bullets = [chunk for chunk in BULLET_RE.findall(body or "") if "|" in chunk]
+    return len(bullets) >= 2
+
+
+def collect_raw(window_hours: float, channels: list[str]) -> list[adapters.Item]:
     # 요약 글은 지정 채널(x_research_digest_channels)에서만 올라온다.
     # include_chats로 좁히면 다른 방은 히스토리를 아예 요청하지 않아 스캔이 몇 초로 끝난다.
-    source = {
+    return adapters.collect_telegram_account({
         "lookback_hours": window_hours,
         "include_chats": channels,
-    }
-    items = adapters.collect_telegram_account(source)
-    return [item for item in items if MARKER_RE.search(item.title or "")]
+        # 이 채널은 하루 수십 건을 올린다. 기본 상한(방당 30개)이면 오전 글이
+        # 오후 요약 무더기에 밀려 잘려 나간다(9/18 아침 심층 목록 유실의 원인).
+        "per_chat_limit": 500,
+    })
+
+
+def pick_reports(items: list[adapters.Item]) -> list[adapters.Item]:
+    return [item for item in items
+            if MARKER_RE.search(item.title or "") or looks_like_report_list(item.body)]
 
 
 def build_digest(items: list[adapters.Item], groups: list[tuple[str, list[str]]],
@@ -128,7 +188,7 @@ def build_digest(items: list[adapters.Item], groups: list[tuple[str, list[str]]]
     """모음 메시지 본문과 건수를 만든다. 커버리지 밖 요약은 여기서 걸러진다."""
     escape = notify.escape
     picked: dict[str, dict] = {}   # title_key → {item, labels, channels}
-    for item in sorted(items, key=lambda it: (it.published_at or now)):
+    for item in sorted(explode_entries(items), key=lambda it: (it.published_at or now, it.uid)):
         labels = coverage_labels(groups, item.text_for_match())
         if not labels:
             continue
@@ -148,7 +208,7 @@ def build_digest(items: list[adapters.Item], groups: list[tuple[str, list[str]]]
     for entry in picked.values():
         item, labels = entry["item"], entry["labels"]
         when = f"{item.published_at.astimezone(KST):%H:%M}" if item.published_at else "?"
-        title = MARKER_RE.sub("", item.title).strip(" []✨-·:") or item.title
+        title = MARKER_STRIP_RE.sub("", item.title).strip(" []✨-·:") or item.title
         line = f"• <b>[{escape(labels[0])}]</b> {escape(title)}"
         extra = len(entry["channels"]) - 1
         meta = f"{when}" + (f" · {extra + 1}개 채널" if extra > 0 else "")
@@ -182,11 +242,34 @@ def main(argv: list[str] | None = None) -> int:
             pass
 
     groups, channels = load_coverage()
-    window = pick_window_hours(state, now, args.window_hours)
+    if args.dry_run and not args.window_hours:
+        # 진단용 dry-run은 직전 발송 시각과 무관하게 하루치를 통째로 본다
+        window = float(DEFAULT_WINDOW_HOURS)
+    else:
+        window = pick_window_hours(state, now, args.window_hours)
     print(f"조회 창 {window:.1f}시간 · 커버리지 묶음 {len(groups)}개 · 대상 채널 {', '.join(channels)}")
 
-    items = collect_reports(window, channels)
-    print(f"리서치 요약 글 {len(items)}건 수집")
+    raw = collect_raw(window, channels)
+    if raw:
+        stamps = sorted(i.published_at for i in raw if i.published_at)
+        span = (f"{stamps[0].astimezone(KST):%m/%d %H:%M}~{stamps[-1].astimezone(KST):%H:%M}"
+                if stamps else "?")
+        print(f"원시 메시지 {len(raw)}건 · 시간 범위 {span} KST")
+    items = pick_reports(raw)
+    print(f"리서치 표식 글 {len(items)}건 수집")
+    # 매칭 진단용 — '왜 안 잡혔지?'가 나오면 이 목록부터 본다.
+    # 목록 글은 분해된 항목과 항목별 커버리지 판정까지 찍는다.
+    exploded = explode_entries(items)
+    for entry in exploded:
+        labels = coverage_labels(groups, entry.text_for_match())
+        mark = ",".join(labels) if labels else "－"
+        print(f"  · [{mark}] {entry.title[:70]}")
+    split_uids = {entry.uid.split("#")[0] for entry in exploded if "#" in entry.uid}
+    for item in items:
+        # 낱개 요약이 아닌데 분해도 안 된 글 — 본문 앞부분을 남겨 형식을 파악한다
+        if item.uid not in split_uids and not re.search(r"리서치\s*요약", item.title or ""):
+            head_lines = "\n".join((item.body or "").splitlines()[:8])
+            print(f"  ⚠ 분해 안 됨({item.uid}):\n{head_lines}")
 
     text, count = build_digest(items, groups, now)
     if args.dry_run:

@@ -171,7 +171,7 @@ const SCHEDULE = [
                      inputs: { via: 'scheduler' } },
   { wf: 'consensus', hours: [17],     minute: 0,  days: 'fri,sat', label: '코스피200 컨센' },
   // 스크립트 자체에 '오늘 이미 발송' 가드가 있어 GitHub 크론 안전망과 겹쳐도 한 통만 간다
-  { wf: 'research',  hours: [8],      minute: 30, days: 'weekday', label: '커버리지 리서치요약 모음' },
+  { wf: 'research',  hours: [8],      minute: 50, days: 'weekday', label: '커버리지 리서치요약 모음' },   // 채널 아침 목록(~08:40) 뒤
 ];
 
 /** 5분마다 도는 본체. 목표 시각을 지난 슬롯 중 오늘 아직 안 쏜 것을 발사한다. */

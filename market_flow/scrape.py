@@ -2,11 +2,21 @@
 """네이버 파이낸스에서 KOSPI 수급 스냅샷을 수집해 data/history.json 에 누적한다.
 
 하루 4회(10:00 / 13:00 / 15:40잠정 / 16:40확정 KST) GitHub Actions로 실행.
- - 매 실행: 시세 메인페이지의 투자자 잠정치(개인/외국인/기관) + 프로그램(차익/비차익/전체) 스냅샷
- - 매 실행: 일별 확정치 백필(투자자별·프로그램·K200선물, 최근 3페이지 ≈ 30영업일)
- - 15:40/16:40 실행: 시간대별 누적 곡선(투자자·프로그램·선물)을 10분 간격으로 샘플링해 저장
+ - 매 실행: 투자자 잠정치(개인/외국인/기관) + 프로그램(차익/비차익/전체) 스냅샷
+ - 매 실행: 일별 확정 백필 — 투자자별은 30영업일, 프로그램은 당일치만
+ - 15:40/16:40 실행: 그날 슬롯 스냅샷을 이어 붙인 장중 곡선 저장
 휴장일(모바일API localTradedAt 날짜 ≠ 오늘)은 아무것도 쓰지 않고 종료한다.
-단위: 현물·프로그램 억원, 선물은 페이지 표기 단위(보통 계약)를 futures_unit에 기록.
+단위: 억원.
+
+[2026-09-18 수집 경로 전면 교체]
+네이버가 옛 PC 수급 페이지를 **410 Gone** 으로 폐기했다(9/11 리다이렉트 →
+9/16 시간대별로 우회 → 9/18 그것마저 삭제). 신규 SPA 가 쓰는 JSON API 로 옮겼다:
+  · m.stock.naver.com/api/index/<code>/trend?bizdate=  개인·외국인·기관 (과거 조회 O)
+  · m.stock.naver.com/front-api/stock/domestic/integration  당일 투자자별+프로그램
+JSON 이라 마크업 변경에는 안 깨진다. 다만 옛 페이지가 주던 아래 셋은 대체 경로가 없다:
+  · 기관 세부 7항목(금융투자·보험·투신·은행·기타금융·연기금등·기타법인)
+  · 프로그램 매수/매도 다리 (순매수만 남음 — 화면·텔레그램은 원래 순매수만 썼다)
+  · K200 선물 투자자별 (신규 API 의 KPI200 은 현물이라 대용 불가 — 섹션 비표시)
 """
 import csv
 import json
@@ -17,7 +27,6 @@ from pathlib import Path
 
 import requests
 from requests.adapters import HTTPAdapter, Retry
-from bs4 import BeautifulSoup
 
 HERE = Path(__file__).resolve().parent
 DATA = HERE / "data"
@@ -26,17 +35,10 @@ RUN_META = DATA / "run_meta.json"
 
 KST = dt.timezone(dt.timedelta(hours=9))
 UA = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"}
-BASE = "https://finance.naver.com/sise"
 
 KEEP_DAYS = 60      # history.json에 보관할 일수
 KEEP_CURVE_DAYS = 5  # 장중 곡선을 보관할 일수
 
-INV_COLS = ["individual", "foreign", "inst_total",
-            "fin_invest", "insurance", "asset_mgmt", "bank",
-            "other_fin", "pension", "other_corp"]
-PRG_COLS = ["arb_buy", "arb_sell", "arb_net",
-            "nonarb_buy", "nonarb_sell", "nonarb_net",
-            "total_buy", "total_sell", "total_net"]
 
 
 def now_kst():
@@ -56,10 +58,6 @@ def get(url, **kw):
     return r
 
 
-def get_html(url):
-    r = get(url)
-    r.encoding = "euc-kr"
-    return BeautifulSoup(r.text, "lxml")
 
 
 def num(s):
@@ -81,87 +79,128 @@ def kospi_basic():
     }
 
 
+# ── 네이버 신규 JSON API ────────────────────────────────────────────────────
+# 2026-09-18: 옛 PC 수급 페이지 4종이 전부 410 Gone 으로 사라졌다(9/16 에 갈아탄
+# 시간대별 페이지 포함). 러너 프로브로 신규 SPA 가 쓰는 API 를 찾아 이쪽으로 옮긴다.
+#   m.stock.naver.com/api/index/<code>/trend?bizdate=  → 개인·외국인·기관 (과거 조회 O)
+#   m.stock.naver.com/front-api/stock/domestic/integration → dealTrendInfo + programTrendInfo
+# HTML 파싱이 아니라 JSON 이라 마크업 변경에는 안 깨진다. 단, 옛 페이지가 주던
+# 기관 세부 7항목·프로그램 매수/매도 다리·선물 투자자별은 이 API 에 없다.
+MAPI = "https://m.stock.naver.com/api"
+FRONT = "https://m.stock.naver.com/front-api"
+
+
+def _amt(s):
+    """'+1,311' → 1311 · '-25,126' → -25126 · None/빈값 → None (단위 억원)"""
+    if s is None:
+        return None
+    s = str(s).replace(",", "").replace("+", "").strip()
+    try:
+        return int(s)
+    except ValueError:
+        return None
+
+
+def index_trend(code="KOSPI", bizdate=None):
+    """지수의 개인·외국인·기관 순매수(억원). bizdate 를 주면 그날치.
+
+    휴장일을 요청하면 네이버가 직전 거래일 값을 돌려주므로, 응답의 bizdate 가
+    요청과 다르면 '그날은 거래일이 아니다'로 보고 None 을 반환한다.
+    """
+    j = get(f"{MAPI}/index/{code}/trend",
+            params={"bizdate": bizdate} if bizdate else None).json()
+    got = j.get("bizdate")
+    if bizdate and got != bizdate:
+        return None
+    return {"bizdate": got,
+            "individual": _amt(j.get("personalValue")),
+            "foreign": _amt(j.get("foreignValue")),
+            "inst_total": _amt(j.get("institutionalValue"))}
+
+
+def index_integration(code="KOSPI"):
+    """오늘의 투자자별 + 프로그램(차익·비차익·합계). 과거 조회는 안 된다."""
+    j = get(f"{FRONT}/stock/domestic/integration",
+            params={"code": code, "endType": "index"}).json()
+    res = j.get("result") or {}
+    deal = res.get("dealTrendInfo") or {}
+    prg = res.get("programTrendInfo") or {}
+    return {
+        "bizdate": deal.get("bizdate") or prg.get("bizdate"),
+        "individual": _amt(deal.get("personalValue")),
+        "foreign": _amt(deal.get("foreignValue")),
+        "inst_total": _amt(deal.get("institutionalValue")),
+        # Real = 실시간 누적. difference=차익, biDifference=비차익.
+        "arb_net": _amt(prg.get("indexDifferenceReal")),
+        "nonarb_net": _amt(prg.get("indexBiDifferenceReal")),
+        "total_net": _amt(prg.get("indexTotalReal")),
+    }
+
+
 def snapshot_provisional(bizdate):
     """잠정 스냅샷: 개인/외국인/기관 + 차익/비차익/전체 (억원).
 
-    원래 시세 메인페이지의 lst_kos_info 블록에서 읽었으나, 2026-09-11경 네이버가
-    옛 PC 페이지(sise_index.naver)를 신규 사이트(stock.naver.com SPA)로 리다이렉트하며
-    블록이 사라졌다. 같은 수치를 담은 시간대별 페이지(아직 유지)의 최신 행으로 대체.
+    옛 시세 메인 → (9/16) 시간대별 페이지 → (9/18) 신규 JSON API 로 두 번 옮겼다.
+    integration 은 '지금 이 순간의 누적'을 주므로 슬롯 스냅샷 용도에 그대로 맞는다.
     """
-    soup = get_html(f"{BASE}/investorDealTrendTime.naver?bizdate={bizdate}&page=1")
-    inv = _table_rows(soup, 10)
-    soup = get_html(f"{BASE}/programDealTrendTime.naver?bizdate={bizdate}&page=1")
-    prg = _table_rows(soup, 9)
-    if not inv or not prg:
-        raise RuntimeError(f"시간대별 잠정 표 파싱 실패 (투자자 {len(inv)}행 · "
-                           f"프로그램 {len(prg)}행 — 페이지 구조 변경?)")
-    iv = inv[0][1]      # 첫 행 = 최신 시각 누적치
-    pv = prg[0][1]
-    return {"individual": iv[0], "foreign": iv[1], "institution": iv[2],
-            "arb": pv[2], "nonarb": pv[5], "program": pv[8]}
+    d = index_integration("KOSPI")
+    if d["individual"] is None or d["total_net"] is None:
+        raise RuntimeError(f"integration 응답에 수급 값이 없다: {d}")
+    return {"individual": d["individual"], "foreign": d["foreign"],
+            "institution": d["inst_total"],
+            "arb": d["arb_net"], "nonarb": d["nonarb_net"], "program": d["total_net"]}
 
 
-def _table_rows(soup, ncols):
-    """type_1 계열 테이블에서 [첫칸텍스트, 숫자…] 행들을 뽑는다."""
-    rows = []
-    for tr in soup.select("table tr"):
-        tds = tr.find_all("td")
-        if len(tds) < ncols + 1:
+def daily_confirmed(bizdate, pages=3, want=None):
+    """일별 확정. {date: {"investor": {...}, "program": {...}}}
+
+    투자자별은 trend API 로 날짜별 조회가 되지만 **프로그램은 과거 조회 경로가 없어
+    오늘치만** 담긴다(옛 programDealTrendDay 소멸). pages 는 옛 시그니처 호환용.
+    want 에 날짜(YYYY-MM-DD) 집합을 주면 그 날짜만 채운다 — 매 실행 30회씩
+    다시 긁지 않으려는 것.
+    """
+    today = dt.datetime.strptime(bizdate, "%Y%m%d").date()
+    out = {}
+    for back in range(0, pages * 14):          # 넉넉히 훑되 주말은 건너뛴다
+        d = today - dt.timedelta(days=back)
+        if d.weekday() >= 5:
             continue
-        head = tds[0].get_text(strip=True)
-        nums = [num(td.get_text(strip=True)) for td in tds[1:ncols + 1]]
-        if head and all(v is not None for v in nums):
-            rows.append((head, nums))
-    return rows
-
-
-def parse_date(s):
-    """'26.07.30' → '2026-07-30'"""
-    m = re.match(r"(\d{2})\.(\d{2})\.(\d{2})", s)
-    if not m:
-        return None
-    return f"20{m.group(1)}-{m.group(2)}-{m.group(3)}"
-
-
-def detect_unit(soup):
-    """페이지 본문에서 '단위 : 계약/억원' 표기를 찾는다."""
-    m = re.search(r"단위\s*[:：]?\s*(계약|억원|백만원|천주)",
-                  soup.get_text(" ", strip=True))
-    return m.group(1) if m else None
+        iso = d.isoformat()
+        if want is not None and iso not in want and d != today:
+            continue
+        try:
+            t = index_trend("KOSPI", d.strftime("%Y%m%d"))
+        except Exception as e:
+            print(f"  · {iso} 투자자별 조회 실패: {e}")
+            continue
+        if not t:                               # 휴장일
+            continue
+        out[iso] = {"investor": {"individual": t["individual"],
+                                 "foreign": t["foreign"],
+                                 "inst_total": t["inst_total"]}}
+        if len(out) >= 30:
+            break
+    # 프로그램은 오늘치만 — integration 이 과거를 안 준다.
+    try:
+        g = index_integration("KOSPI")
+        if g["bizdate"]:
+            iso = f"{g['bizdate'][:4]}-{g['bizdate'][4:6]}-{g['bizdate'][6:]}"
+            out.setdefault(iso, {})["program"] = {
+                "arb_net": g["arb_net"], "nonarb_net": g["nonarb_net"],
+                "total_net": g["total_net"]}
+    except Exception as e:
+        print(f"  · 프로그램(당일) 조회 실패: {e}")
+    return out
 
 
 def futures_daily(bizdate, pages=3):
-    """KOSPI200 선물 투자자별 일별 순매수 (sosok=03, 코스피 탭과 동일 템플릿).
-    반환: ({date: {INV_COLS…}}, 단위문자열)"""
-    out, unit = {}, None
-    for page in range(1, pages + 1):
-        soup = get_html(f"{BASE}/investorDealTrendDay.naver"
-                        f"?bizdate={bizdate}&sosok=03&page={page}")
-        if unit is None:
-            unit = detect_unit(soup)
-        for head, nums in _table_rows(soup, 10):
-            d = parse_date(head)
-            if d:
-                out.setdefault(d, dict(zip(INV_COLS, nums)))
-    return out, unit or "계약"
+    """K200 선물 투자자별 — 2026-09-18 현재 대체 경로가 없다.
 
-
-def daily_confirmed(bizdate, pages=3):
-    """일별 확정: 투자자별(10칸) + 프로그램(9칸). {date: {"investor":…, "program":…}}"""
-    out = {}
-    for page in range(1, pages + 1):
-        soup = get_html(f"{BASE}/investorDealTrendDay.naver?bizdate={bizdate}&page={page}")
-        for head, nums in _table_rows(soup, 10):
-            d = parse_date(head)
-            if d:
-                out.setdefault(d, {})["investor"] = dict(zip(INV_COLS, nums))
-    for page in range(1, pages + 1):
-        soup = get_html(f"{BASE}/programDealTrendDay.naver?bizdate={bizdate}&page={page}")
-        for head, nums in _table_rows(soup, 9):
-            d = parse_date(head)
-            if d:
-                out.setdefault(d, {})["program"] = dict(zip(PRG_COLS, nums))
-    return out
+    옛 investorDealTrendDay?sosok=03 이 410 으로 사라졌고, 신규 API 의 KPI200 은
+    **현물 지수**라 선물이 아니다. 현물을 선물로 저장하면 조용히 틀린 값이 쌓이므로
+    차라리 실패시켜 해당 섹션을 숨긴다(호출부가 try/except 로 감싸고 있다).
+    """
+    raise RuntimeError("선물 투자자별: 네이버 옛 페이지 폐기(410)로 대체 경로 없음")
 
 
 UNIVERSE_CSV = HERE.parent / "etf_signal" / "etf_universe.csv"
@@ -234,44 +273,26 @@ def stock_investor_flow(top=7):
     return out
 
 
-def intraday_curve(bizdate, kind, max_pages=45, sosok=None):
-    """시간대별 누적치(분 단위)를 전 페이지 수집 후 10분 간격으로 샘플링.
-    kind: "investor"(10칸 → 개인/외인/기관만) 또는 "program"(9칸 → 차익순/비차익순/전체순)
-    sosok="03"이면 K200 선물 탭.
-    반환: [["HH:MM", a, b, c], …] (시간 오름차순)"""
-    url = f"{BASE}/{'investorDealTrendTime' if kind == 'investor' else 'programDealTrendTime'}.naver"
-    ncols = 10 if kind == "investor" else 9
-    extra = f"&sosok={sosok}" if sosok else ""
-    by_time = {}
-    for page in range(1, max_pages + 1):
-        soup = get_html(f"{url}?bizdate={bizdate}&page={page}{extra}")
-        rows = _table_rows(soup, ncols)
-        if not rows:
-            break
-        for head, nums in rows:
-            if not re.match(r"\d{2}:\d{2}", head):
-                continue
-            if kind == "investor":
-                by_time[head] = [nums[0], nums[1], nums[2]]          # 개인, 외국인, 기관계
-            else:
-                by_time[head] = [nums[2], nums[5], nums[8]]          # 차익순, 비차익순, 전체순
-        if by_time and min(by_time) <= "09:02":   # 장 시작까지 다 받았으면 종료
-            break
-    # 10분 격자(09:10~15:30)마다 그 시각 이전의 마지막 관측치를 채택
-    times = sorted(t for t in by_time if "09:00" <= t <= "15:35")
-    grid, out = [], []
-    h, m = 9, 10
-    while (h, m) <= (15, 30):
-        grid.append(f"{h:02d}:{m:02d}")
-        m += 10
-        if m >= 60:
-            h, m = h + 1, 0
-    for g in grid:
-        prev = [t for t in times if t <= g]
-        if prev:
-            out.append([g] + by_time[prev[-1]])
-    return out
+def curve_from_slots(day, kind):
+    """장중 곡선 — 그날 슬롯 스냅샷을 이어 붙인 성긴 판.
 
+    옛 시간대별 페이지(분 단위)가 410 으로 사라졌고 신규 API 는 '지금 누적' 한 점만
+    준다. 대신 우리가 이미 슬롯마다(10:00·13:00·15:40·16:40) 저장해 둔 스냅샷을
+    쓴다 — 점이 40개에서 3~4개로 줄지만 모양(방향과 전환)은 남는다.
+    반환: [["HH:MM", a, b, c], …] 시간 오름차순.
+    """
+    out = []
+    for snap in (day.get("slots") or {}).values():
+        t = snap.get("time")
+        if not t:
+            continue
+        if kind == "investor":
+            v = [snap.get("individual"), snap.get("foreign"), snap.get("institution")]
+        else:
+            v = [snap.get("arb"), snap.get("nonarb"), snap.get("program")]
+        if all(x is not None for x in v):
+            out.append([t] + v)
+    return sorted(out, key=lambda r: r[0])
 
 def decide_slot(t):
     """실행 시각(KST) → 슬롯. 크론 지연(수십 분)을 감안해 넉넉한 경계."""
@@ -383,21 +404,12 @@ def main():
     except Exception as e:
         print(f"⚠️ 종목별 외국인 가집계 수집 실패(섹션 비표시): {e}")
 
-    # 마감 이후 실행이면 장중 곡선 저장
+    # 마감 이후 실행이면 장중 곡선 저장 (슬롯 스냅샷 기반 — 위 curve_from_slots 주석 참조)
     if slot in ("1540", "1640"):
-        day["curve"] = {
-            "investor": intraday_curve(bizdate, "investor"),
-            "program": intraday_curve(bizdate, "program"),
-        }
-        try:
-            fc = intraday_curve(bizdate, "investor", sosok="03")
-            if fc:
-                day["curve"]["futures"] = fc
-        except Exception as e:
-            print(f"⚠️ 선물 장중 곡선 수집 실패: {e}")
-        print(f"장중 곡선: investor {len(day['curve']['investor'])}점, "
-              f"program {len(day['curve']['program'])}점, "
-              f"futures {len(day['curve'].get('futures', []))}점")
+        day["curve"] = {"investor": curve_from_slots(day, "investor"),
+                        "program": curve_from_slots(day, "program")}
+        print(f"장중 곡선(슬롯 기반): investor {len(day['curve']['investor'])}점, "
+              f"program {len(day['curve']['program'])}점")
 
     save_history(hist)
     write_meta(True, slot=slot)

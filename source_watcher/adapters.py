@@ -350,13 +350,19 @@ def _account_session():
 
 def _chat_names(entity) -> set[str]:
     names = set()
-    for value in (getattr(entity, "username", None), getattr(entity, "title", None)):
+    # 봇·1:1 대화는 title이 없고 first/last name이 표시 이름이다.
+    person = " ".join(part for part in (getattr(entity, "first_name", None),
+                                        getattr(entity, "last_name", None)) if part)
+    for value in (getattr(entity, "username", None), getattr(entity, "title", None), person or None):
         if value:
             names.add(str(value).casefold())
     return names
 
 
 def _message_url(entity, message_id: int) -> str:
+    # 봇·1:1 대화의 메시지는 공유 주소가 없다(t.me 링크가 성립하지 않는 영역).
+    if getattr(entity, "first_name", None) is not None:
+        return ""
     username = getattr(entity, "username", None)
     if username:
         return f"https://t.me/{username}/{message_id}"
@@ -393,24 +399,15 @@ async def _scan_account(source: dict, since: datetime) -> list[Item]:
 
         items: list[Item] = []
         scanned = 0
-        async for dialog in client.iter_dialogs(limit=max_chats):
-            entity = dialog.entity
-            broadcast = bool(getattr(entity, "broadcast", False))
-            megagroup = bool(getattr(entity, "megagroup", False))
-            if not broadcast and not (include_groups and megagroup):
-                continue  # 1:1 대화와 일반 그룹은 리서치 소스가 아니다
+        matched: set[str] = set()  # include 중 대화 목록에서 실제로 만난 이름
 
-            names = _chat_names(entity)
-            if include and not (names & include):
-                continue
-            if names & exclude:
-                continue
-            # 최신 글이 조회 창보다 오래된 방은 히스토리를 요청하지 않는다(호출량 절약).
-            if dialog.date and to_utc(dialog.date) < since:
-                continue
-
+        async def scan_entity(entity) -> None:
+            nonlocal scanned
             scanned += 1
-            title = getattr(entity, "title", None) or getattr(entity, "username", "") or "이름 없는 채널"
+            title = (getattr(entity, "title", None)
+                     or " ".join(part for part in (getattr(entity, "first_name", None),
+                                                   getattr(entity, "last_name", None)) if part)
+                     or getattr(entity, "username", "") or "이름 없는 채널")
             async for message in client.iter_messages(entity, limit=per_chat_limit):
                 posted = to_utc(message.date)
                 if posted and posted < since:
@@ -428,6 +425,46 @@ async def _scan_account(source: dict, since: datetime) -> list[Item]:
                         origin=str(title),
                     )
                 )
+
+        async for dialog in client.iter_dialogs(limit=max_chats):
+            entity = dialog.entity
+            names = _chat_names(entity)
+            broadcast = bool(getattr(entity, "broadcast", False))
+            megagroup = bool(getattr(entity, "megagroup", False))
+            # 기본은 채널만 본다. 단 include_chats로 콕 집은 방은 봇 대화방이어도 수집한다
+            # (예: 'epic AI - 투자 어시스턴트' — 리서치 목록을 봇이 밀어주는 방).
+            wanted = bool(include and (names & include))
+            if not wanted and not broadcast and not (include_groups and megagroup):
+                continue  # 1:1 대화와 일반 그룹은 리서치 소스가 아니다
+
+            if include and not wanted:
+                continue
+            if names & exclude:
+                continue
+            if wanted:
+                matched |= names & include
+            # 최신 글이 조회 창보다 오래된 방은 히스토리를 요청하지 않는다(호출량 절약).
+            if dialog.date and to_utc(dialog.date) < since:
+                continue
+
+            await scan_entity(entity)
+
+        # include로 콕 집었는데 대화 목록에 없는 @채널은 주소로 직접 연다 — 공개 채널은
+        # 계정이 구독(가입)하지 않아도 읽을 수 있다(@ked_epic_ai_summary가 이 경우였다).
+        # 표시 이름(한글 등)은 주소 해석이 안 되므로 @아이디 모양만 시도한다.
+        for name in sorted(include - matched):
+            if not re.fullmatch(r"[a-z0-9_]{4,}", name):
+                continue
+            try:
+                entity = await client.get_entity(name)
+            except Exception as exc:
+                print(f"  · @{name} 직접 조회 실패(구독하지 않은 비공개 방이거나 없는 주소): {exc}",
+                      flush=True)
+                continue
+            if _chat_names(entity) & exclude:
+                continue
+            await scan_entity(entity)
+
         print(f"  · 새 글이 있는 방 {scanned}개 확인", flush=True)
         return items
     finally:

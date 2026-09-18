@@ -442,6 +442,16 @@ def render_day(hist, all_dates, i):
             continue
         tds = "".join(cell(c["investor"].get(k)) for k, _ in detail_cols)
         det_body += f'<tr><th>{d[5:]}</th>{tds}</tr>'
+    # 2026-09-18 이후 수집분에는 기관 세부 항목이 없다(네이버 옛 페이지 410 폐기,
+    # 신규 JSON API 는 기관계까지만 준다). 값이 하나도 없으면 빈 칸 표를 띄우느니
+    # 섹션을 통째로 감춘다 — 옛 날짜가 남아 있는 동안에는 그대로 보인다.
+    has_detail = any(c.get("investor", {}).get(k) is not None
+                     for _, c in conf_days[-5:] for k, _ in detail_cols)
+    det_section = ("" if not has_detail else
+                   "<h2>🏦 기관 세부 — 최근 5일 (확정, 억원)</h2>\n"
+                   '<div class="card scroll"><table>\n'
+                   f"<thead><tr><th>날짜</th>{det_head}</tr></thead>"
+                   f"<tbody>{det_body}</tbody></table></div>")
 
     # ── 현·선물 흐름 (K200 선물) ──
     fut_now, fut_src = fut_snapshot(today)
@@ -534,9 +544,7 @@ def render_day(hist, all_dates, i):
 <p class="note">최근 {n20}영업일 누적 순매수 ({dkey} 기준)</p>
 <div class="card">{bars}</div>
 
-<h2>🏦 기관 세부 — 최근 5일 (확정, 억원)</h2>
-<div class="card scroll"><table>
-<thead><tr><th>날짜</th>{det_head}</tr></thead><tbody>{det_body}</tbody></table></div>
+{det_section}
 """
 
 

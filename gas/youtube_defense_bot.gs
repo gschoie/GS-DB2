@@ -702,18 +702,36 @@ function scheduledWeekly() {
 }
 
 // 주간 트리거를 건다. 한 번만 실행하면 된다(여러 번 눌러도 중복되지 않는다).
-// === 나우뉴스 밀리터리+ 주간 링크 모음 (일요일 아침) ===
+// === 밀리터리 칼럼 주간 링크 모음 (일요일 아침) ===
 //
-// m.nownews.seoul.co.kr/newsList/science/military (최현호의 무기인사이드) 목록에서
-// 지난 한 달치 기사 링크만 모아 텔레그램으로 보낸다. NotebookLM 오디오 소스용.
-// 기사 URL은 newsView.php?id=YYYYMMDD60NNNN 꼴이라 ID 앞 8자리로 날짜를 판별한다.
-
-const NOWNEWS_LIST = 'https://m.nownews.seoul.co.kr/newsList/science/military/?cp=nownews';
-const NOWNEWS_VIEW = 'https://nownews.seoul.co.kr/news/newsView.php?id=';
-const NOWNEWS_DAYS = 31;        // 며칠치를 모을지
-const NOWNEWS_MAX_PAGES = 12;   // 목록 페이지 상한 (한 달이면 이 안에 다 들어온다)
-// 기사 ID: 8자리 날짜 + '60' + 숫자. 이 모양이면 마크업이 바뀌어도 링크를 뽑아낸다.
-const NOWNEWS_ID_RE = /\b(\d{8}60\d{3,})\b/g;
+// 나우뉴스 밀리터리+·세계 박수찬의 軍 등 밀리터리 칼럼 목록에서 지난 한 달치 기사
+// 링크만 모아 텔레그램 두 통(제목 목록 + 링크만)으로 보낸다. NotebookLM 오디오 소스용.
+// 기사 URL에 날짜(YYYYMMDD)가 박혀 있어 그 8자리로 최근 한 달을 거른다.
+//
+// 소스를 늘릴 때 손대는 곳은 MIL_SOURCES 하나뿐이다.
+//   name    : 표시 이름
+//   list    : 목록 페이지 주소 (모바일 버전이 서버 렌더라 링크 추출이 쉽다)
+//   page    : 2쪽 이후 붙일 페이지 파라미터 (첫 쪽엔 안 붙인다)
+//   linkRe  : 목록 HTML에서 기사 링크의 ID 를 뽑는 정규식(첫 그룹 = ID, 앞 8자리 날짜)
+//   view    : ID → 실제 기사 주소
+const MIL_DAYS = 31;         // 며칠치를 모을지
+const MIL_MAX_PAGES = 12;    // 소스당 목록 페이지 상한
+const MIL_SOURCES = [
+  {
+    name: '나우뉴스 밀리터리+',
+    list: 'https://m.nownews.seoul.co.kr/newsList/science/military/?cp=nownews',
+    page: '&page=',
+    linkRe: /newsView\.php\?id=(\d{8}\d{4,})/g,
+    view: function (id) { return 'https://nownews.seoul.co.kr/news/newsView.php?id=' + id; }
+  },
+  {
+    name: '세계 박수찬의 軍',
+    list: 'https://m.segye.com/category/3000327',
+    page: '?page=',
+    linkRe: /newsView\/(\d{14})/g,
+    view: function (id) { return 'https://www.segye.com/newsView/' + id; }
+  }
+];
 
 // URL 하나를 텍스트로 가져온다(차단 시 재시도).
 function fetchText_(url) {
@@ -736,49 +754,48 @@ function fetchText_(url) {
 }
 
 // ID 앞 8자리(YYYYMMDD) → 그날 자정의 밀리초. 못 읽으면 0.
-function nownewsDateMillis_(id) {
+function idDateMillis_(id) {
   const y = Number(id.slice(0, 4)), m = Number(id.slice(4, 6)), d = Number(id.slice(6, 8));
-  if (!y || !m || !d) return 0;
+  if (!y || !m || !d || m > 12 || d > 31) return 0;
   return new Date(y, m - 1, d).getTime();
 }
 
 // 한 페이지 HTML에서 (id → 제목) 을 뽑는다. 제목은 최선의 추정(없으면 빈 문자열).
-function parseNownewsPage_(html) {
+function parseMilPage_(html, linkRe) {
   const found = {};   // id -> title
   let match;
-  NOWNEWS_ID_RE.lastIndex = 0;
-  while ((match = NOWNEWS_ID_RE.exec(html)) !== null) {
+  linkRe.lastIndex = 0;
+  while ((match = linkRe.exec(html)) !== null) {
     const id = match[1];
     if (!(id in found)) found[id] = '';
   }
   // 제목 best-effort: id 가 든 <a ...>제목</a> 를 찾아 태그를 걷어내고 엔티티를 되돌린다.
   Object.keys(found).forEach(function (id) {
-    const re = new RegExp('id=' + id + '[^>]*>\\s*([^<]{4,120})<', 'i');
+    const re = new RegExp(id + '[^>]*>\\s*([^<]{4,120})<', 'i');
     const t = html.match(re);
     if (t) found[id] = unescapeHtml_(t[1].replace(/\s+/g, ' ').trim());
   });
   return found;
 }
 
-function sendNownewsMilitary() {
-  const cutoff = Date.now() - NOWNEWS_DAYS * 24 * 3600 * 1000;
+// 소스 하나에서 지난 MIL_DAYS 일 기사(id·title·millis)를 최신순으로 모은다.
+function collectMilSource_(src, cutoff) {
   const seen = {};   // id -> { title, millis }
-
-  for (let page = 1; page <= NOWNEWS_MAX_PAGES; page++) {
+  for (let page = 1; page <= MIL_MAX_PAGES; page++) {
     let html;
     try {
-      html = fetchText_(NOWNEWS_LIST + '&page=' + page);
+      html = fetchText_(src.list + (page > 1 ? src.page + page : ''));
     } catch (error) {
-      Logger.log('나우뉴스 목록 ' + page + '쪽 실패: ' + error.toString());
+      Logger.log(src.name + ' ' + page + '쪽 실패: ' + error.toString());
       break;
     }
-    const rows = parseNownewsPage_(html);
+    const rows = parseMilPage_(html, src.linkRe);
     const ids = Object.keys(rows);
-    if (ids.length === 0) break;   // 더는 기사 없음
+    if (ids.length === 0) break;
 
     let anyInWindow = false;
     ids.forEach(function (id) {
-      const millis = nownewsDateMillis_(id);
+      const millis = idDateMillis_(id);
       if (millis && millis >= cutoff) {
         anyInWindow = true;
         if (!seen[id] || (!seen[id].title && rows[id])) {
@@ -786,61 +803,80 @@ function sendNownewsMilitary() {
         }
       }
     });
-    // 이 페이지가 통째로 한 달보다 오래면 더 넘길 필요 없다(목록은 최신순).
-    if (!anyInWindow && page > 1) break;
+    if (!anyInWindow && page > 1) break;   // 목록은 최신순 — 창을 벗어나면 그만
     Utilities.sleep(400);
   }
+  return Object.keys(seen).map(function (id) {
+    return { id: id, title: seen[id].title, millis: seen[id].millis, url: src.view(id) };
+  }).sort(function (a, b) { return b.millis - a.millis; });
+}
 
-  const items = Object.keys(seen).map(function (id) {
-    return { id: id, title: seen[id].title, millis: seen[id].millis };
-  }).sort(function (a, b) { return b.millis - a.millis; });   // 최신 먼저
-
-  if (items.length === 0) {
-    Logger.log('나우뉴스: 지난 ' + NOWNEWS_DAYS + '일 기사가 없습니다.');
+function sendMilitaryColumns() {
+  const cutoff = Date.now() - MIL_DAYS * 24 * 3600 * 1000;
+  const groups = [];   // { name, items }
+  let total = 0;
+  MIL_SOURCES.forEach(function (src) {
+    const items = collectMilSource_(src, cutoff);
+    if (items.length) { groups.push({ name: src.name, items: items }); total += items.length; }
+  });
+  if (total === 0) {
+    Logger.log('밀리터리 칼럼: 지난 ' + MIL_DAYS + '일 기사가 없습니다.');
     return;
   }
 
   const stamp = Utilities.formatDate(new Date(), 'Asia/Seoul', 'M월 d일');
   const head = [
-    '📰 <b>나우뉴스 밀리터리+ 한 달 모음 · ' + stamp + '</b>',
-    '최근 ' + NOWNEWS_DAYS + '일 · 기사 ' + items.length + '건',
+    '📰 <b>밀리터리 칼럼 한 달 모음 · ' + stamp + '</b>',
+    '최근 ' + MIL_DAYS + '일 · 소스 ' + groups.length + '개 · 기사 ' + total + '건',
     ''
   ];
-  items.forEach(function (it) {
-    const day = Utilities.formatDate(new Date(it.millis), 'Asia/Seoul', 'MM-dd');
-    head.push('• ' + day + ' ' + escapeHtml_(it.title || '(제목 미상)'));
+  groups.forEach(function (g) {
+    head.push('<b>' + escapeHtml_(g.name) + '</b>');
+    g.items.forEach(function (it) {
+      const day = Utilities.formatDate(new Date(it.millis), 'Asia/Seoul', 'MM-dd');
+      head.push('• ' + day + ' ' + escapeHtml_(it.title || '(제목 미상)'));
+    });
+    head.push('');
   });
-  head.push('');
   head.push('↓ 다음 메시지를 통째로 복사해 NotebookLM 소스에 붙여넣으세요');
   sendChunked_(head, false);
 
-  const links = items.map(function (it) { return NOWNEWS_VIEW + it.id; });
+  const links = [];
+  groups.forEach(function (g) {
+    links.push('[' + g.name + ']');
+    g.items.forEach(function (it) { links.push(it.url); });
+    links.push('');
+  });
   sendChunked_(links, true);
 
-  Logger.log('나우뉴스 밀리터리+ 발송 완료 — 기사 ' + items.length + '건');
+  Logger.log('밀리터리 칼럼 발송 완료 — 소스 ' + groups.length + '개 · 기사 ' + total + '건');
 }
 
 // 자동 트리거 전용 — 일요일에만 보낸다.
 function scheduledNownews() {
   const dayOfWeek = Number(Utilities.formatDate(new Date(), 'Asia/Seoul', 'u')); // 1=월 … 7=일
   if (dayOfWeek !== 7) {
-    Logger.log('일요일이 아니라 나우뉴스 모음을 건너뜁니다.');
+    Logger.log('일요일이 아니라 밀리터리 칼럼 모음을 건너뜁니다.');
     return;
   }
-  sendNownewsMilitary();
+  sendMilitaryColumns();
 }
+
+// 예전 이름 호환 — 기존 트리거/버튼이 이 이름을 가리킬 수 있다.
+function sendNownewsMilitary() { sendMilitaryColumns(); }
 
 // 일요일 오전 8시대 트리거. 한 번만 실행하면 된다(중복 안 생김).
 function installNownewsTrigger() {
   ScriptApp.getProjectTriggers().forEach(function (trigger) {
     const handler = trigger.getHandlerFunction();
-    if (handler === 'scheduledNownews' || handler === 'sendNownewsMilitary') {
+    if (handler === 'scheduledNownews' || handler === 'sendNownewsMilitary'
+        || handler === 'sendMilitaryColumns') {
       ScriptApp.deleteTrigger(trigger);
     }
   });
   ScriptApp.newTrigger('scheduledNownews').timeBased()
     .onWeekDay(ScriptApp.WeekDay.SUNDAY).atHour(8).create();
-  Logger.log('일요일 오전 8시대에 나우뉴스 밀리터리+ 한 달 모음을 보냅니다.');
+  Logger.log('일요일 오전 8시대에 밀리터리 칼럼 한 달 모음을 보냅니다.');
 }
 
 
