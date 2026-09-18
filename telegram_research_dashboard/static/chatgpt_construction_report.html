@@ -60,7 +60,7 @@ details.paste summary{cursor:pointer;padding:9px 14px;color:#c9a86a;font-size:13
 </details>
 <iframe id="frame" title="브리핑"></iframe>
 <script>
-const DATES=["2026-09-18", "2026-09-17"];
+const DATES=["2026-09-19", "2026-09-18", "2026-09-17"];
 const EP="https://script.google.com/macros/s/AKfycbx3RjIjtlO2Z6fIYo2T3LhJrFg9Wp2hS7dMS3Is52-JVF1hizoCWewbQ1uM_v5sdhR2jw/exec";
 const sel=document.getElementById('dsel'),fr=document.getElementById('frame');
 DATES.forEach(d=>{const o=document.createElement('option');o.value=d;o.textContent=d+' ('+'일월화수목금토'[new Date(d+'T00:00:00').getDay()]+')';sel.appendChild(o)});
