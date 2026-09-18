@@ -13,8 +13,9 @@ on:
         default: run
         options: [run, dry-run, force]
   schedule:
-    # 평일 08:30 KST = 일~목 23:30 UTC
-    - cron: "30 23 * * 0-4"
+    # 평일 08:50 KST = 일~목 23:50 UTC. 채널의 아침 발간분 목록('[✨ 리서치] 심층 분석
+    # 보고서')이 ~08:40에 올라오므로 그보다 뒤여야 그날 아침 보고서가 잡힌다.
+    - cron: "50 23 * * 0-4"
 
 permissions:
   contents: write
