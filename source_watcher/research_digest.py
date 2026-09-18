@@ -166,17 +166,19 @@ def looks_like_report_list(body: str) -> bool:
     return len(bullets) >= 2
 
 
-def collect_reports(window_hours: float, channels: list[str]) -> list[adapters.Item]:
+def collect_raw(window_hours: float, channels: list[str]) -> list[adapters.Item]:
     # 요약 글은 지정 채널(x_research_digest_channels)에서만 올라온다.
     # include_chats로 좁히면 다른 방은 히스토리를 아예 요청하지 않아 스캔이 몇 초로 끝난다.
-    source = {
+    return adapters.collect_telegram_account({
         "lookback_hours": window_hours,
         "include_chats": channels,
         # 이 채널은 하루 수십 건을 올린다. 기본 상한(방당 30개)이면 오전 글이
         # 오후 요약 무더기에 밀려 잘려 나간다(9/18 아침 심층 목록 유실의 원인).
-        "per_chat_limit": 200,
-    }
-    items = adapters.collect_telegram_account(source)
+        "per_chat_limit": 500,
+    })
+
+
+def pick_reports(items: list[adapters.Item]) -> list[adapters.Item]:
     return [item for item in items
             if MARKER_RE.search(item.title or "") or looks_like_report_list(item.body)]
 
@@ -247,7 +249,13 @@ def main(argv: list[str] | None = None) -> int:
         window = pick_window_hours(state, now, args.window_hours)
     print(f"조회 창 {window:.1f}시간 · 커버리지 묶음 {len(groups)}개 · 대상 채널 {', '.join(channels)}")
 
-    items = collect_reports(window, channels)
+    raw = collect_raw(window, channels)
+    if raw:
+        stamps = sorted(i.published_at for i in raw if i.published_at)
+        span = (f"{stamps[0].astimezone(KST):%m/%d %H:%M}~{stamps[-1].astimezone(KST):%H:%M}"
+                if stamps else "?")
+        print(f"원시 메시지 {len(raw)}건 · 시간 범위 {span} KST")
+    items = pick_reports(raw)
     print(f"리서치 표식 글 {len(items)}건 수집")
     # 매칭 진단용 — '왜 안 잡혔지?'가 나오면 이 목록부터 본다.
     # 목록 글은 분해된 항목과 항목별 커버리지 판정까지 찍는다.
