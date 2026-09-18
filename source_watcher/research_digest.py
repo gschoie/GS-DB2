@@ -211,7 +211,11 @@ def main(argv: list[str] | None = None) -> int:
             pass
 
     groups, channels = load_coverage()
-    window = pick_window_hours(state, now, args.window_hours)
+    if args.dry_run and not args.window_hours:
+        # 진단용 dry-run은 직전 발송 시각과 무관하게 하루치를 통째로 본다
+        window = float(DEFAULT_WINDOW_HOURS)
+    else:
+        window = pick_window_hours(state, now, args.window_hours)
     print(f"조회 창 {window:.1f}시간 · 커버리지 묶음 {len(groups)}개 · 대상 채널 {', '.join(channels)}")
 
     items = collect_reports(window, channels)
