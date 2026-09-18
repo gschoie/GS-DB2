@@ -1,5 +1,5 @@
 {
-  "when_utc": "2026-09-17 07:21:02Z",
+  "when_utc": "2026-09-18 00:21:38Z",
   "ok": true,
   "note": "change_sent",
   "chat_id_tail": "5171",
@@ -7,7 +7,7 @@
   "response": {
     "ok": true,
     "result": {
-      "message_id": 347,
+      "message_id": 354,
       "from": {
         "id": 8875725998,
         "is_bot": true,
@@ -21,8 +21,8 @@
         "username": "gschoie",
         "type": "private"
       },
-      "date": 1789629662,
-      "text": "🧩 액티브 ETF 구성 변화 · 구성 기준일 — (KRX 장마감)\n\n변화 ETF 9개 · 진입 11·이탈 11·실매매 8\n\n🟢 KoAct 배당성장액티브 · KoAct\n   ⊕ 진입: SK텔레콤, HD현대중공업, SK이노베이션, 하나금융지주\n   ⊖ 이탈: GS, 한국금융지주, HD현대, 가온전선\n🟢 TIGER 퓨처모빌리티액티브 · TIGER\n   ⊕ 진입: POSCO홀딩스, SK이노베이션\n   ⊖ 이탈: 현대오토에버, 엘앤에프\n   ▽ 현대모비스 계약수 −26% · 비중 −1.5%p\n🟢 TIME 코스닥액티브 · TIME(구 TIMEFOLIO)\n   ⊕ 진입: 로보티즈, 인텍플러스\n   ⊖ 이탈: 심텍, 레인보우로보틱스\n🟢 TIME K바이오액티브 · TIME(구 TIMEFOLIO)\n   ⊕ 진입: 오름테라퓨틱\n   ⊖ 이탈: 보로노이\n   ▽ 셀트리온 계약수 −22% · 비중 −2.1%p\n   ▲ 한올바이오파마 계약수 +44% · 비중 +1.8%p\n   ▲ 올릭스 계약수 +14% · 비중 +1.1%p\n🟢 TIME 글로벌AI인공지능액티브 · TIME(구 TIMEFOLIO)\n   ⊕ 진입: STRATEGY INC\n   ⊖ 이탈: SERVICENOW INC\n🟢 TIGER AI코리아그로스액티브 · TIGER\n   ⊕ 진입: KB금융\n   ⊖ 이탈: HD현대중공업\n🟢 TIME K컬처액티브 · TIME(구 TIMEFOLIO)\n   ▲ 올릭스 계약수 +40% · 비중 +2.2%p\n   ▽ 크래프톤 계약수 −20% · 비중 −1.6%p\n🟢 KoAct 코스닥액티브 · KoAct\n   ▲ 이오테크닉스 계약수 +60% · 비중 +2.4%p\n🟢 KODEX 미국배당커버드콜액티브 · KODEX\n   ▲ FREEPORT-MCMORAN INC 계약수 +78%\n\n전체 상세 › 대시보드\n🎴 GS Research Desk · 액티브 ETF 트래커",
+      "date": 1789690898,
+      "text": "🧩 액티브 ETF 구성 변화 · 구성 기준일 — (KRX 장마감)\n\n변화 ETF 8개 · 진입 7·이탈 7·실매매 7\n\n🟢 TIME K컬처액티브 · TIME(구 TIMEFOLIO)\n   ⊕ 진입: CJ ENM\n   ⊖ 이탈: 에스엠\n   ▲ 하이브 계약수 +46% · 비중 +2.1%p\n   ▽ 크래프톤 계약수 −27% · 비중 −1.7%p\n🟢 TIME 코스닥액티브 · TIME(구 TIMEFOLIO)\n   ⊕ 진입: 레인보우로보틱스\n   ⊖ 이탈: 인텍플러스\n🟢 TIME 글로벌AI인공지능액티브 · TIME(구 TIMEFOLIO)\n   ⊕ 진입: EOPTOLINK TECHNOLOGY INC L-A\n   ⊖ 이탈: STRATEGY INC\n🟢 KoAct 배당성장액티브 · KoAct\n   ⊕ 진입: HD현대\n   ⊖ 이탈: 하나금융지주\n🟢 TIGER 배당커버드콜액티브 · TIGER\n   ⊕ 진입: 한화에어로스페이스\n   ⊖ 이탈: LS ELECTRIC\n🟢 TIGER AI코리아그로스액티브 · TIGER\n   ⊕ 진입: HD현대중공업\n   ⊖ 이탈: KB금융\n🟢 TIGER 퓨처모빌리티액티브 · TIGER\n   ⊕ 진입: 이수페타시스\n   ⊖ 이탈: 현대차\n🟢 TIME K바이오액티브 · TIME(구 TIMEFOLIO)\n   ▽ 에이비엘바이오 계약수 −36% · 비중 −2.4%p\n   ▲ 셀트리온 계약수 +27% · 비중 +2.1%p\n   ▽ 알테오젠 계약수 −22% · 비중 −1.8%p\n   ▲ 올릭스 계약수 +17% · 비중 +1.7%p\n   … 실매매 외 1건\n\n전체 상세 › 대시보드\n🎴 GS Research Desk · 액티브 ETF 트래커",
       "entities": [
         {
           "offset": 0,
@@ -35,52 +35,47 @@
           "type": "bold"
         },
         {
-          "offset": 73,
+          "offset": 71,
+          "length": 11,
+          "type": "bold"
+        },
+        {
+          "offset": 196,
+          "length": 11,
+          "type": "bold"
+        },
+        {
+          "offset": 264,
+          "length": 17,
+          "type": "bold"
+        },
+        {
+          "offset": 365,
           "length": 13,
           "type": "bold"
         },
         {
-          "offset": 171,
+          "offset": 420,
           "length": 15,
           "type": "bold"
         },
         {
-          "offset": 279,
-          "length": 11,
+          "offset": 487,
+          "length": 17,
           "type": "bold"
         },
         {
-          "offset": 357,
+          "offset": 547,
+          "length": 15,
+          "type": "bold"
+        },
+        {
+          "offset": 603,
           "length": 12,
           "type": "bold"
         },
         {
-          "offset": 518,
-          "length": 17,
-          "type": "bold"
-        },
-        {
-          "offset": 605,
-          "length": 17,
-          "type": "bold"
-        },
-        {
-          "offset": 665,
-          "length": 11,
-          "type": "bold"
-        },
-        {
-          "offset": 761,
-          "length": 12,
-          "type": "bold"
-        },
-        {
-          "offset": 818,
-          "length": 17,
-          "type": "bold"
-        },
-        {
-          "offset": 888,
+          "offset": 785,
           "length": 4,
           "type": "text_link",
           "url": "https://gschoie.github.io/GS-DB2/etf_holdings_report.html"
