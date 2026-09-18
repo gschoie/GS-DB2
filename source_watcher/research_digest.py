@@ -1,7 +1,7 @@
 """커버리지 리서치 요약 아침 모음 — 낱개 알림이 아니라 하루 한 통.
 
 요약 채널(@ked_epic_ai)에는 증권사 보고서를 "[✨ 리서치 요약] 기업명 …" 형태로 요약해 올리는
-글이 하루 수십 건 흐른다. 이 스크립트는 매일 아침(08:30 KST 목표) 그 채널의 지난 하루치에서
+글이 하루 수십 건 흐른다. 이 스크립트는 매일 아침(08:50 KST 목표 — 채널의 아침 목록이 ~08:40에 올라온다) 그 채널의 지난 하루치에서
 요약 글만 골라, 커버리지 산업(조선·방산·기계)에 해당하는 것만 추려 한 통으로 보낸다.
 
 ship_all(조선 염탐)과의 관계: 저쪽은 걸리는 즉시 낱개 알림, 여기는 '보고서 요약'
@@ -36,8 +36,15 @@ BASE_DIR = Path(__file__).resolve().parent
 STATE_PATH = BASE_DIR / "state" / "research_digest.json"
 KST = timezone(timedelta(hours=9))
 
-# 보고서 요약 글의 표식. 채널마다 이모지 유무가 달라 '리서치 요약'만 본다.
-MARKER_RE = re.compile(r"리서치\s*요약")
+# 보고서 글의 표식. 채널이 두 형태로 올린다:
+#   ① "[✨ 리서치 요약] 기업명 …"        — 장중 낱개 요약
+#   ② "[✨ 리서치] 심층 분석 보고서" 등    — 아침(자정~8시 발간분) 번호 목록 한 통
+# ①만 보다가 ②를 통째로 놓쳐 아침 발간분이 한 건도 안 잡혔었다(9/18 발견).
+MARKER_RE = re.compile(r"\[\s*✨\s*리서치|리서치\s*요약")
+# 제목 표시용으로 벗겨낼 머리말
+MARKER_STRIP_RE = re.compile(r"\[\s*✨\s*리서치[^\]]*\]|리서치\s*요약")
+# 목록 글(②)의 항목: "1. 산업 | [조선] 제목 | SK증권" — 다음 번호 전까지가 한 항목
+ENTRY_RE = re.compile(r"^\s*\d{1,2}\.\s+(.+?)(?=^\s*\d{1,2}\.\s|\Z)", re.M | re.S)
 # 제목 정규화용 — 같은 요약이 여러 채널로 퍼날라진 것을 접는다.
 TITLE_NOISE_RE = re.compile(r"[^0-9a-z가-힣]+")
 
@@ -79,8 +86,30 @@ def coverage_labels(groups: list[tuple[str, list[str]]], text: str) -> list[str]
 
 def title_key(title: str) -> str:
     """퍼나른 같은 요약을 접기 위한 제목 지문. 표식·이모지·문장부호를 걷어낸다."""
-    value = MARKER_RE.sub("", title.casefold())
+    value = MARKER_STRIP_RE.sub("", title.casefold())
     return TITLE_NOISE_RE.sub("", value)
+
+
+def explode_entries(items: list[adapters.Item]) -> list[adapters.Item]:
+    """목록 글(번호 목록 2건 이상)은 보고서 항목별로 쪼갠다. 낱개 요약 글은 그대로.
+
+    아침 '[✨ 리서치] 심층 분석 보고서' 한 통에 여러 산업 보고서가 섞여 있어,
+    글 단위로 매칭하면 조선 한 건 때문에 제약·ESG까지 딸려 오거나 제목이
+    '심층 분석 보고서'로만 찍힌다. 항목 단위로 갈라야 커버리지 것만 제목째 뽑힌다.
+    """
+    exploded: list[adapters.Item] = []
+    for item in items:
+        entries = [" ".join(chunk.split()) for chunk in ENTRY_RE.findall(item.body or "")]
+        entries = [entry for entry in entries if len(entry) >= 8]
+        if len(entries) < 2:
+            exploded.append(item)
+            continue
+        for order, entry in enumerate(entries):
+            exploded.append(adapters.Item(
+                uid=f"{item.uid}#{order}", title=entry, url=item.url, body=entry,
+                published_at=item.published_at, origin=item.origin,
+            ))
+    return exploded
 
 
 def load_digest_state() -> dict:
@@ -128,7 +157,7 @@ def build_digest(items: list[adapters.Item], groups: list[tuple[str, list[str]]]
     """모음 메시지 본문과 건수를 만든다. 커버리지 밖 요약은 여기서 걸러진다."""
     escape = notify.escape
     picked: dict[str, dict] = {}   # title_key → {item, labels, channels}
-    for item in sorted(items, key=lambda it: (it.published_at or now)):
+    for item in sorted(explode_entries(items), key=lambda it: (it.published_at or now, it.uid)):
         labels = coverage_labels(groups, item.text_for_match())
         if not labels:
             continue
@@ -148,7 +177,7 @@ def build_digest(items: list[adapters.Item], groups: list[tuple[str, list[str]]]
     for entry in picked.values():
         item, labels = entry["item"], entry["labels"]
         when = f"{item.published_at.astimezone(KST):%H:%M}" if item.published_at else "?"
-        title = MARKER_RE.sub("", item.title).strip(" []✨-·:") or item.title
+        title = MARKER_STRIP_RE.sub("", item.title).strip(" []✨-·:") or item.title
         line = f"• <b>[{escape(labels[0])}]</b> {escape(title)}"
         extra = len(entry["channels"]) - 1
         meta = f"{when}" + (f" · {extra + 1}개 채널" if extra > 0 else "")
@@ -186,7 +215,10 @@ def main(argv: list[str] | None = None) -> int:
     print(f"조회 창 {window:.1f}시간 · 커버리지 묶음 {len(groups)}개 · 대상 채널 {', '.join(channels)}")
 
     items = collect_reports(window, channels)
-    print(f"리서치 요약 글 {len(items)}건 수집")
+    print(f"리서치 표식 글 {len(items)}건 수집")
+    for item in items:
+        # 매칭 진단용 — '왜 안 잡혔지?'가 나오면 이 목록부터 본다
+        print(f"  · {item.title[:70]}")
 
     text, count = build_digest(items, groups, now)
     if args.dry_run:
