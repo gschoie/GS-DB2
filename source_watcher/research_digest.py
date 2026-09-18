@@ -154,6 +154,18 @@ def pick_window_hours(state: dict, now: datetime, override: float | None) -> flo
     return min(max(hours, 1.0), MAX_WINDOW_HOURS)
 
 
+def looks_like_report_list(body: str) -> bool:
+    """표식 없이 오는 보고서 목록 메시지인지. 채널이 '[✨ 리서치] 심층 분석 보고서'
+    헤더와 번호 목록을 **별개 메시지**로 올려서, 목록 쪽은 제목이 '1. 산업 | …'로
+    시작해 표식 필터에 걸리지 않는다(9/18 확인). '항목 | 항목 | 증권사' 꼴의
+    구분자 있는 번호/불릿 줄이 2개 이상이면 목록으로 본다."""
+    numbered = [chunk for chunk in ENTRY_RE.findall(body or "") if "|" in chunk]
+    if len(numbered) >= 2:
+        return True
+    bullets = [chunk for chunk in BULLET_RE.findall(body or "") if "|" in chunk]
+    return len(bullets) >= 2
+
+
 def collect_reports(window_hours: float, channels: list[str]) -> list[adapters.Item]:
     # 요약 글은 지정 채널(x_research_digest_channels)에서만 올라온다.
     # include_chats로 좁히면 다른 방은 히스토리를 아예 요청하지 않아 스캔이 몇 초로 끝난다.
@@ -162,7 +174,8 @@ def collect_reports(window_hours: float, channels: list[str]) -> list[adapters.I
         "include_chats": channels,
     }
     items = adapters.collect_telegram_account(source)
-    return [item for item in items if MARKER_RE.search(item.title or "")]
+    return [item for item in items
+            if MARKER_RE.search(item.title or "") or looks_like_report_list(item.body)]
 
 
 def build_digest(items: list[adapters.Item], groups: list[tuple[str, list[str]]],
@@ -242,9 +255,9 @@ def main(argv: list[str] | None = None) -> int:
         print(f"  · [{mark}] {entry.title[:70]}")
     split_uids = {entry.uid.split("#")[0] for entry in exploded if "#" in entry.uid}
     for item in items:
-        if item.uid not in split_uids and len((item.body or "").splitlines()) > 3:
-            # 여러 줄인데 분해가 안 된 목록 글 후보 — 본문 앞부분을 남겨 형식을 파악한다
-            head_lines = "\n".join((item.body or "").splitlines()[:6])
+        # 낱개 요약이 아닌데 분해도 안 된 글 — 본문 앞부분을 남겨 형식을 파악한다
+        if item.uid not in split_uids and not re.search(r"리서치\s*요약", item.title or ""):
+            head_lines = "\n".join((item.body or "").splitlines()[:8])
             print(f"  ⚠ 분해 안 됨({item.uid}):\n{head_lines}")
 
     text, count = build_digest(items, groups, now)
