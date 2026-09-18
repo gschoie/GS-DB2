@@ -108,13 +108,13 @@ def explode_entries(items: list[adapters.Item]) -> list[adapters.Item]:
             exploded.append(item)
             continue
         entries = [" ".join(chunk.split()) for chunk in ENTRY_RE.findall(item.body or "")]
-        if len(entries) < 2:
-            # 불릿 목록("- 종목 | 가격 | 증권사")은 항목에 구분자 |가 들어 있다.
-            # 요약 포인트류 불릿을 목록으로 오인하지 않기 위한 조건이다.
-            entries = [" ".join(chunk.split()) for chunk in BULLET_RE.findall(item.body or "")
-                       if "|" in chunk]
-        entries = [entry for entry in entries if len(entry) >= 8]
-        if len(entries) < 2:
+        if not entries:
+            entries = [" ".join(chunk.split()) for chunk in BULLET_RE.findall(item.body or "")]
+        # 목록 항목은 '산업 | 제목 | 증권사'처럼 | 구분자를 쓴다. 요약 포인트류
+        # 불릿을 목록으로 오인하지 않기 위한 조건이며, 목록이 1건짜리 날도 분해한다
+        # (분해해야 표시 제목이 '심층 분석 보고서'가 아니라 보고서 제목이 된다).
+        entries = [entry for entry in entries if len(entry) >= 8 and "|" in entry]
+        if not entries:
             exploded.append(item)
             continue
         for order, entry in enumerate(entries):
@@ -172,6 +172,9 @@ def collect_reports(window_hours: float, channels: list[str]) -> list[adapters.I
     source = {
         "lookback_hours": window_hours,
         "include_chats": channels,
+        # 이 채널은 하루 수십 건을 올린다. 기본 상한(방당 30개)이면 오전 글이
+        # 오후 요약 무더기에 밀려 잘려 나간다(9/18 아침 심층 목록 유실의 원인).
+        "per_chat_limit": 200,
     }
     items = adapters.collect_telegram_account(source)
     return [item for item in items
