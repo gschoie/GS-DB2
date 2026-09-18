@@ -102,9 +102,17 @@ def explode_entries(items: list[adapters.Item]) -> list[adapters.Item]:
     """
     exploded: list[adapters.Item] = []
     for item in items:
+        # 낱개 요약 글("[✨ 리서치 요약] 회사명 …")은 분해하지 않는다 — 제목이 이미
+        # 회사명을 담고 있고, 본문의 '- ' 줄은 목록이 아니라 요약 포인트다.
+        if re.search(r"리서치\s*요약", item.title or ""):
+            exploded.append(item)
+            continue
         entries = [" ".join(chunk.split()) for chunk in ENTRY_RE.findall(item.body or "")]
         if len(entries) < 2:
-            entries = [" ".join(chunk.split()) for chunk in BULLET_RE.findall(item.body or "")]
+            # 불릿 목록("- 종목 | 가격 | 증권사")은 항목에 구분자 |가 들어 있다.
+            # 요약 포인트류 불릿을 목록으로 오인하지 않기 위한 조건이다.
+            entries = [" ".join(chunk.split()) for chunk in BULLET_RE.findall(item.body or "")
+                       if "|" in chunk]
         entries = [entry for entry in entries if len(entry) >= 8]
         if len(entries) < 2:
             exploded.append(item)

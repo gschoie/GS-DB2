@@ -350,13 +350,19 @@ def _account_session():
 
 def _chat_names(entity) -> set[str]:
     names = set()
-    for value in (getattr(entity, "username", None), getattr(entity, "title", None)):
+    # 봇·1:1 대화는 title이 없고 first/last name이 표시 이름이다.
+    person = " ".join(part for part in (getattr(entity, "first_name", None),
+                                        getattr(entity, "last_name", None)) if part)
+    for value in (getattr(entity, "username", None), getattr(entity, "title", None), person or None):
         if value:
             names.add(str(value).casefold())
     return names
 
 
 def _message_url(entity, message_id: int) -> str:
+    # 봇·1:1 대화의 메시지는 공유 주소가 없다(t.me 링크가 성립하지 않는 영역).
+    if getattr(entity, "first_name", None) is not None:
+        return ""
     username = getattr(entity, "username", None)
     if username:
         return f"https://t.me/{username}/{message_id}"
@@ -395,13 +401,16 @@ async def _scan_account(source: dict, since: datetime) -> list[Item]:
         scanned = 0
         async for dialog in client.iter_dialogs(limit=max_chats):
             entity = dialog.entity
+            names = _chat_names(entity)
             broadcast = bool(getattr(entity, "broadcast", False))
             megagroup = bool(getattr(entity, "megagroup", False))
-            if not broadcast and not (include_groups and megagroup):
+            # 기본은 채널만 본다. 단 include_chats로 콕 집은 방은 봇 대화방이어도 수집한다
+            # (예: 'epic AI - 투자 어시스턴트' — 리서치 목록을 봇이 밀어주는 방).
+            wanted = bool(include and (names & include))
+            if not wanted and not broadcast and not (include_groups and megagroup):
                 continue  # 1:1 대화와 일반 그룹은 리서치 소스가 아니다
 
-            names = _chat_names(entity)
-            if include and not (names & include):
+            if include and not wanted:
                 continue
             if names & exclude:
                 continue
@@ -410,7 +419,10 @@ async def _scan_account(source: dict, since: datetime) -> list[Item]:
                 continue
 
             scanned += 1
-            title = getattr(entity, "title", None) or getattr(entity, "username", "") or "이름 없는 채널"
+            title = (getattr(entity, "title", None)
+                     or " ".join(part for part in (getattr(entity, "first_name", None),
+                                                   getattr(entity, "last_name", None)) if part)
+                     or getattr(entity, "username", "") or "이름 없는 채널")
             async for message in client.iter_messages(entity, limit=per_chat_limit):
                 posted = to_utc(message.date)
                 if posted and posted < since:
