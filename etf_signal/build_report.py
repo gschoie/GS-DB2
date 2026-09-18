@@ -809,8 +809,21 @@ padding:18px 22px 16px;box-shadow:0 12px 40px rgba(23,33,29,.22)}}
 .grid{{stroke:#e9ede7;stroke-width:1}}
 .ax{{font:10px Georgia;fill:#8b918e}}
 .pline{{fill:none;stroke:#173f35;stroke-width:1.6}}
-.mk-t{{fill:#2e7d4f;cursor:help}}.mk-s{{fill:#c98a1e;cursor:help}}
-.mk-dt{{fill:#bd4335;cursor:help}}.mk-ds{{fill:#8e5ba6;cursor:help}}
+.mk-t{{fill:#2e7d4f}}.mk-s{{fill:#c98a1e}}
+.mk-dt{{fill:#bd4335}}.mk-ds{{fill:#8e5ba6}}
+/* 마커 묶음 — 투명 히트 원(r=13)이 도형 대신 포인터를 받는다. 도형이 5~9px라
+   그것만 노리면 잡기 어렵다. 가리키면 살짝 키워 '잡혔다'는 걸 보여준다. */
+.mkg{{cursor:pointer}}
+.mkg .hit{{fill:transparent;stroke:none}}
+.mkg:hover>*:first-child,.mkg:focus>*:first-child{{
+  transform-box:fill-box;transform-origin:center;transform:scale(1.45)}}
+.mkg:focus{{outline:none}}
+.chartwrap{{position:relative}}
+.chart-tip{{position:absolute;z-index:5;pointer-events:none;
+  background:#173f35;color:#f4f7f3;font:11px/1.55 Inter,system-ui,sans-serif;
+  padding:6px 9px;border-radius:7px;white-space:nowrap;
+  box-shadow:0 4px 14px rgba(0,0,0,.22)}}
+.chart-tip b{{font-size:12px;letter-spacing:.2px}}
 .chart-legend{{margin:10px 0 0;font-size:11px;color:var(--muted);line-height:1.8}}
 .chart-legend .lg-t{{color:#2e7d4f}}.chart-legend .lg-s{{color:#c98a1e}}
 .chart-legend .lg-dt{{color:#bd4335}}.chart-legend .lg-ds{{color:#8e5ba6}}
@@ -988,6 +1001,7 @@ function openChart(code) {{
   }} else {{
     title.textContent = c.name + ' · 최근 ' + c.dates.length + '거래일 (' + c.dates[0] + ' ~ ' + c.dates[c.dates.length - 1] + ')';
     body.innerHTML = renderChart(c);
+    chartTip(body.querySelector('.chartwrap'));
   }}
   mbg.style.display = 'flex';
 }}
@@ -1011,32 +1025,80 @@ function renderChart(c) {{
   for (var i = 0; i < n; i += step)
     s += '<text x="' + X(i).toFixed(1) + '" y="' + (H - 10) + '" class="ax" text-anchor="middle">' + c.dates[i].slice(5) + '</text>';
   s += '<polyline points="' + pts + '" class="pline"/>';
+  // 마커: 보이는 도형 + **투명 히트 영역**을 한 <g>로 묶는다. 도형이 5~9px라
+  // 그것만으로는 커서를 올리기 어렵다 — r=13 원을 덮어 잡기 쉽게 한다.
+  // data-tip 은 아래 chartTip() 이 읽어 커스텀 툴팁으로 띄운다(SVG <title> 의
+  // 기본 툴팁은 1초 지연 + 터치 미지원이라 쓰지 않는다).
+  function mk(i, shape, dy, label) {{
+    var x = X(i), y = Y(c.close[i]);
+    var tip = c.dates[i] + '|' + label + '|' + c.close[i].toLocaleString() + '원';
+    return '<g class="mkg" tabindex="0" role="img" aria-label="' + tip.split('|').join(' · ') +
+           '" data-tip="' + tip + '">' + shape +
+           '<circle cx="' + x.toFixed(1) + '" cy="' + (y + dy).toFixed(1) +
+           '" r="13" class="hit"/></g>';
+  }}
   (c.t || []).forEach(function (i) {{
     var x = X(i).toFixed(1), y = Y(c.close[i]);
-    s += '<path d="M' + x + ' ' + (y + 6).toFixed(1) + ' l5 9 h-10 z" class="mk-t">' +
-         '<title>' + c.dates[i] + ' · 추세 골든크로스(+DI가 −DI 상향돌파) · ' + c.close[i].toLocaleString() + '원</title></path>';
+    s += mk(i, '<path d="M' + x + ' ' + (y + 6).toFixed(1) + ' l5 9 h-10 z" class="mk-t"/>',
+            10, '추세 골든크로스(+DI가 −DI 상향돌파)');
   }});
   (c.s || []).forEach(function (i) {{
     var x = X(i).toFixed(1), y = Y(c.close[i]);
-    s += '<circle cx="' + x + '" cy="' + (y - 10).toFixed(1) + '" r="4.5" class="mk-s">' +
-         '<title>' + c.dates[i] + ' · 과매도 반등(Stochastic 골든크로스) · ' + c.close[i].toLocaleString() + '원</title></circle>';
+    s += mk(i, '<circle cx="' + x + '" cy="' + (y - 10).toFixed(1) + '" r="4.5" class="mk-s"/>',
+            -10, '과매도 반등(Stochastic 골든크로스)');
   }});
   (c.dt || []).forEach(function (i) {{
     var x = X(i).toFixed(1), y = Y(c.close[i]);
-    s += '<path d="M' + x + ' ' + (y - 6).toFixed(1) + ' l5 -9 h-10 z" class="mk-dt">' +
-         '<title>' + c.dates[i] + ' · 추세 데드크로스(+DI가 −DI 하향이탈) · ' + c.close[i].toLocaleString() + '원</title></path>';
+    s += mk(i, '<path d="M' + x + ' ' + (y - 6).toFixed(1) + ' l5 -9 h-10 z" class="mk-dt"/>',
+            -10, '추세 데드크로스(+DI가 −DI 하향이탈)');
   }});
   (c.ds || []).forEach(function (i) {{
     var x = X(i).toFixed(1), y = Y(c.close[i]);
-    s += '<path d="M' + x + ' ' + (y + 7).toFixed(1) + ' l5 5 l-5 5 l-5 -5 z" class="mk-ds">' +
-         '<title>' + c.dates[i] + ' · 과열 이탈(Stochastic 데드크로스) · ' + c.close[i].toLocaleString() + '원</title></path>';
+    s += mk(i, '<path d="M' + x + ' ' + (y + 7).toFixed(1) + ' l5 5 l-5 5 l-5 -5 z" class="mk-ds"/>',
+            12, '과열 이탈(Stochastic 데드크로스)');
   }});
-  s += '</svg>';
+  s += '</svg><div class="chart-tip" hidden></div>';
+  s = '<div class="chartwrap">' + s + '</div>';
   s += '<p class="chart-legend"><span class="lg-t">▲</span> 추세 골든크로스(+DI가 −DI 상향돌파, 라인 아래) · ' +
        '<span class="lg-s">●</span> 과매도 반등(Stochastic %K↑%D, 라인 위)<br>' +
        '<span class="lg-dt">▼</span> 추세 데드크로스(+DI가 −DI 하향이탈, 라인 위) · ' +
-       '<span class="lg-ds">◆</span> 과열 이탈(Stochastic %K↓%D, 라인 아래) · 마커에 마우스를 올리면 날짜·가격 표시</p>';
+       '<span class="lg-ds">◆</span> 과열 이탈(Stochastic %K↓%D, 라인 아래)<br>' +
+       '<b>마커를 가리키거나(모바일은 탭) 하면 날짜·가격이 뜬다.</b></p>';
   return s;
+}}
+/* 차트 마커 툴팁 — 마커의 화면 좌표(getBoundingClientRect)로 위치를 잡으므로
+   SVG 가 어떤 배율로 늘어나도 따라간다. 터치는 탭으로 열고 바깥을 누르면 닫힌다. */
+function chartTip(wrap) {{
+  var tip = wrap.querySelector('.chart-tip');
+  if (!tip) return;
+  function show(g) {{
+    var parts = (g.getAttribute('data-tip') || '').split('|');
+    if (parts.length < 3) return;
+    tip.innerHTML = '<b>' + parts[0] + '</b><br>' + parts[1] + '<br>' + parts[2];
+    tip.hidden = false;
+    var wr = wrap.getBoundingClientRect(), r = g.getBoundingClientRect();
+    var x = r.left - wr.left + r.width / 2 - tip.offsetWidth / 2;
+    var y = r.top - wr.top - tip.offsetHeight - 8;
+    /* 위가 좁으면 마커 아래로 내려 단다 */
+    if (y < 0) y = r.top - wr.top + r.height + 8;
+    tip.style.left = Math.max(2, Math.min(x, wr.width - tip.offsetWidth - 2)) + 'px';
+    tip.style.top = y + 'px';
+  }}
+  function hide() {{ tip.hidden = true; }}
+  wrap.addEventListener('mouseover', function (e) {{
+    var g = e.target.closest && e.target.closest('.mkg'); if (g) show(g);
+  }});
+  wrap.addEventListener('mouseout', function (e) {{
+    var g = e.target.closest && e.target.closest('.mkg'); if (g) hide();
+  }});
+  wrap.addEventListener('focusin', function (e) {{
+    var g = e.target.closest && e.target.closest('.mkg'); if (g) show(g);
+  }});
+  wrap.addEventListener('focusout', hide);
+  wrap.addEventListener('click', function (e) {{
+    var g = e.target.closest && e.target.closest('.mkg');
+    if (g) {{ show(g); e.stopPropagation(); }} else hide();
+  }});
 }}
 </script>
 </body></html>"""
