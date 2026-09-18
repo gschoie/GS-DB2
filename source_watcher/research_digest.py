@@ -216,9 +216,19 @@ def main(argv: list[str] | None = None) -> int:
 
     items = collect_reports(window, channels)
     print(f"리서치 표식 글 {len(items)}건 수집")
+    # 매칭 진단용 — '왜 안 잡혔지?'가 나오면 이 목록부터 본다.
+    # 목록 글은 분해된 항목과 항목별 커버리지 판정까지 찍는다.
+    exploded = explode_entries(items)
+    for entry in exploded:
+        labels = coverage_labels(groups, entry.text_for_match())
+        mark = ",".join(labels) if labels else "－"
+        print(f"  · [{mark}] {entry.title[:70]}")
+    split_uids = {entry.uid.split("#")[0] for entry in exploded if "#" in entry.uid}
     for item in items:
-        # 매칭 진단용 — '왜 안 잡혔지?'가 나오면 이 목록부터 본다
-        print(f"  · {item.title[:70]}")
+        if item.uid not in split_uids and len((item.body or "").splitlines()) > 3:
+            # 여러 줄인데 분해가 안 된 목록 글 후보 — 본문 앞부분을 남겨 형식을 파악한다
+            head_lines = "\n".join((item.body or "").splitlines()[:6])
+            print(f"  ⚠ 분해 안 됨({item.uid}):\n{head_lines}")
 
     text, count = build_digest(items, groups, now)
     if args.dry_run:
