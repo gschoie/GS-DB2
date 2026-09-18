@@ -43,8 +43,11 @@ KST = timezone(timedelta(hours=9))
 MARKER_RE = re.compile(r"\[\s*✨\s*리서치|리서치\s*요약")
 # 제목 표시용으로 벗겨낼 머리말
 MARKER_STRIP_RE = re.compile(r"\[\s*✨\s*리서치[^\]]*\]|리서치\s*요약")
-# 목록 글(②)의 항목: "1. 산업 | [조선] 제목 | SK증권" — 다음 번호 전까지가 한 항목
+# 목록 글(②)의 항목. 두 형태를 쓴다:
+#   번호  "1. 산업 | [조선] 제목 | SK증권"  — 다음 번호 전까지가 한 항목
+#   불릿  "- 한솔케미칼 | 325,000 | 현대차증권" — 한 줄이 한 항목
 ENTRY_RE = re.compile(r"^\s*\d{1,2}\.\s+(.+?)(?=^\s*\d{1,2}\.\s|\Z)", re.M | re.S)
+BULLET_RE = re.compile(r"^\s*[-•]\s+(.+)$", re.M)
 # 제목 정규화용 — 같은 요약이 여러 채널로 퍼날라진 것을 접는다.
 TITLE_NOISE_RE = re.compile(r"[^0-9a-z가-힣]+")
 
@@ -100,6 +103,8 @@ def explode_entries(items: list[adapters.Item]) -> list[adapters.Item]:
     exploded: list[adapters.Item] = []
     for item in items:
         entries = [" ".join(chunk.split()) for chunk in ENTRY_RE.findall(item.body or "")]
+        if len(entries) < 2:
+            entries = [" ".join(chunk.split()) for chunk in BULLET_RE.findall(item.body or "")]
         entries = [entry for entry in entries if len(entry) >= 8]
         if len(entries) < 2:
             exploded.append(item)
