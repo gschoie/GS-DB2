@@ -42,6 +42,8 @@ const WF = {
   gptbrief:  'chatgpt-brief.yml',      // ChatGPT 방산 브리핑 붙여넣기 발행 (content 입력 필요)
   congpt:    'construction-gpt.yml',   // ChatGPT 건설기계 브리핑 붙여넣기 발행 (content 입력 필요)
   research:  'research-digest.yml',    // 커버리지 리서치요약 아침 모음
+  defweekly: 'defense-weekly.yml',     // 방산 주간정리 (토) — 스케줄러 정시 발사용
+  conweekly: 'construction-weekly.yml',// 건설기계 주간정리 (토) — 스케줄러 정시 발사용
   // 다른 저장소의 워크플로는 {repo:'owner/name', file:'...'} 형태로 적는다.
   mirror:    { repo: 'DAOL-Securities-Research-Center/DAOL-RESEARCH-TONE', file: 'mirror.yml' }, // 챗봇 미러 즉시 동기화
 };
@@ -172,6 +174,10 @@ const SCHEDULE = [
   { wf: 'consensus', hours: [17],     minute: 0,  days: 'fri,sat', label: '코스피200 컨센' },
   // 스크립트 자체에 '오늘 이미 발송' 가드가 있어 GitHub 크론 안전망과 겹쳐도 한 통만 간다
   { wf: 'research',  hours: [8],      minute: 50, days: 'weekday', label: '커버리지 리서치요약 모음' },   // 채널 아침 목록(~08:40) 뒤
+  // 주간정리 2종 — GitHub 토요일 크론이 매주 +4.5시간대로 밀려(실측 16:30~17:00 실행)
+  // 텔레가 오후 5시에 오던 문제(9/19). 크론은 안전망으로 유지(워크플로 guard가 중복 차단).
+  { wf: 'defweekly', hours: [11],     minute: 50, days: 'sat',     label: '방산 주간정리' },
+  { wf: 'conweekly', hours: [12],     minute: 10, days: 'sat',     label: '건설기계 주간정리' },
 ];
 
 /** 5분마다 도는 본체. 목표 시각을 지난 슬롯 중 오늘 아직 안 쏜 것을 발사한다. */
