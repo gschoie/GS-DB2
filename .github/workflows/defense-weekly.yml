@@ -11,7 +11,8 @@ on:
         required: false
         default: ""
   schedule:
-    # UTC 02:50 = KST 11:50 (토). 큐 지연 감안 시 실생성 ~12시 전후.
+    # UTC 02:50 = KST 11:50 (토) — 안전망. 정시 발사는 GAS 스케줄러(defweekly 슬롯)가
+    # 담당한다(토요일 크론이 매주 +4.5시간대로 밀려 텔레가 오후 5시에 오던 문제, 9/19).
     - cron: "50 2 * * 6"
 
 permissions:
@@ -22,7 +23,34 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  # 예약(schedule) 실행 중복 가드 — "이 일이 이미 됐나"를 묻는다: 이벤트를 가리지 않고
+  # 최근 600분 내 성공·진행중 run(자기 자신 제외)이 있으면 뒤늦은 크론을 건너뛴다.
+  # fail-open: 가드가 죽으면 그냥 실행된다.
+  guard:
+    runs-on: ubuntu-latest
+    permissions:
+      actions: read
+    outputs:
+      skip: ${{ steps.check.outputs.skip }}
+    steps:
+      - name: 최근 실행 확인
+        id: check
+        if: github.event_name == 'schedule'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          since=$(date -u -d '-600 minutes' +%Y-%m-%dT%H:%M)
+          n=$(gh api "repos/${{ github.repository }}/actions/workflows/defense-weekly.yml/runs?created=%3E${since}" \
+                --jq '[.workflow_runs[] | select(.id != ${{ github.run_id }}) | select(.conclusion=="success" or .status=="in_progress" or .status=="queued")] | length' || echo 0)
+          echo "최근 600분 내 다른 실행 ${n:-0}건"
+          if [ "${n:-0}" -gt 0 ]; then
+            echo "::notice::이번 주 주간정리는 이미 처리됐습니다 — 이 예약 실행은 건너뜁니다"
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+          fi
+
   weekly:
+    needs: guard
+    if: ${{ always() && needs.guard.outputs.skip != 'true' }}
     runs-on: ubuntu-latest
     timeout-minutes: 25
     steps:
