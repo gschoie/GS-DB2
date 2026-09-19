@@ -1,61 +1,5 @@
 # 글로벌 건설기계 월간 정리 (최근 4주 주간 정리본 묶음)
-수록 주간: 2026-08-24, 2026-08-29, 2026-09-05, 2026-09-12
-
-# 글로벌 건설기계 주간 정리 2026-08-24
-(기간: 08/18~08/24)
-
-글로벌 건설기계 업종의 지난 한 주(08/18~08/24) 주요 흐름을 정리해 드립니다.
-
-## 주간 핵심 테마
-이번 주 글로벌 건설기계 업종은 중국 부동산 시장의 불확실성 지속과 광산 장비 시장의 견조한 수요가 주요 흐름을 형성했습니다. 중국에서는 에버그란데(Evergrande) 창업주의 종신형 선고로 부동산 위기감이 고조되었으나, 상하이시의 주택 구매 규제 완화 정책이 발표되며 시장 부양 기대감도 공존했습니다. 광산 장비 시장은 금과 구리 가격 상승세에 힘입어 샌드빅(Sandvik)의 대규모 수주와 선코어(Suncor)의 캐터필러(Caterpillar), 고마쓰(Komatsu) 자율주행 운반 시스템(AHS) 도입 소식이 전해지며 긍정적인 투자 심리를 유지했습니다.
-
-미국 시장에서는 주요 건설기계 기업들의 자국 내 제조 투자 확대 소식이 전해지며 견조한 수요와 공급망 안정화 노력이 부각되었습니다. 신흥 시장에서는 일본 구보타(Kubota) 및 에스코츠 구보타(Escorts Kubota)의 인도 투자 및 글로벌 수출 확대 전략이 발표되며 성장 기회와 함께 소형 장비 시장의 경쟁 심화 가능성을 시사했습니다. 한국 3사 중 HD현대건설기계(HD Hyundai CE)와 두산밥캣(Doosan Bobcat)은 특별한 뉴스 없이 주간 10% 이상 하락하며 시장의 전반적인 투자 심리 위축에 영향을 받은 것으로 보입니다.
-
-## 매크로·수요 지표
-지난 한 주간 미국채 10년 금리는 4.74%로 +0.89% 상승하며 주택 및 건설 투자 심리에 부정적인 영향을 미칠 수 있습니다. 반면, 금(COMEX) 가격은 4,663.20$/oz로 +5.55% 크게 상승하여 금광 투자 확대 및 광산 장비 수요에 긍정적인 신호를 보냈습니다. 구리(COMEX) 가격은 6.58$/lb로 -0.42% 소폭 하락하며 혼조세를 보였습니다. WTI 원유는 85.73$/bbl로 +1.46% 상승했습니다. 원/달러 환율은 1,381.08원으로 -2.42% 하락했고, 위안/달러 환율은 6.72위안으로 -0.33% 하락했습니다.
-
-중국 부동산 시장은 에버그란데 창업주의 종신형 선고(08/20)로 불확실성이 심화되었으나, 상하이시의 주택 구매 규제 완화 정책(08/20)으로 시장 부양 기대감이 공존했습니다. 7월 중국 1선 도시 신규 주택 가격은 4개월간의 반등을 마치고 보합세를 기록했습니다(08/20). 2026년 7월 중국 건설기계 수출입 현황이 발표되었으나(08/21), 구체적인 판매량 지표는 확인되지 않았습니다.
-
-## 수주·계약·전략
-*   **08/20 | 광산 장비 수주 | 샌드빅 (Sandvik)**: 바이른컷(Byrnecut)으로부터 굴착기, 로더, 트럭, 레이즈보링 장비 등 20대의 광산 장비 대규모 수주. [Trending Now Infrastructure](https://news.google.com/rss/articles/CBMitwFBVV95cUxQYTI5bUVsXzVaOFVnNDhqd2VaUEFua25SRFVRbklHZFlvNURxTmd5NHdoRGNMa3RWbjlUUm5TOVJWcHN2cU1NWmZvbVB2ckxQaVU3U3JabVFhMnFnalZhSDlVdzZGQVBTcHcwTkpzT2xsLUpLdmh3NzJLWHVZMmJXd1loVTBjc0ZFb3ZFNnBta3B1SzAtc2FXamR2aC1XX1Rrd0dTeFZUWG5iUXdtSVAxMDF0RDFJanc?oc=1)
-*   **08/20 | 해외 거점 재편 | HD현대건설기계 (HD Hyundai CE)**: 아프리카 및 중남미 시장 거점 확대, 중국 법인 합병 및 칠레 법인 폐쇄. [이투데이](https://news.google.com/rss/articles/CBMiVEFVX3lxTFBBZ0RJSmNpU1NmWTY4ZUd5NldscUhlZ185eGtyUE9rNmd0QUZSdVdPNVN6TEI0UHNwVktHMmxBVWJ6S2x4eHFEVkpmOU9zcW5ULUN0ZQ?oc=1)
-*   **08/20 | 신제품 출시 | HD현대인프라코어 (HD Hyundai Infracore)**: 건설기계 브랜드 디벨론(Develon) 미니 굴착기 업그레이드 버전 출시. [Project Plant](https://news.google.com/rss/articles/CBMikAFBVV95cUxONlFDSWxEVnpQaWpzZG5XVVJ2NnJ5RTZVb1VDTlMzTHpzUkJVeXNvODlUZ0tmVkhpbkhCeWxKUlpmcHpZSVZMSHozTkliWnRkc3YtV3plWXQxNVlxOXdXQTlHd0tybDhRSVduY1RoY0djOUctVEwxUmZfSkxKT0VaTDdvNG1uVjRyYmJhY2JHVlI?oc=5)
-*   **08/20 | 자율 건설 파트너십 | 고마쓰 (Komatsu)**: AIM과 미국·일본 자율 건설 확장 파트너십 발표. [For Construction Pros](https://news.google.com/rss/articles/CBMijwJBVV95cUxQN2pueGZEdllYSXRGbE5aalRDRmFZR2xMVUREaFJLTEhNTUx5blNLYmhoTC1YVnBBXzJ5TkgyYjZJaW1ZMm5iODNCQnVmWTEtNGo3M3hHVGdCSnp0NGZJLW1OQUxQcWtFR0U4bGJtYmptaHZrZXdKRTNFMGlBN1ZsM0FzOUZ0dThTNVRmd1QxNkQzX05nNkVtcTFjUFpYUW5kcUluX2N1TlVBN0VqamZ6LWdaREpRTjNjb0NSZDNzUDRGSjA5cVd5TWIzMEliOUUyTGw5dGt3SHZZTUQ0aV95cHBacHpCXzl2d1laMGlreGpaSk5YSW0ycm1VWjM1eWRIUHFST0psM1pzYXoyS2tZ?oc=1)
-*   **08/20 | 인도 투자 계획 | 구보타 (Kubota) / 에스코츠 구보타 (Escorts Kubota)**: 인도 우타르프라데시주에 일본 도시 조성 및 3,195억 루피(약 5조 2천억원) 투자 계획 발표. [Swarajya](https://news.google.com/rss/articles/CBMi6AFBVV95cUxNNTZMVzk4Njl1cmFkMTRjeHg5ZkFVOV8wd2hmLXVPalRBNS16OEh4cllfLWhYeEhzNG1WOXZqNWxfTTlZRHRuaHFhVGw1ckV3a0Ntdlg4UDNzdklsOWJEdXAtZHVQM2d5SXZjS3drQ2hzUlB2a3drZ2ZpNEI0ZGQ4Q0lIMXFYcTlLZEs4U05LdkNUYzJrRG15WElxell6dGJFamNzeFA2OTlPY0xVV2ROR1ZfTmRaa3ktSFhra2Q5TjkzbEZGQXI3M1ZkTWQ0ZkZkbWxlYlhfYnFOU1NtYzlEV0lyTXFmbld30gH4AUFVX3lxTE9UMV91bU12TTUxWElNbVBQQzdjdVE1b1VLekpwTkFjcmJtTEVzNDc3eFZza0FuLThwVW1hREpvU1hYWUstMXdsalM0VDNtRUxkSURjYUdZYVJFNTZvUVVaVUFGakNvMmR1ekJ5QjhWQUtkTURjMDJKdWxLNHRlcTlaWUNESGZqQjlXZDN5YW9VdDJWU1B5ejVpUkZyRThyRFcwZ3IzTDd3M2pDWktIM3lPNzhjekpjazFvZmRyUktGUG9iUXkxajR5MUFIWlo3ZUN4bTI5c3Awd3pxSEp6ZFl1NVZrLWplNUNTbksxSHNRdVI2RnBBeHZM?oc=1)
-*   **08/22 | 미국 내 제조 투자 | 미국 건설장비 기업**: 주요 건설기계 기업들이 미국 내 제조에 대규모 투자 진행. [constructionequipment.com](https://news.google.com/rss/articles/CBMi2wFBVV95cUxPcGxScHM5YnhWMjVqLU9uMG1VWmlPZGY2MEVFcmJ2eXU4YTZPTzRXZ05SV0dnc29xdS1MWUJBSGFKU1lRQUJMdDJQbTZGNUk2TlhNUWpYLXJ4cVNGMFpJWWFOSlNlX0NzNTFmNUVoS0xxWUNKT2hBYlN0Mkx3SkZGdmF0clVmeFVfU1NUb2U0dzEycjV2S3RoRWpudG1SdW4wMjhoMnRvSkQtV2pzU2lNczR4d29HSl9PTmpSMndyenRxSDNXbmdpY3ljanF1MVJXMjVmMXI1VjFqUGs?oc=5)
-*   **08/23 | 자율주행 광산 장비 도입 | 캐터필러 (Caterpillar) / 고마쓰 (Komatsu)**: 캐나다 선코어(Suncor)가 밀드레드 레이크(Mildred Lake) 광산에 캐터필러 AHS 도입, 베이스 플랜트(Base Plant)에서 고마쓰 AHS 트럭의 '머드 모드(Mud Mode)' 성공 보고. [International Mining](https://news.google.com/rss/articles/CBMi2AFBVV95cUxOY0xZRXR0RXdnNVhMckdBREpTYWx0bElnVWFYNGFEdWFlZVdxZ2QyQzB5VVhaOHRUeVM4dU41T09IZUxBS2M5YVpja3ZOdURzYTZ6MGs1Q2NDTXhPUjVqb2ZnNDdKMlRDVTN6TjV2NjBaM3M4amFKTEJUQWFhQS1vdUlPZWNVSG1RZnk3QnIzN1lGQkg5bmdGTmFTbUNqb2k1bS1qVkthcGx0a3E3Mk90Q09JWnc4amVkalc4ZVZucHZBZU1ocVAyZ0FxN2cxbUdqaGNabnhSTmk?oc=5)
-*   **08/23 | 인도 생산 기지 활용 전략 | 구보타 (Kubota)**: 인도 생산 기지를 활용해 유럽 및 미국 시장으로의 트랙터 수출 확대 및 가격 경쟁력 확보 전략 발표. [Nikkei Asia](https://news.google.com/rss/articles/CBMiuAFBVV95cUxNOGl4czNLb0dRQWEtcU40YlNyTi1Zc2NzZTEtcURob1A2RXU3eGE2YjhjN1ZqMVZZNUhBcXlVRGwzYTE5M2xHbjA2ZEZ5TFlrTE1KNGxyZlRfd3c1cXhhMXpwdnBMUDhzVHprelk4NkQxVjREQk1kZTNvQUhvMVEzUE9SMFFPNGEzRFU2R2o4ZHdXRm12RnJKNC1ucU8wODRST2ljTHh0aVV1TGN0aW5DVUFQYUpyQ2M2?oc=5)
-*   **08/23 | 인도 공장 투자 | 에스코츠 구보타 (Escorts Kubota)**: 인도 공장에 대규모 투자 단행, 글로벌 트랙터 수출 확대 계획 발표. [Investment Guru India](https://news.google.com/rss/articles/CBMiwAFBVV95cUxNRXpWOE9mdFZfZHNXazlsV21lblZObjdYalhWMXFiVXNsQW1jT1MtbjU5SUhXZk51d3FZWFQ3UXB6YUgySmN2T082WDZPeldQUnU4VERNeThxV0ZreHJXZkpFbWdkaFhSeU9ZQ2lNekxaQlV5Y1dVQXpVSjlQUEFvYlZuWklnbE1iVlBkSkZtZ0ROdHJsMnRhRmNRTnhTeDlGbHduSEFsbENLd0pLUVpRNmpCeXczR2NsMXZEOEwwMFQ?oc=5)
-
-## 주간 주가 리뷰
-지난 한 주간 글로벌 건설기계 업종은 전반적으로 혼조세를 보였습니다. 특히 한국 기업들은 큰 폭의 하락세를 기록했습니다.
-
-*   **HD현대건설기계 (HD Hyundai CE)**는 -13.42% 하락하며 주간 하락률 상위를 기록했습니다. 아프리카 및 중남미 시장 거점 확대와 중국 및 칠레 법인 재편 등 해외 거점 재편 소식이 있었으나, 주가 하락에 대한 직접적인 악재성 공시나 뉴스는 확인되지 않아 수급 요인에 의한 변동으로 추정됩니다.
-*   **두산밥캣 (Doosan Bobcat)**은 -10.59% 하락했습니다. 관련 공시나 뉴스는 확인되지 않았으며, 수급 요인에 의한 변동으로 추정됩니다.
-*   **HD현대인프라코어 (HD Hyundai Infracore)**는 시세 조회 불가로 주간 등락률을 확인할 수 없었습니다.
-*   **CNH Industrial**은 +13.70% 상승하며 주간 상승률 상위를 기록했습니다. 관련 공시나 뉴스는 확인되지 않아 수급 요인에 의한 변동으로 추정됩니다.
-*   **히타치건기 (Hitachi CM)**는 +9.17% 상승했습니다. 관련 공시나 뉴스는 확인되지 않았습니다.
-*   **Action Construction Equipment (인도)**는 +8.90% 상승하며 인도 시장의 성장 기대감에 영향을 받은 것으로 보입니다.
-*   **존디어 (John Deere)**는 +6.34% 상승하며 미국 내 제조 투자 소식 및 시장 전반의 긍정적 흐름에 영향을 받은 것으로 보입니다.
-*   **에피록 (Epiroc)**은 +5.64%, **샌드빅 (Sandvik)**은 +6.01% 상승하며 금·구리 가격 상승에 따른 광산 장비 수요 기대감에 긍정적인 영향을 받았습니다.
-
-## 시장별 동향
-*   **미국**: 주요 건설기계 기업들이 미국 내 제조에 대규모 투자를 진행하고 있다는 소식이 전해졌습니다(08/22). 이는 미국 시장의 견조한 수요와 공급망 안정화 노력의 일환으로 해석됩니다. 캐나다 광산 기업 선코어(Suncor)는 캐터필러(Caterpillar)와 고마쓰(Komatsu)의 자율주행 운반 시스템(AHS)을 도입하며 광산 업계의 자동화 및 효율성 증대 투자가 지속되고 있음을 보여주었습니다(08/23).
-*   **중국**: 에버그란데(Evergrande) 창업주 쉬자인(Hui Ka Yan)이 종신형을 선고받고 자산을 몰수당하면서 중국 부동산 시장의 불확실성이 더욱 커졌습니다(08/20). 이는 건설기계 수요에 부정적인 영향을 미칠 수 있습니다. 반면, 상하이시는 두 번째 주택 구매 계약금 비율을 낮추는 등 부동산 시장 부양책을 발표했습니다(08/20). 호주와 중국 양쪽에서 중국 부동산 시장의 자금 흐름을 압박하고 있다는 보도도 나왔습니다(08/23). 싸니중공업(SANY)은 산업 전체를 수출하려는 야심찬 계획을 밝히며 글로벌 시장에서의 경쟁 심화를 예고했습니다(08/20).
-*   **자원국·광산**: 광산 서비스 업체 바이른컷(Byrnecut)이 샌드빅(Sandvik)으로부터 20대의 광산 장비를 대규모로 주문했습니다(08/20). 금과 구리 가격의 상승은 글로벌 광산 기업들의 투자 확대(capex)로 이어질 가능성이 높으며, 이는 광산 장비 전문 기업뿐만 아니라 대형 굴착기 및 광산 트럭을 생산하는 종합 건설기계 업체에도 긍정적인 영향을 미칠 수 있습니다. 선코어(Suncor)의 캐터필러(Caterpillar) 및 고마쓰(Komatsu) 자율주행 운반 시스템(AHS) 도입은 광산 장비 시장에서 자동화 및 스마트 기술의 중요성이 커지고 있음을 보여줍니다(08/23).
-*   **신흥국 (인도·아세안)**: 인도 우타르프라데시주(Uttar Pradesh)는 노이다 공항 근처에 500에이커 규모의 일본 도시를 조성할 계획이며, 이와 관련하여 에스코츠 구보타(Escorts Kubota)가 3,195억 루피(약 5조 2천억원)를 투자하기로 약속했습니다(08/20). 일본 구보타(Kubota)는 인도 생산 기지에서 유럽과 미국으로의 수출을 늘려 가격 경쟁력을 확보하겠다는 전략을 발표했습니다(08/22). 이는 소형 장비 시장에서 가격 경쟁이 심화될 수 있음을 시사합니다. 에스코츠 구보타(Escorts Kubota)는 인도 공장에 대규모 투자를 단행하여 글로벌 트랙터 수출을 확대할 계획을 발표했습니다(08/23).
-
-## 한국 3사 종합
-**HD현대건설기계 (HD Hyundai CE)**는 아프리카 및 중남미 지역에서 현지 거점을 늘려 신흥 시장 공략을 강화하고 있으며, 중국 법인을 합치고 칠레 법인을 폐쇄하는 등 해외 거점 재편에 속도를 내고 있습니다(08/20). 이는 효율적인 시장 대응과 성장 동력 확보를 위한 전략으로 풀이됩니다. 그러나 주간 주가는 -13.42%로 큰 폭의 하락을 기록했으며, 이에 대한 직접적인 악재성 공시나 뉴스는 확인되지 않았습니다.
-
-**HD현대인프라코어 (HD Hyundai Infracore)**의 건설기계 브랜드 디벨론(Develon)은 미니 굴착기의 업그레이드 버전을 출시하며 소형 장비 시장에서의 경쟁력 강화에 나섰습니다(08/20). 이는 고객 요구에 부응하고 제품 라인업을 강화하려는 노력으로 해석됩니다.
-
-**두산밥캣 (Doosan Bobcat)**은 주간 주가가 -10.59% 하락했으나, 이에 대한 직접적인 공시나 뉴스는 확인되지 않았습니다. 일본 구보타(Kubota)가 인도 생산 기지를 활용해 유럽 및 미국 시장에서 가격 경쟁력을 확보하겠다는 전략을 발표한 것은 소형 장비 시장에서 두산밥캣에게 잠재적인 경쟁 위협 요인이 될 수 있습니다(08/22). 중국 싸니중공업(SANY)의 공격적인 해외 시장 확장 전략 또한 한국 기업들의 신흥국 시장 점유율에 대한 경쟁 압력을 높일 수 있습니다(08/20).
-
-## 다음 주 관전 포인트
-데일리 브리핑에서 다음 주에 예정된 특정 일정이나 이벤트는 확인되지 않았습니다. 다만, 중국 부동산 시장의 추가적인 부양책 또는 위기 심화 여부, 그리고 글로벌 원자재 가격 변동이 건설기계 업종에 미치는 영향에 대한 지속적인 모니터링이 필요할 것으로 보입니다.
-
----
+수록 주간: 2026-08-29, 2026-09-05, 2026-09-12, 2026-09-19
 
 # 글로벌 건설기계 주간 정리 2026-08-29
 (기간: 08/23~08/29)
@@ -260,3 +204,67 @@ HD현대건설기계는 인도법인 유상증자를 통해 산업용 차량 생
 *   **북미 소형장비 시장의 한국 브랜드 경쟁 구도**: Develon의 신형 컴팩트트랙로더 북미 출시와 두산밥캣의 주력 제품 강화가 맞물리며, 내년 북미 소형장비 시장에서 양사 간의 경쟁 심화 양상이 구체화될지 관찰이 필요합니다.
 *   **HD현대건설기계의 ESG·제재 리스크 논의 진전**: 영국 주도의 '이스라엘 정착촌 지원 기업 제재' 논의가 구체화될 경우, HD현대건설기계의 잠재적 노출 여부와 그 파급 효과를 지속적으로 추적해야 합니다.
 *   **중국 건설기계 시장 동향**: 1~8월 굴착기 판매 호조 이후 중국 정부의 추가적인 실물 부양책 발표 여부와 중국 건설기계 기업들의 주가 흐름이 주목됩니다.
+
+---
+
+# 글로벌 건설기계 주간 정리 2026-09-19
+(기간: 09/13~09/19)
+
+글로벌 건설기계 업종의 지난 한 주(09/13~09/19) 주요 흐름을 정리해 드립니다.
+
+## 주간 핵심 테마
+지난 한 주는 미국 연준의 금리 인상(25bp) 확정으로 매크로 불확실성이 해소되는 듯했으나, 장기 금리 5% 안착과 유가 변동성(WTI $100선 등락)이 지속되며 업종 전반에 매크로 부담이 이어졌습니다. 특히 미국 주택 착공 지표 악화로 소형 장비 수요에 대한 우려가 커진 반면, 데이터센터 전력 인프라 및 광산 투자(배터리 금속 중심)는 견조한 수요를 보이며 건설기계 시장 내 수요 축의 차별화가 심화되었습니다.
+
+한편, HD현대건설기계(Develon)는 북미 스마트 장비 신제품 출시와 홍콩 도시철도 수주(중국산 제치고), 칠레 광산 벨트 지점 개설 등 제품·채널·기술 측면에서 전방위적 확장을 보이며 '스마트 건기' 서사를 구체화했습니다. 중국 건설기계 시장은 8월 내수 판매 급감과 정부의 '수급 중대 변화' 공식 언급으로 부양책 기대보다 구조적 재편에 대한 우려가 커지며 주가 약세를 면치 못했습니다.
+
+## 매크로·수요 지표
+지난 한 주 미국채 10년 금리는 5.00%로 +0.46% 상승하며 금리 인상 기조가 고착화되었습니다. 이는 주택 시장 및 렌탈 업체의 자금 조달 비용 부담으로 이어집니다. 금(COMEX)은 4,424.90$/oz로 +0.36%, 은(COMEX)은 66.56$/oz로 +3.10%, 구리(COMEX)는 6.61$/lb로 +2.25% 상승하며 광산 capex 투자에 긍정적인 신호를 보냈습니다. WTI 원유는 100.30$/bbl로 +0.25% 소폭 상승했으나, 주중 $95선까지 급락하는 등 변동성이 컸으며 연료비 부담 완화 가능성을 시사했습니다. 원/달러 환율은 1,385.00원으로 +3.00% 급등하며 한국 기업의 수출 채산성에는 긍정적이나 외국인 수급에는 부담으로 작용했습니다.
+
+주요 수요 지표로는 미국 8월 주택착공이 연율 127.5만호로 전월 대비 -2.6% 감소하며 두 달 연속 하락, 2025년 10월 이후 최저치를 기록했습니다 (09/18). 이는 두산밥캣(Doosan Bobcat) 등 소형 장비 수요에 부정적인 영향을 미칠 것으로 예상됩니다. 중국 8월 굴착기 판매는 총량 +19.3%로 견조했으나, 내수 판매는 +3.9%로 급감한 반면 수출은 +32.7%를 기록하며 내수 모멘텀 둔화가 확인되었습니다 (09/17).
+
+## 수주·계약·전략
+*   **북미 | 33톤급 스마트 굴착기 DX300LC-9 공개 | Develon | - | 09/13**
+*   **캐나다 | Canada Nickel Crawford 니켈 프로젝트에 15억 달러 규모 전기 로드&홀 플릿 공급자로 선정 (딜러 SMS Equipment 경유, 자율주행 지향) | Komatsu | C$1.5B (40년, 300대+) | 09/15**
+*   **한국 | L100 휠로더 신제품 출시 및 L85 업데이트 | 두산밥캣 (Doosan Bobcat) | - | 09/16**
+*   **칠레 | 안토파가스타(구리 광산 벨트) Develon 신규 지점 개설 | HD현대건설기계 (HD Hyundai CE·Develon) | - | 09/16**
+*   **홍콩 | 도시철도(퉁청선 연장) 중대형 굴착기 45대 수주 (중국산 저가 장비 제치고) | HD현대건설기계 (HD Hyundai CE·Develon) | 45대 (올해 누적 75대, 2029년 연 100대 목표) | 09/17**
+*   **독일 | steinexpo에서 스마트 안전 시스템 시연 | Develon | - | 09/17**
+*   **미국 | 미국 공장 첫 미국산 굴착기·대형 휠로더 출고 | Volvo CE | - | 09/17**
+*   **미국 | Luck Stone 채석장 Caterpillar 자율 운반(autonomous hauling) 확장 발표 | Caterpillar | - | 09/16**
+*   **인도 | 신공장 부지 매입 | Kubota | - | 09/18**
+*   **아시아·신흥시장 | 신형 굴착기 PC75-10M0 (7톤급), PC200/PC210-11M2 (20톤급) 연속 출시 | Komatsu | - | 09/17**
+*   **미국 | REV Group 합병으로 '특수장비 플랫폼'화 | Terex | - | 09/19**
+*   **일본 | 2027년 4월 'Landcros Corp' 사명 변경 예고 | Hitachi CM | - | 09/18**
+
+## 주간 주가 리뷰
+지난 한 주 글로벌 건설기계 업종은 매크로 변수와 시장별 동향에 따라 등락이 엇갈렸습니다.
+
+*   **Manitowoc (+7.56%)**: 크레인 사이클 강세가 지속되며 주간 상승을 이끌었습니다.
+*   **Action Construction Equipment (+8.88%)**: 인도 시장의 견조한 성장세가 주가에 반영되었습니다.
+*   **Ashtead (-13.29%)**: 렌탈 업종 전반의 약세와 함께, 9/18 Sunbelt Rentals(SUNB)의 배당락($0.30) 및 NYSE 이전으로 인한 구 티커(AHT) 데이터 왜곡 가능성이 겹쳐 큰 폭으로 하락했습니다.
+*   **싸니중공업 (SANY) (-9.56%)** 및 **쉬공기계 (XCMG) (-7.57%)**: 중국 8월 굴착기 내수 판매 급감 소식과 정부의 부동산 시장 수급 변화 언급이 겹치며 큰 폭의 하락세를 보였습니다.
+*   **HD현대건설기계 (HD Hyundai CE·Develon) (-1.89%)**: 주중 홍콩 도시철도 중대형 굴착기 45대 수주 소식이 있었으나, 발표 당일 원/달러 환율 급등에 눌려 반응이 지연되었고, 이후 +6.36% 급등하며 수주 재료를 반영했으나 주간 기준으로는 소폭 하락 마감했습니다.
+*   **두산밥캣 (Doosan Bobcat) (-4.22%)**: 미국 8월 주택착공 지표 악화와 금리 인상 부담이 겹치며 약세를 보였습니다.
+
+Caterpillar(-1.17%)는 주중 AI 관련 서사 조정으로 급락했으나, Citi의 목표가 상향 및 데이터센터 전력 수요에 대한 긍정적 전망으로 하락폭을 만회했습니다. United Rentals(+2.51%)는 금리 인상 확정 후 불확실성 해소로 반등하며 렌탈 업종 내 차별화된 모습을 보였습니다.
+
+## 시장별 동향
+*   **미국**: 8월 주택착공이 전월 대비 -2.6% 감소하며 주거용 건설 시장의 침체가 확인되었습니다. 이는 두산밥캣과 같은 소형 장비 업체에 부정적인 신호입니다. 반면, ConstructConnect 가을 전망은 데이터센터 붐을 이유로 비주거 건축 착공 전망을 상향 조정하며 건설기계 수요의 축이 주택에서 데이터센터 및 전력 인프라로 이동하고 있음을 보여주었습니다. 렌탈 시장에서는 United Rentals가 금리 인상 확정 후 반등하며 낙폭과대 인식을 반영했으나, Herc Holdings와 Ashtead는 여전히 약세를 보이며 렌탈 업체 간의 체력 차별화가 심화되었습니다.
+*   **유럽**: 독일 정부가 2026년 연방 투자를 €120bn 이상으로 끌어올리는 특별기금 집행을 가속화할 예정이며, 이는 Wacker Neuson(+15.9% 1M) 등 유럽 중소형 장비 업체들의 모멘텀으로 작용하고 있습니다. HD현대건설기계(Develon)는 독일 steinexpo에서 스마트 안전 시스템을 시연하며 유럽 시장 내 기술 노출을 확대했습니다.
+*   **중국**: 8월 굴착기 내수 판매가 +3.9%로 급감하고, 중국 국무원이 "부동산 시장 수급의 중대 변화"를 공식 언급하며 단기 부양책 기대보다 구조적 재편에 대한 우려가 커졌습니다. 이는 싸니중공업(SANY) 등 중국 주요 건설기계 업체들의 주가 약세로 이어졌습니다. 다만, 수출은 +32.7%로 견조했으며, 특히 전동화 장비 수출이 급증하며 해외 시장 경쟁 강도를 높이고 있습니다.
+*   **자원국·광산**: 구리, 은 등 주요 광물 가격이 상승세를 보이며 광산 capex 투자에 대한 기대감을 높였습니다. Komatsu는 캐나다 Canada Nickel의 Crawford 니켈 프로젝트에 15억 달러 규모의 전기 로드&홀 플릿 공급자로 선정되며 전동화 및 자율주행 광산 장비 수요의 실질적인 증가를 보여주었습니다. HD현대건설기계(Develon)는 칠레 안토파가스타(세계 구리 광산 벨트)에 신규 지점을 개설하며 광산 장비 시장 확장에 나섰습니다.
+*   **신흥국 (인도·아세안)**: Komatsu가 동남아 및 아시아 신흥 시장을 겨냥한 신형 굴착기를 연속 출시하며 신흥국 시장 내 경쟁 강도를 높였습니다. Kubota는 인도에 신공장 부지를 매입하며 현지 생산 확대를 예고했고, 12월 '바우마 콘엑스포 인디아'에 한국 8개 기업이 참가할 예정이어서 인도 시장이 다음 격전지로 부상하고 있습니다.
+
+## 한국 기업 종합
+**HD현대건설기계 (HD Hyundai CE·Develon)**는 지난 한 주 북미 시장에서 33톤급 스마트 굴착기 DX300LC-9를 공개하며 소형(CTL)에 이어 중대형 장비까지 스마트 기술 라인업을 확장했습니다. 특히 홍콩 도시철도(퉁청선 연장) 중대형 굴착기 45대 수주 건은 중국산 저가 공세를 제치고 따낸 물량으로, 아시아 인프라 시장에서 K-건기의 중대형 프리미엄이 통하고 있음을 입증했습니다. 또한 칠레 안토파가스타에 Develon 신규 지점을 개설하며 광산 capex 벨트 내 채널을 강화하고, 독일 steinexpo에서 스마트 안전 시스템을 시연하는 등 제품·기술·채널의 전방위적 확장을 보였습니다. 주가는 수주 발표 당일 환율 급등에 눌렸으나, 이후 급등하며 수주 재료를 반영했습니다.
+
+**두산밥캣 (Doosan Bobcat)**은 L100 휠로더 신제품 출시 및 L85 업데이트를 통해 소형 휠로더 라인업을 확장했습니다. 그러나 미국 8월 주택착공 지표가 급락하며 소형 장비 수요에 대한 우려가 커졌고, 이는 주가 약세로 이어졌습니다. 국내 증권가에서는 3분기 컨센서스 하회 우려가 제기되는 등 매크로 환경 변화에 민감한 모습을 보였습니다.
+
+경쟁 구도 측면에서 HD현대건설기계는 CAT-FieldAI가 주도하는 '스마트·자동화' 담론에 제품 출시와 HD현대로보틱스의 '피지컬 AI' 경쟁력 강화 보도로 응전하는 구도를 형성했습니다. 신흥국 시장에서는 홍콩 수주로 중국 업체들의 저가 공세를 이겨냈으나, Komatsu가 신흥국 타깃 신제품을 연속 출시하며 경쟁 강도를 높이고 있어 제품 경쟁력 강화가 중요해질 전망입니다.
+
+## 다음 주 관전 포인트
+1.  **국내 건설기계 기업 3분기 실적 프리뷰 시즌**: HD현대건설기계와 두산밥캣 등 국내 기업들의 3분기 실적 눈높이 조정 및 가이던스 발표가 예상됩니다. 특히 두산밥캣은 미국 주택 시장 둔화의 영향이 숫자로 확인될지 주목됩니다.
+2.  **미국 렌탈 업체의 4분기 가이던스 발표**: United Rentals, Herc Holdings 등 주요 렌탈 업체들이 4분기 가이던스를 발표하며, 현재 주가와 가이던스 간의 괴리(렌탈 가이던스 상향 vs 주가 약세)가 해소될지 주목됩니다. 메가프로젝트 및 스페셜티 장비 수요가 지속될지 여부가 관건입니다.
+3.  **중국 부동산 시장 부양책의 구체화 및 효과**: 국무원의 '수급 중대 변화' 언급 이후, 신규 착공 억제 및 재고 소진 중심의 '관리된 안정화' 정책이 구체화될지, 그리고 이것이 굴착기 내수 판매에 어떤 영향을 미칠지 지속적인 관찰이 필요합니다.
+4.  **광산 장비 시장의 추가 대형 수주 공시**: Komatsu의 캐나다 니켈 프로젝트 수주에 이어, Epiroc, Sandvik 등 유럽 광산 장비 업체들의 배터리 금속 관련 대형 수주 공시가 이어질지 주목됩니다. 구리 등 광물 가격 상승과 광산 capex 전망 상향이 실질적인 주문으로 이어지는지 확인해야 합니다.
+5.  **인도 시장 경쟁 심화 동향**: Kubota의 인도 신공장 부지 매입과 Komatsu의 신흥국 타깃 신제품 출시 등 인도 시장을 둘러싼 글로벌 업체들의 경쟁이 가시화되고 있습니다. 12월 '바우마 콘엑스포 인디아'를 앞두고 한국 기업들의 추가적인 시장 전략 발표가 있을지 주목됩니다.
