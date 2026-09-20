@@ -498,6 +498,15 @@ $('#todo-group-add')?.addEventListener('click',()=>{const name=(prompt('추가�
 /* 일괄 보관: 체크한 항목을 한꺼번에 보관함으로(한 건씩은 각 줄의 📦) */
 $('#todo-archive-done')?.addEventListener('click',()=>{const a=todoLoad(),done=a.filter(t=>t.done);if(!done.length){alert('체크된 항목이 없습니다. 한 건만 보관하려면 그 줄의 📦를 누르세요.');return}
  todoArchiveMove(done,a.filter(t=>!t.done))});
+/* 보관함 접기/펴기 — 선택은 이 기기에 기억한다(기본은 펼침, 기존 화면 그대로) */
+const TODO_ARCH_OPEN='hi_todo_arch_open_v1';
+function todoArchOpen(open){const cols=$('.todo-cols'),btn=$('#todo-arch-toggle');if(!cols||!btn)return;
+ cols.classList.toggle('arch-collapsed',!open);btn.textContent=open?'▾':'▸';btn.setAttribute('aria-expanded',open?'true':'false');
+ btn.title=open?'보관함 접기':'보관함 펴기';try{localStorage.setItem(TODO_ARCH_OPEN,open?'1':'0')}catch(e){}}
+const todoArchFlip=()=>todoArchOpen($('.todo-cols').classList.contains('arch-collapsed'));
+$('#todo-arch-toggle')?.addEventListener('click',todoArchFlip);
+$('#todo-arch-title')?.addEventListener('click',todoArchFlip);
+(()=>{let v='1';try{v=localStorage.getItem(TODO_ARCH_OPEN)??'1'}catch(e){}todoArchOpen(v!=='0')})();
 /* 보관항목 정리: 여기서만 완전 삭제된다 */
 $('#todo-clear-arch')?.addEventListener('click',()=>{const a=todoArchLoad();if(!a.length){alert('보관함이 비어 있습니다.');return}
  if(!confirm(`보관함의 ${a.length}개 항목을 완전히 삭제할까요?\n삭제하면 되돌릴 수 없습니다.`))return;todoArchSave([])});
