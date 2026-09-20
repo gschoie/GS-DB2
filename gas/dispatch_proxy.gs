@@ -46,6 +46,10 @@ const WF = {
   conweekly: 'construction-weekly.yml',// 건설기계 주간정리 (토) — 스케줄러 정시 발사용
   // 다른 저장소의 워크플로는 {repo:'owner/name', file:'...'} 형태로 적는다.
   mirror:    { repo: 'DAOL-Securities-Research-Center/DAOL-RESEARCH-TONE', file: 'mirror.yml' }, // 챗봇 미러 즉시 동기화
+  // 엑셀 2종: 버튼을 누르면 수집부터 새로 돌리고, 끝나면 대시보드가 파일을 내려받는다.
+  // (app.js 의 FRESH 표와 1:1. 완료 시점은 아래 latestRun 상태 조회로 잡는다)
+  fx:        { repo: 'gschoie/ecos-fx-rates', file: 'fx-ecos.yml' },        // ECOS 환율 엑셀
+  peer:      { repo: 'gschoie/ecos-fx-rates', file: 'peergroup-price.yml' },// 피어그룹 주가 엑셀
 };
 
 // 워크플로별 추가 입력. 선언한 required 입력을 빠짐없이 채워야 422가 안 난다.
@@ -78,6 +82,10 @@ function doPost(e) {
   try {
     const body = JSON.parse((e && e.postData && e.postData.contents) || '{}');
     const key = String(body.workflow || '');
+
+    // 발사가 아니라 "그 워크플로 지금 어떻게 됐나" 묻는 요청(대시보드 폴링용)
+    if (String(body.action || '') === 'status') return json(latestRun(key));
+
     const wf = WF[key];
 
     // 매핑에 없는 키는 여기서 끊는다. 예전에는 dart로 폴백시켰는데, dart는
@@ -128,6 +136,31 @@ function fireWorkflow(key, inputs) {
   return code === 204
     ? { ok: true, code: code, wf: wf }
     : { ok: false, code: code, wf: wf, error: String(res.getContentText() || '').slice(0, 300) };
+}
+
+/** 워크플로의 가장 최근 실행 상태. 대시보드가 5초 간격으로 물어 완료 시점을 잡는다. */
+function latestRun(key) {
+  const entry = WF[key];
+  if (!entry) return { ok: false, code: 400, error: 'unknown workflow key: ' + (key || '(빈 값)') };
+  const wf = typeof entry === 'string' ? entry : entry.file;
+  const repoPath = typeof entry === 'string' ? `${OWNER}/${REPO}` : entry.repo;
+
+  const token = PropertiesService.getScriptProperties().getProperty('GH_TOKEN');
+  if (!token) return { ok: false, code: 500, wf: wf, error: 'GH_TOKEN 미설정' };
+
+  const res = UrlFetchApp.fetch(
+    `https://api.github.com/repos/${repoPath}/actions/workflows/${wf}/runs?per_page=1`,
+    { headers: { Authorization: 'Bearer ' + token, Accept: 'application/vnd.github+json' },
+      muteHttpExceptions: true });
+
+  if (res.getResponseCode() !== 200) {
+    return { ok: false, code: res.getResponseCode(), wf: wf,
+             error: String(res.getContentText() || '').slice(0, 200) };
+  }
+  const run = (JSON.parse(res.getContentText()).workflow_runs || [])[0];
+  if (!run) return { ok: true, wf: wf, status: 'none' };
+  return { ok: true, wf: wf, status: run.status, conclusion: run.conclusion,
+           created_at: run.created_at, run_id: run.id };
 }
 
 function json(obj) {

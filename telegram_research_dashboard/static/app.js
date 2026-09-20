@@ -614,3 +614,40 @@ applyHashView();window.addEventListener('hashchange',applyHashView);
 const LOADED_VERSION=window.__DASHBOARD_DATA__?.summary?.updated_at||'';
 async function checkNewDeploy(){if(!LOADED_VERSION||!/^http/.test(location.protocol))return;try{const r=await fetch(`version.json?t=${Date.now()}`,{cache:'no-store'});if(!r.ok)return;const v=await r.json();if(!v.updated_at||v.updated_at<=LOADED_VERSION)return;if(document.hidden){location.reload();return}if($('#fresh-banner'))return;const b=document.createElement('div');b.id='fresh-banner';b.style.cssText='position:fixed;bottom:16px;right:16px;z-index:999;background:#1c2733;color:#fff;padding:10px 14px;border-radius:10px;box-shadow:0 4px 14px rgba(0,0,0,.35);font-size:13px;display:flex;gap:10px;align-items:center';b.innerHTML='새 데이터가 배포되었습니다.<button style="background:#3b82f6;color:#fff;border:0;border-radius:6px;padding:5px 10px;cursor:pointer">새로고침</button>';b.querySelector('button').onclick=()=>location.reload();document.body.appendChild(b)}catch{}}
 setInterval(checkNewDeploy,15*60*1000);
+
+/* ── 엑셀 2종: 버튼 하나로 "새로 수집 → 완료 대기 → 내려받기" ─────────────────
+   메뉴의 링크였던 것들(환율·피어그룹)은 저장소에 마지막으로 만들어둔 파일만 줬다.
+   그래서 수집을 며칠 안 돌리면 조용히 낡은 파일을 받게 된다(9/20 환율 8/21까지 사고).
+   이제 버튼을 누르면 워크플로를 먼저 돌리고, 끝난 뒤에 파일을 내려받는다.
+   키(fx·peer)는 gas/dispatch_proxy.gs 의 WF 매핑과 1:1. 프록시가 그 키를 모르면
+   (= GAS 재배포 전이면) 새로 못 돌린다고 알리고 저장본이라도 내려준다. */
+const FRESH={
+ fx:{name:'환율',url:'https://github.com/gschoie/ecos-fx-rates/raw/main/output/BOK_exchange_rates.xlsx'},
+ peer:{name:'피어그룹 주가',url:'https://github.com/gschoie/ecos-fx-rates/raw/main/output/'+encodeURIComponent('글로벌_주가_변동률_모니터링_최종.xlsx')}};
+function xlDown(u){const a=document.createElement('a');a.href=u+(u.includes('?')?'&':'?')+'t='+Date.now();a.target='_blank';a.rel='noopener';document.body.appendChild(a);a.click();a.remove()}
+async function proxyPost(payload){const r=await fetch(DISPATCH_ENDPOINT,{method:'POST',body:JSON.stringify(payload)});return r.json()}
+async function freshDownload(key,btn){
+ const c=FRESH[key];if(!c||btn.dataset.busy)return;
+ const label=btn.textContent,say=t=>{btn.textContent=t};
+ btn.dataset.busy='1';btn.disabled=true;
+ const since=Date.now()-90000;                 // 이 시각 이후에 생긴 실행만 "내 실행"으로 본다
+ const done=(msg,dl)=>{say(msg);if(dl)xlDown(c.url);
+  setTimeout(()=>{btn.textContent=label;btn.disabled=false;delete btn.dataset.busy},3000)};
+ try{
+  say('⏳ 최신 수집 요청…');
+  let d=null;try{d=await proxyPost({workflow:key})}catch{}
+  if(d&&d.ok===false){alert(`${c.name}을 새로 수집하지 못했습니다.\n(${d.error||'GAS 프록시 매핑 확인 필요'})\n\n저장된 마지막 파일을 내려받습니다.`);
+   return done('⚠ 저장본',true)}
+  for(let i=1;i<=72;i++){                      // 5초 × 72 = 최대 6분
+   await new Promise(s=>setTimeout(s,5000));
+   let st=null;try{st=await proxyPost({action:'status',workflow:key})}catch{}
+   if(!st||st.ok===false)continue;
+   if(st.created_at&&Date.parse(st.created_at)<since)continue;   // 새 실행이 아직 안 잡힘
+   if(st.status!=='completed'){say(`⏳ 수집 중 ${i*5}초…`);continue}
+   if(st.conclusion==='success')return done('✅ 내려받는 중',true);
+   alert(`${c.name} 수집이 실패했습니다 (${st.conclusion}).\nActions 로그를 확인해주세요.`);
+   return done('⚠ 수집 실패',false)}
+  alert(`${c.name} 수집이 6분 안에 끝나지 않았습니다.\n저장된 파일을 내려받습니다 — 잠시 뒤 다시 눌러보세요.`);
+  return done('⌛ 지연',true);
+ }catch(e){return done('⚠ 오류',true)}}
+$$('[data-fresh]').forEach(b=>b.onclick=()=>freshDownload(b.dataset.fresh,b));
