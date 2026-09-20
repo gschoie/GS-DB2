@@ -290,6 +290,10 @@ def build() -> Path:
     lng_tracker = ROOT / "static" / "lng_tracker.html"
     if lng_tracker.exists():
         shutil.copy2(lng_tracker, OUTPUT.parent / "lng_tracker.html")
+    for defense_tracker_file in ("defense_tracker.html", "defense_tracker.json"):
+        src = ROOT / "static" / defense_tracker_file
+        if src.exists():
+            shutil.copy2(src, OUTPUT.parent / defense_tracker_file)
     construction_weekly_index = ROOT / "static" / "construction_weekly_report.html"
     if construction_weekly_index.exists():
         shutil.copy2(construction_weekly_index, OUTPUT.parent / "construction_weekly_report.html")
