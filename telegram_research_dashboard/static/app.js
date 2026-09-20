@@ -624,17 +624,25 @@ setInterval(checkNewDeploy,15*60*1000);
 const FRESH={
  fx:{name:'환율',url:'https://github.com/gschoie/ecos-fx-rates/raw/main/output/BOK_exchange_rates.xlsx'},
  peer:{name:'피어그룹 주가',url:'https://github.com/gschoie/ecos-fx-rates/raw/main/output/'+encodeURIComponent('글로벌_주가_변동률_모니터링_최종.xlsx')}};
-function xlDown(u){const a=document.createElement('a');a.href=u+(u.includes('?')?'&':'?')+'t='+Date.now();a.target='_blank';a.rel='noopener';document.body.appendChild(a);a.click();a.remove()}
+/* 새 탭(target=_blank)으로 열면 클릭 한참 뒤에 도는 코드라 크롬이 팝업으로 막는다.
+   같은 탭으로 내려받는다 — 엑셀은 첨부(attachment)라 화면은 그대로 남는다. */
+function xlDown(u){location.href=u+(u.includes('?')?'&':'?')+'t='+Date.now()}
 async function proxyPost(payload){const r=await fetch(DISPATCH_ENDPOINT,{method:'POST',body:JSON.stringify(payload)});return r.json()}
 async function freshDownload(key,btn){
  const c=FRESH[key];if(!c||btn.dataset.busy)return;
  const label=btn.textContent,say=t=>{btn.textContent=t};
  btn.dataset.busy='1';btn.disabled=true;
  const since=Date.now()-90000;                 // 이 시각 이후에 생긴 실행만 "내 실행"으로 본다
+ const reset=()=>{btn.textContent=label;btn.disabled=false;btn.onclick=()=>freshDownload(key,btn);delete btn.dataset.busy};
  const done=(msg,dl)=>{say(msg);if(dl)xlDown(c.url);
-  setTimeout(()=>{btn.textContent=label;btn.disabled=false;delete btn.dataset.busy},3000)};
+  if(dl){ // 브라우저가 자동 다운로드를 막는 경우가 있어 직접 누를 수 있는 상태로 남긴다
+   setTimeout(()=>{btn.disabled=false;say('⬇ 안 받아졌으면 누르세요');
+    btn.onclick=()=>{xlDown(c.url);reset()};setTimeout(reset,30000)},2500);
+   delete btn.dataset.busy;return}
+  setTimeout(reset,3000)};
  try{
   say('⏳ 최신 수집 요청…');
+  let prevId=0;try{const p=await proxyPost({action:'status',workflow:key});if(p&&p.run_id)prevId=p.run_id}catch{}
   let d=null;try{d=await proxyPost({workflow:key})}catch{}
   if(d&&d.ok===false){alert(`${c.name}을 새로 수집하지 못했습니다.\n(${d.error||'GAS 프록시 매핑 확인 필요'})\n\n저장된 마지막 파일을 내려받습니다.`);
    return done('⚠ 저장본',true)}
@@ -642,6 +650,7 @@ async function freshDownload(key,btn){
    await new Promise(s=>setTimeout(s,5000));
    let st=null;try{st=await proxyPost({action:'status',workflow:key})}catch{}
    if(!st||st.ok===false)continue;
+   if(st.run_id&&st.run_id===prevId)continue;                     // 아직 직전 실행만 보임
    if(st.created_at&&Date.parse(st.created_at)<since)continue;   // 새 실행이 아직 안 잡힘
    if(st.status!=='completed'){say(`⏳ 수집 중 ${i*5}초…`);continue}
    if(st.conclusion==='success')return done('✅ 내려받는 중',true);
