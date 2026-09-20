@@ -1,0 +1,267 @@
+<title>방산 입찰·예산 트래커</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+  :root {
+    color-scheme: light;
+    --bg: #f6f5f1; --surface: #fdfdfb; --surface-2: #f0efe9;
+    --ink: #171612; --ink-2: #55534c; --muted: #8b887f;
+    --line: #e3e1d8; --line-strong: #c9c7bc;
+    --accent: #b97d10; --accent-ink: #8a5d0b; --accent-wash: rgba(185, 125, 16, 0.10);
+    --open: #2a78d6; --hot: #c53030; --done: #8b887f; --pass: #1baf7a;
+    --shadow: 0 1px 2px rgba(23, 22, 18, 0.05), 0 4px 14px rgba(23, 22, 18, 0.04);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      color-scheme: dark;
+      --bg: #121210; --surface: #1b1b18; --surface-2: #23231f;
+      --ink: #f2f1ea; --ink-2: #c3c2b7; --muted: #8f8d84;
+      --line: #2c2c2a; --line-strong: #3d3d38;
+      --accent: #e0a532; --accent-ink: #e8b756; --accent-wash: rgba(224, 165, 50, 0.12);
+      --open: #3987e5; --hot: #e66767; --done: #8f8d84; --pass: #199e70;
+      --shadow: 0 1px 2px rgba(0, 0, 0, 0.35), 0 4px 14px rgba(0, 0, 0, 0.25);
+    }
+  }
+  :root[data-theme="dark"] {
+    color-scheme: dark;
+    --bg: #121210; --surface: #1b1b18; --surface-2: #23231f;
+    --ink: #f2f1ea; --ink-2: #c3c2b7; --muted: #8f8d84;
+    --line: #2c2c2a; --line-strong: #3d3d38;
+    --accent: #e0a532; --accent-ink: #e8b756; --accent-wash: rgba(224, 165, 50, 0.12);
+    --open: #3987e5; --hot: #e66767; --done: #8f8d84; --pass: #199e70;
+    --shadow: 0 1px 2px rgba(0, 0, 0, 0.35), 0 4px 14px rgba(0, 0, 0, 0.25);
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--bg); color: var(--ink);
+    font-family: "IBM Plex Sans KR", "Apple SD Gothic Neo", "Malgun Gothic", system-ui, sans-serif;
+    font-size: 14.5px; line-height: 1.5;
+  }
+  a { color: inherit; }
+  .mono { font-family: "IBM Plex Mono", ui-monospace, monospace; }
+  .wrap { max-width: 1280px; margin: 0 auto; padding: 0 16px 80px; }
+
+  header {
+    display: flex; flex-wrap: wrap; align-items: baseline; gap: 8px 18px;
+    padding: 26px 0 14px; border-bottom: 2px solid var(--ink);
+  }
+  .brand-eyebrow {
+    width: 100%; font-size: 11px; font-weight: 600; letter-spacing: 0.14em;
+    color: var(--accent-ink); text-transform: uppercase;
+  }
+  h1 { margin: 0; font-size: 24px; font-weight: 700; letter-spacing: -0.01em; }
+  .head-meta { margin-left: auto; font-size: 12.5px; color: var(--ink-2); display: flex; gap: 14px; align-items: baseline; }
+  .head-meta a { color: var(--accent-ink); font-weight: 600; text-decoration: none; }
+  .head-meta a:hover { text-decoration: underline; }
+
+  .notice {
+    margin: 14px 0 0; padding: 9px 12px;
+    background: var(--accent-wash); border: 1px solid var(--accent);
+    border-radius: 8px; font-size: 12.5px; color: var(--ink);
+  }
+
+  h2 { font-size: 16px; margin: 30px 0 10px; padding-bottom: 6px; border-bottom: 1px solid var(--line-strong); }
+  h2 .sub { font-size: 12px; font-weight: 500; color: var(--muted); margin-left: 8px; }
+
+  .bar { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin: 14px 0 10px; font-size: 13px; }
+  .bar input[type="search"] {
+    font: inherit; color: var(--ink); background: var(--surface);
+    border: 1px solid var(--line-strong); border-radius: 6px; padding: 5px 8px; min-width: 220px;
+  }
+  .bar label { display: flex; gap: 5px; align-items: center; color: var(--ink-2); }
+  input:focus-visible, a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  .tblwrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); box-shadow: var(--shadow); }
+  table { border-collapse: collapse; width: 100%; min-width: 1150px; font-size: 12.8px; }
+  thead th {
+    position: sticky; top: 0; background: var(--surface-2); z-index: 1;
+    text-align: left; font-size: 11.5px; letter-spacing: 0.03em; color: var(--ink-2);
+    padding: 8px 9px; border-bottom: 1px solid var(--line-strong); white-space: nowrap;
+  }
+  tbody td { padding: 7px 9px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  tbody tr:hover { background: var(--accent-wash); }
+  td.nowrap { white-space: nowrap; }
+  .pname { font-weight: 600; }
+  .pname .op { display: block; font-weight: 400; font-size: 11.5px; color: var(--muted); }
+  .badge { display: inline-block; padding: 1px 7px; border-radius: 999px; font-size: 11px; font-weight: 600; border: 1px solid; white-space: nowrap; }
+  .b-open { color: var(--open); border-color: var(--open); }
+  .b-hot  { color: var(--hot);  border-color: var(--hot); }
+  .b-done { color: var(--done); border-color: var(--done); }
+  .b-pass { color: var(--pass); border-color: var(--pass); }
+  .kr { color: var(--accent-ink); font-weight: 600; }
+  .dim { color: var(--muted); }
+  td .cell { max-width: 330px; }
+
+  .log { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 4px 14px; box-shadow: var(--shadow); }
+  .log .entry { display: flex; gap: 12px; padding: 9px 0; border-bottom: 1px solid var(--line); font-size: 13px; }
+  .log .entry:last-child { border-bottom: 0; }
+  .log .d { flex: 0 0 86px; color: var(--muted); font-family: "IBM Plex Mono", monospace; font-size: 12px; }
+  .log .p { font-weight: 600; margin-right: 6px; }
+  .empty { color: var(--muted); font-size: 13px; padding: 14px 2px; }
+  footer { margin-top: 40px; font-size: 12px; color: var(--muted); }
+</style>
+
+<div class="wrap">
+  <header>
+    <div class="brand-eyebrow">Global Defense · Tenders / Budgets / Legislation</div>
+    <h1>방산 입찰·예산 트래커</h1>
+    <div class="head-meta">
+      <span id="metaLine" class="mono"></span>
+      <a href="defense_briefing_report.html">← 방산 브리핑</a>
+    </div>
+  </header>
+
+  <div class="notice">
+    글로벌 방산 <b>① 입찰·수주경쟁 중 프로젝트 ② 국가별 예산·법안</b>을 추적한다.
+    매일 방산 브리핑에서 관련 보도가 확인되면 로그로 자동 누적. 초기값은 <b>2026-09-20</b> 일괄 정리 기준.
+    한국 업체 관련 항목은 <span class="kr">금색</span>으로 표시.
+  </div>
+
+  <div class="bar">
+    <input type="search" id="fQ" placeholder="국가·프로그램·업체 검색">
+    <label><input type="checkbox" id="fKr"> 한국 관련만</label>
+    <label><input type="checkbox" id="fOpen"> 진행 중만 (종료 제외)</label>
+  </div>
+
+  <h2>① 입찰·수주경쟁 중 프로젝트 <span class="sub" id="tSum"></span></h2>
+  <div class="tblwrap">
+    <table>
+      <thead><tr>
+        <th>국가</th><th>프로그램 / 분야</th><th>규모</th><th>경쟁 구도</th>
+        <th>한국 관련</th><th>단계</th><th>일정·최근 경과</th><th>비고</th>
+      </tr></thead>
+      <tbody id="tBody"></tbody>
+    </table>
+  </div>
+
+  <h2>② 국가별 예산·법안 <span class="sub" id="pSum"></span></h2>
+  <div class="tblwrap">
+    <table>
+      <thead><tr>
+        <th>국가</th><th>구분</th><th>내용</th><th>규모</th>
+        <th>상태</th><th>기준일</th><th>다음 단계</th><th>비고</th>
+      </tr></thead>
+      <tbody id="pBody"></tbody>
+    </table>
+  </div>
+
+  <div id="inboxSec" hidden>
+    <h2>신규 감지 (검토 대기) <span class="sub">자동 수집이 기존 항목과 매칭하지 못한 이벤트</span></h2>
+    <div id="inbox" class="log"></div>
+  </div>
+
+  <h2>업데이트 로그 <span class="sub">방산 브리핑에서 쌓는 항목별 뉴스 기록 (최신순)</span></h2>
+  <div id="log" class="log"></div>
+
+  <footer id="foot"></footer>
+</div>
+
+<script>
+"use strict";
+const $ = (id) => document.getElementById(id);
+const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => (
+  { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]
+));
+
+let DATA = null;
+
+function stageBadge(stage) {
+  const s = String(stage || "");
+  let cls = "b-open";
+  if (s.startsWith("종료")) cls = "b-done";
+  else if (s.includes("임박")) cls = "b-hot";
+  return `<span class="badge ${cls}">${esc(s)}</span>`;
+}
+function statusBadge(st) {
+  const s = String(st || "");
+  let cls = "b-open";
+  if (s.includes("통과") || s.includes("성립") || s.includes("발효") || s.includes("채택")) cls = "b-pass";
+  else if (s.includes("계류") || s.includes("지연")) cls = "b-hot";
+  return `<span class="badge ${cls}">${esc(s)}</span>`;
+}
+const cell = (v) => v && v !== "-" ? `<div class="cell">${esc(v)}</div>` : '<span class="dim">—</span>';
+const isKr = (x) => x.kr && x.kr !== "-";
+
+function filters() {
+  return {
+    q: $("fQ").value.trim().toLowerCase(),
+    kr: $("fKr").checked,
+    open: $("fOpen").checked,
+  };
+}
+function matchQ(x, q) {
+  return !q || JSON.stringify(x).toLowerCase().includes(q);
+}
+
+function render() {
+  const f = filters();
+  const ts = DATA.tenders.filter(t => matchQ(t, f.q) && (!f.kr || isKr(t)) &&
+    (!f.open || !String(t.stage || "").startsWith("종료")));
+  $("tSum").textContent = `${ts.length} / ${DATA.tenders.length}건`;
+  $("tBody").innerHTML = ts.map(t => `
+    <tr>
+      <td class="nowrap">${esc(t.country)}</td>
+      <td class="pname">${esc(t.program)}<span class="op">${esc(t.domain)}</span></td>
+      <td>${cell(t.scale)}</td>
+      <td>${cell(t.candidates)}</td>
+      <td>${isKr(t) ? `<span class="kr">${esc(t.kr)}</span>` : '<span class="dim">—</span>'}</td>
+      <td class="nowrap">${stageBadge(t.stage)}</td>
+      <td>${cell(t.timeline)}</td>
+      <td>${cell(t.note)}</td>
+    </tr>`).join("") || `<tr><td colspan="8" class="empty">조건에 맞는 항목 없음</td></tr>`;
+
+  const pol = DATA.policy.filter(p => matchQ(p, f.q) &&
+    (!f.open || !(String(p.status).includes("성립") && p.next === "-")));
+  $("pSum").textContent = `${pol.length} / ${DATA.policy.length}건`;
+  $("pBody").innerHTML = pol.map(p => `
+    <tr>
+      <td class="nowrap">${esc(p.country)}</td>
+      <td class="nowrap">${esc(p.kind)}</td>
+      <td class="pname">${esc(p.title)}</td>
+      <td>${cell(p.amount)}</td>
+      <td class="nowrap">${statusBadge(p.status)}</td>
+      <td class="nowrap mono">${esc(p.date || "—")}</td>
+      <td>${cell(p.next)}</td>
+      <td>${cell(p.note)}</td>
+    </tr>`).join("") || `<tr><td colspan="8" class="empty">조건에 맞는 항목 없음</td></tr>`;
+}
+
+function renderLog() {
+  const entries = [];
+  [...DATA.tenders, ...DATA.policy].forEach(x =>
+    (x.log || []).forEach(e => entries.push({ ...e, pname: x.program || x.title })));
+  entries.sort((a, b) => (b.date || "").localeCompare(a.date || ""));
+  $("log").innerHTML = entries.length ? entries.map(e => `
+    <div class="entry">
+      <div class="d">${esc(e.date)}</div>
+      <div><span class="p">${esc(e.pname)}</span>${e.link ? `<a href="${esc(e.link)}" target="_blank" rel="noopener">${esc(e.text)}</a>` : esc(e.text)}</div>
+    </div>`).join("")
+    : '<div class="empty">아직 쌓인 로그가 없습니다. 매일 방산 브리핑 생성 후 자동으로 누적됩니다.</div>';
+
+  const inbox = (DATA.meta.inbox || []);
+  if (inbox.length) {
+    $("inboxSec").hidden = false;
+    $("inbox").innerHTML = inbox.map(e => `
+      <div class="entry">
+        <div class="d">${esc(e.date)}</div>
+        <div><span class="p">${esc(e.country || "")} ${esc(e.name || "")}</span>${esc(e.text)}</div>
+      </div>`).join("");
+  }
+}
+
+fetch("defense_tracker.json", { cache: "no-store" })
+  .then(r => r.json())
+  .then(d => {
+    DATA = d;
+    $("metaLine").textContent = `기준 ${d.meta.updated}`;
+    render();
+    renderLog();
+    $("foot").textContent = "데이터: defense_tracker.json — 매일 방산 브리핑 후 자동 갱신 · 구조화 필드는 수동 큐레이션";
+    ["fKr", "fOpen"].forEach(id => $(id).addEventListener("change", render));
+    $("fQ").addEventListener("input", render);
+  })
+  .catch(e => { $("tBody").innerHTML = `<tr><td colspan="8" class="empty">데이터 로드 실패: ${esc(e)}</td></tr>`; });
+</script>

@@ -551,6 +551,9 @@ def write_index() -> None:
 .bar h1{{font-size:17px;margin:0;flex:1;min-width:200px}}
 select,button{{background:#161d29;color:#d8dee9;border:1px solid #2c3a52;border-radius:8px;
   padding:7px 12px;font-size:13.5px;cursor:pointer}}
+.bar a.trk{{margin-left:auto;flex:0 0 auto;background:#161d29;color:#e8b756;border:1px solid #4a3f24;
+  border-radius:8px;padding:6px 10px;font-size:12px;font-weight:600;text-decoration:none;white-space:nowrap}}
+.bar a.trk:hover{{border-color:#e8b756}}
 iframe{{width:100%;height:calc(100vh - 110px);border:1px solid #223046;border-radius:10px;background:#0d1117}}
 </style></head><body>
 <div class="bar">
@@ -558,6 +561,8 @@ iframe{{width:100%;height:calc(100vh - 110px);border:1px solid #223046;border-ra
   <button id="prev" title="이전 날짜">◀</button>
   <select id="dsel"></select>
   <button id="next" title="다음 날짜">▶</button>
+  <a class="trk" href="defense_tracker.html" target="_blank" rel="noopener"
+     title="입찰 중 프로젝트 · 국가별 예산·법안">📌 입찰·예산 트래커</a>
 </div>
 <iframe id="frame" title="브리핑"></iframe>
 <script>
