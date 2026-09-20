@@ -385,6 +385,9 @@ def write_index() -> None:
 .bar h1{{font-size:17px;margin:0;flex:1;min-width:200px}}
 select,button{{background:#161d29;color:#d8dee9;border:1px solid #2c3a52;border-radius:8px;
   padding:7px 12px;font-size:13.5px;cursor:pointer}}
+.bar a.lng{{margin-left:auto;flex:0 0 auto;background:#161d29;color:#7ee0b0;border:1px solid #24443a;
+  border-radius:8px;padding:6px 10px;font-size:12px;font-weight:600;text-decoration:none;white-space:nowrap}}
+.bar a.lng:hover{{border-color:#7ee0b0}}
 iframe{{width:100%;height:calc(100vh - 110px);border:1px solid #24443a;border-radius:10px;background:#0d1117}}
 </style></head><body>
 <div class="bar">
@@ -392,6 +395,8 @@ iframe{{width:100%;height:calc(100vh - 110px);border:1px solid #24443a;border-ra
   <button id="prev" title="이전 날짜">◀</button>
   <select id="dsel"></select>
   <button id="next" title="다음 날짜">▶</button>
+  <a class="lng" href="lng_tracker.html"
+     target="_blank" rel="noopener" title="pre-FID 액화 프로젝트 트래커">📌 LNG 수출 프로젝트 모니터링</a>
 </div>
 <iframe id="frame" title="브리핑"></iframe>
 <script>

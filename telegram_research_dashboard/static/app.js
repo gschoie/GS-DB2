@@ -498,6 +498,15 @@ $('#todo-group-add')?.addEventListener('click',()=>{const name=(prompt('추가�
 /* 일괄 보관: 체크한 항목을 한꺼번에 보관함으로(한 건씩은 각 줄의 📦) */
 $('#todo-archive-done')?.addEventListener('click',()=>{const a=todoLoad(),done=a.filter(t=>t.done);if(!done.length){alert('체크된 항목이 없습니다. 한 건만 보관하려면 그 줄의 📦를 누르세요.');return}
  todoArchiveMove(done,a.filter(t=>!t.done))});
+/* 보관함 접기/펴기 — 선택은 이 기기에 기억한다(기본은 펼침, 기존 화면 그대로) */
+const TODO_ARCH_OPEN='hi_todo_arch_open_v1';
+function todoArchOpen(open){const cols=$('.todo-cols'),btn=$('#todo-arch-toggle');if(!cols||!btn)return;
+ cols.classList.toggle('arch-collapsed',!open);btn.textContent=open?'▼':'▶';btn.setAttribute('aria-expanded',open?'true':'false');
+ btn.title=open?'보관함 접기':'보관함 펴기';try{localStorage.setItem(TODO_ARCH_OPEN,open?'1':'0')}catch(e){}}
+const todoArchFlip=()=>todoArchOpen($('.todo-cols').classList.contains('arch-collapsed'));
+$('#todo-arch-toggle')?.addEventListener('click',todoArchFlip);
+$('#todo-arch-title')?.addEventListener('click',todoArchFlip);
+(()=>{let v='1';try{v=localStorage.getItem(TODO_ARCH_OPEN)??'1'}catch(e){}todoArchOpen(v!=='0')})();
 /* 보관항목 정리: 여기서만 완전 삭제된다 */
 $('#todo-clear-arch')?.addEventListener('click',()=>{const a=todoArchLoad();if(!a.length){alert('보관함이 비어 있습니다.');return}
  if(!confirm(`보관함의 ${a.length}개 항목을 완전히 삭제할까요?\n삭제하면 되돌릴 수 없습니다.`))return;todoArchSave([])});
@@ -614,3 +623,49 @@ applyHashView();window.addEventListener('hashchange',applyHashView);
 const LOADED_VERSION=window.__DASHBOARD_DATA__?.summary?.updated_at||'';
 async function checkNewDeploy(){if(!LOADED_VERSION||!/^http/.test(location.protocol))return;try{const r=await fetch(`version.json?t=${Date.now()}`,{cache:'no-store'});if(!r.ok)return;const v=await r.json();if(!v.updated_at||v.updated_at<=LOADED_VERSION)return;if(document.hidden){location.reload();return}if($('#fresh-banner'))return;const b=document.createElement('div');b.id='fresh-banner';b.style.cssText='position:fixed;bottom:16px;right:16px;z-index:999;background:#1c2733;color:#fff;padding:10px 14px;border-radius:10px;box-shadow:0 4px 14px rgba(0,0,0,.35);font-size:13px;display:flex;gap:10px;align-items:center';b.innerHTML='새 데이터가 배포되었습니다.<button style="background:#3b82f6;color:#fff;border:0;border-radius:6px;padding:5px 10px;cursor:pointer">새로고침</button>';b.querySelector('button').onclick=()=>location.reload();document.body.appendChild(b)}catch{}}
 setInterval(checkNewDeploy,15*60*1000);
+
+/* ── 엑셀 2종: 버튼 하나로 "새로 수집 → 완료 대기 → 내려받기" ─────────────────
+   메뉴의 링크였던 것들(환율·피어그룹)은 저장소에 마지막으로 만들어둔 파일만 줬다.
+   그래서 수집을 며칠 안 돌리면 조용히 낡은 파일을 받게 된다(9/20 환율 8/21까지 사고).
+   이제 버튼을 누르면 워크플로를 먼저 돌리고, 끝난 뒤에 파일을 내려받는다.
+   키(fx·peer)는 gas/dispatch_proxy.gs 의 WF 매핑과 1:1. 프록시가 그 키를 모르면
+   (= GAS 재배포 전이면) 새로 못 돌린다고 알리고 저장본이라도 내려준다. */
+const FRESH={
+ fx:{name:'환율',url:'https://github.com/gschoie/ecos-fx-rates/raw/main/output/BOK_exchange_rates.xlsx'},
+ peer:{name:'피어그룹 주가',url:'https://github.com/gschoie/ecos-fx-rates/raw/main/output/'+encodeURIComponent('글로벌_주가_변동률_모니터링_최종.xlsx')}};
+/* 새 탭(target=_blank)으로 열면 클릭 한참 뒤에 도는 코드라 크롬이 팝업으로 막는다.
+   같은 탭으로 내려받는다 — 엑셀은 첨부(attachment)라 화면은 그대로 남는다. */
+function xlDown(u){location.href=u+(u.includes('?')?'&':'?')+'t='+Date.now()}
+async function proxyPost(payload){const r=await fetch(DISPATCH_ENDPOINT,{method:'POST',body:JSON.stringify(payload)});return r.json()}
+async function freshDownload(key,btn){
+ const c=FRESH[key];if(!c||btn.dataset.busy)return;
+ const label=btn.textContent,say=t=>{btn.textContent=t};
+ btn.dataset.busy='1';btn.disabled=true;
+ const since=Date.now()-90000;                 // 이 시각 이후에 생긴 실행만 "내 실행"으로 본다
+ const reset=()=>{btn.textContent=label;btn.disabled=false;btn.onclick=()=>freshDownload(key,btn);delete btn.dataset.busy};
+ const done=(msg,dl)=>{say(msg);if(dl)xlDown(c.url);
+  if(dl){ // 브라우저가 자동 다운로드를 막는 경우가 있어 직접 누를 수 있는 상태로 남긴다
+   setTimeout(()=>{btn.disabled=false;say('⬇ 안 받아졌으면 누르세요');
+    btn.onclick=()=>{xlDown(c.url);reset()};setTimeout(reset,30000)},2500);
+   delete btn.dataset.busy;return}
+  setTimeout(reset,3000)};
+ try{
+  say('⏳ 최신 수집 요청…');
+  let prevId=0;try{const p=await proxyPost({action:'status',workflow:key});if(p&&p.run_id)prevId=p.run_id}catch{}
+  let d=null;try{d=await proxyPost({workflow:key})}catch{}
+  if(d&&d.ok===false){alert(`${c.name}을 새로 수집하지 못했습니다.\n(${d.error||'GAS 프록시 매핑 확인 필요'})\n\n저장된 마지막 파일을 내려받습니다.`);
+   return done('⚠ 저장본',true)}
+  for(let i=1;i<=72;i++){                      // 5초 × 72 = 최대 6분
+   await new Promise(s=>setTimeout(s,5000));
+   let st=null;try{st=await proxyPost({action:'status',workflow:key})}catch{}
+   if(!st||st.ok===false)continue;
+   if(st.run_id&&st.run_id===prevId)continue;                     // 아직 직전 실행만 보임
+   if(st.created_at&&Date.parse(st.created_at)<since)continue;   // 새 실행이 아직 안 잡힘
+   if(st.status!=='completed'){say(`⏳ 수집 중 ${i*5}초…`);continue}
+   if(st.conclusion==='success')return done('✅ 내려받는 중',true);
+   alert(`${c.name} 수집이 실패했습니다 (${st.conclusion}).\nActions 로그를 확인해주세요.`);
+   return done('⚠ 수집 실패',false)}
+  alert(`${c.name} 수집이 6분 안에 끝나지 않았습니다.\n저장된 파일을 내려받습니다 — 잠시 뒤 다시 눌러보세요.`);
+  return done('⌛ 지연',true);
+ }catch(e){return done('⚠ 오류',true)}}
+$$('[data-fresh]').forEach(b=>b.onclick=()=>freshDownload(b.dataset.fresh,b));

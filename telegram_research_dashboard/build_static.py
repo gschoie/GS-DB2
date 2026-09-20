@@ -287,6 +287,9 @@ def build() -> Path:
     energy_dir = ROOT / "static" / "energy_daily"
     if energy_dir.is_dir():
         shutil.copytree(energy_dir, OUTPUT.parent / "energy_daily", dirs_exist_ok=True)
+    lng_tracker = ROOT / "static" / "lng_tracker.html"
+    if lng_tracker.exists():
+        shutil.copy2(lng_tracker, OUTPUT.parent / "lng_tracker.html")
     construction_weekly_index = ROOT / "static" / "construction_weekly_report.html"
     if construction_weekly_index.exists():
         shutil.copy2(construction_weekly_index, OUTPUT.parent / "construction_weekly_report.html")
