@@ -495,4 +495,21 @@
     'md 변경'으로 보고 텔레를 재발송한다(9/19 시각 정정 커밋으로 KDEF 2통 실측) —
     표기 정정은 다음 날 반영하거나 발행 전에 끝낼 것.
 
+29. **섹션 캡쳐봇 2종 복구 — Playwright 브라우저 캐시 함정** (9/20): 산업봇
+    (industry-section-newportal)이 9/16부터 10분마다 전패, 매크로봇(Macro_Section_Get)도
+    같은 날부터 6개 섹션 전부 발송 실패(이쪽은 오류를 삼켜 run이 success — 겉으론 정상).
+    - 원인: `requirements.txt`가 `playwright>=1.45`(비고정)라 pip이 매 실행 최신을 깔지만,
+      브라우저 캐시 키가 `hashFiles('requirements.txt')` — 파일이 안 바뀌니 옛 크로미엄이
+      영원히 캐시 히트하고 설치 스텝은 스킵. 9/16 Playwright 1.63이 요구 브라우저 빌드를
+      바꾸며 `Executable doesn't exist`로 폭발.
+    - 고침(두 리포 main): 캐시 키를 **실제 설치된 playwright 버전**으로
+      (`python -c 'import playwright; print(playwright.__version__)'` → 키에 사용) —
+      업그레이드 시 자동 캐시 미스 → 재설치. 산업봇 workflow_dispatch(--once)로 E2E 검증
+      (캐시 미스 → 브라우저 설치 18초 → 6개 섹션 발송 성공).
+    - 교훈: ① 비고정 패키지의 파생물(브라우저 등) 캐시는 파일 해시가 아니라 **설치된
+      버전**을 키로. ② 오류를 삼키는 봇(TELEGRAM_NOTIFY_ERRORS=false)은 success여도
+      죽어 있을 수 있다 — 매크로봇이 3일간 그랬다. ③ TradeWinds 봇이 무사했던 이유는
+      캐시 없이 **매 실행 `playwright install`**이라서(느리지만 안전). 참고: TradeWinds는
+      현재 30분 간격(0,30 * * * *, 야간 01~05 스크립트 스킵) — 위 '매시 실행' 표기는 옛말.
+
 이후 작업은 git log와 이 파일을 갱신하며 이어간다.
