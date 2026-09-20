@@ -1,0 +1,284 @@
+<title>LNG 수출 프로젝트 트래커</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+  :root {
+    color-scheme: light;
+    --bg: #f6f5f1;
+    --surface: #fdfdfb;
+    --surface-2: #f0efe9;
+    --ink: #171612;
+    --ink-2: #55534c;
+    --muted: #8b887f;
+    --line: #e3e1d8;
+    --line-strong: #c9c7bc;
+    --accent: #b97d10;
+    --accent-ink: #8a5d0b;
+    --accent-wash: rgba(185, 125, 16, 0.10);
+    --feed: #2a78d6;
+    --prop: #8b887f;
+    --fid: #1baf7a;
+    --watch: #c53030;
+    --shadow: 0 1px 2px rgba(23, 22, 18, 0.05), 0 4px 14px rgba(23, 22, 18, 0.04);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      color-scheme: dark;
+      --bg: #121210; --surface: #1b1b18; --surface-2: #23231f;
+      --ink: #f2f1ea; --ink-2: #c3c2b7; --muted: #8f8d84;
+      --line: #2c2c2a; --line-strong: #3d3d38;
+      --accent: #e0a532; --accent-ink: #e8b756; --accent-wash: rgba(224, 165, 50, 0.12);
+      --feed: #3987e5; --prop: #8f8d84; --fid: #199e70; --watch: #e66767;
+      --shadow: 0 1px 2px rgba(0, 0, 0, 0.35), 0 4px 14px rgba(0, 0, 0, 0.25);
+    }
+  }
+  :root[data-theme="dark"] {
+    color-scheme: dark;
+    --bg: #121210; --surface: #1b1b18; --surface-2: #23231f;
+    --ink: #f2f1ea; --ink-2: #c3c2b7; --muted: #8f8d84;
+    --line: #2c2c2a; --line-strong: #3d3d38;
+    --accent: #e0a532; --accent-ink: #e8b756; --accent-wash: rgba(224, 165, 50, 0.12);
+    --feed: #3987e5; --prop: #8f8d84; --fid: #199e70; --watch: #e66767;
+    --shadow: 0 1px 2px rgba(0, 0, 0, 0.35), 0 4px 14px rgba(0, 0, 0, 0.25);
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--bg); color: var(--ink);
+    font-family: "IBM Plex Sans KR", "Apple SD Gothic Neo", "Malgun Gothic", system-ui, sans-serif;
+    font-size: 14.5px; line-height: 1.5;
+  }
+  a { color: inherit; }
+  .mono { font-family: "IBM Plex Mono", ui-monospace, monospace; }
+  .wrap { max-width: 1320px; margin: 0 auto; padding: 0 16px 80px; }
+
+  header {
+    display: flex; flex-wrap: wrap; align-items: baseline; gap: 8px 18px;
+    padding: 26px 0 14px; border-bottom: 2px solid var(--ink);
+  }
+  .brand-eyebrow {
+    width: 100%; font-size: 11px; font-weight: 600; letter-spacing: 0.14em;
+    color: var(--accent-ink); text-transform: uppercase;
+  }
+  h1 { margin: 0; font-size: 24px; font-weight: 700; letter-spacing: -0.01em; }
+  .head-meta { margin-left: auto; font-size: 12.5px; color: var(--ink-2); display:flex; gap:14px; align-items:baseline; }
+  .head-meta a { color: var(--accent-ink); font-weight: 600; text-decoration: none; }
+  .head-meta a:hover { text-decoration: underline; }
+
+  .notice {
+    margin: 14px 0 0; padding: 9px 12px;
+    background: var(--accent-wash); border: 1px solid var(--accent);
+    border-radius: 8px; font-size: 12.5px; color: var(--ink);
+  }
+
+  h2 { font-size: 16px; margin: 30px 0 10px; padding-bottom: 6px; border-bottom: 1px solid var(--line-strong); }
+  h2 .sub { font-size: 12px; font-weight: 500; color: var(--muted); margin-left: 8px; }
+
+  /* watchlist */
+  .watchgrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 10px; }
+  .wcard {
+    background: var(--surface); border: 1px solid var(--line); border-left: 3px solid var(--watch);
+    border-radius: 8px; padding: 10px 12px; box-shadow: var(--shadow);
+  }
+  .wcard .t { font-weight: 700; font-size: 14px; }
+  .wcard .m { font-size: 12px; color: var(--ink-2); margin-top: 2px; }
+  .wcard .r { font-size: 12.5px; margin-top: 6px; }
+
+  /* filter bar */
+  .bar {
+    display: flex; flex-wrap: wrap; gap: 8px; align-items: center;
+    margin: 14px 0 10px; font-size: 13px;
+  }
+  .bar select, .bar input[type="search"] {
+    font: inherit; color: var(--ink); background: var(--surface);
+    border: 1px solid var(--line-strong); border-radius: 6px; padding: 5px 8px;
+  }
+  .bar input[type="search"] { min-width: 220px; }
+  .bar label { display: flex; gap: 5px; align-items: center; color: var(--ink-2); }
+  .bar .cnt { margin-left: auto; color: var(--muted); font-size: 12.5px; }
+  select:focus-visible, input:focus-visible, a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  /* table */
+  .tblwrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); box-shadow: var(--shadow); }
+  table { border-collapse: collapse; width: 100%; min-width: 1500px; font-size: 12.8px; }
+  thead th {
+    position: sticky; top: 0; background: var(--surface-2); z-index: 1;
+    text-align: left; font-size: 11.5px; letter-spacing: 0.03em; color: var(--ink-2);
+    padding: 8px 9px; border-bottom: 1px solid var(--line-strong); white-space: nowrap;
+  }
+  tbody td { padding: 7px 9px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  tbody tr:hover { background: var(--accent-wash); }
+  td.num { text-align: right; font-family: "IBM Plex Mono", monospace; white-space: nowrap; }
+  td.nowrap { white-space: nowrap; }
+  .pname { font-weight: 600; }
+  .pname .op { display: block; font-weight: 400; font-size: 11.5px; color: var(--muted); }
+  .badge {
+    display: inline-block; padding: 1px 7px; border-radius: 999px;
+    font-size: 11px; font-weight: 600; border: 1px solid;
+  }
+  .badge.FEED { color: var(--feed); border-color: var(--feed); }
+  .badge.Proposed { color: var(--prop); border-color: var(--prop); }
+  .badge.FID { color: var(--fid); border-color: var(--fid); }
+  .flag { color: var(--watch); font-weight: 700; }
+  .dim { color: var(--muted); }
+  td .cell { max-width: 340px; }
+
+  /* log */
+  .log { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 4px 14px; box-shadow: var(--shadow); }
+  .log .entry { display: flex; gap: 12px; padding: 9px 0; border-bottom: 1px solid var(--line); font-size: 13px; }
+  .log .entry:last-child { border-bottom: 0; }
+  .log .d { flex: 0 0 86px; color: var(--muted); font-family: "IBM Plex Mono", monospace; font-size: 12px; }
+  .log .p { font-weight: 600; margin-right: 6px; }
+  .empty { color: var(--muted); font-size: 13px; padding: 14px 2px; }
+
+  footer { margin-top: 40px; font-size: 12px; color: var(--muted); }
+</style>
+
+<div class="wrap">
+  <header>
+    <div class="brand-eyebrow">LNG Export / Liquefaction Projects · FID Tracker</div>
+    <h1>LNG 수출·액화터미널 프로젝트 트래커</h1>
+    <div class="head-meta">
+      <span id="metaLine" class="mono"></span>
+      <a href="energy_briefing_report.html">← FDC 브리핑</a>
+    </div>
+  </header>
+
+  <div class="notice">
+    글로벌 <b>pre-FID</b>(FEED·Proposed) 액화 프로젝트 전수 리스트. FID 설(목표·임박 보도) → FID 확정 → 완공까지
+    데일리 브리핑에서 확인되는 보도로 갱신한다. 초기값은 <b>2026-09-20</b> 일괄 정리 기준.
+    미국 프로젝트는 DOE 수출허가·FERC 승인(FLNG 심해항은 MARAD 관할)을 병기.
+  </div>
+
+  <h2>FID 임박 워치리스트 <span class="sub">FID 목표가 임박(2026~27)했거나 모멘텀이 확인된 프로젝트</span></h2>
+  <div id="watch" class="watchgrid"></div>
+
+  <h2>전체 프로젝트 <span class="sub" id="sumLine"></span></h2>
+  <div class="bar">
+    <select id="fStatus" aria-label="상태 필터">
+      <option value="">상태: 전체</option>
+      <option value="FEED">FEED</option>
+      <option value="Proposed">Proposed</option>
+      <option value="FID">FID 확정</option>
+    </select>
+    <select id="fCountry" aria-label="국가 필터"><option value="">국가: 전체</option></select>
+    <label><input type="checkbox" id="fUS"> 미국만</label>
+    <label><input type="checkbox" id="fWatch"> 워치리스트만</label>
+    <input type="search" id="fQ" placeholder="프로젝트·운영사 검색">
+    <span class="cnt" id="cnt"></span>
+  </div>
+  <div class="tblwrap">
+    <table>
+      <thead>
+        <tr>
+          <th>국가</th>
+          <th>프로젝트 / 운영사</th>
+          <th style="text-align:right">MTPA</th>
+          <th>상태</th>
+          <th>완공계획</th>
+          <th>FID 설(목표·동향)</th>
+          <th>FID 확정</th>
+          <th>장기공급계약(SPA)</th>
+          <th>DOE 승인</th>
+          <th>FERC 승인</th>
+          <th>비고</th>
+        </tr>
+      </thead>
+      <tbody id="tbody"></tbody>
+    </table>
+  </div>
+
+  <h2>업데이트 로그 <span class="sub">데일리 브리핑에서 쌓는 프로젝트별 뉴스 기록 (최신순)</span></h2>
+  <div id="log" class="log"></div>
+
+  <footer id="foot"></footer>
+</div>
+
+<script>
+"use strict";
+const $ = (id) => document.getElementById(id);
+const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => (
+  { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]
+));
+
+let DATA = null;
+
+function badge(st) { return `<span class="badge ${esc(st)}">${esc(st)}</span>`; }
+function cell(v) { return v ? `<div class="cell">${esc(v)}</div>` : '<span class="dim">—</span>'; }
+
+function renderWatch(ps) {
+  const w = ps.filter(p => p.watch);
+  $("watch").innerHTML = w.map(p => `
+    <div class="wcard">
+      <div class="t">${p.watch ? '<span class="flag">●</span> ' : ''}${esc(p.name)} <span class="dim mono">${p.capacity_mtpa ?? "?"} MTPA</span></div>
+      <div class="m">${esc(p.country)} · ${esc(p.operator)} · ${badge(p.status)} · 완공계획 ${esc(p.startup || "?")}</div>
+      <div class="r">${esc(p.fid_rumor || p.note || "")}</div>
+    </div>`).join("") || '<div class="empty">워치리스트 항목 없음</div>';
+}
+
+function renderTable() {
+  const ps = DATA.projects;
+  const st = $("fStatus").value, co = $("fCountry").value;
+  const us = $("fUS").checked, wo = $("fWatch").checked;
+  const q = $("fQ").value.trim().toLowerCase();
+  const rows = ps.filter(p =>
+    (!st || p.status === st) &&
+    (!co || p.country === co) &&
+    (!us || p.us) && (!wo || p.watch) &&
+    (!q || (p.name + " " + p.operator + " " + p.country).toLowerCase().includes(q))
+  );
+  $("cnt").textContent = `${rows.length} / ${ps.length}건`;
+  $("tbody").innerHTML = rows.map(p => `
+    <tr id="p-${esc(p.id)}">
+      <td class="nowrap">${esc(p.country)}</td>
+      <td class="pname">${p.watch ? '<span class="flag" title="FID 임박 워치">●</span> ' : ''}${esc(p.name)}
+        <span class="op">${esc(p.operator)}${p.port ? " · " + esc(p.port) : ""}${p.trains ? " · " + esc(p.trains) + " train" : ""}</span></td>
+      <td class="num">${p.capacity_mtpa ?? "—"}</td>
+      <td class="nowrap">${badge(p.status)}</td>
+      <td class="nowrap mono">${esc(p.startup || "—")}</td>
+      <td>${cell(p.fid_rumor)}</td>
+      <td class="nowrap">${p.fid_date ? `<b>${esc(p.fid_date)}</b>` : '<span class="dim">—</span>'}</td>
+      <td>${cell(p.spa)}</td>
+      <td>${p.us ? cell(p.doe) : '<span class="dim">해당없음</span>'}</td>
+      <td>${p.us ? cell(p.ferc) : '<span class="dim">해당없음</span>'}</td>
+      <td>${cell(p.note)}</td>
+    </tr>`).join("");
+}
+
+function renderLog(ps) {
+  const entries = [];
+  ps.forEach(p => (p.log || []).forEach(e => entries.push({ ...e, pname: p.name })));
+  entries.sort((a, b) => (b.date || "").localeCompare(a.date || ""));
+  $("log").innerHTML = entries.length ? entries.map(e => `
+    <div class="entry">
+      <div class="d">${esc(e.date)}</div>
+      <div><span class="p">${esc(e.pname)}</span>${e.link ? `<a href="${esc(e.link)}" target="_blank" rel="noopener">${esc(e.text)}</a>` : esc(e.text)}</div>
+    </div>`).join("")
+    : '<div class="empty">아직 쌓인 로그가 없습니다. 데일리 브리핑에서 LNG 보도가 확인되면 data/lng_projects.json의 해당 프로젝트 log에 추가됩니다.</div>';
+}
+
+fetch("https://raw.githubusercontent.com/gschoie/GLOBAL_DEFENCE_NEW/refs/heads/claude/construction-equipment-news-dashboard-1ig6u1/docs/data/lng_projects.json", { cache: "no-store" })
+  .then(r => r.json())
+  .then(d => {
+    DATA = d;
+    const ps = d.projects;
+    $("metaLine").textContent = `기준 ${d.meta.updated}`;
+    const nF = ps.filter(p => p.status === "FEED").length;
+    const nP = ps.filter(p => p.status === "Proposed").length;
+    const nD = ps.filter(p => p.status === "FID").length;
+    const cap = ps.reduce((s, p) => s + (p.capacity_mtpa || 0), 0);
+    $("sumLine").textContent = `총 ${ps.length}건 (FEED ${nF} · Proposed ${nP}${nD ? " · FID " + nD : ""}) · 합계 ${cap.toFixed(1)} MTPA`;
+    const cos = [...new Set(ps.map(p => p.country))].sort();
+    $("fCountry").insertAdjacentHTML("beforeend",
+      cos.map(c => `<option value="${esc(c)}">${esc(c)}</option>`).join(""));
+    renderWatch(ps);
+    renderTable();
+    renderLog(ps);
+    $("foot").textContent = `소스: ${d.meta.source} · 데이터: GLOBAL_DEFENCE_NEW 리포지토리에서 실시간 로드 (매일 KST 06:00 자동 갱신)`;
+    ["fStatus", "fCountry", "fUS", "fWatch"].forEach(id => $(id).addEventListener("change", renderTable));
+    $("fQ").addEventListener("input", renderTable);
+  })
+  .catch(e => { $("tbody").innerHTML = `<tr><td colspan="11" class="empty">데이터 로드 실패: ${esc(e)}</td></tr>`; });
+</script>
