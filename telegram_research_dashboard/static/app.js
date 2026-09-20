@@ -501,7 +501,7 @@ $('#todo-archive-done')?.addEventListener('click',()=>{const a=todoLoad(),done=a
 /* 보관함 접기/펴기 — 선택은 이 기기에 기억한다(기본은 펼침, 기존 화면 그대로) */
 const TODO_ARCH_OPEN='hi_todo_arch_open_v1';
 function todoArchOpen(open){const cols=$('.todo-cols'),btn=$('#todo-arch-toggle');if(!cols||!btn)return;
- cols.classList.toggle('arch-collapsed',!open);btn.textContent=open?'▾':'▸';btn.setAttribute('aria-expanded',open?'true':'false');
+ cols.classList.toggle('arch-collapsed',!open);btn.textContent=open?'▼':'▶';btn.setAttribute('aria-expanded',open?'true':'false');
  btn.title=open?'보관함 접기':'보관함 펴기';try{localStorage.setItem(TODO_ARCH_OPEN,open?'1':'0')}catch(e){}}
 const todoArchFlip=()=>todoArchOpen($('.todo-cols').classList.contains('arch-collapsed'));
 $('#todo-arch-toggle')?.addEventListener('click',todoArchFlip);
