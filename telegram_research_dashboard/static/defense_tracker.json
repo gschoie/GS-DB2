@@ -8,9 +8,17 @@
    "구조화 필드(stage, status, amount 등)는 자동으로 바꾸지 않는다 — 로그를 보고 수동(또는 Claude 세션)으로 갱신.",
    "신규 감지 항목은 meta.inbox에 쌓이며, 검토 후 tenders/policy로 옮긴다."
   ],
-  "inbox": [],
+  "inbox": [
+   {
+    "date": "2026-09-22",
+    "country": "미국",
+    "name": "미 육군 PrSM Increment 2 미사일",
+    "text": "Lockheed Martin은 미 육군으로부터 최대 12억 달러 규모의 정밀 타격 미사일 PrSM Increment 2 공급 계약을 수주했습니다."
+   }
+  ],
   "seen": [
-   "78d51229a906c3f4"
+   "78d51229a906c3f4",
+   "3e4a09778996014d"
   ]
  },
  "tenders": [
