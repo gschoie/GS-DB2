@@ -123,7 +123,6 @@
   <div class="bar">
     <input type="search" id="fQ" placeholder="국가·프로그램·업체 검색">
     <label><input type="checkbox" id="fKr"> 한국 관련만</label>
-    <label><input type="checkbox" id="fOpen"> 진행 중만 (종료 제외)</label>
   </div>
 
   <h2>① 입찰·수주경쟁 중 프로젝트 <span class="sub" id="tSum"></span></h2>
@@ -134,6 +133,17 @@
         <th>한국 관련</th><th>단계</th><th>일정·최근 경과</th><th>비고</th>
       </tr></thead>
       <tbody id="tBody"></tbody>
+    </table>
+  </div>
+
+  <h2>①-1 종료된 경쟁 — 최근 결과 <span class="sub" id="cSum"></span></h2>
+  <div class="tblwrap">
+    <table>
+      <thead><tr>
+        <th>국가</th><th>프로그램 / 분야</th><th>규모</th><th>경쟁 구도</th>
+        <th>한국 관련</th><th>결과</th><th>일정·최근 경과</th><th>비고</th>
+      </tr></thead>
+      <tbody id="cBody"></tbody>
     </table>
   </div>
 
@@ -189,19 +199,15 @@ function filters() {
   return {
     q: $("fQ").value.trim().toLowerCase(),
     kr: $("fKr").checked,
-    open: $("fOpen").checked,
   };
 }
 function matchQ(x, q) {
   return !q || JSON.stringify(x).toLowerCase().includes(q);
 }
+const isClosed = (t) => String(t.stage || "").startsWith("종료");
 
-function render() {
-  const f = filters();
-  const ts = DATA.tenders.filter(t => matchQ(t, f.q) && (!f.kr || isKr(t)) &&
-    (!f.open || !String(t.stage || "").startsWith("종료")));
-  $("tSum").textContent = `${ts.length} / ${DATA.tenders.length}건`;
-  $("tBody").innerHTML = ts.map(t => `
+function tenderRow(t) {
+  return `
     <tr>
       <td class="nowrap">${esc(t.country)}</td>
       <td class="pname">${esc(t.program)}<span class="op">${esc(t.domain)}</span></td>
@@ -211,10 +217,26 @@ function render() {
       <td class="nowrap">${stageBadge(t.stage)}</td>
       <td>${cell(t.timeline)}</td>
       <td>${cell(t.note)}</td>
-    </tr>`).join("") || `<tr><td colspan="8" class="empty">조건에 맞는 항목 없음</td></tr>`;
+    </tr>`;
+}
 
-  const pol = DATA.policy.filter(p => matchQ(p, f.q) &&
-    (!f.open || !(String(p.status).includes("성립") && p.next === "-")));
+function render() {
+  const f = filters();
+  const keep = (t) => matchQ(t, f.q) && (!f.kr || isKr(t));
+  const active = DATA.tenders.filter(t => !isClosed(t));
+  const closed = DATA.tenders.filter(isClosed);
+
+  const ts = active.filter(keep);
+  $("tSum").textContent = `${ts.length} / ${active.length}건`;
+  $("tBody").innerHTML = ts.map(tenderRow).join("")
+    || `<tr><td colspan="8" class="empty">조건에 맞는 항목 없음</td></tr>`;
+
+  const cs = closed.filter(keep);
+  $("cSum").textContent = `${cs.length} / ${closed.length}건`;
+  $("cBody").innerHTML = cs.map(tenderRow).join("")
+    || `<tr><td colspan="8" class="empty">조건에 맞는 항목 없음</td></tr>`;
+
+  const pol = DATA.policy.filter(p => matchQ(p, f.q));
   $("pSum").textContent = `${pol.length} / ${DATA.policy.length}건`;
   $("pBody").innerHTML = pol.map(p => `
     <tr>
@@ -260,7 +282,7 @@ fetch("defense_tracker.json", { cache: "no-store" })
     render();
     renderLog();
     $("foot").textContent = "데이터: defense_tracker.json — 매일 방산 브리핑 후 자동 갱신 · 구조화 필드는 수동 큐레이션";
-    ["fKr", "fOpen"].forEach(id => $(id).addEventListener("change", render));
+    $("fKr").addEventListener("change", render);
     $("fQ").addEventListener("input", render);
   })
   .catch(e => { $("tBody").innerHTML = `<tr><td colspan="8" class="empty">데이터 로드 실패: ${esc(e)}</td></tr>`; });
