@@ -1,0 +1,14 @@
+name: (임시) 선물 수급 경로 프로브
+on:
+  push:
+    branches: [claude/futures-restore]
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with: { python-version: "3.12" }
+      - run: pip install requests
+      - run: python .github/probe_fut.py
