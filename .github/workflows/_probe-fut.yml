@@ -12,3 +12,6 @@ jobs:
         with: { python-version: "3.12" }
       - run: pip install requests
       - run: python .github/probe_fut.py
+        env:
+          KIS_APP_KEY: ${{ secrets.KIS_APP_KEY }}
+          KIS_APP_SECRET: ${{ secrets.KIS_APP_SECRET }}
