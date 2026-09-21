@@ -714,13 +714,18 @@ function scheduledWeekly() {
 //   page    : 2쪽 이후 붙일 페이지 파라미터 (첫 쪽엔 안 붙인다)
 //   linkRe  : 목록 HTML에서 기사 링크의 ID 를 뽑는 정규식(첫 그룹 = ID, 앞 8자리 날짜)
 //   view    : ID → 실제 기사 주소
-const MIL_DAYS = 31;         // 며칠치를 모을지
+const MIL_DAYS = 31;         // 날짜형 소스: 며칠치를 모을지
 const MIL_MAX_PAGES = 12;    // 소스당 목록 페이지 상한
+const MIL_LIMIT = 12;        // 날짜없는 소스: 최근 몇 건까지
+//
+// dated:true  — 기사 ID 앞 8자리가 YYYYMMDD. 지난 MIL_DAYS 일로 거른다.
+// dated:false — ID 가 순번이라 날짜를 못 읽는다. 목록 최근 limit 건을 그대로 담는다.
 const MIL_SOURCES = [
   {
     name: '나우뉴스 밀리터리+',
     list: 'https://m.nownews.seoul.co.kr/newsList/science/military/?cp=nownews',
     page: '&page=',
+    dated: true,
     linkRe: /newsView\.php\?id=(\d{8}\d{4,})/g,
     view: function (id) { return 'https://nownews.seoul.co.kr/news/newsView.php?id=' + id; }
   },
@@ -728,8 +733,18 @@ const MIL_SOURCES = [
     name: '세계 박수찬의 軍',
     list: 'https://m.segye.com/category/3000327',
     page: '?page=',
+    dated: true,
     linkRe: /newsView\/(\d{14})/g,
     view: function (id) { return 'https://www.segye.com/newsView/' + id; }
+  },
+  {
+    name: '서울경제 이현호의 방산톡',
+    list: 'https://www.sedaily.com/subscription/series/S010100493',
+    page: '?page=',
+    dated: false,              // 기사 ID 가 순번(/article/20093150) — 날짜가 없다
+    limit: MIL_LIMIT,
+    linkRe: /\/article\/(\d{6,9})/g,
+    view: function (id) { return 'https://www.sedaily.com/article/' + id; }
   }
 ];
 
@@ -760,27 +775,33 @@ function idDateMillis_(id) {
   return new Date(y, m - 1, d).getTime();
 }
 
-// 한 페이지 HTML에서 (id → 제목) 을 뽑는다. 제목은 최선의 추정(없으면 빈 문자열).
+// 한 페이지 HTML에서 [{id, title}] 을 등장 순서대로 뽑는다(중복 제거).
+// 객체 대신 배열을 쓰는 이유: 숫자형 키는 JS가 순번대로 재정렬해 '목록 순서'가 깨진다.
 function parseMilPage_(html, linkRe) {
-  const found = {};   // id -> title
+  const order = [];
+  const seen = {};
   let match;
   linkRe.lastIndex = 0;
   while ((match = linkRe.exec(html)) !== null) {
     const id = match[1];
-    if (!(id in found)) found[id] = '';
+    if (seen[id]) continue;
+    seen[id] = true;
+    // 제목 best-effort: id 가 든 <a ...>제목</a> 를 찾아 태그를 걷어내고 엔티티를 되돌린다.
+    let title = '';
+    const t = html.match(new RegExp(id + '[^>]*>\\s*([^<]{4,120})<', 'i'));
+    if (t) title = unescapeHtml_(t[1].replace(/\s+/g, ' ').trim());
+    order.push({ id: id, title: title });
   }
-  // 제목 best-effort: id 가 든 <a ...>제목</a> 를 찾아 태그를 걷어내고 엔티티를 되돌린다.
-  Object.keys(found).forEach(function (id) {
-    const re = new RegExp(id + '[^>]*>\\s*([^<]{4,120})<', 'i');
-    const t = html.match(re);
-    if (t) found[id] = unescapeHtml_(t[1].replace(/\s+/g, ' ').trim());
-  });
-  return found;
+  return order;
 }
 
 // 소스 하나에서 지난 MIL_DAYS 일 기사(id·title·millis)를 최신순으로 모은다.
 function collectMilSource_(src, cutoff) {
-  const seen = {};   // id -> { title, millis }
+  const undated = src.dated === false;
+  const limit = src.limit || MIL_LIMIT;
+  const out = [];        // 최종 항목(등장 순서 = 최신순)
+  const picked = {};     // id 중복 방지
+
   for (let page = 1; page <= MIL_MAX_PAGES; page++) {
     let html;
     try {
@@ -790,25 +811,35 @@ function collectMilSource_(src, cutoff) {
       break;
     }
     const rows = parseMilPage_(html, src.linkRe);
-    const ids = Object.keys(rows);
-    if (ids.length === 0) break;
+    if (rows.length === 0) break;
 
-    let anyInWindow = false;
-    ids.forEach(function (id) {
-      const millis = idDateMillis_(id);
-      if (millis && millis >= cutoff) {
-        anyInWindow = true;
-        if (!seen[id] || (!seen[id].title && rows[id])) {
-          seen[id] = { title: rows[id], millis: millis };
-        }
+    if (undated) {
+      // 날짜 없는 소스 — 목록 순서대로 limit 건까지.
+      for (let i = 0; i < rows.length && out.length < limit; i++) {
+        if (picked[rows[i].id]) continue;
+        picked[rows[i].id] = true;
+        out.push({ title: rows[i].title, millis: 0, url: src.view(rows[i].id) });
       }
-    });
-    if (!anyInWindow && page > 1) break;   // 목록은 최신순 — 창을 벗어나면 그만
+      if (out.length >= limit) break;
+    } else {
+      // 날짜 있는 소스 — 지난 MIL_DAYS 일 창.
+      let anyInWindow = false;
+      rows.forEach(function (row) {
+        const millis = idDateMillis_(row.id);
+        if (millis && millis >= cutoff && !picked[row.id]) {
+          picked[row.id] = true;
+          anyInWindow = true;
+          out.push({ title: row.title, millis: millis, url: src.view(row.id) });
+        }
+      });
+      if (!anyInWindow && page > 1) break;   // 목록은 최신순 — 창을 벗어나면 그만
+    }
     Utilities.sleep(400);
   }
-  return Object.keys(seen).map(function (id) {
-    return { id: id, title: seen[id].title, millis: seen[id].millis, url: src.view(id) };
-  }).sort(function (a, b) { return b.millis - a.millis; });
+
+  // 날짜 있는 소스만 최신순 정렬(페이지 경계로 섞일 수 있어서). 없는 소스는 목록 순서 유지.
+  if (!undated) out.sort(function (a, b) { return b.millis - a.millis; });
+  return out;
 }
 
 function sendMilitaryColumns() {
@@ -833,8 +864,10 @@ function sendMilitaryColumns() {
   groups.forEach(function (g) {
     head.push('<b>' + escapeHtml_(g.name) + '</b>');
     g.items.forEach(function (it) {
-      const day = Utilities.formatDate(new Date(it.millis), 'Asia/Seoul', 'MM-dd');
-      head.push('• ' + day + ' ' + escapeHtml_(it.title || '(제목 미상)'));
+      const day = it.millis
+        ? Utilities.formatDate(new Date(it.millis), 'Asia/Seoul', 'MM-dd') + ' '
+        : '';
+      head.push('• ' + day + escapeHtml_(it.title || '(제목 미상)'));
     });
     head.push('');
   });

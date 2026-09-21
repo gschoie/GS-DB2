@@ -1,0 +1,252 @@
+{
+ "meta": {
+  "title": "방산 입찰·예산 트래커",
+  "created": "2026-09-20",
+  "updated": "2026-09-22",
+  "howto": [
+   "매일 방산 브리핑 생성 후 defense_tracker_update.py가 브리핑 본문에서 입찰/예산/법안 이벤트를 추출해 log에 자동 누적한다.",
+   "구조화 필드(stage, status, amount 등)는 자동으로 바꾸지 않는다 — 로그를 보고 수동(또는 Claude 세션)으로 갱신.",
+   "신규 감지 항목은 meta.inbox에 쌓이며, 검토 후 tenders/policy로 옮긴다."
+  ],
+  "inbox": [],
+  "seen": [
+   "78d51229a906c3f4"
+  ]
+ },
+ "tenders": [
+  {
+   "id": "peru-tank",
+   "country": "페루",
+   "program": "차기 전차 사업",
+   "domain": "전차",
+   "scale": "미정(1차 수십 대 추정)",
+   "candidates": "현대로템 K2 vs 경쟁 기종",
+   "kr": "현대로템 K2",
+   "stage": "결정 임박",
+   "timeline": "페루 육군, K2를 최적 기종으로 추천(2026.09 보도)",
+   "note": "남미 첫 K2 수출 여부 관전 — 추천→계약 전환 모니터링",
+   "log": []
+  },
+  {
+   "id": "poland-k2k9-follow",
+   "country": "폴란드",
+   "program": "K2·K9 추가 이행계약(현지생산 포함)",
+   "domain": "전차·자주포",
+   "scale": "수조 원대(회차별)",
+   "candidates": "현대로템(K2PL)·한화에어로(K9PL) — PGZ 현지화 협력",
+   "kr": "현대로템·한화에어로스페이스",
+   "stage": "협상중",
+   "timeline": "MSPO 2026(9월) 전후 추가 수주 기대 보도(증권가)",
+   "note": "",
+   "log": []
+  },
+  {
+   "id": "ph-kf21",
+   "country": "필리핀",
+   "program": "KF-21 도입 협의",
+   "domain": "전투기",
+   "scale": "미정",
+   "candidates": "KAI KF-21 (FA-50PH 24대 운용 연계)",
+   "kr": "KAI",
+   "stage": "협상중",
+   "timeline": "필리핀, 2027~29년 인도 요청 보도(2026) — KAI 'KF-21 첫 수출 연내 가능' 언급(2026.07)",
+   "note": "인니·UAE·말레이시아도 KF-21 후보군",
+   "log": []
+  },
+  {
+   "id": "uae-iads",
+   "country": "UAE",
+   "program": "통합방공망 구축 (EDGE–한화 프레임워크)",
+   "domain": "방공",
+   "scale": "미정(수십억 달러급 전망)",
+   "candidates": "한화 L-SAM·M-SAM 추가·천무 패키지",
+   "kr": "한화에어로스페이스·한화시스템",
+   "stage": "협상중",
+   "timeline": "2026.09.16 EDGE–한화 전략적 텀시트 체결 — 이란 미사일·드론 공격 후 방공 보강",
+   "note": "천궁-II 2개 포대 실전 운용 중(2026.03 FOC)",
+   "log": []
+  },
+  {
+   "id": "it-ddx",
+   "country": "이탈리아",
+   "program": "차세대 방공구축함(DDX) 2척",
+   "domain": "수상함",
+   "scale": "미정",
+   "candidates": "Fincantieri 주도(자국)",
+   "kr": "-",
+   "stage": "입찰중",
+   "timeline": "2026 조달 절차 개시",
+   "note": "",
+   "log": []
+  },
+  {
+   "id": "saudi-msam-follow",
+   "country": "사우디·이라크",
+   "program": "M-SAM II 후속·확대 협의",
+   "domain": "방공",
+   "scale": "사우디 $32억(10개 포대, 2023 계약)·이라크 8개 포대(2024)",
+   "candidates": "한화시스템·LIG넥스원",
+   "kr": "LIG넥스원·한화시스템",
+   "stage": "이행중(추가 협의)",
+   "timeline": "WDS 2026: 사우디·이라크 첫 납품 2028 — 추가 물량·현지화 협의 지속",
+   "note": "",
+   "log": []
+  },
+  {
+   "id": "canada-cpsp",
+   "country": "캐나다",
+   "program": "초계잠수함 CPSP (12척)",
+   "domain": "잠수함",
+   "scale": "최대 C$1,000억(수명주기)",
+   "candidates": "TKMS 212CD vs 한화오션 KSS-III",
+   "kr": "한화오션 (탈락)",
+   "stage": "종료 — TKMS 선정",
+   "timeline": "2026.07.06 TKMS 선정 발표, 연내 본계약 목표",
+   "note": "캐나다 사상 최대 조달 — 한국 서방시장 진입 과제 확인",
+   "log": [
+    {
+     "date": "2026-09-22",
+     "text": "캐나다와 노르웨이가 Type 212CD 잠수함 및 북극 안보를 중심으로 전략적 방위 산업 파트너십을 구축하며 차세대 잠수함 사업 방향성을 제시했다.",
+     "link": ""
+    }
+   ]
+  },
+  {
+   "id": "poland-orka",
+   "country": "폴란드",
+   "program": "Orka 잠수함 (3척)",
+   "domain": "잠수함",
+   "scale": "€25억+",
+   "candidates": "Saab A26 vs 한화오션 KSS-III 등 5개사",
+   "kr": "한화오션 (탈락)",
+   "stage": "종료 — Saab 선정(계약 협상중)",
+   "timeline": "2025.11.26 스웨덴 Saab A26 선정(MOU), 1번함 2030 인도 목표",
+   "note": "",
+   "log": []
+  },
+  {
+   "id": "norway-frigate",
+   "country": "노르웨이",
+   "program": "차기 호위함",
+   "domain": "수상함",
+   "scale": "$135억",
+   "candidates": "영국 Type 26 선정",
+   "kr": "-",
+   "stage": "종료 — 영국 선정",
+   "timeline": "영국 전략적 파트너 선정",
+   "note": "",
+   "log": []
+  },
+  {
+   "id": "sweden-frigate",
+   "country": "스웨덴",
+   "program": "차기 호위함 (Luleå급 후속)",
+   "domain": "수상함",
+   "scale": "$42.5억",
+   "candidates": "프랑스 선정 (영·스페인 경합 탈락)",
+   "kr": "-",
+   "stage": "종료 — 프랑스 선정",
+   "timeline": "2026 결정",
+   "note": "",
+   "log": []
+  }
+ ],
+ "policy": [
+  {
+   "id": "kr-budget-2027",
+   "country": "한국",
+   "kind": "예산",
+   "title": "2027년 국방예산 정부안",
+   "amount": "73조 2,777억원 (+8.2%, 첫 70조 돌파) — 방위력개선비 22.7조(+13.8%)",
+   "status": "국회 심의중",
+   "date": "2026.09 정부안 제출",
+   "next": "12월 국회 본회의 의결",
+   "note": "GDP 대비 2.33%. 20년 내 최대 증가율",
+   "log": []
+  },
+  {
+   "id": "us-ndaa-fy27",
+   "country": "미국",
+   "kind": "법안",
+   "title": "FY2027 NDAA (국방수권법)",
+   "amount": "$1.15조 (하원안)",
+   "status": "하원 통과(2026.07.26, 216-212) — 상원 계류",
+   "date": "2026.07.26",
+   "next": "상원 표결(민주당, 이란전·증액 반대로 지연)",
+   "note": "대만 안보협력구상(TSCI) $10억 포함",
+   "log": []
+  },
+  {
+   "id": "us-ndaa-fy26",
+   "country": "미국",
+   "kind": "법안",
+   "title": "FY2026 NDAA",
+   "amount": "-",
+   "status": "성립(법률)",
+   "date": "2025.12 (하원 312-112, 상원 77-20)",
+   "next": "-",
+   "note": "",
+   "log": []
+  },
+  {
+   "id": "de-budget-2027",
+   "country": "독일",
+   "kind": "예산",
+   "title": "2027년 연방예산 — 국방",
+   "amount": "국방 €1,097억(조달 €558억) + 특별기금 ~€300억 → 총 방위지출 ~€1,520억",
+   "status": "분데스탁 심의중",
+   "date": "2026.09.08 1차 심의",
+   "next": "연내 의결",
+   "note": "신규차입 €1,187억 중 €854억이 국방·안보 예외 적용",
+   "log": []
+  },
+  {
+   "id": "jp-budget-fy27",
+   "country": "일본",
+   "kind": "예산",
+   "title": "FY2027 방위예산 요구안",
+   "amount": "¥8.9조 (사상 최대 요구) — 최종 ¥10조 돌파 전망",
+   "status": "재무성 심사중",
+   "date": "2026.08.31 제출",
+   "next": "12월 말 각의 결정",
+   "note": "무인·스탠드오프·AI 중점, 15년 연속 증액",
+   "log": []
+  },
+  {
+   "id": "tw-special",
+   "country": "대만",
+   "kind": "법안",
+   "title": "특별방위조달법 (8년 보충예산)",
+   "amount": "NT$7,800억 (~$260억, 2026~33)",
+   "status": "입법원 통과",
+   "date": "2026.05.08",
+   "next": "연차별 집행 — 대미 구매 NT$3,000억 + 미발표 패키지 NT$4,800억",
+   "note": "T-Dome 다층방공($400억 구상, 2025.11 발표)과 연계",
+   "log": []
+  },
+  {
+   "id": "eu-safe",
+   "country": "EU",
+   "kind": "기금",
+   "title": "SAFE 공동조달 대출기구",
+   "amount": "€1,500억",
+   "status": "집행 단계 — 19개국 신청",
+   "date": "2025.05.27 이사회 채택",
+   "next": "국가별 계획 기반 대출 집행 (EU·EEA·우크라이나산 65% 요건)",
+   "note": "한국산 무기 참여 요건(잔여 35% 또는 협정) 모니터링",
+   "log": []
+  },
+  {
+   "id": "nato-5pct",
+   "country": "NATO",
+   "kind": "공약",
+   "title": "GDP 5% 방위투자 공약",
+   "amount": "핵심전력 3.5% + 안보인프라 1.5% (2035년까지)",
+   "status": "이행 단계",
+   "date": "2025.06 헤이그 정상회의",
+   "next": "회원국별 연차 이행계획·검증(2029 중간점검)",
+   "note": "유럽 국방예산 증액의 상위 프레임",
+   "log": []
+  }
+ ]
+}

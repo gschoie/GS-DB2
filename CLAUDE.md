@@ -217,8 +217,9 @@
     - **밀리터리 칼럼 주간 모음**(`sendMilitaryColumns`): 밀리터리 칼럼 목록에서 지난 31일
       기사 링크만 모아 일요일 오전 8시대(`scheduledNownews`, `installNownewsTrigger`)에
       텔레그램 두 통(소스별 제목 목록 + [소스명] 링크 묶음)으로. NotebookLM 오디오용.
-      소스는 `MIL_SOURCES` 하나에서 관리 — 현재 나우뉴스 밀리터리+(무기인사이드) +
-      세계 박수찬의 軍. 기사 URL의 id 앞 8자리(YYYYMMDD)로 날짜를 판별하므로 마크업이
+      소스는 `MIL_SOURCES` 하나에서 관리 — 현재 나우뉴스 밀리터리+(무기인사이드) + 세계 박수찬의 軍 +
+      서울경제 이현호의 방산톡. 소스는 dated:true(ID에 YYYYMMDD → 지난 31일) /
+      dated:false(ID가 순번 → 목록 최근 limit건, 서울경제가 이 경우)로 나뉜다. 기사 URL의 id 앞 8자리(YYYYMMDD)로 날짜를 판별하므로 마크업이
       바뀌어도 링크는 뽑힌다(제목은 best-effort). doPost 에 send_nownews 액션.
       매주 롤링(지난 한 달) — 겹침이 정상. `sendNownewsMilitary` 는 옛 이름 호환 별칭.
     - **수동 갱신 버튼**: ytdigest 뷰의 `🔄 모음 갱신` → 유튜브 GAS 프로젝트를 웹 앱으로
