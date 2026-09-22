@@ -1,0 +1,77 @@
+name: "[시험용] K200 선물 시세 경로 확인"
+
+# 베이시스(선물−현물)를 만들려면 K200 선물 '가격'이 필요하다. 투자자별은 없어졌지만
+# 가격은 한투 OpenAPI 에 있을 수 있다 — 월물 코드와 응답 필드를 확인한다.
+# 확인이 끝나면 이 파일은 지운다.
+on:
+  push:
+    branches: [claude/telegram-trend-analysis-logic-7efsdy]
+    paths: [".github/workflows/_probe-futures-price.yml"]
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/setup-python@v6
+        with: {python-version: "3.12"}
+      - run: pip install requests
+      - name: 탐색
+        env:
+          KIS_APP_KEY: ${{ secrets.KIS_APP_KEY }}
+          KIS_APP_SECRET: ${{ secrets.KIS_APP_SECRET }}
+        run: |
+          python - <<'PY'
+          import json, os
+          import requests
+
+          BASE = "https://openapi.koreainvestment.com:9443"
+          key, sec = os.environ["KIS_APP_KEY"], os.environ["KIS_APP_SECRET"]
+          S = requests.Session()
+          r = S.post(f"{BASE}/oauth2/tokenP", timeout=20, json={
+              "grant_type": "client_credentials", "appkey": key, "appsecret": sec})
+          print("token", r.status_code)
+          tok = r.json()["access_token"]
+
+          def call(path, tr, params, label, cut=1200):
+              h = {"authorization": f"Bearer {tok}", "appkey": key, "appsecret": sec,
+                   "tr_id": tr, "custtype": "P"}
+              try:
+                  rr = S.get(BASE + path, headers=h, params=params, timeout=20)
+              except Exception as e:
+                  print(f"\n[{label}] 예외 {e}"); return None
+              print(f"\n[{label}] http={rr.status_code} {path} {tr} {params}")
+              print("   ", rr.text[:cut].replace("\n", " "))
+              try: return rr.json()
+              except Exception: return None
+
+          # 1) 선물 전광판 — 월물 목록을 얻을 수 있는가
+          call("/uapi/domestic-futureoption/v1/quotations/display-board-futures",
+               "FHPIF05030100",
+               {"FID_COND_MRKT_DIV_CODE": "JF", "FID_COND_SCR_DIV_CODE": "20503",
+                "FID_MRKT_CLS_CODE": "F", "FID_MTRT_CNT": "", "FID_COND_MRKT_CLS_CODE": "",
+                "FID_MRKT_CLS_CODE1": ""}, "전광판 선물")
+
+          # 2) 상품 기본정보 조회로 월물 코드 찾기
+          call("/uapi/domestic-futureoption/v1/quotations/display-board-option-list",
+               "FHPIF05030200",
+               {"FID_COND_MRKT_DIV_CODE": "JF", "FID_COND_SCR_DIV_CODE": "20503",
+                "FID_COND_MRKT_CLS_CODE": "", "FID_MRKT_CLS_CODE": "F"}, "옵션/월물 목록")
+
+          # 3) 후보 월물 코드로 시세 직접 조회 (근월물 추정)
+          for code in ("101W12", "101W09", "101V12", "101S12", "101T12", "101RC000",
+                       "101W1000", "101C6000"):
+              j = call("/uapi/domestic-futureoption/v1/quotations/inquire-price",
+                       "FHMIF10000000",
+                       {"FID_COND_MRKT_DIV_CODE": "F", "FID_INPUT_ISCD": code},
+                       f"시세 {code}", 700)
+              if j and j.get("rt_cd") == "0" and (j.get("output1") or {}).get("futs_prpr"):
+                  print("   ★ 성공 코드:", code)
+
+          # 4) 일봉(과거 백필 가능성)
+          call("/uapi/domestic-futureoption/v1/quotations/inquire-daily-fuopchartprice",
+               "FHKIF03020100",
+               {"FID_COND_MRKT_DIV_CODE": "F", "FID_INPUT_ISCD": "101W12",
+                "FID_INPUT_DATE_1": "20260901", "FID_INPUT_DATE_2": "20260922",
+                "FID_PERIOD_DIV_CODE": "D"}, "일봉 101W12", 900)
+          PY
