@@ -1,8 +1,7 @@
 name: "[시험용] 네이버 증권 신규 구조 탐색"
 
-# 개편된 Npay 증권이 쓰는 내부 API(front-api) 경로 전체를 번들에서 뽑고,
-# 종목/지수 화면의 탭 구성(menuInfo)을 받아 '투자자별·선물'이 새 구조에
-# 남아 있는지 확인한다. 확인이 끝나면 이 파일은 지운다.
+# 찾아낸 신규 수급 API(/market/investorTrend 등)의 호출 규약을 번들 코드에서
+# 떠내고, 실제로 호출해 응답 모양을 확인한다. 확인이 끝나면 이 파일은 지운다.
 on:
   push:
     branches: [claude/telegram-trend-analysis-logic-7efsdy]
@@ -19,10 +18,11 @@ jobs:
       - name: 탐색
         run: |
           python - <<'PY'
-          import json, re, collections
+          import json, re, itertools
           import requests
 
           HOST = "https://m.stock.naver.com"
+          API = HOST + "/front-api"
           UA = ("Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) AppleWebKit/605.1.15 "
                 "(KHTML, like Gecko) Version/17.0 Mobile/15E148 Safari/604.1")
           S = requests.Session(); S.headers.update({"User-Agent": UA, "Referer": HOST + "/"})
@@ -32,73 +32,59 @@ jobs:
               except Exception as e:
                   print(f"   !! {u} -> {type(e).__name__}: {e}"); return None
 
-          # ── 1) 번들 모으기 ──────────────────────────────────────────
+          TARGETS = ["/market/investorTrend", "/stock/domestic/trend",
+                     "/market/tradingTrend/ranking", "/stock/index/periodChanges",
+                     "/stock/domestic/index/price/list", "/chart/domesticPriceByTime"]
+
+          # ── 1) 번들에서 호출부 주변 코드 떠내기 ─────────────────────
           seeds = ["/", "/domestic/index/KPI200/total", "/domestic/index/KOSPI/total",
-                   "/domestic/stock/005930/total", "/worldstock/futures/EScv1/total",
-                   "/domestic/home/capitalization/total", "/marketindex"]
+                   "/domestic/stock/005930/total", "/domestic/home/capitalization/total"]
           chunks = set()
           for p in seeds:
               r = get(HOST + p)
               if r is not None and r.status_code == 200:
                   chunks |= set(re.findall(r'src="([^"]*/_next/static/[^"]+\.js)"', r.text))
-          # 청크 매니페스트를 통해 나머지 페이지 번들까지 끌어온다
-          more = set()
           for c in list(chunks):
-              u = c if c.startswith("http") else HOST + c
-              rr = get(u)
+              rr = get(c if c.startswith("http") else HOST + c)
               if rr is None or rr.status_code != 200: continue
-              more |= {"/_next/static/chunks/" + m for m in
-                       re.findall(r'"(?:static/chunks/)?((?:pages|app)/[A-Za-z0-9/_.\-\[\]]+\.js)"', rr.text)}
-          chunks |= more
-          print(f"번들 {len(chunks)}개")
+              chunks |= {"/_next/static/chunks/" + m for m in
+                         re.findall(r'"(?:static/chunks/)?((?:pages|app)/[A-Za-z0-9/_.\-\[\]]+\.js)"', rr.text)}
 
-          # ── 2) API 경로 문자열 전량 수집 ────────────────────────────
-          PATH = re.compile(r'["`\'](/(?:front-api|api|domestic|stock|worldstock|market|'
-                            r'marketIndex|investment|news|research|chart|briefing|integration|sise)'
-                            r'/[A-Za-z0-9/_.\-{}$\[\]:]{2,})')
-          api = collections.Counter()
-          base_hits = collections.Counter()
+          found = {t: [] for t in TARGETS}
           for c in sorted(chunks)[:500]:
-              u = c if c.startswith("http") else HOST + c
-              rr = get(u)
+              rr = get(c if c.startswith("http") else HOST + c)
               if rr is None or rr.status_code != 200: continue
               t = rr.text
-              for m in PATH.findall(t): api[m] += 1
-              for m in re.findall(r'["\'`]([^"\'`]{0,60}front-api[^"\'`]{0,40})', t):
-                  base_hits[m] += 1
+              for tgt in TARGETS:
+                  for m in re.finditer(re.escape(tgt), t):
+                      if len(found[tgt]) < 3:
+                          found[tgt].append(t[max(0, m.start()-420):m.start()+220])
 
-          print(f"\n=== front-api 베이스 후보 ===")
-          for k, n in base_hits.most_common(20): print(f"  ({n}) {k}")
+          print("=" * 78); print("호출부 코드"); print("=" * 78)
+          for tgt, ctxs in found.items():
+              print(f"\n───── {tgt} ({len(ctxs)}곳) ─────")
+              for c in ctxs:
+                  print("  …", c.replace("\n", " ")[-620:])
 
-          FUT  = re.compile(r"future|derivat|drv|option", re.I)
-          FLOW = re.compile(r"invest|trend|program|deal|supply|flow|frgn|institu|foreign", re.I)
-          futs  = sorted(k for k in api if FUT.search(k))
-          flows = sorted(k for k in api if FLOW.search(k) and k not in futs)
-          rest  = sorted(k for k in api if k not in futs and k not in flows)
-          print(f"\n=== 선물·파생 {len(futs)} ===");   [print("  ", k) for k in futs]
-          print(f"\n=== 수급·투자자 {len(flows)} ==="); [print("  ", k) for k in flows]
-          print(f"\n=== 나머지 {len(rest)} ===");       [print("  ", k) for k in rest[:250]]
-
-          # ── 3) 화면 탭 구성 + 지수 상세 ─────────────────────────────
-          print("\n=== front-api 직접 호출 ===")
-          BASES = [HOST + "/front-api/v1", HOST + "/front-api", HOST + "/api"]
-          calls = [
-              ("/stock/menuInfo", {"code": "KPI200"}),
-              ("/stock/menuInfo", {"code": "005930"}),
-              ("/domestic/index/detail", {"indexCode": "KPI200"}),
-              ("/stock/domestic/integration", {"code": "KPI200", "endType": "index"}),
-              ("/market/majorIndicators", {}),
+          # ── 2) 실제 호출 ────────────────────────────────────────────
+          print("\n" + "=" * 78); print("실호출"); print("=" * 78)
+          trials = [
+              ("/market/investorTrend", {}),
+              ("/market/investorTrend", {"market": "KOSPI"}),
+              ("/market/investorTrend", {"marketType": "KOSPI"}),
+              ("/market/investorTrend", {"indexCode": "KOSPI"}),
+              ("/market/investorTrend", {"stockExchangeType": "KRX"}),
+              ("/market/tradingTrend/ranking", {}),
+              ("/market/tradingTrend/ranking", {"market": "KOSPI", "investorType": "FOREIGN"}),
+              ("/stock/domestic/trend", {"code": "005930"}),
+              ("/stock/domestic/trend", {"code": "KPI200", "endType": "index"}),
+              ("/stock/domestic/trend", {"code": "KOSPI", "endType": "index"}),
+              ("/stock/index/periodChanges", {"code": "KPI200"}),
+              ("/stock/domestic/index/price/list", {"indexCode": "KPI200", "page": 1, "pageSize": 10}),
           ]
-          good_base = None
-          for b in BASES:
-              rr = get(b + "/stock/menuInfo", params={"code": "KPI200"})
-              if rr is not None and rr.status_code == 200 and rr.text.strip().startswith("{"):
-                  good_base = b; break
-          print("  베이스:", good_base)
-          if good_base:
-              for path, params in calls:
-                  rr = get(good_base + path, params=params)
-                  if rr is None: continue
-                  print(f"\n  [{rr.status_code}] {path} {params}")
-                  print("   ", rr.text[:1500].replace("\n", " "))
+          for path, params in trials:
+              rr = get(API + path, params=params)
+              if rr is None: continue
+              body = rr.text[:1400].replace("\n", " ")
+              print(f"\n  [{rr.status_code}] {path} {params}\n    {body}")
           PY
