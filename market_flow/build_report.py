@@ -260,6 +260,36 @@ def basis_read(b):
     return state, desc, cls
 
 
+def futures_archive_section(conf_days, unit="계약"):
+    """🗄️ 선물 투자자별 — **2026-09-17 까지의 기록**.
+
+    네이버가 9/18 에 제공을 끊어 더 이상 쌓이지 않는다. 그렇다고 있는 기록까지
+    감출 이유는 없으므로, 20일 창에 남아 있는 동안은 그대로 보여주되 **멈춘 날짜를
+    제목에 박아** 최신 자료로 오해하지 않게 한다(기관 세부 표와 같은 취급 —
+    창을 벗어나면 섹션이 통째로 사라진다).
+    """
+    both = [(d, c["investor"], c["futures"]) for d, c in conf_days
+            if "investor" in c and "futures" in c][-20:]
+    if not both:
+        return ""
+    cum_f = sum(f["foreign"] for _, _, f in both)
+    cum_i = sum(f["inst_total"] for _, _, f in both)
+    frn = combo_chart([(d, inv["foreign"], f["foreign"]) for d, inv, f in both],
+                      C_FRN, unit, line_label="선물 순매수")
+    inst = combo_chart([(d, inv["inst_total"], f["inst_total"]) for d, inv, f in both],
+                       C_INST, unit, line_label="선물 순매수")
+    return f"""
+<h2>🗄️ 선물 투자자별 <span class="na" style="font-weight:400;font-size:12px">(기록 ·
+{both[0][0][5:]}~{both[-1][0][5:]} · K200 선물 {unit})</span></h2>
+<p class="note">네이버가 <b>2026-09-18</b>부터 선물 투자자별 제공을 중단했다 —
+여기는 그때까지 모아둔 기록이고 <b>더 이상 갱신되지 않는다</b>. 이후 흐름은 위
+‘현·선물 괴리’(베이시스)로 본다. 20일 창을 벗어나면 이 섹션은 사라진다.</p>
+<div class="card"><p class="ctitle" style="color:{C_FRN}">외국인 — 현물 vs 선물</p>{frn}</div>
+<div class="card"><p class="ctitle" style="color:{C_INST}">기관 — 현물 vs 선물</p>{inst}</div>
+<p class="note">위 {len(both)}일 누적 선물 순매수: 외국인 {fmt(cum_f)}{unit} ·
+기관 {fmt(cum_i)}{unit}</p>"""
+
+
 def bar_chart(days, width=760, height=240):
     """최근 20일 개인/외인/기관 일별 순매수 그룹 바차트. days: [(date, ind, frn, inst), …]"""
     if not days:
@@ -513,7 +543,8 @@ def render_day(hist, all_dates, i):
     bas_now, bas_src = basis_snapshot(today)
     bas_days = [(d, c["basis"]) for d, c in conf_days if c.get("basis")][-20:]
     con = hist.get("fut_contract") or {}
-    fut_section = basis_section(bas_now, bas_src, bas_days, conf_days, con, is_latest)
+    fut_section = (basis_section(bas_now, bas_src, bas_days, conf_days, con, is_latest)
+                   + futures_archive_section(conf_days, hist.get("futures_unit", "계약")))
 
     # ── 시그널 ──
     prev_snap = slots[slot_keys[-2]] if len(slot_keys) >= 2 else None
