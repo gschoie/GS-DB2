@@ -1,7 +1,7 @@
 name: "[시험용] K200 선물 시세 경로 확인"
 
-# 종목마스터(fo_idx_code_mts.mst)에서 코스피200 선물 근월물 코드를 뽑아
-# 현재가·일봉이 실제로 나오는지 확인한다. 확인이 끝나면 이 파일은 지운다.
+# 베이시스 소급용 — KOSPI200 지수 '일별 종가' 경로를 확인한다.
+# 확인이 끝나면 이 파일은 지운다.
 on:
   push:
     branches: [claude/telegram-trend-analysis-logic-7efsdy]
@@ -21,56 +21,36 @@ jobs:
           KIS_APP_SECRET: ${{ secrets.KIS_APP_SECRET }}
         run: |
           python - <<'PY'
-          import io, os, re, time, zipfile
+          import os
           import requests
 
           S = requests.Session(); S.headers.update({"User-Agent": "Mozilla/5.0"})
-          r = S.get("https://new.real.download.dws.co.kr/common/master/fo_idx_code_mts.mst.zip",
-                    timeout=60)
-          z = zipfile.ZipFile(io.BytesIO(r.content))
-          raw = z.read(z.namelist()[0]).decode("cp949", "ignore")
 
-          rows = []
-          for line in raw.splitlines():
-              f = [x.strip() for x in line.split("|")]
-              if len(f) < 9:
-                  continue
-              code, name, base = f[1], f[3], f[-1]
-              m = re.fullmatch(r"(미니)?F (\d{6})", name)
-              if m and base == "KOSPI200":
-                  rows.append((m.group(2), bool(m.group(1)), code, f[2]))
-          rows.sort()
-          print("코스피200 선물 월물 (앞 8):")
-          for ym, mini, code, isin in rows[:8]:
-              print(f"   {ym} {'미니' if mini else '정규'} code={code} isin={isin}")
-          front = next((r for r in rows if not r[1]), None)
-          print("\n근월물(정규):", front)
+          def show(label, r, cut=1200):
+              print(f"\n[{label}] {r.status_code}")
+              print("   ", r.text[:cut].replace("\n", " "))
 
+          # A) 네이버 신규 front-api 지수 일별 시세
+          F = "https://m.stock.naver.com/front-api"
+          for p in ({"code": "KPI200", "page": 1, "pageSize": 30},
+                    {"code": "KPI200", "pageSize": 30},
+                    {"code": "KOSPI", "page": 1, "pageSize": 5}):
+              show(f"naver index/price/list {p}",
+                   S.get(F + "/stock/domestic/index/price/list", params=p, timeout=20))
+
+          # B) 한투 지수 일봉
           BASE = "https://openapi.koreainvestment.com:9443"
           key, sec = os.environ["KIS_APP_KEY"], os.environ["KIS_APP_SECRET"]
           tok = S.post(f"{BASE}/oauth2/tokenP", timeout=20, json={
               "grant_type": "client_credentials", "appkey": key,
               "appsecret": sec}).json()["access_token"]
-
-          def call(path, tr, params, label, cut=1100):
-              h = {"authorization": f"Bearer {tok}", "appkey": key, "appsecret": sec,
-                   "tr_id": tr, "custtype": "P"}
-              rr = S.get(BASE + path, headers=h, params=params, timeout=20)
-              print(f"\n[{label}] {rr.status_code} {params}")
-              print("   ", rr.text[:cut].replace("\n", " "))
-              time.sleep(0.3)
-              try: return rr.json()
-              except Exception: return None
-
-          for cand in [front[2], front[3], rows[0][2]]:
-              call("/uapi/domestic-futureoption/v1/quotations/inquire-price",
-                   "FHMIF10000000",
-                   {"FID_COND_MRKT_DIV_CODE": "F", "FID_INPUT_ISCD": cand},
-                   f"현재가 {cand}")
-
-          call("/uapi/domestic-futureoption/v1/quotations/inquire-daily-fuopchartprice",
-               "FHKIF03020100",
-               {"FID_COND_MRKT_DIV_CODE": "F", "FID_INPUT_ISCD": front[2],
-                "FID_INPUT_DATE_1": "20260801", "FID_INPUT_DATE_2": "20260922",
-                "FID_PERIOD_DIV_CODE": "D"}, f"일봉 {front[2]}", 1600)
+          h = {"authorization": f"Bearer {tok}", "appkey": key, "appsecret": sec,
+               "tr_id": "FHKUP03500100", "custtype": "P"}
+          for iscd in ("2001", "0001"):
+              show(f"KIS 지수일봉 {iscd}",
+                   S.get(BASE + "/uapi/domestic-stock/v1/quotations/inquire-daily-indexchartprice",
+                         headers=h, timeout=20,
+                         params={"FID_COND_MRKT_DIV_CODE": "U", "FID_INPUT_ISCD": iscd,
+                                 "FID_INPUT_DATE_1": "20260801", "FID_INPUT_DATE_2": "20260922",
+                                 "FID_PERIOD_DIV_CODE": "D"}), 1400)
           PY
