@@ -72,10 +72,11 @@ const WATCH_CHANNELS = [
 const WEEKLY_ROTATION = {
   1: '샤를세환',
   2: 'KKMD',
-  3: '까치살모',
-  4: '슈퍼소닉',
-  5: 'KFN+',
-  6: 'KFN1'
+  // 3(수)은 비움 — 밀리터리 칼럼 모음(수·일) 요일
+  4: '까치살모',
+  5: '슈퍼소닉',
+  6: 'KFN+',
+  7: 'KFN1'
 };
 
 
@@ -693,11 +694,7 @@ function sendWeeklyList(channelName) {
 // 자동 트리거 전용 — 일요일만 쉰다. 어느 채널을 보낼지는 sendWeeklyList 가
 // WEEKLY_ROTATION 에서 스스로 고른다.
 function scheduledWeekly() {
-  const dayOfWeek = Number(Utilities.formatDate(new Date(), 'Asia/Seoul', 'u')); // 1=월 … 7=일
-  if (dayOfWeek === 7) {
-    Logger.log('일요일 — 주간 모음 로테이션은 월~토에만 보냅니다.');
-    return;
-  }
+  // 그날 담당 채널이 없는 요일(현재 수요일)은 sendWeeklyList 가 알아서 넘어간다.
   sendWeeklyList();
 }
 
@@ -714,9 +711,9 @@ function scheduledWeekly() {
 //   page    : 2쪽 이후 붙일 페이지 파라미터 (첫 쪽엔 안 붙인다)
 //   linkRe  : 목록 HTML에서 기사 링크의 ID 를 뽑는 정규식(첫 그룹 = ID, 앞 8자리 날짜)
 //   view    : ID → 실제 기사 주소
-const MIL_DAYS = 31;         // 날짜형 소스: 며칠치를 모을지
+const MIL_DAYS = 4;          // 날짜형 소스: 며칠치를 모을지 (수·일 주 2회 → 지난 4일)
 const MIL_MAX_PAGES = 12;    // 소스당 목록 페이지 상한
-const MIL_LIMIT = 12;        // 날짜없는 소스: 최근 몇 건까지
+const MIL_LIMIT = 5;         // 날짜없는 소스(서울경제): 최근 몇 건까지 (4일치 근사)
 //
 // dated:true  — 기사 ID 앞 8자리가 YYYYMMDD. 지난 MIL_DAYS 일로 거른다.
 // dated:false — ID 가 순번이라 날짜를 못 읽는다. 목록 최근 limit 건을 그대로 담는다.
@@ -861,7 +858,7 @@ function sendMilitaryColumns() {
 
   const stamp = Utilities.formatDate(new Date(), 'Asia/Seoul', 'M월 d일');
   const head = [
-    '📰 <b>밀리터리 칼럼 한 달 모음 · ' + stamp + '</b>',
+    '📰 <b>밀리터리 칼럼 모음 · ' + stamp + '</b>',
     '최근 ' + MIL_DAYS + '일 · 소스 ' + groups.length + '개 · 기사 ' + total + '건',
     ''
   ];
@@ -892,8 +889,8 @@ function sendMilitaryColumns() {
 // 자동 트리거 전용 — 일요일에만 보낸다.
 function scheduledNownews() {
   const dayOfWeek = Number(Utilities.formatDate(new Date(), 'Asia/Seoul', 'u')); // 1=월 … 7=일
-  if (dayOfWeek !== 7) {
-    Logger.log('일요일이 아니라 밀리터리 칼럼 모음을 건너뜁니다.');
+  if (dayOfWeek !== 3 && dayOfWeek !== 7) {
+    Logger.log('수·일요일이 아니라 밀리터리 칼럼 모음을 건너뜁니다.');
     return;
   }
   sendMilitaryColumns();
@@ -911,9 +908,8 @@ function installNownewsTrigger() {
       ScriptApp.deleteTrigger(trigger);
     }
   });
-  ScriptApp.newTrigger('scheduledNownews').timeBased()
-    .onWeekDay(ScriptApp.WeekDay.SUNDAY).atHour(8).create();
-  Logger.log('일요일 오전 8시대에 밀리터리 칼럼 한 달 모음을 보냅니다.');
+  ScriptApp.newTrigger('scheduledNownews').timeBased().everyDays(1).atHour(8).create();
+  Logger.log('매일 오전 8시대에 확인해서, 수·일요일에 밀리터리 칼럼 모음을 보냅니다.');
 }
 
 

@@ -206,7 +206,7 @@
     - **3일 간격은 마지막 발송 기준**: 트리거는 매일 07시에 돌고(`scheduledDigest`),
       `LAST_DIGEST_AT`에서 3일(−6h 여유)이 안 지났으면 건너뛴다. 수동 갱신도 발송이므로
       그 시점부터 다시 3일을 센다. GAS everyDays(3)는 기준점을 못 옮겨 이렇게 했다.
-    - **주간(평일) 모음**: 3일 모음과 별개로, 월~토 오전 8시대(`scheduledWeekly`, 일요일 스킵)에 WEEKLY_ROTATION 의 그날 담당 채널만
+    - **주간(평일) 모음**: 3일 모음과 별개로, 매일 오전 8시대(`scheduledWeekly`)에 WEEKLY_ROTATION 의 그날 담당 채널만(월 샤를세환·화 KKMD·목 까치살모·금 슈퍼소닉·토 KFN+·일 KFN1, 수요일은 비움)
       '지난 7일'의 **일반 영상만**(쇼츠·라이브 제목 휴리스틱 제외) 채널별로 보낸다.
       대상은 weekly:false 를 안 단 5곳(샤를세환·KKMD·까치살모·슈퍼소닉·KFN+).
       `WEEKLY_` 롤링 로그는 발송해도 안 비우고 7일 지난 것만 청소 — 같은 영상이
@@ -214,11 +214,11 @@
       checkNewVideos 가 지나갈 때마다 로그에 적립해 메운다. 대시보드는 같은
       workflow_dispatch 에 kind:'weekly' 로 실려 `static/youtube_weekly/` +
       사이드바 `🗞 ┗방산유튜브.주간(평일)`. installWeeklyTrigger() 1회 실행 필요.
-    - **밀리터리 칼럼 주간 모음**(`sendMilitaryColumns`): 밀리터리 칼럼 목록에서 지난 31일
-      기사 링크만 모아 일요일 오전 8시대(`scheduledNownews`, `installNownewsTrigger`)에
+    - **밀리터리 칼럼 주간 모음**(`sendMilitaryColumns`): 밀리터리 칼럼 목록에서 지난 4일
+      기사 링크만 모아 수·일요일 오전 8시대(`scheduledNownews`, `installNownewsTrigger`)에
       텔레그램 두 통(소스별 제목 목록 + [소스명] 링크 묶음)으로. NotebookLM 오디오용.
       소스는 `MIL_SOURCES` 하나에서 관리 — 현재 나우뉴스 밀리터리+(무기인사이드) + 세계 박수찬의 軍 +
-      서울경제 이현호의 방산톡. 소스는 dated:true(ID에 YYYYMMDD → 지난 31일) /
+      서울경제 이현호의 방산톡. 소스는 dated:true(ID에 YYYYMMDD → 지난 MIL_DAYS일) /
       dated:false(ID가 순번 → 목록 최근 limit건, 서울경제가 이 경우)로 나뉜다. 기사 URL의 id 앞 8자리(YYYYMMDD)로 날짜를 판별하므로 마크업이
       바뀌어도 링크는 뽑힌다(제목은 best-effort). doPost 에 send_nownews 액션.
       매주 롤링(지난 한 달) — 겹침이 정상. `sendNownewsMilitary` 는 옛 이름 호환 별칭.
