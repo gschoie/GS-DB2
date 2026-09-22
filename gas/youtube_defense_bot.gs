@@ -56,6 +56,7 @@ const DIGEST_SKIP_SHORTS = true;
 // digest: false 를 단 채널은 낱개 알림만 오고 3일 모음에는 담지 않는다.
 // weekly: false 를 단 채널은 주간(평일) 모음에서 뺀다.
 // exclude: /정규식/ 을 단 채널은 제목이 걸리는 영상을 통째로 건너뛴다(알림·모음 모두).
+// include: /정규식/ 을 단 채널은 제목이 '걸리는 것만' 남긴다(허용목록 — 나머지는 전부 제외).
 const WATCH_CHANNELS = [
   { name: '샤를세환', id: 'UCVNAlg66t3JhkzT5JntclLg' },
   { name: 'KKMD', id: 'UCLDV9mI3tOQCrdPUWjogQZA' },
@@ -63,7 +64,11 @@ const WATCH_CHANNELS = [
   { name: '슈퍼소닉', id: 'UCXK_itQ6_JKltErZW_sQojQ' },
   { name: '밀덕', id: 'UCV-slcYbZrNCowaVd3cQaHQ', weekly: false },
   { name: 'KFN+', id: 'UCObL9hob3R03QSZU5olJZiQ' },
-  { name: 'KFN1', id: 'UCXNMgSZqmfX1_K8Uf4l4sog', digest: false, exclude: /이슈&국방/ }
+  // KFN1 은 잡다한 영상이 많아, 원하는 시리즈 제목이 든 것만 남긴다(공백 유무 무관).
+  {
+    name: 'KFN1', id: 'UCXNMgSZqmfX1_K8Uf4l4sog', digest: false,
+    include: /본게임\s*2|리얼\s*웨폰|이것이\s*전투다|K[-\s]?인사이트|밀덕들의\s*수다|밀리터리\s*사이언스/
+  }
 ];
 
 // 주간 모음 요일별 로테이션 — 매일 그날 담당 채널 1개의 지난 7일치만 보낸다.
@@ -72,10 +77,11 @@ const WATCH_CHANNELS = [
 const WEEKLY_ROTATION = {
   1: '샤를세환',
   2: 'KKMD',
-  3: '까치살모',
-  4: '슈퍼소닉',
-  5: 'KFN+',
-  6: 'KFN1'
+  // 3(수)은 비움 — 밀리터리 칼럼 모음(수·일) 요일
+  4: '까치살모',
+  5: '슈퍼소닉',
+  6: 'KFN+',
+  7: 'KFN1'
 };
 
 
@@ -204,7 +210,12 @@ function checkNewVideos() {
           let videoTitle = entry.getChildText('title', atom);
           const videoUrl = entry.getChild('link', atom).getAttribute('href').getValue();
 
-          // 채널별 제목 예외 — 걸리면 알림도 모음도 없이 조용히 넘어간다
+          // 채널별 제목 필터 — 알림도 모음도 없이 조용히 넘어간다.
+          // include(허용목록): 걸리는 것만 남긴다. exclude: 걸리는 것을 버린다.
+          if (channel.include && !channel.include.test(videoTitle)) {
+            Logger.log(`허용목록 밖이라 건너뜀 (${channel.name}): ${videoTitle}`);
+            return;
+          }
           if (channel.exclude && channel.exclude.test(videoTitle)) {
             Logger.log(`제목 예외로 건너뜀 (${channel.name}): ${videoTitle}`);
             return;
@@ -353,6 +364,7 @@ function fillBufferFromFeeds(days) {
         if (isBuffered_(videoId)) return;
 
         const title = entry.getChildText('title', atom);
+        if (channel.include && !channel.include.test(title)) return;
         if (channel.exclude && channel.exclude.test(title)) return;
         const link = entry.getChild('link', atom).getAttribute('href').getValue();
         if (bufferForDigest_(channel.name, videoId, title, link, published)) {
@@ -578,6 +590,7 @@ function weeklyEligible_(channel, title, url) {
   if (channel.weekly === false) return false;
   if (isShorts_(url)) return false;
   if (LIVE_TITLE_RE.test(title)) return false;
+  if (channel.include && !channel.include.test(title)) return false;
   if (channel.exclude && channel.exclude.test(title)) return false;
   return true;
 }
@@ -693,11 +706,7 @@ function sendWeeklyList(channelName) {
 // 자동 트리거 전용 — 일요일만 쉰다. 어느 채널을 보낼지는 sendWeeklyList 가
 // WEEKLY_ROTATION 에서 스스로 고른다.
 function scheduledWeekly() {
-  const dayOfWeek = Number(Utilities.formatDate(new Date(), 'Asia/Seoul', 'u')); // 1=월 … 7=일
-  if (dayOfWeek === 7) {
-    Logger.log('일요일 — 주간 모음 로테이션은 월~토에만 보냅니다.');
-    return;
-  }
+  // 그날 담당 채널이 없는 요일(현재 수요일)은 sendWeeklyList 가 알아서 넘어간다.
   sendWeeklyList();
 }
 
@@ -714,19 +723,21 @@ function scheduledWeekly() {
 //   page    : 2쪽 이후 붙일 페이지 파라미터 (첫 쪽엔 안 붙인다)
 //   linkRe  : 목록 HTML에서 기사 링크의 ID 를 뽑는 정규식(첫 그룹 = ID, 앞 8자리 날짜)
 //   view    : ID → 실제 기사 주소
-const MIL_DAYS = 31;         // 날짜형 소스: 며칠치를 모을지
+const MIL_DAYS = 4;          // 날짜형 소스: 며칠치를 모을지 (수·일 주 2회 → 지난 4일)
 const MIL_MAX_PAGES = 12;    // 소스당 목록 페이지 상한
-const MIL_LIMIT = 12;        // 날짜없는 소스: 최근 몇 건까지
+const MIL_LIMIT = 5;         // 날짜없는 소스(서울경제): 최근 몇 건까지 (4일치 근사)
 //
 // dated:true  — 기사 ID 앞 8자리가 YYYYMMDD. 지난 MIL_DAYS 일로 거른다.
 // dated:false — ID 가 순번이라 날짜를 못 읽는다. 목록 최근 limit 건을 그대로 담는다.
 const MIL_SOURCES = [
   {
     name: '나우뉴스 밀리터리+',
-    list: 'https://m.nownews.seoul.co.kr/newsList/science/military/?cp=nownews',
+    list: 'https://nownews.seoul.co.kr/newsList/science/military/?cp=nownews',
     page: '&page=',
     dated: true,
-    linkRe: /newsView\.php\?id=(\d{8}\d{4,})/g,
+    // 링크 경로가 아니라 기사 ID 자체를 잡는다(모바일·데스크톱 경로가 달라도 무관).
+    // 나우뉴스 ID 는 YYYYMMDD + '60' + 숫자라 이 패턴이 고유하다.
+    linkRe: /(\d{8}60\d{4,})/g,
     view: function (id) { return 'https://nownews.seoul.co.kr/news/newsView.php?id=' + id; }
   },
   {
@@ -734,7 +745,8 @@ const MIL_SOURCES = [
     list: 'https://m.segye.com/category/3000327',
     page: '?page=',
     dated: true,
-    linkRe: /newsView\/(\d{14})/g,
+    // 모바일은 /view/ID, 데스크톱은 /newsView/ID — 둘 다 잡는다. ID 는 14자리(날짜 8+순번 6).
+    linkRe: /[Vv]iew\/(\d{14})/g,
     view: function (id) { return 'https://www.segye.com/newsView/' + id; }
   },
   {
@@ -848,6 +860,7 @@ function sendMilitaryColumns() {
   let total = 0;
   MIL_SOURCES.forEach(function (src) {
     const items = collectMilSource_(src, cutoff);
+    Logger.log(src.name + ': ' + items.length + '건');
     if (items.length) { groups.push({ name: src.name, items: items }); total += items.length; }
   });
   if (total === 0) {
@@ -857,7 +870,7 @@ function sendMilitaryColumns() {
 
   const stamp = Utilities.formatDate(new Date(), 'Asia/Seoul', 'M월 d일');
   const head = [
-    '📰 <b>밀리터리 칼럼 한 달 모음 · ' + stamp + '</b>',
+    '📰 <b>밀리터리 칼럼 모음 · ' + stamp + '</b>',
     '최근 ' + MIL_DAYS + '일 · 소스 ' + groups.length + '개 · 기사 ' + total + '건',
     ''
   ];
@@ -888,8 +901,8 @@ function sendMilitaryColumns() {
 // 자동 트리거 전용 — 일요일에만 보낸다.
 function scheduledNownews() {
   const dayOfWeek = Number(Utilities.formatDate(new Date(), 'Asia/Seoul', 'u')); // 1=월 … 7=일
-  if (dayOfWeek !== 7) {
-    Logger.log('일요일이 아니라 밀리터리 칼럼 모음을 건너뜁니다.');
+  if (dayOfWeek !== 3 && dayOfWeek !== 7) {
+    Logger.log('수·일요일이 아니라 밀리터리 칼럼 모음을 건너뜁니다.');
     return;
   }
   sendMilitaryColumns();
@@ -907,9 +920,8 @@ function installNownewsTrigger() {
       ScriptApp.deleteTrigger(trigger);
     }
   });
-  ScriptApp.newTrigger('scheduledNownews').timeBased()
-    .onWeekDay(ScriptApp.WeekDay.SUNDAY).atHour(8).create();
-  Logger.log('일요일 오전 8시대에 밀리터리 칼럼 한 달 모음을 보냅니다.');
+  ScriptApp.newTrigger('scheduledNownews').timeBased().everyDays(1).atHour(8).create();
+  Logger.log('매일 오전 8시대에 확인해서, 수·일요일에 밀리터리 칼럼 모음을 보냅니다.');
 }
 
 
