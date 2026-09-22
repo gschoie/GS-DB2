@@ -1,43 +1,124 @@
 {
-  "date": "2026-09-21",
-  "prev_date": "2026-09-18",
-  "generated_at": "2026-09-21 16:21",
+  "date": "2026-09-22",
+  "prev_date": "2026-09-21",
+  "generated_at": "2026-09-22 09:21",
   "base_date": "",
   "prev_base_date": "",
   "same_base": false,
   "first_run": false,
   "etfs": [
     {
-      "code": "426030",
-      "label": "TIME 미국나스닥100액티브",
-      "group": "TIME(구 TIMEFOLIO)",
+      "code": "471780",
+      "label": "TIGER 코리아테크액티브",
+      "group": "TIGER",
       "flow_factor": 1.0,
+      "new": [],
+      "gone": [
+        {
+          "key": "000660",
+          "name": "SK하이닉스",
+          "code": "000660",
+          "weight_prev": 23.75,
+          "shares_prev": 47.0
+        },
+        {
+          "key": "005930",
+          "name": "삼성전자",
+          "code": "005930",
+          "weight_prev": 23.72,
+          "shares_prev": 334.0
+        },
+        {
+          "key": "009150",
+          "name": "삼성전기",
+          "code": "009150",
+          "weight_prev": 9.44,
+          "shares_prev": 25.0
+        },
+        {
+          "key": "001820",
+          "name": "삼화콘덴서",
+          "code": "001820",
+          "weight_prev": 5.27,
+          "shares_prev": 134.0
+        },
+        {
+          "key": "031980",
+          "name": "피에스케이홀딩스",
+          "code": "031980",
+          "weight_prev": 3.35,
+          "shares_prev": 77.0
+        },
+        {
+          "key": "007660",
+          "name": "이수페타시스",
+          "code": "007660",
+          "weight_prev": 3.16,
+          "shares_prev": 112.0
+        },
+        {
+          "key": "000150",
+          "name": "두산",
+          "code": "000150",
+          "weight_prev": 3.15,
+          "shares_prev": 8.0
+        },
+        {
+          "key": "095340",
+          "name": "ISC",
+          "code": "095340",
+          "weight_prev": 3.09,
+          "shares_prev": 61.0
+        },
+        {
+          "key": "403870",
+          "name": "HPSP",
+          "code": "403870",
+          "weight_prev": 3.04,
+          "shares_prev": 207.0
+        },
+        {
+          "key": "095610",
+          "name": "테스",
+          "code": "095610",
+          "weight_prev": 3.04,
+          "shares_prev": 81.0
+        }
+      ],
+      "moves": [],
+      "has_weight": false
+    },
+    {
+      "code": "441640",
+      "label": "KODEX 미국배당커버드콜액티브",
+      "group": "KODEX",
+      "flow_factor": 1.0926,
       "new": [
         {
-          "key": "SPACE EXPLORATION TECHN-CL A",
-          "name": "SPACE EXPLORATION TECHN-CL A",
+          "key": "NVIDIA Corp",
+          "name": "NVIDIA Corp",
           "code": "",
           "weight": 0.0,
-          "shares": 114.0
+          "shares": 48.0
         }
       ],
       "gone": [
         {
-          "key": "AMAZON.COM INC",
-          "name": "AMAZON.COM INC",
+          "key": "TJX COMPANIES INC",
+          "name": "TJX COMPANIES INC",
           "code": "",
           "weight_prev": 0.0,
-          "shares_prev": 91.0
+          "shares_prev": 55.0
         }
       ],
       "moves": [
         {
-          "key": "COREWEAVE INC-CL A",
-          "name": "COREWEAVE INC-CL A",
+          "key": "WAL-MART STORES INC",
+          "name": "WAL-MART STORES INC",
           "code": "",
-          "shares_now": 156.0,
-          "shares_prev": 117.0,
-          "active_share_pct": 33.3,
+          "shares_now": 50.0,
+          "shares_prev": 66.0,
+          "active_share_pct": -30.7,
           "active_weight_pp": null,
           "weight_now": 0.0,
           "weight_prev": 0.0,
@@ -47,26 +128,52 @@
       "has_weight": false
     },
     {
+      "code": "441800",
+      "label": "TIME Korea플러스배당액티브",
+      "group": "TIME(구 TIMEFOLIO)",
+      "flow_factor": 1.0,
+      "new": [
+        {
+          "key": "032830",
+          "name": "삼성생명",
+          "code": "032830",
+          "weight": 2.43,
+          "shares": 49.0
+        }
+      ],
+      "gone": [
+        {
+          "key": "017670",
+          "name": "SK텔레콤",
+          "code": "017670",
+          "weight_prev": 3.1,
+          "shares_prev": 200.0
+        }
+      ],
+      "moves": [],
+      "has_weight": true
+    },
+    {
       "code": "463050",
       "label": "TIME K바이오액티브",
       "group": "TIME(구 TIMEFOLIO)",
       "flow_factor": 1.0,
       "new": [
         {
-          "key": "237690",
-          "name": "에스티팜",
-          "code": "237690",
-          "weight": 4.07,
-          "shares": 249.0
+          "key": "310210",
+          "name": "보로노이",
+          "code": "310210",
+          "weight": 4.65,
+          "shares": 169.0
         }
       ],
       "gone": [
         {
-          "key": "475830",
-          "name": "오름테라퓨틱",
-          "code": "475830",
-          "weight_prev": 4.97,
-          "shares_prev": 543.0
+          "key": "237690",
+          "name": "에스티팜",
+          "code": "237690",
+          "weight_prev": 4.07,
+          "shares_prev": 249.0
         }
       ],
       "moves": [],
@@ -79,75 +186,72 @@
       "flow_factor": 1.0,
       "new": [
         {
+          "key": "086790",
+          "name": "하나금융지주",
+          "code": "086790",
+          "weight": 1.47,
+          "shares": 120.0
+        }
+      ],
+      "gone": [
+        {
           "key": "000500",
           "name": "가온전선",
           "code": "000500",
-          "weight": 1.62,
-          "shares": 54.0
-        }
-      ],
-      "gone": [
-        {
-          "key": "267250",
-          "name": "HD현대",
-          "code": "267250",
-          "weight_prev": 1.56,
-          "shares_prev": 75.0
+          "weight_prev": 1.62,
+          "shares_prev": 54.0
         }
       ],
       "moves": [],
       "has_weight": true
     },
     {
-      "code": "471780",
-      "label": "TIGER 코리아테크액티브",
+      "code": "365040",
+      "label": "TIGER AI코리아그로스액티브",
       "group": "TIGER",
       "flow_factor": 1.0,
       "new": [
         {
-          "key": "000150",
-          "name": "두산",
-          "code": "000150",
-          "weight": 3.15,
-          "shares": 8.0
+          "key": "105560",
+          "name": "KB금융",
+          "code": "105560",
+          "weight": 0.84,
+          "shares": 176.0
         }
       ],
       "gone": [
         {
-          "key": "222800",
-          "name": "심텍",
-          "code": "222800",
-          "weight_prev": 3.16,
-          "shares_prev": 88.0
+          "key": "329180",
+          "name": "HD현대중공업",
+          "code": "329180",
+          "weight_prev": 0.86,
+          "shares_prev": 68.0
         }
       ],
       "moves": [],
       "has_weight": true
     },
     {
-      "code": "472150",
-      "label": "TIGER 배당커버드콜액티브",
-      "group": "TIGER",
+      "code": "0162Y0",
+      "label": "TIME 코스닥액티브",
+      "group": "TIME(구 TIMEFOLIO)",
       "flow_factor": 1.0,
-      "new": [
+      "new": [],
+      "gone": [],
+      "moves": [
         {
-          "key": "010120",
-          "name": "LS ELECTRIC",
-          "code": "010120",
-          "weight": 1.65,
-          "shares": 16.0
+          "key": "119850",
+          "name": "지엔씨에너지",
+          "code": "119850",
+          "shares_now": 399.0,
+          "shares_prev": 299.0,
+          "active_share_pct": 33.4,
+          "active_weight_pp": 1.24,
+          "weight_now": 5.43,
+          "weight_prev": 4.31,
+          "headline": false
         }
       ],
-      "gone": [
-        {
-          "key": "012450",
-          "name": "한화에어로스페이스",
-          "code": "012450",
-          "weight_prev": 1.65,
-          "shares_prev": 3.0
-        }
-      ],
-      "moves": [],
       "has_weight": true
     }
   ],
@@ -157,10 +261,10 @@
     "share_pct_min": 30.0
   },
   "summary": {
-    "etfs_changed": 5,
+    "etfs_changed": 7,
     "new_total": 5,
-    "gone_total": 5,
-    "moves_total": 1,
+    "gone_total": 15,
+    "moves_total": 2,
     "universe": 20
   }
 }
