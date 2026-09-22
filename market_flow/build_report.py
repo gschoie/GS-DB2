@@ -125,12 +125,13 @@ def nice_max(m):
     return 10 * e
 
 
-def combo_chart(rows, color, line_unit, width=760, height=250):
-    """현물(바, 좌축 억원) vs 선물(라인, 우축) 이중축 차트.
-    rows: [(date, spot_v, fut_v), …] — 두 축 모두 0 중심 대칭이라 0선을 공유한다."""
+def combo_chart(rows, color, line_unit, bar_label="현물 순매수", line_label="선물 순매수",
+                bar_unit="억원", width=760, height=250):
+    """바(좌축) vs 라인(우축) 이중축 차트.
+    rows: [(date, bar_v, line_v), …] — 두 축 모두 0 중심 대칭이라 0선을 공유한다."""
     rows = [r for r in rows if r[1] is not None and r[2] is not None]
     if not rows:
-        return '<p class="na">현물·선물 동시 확정 데이터 없음</p>'
+        return '<p class="na">두 계열이 함께 있는 날이 아직 없음</p>'
     pad_l, pad_r, pad_t, pad_b = 64, 64, 14, 30
     sm = nice_max(max(abs(v) for _, v, _ in rows))
     fm = nice_max(max(abs(v) for _, _, v in rows))
@@ -165,8 +166,8 @@ def combo_chart(rows, color, line_unit, width=760, height=250):
     g.append(f'<polyline points="{poly}" fill="none" stroke="{color}" '
              f'stroke-width="2.2" stroke-linejoin="round"/>')
     g += [f'<circle cx="{x:.1f}" cy="{y:.1f}" r="2.6" fill="{color}"/>' for x, y in pts]
-    legend = (f'<span style="color:{color};opacity:.65">■ 현물 순매수 (좌축·억원)</span> · '
-              f'<span style="color:{color}">●━ 선물 순매수 (우축·{line_unit})</span>')
+    legend = (f'<span style="color:{color};opacity:.65">■ {bar_label} (좌축·{bar_unit})</span> · '
+              f'<span style="color:{color}">●━ {line_label} (우축·{line_unit})</span>')
     return (f'<div class="legend">{legend}</div>'
             f'<svg viewBox="0 0 {width} {height}" role="img">{"".join(g)}</svg>')
 
@@ -228,32 +229,33 @@ def stock_flow_block(today, is_latest):
             f'</div><p class="note">한국투자증권 장중 가집계 — 확정치와 다를 수 있음{inst_note}</p></div>')
 
 
-def fut_snapshot(day):
-    """당일 K200 선물 순매수 (확정 우선, 없으면 장중 곡선 마지막 점).
-    반환: ({individual, foreign, inst}, 출처라벨) 또는 (None, None)"""
-    f = day.get("confirmed", {}).get("futures")
-    if f:
-        return ({"individual": f.get("individual"), "foreign": f.get("foreign"),
-                 "inst": f.get("inst_total")}, "확정")
-    c = (day.get("curve") or {}).get("futures")
-    if c:
-        last = c[-1]
-        return ({"individual": last[1], "foreign": last[2], "inst": last[3]},
-                f"장중 {last[0]}")
-    return None, None
+def basis_snapshot(day):
+    """당일 베이시스 스냅샷 (최근 슬롯 우선, 없으면 일별 확정).
+    반환: (값dict, 출처라벨) 또는 (None, None)"""
+    for k in ("1640", "1540", "1300", "1000"):
+        b = (day.get("slots", {}).get(k) or {}).get("basis")
+        if b:
+            return b, SLOT_LABEL[k]
+    b = day.get("confirmed", {}).get("basis")
+    return (b, "종가") if b else (None, None)
 
 
-def fut_quadrant(spot, fut):
-    """현물·선물 방향 조합 → (조합라벨, 해석, css클래스)"""
-    if spot is None or fut is None:
+def basis_read(b):
+    """베이시스·괴리율 → (상태라벨, 해석, css클래스). 값이 없으면 None."""
+    if not b or b.get("basis") is None:
         return None
-    if spot >= 0 and fut >= 0:
-        return ("현·선물 동반 매수", "방향성 강세 베팅", "pos")
-    if spot >= 0 > fut:
-        return ("현물 매수 · 선물 매도", "헤지 동반 — 상승 신뢰 제한", "")
-    if spot < 0 <= fut:
-        return ("현물 매도 · 선물 매수", "숏커버/반등 베팅 성격", "")
-    return ("현·선물 동반 매도", "리스크 오프 압력", "neg")
+    v, dp = b["basis"], b.get("dprt")
+    if v > 0:
+        state, cls = "콘탱고", "pos"
+        desc = "선물이 현물보다 비싸다 — 차익 매수(현물 사고 선물 팔기) 유인"
+    elif v < 0:
+        state, cls = "백워데이션", "neg"
+        desc = "선물이 현물보다 싸다 — 차익 매도(현물 팔고 선물 사기) 압력"
+    else:
+        state, cls, desc = "동일", "", "괴리 없음"
+    if dp is not None:
+        desc += f" · 이론가 대비 {dp:+.2f}%"
+    return state, desc, cls
 
 
 def bar_chart(days, width=760, height=240):
@@ -297,7 +299,64 @@ def bar_chart(days, width=760, height=240):
             f'<svg viewBox="0 0 {width} {height}" role="img">{"".join(g)}</svg>')
 
 
-def build_signals(today, prev_slot_snap, fut=None, fut_src="", fut_unit="계약"):
+def basis_section(now, src, days, conf_days, contract, is_latest):
+    """🔀 현·선물 괴리 섹션. days: [(날짜, {fut, spot, basis, contract}), …]"""
+    title = ('<h2>🔀 현·선물 괴리 <span class="na" style="font-weight:400;font-size:12px">'
+             f'(K200 선물 {contract.get("name", "")} · 지수 포인트)</span></h2>')
+    if not now and not days:
+        return (title + '<div class="card"><p class="na">선물 가격 수집 대기 중 — '
+                '다음 수집 사이클부터 표시</p></div>') if is_latest else ""
+
+    chips = ""
+    read = basis_read(now)
+    if now:
+        def chip(label, val, cls="", sub=""):
+            return (f'<div class="chip"><span>{label}</span>'
+                    f'<b class="{cls}">{val}</b>' + (f"<span>{sub}</span>" if sub else "")
+                    + "</div>")
+        chg = now.get("chg_pct")
+        chips += chip("K200 선물", f'{now["fut"]:,.2f}',
+                      "pos" if (chg or 0) > 0 else "neg" if (chg or 0) < 0 else "",
+                      f"{chg:+.2f}%" if chg is not None else "")
+        if now.get("spot") is not None:
+            chips += chip("현물 KOSPI200", f'{now["spot"]:,.2f}')
+        if read:
+            state, desc, cls = read
+            chips += chip(f"시장 베이시스 · {state}", f'{now["basis"]:+.2f}p', cls)
+        if now.get("dprt") is not None:
+            chips += chip("괴리율", f'{now["dprt"]:+.2f}%',
+                          "neg" if now["dprt"] < 0 else "pos",
+                          f'이론가 {now["theo"]:,.2f}' if now.get("theo") else "")
+        if now.get("oi") is not None:
+            chips += chip("미결제약정", f'{now["oi"]:,.0f}', "",
+                          (f'{now["oi_chg"]:+,.0f}' if now.get("oi_chg") is not None else "")
+                          + (f' · 잔존 {now["remain"]:.0f}일' if now.get("remain") else ""))
+        chips = (f'<div class="chips">{chips}</div>'
+                 f'<p class="note">기준: {src}'
+                 + (f' · {read[1]}' if read else '') + '</p>')
+
+    # 차익 프로그램(바) vs 베이시스(라인) — 베이시스가 벌어지면 차익 매수가 붙는다.
+    arb_by_date = {d: c["program"]["arb_net"] for d, c in conf_days
+                   if c.get("program") and c["program"].get("arb_net") is not None}
+    rows = [(d, arb_by_date.get(d), b["basis"]) for d, b in days]
+    chart = combo_chart(rows, C_ARB, "p", bar_label="차익 프로그램 순매수",
+                        line_label="시장 베이시스")
+    trail = ""
+    if days:
+        vals = [b["basis"] for _, b in days if b.get("basis") is not None]
+        back = sum(1 for v in vals if v < 0)
+        trail = (f'<p class="note">최근 {len(vals)}영업일 중 백워데이션 {back}일 · '
+                 f'평균 {sum(vals)/len(vals):+.2f}p</p>')
+    return f"""{title}
+{chips}
+<div class="card"><p class="ctitle" style="color:{C_ARB}">차익 프로그램 vs 베이시스</p>{chart}</div>
+{trail}
+<p class="note">선물 <b>투자자별</b>(누가 샀나)은 2026-09 네이버 서비스 개편으로 사라졌다 —
+대체 경로가 없어 가격 괴리로 대신한다. 베이시스는 만기까지 남은 기간에 비례하므로
+<b>월물 교체일(분기 두 번째 목요일)에 레벨이 한 번 튄다</b>.</p>"""
+
+
+def build_signals(today, prev_slot_snap, basis=None, basis_src=""):
     """룰 기반 한줄 해석 목록."""
     slots = today.get("slots", {})
     latest = None
@@ -310,17 +369,21 @@ def build_signals(today, prev_slot_snap, fut=None, fut_src="", fut_unit="계약"
     sig = []
     frn, ind, inst = latest["foreign"], latest["individual"], latest["institution"]
     arb, nonarb, prog = latest["arb"], latest["nonarb"], latest["program"]
-    if fut and fut.get("foreign") is not None and abs(fut["foreign"]) >= 800:
-        ff = fut["foreign"]
-        tail = f"(선물 {fmt(ff)}{fut_unit}·{fut_src})"
-        if frn > 0 and ff > 0:
-            sig.append(f"외국인 현·선물 동반 매수 {tail} — 방향성 강세 베팅")
-        elif frn > 0 > ff:
-            sig.append(f"외국인 현물 매수·선물 매도 {tail} — 헤지 동반, 지수 상단 제한 가능")
-        elif frn < 0 < ff:
-            sig.append(f"외국인 현물 매도·선물 매수 {tail} — 숏커버/반등 베팅 성격")
-        elif frn < 0 and ff < 0:
-            sig.append(f"외국인 현·선물 동반 매도 {tail} — 리스크 오프 압력")
+    # 선물 '투자자별'은 2026-09 네이버 개편으로 없어졌다. 대신 가격 괴리로 읽는다 —
+    # 베이시스·괴리율은 차익 프로그램이 어느 쪽으로 걸리는지를 직접 설명한다.
+    b = basis or {}
+    if b.get("basis") is not None:
+        v, dp = b["basis"], b.get("dprt")
+        tail = f"(선물 {b['fut']:,.2f} · 현물 {b['spot']:,.2f}·{basis_src})" if b.get("spot") else ""
+        if v < 0 and arb < 0:
+            sig.append(f"백워데이션 {v:+.2f}p + 차익 매도 {tail} — 프로그램 매물 압력 지속")
+        elif v > 0 and arb > 0:
+            sig.append(f"콘탱고 {v:+.2f}p + 차익 매수 {tail} — 프로그램 유입 우호")
+        elif v < 0 and arb > 0:
+            sig.append(f"백워데이션인데 차익 매수 {tail} — 스프레드 되돌림 기대 성격")
+        if dp is not None and abs(dp) >= 0.5:
+            sig.append(f"괴리율 {dp:+.2f}% — 선물이 이론가보다 "
+                       f"{'싸다, 차익 매도 유인' if dp < 0 else '비싸다, 차익 매수 유인'}")
     if frn > 0 and arb > 0:
         sig.append("외국인 현물 매수 + 차익 프로그램 매수 — 베이시스 개선 동반 상승 압력")
     elif frn > 0 > prog:
@@ -365,12 +428,11 @@ def render_day(hist, all_dates, i):
         snap_table = '<p class="na">장중 스냅샷 데이터 없음</p>'
     else:
         snap_table = f'<table><thead><tr><th></th>{head}</tr></thead><tbody>{body}</tbody></table>'
-    fut_unit = hist.get("futures_unit", "계약")
-    conf_fut = conf.get("futures")
+    conf_bas = conf.get("basis")
     conf_note = ""
     if conf_inv and conf_prg:
-        fut_seg = (f' / K200선물 외인 {fmt(conf_fut["foreign"])}{fut_unit}'
-                   if conf_fut else "")
+        fut_seg = (f' / K200선물 종가 {conf_bas["fut"]:,.2f} '
+                   f'(베이시스 {conf_bas["basis"]:+.2f}p)' if conf_bas else "")
         conf_note = (f'<p class="note">일별 확정(거래소): 개인 {fmt(conf_inv["individual"])} · '
                      f'외국인 {fmt(conf_inv["foreign"])} · 기관 {fmt(conf_inv["inst_total"])} / '
                      f'프로그램 {fmt(conf_prg["total_net"])} '
@@ -397,18 +459,6 @@ def render_day(hist, all_dates, i):
         prg_chart = line_chart([("차익", C_ARB, [(r[0], r[1]) for r in pc]),
                                 ("비차익", C_NONARB, [(r[0], r[2]) for r in pc]),
                                 ("전체", C_TOTAL, [(r[0], r[3]) for r in pc])])
-    fut_curve_html = ""
-    fc = curve.get("futures")
-    if fc:
-        fut_curve_html = (
-            f'<h2>🎯 장중 누적 흐름 — K200 선물 <span class="na" '
-            f'style="font-weight:400;font-size:12px">({curve_day} · {fut_unit})</span></h2>'
-            '<div class="card">'
-            + line_chart([("개인", C_IND, [(r[0], r[1]) for r in fc]),
-                          ("외국인", C_FRN, [(r[0], r[2]) for r in fc]),
-                          ("기관", C_INST, [(r[0], r[3]) for r in fc])], unit=fut_unit)
-            + '</div>')
-
     # ── 해당 일자 기준 최근 20일 확정 ──
     upto = all_dates[:i + 1]
     conf_days = [(d, days[d]["confirmed"]) for d in upto if days[d].get("confirmed")]
@@ -453,55 +503,17 @@ def render_day(hist, all_dates, i):
                    f"<thead><tr><th>날짜</th>{det_head}</tr></thead>"
                    f"<tbody>{det_body}</tbody></table></div>")
 
-    # ── 현·선물 흐름 (K200 선물) ──
-    fut_now, fut_src = fut_snapshot(today)
-    both = [(d, c["investor"], c["futures"]) for d, c in conf_days
-            if "investor" in c and "futures" in c][-20:]
-    snap_latest = slots[slot_keys[-1]] if slot_keys else {}
-    spot_f = conf_inv["foreign"] if conf_inv else snap_latest.get("foreign")
-    spot_i = conf_inv["inst_total"] if conf_inv else snap_latest.get("institution")
-
-    def quad_card(name, color, spot, futv):
-        q = fut_quadrant(spot, futv)
-        if q is None:
-            return ""
-        combo, desc, cls = q
-        return (f'<div class="chip" style="border-top:3px solid {color}">'
-                f'<span>{name} · 현물 {fmt(spot)}억 / 선물 {fmt(futv)}{fut_unit}</span>'
-                f'<b class="{cls}" style="font-size:14px">{combo}</b>'
-                f'<span>{desc}</span></div>')
-
-    if fut_now or both:
-        quads = ""
-        if fut_now:
-            quads = (quad_card("외국인", C_FRN, spot_f, fut_now["foreign"])
-                     + quad_card("기관", C_INST, spot_i, fut_now["inst"]))
-            quads = (f'<div class="chips">{quads}</div>'
-                     f'<p class="note">선물 수치 기준: {fut_src} · 단위 {fut_unit}</p>') if quads else ""
-        fut_cum_f = sum(f["foreign"] for _, _, f in both)
-        fut_cum_i = sum(f["inst_total"] for _, _, f in both)
-        cum_note = (f'<p class="note">최근 {len(both)}영업일 누적 선물 순매수: '
-                    f'외국인 {fmt(fut_cum_f)}{fut_unit} · 기관 {fmt(fut_cum_i)}{fut_unit}</p>'
-                    if both else "")
-        frn_combo = combo_chart([(d, inv["foreign"], f["foreign"])
-                                 for d, inv, f in both], C_FRN, fut_unit)
-        inst_combo = combo_chart([(d, inv["inst_total"], f["inst_total"])
-                                  for d, inv, f in both], C_INST, fut_unit)
-        fut_section = f"""
-<h2>🔀 현·선물 흐름 <span class="na" style="font-weight:400;font-size:12px">(K200 선물 · {fut_unit})</span></h2>
-{quads}
-<div class="card"><p class="ctitle" style="color:{C_FRN}">외국인 — 현물 vs 선물</p>{frn_combo}</div>
-<div class="card"><p class="ctitle" style="color:{C_INST}">기관 — 현물 vs 선물</p>{inst_combo}</div>
-{cum_note}"""
-    else:
-        fut_section = ('<h2>🔀 현·선물 흐름 <span class="na" style="font-weight:400;'
-                       'font-size:12px">(K200 선물)</span></h2><div class="card">'
-                       '<p class="na">선물 데이터 수집 대기 중 — 다음 수집 사이클부터 표시</p></div>'
-                       if is_latest else "")
+    # ── 현·선물 괴리 (베이시스) ──
+    # 2026-09 네이버 개편으로 선물 '투자자별'이 사라졌다. 누가 샀는지는 알 수 없지만
+    # 선물이 현물보다 비싼지/싼지는 가격으로 알 수 있고, 그게 차익 프로그램을 설명한다.
+    bas_now, bas_src = basis_snapshot(today)
+    bas_days = [(d, c["basis"]) for d, c in conf_days if c.get("basis")][-20:]
+    con = hist.get("fut_contract") or {}
+    fut_section = basis_section(bas_now, bas_src, bas_days, conf_days, con, is_latest)
 
     # ── 시그널 ──
     prev_snap = slots[slot_keys[-2]] if len(slot_keys) >= 2 else None
-    sig = build_signals(today, prev_snap, fut_now, fut_src, fut_unit)
+    sig = build_signals(today, prev_snap, bas_now, bas_src)
     sig_html = "".join(f"<li>{s}</li>" for s in sig) or "<li>특이 신호 없음</li>"
 
     chg = kospi.get("chg_pct", 0)
@@ -536,7 +548,6 @@ def render_day(hist, all_dates, i):
 <div class="card">{inv_chart}</div>
 <h2>⚙️ 장중 누적 흐름 — 프로그램 <span class="na" style="font-weight:400;font-size:12px">({curve_day})</span></h2>
 <div class="card">{prg_chart}</div>
-{fut_curve_html}
 {fut_section}
 
 <h2>📅 최근 20일 일별 순매수 (확정)</h2>

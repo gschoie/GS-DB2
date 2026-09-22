@@ -1,7 +1,7 @@
-name: "[시험용] K200 선물 시세 경로 확인"
+name: "[시험용] 베이시스 수집 실호출 확인"
 
-# 베이시스 소급용 — KOSPI200 지수 '일별 종가' 경로를 확인한다.
-# 확인이 끝나면 이 파일은 지운다.
+# 새로 넣은 베이시스 수집 함수들을 **실제 한투 API 로** 한 번 돌려본다.
+# 저장·발송·커밋은 하지 않는다(읽기만). 확인이 끝나면 이 파일은 지운다.
 on:
   push:
     branches: [claude/telegram-trend-analysis-logic-7efsdy]
@@ -12,45 +12,40 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
+      - uses: actions/checkout@v5
       - uses: actions/setup-python@v6
         with: {python-version: "3.12"}
-      - run: pip install requests
-      - name: 탐색
+      - name: 패키지
+        working-directory: market_flow
+        run: pip install -r requirements.txt
+      - name: 산식 테스트
+        working-directory: market_flow
+        run: python -m unittest discover -s tests -p "test_*.py" -v
+      - name: 실호출
+        working-directory: market_flow
         env:
           KIS_APP_KEY: ${{ secrets.KIS_APP_KEY }}
           KIS_APP_SECRET: ${{ secrets.KIS_APP_SECRET }}
         run: |
           python - <<'PY'
-          import os
-          import requests
+          import json
+          import scrape
 
-          S = requests.Session(); S.headers.update({"User-Agent": "Mozilla/5.0"})
+          con = scrape.front_contract()
+          print("근월물:", con)
 
-          def show(label, r, cut=1200):
-              print(f"\n[{label}] {r.status_code}")
-              print("   ", r.text[:cut].replace("\n", " "))
+          b = scrape.futures_basis(con["code"])
+          print("현재 베이시스:", json.dumps(b, ensure_ascii=False))
+          assert b["fut"] and b["spot"], "선물/현물 가격이 비었다"
+          assert abs((b["fut"] - b["spot"]) - b["basis"]) < 0.05, \
+              f"베이시스 불일치: {b['fut']} - {b['spot']} != {b['basis']}"
 
-          # A) 네이버 신규 front-api 지수 일별 시세
-          F = "https://m.stock.naver.com/front-api"
-          for p in ({"code": "KPI200", "page": 1, "pageSize": 30},
-                    {"code": "KPI200", "pageSize": 30},
-                    {"code": "KOSPI", "page": 1, "pageSize": 5}):
-              show(f"naver index/price/list {p}",
-                   S.get(F + "/stock/domestic/index/price/list", params=p, timeout=20))
-
-          # B) 한투 지수 일봉
-          BASE = "https://openapi.koreainvestment.com:9443"
-          key, sec = os.environ["KIS_APP_KEY"], os.environ["KIS_APP_SECRET"]
-          tok = S.post(f"{BASE}/oauth2/tokenP", timeout=20, json={
-              "grant_type": "client_credentials", "appkey": key,
-              "appsecret": sec}).json()["access_token"]
-          h = {"authorization": f"Bearer {tok}", "appkey": key, "appsecret": sec,
-               "tr_id": "FHKUP03500100", "custtype": "P"}
-          for iscd in ("2001", "0001"):
-              show(f"KIS 지수일봉 {iscd}",
-                   S.get(BASE + "/uapi/domestic-stock/v1/quotations/inquire-daily-indexchartprice",
-                         headers=h, timeout=20,
-                         params={"FID_COND_MRKT_DIV_CODE": "U", "FID_INPUT_ISCD": iscd,
-                                 "FID_INPUT_DATE_1": "20260801", "FID_INPUT_DATE_2": "20260922",
-                                 "FID_PERIOD_DIV_CODE": "D"}), 1400)
+          bd = scrape.basis_daily(con["ym"])
+          print(f"\n일별 베이시스 {len(bd)}일")
+          for d in sorted(bd)[-12:]:
+              v = bd[d]
+              print(f"  {d} 선물 {v['fut']:>9,.2f} · 현물 {v['spot']:>9,.2f} "
+                    f"· 베이시스 {v['basis']:+7.2f}p · {v['contract']}")
+          contracts = sorted({v["contract"] for v in bd.values()})
+          print("\n쓰인 월물:", contracts)
           PY
