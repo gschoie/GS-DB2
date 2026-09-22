@@ -1,93 +1,12 @@
 {
   "date": "2026-09-22",
   "prev_date": "2026-09-21",
-  "generated_at": "2026-09-22 09:21",
+  "generated_at": "2026-09-22 10:21",
   "base_date": "",
   "prev_base_date": "",
   "same_base": false,
   "first_run": false,
   "etfs": [
-    {
-      "code": "471780",
-      "label": "TIGER 코리아테크액티브",
-      "group": "TIGER",
-      "flow_factor": 1.0,
-      "new": [],
-      "gone": [
-        {
-          "key": "000660",
-          "name": "SK하이닉스",
-          "code": "000660",
-          "weight_prev": 23.75,
-          "shares_prev": 47.0
-        },
-        {
-          "key": "005930",
-          "name": "삼성전자",
-          "code": "005930",
-          "weight_prev": 23.72,
-          "shares_prev": 334.0
-        },
-        {
-          "key": "009150",
-          "name": "삼성전기",
-          "code": "009150",
-          "weight_prev": 9.44,
-          "shares_prev": 25.0
-        },
-        {
-          "key": "001820",
-          "name": "삼화콘덴서",
-          "code": "001820",
-          "weight_prev": 5.27,
-          "shares_prev": 134.0
-        },
-        {
-          "key": "031980",
-          "name": "피에스케이홀딩스",
-          "code": "031980",
-          "weight_prev": 3.35,
-          "shares_prev": 77.0
-        },
-        {
-          "key": "007660",
-          "name": "이수페타시스",
-          "code": "007660",
-          "weight_prev": 3.16,
-          "shares_prev": 112.0
-        },
-        {
-          "key": "000150",
-          "name": "두산",
-          "code": "000150",
-          "weight_prev": 3.15,
-          "shares_prev": 8.0
-        },
-        {
-          "key": "095340",
-          "name": "ISC",
-          "code": "095340",
-          "weight_prev": 3.09,
-          "shares_prev": 61.0
-        },
-        {
-          "key": "403870",
-          "name": "HPSP",
-          "code": "403870",
-          "weight_prev": 3.04,
-          "shares_prev": 207.0
-        },
-        {
-          "key": "095610",
-          "name": "테스",
-          "code": "095610",
-          "weight_prev": 3.04,
-          "shares_prev": 81.0
-        }
-      ],
-      "moves": [],
-      "has_weight": false
-    },
     {
       "code": "441640",
       "label": "KODEX 미국배당커버드콜액티브",
@@ -206,6 +125,32 @@
       "has_weight": true
     },
     {
+      "code": "471780",
+      "label": "TIGER 코리아테크액티브",
+      "group": "TIGER",
+      "flow_factor": 1.0,
+      "new": [
+        {
+          "key": "222800",
+          "name": "심텍",
+          "code": "222800",
+          "weight": 3.02,
+          "shares": 88.0
+        }
+      ],
+      "gone": [
+        {
+          "key": "403870",
+          "name": "HPSP",
+          "code": "403870",
+          "weight_prev": 3.04,
+          "shares_prev": 207.0
+        }
+      ],
+      "moves": [],
+      "has_weight": true
+    },
+    {
       "code": "365040",
       "label": "TIGER AI코리아그로스액티브",
       "group": "TIGER",
@@ -253,6 +198,29 @@
         }
       ],
       "has_weight": true
+    },
+    {
+      "code": "426030",
+      "label": "TIME 미국나스닥100액티브",
+      "group": "TIME(구 TIMEFOLIO)",
+      "flow_factor": 1.0,
+      "new": [],
+      "gone": [],
+      "moves": [
+        {
+          "key": "SPACE EXPLORATION TECHN-CL A",
+          "name": "SPACE EXPLORATION TECHN-CL A",
+          "code": "",
+          "shares_now": 157.0,
+          "shares_prev": 114.0,
+          "active_share_pct": 37.7,
+          "active_weight_pp": null,
+          "weight_now": 0.0,
+          "weight_prev": 0.0,
+          "headline": false
+        }
+      ],
+      "has_weight": false
     }
   ],
   "thresholds": {
@@ -261,10 +229,10 @@
     "share_pct_min": 30.0
   },
   "summary": {
-    "etfs_changed": 7,
-    "new_total": 5,
-    "gone_total": 15,
-    "moves_total": 2,
+    "etfs_changed": 8,
+    "new_total": 6,
+    "gone_total": 6,
+    "moves_total": 3,
     "universe": 20
   }
 }
