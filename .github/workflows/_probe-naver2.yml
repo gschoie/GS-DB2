@@ -1,8 +1,10 @@
 name: "[시험용] 네이버 증권 신규 구조 탐색"
 
-# 옛 주소를 시험하는 게 아니라, 개편된 사이트가 **실제로 쓰는** 라우트/API 목록을
-# Next.js 빌드 매니페스트와 번들에서 통째로 뽑아 본다. 선물 투자자별이 새 구조 어딘가에
-# 남아 있는지 확인용 — 확인 끝나면 이 파일은 지운다.
+# 옛 주소를 시험하는 게 아니라, 개편된 사이트를 실제로 돌아다니며
+#  · 존재하는 화면(라우트) 목록
+#  · 각 화면이 서버에서 미리 받아온 쿼리키(= 실제 API 호출)
+#  · 번들에 박힌 API 경로 문자열
+# 을 통째로 뽑는다. 확인 끝나면 이 파일은 지운다.
 on:
   push:
     branches: [claude/telegram-trend-analysis-logic-7efsdy]
@@ -11,7 +13,7 @@ on:
 jobs:
   probe:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 20
     steps:
       - uses: actions/setup-python@v6
         with: {python-version: "3.12"}
@@ -22,6 +24,7 @@ jobs:
           import json, re, collections
           import requests
 
+          HOST = "https://m.stock.naver.com"
           UA = ("Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) AppleWebKit/605.1.15 "
                 "(KHTML, like Gecko) Version/17.0 Mobile/15E148 Safari/604.1")
           S = requests.Session(); S.headers.update({"User-Agent": UA})
@@ -39,87 +42,75 @@ jobs:
               try: return json.loads(m.group(1))
               except Exception: return None
 
-          FUT = re.compile(r"future|derivat|drv|option|kospi200|kpi200|k200", re.I)
-          FLOW = re.compile(r"invest|trend|program|deal|supply|flow", re.I)
+          SEEDS = ["/", "/domestic", "/domestic/index/KOSPI/total",
+                   "/domestic/index/KPI200/total", "/domestic/stock/005930/total",
+                   "/domestic/etf/069500/total", "/marketindex", "/worldstock",
+                   "/investment", "/domestic/capitalization/KOSPI"]
 
-          for host in ("https://m.stock.naver.com", "https://stock.naver.com"):
-              print("\n" + "=" * 78)
-              print("HOST", host)
-              print("=" * 78)
-              r = get(host + "/")
+          seen, queue = set(), list(SEEDS)
+          pages, chunks, qkeys = {}, set(), collections.Counter()
+          futmentions = []
+
+          while queue and len(seen) < 60:
+              path = queue.pop(0)
+              if path in seen: continue
+              seen.add(path)
+              r = get(HOST + path, allow_redirects=True)
               if r is None: continue
-              print("  홈", r.status_code, "· 최종주소", r.url, "· 길이", len(r.text))
-              nd = nextdata(r.text)
-              if not nd:
-                  print("  __NEXT_DATA__ 없음 — Next.js 앱이 아니거나 구조가 다름")
-                  continue
-              bid = nd.get("buildId")
-              print("  buildId", bid)
+              final = r.url.replace(HOST, "")
+              pages[path] = (r.status_code, final)
+              if r.status_code != 200: continue
+              html = r.text
 
-              # ── 1) 라우트 전체 목록 (사이트에 어떤 화면이 존재하는가) ──
-              routes = set()
-              for path in (f"/_next/static/{bid}/_buildManifest.js",
-                           f"/_next/static/{bid}/_ssgManifest.js"):
-                  rr = get(host + path)
-                  if rr is None or rr.status_code != 200:
-                      print(f"  {path} -> {rr.status_code if rr else 'fail'}")
-                      continue
-                  routes |= set(re.findall(r'"(/[^"]*)"', rr.text))
-              routes = {x for x in routes if not x.startswith("/_next")}
-              print(f"\n  ── 라우트 {len(routes)}개 ──")
-              hit = sorted(x for x in routes if FUT.search(x) or FLOW.search(x))
-              print(f"  [선물·수급 관련 {len(hit)}개]")
-              for x in hit: print("    ", x)
-              rest = sorted(routes - set(hit))
-              print(f"  [나머지 {len(rest)}개]")
-              for x in rest[:120]: print("    ", x)
+              chunks |= set(re.findall(r'src="([^"]*/_next/static/[^"]+\.js)"', html))
 
-              # ── 2) 번들에서 API 경로 문자열 수집 ──
-              chunks = set(re.findall(r'src="([^"]*/_next/static/[^"]+\.js)"', r.text))
-              # 앱 전체 청크 목록은 buildManifest 안에도 들어 있다
-              rr = get(host + f"/_next/static/{bid}/_buildManifest.js")
-              if rr is not None and rr.status_code == 200:
-                  chunks |= {("/_next/static/chunks/" + m) if not m.startswith("/") else m
-                             for m in re.findall(r'"(static/chunks/[^"]+\.js)"', rr.text)}
-              chunks = {c if c.startswith("http") else host + (c if c.startswith("/") else "/" + c)
-                        for c in chunks}
-              print(f"\n  ── 청크 {len(chunks)}개 스캔 ──")
-              api = collections.Counter()
-              for i, c in enumerate(sorted(chunks)[:400]):
-                  rr = get(c)
-                  if rr is None or rr.status_code != 200: continue
-                  t = rr.text
-                  for m in re.findall(r'["`\'](/?(?:front-api|api)/[A-Za-z0-9/_.\-{}$\[\]:]+)', t):
-                      api[m] += 1
-                  for m in re.findall(r'["`\']((?:https?:)?//[a-z.]*naver\.com/(?:front-api|api)/[A-Za-z0-9/_.\-{}$\[\]:]+)', t):
-                      api[m] += 1
-              print(f"  고유 API 경로 {len(api)}개")
-              futs = sorted(k for k in api if FUT.search(k))
-              print(f"  [선물·파생 후보 {len(futs)}]")
-              for k in futs: print("    ", k)
-              flows = sorted(k for k in api if FLOW.search(k) and k not in futs)
-              print(f"  [수급·투자자 후보 {len(flows)}]")
-              for k in flows: print("    ", k)
-              others = sorted(k for k in api if k not in futs and k not in flows)
-              print(f"  [나머지 {len(others)}]")
-              for k in others[:150]: print("    ", k)
+              nd = nextdata(html)
+              if nd:
+                  try:
+                      qs = nd["props"]["pageProps"]["dehydratedState"]["queries"]
+                      for q in qs:
+                          qkeys[json.dumps(q.get("queryKey"), ensure_ascii=False)] += 1
+                  except Exception:
+                      pass
+                  blob = json.dumps(nd, ensure_ascii=False)
+                  for m in re.finditer(r"선물|futures", blob, re.I):
+                      futmentions.append(blob[max(0, m.start()-90):m.start()+90])
 
-          # ── 3) 후보 화면 직접 열어 보기 ──
-          print("\n" + "=" * 78)
-          print("후보 화면 응답")
-          print("=" * 78)
-          cands = [
-              "https://m.stock.naver.com/domestic/index/KPI200/total",
-              "https://m.stock.naver.com/domestic/index/KPI200/investor",
-              "https://m.stock.naver.com/domestic/futures/KPI200",
-              "https://m.stock.naver.com/domestic/derivative/KPI200",
-              "https://m.stock.naver.com/marketindex",
-              "https://m.stock.naver.com/api/index/KPI200/trend",
-              "https://m.stock.naver.com/api/index/KPI200/integration",
-          ]
-          for u in cands:
-              rr = get(u, allow_redirects=True)
-              if rr is None: continue
-              body = rr.text[:200].replace("\n", " ")
-              print(f"  {rr.status_code} {u}\n      -> {rr.url}\n      {body}")
+              # 내부 링크 수집 (같은 종류 화면이 수십 개씩 나오는 것은 대표 몇 개만)
+              hrefs = set(re.findall(r'href="(/[^"#?]*)"', html))
+              buckets = collections.Counter()
+              for h in sorted(hrefs):
+                  key = re.sub(r"/[A-Z0-9._-]{3,}(?=/|$)", "/*", h)
+                  buckets[key] += 1
+                  if buckets[key] <= 2 and h not in seen and len(seen) + len(queue) < 60:
+                      queue.append(h)
+
+          print("=" * 78); print("방문한 화면"); print("=" * 78)
+          for p, (code, final) in sorted(pages.items()):
+              print(f"  {code} {p}" + (f"   -> {final}" if final != p else ""))
+
+          print("\n" + "=" * 78); print(f"서버 프리페치 쿼리키 {len(qkeys)}종"); print("=" * 78)
+          for k, n in sorted(qkeys.items()):
+              print(f"  ({n}) {k}")
+
+          print("\n" + "=" * 78); print(f"번들 {len(chunks)}개 스캔"); print("=" * 78)
+          api = collections.Counter()
+          for c in sorted(chunks)[:400]:
+              u = c if c.startswith("http") else HOST + c
+              rr = get(u)
+              if rr is None or rr.status_code != 200: continue
+              for m in re.findall(r'["`\'](/?(?:front-api|api)/[A-Za-z0-9/_.\-{}$\[\]:]+)', rr.text):
+                  api[m.lstrip("/")] += 1
+          FUT = re.compile(r"future|derivat|drv|option|kpi200|k200", re.I)
+          FLOW = re.compile(r"invest|trend|program|deal|supply|flow|frgn|institut", re.I)
+          futs = sorted(k for k in api if FUT.search(k))
+          flows = sorted(k for k in api if FLOW.search(k) and k not in futs)
+          rest = sorted(k for k in api if k not in futs and k not in flows)
+          print(f"\n  [선물·파생 {len(futs)}]");  [print("    ", k) for k in futs]
+          print(f"\n  [수급·투자자 {len(flows)}]"); [print("    ", k) for k in flows]
+          print(f"\n  [나머지 {len(rest)}]");      [print("    ", k) for k in rest[:200]]
+
+          print("\n" + "=" * 78); print(f"'선물' 언급 {len(futmentions)}건(앞 25건)"); print("=" * 78)
+          for s in futmentions[:25]:
+              print("  …", s.replace("\n", " "))
           PY
