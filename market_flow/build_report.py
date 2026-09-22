@@ -143,6 +143,8 @@ def combo_chart(rows, color, line_unit, bar_label="현물 순매수", line_label
         return pad_t + (1 - (v + m) / (2 * m)) * ih
 
     g = []
+    # 베이시스처럼 눈금이 한 자릿수면 0.5칸이 정수로 반올림돼 거짓 눈금(…-2,0,2…)이 된다
+    fdig = 1 if fm < 10 else 0
     for frac in (-1, -0.5, 0, 0.5, 1):
         y = pad_t + (1 - (frac + 1) / 2) * ih
         g.append(f'<line x1="{pad_l}" y1="{y:.1f}" x2="{width-pad_r}" y2="{y:.1f}" '
@@ -150,7 +152,7 @@ def combo_chart(rows, color, line_unit, bar_label="현물 순매수", line_label
                  f'<text x="{pad_l-6}" y="{y+3.5:.1f}" class="tick" '
                  f'text-anchor="end">{frac*sm:,.0f}</text>'
                  f'<text x="{width-pad_r+6}" y="{y+3.5:.1f}" class="tick" '
-                 f'text-anchor="start">{frac*fm:,.0f}</text>')
+                 f'text-anchor="start">{frac*fm:,.{fdig}f}</text>')
     y0 = Y(0, sm)
     pts = []
     for i, (d, sv, fv) in enumerate(rows):
@@ -360,8 +362,10 @@ def build_signals(today, prev_slot_snap, basis=None, basis_src=""):
     """룰 기반 한줄 해석 목록."""
     slots = today.get("slots", {})
     latest = None
+    need = ("foreign", "individual", "institution", "arb", "nonarb", "program")
     for s in ("1640", "1540", "1300", "1000"):
-        if s in slots:
+        # 수집이 중간에 끊겨 값이 덜 찬 슬롯은 건너뛴다(해석보다 다음 슬롯이 낫다).
+        if all(slots.get(s, {}).get(k) is not None for k in need):
             latest = slots[s]
             break
     if not latest:
