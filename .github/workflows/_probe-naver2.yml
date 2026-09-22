@@ -1,10 +1,8 @@
 name: "[시험용] 네이버 증권 신규 구조 탐색"
 
-# 옛 주소를 시험하는 게 아니라, 개편된 사이트를 실제로 돌아다니며
-#  · 존재하는 화면(라우트) 목록
-#  · 각 화면이 서버에서 미리 받아온 쿼리키(= 실제 API 호출)
-#  · 번들에 박힌 API 경로 문자열
-# 을 통째로 뽑는다. 확인 끝나면 이 파일은 지운다.
+# 개편된 Npay 증권이 쓰는 내부 API(front-api) 경로 전체를 번들에서 뽑고,
+# 종목/지수 화면의 탭 구성(menuInfo)을 받아 '투자자별·선물'이 새 구조에
+# 남아 있는지 확인한다. 확인이 끝나면 이 파일은 지운다.
 on:
   push:
     branches: [claude/telegram-trend-analysis-logic-7efsdy]
@@ -27,90 +25,80 @@ jobs:
           HOST = "https://m.stock.naver.com"
           UA = ("Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) AppleWebKit/605.1.15 "
                 "(KHTML, like Gecko) Version/17.0 Mobile/15E148 Safari/604.1")
-          S = requests.Session(); S.headers.update({"User-Agent": UA})
+          S = requests.Session(); S.headers.update({"User-Agent": UA, "Referer": HOST + "/"})
 
           def get(u, **kw):
-              try:
-                  return S.get(u, timeout=25, **kw)
+              try: return S.get(u, timeout=25, **kw)
               except Exception as e:
-                  print(f"   !! {u} -> {type(e).__name__}: {e}")
-                  return None
+                  print(f"   !! {u} -> {type(e).__name__}: {e}"); return None
 
-          def nextdata(html):
-              m = re.search(r'id="__NEXT_DATA__"[^>]*>(.*?)</script>', html, re.S)
-              if not m: return None
-              try: return json.loads(m.group(1))
-              except Exception: return None
-
-          SEEDS = ["/", "/domestic", "/domestic/index/KOSPI/total",
-                   "/domestic/index/KPI200/total", "/domestic/stock/005930/total",
-                   "/domestic/etf/069500/total", "/marketindex", "/worldstock",
-                   "/investment", "/domestic/capitalization/KOSPI"]
-
-          seen, queue = set(), list(SEEDS)
-          pages, chunks, qkeys = {}, set(), collections.Counter()
-          futmentions = []
-
-          while queue and len(seen) < 60:
-              path = queue.pop(0)
-              if path in seen: continue
-              seen.add(path)
-              r = get(HOST + path, allow_redirects=True)
-              if r is None: continue
-              final = r.url.replace(HOST, "")
-              pages[path] = (r.status_code, final)
-              if r.status_code != 200: continue
-              html = r.text
-
-              chunks |= set(re.findall(r'src="([^"]*/_next/static/[^"]+\.js)"', html))
-
-              nd = nextdata(html)
-              if nd:
-                  try:
-                      qs = nd["props"]["pageProps"]["dehydratedState"]["queries"]
-                      for q in qs:
-                          qkeys[json.dumps(q.get("queryKey"), ensure_ascii=False)] += 1
-                  except Exception:
-                      pass
-                  blob = json.dumps(nd, ensure_ascii=False)
-                  for m in re.finditer(r"선물|futures", blob, re.I):
-                      futmentions.append(blob[max(0, m.start()-90):m.start()+90])
-
-              # 내부 링크 수집 (같은 종류 화면이 수십 개씩 나오는 것은 대표 몇 개만)
-              hrefs = set(re.findall(r'href="(/[^"#?]*)"', html))
-              buckets = collections.Counter()
-              for h in sorted(hrefs):
-                  key = re.sub(r"/[A-Z0-9._-]{3,}(?=/|$)", "/*", h)
-                  buckets[key] += 1
-                  if buckets[key] <= 2 and h not in seen and len(seen) + len(queue) < 60:
-                      queue.append(h)
-
-          print("=" * 78); print("방문한 화면"); print("=" * 78)
-          for p, (code, final) in sorted(pages.items()):
-              print(f"  {code} {p}" + (f"   -> {final}" if final != p else ""))
-
-          print("\n" + "=" * 78); print(f"서버 프리페치 쿼리키 {len(qkeys)}종"); print("=" * 78)
-          for k, n in sorted(qkeys.items()):
-              print(f"  ({n}) {k}")
-
-          print("\n" + "=" * 78); print(f"번들 {len(chunks)}개 스캔"); print("=" * 78)
-          api = collections.Counter()
-          for c in sorted(chunks)[:400]:
+          # ── 1) 번들 모으기 ──────────────────────────────────────────
+          seeds = ["/", "/domestic/index/KPI200/total", "/domestic/index/KOSPI/total",
+                   "/domestic/stock/005930/total", "/worldstock/futures/EScv1/total",
+                   "/domestic/home/capitalization/total", "/marketindex"]
+          chunks = set()
+          for p in seeds:
+              r = get(HOST + p)
+              if r is not None and r.status_code == 200:
+                  chunks |= set(re.findall(r'src="([^"]*/_next/static/[^"]+\.js)"', r.text))
+          # 청크 매니페스트를 통해 나머지 페이지 번들까지 끌어온다
+          more = set()
+          for c in list(chunks):
               u = c if c.startswith("http") else HOST + c
               rr = get(u)
               if rr is None or rr.status_code != 200: continue
-              for m in re.findall(r'["`\'](/?(?:front-api|api)/[A-Za-z0-9/_.\-{}$\[\]:]+)', rr.text):
-                  api[m.lstrip("/")] += 1
-          FUT = re.compile(r"future|derivat|drv|option|kpi200|k200", re.I)
-          FLOW = re.compile(r"invest|trend|program|deal|supply|flow|frgn|institut", re.I)
-          futs = sorted(k for k in api if FUT.search(k))
-          flows = sorted(k for k in api if FLOW.search(k) and k not in futs)
-          rest = sorted(k for k in api if k not in futs and k not in flows)
-          print(f"\n  [선물·파생 {len(futs)}]");  [print("    ", k) for k in futs]
-          print(f"\n  [수급·투자자 {len(flows)}]"); [print("    ", k) for k in flows]
-          print(f"\n  [나머지 {len(rest)}]");      [print("    ", k) for k in rest[:200]]
+              more |= {"/_next/static/chunks/" + m for m in
+                       re.findall(r'"(?:static/chunks/)?((?:pages|app)/[A-Za-z0-9/_.\-\[\]]+\.js)"', rr.text)}
+          chunks |= more
+          print(f"번들 {len(chunks)}개")
 
-          print("\n" + "=" * 78); print(f"'선물' 언급 {len(futmentions)}건(앞 25건)"); print("=" * 78)
-          for s in futmentions[:25]:
-              print("  …", s.replace("\n", " "))
+          # ── 2) API 경로 문자열 전량 수집 ────────────────────────────
+          PATH = re.compile(r'["`\'](/(?:front-api|api|domestic|stock|worldstock|market|'
+                            r'marketIndex|investment|news|research|chart|briefing|integration|sise)'
+                            r'/[A-Za-z0-9/_.\-{}$\[\]:]{2,})')
+          api = collections.Counter()
+          base_hits = collections.Counter()
+          for c in sorted(chunks)[:500]:
+              u = c if c.startswith("http") else HOST + c
+              rr = get(u)
+              if rr is None or rr.status_code != 200: continue
+              t = rr.text
+              for m in PATH.findall(t): api[m] += 1
+              for m in re.findall(r'["\'`]([^"\'`]{0,60}front-api[^"\'`]{0,40})', t):
+                  base_hits[m] += 1
+
+          print(f"\n=== front-api 베이스 후보 ===")
+          for k, n in base_hits.most_common(20): print(f"  ({n}) {k}")
+
+          FUT  = re.compile(r"future|derivat|drv|option", re.I)
+          FLOW = re.compile(r"invest|trend|program|deal|supply|flow|frgn|institu|foreign", re.I)
+          futs  = sorted(k for k in api if FUT.search(k))
+          flows = sorted(k for k in api if FLOW.search(k) and k not in futs)
+          rest  = sorted(k for k in api if k not in futs and k not in flows)
+          print(f"\n=== 선물·파생 {len(futs)} ===");   [print("  ", k) for k in futs]
+          print(f"\n=== 수급·투자자 {len(flows)} ==="); [print("  ", k) for k in flows]
+          print(f"\n=== 나머지 {len(rest)} ===");       [print("  ", k) for k in rest[:250]]
+
+          # ── 3) 화면 탭 구성 + 지수 상세 ─────────────────────────────
+          print("\n=== front-api 직접 호출 ===")
+          BASES = [HOST + "/front-api/v1", HOST + "/front-api", HOST + "/api"]
+          calls = [
+              ("/stock/menuInfo", {"code": "KPI200"}),
+              ("/stock/menuInfo", {"code": "005930"}),
+              ("/domestic/index/detail", {"indexCode": "KPI200"}),
+              ("/stock/domestic/integration", {"code": "KPI200", "endType": "index"}),
+              ("/market/majorIndicators", {}),
+          ]
+          good_base = None
+          for b in BASES:
+              rr = get(b + "/stock/menuInfo", params={"code": "KPI200"})
+              if rr is not None and rr.status_code == 200 and rr.text.strip().startswith("{"):
+                  good_base = b; break
+          print("  베이스:", good_base)
+          if good_base:
+              for path, params in calls:
+                  rr = get(good_base + path, params=params)
+                  if rr is None: continue
+                  print(f"\n  [{rr.status_code}] {path} {params}")
+                  print("   ", rr.text[:1500].replace("\n", " "))
           PY
