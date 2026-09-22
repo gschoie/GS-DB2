@@ -10283,31 +10283,31 @@
      "chg_pct": 0.15
     },
     "1640": {
-     "individual": -15810,
-     "foreign": 547,
-     "institution": -1261,
-     "arb": 684,
-     "nonarb": 1141,
-     "program": 1825,
-     "time": "16:45",
+     "individual": -15797,
+     "foreign": 649,
+     "institution": -1297,
+     "arb": 686,
+     "nonarb": 1235,
+     "program": 1921,
+     "time": "18:08",
      "kospi": 7017.91,
      "chg_pct": 0.15
     }
    },
    "confirmed": {
     "investor": {
-     "individual": -15810,
-     "foreign": 547,
-     "inst_total": -1261
+     "individual": -15797,
+     "foreign": 649,
+     "inst_total": -1297
     },
     "program": {
-     "arb_net": 684,
-     "nonarb_net": 1141,
-     "total_net": 1825
+     "arb_net": 686,
+     "nonarb_net": 1223,
+     "total_net": 1909
     }
    },
    "group_1d": {
-    "time": "16:45",
+    "time": "18:08",
     "groups": [
      [
       "운송",
@@ -10588,10 +10588,10 @@
       -1219
      ],
      [
-      "16:45",
-      -15810,
-      547,
-      -1261
+      "18:08",
+      -15797,
+      649,
+      -1297
      ]
     ],
     "program": [
@@ -10614,15 +10614,15 @@
       2060
      ],
      [
-      "16:45",
-      684,
-      1141,
-      1825
+      "18:08",
+      686,
+      1235,
+      1921
      ]
     ]
    }
   }
  },
- "updated_kst": "2026-09-22 16:45",
+ "updated_kst": "2026-09-22 18:08",
  "futures_unit": "계약"
 }
