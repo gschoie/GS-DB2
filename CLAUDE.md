@@ -496,4 +496,29 @@
     'md 변경'으로 보고 텔레를 재발송한다(9/19 시각 정정 커밋으로 KDEF 2통 실측) —
     표기 정정은 다음 날 반영하거나 발행 전에 끝낼 것.
 
+29. **네이버 증권 → Npay 증권 전면 개편 · 신규 front-api 지도** (9/22): 9/11 리다이렉트,
+    9/18 410 폐기는 낱개 사고가 아니라 **서비스 전체가 Npay 증권으로 갈아엎어진** 결과였다
+    (페이지 title 이 전부 `… - Npay 증권`). 러너에서 새 사이트를 크롤해 **앱이 호출하는
+    axios url 274개 전량**을 번들에서 떠 확인한 것을 남긴다 — 다음에 또 뭐가 죽으면
+    여기부터 볼 것.
+    - **구조**: Next.js SPA. 화면은 `/domestic/…`(국내) · `/worldstock/…`(해외) ·
+      `/marketindex/…`(환율·원자재·금리) 세 갈래. 데이터는 **`https://m.stock.naver.com/front-api`**
+      베이스에 상대경로(`/market/investorTrend` 등)로 붙는다. 코드에 `/api/` 로 시작하는
+      문자열만 뒤지면 **아무것도 안 나온다**(realtime 폴링 15개만 그 형태) — 첫 탐색에서
+      이걸로 "새 API에 수급이 없다"고 잘못 결론냈다. `url:"…"` 패턴으로 긁을 것.
+    - **살아 있는 것**: `/market/investorTrend`(외국인·기관·개인 × 순매수/매수/매도 금액
+      + 매수·매도 수량. `marketType`=KOSPI|KOSDAQ|ALL, `periodType`=DAILY|WEEKLY|MONTHLY|
+      THREE_MONTHLY. **날짜 파라미터는 없다** — fromDate/toDate/bizdate 다 무시하고 당일만),
+      `/stock/domestic/trend`(종목별 일별 수급 + 외국인 보유주식수·보유비율, cursor 페이징,
+      한 번에 40건 이상), `/market/tradingTrend/ranking`(투자자별 순매수 상위),
+      `/stock/domestic/integration`(dealTrendInfo·programTrendInfo — 현행 수급 수집원),
+      `/domestic/index/detail`, `/stock/index/periodChanges`(1d~10y 기준가).
+      과거 일자 조회는 구 모바일 API `/api/index/{code}/trend?bizdate=` 가 계속 된다.
+    - **영영 없어진 것 둘**: ① **국내 선물·파생** — url 274개 중 선물은
+      `/stock/foreign/futures/price/list` 와 `/worldstock/nation/indexFutures/list` 뿐으로
+      **둘 다 해외**다. `/domestic/futures/*` 화면도 404. 네이버가 국내 파생 서비스를 접었다.
+      ② **기관 세부 7항목**(연기금·투신·보험 등) — 새 API의 투자자 구분은 외국인·기관·개인
+      3개가 전부다. 두 가지는 대체 경로도 없다(KRX 는 프로그램 접근을 막고 — 러너·GAS 양쪽
+      `400 LOGOUT` 실측 —, 한투 OpenAPI 에는 선물 투자자별 엔드포인트가 아예 없다).
+
 이후 작업은 git log와 이 파일을 갱신하며 이어간다.
