@@ -56,6 +56,7 @@ const DIGEST_SKIP_SHORTS = true;
 // digest: false 를 단 채널은 낱개 알림만 오고 3일 모음에는 담지 않는다.
 // weekly: false 를 단 채널은 주간(평일) 모음에서 뺀다.
 // exclude: /정규식/ 을 단 채널은 제목이 걸리는 영상을 통째로 건너뛴다(알림·모음 모두).
+// include: /정규식/ 을 단 채널은 제목이 '걸리는 것만' 남긴다(허용목록 — 나머지는 전부 제외).
 const WATCH_CHANNELS = [
   { name: '샤를세환', id: 'UCVNAlg66t3JhkzT5JntclLg' },
   { name: 'KKMD', id: 'UCLDV9mI3tOQCrdPUWjogQZA' },
@@ -63,7 +64,11 @@ const WATCH_CHANNELS = [
   { name: '슈퍼소닉', id: 'UCXK_itQ6_JKltErZW_sQojQ' },
   { name: '밀덕', id: 'UCV-slcYbZrNCowaVd3cQaHQ', weekly: false },
   { name: 'KFN+', id: 'UCObL9hob3R03QSZU5olJZiQ' },
-  { name: 'KFN1', id: 'UCXNMgSZqmfX1_K8Uf4l4sog', digest: false, exclude: /이슈&국방/ }
+  // KFN1 은 잡다한 영상이 많아, 원하는 시리즈 제목이 든 것만 남긴다(공백 유무 무관).
+  {
+    name: 'KFN1', id: 'UCXNMgSZqmfX1_K8Uf4l4sog', digest: false,
+    include: /본게임\s*2|리얼\s*웨폰|이것이\s*전투다|K[-\s]?인사이트|밀덕들의\s*수다|밀리터리\s*사이언스/
+  }
 ];
 
 // 주간 모음 요일별 로테이션 — 매일 그날 담당 채널 1개의 지난 7일치만 보낸다.
@@ -205,7 +210,12 @@ function checkNewVideos() {
           let videoTitle = entry.getChildText('title', atom);
           const videoUrl = entry.getChild('link', atom).getAttribute('href').getValue();
 
-          // 채널별 제목 예외 — 걸리면 알림도 모음도 없이 조용히 넘어간다
+          // 채널별 제목 필터 — 알림도 모음도 없이 조용히 넘어간다.
+          // include(허용목록): 걸리는 것만 남긴다. exclude: 걸리는 것을 버린다.
+          if (channel.include && !channel.include.test(videoTitle)) {
+            Logger.log(`허용목록 밖이라 건너뜀 (${channel.name}): ${videoTitle}`);
+            return;
+          }
           if (channel.exclude && channel.exclude.test(videoTitle)) {
             Logger.log(`제목 예외로 건너뜀 (${channel.name}): ${videoTitle}`);
             return;
@@ -354,6 +364,7 @@ function fillBufferFromFeeds(days) {
         if (isBuffered_(videoId)) return;
 
         const title = entry.getChildText('title', atom);
+        if (channel.include && !channel.include.test(title)) return;
         if (channel.exclude && channel.exclude.test(title)) return;
         const link = entry.getChild('link', atom).getAttribute('href').getValue();
         if (bufferForDigest_(channel.name, videoId, title, link, published)) {
@@ -579,6 +590,7 @@ function weeklyEligible_(channel, title, url) {
   if (channel.weekly === false) return false;
   if (isShorts_(url)) return false;
   if (LIVE_TITLE_RE.test(title)) return false;
+  if (channel.include && !channel.include.test(title)) return false;
   if (channel.exclude && channel.exclude.test(title)) return false;
   return true;
 }
