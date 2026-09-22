@@ -16,12 +16,23 @@
 JSON 이라 마크업 변경에는 안 깨진다. 다만 옛 페이지가 주던 아래 셋은 대체 경로가 없다:
   · 기관 세부 7항목(금융투자·보험·투신·은행·기타금융·연기금등·기타법인)
   · 프로그램 매수/매도 다리 (순매수만 남음 — 화면·텔레그램은 원래 순매수만 썼다)
-  · K200 선물 투자자별 (신규 API 의 KPI200 은 현물이라 대용 불가 — 섹션 비표시)
+  · K200 선물 **투자자별** (누가 샀나 — 네이버가 국내 파생 서비스를 통째로 접었다)
+
+[2026-09-22 선물 자리를 베이시스로 교체]
+네이버 개편(Npay 증권) 뒤 국내 선물은 화면도 API 도 없다. 투자자별은 포기하고,
+대신 **가격**으로 같은 질문에 답한다 — 선물이 현물보다 비싼가 싼가(베이시스),
+이론가 대비 싼가(괴리율). 이것이 차익 프로그램 매매를 직접 설명한다.
+가격은 한국투자 OpenAPI 에서 받는다(이 모듈이 종목별 가집계로 이미 쓰는 곳):
+  · 근월물 단축코드는 한투 종목마스터(.mst)에서 읽는다 — 코드 규약을 안 박아둔다
+  · inquire-price  → 선물 현재가·시장베이시스·이론가·괴리율·미결제약정
+  · inquire-daily-fuopchartprice + inquire-daily-indexchartprice → 일별 베이시스 소급
 """
 import csv
+import io
 import json
 import os
 import re
+import zipfile
 import datetime as dt
 from pathlib import Path
 
@@ -193,16 +204,6 @@ def daily_confirmed(bizdate, pages=3, want=None):
     return out
 
 
-def futures_daily(bizdate, pages=3):
-    """K200 선물 투자자별 — 2026-09-18 현재 대체 경로가 없다.
-
-    옛 investorDealTrendDay?sosok=03 이 410 으로 사라졌고, 신규 API 의 KPI200 은
-    **현물 지수**라 선물이 아니다. 현물을 선물로 저장하면 조용히 틀린 값이 쌓이므로
-    차라리 실패시켜 해당 섹션을 숨긴다(호출부가 try/except 로 감싸고 있다).
-    """
-    raise RuntimeError("선물 투자자별: 네이버 옛 페이지 폐기(410)로 대체 경로 없음")
-
-
 UNIVERSE_CSV = HERE.parent / "etf_signal" / "etf_universe.csv"
 
 
@@ -229,6 +230,174 @@ def group_returns():
 
 
 KIS_BASE = "https://openapi.koreainvestment.com:9443"
+# 한투가 공개 배포하는 지수선물·옵션 종목마스터. 근월물 단축코드를 여기서 읽는다.
+FO_MASTER = "https://new.real.download.dws.co.kr/common/master/fo_idx_code_mts.mst.zip"
+
+_KIS_TOKEN = None
+
+
+def kis_token():
+    """접근토큰 1회 발급 후 재사용. 키가 없으면 빈 문자열(호출부가 섹션만 생략)."""
+    global _KIS_TOKEN
+    if _KIS_TOKEN is not None:
+        return _KIS_TOKEN
+    key, sec = os.environ.get("KIS_APP_KEY"), os.environ.get("KIS_APP_SECRET")
+    if not key or not sec:
+        _KIS_TOKEN = ""
+        return _KIS_TOKEN
+    r = SESSION.post(f"{KIS_BASE}/oauth2/tokenP", timeout=15, json={
+        "grant_type": "client_credentials", "appkey": key, "appsecret": sec})
+    r.raise_for_status()
+    _KIS_TOKEN = r.json()["access_token"]
+    return _KIS_TOKEN
+
+
+def kis_get(path, tr_id, params):
+    tok = kis_token()
+    if not tok:
+        raise RuntimeError("KIS_APP_KEY/SECRET 미설정")
+    r = SESSION.get(KIS_BASE + path, timeout=15, params=params, headers={
+        "authorization": f"Bearer {tok}",
+        "appkey": os.environ["KIS_APP_KEY"], "appsecret": os.environ["KIS_APP_SECRET"],
+        "tr_id": tr_id, "custtype": "P"})
+    r.raise_for_status()
+    j = r.json()
+    if j.get("rt_cd") != "0":
+        raise RuntimeError(f"KIS {tr_id} 오류: {j.get('msg1')}")
+    return j
+
+
+def _f(x):
+    try:
+        return float(str(x).replace(",", ""))
+    except (TypeError, ValueError):
+        return None
+
+
+def front_contract():
+    """코스피200 **정규** 선물의 근월물 {ym, code, name}.
+
+    단축코드 규약은 문서마다 다르고 바뀐다(옛 문서의 '101W12' 형식은 지금 안 먹는다).
+    그래서 코드를 박아두지 않고 한투 종목마스터에서 이름이 'F YYYYMM' 인 것 중
+    가장 이른 월물을 고른다 — '미니F' 는 이름이 달라 자동으로 빠진다.
+    """
+    r = SESSION.get(FO_MASTER, timeout=60)
+    r.raise_for_status()
+    z = zipfile.ZipFile(io.BytesIO(r.content))
+    raw = z.read(z.namelist()[0]).decode("cp949", "ignore")
+    best = None
+    for line in raw.splitlines():
+        f = [x.strip() for x in line.split("|")]
+        if len(f) < 9 or f[-1] != "KOSPI200":
+            continue
+        m = re.fullmatch(r"F (\d{6})", f[3])
+        if m and (best is None or m.group(1) < best[0]):
+            best = (m.group(1), f[1], f[3])
+    if not best:
+        raise RuntimeError("종목마스터에서 코스피200 선물 근월물을 찾지 못함")
+    return {"ym": best[0], "code": best[1], "name": best[2]}
+
+
+def futures_basis(code):
+    """지금 시점의 선물 가격과 현물 괴리. 단위: 지수 포인트(베이시스)·%(괴리율).
+
+    basis  = 선물 − 현물(KOSPI200). 양수 콘탱고 / 음수 백워데이션.
+    dprt   = 괴리율 = (선물 − 이론가)/이론가. 음수면 선물이 이론가보다 싸다
+             → 차익거래는 '선물 매수 + 현물 매도'가 유리해져 차익 프로그램 매도 압력.
+    """
+    j = kis_get("/uapi/domestic-futureoption/v1/quotations/inquire-price",
+                "FHMIF10000000", {"FID_COND_MRKT_DIV_CODE": "F", "FID_INPUT_ISCD": code})
+    o1, o3 = j.get("output1") or {}, j.get("output3") or {}
+    fut, spot = _f(o1.get("futs_prpr")), _f(o3.get("bstp_nmix_prpr"))
+    if fut is None:
+        raise RuntimeError(f"선물 시세 응답이 비었다(코드 {code}) — 월물 교체 의심")
+    basis = _f(o1.get("mrkt_basis"))
+    if basis is None and spot is not None:
+        basis = round(fut - spot, 2)
+    return {"fut": fut, "spot": spot, "basis": basis,
+            "theo": _f(o1.get("hts_thpr")), "dprt": _f(o1.get("dprt")),
+            "chg_pct": _f(o1.get("futs_prdy_ctrt")),
+            "oi": _f(o1.get("hts_otst_stpl_qty")),
+            "oi_chg": _f(o1.get("otst_stpl_qty_icdc")),
+            "remain": _f(o1.get("hts_rmnn_dynu"))}
+
+
+def second_thursday(y, m):
+    """해당 월의 두 번째 목요일 = 코스피200 선물 만기일."""
+    d = dt.date(y, m, 1)
+    return d + dt.timedelta(days=(3 - d.weekday()) % 7 + 7)
+
+
+def _prev_quarter(ym):
+    """'202612' → '202609' (분기물은 3·6·9·12월)."""
+    y, m = int(ym[:4]), int(ym[4:6])
+    m -= 3
+    if m <= 0:
+        y, m = y - 1, m + 12
+    return f"{y}{m:02d}"
+
+
+def _contract_code(ym):
+    """'202612' → 'A01612'. 마스터에서 확인한 규약(A01 + 연도끝자리 + 월)인데,
+    추정이 틀릴 수 있으므로 **쓰는 쪽에서 응답이 비면 조용히 건너뛴다**.
+    근월물만은 언제나 마스터에서 직접 읽으므로 이 추정에 기대지 않는다."""
+    return f"A01{ym[3]}{ym[4:6]}"
+
+
+def _index_closes(d1, d2):
+    """KOSPI200 일별 종가 {YYYYMMDD: close}"""
+    j = kis_get("/uapi/domestic-stock/v1/quotations/inquire-daily-indexchartprice",
+                "FHKUP03500100",
+                {"FID_COND_MRKT_DIV_CODE": "U", "FID_INPUT_ISCD": "2001",
+                 "FID_INPUT_DATE_1": d1, "FID_INPUT_DATE_2": d2, "FID_PERIOD_DIV_CODE": "D"})
+    return {r["stck_bsop_date"]: _f(r.get("bstp_nmix_prpr"))
+            for r in (j.get("output2") or []) if r.get("stck_bsop_date")}
+
+
+def _futures_closes(code, d1, d2):
+    """선물 일별 종가 {YYYYMMDD: close}"""
+    j = kis_get("/uapi/domestic-futureoption/v1/quotations/inquire-daily-fuopchartprice",
+                "FHKIF03020100",
+                {"FID_COND_MRKT_DIV_CODE": "F", "FID_INPUT_ISCD": code,
+                 "FID_INPUT_DATE_1": d1, "FID_INPUT_DATE_2": d2, "FID_PERIOD_DIV_CODE": "D"})
+    return {r["stck_bsop_date"]: _f(r.get("futs_prpr"))
+            for r in (j.get("output2") or []) if r.get("stck_bsop_date")}
+
+
+def basis_daily(front_ym, days=45):
+    """일별 시장 베이시스 {날짜: {fut, spot, basis, contract}} — 선물 종가 − 현물 종가.
+
+    **날짜마다 그날의 근월물**을 쓴다. 베이시스는 만기까지 남은 기간에 비례해서
+    커지므로, 월물이 바뀐 날을 넘어 한 월물로 쭉 그리면 레벨이 통째로 어긋난다.
+    (그래도 교체일에는 계단이 생긴다 — 화면에 그렇게 적어둔다.)
+    """
+    end = now_kst().date()
+    start = end - dt.timedelta(days=days)
+    d1, d2 = start.strftime("%Y%m%d"), end.strftime("%Y%m%d")
+    spots = _index_closes(d1, d2)
+
+    out, ym, hi = {}, front_ym, None
+    for _ in range(4):                       # 근월물부터 뒤로 최대 4개 분기물
+        p = _prev_quarter(ym)
+        lo = second_thursday(int(p[:4]), int(p[4:6]))   # 직전 만기 — 그 다음날부터 근월물
+        try:
+            closes = _futures_closes(_contract_code(ym), d1, d2)
+        except Exception as e:
+            print(f"  · 선물 일봉 {ym} 실패: {e}")
+            closes = {}
+        for d8, fv in closes.items():
+            d = dt.date(int(d8[:4]), int(d8[4:6]), int(d8[6:]))
+            if not (lo < d <= (hi or dt.date.max)) or fv is None:
+                continue
+            sv = spots.get(d8)
+            if sv is None:
+                continue
+            out[f"{d8[:4]}-{d8[4:6]}-{d8[6:]}"] = {
+                "fut": fv, "spot": sv, "basis": round(fv - sv, 2), "contract": ym}
+        if lo <= start:
+            break
+        hi, ym = lo, p
+    return out
 
 
 def stock_investor_flow(top=7):
@@ -237,15 +406,11 @@ def stock_investor_flow(top=7):
     반환: {"time": "HH:MM", "buy": [[종목명, 등락률%, 순매수억], …], "sell": […],
            "inst_buy": […], "inst_sell": […]} 또는 None
     (KIS_APP_KEY/SECRET 미설정이면 None — 섹션만 비표시)"""
-    key = os.environ.get("KIS_APP_KEY")
-    sec = os.environ.get("KIS_APP_SECRET")
-    if not key or not sec:
+    if not kis_token():
         print("KIS 키 미설정 → 종목별 수급 생략")
         return None
-    r = SESSION.post(f"{KIS_BASE}/oauth2/tokenP", timeout=15, json={
-        "grant_type": "client_credentials", "appkey": key, "appsecret": sec})
-    r.raise_for_status()
-    hdr = {"authorization": f"Bearer {r.json()['access_token']}",
+    key, sec = os.environ["KIS_APP_KEY"], os.environ["KIS_APP_SECRET"]
+    hdr = {"authorization": f"Bearer {kis_token()}",
            "appkey": key, "appsecret": sec, "tr_id": "FHPTJ04400000", "custtype": "P"}
     out = {"time": now_kst().strftime("%H:%M")}
     # FID_ETC_CLS_CODE: 1 외국인 / 2 기관계 — 기관은 orgn_* 필드에서 금액을 읽는다
@@ -365,28 +530,23 @@ def main():
             n_new += 1
     print(f"일별 확정 백필: {len(confirmed)}일 수신, {n_new}일 갱신")
 
-    # K200 선물 일별 백필 (실패해도 본 파이프라인은 유지)
+    # K200 선물 베이시스 — 투자자별이 사라진 자리를 '가격 괴리'로 대신한다.
+    # (실패하거나 KIS 키가 없으면 해당 섹션만 비표시, 본 파이프라인은 그대로)
     try:
-        fut, fut_unit = futures_daily(bizdate)
-        # sosok 미적용으로 현물과 같은 표가 오면(2일 이상 완전 일치) 오염 방지 위해 생략
-        dup = sum(1 for d, v in fut.items()
-                  if hist["days"].get(d, {}).get("confirmed", {}).get("investor") == v)
-        if fut and dup >= 2:
-            print(f"⚠️ 선물 응답이 현물 확정치와 동일({dup}일) — sosok 미적용 의심, 저장 생략")
-        else:
-            hist["futures_unit"] = fut_unit
-            n_fut = 0
-            for d, v in fut.items():
-                rec = hist["days"].setdefault(d, {})
-                if "futures" not in rec.get("confirmed", {}) or d == today:
-                    rec.setdefault("confirmed", {})["futures"] = v
-                    n_fut += 1
-            if today in fut:  # 슬롯별 선물 스냅샷 → 텔레그램의 전 슬롯 대비 증감 계산용
-                snap["futures"] = {"foreign": fut[today]["foreign"],
-                                   "inst_total": fut[today]["inst_total"]}
-            print(f"선물 일별 백필: {len(fut)}일 수신, {n_fut}일 갱신 (단위: {fut_unit})")
+        con = front_contract()
+        hist["fut_contract"] = con
+        snap["basis"] = futures_basis(con["code"])
+        print(f"[{slot}] 베이시스: {con['name']}({con['code']}) {snap['basis']}")
+        bd = basis_daily(con["ym"])
+        n_b = 0
+        for d, v in bd.items():
+            rec = hist["days"].setdefault(d, {})
+            if "basis" not in rec.get("confirmed", {}) or d == today:
+                rec.setdefault("confirmed", {})["basis"] = v
+                n_b += 1
+        print(f"일별 베이시스 백필: {len(bd)}일 수신, {n_b}일 갱신")
     except Exception as e:
-        print(f"⚠️ 선물 일별 수집 실패(리포트에는 해당 섹션만 비표시): {e}")
+        print(f"⚠️ 선물 베이시스 수집 실패(섹션만 비표시): {e}")
 
     # ETF 그룹 평균 등락률 (실패해도 본 파이프라인 유지, 해당 섹션만 비표시)
     try:
