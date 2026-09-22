@@ -1,7 +1,8 @@
 name: "[시험용] 네이버 증권 신규 구조 탐색"
 
-# 찾아낸 신규 수급 API(/market/investorTrend 등)의 호출 규약을 번들 코드에서
-# 떠내고, 실제로 호출해 응답 모양을 확인한다. 확인이 끝나면 이 파일은 지운다.
+# 신규 수급 API(/market/investorTrend)의 파라미터(기간·시장)를 확정하고,
+# 전체 API 목록에서 '선물·파생'에 해당하는 것이 정말 하나도 없는지 못박는다.
+# 확인이 끝나면 이 파일은 지운다.
 on:
   push:
     branches: [claude/telegram-trend-analysis-logic-7efsdy]
@@ -18,7 +19,7 @@ jobs:
       - name: 탐색
         run: |
           python - <<'PY'
-          import json, re, itertools
+          import re, json
           import requests
 
           HOST = "https://m.stock.naver.com"
@@ -32,13 +33,15 @@ jobs:
               except Exception as e:
                   print(f"   !! {u} -> {type(e).__name__}: {e}"); return None
 
-          TARGETS = ["/market/investorTrend", "/stock/domestic/trend",
-                     "/market/tradingTrend/ranking", "/stock/index/periodChanges",
-                     "/stock/domestic/index/price/list", "/chart/domesticPriceByTime"]
+          def show(path, params, cut=900):
+              rr = get(API + path, params=params)
+              if rr is None: return
+              print(f"\n  [{rr.status_code}] {path} {params}\n    {rr.text[:cut]}")
 
-          # ── 1) 번들에서 호출부 주변 코드 떠내기 ─────────────────────
-          seeds = ["/", "/domestic/index/KPI200/total", "/domestic/index/KOSPI/total",
-                   "/domestic/stock/005930/total", "/domestic/home/capitalization/total"]
+          # ── 1) 선물·파생이 정말 없는지 ──────────────────────────────
+          seeds = ["/", "/domestic/index/KPI200/total", "/domestic/stock/005930/total",
+                   "/domestic/home/capitalization/total", "/worldstock/futures/EScv1/total",
+                   "/marketindex"]
           chunks = set()
           for p in seeds:
               r = get(HOST + p)
@@ -49,42 +52,34 @@ jobs:
               if rr is None or rr.status_code != 200: continue
               chunks |= {"/_next/static/chunks/" + m for m in
                          re.findall(r'"(?:static/chunks/)?((?:pages|app)/[A-Za-z0-9/_.\-\[\]]+\.js)"', rr.text)}
-
-          found = {t: [] for t in TARGETS}
+          PAT = re.compile(r'url:\s*["`\']([^"`\']+)')
+          urls = set()
           for c in sorted(chunks)[:500]:
               rr = get(c if c.startswith("http") else HOST + c)
               if rr is None or rr.status_code != 200: continue
-              t = rr.text
-              for tgt in TARGETS:
-                  for m in re.finditer(re.escape(tgt), t):
-                      if len(found[tgt]) < 3:
-                          found[tgt].append(t[max(0, m.start()-420):m.start()+220])
+              urls |= set(PAT.findall(rr.text))
+          FUT = re.compile(r"futur|derivat|drv|option|선물", re.I)
+          print("=" * 70); print(f"axios url 총 {len(urls)}개 · 선물/파생 해당:"); print("=" * 70)
+          for u in sorted(x for x in urls if FUT.search(x)): print("   ", u)
 
-          print("=" * 78); print("호출부 코드"); print("=" * 78)
-          for tgt, ctxs in found.items():
-              print(f"\n───── {tgt} ({len(ctxs)}곳) ─────")
-              for c in ctxs:
-                  print("  …", c.replace("\n", " ")[-620:])
+          # ── 2) investorTrend 파라미터 확정 ─────────────────────────
+          print("\n" + "=" * 70); print("investorTrend 파라미터"); print("=" * 70)
+          for p in ({}, {"marketType": "KOSPI"}, {"marketType": "KOSDAQ"},
+                    {"marketType": "ALL"}, {"marketType": "BAD"},
+                    {"periodType": "BAD"}, {"periodType": "daily"},
+                    {"marketType": "KOSPI", "fromDate": "20260915", "toDate": "20260919"},
+                    {"marketType": "KOSPI", "startDate": "20260915", "endDate": "20260919"},
+                    {"marketType": "KOSPI", "bizdate": "20260919"},
+                    {"marketType": "KOSPI", "periodType": "weekly"}):
+              show("/market/investorTrend", p, 700)
 
-          # ── 2) 실제 호출 ────────────────────────────────────────────
-          print("\n" + "=" * 78); print("실호출"); print("=" * 78)
-          trials = [
-              ("/market/investorTrend", {}),
-              ("/market/investorTrend", {"market": "KOSPI"}),
-              ("/market/investorTrend", {"marketType": "KOSPI"}),
-              ("/market/investorTrend", {"indexCode": "KOSPI"}),
-              ("/market/investorTrend", {"stockExchangeType": "KRX"}),
-              ("/market/tradingTrend/ranking", {}),
-              ("/market/tradingTrend/ranking", {"market": "KOSPI", "investorType": "FOREIGN"}),
-              ("/stock/domestic/trend", {"code": "005930"}),
-              ("/stock/domestic/trend", {"code": "KPI200", "endType": "index"}),
-              ("/stock/domestic/trend", {"code": "KOSPI", "endType": "index"}),
-              ("/stock/index/periodChanges", {"code": "KPI200"}),
-              ("/stock/domestic/index/price/list", {"indexCode": "KPI200", "page": 1, "pageSize": 10}),
-          ]
-          for path, params in trials:
-              rr = get(API + path, params=params)
-              if rr is None: continue
-              body = rr.text[:1400].replace("\n", " ")
-              print(f"\n  [{rr.status_code}] {path} {params}\n    {body}")
+          # ── 3) 종목별 수급 이력 깊이 ───────────────────────────────
+          print("\n" + "=" * 70); print("stock/domestic/trend"); print("=" * 70)
+          show("/stock/domestic/trend", {"code": "005930", "size": 40}, 400)
+          rr = get(API + "/stock/domestic/trend", params={"code": "005930", "size": 40})
+          if rr is not None and rr.ok:
+              try:
+                  j = rr.json()["result"]
+                  print("   건수", len(j.get("items") or []), "· cursor", j.get("cursor"))
+              except Exception as e: print("   ", e)
           PY
