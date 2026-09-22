@@ -1,0 +1,125 @@
+name: "[시험용] 네이버 증권 신규 구조 탐색"
+
+# 옛 주소를 시험하는 게 아니라, 개편된 사이트가 **실제로 쓰는** 라우트/API 목록을
+# Next.js 빌드 매니페스트와 번들에서 통째로 뽑아 본다. 선물 투자자별이 새 구조 어딘가에
+# 남아 있는지 확인용 — 확인 끝나면 이 파일은 지운다.
+on:
+  push:
+    branches: [claude/telegram-trend-analysis-logic-7efsdy]
+    paths: [".github/workflows/_probe-naver2.yml"]
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/setup-python@v6
+        with: {python-version: "3.12"}
+      - run: pip install requests
+      - name: 탐색
+        run: |
+          python - <<'PY'
+          import json, re, collections
+          import requests
+
+          UA = ("Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) AppleWebKit/605.1.15 "
+                "(KHTML, like Gecko) Version/17.0 Mobile/15E148 Safari/604.1")
+          S = requests.Session(); S.headers.update({"User-Agent": UA})
+
+          def get(u, **kw):
+              try:
+                  return S.get(u, timeout=25, **kw)
+              except Exception as e:
+                  print(f"   !! {u} -> {type(e).__name__}: {e}")
+                  return None
+
+          def nextdata(html):
+              m = re.search(r'id="__NEXT_DATA__"[^>]*>(.*?)</script>', html, re.S)
+              if not m: return None
+              try: return json.loads(m.group(1))
+              except Exception: return None
+
+          FUT = re.compile(r"future|derivat|drv|option|kospi200|kpi200|k200", re.I)
+          FLOW = re.compile(r"invest|trend|program|deal|supply|flow", re.I)
+
+          for host in ("https://m.stock.naver.com", "https://stock.naver.com"):
+              print("\n" + "=" * 78)
+              print("HOST", host)
+              print("=" * 78)
+              r = get(host + "/")
+              if r is None: continue
+              print("  홈", r.status_code, "· 최종주소", r.url, "· 길이", len(r.text))
+              nd = nextdata(r.text)
+              if not nd:
+                  print("  __NEXT_DATA__ 없음 — Next.js 앱이 아니거나 구조가 다름")
+                  continue
+              bid = nd.get("buildId")
+              print("  buildId", bid)
+
+              # ── 1) 라우트 전체 목록 (사이트에 어떤 화면이 존재하는가) ──
+              routes = set()
+              for path in (f"/_next/static/{bid}/_buildManifest.js",
+                           f"/_next/static/{bid}/_ssgManifest.js"):
+                  rr = get(host + path)
+                  if rr is None or rr.status_code != 200:
+                      print(f"  {path} -> {rr.status_code if rr else 'fail'}")
+                      continue
+                  routes |= set(re.findall(r'"(/[^"]*)"', rr.text))
+              routes = {x for x in routes if not x.startswith("/_next")}
+              print(f"\n  ── 라우트 {len(routes)}개 ──")
+              hit = sorted(x for x in routes if FUT.search(x) or FLOW.search(x))
+              print(f"  [선물·수급 관련 {len(hit)}개]")
+              for x in hit: print("    ", x)
+              rest = sorted(routes - set(hit))
+              print(f"  [나머지 {len(rest)}개]")
+              for x in rest[:120]: print("    ", x)
+
+              # ── 2) 번들에서 API 경로 문자열 수집 ──
+              chunks = set(re.findall(r'src="([^"]*/_next/static/[^"]+\.js)"', r.text))
+              # 앱 전체 청크 목록은 buildManifest 안에도 들어 있다
+              rr = get(host + f"/_next/static/{bid}/_buildManifest.js")
+              if rr is not None and rr.status_code == 200:
+                  chunks |= {("/_next/static/chunks/" + m) if not m.startswith("/") else m
+                             for m in re.findall(r'"(static/chunks/[^"]+\.js)"', rr.text)}
+              chunks = {c if c.startswith("http") else host + (c if c.startswith("/") else "/" + c)
+                        for c in chunks}
+              print(f"\n  ── 청크 {len(chunks)}개 스캔 ──")
+              api = collections.Counter()
+              for i, c in enumerate(sorted(chunks)[:400]):
+                  rr = get(c)
+                  if rr is None or rr.status_code != 200: continue
+                  t = rr.text
+                  for m in re.findall(r'["`\'](/?(?:front-api|api)/[A-Za-z0-9/_.\-{}$\[\]:]+)', t):
+                      api[m] += 1
+                  for m in re.findall(r'["`\']((?:https?:)?//[a-z.]*naver\.com/(?:front-api|api)/[A-Za-z0-9/_.\-{}$\[\]:]+)', t):
+                      api[m] += 1
+              print(f"  고유 API 경로 {len(api)}개")
+              futs = sorted(k for k in api if FUT.search(k))
+              print(f"  [선물·파생 후보 {len(futs)}]")
+              for k in futs: print("    ", k)
+              flows = sorted(k for k in api if FLOW.search(k) and k not in futs)
+              print(f"  [수급·투자자 후보 {len(flows)}]")
+              for k in flows: print("    ", k)
+              others = sorted(k for k in api if k not in futs and k not in flows)
+              print(f"  [나머지 {len(others)}]")
+              for k in others[:150]: print("    ", k)
+
+          # ── 3) 후보 화면 직접 열어 보기 ──
+          print("\n" + "=" * 78)
+          print("후보 화면 응답")
+          print("=" * 78)
+          cands = [
+              "https://m.stock.naver.com/domestic/index/KPI200/total",
+              "https://m.stock.naver.com/domestic/index/KPI200/investor",
+              "https://m.stock.naver.com/domestic/futures/KPI200",
+              "https://m.stock.naver.com/domestic/derivative/KPI200",
+              "https://m.stock.naver.com/marketindex",
+              "https://m.stock.naver.com/api/index/KPI200/trend",
+              "https://m.stock.naver.com/api/index/KPI200/integration",
+          ]
+          for u in cands:
+              rr = get(u, allow_redirects=True)
+              if rr is None: continue
+              body = rr.text[:200].replace("\n", " ")
+              print(f"  {rr.status_code} {u}\n      -> {rr.url}\n      {body}")
+          PY
