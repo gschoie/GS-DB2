@@ -723,10 +723,12 @@ const MIL_LIMIT = 12;        // 날짜없는 소스: 최근 몇 건까지
 const MIL_SOURCES = [
   {
     name: '나우뉴스 밀리터리+',
-    list: 'https://m.nownews.seoul.co.kr/newsList/science/military/?cp=nownews',
+    list: 'https://nownews.seoul.co.kr/newsList/science/military/?cp=nownews',
     page: '&page=',
     dated: true,
-    linkRe: /newsView\.php\?id=(\d{8}\d{4,})/g,
+    // 링크 경로가 아니라 기사 ID 자체를 잡는다(모바일·데스크톱 경로가 달라도 무관).
+    // 나우뉴스 ID 는 YYYYMMDD + '60' + 숫자라 이 패턴이 고유하다.
+    linkRe: /(\d{8}60\d{4,})/g,
     view: function (id) { return 'https://nownews.seoul.co.kr/news/newsView.php?id=' + id; }
   },
   {
@@ -734,7 +736,8 @@ const MIL_SOURCES = [
     list: 'https://m.segye.com/category/3000327',
     page: '?page=',
     dated: true,
-    linkRe: /newsView\/(\d{14})/g,
+    // 모바일은 /view/ID, 데스크톱은 /newsView/ID — 둘 다 잡는다. ID 는 14자리(날짜 8+순번 6).
+    linkRe: /[Vv]iew\/(\d{14})/g,
     view: function (id) { return 'https://www.segye.com/newsView/' + id; }
   },
   {
@@ -848,6 +851,7 @@ function sendMilitaryColumns() {
   let total = 0;
   MIL_SOURCES.forEach(function (src) {
     const items = collectMilSource_(src, cutoff);
+    Logger.log(src.name + ': ' + items.length + '건');
     if (items.length) { groups.push({ name: src.name, items: items }); total += items.length; }
   });
   if (total === 0) {
