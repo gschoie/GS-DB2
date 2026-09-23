@@ -39,10 +39,12 @@ iframe{width:100%;height:calc(100vh - 110px);border:1px solid #24443a;border-rad
   <button id="next" title="다음 날짜">▶</button>
   <a class="lng" href="lng_tracker.html"
      target="_blank" rel="noopener" title="pre-FID 액화 프로젝트 트래커">📌 LNG 수출 프로젝트 모니터링</a>
+  <a class="lng" style="margin-left:0" href="dc_tracker.html"
+     target="_blank" rel="noopener" title="미국 데이터센터 투자계획 트래커">📌 미국 DC 투자</a>
 </div>
 <iframe id="frame" title="브리핑"></iframe>
 <script>
-const DATES=["2026-09-22", "2026-09-21", "2026-09-20", "2026-09-19", "2026-09-18", "2026-09-17", "2026-09-16", "2026-09-15", "2026-09-14", "2026-09-13", "2026-09-12", "2026-09-11", "2026-09-10", "2026-09-09", "2026-09-08", "2026-09-06", "2026-09-05", "2026-09-04", "2026-09-03", "2026-09-02", "2026-09-01"];
+const DATES=["2026-09-23", "2026-09-22", "2026-09-21", "2026-09-20", "2026-09-19", "2026-09-18", "2026-09-17", "2026-09-16", "2026-09-15", "2026-09-14", "2026-09-13", "2026-09-12", "2026-09-11", "2026-09-10", "2026-09-09", "2026-09-08", "2026-09-06", "2026-09-05", "2026-09-04", "2026-09-03", "2026-09-02", "2026-09-01"];
 const sel=document.getElementById('dsel'),fr=document.getElementById('frame');
 DATES.forEach(d=>{const o=document.createElement('option');o.value=d;o.textContent=d+' ('+'일월화수목금토'[new Date(d+'T00:00:00').getDay()]+')';sel.appendChild(o)});
 function load(){fr.src='energy_daily/'+sel.value+'.html'}
