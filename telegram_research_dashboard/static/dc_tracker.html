@@ -1,0 +1,225 @@
+<title>미국 DC 투자 트래커</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+  :root {
+    color-scheme: light;
+    --bg: #f6f5f1; --surface: #fdfdfb; --surface-2: #f0efe9;
+    --ink: #171612; --ink-2: #55534c; --muted: #8b887f;
+    --line: #e3e1d8; --line-strong: #c9c7bc;
+    --accent: #b97d10; --accent-ink: #8a5d0b; --accent-wash: rgba(185, 125, 16, 0.10);
+    --t1: #2a78d6; --t2: #1baf7a; --t3: #4a3aa7;
+    --shadow: 0 1px 2px rgba(23, 22, 18, 0.05), 0 4px 14px rgba(23, 22, 18, 0.04);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      color-scheme: dark;
+      --bg: #121210; --surface: #1b1b18; --surface-2: #23231f;
+      --ink: #f2f1ea; --ink-2: #c3c2b7; --muted: #8f8d84;
+      --line: #2c2c2a; --line-strong: #3d3d38;
+      --accent: #e0a532; --accent-ink: #e8b756; --accent-wash: rgba(224, 165, 50, 0.12);
+      --t1: #3987e5; --t2: #199e70; --t3: #9085e9;
+      --shadow: 0 1px 2px rgba(0, 0, 0, 0.35), 0 4px 14px rgba(0, 0, 0, 0.25);
+    }
+  }
+  :root[data-theme="dark"] {
+    color-scheme: dark;
+    --bg: #121210; --surface: #1b1b18; --surface-2: #23231f;
+    --ink: #f2f1ea; --ink-2: #c3c2b7; --muted: #8f8d84;
+    --line: #2c2c2a; --line-strong: #3d3d38;
+    --accent: #e0a532; --accent-ink: #e8b756; --accent-wash: rgba(224, 165, 50, 0.12);
+    --t1: #3987e5; --t2: #199e70; --t3: #9085e9;
+    --shadow: 0 1px 2px rgba(0, 0, 0, 0.35), 0 4px 14px rgba(0, 0, 0, 0.25);
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--bg); color: var(--ink);
+    font-family: "IBM Plex Sans KR", "Apple SD Gothic Neo", "Malgun Gothic", system-ui, sans-serif;
+    font-size: 14.5px; line-height: 1.5;
+  }
+  a { color: inherit; }
+  .mono { font-family: "IBM Plex Mono", ui-monospace, monospace; }
+  .wrap { max-width: 1280px; margin: 0 auto; padding: 0 16px 80px; }
+
+  header {
+    display: flex; flex-wrap: wrap; align-items: baseline; gap: 8px 18px;
+    padding: 26px 0 14px; border-bottom: 2px solid var(--ink);
+  }
+  .brand-eyebrow {
+    width: 100%; font-size: 11px; font-weight: 600; letter-spacing: 0.14em;
+    color: var(--accent-ink); text-transform: uppercase;
+  }
+  h1 { margin: 0; font-size: 24px; font-weight: 700; letter-spacing: -0.01em; }
+  .head-meta { margin-left: auto; font-size: 12.5px; color: var(--ink-2); display: flex; gap: 14px; align-items: baseline; }
+  .head-meta a { color: var(--accent-ink); font-weight: 600; text-decoration: none; }
+  .head-meta a:hover { text-decoration: underline; }
+
+  .notice {
+    margin: 14px 0 0; padding: 9px 12px;
+    background: var(--accent-wash); border: 1px solid var(--accent);
+    border-radius: 8px; font-size: 12.5px; color: var(--ink);
+  }
+
+  h2 { font-size: 16px; margin: 30px 0 10px; padding-bottom: 6px; border-bottom: 1px solid var(--line-strong); }
+  h2 .sub { font-size: 12px; font-weight: 500; color: var(--muted); margin-left: 8px; }
+
+  .bar { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin: 14px 0 10px; font-size: 13px; }
+  .bar select, .bar input[type="search"] {
+    font: inherit; color: var(--ink); background: var(--surface);
+    border: 1px solid var(--line-strong); border-radius: 6px; padding: 5px 8px;
+  }
+  .bar input[type="search"] { min-width: 220px; }
+  .bar label { display: flex; gap: 5px; align-items: center; color: var(--ink-2); }
+  select:focus-visible, input:focus-visible, a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  .tblwrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); box-shadow: var(--shadow); }
+  table { border-collapse: collapse; width: 100%; min-width: 1200px; font-size: 12.8px; }
+  thead th {
+    position: sticky; top: 0; background: var(--surface-2); z-index: 1;
+    text-align: left; font-size: 11.5px; letter-spacing: 0.03em; color: var(--ink-2);
+    padding: 8px 9px; border-bottom: 1px solid var(--line-strong); white-space: nowrap;
+  }
+  tbody td { padding: 7px 9px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  tbody tr:hover { background: var(--accent-wash); }
+  td.nowrap { white-space: nowrap; }
+  .pname { font-weight: 600; }
+  .pname .op { display: block; font-weight: 400; font-size: 11.5px; color: var(--muted); }
+  .badge { display: inline-block; padding: 1px 7px; border-radius: 999px; font-size: 11px; font-weight: 600; border: 1px solid; white-space: nowrap; }
+  .b-campus { color: var(--t1); border-color: var(--t1); }
+  .b-capex { color: var(--t2); border-color: var(--t2); }
+  .b-compute { color: var(--t3); border-color: var(--t3); }
+  .b-fdc { color: var(--accent-ink); border-color: var(--accent-ink); }
+  .kr { color: var(--accent-ink); font-weight: 600; }
+  .dim { color: var(--muted); }
+  td .cell { max-width: 330px; }
+
+  .log { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 4px 14px; box-shadow: var(--shadow); }
+  .log .entry { display: flex; gap: 12px; padding: 9px 0; border-bottom: 1px solid var(--line); font-size: 13px; }
+  .log .entry:last-child { border-bottom: 0; }
+  .log .d { flex: 0 0 86px; color: var(--muted); font-family: "IBM Plex Mono", monospace; font-size: 12px; }
+  .log .p { font-weight: 600; margin-right: 6px; }
+  .empty { color: var(--muted); font-size: 13px; padding: 14px 2px; }
+  footer { margin-top: 40px; font-size: 12px; color: var(--muted); }
+</style>
+
+<div class="wrap">
+  <header>
+    <div class="brand-eyebrow">US Data Center · Investment Plans Tracker</div>
+    <h1>미국 DC 투자 트래커</h1>
+    <div class="head-meta">
+      <span id="metaLine" class="mono"></span>
+      <a href="energy_briefing_report.html">← FDC 브리핑</a>
+    </div>
+  </header>
+
+  <div class="notice">
+    미국 데이터센터 <b>투자계획</b>(메가 캠퍼스 · 하이퍼스케일러 capex · 컴퓨트 계약 · FDC)을 추적한다.
+    매일 FDC 모닝 브리핑에서 관련 보도가 확인되면 로그로 자동 누적. 초기값은 <b>2026-09-22</b> 일괄 정리 기준.
+    2026년 5대 하이퍼스케일러(MS·알파벳·아마존·메타·오라클) 합산 capex는 <b>$6,600~6,900억</b> 수준.
+    한국 조선 관련(삼성중공업 FDC 등)은 <span class="kr">금색</span> 표시.
+  </div>
+
+  <div class="bar">
+    <input type="search" id="fQ" placeholder="기업·프로젝트·지역 검색">
+    <select id="fType"><option value="">유형: 전체</option></select>
+    <label><input type="checkbox" id="fKr"> 한국 조선 관련만</label>
+    <span class="dim" id="cnt" style="margin-left:auto;font-size:12.5px"></span>
+  </div>
+
+  <div class="tblwrap">
+    <table>
+      <thead><tr>
+        <th>유형</th><th>프로젝트 / 주체</th><th>지역</th><th>투자 규모</th>
+        <th>전력</th><th>단계</th><th>전력 조달·파트너</th><th>한국 관련</th><th>비고</th>
+      </tr></thead>
+      <tbody id="tbody"></tbody>
+    </table>
+  </div>
+
+  <div id="inboxSec" hidden>
+    <h2>신규 감지 (검토 대기) <span class="sub">자동 수집이 기존 항목과 매칭하지 못한 이벤트</span></h2>
+    <div id="inbox" class="log"></div>
+  </div>
+
+  <h2>업데이트 로그 <span class="sub">FDC 브리핑에서 쌓는 항목별 뉴스 기록 (최신순)</span></h2>
+  <div id="log" class="log"></div>
+
+  <footer id="foot"></footer>
+</div>
+
+<script>
+"use strict";
+const $ = (id) => document.getElementById(id);
+const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => (
+  { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]
+));
+
+let DATA = null;
+const TYPE_CLS = { "캠퍼스": "b-campus", "기업 capex": "b-capex", "컴퓨트 계약": "b-compute", "FDC(해상)": "b-fdc" };
+const typeBadge = (t) => `<span class="badge ${TYPE_CLS[t] || "b-campus"}">${esc(t)}</span>`;
+const cell = (v) => v && v !== "-" ? `<div class="cell">${esc(v)}</div>` : '<span class="dim">—</span>';
+const isKr = (x) => x.kr && x.kr !== "-";
+
+function render() {
+  const q = $("fQ").value.trim().toLowerCase();
+  const ty = $("fType").value;
+  const kr = $("fKr").checked;
+  const rows = DATA.projects.filter(p =>
+    (!q || JSON.stringify(p).toLowerCase().includes(q)) &&
+    (!ty || p.type === ty) && (!kr || isKr(p)));
+  $("cnt").textContent = `${rows.length} / ${DATA.projects.length}건`;
+  $("tbody").innerHTML = rows.map(p => `
+    <tr>
+      <td class="nowrap">${typeBadge(p.type)}</td>
+      <td class="pname">${esc(p.name)}<span class="op">${esc(p.owner)}</span></td>
+      <td>${cell(p.region)}</td>
+      <td>${cell(p.capex)}</td>
+      <td>${cell(p.power)}</td>
+      <td>${cell(p.stage)}</td>
+      <td>${cell(p.energy)}</td>
+      <td>${isKr(p) ? `<span class="kr">${esc(p.kr)}</span>` : '<span class="dim">—</span>'}</td>
+      <td>${cell(p.note)}</td>
+    </tr>`).join("") || `<tr><td colspan="9" class="empty">조건에 맞는 항목 없음</td></tr>`;
+}
+
+function renderLog() {
+  const entries = [];
+  DATA.projects.forEach(p => (p.log || []).forEach(e => entries.push({ ...e, pname: p.name })));
+  entries.sort((a, b) => (b.date || "").localeCompare(a.date || ""));
+  $("log").innerHTML = entries.length ? entries.map(e => `
+    <div class="entry">
+      <div class="d">${esc(e.date)}</div>
+      <div><span class="p">${esc(e.pname)}</span>${e.link ? `<a href="${esc(e.link)}" target="_blank" rel="noopener">${esc(e.text)}</a>` : esc(e.text)}</div>
+    </div>`).join("")
+    : '<div class="empty">아직 쌓인 로그가 없습니다. 매일 FDC 모닝 브리핑 생성 후 자동으로 누적됩니다.</div>';
+
+  const inbox = (DATA.meta.inbox || []);
+  if (inbox.length) {
+    $("inboxSec").hidden = false;
+    $("inbox").innerHTML = inbox.map(e => `
+      <div class="entry">
+        <div class="d">${esc(e.date)}</div>
+        <div><span class="p">${esc(e.name || "")}</span>${esc(e.text)}</div>
+      </div>`).join("");
+  }
+}
+
+fetch("dc_tracker.json", { cache: "no-store" })
+  .then(r => r.json())
+  .then(d => {
+    DATA = d;
+    $("metaLine").textContent = `기준 ${d.meta.updated}`;
+    const types = [...new Set(d.projects.map(p => p.type))];
+    $("fType").insertAdjacentHTML("beforeend",
+      types.map(t => `<option value="${esc(t)}">${esc(t)}</option>`).join(""));
+    render();
+    renderLog();
+    $("foot").textContent = "데이터: dc_tracker.json — 매일 FDC 브리핑 후 자동 갱신 · 구조화 필드는 수동 큐레이션";
+    ["fType", "fKr"].forEach(id => $(id).addEventListener("change", render));
+    $("fQ").addEventListener("input", render);
+  })
+  .catch(e => { $("tbody").innerHTML = `<tr><td colspan="9" class="empty">데이터 로드 실패: ${esc(e)}</td></tr>`; });
+</script>

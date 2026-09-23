@@ -407,6 +407,8 @@ iframe{{width:100%;height:calc(100vh - 110px);border:1px solid #24443a;border-ra
   <button id="next" title="다음 날짜">▶</button>
   <a class="lng" href="lng_tracker.html"
      target="_blank" rel="noopener" title="pre-FID 액화 프로젝트 트래커">📌 LNG 수출 프로젝트 모니터링</a>
+  <a class="lng" style="margin-left:0" href="dc_tracker.html"
+     target="_blank" rel="noopener" title="미국 데이터센터 투자계획 트래커">📌 미국 DC 투자</a>
 </div>
 <iframe id="frame" title="브리핑"></iframe>
 <script>
