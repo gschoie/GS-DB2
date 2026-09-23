@@ -1,0 +1,142 @@
+{
+ "meta": {
+  "title": "미국 DC 투자계획 트래커",
+  "created": "2026-09-22",
+  "updated": "2026-09-22",
+  "howto": [
+   "매일 FDC 브리핑 생성 후 dc_tracker_update.py가 브리핑 본문에서 미국 DC 투자 이벤트를 추출해 log에 자동 누적한다.",
+   "구조화 필드(투자규모·전력·단계 등)는 자동으로 바꾸지 않는다 — 로그를 보고 수동(또는 Claude 세션)으로 갱신.",
+   "신규 감지 항목은 meta.inbox에 쌓이며, 검토 후 projects로 옮긴다."
+  ],
+  "inbox": [],
+  "seen": []
+ },
+ "projects": [
+  {
+   "id": "mousterian-shi",
+   "type": "FDC(해상)",
+   "name": "Mousterian × 삼성중공업 부유식 DC",
+   "owner": "Mousterian(M3)·삼성중공업",
+   "region": "텍사스(1호기) 등 미국",
+   "capex": "미공개",
+   "power": "호기당 50 MW",
+   "stage": "엔지니어링 계약(2026.08.03) — 기본·상세·생산설계 착수",
+   "energy": "기존 발전자산 인접 계류(moored) 배치로 전력 확보",
+   "kr": "삼성중공업",
+   "note": "2026.04 전략협력 프레임워크의 첫 확정 계약. 텍사스 그리드 접속 규제 이슈 보도 — 규제 트래커와 연계 모니터링",
+   "log": []
+  },
+  {
+   "id": "stargate",
+   "type": "캠퍼스",
+   "name": "Stargate (OpenAI·SoftBank·Oracle·MGX)",
+   "owner": "OpenAI 컨소시엄",
+   "region": "TX(Abilene 1.2GW)·NM·OH 등 5개 부지",
+   "capex": "2029년까지 $5,000억 목표 — 3년내 $4,000억+ 커밋",
+   "power": "~7 GW 계획",
+   "stage": "건설·확장 중",
+   "energy": "Lancium Clean Campus(재생e)·가스 등 부지별 상이",
+   "kr": "-",
+   "note": "",
+   "log": []
+  },
+  {
+   "id": "meta-hyperion",
+   "type": "캠퍼스",
+   "name": "Meta Hyperion",
+   "owner": "Meta",
+   "region": "루이지애나 Richland Parish",
+   "capex": "$100억+",
+   "power": "멀티 GW",
+   "stage": "건설 중",
+   "energy": "가스복합 신설 연계(Entergy)",
+   "kr": "-",
+   "note": "맨해튼 면적급 캠퍼스. Meta 2026 capex 가이던스 ~$720억",
+   "log": []
+  },
+  {
+   "id": "colossus",
+   "type": "캠퍼스",
+   "name": "SpaceXAI(xAI) Colossus 1·2·3",
+   "owner": "SpaceXAI",
+   "region": "테네시 멤피스·미시시피",
+   "capex": "$180억(2GW 확장 기준)",
+   "power": "IT ~1 GW 가동, 2 GW로 확장 중 (Colossus 2 946MW = 미국 최대 단지)",
+   "stage": "확장 중 (77만 GPU, 100만 GPU 목표)",
+   "energy": "오프그리드 자가발전(가스터빈) 중심",
+   "kr": "-",
+   "note": "컴퓨트 임대: Anthropic(~$150억/년)·Google(~$110억/년)·Reflection AI($1.5억/월, 2026.06) — 군 기밀 워크로드 운용",
+   "log": []
+  },
+  {
+   "id": "aws-capex",
+   "type": "기업 capex",
+   "name": "Amazon AWS 2026 투자",
+   "owner": "Amazon",
+   "region": "버지니아·오하이오·피닉스·댈러스-포트워스 등",
+   "capex": "2026 capex ~$2,000억 (대부분 AI 인프라)",
+   "power": "-",
+   "stage": "집행 중",
+   "energy": "원전(재가동·SMR)·가스·재생e 포트폴리오",
+   "kr": "-",
+   "note": "Anthropic 딜(2026.04): 추가 $250억 투자 + Anthropic에 5GW 캐퍼시티 — Anthropic은 10년 $1,000억 AWS 커밋(Trainium)",
+   "log": []
+  },
+  {
+   "id": "msft-azure",
+   "type": "기업 capex",
+   "name": "Microsoft Azure 2026 투자",
+   "owner": "Microsoft",
+   "region": "위스콘신·조지아 등 전국",
+   "capex": "4대 하이퍼스케일러 합산 $4,000억+의 최대 축",
+   "power": "-",
+   "stage": "집행 중",
+   "energy": "원전 PPA(TMI 재가동)·가스·재생e",
+   "kr": "-",
+   "note": "Anthropic: MS $50억 투자 + Azure $300억 구매 커밋(2025.11)",
+   "log": []
+  },
+  {
+   "id": "google-capex",
+   "type": "기업 capex",
+   "name": "Google(Alphabet) 2026 투자",
+   "owner": "Alphabet",
+   "region": "전국",
+   "capex": "5사 합산 $6,600~6,900억의 한 축",
+   "power": "-",
+   "stage": "집행 중",
+   "energy": "SMR(Kairos)·재생e PPA + xAI Colossus 캐퍼시티 구매(~$110억/년)",
+   "kr": "-",
+   "note": "",
+   "log": []
+  },
+  {
+   "id": "oracle-capex",
+   "type": "기업 capex",
+   "name": "Oracle FY2026 투자",
+   "owner": "Oracle",
+   "region": "Stargate 부지 중심",
+   "capex": "FY2026 $350억+ (수년 전 대비 10배 가속)",
+   "power": "-",
+   "stage": "집행 중",
+   "energy": "-",
+   "kr": "-",
+   "note": "Stargate 최대 수혜 축",
+   "log": []
+  },
+  {
+   "id": "anthropic-compute",
+   "type": "컴퓨트 계약",
+   "name": "Anthropic 컴퓨트 조달 포트폴리오",
+   "owner": "Anthropic",
+   "region": "멀티 클라우드",
+   "capex": "AWS $1,000억(10년)+Azure $300억+Colossus ~$150억/년",
+   "power": "AWS 5GW 확보",
+   "stage": "계약 체결·집행 중",
+   "energy": "-",
+   "kr": "-",
+   "note": "프런티어 AI사 컴퓨트 확보 경쟁의 바로미터",
+   "log": []
+  }
+ ]
+}
