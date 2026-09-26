@@ -363,7 +363,8 @@ iframe{{width:100%;height:calc(100vh - 110px);border:1px solid #223046;border-ra
 <div class="bar">
   <h1>🗓️ 글로벌 방산 주간 정리 <small style="font-size:11px;color:#8b96a8">매주 토 11:50</small></h1>
   <a class="bundle" href="defense_weekly/last4weeks.html" target="_blank" rel="noopener" title="월간 세미나(NotebookLM)용 최근 4주 묶음">📦 4주 묶음</a>
-  <a class="bundle" href="defense_weekly/last4weeks.md" download="{md_download_name}" title="NotebookLM 업로드용 마크다운 ({md_download_name})">⬇ .md</a>
+  <a class="bundle" href="defense_weekly/last4weeks.md" download="{md_download_name}" title="NotebookLM 업로드용 최근 4주 묶음 마크다운 ({md_download_name})">⬇ 4주 .md</a>
+  <a class="bundle" id="mdlink" href="#" title="선택한 주의 마크다운 다운로드">⬇ .md</a>
   <button id="prev" title="이전 주">◀</button>
   <select id="dsel"></select>
   <button id="next" title="다음 주">▶</button>
@@ -373,7 +374,10 @@ iframe{{width:100%;height:calc(100vh - 110px);border:1px solid #223046;border-ra
 const DATES={dates_js};
 const sel=document.getElementById('dsel'),fr=document.getElementById('frame');
 DATES.forEach(d=>{{const o=document.createElement('option');o.value=d;o.textContent=d+' ('+'일월화수목금토'[new Date(d+'T00:00:00').getDay()]+')';sel.appendChild(o)}});
-function load(){{fr.src='defense_weekly/'+sel.value+'.html'}}
+function load(){{fr.src='defense_weekly/'+sel.value+'.html';
+  const m=document.getElementById('mdlink');m.href='defense_weekly/'+sel.value+'.md';
+  m.download='GLOBAL_DEFENSE_'+sel.value.slice(2).replace(/-/g,'')+'.md';
+  m.title='선택한 주의 마크다운 다운로드 ('+m.download+')'}}
 sel.onchange=load;
 document.getElementById('prev').onclick=()=>{{if(sel.selectedIndex<DATES.length-1){{sel.selectedIndex++;load()}}}};
 document.getElementById('next').onclick=()=>{{if(sel.selectedIndex>0){{sel.selectedIndex--;load()}}}};
