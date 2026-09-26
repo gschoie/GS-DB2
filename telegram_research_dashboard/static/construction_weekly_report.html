@@ -31,7 +31,7 @@ select,button{background:#161d29;color:#d8dee9;border:1px solid #2c3a52;border-r
 iframe{width:100%;height:calc(100vh - 110px);border:1px solid #3a3046;border-radius:10px;background:#0d1117}
 </style></head><body>
 <div class="bar">
-  <h1>🗓️ 글로벌 건설기계 주간 정리 <small style="font-size:11px;color:#8b96a8">매주 토 12:10</small></h1>
+  <h1>🗓️ 글로벌 건설기계 주간 정리 <small style="font-size:11px;color:#8b96a8">매주 토 08:20</small></h1>
   <a class="bundle" href="construction_weekly/last4weeks.html" target="_blank" rel="noopener" title="월간 세미나(NotebookLM)용 최근 4주 묶음">📦 4주 묶음</a>
   <a class="bundle" href="construction_weekly/last4weeks.md" download="GLOBAL_CONSTRUCTION_260926.md" title="NotebookLM 업로드용 최근 4주 묶음 마크다운 (GLOBAL_CONSTRUCTION_260926.md)">⬇ 4주 .md</a>
   <a class="bundle" id="mdlink" href="#" title="선택한 주의 마크다운 다운로드">⬇ .md</a>
@@ -52,5 +52,5 @@ sel.onchange=load;
 document.getElementById('prev').onclick=()=>{if(sel.selectedIndex<DATES.length-1){sel.selectedIndex++;load()}};
 document.getElementById('next').onclick=()=>{if(sel.selectedIndex>0){sel.selectedIndex--;load()}};
 if(DATES.length)load();
-else fr.srcdoc='<body style="background:#0d1117;color:#8b96a8;font-family:sans-serif;display:flex;align-items:center;justify-content:center;height:100vh;margin:0">아직 주간 정리가 없습니다 — 매주 토요일 12:10에 자동 생성됩니다.</body>';
+else fr.srcdoc='<body style="background:#0d1117;color:#8b96a8;font-family:sans-serif;display:flex;align-items:center;justify-content:center;height:100vh;margin:0">아직 주간 정리가 없습니다 — 매주 토요일 08:20에 자동 생성됩니다.</body>';
 </script></body></html>
