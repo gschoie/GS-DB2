@@ -13,7 +13,7 @@ on:
   schedule:
     # UTC 02:50 = KST 11:50 (토) — 안전망. 정시 발사는 GAS 스케줄러(defweekly 슬롯)가
     # 담당한다(토요일 크론이 매주 +4.5시간대로 밀려 텔레가 오후 5시에 오던 문제, 9/19).
-    - cron: "50 2 * * 6"
+    - cron: "0 23 * * 5"
 
 permissions:
   contents: write

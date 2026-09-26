@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """글로벌 건설기계 주간 정리본 봇 (weekly_defense_bot과 동일 골격).
 
-매주 토요일 KST 12:10 실행. 지난 7일의 건설기계 브리핑 마크다운을 모아
+매주 토요일 KST 08:20 실행. 지난 7일의 건설기계 브리핑 마크다운을 모아
 Gemini가 주간 정리본 1편을 작성한다. 소스는 날짜별로 **통합본
 (construction_unified — 데일리+GPT판 합본) 우선**, 통합본이 없는 날짜만
 데일리(construction_daily)로 보충한다.
@@ -355,7 +355,7 @@ select,button{{background:#161d29;color:#d8dee9;border:1px solid #2c3a52;border-
 iframe{{width:100%;height:calc(100vh - 110px);border:1px solid #3a3046;border-radius:10px;background:#0d1117}}
 </style></head><body>
 <div class="bar">
-  <h1>🗓️ 글로벌 건설기계 주간 정리 <small style="font-size:11px;color:#8b96a8">매주 토 12:10</small></h1>
+  <h1>🗓️ 글로벌 건설기계 주간 정리 <small style="font-size:11px;color:#8b96a8">매주 토 08:20</small></h1>
   <a class="bundle" href="construction_weekly/last4weeks.html" target="_blank" rel="noopener" title="월간 세미나(NotebookLM)용 최근 4주 묶음">📦 4주 묶음</a>
   <a class="bundle" href="construction_weekly/last4weeks.md" download="{md_download_name}" title="NotebookLM 업로드용 최근 4주 묶음 마크다운 ({md_download_name})">⬇ 4주 .md</a>
   <a class="bundle" id="mdlink" href="#" title="선택한 주의 마크다운 다운로드">⬇ .md</a>
@@ -376,7 +376,7 @@ sel.onchange=load;
 document.getElementById('prev').onclick=()=>{{if(sel.selectedIndex<DATES.length-1){{sel.selectedIndex++;load()}}}};
 document.getElementById('next').onclick=()=>{{if(sel.selectedIndex>0){{sel.selectedIndex--;load()}}}};
 if(DATES.length)load();
-else fr.srcdoc='<body style="background:#0d1117;color:#8b96a8;font-family:sans-serif;display:flex;align-items:center;justify-content:center;height:100vh;margin:0">아직 주간 정리가 없습니다 — 매주 토요일 12:10에 자동 생성됩니다.</body>';
+else fr.srcdoc='<body style="background:#0d1117;color:#8b96a8;font-family:sans-serif;display:flex;align-items:center;justify-content:center;height:100vh;margin:0">아직 주간 정리가 없습니다 — 매주 토요일 08:20에 자동 생성됩니다.</body>';
 </script></body></html>"""
     INDEX_PAGE.write_text(index, encoding="utf-8")
     print(f"[인덱스] construction_weekly_report.html 갱신 (누적 {len(dates)}주)")
