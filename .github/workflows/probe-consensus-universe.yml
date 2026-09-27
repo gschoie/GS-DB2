@@ -1,0 +1,12 @@
+name: probe consensus universe (temp)
+on:
+  push:
+    branches: ["claude/pensive-clarke-tzhq34"]
+    paths: [".github/workflows/probe-consensus-universe.yml", "kospi_consensus/probe_universe.py"]
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - run: pip install requests
+      - run: python kospi_consensus/probe_universe.py
