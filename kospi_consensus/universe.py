@@ -39,18 +39,29 @@ def _items(j):
             if r.get("itemCode") and r.get("stockName")]
 
 
-def crawl_kospi200(page_size=100, max_pages=5):
+def crawl_kospi200(max_pages=30):
+    """KOSPI200 구성종목. pageSize 상한이 문서화돼 있지 않아(100은 400 에러)
+    큰 값부터 받아 주는 크기를 찾는다."""
     s = _session()
-    codes = {}
-    for page in range(1, max_pages + 1):
-        r = s.get(KOSPI200_API.format(page=page, size=page_size), timeout=10)
+    for size in (50, 20, 10):
+        r = s.get(KOSPI200_API.format(page=1, size=size), timeout=10)
+        if r.status_code == 400:
+            continue
         r.raise_for_status()
+        break
+    else:
+        r.raise_for_status()
+    codes = {}
+    page = 1
+    while True:
         found = _items(r.json())
         new = [(c, n) for c, n in found if c not in codes]
-        for code, name in new:
-            codes[code] = name
-        if len(found) < page_size or not new:
+        codes.update(new)
+        page += 1
+        if len(found) < size or not new or page > max_pages:
             break
+        r = s.get(KOSPI200_API.format(page=page, size=size), timeout=10)
+        r.raise_for_status()
     return codes
 
 

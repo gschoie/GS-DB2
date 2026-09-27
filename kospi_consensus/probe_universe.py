@@ -8,3 +8,7 @@ universe.CACHE = "/tmp/uni.json"
 u = universe.load_or_crawl(refresh=True)
 from collections import Counter
 print("total", len(u), Counter(g for v in u.values() for g in v["groups"]))
+import requests
+for sz in (50, 20):
+    r = requests.get(universe.KOSDAQ_SUM_API.format(size=sz), headers={"User-Agent": universe.UA}, timeout=10)
+    print("kosdaq size", sz, r.status_code)
