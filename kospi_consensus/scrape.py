@@ -54,14 +54,15 @@ def fetch_quarters(code, session=None):
         d = s.get(QUARTER_API.format(code=code), headers=headers, timeout=10).json()
     except Exception:
         return []
-    fi = d.get("financeInfo", {})
-    titles = fi.get("trTitleList", [])
-    rows = fi.get("rowList", [])
+    # 재무 정보가 없는 종목(신규상장·지주 등)은 financeInfo가 null로 온다 → 빈 결과
+    fi = (d.get("financeInfo") if isinstance(d, dict) else None) or {}
+    titles = fi.get("trTitleList") or []
+    rows = fi.get("rowList") or []
     cons = [t for t in titles if t.get("isConsensus") == "Y"]
 
     def val(title, key):
         row = next((r for r in rows if r.get("title", "").strip() == title), None)
-        return _num(row["columns"].get(key, {}).get("value")) if row else None
+        return _num(((row.get("columns") or {}).get(key) or {}).get("value")) if row else None
 
     out = []
     for tgt in cons:
