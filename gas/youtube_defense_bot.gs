@@ -743,12 +743,17 @@ const MIL_SOURCES = [
   },
   {
     name: '세계 박수찬의 軍',
-    list: 'https://www.segye.com/category/3000327',
-    listAlts: ['https://m.segye.com/category/3000327'],
+    list: 'https://m.segye.com/category/3000327',
+    listAlts: [
+      // 기자 페이지(박수찬) — 카테고리 페이지가 안 잡힐 때의 대체
+      'https://m.segye.com/journalist/list.do?id=psc%40segye.com&writerName=%EB%B0%95%EC%88%98%EC%B0%AC',
+      'https://www.segye.com/category/3000327'
+    ],
     page: '?page=',
     dated: true,
-    // 모바일은 /view/ID, 데스크톱은 /newsView/ID — 둘 다 잡는다. ID 는 14자리(날짜 8+순번 6).
-    linkRe: /[Vv]iew\/(\d{14})/g,
+    // 경로가 아니라 기사 ID 로 잡는다. 세계 최근 기사 ID = 날짜8 + '5' + 5자리
+    // (시각 타임스탬프는 date+0~2 로 시작하므로 '5' 로 걸러 오탐을 막는다).
+    linkRe: /\b(\d{8}5\d{5})\b/g,
     view: function (id) { return 'https://www.segye.com/newsView/' + id; }
   },
   {
