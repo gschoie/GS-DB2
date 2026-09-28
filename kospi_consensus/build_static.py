@@ -4,6 +4,7 @@
 - 화면 상단 4개 시계: 당분기 / 다음분기 / 올해E / 내년E (연도는 스냅샷 연도 기준 자동)
 - 당분기는 법정 보고서 마감(분기말+45일, 4Q는 90일) 경과 시 자동으로 다음 분기로 이동,
   화면의 ◀▶ 버튼으로 수동 이동도 가능(브라우저 저장, '자동으로' 버튼으로 복귀)
+- 비교 기준 토글: 주간(전주) / 1개월 / 3개월 — 기준일은 스냅샷에서 가장 가까운 과거 주
 - 전체 종목 데이터는 엑셀 다운로드 버튼으로 제공
 출력: telegram_research_dashboard/static/{consensus_revision.html, consensus_full.xlsx}
 """
@@ -27,6 +28,7 @@ OUT_XLSX = os.path.join(STATIC, "consensus_full.xlsx")
 SECTORS_PATH = os.path.join(BASE, "sectors.json")   # 코드→섹터(세부업종) 매핑
 MAX_PERIODS = 10                                     # 화면 주차 이동 최대 비교주 수
 MONTHS3 = 3                                           # 장기 비교 기준(개월)
+MONTHS1 = 1                                           # 중기 비교 기준(개월)
 
 REPORT_LAG_DAYS = {"03": 45, "06": 45, "09": 45, "12": 90}   # 분기·반기 45일 / 사업보고서 90일
 
@@ -181,11 +183,12 @@ def horizon_specs(con, snap):
     return specs, qps, anchor
 
 
-def build_period(con, snap, base, ref3, sectors, umeta):
-    """한 비교주: 전주(base)와 3개월전(ref3) 두 기준 대비 값을 함께 담는다."""
+def build_period(con, snap, base, ref1, ref3, sectors, umeta):
+    """한 비교주: 전주(base)·1개월전(ref1)·3개월전(ref3) 세 기준 대비 값을 함께 담는다."""
     specs, qps, anchor = horizon_specs(con, snap)
     psnap = db.price_map(con, snap)
     pbase = db.price_map(con, base) if base else {}
+    pref1 = db.price_map(con, ref1) if ref1 else {}
     pref3 = db.price_map(con, ref3) if ref3 else {}
 
     def pw(mp, code):
@@ -196,19 +199,23 @@ def build_period(con, snap, base, ref3, sectors, umeta):
     hz = []
     for key, kind, p, label in specs:
         sw = series(con, snap, base, kind, p)                     # 전주 대비
+        s1 = series(con, snap, ref1, kind, p) if ref1 else {}     # 1개월전 대비
         s3 = series(con, snap, ref3, kind, p) if ref3 else {}     # 3개월전 대비
         for code, d in sw.items():
             names[code] = d["name"]
         uw = _counts([d["wow"] for d in sw.values()])
+        u1 = _counts([d["wow"] for d in s1.values()]) if ref1 else (0, 0, 0)
         u3 = _counts([d["wow"] for d in s3.values()]) if ref3 else (0, 0, 0)
         rows = []
         for code, d in sw.items():
-            d3 = s3.get(code)
+            d1, d3 = s1.get(code), s3.get(code)
             um = umeta.get(code, {})
             rows.append({"code": code, "name": d["name"], "sec": sectors.get(code, "기타"),
                          "mkt": um.get("mkt"), "cov": bool(um.get("cov")),
                          "grp": ",".join(um.get("groups", [])),
                          "curr": d["curr"], "base": d["base"], "wow": d["wow"], "pwow": pw(pbase, code),
+                         "base1": d1["base"] if d1 else None, "wow1": d1["wow"] if d1 else None,
+                         "pwow1": pw(pref1, code),
                          "base3": d3["base"] if d3 else None, "wow3": d3["wow"] if d3 else None,
                          "pwow3": pw(pref3, code)})
         if base:
@@ -217,11 +224,13 @@ def build_period(con, snap, base, ref3, sectors, umeta):
             rows.sort(key=lambda r: -(r["curr"] or 0))
         hz.append({"label": label, "period": p, "key": key,
                    "up": uw[0], "down": uw[1], "flat": uw[2],
+                   "up1": u1[0], "down1": u1[1], "flat1": u1[2],
                    "up3": u3[0], "down3": u3[1], "flat3": u3[2], "rows": rows})
     uni = con.execute("SELECT COUNT(*) FROM universe WHERE snapshot_date=?", (snap,)).fetchone()[0]
-    return {"snapshot_date": snap, "base_date": base, "ref3_date": ref3,
+    return {"snapshot_date": snap, "base_date": base, "ref1_date": ref1, "ref3_date": ref3,
             "price_date_snap": price_date_of(con, snap),
             "price_date_base": price_date_of(con, base) if base else None,
+            "price_date_ref1": price_date_of(con, ref1) if ref1 else None,
             "price_date_ref3": price_date_of(con, ref3) if ref3 else None,
             "qlist": qps, "anchor": anchor,
             "universe": uni, "covered": len(names), "horizons": hz}
@@ -282,7 +291,8 @@ def build():
         pairs = [(reps[0], None)]
     else:
         pairs = [(reps[i], reps[i - 1]) for i in range(len(reps) - 1, 0, -1)][:MAX_PERIODS]
-    periods_payload = [build_period(con, s, b, three_month_ref(s, reps), sectors, umeta)
+    periods_payload = [build_period(con, s, b, three_month_ref(s, reps, MONTHS1),
+                                    three_month_ref(s, reps), sectors, umeta)
                        for s, b in pairs]
     sec_list = sorted({r["sec"] for pp in periods_payload for h in pp["horizons"] for r in h["rows"]})
 
@@ -441,8 +451,12 @@ var pi=0, sel=0, sortKey=null, sortDir=-1, showAll=false, secFilter='', grpFilte
 var qOverride=null; try{qOverride=localStorage.getItem('kc_anchor')||null}catch(e){}
 function P(){return D.periods[pi]}
 function $(id){return document.getElementById(id)}
-function m3(){return MODE==='3m'}
-function chgField(){return m3()?'wow3':'wow'}
+// 비교 기준: 주간(전주) / 1개월 / 3개월 — 필드 접미사 ''·'1'·'3' (wow1·base1·up1·ref1_date …)
+var MODES={wk:{sfx:'',lab:'전주',btn:'주간'},'1m':{sfx:'1',lab:'1개월전',btn:'1개월'},'3m':{sfx:'3',lab:'3개월전',btn:'3개월'}};
+function MX(){return MODES[MODE]||MODES.wk}
+function refDate(p){var x=MX().sfx;return x?p['ref'+x+'_date']:p.base_date}
+function refPDate(p){var x=MX().sfx;return x?p['price_date_ref'+x]:p.price_date_base}
+function chgField(){return 'wow'+MX().sfx}
 function fmt(n){return n==null?'-':Math.round(n).toLocaleString('ko-KR')}
 function pct(w){if(w==null)return'<span class="tiny">-</span>';
  var c=w>0?'pos':(w<0?'neg':'');return'<span class="'+c+'">'+(w>0?'+':'')+w.toFixed(1)+'%</span>'}
@@ -458,7 +472,7 @@ function nextq(p){var y=+p.slice(0,4),m=+p.slice(5,7)+3;if(m>12){y++;m-=12}
 function anchorOf(p){return (qOverride&&p.qlist.indexOf(qOverride)>=0)?qOverride:p.anchor}
 function findHz(p,key){for(var i=0;i<p.horizons.length;i++)if(p.horizons[i].key===key)return p.horizons[i];return null}
 function stubHz(per){return{key:'q:'+(per||''),label:qq(per),period:per,stub:true,
- up:0,down:0,flat:0,up3:0,down3:0,flat3:0,rows:[]}}
+ up:0,down:0,flat:0,up1:0,down1:0,flat1:0,up3:0,down3:0,flat3:0,rows:[]}}
 function roled(h,role){var o={};for(var k in h)o[k]=h[k];o.role=role;return o}
 function activeHz(p){   // 화면 4개 시계: 당분기 / 다음분기 / 올해E / 내년E
  var a=anchorOf(p), n=a?nextq(a):null;
@@ -471,7 +485,7 @@ function nameCell(d){return '<a class="stk" href="https://finance.naver.com/item
  d.code+'" target="_blank" rel="noopener">'+d.name+'</a>'+(d.cov?' <span class="covstar" title="리서치 커버리지">★</span>':'')}
 function mktBadge(m){return m?'<span class="'+(m==='코스닥'?'mkt-kq':'mkt-kp')+'">'+m+'</span>':''}
 function sortRows(rows){
- if(sortKey==null){var kk=chgField();   // 기본: 선택 기준(주간/3개월) 변화 큰 순
+ if(sortKey==null){var kk=chgField();   // 기본: 선택 기준(주간/1개월/3개월) 변화 큰 순
   return rows.slice().sort(function(a,b){var x=a[kk],y=b[kk];
    x=x==null?-1:Math.abs(x);y=y==null?-1:Math.abs(y);return y-x});}
  return rows.slice().sort(function(a,b){var x=a[sortKey],y=b[sortKey];
@@ -513,35 +527,37 @@ function renderTop(){
   '<span>🎯 유니버스 <b>'+p.universe+'</b></span>'+
   '<span>✅ 컨센 확보 <b>'+p.covered+'</b> · 없음 '+(p.universe-p.covered)+'</span>';
  if(D.has_revision){
-  var M=m3(), ch='<div class="cards">';
+  var x=MX().sfx, ch='<div class="cards">';
   activeHz(p).forEach(function(h){
    var lab='<div class="lab"><b>'+h.role+'</b> '+dlab(h)+'</div>';
    if(h.stub||!h.rows.length){
     ch+='<div class="card">'+lab+'<div class="tiny" style="margin-top:6px">'+
      (h.period?'다음 주간 스냅샷부터 수집':'데이터 없음')+'</div></div>';return}
-   var up=M?h.up3:h.up,dn=M?h.down3:h.down,fl=M?h.flat3:h.flat,t=up+dn+fl||1;
+   var up=h['up'+x]||0,dn=h['down'+x]||0,fl=h['flat'+x]||0,t=up+dn+fl||1;
    ch+='<div class="card">'+lab+
     '<div class="nums"><span class="up">'+up+' ▲</span><span class="down">'+dn+' ▼</span></div>'+
     '<div class="bar"><i class="iu" style="width:'+(up/t*100)+'%"></i>'+
     '<i class="id" style="width:'+(dn/t*100)+'%"></i></div>'+
     '<div class="tiny">보합 '+fl+' · 평가 '+(up+dn+fl)+'</div></div>';});
   $('cards').innerHTML=ch+'</div>';
-  var bd=M?p.ref3_date:p.base_date, pbd=M?p.price_date_ref3:p.price_date_base;
-  $('foot').innerHTML='컨센 변화 = '+(M?'3개월전':'전주')+'('+(bd||'')+') 대비 영업이익 컨센 변화율 · 주가 변동 = 종가 '+
+  var bd=refDate(p), pbd=refPDate(p);
+  $('foot').innerHTML='컨센 변화 = '+MX().lab+'('+(bd||'')+') 대비 영업이익 컨센 변화율 · 주가 변동 = 종가 '+
    (pbd||'')+' → '+(p.price_date_snap||'')+' · 상위 30 기본(전체 보기·열 정렬) · 섹터/종목명 클릭 활용';
  }else{
   $('cards').innerHTML='<div class="note">첫 스냅샷이라 전주 대비 변동은 다음 스냅샷부터 표시됩니다. 아래는 현재 컨센 레벨이며, 전체 종목은 엑셀에서 확인하세요.</div>';
   $('foot').innerHTML='';
  }
 }
-function renderCtl(){   // 그룹/섹터 필터 + 기준(주간/3개월) 토글
+function renderCtl(){   // 그룹/섹터 필터 + 기준(주간/1개월/3개월) 토글
  var gopts='<option value="">전체 그룹</option>';
  (D.groups||[]).forEach(function(g){gopts+='<option value="'+g+'"'+(g===grpFilter?' selected':'')+'>'+g+'</option>'});
  var opts='<option value="">전체 섹터</option>';
  D.sectors.forEach(function(s){opts+='<option value="'+s+'"'+(s===secFilter?' selected':'')+'>'+s+'</option>'});
  var clr=(secFilter||grpFilter)?'<button class="clrfil" id="clrfil">✕ 필터 해제</button>':'';
- var tog=D.has_revision?'<span class="modetog"><button data-m="wk"'+(MODE==='wk'?' class="on"':'')+'>주간</button>'+
-  '<button data-m="3m"'+(MODE==='3m'?' class="on"':'')+'>3개월</button></span>':'';
+ var tog='';
+ if(D.has_revision){tog='<span class="modetog">';
+  for(var mk in MODES)tog+='<button data-m="'+mk+'"'+(MODE===mk?' class="on"':'')+'>'+MODES[mk].btn+'</button>';
+  tog+='</span>'}
  $('ctlbar').innerHTML='<label class="ctllab">그룹 <select class="grpfil" id="grpfil">'+gopts+'</select></label>'+
   '<label class="ctllab" style="margin-left:6px">섹터 <select class="secfil" id="secfil">'+opts+'</select></label>'+clr+tog;
  $('grpfil').onchange=function(){grpFilter=this.value;renderCtl();draw()};
@@ -550,7 +566,7 @@ function renderCtl(){   // 그룹/섹터 필터 + 기준(주간/3개월) 토글
  document.querySelectorAll('.modetog button').forEach(function(b){b.onclick=function(){MODE=b.dataset.m;sortKey=null;render()}});
 }
 function draw(){
- var p=P(), h=activeHz(p)[sel], rev=D.has_revision, M=m3(), tbl=$('tbl');
+ var p=P(), h=activeHz(p)[sel], rev=D.has_revision, x=MX().sfx, tbl=$('tbl');
  if(h.stub||!h.rows.length){
   tbl.innerHTML='<div class="note">'+(h.period?dlab(h)+' 컨센은 아직 수집 전입니다. 다음 주간 스냅샷부터 쌓입니다.':'데이터가 없습니다.')+'</div>';
   return}
@@ -558,8 +574,8 @@ function draw(){
  var rows=sortRows(all), shown=showAll?rows:rows.slice(0,TOP);
  var toggle=all.length>TOP?'<button class="lim" id="limtog">'+
   (showAll?'상위 '+TOP+'만 보기':'전체 '+all.length+'개 보기')+'</button>':'';
- var bK=M?'base3':'base', cK=M?'wow3':'wow', pK=M?'pwow3':'pwow';
- var bLab=M?'3개월전 컨센':'컨센 전주', bDate=M?p.ref3_date:p.base_date, pbDate=M?p.price_date_ref3:p.price_date_base;
+ var bK='base'+x, cK='wow'+x, pK='pwow'+x;
+ var bLab=x?MX().lab+' 컨센':'컨센 전주', bDate=refDate(p), pbDate=refPDate(p);
  var cols=rev?
   [['mkt','시장','','mktc'],['sec','섹터','','l'],['name','종목','','l'],[bK,bLab,mmdd(bDate),''],
    ['curr','컨센 현재',mmdd(p.snapshot_date),''],[cK,'컨센 변화',mmdd(bDate)+'-'+mmdd(p.snapshot_date),''],

@@ -1,0 +1,222 @@
+{
+ "source": "DC인사이드",
+ "galleries": [
+  {
+   "id": "krstock",
+   "name": "국내주식갤러리",
+   "posts": 1005,
+   "capped": true,
+   "burst": 0.8,
+   "base_daily": 1324.4
+  },
+  {
+   "id": "stockus",
+   "name": "해외주식갤러리",
+   "posts": 2100,
+   "capped": true,
+   "burst": 0.7,
+   "base_daily": 3169.9
+  }
+ ],
+ "posts_sampled": 550,
+ "keywords": [
+  {
+   "term": "댓글봇",
+   "count": 21,
+   "burst": 99.0,
+   "new": true
+  },
+  {
+   "term": "시진핑",
+   "count": 10,
+   "burst": 99.0,
+   "new": true
+  },
+  {
+   "term": "부처",
+   "count": 8,
+   "burst": 99.0,
+   "new": true
+  },
+  {
+   "term": "제일",
+   "count": 6,
+   "burst": 85.0,
+   "new": true
+  },
+  {
+   "term": "요즘",
+   "count": 6,
+   "burst": 85.0,
+   "new": true
+  },
+  {
+   "term": "드디어",
+   "count": 5,
+   "burst": 70.8,
+   "new": true
+  },
+  {
+   "term": "애들",
+   "count": 5,
+   "burst": 70.8,
+   "new": true
+  },
+  {
+   "term": "무조건",
+   "count": 5,
+   "burst": 70.8,
+   "new": true
+  },
+  {
+   "term": "삼성전자",
+   "count": 27,
+   "burst": 8.9,
+   "new": false
+  },
+  {
+   "term": "AI",
+   "count": 18,
+   "burst": 6.9,
+   "new": false
+  },
+  {
+   "term": "ai",
+   "count": 24,
+   "burst": 5.2,
+   "new": false
+  },
+  {
+   "term": "Ai",
+   "count": 8,
+   "burst": 8.7,
+   "new": false
+  },
+  {
+   "term": "삼닉",
+   "count": 6,
+   "burst": 6.5,
+   "new": false
+  },
+  {
+   "term": "사실",
+   "count": 6,
+   "burst": 6.5,
+   "new": false
+  },
+  {
+   "term": "씨발",
+   "count": 6,
+   "burst": 5.7,
+   "new": false
+  }
+ ],
+ "top_recommended": [
+  {
+   "gallery": "해외주식갤러리",
+   "title": "중국차 사지 말아야 하는 이유",
+   "views": 13794,
+   "recommend": 187,
+   "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=17850949&exception_mode=recommend&page=1",
+   "time_kst": "09-27 08:35"
+  },
+  {
+   "gallery": "해외주식갤러리",
+   "title": "숏포갤 인터뷰 레전드...jpg",
+   "views": 8956,
+   "recommend": 87,
+   "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=17852521&exception_mode=recommend&page=1",
+   "time_kst": "09-27 15:33"
+  },
+  {
+   "gallery": "해외주식갤러리",
+   "title": "휴전거부 이후에 오히려 상승이나오는 이유",
+   "views": 9769,
+   "recommend": 79,
+   "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=17853070&exception_mode=recommend&page=1",
+   "time_kst": "09-27 17:56"
+  },
+  {
+   "gallery": "국내주식갤러리",
+   "title": "자사주 매입 끝나면 폭락한다 롱숭이들아 벌벌 떨어라",
+   "views": 3014,
+   "recommend": 25,
+   "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3550396&exception_mode=recommend&page=1",
+   "time_kst": "09-27 19:44"
+  },
+  {
+   "gallery": "해외주식갤러리",
+   "title": "희소식)미붕이들 양도세 안 내도 됨 ㄷㄷㄷ",
+   "views": 1202,
+   "recommend": 20,
+   "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=17854836&exception_mode=recommend&page=1",
+   "time_kst": "09-28 01:05"
+  }
+ ],
+ "top_viewed": [
+  {
+   "gallery": "국내주식갤러리",
+   "title": "코스피랩 삼닉현 근황",
+   "views": 1056,
+   "recommend": 8,
+   "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3551071&page=1",
+   "time_kst": "09-28 02:53"
+  },
+  {
+   "gallery": "국내주식갤러리",
+   "title": "국장 시작전 트럼프 타코 ...jpg",
+   "views": 876,
+   "recommend": 4,
+   "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3551039&page=2",
+   "time_kst": "09-28 01:29"
+  },
+  {
+   "gallery": "국내주식갤러리",
+   "title": "아 씨발 좆됐네",
+   "views": 851,
+   "recommend": 0,
+   "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3551040&page=2",
+   "time_kst": "09-28 01:33"
+  },
+  {
+   "gallery": "국내주식갤러리",
+   "title": "딱봐도 내일 좆된거 같음",
+   "views": 809,
+   "recommend": 3,
+   "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3551014&page=3",
+   "time_kst": "09-28 00:57"
+  },
+  {
+   "gallery": "국내주식갤러리",
+   "title": "드디어 3개읠간의 긴 여정이 끝나는건가",
+   "views": 724,
+   "recommend": 2,
+   "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3551050&page=2",
+   "time_kst": "09-28 01:50"
+  },
+  {
+   "gallery": "국내주식갤러리",
+   "title": "삼닉 아무일도 없었다 시전 ㄷㄷ",
+   "views": 683,
+   "recommend": 2,
+   "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3551004&page=3",
+   "time_kst": "09-28 00:47"
+  },
+  {
+   "gallery": "국내주식갤러리",
+   "title": "종배 숏쳤는데 설마 나 죽음?",
+   "views": 666,
+   "recommend": 3,
+   "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3551058&page=2",
+   "time_kst": "09-28 02:11"
+  },
+  {
+   "gallery": "국내주식갤러리",
+   "title": "주식 해야하는 시기",
+   "views": 620,
+   "recommend": 0,
+   "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3551080&page=1",
+   "time_kst": "09-28 03:27"
+  }
+ ]
+}

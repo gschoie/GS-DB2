@@ -732,7 +732,8 @@ const MIL_LIMIT = 5;         // 날짜없는 소스(서울경제): 최근 몇 �
 const MIL_SOURCES = [
   {
     name: '나우뉴스 밀리터리+',
-    list: 'https://nownews.seoul.co.kr/newsList/science/military/?cp=nownews',
+    list: 'https://m.nownews.seoul.co.kr/newsList/science/military/?cp=nownews',
+    listAlts: ['https://www.seoul.co.kr/newsList/science/military/?cp=nownews'],
     page: '&page=',
     dated: true,
     // 링크 경로가 아니라 기사 ID 자체를 잡는다(모바일·데스크톱 경로가 달라도 무관).
@@ -743,15 +744,22 @@ const MIL_SOURCES = [
   {
     name: '세계 박수찬의 軍',
     list: 'https://m.segye.com/category/3000327',
+    listAlts: [
+      // 기자 페이지(박수찬) — 카테고리 페이지가 안 잡힐 때의 대체
+      'https://m.segye.com/journalist/list.do?id=psc%40segye.com&writerName=%EB%B0%95%EC%88%98%EC%B0%AC',
+      'https://www.segye.com/category/3000327'
+    ],
     page: '?page=',
     dated: true,
-    // 모바일은 /view/ID, 데스크톱은 /newsView/ID — 둘 다 잡는다. ID 는 14자리(날짜 8+순번 6).
-    linkRe: /[Vv]iew\/(\d{14})/g,
+    // 경로가 아니라 기사 ID 로 잡는다. 세계 최근 기사 ID = 날짜8 + '5' + 5자리
+    // (시각 타임스탬프는 date+0~2 로 시작하므로 '5' 로 걸러 오탐을 막는다).
+    linkRe: /\b(\d{8}5\d{5})\b/g,
     view: function (id) { return 'https://www.segye.com/newsView/' + id; }
   },
   {
     name: '서울경제 이현호의 방산톡',
     list: 'https://www.sedaily.com/subscription/series/S010100493',
+    listAlts: ['https://m.sedaily.com/Subscription/Series/S010100493'],
     page: '?page=',
     dated: false,              // 기사 ID 가 순번(/article/20093150) — 날짜가 없다
     limit: MIL_LIMIT,
@@ -814,10 +822,24 @@ function collectMilSource_(src, cutoff) {
   const out = [];        // 최종 항목(등장 순서 = 최신순)
   const picked = {};     // id 중복 방지
 
+  // 후보 목록 URL 을 순서대로 시도해, 1쪽에서 링크가 잡히는 첫 주소를 쓴다.
+  const candidates = [src.list].concat(src.listAlts || []);
+  let base = null;
+  for (let ci = 0; ci < candidates.length; ci++) {
+    try {
+      const rows0 = parseMilPage_(fetchText_(candidates[ci]), src.linkRe);
+      if (rows0.length > 0) { base = candidates[ci]; break; }
+      Logger.log(src.name + ' 후보 링크 0: ' + candidates[ci]);
+    } catch (error) {
+      Logger.log(src.name + ' 후보 실패(' + candidates[ci] + '): ' + error.toString());
+    }
+  }
+  if (!base) { Logger.log(src.name + ': 쓸 목록 주소를 못 찾음'); return out; }
+
   for (let page = 1; page <= MIL_MAX_PAGES; page++) {
     let html;
     try {
-      html = fetchText_(src.list + (page > 1 ? src.page + page : ''));
+      html = fetchText_(base + (page > 1 ? src.page + page : ''));
     } catch (error) {
       Logger.log(src.name + ' ' + page + '쪽 실패: ' + error.toString());
       break;
