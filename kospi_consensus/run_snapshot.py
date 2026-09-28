@@ -50,15 +50,23 @@ def run(limit=None, snapshot_date=None, refresh_universe=False, delay=0.3):
                                ",".join(meta.get("groups", [])) if isinstance(meta, dict) else None,
                                meta.get("status") if isinstance(meta, dict) else None)
 
-            quarters = [q for q in scrape.fetch_quarters(code, session)
-                        if q["op_profit"] is not None]
+            try:   # 한 종목의 응답 이상으로 전체 스냅샷이 죽지 않게 (9/28 financeInfo=null 사고)
+                quarters = [q for q in scrape.fetch_quarters(code, session)
+                            if q["op_profit"] is not None]
+            except Exception as e:
+                print(f"  ⚠ {name}({code}) 분기 수집 오류: {e}")
+                quarters = []
             for q in quarters:
                 db.upsert_consensus(con, snap, code, name, "quarter", q["period"],
                                     q["sales"], q["op_profit"], q["net_profit"])
             if quarters:
                 ok_q += 1
 
-            annual = scrape.scrape_annual(page, code)
+            try:
+                annual = scrape.scrape_annual(page, code)
+            except Exception as e:
+                print(f"  ⚠ {name}({code}) 연간 수집 오류: {e}")
+                annual = []
             for row in annual:
                 db.upsert_consensus(con, snap, code, name, "annual", row["period"],
                                     row["sales"], row["op_profit"], row["net_profit"])
