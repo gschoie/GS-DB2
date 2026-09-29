@@ -1,22 +1,128 @@
 {
-  "date": "2026-09-28",
-  "prev_date": "2026-09-25",
-  "generated_at": "2026-09-28 16:21",
+  "date": "2026-09-29",
+  "prev_date": "2026-09-28",
+  "generated_at": "2026-09-29 09:20",
   "base_date": "",
   "prev_base_date": "",
   "same_base": false,
   "first_run": false,
-  "etfs": [],
+  "etfs": [
+    {
+      "code": "471780",
+      "label": "TIGER 코리아테크액티브",
+      "group": "TIGER",
+      "flow_factor": 1.0,
+      "new": [
+        {
+          "key": "319660",
+          "name": "피에스케이",
+          "code": "319660",
+          "weight": 3.74,
+          "shares": 101.0
+        },
+        {
+          "key": "403870",
+          "name": "HPSP",
+          "code": "403870",
+          "weight": 3.31,
+          "shares": 225.0
+        }
+      ],
+      "gone": [
+        {
+          "key": "095340",
+          "name": "ISC",
+          "code": "095340",
+          "weight_prev": 3.29,
+          "shares_prev": 61.0
+        },
+        {
+          "key": "000150",
+          "name": "두산",
+          "code": "000150",
+          "weight_prev": 3.07,
+          "shares_prev": 8.0
+        }
+      ],
+      "moves": [],
+      "has_weight": true
+    },
+    {
+      "code": "463050",
+      "label": "TIME K바이오액티브",
+      "group": "TIME(구 TIMEFOLIO)",
+      "flow_factor": 1.0,
+      "new": [
+        {
+          "key": "347850",
+          "name": "디앤디파마텍",
+          "code": "347850",
+          "weight": 3.9,
+          "shares": 501.0
+        }
+      ],
+      "gone": [
+        {
+          "key": "068760",
+          "name": "셀트리온제약",
+          "code": "068760",
+          "weight_prev": 4.46,
+          "shares_prev": 632.0
+        }
+      ],
+      "moves": [
+        {
+          "key": "196170",
+          "name": "알테오젠",
+          "code": "196170",
+          "shares_now": 272.0,
+          "shares_prev": 205.0,
+          "active_share_pct": 32.7,
+          "active_weight_pp": 2.62,
+          "weight_now": 12.39,
+          "weight_prev": 9.25,
+          "headline": false
+        }
+      ],
+      "has_weight": true
+    },
+    {
+      "code": "0163Y0",
+      "label": "KoAct 코스닥액티브",
+      "group": "KoAct",
+      "flow_factor": 1.0,
+      "new": [
+        {
+          "key": "005290",
+          "name": "동진쎄미켐",
+          "code": "005290",
+          "weight": 1.98,
+          "shares": 216.0
+        }
+      ],
+      "gone": [
+        {
+          "key": "183300",
+          "name": "코미코",
+          "code": "183300",
+          "weight_prev": 2.44,
+          "shares_prev": 381.0
+        }
+      ],
+      "moves": [],
+      "has_weight": true
+    }
+  ],
   "thresholds": {
     "weight_pp_min": 1.0,
     "weight_pp_big": 5.0,
     "share_pct_min": 30.0
   },
   "summary": {
-    "etfs_changed": 0,
-    "new_total": 0,
-    "gone_total": 0,
-    "moves_total": 0,
+    "etfs_changed": 3,
+    "new_total": 4,
+    "gone_total": 4,
+    "moves_total": 1,
     "universe": 20
   }
 }
