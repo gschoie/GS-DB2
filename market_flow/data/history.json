@@ -9782,31 +9782,31 @@
      "chg_pct": -1.16
     },
     "1540": {
-     "individual": 11432,
-     "foreign": -29030,
-     "institution": 1211,
-     "arb": 269,
-     "nonarb": -20188,
-     "program": -19918,
-     "time": "15:32",
+     "individual": 11450,
+     "foreign": -29043,
+     "institution": 1206,
+     "arb": 365,
+     "nonarb": -21457,
+     "program": -21093,
+     "time": "15:45",
      "kospi": 6870.81,
      "chg_pct": -0.27
     }
    },
    "confirmed": {
     "investor": {
-     "individual": 11432,
-     "foreign": -29030,
-     "inst_total": 1211
+     "individual": 11450,
+     "foreign": -29043,
+     "inst_total": 1206
     },
     "program": {
-     "arb_net": 269,
-     "nonarb_net": -20188,
-     "total_net": -19918
+     "arb_net": 365,
+     "nonarb_net": -21457,
+     "total_net": -21093
     }
    },
    "group_1d": {
-    "time": "15:33",
+    "time": "15:45",
     "groups": [
      [
       "반도체/AI",
@@ -9916,7 +9916,7 @@
     ]
    },
    "stock_flow": {
-    "time": "15:33",
+    "time": "15:45",
     "buy": [
      [
       "한미반도체",
@@ -10081,10 +10081,10 @@
       -4196
      ],
      [
-      "15:32",
-      11432,
-      -29030,
-      1211
+      "15:45",
+      11450,
+      -29043,
+      1206
      ]
     ],
     "program": [
@@ -10101,15 +10101,15 @@
       -12420
      ],
      [
-      "15:32",
-      269,
-      -20188,
-      -19918
+      "15:45",
+      365,
+      -21457,
+      -21093
      ]
     ]
    }
   }
  },
- "updated_kst": "2026-09-29 15:33",
+ "updated_kst": "2026-09-29 15:45",
  "futures_unit": "계약"
 }
