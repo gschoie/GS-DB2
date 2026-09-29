@@ -1,7 +1,7 @@
 {
   "date": "2026-09-29",
   "prev_date": "2026-09-28",
-  "generated_at": "2026-09-29 09:20",
+  "generated_at": "2026-09-29 10:20",
   "base_date": "",
   "prev_base_date": "",
   "same_base": false,
@@ -87,6 +87,45 @@
       "has_weight": true
     },
     {
+      "code": "476850",
+      "label": "KoAct 배당성장액티브",
+      "group": "KoAct",
+      "flow_factor": 1.0,
+      "new": [
+        {
+          "key": "281820",
+          "name": "케이씨텍",
+          "code": "281820",
+          "weight": 2.07,
+          "shares": 268.0
+        }
+      ],
+      "gone": [
+        {
+          "key": "086790",
+          "name": "하나금융지주",
+          "code": "086790",
+          "weight_prev": 1.42,
+          "shares_prev": 120.0
+        }
+      ],
+      "moves": [
+        {
+          "key": "096770",
+          "name": "SK이노베이션",
+          "code": "096770",
+          "shares_now": 192.0,
+          "shares_prev": 137.0,
+          "active_share_pct": 40.1,
+          "active_weight_pp": 0.78,
+          "weight_now": 2.77,
+          "weight_prev": 1.82,
+          "headline": false
+        }
+      ],
+      "has_weight": true
+    },
+    {
       "code": "0163Y0",
       "label": "KoAct 코스닥액티브",
       "group": "KoAct",
@@ -119,10 +158,10 @@
     "share_pct_min": 30.0
   },
   "summary": {
-    "etfs_changed": 3,
-    "new_total": 4,
-    "gone_total": 4,
-    "moves_total": 1,
+    "etfs_changed": 4,
+    "new_total": 5,
+    "gone_total": 5,
+    "moves_total": 2,
     "universe": 20
   }
 }
