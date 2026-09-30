@@ -1,12 +1,75 @@
 {
   "date": "2026-09-30",
   "prev_date": "2026-09-29",
-  "generated_at": "2026-09-30 09:20",
+  "generated_at": "2026-09-30 10:21",
   "base_date": "",
   "prev_base_date": "",
   "same_base": false,
   "first_run": false,
   "etfs": [
+    {
+      "code": "472150",
+      "label": "TIGER 배당커버드콜액티브",
+      "group": "TIGER",
+      "flow_factor": 0.8606,
+      "new": [
+        {
+          "key": "012450",
+          "name": "한화에어로스페이스",
+          "code": "012450",
+          "weight": 1.5,
+          "shares": 3.0
+        }
+      ],
+      "gone": [
+        {
+          "key": "010120",
+          "name": "LS ELECTRIC",
+          "code": "010120",
+          "weight_prev": 1.59,
+          "shares_prev": 16.0
+        }
+      ],
+      "moves": [
+        {
+          "key": "102110",
+          "name": "TIGER 200",
+          "code": "102110",
+          "shares_now": 300.0,
+          "shares_prev": 60.0,
+          "active_share_pct": 481.0,
+          "active_weight_pp": 12.92,
+          "weight_now": 16.36,
+          "weight_prev": 3.2,
+          "headline": true
+        },
+        {
+          "key": "005930",
+          "name": "삼성전자",
+          "code": "005930",
+          "shares_now": 179.0,
+          "shares_prev": 208.0,
+          "active_share_pct": 0.0,
+          "active_weight_pp": -5.39,
+          "weight_now": 24.13,
+          "weight_prev": 27.31,
+          "headline": true
+        },
+        {
+          "key": "000660",
+          "name": "SK하이닉스",
+          "code": "000660",
+          "shares_now": 26.0,
+          "shares_prev": 30.0,
+          "active_share_pct": 0.7,
+          "active_weight_pp": -4.88,
+          "weight_now": 22.7,
+          "weight_prev": 25.79,
+          "headline": false
+        }
+      ],
+      "has_weight": true
+    },
     {
       "code": "426020",
       "label": "TIME 미국S&P500액티브",
@@ -118,10 +181,10 @@
     "share_pct_min": 30.0
   },
   "summary": {
-    "etfs_changed": 4,
-    "new_total": 4,
-    "gone_total": 4,
-    "moves_total": 0,
+    "etfs_changed": 5,
+    "new_total": 5,
+    "gone_total": 5,
+    "moves_total": 3,
     "universe": 20
   }
 }
