@@ -1,51 +1,37 @@
 {
-  "date": "2026-09-29",
-  "prev_date": "2026-09-28",
-  "generated_at": "2026-09-29 16:20",
+  "date": "2026-09-30",
+  "prev_date": "2026-09-29",
+  "generated_at": "2026-09-30 09:20",
   "base_date": "",
   "prev_base_date": "",
   "same_base": false,
   "first_run": false,
   "etfs": [
     {
-      "code": "471780",
-      "label": "TIGER 코리아테크액티브",
-      "group": "TIGER",
+      "code": "426020",
+      "label": "TIME 미국S&P500액티브",
+      "group": "TIME(구 TIMEFOLIO)",
       "flow_factor": 1.0,
       "new": [
         {
-          "key": "319660",
-          "name": "피에스케이",
-          "code": "319660",
-          "weight": 3.74,
-          "shares": 101.0
-        },
-        {
-          "key": "403870",
-          "name": "HPSP",
-          "code": "403870",
-          "weight": 3.31,
-          "shares": 225.0
+          "key": "JOHNSON & JOHNSON",
+          "name": "JOHNSON & JOHNSON",
+          "code": "",
+          "weight": 0.0,
+          "shares": 51.0
         }
       ],
       "gone": [
         {
-          "key": "095340",
-          "name": "ISC",
-          "code": "095340",
-          "weight_prev": 3.29,
-          "shares_prev": 61.0
-        },
-        {
-          "key": "000150",
-          "name": "두산",
-          "code": "000150",
-          "weight_prev": 3.07,
-          "shares_prev": 8.0
+          "key": "AMAZON.COM INC",
+          "name": "AMAZON.COM INC",
+          "code": "",
+          "weight_prev": 0.0,
+          "shares_prev": 58.0
         }
       ],
       "moves": [],
-      "has_weight": true
+      "has_weight": false
     },
     {
       "code": "463050",
@@ -54,76 +40,50 @@
       "flow_factor": 1.0,
       "new": [
         {
+          "key": "298380",
+          "name": "에이비엘바이오",
+          "code": "298380",
+          "weight": 3.83,
+          "shares": 427.0
+        }
+      ],
+      "gone": [
+        {
           "key": "347850",
           "name": "디앤디파마텍",
           "code": "347850",
-          "weight": 3.9,
-          "shares": 501.0
+          "weight_prev": 3.9,
+          "shares_prev": 501.0
         }
       ],
-      "gone": [
-        {
-          "key": "068760",
-          "name": "셀트리온제약",
-          "code": "068760",
-          "weight_prev": 4.46,
-          "shares_prev": 632.0
-        }
-      ],
-      "moves": [
-        {
-          "key": "196170",
-          "name": "알테오젠",
-          "code": "196170",
-          "shares_now": 272.0,
-          "shares_prev": 205.0,
-          "active_share_pct": 32.7,
-          "active_weight_pp": 2.62,
-          "weight_now": 12.39,
-          "weight_prev": 9.25,
-          "headline": false
-        }
-      ],
+      "moves": [],
       "has_weight": true
     },
     {
-      "code": "476850",
-      "label": "KoAct 배당성장액티브",
-      "group": "KoAct",
+      "code": "456600",
+      "label": "TIME 글로벌AI인공지능액티브",
+      "group": "TIME(구 TIMEFOLIO)",
       "flow_factor": 1.0,
       "new": [
         {
-          "key": "281820",
-          "name": "케이씨텍",
-          "code": "281820",
-          "weight": 2.07,
-          "shares": 268.0
+          "key": "KIOXIA HOLDINGS CORP",
+          "name": "KIOXIA HOLDINGS CORP",
+          "code": "",
+          "weight": 0.0,
+          "shares": 216.0
         }
       ],
       "gone": [
         {
-          "key": "086790",
-          "name": "하나금융지주",
-          "code": "086790",
-          "weight_prev": 1.42,
-          "shares_prev": 120.0
+          "key": "EOPTOLINK TECHNOLOGY INC L-A",
+          "name": "EOPTOLINK TECHNOLOGY INC L-A",
+          "code": "",
+          "weight_prev": 0.0,
+          "shares_prev": 136.0
         }
       ],
-      "moves": [
-        {
-          "key": "096770",
-          "name": "SK이노베이션",
-          "code": "096770",
-          "shares_now": 192.0,
-          "shares_prev": 137.0,
-          "active_share_pct": 40.1,
-          "active_weight_pp": 0.78,
-          "weight_now": 2.77,
-          "weight_prev": 1.82,
-          "headline": false
-        }
-      ],
-      "has_weight": true
+      "moves": [],
+      "has_weight": false
     },
     {
       "code": "0163Y0",
@@ -132,20 +92,20 @@
       "flow_factor": 1.0,
       "new": [
         {
-          "key": "005290",
-          "name": "동진쎄미켐",
-          "code": "005290",
-          "weight": 1.98,
-          "shares": 216.0
+          "key": "319660",
+          "name": "피에스케이",
+          "code": "319660",
+          "weight": 2.03,
+          "shares": 69.0
         }
       ],
       "gone": [
         {
-          "key": "183300",
-          "name": "코미코",
-          "code": "183300",
-          "weight_prev": 2.44,
-          "shares_prev": 381.0
+          "key": "005290",
+          "name": "동진쎄미켐",
+          "code": "005290",
+          "weight_prev": 1.98,
+          "shares_prev": 216.0
         }
       ],
       "moves": [],
@@ -159,9 +119,9 @@
   },
   "summary": {
     "etfs_changed": 4,
-    "new_total": 5,
-    "gone_total": 5,
-    "moves_total": 2,
+    "new_total": 4,
+    "gone_total": 4,
+    "moves_total": 0,
     "universe": 20
   }
 }
