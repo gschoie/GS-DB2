@@ -1,73 +1,87 @@
 {
-  "date": "2026-09-30",
-  "prev_date": "2026-09-29",
-  "generated_at": "2026-09-30 16:21",
+  "date": "2026-10-01",
+  "prev_date": "2026-09-30",
+  "generated_at": "2026-10-01 09:21",
   "base_date": "",
   "prev_base_date": "",
   "same_base": false,
   "first_run": false,
   "etfs": [
     {
-      "code": "472150",
-      "label": "TIGER 배당커버드콜액티브",
-      "group": "TIGER",
-      "flow_factor": 0.8606,
+      "code": "463050",
+      "label": "TIME K바이오액티브",
+      "group": "TIME(구 TIMEFOLIO)",
+      "flow_factor": 1.0,
       "new": [
         {
-          "key": "012450",
-          "name": "한화에어로스페이스",
-          "code": "012450",
-          "weight": 1.5,
-          "shares": 3.0
+          "key": "347850",
+          "name": "디앤디파마텍",
+          "code": "347850",
+          "weight": 3.81,
+          "shares": 501.0
         }
       ],
       "gone": [
         {
-          "key": "010120",
-          "name": "LS ELECTRIC",
-          "code": "010120",
-          "weight_prev": 1.59,
-          "shares_prev": 16.0
+          "key": "298380",
+          "name": "에이비엘바이오",
+          "code": "298380",
+          "weight_prev": 3.83,
+          "shares_prev": 427.0
         }
       ],
       "moves": [
         {
-          "key": "102110",
-          "name": "TIGER 200",
-          "code": "102110",
-          "shares_now": 300.0,
-          "shares_prev": 60.0,
-          "active_share_pct": 481.0,
-          "active_weight_pp": 12.92,
-          "weight_now": 16.36,
-          "weight_prev": 3.2,
-          "headline": true
+          "key": "128940",
+          "name": "한미약품",
+          "code": "128940",
+          "shares_now": 94.0,
+          "shares_prev": 121.0,
+          "active_share_pct": -22.3,
+          "active_weight_pp": -2.2,
+          "weight_now": 8.52,
+          "weight_prev": 11.16,
+          "headline": false
         },
         {
-          "key": "005930",
-          "name": "삼성전자",
-          "code": "005930",
-          "shares_now": 179.0,
-          "shares_prev": 208.0,
-          "active_share_pct": 0.0,
-          "active_weight_pp": -5.39,
-          "weight_now": 24.13,
-          "weight_prev": 27.31,
-          "headline": true
-        },
-        {
-          "key": "000660",
-          "name": "SK하이닉스",
-          "code": "000660",
-          "shares_now": 26.0,
-          "shares_prev": 30.0,
-          "active_share_pct": 0.7,
-          "active_weight_pp": -4.88,
-          "weight_now": 22.7,
-          "weight_prev": 25.79,
+          "key": "068270",
+          "name": "셀트리온",
+          "code": "068270",
+          "shares_now": 367.0,
+          "shares_prev": 336.0,
+          "active_share_pct": 9.2,
+          "active_weight_pp": 1.24,
+          "weight_now": 11.84,
+          "weight_prev": 10.94,
           "headline": false
         }
       ],
+      "has_weight": true
+    },
+    {
+      "code": "385720",
+      "label": "TIME 코스피액티브",
+      "group": "TIME(구 TIMEFOLIO)",
+      "flow_factor": 1.0,
+      "new": [
+        {
+          "key": "373220",
+          "name": "LG에너지솔루션",
+          "code": "373220",
+          "weight": 1.4,
+          "shares": 100.0
+        }
+      ],
+      "gone": [
+        {
+          "key": "055550",
+          "name": "신한지주",
+          "code": "055550",
+          "weight_prev": 1.45,
+          "shares_prev": 335.0
+        }
+      ],
+      "moves": [],
       "has_weight": true
     },
     {
@@ -77,72 +91,20 @@
       "flow_factor": 1.0,
       "new": [
         {
-          "key": "JOHNSON & JOHNSON",
-          "name": "JOHNSON & JOHNSON",
-          "code": "",
-          "weight": 0.0,
-          "shares": 51.0
-        }
-      ],
-      "gone": [
-        {
           "key": "AMAZON.COM INC",
           "name": "AMAZON.COM INC",
           "code": "",
-          "weight_prev": 0.0,
-          "shares_prev": 58.0
-        }
-      ],
-      "moves": [],
-      "has_weight": false
-    },
-    {
-      "code": "463050",
-      "label": "TIME K바이오액티브",
-      "group": "TIME(구 TIMEFOLIO)",
-      "flow_factor": 1.0,
-      "new": [
-        {
-          "key": "298380",
-          "name": "에이비엘바이오",
-          "code": "298380",
-          "weight": 3.83,
-          "shares": 427.0
-        }
-      ],
-      "gone": [
-        {
-          "key": "347850",
-          "name": "디앤디파마텍",
-          "code": "347850",
-          "weight_prev": 3.9,
-          "shares_prev": 501.0
-        }
-      ],
-      "moves": [],
-      "has_weight": true
-    },
-    {
-      "code": "456600",
-      "label": "TIME 글로벌AI인공지능액티브",
-      "group": "TIME(구 TIMEFOLIO)",
-      "flow_factor": 1.0,
-      "new": [
-        {
-          "key": "KIOXIA HOLDINGS CORP",
-          "name": "KIOXIA HOLDINGS CORP",
-          "code": "",
           "weight": 0.0,
-          "shares": 216.0
+          "shares": 50.0
         }
       ],
       "gone": [
         {
-          "key": "EOPTOLINK TECHNOLOGY INC L-A",
-          "name": "EOPTOLINK TECHNOLOGY INC L-A",
+          "key": "JOHNSON & JOHNSON",
+          "name": "JOHNSON & JOHNSON",
           "code": "",
           "weight_prev": 0.0,
-          "shares_prev": 136.0
+          "shares_prev": 51.0
         }
       ],
       "moves": [],
@@ -155,23 +117,72 @@
       "flow_factor": 1.0,
       "new": [
         {
-          "key": "319660",
-          "name": "피에스케이",
-          "code": "319660",
-          "weight": 2.03,
-          "shares": 69.0
+          "key": "005290",
+          "name": "동진쎄미켐",
+          "code": "005290",
+          "weight": 2.01,
+          "shares": 216.0
         }
       ],
       "gone": [
         {
-          "key": "005290",
-          "name": "동진쎄미켐",
-          "code": "005290",
-          "weight_prev": 1.98,
-          "shares_prev": 216.0
+          "key": "319660",
+          "name": "피에스케이",
+          "code": "319660",
+          "weight_prev": 2.03,
+          "shares_prev": 69.0
         }
       ],
       "moves": [],
+      "has_weight": true
+    },
+    {
+      "code": "471780",
+      "label": "TIGER 코리아테크액티브",
+      "group": "TIGER",
+      "flow_factor": 1.0,
+      "new": [
+        {
+          "key": "039030",
+          "name": "이오테크닉스",
+          "code": "039030",
+          "weight": 3.47,
+          "shares": 26.0
+        }
+      ],
+      "gone": [
+        {
+          "key": "222800",
+          "name": "심텍",
+          "code": "222800",
+          "weight_prev": 3.41,
+          "shares_prev": 88.0
+        }
+      ],
+      "moves": [],
+      "has_weight": true
+    },
+    {
+      "code": "472150",
+      "label": "TIGER 배당커버드콜액티브",
+      "group": "TIGER",
+      "flow_factor": 1.0,
+      "new": [],
+      "gone": [],
+      "moves": [
+        {
+          "key": "102110",
+          "name": "TIGER 200",
+          "code": "102110",
+          "shares_now": 260.0,
+          "shares_prev": 300.0,
+          "active_share_pct": -13.3,
+          "active_weight_pp": -1.73,
+          "weight_now": 14.24,
+          "weight_prev": 16.36,
+          "headline": false
+        }
+      ],
       "has_weight": true
     }
   ],
@@ -181,7 +192,7 @@
     "share_pct_min": 30.0
   },
   "summary": {
-    "etfs_changed": 5,
+    "etfs_changed": 6,
     "new_total": 5,
     "gone_total": 5,
     "moves_total": 3,
