@@ -10748,31 +10748,31 @@
      "chg_pct": 0.19
     },
     "1540": {
-     "individual": -17206,
+     "individual": -17207,
      "foreign": -1438,
-     "institution": 3814,
+     "institution": 3815,
      "arb": 1142,
-     "nonarb": -2112,
-     "program": -970,
-     "time": "15:38",
+     "nonarb": -2113,
+     "program": -971,
+     "time": "15:45",
      "kospi": 7003.74,
      "chg_pct": 0.46
     }
    },
    "confirmed": {
     "investor": {
-     "individual": -17206,
+     "individual": -17207,
      "foreign": -1438,
-     "inst_total": 3814
+     "inst_total": 3815
     },
     "program": {
      "arb_net": 1142,
-     "nonarb_net": -2112,
-     "total_net": -970
+     "nonarb_net": -2113,
+     "total_net": -971
     }
    },
    "group_1d": {
-    "time": "15:38",
+    "time": "15:45",
     "groups": [
      [
       "화학",
@@ -10882,7 +10882,7 @@
     ]
    },
    "stock_flow": {
-    "time": "15:38",
+    "time": "15:45",
     "buy": [
      [
       "SK이노베이션",
@@ -11047,10 +11047,10 @@
       302
      ],
      [
-      "15:38",
-      -17206,
+      "15:45",
+      -17207,
       -1438,
-      3814
+      3815
      ]
     ],
     "program": [
@@ -11067,15 +11067,15 @@
       -1741
      ],
      [
-      "15:38",
+      "15:45",
       1142,
-      -2112,
-      -970
+      -2113,
+      -971
      ]
     ]
    }
   }
  },
- "updated_kst": "2026-10-02 15:38",
+ "updated_kst": "2026-10-02 15:45",
  "futures_unit": "계약"
 }
