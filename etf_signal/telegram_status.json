@@ -1,79 +1,8 @@
 {
-  "when_utc": "2026-10-01 22:09:40Z",
+  "when_utc": "2026-10-02 22:08:11Z",
   "ok": true,
-  "note": "alert_sent",
+  "note": "no_alert_skip",
   "chat_id_tail": "5171",
   "token_set": true,
-  "response": {
-    "ok": true,
-    "result": {
-      "message_id": 521,
-      "from": {
-        "id": 8875725998,
-        "is_bot": true,
-        "first_name": "GB Investing Signal",
-        "username": "gs_invest_signal_bot"
-      },
-      "chat": {
-        "id": 279385171,
-        "first_name": "광식",
-        "last_name": "최",
-        "username": "gschoie",
-        "type": "private"
-      },
-      "date": 1790892580,
-      "text": "📡 ETF/섹터 신호 · 2026-10-01 (전일 확정)\n\n★ 매수 신호(골든크로스) 4개\n\n🟢 KODEX 로봇액티브 · 로봇\n   ＋DI가 −DI 상향돌파·추세전환 · Stochastic 골든크로스\n   ADX 8.4 · %K 39.4/36.8 · 수급 중립\n   [B] 상대강도 상위 14% · 외인·기관 연속 순매수 5일\n\n🟢 KODEX 바이오 · 바이오/헬스케어\n   ＋DI가 −DI 상향돌파·추세전환 · 외인·기관 동반 순매수\n   ADX 19.6 · %K 66.4/52.2 · 외인·기관 쌍끌이\n   [B] 거래대금 2.99배 · 상대강도 상위 23%\n\n🟢 TIME K바이오액티브 · 바이오/헬스케어\n   ＋DI가 −DI 상향돌파·추세전환\n   ADX 26.7 · %K 39.4/19.4 · 수급 중립\n   [B] 거래대금 3.74배 · ADX 상승추세\n\n🟢 KODEX 방산TOP10 · 방산\n   ＋DI가 −DI 상향돌파·추세전환 · Stochastic 과매도 반등·골든크로스\n   ADX 10.5 · %K 22.2/17.5 · 수급 중립\n   [B] 상대강도 상위 25% · 외인·기관 연속 순매수 5일\n\n▼ 매도 경고(데드크로스) 1개\n\n🔴 KODEX 보험 · 금융\n   ＋DI가 −DI 하향이탈·추세꺾임 · Stochastic 데드크로스 · 외인·기관 동반 순매도\n   ADX 26.7 · %K 21.5/29.9 · 개인몰림 주의\n   [B] 상대강도 하위 23% · ADX 하락추세 · 외인·기관 연속 순매도 5일\n\n전체 신호판 › 대시보드\n🎴 GS Research Desk · ETF/섹터 신호",
-      "entities": [
-        {
-          "offset": 0,
-          "length": 12,
-          "type": "bold"
-        },
-        {
-          "offset": 50,
-          "length": 1,
-          "type": "bold"
-        },
-        {
-          "offset": 57,
-          "length": 11,
-          "type": "bold"
-        },
-        {
-          "offset": 190,
-          "length": 9,
-          "type": "bold"
-        },
-        {
-          "offset": 323,
-          "length": 12,
-          "type": "bold"
-        },
-        {
-          "offset": 437,
-          "length": 13,
-          "type": "bold"
-        },
-        {
-          "offset": 592,
-          "length": 1,
-          "type": "bold"
-        },
-        {
-          "offset": 599,
-          "length": 8,
-          "type": "bold"
-        },
-        {
-          "offset": 764,
-          "length": 4,
-          "type": "text_link",
-          "url": "https://gschoie.github.io/GS-DB2/etf_signal_report.html"
-        }
-      ],
-      "link_preview_options": {
-        "is_disabled": true
-      }
-    }
-  }
+  "response": null
 }
