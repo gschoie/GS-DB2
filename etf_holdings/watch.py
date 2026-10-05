@@ -1,17 +1,25 @@
 # -*- coding: utf-8 -*-
-"""기준일 워처: CU 구성종목 '기준일'이 넘어갔을 때만 파이프라인을 돌리기 위한 판정.
+"""실행 게이트: 오늘이 수집할 날인가.
 
-매시간 가볍게 대표 ETF 1개의 기준일만 확인(요청 1번)하고, 저장된 마지막 처리 기준일보다
-넘어갔으면 실행(should_run=true). 넘어가지 않았으면 스킵 → 하루 한 번, 데이터가 실제로
-갱신됐을 때만 무거운 수집·알림이 돈다.
+[2026-10-05 전면 수정]
+원래는 CU 구성종목 '기준일'을 1회 조회해 "기준일이 넘어갔을 때만 전체 수집"하는
+워처였다. 그 기준일을 긁던 finance.naver.com/item/coinfo.naver 가 9/11 Npay 증권
+개편으로 죽어(신규 SPA 로 리다이렉트·'기준' 표기 소멸) **2026-09-10 이후 기준일이
+계속 빈 값**이었고, state.json 도 9/10 에 멈춰 있었다. 게다가 GAS 스케줄러가
+workflow_dispatch 로 쏘면 워크플로가 WATCH_FORCE=1 을 걸어 **판정 자체를 건너뛰고**
+매시간 전체 수집이 돌았다 — 10/5 대체공휴일에도 09·10·11시 세 번.
 
-  python watch.py check    # 판정 → GITHUB_OUTPUT(should_run, base) + 콘솔
-  python watch.py commit   # 파이프라인 성공 후, 최신 스냅샷 기준일을 state에 저장
+신규 API 에도 CU 기준일이 없어(etf/analysis·etf/component/list 응답 키 전수 확인)
+설계를 둘로 나눴다:
+  · 이 파일  = **휴장일이면 아예 돌지 않는다** (거래가 없으니 새 바스켓도 없다)
+  · fetch_holdings = **구성이 실제로 바뀌었을 때만** 스냅샷을 쓴다(계약수 지문 비교)
 
-state.json: {"last_base_date": "YYYY-MM-DD", "updated_at": "..."}  (커밋해서 런 간 유지)
-환경변수 WATCH_FORCE=1 이면 무조건 실행(수동 workflow_dispatch용).
+  python watch.py check    # 판정 → GITHUB_OUTPUT(should_run, market_date)
+
+WATCH_FORCE=1 이면 휴장일이라도 실행(화면의 수동 '갱신' 버튼용).
+GAS 스케줄러(via=scheduler)는 force 를 걸지 않는다 — 워크플로에서 구분한다.
 """
-import os, sys, json, glob
+import os, sys, json
 from datetime import datetime, timezone, timedelta
 
 try:
@@ -20,78 +28,39 @@ except Exception:
     pass
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-STATE = os.path.join(HERE, "state.json")
-SNAP_DIR = os.path.join(HERE, "snapshots")
 KST = timezone(timedelta(hours=9))
 
 import fetch_holdings
 
 
-def _load_state():
-    if os.path.exists(STATE):
-        with open(STATE, encoding="utf-8") as f:
-            return json.load(f)
-    return {"last_base_date": "", "updated_at": ""}
-
-
-def _rep_code():
-    """대표 ETF(유니버스 첫 active) 티커."""
-    uni = fetch_holdings.load_universe()
-    return uni[0]["code"] if uni else "445290"
-
-
-def _emit(should_run, base):
+def _emit(should_run, market_date):
     out = os.environ.get("GITHUB_OUTPUT")
     if out:
         with open(out, "a", encoding="utf-8") as f:
             f.write(f"should_run={'true' if should_run else 'false'}\n")
-            f.write(f"base={base}\n")
+            f.write(f"market_date={market_date}\n")
 
 
 def check():
-    state = _load_state()
-    last = state.get("last_base_date", "")
+    now = datetime.now(KST)
+    today = now.strftime("%Y-%m-%d")
     force = os.environ.get("WATCH_FORCE") == "1"
-    base = fetch_holdings.fetch_base_date(_rep_code())
-    now = datetime.now(KST).strftime("%Y-%m-%d %H:%M KST")
+    traded, status = fetch_holdings.market_day()
 
     if force:
-        should = True; why = "강제 실행(수동)"
-    elif not base:
-        should = False; why = "기준일 조회 실패 — 스킵(다음 시각 재시도)"
-    elif not last:
-        should = True; why = "최초 실행(state 없음)"
-    elif base > last:
-        should = True; why = f"기준일 갱신 {last} → {base}"
+        should, why = True, "강제 실행(수동 갱신)"
+    elif not traded:
+        # 조회 실패로 멈추면 조용히 몇 날 며칠 비는 쪽이 더 위험하다 → fail-open
+        should, why = True, "장 상태 조회 실패 — 일단 실행(구성 변화 없으면 저장 생략)"
+    elif traded != today:
+        should, why = False, f"휴장일 — 마지막 거래일 {traded} ≠ 오늘 {today}"
     else:
-        should = False; why = f"기준일 동일({base}) — 아직 새 구성 아님"
+        should, why = True, f"거래일({traded}·{status or '?'})"
 
-    print(f"[{now}] 대표기준일={base or '?'} · 마지막처리={last or '-'} → "
-          f"{'실행' if should else '스킵'} ({why})")
-    _emit(should, base)
+    print(f"[{now:%Y-%m-%d %H:%M} KST] {'실행' if should else '스킵'} ({why})")
+    _emit(should, traded)
     return should
 
 
-def commit():
-    """최신 스냅샷의 기준일을 state에 기록."""
-    snaps = sorted(glob.glob(os.path.join(SNAP_DIR, "*.json")))
-    base = ""
-    if snaps:
-        with open(snaps[-1], encoding="utf-8") as f:
-            base = json.load(f).get("base_date", "")
-    if not base:
-        print("스냅샷 기준일 없음 — state 미갱신")
-        return
-    with open(STATE, "w", encoding="utf-8") as f:
-        json.dump({"last_base_date": base,
-                   "updated_at": datetime.now(KST).strftime("%Y-%m-%d %H:%M")},
-                  f, ensure_ascii=False, indent=2)
-    print(f"state 갱신: last_base_date={base}")
-
-
 if __name__ == "__main__":
-    cmd = sys.argv[1] if len(sys.argv) > 1 else "check"
-    if cmd == "commit":
-        commit()
-    else:
-        check()
+    check()

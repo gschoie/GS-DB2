@@ -75,25 +75,34 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: 기준일 워처 판정 (매시간 가볍게)
+      - name: 가드 테스트 (휴장일·구성 지문)
+        working-directory: etf_holdings
+        run: python -m unittest discover -s tests -p "test_*.py"
+
+      # 휴장일이면 여기서 끝낸다. GAS 스케줄러(via=scheduler)도 workflow_dispatch 로
+      # 오므로 '수동이면 강제'를 event_name 으로 판정하면 **매시간 강제 실행**이 된다
+      # (10/5 대체공휴일에 09·10·11시 세 번 돈 원인). 화면 버튼만 강제로 둔다.
+      - name: 거래일 판정
         id: watch
         working-directory: etf_holdings
         env:
-          WATCH_FORCE: ${{ github.event_name == 'workflow_dispatch' && '1' || '' }}
+          WATCH_FORCE: ${{ (github.event_name == 'workflow_dispatch' && inputs.via != 'scheduler') && '1' || '' }}
         run: python watch.py check
 
+      # 구성이 직전 스냅샷과 같으면 파일을 쓰지 않고 changed=false 를 내놓는다.
       - name: 구성종목 스냅샷 수집
+        id: fetch
         if: steps.watch.outputs.should_run == 'true'
         working-directory: etf_holdings
         run: python fetch_holdings.py
 
       - name: 전일 대비 변화 감지
-        if: steps.watch.outputs.should_run == 'true'
+        if: steps.fetch.outputs.changed == 'true'
         working-directory: etf_holdings
         run: python detect_changes.py
 
       - name: 카드 종목 시세 수집 (스파크라인용 · 하루 1회만 API 사용)
-        if: steps.watch.outputs.should_run == 'true'
+        if: steps.fetch.outputs.changed == 'true'
         working-directory: etf_holdings
         env:
           KIS_APP_KEY: ${{ secrets.KIS_APP_KEY }}
@@ -102,14 +111,14 @@ jobs:
         run: python fetch_prices.py
 
       - name: HTML 리포트 생성 (대시보드 static)
-        if: steps.watch.outputs.should_run == 'true'
+        if: steps.fetch.outputs.changed == 'true'
         working-directory: etf_holdings
         env:
           ETF_HOLDINGS_OUT: ../telegram_research_dashboard/static/etf_holdings_report.html
         run: python build_report.py
 
       - name: 텔레그램 알림 (ETF섹터와 동일 봇 · 수동 실행이면 확인메시지)
-        if: steps.watch.outputs.should_run == 'true'
+        if: steps.fetch.outputs.changed == 'true'
         working-directory: etf_holdings
         env:
           TELEGRAM_BOT_TOKEN: ${{ secrets.ETF_TELEGRAM_BOT_TOKEN }}
@@ -118,19 +127,14 @@ jobs:
         # (안 그러면 '변화 없음' 확인 메시지가 하루 8번 온다).
         run: python telegram_notify.py ${{ (github.event_name == 'workflow_dispatch' && inputs.via != 'scheduler') && '--force' || '' }}
 
-      - name: 처리 기준일 state 갱신
-        if: steps.watch.outputs.should_run == 'true'
-        working-directory: etf_holdings
-        run: python watch.py commit
-
-      - name: 스냅샷·리포트·state 커밋 및 푸시 (→ Pages 재배포)
-        if: steps.watch.outputs.should_run == 'true'
+      - name: 스냅샷·리포트 커밋 및 푸시 (→ Pages 재배포)
+        if: steps.fetch.outputs.changed == 'true'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add telegram_research_dashboard/static/etf_holdings_report.html \
                   etf_holdings/snapshots etf_holdings/changes.json \
-                  etf_holdings/telegram_status.json etf_holdings/state.json \
+                  etf_holdings/telegram_status.json \
                   etf_holdings/prices.json
           if git diff --cached --quiet; then
             echo "변경 없음 — 커밋 생략"
