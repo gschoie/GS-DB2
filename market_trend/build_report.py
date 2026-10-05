@@ -345,6 +345,14 @@ h1{{font-family:inherit;font-weight:800;font-size:21px;letter-spacing:-.02em;bac
 .card{{border-radius:14px;box-shadow:0 1px 2px rgba(17,24,39,.04)}}
 .badge,.kw{{border-radius:999px}}
 .oneliner{{border-radius:12px}}
+
+/* == 노션 모드: 워시·그라데이션 제거, 플랫 헤어라인·작은 라운드·호버 하이라이트 == */
+@media (prefers-color-scheme:light){{html{{background:#fff}}}}
+h1{{background:none;-webkit-background-clip:unset;background-clip:unset;color:inherit;display:block}}
+.sched,.dl,.nav button{{border-radius:6px}}
+.card,.oneliner{{border-radius:8px;box-shadow:none}}
+.badge,.kw{{border-radius:6px}}
+@media (prefers-color-scheme:light){{.card{{border-color:#ededeb}}}}
 </style></head><body><div class="wrap">
 <h1>🧠 시장관심.내러티브</h1>
 <p class="sub">구독 텔레그램 전 채널의 하루치에서 계량으로 추린 신호를 테마로 묶은 것 · 매일 06:30 갱신</p>

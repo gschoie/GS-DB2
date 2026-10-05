@@ -373,6 +373,13 @@ h1{{font-family:inherit;font-weight:800;font-size:21px;letter-spacing:-.02em;bac
 .nav button{{border-radius:999px}}.nav select{{border-radius:10px}}
 .stats article,.ecard,.none,.legend,.hcard,.mode{{border-radius:14px;box-shadow:0 1px 2px rgba(17,24,39,.04)}}
 .stats strong{{font-family:inherit;font-weight:800}}
+
+/* == 노션 모드: 워시·그라데이션 제거, 플랫 헤어라인·작은 라운드·호버 하이라이트 == */
+@media (prefers-color-scheme:light){{html{{background:#fff}}}}
+h1{{background:none;-webkit-background-clip:unset;background-clip:unset;color:inherit;display:block}}
+.sched,.dl,.nav button{{border-radius:6px}}
+.stats article,.ecard,.none,.legend,.hcard,.mode{{border-radius:8px;box-shadow:none;border-color:#ededeb}}
+tbody tr:hover td{{background:rgba(55,53,47,.04)}}
 </style></head><body>
 <p class="eyebrow">ACTIVE ETF · HOLDINGS</p>
 <h1>액티브 ETF 구성 변화</h1>

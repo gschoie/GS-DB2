@@ -77,6 +77,14 @@ body{font-family:'Pretendard Variable',Pretendard,'Apple SD Gothic Neo','Malgun 
 h1{font-family:inherit;font-weight:800;font-size:21px;letter-spacing:-.02em;background:linear-gradient(135deg,#4f46e5,#7c3aed);-webkit-background-clip:text;background-clip:text;color:transparent;display:inline-block}
 .sched,.dl{border-radius:999px}
 .status,.card{border-radius:14px;box-shadow:0 1px 2px rgba(17,24,39,.04)}
+
+/* == 노션 모드: 워시·그라데이션 제거, 플랫 헤어라인·작은 라운드·호버 하이라이트 == */
+@media (prefers-color-scheme:light){html{background:#fff}}
+h1{background:none;-webkit-background-clip:unset;background-clip:unset;color:inherit;display:block}
+.sched,.dl,.nav button{border-radius:6px}
+.status,.card{border-radius:8px;box-shadow:none;border-color:#ededeb}
+tbody tr:hover td{background:rgba(55,53,47,.04)}
+.dl{background:#2383e2}
 </style></head><body><div class="wrap">
 <h1>영업이익 컨센 리비전 <span class="tiny" style="font-weight:400">KOSPI200 · KOSDAQ50 · 리서치커버리지</span></h1>
 <div class="sub" id="sub"></div>

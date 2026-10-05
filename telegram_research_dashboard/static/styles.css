@@ -379,3 +379,38 @@ body.item-locked #task-item{appearance:none;-webkit-appearance:none;border-color
 #todo .todo-pane-head h3{font-size:15px;font-weight:800}
 #todo .todo-group.drop-hover{background:rgba(35,131,226,.06);box-shadow:inset 0 0 0 1px #2383e2;border-radius:8px}
 @media(hover:none){#todo .todo-grip,#todo .todo-edit,#todo .todo-del,#todo .todo-arch-one,#todo .todo-restore,#todo .todo-arch-del,#todo .todo-ts{opacity:1}}
+
+/* ── 노션 모드 보정: 오늘의 요약·수명 피드백 플랫화 ── */
+#overview .panel,#overview .brief-card{border-radius:8px;box-shadow:none;border-color:#ededeb}
+#tasklist .task-toolbar,#tasklist .panel{border-radius:8px;box-shadow:none;border-color:#ededeb}
+#tasklist .task-toolbar button,#tasklist .task-import{border-radius:6px;box-shadow:none}
+#tasklist .task-toolbar select{border-radius:6px}
+#tasklist .task-table tbody tr:hover td{background:rgba(55,53,47,.04)}
+#tasklist .task-arch-pair{border-radius:6px}
+
+/* ── 🎴 GS 산출물: 노션 모드 ── */
+#reports .chip{border-radius:6px;color:#111827;border-color:#ededeb}
+#reports .chip:hover{background:rgba(55,53,47,.06)}
+#reports .chip.active{background:#2383e2;border-color:#2383e2;color:#fff}
+#reports select{border-radius:6px;border-color:#ededeb}
+#reports .refresh-btn{background:#2383e2;border-radius:6px}
+#reports .panel,#reports .archive-intro{border-radius:8px;border-color:#ededeb;box-shadow:none}
+#reports .report-kind{background:#e7f3fe;color:#1b6ec2;border-radius:4px}
+#reports .rep-range input[type=date]{border-radius:6px;border-color:#ededeb}
+#reports table tbody tr:hover td{background:rgba(55,53,47,.04)}
+#reports .archive-intro h2,#reports h2{font-family:inherit;font-weight:800;letter-spacing:-.02em}
+#reports .eyebrow{color:#6b7280;letter-spacing:.12em}
+
+/* ── 📚 뉴스.아카이브: 노션 모드 ── */
+#news .archive-intro{border-radius:8px;border-color:#ededeb;box-shadow:none}
+#news .archive-intro h2{font-family:inherit;font-weight:800;letter-spacing:-.02em}
+#news .eyebrow{color:#6b7280;letter-spacing:.12em}
+#news .refresh-btn{background:#2383e2;border-radius:6px}
+#news .open-new{border-radius:6px;color:#1d4ed8;background:#fff;border-color:#ededeb}
+#news .open-new:hover{background:rgba(55,53,47,.06)}
+#news .news-card{border-radius:8px;border-color:#ededeb;background:#fff}
+#news .news-card:hover{background:#fbfbfa}
+#news .news-table-wrap{border-radius:8px;border-color:#ededeb;overflow:hidden;overflow-x:auto}
+#news .news-table th{background:#fff;color:#6b7280;border-bottom:1px solid #ededeb}
+#news .news-table tbody tr:hover td{background:rgba(55,53,47,.04)}
+#news .task-sync{color:#2383e2}
