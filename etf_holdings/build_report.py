@@ -146,11 +146,13 @@ def current_holdings_block(snap, day_label):
 def day_html(ch, snap, is_latest, period_label=None):
     """하루치(또는 주간 누적) 본문(네비게이션으로 교체되는 부분)."""
     s = ch["summary"]
-    base = esc(ch.get("base_date") or "—")
-    prevbase = esc(ch.get("prev_base_date") or "—")
-    span = "이 주" if period_label else "이 날"
+    # 네이버가 CU 구성종목 '기준일'을 더 이상 주지 않는다(2026-09 개편) → 억지로
+    # 날짜를 지어내지 않고 '언제 바뀐 걸 봤는가'(수집 시각)만 정직하게 적는다.
+    seen = esc(ch.get("fetched_at") or ch.get("date") or "—")
+    prevseen = esc(ch.get("prev_fetched_at") or ch.get("prev_date") or "—")
+    span = "이 주" if period_label else "이 구간"
     if not ch["etfs"]:
-        body = (f'<div class="none">{span}(<b>{prevbase} → {base}</b> 기준일 비교)은 '
+        body = (f'<div class="none">{span}(<b>{prevseen} → {seen}</b>)에는 '
                 '유의미한 구성 변화가 없습니다. ✅</div>')
     else:
         body = '<div class="cards">' + "".join(etf_card(e) for e in ch["etfs"]) + '</div>'
@@ -158,9 +160,6 @@ def day_html(ch, snap, is_latest, period_label=None):
     raw = ch.get("base_date") or ch.get("date") or ""
     h2d = f"{raw[2:4]}/{raw[5:7]}/{raw[8:10]}" if len(raw) == 10 else "—"
     banner = ""
-    if is_latest and not period_label and ch.get("same_base"):
-        banner = ('<div class="banner">⚠ 직전 실행과 <b>구성 기준일이 동일</b>합니다 '
-                  f'({base} · KRX 장마감). 아직 새 구성이 반영되지 않아 변화가 없을 수 있습니다.</div>')
     gen = esc(ch.get("generated_at") or "")
     gen_txt = ''   # 생성 시각은 아래 sched 배지에서 표시
     if period_label:
@@ -170,9 +169,12 @@ def day_html(ch, snap, is_latest, period_label=None):
         title = "오늘" if is_latest else "당일"
         first_line = f'{gen_txt}실행일 {esc(ch["date"])}'
 
+    mkt = esc(ch.get("market_date") or "")
     return f"""
 <p class="sub">{first_line}<br>
-구성 기준일 <b>{base}</b> (KRX 장마감) · 비교 <b>{prevbase} → {base}</b><br>
+구성 변화 감지 <b>{seen}</b> · 직전 <b>{prevseen}</b>{f' · 마지막 거래일 {mkt}' if mkt else ''}<br>
+<span class="sparknote">운용사 바스켓은 <b>장 마감 뒤</b> 갱신되므로, 여기 매매는 대개
+<b>직전 거래일</b>의 것입니다 — 휴장일에는 새 변화가 잡히지 않습니다.</span><br>
 <span class="sched">🕙 정기 업데이트 <b>{SCHEDULE_TIME}</b>(한국시간){f' · 실제 갱신 <b>{gen}</b>' if gen else ''}<span class="schedq"> — 대기열 사정으로 일부 시간대는 건너뜀</span></span><br>
 매일 구성종목(Top10)을 스냅샷하고, <b>주가 효과와 CU 자금유출입을 제거</b>해 운용사가 실제로 사고판 것만 잡아냅니다.<br>
 <span class="sparknote">종목명 옆 곡선은 <b>최근 60거래일</b> 주가 — 상승 초록 · 하락 빨강, 마우스를 올리면 등락률</span></p>

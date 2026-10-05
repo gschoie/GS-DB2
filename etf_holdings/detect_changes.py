@@ -125,12 +125,14 @@ def compare(prev, now, prev_date, now_date, generated=""):
     etfs_out.sort(key=lambda e: (len(e["new"]) + len(e["gone"])) * 10
                   + sum(1 for m in e["moves"] if m["headline"]) * 5 + len(e["moves"]),
                   reverse=True)
-    today_base = now.get("base_date", "")
-    prev_base = prev.get("base_date", "")
+    # 스냅샷은 '구성이 바뀐 날'에만 쓰이므로(fetch_holdings) 연속한 두 스냅샷은 항상
+    # 서로 다른 바스켓이다. 옛 base_date 키는 과거 스냅샷에만 들어 있다 — 있으면 쓴다.
     return {
         "date": now_date, "prev_date": prev_date, "generated_at": generated,
-        "base_date": today_base, "prev_base_date": prev_base,
-        "same_base": bool(today_base and today_base == prev_base),
+        "base_date": now.get("base_date", ""), "prev_base_date": prev.get("base_date", ""),
+        "market_date": now.get("market_date", ""),
+        "prev_market_date": prev.get("market_date", ""),
+        "fetched_at": now.get("fetched_at", ""), "prev_fetched_at": prev.get("fetched_at", ""),
         "first_run": False, "etfs": etfs_out,
         "thresholds": {"weight_pp_min": WEIGHT_PP_MIN, "weight_pp_big": WEIGHT_PP_BIG,
                        "share_pct_min": SHARE_PCT_MIN},
