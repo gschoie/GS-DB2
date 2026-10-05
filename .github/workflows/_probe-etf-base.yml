@@ -1,7 +1,6 @@
 name: "[시험용] ETF 구성종목 기준일 경로 확인"
 
-# fetch_base_date 가 긁던 finance.naver.com/item/coinfo.naver 가 9/11 개편으로 죽어
-# 기준일이 2026-09-10 이후 전부 빈 값이다. 신규 API 에서 기준일을 찾는다.
+# 신규 front-api 응답 어딘가에 CU 구성종목 '기준일'이 있는지 끝까지 본다.
 # 확인이 끝나면 이 파일은 지운다.
 on:
   push:
@@ -26,36 +25,37 @@ jobs:
           S.headers.update({"User-Agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) "
                                           "AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148",
                             "Referer": "https://m.stock.naver.com/"})
-          CODE = "445290"
-
-          def show(label, r, cut=900):
-              print(f"\n[{label}] {r.status_code}")
-              print("   ", r.text[:cut].replace("\n", " "))
-
-          # 1) 옛 PC 페이지가 정말 죽었는지
-          r = S.get(f"https://finance.naver.com/item/coinfo.naver?code={CODE}",
-                    headers={"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/126"},
-                    timeout=20, allow_redirects=True)
-          print(f"\n[옛 coinfo] {r.status_code} -> {r.url} · 길이 {len(r.text)}")
-          print("   '기준' 포함:", "기준" in r.text)
-
-          # 2) 지금 쓰는 etfAnalysis 응답에 날짜가 들어 있나
-          r = S.get(f"https://m.stock.naver.com/api/stock/{CODE}/etfAnalysis", timeout=20)
-          j = r.json()
-          print(f"\n[etfAnalysis] {r.status_code} · 최상위 키: {list(j)}")
-          for k, v in j.items():
-              if isinstance(v, (str, int, float)) and re.search(r"\d{4}[-.]?\d{2}[-.]?\d{2}", str(v)):
-                  print(f"   날짜 같은 값: {k} = {v}")
-          top = (j.get("etfTop10MajorConstituentAssets") or [])[:1]
-          if top:
-              print("   구성종목 항목 키:", list(top[0]))
-
-          # 3) 신규 front-api 의 ETF 구성종목 엔드포인트
           F = "https://m.stock.naver.com/front-api"
-          for params in ({"code": CODE}, {"code": CODE, "page": 1, "pageSize": 20},
-                         {"itemCode": CODE}):
-              show(f"front-api etf/component/list {params}",
-                   S.get(F + "/stock/domestic/etf/component/list", params=params, timeout=20))
-          show("front-api etf/analysis",
-               S.get(F + "/stock/domestic/etf/analysis", params={"code": CODE}, timeout=20))
+          DATE = re.compile(r"20\d{2}[-.]?\d{2}[-.]?\d{2}")
+
+          def walk(o, path=""):
+              """날짜처럼 생긴 값을 경로와 함께 전부 모은다(구성종목 배열 안은 건너뜀)."""
+              if isinstance(o, dict):
+                  for k, v in o.items():
+                      yield from walk(v, f"{path}.{k}")
+              elif isinstance(o, list):
+                  if o: yield from walk(o[0], f"{path}[0]")
+              elif isinstance(o, (str, int)) and DATE.fullmatch(str(o).strip()):
+                  yield path, o
+
+          for code, name in (("445290", "KODEX 로봇액티브"), ("385720", "TIME 코스피액티브")):
+              print("\n" + "=" * 70); print(code, name); print("=" * 70)
+              for path, params in (("/stock/domestic/etf/component/list", {"code": code, "pageSize": 100}),
+                                   ("/stock/domestic/etf/analysis", {"code": code}),
+                                   ("/stock/domestic/integration", {"code": code, "endType": "etf"}),
+                                   ("/stock/domestic/basic", {"code": code, "endType": "etf"})):
+                  try:
+                      r = S.get(F + path, params=params, timeout=20)
+                      j = r.json()
+                  except Exception as e:
+                      print(f"  {path} 실패 {e}"); continue
+                  res = j.get("result", j)
+                  keys = list(res) if isinstance(res, dict) else f"<list {len(res)}>"
+                  print(f"\n  [{r.status_code}] {path}\n    result 키: {keys}")
+                  for p, v in walk(res):
+                      print(f"      날짜값 {p} = {v}")
+                  if path.endswith("component/list") and isinstance(res, dict):
+                      it = (res.get("items") or [{}])[0]
+                      print("    items[0] 키:", list(it))
+                      print("    totalCount:", res.get("totalCount"), "· hasNext:", res.get("hasNext"))
           PY
