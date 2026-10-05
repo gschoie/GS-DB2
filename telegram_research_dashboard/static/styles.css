@@ -476,3 +476,32 @@ h2{font-weight:800;font-size:17px;color:#111827}
 .nlm-link{border-radius:6px;color:#1b6ec2;background:#e7f3fe;border-color:#cde3f8}
 .news-card a{color:#1b6ec2}
 .research-row a{color:#1b6ec2}
+
+/* ══ 사이드바 노션 보정 ══
+   노션 레이어가 사이드바를 라이트로 바꿨는데 상태색(열림·호버·선택)은 옛 다크그린이
+   그대로 남아, 열린 그룹·그 안의 서브그룹이 통째로 검은 블록이 되고 '지금 보고 있는
+   메뉴'가 구분되지 않았다. 여기서 셋을 갈라 놓는다 —
+   열린 그룹 = 글자만 진하게 / 서브메뉴 = 연한 회색 / 지금 보는 화면 = 노션 블루. */
+.nav-group summary:hover,.nav-group[open] summary{background:transparent;color:#37352f}
+.nav-group summary:hover{background:rgba(55,53,47,.06)}
+.nav-group[open]>summary{color:#111827;font-weight:700}
+.nav-submenu,.nav-submenu-2{border-left-color:#ededeb}
+.sidebar .nav-sep{background:#ededeb}
+.nav-submenu a,.nav-submenu button,.nav-submenu .nav-label,
+.nav-subgroup>summary,.nav-submenu-2 a,.nav-submenu-2 button{color:#86857f}
+.nav-submenu a:hover,.nav-submenu button:hover,.nav-subgroup>summary:hover,
+.nav-submenu-2 a:hover,.nav-submenu-2 button:hover,
+.nav-subgroup[open]>summary{background:rgba(55,53,47,.06);color:#37352f}
+.nav-subgroup[open]>summary{background:transparent;font-weight:600}
+/* 지금 보고 있는 화면만 파랑 — 왼쪽 막대까지 더해 한눈에 */
+.nav.active,.nav-submenu button.active,.nav-submenu-2 button.active{
+  background:#e7f3fe;color:#1b6ec2;font-weight:700;box-shadow:inset 2px 0 0 #2383e2}
+.nav.active:hover,.nav-submenu button.active:hover,.nav-submenu-2 button.active:hover{
+  background:#dbebfc;color:#1b6ec2}
+@media(max-width:950px){
+  /* 폰 플라이아웃도 라이트로 */
+  .nav-group[open] .nav-submenu{background:#fff;border-color:#ededeb;box-shadow:0 14px 35px rgba(15,23,42,.16)}
+  .nav-group[open] .nav-submenu a,.nav-group[open] .nav-submenu button,
+  .nav-group[open] .nav-submenu .nav-label{color:#5f5e5b}
+  .nav-group[open] .nav-submenu button.active{color:#1b6ec2}
+}
