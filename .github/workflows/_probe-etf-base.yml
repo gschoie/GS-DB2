@@ -1,0 +1,61 @@
+name: "[시험용] ETF 구성종목 기준일 경로 확인"
+
+# fetch_base_date 가 긁던 finance.naver.com/item/coinfo.naver 가 9/11 개편으로 죽어
+# 기준일이 2026-09-10 이후 전부 빈 값이다. 신규 API 에서 기준일을 찾는다.
+# 확인이 끝나면 이 파일은 지운다.
+on:
+  push:
+    branches: [claude/telegram-trend-analysis-logic-7efsdy]
+    paths: [".github/workflows/_probe-etf-base.yml"]
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/setup-python@v6
+        with: {python-version: "3.12"}
+      - run: pip install requests
+      - name: 탐색
+        run: |
+          python - <<'PY'
+          import json, re
+          import requests
+
+          S = requests.Session()
+          S.headers.update({"User-Agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) "
+                                          "AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148",
+                            "Referer": "https://m.stock.naver.com/"})
+          CODE = "445290"
+
+          def show(label, r, cut=900):
+              print(f"\n[{label}] {r.status_code}")
+              print("   ", r.text[:cut].replace("\n", " "))
+
+          # 1) 옛 PC 페이지가 정말 죽었는지
+          r = S.get(f"https://finance.naver.com/item/coinfo.naver?code={CODE}",
+                    headers={"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/126"},
+                    timeout=20, allow_redirects=True)
+          print(f"\n[옛 coinfo] {r.status_code} -> {r.url} · 길이 {len(r.text)}")
+          print("   '기준' 포함:", "기준" in r.text)
+
+          # 2) 지금 쓰는 etfAnalysis 응답에 날짜가 들어 있나
+          r = S.get(f"https://m.stock.naver.com/api/stock/{CODE}/etfAnalysis", timeout=20)
+          j = r.json()
+          print(f"\n[etfAnalysis] {r.status_code} · 최상위 키: {list(j)}")
+          for k, v in j.items():
+              if isinstance(v, (str, int, float)) and re.search(r"\d{4}[-.]?\d{2}[-.]?\d{2}", str(v)):
+                  print(f"   날짜 같은 값: {k} = {v}")
+          top = (j.get("etfTop10MajorConstituentAssets") or [])[:1]
+          if top:
+              print("   구성종목 항목 키:", list(top[0]))
+
+          # 3) 신규 front-api 의 ETF 구성종목 엔드포인트
+          F = "https://m.stock.naver.com/front-api"
+          for params in ({"code": CODE}, {"code": CODE, "page": 1, "pageSize": 20},
+                         {"itemCode": CODE}):
+              show(f"front-api etf/component/list {params}",
+                   S.get(F + "/stock/domestic/etf/component/list", params=params, timeout=20))
+          show("front-api etf/analysis",
+               S.get(F + "/stock/domestic/etf/analysis", params={"code": CODE}, timeout=20))
+          PY
