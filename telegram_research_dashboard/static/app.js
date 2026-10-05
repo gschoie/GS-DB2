@@ -632,7 +632,7 @@ setInterval(checkNewDeploy,15*60*1000);
    (= GAS 재배포 전이면) 새로 못 돌린다고 알리고 저장본이라도 내려준다. */
 const FRESH={
  fx:{name:'환율',url:'https://raw.githubusercontent.com/gschoie/ecos-fx-rates/main/output/BOK_exchange_rates.xlsx',dated:'BOK_exchange_rates'},
- peer:{name:'피어그룹 주가',url:'https://github.com/gschoie/ecos-fx-rates/raw/main/output/'+encodeURIComponent('글로벌_주가_변동률_모니터링_최종.xlsx')}};
+ peer:{name:'피어그룹 주가',url:'https://raw.githubusercontent.com/gschoie/ecos-fx-rates/main/output/'+encodeURIComponent('글로벌_주가_변동률_모니터링_최종.xlsx'),dated:'글로벌_주가_변동률_모니터링_최종'}};
 /* 새 탭(target=_blank)으로 열면 클릭 한참 뒤에 도는 코드라 크롬이 팝업으로 막는다.
    같은 탭으로 내려받는다 — 엑셀은 첨부(attachment)라 화면은 그대로 남는다.
    dated가 있으면 저장 이름 끝에 _YYMMDD(받는 날)를 붙인다. 다른 출처 파일은 <a download>로
