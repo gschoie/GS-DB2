@@ -43,3 +43,8 @@ include_own_messages: true
 former:
   - 고영민
   - 김상혁
+
+# 인뎁스 발간계획 전용 단체방 — 제목 부분일치(공백 무시)로 찾는다.
+# 단체방은 발간 계획만 수집하고 휴가·근태는 보지 않는다. 매칭 확인은 mode=probe.
+indepth_groups:
+  - DAOL 기업분석 시니어+알짱

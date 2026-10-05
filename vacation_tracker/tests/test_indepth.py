@@ -7,6 +7,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
+import indepth  # noqa: E402
 from indepth import is_candidate, is_strong, pick_indepth_candidates, record  # noqa: E402
 from rules import KST  # noqa: E402
 
@@ -62,6 +63,65 @@ class PickTest(unittest.TestCase):
         late = {"id": 99, "out": False, "text": "다음주요", "dt": T0 + timedelta(hours=20)}
         picked = pick_indepth_candidates(timeline + [late])
         self.assertEqual([p["index"] for p in picked], [0])  # 12시간 지난 답은 제외
+
+
+class ExtractTest(unittest.TestCase):
+    """Gemini 판정을 흉내 내 extract의 스키마 처리만 검산한다(네트워크 없음)."""
+
+    def cand(self, **kw):
+        base = {"uid": "1:500", "name": "이준범", "text": "<10월 인뎁스 일정> 10/1 건설 10/6 전력기기",
+                "msg_date": "2026-09-30T17:20+09:00", "context": "", "trigger": "keyword",
+                "by_me": True}
+        base.update(kw)
+        return base
+
+    def run_extract(self, cand, verdict):
+        orig = indepth._gemini_extract
+        indepth._gemini_extract = lambda c: {0: verdict}
+        try:
+            return indepth.extract([cand])
+        finally:
+            indepth._gemini_extract = orig
+
+    def test_multi_plans_split_with_suffixed_uids(self):
+        entries = self.run_extract(self.cand(), {"i": 0, "plans": [
+            {"name": "", "topic": "건설/인터넷", "target": "2026-10-01",
+             "target_text": "10/1(목)", "kind": "인뎁스"},
+            {"name": "이정우", "topic": "전력기기", "target": "2026-10-06",
+             "target_text": "10/6(화)", "kind": "인뎁스"},
+        ]})
+        self.assertEqual(len(entries), 2)
+        self.assertEqual(entries[0]["uid"], "1:500#0")
+        self.assertEqual(entries[1]["uid"], "1:500#1")
+        self.assertEqual(entries[0]["name"], "미정")  # 일정표의 무기명 건은 미정
+        self.assertEqual(entries[1]["name"], "이정우")
+        self.assertEqual(entries[0]["target"], "2026-10-01")
+
+    def test_single_plan_1to1_attributes_partner(self):
+        # "너 10/12 전기전자지?" — 내가 말해도 1:1 단건은 대화 상대의 계획.
+        entries = self.run_extract(self.cand(), {"i": 0, "plans": [
+            {"name": "", "topic": "전기전자", "target": "2026-10-12",
+             "target_text": "10/12", "kind": "인뎁스"}]})
+        self.assertEqual(len(entries), 1)
+        self.assertEqual(entries[0]["uid"], "1:500")  # 단건은 접미사 없음
+        self.assertEqual(entries[0]["name"], "이준범")
+
+    def test_group_single_plan_unnamed_is_undecided(self):
+        entries = self.run_extract(self.cand(group="시니어방", name="김OO"),
+                                   {"i": 0, "plans": [
+                                       {"name": "", "topic": "철강", "target": None,
+                                        "target_text": "", "kind": "기타"}]})
+        self.assertEqual(entries[0]["name"], "미정")
+
+    def test_old_single_plan_schema_still_works(self):
+        entries = self.run_extract(self.cand(), {"i": 0, "plan": True, "topic": "조선",
+                                                 "target": "2026-10-20", "target_text": "",
+                                                 "kind": "인뎁스"})
+        self.assertEqual(len(entries), 1)
+        self.assertEqual(entries[0]["topic"], "조선")
+
+    def test_empty_plans_dropped(self):
+        self.assertEqual(self.run_extract(self.cand(), {"i": 0, "plans": []}), [])
 
 
 class RecordTest(unittest.TestCase):

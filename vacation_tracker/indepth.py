@@ -82,7 +82,7 @@ def pick_indepth_candidates(timeline: list[dict], hours: int = 12) -> list[dict]
 
 # ── Gemini 판정 ────────────────────────────────────────────────────────────
 
-GEMINI_IDX_PROMPT = """너는 증권사 리서치팀장의 텔레그램 1:1 대화에서 팀원(분석원)의
+GEMINI_IDX_PROMPT = """너는 증권사 리서치팀장의 텔레그램 대화(1:1·단체방)에서 팀의
 '자료 발간 계획'을 추려 정리하는 비서다. 발간 계획 = 인뎁스·개시(이니시에이션)·산업·
 스몰캡·탐방 등 리서치 자료를 쓰고 있거나 언제까지 내겠다는 이야기. '인뎁스'라는 말이
 없어도 자료/보고서를 작성·발간하겠다는 맥락이면 계획이다.
@@ -90,16 +90,21 @@ GEMINI_IDX_PROMPT = """너는 증권사 리서치팀장의 텔레그램 1:1 대�
 입력은 번호가 붙은 메시지 목록이다. 각 메시지에는 보낸 사람, 보낸 시각(KST, 요일 포함),
 본문이 있고 일부에는 (맥락)으로 직전 대화가 붙어 있다. '나'는 팀장(계정 주인)이다.
 
-메시지마다 아래를 판정해 JSON 배열로만 답하라(설명 금지):
-[{"i": <메시지 번호>, "plan": true|false, "topic": "주제(종목·산업, 짧게)",
-  "target": "YYYY-MM-DD"|null, "target_text": "원문의 시점 표현(없으면 빈 문자열)",
-  "kind": "인뎁스|Semi-인뎁스|개시|산업|스몰캡|탐방|기타"}]
+메시지마다 아래를 판정해 JSON 배열로만 답하라(설명 금지). 계획이 없으면 plans=[].
+한 메시지에 "<10월 인뎁스 일정>"처럼 여러 건이 나열되면 **건마다 plans 원소 하나씩** 쪼개라.
+[{"i": <메시지 번호>, "plans": [{"name": "담당자 이름(글·맥락에 명시된 경우만, 모르면 \\"\\")",
+  "topic": "주제(종목·산업, 짧게)", "target": "YYYY-MM-DD"|null,
+  "target_text": "원문의 시점 표현(없으면 빈 문자열)",
+  "kind": "인뎁스|Semi-인뎁스|개시|산업|스몰캡|탐방|기타"}]}]
 
 판정 기준:
-- plan=true는 그 대화 상대(분석원)가 자기 자료의 발간 계획·진행 상황을 말한 것만.
-  남의 자료 공유, 이미 발간된 자료 링크, 자료 요청("자료 보내줘"), 단순 질문은 false.
-- 맥락의 질문(예: "인뎁스 언제 나와?")에 대한 답이면 plan=true — 주제·종류는 맥락에서 찾아라.
+- 분석원이 자기 자료의 발간 계획·진행 상황을 말한 것, **내가 상대의 일정을 말한 것**
+  ("너 10/12 전기전자지?" — 1:1이면 그 상대가 담당자다), 그리고 **팀장(나)이나 단체방에서
+  공지한 발간 일정표**도 계획이다. 남의 회사 자료 공유, 이미 발간된 자료 링크,
+  자료 요청("자료 보내줘"), 단순 질문은 plans=[].
+- 맥락의 질문(예: "인뎁스 언제 나와?")에 대한 답이면 계획 — 주제·종류는 맥락에서 찾아라.
 - "내일", "다음주 금요일" 같은 상대 시점은 메시지의 보낸 시각 기준으로 target을 계산한다.
+  "10/6(화)"처럼 연도가 없으면 보낸 시각의 연도(지났으면 다음 해)로 본다.
 - "9월 중", "9월 마지막주~10월 첫째주쯤", "추석 전"처럼 모호하거나 구간인 표현도
   그 표현이 가리키는 **적당한 대표 날짜 하나**를 target으로 추정해 채워라
   (구간이면 중간~끝 무렵, "N월 중"이면 그 달 중순). 원문 표현은 target_text에 그대로
@@ -172,6 +177,8 @@ def _gemini_extract(candidates: list[dict]) -> dict[int, dict] | None:
 def extract(candidates: list[dict]) -> list[dict]:
     """후보 → 확정 항목. Gemini가 '계획 아님'이라 한 건은 버린다.
 
+    한 메시지에 일정표처럼 여러 건이 있으면 plans 원소마다 항목을 만든다
+    (uid는 `원래uid#k`로 가른다 — 재스캔 때 전부 아는 uid로 걸러지도록).
     Gemini 불가 시 폴백: 강한 키워드(인뎁스·커버리지·개시·발간)가 본문에 직접 있는
     건만 needs_review로 남긴다(넓은 프리필터를 다 남기면 잡담이 쏟아진다).
     """
@@ -180,35 +187,50 @@ def extract(candidates: list[dict]) -> list[dict]:
     for index, cand in enumerate(candidates):
         verdict = (verdicts or {}).get(index)
         if verdict is not None:
-            if not verdict.get("plan"):
-                continue
-            target = str(verdict.get("target") or "").strip() or None
-            if target:
-                try:
-                    datetime.strptime(target, "%Y-%m-%d")
-                except ValueError:
-                    target = None
-            entry = {
-                "topic": str(verdict.get("topic") or "").strip(),
-                "kind": str(verdict.get("kind") or "기타").strip() or "기타",
-                "target": target,
-                "target_text": str(verdict.get("target_text") or "").strip(),
-                "needs_review": False,
-                "engine": "gemini",
-            }
+            plans = verdict.get("plans")
+            if not isinstance(plans, list):  # 구 스키마({"plan": bool, ...}) 호환
+                plans = [verdict] if verdict.get("plan") else []
+            plans = [p for p in plans if isinstance(p, dict)]
+            made = []
+            for plan in plans:
+                target = str(plan.get("target") or "").strip() or None
+                if target:
+                    try:
+                        datetime.strptime(target, "%Y-%m-%d")
+                    except ValueError:
+                        target = None
+                made.append({
+                    "name": str(plan.get("name") or "").strip(),
+                    "topic": str(plan.get("topic") or "").strip(),
+                    "kind": str(plan.get("kind") or "기타").strip() or "기타",
+                    "target": target,
+                    "target_text": str(plan.get("target_text") or "").strip(),
+                    "needs_review": False,
+                    "engine": "gemini",
+                })
         else:
             if cand.get("by_me") or not is_strong(cand["text"]):
                 continue
-            entry = {"topic": "", "kind": "기타", "target": None, "target_text": "",
-                     "needs_review": True, "engine": "rule"}
+            made = [{"name": "", "topic": "", "kind": "기타", "target": None,
+                     "target_text": "", "needs_review": True, "engine": "rule"}]
         display_text = cand["text"]
         if cand.get("trigger") == "context" and cand.get("context"):
             display_text = f"{cand['context'].splitlines()[-1]} → {cand['text']}"
-        entry.update(uid=cand["uid"], name=cand["name"], text=display_text,
-                     note="", done=False,
-                     msg_date=cand["msg_date"],
-                     detected_at=datetime.now(KST).isoformat(timespec="minutes"))
-        entries.append(entry)
+        for k, entry in enumerate(made):
+            # 담당자: Gemini가 이름을 집으면 그 이름, 아니면 1:1 단건은 대화 상대,
+            # 단체방·일정표(여러 건)는 미정으로 남겨 수동 정리.
+            name = entry.pop("name")
+            if not name:
+                if len(made) == 1 and not cand.get("group"):
+                    name = cand["name"]
+                else:
+                    name = "미정"
+            uid = cand["uid"] if len(made) == 1 else f"{cand['uid']}#{k}"
+            entry.update(uid=uid, name=name, text=display_text,
+                         note="", done=False,
+                         msg_date=cand["msg_date"],
+                         detected_at=datetime.now(KST).isoformat(timespec="minutes"))
+            entries.append(entry)
     return entries
 
 
@@ -446,7 +468,7 @@ def _row(uid: str, entry: dict) -> str:
     return (f'<tr data-uid="{html.escape(uid)}" data-done="{1 if done else 0}"'
             f' data-note="{html.escape(note)}" data-target="{html.escape(entry.get("target") or "")}">'
             f'<td class="c-name name">{html.escape(entry.get("name") or "")}</td>'
-            f'<td class="c-topic topic">{html.escape(entry.get("topic") or "—")}</td>'
+            f'<td class="c-topic topic">{html.escape(_shown_topic(entry) or "—")}</td>'
             f'<td class="c-tgt tgt">{_fmt_target(entry)}</td>'
             f'<td class="c-kind">{badge}</td>'
             f'<td class="c-done">{mark}</td>'
@@ -475,10 +497,15 @@ def _section(title: str, count: int, inner: str, is_open: bool,
             f'<summary>{title} ({count}건)</summary>{inner}</details>')
 
 
+def _shown_topic(entry: dict) -> str:
+    """주제 자리 표기 — 주제가 비면 메모로 대신한다(수동 메모가 사실상 주제인 경우)."""
+    return str(entry.get("topic") or "").strip() or str(entry.get("note") or "").strip()
+
+
 def _chip(uid: str, entry: dict) -> str:
     label = entry.get("name") or ""
-    if entry.get("topic"):
-        label += f"·{entry['topic']}"
+    if _shown_topic(entry):
+        label += f"·{_shown_topic(entry)}"
     cls = "chip fin" if entry.get("done") else "chip"
     return (f'<span class="{cls}" draggable="true"'
             f' data-uid="{html.escape(uid)}"'
@@ -489,7 +516,7 @@ def _chip(uid: str, entry: dict) -> str:
             f' data-target="{html.escape(entry.get("target") or "")}"'
             f' data-note="{html.escape(entry.get("note") or "")}"'
             f' data-text="{html.escape((entry.get("text") or "")[:200])}"'
-            f' title="{html.escape(entry.get("topic") or "")} — 눌러서 상세 보기">'
+            f' title="{html.escape(_shown_topic(entry))} — 눌러서 상세 보기">'
             f'{html.escape(label[:14])}</span>')
 
 
@@ -832,7 +859,7 @@ function showPop(chip){
   const close=document.createElement('span');close.className='close';close.textContent='✕';
   close.addEventListener('click',hidePop);
   const t=document.createElement('div');t.className='t';
-  t.textContent=d.name+(d.topic?' — '+d.topic:'');
+  t.textContent=d.name+((d.topic||d.note)?' — '+(d.topic||d.note):'');
   const meta=document.createElement('div');
   meta.textContent=(d.kind||'')+(d.target?' · '+d.target:'');
   chipPop.append(close,t,meta);
