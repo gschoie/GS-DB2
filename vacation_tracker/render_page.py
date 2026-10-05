@@ -174,6 +174,16 @@ td.c-kind .badge:not(.review){cursor:pointer}
   .cal .d{font-size:10.5px}
   #cal-label{min-width:0}
 }
+
+/* 노션 모드: 플랫 헤어라인·작은 라운드·호버 하이라이트 */
+h1{font-weight:800;letter-spacing:-.02em;color:#111827}
+h2{color:#111827;border-bottom-color:#ededeb}
+th{border-bottom:1px solid #ededeb}
+td{border-bottom-color:#f1f1ef}
+tbody tr:hover td{background:rgba(55,53,47,.04)}
+.badge{border-radius:4px}
+tr.today td{background:#e7f3fe}
+a{color:#1b6ec2}
 """
 
 # 달력 칩 색 구분: 휴가·연차 계열은 노랑, 출장·샵투어 계열은 파랑.

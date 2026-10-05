@@ -403,6 +403,16 @@ details.sec[open]>summary{margin-bottom:10px}
   table.lst td{border:none;padding:2px 0}
   #cal-strip{grid-template-columns:1fr}
 }
+
+/* 노션 모드: 플랫 헤어라인·작은 라운드·호버 하이라이트 */
+h1{font-weight:800;letter-spacing:-.02em;color:#111827}
+h2{color:#111827;border-bottom-color:#ededeb}
+th{border-bottom:1px solid #ededeb}
+td{border-bottom-color:#f1f1ef}
+tbody tr:hover td{background:rgba(55,53,47,.04)}
+.badge{border-radius:4px}
+tr.today td{background:#e7f3fe}
+a{color:#1b6ec2}
 """
 
 

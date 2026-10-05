@@ -247,6 +247,16 @@ details.former>summary{font-size:13.5px;color:#8a94a0;font-weight:700;cursor:poi
   body{padding:18px 10px 50px}
   th.h-when,td.c-when{display:none}
 }
+
+/* 노션 모드: 플랫 헤어라인·작은 라운드·호버 하이라이트 */
+h1{font-weight:800;letter-spacing:-.02em;color:#111827}
+h2{color:#111827;border-bottom-color:#ededeb}
+th{border-bottom:1px solid #ededeb}
+td{border-bottom-color:#f1f1ef}
+tbody tr:hover td{background:rgba(55,53,47,.04)}
+.badge{border-radius:4px}
+tr.today td{background:#e7f3fe}
+a{color:#1b6ec2}
 """
 
 
