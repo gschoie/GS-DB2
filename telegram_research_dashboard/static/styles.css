@@ -523,3 +523,62 @@ main input[type=date]:focus,main input[type=number]:focus,main select:focus,main
   border:0;border-radius:6px;background:#2383e2;color:#fff;font:700 13px/1 inherit;
   padding:9px 14px;cursor:pointer}
 #recipe-send:hover,#remember-endpoint-save:hover,#mzdiary-endpoint-save:hover{background:#1b6ec2}
+
+/* ══ 발간 보고서·뉴스.아카이브 — 리서치 톤에 맞추고 글씨 키우기 ══
+   두 표가 10~11.5px라 리서치 톤 화면보다 확연히 작았다. 본문 13px대로 올리고,
+   표 머리의 굵은 먹선(2px #263d35)·초록 바탕·다크그린 활성 버튼 같은 옛 톤 잔재를
+   노션 헤어라인·파랑으로 바꾼다. 폰(≤620px)은 표가 카드로 접히므로 글씨만 키우고
+   여백은 건드리지 않는다. */
+/* 구분 배지 — 톤처럼 파랑 계열로, 종류만 살짝 다르게 */
+.report-kind{background:#e7f3fe;color:#1b6ec2;font-size:11px;padding:3px 8px}
+.report-kind.industry{background:#eef2ff;color:#4338ca}
+.report-kind.weekly{background:#fdf4e4;color:#96670f}
+/* 발간 보고서 */
+#reports .rep-table{font-size:13px}
+#reports .rep-table th{font-size:12px;font-weight:600;letter-spacing:0;
+  background:#fbfbfa;color:#6b7280;border-bottom:1px solid #ededeb}
+#reports .rep-table tbody tr:hover{background:rgba(55,53,47,.035)}
+#reports .rep-table td{border-bottom-color:#f1f1ef;line-height:1.55}
+#reports .company-chip{font-size:12px;border-radius:4px}
+#reports .rep-range{font-size:13px}
+#reports .rep-range input[type=date]{font-size:12.5px;padding:6px 9px}
+#reports .rep-range strong{font-size:12.5px}
+#reports .rep-preset{background:#fff;border-color:#ededeb;border-radius:6px;
+  color:#5f5e5b;font-size:12.5px;padding:6px 13px}
+#reports .rep-preset:hover{background:rgba(55,53,47,.06);color:#37352f}
+#reports .rep-preset.on{background:#2383e2;border-color:#2383e2;color:#fff;font-weight:700}
+/* 뉴스.아카이브 */
+#news .news-table{font-size:13.5px}
+#news .news-table th{font-size:12px;font-weight:600;letter-spacing:0;background:#fbfbfa}
+#news .news-table td{font-size:13.5px;line-height:1.55}
+#news .company-label{font-size:12px}
+#news .year-group>summary{font-size:19px}
+#news .month-divider h3{font-size:15.5px}
+#news .toolbar p{font-size:13px}
+@media(min-width:621px){
+  #reports .rep-table th{padding:11px 12px}
+  #reports .rep-table td{padding:11px 12px}
+  #news .news-table th,#news .news-table td{padding:12px}
+}
+/* 표 안 배지·칩·글씨 — 리서치 톤처럼 테두리 없는 파스텔 알약으로, 크기도 한 단계 위로 */
+#reports .rep-kind{font-size:11.5px;padding:3px 9px;border:0;border-radius:4px;
+  background:#e7f3fe;color:#1b6ec2}
+#reports .rep-kind.ind{background:#eef2ff;color:#4338ca}
+#reports .rep-kind.strat{background:#fdf4e4;color:#96670f}
+#reports .rep-sub{font-size:11.5px;color:#8a8984}
+#reports .rep-title{font-size:14.5px;line-height:1.5}
+#reports .rep-desc{font-size:12.5px;color:#6b7280;font-style:normal;margin-top:4px}
+#reports .pt-chip{font-size:11.5px;padding:3px 9px;border-radius:4px;
+  background:#e9f7ef;color:#1f7a4d}
+#reports .rep-rsn{font-size:11.5px}
+#reports .rep-links a{font-size:12px}
+/* 기업 칩 — 초록기 빼고 중립 회색 바탕 + 파란 글씨(톤 화면의 파란 기업명과 같은 신호) */
+#reports .company-chip,#news .news-company-chip,#press .press-company-chip{
+  background:#f4f4f2;color:#1b6ec2;font-size:12px;font-weight:600;border-radius:4px;padding:4px 9px}
+#reports .company-chip:hover,#news .news-company-chip:hover,#press .press-company-chip:hover{
+  background:#e7f3fe;color:#1b6ec2}
+#news .news-company-chip.active,#press .press-company-chip.active{background:#2383e2;color:#fff}
+#news .company-label{background:#f4f4f2;color:#6b7280;font-size:12px;padding:4px 9px;border-radius:4px}
+/* 뉴스 검색칸·셀렉트도 같은 헤어라인으로 */
+#news .news-filters input,#news .news-filters select{
+  border:1px solid #ededeb;border-radius:6px;padding:8px 11px;font-size:13px;background:#fff}
