@@ -63,23 +63,20 @@ def build_message():
     lines += [line("개인", "individual"), line("외국인", "foreign"), line("기관", "institution"), ""]
     lines.append(f"프로그램 <b>{fmt(s['program'])}억</b> = "
                  f"차익 {fmt(s['arb'])} · 비차익 {fmt(s['nonarb'])}")
-    fut = day.get("confirmed", {}).get("futures")
-    fut_curve = (day.get("curve") or {}).get("futures")
-    unit = hist.get("futures_unit", "계약")
-    prev_fut = prev.get("futures") if prev else None
-
-    def fut_d(key, cur):
-        if prev_fut and cur is not None and prev_fut.get(key) is not None:
-            return f" ({fmt(cur - prev_fut[key])})"
-        return ""
-
-    if fut:
-        lines += ["", f"K200선물 외인 <b>{fmt(fut['foreign'])}{unit}</b>{fut_d('foreign', fut['foreign'])} · "
-                      f"기관 {fmt(fut['inst_total'])}{unit}{fut_d('inst_total', fut['inst_total'])}"]
-    elif fut_curve:
-        last = fut_curve[-1]
-        lines += ["", f"K200선물 외인 <b>{fmt(last[2])}{unit}</b>{fut_d('foreign', last[2])} · "
-                      f"기관 {fmt(last[3])}{unit}{fut_d('inst_total', last[3])} <i>(장중 {last[0]})</i>"]
+    # 선물은 '누가 샀나'(투자자별)가 2026-09 네이버 개편으로 사라져 가격 괴리로 대신한다.
+    b = s.get("basis") or day.get("confirmed", {}).get("basis")
+    if b and b.get("basis") is not None:
+        state = "콘탱고" if b["basis"] > 0 else "백워데이션" if b["basis"] < 0 else "동일"
+        prev_b = (prev or {}).get("basis") or {}
+        delta = (f" ({b['basis'] - prev_b['basis']:+.2f})"
+                 if prev_b.get("basis") is not None else "")
+        seg = f"K200선물 <b>{b['fut']:,.2f}</b>"
+        if b.get("chg_pct") is not None:
+            seg += f" ({b['chg_pct']:+.2f}%)"
+        seg += f"\n베이시스 <b>{b['basis']:+.2f}p</b>{delta} · {state}"
+        if b.get("dprt") is not None:
+            seg += f" · 괴리율 {b['dprt']:+.2f}%"
+        lines += ["", seg]
     if prev:
         lines += ["", f"<i>( ) 안은 {SLOT_LABEL[keys[-2]].split(' ')[0]} 대비 증감</i>"]
     sf = day.get("stock_flow")

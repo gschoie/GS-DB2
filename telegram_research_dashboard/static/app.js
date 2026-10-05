@@ -179,7 +179,7 @@ async function load(){
  renderPressTable();
 }
 function loadUnionBoard(){const frame=$('#union-board-frame'),status=$('#union-board-status');status.textContent='최신 보고서를 불러오는 중';frame.onload=()=>status.textContent='현중 노조게시판 분석 보고서';frame.onerror=()=>status.textContent='hhiun_board_report.html 파일을 확인해 주세요';frame.src=`hhiun_board_report.html?t=${Date.now()}`}
-const TASK_ROSTER=[['팀장',['최광식','이준범']],['테크(Tech)',['남대종','김연미','이다연','테크RA']],['지속가능(Sustainability)',['박영도','김지원','김진영']],['지능화(Intelligence)',['유지웅','김혜영','이정우']],['휴먼/생체(Human)',['이지수','박종현','임도영','박소현','한수빈']]];
+const TASK_ROSTER=[['팀장',['최광식','이준범']],['테크(Tech)',['남대종','김연미','테크RA']],['지속가능(Sustainability)',['박영도','김지원','김진영','이정우']],['지능화(Intelligence)',['유지웅','김혜영']],['휴먼/생체(Human)',['이지수','박종현','임도영','박소현','한수빈','이다연']]];
 const TASK_FORMER=['고영민','김상혁'];/* 퇴사자 — 표 하단 접힌 그룹, 기록은 보존 */
 const TASK_ITEMS_DEFAULT=['근태입력','휴가계획','자료제출','컴플라이언스','기타'],TASK_KEY='hi_tasklist_v1',TASK_ITEMS_KEY='hi_tasklist_items_v1',TASK_LAST_KEY='hi_tasklist_last_v1';
 let taskWantItem=null;/* 주소(#tasklist:항목)로 들어온 항목 — 동기화가 끝난 뒤에도 유지 */
@@ -299,7 +299,17 @@ async function todoPull(){if(!TASK_ENDPOINT)return false;const status=$('#todo-s
  if(Array.isArray(b.todos)){localStorage.setItem(TODO_KEY,JSON.stringify(b.todos));if(status)status.textContent='☁ 동기화됨';return true}
  // 서버 번들에 아직 todos가 없으면 이 기기 목록을 올려 시드한다
  if(todoLoad().length||todoGroups().length)taskPush('#todo-sync');else if(status)status.textContent='☁ 동기화';return false}catch{if(status)status.textContent='이 기기에만 저장(동기화 실패)'}return false}
-function view(id){$$('.view,.nav').forEach(x=>x.classList.remove('active'));$('#'+id).classList.add('active');$(`.nav[data-view="${id}"]`).classList.add('active');$('#page-title').textContent={todo:'TO-DO 체크리스트',overview:'오늘의 리서치 흐름',reports:'발간 보고서',news:'뉴스.아카이브',press:'보도기사 취합','union-board':'현중 노조게시판',tone:'DAOL 리서치 톤',chatbot:'DAOL 리서치와 챗봇',collab:'섹터 콜라보 레이더',tasklist:'수명 피드백 확인',dart:'조선 수주공시 → 텔레',recipe:'레시피 수집 → Notion',etf:'ETF/섹터.신호 포착',holdings:'액티브 ETF 구성 변화',flow:'시장 수급 동향',trend:'시장관심.내러티브',consensus:'코스피200 컨센서스 추적',defense:'글로벌 방산 데일리 브리핑',defweekly:'글로벌 방산 주간 정리',ytdigest:'방산 유튜브 3일 모음',ytweekly:'방산 유튜브 주간 모음',vacation:'휴가/출장 계획',attendance:'월별 근태 체크',indepth:'인뎁스/자료 발간 계획',construction:'글로벌 건설기계 데일리 브리핑',conweekly:'글로벌 건설기계 주간 정리',energy:'친환경 에너지·FDC 데일리 브리핑',remember:'리멤버 → Notion 기록',mzdiary:'MZ일기 · 잔고/매매노트'}[id];if(id==='overview')fetchLiveMacro();if(id==='press'){state.pressCompany='';renderPressTable()}if(id==='tone')loadToneFrame();if(id==='union-board')loadUnionBoard();if(id==='tasklist'){renderTaskList(taskWantItem);taskPull().then(ok=>{if(ok)renderTaskList(taskWantItem);taskWantItem=null})}if(id==='todo'){renderTodo();todoPull().then(ok=>{if(ok)renderTodo()})}if(id==='etf'){const f=$('#etf-frame');if(!f.getAttribute('src'))f.src='etf_signal_report.html?t='+Date.now()}if(id==='holdings'){const f=$('#holdings-frame');if(!f.getAttribute('src'))f.src='etf_holdings_report.html?t='+Date.now()}if(id==='flow'){const f=$('#flow-frame');if(!f.getAttribute('src'))f.src='market_flow_report.html?t='+Date.now()}if(id==='trend'){const f=$('#trend-frame');if(!f.getAttribute('src'))f.src='market_trend_report.html?t='+Date.now()}if(id==='consensus'){const f=$('#consensus-frame');if(!f.getAttribute('src'))f.src='consensus_revision.html?t='+Date.now()}if(id==='defense'){const f=$('#defense-frame');if(!f.getAttribute('src'))f.src='defense_briefing_report.html?t='+Date.now()}if(id==='defweekly'){const f=$('#defweekly-frame');if(!f.getAttribute('src'))f.src='defense_weekly_report.html?t='+Date.now()}if(id==='ytdigest'){const f=$('#ytdigest-frame');if(!f.getAttribute('src'))f.src='youtube_digest_report.html?t='+Date.now()}if(id==='ytweekly'){const f=$('#ytweekly-frame');if(!f.getAttribute('src'))f.src='youtube_weekly_report.html?t='+Date.now()}if(id==='vacation'){const f=$('#vacation-frame');if(!f.getAttribute('src'))f.src='vacation_report.html?t='+Date.now()}if(id==='attendance'){const f=$('#attendance-frame');if(!f.getAttribute('src'))f.src='attendance_report.html?t='+Date.now()}if(id==='indepth'){const f=$('#indepth-frame');if(!f.getAttribute('src'))f.src='indepth_report.html?t='+Date.now()}if(id==='construction'){const f=$('#construction-frame');if(!f.getAttribute('src'))f.src='construction_briefing_report.html?t='+Date.now()}if(id==='conweekly'){const f=$('#conweekly-frame');if(!f.getAttribute('src'))f.src='construction_weekly_report.html?t='+Date.now()}if(id==='energy'){const f=$('#energy-frame');if(!f.getAttribute('src'))f.src='energy_briefing_report.html?t='+Date.now()}if(id==='collab'){const f=$('#collab-frame');if(!f.getAttribute('src'))f.src=TONE_SITE+'daol_collab_radar.html?t='+Date.now()}if(id==='chatbot'){const f=$('#chatbot-frame');if(!f.getAttribute('src'))f.src=TONE_SITE+'chat.html?t='+Date.now()}}
+// 아이폰에서 iframe 안/밖 이중 스크롤이 걸리적거림 — 좁은 화면에서는 iframe 높이를
+// 내용 높이에 맞춰 바깥 페이지가 통으로 스크롤되게 한다(리포트가 같은 출처라 가능).
+function fitFrame(f){
+ if(!f||f.dataset.fit||!matchMedia('(max-width:950px)').matches)return;f.dataset.fit='1';
+ const adjust=()=>{try{const b=f.contentDocument&&f.contentDocument.body;if(!b)return;
+  const h=Math.max(b.scrollHeight+40,500);
+  if(Math.abs((parseInt(f.style.height)||0)-h)>4)f.style.height=h+'px'}catch(e){}};
+ f.addEventListener('load',()=>{adjust();
+  try{new ResizeObserver(adjust).observe(f.contentDocument.body)}catch(e){setInterval(adjust,2500)}});
+}
+function view(id){$$('.view,.nav').forEach(x=>x.classList.remove('active'));$('#'+id).classList.add('active');$(`.nav[data-view="${id}"]`).classList.add('active');$('#page-title').textContent={todo:'TO-DO 체크리스트',overview:'오늘의 리서치 흐름',reports:'발간 보고서',news:'뉴스.아카이브',press:'보도기사 취합','union-board':'현중 노조게시판',tone:'DAOL 리서치 톤',chatbot:'DAOL 리서치와 챗봇',collab:'섹터 콜라보 레이더',tasklist:'수명 피드백 확인',dart:'조선 수주공시 → 텔레',recipe:'레시피 수집 → Notion',etf:'ETF/섹터.신호 포착',holdings:'액티브 ETF 구성 변화',flow:'시장 수급 동향',trend:'시장관심.내러티브',consensus:'코스피200 컨센서스 추적',defense:'글로벌 방산 데일리 브리핑',defweekly:'글로벌 방산 주간 정리',ytdigest:'방산 유튜브 3일 모음',ytweekly:'방산 유튜브 주간 모음',vacation:'휴가/출장 계획',attendance:'월별 근태 체크',indepth:'인뎁스/자료 발간 계획',construction:'글로벌 건설기계 데일리 브리핑',conweekly:'글로벌 건설기계 주간 정리',energy:'친환경 에너지·FDC 데일리 브리핑',remember:'리멤버 → Notion 기록',mzdiary:'MZ일기 · 잔고/매매노트'}[id];if(id==='overview')fetchLiveMacro();if(id==='press'){state.pressCompany='';renderPressTable()}if(id==='tone')loadToneFrame();if(id==='union-board')loadUnionBoard();if(id==='tasklist'){renderTaskList(taskWantItem);taskPull().then(ok=>{if(ok)renderTaskList(taskWantItem);taskWantItem=null})}if(id==='todo'){renderTodo();todoPull().then(ok=>{if(ok)renderTodo()})}if(id==='etf'){const f=$('#etf-frame');if(!f.getAttribute('src'))f.src='etf_signal_report.html?t='+Date.now()}if(id==='holdings'){const f=$('#holdings-frame');if(!f.getAttribute('src'))f.src='etf_holdings_report.html?t='+Date.now()}if(id==='flow'){const f=$('#flow-frame');if(!f.getAttribute('src'))f.src='market_flow_report.html?t='+Date.now()}if(id==='trend'){const f=$('#trend-frame');if(!f.getAttribute('src'))f.src='market_trend_report.html?t='+Date.now()}if(id==='consensus'){const f=$('#consensus-frame');if(!f.getAttribute('src'))f.src='consensus_revision.html?t='+Date.now()}if(id==='defense'){const f=$('#defense-frame');if(!f.getAttribute('src'))f.src='defense_briefing_report.html?t='+Date.now()}if(id==='defweekly'){const f=$('#defweekly-frame');if(!f.getAttribute('src'))f.src='defense_weekly_report.html?t='+Date.now()}if(id==='ytdigest'){const f=$('#ytdigest-frame');if(!f.getAttribute('src'))f.src='youtube_digest_report.html?t='+Date.now()}if(id==='ytweekly'){const f=$('#ytweekly-frame');if(!f.getAttribute('src'))f.src='youtube_weekly_report.html?t='+Date.now()}if(id==='vacation'){const f=$('#vacation-frame');fitFrame(f);if(!f.getAttribute('src'))f.src='vacation_report.html?t='+Date.now()}if(id==='attendance'){const f=$('#attendance-frame');fitFrame(f);if(!f.getAttribute('src'))f.src='attendance_report.html?t='+Date.now()}if(id==='indepth'){const f=$('#indepth-frame');fitFrame(f);if(!f.getAttribute('src'))f.src='indepth_report.html?t='+Date.now()}if(id==='construction'){const f=$('#construction-frame');if(!f.getAttribute('src'))f.src='construction_briefing_report.html?t='+Date.now()}if(id==='conweekly'){const f=$('#conweekly-frame');if(!f.getAttribute('src'))f.src='construction_weekly_report.html?t='+Date.now()}if(id==='energy'){const f=$('#energy-frame');if(!f.getAttribute('src'))f.src='energy_briefing_report.html?t='+Date.now()}if(id==='collab'){const f=$('#collab-frame');if(!f.getAttribute('src'))f.src=TONE_SITE+'daol_collab_radar.html?t='+Date.now()}if(id==='chatbot'){const f=$('#chatbot-frame');if(!f.getAttribute('src'))f.src=TONE_SITE+'chat.html?t='+Date.now()}}
 const DISPATCH_ENDPOINT='https://script.google.com/macros/s/AKfycbx3RjIjtlO2Z6fIYo2T3LhJrFg9Wp2hS7dMS3Is52-JVF1hizoCWewbQ1uM_v5sdhR2jw/exec';/* 갱신 버튼 → GitHub Actions 디스패치 GAS 웹앱 (gas/dispatch_proxy.gs). 아래 workflow 키는 그 파일의 WF 매핑과 1:1이어야 한다 */
 async function dispatchWorkflow(payload,status,btn){
  if(status)status.textContent='요청 중…';if(btn)btn.disabled=true;
@@ -631,11 +641,22 @@ setInterval(checkNewDeploy,15*60*1000);
    키(fx·peer)는 gas/dispatch_proxy.gs 의 WF 매핑과 1:1. 프록시가 그 키를 모르면
    (= GAS 재배포 전이면) 새로 못 돌린다고 알리고 저장본이라도 내려준다. */
 const FRESH={
- fx:{name:'환율',url:'https://github.com/gschoie/ecos-fx-rates/raw/main/output/BOK_exchange_rates.xlsx'},
- peer:{name:'피어그룹 주가',url:'https://github.com/gschoie/ecos-fx-rates/raw/main/output/'+encodeURIComponent('글로벌_주가_변동률_모니터링_최종.xlsx')}};
+ fx:{name:'환율',url:'https://raw.githubusercontent.com/gschoie/ecos-fx-rates/main/output/BOK_exchange_rates.xlsx',dated:'BOK_exchange_rates'},
+ peer:{name:'피어그룹 주가',url:'https://raw.githubusercontent.com/gschoie/ecos-fx-rates/main/output/'+encodeURIComponent('글로벌_주가_변동률_모니터링_최종.xlsx'),dated:'글로벌_주가_변동률_모니터링_최종'}};
 /* 새 탭(target=_blank)으로 열면 클릭 한참 뒤에 도는 코드라 크롬이 팝업으로 막는다.
-   같은 탭으로 내려받는다 — 엑셀은 첨부(attachment)라 화면은 그대로 남는다. */
-function xlDown(u){location.href=u+(u.includes('?')?'&':'?')+'t='+Date.now()}
+   같은 탭으로 내려받는다 — 엑셀은 첨부(attachment)라 화면은 그대로 남는다.
+   dated가 있으면 저장 이름 끝에 _YYMMDD(받는 날)를 붙인다. 다른 출처 파일은 <a download>로
+   이름을 못 바꾸니 raw.githubusercontent(CORS 허용)에서 받아 blob으로 저장, 실패하면 원래 이름으로. */
+const ymd6=(d=new Date())=>String(d.getFullYear()).slice(2)+String(d.getMonth()+1).padStart(2,'0')+String(d.getDate()).padStart(2,'0');
+async function xlDown(c){
+ const u=c.url+(c.url.includes('?')?'&':'?')+'t='+Date.now();
+ if(!c.dated){location.href=u;return}
+ try{
+  const r=await fetch(u,{cache:'no-store'});if(!r.ok)throw 0;
+  const a=document.createElement('a');a.href=URL.createObjectURL(await r.blob());
+  a.download=`${c.dated}_${ymd6()}.xlsx`;document.body.append(a);a.click();a.remove();
+  setTimeout(()=>URL.revokeObjectURL(a.href),60000);
+ }catch{location.href=u}}
 async function proxyPost(payload){const r=await fetch(DISPATCH_ENDPOINT,{method:'POST',body:JSON.stringify(payload)});return r.json()}
 async function freshDownload(key,btn){
  const c=FRESH[key];if(!c||btn.dataset.busy)return;
@@ -643,10 +664,10 @@ async function freshDownload(key,btn){
  btn.dataset.busy='1';btn.disabled=true;
  const since=Date.now()-90000;                 // 이 시각 이후에 생긴 실행만 "내 실행"으로 본다
  const reset=()=>{btn.textContent=label;btn.disabled=false;btn.onclick=()=>freshDownload(key,btn);delete btn.dataset.busy};
- const done=(msg,dl)=>{say(msg);if(dl)xlDown(c.url);
+ const done=(msg,dl)=>{say(msg);if(dl)xlDown(c);
   if(dl){ // 브라우저가 자동 다운로드를 막는 경우가 있어 직접 누를 수 있는 상태로 남긴다
    setTimeout(()=>{btn.disabled=false;say('⬇ 안 받아졌으면 누르세요');
-    btn.onclick=()=>{xlDown(c.url);reset()};setTimeout(reset,30000)},2500);
+    btn.onclick=()=>{xlDown(c);reset()};setTimeout(reset,30000)},2500);
    delete btn.dataset.busy;return}
   setTimeout(reset,3000)};
  try{

@@ -110,6 +110,20 @@ def _session():
     return str(ROOT / "source_watcher" / "state" / "telegram_account.session")
 
 
+def _ckey(text: str) -> str:
+    """이름 비교 키 — 공백을 지우고 소문자로("이 준범"·"이준범" 동일)."""
+    return "".join(str(text or "").split()).casefold()
+
+
+def _display_name(user) -> str:
+    """텔레그램 사용자/채널의 표시 이름 — 단체방 발신자 표기용."""
+    if user is None:
+        return "?"
+    full = (f"{getattr(user, 'first_name', '') or ''} "
+            f"{getattr(user, 'last_name', '') or ''}").strip()
+    return full or (getattr(user, "title", "") or "?")
+
+
 def pick_dialog(name: str, directory: dict[str, object]) -> tuple[object | None, str]:
     """이름으로 대화 상대를 고른다. 정확 일치 → 포함 일치(대화명에 '다리' 같은 수식어가
     붙는 관행 때문: '이준범 다리'도 '이준범'으로 잡힌다). 포함 후보가 여럿이면
@@ -287,6 +301,75 @@ async def _scan(config: dict, state: dict, probe: bool = False,
                 })
             print(f"  · {name}: 후보 {len(picked)}건, 발간계획 후보 {len(idx_picked)}건"
                   f" (마지막 메시지 id {newest_id})")
+
+        # ── 단체방: 발간 계획 전용 — 휴가·근태는 보지 않는다 ────────────────
+        # 제목 부분일치(공백 무시)로 찾고, 여럿이면 엉뚱한 방을 긁지 않도록 보류.
+        group_names = [str(g).strip() for g in (config.get("indepth_groups") or [])
+                       if str(g).strip()]
+        if group_names:
+            from indepth import pick_indepth_candidates
+
+            team_keys = {_ckey(f["name"]): f["name"] for f in config["friends"]}
+            group_dialogs = []
+            async for dialog in client.iter_dialogs(limit=int(config.get("max_chats") or 500)):
+                if dialog.is_group:
+                    group_dialogs.append(dialog)
+            for gname in group_names:
+                want = _ckey(gname)
+                hits = [d for d in group_dialogs if want in _ckey(d.name or "")]
+                if len(hits) != 1:
+                    shown = ", ".join((d.name or "?") for d in hits[:5]) or "없음"
+                    print(f"[경고] 단체방 '{gname}' 매칭 실패(후보 {len(hits)}개: {shown})",
+                          file=sys.stderr)
+                    continue
+                entity = hits[0].entity
+                if probe:
+                    print(f"  · 단체방 '{gname}' ↔ '{hits[0].name}' (id={entity.id}) 매칭 확인")
+                    continue
+                chat_state = chats.setdefault(f"group:{entity.id}", {})
+                chat_state["name"] = gname
+                last_id = 0 if backfill_days else int(chat_state.get("last_id") or 0)
+                newest_id = last_id
+                timeline = []
+                async for message in client.iter_messages(entity, limit=per_chat_limit,
+                                                          min_id=last_id):
+                    newest_id = max(newest_id, message.id)
+                    posted = (message.date if message.date.tzinfo
+                              else message.date.replace(tzinfo=timezone.utc))
+                    if last_id == 0 and posted < since:
+                        break
+                    sender = "나" if message.out else _display_name(message.sender)
+                    timeline.append({"id": message.id, "out": bool(message.out),
+                                     "text": (message.message or "").strip(),
+                                     "dt": posted, "sender": sender})
+                timeline.reverse()
+                idx_picked = pick_indepth_candidates(timeline)
+                for pick in idx_picked:
+                    msg = timeline[pick["index"]]
+                    context_lines = [
+                        f"{prev.get('sender') or '?'}: {prev['text'][:120]}"
+                        for prev in timeline[max(0, pick["index"] - 10):pick["index"]]
+                        if prev["text"]
+                    ]
+                    sender = msg.get("sender") or "?"
+                    # 보낸 사람을 팀원 이름으로 환원(부분일치 양방향) — 못 맞추면 표시 이름 그대로.
+                    skey = _ckey(sender)
+                    name = next((v for k, v in team_keys.items()
+                                 if skey and (k in skey or skey in k)), sender)
+                    idx_cands.append({
+                        "uid": f"{entity.id}:{msg['id']}",
+                        "name": name,
+                        "text": msg["text"],
+                        "msg_date": msg["dt"].astimezone(KST).isoformat(timespec="minutes"),
+                        "context": "\n".join(context_lines),
+                        "trigger": pick["trigger"],
+                        "by_me": bool(msg["out"]),
+                        "group": gname,
+                    })
+                if not backfill_days:
+                    chat_state["last_id"] = newest_id
+                print(f"  · 단체방 {gname}: 발간계획 후보 {len(idx_picked)}건"
+                      f" (마지막 메시지 id {newest_id})")
     finally:
         await client.disconnect()
     return candidates, att_hits, idx_cands

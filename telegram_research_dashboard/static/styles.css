@@ -281,3 +281,304 @@ body.item-locked #task-item{appearance:none;-webkit-appearance:none;border-color
    min-height는 모바일에서 행이 세로로 쌓일 때(기준 형제가 없어질 때) 본문이 0으로 붕괴하는 것 방지. */
 #unified-brief,#construction-brief{display:flex;flex-direction:column}
 #unified-brief .brief-body,#construction-brief .brief-body{flex:1 1 auto;height:0;min-height:280px;max-height:none}
+
+/* ── 📬 수명 피드백.확인: 톤 챗봇 디자인 언어(블루 포인트·둥근 카드·필 버튼) ── */
+#tasklist .task-toolbar{border-radius:16px;box-shadow:0 1px 2px rgba(17,24,39,.04);border-color:#e5e7eb}
+#tasklist .task-toolbar select{border-radius:10px;border-color:#e5e7eb}
+#tasklist .task-toolbar button,#tasklist .task-import{border-radius:999px;font-weight:600;color:#111827;border-color:#e5e7eb;box-shadow:0 1px 2px rgba(17,24,39,.04)}
+#tasklist .task-toolbar button:hover{background:#eff6ff}
+#tasklist .task-sync{color:#2563eb}
+#tasklist .task-summary b{color:#1d4ed8;font-family:inherit}
+#tasklist .task-date{font-family:inherit;color:#6b7280}
+#tasklist .panel{border-radius:16px;box-shadow:0 1px 2px rgba(17,24,39,.04);border-color:#e5e7eb;overflow:hidden}
+#tasklist .task-table th{background:#f9fafb;color:#6b7280;border-bottom-color:#e5e7eb}
+#tasklist .task-table td{border-bottom-color:#f3f4f6}
+#tasklist .task-group td{background:#eff6ff;color:#1d4ed8}
+#tasklist .task-done input{accent-color:#2563eb}
+#tasklist .task-in{background:#f9fafb}
+#tasklist .task-in:focus{border-color:#93c5fd}
+#tasklist .task-arch-pair{border-radius:999px;border-color:#e5e7eb}
+#tasklist .task-arch-item:hover{background:#eff6ff}
+#tasklist .task-arch-restore{background:#eff6ff;color:#1d4ed8;border-left-color:#e5e7eb}
+#tasklist .task-arch-restore:hover{background:#2563eb;color:#fff}
+#tasklist .task-arch-del{background:#fef2f2;color:#dc2626;border-left-color:#e5e7eb}
+#tasklist .task-arch-del:hover{background:#fee2e2}
+
+/* ── ⌂ 오늘의 요약: 톤 챗봇 디자인 언어(흰 카드·변형별 컬러 액센트·필 버튼) ── */
+#overview .panel{border-radius:16px;box-shadow:0 1px 2px rgba(17,24,39,.04);border-color:#e5e7eb}
+#overview .panel-head small{color:#6b7280}
+#overview .panel-head button,#overview .panel-more{color:#2563eb;font-weight:600}
+#overview .panel-head button:hover,#overview .panel-more:hover{color:#1d4ed8;text-decoration:underline}
+#overview .brief-card{background:#fff;color:#111827;border:1px solid #e5e7eb;border-radius:16px;
+  border-left:4px solid #4f46e5;box-shadow:0 1px 2px rgba(17,24,39,.04)}
+#overview .brief-card .brief-head small,#overview .brief-card .brief-head a{color:#4f46e5}
+#overview .brief-card .brief-src{color:#4f46e5;border-bottom-color:rgba(79,70,229,.4)}
+#overview .brief-card .brief-body{scrollbar-color:#cbd5e1 transparent}
+#overview .brief-card.tone-gemini{background:#fff;border-left-color:#2563eb}
+#overview .brief-card.tone-gemini .brief-head small,#overview .brief-card.tone-gemini .brief-head a,
+#overview .brief-card.tone-gemini .brief-src{color:#2563eb;border-bottom-color:rgba(37,99,235,.4)}
+#overview .brief-card.tone-gpt{background:#fff;border-left-color:#7c3aed}
+#overview .brief-card.tone-gpt .brief-head small,#overview .brief-card.tone-gpt .brief-head a,
+#overview .brief-card.tone-gpt .brief-src{color:#7c3aed;border-bottom-color:rgba(124,58,237,.4)}
+#overview .brief-card.tone-plan{background:#fff;border-left-color:#d97706}
+#overview .brief-card.tone-plan .brief-head small,#overview .brief-card.tone-plan .brief-head a,
+#overview .brief-card.tone-plan .brief-src{color:#b45309;border-bottom-color:rgba(217,119,6,.4)}
+#overview .panel-head h2{font-family:inherit;font-weight:800;letter-spacing:-.02em}
+
+/* ── ✅ TO-DO 체크리스트: 톤 챗봇 디자인 언어(블루 포인트·둥근 카드·필 버튼) ── */
+#todo a.todo-feedback{color:#1d4ed8;border:1px solid #e5e7eb;background:#fff;
+  box-shadow:0 1px 2px rgba(17,24,39,.04);transition:background .15s,color .15s,border-color .15s}
+#todo a.todo-feedback:hover{background:#2563eb;border-color:#2563eb;color:#fff;filter:none;transform:none;box-shadow:0 1px 2px rgba(17,24,39,.04)}
+#todo a.todo-feedback:active{transform:none;box-shadow:0 1px 2px rgba(17,24,39,.04)}
+#todo .archive-intro .eyebrow{color:#6b7280;letter-spacing:.12em}
+#todo .archive-intro h2{font-family:inherit;font-weight:800;letter-spacing:-.02em}
+#todo .todo-form{border-radius:16px;box-shadow:0 1px 2px rgba(17,24,39,.04);border-color:#e5e7eb}
+#todo .todo-form input{border-radius:10px;border-color:#e5e7eb;background:#f9fafb}
+#todo .todo-form input:focus{border-color:#93c5fd;background:#fff}
+#todo .todo-form button{border-radius:999px;background:#2563eb}
+#todo .todo-group{border-radius:14px;border-color:#e5e7eb;box-shadow:0 1px 2px rgba(17,24,39,.04)}
+#todo .todo-group.drop-hover{border-color:#2563eb;box-shadow:inset 0 0 0 1px #2563eb}
+#todo .todo-pane-head{border-bottom-color:#e5e7eb}
+#todo .todo-pane-head h3{color:#111827}
+#todo .todo-pane-head em{font-family:inherit;color:#6b7280}
+#todo .todo-row{border-bottom-color:#f3f4f6}
+#todo .todo-row input[type=checkbox]{accent-color:#2563eb}
+#todo .todo-ts{font-family:inherit}
+#todo .todo-grip:hover,#todo .todo-edit:hover,#todo .todo-restore:hover{color:#2563eb}
+#todo .todo-arch-toggle{border-radius:999px;border-color:#e5e7eb}
+#todo .todo-arch-toggle:hover{border-color:#2563eb;color:#2563eb;background:#eff6ff}
+#todo .todo-thumb{border-radius:10px}
+#todo .task-sync{color:#2563eb}
+
+/* ── ✅ TO-DO 노션 모드: 플랫 토글 그룹·호버 시 컨트롤·조용한 입력줄 ── */
+#todo .todo-group{border:0;box-shadow:none;background:transparent;border-radius:8px;margin-bottom:4px;padding:0 2px}
+#todo .todo-group>summary{list-style:none;display:flex;align-items:center;gap:7px;cursor:pointer;
+  padding:6px 8px;border-radius:6px;font-weight:700;font-size:15px;color:#111827}
+#todo .todo-group>summary::-webkit-details-marker{display:none}
+#todo .todo-group>summary::before{content:'▸';font-size:12px;color:#9ca3af;transition:transform .12s;width:12px}
+#todo .todo-group[open]>summary::before{content:'▾'}
+#todo .todo-group>summary:hover{background:rgba(55,53,47,.06)}
+#todo .todo-group>summary em{font-style:normal;font-size:12px;font-weight:500;color:#9ca3af}
+#todo .todo-row{border-bottom:0;border-radius:6px;padding:5px 8px;gap:9px;transition:background .1s}
+#todo .todo-row:hover{background:rgba(55,53,47,.06)}
+#todo .todo-row input[type=checkbox]{width:16px;height:16px;accent-color:#2383e2}
+#todo .todo-text{font-size:15px;line-height:1.55}
+#todo .todo-row.done .todo-text{color:#9ca3af}
+#todo .todo-grip,#todo .todo-edit,#todo .todo-del,#todo .todo-arch-one,#todo .todo-restore,#todo .todo-arch-del,#todo .todo-ts{
+  opacity:0;transition:opacity .12s}
+#todo .todo-row:hover .todo-grip,#todo .todo-row:hover .todo-edit,#todo .todo-row:hover .todo-del,
+#todo .todo-row:hover .todo-arch-one,#todo .todo-row:hover .todo-restore,#todo .todo-row:hover .todo-arch-del,
+#todo .todo-row:hover .todo-ts,#todo .todo-row:focus-within .todo-grip,#todo .todo-row:focus-within .todo-edit,
+#todo .todo-row:focus-within .todo-del{opacity:1}
+#todo .todo-form{background:transparent;border:0;box-shadow:none;padding:6px 2px 10px;border-bottom:1px solid #ededeb;border-radius:0}
+#todo .todo-form input{background:transparent;border-color:transparent;font-size:15px;padding:8px 8px}
+#todo .todo-form input:hover{background:rgba(55,53,47,.04)}
+#todo .todo-form input:focus{background:#fff;border-color:#93c5fd}
+#todo .todo-form button{border-radius:8px;padding:9px 14px;font-size:13px;background:#2383e2}
+#todo .todo-pane-head{border-bottom:1px solid #ededeb}
+#todo .todo-pane-head h3{font-size:15px;font-weight:800}
+#todo .todo-group.drop-hover{background:rgba(35,131,226,.06);box-shadow:inset 0 0 0 1px #2383e2;border-radius:8px}
+@media(hover:none){#todo .todo-grip,#todo .todo-edit,#todo .todo-del,#todo .todo-arch-one,#todo .todo-restore,#todo .todo-arch-del,#todo .todo-ts{opacity:1}}
+
+/* ── 노션 모드 보정: 오늘의 요약·수명 피드백 플랫화 ── */
+#overview .panel,#overview .brief-card{border-radius:8px;box-shadow:none;border-color:#ededeb}
+#tasklist .task-toolbar,#tasklist .panel{border-radius:8px;box-shadow:none;border-color:#ededeb}
+#tasklist .task-toolbar button,#tasklist .task-import{border-radius:6px;box-shadow:none}
+#tasklist .task-toolbar select{border-radius:6px}
+#tasklist .task-table tbody tr:hover td{background:rgba(55,53,47,.04)}
+#tasklist .task-arch-pair{border-radius:6px}
+
+/* ── 🎴 GS 산출물: 노션 모드 ── */
+#reports .chip{border-radius:6px;color:#111827;border-color:#ededeb}
+#reports .chip:hover{background:rgba(55,53,47,.06)}
+#reports .chip.active{background:#2383e2;border-color:#2383e2;color:#fff}
+#reports select{border-radius:6px;border-color:#ededeb}
+#reports .refresh-btn{background:#2383e2;border-radius:6px}
+#reports .panel,#reports .archive-intro{border-radius:8px;border-color:#ededeb;box-shadow:none}
+#reports .report-kind{background:#e7f3fe;color:#1b6ec2;border-radius:4px}
+#reports .rep-range input[type=date]{border-radius:6px;border-color:#ededeb}
+#reports table tbody tr:hover td{background:rgba(55,53,47,.04)}
+#reports .archive-intro h2,#reports h2{font-family:inherit;font-weight:800;letter-spacing:-.02em}
+#reports .eyebrow{color:#6b7280;letter-spacing:.12em}
+
+/* ── 📚 뉴스.아카이브: 노션 모드 ── */
+#news .archive-intro{border-radius:8px;border-color:#ededeb;box-shadow:none}
+#news .archive-intro h2{font-family:inherit;font-weight:800;letter-spacing:-.02em}
+#news .eyebrow{color:#6b7280;letter-spacing:.12em}
+#news .refresh-btn{background:#2383e2;border-radius:6px}
+#news .open-new{border-radius:6px;color:#1d4ed8;background:#fff;border-color:#ededeb}
+#news .open-new:hover{background:rgba(55,53,47,.06)}
+#news .news-card{border-radius:8px;border-color:#ededeb;background:#fff}
+#news .news-card:hover{background:#fbfbfa}
+#news .news-table-wrap{border-radius:8px;border-color:#ededeb;overflow:hidden;overflow-x:auto}
+#news .news-table th{background:#fff;color:#6b7280;border-bottom:1px solid #ededeb}
+#news .news-table tbody tr:hover td{background:rgba(55,53,47,.04)}
+#news .task-sync{color:#2383e2}
+
+/* ════ 노션 글로벌 레이어: 전역 셸 통일 (세리프 제거·라이트 사이드바·플랫 헤어라인·노션 블루) ════ */
+:root{--bg:#fff;--ink:#111827;--muted:#6b7280;--line:#ededeb;--green:#2383e2;--lime:#e7f3fe}
+body{font-family:'Pretendard Variable',Pretendard,'Apple SD Gothic Neo','Malgun Gothic',sans-serif;letter-spacing:-.01em}
+h1,h2{font-family:inherit;letter-spacing:-.02em}
+h1{font-weight:800;font-size:24px;color:#111827}
+h2{font-weight:800;font-size:17px;color:#111827}
+.eyebrow,.panel-head small{color:#9ca3af;letter-spacing:.12em}
+/* 사이드바: 노션식 라이트 */
+.sidebar{background:#f7f7f5;color:#37352f;scrollbar-color:#d3d1cb #f7f7f5;border-right:1px solid #ededeb}
+.brand>span{border-color:#d3d1cb;color:#2383e2;font-family:inherit;font-weight:800;border-radius:8px}
+.brand small{color:#9b9a97}
+.nav{color:#5f5e5b;border-radius:6px;padding:9px 12px;font-size:13.5px}
+.nav.active,.nav:hover{background:rgba(55,53,47,.08);color:#111827}
+.sidebar nav{gap:2px;margin-top:36px}
+.sidebar a{color:#5f5e5b}
+.nav-sep{border-color:#ededeb}
+.nav-subgroup summary{color:#5f5e5b}
+.secure{color:#9b9a97;border-top-color:#ededeb}
+.secure:first-letter{color:#2383e2}
+.secure small{color:#b3b1ab}
+/* 공통 컴포넌트 */
+.search-wrap{border-radius:8px;border-color:#ededeb}
+.refresh-btn{background:#2383e2;border-radius:6px}
+.panel,.stats article,.archive-intro,.dart-form{border-radius:8px;border-color:#ededeb}
+.stats strong{font:800 28px/1.2 inherit}
+.price,.mini-row>small,.mini-line>small,.rank-row b:last-child,.news-date,.task-date,.task-summary b,
+.todo-pane-head em,.todo-group>summary em,.todo-ts,.day-group>h3{font-family:inherit}
+.day-group>h3{font-weight:800;font-size:15px}
+.mini-row .rk,.mini-line .rk-s{background:#e7f3fe;color:#1b6ec2;font-family:inherit;font-weight:700}
+.chip,select{border-radius:6px;color:#111827;border-color:#ededeb}
+.chip:hover{background:rgba(55,53,47,.06)}
+.chip.active{background:#2383e2;color:#fff;border-color:#2383e2}
+.tag{border-radius:4px}
+.report-kind{border-radius:4px}
+.panel-head button,.panel-more{color:#2383e2;font-weight:600}
+.panel-head button:hover,.panel-more:hover{color:#1b6ec2}
+.mini-row:hover,.mini-line:hover,.research-row:hover{background:rgba(55,53,47,.04)}
+.research-row,.rank-row,.mini-row,.mini-line{border-top-color:#f1f1ef}
+.dart-form #dart-send,.dart-form #remember-send,#mzdiary-send{background:#2383e2;border-radius:6px}
+.dart-status,.task-sync{color:#2383e2}
+/* 뉴스 아카이브: 연도·월 그룹 플랫화 */
+.year-group{border-radius:8px;border-color:#ededeb}
+.year-group>summary{font:800 17px/1.3 inherit;letter-spacing:-.02em;padding:14px 18px;border-radius:8px}
+.year-group>summary:hover{background:rgba(55,53,47,.05)}
+.year-group>summary:before{content:'▸';font:12px inherit;color:#9ca3af}
+.year-group[open]>summary:before{content:'▾'}
+.year-group summary:focus{outline:none}
+.year-group summary:focus-visible,.month-divider:focus-visible{outline:2px solid #bfdbfe;outline-offset:2px;border-radius:6px}
+.month-divider{border-top:1px solid #ededeb;padding:12px 2px 8px}
+.month-divider:focus{outline:none}
+.month-divider h3{font:700 14.5px/1.3 inherit}
+.news-table th{background:#fff;border-bottom:1px solid #ededeb;color:#6b7280}
+.news-table td{border-bottom-color:#f1f1ef}
+.news-table tbody tr:hover{background:rgba(55,53,47,.04)}
+.company-label{border-radius:4px;background:#f1f1ef;color:#4b5563}
+.table-link{color:#1b6ec2;border-bottom-color:#bfdbfe}
+.table-link:hover{color:#1d4ed8;border-color:#1d4ed8}
+.telegram-link{color:#6b7280}
+.nlm-link{border-radius:6px;color:#1b6ec2;background:#e7f3fe;border-color:#cde3f8}
+.news-card a{color:#1b6ec2}
+.research-row a{color:#1b6ec2}
+
+/* ══ 사이드바 노션 보정 ══
+   노션 레이어가 사이드바를 라이트로 바꿨는데 상태색(열림·호버·선택)은 옛 다크그린이
+   그대로 남아, 열린 그룹·그 안의 서브그룹이 통째로 검은 블록이 되고 '지금 보고 있는
+   메뉴'가 구분되지 않았다. 여기서 셋을 갈라 놓는다 —
+   열린 그룹 = 글자만 진하게 / 서브메뉴 = 연한 회색 / 지금 보는 화면 = 노션 블루. */
+.nav-group summary:hover,.nav-group[open] summary{background:transparent;color:#37352f}
+.nav-group summary:hover{background:rgba(55,53,47,.06)}
+.nav-group[open]>summary{color:#111827;font-weight:700}
+.nav-submenu,.nav-submenu-2{border-left-color:#ededeb}
+.sidebar .nav-sep{background:#ededeb}
+.nav-submenu a,.nav-submenu button,.nav-submenu .nav-label,
+.nav-subgroup>summary,.nav-submenu-2 a,.nav-submenu-2 button{color:#86857f}
+.nav-submenu a:hover,.nav-submenu button:hover,.nav-subgroup>summary:hover,
+.nav-submenu-2 a:hover,.nav-submenu-2 button:hover,
+.nav-subgroup[open]>summary{background:rgba(55,53,47,.06);color:#37352f}
+.nav-subgroup[open]>summary{background:transparent;font-weight:600}
+/* 지금 보고 있는 화면만 파랑 — 왼쪽 막대까지 더해 한눈에 */
+.nav.active,.nav-submenu button.active,.nav-submenu-2 button.active{
+  background:#e7f3fe;color:#1b6ec2;font-weight:700;box-shadow:inset 2px 0 0 #2383e2}
+.nav.active:hover,.nav-submenu button.active:hover,.nav-submenu-2 button.active:hover{
+  background:#dbebfc;color:#1b6ec2}
+@media(max-width:950px){
+  /* 폰 플라이아웃도 라이트로 */
+  .nav-group[open] .nav-submenu{background:#fff;border-color:#ededeb;box-shadow:0 14px 35px rgba(15,23,42,.16)}
+  .nav-group[open] .nav-submenu a,.nav-group[open] .nav-submenu button,
+  .nav-group[open] .nav-submenu .nav-label{color:#5f5e5b}
+  .nav-group[open] .nav-submenu button.active{color:#1b6ec2}
+}
+
+/* ══ 본문 노션 보정 ══
+   .refresh-btn 은 원래 <a> 용으로 만든 규칙이라 border 를 안 정한다. 화면마다
+   같은 버튼이 <button> 으로 쓰인 곳(🔄 갱신 13개)은 브라우저 기본값
+   'border:2px outset black' 이 그대로 나와 파란 버튼에 검은 입체 테두리가 둘렸다.
+   입력칸도 기본 테두리라 톤이 제각각이어서 같이 맞춘다. */
+button.refresh-btn{border:0;font-family:inherit;cursor:pointer}
+main input[type=text],main input[type=search],main input[type=url],main input[type=date],
+main input[type=number],main select,main textarea{
+  font-family:inherit;color:#37352f;background:#fff;border:1px solid #ededeb;border-radius:6px}
+main input[type=text]:focus,main input[type=search]:focus,main input[type=url]:focus,
+main input[type=date]:focus,main input[type=number]:focus,main select:focus,main textarea:focus{
+  outline:none;border-color:#2383e2;box-shadow:0 0 0 2px #e7f3fe}
+/* 보조 저장 버튼들도 같은 파란 버튼으로 */
+#recipe-send,#remember-endpoint-save,#mzdiary-endpoint-save{
+  border:0;border-radius:6px;background:#2383e2;color:#fff;font:700 13px/1 inherit;
+  padding:9px 14px;cursor:pointer}
+#recipe-send:hover,#remember-endpoint-save:hover,#mzdiary-endpoint-save:hover{background:#1b6ec2}
+
+/* ══ 발간 보고서·뉴스.아카이브 — 리서치 톤에 맞추고 글씨 키우기 ══
+   두 표가 10~11.5px라 리서치 톤 화면보다 확연히 작았다. 본문 13px대로 올리고,
+   표 머리의 굵은 먹선(2px #263d35)·초록 바탕·다크그린 활성 버튼 같은 옛 톤 잔재를
+   노션 헤어라인·파랑으로 바꾼다. 폰(≤620px)은 표가 카드로 접히므로 글씨만 키우고
+   여백은 건드리지 않는다. */
+/* 구분 배지 — 톤처럼 파랑 계열로, 종류만 살짝 다르게 */
+.report-kind{background:#e7f3fe;color:#1b6ec2;font-size:11px;padding:3px 8px}
+.report-kind.industry{background:#eef2ff;color:#4338ca}
+.report-kind.weekly{background:#fdf4e4;color:#96670f}
+/* 발간 보고서 */
+#reports .rep-table{font-size:13px}
+#reports .rep-table th{font-size:12px;font-weight:600;letter-spacing:0;
+  background:#fbfbfa;color:#6b7280;border-bottom:1px solid #ededeb}
+#reports .rep-table tbody tr:hover{background:rgba(55,53,47,.035)}
+#reports .rep-table td{border-bottom-color:#f1f1ef;line-height:1.55}
+#reports .company-chip{font-size:12px;border-radius:4px}
+#reports .rep-range{font-size:13px}
+#reports .rep-range input[type=date]{font-size:12.5px;padding:6px 9px}
+#reports .rep-range strong{font-size:12.5px}
+#reports .rep-preset{background:#fff;border-color:#ededeb;border-radius:6px;
+  color:#5f5e5b;font-size:12.5px;padding:6px 13px}
+#reports .rep-preset:hover{background:rgba(55,53,47,.06);color:#37352f}
+#reports .rep-preset.on{background:#2383e2;border-color:#2383e2;color:#fff;font-weight:700}
+/* 뉴스.아카이브 */
+#news .news-table{font-size:13.5px}
+#news .news-table th{font-size:12px;font-weight:600;letter-spacing:0;background:#fbfbfa}
+#news .news-table td{font-size:13.5px;line-height:1.55}
+#news .company-label{font-size:12px}
+#news .year-group>summary{font-size:19px}
+#news .month-divider h3{font-size:15.5px}
+#news .toolbar p{font-size:13px}
+@media(min-width:621px){
+  #reports .rep-table th{padding:11px 12px}
+  #reports .rep-table td{padding:11px 12px}
+  #news .news-table th,#news .news-table td{padding:12px}
+}
+/* 표 안 배지·칩·글씨 — 리서치 톤처럼 테두리 없는 파스텔 알약으로, 크기도 한 단계 위로 */
+#reports .rep-kind{font-size:11.5px;padding:3px 9px;border:0;border-radius:4px;
+  background:#e7f3fe;color:#1b6ec2}
+#reports .rep-kind.ind{background:#eef2ff;color:#4338ca}
+#reports .rep-kind.strat{background:#fdf4e4;color:#96670f}
+#reports .rep-sub{font-size:11.5px;color:#8a8984}
+#reports .rep-title{font-size:14.5px;line-height:1.5}
+#reports .rep-desc{font-size:12.5px;color:#6b7280;font-style:normal;margin-top:4px}
+#reports .pt-chip{font-size:11.5px;padding:3px 9px;border-radius:4px;
+  background:#e9f7ef;color:#1f7a4d}
+#reports .rep-rsn{font-size:11.5px}
+#reports .rep-links a{font-size:12px}
+/* 기업 칩 — 초록기 빼고 중립 회색 바탕 + 파란 글씨(톤 화면의 파란 기업명과 같은 신호) */
+#reports .company-chip,#news .news-company-chip,#press .press-company-chip{
+  background:#f4f4f2;color:#1b6ec2;font-size:12px;font-weight:600;border-radius:4px;padding:4px 9px}
+#reports .company-chip:hover,#news .news-company-chip:hover,#press .press-company-chip:hover{
+  background:#e7f3fe;color:#1b6ec2}
+#news .news-company-chip.active,#press .press-company-chip.active{background:#2383e2;color:#fff}
+#news .company-label{background:#f4f4f2;color:#6b7280;font-size:12px;padding:4px 9px;border-radius:4px}
+/* 뉴스 검색칸·셀렉트도 같은 헤어라인으로 */
+#news .news-filters input,#news .news-filters select{
+  border:1px solid #ededeb;border-radius:6px;padding:8px 11px;font-size:13px;background:#fff}

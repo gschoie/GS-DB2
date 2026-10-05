@@ -3,8 +3,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>KOSPI200 컨센 리비전</title>
 <style>
-:root{--bg:#f6f7f9;--card:#fff;--ink:#1a1d21;--muted:#6b7280;--line:#e5e7eb;
---up:#0ca30c;--down:#d03b3b;--accent:#185fa5}
+:root{--bg:#fff;--card:#fff;--ink:#111827;--muted:#6b7280;--line:#e5e7eb;
+--up:#0ca30c;--down:#d03b3b;--accent:#2563eb}
 @media(prefers-color-scheme:dark){:root{--bg:#141516;--card:#1d1e1f;--ink:#f2f2f0;
 --muted:#9a9a92;--line:#2f3032}}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);
@@ -65,11 +65,26 @@ font-size:12px;font-weight:600;padding:6px 11px;border-radius:8px;cursor:pointer
 padding:14px 16px;color:var(--muted);font-size:13px;margin-bottom:18px}
 td.mktc{text-align:center}
 .mkt-kp,.mkt-kq{font-size:10px;font-weight:600;padding:2px 6px;border-radius:6px;white-space:nowrap}
-.mkt-kp{color:#185fa5;background:rgba(24,95,165,.12)}
+.mkt-kp{color:#2563eb;background:rgba(24,95,165,.12)}
 .mkt-kq{color:#b0700a;background:rgba(176,112,10,.14)}
 .covstar{color:#e0a400;font-size:11px}
 .grpfil{font-size:13px;color:var(--ink);background:var(--card);border:1px solid var(--line);
 border-radius:8px;padding:6px 10px;margin-left:6px}
+
+/* == 챗봇(톤 챗봇) 디자인 언어 정합: 라벤더 워시·그라데이션 타이틀·둥근 카드·필 배지·Pretendard == */
+@media (prefers-color-scheme:light){html{background:linear-gradient(180deg,#eef1fd 0%,#fff 240px) no-repeat #fff}body{background:transparent}}
+body{font-family:'Pretendard Variable',Pretendard,'Apple SD Gothic Neo','Malgun Gothic',sans-serif;letter-spacing:-.01em}
+h1{font-family:inherit;font-weight:800;font-size:21px;letter-spacing:-.02em;background:linear-gradient(135deg,#4f46e5,#7c3aed);-webkit-background-clip:text;background-clip:text;color:transparent;display:inline-block}
+.sched,.dl{border-radius:999px}
+.status,.card{border-radius:14px;box-shadow:0 1px 2px rgba(17,24,39,.04)}
+
+/* == 노션 모드: 워시·그라데이션 제거, 플랫 헤어라인·작은 라운드·호버 하이라이트 == */
+@media (prefers-color-scheme:light){html{background:#fff}}
+h1{background:none;-webkit-background-clip:unset;background-clip:unset;color:inherit;display:block}
+.sched,.dl,.nav button{border-radius:6px}
+.status,.card{border-radius:8px;box-shadow:none;border-color:#ededeb}
+tbody tr:hover td{background:rgba(55,53,47,.04)}
+.dl{background:#2383e2}
 </style></head><body><div class="wrap">
 <h1>영업이익 컨센 리비전 <span class="tiny" style="font-weight:400">KOSPI200 · KOSDAQ50 · 리서치커버리지</span></h1>
 <div class="sub" id="sub"></div>

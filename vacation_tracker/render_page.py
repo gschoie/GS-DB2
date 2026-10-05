@@ -84,6 +84,10 @@ tr.today td{background:#eef5ff}
 .src{color:#8a94a0;font-size:12.5px}
 .name{font-weight:700;color:#1f2937;white-space:nowrap}
 .empty{color:#8a94a0;padding:18px 0}
+details.sec>summary{font-size:16.5px;color:#2b5f8a;font-weight:700;cursor:pointer;
+  padding-bottom:6px;border-bottom:1px solid #e3e8ee;list-style-position:inside;
+  user-select:none;margin:30px 0 0}
+details.sec[open]>summary{margin-bottom:10px}
 details.former{margin-top:26px}
 details.former>summary{font-size:15px;color:#8a94a0;font-weight:700;cursor:pointer;
   padding-bottom:6px;border-bottom:1px solid #e3e8ee;list-style-position:inside;user-select:none}
@@ -170,6 +174,16 @@ td.c-kind .badge:not(.review){cursor:pointer}
   .cal .d{font-size:10.5px}
   #cal-label{min-width:0}
 }
+
+/* 노션 모드: 플랫 헤어라인·작은 라운드·호버 하이라이트 */
+h1{font-weight:800;letter-spacing:-.02em;color:#111827}
+h2{color:#111827;border-bottom-color:#ededeb}
+th{border-bottom:1px solid #ededeb}
+td{border-bottom-color:#f1f1ef}
+tbody tr:hover td{background:rgba(55,53,47,.04)}
+.badge{border-radius:4px}
+tr.today td{background:#e7f3fe}
+a{color:#1b6ec2}
 """
 
 # 달력 칩 색 구분: 휴가·연차 계열은 노랑, 출장·샵투어 계열은 파랑.
@@ -682,8 +696,10 @@ def build_page(store: dict) -> Path:
 갱신 {stamp} KST · 총 {len(entries)}건
 <button id="run-btn" class="run-btn" onclick="runScan()">🔄 지금 수집</button>
 <span id="run-status"></span></p>
-<h2>다가오는 휴가/출장 ({len(upcoming)}건)</h2>
+<details class="sec">
+<summary>다가오는 휴가/출장 ({len(upcoming)}건)</summary>
 {table(upcoming, "tbl-upcoming")}
+</details>
 <h2>📅 달력</h2>
 <p class="form-hint">날짜를 더블클릭(모바일: 두 번 탭)하면 아래 기입 폼에 시작일로 들어가고,
 이어서 다른 날을 더블클릭하면 기간이 됩니다.</p>
@@ -691,8 +707,10 @@ def build_page(store: dict) -> Path:
 """
     doc += _add_form(stamp)
     doc += f"""
-<h2>지난 휴가/출장 ({len(past)}건)</h2>
+<details class="sec">
+<summary>지난 휴가/출장 ({len(past)}건)</summary>
 {table(past, "tbl-past")}
+</details>
 """
     if review:
         doc += f"<h2>확인 필요 — 날짜를 못 읽은 보고 ({len(review)}건)</h2>\n{table(review)}\n"

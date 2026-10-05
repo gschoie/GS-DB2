@@ -6,7 +6,8 @@
 종목을 늘리거나 빼려면 이 파일만 고치면 된다 — 수집·엑셀·화면이 모두 여기를 읽는다.
 
 ticker 는 야후 파이낸스 심볼 그대로. (한국 KOSPI=.KS / KOSDAQ=.KQ,
-독일=.DE, 영국=.L, 이탈리아=.MI, 스웨덴=.ST)
+독일=.DE, 영국=.L, 이탈리아=.MI, 스웨덴=.ST, 상해=.SS, 홍콩=.HK,
+싱가포르=.SI, 도쿄=.T, 호주=.AX)
 """
 
 TARGET_COMPANIES = [
@@ -17,7 +18,22 @@ TARGET_COMPANIES = [
     {"industry": "조선", "sub": "조선사", "region": "한국", "name": "HD한국조선해양", "ticker": "009540.KS"},
     {"industry": "조선", "sub": "조선사", "region": "한국", "name": "대한조선", "ticker": "439260.KS"},
     {"industry": "조선", "sub": "조선사", "region": "한국", "name": "HJ중공업", "ticker": "097230.KS"},
+    # 중국선박(600150)은 2025년 중국중공업(601989, 대련조선)을 흡수합병 → 601989는 상장폐지라 뺐다.
+    # 양즈장은 중국 조선사지만 싱가포르 상장(.SI).
+    {"industry": "조선", "sub": "조선사", "region": "중국", "name": "중국선박(CSSC)", "ticker": "600150.SS"},
+    {"industry": "조선", "sub": "조선사", "region": "중국", "name": "양즈장(Yangzijiang)", "ticker": "BS6.SI"},
+    {"industry": "조선", "sub": "조선사", "region": "중국", "name": "CSSC 해양방위(H)", "ticker": "0317.HK"},
+    # 미쓰비시·가와사키·IHI는 조선 비중이 작은 복합 중공업 — 배수 비교 시 감안.
+    # 이마바리·JMU 등 일본 전업 조선사는 비상장이라 넣을 수 없다.
+    {"industry": "조선", "sub": "조선사", "region": "일본", "name": "미쓰비시중공업", "ticker": "7011.T"},
+    {"industry": "조선", "sub": "조선사", "region": "일본", "name": "가와사키중공업", "ticker": "7012.T"},
+    {"industry": "조선", "sub": "조선사", "region": "일본", "name": "IHI", "ticker": "7013.T"},
+    {"industry": "조선", "sub": "조선사", "region": "일본", "name": "미쓰이E&S", "ticker": "7003.T"},
+    {"industry": "조선", "sub": "조선사", "region": "일본", "name": "나이카이조선", "ticker": "7018.T"},
     {"industry": "조선", "sub": "조선사", "region": "이탈리아", "name": "Fincantieri", "ticker": "FCT.MI"},
+    # HII는 아래 방산(해외)에도 있다 — 조선 피어 중앙값에도 들어가도록 양쪽에 둔다.
+    {"industry": "조선", "sub": "조선사", "region": "미국", "name": "Huntington Ingalls", "ticker": "HII"},
+    {"industry": "조선", "sub": "조선사", "region": "호주", "name": "Austal", "ticker": "ASB.AX"},
 
     # ── 조선 엔진/기자재 ──────────────────────────────────────
     {"industry": "조선", "sub": "엔진/기자재", "region": "한국", "name": "HD현대마린솔루션", "ticker": "443060.KS"},

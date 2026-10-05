@@ -191,7 +191,7 @@ def returns_block(sig, day):
         for k, v, n in gavg)
 
     return f"""
-<h2>{day}의 수익률 <small style="font:400 12px Inter;color:#8b918e">— 그룹 평균 WoW · 센 섹터부터</small></h2>
+<h2>{day}의 수익률 <small style="font:400 12px Inter;color:#9ca3af">— 그룹 평균 WoW · 센 섹터부터</small></h2>
 <details class="grp" open><summary>그룹 평균 WoW ({len(gavg)}개 그룹) — 종목을 훑기 전에 어느 섹터가 셌는지</summary>
 <ul class="gbars">{gitems}</ul></details>
 """
@@ -424,18 +424,18 @@ ADX(추세) + Stochastic Slow(타이밍) + 수급(외인·기관·개인 5일 �
   <a class="tile" href="#sec-board" data-flow="개인몰림"><small>개인몰림 경계</small><strong class="w">{n_warn}</strong></a>
 </section>
 
-<h2 id="sec-adx">{day}의 추세 강도 <small style="font:400 12px Inter;color:#8b918e">— ADX 20 돌파(확인) · 25 돌파(강력) · 방향은 DI로 판정</small></h2>
+<h2 id="sec-adx">{day}의 추세 강도 <small style="font:400 12px Inter;color:#9ca3af">— ADX 20 돌파(확인) · 25 돌파(강력) · 방향은 DI로 판정</small></h2>
 <div class="alerts">{cards(adxs, "adx")}</div>
 
-<h2 id="sec-buy">{day}의 매수 신호 <small style="font:400 12px Inter;color:#8b918e">— 새로 뜬 골든크로스 · 개인몰림 제외 · 유동성 확보 종목</small></h2>
+<h2 id="sec-buy">{day}의 매수 신호 <small style="font:400 12px Inter;color:#9ca3af">— 새로 뜬 골든크로스 · 개인몰림 제외 · 유동성 확보 종목</small></h2>
 <div class="alerts">{cards(alerts, "buy")}</div>
 
-<h2 id="sec-sell">{day}의 매도 경고 <small style="font:400 12px Inter;color:#8b918e">— 새로 뜬 데드크로스 · 쌍끌이 제외 · 유동성 확보 종목</small></h2>
+<h2 id="sec-sell">{day}의 매도 경고 <small style="font:400 12px Inter;color:#9ca3af">— 새로 뜬 데드크로스 · 쌍끌이 제외 · 유동성 확보 종목</small></h2>
 <div class="alerts">{cards(sells, "sell")}</div>
 
 {returns_block(sig, day)}
 
-<h2 id="sec-board">전체 신호판 ({scanned}) <small style="font:400 12px Inter;color:#8b918e">— 수익률·지표·수급 한 표 · 헤더 클릭으로 정렬 · 종목명 아래 곡선은 <b>최근 60거래일</b> 주가</small></h2>
+<h2 id="sec-board">전체 신호판 ({scanned}) <small style="font:400 12px Inter;color:#9ca3af">— 수익률·지표·수급 한 표 · 헤더 클릭으로 정렬 · 종목명 아래 곡선은 <b>최근 60거래일</b> 주가</small></h2>
 <div id="board-filter"></div>
 <div class="tablewrap"><table class="board">
 <thead><tr>
@@ -657,18 +657,18 @@ TEMPLATE = """<!doctype html><html lang="ko"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>ETF/섹터 신호 포착 · GS Research Desk</title>
 <style>
-:root{{--bg:#f3f4f1;--ink:#17211d;--muted:#6c746f;--line:#dfe2dc;--card:#fff;
---green:#173f35;--lime:#d9f272;--red:#bd4335}}
+:root{{--bg:#fff;--ink:#111827;--muted:#6b7280;--line:#e5e7eb;--card:#fff;
+--green:#2563eb;--lime:#c7d2fe;--red:#dc2626}}
 *{{box-sizing:border-box}}body{{margin:0;background:var(--bg);color:var(--ink);
 font-family:Inter,Pretendard,"Noto Sans KR",sans-serif;padding:28px 30px 60px}}
-.eyebrow{{font-size:10px;font-weight:800;letter-spacing:1.6px;color:#758079;margin:0 0 7px}}
+.eyebrow{{font-size:10px;font-weight:800;letter-spacing:1.6px;color:#6b7280;margin:0 0 7px}}
 h1{{font:500 30px Georgia,"Noto Serif KR",serif;margin:0}}
 .sub{{color:var(--muted);font-size:12px;margin:8px 0 0;line-height:1.6}}
-.sub b{{color:#445049}}
-.sched{{display:inline-block;background:#eef2ec;border:1px solid var(--line);border-radius:4px;
-padding:3px 9px;margin:3px 0;font-size:11px;color:#5b6660}}
-.sched b{{color:#2c3a34}}
-.schedq{{color:#8b918e}}
+.sub b{{color:#4b5563}}
+.sched{{display:inline-block;background:#eff6ff;border:1px solid var(--line);border-radius:4px;
+padding:3px 9px;margin:3px 0;font-size:11px;color:#6b7280}}
+.sched b{{color:#1d4ed8}}
+.schedq{{color:#9ca3af}}
 @media(max-width:620px){{.schedq{{display:none}}}}
 .stats{{display:grid;grid-template-columns:repeat(6,1fr);gap:12px;margin:22px 0 8px}}
 .stats .tile{{background:var(--card);border:1px solid var(--line);padding:18px 20px;
@@ -686,7 +686,7 @@ h2.jumped{{animation:jump 1.6s ease-out}}
 tr.hidden-row{{display:none}}
 .stats small{{color:var(--muted);font-size:11px;font-weight:700;letter-spacing:.04em}}
 .stats strong{{font:500 32px Georgia;display:block;margin:8px 0 0}}
-.stats .g{{color:#286342}}.stats .w{{color:#8a661c}}.stats .r{{color:#a43c31}}
+.stats .g{{color:#15803d}}.stats .w{{color:#b45309}}.stats .r{{color:#dc2626}}
 .stats .b{{color:#2b5f8a}}
 h2{{font:600 18px Georgia,"Noto Serif KR",serif;margin:30px 0 12px}}
 .alerts{{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px}}
@@ -698,19 +698,19 @@ h2{{font:600 18px Georgia,"Noto Serif KR",serif;margin:30px 0 12px}}
 .ac-head{{display:flex;justify-content:space-between;align-items:baseline;gap:10px}}
 .ac-title{{display:inline-flex;align-items:center;gap:8px}}
 .ac-head b{{font-size:15px}}.ac-head small{{color:var(--muted);font-size:11px;white-space:nowrap}}
-.alert-card p{{margin:9px 0;font-size:13px;color:#2c3a34;line-height:1.5}}
+.alert-card p{{margin:9px 0;font-size:13px;color:#1d4ed8;line-height:1.5}}
 .ac-meta{{font-size:11px;color:var(--muted);display:flex;gap:8px;align-items:center;flex-wrap:wrap}}
 .none{{color:var(--muted);background:#fff;border:1px solid var(--line);padding:22px;text-align:center}}
 .tablewrap{{overflow-x:auto;border:1px solid var(--line);background:#fff;margin-top:4px}}
 table{{width:100%;min-width:900px;border-collapse:collapse}}
-th{{background:#f5f7f3;border-bottom:1px solid #cfd5cf;color:#68736d;font-size:10px;
+th{{background:#f9fafb;border-bottom:1px solid #e5e7eb;color:#6b7280;font-size:10px;
 font-weight:700;letter-spacing:.04em;text-align:left;padding:11px 12px;white-space:nowrap}}
 th.c{{text-align:center}}th.r{{text-align:right}}
-th.sortable{{cursor:pointer;user-select:none}}th.sortable:hover{{color:#2c3a34}}
+th.sortable{{cursor:pointer;user-select:none}}th.sortable:hover{{color:#1d4ed8}}
 th.sortable::after{{content:"⇅";opacity:.32;font-size:9px;margin-left:4px;font-weight:400}}
 th.sortable[data-dir=asc]::after{{content:"▲";opacity:.85}}
 th.sortable[data-dir=desc]::after{{content:"▼";opacity:.85}}
-td{{border-bottom:1px solid #eef1ec;padding:10px 12px;font-size:13px;vertical-align:middle}}
+td{{border-bottom:1px solid #f3f4f6;padding:10px 12px;font-size:13px;vertical-align:middle}}
 td.c{{text-align:center}}td.r{{text-align:right;font-family:Georgia}}
 tbody tr:hover{{background:#fafbf8}}tbody tr.hl{{background:#fbfdf4}}
 tbody tr.hl:hover{{background:#f6faea}}tbody tr.dim td{{color:#98a09a}}
@@ -718,23 +718,23 @@ tbody tr.hs{{background:#fdf7f5}}tbody tr.hs:hover{{background:#fbefeb}}
 tbody tr.ha{{background:#f6f9fc}}tbody tr.ha:hover{{background:#eef4fa}}
 .etf b{{font-size:13px;display:block}}.etf small{{color:var(--muted);font-size:10px}}
 .etf-link{{color:inherit;text-decoration:none;border-bottom:1px solid transparent}}
-.etf-link:hover{{color:#286342;border-bottom-color:#286342}}
-.di{{display:block;color:#9aa19d;font-size:10px;font-family:Georgia}}
+.etf-link:hover{{color:#15803d;border-bottom-color:#15803d}}
+.di{{display:block;color:#9ca3af;font-size:10px;font-family:Georgia}}
 .badge{{display:inline-block;border-radius:11px;padding:3px 9px;font-size:10px;font-weight:700;white-space:nowrap}}
-.b-buy{{background:#e3f3e7;color:#286342}}.b-warn{{background:#fff1cf;color:#765c19}}
-.b-down{{background:#f8e9e6;color:#a43c31}}.b-mut{{background:#edf1ed;color:#61706a}}
+.b-buy{{background:#dcfce7;color:#15803d}}.b-warn{{background:#fef3c7;color:#b45309}}
+.b-down{{background:#fee2e2;color:#dc2626}}.b-mut{{background:#edf1ed;color:#61706a}}
 .mini{{display:inline-block;font-size:9px;font-weight:700;padding:2px 5px;border-radius:4px;margin-left:3px}}
-.mini.gold{{background:#fff4d6;color:#8a661c}}
-.mini.dead{{background:#f8e3e0;color:#a43c31}}
+.mini.gold{{background:#fff4d6;color:#b45309}}
+.mini.dead{{background:#f8e3e0;color:#dc2626}}
 .logic{{background:#fff;border:1px solid var(--line);border-left:4px solid var(--green);
 padding:14px 18px;margin:18px 0 6px}}
-.logic>summary{{cursor:pointer;font:600 14px Georgia,"Noto Serif KR",serif;color:#2c3a34}}
+.logic>summary{{cursor:pointer;font:600 14px Georgia,"Noto Serif KR",serif;color:#1d4ed8}}
 .logic-body{{font-size:12.5px;line-height:1.75;color:#3c4842;margin-top:10px}}
-.logic-body .sec{{border-top:1px solid #eef1ec;padding:7px 0}}
+.logic-body .sec{{border-top:1px solid #f3f4f6;padding:7px 0}}
 .logic-body .sec:first-of-type{{border-top:0}}
 .logic-body .sec>summary{{cursor:pointer;font:600 13px Georgia,"Noto Serif KR",serif;
 color:#1f2b26;list-style:none;padding:2px 0}}
-.logic-body .sec>summary::before{{content:"▸ ";color:#8b918e}}
+.logic-body .sec>summary::before{{content:"▸ ";color:#9ca3af}}
 .logic-body .sec[open]>summary::before{{content:"▾ "}}
 .logic-body .sec>summary::-webkit-details-marker{{display:none}}
 .logic-body .sec[open]{{padding-bottom:10px}}
@@ -742,74 +742,74 @@ color:#1f2b26;list-style:none;padding:2px 0}}
 .logic-body li{{margin:3px 0}}
 .logic-tb{{border-collapse:collapse;margin:8px 0;min-width:0;width:auto}}
 .logic-tb th,.logic-tb td{{border:1px solid #e6eae4;padding:5px 10px;font-size:11.5px;text-align:left}}
-.logic-tb th{{background:#f5f7f3;color:#5b6660;white-space:nowrap}}
+.logic-tb th{{background:#f9fafb;color:#6b7280;white-space:nowrap}}
 .logic-tb td:nth-child(2){{text-align:center;font-family:Georgia}}
 .grade{{display:inline-block;width:17px;height:17px;line-height:17px;text-align:center;
 border-radius:4px;font-size:10px;font-weight:800;margin-right:6px;cursor:help}}
-.g-a{{background:#173f35;color:#d9f272}}.g-b{{background:#dfe9df;color:#2c3a34}}
-.g-c{{background:#eef1ec;color:#98a09a}}
-.why{{margin:6px 0;font-size:11px;color:#5b6660;display:flex;flex-wrap:wrap;gap:4px 6px}}
+.g-a{{background:#1d4ed8;color:#d9f272}}.g-b{{background:#dfe9df;color:#1d4ed8}}
+.g-c{{background:#f3f4f6;color:#98a09a}}
+.why{{margin:6px 0;font-size:11px;color:#6b7280;display:flex;flex-wrap:wrap;gap:4px 6px}}
 .why span{{background:#f2f5f0;border-radius:3px;padding:1px 6px}}
 .why.none-why{{color:#a9afab;font-style:italic;display:block}}
 .spark{{vertical-align:middle;overflow:visible}}
 .spark polyline{{fill:none;stroke-width:1.3;vector-effect:non-scaling-stroke}}
-.spark.sp-up polyline{{stroke:#2e7d4f}}.spark.sp-dn polyline{{stroke:#bd4335}}
+.spark.sp-up polyline{{stroke:#16a34a}}.spark.sp-dn polyline{{stroke:#bd4335}}
 table.rets td{{padding:7px 10px}}table.rets .sparkcell{{width:60px}}
-.dbar{{display:block;position:relative;height:7px;background:#f1f4f0;border-radius:2px;margin:0 0 3px}}
+.dbar{{display:block;position:relative;height:7px;background:#f3f4f6;border-radius:2px;margin:0 0 3px}}
 .dbar::before{{content:"";position:absolute;left:50%;top:-1px;bottom:-1px;width:1px;background:#d5dcd4}}
 .dbar i{{position:absolute;top:0;bottom:0;border-radius:2px}}
 .dbar i.up{{background:#7fb894}}.dbar i.dn{{background:#e29b91}}
 .rv{{font-size:12px;font-family:Georgia;white-space:nowrap}}
 .grp{{background:#fff;border:1px solid var(--line);padding:10px 14px;margin:4px 0 10px}}
-.grp summary{{cursor:pointer;font-size:12px;font-weight:700;color:#5b6660}}
+.grp summary{{cursor:pointer;font-size:12px;font-weight:700;color:#6b7280}}
 /* 순위표는 위에서 아래로 읽어야 흐름이 끊기지 않는다. 여러 열로 흩으면
    가로로 읽게 돼 '센 섹터부터'가 사라지므로, 폰과 PC 모두 한 줄 세로로 둔다. */
 .gbars{{list-style:none;margin:10px 0 2px;padding:0;
 display:block;max-width:720px}}
 .gbars li{{display:grid;grid-template-columns:130px 1fr 58px 46px;align-items:center;
 gap:10px;font-size:12px;padding:2px 0}}
-.gbars .gn{{color:#445049;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}}
+.gbars .gn{{color:#4b5563;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}}
 .gbars .gv{{text-align:right;font-family:Georgia}}
-.gbars small{{color:#9aa19d;text-align:right}}
+.gbars small{{color:#9ca3af;text-align:right}}
 .gbars .dbar{{margin:0}}
 @media(max-width:620px){{.gbars li{{grid-template-columns:88px 1fr 48px}} .gbars small{{display:none}}}}
 .mini.bolt1{{background:#e7eef6;color:#2b5f8a}}
 .mini.bolt2{{background:#d9e6f3;color:#1d4e75;font-weight:800}}
-.pos{{color:#286342}}.neg{{color:#a43c31}}.mut{{color:#a9afab}}
+.pos{{color:#15803d}}.neg{{color:#dc2626}}.mut{{color:#a9afab}}
 .flags{{white-space:nowrap}}.star{{color:#5a7a1e;font-size:10px;font-weight:800}}
-.skull{{color:#a43c31;font-size:10px;font-weight:800;margin-left:5px}}
+.skull{{color:#dc2626;font-size:10px;font-weight:800;margin-left:5px}}
 .bolt{{color:#2b5f8a;font-size:10px;font-weight:800;margin-left:5px}}
 .lowliq{{display:inline-block;margin-left:5px;color:#9a8650;font-size:9px;border:1px solid #e0d8bf;border-radius:4px;padding:1px 4px}}
 .legend{{margin-top:14px;color:var(--muted);font-size:11px;line-height:1.9}}
-.legend b{{color:#445049}}
+.legend b{{color:#4b5563}}
 .nav{{display:flex;align-items:center;gap:8px;margin:16px 0 0;position:sticky;top:0;
 background:var(--bg);padding:8px 0;z-index:5}}
 .nav button{{background:var(--card);color:var(--ink);border:1px solid var(--line);
 padding:7px 15px;font-size:13px;cursor:pointer;line-height:1}}
 .nav button:disabled{{opacity:.35;cursor:default}}
-.nav button:not(:disabled):hover{{border-color:#758079}}
+.nav button:not(:disabled):hover{{border-color:#6b7280}}
 .nav select{{background:var(--card);color:var(--ink);border:1px solid var(--line);
 padding:7px 9px;font-size:12px}}
-.nav .hint{{margin-left:auto;font-size:10px;color:#9aa19d}}
+.nav .hint{{margin-left:auto;font-size:10px;color:#9ca3af}}
 .etf-row{{display:flex;align-items:center;justify-content:space-between;gap:8px}}
 /* 누적 블록의 그룹 칸 — 그룹명 옆에 스파크라인을 한 칸 띄워 붙인다 */
 td.grp .spark{{margin-left:6px}}
 .btn-chart{{background:#eef3ec;color:#3d554a;border:1px solid #d3dcd2;border-radius:10px;
 padding:2px 8px;font-size:10px;font-weight:700;cursor:pointer;white-space:nowrap;line-height:1.5}}
-.btn-chart:hover{{background:#e3f3e7;border-color:#8fae9c;color:#286342}}
+.btn-chart:hover{{background:#dcfce7;border-color:#8fae9c;color:#15803d}}
 #modal-bg{{display:none;position:fixed;inset:0;background:rgba(23,33,29,.45);z-index:50;
 align-items:center;justify-content:center;padding:20px}}
 .modal{{background:#fff;border:1px solid var(--line);max-width:780px;width:100%;
 padding:18px 22px 16px;box-shadow:0 12px 40px rgba(23,33,29,.22)}}
 .modal-head{{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin-bottom:10px}}
 .modal-head b{{font:600 16px Georgia,"Noto Serif KR",serif}}
-#modal-x{{background:none;border:none;font-size:18px;color:#8b918e;cursor:pointer;line-height:1}}
+#modal-x{{background:none;border:none;font-size:18px;color:#9ca3af;cursor:pointer;line-height:1}}
 #modal-x:hover{{color:#17211d}}
 .chart{{width:100%;height:auto;display:block}}
 .grid{{stroke:#e9ede7;stroke-width:1}}
-.ax{{font:10px Georgia;fill:#8b918e}}
-.pline{{fill:none;stroke:#173f35;stroke-width:1.6}}
-.mk-t{{fill:#2e7d4f}}.mk-s{{fill:#c98a1e}}
+.ax{{font:10px Georgia;fill:#9ca3af}}
+.pline{{fill:none;stroke:#1d4ed8;stroke-width:1.6}}
+.mk-t{{fill:#16a34a}}.mk-s{{fill:#c98a1e}}
 .mk-dt{{fill:#bd4335}}.mk-ds{{fill:#8e5ba6}}
 /* 마커 묶음 — 투명 히트 원(r=13)이 도형 대신 포인터를 받는다. 도형이 5~9px라
    그것만 노리면 잡기 어렵다. 가리키면 살짝 키워 '잡혔다'는 걸 보여준다. */
@@ -820,16 +820,33 @@ padding:18px 22px 16px;box-shadow:0 12px 40px rgba(23,33,29,.22)}}
 .mkg:focus{{outline:none}}
 .chartwrap{{position:relative}}
 .chart-tip{{position:absolute;z-index:5;pointer-events:none;
-  background:#173f35;color:#f4f7f3;font:11px/1.55 Inter,system-ui,sans-serif;
+  background:#1d4ed8;color:#f4f7f3;font:11px/1.55 Inter,system-ui,sans-serif;
   padding:6px 9px;border-radius:7px;white-space:nowrap;
   box-shadow:0 4px 14px rgba(0,0,0,.22)}}
 .chart-tip b{{font-size:12px;letter-spacing:.2px}}
 .chart-legend{{margin:10px 0 0;font-size:11px;color:var(--muted);line-height:1.8}}
-.chart-legend .lg-t{{color:#2e7d4f}}.chart-legend .lg-s{{color:#c98a1e}}
+.chart-legend .lg-t{{color:#16a34a}}.chart-legend .lg-s{{color:#c98a1e}}
 .chart-legend .lg-dt{{color:#bd4335}}.chart-legend .lg-ds{{color:#8e5ba6}}
 @media(max-width:1180px){{.stats{{grid-template-columns:repeat(3,1fr)}}}}
 @media(max-width:620px){{body{{padding:20px 12px 50px}}.stats{{grid-template-columns:1fr 1fr}}
 table{{min-width:760px}}}}
+
+/* == 챗봇(톤 챗봇) 디자인 언어 정합: 라벤더 워시·그라데이션 타이틀·둥근 카드·필 배지·Pretendard == */
+@media (prefers-color-scheme:light){{html{{background:linear-gradient(180deg,#eef1fd 0%,#fff 240px) no-repeat #fff}}body{{background:transparent}}}}
+body{{font-family:'Pretendard Variable',Pretendard,'Apple SD Gothic Neo','Malgun Gothic',sans-serif;letter-spacing:-.01em}}
+h1{{font-family:inherit;font-weight:800;font-size:21px;letter-spacing:-.02em;background:linear-gradient(135deg,#4f46e5,#7c3aed);-webkit-background-clip:text;background-clip:text;color:transparent;display:inline-block}}
+.eyebrow{{letter-spacing:.12em}}
+.sched{{border-radius:999px}}
+.nav button{{border-radius:999px}}.nav select{{border-radius:10px}}
+.stats .tile,.alert-card,.none,.tablewrap,.logic,.grp,.modal{{border-radius:14px;box-shadow:0 1px 2px rgba(17,24,39,.04)}}
+.stats strong{{font-family:inherit;font-weight:800}}
+
+/* == 노션 모드: 워시·그라데이션 제거, 플랫 헤어라인·작은 라운드·호버 하이라이트 == */
+@media (prefers-color-scheme:light){{html{{background:#fff}}}}
+h1{{background:none;-webkit-background-clip:unset;background-clip:unset;color:inherit;display:block}}
+.sched,.dl,.nav button{{border-radius:6px}}
+.stats .tile,.alert-card,.none,.tablewrap,.logic,.grp,.modal{{border-radius:8px;box-shadow:none;border-color:#ededeb}}
+tbody tr:hover td{{background:rgba(55,53,47,.04)}}
 </style></head><body>
 <p class="eyebrow">ETF · SECTOR SIGNAL</p>
 <h1>ETF/섹터 신호 포착</h1>

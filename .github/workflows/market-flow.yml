@@ -78,6 +78,10 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
+      - name: 산식 테스트 (베이시스·월물 경계)
+        working-directory: market_flow
+        run: python -m unittest discover -s tests -p "test_*.py"
+
       - name: 수급 스냅샷 수집 (휴장일이면 자동 생략)
         working-directory: market_flow
         env:

@@ -146,11 +146,13 @@ def current_holdings_block(snap, day_label):
 def day_html(ch, snap, is_latest, period_label=None):
     """하루치(또는 주간 누적) 본문(네비게이션으로 교체되는 부분)."""
     s = ch["summary"]
-    base = esc(ch.get("base_date") or "—")
-    prevbase = esc(ch.get("prev_base_date") or "—")
-    span = "이 주" if period_label else "이 날"
+    # 네이버가 CU 구성종목 '기준일'을 더 이상 주지 않는다(2026-09 개편) → 억지로
+    # 날짜를 지어내지 않고 '언제 바뀐 걸 봤는가'(수집 시각)만 정직하게 적는다.
+    seen = esc(ch.get("fetched_at") or ch.get("date") or "—")
+    prevseen = esc(ch.get("prev_fetched_at") or ch.get("prev_date") or "—")
+    span = "이 주" if period_label else "이 구간"
     if not ch["etfs"]:
-        body = (f'<div class="none">{span}(<b>{prevbase} → {base}</b> 기준일 비교)은 '
+        body = (f'<div class="none">{span}(<b>{prevseen} → {seen}</b>)에는 '
                 '유의미한 구성 변화가 없습니다. ✅</div>')
     else:
         body = '<div class="cards">' + "".join(etf_card(e) for e in ch["etfs"]) + '</div>'
@@ -158,9 +160,6 @@ def day_html(ch, snap, is_latest, period_label=None):
     raw = ch.get("base_date") or ch.get("date") or ""
     h2d = f"{raw[2:4]}/{raw[5:7]}/{raw[8:10]}" if len(raw) == 10 else "—"
     banner = ""
-    if is_latest and not period_label and ch.get("same_base"):
-        banner = ('<div class="banner">⚠ 직전 실행과 <b>구성 기준일이 동일</b>합니다 '
-                  f'({base} · KRX 장마감). 아직 새 구성이 반영되지 않아 변화가 없을 수 있습니다.</div>')
     gen = esc(ch.get("generated_at") or "")
     gen_txt = ''   # 생성 시각은 아래 sched 배지에서 표시
     if period_label:
@@ -170,9 +169,12 @@ def day_html(ch, snap, is_latest, period_label=None):
         title = "오늘" if is_latest else "당일"
         first_line = f'{gen_txt}실행일 {esc(ch["date"])}'
 
+    mkt = esc(ch.get("market_date") or "")
     return f"""
 <p class="sub">{first_line}<br>
-구성 기준일 <b>{base}</b> (KRX 장마감) · 비교 <b>{prevbase} → {base}</b><br>
+구성 변화 감지 <b>{seen}</b> · 직전 <b>{prevseen}</b>{f' · 마지막 거래일 {mkt}' if mkt else ''}<br>
+<span class="sparknote">운용사 바스켓은 <b>장 마감 뒤</b> 갱신되므로, 여기 매매는 대개
+<b>직전 거래일</b>의 것입니다 — 휴장일에는 새 변화가 잡히지 않습니다.</span><br>
 <span class="sched">🕙 정기 업데이트 <b>{SCHEDULE_TIME}</b>(한국시간){f' · 실제 갱신 <b>{gen}</b>' if gen else ''}<span class="schedq"> — 대기열 사정으로 일부 시간대는 건너뜀</span></span><br>
 매일 구성종목(Top10)을 스냅샷하고, <b>주가 효과와 CU 자금유출입을 제거</b>해 운용사가 실제로 사고판 것만 잡아냅니다.<br>
 <span class="sparknote">종목명 옆 곡선은 <b>최근 60거래일</b> 주가 — 상승 초록 · 하락 빨강, 마우스를 올리면 등락률</span></p>
@@ -286,24 +288,24 @@ TEMPLATE = """<!doctype html><html lang="ko"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>액티브 ETF 구성 변화 · GS Research Desk</title>
 <style>
-:root{{--bg:#f3f4f1;--ink:#17211d;--muted:#6c746f;--line:#dfe2dc;--card:#fff;
---green:#173f35;--lime:#d9f272;--red:#bd4335}}
+:root{{--bg:#fff;--ink:#111827;--muted:#6b7280;--line:#e5e7eb;--card:#fff;
+--green:#2563eb;--lime:#c7d2fe;--red:#dc2626}}
 *{{box-sizing:border-box}}body{{margin:0;background:var(--bg);color:var(--ink);
 font-family:Inter,Pretendard,"Noto Sans KR",sans-serif;padding:28px 30px 60px}}
-.eyebrow{{font-size:10px;font-weight:800;letter-spacing:1.6px;color:#758079;margin:0 0 7px}}
+.eyebrow{{font-size:10px;font-weight:800;letter-spacing:1.6px;color:#6b7280;margin:0 0 7px}}
 h1{{font:500 30px Georgia,"Noto Serif KR",serif;margin:0}}
 .sub{{color:var(--muted);font-size:12px;margin:8px 0 0;line-height:1.6}}
-.schedq{{color:#9aa19d}}
+.schedq{{color:#9ca3af}}
 @media(max-width:620px){{.schedq{{display:none}}}}
-.sched{{display:inline-block;background:#eef2ec;border:1px solid var(--line);border-radius:4px;
-padding:3px 9px;margin:3px 0;font-size:11px;color:#5b6660}}
-.sched b{{color:#2c3a34}}
-.sub b{{color:#445049}}
+.sched{{display:inline-block;background:#eff6ff;border:1px solid var(--line);border-radius:4px;
+padding:3px 9px;margin:3px 0;font-size:11px;color:#6b7280}}
+.sched b{{color:#1d4ed8}}
+.sub b{{color:#4b5563}}
 .stats{{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:22px 0 8px}}
 .stats article{{background:var(--card);border:1px solid var(--line);padding:18px 20px}}
 .stats small{{color:var(--muted);font-size:11px;font-weight:700;letter-spacing:.04em}}
 .stats strong{{font:500 32px Georgia;display:block;margin:8px 0 0}}
-.stats .g{{color:#286342}}.stats .r{{color:#a43c31}}
+.stats .g{{color:#15803d}}.stats .r{{color:#dc2626}}
 h2{{font:600 18px Georgia,"Noto Serif KR",serif;margin:30px 0 12px}}
 .cards{{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:12px}}
 .ecard{{background:#fff;border:1px solid var(--line);border-left:4px solid var(--green);padding:15px 17px}}
@@ -311,30 +313,30 @@ h2{{font:600 18px Georgia,"Noto Serif KR",serif;margin:30px 0 12px}}
 .ec-head b{{font-size:15px}}.ec-head small{{color:var(--muted);font-size:11px;white-space:nowrap}}
 .row{{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:7px 0}}
 .tag{{font-size:9px;font-weight:800;letter-spacing:.04em;padding:3px 7px;border-radius:5px;white-space:nowrap}}
-.tnew{{background:#e3f3e7;color:#286342}}.tgone{{background:#f8e9e6;color:#a43c31}}
+.tnew{{background:#dcfce7;color:#15803d}}.tgone{{background:#fee2e2;color:#dc2626}}
 .chip{{font-size:12px;padding:3px 8px;border-radius:11px;background:#f2f5f0}}
 .spark{{vertical-align:middle;margin-left:6px;overflow:visible}}
-.sparknote{{color:#9aa19d;font-size:11px}}
+.sparknote{{color:#9ca3af;font-size:11px}}
 .spark polyline{{fill:none;stroke-width:1.3;vector-effect:non-scaling-stroke}}
-.spark.sp-up polyline{{stroke:#2e7d4f}}
+.spark.sp-up polyline{{stroke:#16a34a}}
 .spark.sp-dn polyline{{stroke:#bd4335}}
 .chip .spark{{margin-left:5px}}
 .chip.new{{background:#eaf6ee}}.chip.gone{{background:#faeeeb}}
 .moves{{margin-top:8px;display:flex;flex-direction:column;gap:6px}}
-.mv{{font-size:12px;line-height:1.5;padding:6px 9px;background:#fafbf8;border:1px solid #eef1ec;border-radius:6px}}
+.mv{{font-size:12px;line-height:1.5;padding:6px 9px;background:#fafbf8;border:1px solid #f3f4f6;border-radius:6px}}
 .mv.head{{background:#fbfdf4;border-color:#e4ecc7}}
 .mv .dir{{font-weight:800;font-size:11px;margin-right:5px}}
 .mv b{{font-size:12px}}.mvnum{{display:block;color:var(--muted);font-size:11px;margin-top:2px}}
-.fnote{{margin:8px 0 0;font-size:10px;color:#9aa19d}}
+.fnote{{margin:8px 0 0;font-size:10px;color:#9ca3af}}
 .lnk{{color:inherit;text-decoration:none;border-bottom:1px solid transparent}}
-.lnk:hover{{color:#286342;border-bottom-color:#286342}}
-.pos{{color:#286342}}.neg{{color:#a43c31}}
-.none{{color:#445049;background:#fff;border:1px solid var(--line);padding:26px;text-align:center;font-size:14px}}
+.lnk:hover{{color:#15803d;border-bottom-color:#15803d}}
+.pos{{color:#15803d}}.neg{{color:#dc2626}}
+.none{{color:#4b5563;background:#fff;border:1px solid var(--line);padding:26px;text-align:center;font-size:14px}}
 .banner{{margin:14px 0 0;background:#fff8e6;border:1px solid #e7d9a8;color:#7a5f1a;padding:11px 15px;font-size:12px;border-radius:6px}}
 .legend{{margin:16px 0 0;color:var(--muted);font-size:11px;line-height:1.85;background:#fff;border:1px solid var(--line);padding:14px 16px}}
-.legend b{{color:#445049}}
+.legend b{{color:#4b5563}}
 .cur{{margin-top:26px}}
-.cur>summary{{cursor:pointer;padding:14px 16px;font-size:12px;font-weight:700;color:#445049;background:#fff;border:1px solid var(--line)}}
+.cur>summary{{cursor:pointer;padding:14px 16px;font-size:12px;font-weight:700;color:#4b5563;background:#fff;border:1px solid var(--line)}}
 .hgrid{{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:12px;margin-top:12px}}
 .hcard{{background:#fff;border:1px solid var(--line);padding:12px 14px}}
 .hh{{display:flex;justify-content:space-between;align-items:baseline;gap:8px;margin-bottom:9px;flex-wrap:wrap}}
@@ -342,25 +344,42 @@ h2{{font:600 18px Georgia,"Noto Serif KR",serif;margin:30px 0 12px}}
 .ov{{color:#9a7d2e}}
 .hbars{{display:flex;flex-direction:column;gap:3px}}
 .hbar{{display:grid;grid-template-columns:92px 1fr 54px;align-items:center;gap:8px;font-size:11px}}
-.hn{{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:#2c3a34}}
-.htrack{{background:#eef1ec;border-radius:3px;height:13px;overflow:hidden}}
-.hfill{{display:block;height:100%;background:linear-gradient(90deg,#286342,#4b8b62);border-radius:3px}}
+.hn{{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:#1d4ed8}}
+.htrack{{background:#f3f4f6;border-radius:3px;height:13px;overflow:hidden}}
+.hfill{{display:block;height:100%;background:linear-gradient(90deg,#15803d,#4b8b62);border-radius:3px}}
 .hv{{text-align:right;color:#61706a;font-family:Georgia;white-space:nowrap}}
 .nav{{display:flex;align-items:center;gap:8px;margin:16px 0 0;position:sticky;top:0;
 background:var(--bg);padding:8px 0;z-index:5}}
 .nav button{{background:var(--card);color:var(--ink);border:1px solid var(--line);
 padding:7px 15px;font-size:13px;cursor:pointer;line-height:1}}
 .nav button:disabled{{opacity:.35;cursor:default}}
-.nav button:not(:disabled):hover{{border-color:#758079}}
+.nav button:not(:disabled):hover{{border-color:#6b7280}}
 .nav select{{background:var(--card);color:var(--ink);border:1px solid var(--line);
 padding:7px 9px;font-size:12px}}
-.nav .hint{{margin-left:auto;font-size:10px;color:#9aa19d}}
+.nav .hint{{margin-left:auto;font-size:10px;color:#9ca3af}}
 .mode{{display:inline-flex;border:1px solid var(--line);margin-right:4px}}
 .mode button{{border:0;background:var(--card);color:#61706a;padding:7px 13px;
 font-size:12px;font-weight:700;cursor:pointer}}
 .mode button.on{{background:var(--green);color:#fff}}
 @media(max-width:620px){{body{{padding:20px 12px 50px}}.stats{{grid-template-columns:1fr 1fr}}
 .cards{{grid-template-columns:1fr}}}}
+
+/* == 챗봇(톤 챗봇) 디자인 언어 정합: 라벤더 워시·그라데이션 타이틀·둥근 카드·필 배지·Pretendard == */
+@media (prefers-color-scheme:light){{html{{background:linear-gradient(180deg,#eef1fd 0%,#fff 240px) no-repeat #fff}}body{{background:transparent}}}}
+body{{font-family:'Pretendard Variable',Pretendard,'Apple SD Gothic Neo','Malgun Gothic',sans-serif;letter-spacing:-.01em}}
+h1{{font-family:inherit;font-weight:800;font-size:21px;letter-spacing:-.02em;background:linear-gradient(135deg,#4f46e5,#7c3aed);-webkit-background-clip:text;background-clip:text;color:transparent;display:inline-block}}
+.eyebrow{{letter-spacing:.12em}}
+.sched{{border-radius:999px}}
+.nav button{{border-radius:999px}}.nav select{{border-radius:10px}}
+.stats article,.ecard,.none,.legend,.hcard,.mode{{border-radius:14px;box-shadow:0 1px 2px rgba(17,24,39,.04)}}
+.stats strong{{font-family:inherit;font-weight:800}}
+
+/* == 노션 모드: 워시·그라데이션 제거, 플랫 헤어라인·작은 라운드·호버 하이라이트 == */
+@media (prefers-color-scheme:light){{html{{background:#fff}}}}
+h1{{background:none;-webkit-background-clip:unset;background-clip:unset;color:inherit;display:block}}
+.sched,.dl,.nav button{{border-radius:6px}}
+.stats article,.ecard,.none,.legend,.hcard,.mode{{border-radius:8px;box-shadow:none;border-color:#ededeb}}
+tbody tr:hover td{{background:rgba(55,53,47,.04)}}
 </style></head><body>
 <p class="eyebrow">ACTIVE ETF · HOLDINGS</p>
 <h1>액티브 ETF 구성 변화</h1>
@@ -381,7 +400,7 @@ font-size:12px;font-weight:700;cursor:pointer}}
 <b>한계</b> · 소스(네이버)는 상위 10종목만 제공 → 11위 이하 꼬리 종목 움직임과 '완전 신규 편입'은 잡히지 않을 수 있습니다(향후 운용사 전체 PDF로 확장 예정).
 </div>
 
-<p style="margin-top:30px;color:#9aa19d;font-size:11px">🎴 GS Research Desk · 액티브 ETF 포트폴리오 트래커</p>
+<p style="margin-top:30px;color:#9ca3af;font-size:11px">🎴 GS Research Desk · 액티브 ETF 포트폴리오 트래커</p>
 <script>
 var MODES = {{
   daily:  {{ pages: {day_pages_json},  dates: {day_dates_json},  opts: {day_opts_json} }},
