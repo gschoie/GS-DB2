@@ -457,9 +457,11 @@ def _table(entries: list[tuple[str, dict]], empty_msg: str) -> str:
     return head + "".join(_row(uid, e) for uid, e in entries) + "</tbody></table>"
 
 
-def _section(title: str, count: int, inner: str, is_open: bool) -> str:
-    """접을 수 있는 섹션 — summary가 h2 역할."""
-    return (f'<details class="sec"{" open" if is_open else ""}>'
+def _section(title: str, count: int, inner: str, is_open: bool,
+             mob_collapse: bool = False) -> str:
+    """접을 수 있는 섹션 — summary가 h2 역할. mob_collapse는 좁은 화면에서 기본 접힘."""
+    mob = ' data-mob-collapse="1"' if mob_collapse else ""
+    return (f'<details class="sec"{" open" if is_open else ""}{mob}>'
             f'<summary>{title} ({count}건)</summary>{inner}</details>')
 
 
@@ -587,7 +589,7 @@ def build_page(store: dict | None = None) -> None:
 갱신 {stamp} KST · 총 {len(items)}건
 <button id="run-btn" class="run-btn" onclick="runScan()">🔄 지금 수집</button>
 <span id="run-status"></span></p>
-{_section("📌 발간 예정", len(upcoming), _table(upcoming, "잡힌 발간 계획이 없습니다."), True)}
+{_section("📌 발간 예정", len(upcoming), _table(upcoming, "잡힌 발간 계획이 없습니다."), False)}
 {_section("🗓️ 발간 달력", sum(1 for _, e in items if e.get("target")),
           _calendar(items, now.date()), True)}
 {_section("❓ 확인 필요", len(review), _table(review, "확인할 항목이 없습니다."), bool(review))}
