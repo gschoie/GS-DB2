@@ -303,3 +303,24 @@ body.item-locked #task-item{appearance:none;-webkit-appearance:none;border-color
 #tasklist .task-arch-restore:hover{background:#2563eb;color:#fff}
 #tasklist .task-arch-del{background:#fef2f2;color:#dc2626;border-left-color:#e5e7eb}
 #tasklist .task-arch-del:hover{background:#fee2e2}
+
+/* ── ⌂ 오늘의 요약: 톤 챗봇 디자인 언어(흰 카드·변형별 컬러 액센트·필 버튼) ── */
+#overview .panel{border-radius:16px;box-shadow:0 1px 2px rgba(17,24,39,.04);border-color:#e5e7eb}
+#overview .panel-head small{color:#6b7280}
+#overview .panel-head button,#overview .panel-more{color:#2563eb;font-weight:600}
+#overview .panel-head button:hover,#overview .panel-more:hover{color:#1d4ed8;text-decoration:underline}
+#overview .brief-card{background:#fff;color:#111827;border:1px solid #e5e7eb;border-radius:16px;
+  border-left:4px solid #4f46e5;box-shadow:0 1px 2px rgba(17,24,39,.04)}
+#overview .brief-card .brief-head small,#overview .brief-card .brief-head a{color:#4f46e5}
+#overview .brief-card .brief-src{color:#4f46e5;border-bottom-color:rgba(79,70,229,.4)}
+#overview .brief-card .brief-body{scrollbar-color:#cbd5e1 transparent}
+#overview .brief-card.tone-gemini{background:#fff;border-left-color:#2563eb}
+#overview .brief-card.tone-gemini .brief-head small,#overview .brief-card.tone-gemini .brief-head a,
+#overview .brief-card.tone-gemini .brief-src{color:#2563eb;border-bottom-color:rgba(37,99,235,.4)}
+#overview .brief-card.tone-gpt{background:#fff;border-left-color:#7c3aed}
+#overview .brief-card.tone-gpt .brief-head small,#overview .brief-card.tone-gpt .brief-head a,
+#overview .brief-card.tone-gpt .brief-src{color:#7c3aed;border-bottom-color:rgba(124,58,237,.4)}
+#overview .brief-card.tone-plan{background:#fff;border-left-color:#d97706}
+#overview .brief-card.tone-plan .brief-head small,#overview .brief-card.tone-plan .brief-head a,
+#overview .brief-card.tone-plan .brief-src{color:#b45309;border-bottom-color:rgba(217,119,6,.4)}
+#overview .panel-head h2{font-family:inherit;font-weight:800;letter-spacing:-.02em}
