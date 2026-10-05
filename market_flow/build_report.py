@@ -617,8 +617,8 @@ def build():
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>시장 수급 동향</title>
 <style>
-:root{{--bg:#fff;--fg:#1c2430;--muted:#6b7684;--line:#e5e8ec;--card:#f7f8fa;
---pos:#d64545;--neg:#3b6fd4;--gup:#286342;--gdn:#a43c31;--gbar-bg:#f1f4f0}}
+:root{{--bg:#fff;--fg:#111827;--muted:#6b7280;--line:#e5e7eb;--card:#f9fafb;
+--pos:#d64545;--neg:#3b6fd4;--gup:#286342;--gdn:#a43c31;--gbar-bg:#f3f4f6}}
 @media(prefers-color-scheme:dark){{:root{{--bg:#14181f;--fg:#e6e9ee;--muted:#8b93a1;
 --line:#2a313c;--card:#1b212b;--gup:#8fc7a5;--gdn:#e8a49b;--gbar-bg:#232a34}}}}
 *{{box-sizing:border-box}}
@@ -627,14 +627,14 @@ font:14px/1.55 -apple-system,"Malgun Gothic","Apple SD Gothic Neo",sans-serif}}
 .wrap{{max-width:820px;margin:0 auto}}
 h1{{font-size:19px;margin:0 0 2px}} h2{{font-size:15px;margin:26px 0 8px}}
 .sub{{color:var(--muted);font-size:12.5px;margin:0 0 14px}}
-.schedq{{color:#9aa19d;display:block;margin-top:2px}}
+.schedq{{color:#9ca3af;display:block;margin-top:2px}}
 @media(max-width:620px){{.schedq{{display:none}}}}
 .slots{{display:block;margin:3px 0 0 14px}}
 .slotpair{{display:block;white-space:nowrap;font-variant-numeric:tabular-nums;line-height:1.7;cursor:help}}
-.slotpair.off{{color:#b3b9b4}}
-.sched{{display:inline-block;background:#eef2ec;border:1px solid var(--line);border-radius:4px;
-padding:3px 9px;margin:3px 0;font-size:11px;color:#5b6660}}
-.sched b{{color:#2c3a34}}
+.slotpair.off{{color:#d1d5db}}
+.sched{{display:inline-block;background:#eff6ff;border:1px solid var(--line);border-radius:4px;
+padding:3px 9px;margin:3px 0;font-size:11px;color:#6b7280}}
+.sched b{{color:#1d4ed8}}
 .kospi{{font-size:16px;font-weight:700}}
 .pos{{color:var(--pos)}} .neg{{color:var(--neg)}} .na{{color:var(--muted)}}
 table{{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums}}
@@ -687,6 +687,16 @@ border-radius:8px;padding:6px 14px;font-size:14px;cursor:pointer;line-height:1}}
 .nav select{{background:var(--card);color:var(--fg);border:1px solid var(--line);
 border-radius:8px;padding:6px 8px;font-size:13px;flex:0 1 auto}}
 .nav .hint{{margin-left:auto;font-size:11.5px;color:var(--muted)}}
+
+/* == 챗봇(톤 챗봇) 디자인 언어 정합: 라벤더 워시·그라데이션 타이틀·둥근 카드·필 배지·Pretendard == */
+@media (prefers-color-scheme:light){{html{{background:linear-gradient(180deg,#eef1fd 0%,#fff 240px) no-repeat #fff}}body{{background:transparent}}}}
+body{{font-family:'Pretendard Variable',Pretendard,'Apple SD Gothic Neo','Malgun Gothic',sans-serif;letter-spacing:-.01em}}
+h1{{font-family:inherit;font-weight:800;font-size:21px;letter-spacing:-.02em;background:linear-gradient(135deg,#4f46e5,#7c3aed);-webkit-background-clip:text;background-clip:text;color:transparent;display:inline-block}}
+.eyebrow{{letter-spacing:.12em}}
+.sched{{border-radius:999px}}
+.nav button{{border-radius:999px}}.nav select{{border-radius:10px}}
+.card{{border-radius:14px;box-shadow:0 1px 2px rgba(17,24,39,.04)}}
+.chip{{border-radius:999px}}
 </style></head><body><div class="wrap">
 <h1>💹 시장 수급 동향 <span style="font-weight:400;font-size:13px">KOSPI</span></h1>
 <div class="nav">

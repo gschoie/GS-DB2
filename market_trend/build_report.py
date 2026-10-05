@@ -286,9 +286,9 @@ def build() -> None:
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>시장관심.내러티브</title>
 <style>
-:root{{--bg:#fff;--fg:#1c2430;--muted:#6b7684;--line:#e5e8ec;--card:#f7f8fa;--accent:#2e6b4f}}
+:root{{--bg:#fff;--fg:#111827;--muted:#6b7280;--line:#e5e7eb;--card:#f9fafb;--accent:#2563eb}}
 @media(prefers-color-scheme:dark){{:root{{--bg:#14181f;--fg:#e6e9ee;--muted:#8b93a1;
---line:#2a313c;--card:#1b212b;--accent:#7fc8a4}}}}
+--line:#2a313c;--card:#1b212b;--accent:#93c5fd}}}}
 *{{box-sizing:border-box}}
 body{{margin:0;padding:18px 16px 40px;background:var(--bg);color:var(--fg);
 font:14px/1.6 -apple-system,"Malgun Gothic","Apple SD Gothic Neo",sans-serif}}
@@ -334,6 +334,17 @@ border-radius:8px;padding:6px 14px;font-size:14px;cursor:pointer;line-height:1}}
 .nav select{{background:var(--card);color:var(--fg);border:1px solid var(--line);
 border-radius:8px;padding:6px 8px;font-size:13px}}
 .nav .hint{{margin-left:auto;font-size:11.5px;color:var(--muted)}}
+
+/* == 챗봇(톤 챗봇) 디자인 언어 정합: 라벤더 워시·그라데이션 타이틀·둥근 카드·필 배지·Pretendard == */
+@media (prefers-color-scheme:light){{html{{background:linear-gradient(180deg,#eef1fd 0%,#fff 240px) no-repeat #fff}}body{{background:transparent}}}}
+body{{font-family:'Pretendard Variable',Pretendard,'Apple SD Gothic Neo','Malgun Gothic',sans-serif;letter-spacing:-.01em}}
+h1{{font-family:inherit;font-weight:800;font-size:21px;letter-spacing:-.02em;background:linear-gradient(135deg,#4f46e5,#7c3aed);-webkit-background-clip:text;background-clip:text;color:transparent;display:inline-block}}
+.eyebrow{{letter-spacing:.12em}}
+.sched{{border-radius:999px}}
+.nav button{{border-radius:999px}}.nav select{{border-radius:10px}}
+.card{{border-radius:14px;box-shadow:0 1px 2px rgba(17,24,39,.04)}}
+.badge,.kw{{border-radius:999px}}
+.oneliner{{border-radius:12px}}
 </style></head><body><div class="wrap">
 <h1>🧠 시장관심.내러티브</h1>
 <p class="sub">구독 텔레그램 전 채널의 하루치에서 계량으로 추린 신호를 테마로 묶은 것 · 매일 06:30 갱신</p>

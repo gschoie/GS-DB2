@@ -281,3 +281,25 @@ body.item-locked #task-item{appearance:none;-webkit-appearance:none;border-color
    min-height는 모바일에서 행이 세로로 쌓일 때(기준 형제가 없어질 때) 본문이 0으로 붕괴하는 것 방지. */
 #unified-brief,#construction-brief{display:flex;flex-direction:column}
 #unified-brief .brief-body,#construction-brief .brief-body{flex:1 1 auto;height:0;min-height:280px;max-height:none}
+
+/* ── 📬 수명 피드백.확인: 톤 챗봇 디자인 언어(블루 포인트·둥근 카드·필 버튼) ── */
+#tasklist .task-toolbar{border-radius:16px;box-shadow:0 1px 2px rgba(17,24,39,.04);border-color:#e5e7eb}
+#tasklist .task-toolbar select{border-radius:10px;border-color:#e5e7eb}
+#tasklist .task-toolbar button,#tasklist .task-import{border-radius:999px;font-weight:600;color:#111827;border-color:#e5e7eb;box-shadow:0 1px 2px rgba(17,24,39,.04)}
+#tasklist .task-toolbar button:hover{background:#eff6ff}
+#tasklist .task-sync{color:#2563eb}
+#tasklist .task-summary b{color:#1d4ed8;font-family:inherit}
+#tasklist .task-date{font-family:inherit;color:#6b7280}
+#tasklist .panel{border-radius:16px;box-shadow:0 1px 2px rgba(17,24,39,.04);border-color:#e5e7eb;overflow:hidden}
+#tasklist .task-table th{background:#f9fafb;color:#6b7280;border-bottom-color:#e5e7eb}
+#tasklist .task-table td{border-bottom-color:#f3f4f6}
+#tasklist .task-group td{background:#eff6ff;color:#1d4ed8}
+#tasklist .task-done input{accent-color:#2563eb}
+#tasklist .task-in{background:#f9fafb}
+#tasklist .task-in:focus{border-color:#93c5fd}
+#tasklist .task-arch-pair{border-radius:999px;border-color:#e5e7eb}
+#tasklist .task-arch-item:hover{background:#eff6ff}
+#tasklist .task-arch-restore{background:#eff6ff;color:#1d4ed8;border-left-color:#e5e7eb}
+#tasklist .task-arch-restore:hover{background:#2563eb;color:#fff}
+#tasklist .task-arch-del{background:#fef2f2;color:#dc2626;border-left-color:#e5e7eb}
+#tasklist .task-arch-del:hover{background:#fee2e2}
