@@ -56,6 +56,7 @@ const DIGEST_SKIP_SHORTS = true;
 // digest: false 를 단 채널은 낱개 알림만 오고 3일 모음에는 담지 않는다.
 // weekly: false 를 단 채널은 주간(평일) 모음에서 뺀다.
 // exclude: /정규식/ 을 단 채널은 제목이 걸리는 영상을 통째로 건너뛴다(알림·모음 모두).
+// include: /정규식/ 을 단 채널은 제목이 '걸리는 것만' 남긴다(허용목록 — 나머지는 전부 제외).
 const WATCH_CHANNELS = [
   { name: '샤를세환', id: 'UCVNAlg66t3JhkzT5JntclLg' },
   { name: 'KKMD', id: 'UCLDV9mI3tOQCrdPUWjogQZA' },
@@ -63,7 +64,11 @@ const WATCH_CHANNELS = [
   { name: '슈퍼소닉', id: 'UCXK_itQ6_JKltErZW_sQojQ' },
   { name: '밀덕', id: 'UCV-slcYbZrNCowaVd3cQaHQ', weekly: false },
   { name: 'KFN+', id: 'UCObL9hob3R03QSZU5olJZiQ' },
-  { name: 'KFN1', id: 'UCXNMgSZqmfX1_K8Uf4l4sog', digest: false, exclude: /이슈&국방/ }
+  // KFN1 은 잡다한 영상이 많아, 원하는 시리즈 제목이 든 것만 남긴다(공백 유무 무관).
+  {
+    name: 'KFN1', id: 'UCXNMgSZqmfX1_K8Uf4l4sog', digest: false,
+    include: /본게임\s*2|리얼\s*웨폰|이것이\s*전투다|K[-\s]?인사이트|밀덕들의\s*수다|밀리터리\s*사이언스/
+  }
 ];
 
 // 주간 모음 요일별 로테이션 — 매일 그날 담당 채널 1개의 지난 7일치만 보낸다.
@@ -205,7 +210,12 @@ function checkNewVideos() {
           let videoTitle = entry.getChildText('title', atom);
           const videoUrl = entry.getChild('link', atom).getAttribute('href').getValue();
 
-          // 채널별 제목 예외 — 걸리면 알림도 모음도 없이 조용히 넘어간다
+          // 채널별 제목 필터 — 알림도 모음도 없이 조용히 넘어간다.
+          // include(허용목록): 걸리는 것만 남긴다. exclude: 걸리는 것을 버린다.
+          if (channel.include && !channel.include.test(videoTitle)) {
+            Logger.log(`허용목록 밖이라 건너뜀 (${channel.name}): ${videoTitle}`);
+            return;
+          }
           if (channel.exclude && channel.exclude.test(videoTitle)) {
             Logger.log(`제목 예외로 건너뜀 (${channel.name}): ${videoTitle}`);
             return;
@@ -354,6 +364,7 @@ function fillBufferFromFeeds(days) {
         if (isBuffered_(videoId)) return;
 
         const title = entry.getChildText('title', atom);
+        if (channel.include && !channel.include.test(title)) return;
         if (channel.exclude && channel.exclude.test(title)) return;
         const link = entry.getChild('link', atom).getAttribute('href').getValue();
         if (bufferForDigest_(channel.name, videoId, title, link, published)) {
@@ -579,6 +590,7 @@ function weeklyEligible_(channel, title, url) {
   if (channel.weekly === false) return false;
   if (isShorts_(url)) return false;
   if (LIVE_TITLE_RE.test(title)) return false;
+  if (channel.include && !channel.include.test(title)) return false;
   if (channel.exclude && channel.exclude.test(title)) return false;
   return true;
 }
@@ -720,7 +732,8 @@ const MIL_LIMIT = 5;         // 날짜없는 소스(서울경제): 최근 몇 �
 const MIL_SOURCES = [
   {
     name: '나우뉴스 밀리터리+',
-    list: 'https://nownews.seoul.co.kr/newsList/science/military/?cp=nownews',
+    list: 'https://m.nownews.seoul.co.kr/newsList/science/military/?cp=nownews',
+    listAlts: ['https://www.seoul.co.kr/newsList/science/military/?cp=nownews'],
     page: '&page=',
     dated: true,
     // 링크 경로가 아니라 기사 ID 자체를 잡는다(모바일·데스크톱 경로가 달라도 무관).
@@ -731,15 +744,22 @@ const MIL_SOURCES = [
   {
     name: '세계 박수찬의 軍',
     list: 'https://m.segye.com/category/3000327',
+    listAlts: [
+      // 기자 페이지(박수찬) — 카테고리 페이지가 안 잡힐 때의 대체
+      'https://m.segye.com/journalist/list.do?id=psc%40segye.com&writerName=%EB%B0%95%EC%88%98%EC%B0%AC',
+      'https://www.segye.com/category/3000327'
+    ],
     page: '?page=',
     dated: true,
-    // 모바일은 /view/ID, 데스크톱은 /newsView/ID — 둘 다 잡는다. ID 는 14자리(날짜 8+순번 6).
-    linkRe: /[Vv]iew\/(\d{14})/g,
+    // 경로가 아니라 기사 ID 로 잡는다. 세계 최근 기사 ID = 날짜8 + '5' + 5자리
+    // (시각 타임스탬프는 date+0~2 로 시작하므로 '5' 로 걸러 오탐을 막는다).
+    linkRe: /\b(\d{8}5\d{5})\b/g,
     view: function (id) { return 'https://www.segye.com/newsView/' + id; }
   },
   {
     name: '서울경제 이현호의 방산톡',
     list: 'https://www.sedaily.com/subscription/series/S010100493',
+    listAlts: ['https://m.sedaily.com/Subscription/Series/S010100493'],
     page: '?page=',
     dated: false,              // 기사 ID 가 순번(/article/20093150) — 날짜가 없다
     limit: MIL_LIMIT,
@@ -802,10 +822,24 @@ function collectMilSource_(src, cutoff) {
   const out = [];        // 최종 항목(등장 순서 = 최신순)
   const picked = {};     // id 중복 방지
 
+  // 후보 목록 URL 을 순서대로 시도해, 1쪽에서 링크가 잡히는 첫 주소를 쓴다.
+  const candidates = [src.list].concat(src.listAlts || []);
+  let base = null;
+  for (let ci = 0; ci < candidates.length; ci++) {
+    try {
+      const rows0 = parseMilPage_(fetchText_(candidates[ci]), src.linkRe);
+      if (rows0.length > 0) { base = candidates[ci]; break; }
+      Logger.log(src.name + ' 후보 링크 0: ' + candidates[ci]);
+    } catch (error) {
+      Logger.log(src.name + ' 후보 실패(' + candidates[ci] + '): ' + error.toString());
+    }
+  }
+  if (!base) { Logger.log(src.name + ': 쓸 목록 주소를 못 찾음'); return out; }
+
   for (let page = 1; page <= MIL_MAX_PAGES; page++) {
     let html;
     try {
-      html = fetchText_(src.list + (page > 1 ? src.page + page : ''));
+      html = fetchText_(base + (page > 1 ? src.page + page : ''));
     } catch (error) {
       Logger.log(src.name + ' ' + page + '쪽 실패: ' + error.toString());
       break;

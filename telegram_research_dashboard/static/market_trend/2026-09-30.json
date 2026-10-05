@@ -1,0 +1,683 @@
+{
+ "date": "2026-09-30",
+ "meta": {
+  "window": "09-29 06:00~09-30 06:00 KST",
+  "engine": "Gemini(gemini-2.5-flash)",
+  "generated_at": "2026-09-30T06:36+09:00"
+ },
+ "stats": {
+  "channels": 96,
+  "messages": 1455,
+  "groups": 1347
+ },
+ "one_liner": "AI 산업의 기대와 우려가 교차하는 가운데, 고금리 및 지정학적 불확실성이 시장 전반의 투자 심리를 위축시키고 있다.",
+ "themes": [
+  {
+   "name": "AI 산업 동향 및 투자 심리",
+   "narrative": "AI 기술 발전과 인프라 투자 기대감은 여전하나, OpenAI의 모델 학습 중단 및 제품 출시 취소 소식, 앤트로픽의 IPO 투자설명서에서 드러난 높은 손실 등으로 인해 AI 속도 조절론과 투자 심리 위축 우려가 공존한다.",
+   "status": "ongoing",
+   "strength": 5,
+   "keywords": [
+    "DS",
+    "일시",
+    "모델 학습",
+    "공간",
+    "사장",
+    "취소",
+    "투자설명서",
+    "세미파이브",
+    "경쟁 심화",
+    "낮추고",
+    "연준 이사",
+    "삼성전기",
+    "젠슨 황",
+    "마이크론",
+    "피에스케이",
+    "앤스로픽",
+    "AI 데이터센터"
+   ],
+   "evidence": [
+    {
+     "channel": "키움증권 전략/시황 한지영",
+     "quote": "오픈 AI의 최신 모델 일시 학습 중단에 따른 메타(-4.8%), 인텔(-5.6%), 마이크론(-2.6%) 등 AI주 동반 약세 속에,"
+    },
+    {
+     "channel": "미국 주식 인사이더 🇺🇸 (US Stocks Insider)",
+     "quote": "로이터가 확인한 기업공개(IPO) 투자설명서에 따르면 앤트로픽의 2025회계연도 매출은 45억9,000만 달러로, 전년 3억8,600만 달러 대비 1,088% 증가. 사업 규모가 빠르게 확대되는 가운데 AI 컴퓨팅 관련 비용도 급증."
+    },
+    {
+     "channel": "메리츠증권 리서치",
+     "quote": "삼성전기(009150): ABF 기판, 이제는 Capa의 싸움 ▶ 창사 이래 최대 규모의 Capex 사이클 진입 - 9월 28일 삼성전기는 세종사업장 4.3조원, 베트남 2.5조원 등 총 6.8조원 규모의 ABF 기판 신규 시설투자를 공시"
+    }
+   ]
+  },
+  {
+   "name": "조선업 호황 지속 및 방산 협력 기대",
+   "narrative": "LNG 운반선 발주 소식과 국내 조선 3사의 기술력을 바탕으로 한 해외 협력 논의가 이어지며 조선업에 대한 긍정적 시각이 유지되고 있다.",
+   "status": "ongoing",
+   "strength": 3,
+   "keywords": [
+    "삼성중공업",
+    "조선"
+   ],
+   "evidence": [
+    {
+     "channel": "GS의 조선/기계/방산 「바담」",
+     "quote": "조선 분야의 경우 HD현대중공업, 한화오션, 삼성중공업의 기술력을 바탕으로 생산 시설 구축을 넘어 기술 이전 및 현지 공급망 강화 방안을 양국 외교 라인에서 주요 협력 과제로 검토"
+    },
+    {
+     "channel": "[신한 리서치본부] 조선/방산/기계",
+     "quote": "삼성중공업 20만㎥급 LNG운반선 4척 발주처는 그리스 다이나가스"
+    },
+    {
+     "channel": "다올투자증권 리서치센터",
+     "quote": "[TradeWinds] Zodiac Maritime breaks into LNG carrier business with $500m Hanwha order"
+    }
+   ]
+  },
+  {
+   "name": "기술이전 계약 해지 이슈",
+   "narrative": "한미약품의 주력 항암제 벨바라페닙 기술이전 계약 해지 소식이 전해지며 관련 기업에 대한 우려가 부각되었다.",
+   "status": "new",
+   "strength": 3,
+   "keywords": [
+    "해지",
+    "벨바라페닙"
+   ],
+   "evidence": [
+    {
+     "channel": "AWAKE - 실시간 주식 공시 정리채널",
+     "quote": "제목 : 벨바라페닙(HM95573) 기술이전 계약 해지 및 권리 반환"
+    },
+    {
+     "channel": "서화백의 그림놀이 🚀",
+     "quote": "주력 항암제(벨바라페닙) 기술이전 계약 해지 및 권리 반환"
+    }
+   ]
+  },
+  {
+   "name": "로봇 신규 상장 및 시장 관심",
+   "narrative": "빅웨이브로보틱스와 글로벌테크놀로지가 상장 첫날 급등하며 로봇 산업에 대한 시장의 높은 관심이 확인되었다.",
+   "status": "new",
+   "strength": 3,
+   "keywords": [
+    "빅웨이브로보틱스",
+    "글로벌테크놀로지",
+    "로봇"
+   ],
+   "evidence": [
+    {
+     "channel": "서화백의 그림놀이 🚀",
+     "quote": "[특징주] 글로벌테크놀로지·빅웨이브로보틱스, 상장 첫날 급등(종합)"
+    },
+    {
+     "channel": "유진투자증권 산업분석실 테크/인프라팀",
+     "quote": "빅웨이브로보틱스가 신규 상장합니다. 이어서 브릴스와 10월 에이엘로봇까지 로봇 상장이 이어집니다."
+    }
+   ]
+  },
+  {
+   "name": "고금리 및 거시경제 불확실성",
+   "narrative": "미국 국채 금리 급등과 중동 정세 불안정으로 인한 유가 변동성, 연준 이사의 매파적 발언 등이 신흥시장 전반의 투자 심리를 위축시키고 있다. 국내 증시는 삼성전자 배당락의 영향도 받았다.",
+   "status": "ongoing",
+   "strength": 4,
+   "keywords": [
+    "연기",
+    "배당락",
+    "낮추고",
+    "연준 이사",
+    "국채 금리",
+    "유가",
+    "호르무즈 해협"
+   ],
+   "evidence": [
+    {
+     "channel": "키움증권 전략/시황 한지영",
+     "quote": "오늘 국내 증시도 미국 10년물 금리 급등, 오픈AI발 미국 반도체주 약세, 삼성전자 배당락 등으로 하락 출발하겠으나,"
+    },
+    {
+     "channel": "대신 전략. 돌직구",
+     "quote": "리사 쿡 연준 이사, AI 도입이 단기적으로 인플레이션 압력을 높일 수 있다고 언급. 쿡 이사는 AI 생산성 향상이 향후 수년간 완만한 디스인플레이션 효과를 가져올 것으로 예상하면서도, 올해 확대될 인플레이션 압력을 상쇄하기에는 시차가 있을 것으로 평가."
+    },
+    {
+     "channel": "하나 중국/신흥국 전략 김경환",
+     "quote": "미 국채 금리 급등, 신흥시장 충격…채권 ETF 6개월 만에 최대 주간 자금 유출 •10년물 미 국채 금리가 다시 5.20%를 돌파하며 20년 만에 최고치를 기록한 가운데, 유가 변동성과 호르무즈 해협 정세 불확실성이 겹치면서 신흥시장 채권은 이달 약 2.1% 하락함."
+    }
+   ]
+  }
+ ],
+ "community_mood": {
+  "score": -30,
+  "summary": "커뮤니티는 미국 국채 금리 상승과 반도체 주식의 향방에 대한 논쟁이 활발하며, 시장 전반의 불확실성과 주요 종목의 하락에 대한 우려가 혼재되어 있다.",
+  "hot_stocks": [
+   {
+    "name": "테슬라",
+    "score": 30,
+    "reason": "높은 판매량과 시장 관심이 언급되며 주목받고 있다."
+   },
+   {
+    "name": "삼성",
+    "score": -20,
+    "reason": "기술 유출 논란 및 유튜버의 하락 전망, 해외 예상가 등에 대한 관심이 높다."
+   },
+   {
+    "name": "SK하이닉스",
+    "score": 0,
+    "reason": "삼성전자와 함께 해외 예상가에 대한 관심이 언급되었다."
+   },
+   {
+    "name": "POSCO홀딩스",
+    "score": 10,
+    "reason": "급증 키워드에 포함되며 주가 변동성에 대한 관심이 높다."
+   }
+  ]
+ },
+ "signals": {
+  "spikes": [
+   {
+    "term": "DS",
+    "count": 22,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "연기",
+    "count": 19,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "DS 투자증권",
+    "count": 18,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "해지",
+    "count": 18,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "일시",
+    "count": 17,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "같이",
+    "count": 17,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "설정",
+    "count": 17,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "공간",
+    "count": 15,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "사장",
+    "count": 14,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "삼성중공업",
+    "count": 14,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "빅웨이브로보틱스",
+    "count": 14,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "글로벌테크놀로지",
+    "count": 14,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "취소",
+    "count": 14,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "장내매",
+    "count": 14,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "투자설명서",
+    "count": 14,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "세미파이브",
+    "count": 14,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "경쟁 심화",
+    "count": 13,
+    "burst": 98.13214550853748,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "낮추고",
+    "count": 13,
+    "burst": 98.13214550853748,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "배당락",
+    "count": 13,
+    "burst": 98.13214550853748,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "연준 이사",
+    "count": 13,
+    "burst": 98.13214550853748,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "모델 학습",
+    "count": 13,
+    "burst": 98.13214550853748,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "장내매 보통주",
+    "count": 13,
+    "burst": 98.13214550853748,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "보통주 장내매",
+    "count": 13,
+    "burst": 98.13214550853748,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "수준인",
+    "count": 12,
+    "burst": 90.58351893095768,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "POSCO",
+    "count": 12,
+    "burst": 90.58351893095768,
+    "base_daily": 0.0,
+    "new": true
+   }
+  ],
+  "top_posts": [
+   {
+    "channels": 5,
+    "channel": "AWAKE - 실시간 주식 공시 정리채널",
+    "head": "2026.09.29 13:12:00 기업명: 삼성전기(시가총액: 112조 1,152억) A009150 보고서명: 단일판매ㆍ공급계약체결 계약상대 : 글로벌 대형기업 계약내용 : ( 기타 판매ㆍ공급계약 ) MLCC(Multilayer Ceramic Capacitor) 및 Inductor 공급계약 공급지역 : - 계약금액 :…",
+    "url": "https://t.me/darthacking/153791",
+    "time_kst": "09-29 13:12"
+   },
+   {
+    "channels": 4,
+    "channel": "메리츠증권 리서치",
+    "head": "📮[메리츠증권 전기전자/IT부품 양승수] 삼성전기(009150): ABF 기판, 이제는 Capa의 싸움 ▶ 창사 이래 최대 규모의 Capex 사이클 진입 - 9월 28일 삼성전기는 세종사업장 4.3조원, 베트남 2.5조원 등 총 6.8조원 규모의 ABF 기판 신규 시설투자를 공시 - 다만 종속법인의 경우 공시 대상에 생산…",
+    "url": "https://t.me/meritz_research/44704",
+    "time_kst": "09-29 07:42"
+   },
+   {
+    "channels": 3,
+    "channel": "키움증권 해외선물 톡톡",
+    "head": "제목 : 젠슨 황 “역사상 최대 AI 인프라 구축 시작…韓과 ‘지능공장’ 짓는다” *이데일리FX* - 코리아소사이어티 밴플리트상 수상 후 소감 밝혀 - “한국, 기술 수용국서 기술 최전선 국가로 변모” - “AI, 모든 산업 변화…책임감·안전 갖춰야” - 이재용 “삼성·엔비디아 모두 AI에 올인” - 삼성, 타임스스퀘어…",
+    "url": "https://t.me/kwtok/418671",
+    "time_kst": "09-29 11:02"
+   },
+   {
+    "channels": 3,
+    "channel": "키움증권 전략/시황 한지영",
+    "head": "[9/29, 장 시작 전 생각: 반복적인 노출, 키움 한지영] - 다우 -0.7%, S&P500 -0.8%, 나스닥 -0.9% - 엔비디아 +1.7%, 메타 -4.8%, 마이크론 -2.6% - 미 10년물 금리 5.24%, 30년물 금리 5.55%, WTI 93.2달러 1. 미국 증시는 약세를 보였네요. ﻿엔비디아(+1.…",
+    "url": "https://t.me/hedgecat0301/2950",
+    "time_kst": "09-29 07:38"
+   },
+   {
+    "channels": 3,
+    "channel": "🗽엄브렐라(Umbrella Research) 리서치+ 네프콘 옆집부자형 since 2020",
+    "head": "JP모건, 마이크론( $MU), 투자의견 '비중확대(Overweight)' , 목표주가 1,540달러 “마이크론은 수요일(9월 30일) 8월 분기(2026 회계연도 4분기) 실적을 발표할 예정이며, DRAM과 NAND 전반에 걸쳐 구조적인 공급 부족이 지속되는 메모리 업황 속에서 다수의 '실적 상회 및 가이던스 상향(be…",
+    "url": "https://t.me/umbrellaresearch/42452",
+    "time_kst": "09-29 07:53"
+   },
+   {
+    "channels": 3,
+    "channel": "가치투자클럽",
+    "head": "[현대차증권 반도체 소부장/로보틱스 윤동욱] 피에스케이 BUY/TP 220,000원(유지/유지) 생각보다 더 좋다 ■ 투자포인트 및 결론 - 피에스케이에 대해 목표주가 220,000원과 BUY 의견 유지 - 1) 고객사로 확보한 주요 글로벌 반도체 제조사들의 CapEx 계획이 계속해서 상향되고 있으며, 2) 주력 장비인…",
+    "url": "https://t.me/corevalue/47181",
+    "time_kst": "09-29 08:18"
+   },
+   {
+    "channels": 3,
+    "channel": "다올투자증권 리서치센터",
+    "head": "[다올투자증권 조선/기계/방산 최광식] 9/29(화) 데일리뉴스 🛳 조선 [TradeWinds] Zodiac Maritime breaks into LNG carrier business with $500m Hanwha order Not on my watch: Trump dumps on ‘obscure’ IMO’s net-z…",
+    "url": "https://t.me/daolresearch/15135",
+    "time_kst": "09-29 07:50"
+   },
+   {
+    "channels": 3,
+    "channel": "[삼성 이영진] 글로벌 AI/SW",
+    "head": "앤스로픽, Claude Sonnet 5.5 발표 : Claude 5.5 제품군의 두 번째 모델 Sonnet 5.5 출시 : Sonnet 5 대비 30% 이상 빠르며 코딩, 지식 업무, 컴퓨터 사용 성능을 대폭 개선. 복잡한 작업용 Opus 5.5와 대량·저비용 작업용 Haiku 5.5 사이를 담당하는 주력 범용 모델 :…",
+    "url": "https://t.me/Samsung_Global_AI_SW/4658",
+    "time_kst": "09-29 06:27"
+   },
+   {
+    "channels": 3,
+    "channel": "엄브렐라리서치 Jay의 주식투자교실",
+    "head": "메모리 Fab 증설의 수혜는 반도체 인프라·테스트 밸류체인으로 (LS) 1. Fab 증설 • 삼성전자·SK하이닉스·Micron이 동시에 증설에 나서는 점, 즉 동시성이 이번 사이클의 특징 2. 수혜 ① 인프라 밸류체인 • Fab은 WFE만으로 가동할 수 없고 전력·용수·가스·Chemical·배관·Scrubber·Chill…",
+    "url": "https://t.me/Jstockclass/15151",
+    "time_kst": "09-29 08:23"
+   },
+   {
+    "channels": 3,
+    "channel": "엄브렐라리서치 Jay의 주식투자교실",
+    "head": "[한투증권 중견중소팀] AI 데이터센터 In-depth: 걸어서 데이터센터 속으로 보고서 링크: https://vo.la/Q6xMo8S 텔레그램 링크: http://t.me/kis_midsmall ● 가팔라지는 데이터센터 증설 속도 AI 패러다임 진화에 따라 데이터센터 증설 속도가 가팔라지는 중. 하이퍼스케일러의 CAPE…",
+    "url": "https://t.me/Jstockclass/15150",
+    "time_kst": "09-29 08:14"
+   },
+   {
+    "channels": 3,
+    "channel": "[신한 리서치본부] IT(반도체/전기전자/디스플레이)",
+    "head": "[신한투자증권 IT부품/전기전자 오강호] 삼성전기 속보; 패키지 기판 4.3조원 증설 결정 ▶️ FC-BGA 생산시설 대규모 증설 본격화 - 4.27조원 투자, 2026년 9월~2028년 5월 패키지기판 생산시설 증설 - FC-BGA 중심 투자로 추정, AI 서버·가속기용 고부가 수요 대응 목적 ▶️ 2027~2030년…",
+    "url": "https://t.me/c/1355104422/7395",
+    "time_kst": "09-29 07:42"
+   },
+   {
+    "channels": 3,
+    "channel": "AWAKE - 실시간 주식 공시 정리채널",
+    "head": "2026.09.29 17:49:22 기업명: 한미사이언스(시가총액: 3조 5,632억) A008930 보고서명: 투자판단관련주요경영사항(자회사의 주요경영사항) 종속회사 : 한미약품 제목 : 벨바라페닙(HM95573) 기술이전 계약 해지 및 권리 반환 * 주요내용 - 한미약품은 2016년 9월 28일 제넨텍과 경구용 표적항…",
+    "url": "https://t.me/darthacking/153839",
+    "time_kst": "09-29 17:49"
+   },
+   {
+    "channels": 3,
+    "channel": "텐렙",
+    "head": "이란이 미국 제재 완화와의 교환으로 우라늄 농축 중단에 동의했다는 소식 ======================== ~ Iran has agreed to halt uranium enrichment in exchange for an easing of the US sanctions, according to Al Hadath…",
+    "url": "https://t.me/Ten_level/92450",
+    "time_kst": "09-29 06:31"
+   },
+   {
+    "channels": 3,
+    "channel": "미국 주식 인사이더 🇺🇸 (US Stocks Insider)",
+    "head": "⚡️⚡️⚡️⚡️⚡️⚡️ 로이터가 확인한 기업공개(IPO) 투자설명서에 따르면 앤트로픽의 2025회계연도 매출은 45억9,000만 달러로, 전년 3억8,600만 달러 대비 1,088% 증가. 사업 규모가 빠르게 확대되는 가운데 AI 컴퓨팅 관련 비용도 급증. • 2025회계연도 영업손실 80억6,000만 달러로, 전년 29…",
+    "url": "https://t.me/insidertracking/64898",
+    "time_kst": "09-29 08:24"
+   },
+   {
+    "channels": 3,
+    "channel": "하나 중국/신흥국 전략 김경환",
+    "head": ">>미 국채 금리 급등, 신흥시장 충격…채권 ETF 6개월 만에 최대 주간 자금 유출 •10년물 미 국채 금리가 다시 5.20%를 돌파하며 20년 만에 최고치를 기록한 가운데, 유가 변동성과 호르무즈 해협 정세 불확실성이 겹치면서 신흥시장 채권은 이달 약 2.1% 하락함. 이란 전쟁 이후 가장 부진한 월간 성과를 기록할…",
+    "url": "https://t.me/HANAchina/69574",
+    "time_kst": "09-29 07:39"
+   }
+  ]
+ },
+ "community_dc": {
+  "source": "DC인사이드",
+  "galleries": [
+   {
+    "id": "krstock",
+    "name": "국내주식갤러리",
+    "posts": 1242,
+    "capped": true,
+    "burst": 0.9,
+    "base_daily": 1322.6
+   },
+   {
+    "id": "stockus",
+    "name": "해외주식갤러리",
+    "posts": 2188,
+    "capped": true,
+    "burst": 0.7,
+    "base_daily": 2954.0
+   }
+  ],
+  "posts_sampled": 535,
+  "keywords": [
+   {
+    "term": "금리",
+    "count": 17,
+    "burst": 99.0,
+    "new": true
+   },
+   {
+    "term": "버리",
+    "count": 7,
+    "burst": 99.0,
+    "new": true
+   },
+   {
+    "term": "음전",
+    "count": 6,
+    "burst": 87.5,
+    "new": true
+   },
+   {
+    "term": "여자",
+    "count": 5,
+    "burst": 72.9,
+    "new": true
+   },
+   {
+    "term": "오름",
+    "count": 5,
+    "burst": 72.9,
+    "new": true
+   },
+   {
+    "term": "사라",
+    "count": 5,
+    "burst": 72.9,
+    "new": true
+   },
+   {
+    "term": "국채",
+    "count": 8,
+    "burst": 7.8,
+    "new": false
+   },
+   {
+    "term": "반도체",
+    "count": 7,
+    "burst": 7.9,
+    "new": false
+   },
+   {
+    "term": "이유",
+    "count": 15,
+    "burst": 4.5,
+    "new": false
+   },
+   {
+    "term": "내가",
+    "count": 11,
+    "burst": 5.2,
+    "new": false
+   },
+   {
+    "term": "요즘",
+    "count": 6,
+    "burst": 6.7,
+    "new": false
+   },
+   {
+    "term": "채권",
+    "count": 8,
+    "burst": 5.6,
+    "new": false
+   },
+   {
+    "term": "마이크론",
+    "count": 7,
+    "burst": 4.9,
+    "new": false
+   },
+   {
+    "term": "년물",
+    "count": 7,
+    "burst": 4.4,
+    "new": false
+   },
+   {
+    "term": "유가",
+    "count": 7,
+    "burst": 4.4,
+    "new": false
+   }
+  ],
+  "top_recommended": [
+   {
+    "gallery": "해외주식갤러리",
+    "title": "테슬라 판매량 3위 국가가 조선임 ㅋㅋㅋㅋㅋ",
+    "views": 9998,
+    "recommend": 159,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=17864659&exception_mode=recommend&page=1",
+    "time_kst": "09-29 08:58"
+   },
+   {
+    "gallery": "해외주식갤러리",
+    "title": "멜라니아 여사, 시진핑 악수 거절ㅋㅋㅋㅋㅋㅋㅋㅋㅋ",
+    "views": 9820,
+    "recommend": 80,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=17866120&exception_mode=recommend&page=1",
+    "time_kst": "09-29 13:57"
+   },
+   {
+    "gallery": "해외주식갤러리",
+    "title": "“창신, 100% 삼성 기술…기술 넘기자 쫓겨나” 유출범 후회",
+    "views": 6065,
+    "recommend": 73,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=17868610&exception_mode=recommend&page=1",
+    "time_kst": "09-29 21:03"
+   },
+   {
+    "gallery": "해외주식갤러리",
+    "title": "세계에서 가장 섹시한 CEO...jpg",
+    "views": 8890,
+    "recommend": 70,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=17867465&exception_mode=recommend&page=1",
+    "time_kst": "09-29 17:37"
+   },
+   {
+    "gallery": "해외주식갤러리",
+    "title": "퇴학 합니다",
+    "views": 6404,
+    "recommend": 55,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=17868297&exception_mode=recommend&page=1",
+    "time_kst": "09-29 20:04"
+   }
+  ],
+  "top_viewed": [
+   {
+    "gallery": "국내주식갤러리",
+    "title": "[새로운논리] 국채금리 상승이 곧 메모리 풀롱인 이유",
+    "views": 1028,
+    "recommend": 15,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3566513&page=4",
+    "time_kst": "09-30 01:10"
+   },
+   {
+    "gallery": "국내주식갤러리",
+    "title": "니들이 봐도 미장 이상하다 생각안듬?",
+    "views": 585,
+    "recommend": 2,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3566572&page=3",
+    "time_kst": "09-30 01:57"
+   },
+   {
+    "gallery": "국내주식갤러리",
+    "title": "어떤 유튜버가 중간선거 앞두고 삼성 22~25까지 떨어진다는데",
+    "views": 535,
+    "recommend": 0,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3566672&page=1",
+    "time_kst": "09-30 04:43"
+   },
+   {
+    "gallery": "국내주식갤러리",
+    "title": "아니 이딴거 필요없다고",
+    "views": 516,
+    "recommend": 0,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3566679&page=1",
+    "time_kst": "09-30 05:04"
+   },
+   {
+    "gallery": "국내주식갤러리",
+    "title": "ㅇㅎ)주식카페 숏충이녀 레깅스 인증",
+    "views": 488,
+    "recommend": 0,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3566664&page=1",
+    "time_kst": "09-30 04:21"
+   },
+   {
+    "gallery": "국내주식갤러리",
+    "title": "삼전 하닉 해외예상가",
+    "views": 467,
+    "recommend": 0,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3566666&page=1",
+    "time_kst": "09-30 04:26"
+   },
+   {
+    "gallery": "국내주식갤러리",
+    "title": "오일 더떨어지나?",
+    "views": 461,
+    "recommend": 0,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3566654&page=2",
+    "time_kst": "09-30 03:40"
+   },
+   {
+    "gallery": "국내주식갤러리",
+    "title": "벌써 -3.5 찍었네",
+    "views": 450,
+    "recommend": 0,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3566592&page=3",
+    "time_kst": "09-30 02:16"
+   }
+  ]
+ }
+}

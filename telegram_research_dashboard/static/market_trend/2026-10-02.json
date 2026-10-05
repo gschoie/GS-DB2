@@ -1,0 +1,699 @@
+{
+ "date": "2026-10-02",
+ "meta": {
+  "window": "10-01 06:00~10-02 06:00 KST",
+  "engine": "Gemini(gemini-2.5-flash)",
+  "generated_at": "2026-10-02T06:35+09:00"
+ },
+ "stats": {
+  "channels": 89,
+  "messages": 1724,
+  "groups": 1635
+ },
+ "one_liner": "마이크론 호실적에 AI/메모리 반도체 기대감이 커지는 가운데, K-뷰티와 전력기기 수출 호조가 돋보였으나, 금리·유가 상승 부담으로 시장 전반의 투심은 여전히 불안정했다.",
+ "themes": [
+  {
+   "name": "AI/메모리 반도체 – 마이크론 호실적 및 장기 수요 기대",
+   "narrative": "마이크론의 호실적 발표와 AI 확산에 따른 HBM 및 일반 메모리 수요 증가 전망이 시장의 기대를 높이고 있다. 장기 계약(SCA) 체결과 클린룸 투자 증가 등 공급 제약 속에서도 AI 데이터센터 관련 투자가 활발히 이루어지고 있다.",
+   "status": "ongoing",
+   "strength": 5,
+   "keywords": [
+    "AI",
+    "HBM",
+    "데이터센터",
+    "마이크론 테크놀로지",
+    "SCA",
+    "출하량",
+    "클린룸",
+    "계열사",
+    "호실적",
+    "고객들"
+   ],
+   "evidence": [
+    {
+     "channel": "재야의 고수들",
+     "quote": "[DS증권 반도체 이수림] Micron FY4Q26 실적발표 <Key Takeaways> - FY4Q26 매출/EPS 컨센 상회, FY1Q27 매출/EPS 가이던스도 컨센 큰 폭 상회. 다만 FY1Q27 GPM은 컨센 소폭 하회 - 2027~28년 공급부족 전망 - 2027년 생산량 75%+ 선계약 - 2027 HBM 가…"
+    },
+    {
+     "channel": "서화백의 AI놀이🚀",
+     "quote": "💡 요약 마이크론과 GOOGL 같은 주요 기술 기업의 기록적인 호실적과 AI, HBM, 데이터센터 관련 긍정적 전망이 시장의 기대를 높였으나, 미국 장기 금리 및 국제 유가 상승에 대한 부담이 지속되며 전체 시장은 혼조세를 보이며 관망하는 분위기입니다."
+    },
+    {
+     "channel": "텐렙",
+     "quote": "에코프로의 친환경 솔루션 계열사 에코프로에이치엔이 글로벌 메모리 반도체 기업 마이크론을 신규 고객사로 확보하며 올해 누적 수주 규모를 2500억원까지 끌어올렸다."
+    }
+   ]
+  },
+  {
+   "name": "K-뷰티 – 미국·유럽 시장 다변화 및 인디브랜드 성장",
+   "narrative": "K-뷰티가 중국 중심에서 벗어나 미국과 유럽으로 수출 시장을 다변화하며 글로벌 2위 화장품 수출국으로 성장하고 있다. 특히 인디브랜드들이 성장을 주도하고 있다는 분석이다.",
+   "status": "new",
+   "strength": 3,
+   "keywords": [
+    "화장품",
+    "K-Beauty",
+    "메리츠"
+   ],
+   "evidence": [
+    {
+     "channel": "메리츠증권 리서치",
+     "quote": "📮[메리츠 화장품/생활소비재 박신애] 화장품(신규, Overweight) '모든 길은 K-뷰티로 통한다' ▶ K-Beauty는 어디까지 왔는가 - 작은 내수시장에도 불구하고 글로벌 2위 화장품 수출국으로 성장. 중국 중심에서 미국·유럽으로 수출 시장 다변화 - 성장의 중심에는 인디브랜드가 있으며, 상위 29개 브랜드의 합…"
+    }
+   ]
+  },
+  {
+   "name": "전력기기 및 인프라 수출 호조",
+   "narrative": "9월 한국의 전력기기와 전선 수출이 미국을 중심으로 월별 최대 실적을 기록하며 초고압 변압기 및 전선 산업의 강세를 보여주고 있다. 이는 AI 데이터센터 건설 등 미국 전력 인프라 투자 확대에 기인한 것으로 보인다.",
+   "status": "ongoing",
+   "strength": 4,
+   "keywords": [
+    "전력기기",
+    "전선",
+    "초고압 변압기",
+    "미국",
+    "LS그룹",
+    "AI 데이터센터"
+   ],
+   "evidence": [
+    {
+     "channel": "NH투자증권 리서치",
+     "quote": "[NH/이민재] 전력기기전력기기 [Web발신] [NH/이민재] 전력기기 전력기기 - 2026년 9월 전력기기와 전선 수출입통계 잠정치 본문보기: https://m.nhsec.com/c/0ovpp ■ 9월, 초고압 변압기, 전선 모두 미국 중심 월별 최대 수출 실적 기록"
+    },
+    {
+     "channel": "[신한 리서치본부] 조선/방산/기계",
+     "quote": "· LS그룹 계열사, 미국 전력 인프라 총공세…AI 데이터센터 수주 20조원 육박"
+    }
+   ]
+  },
+  {
+   "name": "시장 투심 – 금리·유가 상승 부담 속 기술적 하락 신호",
+   "narrative": "마이크론의 호실적에도 불구하고 미국 장기 금리 및 국제 유가 상승에 대한 부담이 지속되며 시장 전반의 투심은 혼조세를 보이고 있다. 여러 종목 분석에서 하락세 지속, 매도 신호 우세, 신중한 접근 필요 등 부정적인 기술적 분석 결과가 나타나고 있다.",
+   "status": "ongoing",
+   "strength": 4,
+   "keywords": [
+    "손절매 고려해야",
+    "비율 나타나지",
+    "줄어들고",
+    "적용하기 적합하지",
+    "저항선 설정되어",
+    "금리",
+    "유가",
+    "불안한 투심",
+    "하락세",
+    "매도 신호"
+   ],
+   "evidence": [
+    {
+     "channel": "서화백의 AI놀이🚀",
+     "quote": "💡 요약 마이크론과 GOOGL 같은 주요 기술 기업의 기록적인 호실적과 AI, HBM, 데이터센터 관련 긍정적 전망이 시장의 기대를 높였으나, 미국 장기 금리 및 국제 유가 상승에 대한 부담이 지속되며 전체 시장은 혼조세를 보이며 관망하는 분위기입니다."
+    },
+    {
+     "channel": "키움증권 해외선물 톡톡",
+     "quote": "<b>종목 분석 결과</b> 현재 주식은 하락세를 보이고 있으며, 매도 신호가 우세한 상황입니다. 반등 가능성은 있으나, 신중한 접근이 필요합니다."
+    },
+    {
+     "channel": "우주방산AI로봇 아카이브",
+     "quote": "ㄴ국장 마감 직후부터 나스닥 선물이 급락 중입니다. 동시에 미국채 10년물 금리가 5.360(0.92%) 급등합니다. 유가도 브렌트유와 WTI가 약 2% 가량 상승하고 있습니다."
+    }
+   ]
+  },
+  {
+   "name": "우주 산업 – 상업용 우주정거장 로봇 자동화 추진",
+   "narrative": "레드와이어(RDW)가 혼다의 로봇 손과 자사의 로봇팔을 결합한 우주 로보틱스 시스템을 검토하며 상업용 우주정거장에서의 실험 처리, 화물 관리, 검사 및 연구 작업 자동화를 목표로 하고 있다. 이는 우주 산업의 상업적 활용 가능성을 높이는 움직임으로 해석된다.",
+   "status": "new",
+   "strength": 2,
+   "keywords": [
+    "상업용",
+    "상업",
+    "로봇"
+   ],
+   "evidence": [
+    {
+     "channel": "미국 주식 인사이더 🇺🇸 (US Stocks Insider)",
+     "quote": "• 레드와이어 (RDW) — 혼다의 다지형 로봇 손과 자사의 STAARK 로봇팔을 결합한 우주 로보틱스 시스템을 검토. 향후 상업용 우주정거장에서 실험 처리, 화물·재고 관리, 검사 및 연구실 작업 자동화를 목표로 함."
+    }
+   ]
+  },
+  {
+   "name": "증권사 리서치 – AI 활용 및 보고서 동향",
+   "narrative": "하나증권, 다올투자증권 등 주요 증권사들이 리서치 및 트레이딩 분야에서 AI 활용을 확대하고 있으며, 특정 종목에 대한 애널리스트 뷰 변경 및 보고서 발행이 활발하다.",
+   "status": "ongoing",
+   "strength": 2,
+   "keywords": [
+    "Rated 하나증권",
+    "다올",
+    "AI 분석한",
+    "작성된",
+    "콘텐츠 AI"
+   ],
+   "evidence": [
+    {
+     "channel": "서화백의 AI놀이🚀",
+     "quote": "하나증권은 브이티에 대해 'Not Rated' 의견을 제시했으나, 보고서 내용은 긍정적인 확신을 보여줍니다."
+    },
+    {
+     "channel": "다올투자증권 리서치센터",
+     "quote": "📝 ✅ 다올투자증권, ‘MCP 트레이딩’ 정식 오픈⋯챗GPT·클로드에 계좌 ..."
+    },
+    {
+     "channel": "키움증권 해외선물 톡톡",
+     "quote": "<b>종목 분석 결과</b> 현재 주가는 지지선과 저항선 사이에 위치하고 있으며, 기술적 지표들이 혼합된 신호를 보이고 있습니다. 단기적으로는 하락세가 지속될 가능성이 있으나, 거래량이 증가하고 있어 매수세가 강해질 수 있는 여지가 있습니다."
+    }
+   ]
+  }
+ ],
+ "community_mood": {
+  "score": -30,
+  "summary": "개인 투자자들은 해외 주식 시장의 불안정성과 환차손에 대한 우려를 표하며 전반적으로 불안감을 느끼고 있다. 그러나 반도체 섹터에 대한 강한 기대감과 함께 일부는 공격적인 매매로 수익을 확정하려는 움직임도 보인다.",
+  "hot_stocks": [
+   {
+    "name": "속슬",
+    "score": 50,
+    "reason": "해외 주식 갤러리에서 자주 언급되며, 공격적인 투자 성향과 함께 반등에 대한 기대감이 나타남."
+   },
+   {
+    "name": "SK하이닉스",
+    "score": 60,
+    "reason": "반도체 호실적 기대감과 함께 목표 주가 190 확정 등 긍정적인 전망이 커뮤니티 내에서 공유됨."
+   },
+   {
+    "name": "삼성전자",
+    "score": 40,
+    "reason": "30만원 도달에 대한 기대감이 언급되었으나, 하이닉스에 비해 언급 강도는 다소 낮음."
+   },
+   {
+    "name": "한미반도체",
+    "score": 50,
+    "reason": "뒤늦게 가치를 깨닫고 매수하지 못한 것에 대한 아쉬움이 표출되며, 상승 여력에 대한 기대감이 반영됨."
+   }
+  ]
+ },
+ "signals": {
+  "spikes": [
+   {
+    "term": "Rated 하나증권",
+    "count": 31,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "손절매 고려해야",
+    "count": 26,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "비율 나타나지",
+    "count": 21,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "상업용",
+    "count": 18,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "SCA",
+    "count": 17,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "상업",
+    "count": 17,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "출하량",
+    "count": 17,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "고객들",
+    "count": 16,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "개정",
+    "count": 16,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "의결권",
+    "count": 16,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "줄어들고",
+    "count": 16,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "적용하기 적합하지",
+    "count": 16,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "저항선 설정되어",
+    "count": 16,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "분석한",
+    "count": 132,
+    "burst": 3.9202740481159197,
+    "base_daily": 16.6,
+    "new": false
+   },
+   {
+    "term": "작성된",
+    "count": 131,
+    "burst": 3.924259634351377,
+    "base_daily": 16.4,
+    "new": false
+   },
+   {
+    "term": "AI 분석한",
+    "count": 131,
+    "burst": 3.924259634351377,
+    "base_daily": 16.4,
+    "new": false
+   },
+   {
+    "term": "기반 작성된",
+    "count": 131,
+    "burst": 3.924259634351377,
+    "base_daily": 16.4,
+    "new": false
+   },
+   {
+    "term": "콘텐츠 AI",
+    "count": 131,
+    "burst": 3.924259634351377,
+    "base_daily": 16.4,
+    "new": false
+   },
+   {
+    "term": "클린룸",
+    "count": 15,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "리츠",
+    "count": 15,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "다올",
+    "count": 15,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "호실적",
+    "count": 15,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "계열사",
+    "count": 15,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "마이크론 테크놀로지",
+    "count": 15,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "계약 따라",
+    "count": 15,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   }
+  ],
+  "top_posts": [
+   {
+    "channels": 5,
+    "channel": "Particle News",
+    "head": ">>Muse를 경험한 후 Airbnb를 전량 매도함 (중국언론) •Airbnb를 대규모로 보유했던 한 베테랑 애널리스트가 Meta AI 애플리케이션 Muse를 단 10일간 사용해본 뒤 Airbnb를 전량 매도하기로 결정함. •그는 Muse가 자신의 선호를 이해할 뿐만 아니라 Airbnb를 우회해 직접 숙소를 예약할 수 있…",
+    "url": "https://t.me/ParticleNews/3840",
+    "time_kst": "10-01 13:38"
+   },
+   {
+    "channels": 4,
+    "channel": "재야의 고수들",
+    "head": "[DS증권 반도체 이수림] Micron FY4Q26 실적발표 <Key Takeaways> - FY4Q26 매출/EPS 컨센 상회, FY1Q27 매출/EPS 가이던스도 컨센 큰 폭 상회. 다만 FY1Q27 GPM은 컨센 소폭 하회 - 2027~28년 공급부족 전망 - 2027년 생산량 75%+ 선계약 - 2027 HBM 가…",
+    "url": "https://t.me/gaoshoukorea/64787",
+    "time_kst": "10-01 07:36"
+   },
+   {
+    "channels": 4,
+    "channel": "메리츠증권 리서치",
+    "head": "📮[메리츠 화장품/생활소비재 박신애] 화장품(신규, Overweight) '모든 길은 K-뷰티로 통한다' ▶ K-Beauty는 어디까지 왔는가 - 작은 내수시장에도 불구하고 글로벌 2위 화장품 수출국으로 성장. 중국 중심에서 미국·유럽으로 수출 시장 다변화 - 성장의 중심에는 인디브랜드가 있으며, 상위 29개 브랜드의 합…",
+    "url": "https://t.me/meritz_research/44715",
+    "time_kst": "10-01 08:10"
+   },
+   {
+    "channels": 4,
+    "channel": "한화투자증권 경제 임혜윤",
+    "head": "* 9월 한국 수출/입: 예상 상회 - 수출 1,209억달러(+83.5%) - 일평균 수출 56.3억달러(+105%) - 반도체 수출 603억달러(+263%) - 반도체 역대 최대 수출 재경신 - 수입 711억달러(+26.0%) - 무역수지 498억달러 흑자",
+    "url": "https://t.me/lim_econ/2087",
+    "time_kst": "10-01 09:07"
+   },
+   {
+    "channels": 3,
+    "channel": "NH투자증권 리서치",
+    "head": "[NH/이민재] 전력기기전력기기 [Web발신] [NH/이민재] 전력기기 전력기기 - 2026년 9월 전력기기와 전선 수출입통계 잠정치 본문보기: https://m.nhsec.com/c/0ovpp ■ 9월, 초고압 변압기, 전선 모두 미국 중심 월별 최대 수출 실적 기록 - 전체 변압기 (HS Code, 8504.2+850…",
+    "url": "https://t.me/c/1373336778/47849",
+    "time_kst": "10-01 14:25"
+   },
+   {
+    "channels": 3,
+    "channel": "다올투자증권 리서치센터",
+    "head": "[다올투자증권 조선/기계/방산 최광식] 10/1(목) 데일리뉴스 🛳 조선 [TradeWinds] Cosco Shipping Specialized doubles down with 14 more heavylift ships Shipowner John Su stacks container ship orders to feed re…",
+    "url": "https://t.me/daolresearch/15152",
+    "time_kst": "10-01 09:04"
+   },
+   {
+    "channels": 3,
+    "channel": "키움증권 전략/시황 한지영",
+    "head": "﻿ [10/1 월간 전략: 금리 상승 불안의 돌파구는 실적 , 키움 한지영, 최재원] (요약) 1. 전략: 금리 상승 불안의 돌파구는 실적 - 10월 주식시장은 대내외 메이저급 이벤트와 함께 미국 시장금리 상승 압력에 노출될 전망. 다만, 고금리 장기화는 이제 시장의 베이스 시나리오가 된 만큼 금리 레벨보다는 상승 속도가…",
+    "url": "https://t.me/hedgecat0301/2953",
+    "time_kst": "10-01 07:40"
+   },
+   {
+    "channels": 3,
+    "channel": "다올투자증권 리서치센터",
+    "head": "[건설/AI·인터넷 데이터센터 콜라보｜다올 건설·부동산 박영도 ☎️2184-2548/다올 인터넷·게임·레저 김혜영 ☎2184-2395] ★ 대세는 데이터센터 ★ NAVER (035420): TP 400,000원, BUY, Top-Pick - 빠르면 1Q27부터 자체 AI 데이터센터 매출 반영, '27년 엔터프라이즈 매출…",
+    "url": "https://t.me/daolresearch/15147",
+    "time_kst": "10-01 07:19"
+   },
+   {
+    "channels": 3,
+    "channel": "하나증권/에너지화학/윤재성",
+    "head": "*중국 정유사들이 당국의 추가 지침이 있을 때까지 홍콩과 마카오 이외 지역으로의 석유제품 수출을 중단하기로 했다고 알려져 **중국은 목요일부터 일주일간의 연휴에 들어갔지만, 아직 정유사들에게 홍콩과 마카오 이외 지역으로 석유제품을 수출할 수 있도록 하는 승인을 내리지 않은 상황 ***이와 관련해, 국영 석유기업 Petro…",
+    "url": "https://t.me/energy_youn/3268",
+    "time_kst": "10-01 16:14"
+   },
+   {
+    "channels": 3,
+    "channel": "Granit34의 투자스토리",
+    "head": "어제: 안녕하세오 A증권의 xxx입니다 오늘: 안녕하세요 A증권입니다 누군지는 비밀입니다 회사: 아니 이런~! 익명이라 누군지 모르겠는걸? 익명 작성을 허용하되 준법감시인의 사전 승인 등 내부 절차를 거치도록 하고, 승인 절차와 내용, 작성자 성명 등 관련 자료는 내부적으로 기록·관리하도록 한다. https://news.…",
+    "url": "https://t.me/Joorini34/9290",
+    "time_kst": "10-01 11:23"
+   },
+   {
+    "channels": 3,
+    "channel": "우주방산AI로봇 아카이브",
+    "head": "ㄴ국장 마감 직후부터 나스닥 선물이 급락 중입니다. 동시에 미국채 10년물 금리가 5.360(0.92%) 급등합니다. 유가도 브렌트유와 WTI가 약 2% 가량 상승하고 있습니다. 중동 쪽은 예멘 정규군이 후티 반군의 진지를 공격했다는 뉴스와 이란 혁수대가 테헤란 인근에서 테러단체 소속원 6명을 사살했다는 뉴스가 있습니다.…",
+    "url": "https://t.me/defence_24/6302",
+    "time_kst": "10-01 16:35"
+   },
+   {
+    "channels": 2,
+    "channel": "서화백의 AI놀이🚀",
+    "head": "📝 텔레그램 심층 분석 Report (07시 04분) 기준 🌡️ 센티먼트 관망 (+45) 💡 요약 마이크론과 GOOGL 같은 주요 기술 기업의 기록적인 호실적과 AI, HBM, 데이터센터 관련 긍정적 전망이 시장의 기대를 높였으나, 미국 장기 금리 및 국제 유가 상승에 대한 부담이 지속되며 전체 시장은 혼조세를 보이며 관…",
+    "url": "https://t.me/easobi_ai/21558",
+    "time_kst": "10-01 07:04"
+   },
+   {
+    "channels": 2,
+    "channel": "서화백의 AI놀이🚀",
+    "head": "📝 텔레그램 심층 분석 Report (11시 07분) 기준 🌡️ 센티먼트 긍정적 관망 (+50) 💡 요약 반도체, AI, 로봇, 원전 등 첨단 산업의 성장 기대감과 수출 호조로 시장 전반에 긍정적인 분위기가 형성되었으나, 일부 기업의 실적 둔화 및 지정학적 리스크도 상존합니다. 🗣️ Top 키워드: 반도체(46), AI(…",
+    "url": "https://t.me/easobi_ai/21591",
+    "time_kst": "10-01 11:08"
+   },
+   {
+    "channels": 2,
+    "channel": "[신한 리서치본부] IT(반도체/전기전자/디스플레이)",
+    "head": "[신한투자증권 IT팀 오강호, 김형태, 박현우, 송혜수, 김예성] 10/1(목) 🕗Daily IT 예습하기 ✅ 반도체/장비 ▶️ 마이크론 실적·전망 예상 상회…AI 데이터센터 매출 11배 폭증(종합) (뉴스1) https://alie.kr/7QP1ETy ▶️ 삼성전자 파운드리 적자, 2026년 42% 축소 전망설…HBM4…",
+    "url": "https://t.me/c/1355104422/7400",
+    "time_kst": "10-01 07:38"
+   },
+   {
+    "channels": 2,
+    "channel": "[ IT는 SK ]",
+    "head": "[SK증권 반도체 한동희, 손 건/해외주식 박제민] Micron FY4Q26 컨퍼런스콜 ▶️ 주요 코멘트 FY27·FY28 메모리 수급, FY26보다 더 타이트 전망: AI 수요 강화로 DRAM·NAND 모두 FY27~28 공급제약 지속 전망. 신규 Cleanroom 증설을 감안해도 수급 균형 시점에 대한 Line-of-…",
+    "url": "https://t.me/skitteam/4664",
+    "time_kst": "10-01 06:51"
+   }
+  ]
+ },
+ "community_dc": {
+  "source": "DC인사이드",
+  "galleries": [
+   {
+    "id": "krstock",
+    "name": "국내주식갤러리",
+    "posts": 1631,
+    "capped": true,
+    "burst": 1.3,
+    "base_daily": 1289.0
+   },
+   {
+    "id": "stockus",
+    "name": "해외주식갤러리",
+    "posts": 2690,
+    "capped": true,
+    "burst": 0.8,
+    "base_daily": 3267.4
+   }
+  ],
+  "posts_sampled": 542,
+  "keywords": [
+   {
+    "term": "존나",
+    "count": 8,
+    "burst": 99.0,
+    "new": true
+   },
+   {
+    "term": "속슬",
+    "count": 7,
+    "burst": 99.0,
+    "new": true
+   },
+   {
+    "term": "양닉",
+    "count": 7,
+    "burst": 99.0,
+    "new": true
+   },
+   {
+    "term": "아님",
+    "count": 6,
+    "burst": 85.1,
+    "new": true
+   },
+   {
+    "term": "연준",
+    "count": 6,
+    "burst": 85.1,
+    "new": true
+   },
+   {
+    "term": "양전",
+    "count": 5,
+    "burst": 70.9,
+    "new": true
+   },
+   {
+    "term": "대풀롱",
+    "count": 5,
+    "burst": 70.9,
+    "new": true
+   },
+   {
+    "term": "야선",
+    "count": 28,
+    "burst": 5.8,
+    "new": false
+   },
+   {
+    "term": "갑자기",
+    "count": 8,
+    "burst": 10.3,
+    "new": false
+   },
+   {
+    "term": "SK하이닉스",
+    "count": 16,
+    "burst": 6.9,
+    "new": false
+   },
+   {
+    "term": "마이크론",
+    "count": 8,
+    "burst": 7.6,
+    "new": false
+   },
+   {
+    "term": "차트",
+    "count": 5,
+    "burst": 6.4,
+    "new": false
+   },
+   {
+    "term": "국장",
+    "count": 6,
+    "burst": 5.7,
+    "new": false
+   },
+   {
+    "term": "반도체",
+    "count": 6,
+    "burst": 3.2,
+    "new": false
+   },
+   {
+    "term": "중간선거",
+    "count": 5,
+    "burst": 3.4,
+    "new": false
+   }
+  ],
+  "top_recommended": [
+   {
+    "gallery": "해외주식갤러리",
+    "title": "오를 이유가 왜 없노 많구만",
+    "views": 6664,
+    "recommend": 151,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=17880441&exception_mode=recommend&page=1",
+    "time_kst": "10-01 12:17"
+   },
+   {
+    "gallery": "해외주식갤러리",
+    "title": "아직도 환차손 때문에 마이너스면 개추 ㅋㅋ",
+    "views": 5450,
+    "recommend": 119,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=17881281&exception_mode=recommend&page=1",
+    "time_kst": "10-01 14:33"
+   },
+   {
+    "gallery": "해외주식갤러리",
+    "title": "실시간 방송 끝난 FX 쿠루미 1화 요약...jpg",
+    "views": 7539,
+    "recommend": 106,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=17884763&exception_mode=recommend&page=1",
+    "time_kst": "10-01 22:02"
+   },
+   {
+    "gallery": "해외주식갤러리",
+    "title": "속보) 국장 코스피 \" 세계 주요국 증시중에  최악\"",
+    "views": 6777,
+    "recommend": 68,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=17883246&exception_mode=recommend&page=1",
+    "time_kst": "10-01 17:46"
+   },
+   {
+    "gallery": "해외주식갤러리",
+    "title": "이야 아침부터 수익 확정하고 들어갑니다",
+    "views": 8356,
+    "recommend": 64,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=17879574&exception_mode=recommend&page=1",
+    "time_kst": "10-01 09:13"
+   }
+  ],
+  "top_viewed": [
+   {
+    "gallery": "국내주식갤러리",
+    "title": "오늘 삼전 30 되겟네 ㅎ",
+    "views": 431,
+    "recommend": 0,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3579416&page=2",
+    "time_kst": "10-02 05:01"
+   },
+   {
+    "gallery": "해외주식갤러리",
+    "title": "트럼프 이란 상황 ㄷㄷ....News",
+    "views": 375,
+    "recommend": 1,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=17887166&page=7",
+    "time_kst": "10-02 03:49"
+   },
+   {
+    "gallery": "국내주식갤러리",
+    "title": "자다 깨서 봤는데 나스닥 위치가 너무 불안하다",
+    "views": 354,
+    "recommend": 0,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3579322&page=4",
+    "time_kst": "10-02 03:17"
+   },
+   {
+    "gallery": "국내주식갤러리",
+    "title": "형들오늘머임",
+    "views": 353,
+    "recommend": 0,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3579414&page=2",
+    "time_kst": "10-02 04:58"
+   },
+   {
+    "gallery": "국내주식갤러리",
+    "title": "오늘 하닉 190은 확정같은데",
+    "views": 324,
+    "recommend": 0,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3579410&page=2",
+    "time_kst": "10-02 04:58"
+   },
+   {
+    "gallery": "국내주식갤러리",
+    "title": "금리동결ㄷㄷ",
+    "views": 316,
+    "recommend": 1,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3579422&page=2",
+    "time_kst": "10-02 05:14"
+   },
+   {
+    "gallery": "국내주식갤러리",
+    "title": "아 한미반도체가 그 뜻이였다니",
+    "views": 315,
+    "recommend": 0,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3579431&page=1",
+    "time_kst": "10-02 05:29"
+   },
+   {
+    "gallery": "해외주식갤러리",
+    "title": "씨발 나도 반도체 살걸 나만 계좌가 녹고있어",
+    "views": 313,
+    "recommend": 0,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=17887182&page=7",
+    "time_kst": "10-02 03:56"
+   }
+  ]
+ }
+}

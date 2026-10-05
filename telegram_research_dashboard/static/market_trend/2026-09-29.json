@@ -1,0 +1,692 @@
+{
+ "date": "2026-09-29",
+ "meta": {
+  "window": "09-28 06:00~09-29 06:00 KST",
+  "engine": "Gemini(gemini-2.5-flash)",
+  "generated_at": "2026-09-29T06:35+09:00"
+ },
+ "stats": {
+  "channels": 95,
+  "messages": 1323,
+  "groups": 1190
+ },
+ "one_liner": "AI 데이터센터 관련 하이엔드 부품 수요 급증과 디지털자산 시장 확장이 주목받는 가운데, 제약/바이오 섹터는 개별 모멘텀과 리스크가 공존하며 시장 밸류에이션 재평가와 보수적 투자 심리가 혼재된 하루.",
+ "themes": [
+  {
+   "name": "AI 데이터센터 및 하이엔드 부품 수요 급증",
+   "narrative": "AI 데이터센터 수요가 급증하면서 하이엔드 CCL 등 관련 부품 기업들의 구조적 성장이 기대되고 있다. 두산 전자BG의 기술 경쟁력과 서진시스템의 매수 의견 등이 언급되며 밸류에이션 리레이팅 가능성이 제기된다. AI의 소비재 침투도 가속화될 전망이다.",
+   "status": "new",
+   "strength": 5,
+   "keywords": [
+    "멀티플",
+    "서진시스템",
+    "엔비디아 AI",
+    "전방",
+    "침투",
+    "가전"
+   ],
+   "evidence": [
+    {
+     "channel": "하나증권 리서치",
+     "quote": "AI 데이터센터 수요로 인해 하이엔드 CCL이 구조적 성장 국면에 있다는 점과 두산 전자BG의 기술 경쟁력을 감안하면 글로벌 Peer 대비 저평가 구간에 있다고 판단."
+    },
+    {
+     "channel": "NH투자증권 리서치",
+     "quote": "현 구간은 단순한 멀티플 부담이 아닌, 펀더멘털의 구조적 레벨업을 바탕으로 추가적인 밸류에이션 리레이팅(Re-rating)을 준비하는 국면으로 판단"
+    },
+    {
+     "channel": "텐렙",
+     "quote": "▶️ 서진시스템(A178320) 매수/70,000원"
+    },
+    {
+     "channel": "[신한 리서치본부] IT(반도체/전기전자/디스플레이)",
+     "quote": "▶️ LG전자, 엔비디아 '냉각 파트너' 됐다…MW급 AI 데이터센터 수주전 탄력 (전자신문)"
+    }
+   ]
+  },
+  {
+   "name": "시장 밸류에이션 재평가와 보수적 투자 심리",
+   "narrative": "KOSPI 하단이 견고해졌다는 분석과 함께 저 PBR 자동차 OEM의 리레이팅 조건, 효성티앤씨의 밸류에이션 매력 등 긍정적인 밸류에이션 재평가 기대감이 존재한다. 그러나 반등장 속 레버리지·인버스 ETF 동반 환매가 나타나며 추가 상승에 대한 확신은 부족한 보수적 투자 심리도 관찰된다.",
+   "status": "new",
+   "strength": 4,
+   "keywords": [
+    "PBR",
+    "멀티플",
+    "비중확대",
+    "투자전략",
+    "회복세",
+    "인버스",
+    "월말"
+   ],
+   "evidence": [
+    {
+     "channel": "다올투자증권 리서치센터",
+     "quote": "- 저 PBR 자동차 OEM들의 리레이팅 조건은 이익 사이클 전환"
+    },
+    {
+     "channel": "대신 전략. 돌직구",
+     "quote": "모멘텀이 견고하고 개선 방향성이 명확하다면 등락은 비중확대 기회."
+    },
+    {
+     "channel": "메리츠증권 리서치",
+     "quote": "<반등장 속 레버리지·인버스 동반 환매>"
+    },
+    {
+     "channel": "서화백의 AI놀이🚀",
+     "quote": "반도체 주도로 코스피가 반등했으나, 투자자들은 레버리지/인버스 ETF 동반 환매를 통해 차익실현과 하방 헤지에 집중하고 있어 추가 상승에 대한 확신은 부족하다고 분석한다."
+    }
+   ]
+  },
+  {
+   "name": "디지털자산 시장의 성장과 인프라 구축",
+   "narrative": "'이스트포인트' 컨퍼런스에서 AI와 블록체인의 결합, 기관 자금의 디지털자산 유입 가능성이 논의되었다. 국내 증권사들도 가상자산거래소와의 협업 및 지분 투자를 확대하며 토큰증권, RWA 등 디지털자산 거래 플랫폼 구축을 목표로 시장 진입을 본격화하고 있다.",
+   "status": "new",
+   "strength": 3,
+   "keywords": [
+    "이스트포인트",
+    "디지털자산"
+   ],
+   "evidence": [
+    {
+     "channel": "한국경제",
+     "quote": "김서준 해시드 대표 \"AI가 경제활동...블록체인, 신뢰 인프라 될 것\"[이스트포인트 : 서울 2026]"
+    },
+    {
+     "channel": "[시그널랩] Signal Lab 리서치",
+     "quote": "ㆍ 국내 디지털자산 수요는 충분"
+    },
+    {
+     "channel": "NH투자증권 리서치",
+     "quote": "최근 주요 증권사들은 디지털X, 코인원 등 가상자산거래소와의 협업·지분투자를 확대하며 디지털자산 시장 진입 준비 본격화. 장기적으로 토큰증권·RWA 등 디지털자산까지 하나의 플랫폼에서 거래할 수 있는 환경 구축이 목표."
+    }
+   ]
+  },
+  {
+   "name": "제약/바이오 섹터, 개별 모멘텀과 리스크 공존",
+   "narrative": "제약/바이오 섹터는 비우호적인 대외 환경 속에서도 루닛의 스웨덴 유방암 검진사업 수주 소식과 같은 긍정적 모멘텀으로 급등세를 보였다. 반면 한올바이오파마는 CLE 개발 중단이라는 악재로 단기 투자심리 부담을 겪었으나, 핵심 적응증에 집중하는 전략으로 선회하며 미충족 수요가 높은 분야에 역량을 집중할 계획이다.",
+   "status": "new",
+   "strength": 4,
+   "keywords": [
+    "강한 부정",
+    "한올바이오파마",
+    "루닛",
+    "적응증"
+   ],
+   "evidence": [
+    {
+     "channel": "허혜민의 제약/바이오 소식통",
+     "quote": "★ [키움 허혜민] ★ 한올바이오파마, CLE 개발 중단, 시선은 다시 핵심 적응증으로"
+    },
+    {
+     "channel": "여의도스토리 Ver2.0-习近平是个狗东西",
+     "quote": "[특징주] 루닛, 스웨덴 스톡홀름주 유방암 검진사업 수주 소식에 급등"
+    },
+    {
+     "channel": "epic AI - 투자 어시스턴트",
+     "quote": "HLB의 간암 신약 리보세라닙·캄렐리주맙 병용 요법의 임상 지연은 부정적인 요인으로 작용하고 있습니다."
+    },
+    {
+     "channel": "허혜민의 제약/바이오 소식통",
+     "quote": "제약·바이오 섹터는 비우호적인 대외환경, 신뢰도 하락 등으로 데이터나 이벤트를 앞두고 긴장감과 악재 피로감이 지속되어왔기에 오히려 이제는 기대치가 낮았던 예상 이벤트 및 악재 발생은…"
+    }
+   ]
+  },
+  {
+   "name": "에너지 및 산업재, 글로벌 수주 확대와 무역 합의",
+   "narrative": "미중 정상회담에서 중국의 미국산 석탄 수입 합의가 이루어지며 벌크선 운임 상승 등 에너지 물동량 증가 기대감이 형성되었다. 또한 SNT에너지는 북미 및 중동 지역에서 수주 확대를 본격화하고, SNT모티브는 자기주식 소각을 발표하는 등 산업재 섹터 전반에 긍정적인 소식이 이어지고 있다.",
+   "status": "new",
+   "strength": 3,
+   "keywords": [
+    "석탄",
+    "SNT",
+    "대안"
+   ],
+   "evidence": [
+    {
+     "channel": "엄브렐라리서치 Jay의 주식투자교실",
+     "quote": "• 중국은 2027년과 2028년 각각 최소 1,000만 톤의 미국산 석탄을 수입하기로 함"
+    },
+    {
+     "channel": "NH투자증권 리서치",
+     "quote": "2. 벌크선, 대서양 곡물·석탄 수요가 상승 주도"
+    },
+    {
+     "channel": "이상헌 부장 iM 지주/ESG/중소형주",
+     "quote": "- SNT에너지(100840): 북미 및 중동 등에서 수주확대 본격화"
+    },
+    {
+     "channel": "하나증권 리서치",
+     "quote": "SNT모티브(064960.KS/매수): 자기주식 10% 소각"
+    }
+   ]
+  }
+ ],
+ "community_mood": {
+  "score": -20,
+  "summary": "개인 투자자들은 시장의 단기 변동성과 손실에 대한 불안감을 크게 느끼고 있으며, 일부에서는 새로운 투자 기회나 시스템에 대한 기대감도 보이지만 전반적으로는 조심스러운 분위기다.",
+  "hot_stocks": [
+   {
+    "name": "삼성",
+    "score": -30,
+    "reason": "주가 하락에 대한 우려와 개인 투자자들의 매수세에 대한 언급이 많다."
+   },
+   {
+    "name": "HLB 그룹주",
+    "score": 70,
+    "reason": "FDA로부터 항암 신약 판매 허가 소식에 상한가에 근접한 급등세를 보였다."
+   },
+   {
+    "name": "전력주",
+    "score": 50,
+    "reason": "국내 주식시장에서 주목할 만한 투자 대상으로 언급되고 있다."
+   },
+   {
+    "name": "미국 주식",
+    "score": 0,
+    "reason": "시장의 정신없는 움직임에 대한 불안감과 함께 상승 기대감이 혼재되어 있다."
+   }
+  ]
+ },
+ "signals": {
+  "spikes": [
+   {
+    "term": "멀티플",
+    "count": 20,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "이스트포인트",
+    "count": 20,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "PBR",
+    "count": 15,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "서진시스템",
+    "count": 14,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "디지털자산",
+    "count": 13,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "강한 부정",
+    "count": 13,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "대안",
+    "count": 12,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "가전",
+    "count": 12,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "월말",
+    "count": 12,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "비중확대",
+    "count": 12,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "엔비디아 AI",
+    "count": 12,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "백화점",
+    "count": 12,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "획득",
+    "count": 12,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "회복세",
+    "count": 12,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "LG 화학",
+    "count": 12,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "한올바이오파마",
+    "count": 12,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "SNT",
+    "count": 12,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "루닛",
+    "count": 12,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "석탄",
+    "count": 19,
+    "burst": 31.964705882352938,
+    "base_daily": 0.3,
+    "new": false
+   },
+   {
+    "term": "전방",
+    "count": 11,
+    "burst": 92.52941176470588,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "침투",
+    "count": 11,
+    "burst": 92.52941176470588,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "투자전략",
+    "count": 11,
+    "burst": 92.52941176470588,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "스타십",
+    "count": 11,
+    "burst": 92.52941176470588,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "적응증",
+    "count": 11,
+    "burst": 92.52941176470588,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "인버스",
+    "count": 11,
+    "burst": 92.52941176470588,
+    "base_daily": 0.0,
+    "new": true
+   }
+  ],
+  "top_posts": [
+   {
+    "channels": 5,
+    "channel": "허혜민의 제약/바이오 소식통",
+    "head": "★ [키움 허혜민] ★ 제약바이오 인싸이트 – 쇼킹하지 않은 악재, 서프라이즈한 호재 [키움 제약/바이오 / 허혜민] ◆ 애널리스트 코멘트 제약·바이오 섹터는 비우호적인 대외환경, 신뢰도 하락 등으로 데이터나 이벤트를 앞두고 긴장감과 악재 피로감이 지속되어왔기에 오히려 이제는 기대치가 낮았던 예상 이벤트 및 악재 발생은…",
+    "url": "https://t.me/huhpharm/11790",
+    "time_kst": "09-28 07:39"
+   },
+   {
+    "channels": 4,
+    "channel": "키움증권 전략/시황 한지영",
+    "head": "[9/28, Kiwoom Weekly, 키움 전략 한지영] \"금리 vs 실적, 두 변수의 경합 구간\" ------ <Weekly Three Points> a. 국내 휴장 기간(23~25일) 미국 증시는 매크로 불확실성과 AI 모멘텀이 공존하면서 중립 수준의 흐름을 시현((3거래일간 누적 등락률 다우 -0.1%, S&P50…",
+    "url": "https://t.me/hedgecat0301/2949",
+    "time_kst": "09-28 07:32"
+   },
+   {
+    "channels": 4,
+    "channel": "이상헌 부장 iM 지주/ESG/중소형주",
+    "head": "* (iM 이상헌) 한미 원전동맹 세계로 ★ K원전 미국 등 글로벌 시장 진출 확대로 수주 가속화 - AI 데이터센터와 첨단 제조시설 증가로 전력 수요가 급증하자 도널드 트럼프 미국 대통령은 2050년까지 원전 설비용량을 400GW로 늘리겠다는 목표를 세웠다. 이렇듯 미국 정부는 원전 확대 기조에 있다. 하지만 미국은 지…",
+    "url": "https://t.me/INSIGHTVALUELEE/10238",
+    "time_kst": "09-28 07:58"
+   },
+   {
+    "channels": 4,
+    "channel": "여의도스토리 Ver2.0-习近平是个狗东西",
+    "head": "[메리츠증권 리서치] 📮[메리츠증권 전기전자/IT부품 양승수] 샘씨엔에스(252990) : 다음 성장을 여는 3가지 열쇠 ▶ 3Q26 Preview: 반도체 순풍을 타고 이어지는 외형 성장 - 3Q26 별도 매출액과 영업이익은 각각 320억원(+53.5% YoY), 99억원(+82.4% YoY, OPM 31.0%)으로,…",
+    "url": "https://t.me/YeouidoStory2/117848",
+    "time_kst": "09-28 08:10"
+   },
+   {
+    "channels": 4,
+    "channel": "여의도스토리 Ver2.0-习近平是个狗东西",
+    "head": "[메리츠증권 리서치] 📮[메리츠증권 전기전자/IT부품 양승수] 한솔테크닉스(004710) : 진짜는 프로브카드에 있다 ▶ 한솔윌텍, 어마무시한 잠재력 - 한솔윌텍은 Vertical(수직형) 타입 기술을 확보한 국내 유일의 비메모리향 프로브카드 공급업체로, 삼성전자향 AP 및 CIS, 메모리 컨트롤러용 프로브카드를 주력으로…",
+    "url": "https://t.me/YeouidoStory2/117842",
+    "time_kst": "09-28 07:59"
+   },
+   {
+    "channels": 4,
+    "channel": "AWAKE - 실시간 주식 공시 정리채널",
+    "head": "2026.09.28 14:22:25 기업명: RF머트리얼즈(시가총액: 8,113억) A327260 보고서명: 단일판매ㆍ공급계약체결 계약상대 : Metallife-USA 계약내용 : Lumentum향 pump laser package 공급계약의 건 공급지역 : 미국 계약금액 : 132억 계약시작 : 2026-09-24 계약…",
+    "url": "https://t.me/darthacking/153717",
+    "time_kst": "09-28 14:22"
+   },
+   {
+    "channels": 4,
+    "channel": "메리츠증권 리서치",
+    "head": "📮 [메리츠증권 채권분석 윤여삼] The Bond Weekly: 채권 혹한기, 고금리 장기화 대비 2026.9.28(월) - 글로벌 채권시장 자정능력 상실, 유가와 주가 눈치보기 지속 - 한국 수출증가율 피크아웃 이후 금리상승세 진정되길 바라는 상황 (자료) https://tinyurl.com/53xshhu5 *동 자료는…",
+    "url": "https://t.me/meritz_research/44690",
+    "time_kst": "09-28 07:46"
+   },
+   {
+    "channels": 4,
+    "channel": "미국 주식 인사이더 🇺🇸 (US Stocks Insider)",
+    "head": "⚡️⚡️⚡️⚡️⚡️⚡️⚡️⚡️⚡️⚡️⚡️⚡️ 받) 트럼프 대통령이 내일 미 동부시간 오후 2시 백악관 집무실에서 대국민 연설에 나설 예정. 한국시간 기준 9월 29일(화) 오전 3시.",
+    "url": "https://t.me/insidertracking/64805",
+    "time_kst": "09-28 11:27"
+   },
+   {
+    "channels": 3,
+    "channel": "다올투자증권 리서치센터",
+    "head": "[다올투자증권 조선/기계/방산 최광식] 9/28(월) 데일리뉴스 🛳 조선 [TradeWinds] Heung-A puts $136.5m guarantee behind tanker newbuilding trio MTM looking at healthy profit as Seven Islands snaps up product…",
+    "url": "https://t.me/daolresearch/15130",
+    "time_kst": "09-28 08:51"
+   },
+   {
+    "channels": 3,
+    "channel": "iM전략 김준영",
+    "head": "[iM증권 김준영] [주식전략] ★ 성장이 올린 금리, 뮤즈가 올린 기판 ▶️ 채권 금리 상승은 인플레보단 성장 - 미 10년물 주간 약 16bp 상승해 5.17%로 장중 07년 이후 최고. 2년물 4.81%, 30년물 장중 5.53%로 04년 이후 최고. - 상승 요인은 9월 종합 PMI 속보치 58.4pt(예상 56.…",
+    "url": "https://t.me/crazyecon/1737",
+    "time_kst": "09-28 07:46"
+   },
+   {
+    "channels": 3,
+    "channel": "하나증권 리서치",
+    "head": "[하나증권 IT 김민경] 두산 (000150.KS/매수): 전방 수요 지속 상향조정 중 자료: https://cutt.ly/MybPGjSX ■ 3Q26 Preview: CCL 전방 수요 지속 상향 조정 중 26년 3분기 전자BG는 매출액 7,659억원(YoY +74%, QoQ +13%), 영업이익 2,243억원(YoY +…",
+    "url": "https://t.me/HanaResearch/20516",
+    "time_kst": "09-28 08:41"
+   },
+   {
+    "channels": 3,
+    "channel": "🗽엄브렐라(Umbrella Research) 리서치+ 네프콘 옆집부자형 since 2020",
+    "head": "[리딩투자증권 한제윤] ■ SGC에너지(005090) - 중장기 전략까지 갖춰진 신사업, AI데이터센터 투자포인트 1. 60MW AI 데이터센터, 새로운 성장 동력: 군산 AI 데이터센터 1차 사업은 당초 40MW에서 고객 요청으로 60MW까지 확대됐으며, 2026년 착공하여 1Q28 상업운영을 목표로 한다. 사업의 구조…",
+    "url": "https://t.me/umbrellaresearch/42436",
+    "time_kst": "09-28 08:17"
+   },
+   {
+    "channels": 3,
+    "channel": "NH투자증권 리서치",
+    "head": "[Web발신] [NH/백준기] 스몰캡 - 지엔씨에너지 [NH/스몰캡(목진원)] [지엔씨에너지] ★내년에는 더 가속화될 수주 랠리 ■국내 AIDC GW급 확장 사이클 진입 및 '+α' 공급 모멘텀 부각 국내 AIDC 시장이 2028년 이후 GW급 확장 국면에 진입함에 따라, 필수 인프라인 대형 비상발전기 시장의 구조적 초과…",
+    "url": "https://t.me/c/1373336778/47789",
+    "time_kst": "09-28 08:20"
+   },
+   {
+    "channels": 3,
+    "channel": "다올투자증권 리서치센터",
+    "head": "[다올투자증권 자동차/이차전지 유지웅] ★ 자동차(Overweight) - The Last Global Challenger ▶ 글로벌 자동차, 다시 시작된 점유율 전쟁 - 저 PBR 자동차 OEM들의 리레이팅 조건은 이익 사이클 전환 - 새로운 강자의 등장 이후, 산업의 기준은 항상 높아졌다 - 글로벌 자동차 M/S, 1…",
+    "url": "https://t.me/daolresearch/15127",
+    "time_kst": "09-28 07:37"
+   },
+   {
+    "channels": 3,
+    "channel": "허혜민의 제약/바이오 소식통",
+    "head": "★ [키움 허혜민] ★ 한올바이오파마, CLE 개발 중단, 시선은 다시 핵심 적응증으로 [키움 제약/바이오 / 허혜민] ◆ 애널리스트 코멘트 - Fact: IMVT-1402, CLE 2상 1차 평가지표 미달 → CLE 개발 중단 - 향후 전략: CLE 제외, 핵심 적응증에 선택과 집중. - 주가 영향: 단기 투자심리 부담…",
+    "url": "https://t.me/huhpharm/11789",
+    "time_kst": "09-28 07:39"
+   }
+  ]
+ },
+ "community_dc": {
+  "source": "DC인사이드",
+  "galleries": [
+   {
+    "id": "krstock",
+    "name": "국내주식갤러리",
+    "posts": 1501,
+    "capped": true,
+    "burst": 1.1,
+    "base_daily": 1319.4
+   },
+   {
+    "id": "stockus",
+    "name": "해외주식갤러리",
+    "posts": 2270,
+    "capped": true,
+    "burst": 0.7,
+    "base_daily": 3201.1
+   }
+  ],
+  "posts_sampled": 533,
+  "keywords": [
+   {
+    "term": "야선",
+    "count": 34,
+    "burst": 99.0,
+    "new": true
+   },
+   {
+    "term": "중간선거",
+    "count": 10,
+    "burst": 99.0,
+    "new": true
+   },
+   {
+    "term": "합의",
+    "count": 9,
+    "burst": 99.0,
+    "new": true
+   },
+   {
+    "term": "타코",
+    "count": 8,
+    "burst": 99.0,
+    "new": true
+   },
+   {
+    "term": "jpg",
+    "count": 6,
+    "burst": 87.5,
+    "new": true
+   },
+   {
+    "term": "시발",
+    "count": 5,
+    "burst": 72.9,
+    "new": true
+   },
+   {
+    "term": "바로",
+    "count": 5,
+    "burst": 72.9,
+    "new": true
+   },
+   {
+    "term": "카더라",
+    "count": 5,
+    "burst": 72.9,
+    "new": true
+   },
+   {
+    "term": "구라",
+    "count": 5,
+    "burst": 72.9,
+    "new": true
+   },
+   {
+    "term": "이란",
+    "count": 27,
+    "burst": 7.2,
+    "new": false
+   },
+   {
+    "term": "트럼프",
+    "count": 22,
+    "burst": 5.1,
+    "new": false
+   },
+   {
+    "term": "미장",
+    "count": 13,
+    "burst": 5.7,
+    "new": false
+   },
+   {
+    "term": "내가",
+    "count": 6,
+    "burst": 2.5,
+    "new": false
+   },
+   {
+    "term": "이유",
+    "count": 7,
+    "burst": 1.9,
+    "new": false
+   }
+  ],
+  "top_recommended": [
+   {
+    "gallery": "해외주식갤러리",
+    "title": "8천 잃었다 이제 나도 한계다",
+    "views": 10803,
+    "recommend": 109,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=17858746&exception_mode=recommend&page=1",
+    "time_kst": "09-28 16:04"
+   },
+   {
+    "gallery": "해외주식갤러리",
+    "title": "국장 존야 역대급 타이밍이 어쩌고저쩌고",
+    "views": 11103,
+    "recommend": 107,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=17856327&exception_mode=recommend&page=1",
+    "time_kst": "09-28 09:42"
+   },
+   {
+    "gallery": "해외주식갤러리",
+    "title": "트럼프 “우리는 최고의… 그 뭐냐 빈곤을 가지고 있습니다.“",
+    "views": 9138,
+    "recommend": 92,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=17855832&exception_mode=recommend&page=1",
+    "time_kst": "09-28 08:12"
+   },
+   {
+    "gallery": "해외주식갤러리",
+    "title": "일론머스크도 인정한 ai 티어표",
+    "views": 10894,
+    "recommend": 81,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=17859203&exception_mode=recommend&page=1",
+    "time_kst": "09-28 17:21"
+   },
+   {
+    "gallery": "해외주식갤러리",
+    "title": "트럼프, \"혹시 중국군이 미국 무기 살 생각 없냐\" 질문",
+    "views": 8540,
+    "recommend": 78,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=17856278&exception_mode=recommend&page=1",
+    "time_kst": "09-28 09:35"
+   }
+  ],
+  "top_viewed": [
+   {
+    "gallery": "국내주식갤러리",
+    "title": "하 시발 삼전 오늘도 떨어지면 안됨",
+    "views": 429,
+    "recommend": 0,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3560325&page=1",
+    "time_kst": "09-29 05:13"
+   },
+   {
+    "gallery": "국내주식갤러리",
+    "title": "삼성 38만원이 개미들이 올린거였구나",
+    "views": 402,
+    "recommend": 1,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3560296&page=2",
+    "time_kst": "09-29 03:59"
+   },
+   {
+    "gallery": "국내주식갤러리",
+    "title": "지금 푼돈벌겟다는 욕심을 버려야함...",
+    "views": 397,
+    "recommend": 0,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3560263&page=3",
+    "time_kst": "09-29 02:52"
+   },
+   {
+    "gallery": "국내주식갤러리",
+    "title": "국장에서 담을 전력주는 딱 2개..",
+    "views": 388,
+    "recommend": 0,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3560285&page=2",
+    "time_kst": "09-29 03:25"
+   },
+   {
+    "gallery": "해외주식갤러리",
+    "title": "지금 미장 진짜 정신.나간거 같은디",
+    "views": 386,
+    "recommend": 0,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=17864246&page=1",
+    "time_kst": "09-29 05:52"
+   },
+   {
+    "gallery": "국내주식갤러리",
+    "title": "야선 이걸 말올중이네",
+    "views": 385,
+    "recommend": 0,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3560262&page=3",
+    "time_kst": "09-29 02:51"
+   },
+   {
+    "gallery": "국내주식갤러리",
+    "title": "3달동안 주식 자동으로 종목 잡아내는 시스템 드디어 완성함",
+    "views": 366,
+    "recommend": 2,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3560289&page=2",
+    "time_kst": "09-29 03:39"
+   },
+   {
+    "gallery": "국내주식갤러리",
+    "title": "쏘기직전 힘 잔뜩모은 미국주식 공개함...",
+    "views": 364,
+    "recommend": 0,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3560315&page=2",
+    "time_kst": "09-29 04:50"
+   }
+  ]
+ }
+}

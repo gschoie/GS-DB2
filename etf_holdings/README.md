@@ -34,13 +34,30 @@ fetch_holdings.py  →  detect_changes.py  →  build_report.py  →  telegram_n
 - "TIME 미국나스닥100 = TIMEFOLIO 미국나스닥100"(426030) 동일상품 → 1건으로 통합.
 - active=0 6종은 네이버 표기 확인 필요(테크핵심소재·미국빅테크·미국주식성장·차이나전기차·K이노베이션·Fn성장).
 
-## 실행 타이밍 — 기준일 워처 (watch.py)
-CU 구성종목 기준일이 **몇 시에 갱신되는지 고정돼 있지 않아**(KRX 장마감 기준 → 보통 저녁 예상),
-고정 시각 대신 **매시간(KST 09~21시) 가벼운 워처**로 대표 ETF 기준일만 확인(요청 1번)하고,
-`state.json`의 마지막 처리 기준일보다 **넘어갔을 때만** 전체 파이프라인을 1회 실행한다.
-- `python watch.py check` → `should_run` 판정(GITHUB_OUTPUT). `WATCH_FORCE=1`이면 강제.
-- `python watch.py commit` → 실행 성공 후 최신 스냅샷 기준일을 `state.json`에 저장.
-- 실제 갱신 시각은 Actions 런 기록으로 드러나므로, 파악되면 cron 창을 좁혀 idle 런을 줄이면 된다.
+## 실행 타이밍 — 2단 게이트 (2026-10-05 개편)
+
+운용사 바스켓이 **몇 시에 갱신되는지 고정돼 있지 않아** 매시간 돌면서 "새 것일 때만"
+처리한다. 원래는 CU 구성종목 **기준일**을 보고 판정했는데, 그 기준일을 긁던
+`finance.naver.com/item/coinfo.naver`가 9/11 Npay 증권 개편으로 죽어
+(신규 SPA 리다이렉트·'기준' 표기 소멸) 9/10 이후 계속 빈 값이었다. 신규 front-api 에도
+CU 기준일이 없다(`etf/analysis`·`etf/component/list` 응답 키 전수 확인). **그래서 기준일에
+기대지 않는 2단 게이트로 바꿨다.**
+
+1. **거래일 게이트** (`watch.py check`) — `m.stock.naver.com/api/index/KOSPI/basic`의
+   `localTradedAt`이 오늘이 아니면 휴장일로 보고 **아무것도 하지 않는다**(market_flow 와 동일 방식).
+   조회 실패는 fail-open(일단 실행). `WATCH_FORCE=1`이면 휴장일에도 실행 — 화면 수동 버튼용.
+2. **구성 지문 게이트** (`fetch_holdings.snapshot`) — 직전 스냅샷과 **계약수가 같으면
+   파일을 쓰지 않고** `changed=false`를 내놓아 이후 스텝(감지·리포트·텔레그램·커밋)을 전부 건너뛴다.
+   비중·NAV는 주가만 움직여도 매일 바뀌므로 지문에서 뺀다. 일부 ETF 수집 실패로 종목이
+   줄었을 때도 저장하지 않는다(가짜 '이탈' 방지).
+
+> **GAS 스케줄러를 강제 실행으로 보면 안 된다.** 8/29 정시성 이관 이후 GAS 가 매시 :17 에
+> `workflow_dispatch`로 쏘는데, 워크플로가 `event_name == 'workflow_dispatch'`만 보고
+> `WATCH_FORCE=1`을 걸어 **판정을 통째로 건너뛰고** 있었다(10/5 대체공휴일 09·10·11시 3회 실행).
+> 지금은 `inputs.via != 'scheduler'`일 때만 강제한다.
+
+**기준일 표기는 더 이상 없다.** 화면·텔레그램은 '구성 변화 감지 시각'을 적고, 바스켓이
+장 마감 뒤 갱신되므로 **여기 매매는 대개 직전 거래일의 것**이라고 명시한다.
 
 ## 배포 (GitHub Actions)
 `.github/workflows/etf-holdings.yml` — 매시간 KST 09~21시(월~금) 워처 + 수동(workflow_dispatch).

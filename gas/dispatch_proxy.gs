@@ -209,8 +209,8 @@ const SCHEDULE = [
   { wf: 'research',  hours: [8],      minute: 50, days: 'weekday', label: '커버리지 리서치요약 모음' },   // 채널 아침 목록(~08:40) 뒤
   // 주간정리 2종 — GitHub 토요일 크론이 매주 +4.5시간대로 밀려(실측 16:30~17:00 실행)
   // 텔레가 오후 5시에 오던 문제(9/19). 크론은 안전망으로 유지(워크플로 guard가 중복 차단).
-  { wf: 'defweekly', hours: [11],     minute: 50, days: 'sat',     label: '방산 주간정리' },
-  { wf: 'conweekly', hours: [12],     minute: 10, days: 'sat',     label: '건설기계 주간정리' },
+  { wf: 'defweekly', hours: [8],      minute: 0,  days: 'sat',     label: '방산 주간정리' },
+  { wf: 'conweekly', hours: [8],      minute: 20, days: 'sat',     label: '건설기계 주간정리' },
 ];
 
 /** 5분마다 도는 본체. 목표 시각을 지난 슬롯 중 오늘 아직 안 쏜 것을 발사한다. */

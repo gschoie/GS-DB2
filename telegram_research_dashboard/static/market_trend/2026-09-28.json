@@ -1,0 +1,703 @@
+{
+ "date": "2026-09-28",
+ "meta": {
+  "window": "09-27 06:00~09-28 06:00 KST",
+  "engine": "Gemini(gemini-2.5-flash)",
+  "generated_at": "2026-09-28T06:31+09:00"
+ },
+ "stats": {
+  "channels": 47,
+  "messages": 345,
+  "groups": 323
+ },
+ "one_liner": "미국 자동차 연비 규제 완화, 중동 정세에 따른 유가 및 해운 시장 변동성, 그리고 AI/반도체 섹터의 확장세가 시장의 주요 관심사로 부상하고 있다.",
+ "themes": [
+  {
+   "name": "미국 자동차 연비 규제 완화",
+   "narrative": "미국 교통부가 2031년까지 적용될 자동차 연비 기준을 대폭 완화하고, 트럼프 대통령이 바이든 행정부의 전기차 정책 종료를 언급하며 자동차 산업의 규제 비용 감소 및 에너지 정책 변화에 대한 기대감이 형성되고 있다.",
+   "status": "new",
+   "strength": 3,
+   "keywords": [
+    "연비",
+    "트럼프",
+    "전기차 관련 정책 종료",
+    "규제 완화"
+   ],
+   "evidence": [
+    {
+     "channel": "서화백의 AI놀이🚀",
+     "quote": "📝 미국 교통부가 2031년까지 적용되는 자동차 연비 기준을 대폭 완화하는 ..."
+    },
+    {
+     "channel": "미국 주식 인사이더 🇺🇸 (US Stocks Insider)",
+     "quote": "• 트럼프 대통령은 새로운 자동차 연비 기준을 승인하고 바이든 행정부의 전기차 관련 정책을 종료한다고 발표."
+    }
+   ]
+  },
+  {
+   "name": "미국 거시경제 지표 발표 임박",
+   "narrative": "이번 주 미국 8월 PCE 물가지수, 9월 비농업 고용보고서, 9월 제조업 ISM 등 주요 경제지표 발표가 예정되어 있어, 연준의 금리 인상 경로와 인플레이션 및 고용 시장의 건전성을 가늠할 중요한 시험대가 될 것으로 보인다.",
+   "status": "new",
+   "strength": 4,
+   "keywords": [
+    "물가지수",
+    "PCE 물가지수",
+    "근원 PCE",
+    "ISM",
+    "고용보고서",
+    "경제지표"
+   ],
+   "evidence": [
+    {
+     "channel": "서화백의 AI놀이🚀",
+     "quote": "• 미국 8월 PCE 물가지수는 헤드라인 및 근원 모두 7월과 동일하게 각각 +3.7%, +3.3%를 유지할 것으로 예상됩니다."
+    },
+    {
+     "channel": "하나 중국/신흥국 전략 김경환",
+     "quote": "•미국 경제지표: 9월 30일 미국 8월 PCE 물가지수가 발표, 10월 2일에는 9월 비농업 고용보고서가 발표. 시장은 이를 통해 연준의 10월 금리인상 경로를 확인할 전망."
+    }
+   ]
+  },
+  {
+   "name": "중동 정세, 유가 및 해운 시장 변동성",
+   "narrative": "미국-이란 간 호르무즈 해협 단계적 재개방 협상 보도로 유가가 급락하며 비용 절감 기대감이 확산되는 한편, 이란 사태 및 호르무즈 해협 봉쇄 여파로 희망봉 우회 항로가 늘고 파나마 운하 혼잡이 겹쳐 VLGC 운임이 급등하는 등 해운 시장에 복합적인 영향이 나타나고 있다.",
+   "status": "new",
+   "strength": 5,
+   "keywords": [
+    "호르무즈 협상",
+    "이란",
+    "유가 하락",
+    "비용 절감",
+    "운하",
+    "VLCC",
+    "조선"
+   ],
+   "evidence": [
+    {
+     "channel": "한투증권 미국/중국전략 정정영",
+     "quote": "트럼프 대통령: 이란 전쟁은 곧 끝날 것이고 유가는 하락할 것. 어젯밤 미국은 호르무즈 해협에서 기록적인 규모의 석유 통과시킴"
+    },
+    {
+     "channel": "김현석(자본주의 바이어스 있는 채널입니다)",
+     "quote": "-미·이란 호르무즈 해협 단계적 재개방 협상 보도(로이터)로 장 후반 낙폭 축소. 브렌트유 107달러 부근 마감."
+    },
+    {
+     "channel": "GS의 조선/기계/방산 「바담」",
+     "quote": "[호르무즈 봉쇄에 가스선 운임↑…한국 조선 수주 전망은 '맑음'] • 이란 사태 및 호르무즈 해협 봉쇄 여파로 희망봉 우회 항로가 늘며 VLGC 하루 운임이 18만9천711달러로 전주 대비 17% 급등함"
+    }
+   ]
+  },
+  {
+   "name": "소비자 지출 및 소매 기업 실적 전망",
+   "narrative": "나이키(NKE)와 카니발(CCL) 등 주요 소비재 기업들의 실적 발표를 앞두고 소비 심리와 지출 추이에 대한 관심이 높아지고 있다. 부정적인 거시경제 상황과 연료비 상승 우려 속에서도 일부 기업은 예상보다 견조한 예약 및 유가 하락에 따른 안도 랠리 가능성도 제기된다.",
+   "status": "new",
+   "strength": 3,
+   "keywords": [
+    "나이키",
+    "CCL",
+    "소비자 지출",
+    "기업 실적",
+    "소비 심리"
+   ],
+   "evidence": [
+    {
+     "channel": "서화백의 AI놀이🚀",
+     "quote": "• Nike(NKE): 나이키에 대한 기대치가 워낙 낮기 때문에, 실적이 예상보다 나쁘지 않다면 안도 랠리를 보일 가능성이 있습니다."
+    },
+    {
+     "channel": "서화백의 AI놀이🚀",
+     "quote": "CCL (카니발): 9월 29일 화요일 개장 전 FQ3 실적을 발표합니다. 연료비 상승과 소비 수요 위축에 대한 우려로 주가가 부진했지만, 예약은 예상보다 견조하고 유가도 최악의 수준에서 내려왔다는 전망이 있습니다."
+    }
+   ]
+  },
+  {
+   "name": "AI 및 반도체 섹터 확장세",
+   "narrative": "AI 투자 사이클이 GPU·HBM 중심에서 AI 에이전트, CPU, DRAM 등으로 확장되며 반도체 업황에 대한 긍정적 전망이 우세하다. 삼성전자와 SK하이닉스가 HBM 공급 본격화로 AI 거래의 시험대에 오르고 LG전자가 엔비디아의 AI 데이터센터 냉각 파트너로 선정되는 등 AI 관련 기대감이 고조되지만, 마이크론(MU)과 팩트셋(FDS)은 새로운 공급 증가 및 AI 도구에 의한 플랫폼 대체 위협 등 불확실성도 존재한다.",
+   "status": "ongoing",
+   "strength": 5,
+   "keywords": [
+    "AI",
+    "반도체",
+    "MU",
+    "HBM",
+    "메모리",
+    "삼성전자",
+    "SK하이닉스",
+    "LG전자",
+    "팩트셋",
+    "시험대"
+   ],
+   "evidence": [
+    {
+     "channel": "하나증권 리서치",
+     "quote": "반도체/소부장(Overweight): 견조한 업황과 예상을 상회하는 메모리 가격"
+    },
+    {
+     "channel": "엄브렐라리서치 Jay의 주식투자교실",
+     "quote": "AI 사이클, '집중'에서 '확장'으로 (MS) 1. 핵심 • AI 주도주 사이클이 중요한 전환점에 진입, 반도체·인프라 중심의 '집중형 인에이블러(enablers)' 트레이드에서 소프트웨어 인에이블러와 AI 어답터(adopters)까지 아우르는 바벨 구조로 확장되는 국면"
+    },
+    {
+     "channel": "TNBfolio",
+     "quote": "19. LG전자, 엔비디아 MW급 AI 데이터센터 냉각 파트너 선정"
+    }
+   ]
+  },
+  {
+   "name": "미중 무역 관계 개선 및 불확실성",
+   "narrative": "미국과 중국이 정상회담 이후 무역 휴전을 연장하고 약 300억 달러 규모의 비민감 품목에 우대 관세를 적용하기로 합의하는 등 관계 개선의 움직임을 보였으나, 중국 측의 석탄 구매 계획 미확인 등 불확실성도 상존한다. 한편, 중국 본토 증시는 국경절 연휴로 휴장한다.",
+   "status": "new",
+   "strength": 4,
+   "keywords": [
+    "비민감",
+    "미중 무역 휴전",
+    "관세 인하",
+    "시진핑",
+    "국경절"
+   ],
+   "evidence": [
+    {
+     "channel": "미국 주식 인사이더 🇺🇸 (US Stocks Insider)",
+     "quote": "• 미국과 중국은 정상회담 이후 무역 휴전을 연장하고 약 300억 달러 규모의 비민감 품목에 우대 관세를 적용하기로 합의."
+    },
+    {
+     "channel": "하나증권 리서치",
+     "quote": "> 주말까지 공개된 내용상 미중 무역 휴전의 2개월 연장 외에 중국산 비민감 품목의 관세 인하, 희토류 규제 완화, 중국측의 대규모 농산품 구매와 단기 시행, 대중국 기술 규제 변화와 대미국 투자 확대, AI 소통 채널 구축 이상의 성과 등에서 시장 예상을 크게 상회하는 결과가 나오기는 어려워 보임."
+    }
+   ]
+  }
+ ],
+ "community_mood": {
+  "score": -40,
+  "summary": "개미 투자자들은 시장의 불확실성에 대한 강한 공포와 불안감을 표출하고 있으며, 특히 자사주 매입 종료 후 폭락 가능성이나 숏 포지션에 대한 관심이 높다. 한편, 삼성전자와 AI 관련 종목에 대한 관심은 여전하며, 미중 관계나 양도세 관련 희소식에는 긍정적으로 반응하는 모습도 보인다.",
+  "hot_stocks": [
+   {
+    "name": "삼성전자",
+    "score": 20,
+    "reason": "높은 언급 빈도와 함께 '삼닉현 근황', '삼닉 아무일도 없었다 시전' 등 주가 흐름에 대한 의견이 분분하다."
+   },
+   {
+    "name": "AI",
+    "score": 30,
+    "reason": "높은 언급 빈도로 지속적인 관심과 기대감을 반영한다."
+   },
+   {
+    "name": "중국차",
+    "score": -50,
+    "reason": "'중국차 사지 말아야 하는 이유' 개념글에서 부정적인 인식이 강하게 나타난다."
+   },
+   {
+    "name": "숏포지션",
+    "score": -30,
+    "reason": "'숏포갤 인터뷰 레전드', '종배 숏쳤는데 설마 나 죽음?' 등 숏 포지션에 대한 관심과 불안감이 혼재되어 있다."
+   }
+  ]
+ },
+ "signals": {
+  "spikes": [
+   {
+    "term": "연비",
+    "count": 7,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "쿠바",
+    "count": 6,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "물가지수",
+    "count": 6,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "PCE 물가지수",
+    "count": 6,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "나이키",
+    "count": 6,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "MU",
+    "count": 6,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "비용 절감",
+    "count": 6,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "침해",
+    "count": 5,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "비민감",
+    "count": 5,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "팩트셋",
+    "count": 5,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "의해",
+    "count": 5,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "악시오스",
+    "count": 5,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "근원 PCE",
+    "count": 5,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "ISM",
+    "count": 5,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "최악",
+    "count": 5,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "국경절",
+    "count": 5,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "운하",
+    "count": 5,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "호르무즈 협상",
+    "count": 5,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "시사점",
+    "count": 5,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "CCL",
+    "count": 5,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "시험대",
+    "count": 5,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "그때",
+    "count": 5,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "전자 엔비디아",
+    "count": 5,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "덕분",
+    "count": 5,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "지속되",
+    "count": 5,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   }
+  ],
+  "top_posts": [
+   {
+    "channels": 3,
+    "channel": "GS의 조선/기계/방산 「바담」",
+    "head": "🛳 VLCC 250백만달러 리세일 협의설, 200k-CBM LNG 시대 ☞ http://bit.ly/DOS841 ⚓️ 주시 뉴스 💲 선가, 실적, 캐파 △ 탱커 중고선가 3주 연속 급등. LNG선 4주 연속 하락했지만 VLGC 2주 연속 상승 ▲ VLCC 250백만달러에 리세일 추진 풍문 🌏 그린쉽 ▽ 중국의 개조 암모니…",
+    "url": "https://t.me/c/1405984327/8169",
+    "time_kst": "09-27 15:59"
+   },
+   {
+    "channels": 3,
+    "channel": "한투증권 미국/중국전략 정정영",
+    "head": "트럼프 대통령: 이란 전쟁은 곧 끝날 것이고 유가는 하락할 것. 어젯밤 미국은 호르무즈 해협에서 기록적인 규모의 석유 통과시킴 美国总统特朗普：伊朗战争很快就会结束，届时油价将下跌。昨晚我们从霍尔木兹海峡抽取了创纪录数量的石油。 https://wallstreetcn.com/livenews/3171062?ivk=1#from=andro…",
+    "url": "https://t.me/G2strategy/33381",
+    "time_kst": "09-27 21:55"
+   },
+   {
+    "channels": 2,
+    "channel": "서화백의 AI놀이🚀",
+    "head": "📅 Catalyst Watch (week of Mon 9/28) - 주간 전략 프리뷰 🧭 한눈에 보는 주간 핵심 이번 주는 거시경제 지표와 기업 실적, 그리고 AI 관련 주요 이벤트가 집중되어 있습니다! 📈 8월 개인소비지출(PCE)과 9월 미국 고용 보고서 등 중요한 경제 지표 발표가 예정되어 있어 인플레이션과 고용 시…",
+    "url": "https://t.me/easobi_ai/21217",
+    "time_kst": "09-27 18:00"
+   },
+   {
+    "channels": 2,
+    "channel": "서화백의 AI놀이🚀",
+    "head": "📘 Weekly Recap (week ended Friday September 25, 2026) - 지난주 미국 시황 리뷰 🧭 한눈에 보는 주간 핵심 이번 주는 채권 수익률 급등과 브렌트유 가격 상승이라는 하락 요인과, 메타의 개인 AI 에이전트 '뮤즈'를 중심으로 한 AI 열풍이라는 상승 요인이 팽팽하게 맞섰습니다. 바…",
+    "url": "https://t.me/easobi_ai/21215",
+    "time_kst": "09-27 17:30"
+   },
+   {
+    "channels": 2,
+    "channel": "하나증권 리서치",
+    "head": "[하나증권 반도체 김록호/박규연] Industry Research 링크: https://vo.la/C0pvDJ4 반도체/소부장(Overweight): 견조한 업황과 예상을 상회하는 메모리 가격 ■ 데이터 포인트 및 주간 리뷰: 소부장 강한 반등 9월 20일까지 영업일 평균 메모리 반도체 수출금액은 전년동월대비 262% 증…",
+    "url": "https://t.me/HanaResearch/20509",
+    "time_kst": "09-27 19:49"
+   },
+   {
+    "channels": 2,
+    "channel": "서화백의 AI놀이🚀",
+    "head": "🔁 Catalyst Watch Delta (week of Mon 9/28 vs Mon 9/21) 🧭 변화 한눈에 이번 주에는 거시 경제 초점이 트럼프/시진핑 회담 및 유엔 총회와 같은 지정학적 이슈에서 미국 인플레이션(PCE) 및 고용(고용 보고서) 데이터로 이동했습니다. 개별 기업 이벤트에서는 메타 커넥트가 사라지고 O…",
+    "url": "https://t.me/easobi_ai/21216",
+    "time_kst": "09-27 17:40"
+   },
+   {
+    "channels": 2,
+    "channel": "서화백의 AI놀이🚀",
+    "head": "📝 텔레그램 심층 분석 Report (11시 07분) 기준 🌡️ 센티먼트 낙관 (+35) 💡 요약 AI, 반도체 등 핵심 산업의 지속적인 투자와 수요 증가로 시장에 대한 긍정적 기대가 우세하나, 중동 정세 및 환율 변동성 등 일부 불확실성이 존재합니다. 🗣️ Top 키워드: AI(204), 반도체(113), 서버(105)…",
+    "url": "https://t.me/easobi_ai/21212",
+    "time_kst": "09-27 11:07"
+   },
+   {
+    "channels": 2,
+    "channel": "서화백의 AI놀이🚀",
+    "head": "📝 텔레그램 심층 분석 Report (15시 05분) 기준 🌡️ 센티먼트 관심/낙관 (+60) 💡 요약 AI 및 반도체 섹터의 실적 개선과 기술 혁신 기대감이 시장을 주도하나, 금리 인상 우려와 지정학적 리스크가 잠재적 부담으로 작용하고 있습니다. 🗣️ Top 키워드: AI(301), 반도체(115), 알테오젠(94),…",
+    "url": "https://t.me/easobi_ai/21214",
+    "time_kst": "09-27 15:05"
+   },
+   {
+    "channels": 2,
+    "channel": "서화백의 AI놀이🚀",
+    "head": "📝 텔레그램 심층 분석 Report (19시 05분) 기준 🌡️ 센티먼트 환호 (+85) 💡 요약 AI, 반도체, 데이터센터 관련 대규모 투자 및 실적 기대감 고조, 주요 기업들의 파트너십 확장, 그리고 시장 유동성 개선 조치에 대한 긍정적 평가가 전반적인 시장 분위기를 주도하고 있습니다. 🗣️ Top 키워드: AI(20…",
+    "url": "https://t.me/easobi_ai/21222",
+    "time_kst": "09-27 19:05"
+   },
+   {
+    "channels": 2,
+    "channel": "서화백의 AI놀이🚀",
+    "head": "📝 텔레그램 심층 분석 Report (07시 05분) 기준 🌡️ 센티먼트 관망 (경계) (-15) 💡 요약 미중 일부 합의, 기술주 및 AI, 반도체 섹터의 긍정적 전망에도 불구하고, 이란-트럼프 지정학적 갈등, 주요 기업들의 대규모 배상 및 내부 문제, 전기차 정책 변화 등으로 인해 전반적인 시장은 관망하며 경계하는 심…",
+    "url": "https://t.me/easobi_ai/21209",
+    "time_kst": "09-27 07:05"
+   },
+   {
+    "channels": 2,
+    "channel": "하나증권 리서치",
+    "head": "하나증권 중국/신흥국전략 김경환(T.02-3771-7616) *텔레그램 채널 : https://t.me/HANAchina ◈[김경환의 China Weekly] 美中, 만남 자체가 성과인 시대는 무엇을 의미하나? ▶자료: https://bit.ly/4hyqSUH > 전략 관점에서 시진핑 방미 총평 : 금번 시진핑 방미 이벤…",
+    "url": "https://t.me/HanaResearch/20505",
+    "time_kst": "09-27 15:59"
+   },
+   {
+    "channels": 2,
+    "channel": "하나증권/에너지화학/윤재성",
+    "head": "[하나/에너지화학/윤재성] Weekly Monitor: 미국 태양광 가격 상승 중 ▶ 보고서: https://bit.ly/4xJMpQ7 [총평] ▶ WTI 92.4$(-8%), Dubai 113.3$ (-4%). 정제마진 32.1$(WoW +1.2$). 사우디 동서파이프라인 재가동, 얀부항 선적 재개로 유가 하락 ▶ 석유…",
+    "url": "https://t.me/energy_youn/3253",
+    "time_kst": "09-27 17:48"
+   },
+   {
+    "channels": 2,
+    "channel": "엄브렐라리서치 Jay의 주식투자교실",
+    "head": "AI 사이클, '집중'에서 '확장'으로 (MS) 1. 핵심 • AI 주도주 사이클이 중요한 전환점에 진입, 반도체·인프라 중심의 '집중형 인에이블러(enablers)' 트레이드에서 소프트웨어 인에이블러와 AI 어답터(adopters)까지 아우르는 바벨 구조로 확장되는 국면 • 과거 컴퓨팅 사이클과 동일하게 반도체 → 인프…",
+    "url": "https://t.me/Jstockclass/15130",
+    "time_kst": "09-27 17:45"
+   },
+   {
+    "channels": 2,
+    "channel": "서화백의 AI놀이🚀",
+    "head": "AI 관련 불확실성: 팩트셋(FDS)은 새로운 AI 도구에 의한 플랫폼 대체 위협에 직면해 있으며, 마이크론(MU)은 AI 수요가 폭발적이지만 새로운 공급 증가와 시스템 아키텍처 변화로 인한 메모리 사이클 정점 우려가 있습니다. 액센츄어(ACN) 역시 AI 도구의 부상이 장기적인 역풍으로 작용할 가능성에 대한 우려가 존재…",
+    "url": "https://t.me/easobi_ai/21218",
+    "time_kst": "09-27 18:00"
+   },
+   {
+    "channels": 2,
+    "channel": "GS의 조선/기계/방산 「바담」",
+    "head": "[호르무즈 봉쇄에 가스선 운임↑…한국 조선 수주 전망은 '맑음'] • 이란 사태 및 호르무즈 해협 봉쇄 여파로 희망봉 우회 항로가 늘며 VLGC 하루 운임이 18만9천711달러로 전주 대비 17% 급등함 • 파나마 운하 혼잡과 장거리 물동량 증가로 톤마일이 5.4% 늘어나며 글로벌 선사들의 VLGC 및 암모니아 겸용선 발…",
+    "url": "https://t.me/c/1405984327/8168",
+    "time_kst": "09-27 09:48"
+   }
+  ]
+ },
+ "community_dc": {
+  "source": "DC인사이드",
+  "galleries": [
+   {
+    "id": "krstock",
+    "name": "국내주식갤러리",
+    "posts": 1005,
+    "capped": true,
+    "burst": 0.8,
+    "base_daily": 1324.4
+   },
+   {
+    "id": "stockus",
+    "name": "해외주식갤러리",
+    "posts": 2100,
+    "capped": true,
+    "burst": 0.7,
+    "base_daily": 3169.9
+   }
+  ],
+  "posts_sampled": 550,
+  "keywords": [
+   {
+    "term": "댓글봇",
+    "count": 21,
+    "burst": 99.0,
+    "new": true
+   },
+   {
+    "term": "시진핑",
+    "count": 10,
+    "burst": 99.0,
+    "new": true
+   },
+   {
+    "term": "부처",
+    "count": 8,
+    "burst": 99.0,
+    "new": true
+   },
+   {
+    "term": "제일",
+    "count": 6,
+    "burst": 85.0,
+    "new": true
+   },
+   {
+    "term": "요즘",
+    "count": 6,
+    "burst": 85.0,
+    "new": true
+   },
+   {
+    "term": "드디어",
+    "count": 5,
+    "burst": 70.8,
+    "new": true
+   },
+   {
+    "term": "애들",
+    "count": 5,
+    "burst": 70.8,
+    "new": true
+   },
+   {
+    "term": "무조건",
+    "count": 5,
+    "burst": 70.8,
+    "new": true
+   },
+   {
+    "term": "삼성전자",
+    "count": 27,
+    "burst": 8.9,
+    "new": false
+   },
+   {
+    "term": "AI",
+    "count": 18,
+    "burst": 6.9,
+    "new": false
+   },
+   {
+    "term": "ai",
+    "count": 24,
+    "burst": 5.2,
+    "new": false
+   },
+   {
+    "term": "Ai",
+    "count": 8,
+    "burst": 8.7,
+    "new": false
+   },
+   {
+    "term": "삼닉",
+    "count": 6,
+    "burst": 6.5,
+    "new": false
+   },
+   {
+    "term": "사실",
+    "count": 6,
+    "burst": 6.5,
+    "new": false
+   },
+   {
+    "term": "씨발",
+    "count": 6,
+    "burst": 5.7,
+    "new": false
+   }
+  ],
+  "top_recommended": [
+   {
+    "gallery": "해외주식갤러리",
+    "title": "중국차 사지 말아야 하는 이유",
+    "views": 13794,
+    "recommend": 187,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=17850949&exception_mode=recommend&page=1",
+    "time_kst": "09-27 08:35"
+   },
+   {
+    "gallery": "해외주식갤러리",
+    "title": "숏포갤 인터뷰 레전드...jpg",
+    "views": 8956,
+    "recommend": 87,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=17852521&exception_mode=recommend&page=1",
+    "time_kst": "09-27 15:33"
+   },
+   {
+    "gallery": "해외주식갤러리",
+    "title": "휴전거부 이후에 오히려 상승이나오는 이유",
+    "views": 9769,
+    "recommend": 79,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=17853070&exception_mode=recommend&page=1",
+    "time_kst": "09-27 17:56"
+   },
+   {
+    "gallery": "국내주식갤러리",
+    "title": "자사주 매입 끝나면 폭락한다 롱숭이들아 벌벌 떨어라",
+    "views": 3014,
+    "recommend": 25,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3550396&exception_mode=recommend&page=1",
+    "time_kst": "09-27 19:44"
+   },
+   {
+    "gallery": "해외주식갤러리",
+    "title": "희소식)미붕이들 양도세 안 내도 됨 ㄷㄷㄷ",
+    "views": 1202,
+    "recommend": 20,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=17854836&exception_mode=recommend&page=1",
+    "time_kst": "09-28 01:05"
+   }
+  ],
+  "top_viewed": [
+   {
+    "gallery": "국내주식갤러리",
+    "title": "코스피랩 삼닉현 근황",
+    "views": 1056,
+    "recommend": 8,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3551071&page=1",
+    "time_kst": "09-28 02:53"
+   },
+   {
+    "gallery": "국내주식갤러리",
+    "title": "국장 시작전 트럼프 타코 ...jpg",
+    "views": 876,
+    "recommend": 4,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3551039&page=2",
+    "time_kst": "09-28 01:29"
+   },
+   {
+    "gallery": "국내주식갤러리",
+    "title": "아 씨발 좆됐네",
+    "views": 851,
+    "recommend": 0,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3551040&page=2",
+    "time_kst": "09-28 01:33"
+   },
+   {
+    "gallery": "국내주식갤러리",
+    "title": "딱봐도 내일 좆된거 같음",
+    "views": 809,
+    "recommend": 3,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3551014&page=3",
+    "time_kst": "09-28 00:57"
+   },
+   {
+    "gallery": "국내주식갤러리",
+    "title": "드디어 3개읠간의 긴 여정이 끝나는건가",
+    "views": 724,
+    "recommend": 2,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3551050&page=2",
+    "time_kst": "09-28 01:50"
+   },
+   {
+    "gallery": "국내주식갤러리",
+    "title": "삼닉 아무일도 없었다 시전 ㄷㄷ",
+    "views": 683,
+    "recommend": 2,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3551004&page=3",
+    "time_kst": "09-28 00:47"
+   },
+   {
+    "gallery": "국내주식갤러리",
+    "title": "종배 숏쳤는데 설마 나 죽음?",
+    "views": 666,
+    "recommend": 3,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3551058&page=2",
+    "time_kst": "09-28 02:11"
+   },
+   {
+    "gallery": "국내주식갤러리",
+    "title": "주식 해야하는 시기",
+    "views": 620,
+    "recommend": 0,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3551080&page=1",
+    "time_kst": "09-28 03:27"
+   }
+  ]
+ }
+}

@@ -631,11 +631,22 @@ setInterval(checkNewDeploy,15*60*1000);
    키(fx·peer)는 gas/dispatch_proxy.gs 의 WF 매핑과 1:1. 프록시가 그 키를 모르면
    (= GAS 재배포 전이면) 새로 못 돌린다고 알리고 저장본이라도 내려준다. */
 const FRESH={
- fx:{name:'환율',url:'https://github.com/gschoie/ecos-fx-rates/raw/main/output/BOK_exchange_rates.xlsx'},
- peer:{name:'피어그룹 주가',url:'https://github.com/gschoie/ecos-fx-rates/raw/main/output/'+encodeURIComponent('글로벌_주가_변동률_모니터링_최종.xlsx')}};
+ fx:{name:'환율',url:'https://raw.githubusercontent.com/gschoie/ecos-fx-rates/main/output/BOK_exchange_rates.xlsx',dated:'BOK_exchange_rates'},
+ peer:{name:'피어그룹 주가',url:'https://raw.githubusercontent.com/gschoie/ecos-fx-rates/main/output/'+encodeURIComponent('글로벌_주가_변동률_모니터링_최종.xlsx'),dated:'글로벌_주가_변동률_모니터링_최종'}};
 /* 새 탭(target=_blank)으로 열면 클릭 한참 뒤에 도는 코드라 크롬이 팝업으로 막는다.
-   같은 탭으로 내려받는다 — 엑셀은 첨부(attachment)라 화면은 그대로 남는다. */
-function xlDown(u){location.href=u+(u.includes('?')?'&':'?')+'t='+Date.now()}
+   같은 탭으로 내려받는다 — 엑셀은 첨부(attachment)라 화면은 그대로 남는다.
+   dated가 있으면 저장 이름 끝에 _YYMMDD(받는 날)를 붙인다. 다른 출처 파일은 <a download>로
+   이름을 못 바꾸니 raw.githubusercontent(CORS 허용)에서 받아 blob으로 저장, 실패하면 원래 이름으로. */
+const ymd6=(d=new Date())=>String(d.getFullYear()).slice(2)+String(d.getMonth()+1).padStart(2,'0')+String(d.getDate()).padStart(2,'0');
+async function xlDown(c){
+ const u=c.url+(c.url.includes('?')?'&':'?')+'t='+Date.now();
+ if(!c.dated){location.href=u;return}
+ try{
+  const r=await fetch(u,{cache:'no-store'});if(!r.ok)throw 0;
+  const a=document.createElement('a');a.href=URL.createObjectURL(await r.blob());
+  a.download=`${c.dated}_${ymd6()}.xlsx`;document.body.append(a);a.click();a.remove();
+  setTimeout(()=>URL.revokeObjectURL(a.href),60000);
+ }catch{location.href=u}}
 async function proxyPost(payload){const r=await fetch(DISPATCH_ENDPOINT,{method:'POST',body:JSON.stringify(payload)});return r.json()}
 async function freshDownload(key,btn){
  const c=FRESH[key];if(!c||btn.dataset.busy)return;
@@ -643,10 +654,10 @@ async function freshDownload(key,btn){
  btn.dataset.busy='1';btn.disabled=true;
  const since=Date.now()-90000;                 // 이 시각 이후에 생긴 실행만 "내 실행"으로 본다
  const reset=()=>{btn.textContent=label;btn.disabled=false;btn.onclick=()=>freshDownload(key,btn);delete btn.dataset.busy};
- const done=(msg,dl)=>{say(msg);if(dl)xlDown(c.url);
+ const done=(msg,dl)=>{say(msg);if(dl)xlDown(c);
   if(dl){ // 브라우저가 자동 다운로드를 막는 경우가 있어 직접 누를 수 있는 상태로 남긴다
    setTimeout(()=>{btn.disabled=false;say('⬇ 안 받아졌으면 누르세요');
-    btn.onclick=()=>{xlDown(c.url);reset()};setTimeout(reset,30000)},2500);
+    btn.onclick=()=>{xlDown(c);reset()};setTimeout(reset,30000)},2500);
    delete btn.dataset.busy;return}
   setTimeout(reset,3000)};
  try{

@@ -43,12 +43,23 @@ jobs:
           GEMINI_MODEL: gemini-flash-latest
         run: python energy_briefing_bot.py
 
+      - name: 미국 DC 투자 트래커 갱신
+        # 브리핑 본문에서 DC 투자 이벤트를 추출해 dc_tracker.json에 누적.
+        # 실패해도 브리핑 커밋은 진행되도록 non-fatal.
+        continue-on-error: true
+        working-directory: energy_briefing
+        env:
+          GEMINI_API_KEY: ${{ secrets.ENERGY_GEMINI_API_KEY || secrets.CONSTRUCTION_GEMINI_API_KEY || secrets.GEMINI_API_KEY }}
+          GEMINI_MODEL: gemini-flash-lite-latest
+        run: python dc_tracker_update.py
+
       - name: 아카이브 커밋 및 푸시
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add telegram_research_dashboard/static/energy_daily \
-                  telegram_research_dashboard/static/energy_briefing_report.html
+                  telegram_research_dashboard/static/energy_briefing_report.html \
+                  telegram_research_dashboard/static/dc_tracker.json
           if git diff --cached --quiet; then
             echo "변경 없음 — 커밋 생략"
             exit 0
