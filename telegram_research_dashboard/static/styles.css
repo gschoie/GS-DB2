@@ -414,3 +414,65 @@ body.item-locked #task-item{appearance:none;-webkit-appearance:none;border-color
 #news .news-table th{background:#fff;color:#6b7280;border-bottom:1px solid #ededeb}
 #news .news-table tbody tr:hover td{background:rgba(55,53,47,.04)}
 #news .task-sync{color:#2383e2}
+
+/* ════ 노션 글로벌 레이어: 전역 셸 통일 (세리프 제거·라이트 사이드바·플랫 헤어라인·노션 블루) ════ */
+:root{--bg:#fff;--ink:#111827;--muted:#6b7280;--line:#ededeb;--green:#2383e2;--lime:#e7f3fe}
+body{font-family:'Pretendard Variable',Pretendard,'Apple SD Gothic Neo','Malgun Gothic',sans-serif;letter-spacing:-.01em}
+h1,h2{font-family:inherit;letter-spacing:-.02em}
+h1{font-weight:800;font-size:24px;color:#111827}
+h2{font-weight:800;font-size:17px;color:#111827}
+.eyebrow,.panel-head small{color:#9ca3af;letter-spacing:.12em}
+/* 사이드바: 노션식 라이트 */
+.sidebar{background:#f7f7f5;color:#37352f;scrollbar-color:#d3d1cb #f7f7f5;border-right:1px solid #ededeb}
+.brand>span{border-color:#d3d1cb;color:#2383e2;font-family:inherit;font-weight:800;border-radius:8px}
+.brand small{color:#9b9a97}
+.nav{color:#5f5e5b;border-radius:6px;padding:9px 12px;font-size:13.5px}
+.nav.active,.nav:hover{background:rgba(55,53,47,.08);color:#111827}
+.sidebar nav{gap:2px;margin-top:36px}
+.sidebar a{color:#5f5e5b}
+.nav-sep{border-color:#ededeb}
+.nav-subgroup summary{color:#5f5e5b}
+.secure{color:#9b9a97;border-top-color:#ededeb}
+.secure:first-letter{color:#2383e2}
+.secure small{color:#b3b1ab}
+/* 공통 컴포넌트 */
+.search-wrap{border-radius:8px;border-color:#ededeb}
+.refresh-btn{background:#2383e2;border-radius:6px}
+.panel,.stats article,.archive-intro,.dart-form{border-radius:8px;border-color:#ededeb}
+.stats strong{font:800 28px/1.2 inherit}
+.price,.mini-row>small,.mini-line>small,.rank-row b:last-child,.news-date,.task-date,.task-summary b,
+.todo-pane-head em,.todo-group>summary em,.todo-ts,.day-group>h3{font-family:inherit}
+.day-group>h3{font-weight:800;font-size:15px}
+.mini-row .rk,.mini-line .rk-s{background:#e7f3fe;color:#1b6ec2;font-family:inherit;font-weight:700}
+.chip,select{border-radius:6px;color:#111827;border-color:#ededeb}
+.chip:hover{background:rgba(55,53,47,.06)}
+.chip.active{background:#2383e2;color:#fff;border-color:#2383e2}
+.tag{border-radius:4px}
+.report-kind{border-radius:4px}
+.panel-head button,.panel-more{color:#2383e2;font-weight:600}
+.panel-head button:hover,.panel-more:hover{color:#1b6ec2}
+.mini-row:hover,.mini-line:hover,.research-row:hover{background:rgba(55,53,47,.04)}
+.research-row,.rank-row,.mini-row,.mini-line{border-top-color:#f1f1ef}
+.dart-form #dart-send,.dart-form #remember-send,#mzdiary-send{background:#2383e2;border-radius:6px}
+.dart-status,.task-sync{color:#2383e2}
+/* 뉴스 아카이브: 연도·월 그룹 플랫화 */
+.year-group{border-radius:8px;border-color:#ededeb}
+.year-group>summary{font:800 17px/1.3 inherit;letter-spacing:-.02em;padding:14px 18px;border-radius:8px}
+.year-group>summary:hover{background:rgba(55,53,47,.05)}
+.year-group>summary:before{content:'▸';font:12px inherit;color:#9ca3af}
+.year-group[open]>summary:before{content:'▾'}
+.year-group summary:focus{outline:none}
+.year-group summary:focus-visible,.month-divider:focus-visible{outline:2px solid #bfdbfe;outline-offset:2px;border-radius:6px}
+.month-divider{border-top:1px solid #ededeb;padding:12px 2px 8px}
+.month-divider:focus{outline:none}
+.month-divider h3{font:700 14.5px/1.3 inherit}
+.news-table th{background:#fff;border-bottom:1px solid #ededeb;color:#6b7280}
+.news-table td{border-bottom-color:#f1f1ef}
+.news-table tbody tr:hover{background:rgba(55,53,47,.04)}
+.company-label{border-radius:4px;background:#f1f1ef;color:#4b5563}
+.table-link{color:#1b6ec2;border-bottom-color:#bfdbfe}
+.table-link:hover{color:#1d4ed8;border-color:#1d4ed8}
+.telegram-link{color:#6b7280}
+.nlm-link{border-radius:6px;color:#1b6ec2;background:#e7f3fe;border-color:#cde3f8}
+.news-card a{color:#1b6ec2}
+.research-row a{color:#1b6ec2}
