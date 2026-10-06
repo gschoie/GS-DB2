@@ -74,6 +74,9 @@ jobs:
           # 알림 봇: 전용 시크릿이 없으면 소스 감시와 같은 봇으로 보낸다.
           TELEGRAM_BOT_TOKEN: ${{ secrets.VACATION_TELEGRAM_BOT_TOKEN || secrets.WATCH_TELEGRAM_BOT_TOKEN || secrets.KDEF_TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.VACATION_TELEGRAM_CHAT_ID || secrets.WATCH_TELEGRAM_CHAT_ID || secrets.KDEF_TELEGRAM_CHAT_ID }}
+          # 발간계획(인뎁스) 신규 건은 매크로봇(매크로_공부 방)으로 — 미설정 시 위 봇 폴백.
+          IDX_TELEGRAM_BOT_TOKEN: ${{ secrets.CONGPT_TELEGRAM_BOT_TOKEN }}
+          IDX_TELEGRAM_CHAT_ID: ${{ secrets.CONGPT_TELEGRAM_CHAT_ID }}
           MODE: ${{ inputs.mode || 'run' }}
           # 근태는 수동 수집 전용 — 페이지 🔄 버튼(workflow_dispatch)일 때만 켠다.
           # 크론(schedule) 자동 run은 휴가·발간계획만 보고 근태는 건드리지 않는다.
