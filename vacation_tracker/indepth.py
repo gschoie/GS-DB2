@@ -326,6 +326,13 @@ def apply_op(body: dict) -> None:
     elif op == "idx-topic":
         entry["topic"] = str(body.get("topic") or "").strip()
         print(f"발간계획 제목: {entry.get('name')} ({uid}) → {entry['topic']!r}")
+    elif op == "idx-name":
+        # 담당자 변경 — 일정표 분해분('미정') 등을 실제 팀원으로 바로잡는 용도.
+        name = str(body.get("name") or "").strip()
+        if not name:
+            raise SystemExit("name이 비어 있습니다")
+        entry["name"] = name
+        print(f"발간계획 담당: ({uid}) → {name}")
     elif op == "idx-note":
         entry["note"] = str(body.get("note") or "").strip()
         print(f"발간계획 메모: {entry.get('name')} ({uid}) → {entry['note']!r}")
@@ -494,6 +501,7 @@ def _row(uid: str, entry: dict) -> str:
             f'<td class="c-kind">{badge}</td>'
             f'<td class="c-done">{mark}</td>'
             f'<td class="c-note"><span class="acts">'
+            f'<button data-act="name" title="담당자 변경">👤</button>'
             f'<button data-act="topic" title="제목(주제) 수정">📝</button>'
             f'<button data-act="target" title="날짜 수정">📅</button>'
             f'<button data-act="note" title="메모">✏️</button>'
@@ -525,9 +533,10 @@ def _shown_topic(entry: dict) -> str:
 
 
 def _chip(uid: str, entry: dict) -> str:
-    label = entry.get("name") or ""
-    if _shown_topic(entry):
-        label += f"·{_shown_topic(entry)}"
+    name = entry.get("name") or ""
+    shown = _shown_topic(entry)
+    # 담당 미정은 접두를 숨기고 주제만 — '미정·콜라보…'처럼 읽히는 것 방지.
+    label = (shown or name) if name == "미정" else (name + (f"·{shown}" if shown else ""))
     cls = "chip fin" if entry.get("done") else "chip"
     return (f'<span class="{cls}" draggable="true"'
             f' data-uid="{html.escape(uid)}"'
@@ -730,6 +739,12 @@ async function editTarget(uid,current){
   await setTarget(uid,norm);
 }
 
+// 칩 라벨 규칙(서버 _chip과 동일): 담당 미정이면 접두를 숨기고 주제만.
+function chipLabel(name,shown){
+  if(name==='미정')return shown||name;
+  return (name||'')+(shown?'·'+shown:'');
+}
+
 // 제목(주제) 수정 반영 — 표 행과 달력 칩 양쪽을 바로 고친다(서버 반영 전 pending 표시).
 function setTopic(uid,value){
   const row=document.querySelector('tr[data-uid="'+CSS.escape(uid)+'"]');
@@ -741,10 +756,54 @@ function setTopic(uid,value){
   }
   document.querySelectorAll('.chip[data-uid="'+CSS.escape(uid)+'"]').forEach(c=>{
     c.dataset.topic=value;
-    const shown=value||c.dataset.note||'';
-    c.textContent=(c.dataset.name||'')+(shown?'·'+shown:'');
+    c.textContent=chipLabel(c.dataset.name,value||c.dataset.note||'');
     c.classList.add('pending');
   });
+}
+
+// 담당자 변경 반영
+function setName(uid,value){
+  const row=document.querySelector('tr[data-uid="'+CSS.escape(uid)+'"]');
+  if(row){
+    const td=row.querySelector('.c-name');
+    if(td)td.textContent=value;
+    row.classList.add('pending');
+  }
+  document.querySelectorAll('.chip[data-uid="'+CSS.escape(uid)+'"]').forEach(c=>{
+    c.dataset.name=value;
+    c.textContent=chipLabel(value,c.dataset.topic||c.dataset.note||'');
+    c.classList.add('pending');
+  });
+}
+
+// 담당자 선택 팝업 — 팀원 목록에서 고르거나 직접 입력('미정' 바로잡기 용도).
+function editName(uid,current){
+  hidePop();
+  chipPop=document.createElement('div');chipPop.id='chip-pop';
+  const close=document.createElement('span');close.className='close';close.textContent='✕';
+  close.addEventListener('click',hidePop);
+  const t=document.createElement('div');t.className='t';t.textContent='👤 담당자 변경';
+  const sel=document.createElement('select');
+  const opts=[...NAMES];
+  if(current&&!opts.includes(current))opts.unshift(current);
+  if(!opts.includes('미정'))opts.push('미정');
+  opts.forEach(n=>{const o=document.createElement('option');o.textContent=n;
+    if(n===current)o.selected=true;sel.appendChild(o)});
+  const free=document.createElement('input');free.placeholder='직접 입력(선택)';free.size=10;
+  const btn=document.createElement('button');btn.textContent='변경';
+  btn.addEventListener('click',async()=>{
+    const value=(free.value.trim()||sel.value||'').trim();
+    if(!value)return;
+    btn.disabled=true;
+    if(!await sendOp({op:'idx-name',uid:uid,name:value})){btn.disabled=false;return}
+    hidePop();setName(uid,value);
+  });
+  const acts=document.createElement('div');acts.className='pop-acts';
+  acts.append(sel,free,btn);
+  chipPop.append(close,t,acts);
+  document.body.appendChild(chipPop);
+  chipPop.style.left=Math.max(8,(window.innerWidth-chipPop.offsetWidth)/2)+'px';
+  chipPop.style.top='140px';
 }
 
 // 달력 칩 드래그&드랍 → 발간 예정일 이동 (모바일은 📅 버튼 이용)
@@ -817,6 +876,11 @@ document.addEventListener('click',async ev=>{
     if(!confirm('이 항목을 삭제할까요?'))return;
     if(!await sendOp({op:'idx-del',uid:row.dataset.uid}))return;
     row.classList.add('removed');
+  }else if(btn.dataset.act==='name'){
+    const td=row.querySelector('.c-name');
+    const uid=row.dataset.uid,cur=(td?td.textContent:'').trim();
+    // 같은 클릭이 '바깥 클릭 닫기' 리스너에 잡혀 새 팝업을 바로 닫지 않도록 지연 생성.
+    setTimeout(()=>editName(uid,cur),0);
   }else if(btn.dataset.act==='topic'){
     const value=prompt('제목(주제)',row.dataset.topic||'');
     if(value===null)return;
@@ -904,7 +968,9 @@ function showPop(chip){
   const close=document.createElement('span');close.className='close';close.textContent='✕';
   close.addEventListener('click',hidePop);
   const t=document.createElement('div');t.className='t';
-  t.textContent=d.name+((d.topic||d.note)?' — '+(d.topic||d.note):'');
+  const nm=(d.name&&d.name!=='미정')?d.name:'';
+  const shown=d.topic||d.note||'';
+  t.textContent=nm?(nm+(shown?' — '+shown:'')):(shown||'미정');
   const meta=document.createElement('div');
   meta.textContent=(d.kind||'')+(d.target?' · '+d.target:'');
   chipPop.append(close,t,meta);
@@ -916,6 +982,7 @@ function showPop(chip){
     const acts=document.createElement('div');acts.className='pop-acts';
     const mk=(label,fn)=>{const b=document.createElement('button');b.textContent=label;
       b.addEventListener('click',fn);acts.appendChild(b)};
+    mk('👤 담당',()=>{editName(uid,d.name||'')});
     mk('📝 제목',async()=>{
       const value=prompt('제목(주제)',d.topic||'');
       if(value===null)return;
