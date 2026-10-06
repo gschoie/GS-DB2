@@ -1,8 +1,69 @@
 {
-  "when_utc": "2026-10-05 22:08:44Z",
+  "when_utc": "2026-10-06 22:08:58Z",
   "ok": true,
-  "note": "no_alert_skip",
+  "note": "alert_sent",
   "chat_id_tail": "5171",
   "token_set": true,
-  "response": null
+  "response": {
+    "ok": true,
+    "result": {
+      "message_id": 560,
+      "from": {
+        "id": 8875725998,
+        "is_bot": true,
+        "first_name": "GB Investing Signal",
+        "username": "gs_invest_signal_bot"
+      },
+      "chat": {
+        "id": 279385171,
+        "first_name": "광식",
+        "last_name": "최",
+        "username": "gschoie",
+        "type": "private"
+      },
+      "date": 1791324538,
+      "text": "📡 ETF/섹터 신호 · 2026-10-06 (전일 확정)\n\n★ 매수 신호(골든크로스) 2개\n\n🟢 RISE AI&로봇 · 로봇\n   ＋DI가 −DI 상향돌파·추세전환\n   ADX 12.6 · %K 84.2/66.1 · 수급 중립\n   [B] 상대강도 상위 29% · 외인·기관 연속 순매수 5일\n\n🟢 KoAct 바이오헬스케어액티브 · 바이오/헬스케어\n   ＋DI가 −DI 상향돌파·추세전환\n   ADX 20.9 · %K 81.5/62.6 · 수급 중립\n   [B] 거래대금 2.02배 · ADX 상승추세\n\n⚡ 추세 강도 1개\n\n🔺 PLUS K방산소부장 · 방산\n   ADX 20 상향돌파 · 상승추세 확립(확인) · 외인·기관 동반 순매수\n   ADX 21.7 · %K 86.9/80.8 · 외인·기관 쌍끌이\n   [B] 상대강도 상위 5% · ADX 상승추세\n\n전체 신호판 › 대시보드\n🎴 GS Research Desk · ETF/섹터 신호",
+      "entities": [
+        {
+          "offset": 0,
+          "length": 12,
+          "type": "bold"
+        },
+        {
+          "offset": 50,
+          "length": 1,
+          "type": "bold"
+        },
+        {
+          "offset": 57,
+          "length": 10,
+          "type": "bold"
+        },
+        {
+          "offset": 171,
+          "length": 16,
+          "type": "bold"
+        },
+        {
+          "offset": 294,
+          "length": 1,
+          "type": "bold"
+        },
+        {
+          "offset": 301,
+          "length": 11,
+          "type": "bold"
+        },
+        {
+          "offset": 440,
+          "length": 4,
+          "type": "text_link",
+          "url": "https://gschoie.github.io/GS-DB2/etf_signal_report.html"
+        }
+      ],
+      "link_preview_options": {
+        "is_disabled": true
+      }
+    }
+  }
 }
