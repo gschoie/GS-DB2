@@ -164,10 +164,14 @@ async def _dialog_directory(client, max_chats: int = 500) -> dict[str, object]:
 
 
 async def _scan(config: dict, state: dict, probe: bool = False,
-                backfill_days: int | None = None,
+                backfill_days: int | None = None, att_scan: bool = False,
                 ) -> tuple[list[dict], list[dict], list[dict]]:
     """대화 스캔. backfill_days가 있으면 인뎁스 소급 모드 — last_id를 무시하고
     그 날짜 창을 통째로 읽되 상태(last_id)는 건드리지 않는다(휴가·근태 수집과 무관).
+
+    근태(att_scan)는 수동 수집 전용 — 페이지 🔄 버튼의 dispatch에서만 켠다.
+    last_id와 무관하게 최근 창을 따로 훑으므로, 자동 run이 last_id를 올렸어도
+    그 사이에 온 근태 보고를 놓치지 않는다.
     """
     from adapters import DEVICE_INFO  # source_watcher와 단일 정본
     from telethon import TelegramClient
@@ -242,23 +246,32 @@ async def _scan(config: dict, state: dict, probe: bool = False,
                                  "text": (message.message or "").strip(), "dt": posted})
             timeline.reverse()  # 시간순으로
             picked = []
-            if not backfill_days:
-                # 근태 보고는 상대가 보낸 메시지만 — 내가 쓴 "근태 체크해줘"류는 보고가 아니다.
+            if att_scan and not backfill_days:
+                # 근태는 수동 수집 전용 — last_id 증분이 아니라 최근 창을 따로 훑는다.
+                # 상대가 보낸 메시지만(내가 쓴 "근태 체크해줘"류는 보고가 아니다).
                 from attendance import detect_attendance
 
-                for msg in timeline:
-                    if msg["out"] or not msg["text"]:
+                att_since = datetime.now(timezone.utc) - timedelta(
+                    days=int(config.get("att_lookback_days") or 14))
+                async for message in client.iter_messages(entity, limit=per_chat_limit):
+                    posted = (message.date if message.date.tzinfo
+                              else message.date.replace(tzinfo=timezone.utc))
+                    if posted < att_since:
+                        break
+                    text = (message.message or "").strip()
+                    if message.out or not text:
                         continue
-                    att = detect_attendance(msg["text"], msg["dt"].astimezone(KST))
+                    att = detect_attendance(text, posted.astimezone(KST))
                     if att:
                         att_hits.append({
                             "name": name,
                             "month": att["month"],
                             "explicit": bool(att.get("explicit")),
-                            "uid": f"{entity.id}:{msg['id']}",
-                            "text": msg["text"],
-                            "msg_date": msg["dt"].astimezone(KST).isoformat(timespec="minutes"),
+                            "uid": f"{entity.id}:{message.id}",
+                            "text": text,
+                            "msg_date": posted.astimezone(KST).isoformat(timespec="minutes"),
                         })
+            if not backfill_days:
                 # include_own=True: 내가 대신 적은 메시지도 이 대화 상대의 일정 후보가 된다.
                 picked = pick_candidates(timeline, allow_own=include_own)
                 for pick in picked:
@@ -479,13 +492,14 @@ def extract(candidates: list[dict], owner: str = "") -> list[dict]:
 
 def notify(new_entries: list[dict], fresh_att: list[dict] | None = None,
            fresh_idx: list[dict] | None = None) -> None:
+    """휴가·근태는 기존 봇, 발간계획은 매크로봇(IDX_TELEGRAM_*)으로 따로 보낸다.
+
+    발간계획 전용 시크릿이 없으면 기존 봇으로 폴백 — 알림이 조용히 사라지지 않게.
+    """
     fresh_att = fresh_att or []
     fresh_idx = fresh_idx or []
     token = os.environ.get("TELEGRAM_BOT_TOKEN", "").strip()
     chat_id = os.environ.get("TELEGRAM_CHAT_ID", "").strip()
-    if not token or not chat_id:
-        print("[알림] TELEGRAM_BOT_TOKEN/CHAT_ID 미설정 — 발송 생략(대시보드 전용)")
-        return
     import notify as watcher_notify  # source_watcher의 발송기 재사용 (분할·재시도 포함)
 
     lines: list[str] = []
@@ -507,20 +521,31 @@ def notify(new_entries: list[dict], fresh_att: list[dict] | None = None,
             lines.append(f"└ \"{watcher_notify.escape(hit['text'][:120])}\"")
             lines.append("")
         lines.append('근태 현황: <a href="https://gschoie.github.io/GS-DB2/attendance_report.html">대시보드</a>')
+    if lines:
+        if token and chat_id:
+            watcher_notify.send("\n".join(lines), token=token, chat_id=chat_id)
+            print(f"[알림] 휴가 {len(new_entries)}건 + 근태 {len(fresh_att)}건 발송")
+        else:
+            print("[알림] TELEGRAM_BOT_TOKEN/CHAT_ID 미설정 — 휴가·근태 발송 생략")
+
     if fresh_idx:
-        if lines:
-            lines.append("")
-        lines += [f"📚 <b>발간 계획 감지</b> ({len(fresh_idx)}건)", ""]
+        idx_token = os.environ.get("IDX_TELEGRAM_BOT_TOKEN", "").strip() or token
+        idx_chat = os.environ.get("IDX_TELEGRAM_CHAT_ID", "").strip() or chat_id
+        if not idx_token or not idx_chat:
+            print("[알림] 발간계획 봇 미설정 — 발송 생략(대시보드 전용)")
+            return
+        idx_lines = [f"📚 <b>발간 계획 레이더</b> — 신규 {len(fresh_idx)}건", ""]
         for entry in sorted(fresh_idx, key=lambda e: (e.get("target") or "9999", e["name"])):
             when = entry.get("target") or entry.get("target_text") or "시점 미정"
             topic = entry.get("topic") or "주제 미상"
-            lines.append(f"<b>{watcher_notify.escape(entry['name'])}</b> — "
-                         f"{watcher_notify.escape(topic)} ({watcher_notify.escape(str(when))})")
-            lines.append(f"└ \"{watcher_notify.escape(entry['text'][:120])}\"")
-            lines.append("")
-        lines.append('발간 계획: <a href="https://gschoie.github.io/GS-DB2/indepth_report.html">대시보드</a>')
-    watcher_notify.send("\n".join(lines), token=token, chat_id=chat_id)
-    print(f"[알림] 휴가 {len(new_entries)}건 + 근태 {len(fresh_att)}건 + 발간계획 {len(fresh_idx)}건 발송")
+            idx_lines.append(f"<b>{watcher_notify.escape(entry['name'])}</b> — "
+                             f"{watcher_notify.escape(topic)} ({watcher_notify.escape(str(when))})")
+            idx_lines.append(f"└ \"{watcher_notify.escape(entry['text'][:120])}\"")
+            idx_lines.append("")
+        idx_lines.append('발간 계획: <a href="https://gschoie.github.io/GS-DB2/indepth_report.html">대시보드</a>')
+        watcher_notify.send("\n".join(idx_lines), token=idx_token, chat_id=idx_chat)
+        print(f"[알림] 발간계획 {len(fresh_idx)}건 발송 (매크로봇)" if idx_token != token
+              else f"[알림] 발간계획 {len(fresh_idx)}건 발송 (기본 봇 폴백)")
 
 
 def span_label(entry: dict) -> str:
@@ -544,8 +569,16 @@ def run(dry_run: bool = False, probe: bool = False) -> None:
         asyncio.run(_scan(config, state, probe=True))
         return
 
-    candidates, att_hits, idx_cands = asyncio.run(_scan(config, state))
-    print(f"후보 {len(candidates)}건, 근태 보고 {len(att_hits)}건, 발간계획 후보 {len(idx_cands)}건")
+    # 근태는 수동 수집 전용: 페이지 🔄 버튼(workflow_dispatch → ATT_SCAN=1)일 때만,
+    # 그것도 체크 기간이 열려 있을 때만 창 스캔을 돈다. 크론 자동 run은 근태를 안 본다.
+    import attendance
+
+    att_scan = os.environ.get("ATT_SCAN") == "1" and bool(
+        attendance.open_campaign_month(attendance.load_store()))
+    candidates, att_hits, idx_cands = asyncio.run(_scan(config, state, att_scan=att_scan))
+    print(f"후보 {len(candidates)}건, 근태 보고 {len(att_hits)}건"
+          f"{'' if att_scan else '(근태 스캔 꺼짐 — 수동 수집 전용)'}, "
+          f"발간계획 후보 {len(idx_cands)}건")
     owner = str(config.get("owner_name") or "").strip() or next(
         (f["name"] for f in config["friends"] if f.get("scan") is False), "")
     entries = extract(candidates, owner=owner)
@@ -600,7 +633,7 @@ def run(dry_run: bool = False, probe: bool = False) -> None:
 
     idx_store = indepth.load_store()
     # 아는 uid는 Gemini에 다시 묻지 않는다(수동 수정 보호 + 호출 절약).
-    idx_new_cands = [c for c in idx_cands if c["uid"] not in idx_store.get("entries", {})]
+    idx_new_cands = [c for c in idx_cands if not indepth.is_known(idx_store, c["uid"])]
     fresh_idx = indepth.record(idx_store, indepth.extract(idx_new_cands))
     indepth.save_store(idx_store)
     indepth.build_page(idx_store)
@@ -625,7 +658,7 @@ def run_indepth_backfill(days: int = 92) -> None:
     import indepth
 
     idx_store = indepth.load_store()
-    new_cands = [c for c in idx_cands if c["uid"] not in idx_store.get("entries", {})]
+    new_cands = [c for c in idx_cands if not indepth.is_known(idx_store, c["uid"])]
     fresh = indepth.record(idx_store, indepth.extract(new_cands))
     indepth.save_store(idx_store)
     indepth.build_page(idx_store)

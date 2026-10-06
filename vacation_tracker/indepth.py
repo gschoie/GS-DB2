@@ -9,7 +9,8 @@ Gemini가 문맥으로 '발간 계획인가'를 판정해 {주제, 예정일, �
 Gemini가 없으면 강한 키워드(인뎁스·커버리지·개시·발간)만 needs_review로 남긴다.
 
 저장 state/indepth.json, 화면 static/indepth_report.html. 완료✓·메모·삭제는
-기입 폼과 같은 GAS 경로에 op(idx-done/idx-note/idx-target/idx-del)를 얹는다 — GAS 변경 없음.
+기입 폼과 같은 GAS 경로에 op(idx-done/idx-topic/idx-note/idx-target/idx-del)를 얹는다
+— GAS 변경 없음. 삭제는 묘비(deleted=True)로 남겨 재스캔·백필의 부활을 막는다.
 """
 
 from __future__ import annotations
@@ -110,6 +111,8 @@ GEMINI_IDX_PROMPT = """너는 증권사 리서치팀장의 텔레그램 대화(1
   (구간이면 중간~끝 무렵, "N월 중"이면 그 달 중순). 원문 표현은 target_text에 그대로
   남겨라. 시점 언급이 아예 없을 때만 target=null.
 - topic은 종목명/산업명 위주로 짧게. 정 모르겠으면 빈 문자열.
+- 콜라보(두 섹터 공동 자료)는 쪼개지 말고 한 건으로 — topic에 '건설/인터넷 콜라보'처럼
+  적고, 담당자 여럿이 명시돼 있으면 name에 '이름1·이름2'로 나란히 적어라.
 - '세미 인뎁스'·'세미'라고 말하면 kind=Semi-인뎁스."""
 
 
@@ -251,12 +254,26 @@ def save_store(store: dict) -> None:
                         encoding="utf-8")
 
 
+def is_known(store: dict, uid: str) -> bool:
+    """이 메시지를 이미 판정했는가 — 삭제(묘비)된 항목도 '안다'로 친다.
+
+    다건 분해(uid#k)와 단건이 오가도 중복이 안 생기게: uid 그대로 외에,
+    uid#k는 원 uid(전에 단건 판정)를, 원 uid는 uid#0(전에 다건 분해)을 본다.
+    """
+    known = store.get("entries") or {}
+    if uid in known:
+        return True
+    if "#" in uid:
+        return uid.split("#", 1)[0] in known
+    return f"{uid}#0" in known
+
+
 def record(store: dict, entries: list[dict]) -> list[dict]:
-    """새 항목만 저장하고 돌려준다. 아는 uid는 건드리지 않는다(수동 수정 보호)."""
+    """새 항목만 저장하고 돌려준다. 아는 uid는 건드리지 않는다(수동 수정·묘비 보호)."""
     known = store.setdefault("entries", {})
     fresh = []
     for entry in entries:
-        if entry["uid"] in known:
+        if is_known(store, entry["uid"]):
             continue
         known[entry["uid"]] = {k: v for k, v in entry.items() if k != "uid"}
         fresh.append(entry)
@@ -264,7 +281,7 @@ def record(store: dict, entries: list[dict]) -> list[dict]:
 
 
 def apply_op(body: dict) -> None:
-    """페이지에서 온 op 한 건: idx-add / idx-del / idx-note / idx-target / idx-kind / idx-done."""
+    """페이지에서 온 op 한 건: idx-add / idx-del / idx-topic / idx-note / idx-target / idx-kind / idx-done."""
     op = str(body.get("op") or "").strip()
     if op == "idx-add":
         # 달력 더블클릭 기입: {"op":"idx-add","name","topic","kind","target":"YYYY-MM-DD"}
@@ -304,8 +321,20 @@ def apply_op(body: dict) -> None:
     if entry is None:
         print(f"[경고] uid를 찾지 못했습니다: {uid} — 변경 없음")
     elif op == "idx-del":
-        store["entries"].pop(uid)
-        print(f"발간계획 삭제: {entry.get('name')} {entry.get('topic')!r} ({uid})")
+        # 지우지 않고 묘비(deleted)로 남긴다 — uid를 통째로 지우면 재스캔·백필이
+        # 그 메시지를 '모르는 것'으로 보고 다시 넣는다(10/6 "과거 값이 다시 들어옴").
+        entry["deleted"] = True
+        print(f"발간계획 삭제(묘비): {entry.get('name')} {entry.get('topic')!r} ({uid})")
+    elif op == "idx-topic":
+        entry["topic"] = str(body.get("topic") or "").strip()
+        print(f"발간계획 제목: {entry.get('name')} ({uid}) → {entry['topic']!r}")
+    elif op == "idx-name":
+        # 담당자 변경 — 일정표 분해분('미정') 등을 실제 팀원으로 바로잡는 용도.
+        name = str(body.get("name") or "").strip()
+        if not name:
+            raise SystemExit("name이 비어 있습니다")
+        entry["name"] = name
+        print(f"발간계획 담당: ({uid}) → {name}")
     elif op == "idx-note":
         entry["note"] = str(body.get("note") or "").strip()
         print(f"발간계획 메모: {entry.get('name')} ({uid}) → {entry['note']!r}")
@@ -466,13 +495,16 @@ def _row(uid: str, entry: dict) -> str:
     note = str(entry.get("note") or "")
     note_html = f'<div class="note-x">📝 {html.escape(note)}</div>' if note else ""
     return (f'<tr data-uid="{html.escape(uid)}" data-done="{1 if done else 0}"'
-            f' data-note="{html.escape(note)}" data-target="{html.escape(entry.get("target") or "")}">'
+            f' data-note="{html.escape(note)}" data-target="{html.escape(entry.get("target") or "")}"'
+            f' data-topic="{html.escape(entry.get("topic") or "")}">'
             f'<td class="c-name name">{html.escape(entry.get("name") or "")}</td>'
             f'<td class="c-topic topic">{html.escape(_shown_topic(entry) or "—")}</td>'
             f'<td class="c-tgt tgt">{_fmt_target(entry)}</td>'
             f'<td class="c-kind">{badge}</td>'
             f'<td class="c-done">{mark}</td>'
             f'<td class="c-note"><span class="acts">'
+            f'<button data-act="name" title="담당자 변경">👤</button>'
+            f'<button data-act="topic" title="제목(주제) 수정">📝</button>'
             f'<button data-act="target" title="날짜 수정">📅</button>'
             f'<button data-act="note" title="메모">✏️</button>'
             f'<button data-act="del" title="삭제">🗑</button></span>'
@@ -503,9 +535,10 @@ def _shown_topic(entry: dict) -> str:
 
 
 def _chip(uid: str, entry: dict) -> str:
-    label = entry.get("name") or ""
-    if _shown_topic(entry):
-        label += f"·{_shown_topic(entry)}"
+    name = entry.get("name") or ""
+    shown = _shown_topic(entry)
+    # 담당 미정은 접두를 숨기고 주제만 — '미정·콜라보…'처럼 읽히는 것 방지.
+    label = (shown or name) if name == "미정" else (name + (f"·{shown}" if shown else ""))
     cls = "chip fin" if entry.get("done") else "chip"
     return (f'<span class="{cls}" draggable="true"'
             f' data-uid="{html.escape(uid)}"'
@@ -604,7 +637,8 @@ def build_page(store: dict | None = None) -> None:
     from render_page import former_names
 
     former = set(former_names())
-    all_items = list(store.get("entries", {}).items())
+    all_items = [(u, e) for u, e in store.get("entries", {}).items()
+                 if not e.get("deleted")]  # 묘비는 화면에서 숨긴다(재수집 방지용 기록)
     former_items = sorted(((u, e) for u, e in all_items if (e.get("name") or "") in former),
                           key=lambda x: x[1].get("target") or x[1].get("msg_date") or "",
                           reverse=True)
@@ -707,6 +741,83 @@ async function editTarget(uid,current){
   await setTarget(uid,norm);
 }
 
+// 칩 라벨 규칙(서버 _chip과 동일): 담당 미정이면 접두를 숨기고 주제만.
+function chipLabel(name,shown){
+  if(name==='미정')return shown||name;
+  return (name||'')+(shown?'·'+shown:'');
+}
+
+// 제목(주제) 수정 반영 — 표 행과 달력 칩 양쪽을 바로 고친다(서버 반영 전 pending 표시).
+function setTopic(uid,value){
+  const row=document.querySelector('tr[data-uid="'+CSS.escape(uid)+'"]');
+  if(row){
+    row.dataset.topic=value;
+    const td=row.querySelector('.c-topic');
+    if(td)td.textContent=value||row.dataset.note||'—';
+    row.classList.add('pending');
+  }
+  document.querySelectorAll('.chip[data-uid="'+CSS.escape(uid)+'"]').forEach(c=>{
+    c.dataset.topic=value;
+    c.textContent=chipLabel(c.dataset.name,value||c.dataset.note||'');
+    c.classList.add('pending');
+  });
+}
+
+// 담당자 변경 반영
+function setName(uid,value){
+  const row=document.querySelector('tr[data-uid="'+CSS.escape(uid)+'"]');
+  if(row){
+    const td=row.querySelector('.c-name');
+    if(td)td.textContent=value;
+    row.classList.add('pending');
+  }
+  document.querySelectorAll('.chip[data-uid="'+CSS.escape(uid)+'"]').forEach(c=>{
+    c.dataset.name=value;
+    c.textContent=chipLabel(value,c.dataset.topic||c.dataset.note||'');
+    c.classList.add('pending');
+  });
+}
+
+// 담당자 선택 팝업 — 팀원 목록에서 고르거나 직접 입력('미정' 바로잡기 용도).
+function editName(uid,current){
+  hidePop();
+  chipPop=document.createElement('div');chipPop.id='chip-pop';
+  const close=document.createElement('span');close.className='close';close.textContent='✕';
+  close.addEventListener('click',hidePop);
+  const t=document.createElement('div');t.className='t';
+  t.textContent='👤 담당자 변경 — 콜라보는 여러 명 체크';
+  // 현재 담당은 '박영도·김혜영'처럼 구분자로 쪼개 미리 체크해 둔다.
+  const picked=new Set((current||'').split(/[·,/+&]/).map(s=>s.trim()).filter(s=>s&&s!=='미정'));
+  const box=document.createElement('div');
+  box.style.cssText='display:flex;flex-wrap:wrap;gap:4px 10px;margin:8px 0;max-width:300px';
+  const names=[...NAMES];
+  picked.forEach(n=>{if(!names.includes(n))names.push(n)});
+  names.forEach(n=>{
+    const lab=document.createElement('label');lab.style.whiteSpace='nowrap';
+    const cb=document.createElement('input');cb.type='checkbox';cb.value=n;
+    cb.checked=picked.has(n);
+    lab.append(cb,document.createTextNode(n));
+    box.appendChild(lab);
+  });
+  const free=document.createElement('input');free.placeholder='직접 입력(추가)';free.size=12;
+  const btn=document.createElement('button');btn.textContent='변경';
+  btn.addEventListener('click',async()=>{
+    const chosen=[...box.querySelectorAll('input:checked')].map(c=>c.value);
+    free.value.split(/[·,/+&]/).map(s=>s.trim()).filter(Boolean)
+      .forEach(n=>{if(!chosen.includes(n))chosen.push(n)});
+    const value=chosen.join('·')||'미정';
+    btn.disabled=true;
+    if(!await sendOp({op:'idx-name',uid:uid,name:value})){btn.disabled=false;return}
+    hidePop();setName(uid,value);
+  });
+  const acts=document.createElement('div');acts.className='pop-acts';
+  acts.append(free,btn);
+  chipPop.append(close,t,box,acts);
+  document.body.appendChild(chipPop);
+  chipPop.style.left=Math.max(8,(window.innerWidth-chipPop.offsetWidth)/2)+'px';
+  chipPop.style.top='140px';
+}
+
 // 달력 칩 드래그&드랍 → 발간 예정일 이동 (모바일은 📅 버튼 이용)
 let dragUid=null,dragging=false;
 document.addEventListener('dragstart',ev=>{
@@ -769,7 +880,7 @@ document.addEventListener('click',async ev=>{
   chk.classList.toggle('on',next);chk.classList.toggle('off',!next);
 });
 
-// 📅 날짜 / ✏️ 메모 / 🗑 삭제
+// 📝 제목 / 📅 날짜 / ✏️ 메모 / 🗑 삭제
 document.addEventListener('click',async ev=>{
   const btn=ev.target.closest('.acts button');if(!btn)return;
   const row=btn.closest('tr');if(!row||!row.dataset.uid)return;
@@ -777,6 +888,16 @@ document.addEventListener('click',async ev=>{
     if(!confirm('이 항목을 삭제할까요?'))return;
     if(!await sendOp({op:'idx-del',uid:row.dataset.uid}))return;
     row.classList.add('removed');
+  }else if(btn.dataset.act==='name'){
+    const td=row.querySelector('.c-name');
+    const uid=row.dataset.uid,cur=(td?td.textContent:'').trim();
+    // 같은 클릭이 '바깥 클릭 닫기' 리스너에 잡혀 새 팝업을 바로 닫지 않도록 지연 생성.
+    setTimeout(()=>editName(uid,cur),0);
+  }else if(btn.dataset.act==='topic'){
+    const value=prompt('제목(주제)',row.dataset.topic||'');
+    if(value===null)return;
+    if(!await sendOp({op:'idx-topic',uid:row.dataset.uid,topic:value.trim()}))return;
+    setTopic(row.dataset.uid,value.trim());
   }else if(btn.dataset.act==='target'){
     editTarget(row.dataset.uid,row.dataset.target||'');
   }else{
@@ -859,7 +980,9 @@ function showPop(chip){
   const close=document.createElement('span');close.className='close';close.textContent='✕';
   close.addEventListener('click',hidePop);
   const t=document.createElement('div');t.className='t';
-  t.textContent=d.name+((d.topic||d.note)?' — '+(d.topic||d.note):'');
+  const nm=(d.name&&d.name!=='미정')?d.name:'';
+  const shown=d.topic||d.note||'';
+  t.textContent=nm?(nm+(shown?' — '+shown:'')):(shown||'미정');
   const meta=document.createElement('div');
   meta.textContent=(d.kind||'')+(d.target?' · '+d.target:'');
   chipPop.append(close,t,meta);
@@ -871,6 +994,14 @@ function showPop(chip){
     const acts=document.createElement('div');acts.className='pop-acts';
     const mk=(label,fn)=>{const b=document.createElement('button');b.textContent=label;
       b.addEventListener('click',fn);acts.appendChild(b)};
+    mk('👤 담당',()=>{editName(uid,d.name||'')});
+    mk('📝 제목',async()=>{
+      const value=prompt('제목(주제)',d.topic||'');
+      if(value===null)return;
+      hidePop();
+      if(!await sendOp({op:'idx-topic',uid:uid,topic:value.trim()}))return;
+      setTopic(uid,value.trim());
+    });
     mk('📅 날짜',()=>{hidePop();editTarget(uid,d.target||'')});
     mk('✏️ 메모',async()=>{
       const value=prompt('메모',d.note||'');
