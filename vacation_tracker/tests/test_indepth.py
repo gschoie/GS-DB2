@@ -146,6 +146,23 @@ class RecordTest(unittest.TestCase):
         self.assertEqual(fresh, [])
         self.assertTrue(store["entries"]["1:100"]["done"])  # 재수집이 덮지 않는다
 
+    def test_tombstone_blocks_resurrection(self):
+        # 🗑 삭제는 묘비로 남아 백필·재스캔이 같은 메시지를 되살리지 못한다.
+        store = {"entries": {"1:100": {"deleted": True}}}
+        self.assertTrue(indepth.is_known(store, "1:100"))
+        self.assertEqual(record(store, [self.entry()]), [])
+
+    def test_is_known_across_split_shapes(self):
+        # 전에 다건(#k)으로 분해된 메시지는 원 uid도, 전에 단건이던 메시지는 #k도 안다.
+        self.assertTrue(indepth.is_known({"entries": {"1:100#0": {}}}, "1:100"))
+        self.assertTrue(indepth.is_known({"entries": {"1:100": {}}}, "1:100#2"))
+        self.assertFalse(indepth.is_known({"entries": {"1:100#0": {}}}, "1:100#1"))
+        # 같은 배치의 형제(#0 저장 직후 #1)는 막히지 않는다.
+        store = {"entries": {}}
+        e0 = dict(self.entry(uid="1:200#0"))
+        e1 = dict(self.entry(uid="1:200#1"))
+        self.assertEqual(len(record(store, [e0, e1])), 2)
+
 
 if __name__ == "__main__":
     unittest.main()

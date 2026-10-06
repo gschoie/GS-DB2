@@ -9,7 +9,8 @@ Gemini가 문맥으로 '발간 계획인가'를 판정해 {주제, 예정일, �
 Gemini가 없으면 강한 키워드(인뎁스·커버리지·개시·발간)만 needs_review로 남긴다.
 
 저장 state/indepth.json, 화면 static/indepth_report.html. 완료✓·메모·삭제는
-기입 폼과 같은 GAS 경로에 op(idx-done/idx-note/idx-target/idx-del)를 얹는다 — GAS 변경 없음.
+기입 폼과 같은 GAS 경로에 op(idx-done/idx-topic/idx-note/idx-target/idx-del)를 얹는다
+— GAS 변경 없음. 삭제는 묘비(deleted=True)로 남겨 재스캔·백필의 부활을 막는다.
 """
 
 from __future__ import annotations
@@ -251,12 +252,26 @@ def save_store(store: dict) -> None:
                         encoding="utf-8")
 
 
+def is_known(store: dict, uid: str) -> bool:
+    """이 메시지를 이미 판정했는가 — 삭제(묘비)된 항목도 '안다'로 친다.
+
+    다건 분해(uid#k)와 단건이 오가도 중복이 안 생기게: uid 그대로 외에,
+    uid#k는 원 uid(전에 단건 판정)를, 원 uid는 uid#0(전에 다건 분해)을 본다.
+    """
+    known = store.get("entries") or {}
+    if uid in known:
+        return True
+    if "#" in uid:
+        return uid.split("#", 1)[0] in known
+    return f"{uid}#0" in known
+
+
 def record(store: dict, entries: list[dict]) -> list[dict]:
-    """새 항목만 저장하고 돌려준다. 아는 uid는 건드리지 않는다(수동 수정 보호)."""
+    """새 항목만 저장하고 돌려준다. 아는 uid는 건드리지 않는다(수동 수정·묘비 보호)."""
     known = store.setdefault("entries", {})
     fresh = []
     for entry in entries:
-        if entry["uid"] in known:
+        if is_known(store, entry["uid"]):
             continue
         known[entry["uid"]] = {k: v for k, v in entry.items() if k != "uid"}
         fresh.append(entry)
@@ -264,7 +279,7 @@ def record(store: dict, entries: list[dict]) -> list[dict]:
 
 
 def apply_op(body: dict) -> None:
-    """페이지에서 온 op 한 건: idx-add / idx-del / idx-note / idx-target / idx-kind / idx-done."""
+    """페이지에서 온 op 한 건: idx-add / idx-del / idx-topic / idx-note / idx-target / idx-kind / idx-done."""
     op = str(body.get("op") or "").strip()
     if op == "idx-add":
         # 달력 더블클릭 기입: {"op":"idx-add","name","topic","kind","target":"YYYY-MM-DD"}
@@ -304,8 +319,13 @@ def apply_op(body: dict) -> None:
     if entry is None:
         print(f"[경고] uid를 찾지 못했습니다: {uid} — 변경 없음")
     elif op == "idx-del":
-        store["entries"].pop(uid)
-        print(f"발간계획 삭제: {entry.get('name')} {entry.get('topic')!r} ({uid})")
+        # 지우지 않고 묘비(deleted)로 남긴다 — uid를 통째로 지우면 재스캔·백필이
+        # 그 메시지를 '모르는 것'으로 보고 다시 넣는다(10/6 "과거 값이 다시 들어옴").
+        entry["deleted"] = True
+        print(f"발간계획 삭제(묘비): {entry.get('name')} {entry.get('topic')!r} ({uid})")
+    elif op == "idx-topic":
+        entry["topic"] = str(body.get("topic") or "").strip()
+        print(f"발간계획 제목: {entry.get('name')} ({uid}) → {entry['topic']!r}")
     elif op == "idx-note":
         entry["note"] = str(body.get("note") or "").strip()
         print(f"발간계획 메모: {entry.get('name')} ({uid}) → {entry['note']!r}")
@@ -466,13 +486,15 @@ def _row(uid: str, entry: dict) -> str:
     note = str(entry.get("note") or "")
     note_html = f'<div class="note-x">📝 {html.escape(note)}</div>' if note else ""
     return (f'<tr data-uid="{html.escape(uid)}" data-done="{1 if done else 0}"'
-            f' data-note="{html.escape(note)}" data-target="{html.escape(entry.get("target") or "")}">'
+            f' data-note="{html.escape(note)}" data-target="{html.escape(entry.get("target") or "")}"'
+            f' data-topic="{html.escape(entry.get("topic") or "")}">'
             f'<td class="c-name name">{html.escape(entry.get("name") or "")}</td>'
             f'<td class="c-topic topic">{html.escape(_shown_topic(entry) or "—")}</td>'
             f'<td class="c-tgt tgt">{_fmt_target(entry)}</td>'
             f'<td class="c-kind">{badge}</td>'
             f'<td class="c-done">{mark}</td>'
             f'<td class="c-note"><span class="acts">'
+            f'<button data-act="topic" title="제목(주제) 수정">📝</button>'
             f'<button data-act="target" title="날짜 수정">📅</button>'
             f'<button data-act="note" title="메모">✏️</button>'
             f'<button data-act="del" title="삭제">🗑</button></span>'
@@ -604,7 +626,8 @@ def build_page(store: dict | None = None) -> None:
     from render_page import former_names
 
     former = set(former_names())
-    all_items = list(store.get("entries", {}).items())
+    all_items = [(u, e) for u, e in store.get("entries", {}).items()
+                 if not e.get("deleted")]  # 묘비는 화면에서 숨긴다(재수집 방지용 기록)
     former_items = sorted(((u, e) for u, e in all_items if (e.get("name") or "") in former),
                           key=lambda x: x[1].get("target") or x[1].get("msg_date") or "",
                           reverse=True)
@@ -707,6 +730,23 @@ async function editTarget(uid,current){
   await setTarget(uid,norm);
 }
 
+// 제목(주제) 수정 반영 — 표 행과 달력 칩 양쪽을 바로 고친다(서버 반영 전 pending 표시).
+function setTopic(uid,value){
+  const row=document.querySelector('tr[data-uid="'+CSS.escape(uid)+'"]');
+  if(row){
+    row.dataset.topic=value;
+    const td=row.querySelector('.c-topic');
+    if(td)td.textContent=value||row.dataset.note||'—';
+    row.classList.add('pending');
+  }
+  document.querySelectorAll('.chip[data-uid="'+CSS.escape(uid)+'"]').forEach(c=>{
+    c.dataset.topic=value;
+    const shown=value||c.dataset.note||'';
+    c.textContent=(c.dataset.name||'')+(shown?'·'+shown:'');
+    c.classList.add('pending');
+  });
+}
+
 // 달력 칩 드래그&드랍 → 발간 예정일 이동 (모바일은 📅 버튼 이용)
 let dragUid=null,dragging=false;
 document.addEventListener('dragstart',ev=>{
@@ -769,7 +809,7 @@ document.addEventListener('click',async ev=>{
   chk.classList.toggle('on',next);chk.classList.toggle('off',!next);
 });
 
-// 📅 날짜 / ✏️ 메모 / 🗑 삭제
+// 📝 제목 / 📅 날짜 / ✏️ 메모 / 🗑 삭제
 document.addEventListener('click',async ev=>{
   const btn=ev.target.closest('.acts button');if(!btn)return;
   const row=btn.closest('tr');if(!row||!row.dataset.uid)return;
@@ -777,6 +817,11 @@ document.addEventListener('click',async ev=>{
     if(!confirm('이 항목을 삭제할까요?'))return;
     if(!await sendOp({op:'idx-del',uid:row.dataset.uid}))return;
     row.classList.add('removed');
+  }else if(btn.dataset.act==='topic'){
+    const value=prompt('제목(주제)',row.dataset.topic||'');
+    if(value===null)return;
+    if(!await sendOp({op:'idx-topic',uid:row.dataset.uid,topic:value.trim()}))return;
+    setTopic(row.dataset.uid,value.trim());
   }else if(btn.dataset.act==='target'){
     editTarget(row.dataset.uid,row.dataset.target||'');
   }else{
@@ -871,6 +916,13 @@ function showPop(chip){
     const acts=document.createElement('div');acts.className='pop-acts';
     const mk=(label,fn)=>{const b=document.createElement('button');b.textContent=label;
       b.addEventListener('click',fn);acts.appendChild(b)};
+    mk('📝 제목',async()=>{
+      const value=prompt('제목(주제)',d.topic||'');
+      if(value===null)return;
+      hidePop();
+      if(!await sendOp({op:'idx-topic',uid:uid,topic:value.trim()}))return;
+      setTopic(uid,value.trim());
+    });
     mk('📅 날짜',()=>{hidePop();editTarget(uid,d.target||'')});
     mk('✏️ 메모',async()=>{
       const value=prompt('메모',d.note||'');
