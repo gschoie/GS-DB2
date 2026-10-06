@@ -1,7 +1,8 @@
 """월별 근태 체크 — 팀원의 "근태 완벽합니다" 보고를 잡아 월×이름 표로 정리.
 
 근태 체크는 매월 초의 '체크 기간'에만 돈다: 페이지의 ▶ 체크 시작(대상 월 선택)으로
-기간을 열면 휴가 추적과 같은 스캔(하루 2회)이 보고를 잡고, 🏁 마감을 누르면
+기간을 열면 페이지의 🔄 지금 수집(수동 전용 — 크론 자동 run은 근태를 안 본다)이
+최근 창을 훑어 보고를 잡고, 🏁 마감을 누르면
 이후 스캔은 근태 보고를 무시한다(수동 체크박스 토글은 언제든 가능).
 기간이 열려 있지 않으면 근태 수집 자체를 하지 않는다 — 평소 잡담에 "근태" 문구가
 지나가도 기록되지 않는다.
@@ -340,7 +341,7 @@ def build_page(store: dict | None = None) -> None:
         opened = campaigns.get(open_month, {}).get("opened_at", "")[:10]
         campaign = (f'<span class="camp-on">🟢 {html.escape(open_month)} 근태 체크 진행 중'
                     + (f' (시작 {html.escape(opened)})' if opened else '') + '</span>'
-                    '<span>— 하루 2회(08:30·18:30) 자동 수집</span>'
+                    '<span>— 🔄 지금 수집을 누를 때만 수집(자동 없음)</span>'
                     '<button id="camp-run">🔄 지금 수집</button>'
                     f'<button id="camp-close" data-month="{html.escape(open_month)}">🏁 마감</button>')
     else:
@@ -355,17 +356,18 @@ def build_page(store: dict | None = None) -> None:
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>월별 근태 체크</title><style>{PAGE_CSS}</style></head><body><div class="wrap">
 <h1>✅ 월별 근태 체크</h1>
-<div class="meta">갱신 {stamp} · 체크 기간에만 텔레그램 1:1의 "근태 완벽합니다" 보고를 자동 수집 ·
-확인 칸을 누르면 수동 토글</div>
+<div class="meta">갱신 {stamp} · 체크 기간 중 🔄 지금 수집을 누르면 텔레그램 1:1의
+"근태 완벽합니다" 보고를 최근 2주 창에서 수집 · 확인 칸을 누르면 수동 토글</div>
 <div class="campaign">{campaign}</div>
 <div class="pager"><button id="m-prev">◀</button><span class="label" id="m-label"></span>
 <button id="m-next">▶</button><span class="status-badge" id="m-status" hidden></span>
 <span class="count" id="m-count"></span></div>
 {tables}
 <p id="att-status"></p>
-<p class="hint">흐름: 매월 초 ▶ 체크 시작(대상 월 선택) → 팀원 보고가 자동으로 ✓ →
-다 모이면 🏁 마감(이후 자동 갱신 중단). 자동 체크 문구 예: "근태 완벽합니다",
-"9월 근태 이상 없습니다". 마감 뒤에도 확인 칸 클릭으로 수동 수정은 가능합니다.</p>
+<p class="hint">흐름: 매월 초 ▶ 체크 시작(대상 월 선택) → 🔄 지금 수집을 누를 때마다
+팀원 보고를 긁어 ✓ → 다 모이면 🏁 마감. 수집은 버튼을 눌렀을 때만 돌고(자동 없음),
+최근 2주 창을 훑으므로 지난번 수집 이후에 온 보고도 놓치지 않습니다. 자동 체크 문구 예:
+"근태 완벽합니다", "9월 근태 이상 없습니다". 마감 뒤에도 확인 칸 클릭으로 수동 수정은 가능합니다.</p>
 </div>
 <script>
 const EP={json.dumps(DISPATCH_ENDPOINT)};
@@ -431,7 +433,7 @@ async function sendOp(payload){
 const openBtn=$id('camp-open');
 if(openBtn)openBtn.onclick=async()=>{
   const month=$id('camp-month').value;
-  if(!confirm(label(month)+' 체크를 시작할까요?\\n시작하면 하루 2회 자동 수집됩니다.'))return;
+  if(!confirm(label(month)+' 체크를 시작할까요?\\n시작 후 🔄 지금 수집을 누를 때마다 수집합니다(자동 없음).'))return;
   openBtn.disabled=true;
   if(await sendOp({op:'att-open',month:month}))openBtn.textContent='시작 중…';
   else openBtn.disabled=false;
@@ -439,7 +441,7 @@ if(openBtn)openBtn.onclick=async()=>{
 const closeBtn=$id('camp-close');
 if(closeBtn)closeBtn.onclick=async()=>{
   const month=closeBtn.dataset.month;
-  if(!confirm(label(month)+' 체크를 마감할까요?\\n마감하면 자동 갱신이 중단됩니다(수동 수정은 계속 가능).'))return;
+  if(!confirm(label(month)+' 체크를 마감할까요?\\n마감하면 수집이 중단됩니다(수동 수정은 계속 가능).'))return;
   closeBtn.disabled=true;
   if(await sendOp({op:'att-close',month:month}))closeBtn.textContent='마감 중…';
   else closeBtn.disabled=false;
