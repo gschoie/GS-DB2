@@ -111,6 +111,8 @@ GEMINI_IDX_PROMPT = """너는 증권사 리서치팀장의 텔레그램 대화(1
   (구간이면 중간~끝 무렵, "N월 중"이면 그 달 중순). 원문 표현은 target_text에 그대로
   남겨라. 시점 언급이 아예 없을 때만 target=null.
 - topic은 종목명/산업명 위주로 짧게. 정 모르겠으면 빈 문자열.
+- 콜라보(두 섹터 공동 자료)는 쪼개지 말고 한 건으로 — topic에 '건설/인터넷 콜라보'처럼
+  적고, 담당자 여럿이 명시돼 있으면 name에 '이름1·이름2'로 나란히 적어라.
 - '세미 인뎁스'·'세미'라고 말하면 kind=Semi-인뎁스."""
 
 
@@ -782,25 +784,35 @@ function editName(uid,current){
   chipPop=document.createElement('div');chipPop.id='chip-pop';
   const close=document.createElement('span');close.className='close';close.textContent='✕';
   close.addEventListener('click',hidePop);
-  const t=document.createElement('div');t.className='t';t.textContent='👤 담당자 변경';
-  const sel=document.createElement('select');
-  const opts=[...NAMES];
-  if(current&&!opts.includes(current))opts.unshift(current);
-  if(!opts.includes('미정'))opts.push('미정');
-  opts.forEach(n=>{const o=document.createElement('option');o.textContent=n;
-    if(n===current)o.selected=true;sel.appendChild(o)});
-  const free=document.createElement('input');free.placeholder='직접 입력(선택)';free.size=10;
+  const t=document.createElement('div');t.className='t';
+  t.textContent='👤 담당자 변경 — 콜라보는 여러 명 체크';
+  // 현재 담당은 '박영도·김혜영'처럼 구분자로 쪼개 미리 체크해 둔다.
+  const picked=new Set((current||'').split(/[·,/+&]/).map(s=>s.trim()).filter(s=>s&&s!=='미정'));
+  const box=document.createElement('div');
+  box.style.cssText='display:flex;flex-wrap:wrap;gap:4px 10px;margin:8px 0;max-width:300px';
+  const names=[...NAMES];
+  picked.forEach(n=>{if(!names.includes(n))names.push(n)});
+  names.forEach(n=>{
+    const lab=document.createElement('label');lab.style.whiteSpace='nowrap';
+    const cb=document.createElement('input');cb.type='checkbox';cb.value=n;
+    cb.checked=picked.has(n);
+    lab.append(cb,document.createTextNode(n));
+    box.appendChild(lab);
+  });
+  const free=document.createElement('input');free.placeholder='직접 입력(추가)';free.size=12;
   const btn=document.createElement('button');btn.textContent='변경';
   btn.addEventListener('click',async()=>{
-    const value=(free.value.trim()||sel.value||'').trim();
-    if(!value)return;
+    const chosen=[...box.querySelectorAll('input:checked')].map(c=>c.value);
+    free.value.split(/[·,/+&]/).map(s=>s.trim()).filter(Boolean)
+      .forEach(n=>{if(!chosen.includes(n))chosen.push(n)});
+    const value=chosen.join('·')||'미정';
     btn.disabled=true;
     if(!await sendOp({op:'idx-name',uid:uid,name:value})){btn.disabled=false;return}
     hidePop();setName(uid,value);
   });
   const acts=document.createElement('div');acts.className='pop-acts';
-  acts.append(sel,free,btn);
-  chipPop.append(close,t,acts);
+  acts.append(free,btn);
+  chipPop.append(close,t,box,acts);
   document.body.appendChild(chipPop);
   chipPop.style.left=Math.max(8,(window.innerWidth-chipPop.offsetWidth)/2)+'px';
   chipPop.style.top='140px';
