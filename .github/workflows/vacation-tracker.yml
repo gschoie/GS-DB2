@@ -93,35 +93,43 @@ jobs:
       # 상태 커밋은 발송까지 끝난 뒤에만 — 실패한 run이 last_id를 올리면 그 보고는 영영 안 잡힌다.
       - name: 상태·페이지 커밋
         if: ${{ success() && !contains(fromJSON('["probe","dry-run"]'), inputs.mode || 'run') }}
+        env:
+          MODE: ${{ inputs.mode || 'run' }}
+          ENTRY: ${{ inputs.entry }}
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add vacation_tracker/state telegram_research_dashboard/static/vacation_report.html \
-            telegram_research_dashboard/static/attendance_report.html \
-            telegram_research_dashboard/static/indepth_report.html
-          if git diff --cached --quiet; then
-            echo "변경 없음 — 커밋 생략"
-            exit 0
-          fi
-          git commit -m "chore(vacation): 휴가 일정 갱신 $(TZ=Asia/Seoul date +'%Y-%m-%d %H:%M')"
-          # push 재시도: 버튼 연타로 run이 겹치면 생성 페이지에서 rebase가 충돌해
-          # op가 통째로 유실되던 사고(9/15) 방지 — 내 커밋 우선(-X theirs)으로 리베이스한 뒤
-          # 병합된 상태로 페이지를 다시 구워 amend하고 다시 민다.
+          commit_all() {
+            git add vacation_tracker/state telegram_research_dashboard/static/vacation_report.html \
+              telegram_research_dashboard/static/attendance_report.html \
+              telegram_research_dashboard/static/indepth_report.html
+            if git diff --cached --quiet; then
+              echo "변경 없음 — 커밋 생략"
+              return 1
+            fi
+            git commit -m "chore(vacation): 휴가 일정 갱신 $(TZ=Asia/Seoul date +'%Y-%m-%d %H:%M')"
+          }
+          commit_all || exit 0
+          # push 재시도: run이 겹치면 내 커밋은 낡은 base 위의 것이다. 예전 방식
+          # (pull --rebase -X theirs)은 JSON을 줄 병합해 그 사이 main에 실린 다른
+          # run의 op를 덮어썼다(10/6 근태 수동 체크 유실). 이제는 '일을 다시 한다':
+          # 내 산출을 떼어 두고 최신 main으로 reset한 뒤 — add 모드는 op를 재적용,
+          # run 모드는 reconcile_state.py로 키 단위 병합 — 새로 커밋해 다시 민다.
           for i in 1 2 3 4 5; do
             if git push origin HEAD:main; then
               exit 0
             fi
-            git rebase --abort 2>/dev/null || true
-            if ! git pull --rebase --autostash -X theirs origin main; then
-              git rebase --abort 2>/dev/null || true
-              sleep 5
-              continue
+            OURS=$(mktemp -d)
+            cp vacation_tracker/state/*.json "$OURS"/ 2>/dev/null || true
+            if ! git fetch origin main; then sleep 5; continue; fi
+            git reset --hard origin/main
+            if [ "$MODE" = "add" ]; then
+              (cd vacation_tracker && python vacation_bot.py --add "$ENTRY")
+            else
+              (cd vacation_tracker && python reconcile_state.py "$OURS")
             fi
             (cd vacation_tracker && python vacation_bot.py --rebuild-page)
-            git add vacation_tracker/state telegram_research_dashboard/static/vacation_report.html \
-              telegram_research_dashboard/static/attendance_report.html \
-              telegram_research_dashboard/static/indepth_report.html
-            git commit --amend --no-edit
+            commit_all || exit 0
             sleep 3
           done
           echo "push 실패" >&2
