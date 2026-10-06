@@ -492,13 +492,14 @@ def extract(candidates: list[dict], owner: str = "") -> list[dict]:
 
 def notify(new_entries: list[dict], fresh_att: list[dict] | None = None,
            fresh_idx: list[dict] | None = None) -> None:
+    """휴가·근태는 기존 봇, 발간계획은 매크로봇(IDX_TELEGRAM_*)으로 따로 보낸다.
+
+    발간계획 전용 시크릿이 없으면 기존 봇으로 폴백 — 알림이 조용히 사라지지 않게.
+    """
     fresh_att = fresh_att or []
     fresh_idx = fresh_idx or []
     token = os.environ.get("TELEGRAM_BOT_TOKEN", "").strip()
     chat_id = os.environ.get("TELEGRAM_CHAT_ID", "").strip()
-    if not token or not chat_id:
-        print("[알림] TELEGRAM_BOT_TOKEN/CHAT_ID 미설정 — 발송 생략(대시보드 전용)")
-        return
     import notify as watcher_notify  # source_watcher의 발송기 재사용 (분할·재시도 포함)
 
     lines: list[str] = []
@@ -520,20 +521,31 @@ def notify(new_entries: list[dict], fresh_att: list[dict] | None = None,
             lines.append(f"└ \"{watcher_notify.escape(hit['text'][:120])}\"")
             lines.append("")
         lines.append('근태 현황: <a href="https://gschoie.github.io/GS-DB2/attendance_report.html">대시보드</a>')
+    if lines:
+        if token and chat_id:
+            watcher_notify.send("\n".join(lines), token=token, chat_id=chat_id)
+            print(f"[알림] 휴가 {len(new_entries)}건 + 근태 {len(fresh_att)}건 발송")
+        else:
+            print("[알림] TELEGRAM_BOT_TOKEN/CHAT_ID 미설정 — 휴가·근태 발송 생략")
+
     if fresh_idx:
-        if lines:
-            lines.append("")
-        lines += [f"📚 <b>발간 계획 감지</b> ({len(fresh_idx)}건)", ""]
+        idx_token = os.environ.get("IDX_TELEGRAM_BOT_TOKEN", "").strip() or token
+        idx_chat = os.environ.get("IDX_TELEGRAM_CHAT_ID", "").strip() or chat_id
+        if not idx_token or not idx_chat:
+            print("[알림] 발간계획 봇 미설정 — 발송 생략(대시보드 전용)")
+            return
+        idx_lines = [f"📚 <b>발간 계획 레이더</b> — 신규 {len(fresh_idx)}건", ""]
         for entry in sorted(fresh_idx, key=lambda e: (e.get("target") or "9999", e["name"])):
             when = entry.get("target") or entry.get("target_text") or "시점 미정"
             topic = entry.get("topic") or "주제 미상"
-            lines.append(f"<b>{watcher_notify.escape(entry['name'])}</b> — "
-                         f"{watcher_notify.escape(topic)} ({watcher_notify.escape(str(when))})")
-            lines.append(f"└ \"{watcher_notify.escape(entry['text'][:120])}\"")
-            lines.append("")
-        lines.append('발간 계획: <a href="https://gschoie.github.io/GS-DB2/indepth_report.html">대시보드</a>')
-    watcher_notify.send("\n".join(lines), token=token, chat_id=chat_id)
-    print(f"[알림] 휴가 {len(new_entries)}건 + 근태 {len(fresh_att)}건 + 발간계획 {len(fresh_idx)}건 발송")
+            idx_lines.append(f"<b>{watcher_notify.escape(entry['name'])}</b> — "
+                             f"{watcher_notify.escape(topic)} ({watcher_notify.escape(str(when))})")
+            idx_lines.append(f"└ \"{watcher_notify.escape(entry['text'][:120])}\"")
+            idx_lines.append("")
+        idx_lines.append('발간 계획: <a href="https://gschoie.github.io/GS-DB2/indepth_report.html">대시보드</a>')
+        watcher_notify.send("\n".join(idx_lines), token=idx_token, chat_id=idx_chat)
+        print(f"[알림] 발간계획 {len(fresh_idx)}건 발송 (매크로봇)" if idx_token != token
+              else f"[알림] 발간계획 {len(fresh_idx)}건 발송 (기본 봇 폴백)")
 
 
 def span_label(entry: dict) -> str:
