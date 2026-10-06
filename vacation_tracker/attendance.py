@@ -402,15 +402,18 @@ $id('m-next').onclick=()=>{if(idx<months.length-1){idx++;render()}};
 render();
 
 async function watchDeploy(){
-  for(let i=0;i<24;i++){
+  // 수집 run(~2.5분) + Pages 배포 + CDN 캐시(최대 10분)까지 견디게 12분 감시.
+  // 기다리는 동안 상태가 멈춰 보이지 않게 경과를 계속 적는다.
+  const s=$id('att-status');
+  for(let i=0;i<48;i++){
     await new Promise(r=>setTimeout(r,15000));
+    if(s)s.textContent='⏳ 반영 확인 중… '+Math.round((i+1)*15/60*10)/10+'분 경과 (CDN 캐시로 몇 분 걸릴 수 있음)';
     try{
       const r=await fetch('attendance_report.html?t='+Date.now(),{cache:'no-store'});
       const m=(await r.text()).match(/갱신 ([0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2})/);
       if(m&&m[1]!==PAGE_STAMP){location.reload();return}
     }catch(e){}
   }
-  const s=$id('att-status');
   if(s)s.textContent='서버 반영 확인이 오래 걸립니다 — 잠시 뒤 수동 새로고침해 주세요';
 }
 
