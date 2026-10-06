@@ -683,12 +683,16 @@ const NAMES={json.dumps(team_names, ensure_ascii=False)};
     script = """
 const $id=i=>document.getElementById(i);
 
-async function watchDeploy(){
+async function watchDeploy(mode){
   // 워크플로 + Pages 배포 + CDN 캐시(최대 10분)까지 견디게 12분 감시, 경과 표시.
-  const s=$id('idx-status');
+  // 수집 버튼 경로(mode='collect')는 처음 3분간 '수집 중'을 유지하고 버튼 옆에 적는다.
+  const s=$id(mode==='collect'?'run-status':'idx-status');
   for(let i=0;i<48;i++){
     await new Promise(r=>setTimeout(r,15000));
-    if(s)s.textContent='⏳ 반영 확인 중… '+Math.round((i+1)*15/60*10)/10+'분 경과 (CDN 캐시로 몇 분 걸릴 수 있음)';
+    const min=Math.round((i+1)*15/60*10)/10;
+    if(s)s.textContent=(mode==='collect'&&i<12)
+      ?'🔄 수집 중… '+min+'분 경과 (텔레그램 훑는 중, 2~3분 걸립니다)'
+      :'⏳ 반영 확인 중… '+min+'분 경과 (CDN 캐시로 몇 분 걸릴 수 있음)';
     try{
       const r=await fetch('indepth_report.html?t='+Date.now(),{cache:'no-store'});
       const m=(await r.text()).match(/갱신 ([0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2})/);
