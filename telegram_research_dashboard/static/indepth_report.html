@@ -96,7 +96,7 @@ a{color:#1b6ec2}
 </style></head><body><div class="wrap">
 <h1>📚 인뎁스/자료 발간 계획</h1>
 <p class="meta">팀원들과의 텔레그램 1:1 대화에서 자료 발간 계획을 자동으로 잡아 정리 ·
-갱신 2026-10-07 08:45 KST · 총 49건
+갱신 2026-10-07 08:48 KST · 총 49건
 <button id="run-btn" class="run-btn" onclick="runScan()">🔄 지금 수집</button>
 <span id="run-status"></span></p>
 <details class="sec"><summary>📌 발간 예정 (13건)</summary><table class="lst"><thead><tr><th>이름</th><th>주제</th><th>예정</th><th>종류</th><th>발간</th><th>메모 · 원문</th></tr></thead><tbody><tr data-uid="1099013995:1222913" data-done="0" data-note="" data-target="2026-10-08" data-topic="은행"><td class="c-name name">김지원</td><td class="c-topic topic">은행</td><td class="c-tgt tgt">10/08(목)<span class="vague" title="원문: 내일">≈</span></td><td class="c-kind"><span class="badge">기타</span></td><td class="c-done"><span class="chk off" title="누르면 발간 완료 처리">☐</span></td><td class="c-note"><span class="acts"><button data-act="name" title="담당자 변경">👤</button><button data-act="topic" title="제목(주제) 수정">📝</button><button data-act="target" title="날짜 수정">📅</button><button data-act="note" title="메모">✏️</button><button data-act="del" title="삭제">🗑</button></span><div class="src">2026-10-07 02:24 · “팀장님 내일 발간할 은행 프리뷰 자료입니다”</div></td></tr><tr data-uid="5460814526:1213203" data-done="0" data-note="" data-target="2026-10-12" data-topic="전기전자(전력 부품)"><td class="c-name name">김연미</td><td class="c-topic topic">전기전자(전력 부품)</td><td class="c-tgt tgt">10/12(월)<span class="vague" title="원문: 9월마지막주~ 10월첫째주쯤">≈</span></td><td class="c-kind"><span class="badge">인뎁스</span></td><td class="c-done"><span class="chk off" title="누르면 발간 완료 처리">☐</span></td><td class="c-note"><span class="acts"><button data-act="name" title="담당자 변경">👤</button><button data-act="topic" title="제목(주제) 수정">📝</button><button data-act="target" title="날짜 수정">📅</button><button data-act="note" title="메모">✏️</button><button data-act="del" title="삭제">🗑</button></span><div class="src">2026-09-14 09:36 · “팀장님~~ 전기전자 인뎁스 9월마지막주~ 10월첫째주쯤 내고싶은데 괜찮을까요 ...ㅎㅎ..
@@ -199,7 +199,7 @@ a{color:#1b6ec2}
 </div>
 <script>
 const EP="https://script.google.com/macros/s/AKfycbx3RjIjtlO2Z6fIYo2T3LhJrFg9Wp2hS7dMS3Is52-JVF1hizoCWewbQ1uM_v5sdhR2jw/exec";
-const PAGE_STAMP="2026-10-07 08:45";
+const PAGE_STAMP="2026-10-07 08:48";
 const KINDS=["인뎁스", "Semi-인뎁스", "개시", "산업", "스몰캡", "탐방", "기타"];
 const NAMES=["김연미", "김지원", "김진영", "김혜영", "남대종", "박소현", "박영도", "박종현", "유지웅", "이다연", "이정우", "이준범", "이지수", "임도영", "테크RA", "한수빈"];
 </script>
@@ -207,12 +207,16 @@ const NAMES=["김연미", "김지원", "김진영", "김혜영", "남대종", "�
 
 const $id=i=>document.getElementById(i);
 
-async function watchDeploy(){
+async function watchDeploy(mode){
   // 워크플로 + Pages 배포 + CDN 캐시(최대 10분)까지 견디게 12분 감시, 경과 표시.
-  const s=$id('idx-status');
+  // 수집 버튼 경로(mode='collect')는 처음 3분간 '수집 중'을 유지하고 버튼 옆에 적는다.
+  const s=$id(mode==='collect'?'run-status':'idx-status');
   for(let i=0;i<48;i++){
     await new Promise(r=>setTimeout(r,15000));
-    if(s)s.textContent='⏳ 반영 확인 중… '+Math.round((i+1)*15/60*10)/10+'분 경과 (CDN 캐시로 몇 분 걸릴 수 있음)';
+    const min=Math.round((i+1)*15/60*10)/10;
+    if(s)s.textContent=(mode==='collect'&&i<12)
+      ?'🔄 수집 중… '+min+'분 경과 (텔레그램 훑는 중, 2~3분 걸립니다)'
+      :'⏳ 반영 확인 중… '+min+'분 경과 (CDN 캐시로 몇 분 걸릴 수 있음)';
     try{
       const r=await fetch('indepth_report.html?t='+Date.now(),{cache:'no-store'});
       const m=(await r.text()).match(/갱신 ([0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2})/);

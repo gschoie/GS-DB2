@@ -346,11 +346,18 @@ def build_page(store: dict | None = None) -> None:
                     f'<button id="camp-close" data-month="{html.escape(open_month)}">🏁 마감</button>')
     else:
         prev = _prev_month(current)
+        # 가장 최근에 마감한 기간은 '마감 취소'로 바로 다시 열 수 있게 한다.
+        closed = [m for m, c in campaigns.items() if c.get("status") == "closed"]
+        reopen = ""
+        if closed:
+            last = max(closed)
+            reopen = (f'<button id="camp-reopen" data-month="{html.escape(last)}">'
+                      f'↩️ 마감 취소 ({html.escape(last)} 재개)</button>')
         campaign = ('<span class="camp-off">⚪ 진행 중인 근태 체크 없음</span>'
                     '<select id="camp-month">'
                     f'<option value="{prev}">전월 ({prev})</option>'
                     f'<option value="{current}">당월 ({current})</option></select>'
-                    '<button id="camp-open">▶ 체크 시작</button>')
+                    '<button id="camp-open">▶ 체크 시작</button>' + reopen)
 
     head = f"""<!doctype html><html lang="ko"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -401,13 +408,16 @@ $id('m-prev').onclick=()=>{if(idx>0){idx--;render()}};
 $id('m-next').onclick=()=>{if(idx<months.length-1){idx++;render()}};
 render();
 
-async function watchDeploy(){
+async function watchDeploy(mode){
   // 수집 run(~2.5분) + Pages 배포 + CDN 캐시(최대 10분)까지 견디게 12분 감시.
-  // 기다리는 동안 상태가 멈춰 보이지 않게 경과를 계속 적는다.
+  // 수집 버튼 경로(mode='collect')는 처음 3분간 '수집 중'을 유지한다.
   const s=$id('att-status');
   for(let i=0;i<48;i++){
     await new Promise(r=>setTimeout(r,15000));
-    if(s)s.textContent='⏳ 반영 확인 중… '+Math.round((i+1)*15/60*10)/10+'분 경과 (CDN 캐시로 몇 분 걸릴 수 있음)';
+    const min=Math.round((i+1)*15/60*10)/10;
+    if(s)s.textContent=(mode==='collect'&&i<12)
+      ?'🔄 수집 중… '+min+'분 경과 (텔레그램 훑는 중, 2~3분 걸립니다)'
+      :'⏳ 반영 확인 중… '+min+'분 경과 (CDN 캐시로 몇 분 걸릴 수 있음)';
     try{
       const r=await fetch('attendance_report.html?t='+Date.now(),{cache:'no-store'});
       const m=(await r.text()).match(/갱신 ([0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2})/);
@@ -449,6 +459,14 @@ if(closeBtn)closeBtn.onclick=async()=>{
   if(await sendOp({op:'att-close',month:month}))closeBtn.textContent='마감 중…';
   else closeBtn.disabled=false;
 };
+const reopenBtn=$id('camp-reopen');
+if(reopenBtn)reopenBtn.onclick=async()=>{
+  const month=reopenBtn.dataset.month;
+  if(!confirm(label(month)+' 체크 마감을 취소하고 다시 열까요?'))return;
+  reopenBtn.disabled=true;
+  if(await sendOp({op:'att-open',month:month}))reopenBtn.textContent='재개 중…';
+  else reopenBtn.disabled=false;
+};
 const runBtn=$id('camp-run');
 if(runBtn)runBtn.onclick=async()=>{
   runBtn.disabled=true;
@@ -459,8 +477,8 @@ if(runBtn)runBtn.onclick=async()=>{
     try{const d=await r.json();
       if(d&&d.ok===false){status.textContent='⚠ 거절 '+(d.code||'?')+' — '+(d.error||'GAS 프록시 확인 필요');runBtn.disabled=false;return}
     }catch(e){}
-    status.textContent='✅ 수집 중 — 2~3분 뒤 새 데이터가 오면 자동 새로고침됩니다';
-    watchDeploy();
+    status.textContent='🔄 수집 시작 — 텔레그램을 훑는 중입니다 (2~3분, 끝나면 자동 새로고침)';
+    watchDeploy('collect');
   }catch(e){status.textContent='실패: '+e.message;runBtn.disabled=false}
 };
 
