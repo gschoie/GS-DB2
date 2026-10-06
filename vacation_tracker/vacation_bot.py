@@ -621,7 +621,7 @@ def run(dry_run: bool = False, probe: bool = False) -> None:
 
     idx_store = indepth.load_store()
     # 아는 uid는 Gemini에 다시 묻지 않는다(수동 수정 보호 + 호출 절약).
-    idx_new_cands = [c for c in idx_cands if c["uid"] not in idx_store.get("entries", {})]
+    idx_new_cands = [c for c in idx_cands if not indepth.is_known(idx_store, c["uid"])]
     fresh_idx = indepth.record(idx_store, indepth.extract(idx_new_cands))
     indepth.save_store(idx_store)
     indepth.build_page(idx_store)
@@ -646,7 +646,7 @@ def run_indepth_backfill(days: int = 92) -> None:
     import indepth
 
     idx_store = indepth.load_store()
-    new_cands = [c for c in idx_cands if c["uid"] not in idx_store.get("entries", {})]
+    new_cands = [c for c in idx_cands if not indepth.is_known(idx_store, c["uid"])]
     fresh = indepth.record(idx_store, indepth.extract(new_cands))
     indepth.save_store(idx_store)
     indepth.build_page(idx_store)
