@@ -1,5 +1,5 @@
 {
-  "when_utc": "2026-10-07 00:20:45Z",
+  "when_utc": "2026-10-07 01:20:37Z",
   "ok": true,
   "note": "change_sent",
   "chat_id_tail": "5171",
@@ -7,7 +7,7 @@
   "response": {
     "ok": true,
     "result": {
-      "message_id": 561,
+      "message_id": 563,
       "from": {
         "id": 8875725998,
         "is_bot": true,
@@ -21,8 +21,8 @@
         "username": "gschoie",
         "type": "private"
       },
-      "date": 1791332445,
-      "text": "🧩 액티브 ETF 구성 변화 · 감지 2026-10-07 09:20 (직전 거래일 매매)\n\n변화 ETF 5개 · 진입 5·이탈 5·실매매 0\n\n🟢 TIME K바이오액티브 · TIME(구 TIMEFOLIO)\n   ⊕ 진입: 디앤디파마텍\n   ⊖ 이탈: 알지노믹스\n🟢 KoAct 코스닥액티브 · KoAct\n   ⊕ 진입: 아모텍\n   ⊖ 이탈: 피에스케이\n🟢 TIGER AI코리아그로스액티브 · TIGER\n   ⊕ 진입: LG전자\n   ⊖ 이탈: 한화에어로스페이스\n🟢 TIGER 퓨처모빌리티액티브 · TIGER\n   ⊕ 진입: 엘앤에프\n   ⊖ 이탈: 현대모비스\n🟢 SOL 미국AI소프트웨어액티브 · SOL\n   ⊕ 진입: Nebius Group\n   ⊖ 이탈: ADOBE SYSTEMS INC\n\n전체 상세 › 대시보드\n🎴 GS Research Desk · 액티브 ETF 트래커",
+      "date": 1791336037,
+      "text": "🧩 액티브 ETF 구성 변화 · 감지 2026-10-07 10:20 (직전 거래일 매매)\n\n변화 ETF 7개 · 진입 7·이탈 7·실매매 1\n\n🟢 TIGER 코리아테크액티브 · TIGER\n   ⊕ 진입: 이수페타시스\n   ⊖ 이탈: 이오테크닉스\n   ▲ 삼성전자 계약수 +9% · 비중 +1.6%p\n🟢 TIME 코스닥액티브 · TIME(구 TIMEFOLIO)\n   ⊕ 진입: 레인보우로보틱스\n   ⊖ 이탈: 알테오젠\n🟢 TIME K바이오액티브 · TIME(구 TIMEFOLIO)\n   ⊕ 진입: 디앤디파마텍\n   ⊖ 이탈: 알지노믹스\n🟢 KoAct 코스닥액티브 · KoAct\n   ⊕ 진입: 아모텍\n   ⊖ 이탈: 피에스케이\n🟢 TIGER AI코리아그로스액티브 · TIGER\n   ⊕ 진입: LG전자\n   ⊖ 이탈: 한화에어로스페이스\n🟢 TIGER 퓨처모빌리티액티브 · TIGER\n   ⊕ 진입: 엘앤에프\n   ⊖ 이탈: 현대모비스\n🟢 SOL 미국AI소프트웨어액티브 · SOL\n   ⊕ 진입: Nebius Group\n   ⊖ 이탈: ADOBE SYSTEMS INC\n\n전체 상세 › 대시보드\n🎴 GS Research Desk · 액티브 ETF 트래커",
       "entities": [
         {
           "offset": 0,
@@ -41,31 +41,41 @@
         },
         {
           "offset": 84,
+          "length": 14,
+          "type": "bold"
+        },
+        {
+          "offset": 172,
+          "length": 11,
+          "type": "bold"
+        },
+        {
+          "offset": 239,
           "length": 12,
           "type": "bold"
         },
         {
-          "offset": 151,
+          "offset": 306,
           "length": 12,
           "type": "bold"
         },
         {
-          "offset": 203,
+          "offset": 358,
           "length": 17,
           "type": "bold"
         },
         {
-          "offset": 265,
+          "offset": 420,
           "length": 15,
           "type": "bold"
         },
         {
-          "offset": 321,
+          "offset": 476,
           "length": 16,
           "type": "bold"
         },
         {
-          "offset": 402,
+          "offset": 557,
           "length": 4,
           "type": "text_link",
           "url": "https://gschoie.github.io/GS-DB2/etf_holdings_report.html"
