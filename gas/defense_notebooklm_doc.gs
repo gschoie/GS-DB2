@@ -4,12 +4,17 @@
 // 문서로 만든다. NotebookLM은 구글 문서 소스에 한해 '동기화' 버튼으로 최신 내용을
 // 다시 불러올 수 있으므로, 소스를 지웠다 다시 올릴 필요 없이 버튼 한 번이면 된다.
 //
-// 문서는 두 벌을 유지한다.
+// 문서는 세 벌을 유지한다.
 //   1) 최근 30일 롤링 문서 — 매일 통째로 덮어쓴다. '요즘 동향' 질문용.
 //   2) 월간 누적 문서 — '방산 브리핑 YYYY-MM' 문서를 매일 '이달 1일~오늘'로
 //      다시 쓴다. 달이 바뀌면 새 문서가 생기고 지난달 문서는 더는 손대지 않아
 //      그대로 보존된다(영구 아카이브). 매달 1일에 새 문서를 NotebookLM 소스로
 //      한 번만 추가하면 된다.
+//   3) 오늘의 브리핑(오디오용) — 방산 통합본 + 건설기계 통합본 '하루치'만 담아
+//      매일 덮어쓴다. NotebookLM 오디오 오버뷰(팟캐스트) 소스용 — 30일 문서는
+//      오디오로 만들면 초점이 흩어져서, 하루치 전용 문서를 따로 둔다.
+//      아침 사용법: 노트북 열기 → 이 소스 [동기화] → [오디오 오버뷰 생성]. 클릭 2번.
+//      (오디오 생성 자체는 NotebookLM에 API가 없어 자동화 불가 — 무료 플랜 하루 3개 한도)
 //
 // 설치(1회) — 기존 봇 프로젝트에 섞지 말고 새 Apps Script 프로젝트를 쓸 것.
 // (문서 권한이 새로 필요해서, 웹앱이 붙어 있는 프로젝트에 넣으면 재승인이 걸린다)
@@ -18,7 +23,9 @@
 //      — 한 달치 텍스트가 커서 DocumentApp.setText 로는 실패한다. Drive 로 통째 교체한다.
 //   3. updateNotebookLmDoc() 한 번 실행 → 권한 승인 → 실행 로그의 문서 주소 확인
 //   4. installNotebookLmTrigger() 한 번 실행 → 매일 아침 8시대 자동 갱신
-//   5. NotebookLM → 소스 추가 → Google Docs → 두 문서(30일 롤링 + 이달 월간) 선택
+//   5. NotebookLM → 소스 추가 → Google Docs → 세 문서(30일 롤링 + 이달 월간 +
+//      오늘의 브리핑 오디오용) 선택 — 오디오용은 별도 노트북('아침 브리핑 팟캐스트'
+//      등)에 단독 소스로 두는 걸 권장(오디오가 다른 소스와 섞이지 않게).
 //      이후에는 NotebookLM에서 소스를 열고 '동기화'만 누르면 최신이 된다.
 //
 // 문서는 처음 실행할 때 스크립트가 직접 만들고, ID를 스크립트 속성에 적어 둔다
@@ -39,6 +46,15 @@ const NLM_SOURCES = [
   { key: 'defense_unified', label: '글로벌 방산 브리핑 (통합)' }
 ];
 
+// 오디오용 '오늘의 브리핑' 문서 — 방산+건설기계 통합본 하루치.
+// 섹터를 더 싣고 싶으면 여기에 { key, label } 만 추가하면 된다(energy_daily 등).
+const NLM_DAILY_DOC_KEY = 'NOTEBOOKLM_DOC_ID_DAILY';
+const NLM_DAILY_DOC_TITLE = '오늘의 브리핑 (NotebookLM 오디오용 — 자동 생성)';
+const NLM_DAILY_SOURCES = [
+  { key: 'defense_unified', label: '글로벌 방산 브리핑 (통합)' },
+  { key: 'construction_unified', label: '글로벌 건설기계 브리핑 (통합)' }
+];
+
 // 메인 — 트리거가 매일 이 함수 하나만 부른다. 롤링 30일 문서와 이달 월간 문서를
 // 차례로 갱신한다. 한쪽이 실패해도 다른 쪽은 마저 쓴다.
 function updateNotebookLmDoc() {
@@ -51,6 +67,11 @@ function updateNotebookLmDoc() {
     updateMonthlyDoc_();
   } catch (error) {
     Logger.log('월간 문서 갱신 실패: ' + error);
+  }
+  try {
+    updateDailyAudioDoc_();
+  } catch (error) {
+    Logger.log('오디오용 문서 갱신 실패: ' + error);
   }
 }
 
@@ -85,6 +106,43 @@ function updateMonthlyDoc_() {
   if (isNew) {
     Logger.log('▶ 새 달 문서입니다 — NotebookLM에 소스로 한 번 추가해 주세요.');
   }
+}
+
+// 3) 오디오용 '오늘의 브리핑' — 소스별로 가장 최근 하루치만 담아 매일 덮어쓴다.
+// 트리거가 8시대라 두 통합본(~06:00/06:30 완성) 모두 그날 것이 보통이고,
+// 세션 장애 등으로 그날 판이 없으면 3일 안에서 가장 최근 판을 날짜 표기와 함께 싣는다.
+function updateDailyAudioDoc_() {
+  const dates = recentDates_(3);
+  const token = NLM_PROPS.getProperty('GH_TOKEN');
+  const chunks = [];
+  const found = [];
+  NLM_DAILY_SOURCES.forEach(function (source) {
+    for (let i = 0; i < dates.length; i++) {
+      const params = { muteHttpExceptions: true };
+      if (token) params.headers = { Authorization: 'Bearer ' + token };
+      const response = UrlFetchApp.fetch(
+        NLM_RAW_BASE + source.key + '/' + dates[i] + '.md', params);
+      if (response.getResponseCode() !== 200) continue;
+      const text = response.getContentText().trim();
+      if (!text) continue;
+      chunks.push('━━━━━ ' + dates[i] + ' · ' + source.label + ' ━━━━━\n\n' + text);
+      found.push(source.label + ' ' + dates[i]);
+      break;  // 이 소스는 가장 최근 하루치만
+    }
+  });
+  if (chunks.length === 0) {
+    Logger.log('오디오용 문서: 최근 3일치 통합본이 하나도 없습니다.');
+    return;
+  }
+  const stamp = Utilities.formatDate(new Date(), 'Asia/Seoul', 'yyyy-MM-dd HH:mm');
+  const header = '오늘의 브리핑 — 오디오 오버뷰용 (하루치)\n'
+    + '갱신: ' + stamp + ' KST · ' + found.join(' · ') + '\n'
+    + '이 문서는 매일 자동으로 다시 쓰입니다 — 직접 고치지 마세요.\n'
+    + 'NotebookLM: 이 소스 [동기화] → [오디오 오버뷰 생성] 순서로 누르세요.\n\n';
+  const docId = ensureDoc_(NLM_DAILY_DOC_KEY, NLM_DAILY_DOC_TITLE);
+  writeDocText_(docId, header + chunks.join('\n\n'));
+  Logger.log('오디오용 문서 갱신 — ' + found.join(', ') + ': '
+    + 'https://docs.google.com/document/d/' + docId);
 }
 
 // 날짜 목록의 브리핑을 긁어 문서 본문을 만든다. 하나도 없으면 null.
@@ -184,5 +242,5 @@ function installNotebookLmTrigger() {
     }
   });
   ScriptApp.newTrigger('updateNotebookLmDoc').timeBased().everyDays(1).atHour(8).create();
-  Logger.log('매일 오전 8시대에 문서(30일 롤링 + 이달 월간)를 갱신합니다.');
+  Logger.log('매일 오전 8시대에 문서(30일 롤링 + 이달 월간 + 오늘의 브리핑 오디오용)를 갱신합니다.');
 }
