@@ -1,8 +1,9 @@
 {
  "campaigns": {
   "2026-09": {
+   "closed_at": "2026-10-07T10:39+09:00",
    "opened_at": "2026-10-06T15:07+09:00",
-   "status": "open"
+   "status": "closed"
   }
  },
  "months": {
@@ -22,6 +23,14 @@
     "source": "telegram",
     "text": "9월 근태 이상 없습니다",
     "uid": "5460814526:1222698"
+   },
+   "김지원": {
+    "checked": true,
+    "msg_date": "2026-10-07T08:19+09:00",
+    "note": "미인식2?",
+    "source": "telegram",
+    "text": "헉 완료했습니다",
+    "uid": "1099013995:1222986"
    },
    "김진영": {
     "checked": true,
@@ -54,6 +63,54 @@
     "source": "manual",
     "text": "",
     "uid": ""
+   },
+   "박영도": {
+    "checked": true,
+    "msg_date": "2026-10-07T08:09+09:00",
+    "note": "",
+    "source": "manual",
+    "text": "",
+    "uid": ""
+   },
+   "박종현": {
+    "checked": true,
+    "msg_date": "2026-10-07T10:39+09:00",
+    "note": "",
+    "source": "manual",
+    "text": "",
+    "uid": ""
+   },
+   "유지웅": {
+    "checked": true,
+    "msg_date": "2026-10-07T08:26+09:00",
+    "note": "",
+    "source": "manual",
+    "text": "",
+    "uid": ""
+   },
+   "이다연": {
+    "checked": true,
+    "msg_date": "2026-10-07T08:45+09:00",
+    "note": "출입증놓고옴2",
+    "source": "manual",
+    "text": "",
+    "uid": ""
+   },
+   "이정우": {
+    "checked": true,
+    "msg_date": "2026-10-07T08:12+09:00",
+    "note": "출입증 미지참 2",
+    "source": "telegram",
+    "text": "올렸습니다",
+    "uid": "5161870927:1222980"
+   },
+   "이준범": {
+    "checked": true,
+    "msg_date": "2026-10-07T08:12+09:00",
+    "note": "",
+    "source": "telegram",
+    "text": "9월 정상 출근입니다",
+    "uid": "5415366498:1222979"
    },
    "이지수": {
     "checked": true,

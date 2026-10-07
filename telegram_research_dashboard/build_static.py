@@ -11,6 +11,7 @@ from pathlib import Path
 from urllib.request import Request, urlopen
 
 from db import connect, initialize
+from gate import apply_to_tree
 from parser import APPROVED_COMPANIES
 from tone_market import attach_tone_market
 
@@ -355,6 +356,10 @@ def build() -> Path:
     unified_dir = ROOT / "static" / "defense_unified"
     if unified_dir.is_dir():
         shutil.copytree(unified_dir, OUTPUT.parent / "defense_unified", dirs_exist_ok=True)
+    # 비밀번호 가림막: 복사가 전부 끝난 뒤 배포본의 모든 .html 머리에 끼운다.
+    # (정적 호스팅이라 서버에서 못 막는다 — gate.py 머리말 참고)
+    gated = apply_to_tree(OUTPUT.parent)
+    print(f"비밀번호 잠금 적용: {gated}개 페이지")
     print(f"생성 완료: {OUTPUT} ({OUTPUT.stat().st_size / 1024 / 1024:.1f} MB)")
     return OUTPUT
 

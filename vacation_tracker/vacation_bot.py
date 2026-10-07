@@ -248,28 +248,43 @@ async def _scan(config: dict, state: dict, probe: bool = False,
             picked = []
             if att_scan and not backfill_days:
                 # 근태는 수동 수집 전용 — last_id 증분이 아니라 최근 창을 따로 훑는다.
-                # 상대가 보낸 메시지만(내가 쓴 "근태 체크해줘"류는 보고가 아니다).
-                from attendance import detect_attendance
+                # 내 메시지는 보고가 아니지만 '근태' 질문이면 문맥이 된다:
+                # "근태 첼"(나) → "9월 정상 출근입니다"(상대)는 '근태' 낱말 없이도 잡는다.
+                from attendance import detect_attendance, detect_attendance_reply
+                from rules import _compact as _att_compact
 
                 att_since = datetime.now(timezone.utc) - timedelta(
                     days=int(config.get("att_lookback_days") or 14))
+                window: list[tuple[int, bool, str, datetime]] = []
                 async for message in client.iter_messages(entity, limit=per_chat_limit):
                     posted = (message.date if message.date.tzinfo
                               else message.date.replace(tzinfo=timezone.utc))
                     if posted < att_since:
                         break
-                    text = (message.message or "").strip()
-                    if message.out or not text:
+                    window.append((message.id, bool(message.out),
+                                   (message.message or "").strip(), posted))
+                window.reverse()  # 시간순 — 질문 → 답 순서로 본다
+                prompt_at = None
+                for mid, out, text, posted in window:
+                    if out:
+                        if "근태" in _att_compact(text):
+                            prompt_at = posted
                         continue
-                    att = detect_attendance(text, posted.astimezone(KST))
+                    if not text:
+                        continue
+                    local = posted.astimezone(KST)
+                    if prompt_at is not None and (posted - prompt_at) <= timedelta(hours=12):
+                        att = detect_attendance_reply(text, local)
+                    else:
+                        att = detect_attendance(text, local)
                     if att:
                         att_hits.append({
                             "name": name,
                             "month": att["month"],
                             "explicit": bool(att.get("explicit")),
-                            "uid": f"{entity.id}:{message.id}",
+                            "uid": f"{entity.id}:{mid}",
                             "text": text,
-                            "msg_date": posted.astimezone(KST).isoformat(timespec="minutes"),
+                            "msg_date": local.isoformat(timespec="minutes"),
                         })
             if not backfill_days:
                 # include_own=True: 내가 대신 적은 메시지도 이 대화 상대의 일정 후보가 된다.

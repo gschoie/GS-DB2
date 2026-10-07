@@ -415,9 +415,11 @@ function localApply(en){
 
 // 배포본의 '갱신 시각'이 이 페이지와 달라지면 새로고침 — 임시 표시가 진짜 데이터로 교체된다.
 async function watchDeploy(){
+  // 워크플로 + Pages 배포 + CDN 캐시(최대 10분)까지 견디게 12분 감시, 경과 표시.
   const status=$id('add-status');
-  for(let i=0;i<24;i++){
+  for(let i=0;i<48;i++){
     await new Promise(r=>setTimeout(r,15000));
+    if(status)status.textContent='⏳ 반영 확인 중… '+Math.round((i+1)*15/60*10)/10+'분 경과 (CDN 캐시로 몇 분 걸릴 수 있음)';
     try{
       const r=await fetch('vacation_report.html?t='+Date.now(),{cache:'no-store'});
       const m=(await r.text()).match(/갱신 ([0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2})/);

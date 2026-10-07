@@ -27,8 +27,11 @@ ATT_PATH = HERE / "state" / "attendance.json"
 OUT_PATH = HERE.parent / "telegram_research_dashboard" / "static" / "attendance_report.html"
 
 # "근태 …(긍정)" — 완벽·이상무·문제없음·완료류. 공백/점 낀 표기는 _compact가 붙인다.
-_AFFIRM = r"(?:완벽|이상없|이상무|문제없|누락없|완료|끝냈|다했|깨끗|클리어|이슈없|올렸|확인했)"
+_AFFIRM = r"(?:완벽|이상없|이상무|문제없|누락없|완료|끝냈|다했|깨끗|클리어|이슈없|올렸|확인했|정상)"
 _AFFIRM_RE = re.compile(rf"근태.{{0,20}}?{_AFFIRM}|{_AFFIRM}.{{0,10}}?근태")
+# 내가 '근태 체크'를 물은 직후의 답 전용 — "9월 정상 출근입니다"처럼 '근태' 낱말이
+# 없어도 보고로 인정한다(문맥이 있으니 낱말 요구를 푼다).
+_REPLY_OK_RE = re.compile(rf"{_AFFIRM}|정상출근|출근정상")
 # 부탁·독촉·질문은 보고가 아니다 ("근태 체크해 주세요", "근태 언제까지야?").
 _NEGATIVE_RE = re.compile(r"근태[^?]{0,20}[?？]|해줘|해주세요|하세요|해야|부탁|요망|까지야|언제")
 _MONTH_RE = re.compile(r"(\d{1,2})\s*월")
@@ -45,6 +48,24 @@ def detect_attendance(text: str, msg_dt: datetime) -> dict | None:
         return None
     if _NEGATIVE_RE.search(compact) or not _AFFIRM_RE.search(compact):
         return None
+    return _month_of(text, msg_dt)
+
+
+def detect_attendance_reply(text: str, msg_dt: datetime) -> dict | None:
+    """내가 '근태' 체크를 물은 직후(12h)의 답 — '근태' 낱말 없이도 긍정이면 보고.
+
+    "근태 첼" → "9월 정상 출근입니다"(10/7 실사례)를 잡기 위한 문맥 규칙.
+    질문·부탁은 여전히 컷, '근태'가 들어 있으면 일반 판정으로 넘긴다.
+    """
+    compact = _compact(text or "")
+    if "근태" in compact:
+        return detect_attendance(text, msg_dt)
+    if _NEGATIVE_RE.search(compact) or not _REPLY_OK_RE.search(compact):
+        return None
+    return _month_of(text, msg_dt)
+
+
+def _month_of(text: str, msg_dt: datetime) -> dict:
     month, year = msg_dt.month, msg_dt.year
     explicit = False
     stated = _MONTH_RE.search(text or "")
@@ -211,6 +232,8 @@ h1{font-size:21px;color:#1f2937;margin:0 0 4px}
 .campaign button,.campaign select{background:#fff;border:1px solid #d4dbe3;border-radius:8px;
   padding:4px 12px;font-size:13.5px;cursor:pointer;color:#2b5f8a;font-family:inherit}
 .campaign button:hover{border-color:#9fb6cc}
+#att-status{margin:6px 0 10px;font-size:14px;font-weight:600;color:#9a6b1f;min-height:1em}
+#att-status:empty{display:none}
 .camp-on{color:#2b7a4b;font-weight:700}
 .camp-off{color:#8a94a0}
 .pager{display:flex;align-items:center;gap:10px;margin:14px 0 6px}
@@ -346,11 +369,18 @@ def build_page(store: dict | None = None) -> None:
                     f'<button id="camp-close" data-month="{html.escape(open_month)}">🏁 마감</button>')
     else:
         prev = _prev_month(current)
+        # 가장 최근에 마감한 기간은 '마감 취소'로 바로 다시 열 수 있게 한다.
+        closed = [m for m, c in campaigns.items() if c.get("status") == "closed"]
+        reopen = ""
+        if closed:
+            last = max(closed)
+            reopen = (f'<button id="camp-reopen" data-month="{html.escape(last)}">'
+                      f'↩️ 마감 취소 ({html.escape(last)} 재개)</button>')
         campaign = ('<span class="camp-off">⚪ 진행 중인 근태 체크 없음</span>'
                     '<select id="camp-month">'
                     f'<option value="{prev}">전월 ({prev})</option>'
                     f'<option value="{current}">당월 ({current})</option></select>'
-                    '<button id="camp-open">▶ 체크 시작</button>')
+                    '<button id="camp-open">▶ 체크 시작</button>' + reopen)
 
     head = f"""<!doctype html><html lang="ko"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -359,11 +389,11 @@ def build_page(store: dict | None = None) -> None:
 <div class="meta">갱신 {stamp} · 체크 기간 중 🔄 지금 수집을 누르면 텔레그램 1:1의
 "근태 완벽합니다" 보고를 최근 2주 창에서 수집 · 확인 칸을 누르면 수동 토글</div>
 <div class="campaign">{campaign}</div>
+<div id="att-status"></div>
 <div class="pager"><button id="m-prev">◀</button><span class="label" id="m-label"></span>
 <button id="m-next">▶</button><span class="status-badge" id="m-status" hidden></span>
 <span class="count" id="m-count"></span></div>
 {tables}
-<p id="att-status"></p>
 <p class="hint">흐름: 매월 초 ▶ 체크 시작(대상 월 선택) → 🔄 지금 수집을 누를 때마다
 팀원 보고를 긁어 ✓ → 다 모이면 🏁 마감. 수집은 버튼을 눌렀을 때만 돌고(자동 없음),
 최근 2주 창을 훑으므로 지난번 수집 이후에 온 보고도 놓치지 않습니다. 자동 체크 문구 예:
@@ -401,16 +431,22 @@ $id('m-prev').onclick=()=>{if(idx>0){idx--;render()}};
 $id('m-next').onclick=()=>{if(idx<months.length-1){idx++;render()}};
 render();
 
-async function watchDeploy(){
-  for(let i=0;i<24;i++){
+async function watchDeploy(mode){
+  // 수집 run(~2.5분) + Pages 배포 + CDN 캐시(최대 10분)까지 견디게 12분 감시.
+  // 수집 버튼 경로(mode='collect')는 처음 3분간 '수집 중'을 유지한다.
+  const s=$id('att-status');
+  for(let i=0;i<48;i++){
     await new Promise(r=>setTimeout(r,15000));
+    const min=Math.round((i+1)*15/60*10)/10;
+    if(s)s.textContent=(mode==='collect'&&i<12)
+      ?'🔄 수집 중… '+min+'분 경과 (텔레그램 훑는 중, 2~3분 걸립니다)'
+      :'⏳ 반영 확인 중… '+min+'분 경과 (CDN 캐시로 몇 분 걸릴 수 있음)';
     try{
       const r=await fetch('attendance_report.html?t='+Date.now(),{cache:'no-store'});
       const m=(await r.text()).match(/갱신 ([0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2})/);
       if(m&&m[1]!==PAGE_STAMP){location.reload();return}
     }catch(e){}
   }
-  const s=$id('att-status');
   if(s)s.textContent='서버 반영 확인이 오래 걸립니다 — 잠시 뒤 수동 새로고침해 주세요';
 }
 
@@ -446,6 +482,14 @@ if(closeBtn)closeBtn.onclick=async()=>{
   if(await sendOp({op:'att-close',month:month}))closeBtn.textContent='마감 중…';
   else closeBtn.disabled=false;
 };
+const reopenBtn=$id('camp-reopen');
+if(reopenBtn)reopenBtn.onclick=async()=>{
+  const month=reopenBtn.dataset.month;
+  if(!confirm(label(month)+' 체크 마감을 취소하고 다시 열까요?'))return;
+  reopenBtn.disabled=true;
+  if(await sendOp({op:'att-open',month:month}))reopenBtn.textContent='재개 중…';
+  else reopenBtn.disabled=false;
+};
 const runBtn=$id('camp-run');
 if(runBtn)runBtn.onclick=async()=>{
   runBtn.disabled=true;
@@ -456,8 +500,8 @@ if(runBtn)runBtn.onclick=async()=>{
     try{const d=await r.json();
       if(d&&d.ok===false){status.textContent='⚠ 거절 '+(d.code||'?')+' — '+(d.error||'GAS 프록시 확인 필요');runBtn.disabled=false;return}
     }catch(e){}
-    status.textContent='✅ 수집 중 — 2~3분 뒤 새 데이터가 오면 자동 새로고침됩니다';
-    watchDeploy();
+    status.textContent='🔄 수집 시작 — 텔레그램을 훑는 중입니다 (2~3분, 끝나면 자동 새로고침)';
+    watchDeploy('collect');
   }catch(e){status.textContent='실패: '+e.message;runBtn.disabled=false}
 };
 
