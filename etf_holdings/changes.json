@@ -1,15 +1,80 @@
 {
   "date": "2026-10-07",
   "prev_date": "2026-10-05",
-  "generated_at": "2026-10-07 09:20",
+  "generated_at": "2026-10-07 10:20",
   "base_date": "",
   "prev_base_date": "",
   "market_date": "2026-10-07",
   "prev_market_date": "",
-  "fetched_at": "2026-10-07 09:20",
+  "fetched_at": "2026-10-07 10:20",
   "prev_fetched_at": "2026-10-05 11:21",
   "first_run": false,
   "etfs": [
+    {
+      "code": "471780",
+      "label": "TIGER 코리아테크액티브",
+      "group": "TIGER",
+      "flow_factor": 1.0,
+      "new": [
+        {
+          "key": "007660",
+          "name": "이수페타시스",
+          "code": "007660",
+          "weight": 3.23,
+          "shares": 100.0
+        }
+      ],
+      "gone": [
+        {
+          "key": "039030",
+          "name": "이오테크닉스",
+          "code": "039030",
+          "weight_prev": 3.55,
+          "shares_prev": 27.0
+        }
+      ],
+      "moves": [
+        {
+          "key": "005930",
+          "name": "삼성전자",
+          "code": "005930",
+          "shares_now": 362.0,
+          "shares_prev": 331.0,
+          "active_share_pct": 9.4,
+          "active_weight_pp": 1.57,
+          "weight_now": 24.14,
+          "weight_prev": 22.55,
+          "headline": false
+        }
+      ],
+      "has_weight": true
+    },
+    {
+      "code": "0162Y0",
+      "label": "TIME 코스닥액티브",
+      "group": "TIME(구 TIMEFOLIO)",
+      "flow_factor": 1.0,
+      "new": [
+        {
+          "key": "277810",
+          "name": "레인보우로보틱스",
+          "code": "277810",
+          "weight": 2.83,
+          "shares": 27.0
+        }
+      ],
+      "gone": [
+        {
+          "key": "196170",
+          "name": "알테오젠",
+          "code": "196170",
+          "weight_prev": 2.85,
+          "shares_prev": 47.0
+        }
+      ],
+      "moves": [],
+      "has_weight": true
+    },
     {
       "code": "463050",
       "label": "TIME K바이오액티브",
@@ -147,10 +212,10 @@
     "share_pct_min": 30.0
   },
   "summary": {
-    "etfs_changed": 5,
-    "new_total": 5,
-    "gone_total": 5,
-    "moves_total": 0,
+    "etfs_changed": 7,
+    "new_total": 7,
+    "gone_total": 7,
+    "moves_total": 1,
     "universe": 20
   }
 }
