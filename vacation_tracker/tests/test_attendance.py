@@ -7,7 +7,8 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
-from attendance import detect_attendance, open_campaign_month, record_hits  # noqa: E402
+from attendance import (detect_attendance, detect_attendance_reply,  # noqa: E402
+                        open_campaign_month, record_hits)
 from rules import KST  # noqa: E402
 
 SEP = datetime(2026, 9, 8, 10, 0, tzinfo=KST)
@@ -43,6 +44,35 @@ class DetectTest(unittest.TestCase):
                      "근태 완벽하게 해야 해", "완벽합니다", "오늘 뭐 먹지",
                      "근태 다 됐어?"):
             self.assertIsNone(detect_attendance(text, SEP), text)
+
+
+class DetectReplyTest(unittest.TestCase):
+    """내 '근태' 질문 뒤의 답 — '근태' 낱말 없이도 긍정 보고로 잡는다 (10/7 이준범 실사례)."""
+
+    def test_normal_attendance_reply(self):
+        hit = detect_attendance_reply("9월 정상 출근입니다", SEP)
+        self.assertIsNotNone(hit)
+        self.assertEqual(hit["month"], "2026-09")
+        self.assertTrue(hit["explicit"])
+
+    def test_affirm_without_month(self):
+        self.assertIsNotNone(detect_attendance_reply("완벽합니다!", SEP))
+        self.assertIsNotNone(detect_attendance_reply("이상 없습니다", SEP))
+
+    def test_with_keyword_delegates(self):
+        self.assertEqual(detect_attendance_reply("8월 근태 이상 없습니다", SEP)["month"],
+                         "2026-08")
+
+    def test_questions_still_cut(self):
+        self.assertIsNone(detect_attendance_reply("언제까지 하면 돼요?", SEP))
+        self.assertIsNone(detect_attendance_reply("확인 부탁드립니다", SEP))
+
+    def test_plain_chat_not_report(self):
+        self.assertIsNone(detect_attendance_reply("넵 알겠습니다", SEP))
+
+    def test_jeongsang_with_keyword(self):
+        # _AFFIRM에 '정상' 추가 — "근태 정상입니다"도 일반 판정에서 잡힌다.
+        self.assertIsNotNone(detect_attendance("근태 정상입니다", SEP))
 
 
 def open_store(month="2026-08"):

@@ -27,8 +27,11 @@ ATT_PATH = HERE / "state" / "attendance.json"
 OUT_PATH = HERE.parent / "telegram_research_dashboard" / "static" / "attendance_report.html"
 
 # "근태 …(긍정)" — 완벽·이상무·문제없음·완료류. 공백/점 낀 표기는 _compact가 붙인다.
-_AFFIRM = r"(?:완벽|이상없|이상무|문제없|누락없|완료|끝냈|다했|깨끗|클리어|이슈없|올렸|확인했)"
+_AFFIRM = r"(?:완벽|이상없|이상무|문제없|누락없|완료|끝냈|다했|깨끗|클리어|이슈없|올렸|확인했|정상)"
 _AFFIRM_RE = re.compile(rf"근태.{{0,20}}?{_AFFIRM}|{_AFFIRM}.{{0,10}}?근태")
+# 내가 '근태 체크'를 물은 직후의 답 전용 — "9월 정상 출근입니다"처럼 '근태' 낱말이
+# 없어도 보고로 인정한다(문맥이 있으니 낱말 요구를 푼다).
+_REPLY_OK_RE = re.compile(rf"{_AFFIRM}|정상출근|출근정상")
 # 부탁·독촉·질문은 보고가 아니다 ("근태 체크해 주세요", "근태 언제까지야?").
 _NEGATIVE_RE = re.compile(r"근태[^?]{0,20}[?？]|해줘|해주세요|하세요|해야|부탁|요망|까지야|언제")
 _MONTH_RE = re.compile(r"(\d{1,2})\s*월")
@@ -45,6 +48,24 @@ def detect_attendance(text: str, msg_dt: datetime) -> dict | None:
         return None
     if _NEGATIVE_RE.search(compact) or not _AFFIRM_RE.search(compact):
         return None
+    return _month_of(text, msg_dt)
+
+
+def detect_attendance_reply(text: str, msg_dt: datetime) -> dict | None:
+    """내가 '근태' 체크를 물은 직후(12h)의 답 — '근태' 낱말 없이도 긍정이면 보고.
+
+    "근태 첼" → "9월 정상 출근입니다"(10/7 실사례)를 잡기 위한 문맥 규칙.
+    질문·부탁은 여전히 컷, '근태'가 들어 있으면 일반 판정으로 넘긴다.
+    """
+    compact = _compact(text or "")
+    if "근태" in compact:
+        return detect_attendance(text, msg_dt)
+    if _NEGATIVE_RE.search(compact) or not _REPLY_OK_RE.search(compact):
+        return None
+    return _month_of(text, msg_dt)
+
+
+def _month_of(text: str, msg_dt: datetime) -> dict:
     month, year = msg_dt.month, msg_dt.year
     explicit = False
     stated = _MONTH_RE.search(text or "")
@@ -211,6 +232,8 @@ h1{font-size:21px;color:#1f2937;margin:0 0 4px}
 .campaign button,.campaign select{background:#fff;border:1px solid #d4dbe3;border-radius:8px;
   padding:4px 12px;font-size:13.5px;cursor:pointer;color:#2b5f8a;font-family:inherit}
 .campaign button:hover{border-color:#9fb6cc}
+#att-status{margin:6px 0 10px;font-size:14px;font-weight:600;color:#9a6b1f;min-height:1em}
+#att-status:empty{display:none}
 .camp-on{color:#2b7a4b;font-weight:700}
 .camp-off{color:#8a94a0}
 .pager{display:flex;align-items:center;gap:10px;margin:14px 0 6px}
@@ -366,11 +389,11 @@ def build_page(store: dict | None = None) -> None:
 <div class="meta">갱신 {stamp} · 체크 기간 중 🔄 지금 수집을 누르면 텔레그램 1:1의
 "근태 완벽합니다" 보고를 최근 2주 창에서 수집 · 확인 칸을 누르면 수동 토글</div>
 <div class="campaign">{campaign}</div>
+<div id="att-status"></div>
 <div class="pager"><button id="m-prev">◀</button><span class="label" id="m-label"></span>
 <button id="m-next">▶</button><span class="status-badge" id="m-status" hidden></span>
 <span class="count" id="m-count"></span></div>
 {tables}
-<p id="att-status"></p>
 <p class="hint">흐름: 매월 초 ▶ 체크 시작(대상 월 선택) → 🔄 지금 수집을 누를 때마다
 팀원 보고를 긁어 ✓ → 다 모이면 🏁 마감. 수집은 버튼을 눌렀을 때만 돌고(자동 없음),
 최근 2주 창을 훑으므로 지난번 수집 이후에 온 보고도 놓치지 않습니다. 자동 체크 문구 예:
