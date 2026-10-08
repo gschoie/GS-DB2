@@ -1,13 +1,13 @@
 {
-  "date": "2026-10-07",
-  "prev_date": "2026-10-05",
-  "generated_at": "2026-10-07 10:20",
+  "date": "2026-10-08",
+  "prev_date": "2026-10-07",
+  "generated_at": "2026-10-08 10:20",
   "base_date": "",
   "prev_base_date": "",
-  "market_date": "2026-10-07",
-  "prev_market_date": "",
-  "fetched_at": "2026-10-07 10:20",
-  "prev_fetched_at": "2026-10-05 11:21",
+  "market_date": "2026-10-08",
+  "prev_market_date": "2026-10-07",
+  "fetched_at": "2026-10-08 10:20",
+  "prev_fetched_at": "2026-10-07 10:20",
   "first_run": false,
   "etfs": [
     {
@@ -17,36 +17,37 @@
       "flow_factor": 1.0,
       "new": [
         {
-          "key": "007660",
-          "name": "이수페타시스",
-          "code": "007660",
-          "weight": 3.23,
-          "shares": 100.0
+          "key": "039030",
+          "name": "이오테크닉스",
+          "code": "039030",
+          "weight": 3.14,
+          "shares": 24.0
+        },
+        {
+          "key": "095340",
+          "name": "ISC",
+          "code": "095340",
+          "weight": 3.12,
+          "shares": 61.0
         }
       ],
       "gone": [
         {
-          "key": "039030",
-          "name": "이오테크닉스",
-          "code": "039030",
-          "weight_prev": 3.55,
-          "shares_prev": 27.0
-        }
-      ],
-      "moves": [
+          "key": "319660",
+          "name": "피에스케이",
+          "code": "319660",
+          "weight_prev": 3.36,
+          "shares_prev": 89.0
+        },
         {
-          "key": "005930",
-          "name": "삼성전자",
-          "code": "005930",
-          "shares_now": 362.0,
-          "shares_prev": 331.0,
-          "active_share_pct": 9.4,
-          "active_weight_pp": 1.57,
-          "weight_now": 24.14,
-          "weight_prev": 22.55,
-          "headline": false
+          "key": "007660",
+          "name": "이수페타시스",
+          "code": "007660",
+          "weight_prev": 3.23,
+          "shares_prev": 100.0
         }
       ],
+      "moves": [],
       "has_weight": true
     },
     {
@@ -56,50 +57,50 @@
       "flow_factor": 1.0,
       "new": [
         {
-          "key": "277810",
-          "name": "레인보우로보틱스",
-          "code": "277810",
+          "key": "196170",
+          "name": "알테오젠",
+          "code": "196170",
           "weight": 2.83,
-          "shares": 27.0
+          "shares": 47.0
         }
       ],
       "gone": [
         {
-          "key": "196170",
-          "name": "알테오젠",
-          "code": "196170",
-          "weight_prev": 2.85,
-          "shares_prev": 47.0
+          "key": "277810",
+          "name": "레인보우로보틱스",
+          "code": "277810",
+          "weight_prev": 2.83,
+          "shares_prev": 27.0
         }
       ],
       "moves": [],
       "has_weight": true
     },
     {
-      "code": "463050",
-      "label": "TIME K바이오액티브",
+      "code": "426030",
+      "label": "TIME 미국나스닥100액티브",
       "group": "TIME(구 TIMEFOLIO)",
-      "flow_factor": 1.0,
+      "flow_factor": 0.9925,
       "new": [
         {
-          "key": "347850",
-          "name": "디앤디파마텍",
-          "code": "347850",
-          "weight": 4.0,
-          "shares": 501.0
+          "key": "NEBIUS GROUP NV",
+          "name": "NEBIUS GROUP NV",
+          "code": "",
+          "weight": 0.0,
+          "shares": 76.0
         }
       ],
       "gone": [
         {
-          "key": "476830",
-          "name": "알지노믹스",
-          "code": "476830",
-          "weight_prev": 3.73,
-          "shares_prev": 768.0
+          "key": "COINBASE GLOBAL INC -CLASS A",
+          "name": "COINBASE GLOBAL INC -CLASS A",
+          "code": "",
+          "weight_prev": 0.0,
+          "shares_prev": 88.0
         }
       ],
       "moves": [],
-      "has_weight": true
+      "has_weight": false
     },
     {
       "code": "0163Y0",
@@ -108,20 +109,72 @@
       "flow_factor": 1.0,
       "new": [
         {
-          "key": "052710",
-          "name": "아모텍",
-          "code": "052710",
-          "weight": 1.95,
-          "shares": 477.0
+          "key": "058470",
+          "name": "리노공업",
+          "code": "058470",
+          "weight": 2.53,
+          "shares": 161.0
         }
       ],
       "gone": [
         {
-          "key": "319660",
-          "name": "피에스케이",
-          "code": "319660",
-          "weight_prev": 1.93,
-          "shares_prev": 69.0
+          "key": "052710",
+          "name": "아모텍",
+          "code": "052710",
+          "weight_prev": 1.95,
+          "shares_prev": 477.0
+        }
+      ],
+      "moves": [],
+      "has_weight": true
+    },
+    {
+      "code": "462900",
+      "label": "KoAct 바이오헬스케어액티브",
+      "group": "KoAct",
+      "flow_factor": 1.0,
+      "new": [
+        {
+          "key": "039200",
+          "name": "오스코텍",
+          "code": "039200",
+          "weight": 4.42,
+          "shares": 732.0
+        }
+      ],
+      "gone": [
+        {
+          "key": "476830",
+          "name": "알지노믹스",
+          "code": "476830",
+          "weight_prev": 4.43,
+          "shares_prev": 986.0
+        }
+      ],
+      "moves": [],
+      "has_weight": true
+    },
+    {
+      "code": "472150",
+      "label": "TIGER 배당커버드콜액티브",
+      "group": "TIGER",
+      "flow_factor": 1.0,
+      "new": [
+        {
+          "key": "086790",
+          "name": "하나금융지주",
+          "code": "086790",
+          "weight": 1.36,
+          "shares": 21.0
+        }
+      ],
+      "gone": [
+        {
+          "key": "010120",
+          "name": "LS ELECTRIC",
+          "code": "010120",
+          "weight_prev": 1.39,
+          "shares_prev": 13.0
         }
       ],
       "moves": [],
@@ -134,76 +187,59 @@
       "flow_factor": 1.0,
       "new": [
         {
+          "key": "105560",
+          "name": "KB금융",
+          "code": "105560",
+          "weight": 0.82,
+          "shares": 176.0
+        }
+      ],
+      "gone": [
+        {
           "key": "066570",
           "name": "LG전자",
           "code": "066570",
-          "weight": 0.84,
-          "shares": 134.0
-        }
-      ],
-      "gone": [
-        {
-          "key": "012450",
-          "name": "한화에어로스페이스",
-          "code": "012450",
-          "weight_prev": 0.81,
-          "shares_prev": 28.0
+          "weight_prev": 0.84,
+          "shares_prev": 134.0
         }
       ],
       "moves": [],
       "has_weight": true
     },
     {
-      "code": "387280",
-      "label": "TIGER 퓨처모빌리티액티브",
-      "group": "TIGER",
+      "code": "410870",
+      "label": "TIME K컬처액티브",
+      "group": "TIME(구 TIMEFOLIO)",
       "flow_factor": 1.0,
-      "new": [
+      "new": [],
+      "gone": [],
+      "moves": [
         {
-          "key": "066970",
-          "name": "엘앤에프",
-          "code": "066970",
-          "weight": 3.5,
-          "shares": 35.0
+          "key": "036570",
+          "name": "NC",
+          "code": "036570",
+          "shares_now": 303.0,
+          "shares_prev": 247.0,
+          "active_share_pct": 22.7,
+          "active_weight_pp": 1.48,
+          "weight_now": 7.86,
+          "weight_prev": 6.2,
+          "headline": false
+        },
+        {
+          "key": "214450",
+          "name": "파마리서치",
+          "code": "214450",
+          "shares_now": 181.0,
+          "shares_prev": 225.0,
+          "active_share_pct": -19.6,
+          "active_weight_pp": -1.45,
+          "weight_now": 6.1,
+          "weight_prev": 7.71,
+          "headline": false
         }
       ],
-      "gone": [
-        {
-          "key": "012330",
-          "name": "현대모비스",
-          "code": "012330",
-          "weight_prev": 3.51,
-          "shares_prev": 11.0
-        }
-      ],
-      "moves": [],
       "has_weight": true
-    },
-    {
-      "code": "481180",
-      "label": "SOL 미국AI소프트웨어액티브",
-      "group": "SOL",
-      "flow_factor": 0.9614,
-      "new": [
-        {
-          "key": "Nebius Group",
-          "name": "Nebius Group",
-          "code": "",
-          "weight": 0.0,
-          "shares": 124.0
-        }
-      ],
-      "gone": [
-        {
-          "key": "ADOBE SYSTEMS INC",
-          "name": "ADOBE SYSTEMS INC",
-          "code": "",
-          "weight_prev": 0.0,
-          "shares_prev": 112.0
-        }
-      ],
-      "moves": [],
-      "has_weight": false
     }
   ],
   "thresholds": {
@@ -212,10 +248,10 @@
     "share_pct_min": 30.0
   },
   "summary": {
-    "etfs_changed": 7,
-    "new_total": 7,
-    "gone_total": 7,
-    "moves_total": 1,
+    "etfs_changed": 8,
+    "new_total": 8,
+    "gone_total": 8,
+    "moves_total": 2,
     "universe": 20
   }
 }
