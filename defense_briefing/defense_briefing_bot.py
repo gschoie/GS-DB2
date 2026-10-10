@@ -74,7 +74,7 @@ UNIVERSE = [
     ("KOG.OL", "Kongsberg", "노르웨이", "미사일·방공"),
     # 한국
     ("012450.KS", "한화에어로스페이스 (Hanwha Aerospace)", "한국", "종합"),
-    ("079550.KS", "LIG넥스원 (LIG Nex1)", "한국", "미사일·방공"),
+    ("079550.KS", "LIG디펜스앤에어로스페이스 (LIG D&A)", "한국", "미사일·방공"),
     ("047810.KS", "한국항공우주 (KAI)", "한국", "항공우주"),
     ("272210.KS", "한화시스템 (Hanwha Systems)", "한국", "전자·센서"),
     ("064350.KS", "현대로템 (Hyundai Rotem)", "한국", "지상무기"),
@@ -171,7 +171,7 @@ NEWS_QUERIES = [
      "en-US", "US", "US:en"),
     ('(Elbit OR "Mitsubishi Heavy" OR "Kawasaki Heavy" OR IHI) defense when:1d',
      "en-US", "US", "US:en"),
-    ("한화에어로스페이스 OR LIG넥스원 OR 한국항공우주 OR 한화오션 OR 현대로템 "
+    ("한화에어로스페이스 OR LIG디펜스앤에어로스페이스 OR LIG넥스원 OR 한국항공우주 OR 한화오션 OR 현대로템 "
      "OR 한화시스템 OR HD현대중공업 OR 방산수출 when:1d", "ko", "KR", "KR:ko"),
 ]
 
