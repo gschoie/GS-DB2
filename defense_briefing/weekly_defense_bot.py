@@ -343,10 +343,10 @@ def write_index() -> None:
     WEEKLY_DIR.mkdir(parents=True, exist_ok=True)
     dates = sorted((p.stem for p in WEEKLY_DIR.glob("????-??-??.html")), reverse=True)
     dates_js = json.dumps(dates, ensure_ascii=False)
-    # 다운로드 파일명: GLOBAL_DEFENSE_YYMMDD.md (YYMMDD = 최신 정리본 생성일)
+    # 다운로드 파일명: GLOBAL_DEFENSE_4W_YYMMDD.md (주차별 .md와 겹치지 않게 4W 표기) (YYMMDD = 최신 정리본 생성일)
     md_download_name = (
-        f"GLOBAL_DEFENSE_{dates[0][2:].replace('-', '')}.md" if dates
-        else "GLOBAL_DEFENSE.md"
+        f"GLOBAL_DEFENSE_4W_{dates[0][2:].replace('-', '')}.md" if dates
+        else "GLOBAL_DEFENSE_4W.md"
     )
     index = f"""<!DOCTYPE html><html lang="ko"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
