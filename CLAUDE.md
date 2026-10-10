@@ -607,4 +607,16 @@
       전환·베이시스 산식·빈 응답 예외) + market-flow.yml 에 실행 스텝. 야후 못 부르는
       valuation 과 같은 이유 — 한투는 키가 필요하고 컨테이너에서 네이버·거래소가 막혀 있다.
 
+34. **LIG넥스원 → LIG디펜스앤에어로스페이스(LIG D&A) 사명 반영** (10/10): 2026-03-31 주총
+    의결·4/14 변경상장(코드 079550 동일, 심볼 NEX1→LIGDA)된 사명이 방산 브리핑 봇에만
+    옛 이름으로 남아 매일 price_table·브리핑에 "LIG넥스원 (LIG Nex1)"로 찍히던 것을
+    사용자가 지적. valuation·peergroup은 이미 새 사명이었다.
+    - `defense_briefing/defense_briefing_bot.py` 유니버스 라벨을 "LIG디펜스앤에어로스페이스
+      (LIG D&A)"로, 한국어 뉴스 쿼리에 신명 추가(옛 이름도 검색용 병행 유지).
+      chatgpt_briefing_bot은 이 유니버스를 재사용하므로 같이 반영.
+    - `telegram_research_dashboard/parser.py` 종목 키워드에 신명 추가(구명·"LIG D&A" 유지).
+    - 발행된 과거 브리핑 md는 소급 수정하지 않음(ingest 텔레 재발송 — 28번 교훈).
+      세션 작성 브리핑은 이후 "LIG디펜스앤에어로스페이스(LIG D&A)" 표기, 첫날 1회
+      "(구 LIG넥스원)" 병기.
+
 이후 작업은 git log와 이 파일을 갱신하며 이어간다.
