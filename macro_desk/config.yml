@@ -83,8 +83,11 @@ calendar:
      release: {src: fred, series: DFEDTARU, kind: level, freq: d, unit: "%", digits: 2,
                unit_note: "현재 목표범위 상한"}}
 
-  - {id: kr_cpi,  name: 한국 소비자물가, country: KR, rule: {around: 2}, guide: kr_cpi,
-     release: {src: fred, series: KORCPIALLMINMEI, kind: yoy_mom}}
+  # 한국 CPI 직전치는 소스가 없다. FRED 의 OECD 경유 계열은 **전부 멈췄다**(러너 실측
+  # 2026-10-11): KORCPIALLMINMEI·CPALTT01KRM659N·KORCPALTT01IXNBM 은 2023-11 에,
+  # CPALTT01KRM657N 은 2024-03 에 마지막 관측. MEI 폐기 탓이고 FRED 는 에러 없이 옛
+  # 값을 계속 내준다. ECOS/KOSIS 키를 붙이기 전까지는 빈칸으로 둔다.
+  - {id: kr_cpi,  name: 한국 소비자물가, country: KR, rule: {around: 2}, guide: kr_cpi}
   - {id: kr_trade, name: 한국 수출입(잠정), country: KR, rule: {day: 1}, guide: kr_trade}
   - {id: kr_jobs, name: 한국 고용동향, country: KR, rule: {around: 15},
      release: {src: fred, series: LRHUTTTTKRM156S, kind: level, unit: "%", digits: 1,

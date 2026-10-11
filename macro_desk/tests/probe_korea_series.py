@@ -70,8 +70,14 @@ def main() -> None:
         try:
             got = last(sid, key)
             age = (today - dt.date.fromisoformat(got[-1][0])).days
-            tag = "LIVE" if age <= 130 else f"STALE({age}일)"
-            if age <= 130:
+            # 판정은 releases.is_stale 과 **같은 기준**으로 — 여기 따로 숫자를 박아두면
+            # 수집은 살리는 계열을 프로브가 죽었다고 적어 오판을 부른다(실제로 그랬다:
+            # 한국 GDP 2분기(193일)가 분기 기준으로는 정상인데 STALE 로 찍혔다).
+            freq = "q" if "Q" in sid else "m"
+            obs = [(dt.date.fromisoformat(d), float(v)) for d, v in got]
+            stale = rl.is_stale(obs, {"freq": freq}, today)
+            tag = f"STALE({age}일,{freq})" if stale else f"LIVE({age}일,{freq})"
+            if not stale:
                 live.append(sid)
             print(f"  {tag:<14} {sid:<20} {label:<26} "
                   + " | ".join(f"{d} {v}" for d, v in got))
