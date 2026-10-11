@@ -1,0 +1,18 @@
+name: 프로브 — FRED 키없는 CSV
+
+# 일회성 탐색용. 컨테이너에서 fred.stlouisfed.org 가 막혀 있어 러너로 확인한다.
+# 확인이 끝나면 이 워크플로는 삭제한다.
+on:
+  push:
+    branches: [claude/telegram-trend-analysis-logic-7efsdy]
+    paths: ['macro_desk/tests/probe_fred_csv.py', '.github/workflows/probe-fred.yml']
+  workflow_dispatch:
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - run: python macro_desk/tests/probe_fred_csv.py
