@@ -91,5 +91,55 @@ class TestResolve(unittest.TestCase):
         self.assertEqual([e["date"] for e in ev], sorted(e["date"] for e in ev))
 
 
+class TestFixedBeatsRule(unittest.TestCase):
+    """확정일을 알면 규칙보다 확정일이 먼저다.
+
+    규칙으로 뽑은 추정일은 실제 발표일과 며칠씩 어긋난다 — 2026년 9월 CPI는
+    규칙(around 12)으로 10/12 인데 BLS 일정표의 실제 발표일은 10/14 다.
+    틀린 날짜를 사실처럼 보여주지 않으려면 확정일이 이겨야 한다.
+    """
+
+    RULED = {"id": "us_cpi", "name": "CPI", "country": "US", "rule": {"around": 12}}
+    FIXED = {"us_cpi": ["2026-10-14"], "_tentative": []}
+
+    def test_fixed_wins(self):
+        got = cr.resolve(self.RULED, 2026, 10, self.FIXED)
+        self.assertEqual(len(got), 1)
+        self.assertEqual(got[0]["date"], dt.date(2026, 10, 14))
+        self.assertFalse(got[0]["estimated"])          # 확정일엔 ~ 가 안 붙는다
+
+    def test_falls_back_to_rule(self):
+        """확정일을 모르는 달은 규칙으로 돌아간다 — 달력이 통째로 비면 안 된다."""
+        got = cr.resolve(self.RULED, 2026, 9, self.FIXED)
+        self.assertEqual(len(got), 1)
+        self.assertTrue(got[0]["estimated"])
+
+    def test_tentative_is_not_confirmed(self):
+        """출처 한 곳뿐인 날짜는 보여주되 확정으로 표시하지 않는다."""
+        tent = {"bok": ["2026-10-22"], "_tentative": ["2026-10-22"]}
+        got = cr.resolve({"id": "bok", "name": "금통위", "country": "KR", "fixed": True},
+                         2026, 10, tent)
+        self.assertEqual(got[0]["date"], dt.date(2026, 10, 22))
+        self.assertTrue(got[0]["estimated"])
+        self.assertTrue(got[0]["tentative"])
+
+    def test_unknown_fixed_stays_empty(self):
+        """fixed 인데 날짜를 모르면 추측하지 않는다."""
+        got = cr.resolve({"id": "fomc", "name": "FOMC", "country": "US", "fixed": True},
+                         2026, 10, {})
+        self.assertEqual(got, [])
+
+    def test_real_file(self):
+        real = cr.load_fixed()
+        self.assertIn("2026-10-14", real.get("us_cpi", []))
+        self.assertIn("2026-10-22", real.get("_tentative", []))
+        # 확정일 목록에 쓰레기가 섞여 있지 않은지(전부 ISO 날짜)
+        for key, days in real.items():
+            if key.startswith("_"):
+                continue
+            for d in days:
+                dt.date.fromisoformat(d)
+
+
 if __name__ == "__main__":
     unittest.main()

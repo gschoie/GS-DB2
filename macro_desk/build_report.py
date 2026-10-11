@@ -22,6 +22,7 @@ from pathlib import Path
 import yaml
 
 import calendar_rules as cr
+import releases as rl
 
 HERE = Path(__file__).resolve().parent
 DATA_DIR = HERE.parent / "telegram_research_dashboard" / "static" / "macro_desk"
@@ -32,7 +33,8 @@ OUT = Path(os.environ.get(
 WD = "월화수목금토일"
 KST = dt.timezone(dt.timedelta(hours=9))
 TONE = {"hot": ("neg", "⚠"), "warm": ("", "•"), "cool": ("pos", "✓")}
-FLAG = {"US": "🇺🇸", "KR": "🇰🇷"}
+# 국기 이모지는 윈도우에서 안 그려져 'us'·'KR' 같은 **글자로 떨어진다** → 처음부터 글자 배지.
+CC = {"US": "US", "KR": "KR"}
 
 
 def esc(v) -> str:
@@ -78,7 +80,7 @@ def quote_table(cfg: dict, data: dict) -> str:
         groups = groups + [{"group": "금리 파생(FRED)", "items": cfg.get("fred", [])}]
 
     for grp in groups:
-        rows = ""
+        rows, notes = "", []
         for it in grp["items"]:
             q = data.get("quotes", {}).get(it["id"]) or data.get("fred", {}).get(it["id"])
             if not q:
@@ -86,28 +88,62 @@ def quote_table(cfg: dict, data: dict) -> str:
             name = esc(it["name"])
             if it.get("key"):
                 name = f"<b>{name}</b>"
-            note = f'<span class="hint" title="{esc(it["note"])}">ⓘ</span>' if it.get("note") else ""
+            mark = ""
+            if it.get("note"):
+                # **툴팁만으로 두지 않는다** — 모바일에선 안 뜨고, "2년물이 실은 5년물"
+                # 같은 주의는 안 보이면 그냥 틀린 표가 된다. 표 밑에 글로 적는다.
+                notes.append(f'<b>{esc(it["name"])}</b> — {esc(it["note"])}')
+                mark = f'<span class="hint">*{len(notes)}</span>'
             cells = "".join(fmt_change(q.get(lbl), it["unit"]) for lbl, _ in
                             (("1D", 0), ("1W", 0), ("1M", 0), ("3M", 0), ("12M", 0)))
-            rows += (f'<tr><th>{name}{note}</th>'
+            rows += (f'<tr><th>{name}{mark}</th>'
                      f'<td class="r v">{fmt_value(q.get("last"), it["unit"])}</td>{cells}</tr>')
         if rows:
+            foot = "".join(f'<p class="fnote">*{i + 1} {n}</p>'
+                           for i, n in enumerate(notes))
             blocks.append(
                 f'<p class="ctitle">{esc(grp["group"])}</p>'
                 '<table><thead><tr><th></th><th class="r">현재</th>'
                 '<th class="r">1D</th><th class="r">1W</th><th class="r">1M</th>'
                 '<th class="r">3M</th><th class="r">12M</th></tr></thead>'
-                f"<tbody>{rows}</tbody></table>")
+                f"<tbody>{rows}</tbody></table>{foot}")
     if not blocks:
         return '<p class="na">시세 데이터 없음 — 다음 수집부터 표시</p>'
+    # FRED 키 경로(api.stlouisfed.org)는 러너에서 열려 있음을 실측으로 확인했다 —
+    # 막힌 건 그래프·CSV 호스트(fred.stlouisfed.org)뿐이다.
     note = ("" if data.get("has_fred") else
-            '<p class="note">FRED_API_KEY를 등록하면 <b>진짜 2년물·10년-2년 스프레드·'
-            '기대인플레·실질금리</b>가 여기에 추가됩니다(무료 키).</p>')
+            '<p class="note">FRED_API_KEY(무료)를 등록하면 <b>진짜 2년물·10년-2년 스프레드·'
+            '기대인플레·실질금리</b>가 여기에 추가되고, 아래 달력의 '
+            '<b>소매판매·PCE·GDP·정책금리·한국 지표 직전치</b>도 함께 채워집니다.</p>')
     return "".join(blocks) + note
 
 
 # ── 2. 달력 ────────────────────────────────────────────────────────────────
-def month_grid(entries: list[dict], year: int, month: int, today: dt.date) -> str:
+def chip(e: dict, rel: dict, cons: dict) -> str:
+    """달력 칩 한 개 — **이름 + 직전치 두 줄**.
+
+    전에는 이름만 찍고 설명을 title 툴팁에만 뒀다. 그래서 커서만 물음표로 바뀌고
+    (`cursor:help`) 화면에는 정보가 하나도 없었다 — 툴팁은 모바일에서 아예 안 뜬다.
+    이제 숫자를 본문에 쓰고, 누르면 그 지표의 해석 카드로 내려간다.
+    """
+    r = rel.get(e["id"]) or {}
+    c = cons.get(e["id"]) or {}
+    if c.get("text"):                              # 앞을 보는 숫자가 있으면 그게 먼저
+        val = f'컨센 {c["text"]}'
+    else:
+        val = r.get("text") or ""
+    sub = f'<span class="ev-v">{esc(val)}</span>' if val else ""
+    est = '<i class="est" aria-label="발표일 추정">~</i>' if e.get("estimated") else ""
+    body = (f'<span class="ev-n"><i class="cc">{CC.get(e["country"], "")}</i>'
+            f'{esc(e["name"])}{est}</span>{sub}')
+    if not e.get("guide"):              # 누를 데가 없으면 링크로 만들지 않는다
+        return f'<span class="cal-ev {e["country"].lower()} flat">{body}</span>'
+    return (f'<a class="cal-ev {e["country"].lower()}" href="#g-{esc(e["guide"])}">'
+            f'{body}</a>')
+
+
+def month_grid(entries: list[dict], year: int, month: int, today: dt.date,
+               rel: dict, cons: dict) -> str:
     ev = cr.month_events(entries, year, month)
     by_day: dict[int, list] = {}
     for e in ev:
@@ -125,14 +161,7 @@ def month_grid(entries: list[dict], year: int, month: int, today: dt.date) -> st
             klass += " today"
         if d.weekday() >= 5:
             klass += " wknd"
-        chips = ""
-        for e in by_day.get(day, []):
-            mark = "~" if e.get("estimated") else ""
-            tip = f'{e["name"]}{" (발표일 추정)" if e.get("estimated") else " (확정 공표일)"}'
-            if e.get("time"):
-                tip += f' · {e["time"]}'
-            chips += (f'<span class="cal-ev {e["country"].lower()}" title="{esc(tip)}">'
-                      f'{FLAG.get(e["country"], "")}{mark}{esc(e["name"])}</span>')
+        chips = "".join(chip(e, rel, cons) for e in by_day.get(day, []))
         cells += f'<div class="{klass}"><span class="cal-d">{day}</span>{chips}</div>'
 
     head = "".join(f'<div class="cal-h">{w}</div>' for w in "월화수목금토일")
@@ -140,9 +169,54 @@ def month_grid(entries: list[dict], year: int, month: int, today: dt.date) -> st
             f'<div class="cal">{head}{cells}</div>')
 
 
-def calendar_block(cfg: dict, today: dt.date) -> str:
+def upcoming(entries: list[dict], today: dt.date, rel: dict, cons: dict,
+             days: int = 21) -> str:
+    """다가오는 발표 표 — 달력 칸은 좁아 숫자가 잘린다. 읽을 수 있는 판을 따로 둔다.
+
+    컨센서스는 무료 API 가 없어 `consensus.json` 에 있을 때만 채워진다 —
+    비어 있으면 '–' 로 두고 지어내지 않는다.
+    """
+    end = today + dt.timedelta(days=days)
+    ev = cr.month_events(entries, today.year, today.month)
     nxt_y, nxt_m = (today.year + 1, 1) if today.month == 12 else (today.year, today.month + 1)
+    ev += cr.month_events(entries, nxt_y, nxt_m)
+    ev = [e for e in ev if today <= e["date"] <= end]
+    if not ev:
+        return '<p class="na">앞으로 3주 안에 예정된 발표가 없습니다.</p>'
+
+    rows = ""
+    for e in ev:
+        r = rel.get(e["id"]) or {}
+        c = cons.get(e["id"]) or {}
+        d = e["date"]
+        when = (f'{d.month}/{d.day}<span class="wd">({WD[d.weekday()]})</span>'
+                + ('<i class="est">~</i>' if e.get("estimated") else ""))
+        prev = (f'<b>{esc(r["text"])}</b><span class="pd"> · {esc(r["period"])}</span>'
+                if r.get("text") else '<span class="na">–</span>')
+        recent = (" → ".join(esc(x) for x in r.get("recent", [])) if r.get("recent")
+                  else '<span class="na">–</span>')
+        cs = esc(c["text"]) if c.get("text") else '<span class="na">–</span>'
+        name = esc(e["name"])
+        if e.get("guide"):
+            name = f'<a href="#g-{esc(e["guide"])}">{name}</a>'
+        tm = f'<span class="qtime">{esc(e["time"])}</span>' if e.get("time") else ""
+        soon = "soon" if (d - today).days <= 3 else ""
+        rows += (f'<tr class="{soon}"><td class="d">{when}</td>'
+                 f'<td><i class="cc">{CC.get(e["country"], "")}</i>{name}{tm}</td>'
+                 f'<td class="r">{prev}</td><td class="r">{cs}</td>'
+                 f'<td class="r trend">{recent}</td></tr>')
+    return ('<table class="up"><thead><tr><th>날짜</th><th>지표</th>'
+            '<th class="r">직전 발표</th><th class="r">컨센서스</th>'
+            '<th class="r">최근 3회</th></tr></thead>'
+            f'<tbody>{rows}</tbody></table>')
+
+
+def calendar_block(cfg: dict, today: dt.date, data: dict) -> str:
     entries = cfg.get("calendar", [])
+    rel = data.get("releases") or {}
+    cons = rl.load_consensus()
+    nxt_y, nxt_m = (today.year + 1, 1) if today.month == 12 else (today.year, today.month + 1)
+
     fixed = cr.load_fixed()
     missing = [e["name"] for e in entries if e.get("fixed") and not fixed.get(e["id"])]
     warn = ""
@@ -150,11 +224,45 @@ def calendar_block(cfg: dict, today: dt.date) -> str:
         warn = ('<p class="note warn">📌 <b>' + esc(" · ".join(missing)) +
                 '</b> 은 기관이 공표하는 확정일이라 <b>추측해서 넣지 않았습니다</b>. '
                 '공식 일정을 받아오면 달력에 자동으로 채워집니다.</p>')
-    return (month_grid(entries, today.year, today.month, today)
-            + month_grid(entries, nxt_y, nxt_m, today)
+    if fixed.get("_tentative"):
+        warn += ('<p class="note">출처가 한 곳뿐이어서 <b>아직 확인이 필요한 날짜</b>는 '
+                 '확정으로 표시하지 않고 <b>~</b> 로 둡니다 '
+                 f'(현재 {len(fixed["_tentative"])}건 — 금통위).</p>')
+
+    # 직전치가 비어 있는 이유를 **종류별로** 적는다 — '없다'와 '키가 없어 못 받는다'는
+    # 사용자가 할 수 있는 일이 다르다(앞은 포기, 뒤는 키 등록으로 채워진다).
+    none_src = [e["name"] for e in entries
+                if not (e.get("release") or {}).get("series")]
+    need_key = [e["name"] for e in entries
+                if (e.get("release") or {}).get("src") == "fred" and e["id"] not in rel]
+    gap = ""
+    if none_src:
+        gap += ('<p class="note">직전치 소스가 아예 없는 지표: <b>'
+                + esc(" · ".join(none_src)) +
+                '</b> — ISM 은 2022년에 재배포가 막혀 유료 외엔 경로가 없고, '
+                '한국 수출입·금통위는 기관 발표를 직접 받아야 합니다. '
+                '숫자를 지어내지 않고 빈칸으로 둡니다.</p>')
+    if need_key:
+        gap += ('<p class="note warn">🔑 <b>' + esc(" · ".join(need_key)) +
+                '</b> 의 직전치는 <b>FRED 무료 키</b>(<code>FRED_API_KEY</code>)를 '
+                '등록하면 자동으로 채워집니다. 물가·고용(CPI·PPI·고용보고서)은 '
+                'BLS 공개 API 라 키 없이 이미 나옵니다.</p>')
+    cons_note = ('<p class="note">컨센서스는 무료 API 가 없어 '
+                 f'<b>{"등록된 값만" if cons else "아직 비어"}</b> 표시됩니다'
+                 f'{f" (현재 {len(cons)}건)" if cons else ""}.</p>')
+
+    return ('<p class="ctitle" id="cal-up">다가오는 발표 (3주)</p>'
+            + upcoming(entries, today, rel, cons)
+            + '<p class="note"><b>직전 발표</b>는 가장 최근에 실제로 나온 값입니다 — '
+              '다음 발표 때 이 숫자와 비교해서 보면 됩니다. '
+              '<b>최근 3회</b>는 흐름(가속·둔화)을 보기 위한 것입니다.</p>'
+            + cons_note + gap
+            + month_grid(entries, today.year, today.month, today, rel, cons)
+            + month_grid(entries, nxt_y, nxt_m, today, rel, cons)
             + '<p class="note"><b>~</b> 가 붙은 날짜는 "매월 몇 번째 무슨 요일" 규칙으로 '
               '뽑은 <b>추정일</b>입니다 — 기관 공휴일·변경은 반영되지 않습니다. '
-              '~ 없는 날짜는 기관이 공표한 확정일입니다.</p>' + warn)
+              '~ 없는 날짜는 기관이 공표한 확정일입니다. 칩을 누르면 해석 카드로 갑니다.</p>'
+            + warn)
 
 
 # ── 3. 해석 카드 ───────────────────────────────────────────────────────────
@@ -182,7 +290,7 @@ def indicator_cards(guide: dict) -> str:
   <p class="watch">👁 <b>볼 것</b> — {esc(g.get("watch", ""))}</p>
   <ul class="bands">{bands}</ul>
   <p class="mkt">📈 <b>시장 반응</b><br>{esc(g.get("market", "")).replace(chr(10), "<br>")}</p>
-  <p class="kr">🇰🇷 <b>한국엔</b> — {esc(g.get("korea", ""))}</p>
+  <p class="kr"><i class="cc">KR</i><b>한국엔</b> — {esc(g.get("korea", ""))}</p>
   <p class="links">{links}</p>
 </details>""")
     return "".join(cards)
@@ -226,7 +334,7 @@ def build() -> Path:
 body{{margin:0;padding:18px 16px 48px;background:var(--bg);color:var(--fg);
 font:14px/1.6 -apple-system,"Malgun Gothic","Apple SD Gothic Neo",sans-serif}}
 .wrap{{max-width:820px;margin:0 auto}}
-h1{{font-size:19px;margin:0 0 2px}} h2{{font-size:15px;margin:28px 0 8px}}
+h1{{font-size:19px;margin:0 0 2px}} h2{{font-size:15px;margin:24px 0 8px}}
 .sub{{color:var(--muted);font-size:12.5px;margin:0 0 16px}}
 .stale{{color:var(--pos)}}
 .card{{background:var(--card);border:1px solid var(--line);border-radius:10px;
@@ -238,7 +346,8 @@ thead th{{color:var(--muted);font-weight:600;font-size:11.5px;border-bottom:1.5p
 td.r,th.r{{text-align:right;font-variant-numeric:tabular-nums}}
 td.v{{font-weight:700}}
 .pos{{color:var(--pos)}} .neg{{color:var(--neg)}} .na{{color:var(--muted)}}
-.hint{{color:var(--muted);font-size:11px;margin-left:3px;cursor:help}}
+.hint{{color:var(--muted);font-size:10px;margin-left:2px;vertical-align:2px}}
+.fnote{{color:var(--muted);font-size:11.5px;margin:-8px 0 12px}}
 .note{{color:var(--muted);font-size:12px;margin:6px 0 0}}
 .note.warn{{background:var(--warnbg);border:1px solid var(--warnline);
 border-radius:8px;padding:8px 10px;color:var(--fg)}}
@@ -251,11 +360,39 @@ background:var(--bg)}}
 .cal-cell.wknd{{background:var(--card)}}
 .cal-cell.today{{border-color:var(--accent);border-width:2px}}
 .cal-d{{font-size:11px;color:var(--muted)}}
-.cal-ev{{display:block;font-size:10px;line-height:1.35;margin-top:2px;padding:1px 3px;
-border-radius:3px;background:rgba(59,111,212,.12);white-space:nowrap;overflow:hidden;
-text-overflow:ellipsis;cursor:help}}
+.cal-ev{{display:block;font-size:10px;line-height:1.3;margin-top:2px;padding:2px 3px;
+border-radius:3px;background:rgba(59,111,212,.12);text-decoration:none;color:inherit;
+overflow:hidden}}
+.cal-ev:hover{{background:rgba(59,111,212,.26)}}
+.cal-ev.flat:hover{{background:rgba(59,111,212,.12)}}
 .cal-ev.kr{{background:rgba(214,69,69,.12)}}
+.cal-ev.kr:hover{{background:rgba(214,69,69,.26)}}
+.ev-n{{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}}
+.ev-v{{display:block;font-size:9.5px;color:var(--muted);font-variant-numeric:tabular-nums;
+white-space:nowrap;overflow:hidden;text-overflow:ellipsis}}
+.cc{{display:inline-block;font-style:normal;font-size:8.5px;font-weight:700;letter-spacing:.3px;
+border:1px solid var(--line);border-radius:3px;padding:0 2px;margin-right:3px;
+color:var(--muted);vertical-align:1px}}
+.est{{font-style:normal;color:var(--muted);margin-left:2px}}
+/* 다가오는 발표 */
+table.up td{{font-size:12.5px;vertical-align:top}}
+table.up td.d{{white-space:nowrap;font-weight:700}}
+table.up .wd,table.up .pd{{color:var(--muted);font-weight:400;font-size:11px}}
+table.up .qtime{{display:block;color:var(--muted);font-size:10.5px}}
+table.up tr.soon td{{background:var(--warnbg)}}
+table.up .trend{{color:var(--muted);font-size:11.5px;white-space:nowrap}}
 /* 해석 카드 */
+/* 섹션 접기 */
+details.sec{{margin:0 0 4px}}
+details.sec>summary{{list-style:none;cursor:pointer;display:flex;align-items:center;gap:6px;
+padding:4px 0;border-bottom:1px solid var(--line)}}
+details.sec>summary::-webkit-details-marker{{display:none}}
+details.sec>summary::before{{content:"▾";color:var(--muted);font-size:11px;width:10px;
+flex:none;transition:transform .12s}}
+details.sec:not([open])>summary::before{{transform:rotate(-90deg)}}
+details.sec>summary h2{{margin:0;display:inline}}
+details.sec>summary:hover h2{{color:var(--accent)}}
+details.sec[open]>summary{{margin-bottom:8px}}
 .gcard,.bcard{{border:1px solid var(--line);border-radius:10px;background:var(--card);
 padding:10px 12px;margin:0 0 8px}}
 summary{{cursor:pointer;font-size:14px}}
@@ -274,21 +411,49 @@ a{{color:inherit}} .yt{{font-size:12px}}
 <p class="sub">금리·채권·환율과 월·분기 지표를 한 장에. 숫자 옆에 <b>“얼마면 무슨 뜻인지”</b>를 같이 둔다.<br>
 🕘 매일 저녁 9시 갱신{f' · 실제 갱신 <b>{esc(gen)}</b>' if gen else ''} {stale}</p>
 
-<h2>📈 지금 숫자</h2>
+<details class="sec" id="s-now" open>
+<summary><h2>📈 지금 숫자</h2></summary>
 <div class="card">{quote_table(cfg, data)}</div>
+</details>
 
-<h2>🗓 발표 일정</h2>
-<div class="card">{calendar_block(cfg, today)}</div>
+<details class="sec" id="s-cal" open>
+<summary><h2>🗓 발표 일정</h2></summary>
+<div class="card">{calendar_block(cfg, today, data)}</div>
+</details>
 
-<h2>🧭 지표 해석 — 얼마면 무슨 뜻인가</h2>
+<details class="sec" id="s-read" open>
+<summary><h2>🧭 지표 해석 — 얼마면 무슨 뜻인가</h2></summary>
 <p class="note">제목을 누르면 펼쳐집니다. 밴드는 <b>대략의 기준</b>이지 매매 신호가 아닙니다.</p>
 {indicator_cards(guide)}
+</details>
 
-<h2>📚 기초 — 이것부터</h2>
+<details class="sec" id="s-basic" open>
+<summary><h2>📚 기초 — 이것부터</h2></summary>
 {basics_block(guide)}
+</details>
 
 <p class="note">영상 링크는 특정 영상이 아니라 <b>검색 결과</b>로 겁니다 — 영상은 내려가도 검색은 남습니다.</p>
-</div></body></html>"""
+</div>
+<script>
+// 섹션 접은 상태를 브라우저에 기억해 둔다. 페이지는 매일 새로 구워지고 iframe 이 다시
+// 로드되므로 기억하지 않으면 접어도 다음에 또 펼쳐져 있다. 저장이 막힌 환경(사생활 모드·
+// 사이트 데이터 차단)에서는 accessor 가 던지므로 전부 try 로 감싼다 — 기억만 안 될 뿐
+// 화면은 그대로 동작해야 한다.
+(function(){{
+  var KEY='macroSections';
+  var state={{}};
+  try{{ state=JSON.parse(localStorage.getItem(KEY)||'{{}}')||{{}}; }}catch(e){{}}
+  document.querySelectorAll('details.sec').forEach(function(d){{
+    if(state[d.id]===false) d.open=false;
+    else if(state[d.id]===true) d.open=true;
+    d.addEventListener('toggle',function(){{
+      state[d.id]=d.open;
+      try{{ localStorage.setItem(KEY,JSON.stringify(state)); }}catch(e){{}}
+    }});
+  }});
+}})();
+</script>
+</body></html>"""
 
     OUT.parent.mkdir(parents=True, exist_ok=True)
     OUT.write_text(html_out, encoding="utf-8")

@@ -62,9 +62,13 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: 발표일 계산 테스트
+      # discover 를 쓰지 않는 이유: tests/ 에는 러너 탐색용 probe_*.py 도 있고
+      # test_releases.py 는 unittest 가 아니라 스크립트다. 둘을 따로 돌린다.
+      - name: 테스트 — 발표일 계산 · 직전치 변환
         working-directory: macro_desk
-        run: python -m unittest discover -s tests -p "test_*.py"
+        run: |
+          python tests/test_calendar.py
+          python tests/test_releases.py
 
       - name: 시세 수집
         working-directory: macro_desk

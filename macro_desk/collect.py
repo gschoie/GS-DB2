@@ -4,6 +4,8 @@
 설계 원칙
   · **키 없이도 돌아간다** — yfinance 만으로 금리·환율·원자재가 채워진다.
     FRED_API_KEY 를 넣으면 진짜 2년물·장단기 스프레드·기대인플레·실질금리가 더해진다.
+  · 발표 지표의 **직전치**도 같이 받는다(releases.py — FRED 공개 CSV, 키 불필요).
+    달력에 이름만 있으면 쓸모가 없어서다.
   · 한 종목이 실패해도 나머지는 저장한다(그 줄만 빈칸).
   · 네트워크 라이브러리는 **지연 import** — 렌더만 할 때는 설치 없이 돌게 한다
     (construction_briefing 과 같은 이유).
@@ -17,6 +19,8 @@ import os
 from pathlib import Path
 
 import yaml
+
+import releases as rl
 
 HERE = Path(__file__).resolve().parent
 OUT_DIR = HERE.parent / "telegram_research_dashboard" / "static" / "macro_desk"
@@ -100,6 +104,11 @@ def collect(cfg: dict) -> dict:
         quotes.update(fetch_yahoo(grp["items"]))
 
     fred_key = os.environ.get("FRED_API_KEY", "").strip()
+
+    print("발표 지표 직전치(BLS 공개 API — 키 불필요" +
+          (", FRED 계열 포함)" if fred_key else "; FRED 계열은 키가 없어 생략)"))
+    releases = rl.fetch(cfg.get("calendar", []), fred_key)
+
     fred = {}
     if fred_key and cfg.get("fred"):
         print("FRED")
@@ -113,6 +122,7 @@ def collect(cfg: dict) -> dict:
         "quotes": quotes,
         "fred": fred,
         "has_fred": bool(fred),
+        "releases": releases,
     }
 
 
@@ -133,7 +143,7 @@ def main() -> None:
     args = ap.parse_args()
 
     payload = collect(load_config())
-    got = len(payload["quotes"]) + len(payload["fred"])
+    got = len(payload["quotes"]) + len(payload["fred"]) + len(payload["releases"])
     if not got:
         raise SystemExit("수집된 값이 하나도 없다 — 저장하지 않는다")
     if args.dry_run:
