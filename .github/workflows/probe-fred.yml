@@ -9,8 +9,43 @@ on:
   workflow_dispatch:
 
 jobs:
-  probe:
+  # 1단: 응답이 오기는 하나. 파이썬 urlopen 은 느리게 흘러오는 응답에서 timeout 이
+  # 안 걸려 매달릴 수 있으므로(1차 프로브가 15분 넘게 안 끝났다) curl --max-time 으로 끊는다.
+  reachable:
     runs-on: ubuntu-latest
+    timeout-minutes: 6
+    steps:
+      - name: fredgraph.csv 응답 헤더
+        run: |
+          for id in CPIAUCSL PAYEMS UNRATE; do
+            echo "=== $id ==="
+            curl -sS -o /tmp/$id.csv -D /tmp/$id.hdr --max-time 20 \
+                 -w 'http=%{http_code} size=%{size_download} time=%{time_total}\n' \
+                 -A 'gs-research-desk/macro' \
+                 "https://fred.stlouisfed.org/graph/fredgraph.csv?id=$id" || echo "curl 실패 $?"
+            head -1 /tmp/$id.hdr 2>/dev/null || true
+            grep -i -E '^(content-type|retry-after|server|x-)' /tmp/$id.hdr 2>/dev/null | head -5 || true
+            tail -2 /tmp/$id.csv 2>/dev/null || true
+          done
+      - name: FRED API(키 필요) 와 대안 소스도 살아있나
+        run: |
+          echo "=== BLS 공개 API v1 (키 불필요, IP당 25회/일) ==="
+          curl -sS --max-time 20 -w '\nhttp=%{http_code}\n' \
+               -H 'Content-Type: application/json' \
+               -d '{"seriesid":["CUSR0000SA0","CES0000000001","LNS14000000","WPSFD4"],"startyear":"2025","endyear":"2026"}' \
+               https://api.bls.gov/publicAPI/v1/timeseries/data/ | head -c 1200
+          echo
+          echo "=== Census MARTS 소매판매 (키 불필요) ==="
+          curl -sS --max-time 20 -w '\nhttp=%{http_code}\n' \
+               "https://api.census.gov/data/timeseries/eits/marts?get=cell_value,time_slot_id&for=us:*&category_code=44X72&data_type_code=SM&seasonally_adj=yes&time=from+2026-01" \
+               | head -c 600
+          echo
+
+  # 2단: 1단이 통하면 계열별 생존 확인(여기도 전체 20분 상한)
+  series:
+    needs: reachable
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5

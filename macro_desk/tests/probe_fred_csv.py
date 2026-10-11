@@ -51,8 +51,10 @@ CANDIDATES = [
 
 
 def last_obs(series: str, n: int = 3):
+    # timeout 은 소켓 1회 작업 기준이라 **느리게 흘러오는 응답에선 안 걸린다** →
+    # 전체 시간은 바깥(워크플로 timeout-minutes)에서 끊는다. 여기서는 12초로 짧게.
     req = urllib.request.Request(CSV.format(series), headers={"User-Agent": "gs-macro-probe"})
-    with urllib.request.urlopen(req, timeout=25) as r:
+    with urllib.request.urlopen(req, timeout=12) as r:
         body = r.read().decode("utf-8", "replace")
     rows = list(csv.reader(io.StringIO(body)))
     if not rows:
