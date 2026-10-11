@@ -16,7 +16,7 @@
      등록할 가치가 있는지 판단하려면 이걸 알아야 한다
   ④ BEA(GDP·PCE)는 키 없이 되는가
 
-사용: python macro_desk/tests/probe_fred_csv.py
+사용: python macro_desk/tests/probe_release_sources.py
 """
 from __future__ import annotations
 

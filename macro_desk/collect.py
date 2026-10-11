@@ -103,10 +103,12 @@ def collect(cfg: dict) -> dict:
     for grp in cfg.get("quotes", []):
         quotes.update(fetch_yahoo(grp["items"]))
 
-    print("발표 지표 직전치(FRED 공개 CSV — 키 불필요)")
-    releases = rl.fetch(cfg.get("calendar", []))
-
     fred_key = os.environ.get("FRED_API_KEY", "").strip()
+
+    print("발표 지표 직전치(BLS 공개 API — 키 불필요" +
+          (", FRED 계열 포함)" if fred_key else "; FRED 계열은 키가 없어 생략)"))
+    releases = rl.fetch(cfg.get("calendar", []), fred_key)
+
     fred = {}
     if fred_key and cfg.get("fred"):
         print("FRED")

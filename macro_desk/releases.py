@@ -1,58 +1,121 @@
 # -*- coding: utf-8 -*-
-"""발표 지표의 **직전치** 수집 — FRED 키 없는 CSV 엔드포인트.
+"""발표 지표의 **직전치** 수집.
 
-왜 이게 필요한가: 달력에 지표 **이름만** 있으면 쓸모가 없다. "CPI 발표"가 아니라
-"직전 +0.2%(전월) · +3.0%(전년)" 처럼 숫자가 옆에 있어야 발표값을 보고 놀랄 수 있다.
+왜 필요한가: 달력에 지표 **이름만** 있으면 쓸모가 없다. "CPI 발표"가 아니라
+"직전 +0.2%(전월) · +3.4%(전년)" 처럼 숫자가 옆에 있어야 발표값을 보고 놀랄 수 있다.
 
-왜 키 없는 CSV 인가: `api.stlouisfed.org` 는 `FRED_API_KEY` 가 필요한데 아직 없다.
-`fred.stlouisfed.org/graph/fredgraph.csv?id=…` 는 키 없이 열리는 공개 경로라
-**키 등록 없이도 직전치가 채워진다**. 키를 넣으면 시세판 쪽(collect.fetch_fred)이
-따로 풍부해지는 것이고 여기와는 무관하다.
+**소스 두 갈래** (`release.src`)
+  · `bls`(기본) — **키가 필요 없다**. 물가(CPI·PPI)·고용·임금을 여기서 받는다.
+    v1 한도는 **IP당 25회/일 · 요청당 50계열 · 10년** 이라 계열마다 부르면 한도에
+    걸린다 → **전 지표를 한 번의 호출로** 받는다.
+  · `fred` — `FRED_API_KEY` 가 있을 때만. 소매판매·PCE·GDP·정책금리·한국 지표처럼
+    BLS 소관이 아닌 것들. 키가 없으면 그 줄만 빠지고 화면에 '–' 로 남는다.
+
+러너에서 뭐가 막히고 뭐가 되는지 (실측 2026-10-11, 프로브)
+  · **`fred.stlouisfed.org`(그래프·CSV 호스트)는 막혔다** — 0.05초 만에
+    `HTTP/2 INTERNAL_ERROR`. 그래서 '키 없이 CSV 로 받는' 우회는 안 된다.
+  · **`api.stlouisfed.org`(키 경로)는 열려 있다** — 가짜 키로 부르면 "키 형식이
+    틀렸다"는 400 이 정상적으로 온다. 즉 **FRED 키를 등록하면 이 경로는 쓸 수 있다.**
+    두 호스트를 뭉떵그려 'FRED 는 안 된다'고 적으면 안 되는 이유.
+  · Census(소매판매)는 키를 요구하고(`Missing Key`), BEA 는 타임아웃이다.
+  · 파이썬 `urlopen(timeout=)` 은 앞의 차단을 **타임아웃으로 못 잡는다**(소켓 1회
+    작업 기준이라 응답이 느리게 흘러오면 안 걸린다) — 1차 프로브가 15분을 매달렸다.
 
 없는 것은 없다고 적는다
-  · **ISM 은 소스가 없다** — ISM 이 2022년 FRED 재배포를 중단시켜 NAPM 계열이 죽었다.
-    유료 외엔 경로가 없어 `release` 를 안 달고 '직전치 없음'으로 남긴다.
-  · **컨센서스는 무료 API 가 없다** — Investing·TradingEconomics 는 유료/차단.
-    `consensus.json`(수동·세션 입력) 에 있을 때만 표시한다.
+  · **ISM** — ISM 이 재배포를 막아 무료 경로가 아예 없다(키를 넣어도 안 된다).
+  · **컨센서스** — 무료 API 가 없다. `consensus.json` 에 있을 때만 표시한다.
+  이들은 화면에서 '–' 로 남는다. 숫자를 지어내지 않는다.
 
-계열이 또 죽으면: `macro_desk/tests/probe_fred_csv.py` 를 러너에서 돌려 생존 확인.
+소스가 또 막히면: `macro_desk/tests/probe_release_sources.py` 를 러너에서 돌려 확인.
 """
 from __future__ import annotations
 
-import csv
 import datetime as dt
-import io
 import json
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
-CSV_URL = "https://fred.stlouisfed.org/graph/fredgraph.csv?id={}"
+BLS_URL = "https://api.bls.gov/publicAPI/v1/timeseries/data/"
+FRED_URL = "https://api.stlouisfed.org/fred/series/observations"
 CONSENSUS = HERE / "consensus.json"
-UA = {"User-Agent": "gs-research-desk/macro"}
+UA = {"User-Agent": "gs-research-desk/macro", "Content-Type": "application/json"}
 
 
-# ── 관측치 받기 ─────────────────────────────────────────────────────────────
-def observations(series: str, timeout: int = 25) -> list[tuple[dt.date, float]]:
-    """[(날짜, 값)] 오름차순. 결측('.')은 버린다."""
+# ── BLS 관측치 ──────────────────────────────────────────────────────────────
+def _bls_date(year: str, period: str) -> dt.date | None:
+    """BLS 기간 표기 → 날짜. M01~M12(월) · Q01~Q04(분기) · A01(연간)."""
+    y = int(year)
+    kind, num = period[0], period[1:]
+    if kind == "M" and num.isdigit() and 1 <= int(num) <= 12:
+        return dt.date(y, int(num), 1)
+    if kind == "Q" and num.isdigit() and 1 <= int(num) <= 4:
+        return dt.date(y, (int(num) - 1) * 3 + 1, 1)
+    if kind == "A":
+        return dt.date(y, 1, 1)
+    return None                       # M13(연평균) 등은 버린다
+
+
+def bls_observations(series: list[str], years: int = 3,
+                     timeout: int = 25) -> dict[str, list[tuple[dt.date, float]]]:
+    """계열 여러 개를 **한 번의 호출로** 받아 {계열: [(날짜, 값)] 오름차순}.
+
+    결측('-', 2025년 예산 공백 등)은 버린다 — 전년동월비를 못 만드는 구간이 생기지만
+    빈 값을 0 으로 읽는 것보다 낫다(없는 건 없는 것으로 둔다).
+    """
     import urllib.request          # 지연 import (렌더 모드는 네트워크 없이 돈다)
 
-    req = urllib.request.Request(CSV_URL.format(series), headers=UA)
+    this_year = dt.date.today().year
+    body = json.dumps({"seriesid": series, "startyear": str(this_year - years),
+                       "endyear": str(this_year)}).encode()
+    req = urllib.request.Request(BLS_URL, data=body, headers=UA)
     with urllib.request.urlopen(req, timeout=timeout) as r:
-        body = r.read().decode("utf-8", "replace")
+        j = json.loads(r.read().decode("utf-8", "replace"))
 
-    out = []
-    for row in csv.reader(io.StringIO(body)):
-        if len(row) < 2:
+    if j.get("status") != "REQUEST_SUCCEEDED":
+        raise RuntimeError(f"BLS 응답 실패: {j.get('status')} {j.get('message')}")
+
+    out: dict[str, list[tuple[dt.date, float]]] = {}
+    for s in j.get("Results", {}).get("series", []):
+        rows = []
+        for d in s.get("data", []):
+            if d.get("value") in ("-", "", None):
+                continue
+            day = _bls_date(d.get("year", ""), d.get("period", ""))
+            if day is None:
+                continue
+            try:
+                rows.append((day, float(d["value"])))
+            except ValueError:
+                continue
+        out[s["seriesID"]] = sorted(rows)
+    return out
+
+
+def fred_observations(series: str, key: str, years: int = 4,
+                     timeout: int = 20) -> list[tuple[dt.date, float]]:
+    """FRED 한 계열 → [(날짜, 값)] 오름차순. **키 경로(api.stlouisfed.org)** 를 쓴다."""
+    import urllib.parse
+    import urllib.request
+
+    start = (dt.date.today() - dt.timedelta(days=365 * years + 40)).isoformat()
+    q = urllib.parse.urlencode({"series_id": series, "api_key": key,
+                                "file_type": "json", "observation_start": start})
+    req = urllib.request.Request(f"{FRED_URL}?{q}",
+                                 headers={"User-Agent": UA["User-Agent"]})
+    with urllib.request.urlopen(req, timeout=timeout) as r:
+        j = json.loads(r.read().decode("utf-8", "replace"))
+
+    rows = []
+    for o in j.get("observations", []):
+        if o.get("value") in (".", "", None):
             continue
         try:
-            d = dt.date.fromisoformat(row[0].strip())
-            v = float(row[1].strip())
-        except ValueError:
-            continue                # 헤더·결측
-        out.append((d, v))
-    if not out:
+            rows.append((dt.date.fromisoformat(o["date"]), float(o["value"])))
+        except (ValueError, KeyError):
+            continue
+    if not rows:
         raise ValueError("관측치 없음")
-    return out
+    return sorted(rows)
 
 
 # ── 변환 ───────────────────────────────────────────────────────────────────
@@ -114,19 +177,19 @@ def summarize(obs: list[tuple[dt.date, float]], spec: dict) -> dict:
 
     else:
         mom = _pct(last_v, obs[-2][1] if len(obs) >= 2 else None)
-        yoy = _pct(last_v, _pick_back(obs, 12 if freq == "m" else 12))
+        yoy = _pct(last_v, _pick_back(obs, 12))
         if kind in ("yoy", "yoy_mom") and yoy is not None:
             parts.append(f"전년 {yoy:+.1f}%")
         if kind in ("mom", "yoy_mom") and mom is not None:
             parts.append(f"전{'기' if freq == 'q' else '월'} {mom:+.1f}%")
-        key = yoy if kind == "yoy" else mom
         for i in range(max(1, len(obs) - 3), len(obs)):
             r = (_pct(obs[i][1], _pick_back(obs[:i + 1], 12)) if kind == "yoy"
                  else _pct(obs[i][1], obs[i - 1][1]))
             if r is not None:
                 recent.append(f"{r:+.1f}")
-        if key is None and not parts:
-            parts.append(f"{last_v:,.1f}")
+        # 변화율을 못 구하면 **'–' 로 둔다.** 지수 계열의 원값을 대신 찍으면
+        # '코어 337.8' 처럼 증가율 자리에 지수 레벨이 앉아 완전히 다른 뜻이 된다
+        # (실측으로 잡힌 버그). 모르는 건 모른다고 적는다.
 
     return {"period": _period_label(last_d, freq),
             "period_iso": last_d.isoformat(),
@@ -137,27 +200,83 @@ def summarize(obs: list[tuple[dt.date, float]], spec: dict) -> dict:
 
 
 # ── 수집 ───────────────────────────────────────────────────────────────────
-def fetch(entries: list[dict]) -> dict:
-    """config.yml calendar 목록 → {지표id: 직전치}. 실패한 계열은 빠진다."""
-    out = {}
+def _specs(entries: list[dict]) -> list[tuple[str, dict, dict | None]]:
+    """[(지표id, 주 spec, 부 spec)] — `also` 는 한 줄에 같이 적을 보조 계열
+    (고용보고서의 실업률처럼 '취업자 +2.9만명 · 실업률 4.2%' 로 붙는다)."""
+    out = []
     for e in entries:
-        spec = e.get("release")
-        if not spec or not spec.get("series"):
-            continue
+        spec = e.get("release") or {}
+        if spec.get("series"):
+            out.append((e["id"], spec, spec.get("also")))
+    return out
+
+
+def fetch(entries: list[dict], fred_key: str = "") -> dict:
+    """config.yml calendar 목록 → {지표id: 직전치}.
+
+    BLS 는 **한 번의 호출로** 전 계열을 받는다(하루 25회 한도). FRED 는 키가 있을
+    때만 계열별로 받는다. 어느 쪽이 실패해도 그 지표만 빠지고 나머지는 저장된다 —
+    직전치가 없는 건 화면에서 '–' 일 뿐, 수집 실패가 아니다.
+    """
+    specs = _specs(entries)
+    if not specs:
+        return {}
+
+    def src(s: dict) -> str:
+        return s.get("src", "bls")
+
+    # BLS — 주·보조 계열을 모아 한 번에
+    bls_ids = sorted({s["series"] for _, main, also in specs
+                      for s in ([main] + ([also] if also else []))
+                      if src(s) == "bls"})
+    bls: dict[str, list] = {}
+    if bls_ids:
         try:
-            obs = observations(spec["series"])
-            out[e["id"]] = summarize(obs, spec)
-            print(f"  OK  {e['name']:<20} {out[e['id']]['period']} {out[e['id']]['text']}")
+            bls = bls_observations(bls_ids)
+            print(f"  BLS {len(bls)}/{len(bls_ids)} 계열")
         except Exception as ex:
-            print(f"  ERR {e['name']:<20} {spec['series']} {type(ex).__name__}: {str(ex)[:50]}")
+            print(f"  ERR BLS 호출 실패 — {type(ex).__name__}: {str(ex)[:120]}")
+
+    fred_cache: dict[str, list] = {}
+
+    def rows_for(s: dict) -> list:
+        if src(s) == "bls":
+            return bls.get(s["series"]) or []
+        if not fred_key:
+            return []
+        if s["series"] not in fred_cache:
+            try:
+                fred_cache[s["series"]] = fred_observations(s["series"], fred_key)
+            except Exception as ex:
+                print(f"  ERR FRED {s['series']} — {type(ex).__name__}: {str(ex)[:60]}")
+                fred_cache[s["series"]] = []
+        return fred_cache[s["series"]]
+
+    out = {}
+    for ind_id, main, also in specs:
+        rows = rows_for(main)
+        if not rows:
+            print(f"  --  {ind_id:<14} {main['series']} 직전치 없음"
+                  f"{' (FRED 키 필요)' if src(main) == 'fred' and not fred_key else ''}")
+            continue
+        got = summarize(rows, main)
+        if also:
+            extra = rows_for(also)
+            if extra:
+                sub = summarize(extra, also)
+                if sub["text"] != "–":          # '코어 –' 는 붙이지 않는다
+                    label = also.get("label", "")
+                    got["text"] += f' · {label}{" " if label else ""}{sub["text"]}'
+        out[ind_id] = got
+        print(f"  OK  {ind_id:<14} {got['period']} {got['text']}")
     return out
 
 
 def load_consensus() -> dict:
-    """{'us_cpi': {'text': '전년 +3.1% 예상', 'asof': '2026-10-10'}} — 없으면 빈 dict.
+    """{'us_cpi': {'text': '전년 +3.7% 예상', 'asof': '2026-10-10'}} — 없으면 빈 dict.
 
     무료 컨센서스 API 가 없어 **사람이(또는 세션이 웹서치로) 채우는 파일**이다.
-    비어 있으면 화면에 '컨센 없음'으로 정직하게 나온다.
+    비어 있으면 화면에 '–' 로 정직하게 나온다.
     """
     if not CONSENSUS.exists():
         return {}

@@ -62,13 +62,24 @@ def _month_days(year: int, month: int) -> list[dt.date]:
 
 
 def load_fixed() -> dict[str, list[str]]:
-    """{'fomc': ['2026-01-28', …], 'bok': [...]} — 없으면 빈 dict."""
+    """{'fomc': ['2026-10-28', …], 'us_cpi': [...]} — 없으면 빈 dict.
+
+    `dates` 는 기관이 공표한 **확정일**, `tentative` 는 출처가 한 곳뿐이라 아직
+    확인이 필요한 날짜다. 둘을 합쳐 돌려주되 tentative 는 `~`가 붙도록
+    `_tentative` 키에 따로 표시해 둔다 — 확정인 척 보여주지 않기 위함이다.
+    """
     if not FIXED.exists():
         return {}
     try:
-        return json.loads(FIXED.read_text(encoding="utf-8")).get("dates", {})
+        raw = json.loads(FIXED.read_text(encoding="utf-8"))
     except Exception:
         return {}
+    out: dict[str, list[str]] = {k: list(v) for k, v in (raw.get("dates") or {}).items()}
+    tent = raw.get("tentative") or {}
+    for k, v in tent.items():
+        out.setdefault(k, []).extend(v)
+    out["_tentative"] = sorted({d for v in tent.values() for d in v})
+    return out
 
 
 def resolve(entry: dict, year: int, month: int, fixed: dict | None = None) -> list[dict]:
@@ -85,8 +96,13 @@ def resolve(entry: dict, year: int, month: int, fixed: dict | None = None) -> li
             "country": entry.get("country", ""), "time": entry.get("time", ""),
             "guide": entry.get("guide", "")}
 
-    if entry.get("fixed"):
-        got = (fixed if fixed is not None else load_fixed()).get(entry["id"], [])
+    # **확정일을 알면 규칙보다 확정일이 먼저다.** `fixed: true` 인 항목(FOMC·금통위)만
+    # 아니라 규칙이 있는 항목도 마찬가지 — 규칙은 '매월 12일 전후' 같은 근사라
+    # 실제 발표일과 이틀씩 어긋난다(2026-09 CPI 는 규칙 10/12, 실제 10/14).
+    fixed = load_fixed() if fixed is None else fixed
+    got = fixed.get(entry["id"], [])
+    if got:
+        tent = set(fixed.get("_tentative", []))
         out = []
         for s in got:
             try:
@@ -94,8 +110,12 @@ def resolve(entry: dict, year: int, month: int, fixed: dict | None = None) -> li
             except ValueError:
                 continue
             if (d.year, d.month) == (year, month):
-                out.append({**base, "date": d, "estimated": False})
-        return out
+                out.append({**base, "date": d, "estimated": s in tent,
+                            "tentative": s in tent})
+        if out or entry.get("fixed"):
+            return out
+    elif entry.get("fixed"):
+        return []                       # 공표일을 모르면 추측하지 않는다
 
     rule = entry.get("rule") or {}
     try:

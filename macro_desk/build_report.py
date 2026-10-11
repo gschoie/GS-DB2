@@ -80,7 +80,7 @@ def quote_table(cfg: dict, data: dict) -> str:
         groups = groups + [{"group": "금리 파생(FRED)", "items": cfg.get("fred", [])}]
 
     for grp in groups:
-        rows = ""
+        rows, notes = "", []
         for it in grp["items"]:
             q = data.get("quotes", {}).get(it["id"]) or data.get("fred", {}).get(it["id"])
             if not q:
@@ -88,23 +88,33 @@ def quote_table(cfg: dict, data: dict) -> str:
             name = esc(it["name"])
             if it.get("key"):
                 name = f"<b>{name}</b>"
-            note = f'<span class="hint" title="{esc(it["note"])}">ⓘ</span>' if it.get("note") else ""
+            mark = ""
+            if it.get("note"):
+                # **툴팁만으로 두지 않는다** — 모바일에선 안 뜨고, "2년물이 실은 5년물"
+                # 같은 주의는 안 보이면 그냥 틀린 표가 된다. 표 밑에 글로 적는다.
+                notes.append(f'<b>{esc(it["name"])}</b> — {esc(it["note"])}')
+                mark = f'<span class="hint">*{len(notes)}</span>'
             cells = "".join(fmt_change(q.get(lbl), it["unit"]) for lbl, _ in
                             (("1D", 0), ("1W", 0), ("1M", 0), ("3M", 0), ("12M", 0)))
-            rows += (f'<tr><th>{name}{note}</th>'
+            rows += (f'<tr><th>{name}{mark}</th>'
                      f'<td class="r v">{fmt_value(q.get("last"), it["unit"])}</td>{cells}</tr>')
         if rows:
+            foot = "".join(f'<p class="fnote">*{i + 1} {n}</p>'
+                           for i, n in enumerate(notes))
             blocks.append(
                 f'<p class="ctitle">{esc(grp["group"])}</p>'
                 '<table><thead><tr><th></th><th class="r">현재</th>'
                 '<th class="r">1D</th><th class="r">1W</th><th class="r">1M</th>'
                 '<th class="r">3M</th><th class="r">12M</th></tr></thead>'
-                f"<tbody>{rows}</tbody></table>")
+                f"<tbody>{rows}</tbody></table>{foot}")
     if not blocks:
         return '<p class="na">시세 데이터 없음 — 다음 수집부터 표시</p>'
+    # FRED 키 경로(api.stlouisfed.org)는 러너에서 열려 있음을 실측으로 확인했다 —
+    # 막힌 건 그래프·CSV 호스트(fred.stlouisfed.org)뿐이다.
     note = ("" if data.get("has_fred") else
-            '<p class="note">FRED_API_KEY를 등록하면 <b>진짜 2년물·10년-2년 스프레드·'
-            '기대인플레·실질금리</b>가 여기에 추가됩니다(무료 키).</p>')
+            '<p class="note">FRED_API_KEY(무료)를 등록하면 <b>진짜 2년물·10년-2년 스프레드·'
+            '기대인플레·실질금리</b>가 여기에 추가되고, 아래 달력의 '
+            '<b>소매판매·PCE·GDP·정책금리·한국 지표 직전치</b>도 함께 채워집니다.</p>')
     return "".join(blocks) + note
 
 
@@ -118,13 +128,18 @@ def chip(e: dict, rel: dict, cons: dict) -> str:
     """
     r = rel.get(e["id"]) or {}
     c = cons.get(e["id"]) or {}
-    val = c.get("text") and f'컨센 {c["text"]}' or r.get("text") or ""
+    if c.get("text"):                              # 앞을 보는 숫자가 있으면 그게 먼저
+        val = f'컨센 {c["text"]}'
+    else:
+        val = r.get("text") or ""
     sub = f'<span class="ev-v">{esc(val)}</span>' if val else ""
     est = '<i class="est" aria-label="발표일 추정">~</i>' if e.get("estimated") else ""
-    href = f'#g-{esc(e["guide"])}' if e.get("guide") else "#cal-up"
-    return (f'<a class="cal-ev {e["country"].lower()}" href="{href}">'
-            f'<span class="ev-n"><i class="cc">{CC.get(e["country"], "")}</i>'
-            f'{esc(e["name"])}{est}</span>{sub}</a>')
+    body = (f'<span class="ev-n"><i class="cc">{CC.get(e["country"], "")}</i>'
+            f'{esc(e["name"])}{est}</span>{sub}')
+    if not e.get("guide"):              # 누를 데가 없으면 링크로 만들지 않는다
+        return f'<span class="cal-ev {e["country"].lower()} flat">{body}</span>'
+    return (f'<a class="cal-ev {e["country"].lower()}" href="#g-{esc(e["guide"])}">'
+            f'{body}</a>')
 
 
 def month_grid(entries: list[dict], year: int, month: int, today: dt.date,
@@ -209,14 +224,29 @@ def calendar_block(cfg: dict, today: dt.date, data: dict) -> str:
         warn = ('<p class="note warn">📌 <b>' + esc(" · ".join(missing)) +
                 '</b> 은 기관이 공표하는 확정일이라 <b>추측해서 넣지 않았습니다</b>. '
                 '공식 일정을 받아오면 달력에 자동으로 채워집니다.</p>')
+    if fixed.get("_tentative"):
+        warn += ('<p class="note">출처가 한 곳뿐이어서 <b>아직 확인이 필요한 날짜</b>는 '
+                 '확정으로 표시하지 않고 <b>~</b> 로 둡니다 '
+                 f'(현재 {len(fixed["_tentative"])}건 — 금통위).</p>')
 
-    no_rel = [e["name"] for e in entries
-              if not (e.get("release") or {}).get("series") and not e.get("fixed")]
+    # 직전치가 비어 있는 이유를 **종류별로** 적는다 — '없다'와 '키가 없어 못 받는다'는
+    # 사용자가 할 수 있는 일이 다르다(앞은 포기, 뒤는 키 등록으로 채워진다).
+    none_src = [e["name"] for e in entries
+                if not (e.get("release") or {}).get("series")]
+    need_key = [e["name"] for e in entries
+                if (e.get("release") or {}).get("src") == "fred" and e["id"] not in rel]
     gap = ""
-    if no_rel:
-        gap = ('<p class="note">직전치 소스가 없는 지표: <b>' + esc(" · ".join(no_rel)) +
-               '</b> — ISM 은 2022년 FRED 재배포가 중단돼 무료 경로가 없고, 한국 지표 일부는 '
-               'ECOS 키가 있어야 받습니다. 숫자를 지어내지 않고 빈칸으로 둡니다.</p>')
+    if none_src:
+        gap += ('<p class="note">직전치 소스가 아예 없는 지표: <b>'
+                + esc(" · ".join(none_src)) +
+                '</b> — ISM 은 2022년에 재배포가 막혀 유료 외엔 경로가 없고, '
+                '한국 수출입·금통위는 기관 발표를 직접 받아야 합니다. '
+                '숫자를 지어내지 않고 빈칸으로 둡니다.</p>')
+    if need_key:
+        gap += ('<p class="note warn">🔑 <b>' + esc(" · ".join(need_key)) +
+                '</b> 의 직전치는 <b>FRED 무료 키</b>(<code>FRED_API_KEY</code>)를 '
+                '등록하면 자동으로 채워집니다. 물가·고용(CPI·PPI·고용보고서)은 '
+                'BLS 공개 API 라 키 없이 이미 나옵니다.</p>')
     cons_note = ('<p class="note">컨센서스는 무료 API 가 없어 '
                  f'<b>{"등록된 값만" if cons else "아직 비어"}</b> 표시됩니다'
                  f'{f" (현재 {len(cons)}건)" if cons else ""}.</p>')
@@ -260,7 +290,7 @@ def indicator_cards(guide: dict) -> str:
   <p class="watch">👁 <b>볼 것</b> — {esc(g.get("watch", ""))}</p>
   <ul class="bands">{bands}</ul>
   <p class="mkt">📈 <b>시장 반응</b><br>{esc(g.get("market", "")).replace(chr(10), "<br>")}</p>
-  <p class="kr">🇰🇷 <b>한국엔</b> — {esc(g.get("korea", ""))}</p>
+  <p class="kr"><i class="cc">KR</i><b>한국엔</b> — {esc(g.get("korea", ""))}</p>
   <p class="links">{links}</p>
 </details>""")
     return "".join(cards)
@@ -316,7 +346,8 @@ thead th{{color:var(--muted);font-weight:600;font-size:11.5px;border-bottom:1.5p
 td.r,th.r{{text-align:right;font-variant-numeric:tabular-nums}}
 td.v{{font-weight:700}}
 .pos{{color:var(--pos)}} .neg{{color:var(--neg)}} .na{{color:var(--muted)}}
-.hint{{color:var(--muted);font-size:11px;margin-left:3px;cursor:help}}
+.hint{{color:var(--muted);font-size:10px;margin-left:2px;vertical-align:2px}}
+.fnote{{color:var(--muted);font-size:11.5px;margin:-8px 0 12px}}
 .note{{color:var(--muted);font-size:12px;margin:6px 0 0}}
 .note.warn{{background:var(--warnbg);border:1px solid var(--warnline);
 border-radius:8px;padding:8px 10px;color:var(--fg)}}
@@ -333,6 +364,7 @@ background:var(--bg)}}
 border-radius:3px;background:rgba(59,111,212,.12);text-decoration:none;color:inherit;
 overflow:hidden}}
 .cal-ev:hover{{background:rgba(59,111,212,.26)}}
+.cal-ev.flat:hover{{background:rgba(59,111,212,.12)}}
 .cal-ev.kr{{background:rgba(214,69,69,.12)}}
 .cal-ev.kr:hover{{background:rgba(214,69,69,.26)}}
 .ev-n{{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}}
