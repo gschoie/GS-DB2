@@ -506,6 +506,10 @@ h2{font-weight:800;font-size:17px;color:#111827}
   .nav-group[open] .nav-submenu button.active{color:#1b6ec2}
 }
 
+/* 같은 대시보드 안의 다른 화면으로 가는 링크 — 새 창(.open-new)과 구분되게 초록 계열 */
+.view-link{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;color:#1f7a4d;background:#eaf7f0;border:1px solid #cfe9dc;border-radius:999px;padding:7px 14px;text-decoration:none;white-space:nowrap}
+.view-link:hover{background:#ddf0e6;border-color:#1f7a4d;color:#17603c}
+
 /* ══ 본문 노션 보정 ══
    .refresh-btn 은 원래 <a> 용으로 만든 규칙이라 border 를 안 정한다. 화면마다
    같은 버튼이 <button> 으로 쓰인 곳(🔄 갱신 13개)은 브라우저 기본값
