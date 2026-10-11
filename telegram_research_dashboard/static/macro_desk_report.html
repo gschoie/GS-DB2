@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>매크로 데스크</title>
+<style>
+:root{--bg:#fff;--fg:#1c2430;--muted:#6b7684;--line:#e5e8ec;--card:#f7f8fa;
+--pos:#d64545;--neg:#3b6fd4;--accent:#2f6f4f;--warnbg:#fff8e6;--warnline:#e8c87a}
+@media(prefers-color-scheme:dark){:root{--bg:#14181f;--fg:#e6e9ee;--muted:#8b93a1;
+--line:#2a313c;--card:#1b212b;--accent:#8fc7a5;--warnbg:#2b2718;--warnline:#5c4f27}}
+*{box-sizing:border-box}
+body{margin:0;padding:18px 16px 48px;background:var(--bg);color:var(--fg);
+font:14px/1.6 -apple-system,"Malgun Gothic","Apple SD Gothic Neo",sans-serif}
+.wrap{max-width:820px;margin:0 auto}
+h1{font-size:19px;margin:0 0 2px} h2{font-size:15px;margin:28px 0 8px}
+.sub{color:var(--muted);font-size:12.5px;margin:0 0 16px}
+.stale{color:var(--pos)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;
+padding:12px 14px;margin:0 0 10px}
+.ctitle{font-weight:700;font-size:13px;margin:4px 0 6px;color:var(--muted)}
+table{width:100%;border-collapse:collapse;font-size:13px;margin:0 0 14px}
+th,td{padding:5px 6px;border-bottom:1px solid var(--line);text-align:left}
+thead th{color:var(--muted);font-weight:600;font-size:11.5px;border-bottom:1.5px solid var(--line)}
+td.r,th.r{text-align:right;font-variant-numeric:tabular-nums}
+td.v{font-weight:700}
+.pos{color:var(--pos)} .neg{color:var(--neg)} .na{color:var(--muted)}
+.hint{color:var(--muted);font-size:11px;margin-left:3px;cursor:help}
+.note{color:var(--muted);font-size:12px;margin:6px 0 0}
+.note.warn{background:var(--warnbg);border:1px solid var(--warnline);
+border-radius:8px;padding:8px 10px;color:var(--fg)}
+/* 달력 */
+.cal{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;margin:0 0 14px}
+.cal-h{text-align:center;font-size:11px;color:var(--muted);padding:2px 0}
+.cal-cell{min-height:62px;border:1px solid var(--line);border-radius:6px;padding:3px 4px;
+background:var(--bg)}
+.cal-cell.empty{border:none;background:none}
+.cal-cell.wknd{background:var(--card)}
+.cal-cell.today{border-color:var(--accent);border-width:2px}
+.cal-d{font-size:11px;color:var(--muted)}
+.cal-ev{display:block;font-size:10px;line-height:1.35;margin-top:2px;padding:1px 3px;
+border-radius:3px;background:rgba(59,111,212,.12);white-space:nowrap;overflow:hidden;
+text-overflow:ellipsis;cursor:help}
+.cal-ev.kr{background:rgba(214,69,69,.12)}
+/* 해석 카드 */
+.gcard,.bcard{border:1px solid var(--line);border-radius:10px;background:var(--card);
+padding:10px 12px;margin:0 0 8px}
+summary{cursor:pointer;font-size:14px}
+summary .meta{color:var(--muted);font-size:11.5px;font-weight:400;margin-left:6px}
+.what{margin:8px 0} .watch{margin:6px 0;font-size:13px}
+.bands{list-style:none;padding:0;margin:8px 0}
+.band{display:grid;grid-template-columns:18px 170px 1fr;gap:6px;align-items:start;
+padding:4px 0;border-top:1px dashed var(--line);font-size:12.5px}
+.band .bmark{text-align:center}
+.mkt,.kr{font-size:12.5px;margin:8px 0 0}
+.links{margin:8px 0 0;font-size:12px}
+a{color:inherit} .yt{font-size:12px}
+</style></head><body><div class="wrap">
+
+<h1>📊 매크로 데스크</h1>
+<p class="sub">금리·채권·환율과 월·분기 지표를 한 장에. 숫자 옆에 <b>“얼마면 무슨 뜻인지”</b>를 같이 둔다.<br>
+🕘 매일 저녁 9시 갱신 · 실제 갱신 <b>2026-10-11 12:11</b> </p>
+
+<h2>📈 지금 숫자</h2>
+<div class="card"><p class="ctitle">미국 금리·채권</p><table><thead><tr><th></th><th class="r">현재</th><th class="r">1D</th><th class="r">1W</th><th class="r">1M</th><th class="r">3M</th><th class="r">12M</th></tr></thead><tbody><tr><th>미국 3개월물</th><td class="r v">4.06%</td><td class="r pos">+0.01p</td><td class="r pos">+0.06p</td><td class="r pos">+0.21p</td><td class="r pos">+0.33p</td><td class="r pos">+0.21p</td></tr><tr><th>미국 2년물<span class="hint" title="yfinance에 2년물이 없어 5년물로 대체(FRED 키 넣으면 진짜 2년물)">ⓘ</span></th><td class="r v">5.02%</td><td class="r pos">+0.03p</td><td class="r neg">-0.03p</td><td class="r pos">+0.29p</td><td class="r pos">+0.66p</td><td class="r pos">+1.30p</td></tr><tr><th><b>미국 10년물</b></th><td class="r v">5.24%</td><td class="r pos">+0.01p</td><td class="r neg">-0.03p</td><td class="r pos">+0.30p</td><td class="r pos">+0.64p</td><td class="r pos">+1.11p</td></tr><tr><th>미국 30년물</th><td class="r v">5.60%</td><td class="r neg">-0.01p</td><td class="r neg">-0.03p</td><td class="r pos">+0.24p</td><td class="r pos">+0.50p</td><td class="r pos">+0.88p</td></tr></tbody></table><p class="ctitle">달러·환율</p><table><thead><tr><th></th><th class="r">현재</th><th class="r">1D</th><th class="r">1W</th><th class="r">1M</th><th class="r">3M</th><th class="r">12M</th></tr></thead><tbody><tr><th><b>달러지수</b></th><td class="r v">102.21</td><td class="r pos">+0.07%</td><td class="r pos">+0.27%</td><td class="r pos">+3.15%</td><td class="r pos">+0.92%</td><td class="r pos">+3.40%</td></tr><tr><th><b>원/달러</b></th><td class="r v">1,340.9원</td><td class="r neg">-0.16%</td><td class="r neg">-0.12%</td><td class="r neg">-0.54%</td><td class="r neg">-9.88%</td><td class="r neg">-5.55%</td></tr><tr><th>엔/달러</th><td class="r v">158.25</td><td class="r pos">+0.12%</td><td class="r pos">+0.20%</td><td class="r pos">+3.04%</td><td class="r neg">-2.58%</td><td class="r pos">+4.87%</td></tr><tr><th>유로/달러</th><td class="r v">1.12</td><td class="r pos">+0.04%</td><td class="r neg">-0.39%</td><td class="r neg">-3.68%</td><td class="r neg">-1.57%</td><td class="r neg">-3.87%</td></tr></tbody></table><p class="ctitle">원자재·위험</p><table><thead><tr><th></th><th class="r">현재</th><th class="r">1D</th><th class="r">1W</th><th class="r">1M</th><th class="r">3M</th><th class="r">12M</th></tr></thead><tbody><tr><th>WTI 유가</th><td class="r v">$91.85</td><td class="r pos">+0.39%</td><td class="r pos">+0.81%</td><td class="r neg">-10.37%</td><td class="r pos">+17.55%</td><td class="r pos">+46.84%</td></tr><tr><th>금</th><td class="r v">$4,216.30</td><td class="r pos">+1.43%</td><td class="r pos">+1.30%</td><td class="r neg">-4.33%</td><td class="r pos">+5.26%</td><td class="r pos">+3.58%</td></tr><tr><th>구리<span class="hint" title="경기 선행 — &#x27;닥터 코퍼&#x27;">ⓘ</span></th><td class="r v">$6.64</td><td class="r pos">+1.89%</td><td class="r pos">+2.32%</td><td class="r pos">+2.71%</td><td class="r pos">+6.57%</td><td class="r pos">+31.64%</td></tr><tr><th>VIX 변동성</th><td class="r v">14.84</td><td class="r neg">-3.70%</td><td class="r neg">-3.07%</td><td class="r neg">-16.82%</td><td class="r neg">-10.06%</td><td class="r neg">-31.49%</td></tr></tbody></table><p class="note">FRED_API_KEY를 등록하면 <b>진짜 2년물·10년-2년 스프레드·기대인플레·실질금리</b>가 여기에 추가됩니다(무료 키).</p></div>
+
+<h2>🗓 발표 일정</h2>
+<div class="card"><p class="ctitle">2026년 10월</p><div class="cal"><div class="cal-h">월</div><div class="cal-h">화</div><div class="cal-h">수</div><div class="cal-h">목</div><div class="cal-h">금</div><div class="cal-h">토</div><div class="cal-h">일</div><div class="cal-cell empty"></div><div class="cal-cell empty"></div><div class="cal-cell empty"></div><div class="cal-cell"><span class="cal-d">1</span><span class="cal-ev us" title="미국 ISM 제조업 (발표일 추정)">🇺🇸~미국 ISM 제조업</span><span class="cal-ev kr" title="한국 수출입(잠정) (발표일 추정)">🇰🇷~한국 수출입(잠정)</span></div><div class="cal-cell"><span class="cal-d">2</span><span class="cal-ev us" title="미국 고용보고서 (발표일 추정) · 밤 9:30(서머타임) / 10:30">🇺🇸~미국 고용보고서</span><span class="cal-ev kr" title="한국 소비자물가 (발표일 추정)">🇰🇷~한국 소비자물가</span></div><div class="cal-cell wknd"><span class="cal-d">3</span></div><div class="cal-cell wknd"><span class="cal-d">4</span></div><div class="cal-cell"><span class="cal-d">5</span><span class="cal-ev us" title="미국 ISM 서비스업 (발표일 추정)">🇺🇸~미국 ISM 서비스업</span></div><div class="cal-cell"><span class="cal-d">6</span></div><div class="cal-cell"><span class="cal-d">7</span></div><div class="cal-cell"><span class="cal-d">8</span></div><div class="cal-cell"><span class="cal-d">9</span></div><div class="cal-cell wknd"><span class="cal-d">10</span></div><div class="cal-cell today wknd"><span class="cal-d">11</span></div><div class="cal-cell"><span class="cal-d">12</span><span class="cal-ev us" title="미국 소비자물가 CPI (발표일 추정) · 밤 9:30 / 10:30">🇺🇸~미국 소비자물가 CPI</span></div><div class="cal-cell"><span class="cal-d">13</span></div><div class="cal-cell"><span class="cal-d">14</span><span class="cal-ev us" title="미국 생산자물가 PPI (발표일 추정)">🇺🇸~미국 생산자물가 PPI</span></div><div class="cal-cell"><span class="cal-d">15</span><span class="cal-ev kr" title="한국 고용동향 (발표일 추정)">🇰🇷~한국 고용동향</span></div><div class="cal-cell"><span class="cal-d">16</span><span class="cal-ev us" title="미국 소매판매 (발표일 추정)">🇺🇸~미국 소매판매</span></div><div class="cal-cell wknd"><span class="cal-d">17</span></div><div class="cal-cell wknd"><span class="cal-d">18</span></div><div class="cal-cell"><span class="cal-d">19</span></div><div class="cal-cell"><span class="cal-d">20</span></div><div class="cal-cell"><span class="cal-d">21</span></div><div class="cal-cell"><span class="cal-d">22</span></div><div class="cal-cell"><span class="cal-d">23</span></div><div class="cal-cell wknd"><span class="cal-d">24</span></div><div class="cal-cell wknd"><span class="cal-d">25</span></div><div class="cal-cell"><span class="cal-d">26</span><span class="cal-ev kr" title="한국 GDP(속보) (발표일 추정)">🇰🇷~한국 GDP(속보)</span></div><div class="cal-cell"><span class="cal-d">27</span></div><div class="cal-cell"><span class="cal-d">28</span></div><div class="cal-cell"><span class="cal-d">29</span><span class="cal-ev us" title="미국 GDP(속보) (발표일 추정)">🇺🇸~미국 GDP(속보)</span></div><div class="cal-cell"><span class="cal-d">30</span><span class="cal-ev us" title="미국 PCE 물가 (발표일 추정) · 밤 9:30 / 10:30">🇺🇸~미국 PCE 물가</span></div><div class="cal-cell wknd"><span class="cal-d">31</span></div></div><p class="ctitle">2026년 11월</p><div class="cal"><div class="cal-h">월</div><div class="cal-h">화</div><div class="cal-h">수</div><div class="cal-h">목</div><div class="cal-h">금</div><div class="cal-h">토</div><div class="cal-h">일</div><div class="cal-cell empty"></div><div class="cal-cell empty"></div><div class="cal-cell empty"></div><div class="cal-cell empty"></div><div class="cal-cell empty"></div><div class="cal-cell empty"></div><div class="cal-cell wknd"><span class="cal-d">1</span></div><div class="cal-cell"><span class="cal-d">2</span><span class="cal-ev us" title="미국 ISM 제조업 (발표일 추정)">🇺🇸~미국 ISM 제조업</span><span class="cal-ev kr" title="한국 소비자물가 (발표일 추정)">🇰🇷~한국 소비자물가</span><span class="cal-ev kr" title="한국 수출입(잠정) (발표일 추정)">🇰🇷~한국 수출입(잠정)</span></div><div class="cal-cell"><span class="cal-d">3</span></div><div class="cal-cell"><span class="cal-d">4</span><span class="cal-ev us" title="미국 ISM 서비스업 (발표일 추정)">🇺🇸~미국 ISM 서비스업</span></div><div class="cal-cell"><span class="cal-d">5</span></div><div class="cal-cell"><span class="cal-d">6</span><span class="cal-ev us" title="미국 고용보고서 (발표일 추정) · 밤 9:30(서머타임) / 10:30">🇺🇸~미국 고용보고서</span></div><div class="cal-cell wknd"><span class="cal-d">7</span></div><div class="cal-cell wknd"><span class="cal-d">8</span></div><div class="cal-cell"><span class="cal-d">9</span></div><div class="cal-cell"><span class="cal-d">10</span></div><div class="cal-cell"><span class="cal-d">11</span></div><div class="cal-cell"><span class="cal-d">12</span><span class="cal-ev us" title="미국 소비자물가 CPI (발표일 추정) · 밤 9:30 / 10:30">🇺🇸~미국 소비자물가 CPI</span></div><div class="cal-cell"><span class="cal-d">13</span></div><div class="cal-cell wknd"><span class="cal-d">14</span></div><div class="cal-cell wknd"><span class="cal-d">15</span></div><div class="cal-cell"><span class="cal-d">16</span><span class="cal-ev us" title="미국 생산자물가 PPI (발표일 추정)">🇺🇸~미국 생산자물가 PPI</span><span class="cal-ev us" title="미국 소매판매 (발표일 추정)">🇺🇸~미국 소매판매</span><span class="cal-ev kr" title="한국 고용동향 (발표일 추정)">🇰🇷~한국 고용동향</span></div><div class="cal-cell"><span class="cal-d">17</span></div><div class="cal-cell"><span class="cal-d">18</span></div><div class="cal-cell"><span class="cal-d">19</span></div><div class="cal-cell"><span class="cal-d">20</span></div><div class="cal-cell wknd"><span class="cal-d">21</span></div><div class="cal-cell wknd"><span class="cal-d">22</span></div><div class="cal-cell"><span class="cal-d">23</span></div><div class="cal-cell"><span class="cal-d">24</span></div><div class="cal-cell"><span class="cal-d">25</span></div><div class="cal-cell"><span class="cal-d">26</span></div><div class="cal-cell"><span class="cal-d">27</span><span class="cal-ev us" title="미국 PCE 물가 (발표일 추정) · 밤 9:30 / 10:30">🇺🇸~미국 PCE 물가</span></div><div class="cal-cell wknd"><span class="cal-d">28</span></div><div class="cal-cell wknd"><span class="cal-d">29</span></div><div class="cal-cell"><span class="cal-d">30</span></div></div><p class="note"><b>~</b> 가 붙은 날짜는 "매월 몇 번째 무슨 요일" 규칙으로 뽑은 <b>추정일</b>입니다 — 기관 공휴일·변경은 반영되지 않습니다. ~ 없는 날짜는 기관이 공표한 확정일입니다.</p><p class="note warn">📌 <b>FOMC 금리 결정 · 한국은행 금통위</b> 은 기관이 공표하는 확정일이라 <b>추측해서 넣지 않았습니다</b>. 공식 일정을 받아오면 달력에 자동으로 채워집니다.</p></div>
+
+<h2>🧭 지표 해석 — 얼마면 무슨 뜻인가</h2>
+<p class="note">제목을 누르면 펼쳐집니다. 밴드는 <b>대략의 기준</b>이지 매매 신호가 아닙니다.</p>
+
+<details class="gcard" id="g-us_cpi">
+  <summary><b>미국 소비자물가 (CPI)</b>
+    <span class="meta">미 노동통계국 (BLS) · 매월 (전월치)</span></summary>
+  <p class="what">도시 소비자가 사는 물건·서비스 값이 1년 전 대비 얼마나 올랐나(YoY)를 잰다.<br>**헤드라인**은 전부 포함, **근원(core)**은 식품·에너지를 뺀 것. 둘이 갈리면<br>연준은 근원을 본다 — 유가는 통화정책으로 어쩔 수 없기 때문이다.<br></p>
+  <p class="watch">👁 <b>볼 것</b> — 근원 CPI 전년비(core YoY)와 전월비(core MoM)</p>
+  <ul class="bands"><li class="band neg"><span class="bmark">⚠</span><b>근원 YoY 3.5% 이상</b><span>물가가 안 잡힌다. 금리 인하 기대가 뒤로 밀리고 장기금리가 튄다</span></li><li class="band "><span class="bmark">•</span><b>근원 YoY 2.5~3.5%</b><span>둔화 중이지만 목표(2%)보다 높다. 연준이 &#x27;서두르지 않겠다&#x27;고 말하는 구간</span></li><li class="band pos"><span class="bmark">✓</span><b>근원 YoY 2.5% 미만</b><span>목표에 근접. 인하 여지가 커지고 금리·달러가 눌린다</span></li><li class="band pos"><span class="bmark">✓</span><b>근원 MoM 0.2% 이하</b><span>연율로 환산하면 2%대 — 추세가 목표에 닿았다는 신호</span></li><li class="band neg"><span class="bmark">⚠</span><b>근원 MoM 0.4% 이상</b><span>한 달치만으로도 연율 5% — 시장이 가장 싫어하는 숫자</span></li></ul>
+  <p class="mkt">📈 <b>시장 반응</b><br>**절대 수준보다 &#x27;예상 대비&#x27;가 훨씬 중요하다.** 시장은 예상치를 이미 가격에 넣어둔다.<br>예상보다 높으면 → 금리↑ 달러↑ 주식↓ (장기채·성장주가 가장 아프다)<br>예상보다 낮으면 → 금리↓ 달러↓ 주식↑<br></p>
+  <p class="kr">🇰🇷 <b>한국엔</b> — 미 금리가 뛰면 원화가 약해지고 외국인 수급이 나빠진다. 코스피엔 보통 역풍.</p>
+  <p class="links"><a href="https://www.bls.gov/cpi/" target="_blank" rel="noopener">BLS 소비자물가 공식</a> · <a href="https://fred.stlouisfed.org/series/CPILFESL" target="_blank" rel="noopener">FRED 근원 CPI 그래프</a> · <a href="https://www.youtube.com/results?search_query=미국+CPI+소비자물가+해석" target="_blank" rel="noopener">▶ 영상 찾아보기</a></p>
+</details>
+<details class="gcard" id="g-us_pce">
+  <summary><b>미국 PCE 물가지수</b>
+    <span class="meta">미 경제분석국 (BEA) · 매월 (전월치)</span></summary>
+  <p class="what">**연준이 공식 물가 목표(2%)를 재는 잣대**가 CPI가 아니라 이것이다.<br>CPI와 다른 점은 사람들이 비싼 물건을 싼 대체재로 바꾸는 걸 반영한다는 것 —<br>그래서 보통 CPI보다 조금 낮게 나온다. 근원 PCE가 진짜 주인공이다.<br></p>
+  <p class="watch">👁 <b>볼 것</b> — 근원 PCE 전년비</p>
+  <ul class="bands"><li class="band pos"><span class="bmark">✓</span><b>근원 PCE YoY 2.0% 근처</b><span>연준 목표 달성. 금리를 낮출 명분이 생긴다</span></li><li class="band "><span class="bmark">•</span><b>2.0~2.8%</b><span>목표 위지만 방향은 맞다 — 연준이 참으며 지켜보는 구간</span></li><li class="band neg"><span class="bmark">⚠</span><b>2.8% 이상</b><span>목표에서 멀다. 긴축 유지 또는 재강화 얘기가 나온다</span></li></ul>
+  <p class="mkt">📈 <b>시장 반응</b><br>CPI와 방향은 같지만 **연준의 공식 잣대**라 FOMC 직전 발표면 영향이 더 크다.</p>
+  <p class="kr">🇰🇷 <b>한국엔</b> — CPI와 동일 경로(미 금리 → 원달러 → 외국인 수급).</p>
+  <p class="links"><a href="https://www.bea.gov/data/personal-consumption-expenditures-price-index" target="_blank" rel="noopener">BEA 개인소비지출</a> · <a href="https://fred.stlouisfed.org/series/PCEPILFE" target="_blank" rel="noopener">FRED 근원 PCE</a> · <a href="https://www.youtube.com/results?search_query=PCE+물가지수+연준+목표" target="_blank" rel="noopener">▶ 영상 찾아보기</a></p>
+</details>
+<details class="gcard" id="g-us_payrolls">
+  <summary><b>미국 고용보고서 (비농업고용·실업률)</b>
+    <span class="meta">미 노동통계국 (BLS) · 매월 첫째 금요일</span></summary>
+  <p class="what">한 달 동안 농업 외 일자리가 몇 개 늘었나(비농업고용, NFP)와 실업률.<br>**한 달에 한 번뿐인 가장 큰 지표**로 통한다. 시간당임금(YoY)도 같이 보는데,<br>임금이 오르면 물가가 따라 오른다고 보기 때문이다.<br></p>
+  <p class="watch">👁 <b>볼 것</b> — 비농업고용 증감(천 명), 실업률(%), 시간당임금 전년비</p>
+  <ul class="bands"><li class="band neg"><span class="bmark">⚠</span><b>신규고용 25만 이상</b><span>경기가 뜨겁다 → 금리 인하가 멀어진다. 주식엔 &#x27;좋은 뉴스가 나쁜 뉴스&#x27;가 되는 구간</span></li><li class="band pos"><span class="bmark">✓</span><b>10만~25만</b><span>과열도 침체도 아닌 연착륙 구간. 시장이 가장 편안해한다</span></li><li class="band neg"><span class="bmark">⚠</span><b>10만 미만 / 실업률 급등</b><span>경기 둔화 신호. 금리는 내려가지만 침체 공포로 주식이 같이 빠질 수 있다</span></li><li class="band neg"><span class="bmark">⚠</span><b>시간당임금 YoY 4% 이상</b><span>임금발 물가 압력 — 연준이 가장 경계하는 숫자</span></li></ul>
+  <p class="mkt">📈 <b>시장 반응</b><br>고용이 &#x27;적당히 식는&#x27; 숫자를 시장은 가장 좋아한다. 너무 뜨거우면 금리 공포,<br>너무 차가우면 침체 공포. **같은 방향이라도 정도에 따라 주식 반응이 뒤집힌다.**<br></p>
+  <p class="kr">🇰🇷 <b>한국엔</b> — 미 금리 경로를 통해 원달러·외국인 수급에 전달. 발표가 한국 새벽이라 월요일 시초가에 반영된다.</p>
+  <p class="links"><a href="https://www.bls.gov/news.release/empsit.toc.htm" target="_blank" rel="noopener">BLS 고용상황 공식</a> · <a href="https://fred.stlouisfed.org/series/PAYEMS" target="_blank" rel="noopener">FRED 비농업고용</a> · <a href="https://www.youtube.com/results?search_query=미국+고용보고서+비농업고용+해석" target="_blank" rel="noopener">▶ 영상 찾아보기</a></p>
+</details>
+<details class="gcard" id="g-fomc">
+  <summary><b>FOMC 금리 결정</b>
+    <span class="meta">미 연방준비제도 · 연 8회 (확정일은 연준이 미리 공표)</span></summary>
+  <p class="what">미국 기준금리를 정하는 회의. **발표문 문구 변화 → 기자회견 → 점도표** 순으로<br>시장이 읽는다. 3·6·9·12월 회의에는 점도표(위원들이 생각하는 향후 금리 수준)가<br>같이 나와서 더 중요하다.<br></p>
+  <p class="watch">👁 <b>볼 것</b> — 기준금리, 성명서 문구 변화, 점도표(분기), 파월 기자회견 톤</p>
+  <ul class="bands"><li class="band pos"><span class="bmark">✓</span><b>동결 + 성명서 완화</b><span>&#x27;다음은 인하&#x27; 기대 — 금리↓ 주식↑</span></li><li class="band neg"><span class="bmark">⚠</span><b>동결 + 매파 발언</b><span>&#x27;더 오래 높게&#x27; — 장기금리가 튀고 성장주가 아프다</span></li><li class="band neg"><span class="bmark">⚠</span><b>점도표 상향</b><span>연준이 보는 금리 경로가 올라갔다. 시장 기대와 벌어지면 충격이 크다</span></li><li class="band pos"><span class="bmark">✓</span><b>점도표 하향</b><span>인하 경로가 앞당겨진다 — 위험자산에 우호적</span></li></ul>
+  <p class="mkt">📈 <b>시장 반응</b><br>**결정 자체보다 &#x27;앞으로의 경로&#x27;가 가격을 움직인다.** 금리 인하·인상은 이미<br>선물시장(FedWatch)에 확률로 반영돼 있어서, 놀라움이 없으면 숫자만으로는 안 움직인다.<br></p>
+  <p class="kr">🇰🇷 <b>한국엔</b> — 한미 금리차가 벌어지면 원화 약세·외국인 자금 이탈 압력. 금통위 판단에도 직접 영향.</p>
+  <p class="links"><a href="https://www.federalreserve.gov/monetarypolicy/fomccalendars.htm" target="_blank" rel="noopener">FOMC 일정·성명서</a> · <a href="https://www.cmegroup.com/markets/interest-rates/cme-fedwatch-tool.html" target="_blank" rel="noopener">CME FedWatch (인하 확률)</a> · <a href="https://www.youtube.com/results?search_query=FOMC+점도표+보는+법" target="_blank" rel="noopener">▶ 영상 찾아보기</a></p>
+</details>
+<details class="gcard" id="g-us_ism">
+  <summary><b>미국 ISM 구매관리자지수 (PMI)</b>
+    <span class="meta">공급관리협회 (ISM) · 매월 (제조업 1영업일 / 서비스업 3영업일)</span></summary>
+  <p class="what">구매 담당자들에게 &quot;지난달보다 나아졌나&quot;를 물어 만든 설문 지수.<br>**50이 기준선** — 넘으면 확장, 밑이면 수축. 실제 생산 통계보다 빨리 나와서<br>경기 방향을 먼저 알려주는 선행지표로 쓴다.<br></p>
+  <p class="watch">👁 <b>볼 것</b> — 종합지수(50 기준), 신규주문(가장 선행), 고용, 가격지불(물가 선행)</p>
+  <ul class="bands"><li class="band pos"><span class="bmark">✓</span><b>55 이상</b><span>확장 국면이 뚜렷하다. 경기민감주·소재에 우호적</span></li><li class="band "><span class="bmark">•</span><b>50~55</b><span>완만한 확장. 방향이 더 중요하다 — 3개월 연속 하락이면 경계</span></li><li class="band "><span class="bmark">•</span><b>48~50</b><span>수축이지만 얕다. 바닥을 다지는 구간일 수 있다</span></li><li class="band neg"><span class="bmark">⚠</span><b>48 미만</b><span>뚜렷한 수축. 침체 우려가 금리 인하 기대로 번진다</span></li><li class="band neg"><span class="bmark">⚠</span><b>가격지불 60 이상</b><span>원가 압력 — 두세 달 뒤 소비자물가로 넘어온다</span></li></ul>
+  <p class="mkt">📈 <b>시장 반응</b><br>서비스업이 미국 경제의 7할이라 서비스 PMI가 제조업보다 지수 영향은 크다.</p>
+  <p class="kr">🇰🇷 <b>한국엔</b> — 한국은 수출국이라 **미국·중국 제조업 PMI가 수출 물량의 선행 신호**. 조선·기계·반도체와 직결.</p>
+  <p class="links"><a href="https://www.ismworld.org/supply-management-news-and-reports/reports/ism-report-on-business/" target="_blank" rel="noopener">ISM 보고서</a> · <a href="https://www.youtube.com/results?search_query=ISM+PMI+50+기준선+해석" target="_blank" rel="noopener">▶ 영상 찾아보기</a></p>
+</details>
+<details class="gcard" id="g-us_retail">
+  <summary><b>미국 소매판매</b>
+    <span class="meta">미 통계국 (Census) · 매월</span></summary>
+  <p class="what">미국 경제의 약 7할이 소비다. 그 소비가 지난달 대비 얼마나 늘었나(MoM).<br>자동차·휘발유를 뺀 **근원 소매판매(control group)**가 GDP에 직접 들어가서 더 중요하다.<br></p>
+  <p class="watch">👁 <b>볼 것</b> — 전월비(MoM), control group</p>
+  <ul class="bands"><li class="band "><span class="bmark">•</span><b>MoM +0.4% 이상</b><span>소비가 강하다 — 경기는 좋지만 물가 압력도 남는다</span></li><li class="band pos"><span class="bmark">✓</span><b>MoM -0.2% ~ +0.3%</b><span>완만한 소비. 연착륙 그림에 부합</span></li><li class="band neg"><span class="bmark">⚠</span><b>MoM -0.3% 이하</b><span>소비가 꺾인다 — 침체 논쟁이 다시 붙는다</span></li></ul>
+  <p class="mkt">📈 <b>시장 반응</b><br>소비가 식으면 금리 인하 기대는 커지지만 기업 이익 전망은 나빠진다 — 주식 방향은 둘의 힘겨루기.</p>
+  <p class="kr">🇰🇷 <b>한국엔</b> — 미국 소비는 한국 수출(IT·자동차·소비재)의 최종 수요. 둔화는 수출 기업 실적에 시차를 두고 반영.</p>
+  <p class="links"><a href="https://www.census.gov/retail/index.html" target="_blank" rel="noopener">Census 소매판매</a> · <a href="https://www.youtube.com/results?search_query=미국+소매판매+지표+해석" target="_blank" rel="noopener">▶ 영상 찾아보기</a></p>
+</details>
+<details class="gcard" id="g-us_gdp">
+  <summary><b>GDP (국내총생산)</b>
+    <span class="meta">미 BEA / 한국은행 · 분기 (속보 → 잠정 → 확정 3번 발표)</span></summary>
+  <p class="what">한 분기 동안 만들어진 부가가치의 총합. 미국은 **연율(annualized)**로 발표해서<br>분기 성장률에 대략 4를 곱한 숫자가 나온다 — 한국식(전기비)과 단위가 달라 헷갈리기 쉽다.<br></p>
+  <p class="watch">👁 <b>볼 것</b> — 전기비 연율(미국) / 전기비(한국), 소비·설비투자 기여도</p>
+  <ul class="bands"><li class="band "><span class="bmark">•</span><b>미국 연율 3% 이상</b><span>강한 성장. 금리를 높게 유지할 체력이 있다는 뜻</span></li><li class="band pos"><span class="bmark">✓</span><b>미국 연율 1.5~3%</b><span>추세 성장 근처 — 가장 무난한 구간</span></li><li class="band neg"><span class="bmark">⚠</span><b>미국 연율 1% 미만</b><span>둔화. 2개 분기 연속 마이너스면 기술적 침체</span></li></ul>
+  <p class="mkt">📈 <b>시장 반응</b><br>속보치가 가장 크게 움직이고 잠정·확정은 거의 안 움직인다(이미 알려진 정보라서).</p>
+  <p class="kr">🇰🇷 <b>한국엔</b> — 한국 GDP는 수출 기여도를 같이 봐야 한다 — 내수가 약해도 수출이 끌면 숫자는 버틴다.</p>
+  <p class="links"><a href="https://www.bea.gov/data/gdp/gross-domestic-product" target="_blank" rel="noopener">BEA GDP</a> · <a href="https://ecos.bok.or.kr/" target="_blank" rel="noopener">한국은행 경제통계시스템</a> · <a href="https://www.youtube.com/results?search_query=GDP+연율+전기비+차이" target="_blank" rel="noopener">▶ 영상 찾아보기</a></p>
+</details>
+<details class="gcard" id="g-kr_cpi">
+  <summary><b>한국 소비자물가</b>
+    <span class="meta">통계청 · 매월 초 (전월치)</span></summary>
+  <p class="what">한국 물가. 한국은행 목표도 2%다. 근원(식료품·에너지 제외)과 생활물가를 같이 본다.</p>
+  <p class="watch">👁 <b>볼 것</b> — 전년비(YoY), 근원 YoY</p>
+  <ul class="bands"><li class="band neg"><span class="bmark">⚠</span><b>YoY 3% 이상</b><span>금통위가 인하를 미룰 명분. 채권에 부담</span></li><li class="band "><span class="bmark">•</span><b>2~3%</b><span>목표 상단 — 방향(둔화 중인가)이 더 중요하다</span></li><li class="band pos"><span class="bmark">✓</span><b>2% 미만</b><span>인하 여지. 다만 환율이 높으면 한은이 쉽게 못 내린다</span></li></ul>
+  <p class="mkt">📈 <b>시장 반응</b><br>국고채 금리와 금통위 기대에 직접. 주식엔 간접(금리 경로).</p>
+  <p class="kr">🇰🇷 <b>한국엔</b> — 한국은 **물가보다 환율이 금리 결정을 더 많이 묶는다** — 물가가 낮아도 원달러가 높으면 인하가 어렵다.</p>
+  <p class="links"><a href="https://kostat.go.kr/" target="_blank" rel="noopener">통계청 소비자물가</a> · <a href="https://www.bok.or.kr/portal/main/contents.do?menuNo=200462" target="_blank" rel="noopener">한국은행 물가</a> · <a href="https://www.youtube.com/results?search_query=한국+소비자물가+금통위" target="_blank" rel="noopener">▶ 영상 찾아보기</a></p>
+</details>
+<details class="gcard" id="g-kr_trade">
+  <summary><b>한국 수출입 (관세청 잠정)</b>
+    <span class="meta">관세청 / 산업통상자원부 · 매월 1일 (전월 확정) · 매월 1·11·21일 (10일간 잠정)</span></summary>
+  <p class="what">**한국에서 가장 빨리 나오는 실물 지표.** 전월 수출이 1일 아침에 나온다.<br>반도체·자동차·선박 등 품목별, 미국·중국 등 지역별로 쪼개 보는 게 핵심이다.<br></p>
+  <p class="watch">👁 <b>볼 것</b> — 수출 전년비, 일평균 수출(조업일수 보정), 반도체 수출, 대중국 수출</p>
+  <ul class="bands"><li class="band pos"><span class="bmark">✓</span><b>수출 YoY 플러스 전환</b><span>글로벌 수요 회복 신호. 코스피 이익 전망 상향의 출발점</span></li><li class="band pos"><span class="bmark">✓</span><b>반도체 YoY 두 자릿수 증가</b><span>IT 사이클 상승 — 지수 주도주에 직접</span></li><li class="band neg"><span class="bmark">⚠</span><b>수출 YoY 마이너스 지속</b><span>대외 수요 둔화. 수출주 실적 추정 하향 압력</span></li></ul>
+  <p class="mkt">📈 <b>시장 반응</b><br>1일 아침 숫자가 그날 코스피 분위기를 좌우하는 일이 잦다.</p>
+  <p class="kr">🇰🇷 <b>한국엔</b> — 조선·기계·방산 커버리지와 직결 — 선박 수출액은 인도 기준이라 울퉁불퉁한 점에 주의.</p>
+  <p class="links"><a href="https://unipass.customs.go.kr/ets/" target="_blank" rel="noopener">관세청 수출입 현황</a> · <a href="https://www.motie.go.kr/" target="_blank" rel="noopener">산업부 보도자료</a> · <a href="https://www.youtube.com/results?search_query=한국+수출+지표+보는+법" target="_blank" rel="noopener">▶ 영상 찾아보기</a></p>
+</details>
+<details class="gcard" id="g-bok">
+  <summary><b>한국은행 금융통화위원회</b>
+    <span class="meta">한국은행 · 연 8회 (확정일은 한은이 미리 공표)</span></summary>
+  <p class="what">한국 기준금리 결정. 총재 기자회견과 **소수의견 몇 명**이 다음 회의 방향을 알려준다.</p>
+  <p class="watch">👁 <b>볼 것</b> — 기준금리, 소수의견 수, 총재 발언, 수정 경제전망(2·5·8·11월)</p>
+  <ul class="bands"><li class="band pos"><span class="bmark">✓</span><b>동결 + 인하 소수의견 2명 이상</b><span>다음 회의 인하 가능성이 크게 오른다</span></li><li class="band "><span class="bmark">•</span><b>만장일치 동결</b><span>당분간 변화 없음 — 채권 금리가 횡보</span></li><li class="band "><span class="bmark">•</span><b>인하 + 매파적 기자회견</b><span>&#x27;한 번 하고 쉬어간다&#x27;는 신호일 수 있다</span></li></ul>
+  <p class="mkt">📈 <b>시장 반응</b><br>국고채 3년물이 기대를 먼저 반영한다 — 결정 전 금리 움직임을 보면 시장 예상을 알 수 있다.</p>
+  <p class="kr">🇰🇷 <b>한국엔</b> — 한미 금리차·환율·가계부채 셋에 묶여 있어 물가만으로 예측하면 자주 틀린다.</p>
+  <p class="links"><a href="https://www.bok.or.kr/portal/singl/crncyPolicyDrcMtg/listYear.do?mtgSe=A&amp;menuNo=200755" target="_blank" rel="noopener">한국은행 통화정책방향</a> · <a href="https://www.youtube.com/results?search_query=금통위+기준금리+소수의견" target="_blank" rel="noopener">▶ 영상 찾아보기</a></p>
+</details>
+
+<h2>📚 기초 — 이것부터</h2>
+<details class="bcard"><summary><b>금리가 오르면 채권값은 왜 떨어지나</b></summary><p>채권은 **정해진 이자를 주는 종이**다. 시장금리가 4%로 올랐는데 내 채권이 3%만<br>준다면, 그 종이는 싸게 팔아야 팔린다. 그래서 **금리 ↑ = 채권가격 ↓**가 항상 성립한다.<br>만기가 길수록(10년 &gt; 2년) 같은 금리 변화에 가격이 더 크게 움직인다(듀레이션).<br></p><a class="yt" href="https://www.youtube.com/results?search_query=금리와+채권가격+반비례+듀레이션" target="_blank" rel="noopener">▶ 영상 찾아보기</a></details><details class="bcard"><summary><b>수익률곡선과 &#x27;장단기 역전&#x27;</b></summary><p>보통은 돈을 오래 빌려줄수록 이자를 더 받는다(10년 &gt; 2년). 그런데 **10년물이<br>2년물보다 낮아지는 역전**이 생기면, 시장이 &quot;곧 경기가 나빠져 금리가 내려갈 것&quot;이라고<br>보는 것이다. 역사적으로 침체를 앞서 알린 적이 많아 가장 유명한 경고등이다.<br>다만 **역전 자체보다 역전이 풀리는 시점**이 침체와 더 가깝다는 점이 자주 간과된다.<br></p><a class="yt" href="https://www.youtube.com/results?search_query=장단기+금리+역전+수익률곡선" target="_blank" rel="noopener">▶ 영상 찾아보기</a></details><details class="bcard"><summary><b>실질금리 — 진짜 돈값</b></summary><p>명목금리에서 기대 물가를 뺀 것이 **실질금리**다. 금리가 5%여도 물가가 4%면<br>실제 부담은 1%뿐이다. 금·성장주·신흥국 자산은 명목금리보다 **실질금리**에 더<br>민감하다. 미국 10년 물가연동국채(TIPS) 금리가 실질금리의 대표 지표다.<br></p><a class="yt" href="https://www.youtube.com/results?search_query=실질금리+TIPS+금+상관관계" target="_blank" rel="noopener">▶ 영상 찾아보기</a></details><details class="bcard"><summary><b>왜 &#x27;예상 대비&#x27;가 숫자 자체보다 중요한가</b></summary><p>시장 가격에는 **이미 예상치가 들어가 있다.** CPI가 3%로 높아도 예상이 3.2%였다면<br>그날은 금리가 내린다. 그래서 지표를 볼 때는 항상 ① 예상치 ② 직전치 ③ 실제치<br>셋을 같이 봐야 한다. &quot;좋은 숫자인데 왜 떨어지지?&quot;의 답은 대개 여기에 있다.<br></p><a class="yt" href="https://www.youtube.com/results?search_query=경제지표+예상치+서프라이즈" target="_blank" rel="noopener">▶ 영상 찾아보기</a></details><details class="bcard"><summary><b>좋은 뉴스가 나쁜 뉴스가 되는 구간</b></summary><p>연준이 물가를 잡으려 금리를 높일 때는 **경기가 좋다는 소식이 주식에 악재**가 된다<br>(금리를 더 오래 높게 유지할 테니까). 반대로 침체가 걱정인 국면에서는 같은 소식이<br>호재다. **지금이 &#x27;물가 걱정&#x27; 국면인지 &#x27;성장 걱정&#x27; 국면인지**를 먼저 정해야<br>지표 해석의 방향이 선다.<br></p><a class="yt" href="https://www.youtube.com/results?search_query=좋은뉴스+나쁜뉴스+연준+긴축" target="_blank" rel="noopener">▶ 영상 찾아보기</a></details><details class="bcard"><summary><b>미국 지표가 한국 증시로 오는 길</b></summary><p>① 미 금리 ↑ → ② 한미 금리차 확대 → ③ 원화 약세 → ④ 외국인 순매도 압력,<br>그리고 ⑤ 미국 소비·제조업 둔화 → 한국 수출 감소 → 수출주 이익 추정 하향.<br>**환율 경로(빠름)와 수출 경로(느림)가 따로 움직인다**는 점을 기억하면 헷갈리지 않는다.<br></p><a class="yt" href="https://www.youtube.com/results?search_query=미국+금리+원달러+외국인+수급" target="_blank" rel="noopener">▶ 영상 찾아보기</a></details>
+
+<p class="note">영상 링크는 특정 영상이 아니라 <b>검색 결과</b>로 겁니다 — 영상은 내려가도 검색은 남습니다.</p>
+</div></body></html>
