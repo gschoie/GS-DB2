@@ -1,11 +1,10 @@
 name: 프로브 — 매크로 직전치 실수집 확인
 
-# 일회성. 저장·커밋 없이 collect 를 돌려 BLS 직전치가 실제로 채워지는지만 본다.
-# 확인 후 삭제한다.
+# 일회성. 저장·커밋 없이 돌려 직전치가 실제로 채워지는지만 본다. 확인 후 삭제한다.
 on:
   push:
     branches: [claude/telegram-trend-analysis-logic-7efsdy]
-    paths: ['.github/workflows/probe-macro-verify.yml']
+    paths: ['.github/workflows/probe-macro-verify.yml', 'macro_desk/tests/probe_korea_series.py']
   workflow_dispatch:
 
 jobs:
@@ -24,8 +23,18 @@ jobs:
         run: |
           python tests/test_calendar.py
           python tests/test_releases.py
-      - name: 수집 (저장 안 함)
+      - name: 한국 계열 생존 확인
         working-directory: macro_desk
         env:
           FRED_API_KEY: ${{ secrets.FRED_API_KEY }}
-        run: python collect.py --dry-run
+        run: python tests/probe_korea_series.py
+      - name: 직전치만 수집 (저장 안 함)
+        working-directory: macro_desk
+        env:
+          FRED_API_KEY: ${{ secrets.FRED_API_KEY }}
+        run: |
+          python - <<'EOF'
+          import os, yaml, releases as rl
+          cfg = yaml.safe_load(open("config.yml", encoding="utf-8"))
+          rl.fetch(cfg["calendar"], os.environ.get("FRED_API_KEY", ""))
+          EOF

@@ -139,6 +139,21 @@ def _pct(cur: float, prev: float | None) -> float | None:
     return (cur - prev) / abs(prev) * 100
 
 
+# 계열이 폐기되면 **API 는 조용히 옛 값을 계속 내준다.** 한국 CPI(KORCPIALLMINMEI)가
+# OECD MEI 폐기로 2023-11 에 멈췄는데 화면에는 "직전 발표: 2023년 11월 전년 +3.3%" 가
+# 멀쩡히 찍혔다 — 3년 전 숫자를 어제 것처럼 보여주는 게 빈칸보다 훨씬 나쁘다.
+# 그래서 마지막 관측이 너무 오래됐으면 **버린다**(30번 교훈과 같은 부류).
+STALE_DAYS = {"m": 130, "q": 230, "d": 35}
+
+
+def is_stale(obs: list[tuple[dt.date, float]], spec: dict,
+             today: dt.date | None = None) -> bool:
+    """마지막 관측이 그 주기로는 설명이 안 될 만큼 오래됐나."""
+    limit = spec.get("stale_days") or STALE_DAYS.get(spec.get("freq", "m"), 130)
+    today = today or dt.date.today()
+    return (today - obs[-1][0]).days > limit
+
+
 def _period_label(d: dt.date, freq: str) -> str:
     if freq == "q":
         return f"{d.year}년 {(d.month - 1) // 3 + 1}분기"
@@ -259,10 +274,14 @@ def fetch(entries: list[dict], fred_key: str = "") -> dict:
             print(f"  --  {ind_id:<14} {main['series']} 직전치 없음"
                   f"{' (FRED 키 필요)' if src(main) == 'fred' and not fred_key else ''}")
             continue
+        if is_stale(rows, main):
+            print(f"  ✗   {ind_id:<14} {main['series']} 계열이 멈췄다 "
+                  f"(마지막 관측 {rows[-1][0]}) — 폐기된 계열로 보고 버린다")
+            continue
         got = summarize(rows, main)
         if also:
             extra = rows_for(also)
-            if extra:
+            if extra and not is_stale(extra, also):
                 sub = summarize(extra, also)
                 if sub["text"] != "–":          # '코어 –' 는 붙이지 않는다
                     label = also.get("label", "")
