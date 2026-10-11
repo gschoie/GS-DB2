@@ -162,3 +162,32 @@ def boom(series, **kw):
     raise RuntimeError("차단")
 rl.bls_observations = boom
 eq(rl.fetch(ENTRIES), {}, "BLS 실패 → 빈 dict(수집 전체는 계속된다)")
+
+# ── 멈춘 계열은 버린다 ──────────────────────────────────────────────────────
+print("\n[폐기 계열 판정]")
+TODAY = dt.date(2026, 10, 11)
+# 한국 CPI 실사고: KORCPIALLMINMEI 가 2023-11 에 멈췄는데 FRED 는 그 값을 계속 내줬고
+# 화면에 "직전 발표: 2023년 11월 전년 +3.3%" 가 찍혔다.
+dead = monthly([100.0, 101.0, 102.0], end=(2023, 11))
+eq(rl.is_stale(dead, {"freq": "m"}, TODAY), True, "3년 멈춘 월간 계열 = 폐기")
+fresh = monthly([100.0, 101.0, 102.0], end=(2026, 9))
+eq(rl.is_stale(fresh, {"freq": "m"}, TODAY), False, "지난달까지 있는 월간 계열 = 정상")
+# 월간은 발표 지연이 한두 달 있으므로 그건 살려야 한다(CPI 는 8월분이 10월에도 최신)
+eq(rl.is_stale(monthly([1.0, 2.0], end=(2026, 8)), {"freq": "m"}, TODAY), False,
+   "두 달 전까지 = 아직 정상(발표 지연)")
+eq(rl.is_stale(monthly([1.0, 2.0], end=(2026, 4)), {"freq": "m"}, TODAY), True,
+   "다섯 달 전 = 멈춤")
+# 분기 계열은 더 느긋하게 본다(2분기 GDP 가 10월에도 최신일 수 있다)
+eq(rl.is_stale(quarterly([1.0, 2.0], end=(2026, 4)), {"freq": "q"}, TODAY), False,
+   "2분기 GDP = 10월에도 정상")
+eq(rl.is_stale(quarterly([1.0, 2.0], end=(2025, 7)), {"freq": "q"}, TODAY), True,
+   "1년 넘은 분기 계열 = 멈춤")
+# 일별(정책금리)은 며칠만 밀려도 이상하다
+eq(rl.is_stale([(dt.date(2026, 10, 10), 4.0)], {"freq": "d"}, TODAY), False, "어제치 = 정상")
+eq(rl.is_stale([(dt.date(2026, 8, 1), 4.0)], {"freq": "d"}, TODAY), True, "두 달 전 = 멈춤")
+
+print("\n[fetch — 멈춘 계열은 빠진다]")
+STALE_ENTRY = [{"id": "kr_cpi", "name": "한국 CPI",
+                "release": {"series": "KORCPIALLMINMEI", "kind": "yoy_mom"}}]
+rl.bls_observations = lambda series, **kw: {"KORCPIALLMINMEI": dead}
+eq(rl.fetch(STALE_ENTRY), {}, "멈춘 계열은 직전치로 내보내지 않는다")
