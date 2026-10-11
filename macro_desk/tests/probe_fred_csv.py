@@ -1,86 +1,95 @@
 # -*- coding: utf-8 -*-
-"""러너 전용 탐색 스크립트 — FRED **키 없는** CSV 엔드포인트로 어떤 계열이 살아 있나.
+"""러너 전용 탐색 — 발표 지표 '직전치'를 **키 없이** 받을 수 있는 곳 찾기.
 
-컨테이너는 fred.stlouisfed.org 로 못 나가므로(egress 차단) 이 파일은 워크플로에서만
-돌린다. 발표 지표의 '직전치'를 키 없이 받을 수 있는지, 어느 계열 ID가 아직 유지되는지
-(ISM·OECD 한국 계열은 폐기된 것이 많다) 실측으로 가린다.
+1차·2차 프로브 결론
+  · **FRED 는 러너에서 아예 안 된다** — `fred.stlouisfed.org/graph/fredgraph.csv` 가
+    0.05초 만에 `curl (92) HTTP/2 stream was not closed cleanly: INTERNAL_ERROR`.
+    키가 있든 없든 소용없는 네트워크 단 차단이다(텔레그램·유튜브가 러너 IP 를 막는
+    것과 같은 부류). 파이썬 urlopen 은 이걸 timeout 으로 잡지 못해 15분을 매달렸다.
+  · **BLS 공개 API v1 은 키 없이 된다** — CPI 지수가 그대로 왔다.
+    v1 은 IP당 하루 25회·요청당 50계열·10년 — 하루 한 번이면 **한 번의 호출로 충분**.
 
-쓰고 나면 지워도 되는 일회성 코드지만, 다음에 계열이 또 죽으면 여기부터 다시 돌릴 수
-있게 남겨둔다. 사용: python macro_desk/tests/probe_fred_csv.py
+이 3차 프로브가 가리는 것
+  ① BLS 계열 ID 7개가 전부 유효한가(물가·고용·임금)
+  ② Census MARTS(소매판매)는 302 였다 — 리다이렉트를 따라가면 되는가
+  ③ `api.stlouisfed.org`(FRED 키 경로)도 같이 막혔는가 — 사용자가 FRED 키를
+     등록할 가치가 있는지 판단하려면 이걸 알아야 한다
+  ④ BEA(GDP·PCE)는 키 없이 되는가
+
+사용: python macro_desk/tests/probe_fred_csv.py
 """
 from __future__ import annotations
 
-import csv
-import io
+import json
+import urllib.error
 import urllib.request
 
-CSV = "https://fred.stlouisfed.org/graph/fredgraph.csv?id={}"
+BLS = "https://api.bls.gov/publicAPI/v1/timeseries/data/"
+BLS_SERIES = {
+    "CUSR0000SA0": "CPI 전체(SA, 지수)",
+    "CUSR0000SA0L1E": "CPI 코어(SA, 지수)",
+    "WPSFD4": "PPI 최종수요(SA, 지수)",
+    "WPSFD49116": "PPI 최종수요 코어(SA, 지수)",
+    "CES0000000001": "비농업 취업자(천명)",
+    "LNS14000000": "실업률(%)",
+    "CES0500000003": "시간당임금($)",
+}
 
-CANDIDATES = [
-    # 미국 — 물가
-    ("CPIAUCSL", "CPI 전체(SA, 지수)"),
-    ("CPILFESL", "CPI 코어(SA, 지수)"),
-    ("PCEPI", "PCE 물가(지수)"),
-    ("PCEPILFE", "PCE 코어(지수)"),
-    ("PPIFIS", "PPI 최종수요(지수)"),
-    # 미국 — 고용
-    ("PAYEMS", "비농업 취업자(천명, 수준)"),
-    ("UNRATE", "실업률(%)"),
-    ("CES0500000003", "시간당임금($)"),
-    # 미국 — 실물
-    ("RSAFS", "소매판매(백만$)"),
-    ("A191RL1Q225SBEA", "실질GDP 전기비연율(%)"),
-    # 미국 — 정책
-    ("DFEDTARU", "연방기금목표 상한(%)"),
-    ("DFEDTARL", "연방기금목표 하한(%)"),
-    # ISM — 2022년에 FRED 에서 내려갔다고 알고 있지만 확인
-    ("NAPM", "ISM 제조업"),
-    ("NAPMNOI", "ISM 제조업 신규주문"),
-    ("NMFBAI", "ISM 서비스업"),
-    # 한국 — OECD 경유 계열. MEI 폐기로 상당수가 죽었을 것
-    ("KORCPIALLMINMEI", "한국 CPI(MEI, 지수)"),
-    ("CPALTT01KRM659N", "한국 CPI 전년동월비(%)"),
-    ("CPALTT01KRM657N", "한국 CPI 전월비(%)"),
-    ("LRHUTTTTKRM156S", "한국 실업률(%)"),
-    ("XTEXVA01KRM667S", "한국 수출(지수)"),
-    ("XTEXVA01KRM664N", "한국 수출(통화)"),
-    ("NAEXKP01KRQ657S", "한국 GDP 전기비(%)"),
-    ("IRSTCI01KRM156N", "한국 콜금리(%)"),
-    ("INTDSRKRM193N", "한국 재할인율(%)"),
+OTHERS = [
+    ("Census MARTS 소매판매(리다이렉트 추적)",
+     "https://api.census.gov/data/timeseries/eits/marts"
+     "?get=cell_value,time_slot_id&for=us:*&category_code=44X72"
+     "&data_type_code=SM&seasonally_adj=yes&time=from+2026-01"),
+    ("FRED API(키 경로 — 키 없이 부르면 400이 정상, 차단이면 연결 자체가 실패)",
+     "https://api.stlouisfed.org/fred/series/observations"
+     "?series_id=CPIAUCSL&file_type=json&api_key=notakey"),
+    ("BEA(키 필요 — 역시 연결되는지만 본다)",
+     "https://apps.bea.gov/api/data/?UserID=notakey&method=GETDATASETLIST"),
 ]
 
 
-def last_obs(series: str, n: int = 3):
-    # timeout 은 소켓 1회 작업 기준이라 **느리게 흘러오는 응답에선 안 걸린다** →
-    # 전체 시간은 바깥(워크플로 timeout-minutes)에서 끊는다. 여기서는 12초로 짧게.
-    req = urllib.request.Request(CSV.format(series), headers={"User-Agent": "gs-macro-probe"})
-    with urllib.request.urlopen(req, timeout=12) as r:
-        body = r.read().decode("utf-8", "replace")
-    rows = list(csv.reader(io.StringIO(body)))
-    if not rows:
-        raise ValueError("빈 응답")
-    head = rows[0]
-    vals = [(a, b) for a, b in (x[:2] for x in rows[1:] if len(x) >= 2)
-            if b not in (".", "", None)]
-    if not vals:
-        raise ValueError(f"관측치 없음(헤더 {head})")
-    return vals[-n:]
+def get(url: str, data: bytes | None = None, timeout: int = 15) -> tuple[int, str]:
+    req = urllib.request.Request(
+        url, data=data,
+        headers={"User-Agent": "gs-research-desk/macro",
+                 **({"Content-Type": "application/json"} if data else {})})
+    try:
+        with urllib.request.urlopen(req, timeout=timeout) as r:
+            return r.status, r.read().decode("utf-8", "replace")
+    except urllib.error.HTTPError as e:
+        return e.code, e.read().decode("utf-8", "replace")[:300]
+
+
+def probe_bls() -> None:
+    print("=== BLS 공개 API v1 (키 불필요) ===")
+    body = json.dumps({"seriesid": list(BLS_SERIES), "startyear": "2025",
+                       "endyear": "2026"}).encode()
+    status, text = get(BLS, data=body)
+    j = json.loads(text)
+    print(f"http={status} status={j.get('status')} message={j.get('message')}")
+    got = {s["seriesID"]: s["data"] for s in j.get("Results", {}).get("series", [])}
+    for sid, label in BLS_SERIES.items():
+        rows = [d for d in got.get(sid, []) if d.get("value") not in ("-", "", None)]
+        if not rows:
+            print(f"  DEAD {sid:<16} {label}")
+            continue
+        tail = " | ".join(f'{d["year"]}-{d["period"]} {d["value"]}' for d in rows[:3])
+        print(f"  OK   {sid:<16} {label:<22} {tail}")
+    # 2025년 예산 공백으로 결측된 달이 있다 — 전년동월비를 못 만드는 구간이 생긴다
+    holes = [f'{d["year"]}-{d["period"]}' for d in got.get("CUSR0000SA0", [])
+             if d.get("value") in ("-", "", None)]
+    print(f"  결측 달(CPI): {holes or '없음'}")
 
 
 def main() -> None:
-    ok, dead = [], []
-    for sid, label in CANDIDATES:
+    probe_bls()
+    for label, url in OTHERS:
+        print(f"\n=== {label} ===")
         try:
-            got = last_obs(sid)
-            ok.append(sid)
-            tail = " | ".join(f"{d} {v}" for d, v in got)
-            print(f"OK   {sid:<18} {label:<22} {tail}")
+            status, text = get(url)
+            print(f"http={status} {text[:260]}")
         except Exception as e:
-            dead.append(sid)
-            print(f"DEAD {sid:<18} {label:<22} {type(e).__name__}: {str(e)[:70]}")
-    print(f"\n살아있음 {len(ok)} / 죽음 {len(dead)}")
-    if dead:
-        print("죽은 계열: " + " ".join(dead))
+            print(f"연결 실패 — {type(e).__name__}: {str(e)[:120]}")
 
 
 if __name__ == "__main__":
