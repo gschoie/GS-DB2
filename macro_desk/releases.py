@@ -155,11 +155,17 @@ def is_stale(obs: list[tuple[dt.date, float]], spec: dict,
 
 
 def _period_label(d: dt.date, freq: str) -> str:
+    """관측 기간 라벨. d 는 **대상 기간**이지 발표일이 아니다.
+
+    월간은 `8월분` 처럼 **'분'을 붙인다** — 그냥 '8월' 로 두면 "8월에 발표된"
+    으로 읽힌다(실제로 그렇게 읽혔다). 8월분 CPI·PPI 의 발표는 9월 중순이다.
+    분기는 '3분기' 만으로도 대상 기간으로 읽히므로 그대로 둔다.
+    """
     if freq == "q":
         return f"{d.year}년 {(d.month - 1) // 3 + 1}분기"
     if freq == "d":
         return d.isoformat()
-    return f"{d.year}년 {d.month}월"
+    return f"{d.year}년 {d.month}월분"
 
 
 def summarize(obs: list[tuple[dt.date, float]], spec: dict) -> dict:
@@ -193,10 +199,12 @@ def summarize(obs: list[tuple[dt.date, float]], spec: dict) -> dict:
     else:
         mom = _pct(last_v, obs[-2][1] if len(obs) >= 2 else None)
         yoy = _pct(last_v, _pick_back(obs, 12))
+        # 라벨은 YoY/MoM(분기는 QoQ). '전년'·'전월' 은 **무엇 대비인지는 맞지만
+        # 무엇을 재는지는 안 말한다** — 숫자만 보고 "지난달 값"으로 읽기 쉽다.
         if kind in ("yoy", "yoy_mom") and yoy is not None:
-            parts.append(f"전년 {yoy:+.1f}%")
+            parts.append(f"YoY {yoy:+.1f}%")
         if kind in ("mom", "yoy_mom") and mom is not None:
-            parts.append(f"전{'기' if freq == 'q' else '월'} {mom:+.1f}%")
+            parts.append(f"{'QoQ' if freq == 'q' else 'MoM'} {mom:+.1f}%")
         for i in range(max(1, len(obs) - 3), len(obs)):
             r = (_pct(obs[i][1], _pick_back(obs[:i + 1], 12)) if kind == "yoy"
                  else _pct(obs[i][1], obs[i - 1][1]))

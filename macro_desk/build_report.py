@@ -183,7 +183,10 @@ def _short_period(period: str | None) -> str:
     """
     if not period:
         return ""
-    return period.split("년")[-1].strip() or period.strip()
+    p = period.strip()
+    if len(p) == 10 and p[4] == "-" and p[7] == "-":   # 일별 계열의 ISO 날짜
+        return f"{int(p[5:7])}/{int(p[8:10])}"
+    return p.split("년")[-1].strip() or p
 
 
 def chip(e: dict, rel: dict, cons: dict) -> str:
@@ -339,6 +342,23 @@ def calendar_block(cfg: dict, today: dt.date, data: dict) -> str:
 
 
 # ── 3. 해석 카드 ───────────────────────────────────────────────────────────
+# 약어는 **쓰는 자리에서 풀어준다** — 매크로를 처음 보는 사람이 읽는 페이지다.
+# 본문에 실제로 나온 약어만 적는다(안 쓴 약어까지 늘어놓으면 그게 소음이다).
+ABBR = [("YoY", "전년동월비 — 1년 전 같은 달 대비"),
+        ("MoM", "전월비 — 바로 앞 달 대비"),
+        ("QoQ", "전분기비 — 바로 앞 분기 대비")]
+
+
+def legend(text: str) -> str:
+    used = [f"<b>{k}</b> {v}" for k, v in ABBR if k in text]
+    if not used:
+        return ""
+    # 기간 설명은 월·분기에 다 맞게 일반형으로 — '8월분의 발표는 9월' 같은 월간
+    # 예시를 분기 지표(GDP) 카드에 붙이면 그 자리에서 틀린 말이 된다.
+    return ('<p class="numtip">' + " · ".join(used)
+            + ' · 오른쪽 기간은 발표일이 아니라 <b>대상 기간</b>입니다.</p>')
+
+
 def guide_numbers(cfg: dict, rel: dict, cons: dict) -> dict:
     """guide id → 그 지표의 실제 숫자 블록.
 
@@ -376,7 +396,9 @@ def guide_numbers(cfg: dict, rel: dict, cons: dict) -> dict:
         label = (f'<p class="numname">{esc(e["name"])}</p>'
                  if len([x for x in cfg.get("calendar", []) if x.get("guide") == gid]) > 1
                  else "")
-        out.setdefault(gid, []).append(f'{label}<table class="nums">{rows}</table>')
+        out.setdefault(gid, []).append(
+            f'{label}<table class="nums">{rows}</table>'
+            + legend((r.get("text") or "") + (c.get("text") or "")))
     return out
 
 
@@ -560,6 +582,7 @@ table.nums td.w,table.nums span.w{{color:var(--muted);font-weight:400;font-size:
 white-space:nowrap}}
 table.nums td.trend{{font-weight:400;font-family:Georgia,serif}}
 .numname{{margin:6px 0 0;font-size:12px;font-weight:600;color:var(--muted)}}
+.numtip{{margin:-6px 0 10px;font-size:11.5px;color:var(--muted)}}
 .what{{margin:8px 0}} .watch{{margin:6px 0;font-size:13px}}
 .bands{{list-style:none;padding:0;margin:8px 0}}
 .band{{display:grid;grid-template-columns:18px 170px 1fr;gap:6px;align-items:start;

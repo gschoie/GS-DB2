@@ -119,11 +119,11 @@ class TestChipLabel(unittest.TestCase):
 
     ENTRY = {"id": "us_ppi", "name": "미국 생산자물가 PPI", "country": "US",
              "guide": "us_ppi"}
-    REL = {"us_ppi": {"text": "전년 +5.4% · 전월 +0.4%", "period": "2026년 8월"}}
+    REL = {"us_ppi": {"text": "전년 +5.4% · 전월 +0.4%", "period": "2026년 8월분"}}
 
     def test_prev_release_is_labelled_with_month(self):
         html = br.chip(self.ENTRY, self.REL, {})
-        self.assertIn("직전 8월", html)
+        self.assertIn("직전 8월분", html)
         self.assertIn("+5.4%", html)
 
     def test_consensus_wins_and_says_so(self):
@@ -133,8 +133,9 @@ class TestChipLabel(unittest.TestCase):
         self.assertNotIn("직전", html)                        # 칩 한 줄엔 하나만
 
     def test_short_period(self):
-        self.assertEqual(br._short_period("2026년 8월"), "8월")
+        self.assertEqual(br._short_period("2026년 8월분"), "8월분")
         self.assertEqual(br._short_period("2026년 2분기"), "2분기")
+        self.assertEqual(br._short_period("2026-10-11"), "10/11")  # 일별 계열
         self.assertEqual(br._short_period(None), "")
         self.assertEqual(br._short_period(""), "")
 
@@ -151,9 +152,9 @@ class TestGuideNumbers(unittest.TestCase):
         {"id": "us_ism_svc", "name": "미국 ISM 서비스업", "guide": "us_ism"},
         {"id": "nope", "name": "가이드 없음"},
     ]}
-    REL = {"us_cpi": {"text": "전년 +3.4% · 전월 +0.3%", "period": "2026년 8월",
+    REL = {"us_cpi": {"text": "전년 +3.4% · 전월 +0.3%", "period": "2026년 8월분",
                       "recent": ["-0.4", "+0.1", "+0.3"]},
-           "us_ism_mfg": {"text": "48.2", "period": "2026년 9월"}}
+           "us_ism_mfg": {"text": "48.2", "period": "2026년 9월분"}}
     CONS = {"us_cpi": {"text": "전년 +3.7% · 코어 +2.4%", "for": "2026-10-14 발표(9월분)"}}
 
     def test_both_sides_labelled(self):
@@ -161,7 +162,7 @@ class TestGuideNumbers(unittest.TestCase):
         card = "".join(out["us_cpi"])
         self.assertIn("컨센서스", card)
         self.assertIn("직전 발표", card)
-        self.assertIn("2026년 8월", card)                     # 몇 월분인지
+        self.assertIn("2026년 8월분", card)                     # 몇 월분인지
         self.assertIn("2026-10-14 발표(9월분)", card)
         self.assertIn("최근 3회", card)
 
@@ -172,6 +173,18 @@ class TestGuideNumbers(unittest.TestCase):
     def test_single_entry_needs_no_name(self):
         out = br.guide_numbers(self.CFG, self.REL, self.CONS)
         self.assertNotIn("미국 소비자물가 CPI", "".join(out["us_cpi"]))
+
+    def test_legend_explains_only_the_abbreviations_used(self):
+        self.assertIn("전년동월비", br.legend("YoY +3.4%"))
+        self.assertNotIn("전월비", br.legend("YoY +3.4%"))      # 안 쓴 약어는 소음
+        self.assertIn("전분기비", br.legend("QoQ +2.1%"))
+        self.assertEqual(br.legend("48.2"), "")                 # 약어가 없으면 아예 없다
+
+    def test_legend_says_period_is_the_reference_period(self):
+        # "8월분의 발표는 9월" 같은 월간 예시는 분기 카드에서 틀린 말이 된다
+        tip = br.legend("QoQ +2.1%")
+        self.assertIn("대상 기간", tip)
+        self.assertNotIn("8월분", tip)
 
     def test_indicator_without_numbers_is_absent(self):
         out = br.guide_numbers(self.CFG, {}, {})
