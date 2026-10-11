@@ -334,7 +334,7 @@ def build() -> Path:
 body{{margin:0;padding:18px 16px 48px;background:var(--bg);color:var(--fg);
 font:14px/1.6 -apple-system,"Malgun Gothic","Apple SD Gothic Neo",sans-serif}}
 .wrap{{max-width:820px;margin:0 auto}}
-h1{{font-size:19px;margin:0 0 2px}} h2{{font-size:15px;margin:28px 0 8px}}
+h1{{font-size:19px;margin:0 0 2px}} h2{{font-size:15px;margin:24px 0 8px}}
 .sub{{color:var(--muted);font-size:12.5px;margin:0 0 16px}}
 .stale{{color:var(--pos)}}
 .card{{background:var(--card);border:1px solid var(--line);border-radius:10px;
@@ -382,6 +382,17 @@ table.up .qtime{{display:block;color:var(--muted);font-size:10.5px}}
 table.up tr.soon td{{background:var(--warnbg)}}
 table.up .trend{{color:var(--muted);font-size:11.5px;white-space:nowrap}}
 /* 해석 카드 */
+/* 섹션 접기 */
+details.sec{{margin:0 0 4px}}
+details.sec>summary{{list-style:none;cursor:pointer;display:flex;align-items:center;gap:6px;
+padding:4px 0;border-bottom:1px solid var(--line)}}
+details.sec>summary::-webkit-details-marker{{display:none}}
+details.sec>summary::before{{content:"▾";color:var(--muted);font-size:11px;width:10px;
+flex:none;transition:transform .12s}}
+details.sec:not([open])>summary::before{{transform:rotate(-90deg)}}
+details.sec>summary h2{{margin:0;display:inline}}
+details.sec>summary:hover h2{{color:var(--accent)}}
+details.sec[open]>summary{{margin-bottom:8px}}
 .gcard,.bcard{{border:1px solid var(--line);border-radius:10px;background:var(--card);
 padding:10px 12px;margin:0 0 8px}}
 summary{{cursor:pointer;font-size:14px}}
@@ -400,21 +411,49 @@ a{{color:inherit}} .yt{{font-size:12px}}
 <p class="sub">금리·채권·환율과 월·분기 지표를 한 장에. 숫자 옆에 <b>“얼마면 무슨 뜻인지”</b>를 같이 둔다.<br>
 🕘 매일 저녁 9시 갱신{f' · 실제 갱신 <b>{esc(gen)}</b>' if gen else ''} {stale}</p>
 
-<h2>📈 지금 숫자</h2>
+<details class="sec" id="s-now" open>
+<summary><h2>📈 지금 숫자</h2></summary>
 <div class="card">{quote_table(cfg, data)}</div>
+</details>
 
-<h2>🗓 발표 일정</h2>
+<details class="sec" id="s-cal" open>
+<summary><h2>🗓 발표 일정</h2></summary>
 <div class="card">{calendar_block(cfg, today, data)}</div>
+</details>
 
-<h2>🧭 지표 해석 — 얼마면 무슨 뜻인가</h2>
+<details class="sec" id="s-read" open>
+<summary><h2>🧭 지표 해석 — 얼마면 무슨 뜻인가</h2></summary>
 <p class="note">제목을 누르면 펼쳐집니다. 밴드는 <b>대략의 기준</b>이지 매매 신호가 아닙니다.</p>
 {indicator_cards(guide)}
+</details>
 
-<h2>📚 기초 — 이것부터</h2>
+<details class="sec" id="s-basic" open>
+<summary><h2>📚 기초 — 이것부터</h2></summary>
 {basics_block(guide)}
+</details>
 
 <p class="note">영상 링크는 특정 영상이 아니라 <b>검색 결과</b>로 겁니다 — 영상은 내려가도 검색은 남습니다.</p>
-</div></body></html>"""
+</div>
+<script>
+// 섹션 접은 상태를 브라우저에 기억해 둔다. 페이지는 매일 새로 구워지고 iframe 이 다시
+// 로드되므로 기억하지 않으면 접어도 다음에 또 펼쳐져 있다. 저장이 막힌 환경(사생활 모드·
+// 사이트 데이터 차단)에서는 accessor 가 던지므로 전부 try 로 감싼다 — 기억만 안 될 뿐
+// 화면은 그대로 동작해야 한다.
+(function(){{
+  var KEY='macroSections';
+  var state={{}};
+  try{{ state=JSON.parse(localStorage.getItem(KEY)||'{{}}')||{{}}; }}catch(e){{}}
+  document.querySelectorAll('details.sec').forEach(function(d){{
+    if(state[d.id]===false) d.open=false;
+    else if(state[d.id]===true) d.open=true;
+    d.addEventListener('toggle',function(){{
+      state[d.id]=d.open;
+      try{{ localStorage.setItem(KEY,JSON.stringify(state)); }}catch(e){{}}
+    }});
+  }});
+}})();
+</script>
+</body></html>"""
 
     OUT.parent.mkdir(parents=True, exist_ok=True)
     OUT.write_text(html_out, encoding="utf-8")
