@@ -697,7 +697,8 @@
       - **발송은 정시 실행에만** — `schedule` 또는 `inputs.via == 'scheduler'`(GAS 시계).
         화면 `🔄 지표 갱신` 버튼은 `via` 가 없어 빠진다(30번 교훈: 디스패치를 한 묶음으로
         보면 수동 갱신이 텔레그램을 쏜다). GAS `macro` 슬롯은 이미 via=scheduler 를 보내므로
-        **GAS 변경 0**.
+        **GAS 변경 0**. 지금 한 통 받아보려면 Run workflow 의 `force_telegram` 체크 —
+        발송 스텝 조건과 `--force`(주말 스킵) 둘을 같이 넘긴다.
       - `tests/test_notify.py` 23개(밴드 순서·경계·모르는 값·%p vs %·us2y 제외·키 없을 때
         한 줄만 빠짐·오래된 수집 경고). 워크플로 테스트 스텝에 추가 — **`discover` 금지**
         원칙 그대로 세 파일을 따로 돌린다.

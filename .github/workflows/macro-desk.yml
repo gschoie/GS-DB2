@@ -9,6 +9,12 @@ on:
       via:
         description: "호출 주체 — scheduler면 GAS 시계가 쏜 것"
         default: ""
+      # 평소엔 정시 실행만 텔레그램을 보낸다(아래 발송 스텝 조건). 이 체크를 켜면
+      # 수동 실행으로도 한 통 받아볼 수 있고, 주말 스킵도 넘긴다 — 테스트용.
+      force_telegram:
+        description: "텔레그램 지금 한 통 보내기 (주말에도)"
+        type: boolean
+        default: false
   schedule:
     - cron: "0 12 * * *"    # 12:00 UTC = 21:00 KST
 
@@ -98,10 +104,11 @@ jobs:
       # 정시 실행(GAS 시계 via=scheduler, 또는 크론 안전망)에만 보낸다 —
       # 화면 '🔄 지표 갱신' 버튼은 dispatch 이지만 via 가 없으므로 발송에서 빠진다
       # (30번 교훈: 디스패치를 한 묶음으로 보면 수동 갱신이 텔레그램을 쏜다).
-      # 주말 스킵·한 줄 생성 실패는 notify.py 안에서 처리한다. 발송 실패가 수집·배포를
+      # force_telegram 체크는 그 조건을 수동으로 넘기는 테스트 경로다.
+      # 한 줄 생성 실패는 notify.py 안에서 처리한다. 발송 실패가 수집·배포를
       # 되돌리지는 않으므로 커밋 뒤에 둔다.
       - name: 텔레그램 발송
-        if: ${{ github.event_name == 'schedule' || inputs.via == 'scheduler' }}
+        if: ${{ github.event_name == 'schedule' || inputs.via == 'scheduler' || inputs.force_telegram }}
         working-directory: macro_desk
         env:
           MACRO_TELEGRAM_BOT_TOKEN: ${{ secrets.MACRO_TELEGRAM_BOT_TOKEN }}
@@ -111,4 +118,5 @@ jobs:
           MACRO_GEMINI_API_KEY: ${{ secrets.MACRO_GEMINI_API_KEY }}
           CONSTRUCTION_GEMINI_API_KEY: ${{ secrets.CONSTRUCTION_GEMINI_API_KEY }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-        run: python notify.py
+        # --force 는 주말 스킵만 넘긴다(평일엔 있으나 없으나 같다)
+        run: python notify.py ${{ inputs.force_telegram && '--force' || '' }}
