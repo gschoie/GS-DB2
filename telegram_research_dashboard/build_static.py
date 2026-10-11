@@ -255,6 +255,12 @@ def build() -> Path:
     trend_dir = ROOT / "static" / "market_trend"
     if trend_dir.is_dir():
         shutil.copytree(trend_dir, OUTPUT.parent / "market_trend", dirs_exist_ok=True)
+    macro_report = ROOT / "static" / "macro_desk_report.html"
+    if macro_report.exists():
+        shutil.copy2(macro_report, OUTPUT.parent / "macro_desk_report.html")
+    macro_dir = ROOT / "static" / "macro_desk"
+    if macro_dir.is_dir():
+        shutil.copytree(macro_dir, OUTPUT.parent / "macro_desk", dirs_exist_ok=True)
     consensus_xlsx = ROOT / "static" / "consensus_full.xlsx"
     if consensus_xlsx.exists():
         shutil.copy2(consensus_xlsx, OUTPUT.parent / "consensus_full.xlsx")
