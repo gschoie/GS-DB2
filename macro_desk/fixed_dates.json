@@ -1,0 +1,21 @@
+{
+  "_why": "규칙(매월 n번째 요일)으로 뽑은 추정일은 실제 발표일과 며칠씩 어긋난다 — 2026년 9월 CPI는 규칙으로 10/12인데 실제는 10/14다. 기관이 공표한 날짜를 아는 것만 여기에 적고, 달력은 이 값을 규칙보다 먼저 쓴다. 적지 않은 달은 그대로 ~ 추정일로 나온다.",
+  "_rule": "dates = 기관 일정표에서 확인한 확정일. tentative = 출처가 한 곳뿐이라 아직 확인이 필요한 날짜 — 화면에 ~ 가 붙는다. 추측한 날짜는 어느 쪽에도 넣지 않는다.",
+  "_asof": "2026-10-11",
+  "_sources": {
+    "fomc": "Chicago Fed federal reserve calendars (10/27-28, 12/8-9) — 결정·성명 발표일인 둘째 날을 적는다",
+    "us_cpi": "BLS Schedule of Releases for the Consumer Price Index",
+    "us_ppi": "BLS Schedule of Releases for the Producer Price Index",
+    "us_payrolls": "BLS Schedule of Releases for the Employment Situation",
+    "bok": "출처 한 곳(블로그 정리)뿐 — 한국은행 공식 일정으로 재확인 필요"
+  },
+  "dates": {
+    "fomc": ["2026-10-28", "2026-12-09"],
+    "us_cpi": ["2026-10-14", "2026-11-10", "2026-12-10"],
+    "us_ppi": ["2026-11-13", "2026-12-15"],
+    "us_payrolls": ["2026-11-06", "2026-12-04"]
+  },
+  "tentative": {
+    "bok": ["2026-10-22", "2026-11-26"]
+  }
+}

@@ -1,0 +1,222 @@
+{
+ "source": "DC인사이드",
+ "galleries": [
+  {
+   "id": "krstock",
+   "name": "국내주식갤러리",
+   "posts": 979,
+   "capped": true,
+   "burst": 0.7,
+   "base_daily": 1308.4
+  },
+  {
+   "id": "stockus",
+   "name": "해외주식갤러리",
+   "posts": 2492,
+   "capped": true,
+   "burst": 0.9,
+   "base_daily": 2722.1
+  }
+ ],
+ "posts_sampled": 577,
+ "keywords": [
+  {
+   "term": "한국",
+   "count": 9,
+   "burst": 99.0,
+   "new": true
+  },
+  {
+   "term": "아님",
+   "count": 7,
+   "burst": 94.5,
+   "new": true
+  },
+  {
+   "term": "네이버",
+   "count": 7,
+   "burst": 94.5,
+   "new": true
+  },
+  {
+   "term": "있는데",
+   "count": 6,
+   "burst": 81.0,
+   "new": true
+  },
+  {
+   "term": "반도체",
+   "count": 6,
+   "burst": 81.0,
+   "new": true
+  },
+  {
+   "term": "나도",
+   "count": 6,
+   "burst": 81.0,
+   "new": true
+  },
+  {
+   "term": "사람들",
+   "count": 6,
+   "burst": 81.0,
+   "new": true
+  },
+  {
+   "term": "상속세",
+   "count": 6,
+   "burst": 81.0,
+   "new": true
+  },
+  {
+   "term": "생각",
+   "count": 5,
+   "burst": 67.5,
+   "new": true
+  },
+  {
+   "term": "한주갤",
+   "count": 5,
+   "burst": 67.5,
+   "new": true
+  },
+  {
+   "term": "다들",
+   "count": 5,
+   "burst": 67.5,
+   "new": true
+  },
+  {
+   "term": "좋은",
+   "count": 5,
+   "burst": 67.5,
+   "new": true
+  },
+  {
+   "term": "급등주",
+   "count": 5,
+   "burst": 67.5,
+   "new": true
+  },
+  {
+   "term": "동네",
+   "count": 5,
+   "burst": 67.5,
+   "new": true
+  },
+  {
+   "term": "내가",
+   "count": 9,
+   "burst": 8.1,
+   "new": false
+  }
+ ],
+ "top_recommended": [
+  {
+   "gallery": "해외주식갤러리",
+   "title": "이창용: 반도체 슈퍼사이클 10년? ㅋㅋㅋㅋㅋㅋ",
+   "views": 9669,
+   "recommend": 264,
+   "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=17948330&exception_mode=recommend&page=1",
+   "time_kst": "10-10 17:50"
+  },
+  {
+   "gallery": "해외주식갤러리",
+   "title": "치매의 두 케이스.jpg",
+   "views": 8948,
+   "recommend": 228,
+   "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=17948386&exception_mode=recommend&page=1",
+   "time_kst": "10-10 18:00"
+  },
+  {
+   "gallery": "해외주식갤러리",
+   "title": "속보) 미국이 미국에게 관세 부여할예정",
+   "views": 10154,
+   "recommend": 172,
+   "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=17945585&exception_mode=recommend&page=1",
+   "time_kst": "10-10 06:03"
+  },
+  {
+   "gallery": "해외주식갤러리",
+   "title": "젤렌스키 왜 눈깔 돌아갔냐 ㅆㅂㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋ",
+   "views": 8406,
+   "recommend": 91,
+   "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=17947931&exception_mode=recommend&page=1",
+   "time_kst": "10-10 16:19"
+  },
+  {
+   "gallery": "해외주식갤러리",
+   "title": "[속보] 트럼프 격노 \"내가 노벨상 8개 받았어야\"",
+   "views": 7248,
+   "recommend": 79,
+   "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=17946819&exception_mode=recommend&page=1",
+   "time_kst": "10-10 12:12"
+  }
+ ],
+ "top_viewed": [
+  {
+   "gallery": "국내주식갤러리",
+   "title": "정의선 씨발새끼는 곱게못죽을거다",
+   "views": 1151,
+   "recommend": 24,
+   "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3617272&page=4",
+   "time_kst": "10-11 00:23"
+  },
+  {
+   "gallery": "국내주식갤러리",
+   "title": "한주갤 생각할수록 ㅈ같네",
+   "views": 1101,
+   "recommend": 16,
+   "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3617336&page=3",
+   "time_kst": "10-11 01:02"
+  },
+  {
+   "gallery": "국내주식갤러리",
+   "title": "시발 주식 존나 잘하네",
+   "views": 526,
+   "recommend": 0,
+   "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3617346&page=3",
+   "time_kst": "10-11 01:11"
+  },
+  {
+   "gallery": "국내주식갤러리",
+   "title": "내일 코스피대폭락 확정ㅋㅎㅋㅎㅋㅎㅋㅎㅋㅎㅋㅎ",
+   "views": 483,
+   "recommend": 5,
+   "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3617294&page=4",
+   "time_kst": "10-11 00:35"
+  },
+  {
+   "gallery": "국내주식갤러리",
+   "title": "하닉은 차트 무너진거맞는데",
+   "views": 394,
+   "recommend": 0,
+   "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3617391&page=2",
+   "time_kst": "10-11 02:32"
+  },
+  {
+   "gallery": "국내주식갤러리",
+   "title": "씨벌 코스피 전고뚫은게 하나밖에없네",
+   "views": 381,
+   "recommend": 0,
+   "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3617357&page=3",
+   "time_kst": "10-11 01:30"
+  },
+  {
+   "gallery": "국내주식갤러리",
+   "title": "이럴때일수록 저가매수 해야하는 종목",
+   "views": 371,
+   "recommend": 0,
+   "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3617367&page=3",
+   "time_kst": "10-11 01:48"
+  },
+  {
+   "gallery": "국내주식갤러리",
+   "title": "다들 월요일 하락보내",
+   "views": 349,
+   "recommend": 0,
+   "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3617315&page=4",
+   "time_kst": "10-11 00:47"
+  }
+ ]
+}
