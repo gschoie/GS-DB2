@@ -64,7 +64,7 @@ calendar:
      time: "밤 9:30 / 10:30", guide: us_cpi,
      release: {series: CUSR0000SA0, kind: yoy_mom,
                also: {series: CUSR0000SA0L1E, kind: yoy, label: 코어}}}
-  - {id: us_ppi,  name: 미국 생산자물가 PPI, country: US, rule: {around: 14}, guide: us_cpi,
+  - {id: us_ppi,  name: 미국 생산자물가 PPI, country: US, rule: {around: 14}, guide: us_ppi,
      release: {series: WPSFD4, kind: yoy_mom}}
   - {id: us_retail, name: 미국 소매판매, country: US, rule: {around: 16}, guide: us_retail,
      release: {src: fred, series: RSAFS, kind: mom}}
