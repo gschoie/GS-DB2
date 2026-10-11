@@ -32,6 +32,35 @@ indicators:
       - [FRED 근원 CPI 그래프, "https://fred.stlouisfed.org/series/CPILFESL"]
     youtube: 미국 CPI 소비자물가 해석
 
+  us_ppi:
+    name: 미국 생산자물가 (PPI)
+    agency: 미 노동통계국 (BLS)
+    freq: 매월 (전월치) · CPI 발표 1~2일 뒤
+    what: |
+      기업이 **물건을 팔 때 받는 값**이 얼마나 올랐나. 소비자가 내는 값(CPI)보다
+      한 단계 앞이라 **물가의 선행 지표**로 본다 — 원가가 오르면 몇 달 뒤 소비자가격에
+      얹히기 때문이다. 화면 숫자는 **최종수요(final demand)** 기준이다.
+      PPI의 서비스·의료 항목은 연준이 보는 PCE 계산에 그대로 들어가므로,
+      **PPI가 튀면 월말 PCE 예상치가 같이 올라간다.**
+    watch: 최종수요 PPI 전년비(YoY)와 전월비(MoM). 근원은 식품·에너지·무역서비스를 뺀 것
+    read:
+      - {band: "YoY 3.0% 이상", tone: hot,  mean: "원가 압력이 되살아났다. 몇 달 뒤 CPI 반등 걱정 + 월말 PCE 예상치 상향"}
+      - {band: "YoY 1.5~3.0%", tone: warm, mean: "정상 구간. CPI를 밀어올리지도, 끌어내리지도 않는다"}
+      - {band: "YoY 1.5% 미만", tone: cool, mean: "원가가 식었다. 기업이 가격을 올릴 힘이 줄어 물가 둔화를 예고"}
+      - {band: "MoM 0.4% 이상", tone: hot,  mean: "한 달치만으로 연율 5% — CPI가 좋게 나온 달에도 분위기를 뒤집는다"}
+      - {band: "MoM 마이너스", tone: cool, mean: "유가·원자재가 빠진 달에 자주 나온다. 헤드라인만 내려갔는지 근원도 같이인지 볼 것"}
+    market: |
+      **CPI보다 반응은 작지만, CPI와 방향이 엇갈릴 때 영향이 커진다.**
+      CPI가 좋았는데 PPI가 튀면 '아직 끝나지 않았다'로 읽혀 금리 하락분을 되돌린다.
+      예상보다 높으면 → 금리↑ 달러↑ / 낮으면 → 금리↓ 달러↓ (경로는 CPI와 같다)
+    korea: 수출기업엔 **원가 쪽 신호**다. 미국 PPI가 오르면 그쪽 전방산업 마진이 눌려
+      단가 인상 협상이 어려워지고, 미 금리 경로를 통해 원달러·외국인 수급에도 같이 걸린다.
+    links:
+      - [BLS 생산자물가 공식, "https://www.bls.gov/ppi/"]
+      - [BLS PPI 발표 일정, "https://www.bls.gov/schedule/news_release/ppi.htm"]
+      - [FRED 최종수요 PPI, "https://fred.stlouisfed.org/series/PPIFIS"]
+    youtube: 미국 PPI 생산자물가 해석
+
   us_pce:
     name: 미국 PCE 물가지수
     agency: 미 경제분석국 (BEA)

@@ -452,6 +452,32 @@ a{{color:inherit}} .yt{{font-size:12px}}
     }});
   }});
 }})();
+
+// 달력 칩·발표표의 지표명을 누르면 그 지표의 해석 카드로 내려간다. 그런데 카드도
+// 섹션도 <details> 라서 **접혀 있으면 앵커로 가도 아무것도 안 보인다** — 링크를 눌렀는데
+// 아무 일도 안 일어난 것처럼 느껴진다. 눌린 대상과 그 조상 <details> 를 전부 펼친다.
+// 클릭 경로에서는 preventDefault 를 하지 않는다 — 펼치기만 해두면 브라우저가 이벤트
+// 처리 뒤에 앵커로 점프하므로 iframe 안에서도 기본 동작이 그대로 맞는다.
+// 주소에 해시를 달고 들어온 경우는 브라우저가 **펼치기 전에** 이미 점프를 끝냈으므로
+// 그때만 직접 스크롤한다.
+(function(){{
+  function expand(id){{
+    var el=document.getElementById(id);
+    if(!el) return null;
+    for(var n=el;n;n=n.parentElement){{ if(n.tagName==='DETAILS') n.open=true; }}
+    return el;
+  }}
+  document.querySelectorAll('a[href^="#g-"]').forEach(function(a){{
+    a.addEventListener('click',function(){{ expand(a.getAttribute('href').slice(1)); }});
+  }});
+  function jump(){{
+    if(location.hash.indexOf('#g-')!==0) return;
+    var el=expand(location.hash.slice(1));
+    if(el) try{{ el.scrollIntoView({{block:'start'}}); }}catch(e){{}}
+  }}
+  jump();
+  window.addEventListener('hashchange',jump);
+}})();
 </script>
 </body></html>"""
 
