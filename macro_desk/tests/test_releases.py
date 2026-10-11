@@ -51,17 +51,17 @@ def quarterly(vals: list[float], end=(2026, 7)) -> list[tuple[dt.date, float]]:
 # 1) 지수 계열 → 전월비·전년동월비
 obs = monthly([100.0] + [100.0 * 1.002 ** i for i in range(1, 13)])
 s = rl.summarize(obs, {"series": "CPIAUCSL", "kind": "yoy_mom"})
-eq(s["text"], "전년 +2.4% · 전월 +0.2%", "지수 → 전년·전월")
-eq(s["period"], "2026년 9월", "기간 라벨(월)")
+eq(s["text"], "YoY +2.4% · MoM +0.2%", "지수 → YoY·MoM")
+eq(s["period"], "2026년 9월분", "기간 라벨(월) — 대상 기간이지 발표월이 아니다")
 eq(len(s["recent"]), 3, "최근 3회 길이")
 
 # 2) 전년동월비만
 s = rl.summarize(obs, {"series": "X", "kind": "yoy"})
-eq(s["text"], "전년 +2.4%", "yoy 만")
+eq(s["text"], "YoY +2.4%", "yoy 만")
 
 # 3) 전월비만
 s = rl.summarize(obs, {"series": "X", "kind": "mom"})
-eq(s["text"], "전월 +0.2%", "mom 만")
+eq(s["text"], "MoM +0.2%", "mom 만")
 
 # 4) 수준값 — 소수 자리 지정
 s = rl.summarize(monthly([4.3, 4.2, 4.1]), {"series": "UNRATE", "kind": "level",
@@ -88,7 +88,7 @@ eq(s["period"], "2026년 3분기", "기간 라벨(분기)")
 
 # 8) 분기 지수의 전기비는 '전기'로 적는다 — '전월'이면 거짓말이 된다
 s = rl.summarize(quarterly([100.0, 101.0, 102.0]), {"series": "X", "kind": "mom", "freq": "q"})
-eq(s["text"], "전기 +1.0%", "분기는 '전기'")
+eq(s["text"], "QoQ +1.0%", "분기는 QoQ")
 
 # 9) 변화율을 못 구하면 '–' — **지수 원값을 대신 찍으면 안 된다.**
 #    'CPI 코어 337.8' 처럼 증가율 자리에 지수 레벨이 앉아 전혀 다른 뜻이 된다.
@@ -101,7 +101,7 @@ eq(s["text"], "–", "전년 관측이 없으면 지수 레벨을 찍지 않는�
 sparse = [(dt.date(2025, 3, 1), 100.0), (dt.date(2026, 8, 1), 103.0),
           (dt.date(2026, 9, 1), 103.2)]
 s = rl.summarize(sparse, {"series": "X", "kind": "yoy_mom"})
-eq(s["text"], "전월 +0.2%", "전년 관측 없으면 전년비 생략")
+eq(s["text"], "MoM +0.2%", "전년 관측 없으면 YoY 생략")
 
 # 11) 0 으로 나누지 않는다 — 비율을 못 만들면 '–'
 s = rl.summarize(monthly([0.0, 0.5]), {"series": "X", "kind": "mom"})
@@ -155,7 +155,7 @@ rl.bls_observations = lambda series, **kw: {k: v for k, v in FAKE.items() if k i
 got = rl.fetch(ENTRIES)                      # FRED 키 없음
 eq(sorted(got), ["us_cpi", "us_payrolls"], "키 없으면 FRED 계열은 빠진다")
 eq(got["us_payrolls"]["text"], "+2.9만명 · 실업률 4.2%", "also 가 한 줄에 붙는다")
-eq(got["us_cpi"]["text"], "전년 +2.4% · 전월 +0.2%", "주 계열만")
+eq(got["us_cpi"]["text"], "YoY +2.4% · MoM +0.2%", "주 계열만")
 
 # BLS 호출이 통째로 실패해도 터지지 않는다(그 지표만 빠진다)
 def boom(series, **kw):
