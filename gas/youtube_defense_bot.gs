@@ -837,6 +837,7 @@ function collectMilSource_(src, cutoff) {
   if (!base) { Logger.log(src.name + ': 쓸 목록 주소를 못 찾음'); return out; }
 
   let rawFound = 0;   // 날짜 필터 전, 페이지에서 찾은 링크 수(진단용)
+  let newestMillis = 0;   // 날짜형 소스에서 찾은 가장 최근 기사 날짜(진단용)
   for (let page = 1; page <= MIL_MAX_PAGES; page++) {
     let html;
     try {
@@ -862,6 +863,7 @@ function collectMilSource_(src, cutoff) {
       let anyInWindow = false;
       rows.forEach(function (row) {
         const millis = idDateMillis_(row.id);
+        if (millis > newestMillis) newestMillis = millis;
         if (millis && millis >= cutoff && !picked[row.id]) {
           picked[row.id] = true;
           anyInWindow = true;
@@ -874,7 +876,10 @@ function collectMilSource_(src, cutoff) {
   }
 
   Logger.log(src.name + ': 페이지 링크 ' + rawFound + '개 → 채택 ' + out.length + '건'
-    + (base !== src.list ? ' (대체주소 사용)' : ''));
+    + (base !== src.list ? ' (대체주소 사용)' : '')
+    + (!undated && newestMillis
+        ? ' · 가장 최근 기사 ' + Utilities.formatDate(new Date(newestMillis), 'Asia/Seoul', 'yyyy-MM-dd')
+        : ''));
 
   // 날짜 있는 소스만 최신순 정렬(페이지 경계로 섞일 수 있어서). 없는 소스는 목록 순서 유지.
   if (!undated) out.sort(function (a, b) { return b.millis - a.millis; });
