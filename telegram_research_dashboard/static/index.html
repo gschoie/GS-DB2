@@ -112,6 +112,7 @@
           <button class="nav" data-view="tone">🎯 DAOL 리서치 톤</button>
           <a href="https://gemini.google.com/gem/6c5032cc72cc?usp=sharing" target="_blank" rel="noopener">🏢 기업.톺아보기</a>
           <div class="nav-sep"></div>
+          <button class="nav" data-view="macro">📊 매크로.데스크</button>
           <button class="nav" data-view="flow">🌊 시장.수급.동향</button>
           <button class="nav" data-view="trend">🧠 시장관심.내러티브</button>
           <button class="nav" data-view="etf">📡 ETF/섹터.신호 포착</button>
@@ -397,6 +398,11 @@
     <section id="flow" class="view">
       <div class="archive-intro"><div><p class="eyebrow">INVEST · FLOW</p><h2>시장 수급 동향</h2></div><div class="etf-actions"><button id="flow-refresh" class="refresh-btn" type="button" title="정해진 시간(10:00/13:00/15:40/16:40) 외에 지금 수급을 다시 수집합니다 (자동 실행, 몇 분 소요).">🔄 수급 갱신</button><span id="flow-status" class="task-sync"></span><a class="open-new" href="market_flow_report.html" target="_blank" rel="noopener">🔗 새 창으로</a></div></div>
       <iframe id="flow-frame" class="union-board-frame" title="시장 수급 동향" loading="lazy"></iframe>
+    </section>
+
+    <section id="macro" class="view">
+      <div class="archive-intro"><div><p class="eyebrow">INVEST · MACRO</p><h2>매크로 데스크</h2></div><div class="etf-actions"><button id="macro-refresh" class="refresh-btn" type="button" title="정해진 시간(저녁 9시) 외에 지금 금리·환율·원자재를 다시 수집합니다 (자동 실행, 1~2분 소요).">🔄 지표 갱신</button><span id="macro-status" class="task-sync"></span><a class="open-new" href="macro_desk_report.html" target="_blank" rel="noopener">🔗 새 창으로</a></div></div>
+      <iframe id="macro-frame" class="union-board-frame" title="매크로 데스크" loading="lazy"></iframe>
     </section>
 
     <section id="trend" class="view">
