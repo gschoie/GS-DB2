@@ -76,6 +76,7 @@ jobs:
           python tests/test_calendar.py
           python tests/test_releases.py
           python tests/test_notify.py
+          python tests/test_chart.py
 
       - name: 시세 수집
         working-directory: macro_desk
