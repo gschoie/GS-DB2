@@ -209,7 +209,11 @@ def chip(e: dict, rel: dict, cons: dict) -> str:
     else:
         val = ""
     sub = f'<span class="ev-v">{esc(val)}</span>' if val else ""
-    est = '<i class="est" aria-label="발표일 추정">~</i>' if e.get("estimated") else ""
+    # 앞에 WORD JOINER(U+2060) — 칸이 좁아 이름이 접힐 때 `~` 만 혼자 다음 줄로
+    # 떨어지던 것(실측)을 막는다. 한글과 `~`(ASCII) 사이는 줄바꿈 규칙상 끊을 수
+    # 있는 자리라 word-break:keep-all 로는 안 잡힌다. 폭이 0이라 보이지는 않는다.
+    est = ('<i class="est" aria-label="발표일 추정">⁠~</i>'
+           if e.get("estimated") else "")
     body = (f'<span class="ev-n"><i class="cc">{CC.get(e["country"], "")}</i>'
             f'{esc(e["name"])}{est}</span>{sub}')
     if not e.get("guide"):              # 누를 데가 없으면 링크로 만들지 않는다
@@ -490,7 +494,15 @@ td.v{{font-weight:700}}
 .note.warn{{background:var(--warnbg);border:1px solid var(--warnline);
 border-radius:8px;padding:8px 10px;color:var(--fg)}}
 /* 달력 */
-.cal{{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;margin:0 0 14px}}
+/* 평일 5칸은 **똑같은 너비**, 주말 2칸은 좁게.
+   `1fr` 은 사실 `minmax(auto,1fr)` 이라 **칸 내용의 최소 너비가 제 몫보다 크면
+   그 열이 밀려 넓어진다** — 칩이 nowrap 이던 탓에 긴 칩이 든 요일만 넓어져
+   달력이 들쭉날쭉했다. `minmax(0,…)` 으로 내용이 열 너비를 밀지 못하게 막고,
+   칩은 아래에서 여러 줄로 접히게 한다.
+   주말을 좁히는 근거: 발표 규칙이 전부 영업일 기준이라(on_day 는 주말이면 다음
+   영업일로 민다) 2026~27년 18개월 196건 중 주말 일정이 **0건**이다. */
+.cal{{display:grid;grid-template-columns:repeat(5,minmax(0,1fr)) repeat(2,minmax(0,.5fr));
+gap:3px;margin:0 0 14px}}
 .cal-h{{text-align:center;font-size:11px;color:var(--muted);padding:2px 0}}
 .cal-cell{{min-height:62px;border:1px solid var(--line);border-radius:6px;padding:3px 4px;
 background:var(--bg)}}
@@ -499,15 +511,21 @@ background:var(--bg)}}
 .cal-cell.today{{border-color:var(--accent);border-width:2px}}
 .cal-d{{font-size:11px;color:var(--muted)}}
 .cal-ev{{display:block;font-size:10px;line-height:1.3;margin-top:2px;padding:2px 3px;
-border-radius:3px;background:rgba(59,111,212,.12);text-decoration:none;color:inherit;
-overflow:hidden}}
+border-radius:3px;background:rgba(59,111,212,.12);text-decoration:none;color:inherit}}
 .cal-ev:hover{{background:rgba(59,111,212,.26)}}
 .cal-ev.flat:hover{{background:rgba(59,111,212,.12)}}
 .cal-ev.kr{{background:rgba(214,69,69,.12)}}
 .cal-ev.kr:hover{{background:rgba(214,69,69,.26)}}
-.ev-n{{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}}
-.ev-v{{display:block;font-size:9.5px;color:var(--muted);font-variant-numeric:tabular-nums;
-white-space:nowrap;overflow:hidden;text-overflow:ellipsis}}
+/* 칸이 좁으니 잘라내지 말고 **접는다** — 전에는 ellipsis 로 잘라서
+   '직전 8월분 YoY +5.4% · M…' 처럼 숫자가 끊겼다(툴팁 금지 원칙과 같은 줄기:
+   화면에서 안 보이면 없는 것이다).
+   `word-break:keep-all` 은 한국어 낱말을 통째로 유지해 '생산자물' / '가' 처럼
+   갈라지는 걸 막는다. 넘칠 때만 쓰는 보조는 **`break-word` 여야 한다** —
+   `anywhere` 는 **아무 데나** 끊을 자리를 만들어서, 들어갈 자리가 있는데도
+   추정일 표시 `~` 를 혼자 다음 줄로 떨어뜨렸다(실측). */
+.ev-n,.ev-v{{display:block;white-space:normal;word-break:keep-all;
+overflow-wrap:break-word}}
+.ev-v{{font-size:9.5px;color:var(--muted);font-variant-numeric:tabular-nums}}
 .cc{{display:inline-block;font-style:normal;font-size:8.5px;font-weight:700;letter-spacing:.3px;
 border:1px solid var(--line);border-radius:3px;padding:0 2px;margin-right:3px;
 color:var(--muted);vertical-align:1px}}
