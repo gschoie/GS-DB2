@@ -1,8 +1,69 @@
 {
-  "when_utc": "2026-10-11 22:08:12Z",
+  "when_utc": "2026-10-12 22:09:11Z",
   "ok": true,
-  "note": "no_alert_skip",
+  "note": "alert_sent",
   "chat_id_tail": "5171",
   "token_set": true,
-  "response": null
+  "response": {
+    "ok": true,
+    "result": {
+      "message_id": 608,
+      "from": {
+        "id": 8875725998,
+        "is_bot": true,
+        "first_name": "GB Investing Signal",
+        "username": "gs_invest_signal_bot"
+      },
+      "chat": {
+        "id": 279385171,
+        "first_name": "광식",
+        "last_name": "최",
+        "username": "gschoie",
+        "type": "private"
+      },
+      "date": 1791842950,
+      "text": "📡 ETF/섹터 신호 · 2026-10-12 (전일 확정)\n\n▼ 매도 경고(데드크로스) 1개\n\n🔴 PLUS K방산소부장 · 방산\n   ＋DI가 −DI 하향이탈·추세꺾임\n   ADX 20.5 · %K 29.4/55.3 · 수급 중립\n   [B] 거래대금 2.15배 · ADX 하락추세\n\n⚡ 추세 강도 2개\n\n🔻 RISE 수소경제테마 · 신재생/수소/기후\n   ADX 20 상향돌파 · 하락추세 확립(확인)\n   ADX 20.8 · %K 4.5/21.2 · 수급 중립\n   [A] 거래대금 1.69배 · 상대강도 하위 9% · ADX 하락추세\n\n🔻 SOL 금융지주플러스고배당 · 금융\n   ADX 20 상향돌파 · 하락추세 확립(확인)\n   ADX 20.6 · %K 5.5/5.7 · 수급 중립\n   [B] 상대강도 하위 23% · ADX 하락추세\n\n전체 신호판 › 대시보드\n🎴 GS Research Desk · ETF/섹터 신호",
+      "entities": [
+        {
+          "offset": 0,
+          "length": 12,
+          "type": "bold"
+        },
+        {
+          "offset": 50,
+          "length": 1,
+          "type": "bold"
+        },
+        {
+          "offset": 57,
+          "length": 11,
+          "type": "bold"
+        },
+        {
+          "offset": 169,
+          "length": 1,
+          "type": "bold"
+        },
+        {
+          "offset": 176,
+          "length": 11,
+          "type": "bold"
+        },
+        {
+          "offset": 309,
+          "length": 14,
+          "type": "bold"
+        },
+        {
+          "offset": 431,
+          "length": 4,
+          "type": "text_link",
+          "url": "https://gschoie.github.io/GS-DB2/etf_signal_report.html"
+        }
+      ],
+      "link_preview_options": {
+        "is_disabled": true
+      }
+    }
+  }
 }
