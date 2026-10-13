@@ -43,7 +43,8 @@ def indicators(px):
     """전 구간 지표와 신호를 벡터로 계산. scan_one과 같은 함수를 쓴다."""
     adx, pdi, ndi = E.adx_di(px)
     sk, sd = E.stoch_slow(px)
-    ev = E.cross_events(adx, pdi, ndi, sk, sd)
+    rv = E.rsi(px)
+    ev = E.cross_events(adx, pdi, ndi, sk, sd, rv)
 
     tv = px["c"] * px["v"]
     vol_ratio = tv / tv.shift(1).rolling(20).mean()
@@ -54,6 +55,9 @@ def indicators(px):
 
     return {
         "ev": ev,
+        # 비교용 — 30 이하 '진입'이 아니라 30 위로 '복귀'한 날(통상의 RSI 매수 규칙)
+        "rsi_back30": E._cross_level(rv, E.RSI_BUY),
+        "adx_up": pdi > ndi,
         "up_trend": (pdi > ndi) & (adx > 20),
         "down_trend": (pdi < ndi) & (adx > 20),
         "vol_surge": vol_ratio >= E.VOL_SURGE_X,
@@ -85,12 +89,18 @@ def run(days=FETCH_DAYS, sleep=0.15):
     uni = E.load_universe()
     # 신호 유형 → 각 종목에서 그 신호가 난 봉의 마스크를 만드는 함수
     SIGNALS = {
+        # RSI(메인 지표) — 화면·텔레그램 규칙 그대로
+        "RSI 30이하 진입(매수)": lambda I: I["ev"]["rsi_buy"],
+        "RSI 70 하향이탈(매도)": lambda I: I["ev"]["rsi_sell"],
+        "RSI 30 상향복귀(참고)": lambda I: I["rsi_back30"],
         "추세골든(+DI↑)":      lambda I: I["ev"]["trend"],
         "과매도반등(%K↑<25)":  lambda I: I["ev"]["oversold"],
         "추세데드(+DI↓)":      lambda I: I["ev"]["trend_dead"],
         "과열이탈(%K↓>75)":    lambda I: I["ev"]["overbought"],
         "ADX20 돌파":          lambda I: I["ev"]["adx20"],
         "ADX25 돌파":          lambda I: I["ev"]["adx25"],
+        "ADX20 돌파(+DI>−DI)":  lambda I: I["ev"]["adx20"] & I["adx_up"],
+        "ADX20 돌파(−DI>+DI)":  lambda I: I["ev"]["adx20"] & ~I["adx_up"],
         # 확인 지표가 붙었을 때 — 등급 배점의 근거가 되는지 확인용
         "과매도반등+거래대금":  lambda I: I["ev"]["oversold"] & I["vol_surge"],
         "추세골든+거래대금":    lambda I: I["ev"]["trend"] & I["vol_surge"],

@@ -82,6 +82,11 @@ jobs:
           echo "value=$want" >> "$GITHUB_OUTPUT"
           echo "실행 모드: $want ($(TZ=Asia/Seoul date '+%m-%d %a'))"
 
+      # RSI 산식·이벤트 검산(네트워크 불필요). 깨지면 잘못된 신호가 나가기 전에 멈춘다.
+      - name: 신호 산식 테스트
+        working-directory: etf_signal
+        run: python -m unittest discover -s tests -p "test_*.py"
+
       - name: 55개 ETF 스캔
         if: steps.mode.outputs.value != 'weekly'
         working-directory: etf_signal
