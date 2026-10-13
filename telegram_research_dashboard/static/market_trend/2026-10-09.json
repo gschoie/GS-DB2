@@ -1,0 +1,680 @@
+{
+ "date": "2026-10-09",
+ "meta": {
+  "window": "10-08 06:00~10-09 06:00 KST",
+  "engine": "Gemini(gemini-2.5-flash)",
+  "generated_at": "2026-10-09T06:35+09:00"
+ },
+ "stats": {
+  "channels": 95,
+  "messages": 1838,
+  "groups": 1760
+ },
+ "one_liner": "글로벌 금리 및 유가 상승, AI 매출 우려로 시장 변동성 확대 속 LG에너지솔루션 호실적, 바이오 섹터는 희비 교차.",
+ "themes": [
+  {
+   "name": "LG에너지솔루션 - 예상치 상회하는 실적 발표",
+   "narrative": "LG에너지솔루션이 3분기 잠정 실적 발표에서 시장 예상치를 크게 웃도는 매출액과 영업이익을 기록하며 배터리 섹터에 긍정적인 신호를 보냈다. 특히 영업이익은 예상치 대비 136% 증가하며 시장의 주목을 받았다.",
+   "status": "new",
+   "strength": 5,
+   "keywords": [
+    "LG 에너지솔루션",
+    "에너지솔루션",
+    "발표할"
+   ],
+   "evidence": [
+    {
+     "channel": "AWAKE - 실시간 주식 공시 정리채널",
+     "quote": "기업명: LG에너지솔루션(시가총액: 91조 4,940억) A373220 보고서명: 연결재무제표기준영업(잠정)실적(공정공시) 매출액 : 96,434억(예상치 : 87,815억+/ 10%) 영업익 : 7,560억(예상치 : 3,200억/ +136%)"
+    },
+    {
+     "channel": "서화백의 AI놀이🚀",
+     "quote": "📈 LG에너지솔루션 (+80)"
+    }
+   ]
+  },
+  {
+   "name": "바이오 섹터 - 특허 소송 및 신약 승인으로 희비 교차",
+   "narrative": "바이오 섹터에서는 알테오젠이 네덜란드 법원의 특허 침해 판결로 불확실성이 커졌고, 펩트론은 일라이 릴리와의 후속 계약 불발 소식에 주가가 급락했다. 반면 한미약품은 국산 GLP-1 비만치료제 '에페'의 식약처 품목허가 소식으로 긍정적인 모멘텀을 얻었다.",
+   "status": "new",
+   "strength": 4,
+   "keywords": [
+    "펩트론",
+    "알테오젠",
+    "한미약품",
+    "네덜란드",
+    "법원",
+    "SC"
+   ],
+   "evidence": [
+    {
+     "channel": "텐렙",
+     "quote": "[알테오젠 네덜란드 판결 코멘트] ...영국에서 취소 결론난 EP622 특허를 네덜란드에서는 침해한다는 이례적 판결."
+    },
+    {
+     "channel": "허혜민의 제약/바이오 소식통",
+     "quote": "▶ 펩트론, 릴리 기술평가 종료…'후속 계약 미정, 협력 가능성 종료 아냐'"
+    },
+    {
+     "channel": "유안타증권 리서치센터",
+     "quote": "국산 GLP-1 비만약 드디어 나왔다, 한미약품 '에페' 허가받아"
+    }
+   ]
+  },
+  {
+   "name": "글로벌 시장 - 금리, 유가, AI 우려로 변동성 심화",
+   "narrative": "미국 국채금리 급등과 국제유가 강세가 글로벌 증시 전반에 하방 압력을 가하며 변동성이 확대되었다. 특히 OpenAI의 연환산 매출이 예상보다 낮다는 보도가 전해지면서 반도체 및 AI 인프라 관련주의 하락을 부추기며 시장의 혼조세가 지속되고 있다.",
+   "status": "ongoing",
+   "strength": 5,
+   "keywords": [
+    "변동성 주의",
+    "혼조세 지속",
+    "년물 입찰",
+    "연환산",
+    "순손실"
+   ],
+   "evidence": [
+    {
+     "channel": "서화백의 AI놀이🚀",
+     "quote": "미국 국채금리 상승과 국제유가 강세로 인해 시장 전반의 하방 압력이 작용하며 주요 지수가 하락했으나..."
+    },
+    {
+     "channel": "사제콩이_서상영",
+     "quote": "미 증시는 국제유가가 5% 넘게 급등하고 10년물 국채금리가 장중 5.35%를 넘어서는 등 금리 상승 부담이 확대되자 하락 출발."
+    },
+    {
+     "channel": "사제콩이_서상영",
+     "quote": "이런 가운데 미국 증시는 OpenAI의 연환산 매출이 기존 시장 추정치인 700억 달러보다 200억 달러 적은 500억 달러라는 FT 보도가 전해지자 반도체와 AI 인프라 관련주 중심으로 하락 확대."
+    }
+   ]
+  },
+  {
+   "name": "AI/SW - 팔란티어 투자의견 상향 및 정부 지원 계획",
+   "narrative": "AI 섹터에서는 팔란티어 테크놀로지스가 골드만삭스의 투자의견 상향으로 주목받았으며, 앤트로픽은 코딩 작업에 특화된 'Claude Haiku 5.5'를 출시했다. 미국 정부 또한 AI 기업 지원 및 컴퓨팅 허브 구축 계획을 발표하며 AI 산업 성장에 대한 기대감을 높였다.",
+   "status": "ongoing",
+   "strength": 3,
+   "keywords": [
+    "테크놀로지스",
+    "Claude",
+    "발표할"
+   ],
+   "evidence": [
+    {
+     "channel": "미국 주식 인사이더 🇺🇸 (US Stocks Insider)",
+     "quote": "• 팔란티어 테크놀로지스 (PLTR) — 골드만삭스가 투자의견을 ‘Buy’로 상향하고 목표주가 230달러를 제시."
+    },
+    {
+     "channel": "미국 주식 인사이더 🇺🇸 (US Stocks Insider)",
+     "quote": "• 미국 정부는 AI 기업들이 10억 달러 이상의 컴퓨팅 크레딧을 제공하는 방안을 발표할 예정이라고 워싱턴포스트가 보도."
+    },
+    {
+     "channel": "[삼성 이영진] 글로벌 AI/SW",
+     "quote": "앤스로픽, Claude Haiku 5.5 출시 - 남은 것은 Fable 5.5"
+    }
+   ]
+  },
+  {
+   "name": "기업 구조조정 및 비용 절감 노력",
+   "narrative": "여러 기업들이 비용 절감과 사업 재편을 통해 수익성 개선을 모색하고 있다. 스포츠카 제조업체는 신임 CEO 주도로 '스포츠카 대장간 35' 전략을 통해 비용 절감을 발표했으며, 미국 호텔 리츠는 자산 매각 및 분리를 통해 연간 2500만 달러 이상의 비용 절감을 기대하고 있다.",
+   "status": "new",
+   "strength": 2,
+   "keywords": [
+    "비용 절감",
+    "호텔"
+   ],
+   "evidence": [
+    {
+     "channel": "신한 리서치",
+     "quote": ": 마이클 라이터스 신임 CEO가 자본시장의 날에서 비용 절감과 라인업 재편을 골자로 한 '스포츠카 대장간 35' 전략을 발표"
+    },
+    {
+     "channel": "키움증권 해외선물 톡톡",
+     "quote": "자산 매각·리파이낸싱으로 애쉬포드와 11월 중순 분리 예정…연간 2500만 달러 이상 비용 절감 기대 미국 부동산투자신탁(REITs) 브레이마 호텔스 앤드 리조츠(Braemar Hotels & Resorts, NYSE:BHR)가 2027년 연간 실적 가이던스와 자체 관리형 리츠 전환 계획을 담은 포트폴리오 현황을 8일(현…"
+    }
+   ]
+  },
+  {
+   "name": "조선 - HD현대마린엔진, 중국향 수주 폭발 기대",
+   "narrative": "조선 섹터에서는 HD현대마린엔진이 중국향 수주 폭발과 함께 3분기 증익이 예상되며, 저평가된 주가와 멀티플에 대한 재평가 기대감이 부각되고 있다. 이는 전반적인 조선 산업의 긍정적 흐름을 반영하는 것으로 보인다.",
+   "status": "ongoing",
+   "strength": 3,
+   "keywords": [
+    "한화엔진"
+   ],
+   "evidence": [
+    {
+     "channel": "DAOL 조선/기계/방산 | 최광식",
+     "quote": "🔩 #HD현대마린엔진 「중국향 수주 폭발인데! PER 6배대로?」 ☞ https://bit.ly/HME3Q26PRE ▶️ Issue: 3Q26 증익 프리뷰. 억울한 주가와 멀티플(2028 PER 6.5배), 선호주 견지"
+    },
+    {
+     "channel": "다올투자증권 리서치센터",
+     "quote": "[다올투자증권 조선/기계/방산 최광식] 10/8(목) 데일리뉴스 🛳 조선 [TradeWinds] Chinese auto giants line up $2.5bn haul to drive car carrier orders to new record ‘Do I take my gazillion a day?’: Sinokor and…"
+    }
+   ]
+  }
+ ],
+ "community_mood": {
+  "score": -75,
+  "summary": "개미 투자자들 사이에서는 반도체 및 AI 버블에 대한 고점 인식과 함께 삼성전자 실적 하회에 대한 불만이 팽배하다. 국채금리 상승과 유가 불안정으로 인한 시장 전반의 하방 압력에 대한 공포감이 극심하며, 추가적인 하락을 우려하는 분위기가 지배적이다.",
+  "hot_stocks": [
+   {
+    "name": "삼성전자",
+    "score": -80,
+    "reason": "실적 하회 논란과 반도체 고점 우려로 인한 주주들의 불만과 비판이 높음."
+   },
+   {
+    "name": "SK하이닉스",
+    "score": -70,
+    "reason": "삼성전자와 함께 반도체 섹터의 고점 우려와 실적 부진에 대한 비판적 시각이 존재."
+   }
+  ]
+ },
+ "signals": {
+  "spikes": [
+   {
+    "term": "LG 에너지솔루션",
+    "count": 42,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "에너지솔루션",
+    "count": 42,
+    "burst": 70.74136363636364,
+    "base_daily": 0.3,
+    "new": false
+   },
+   {
+    "term": "펩트론",
+    "count": 20,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "비용 절감",
+    "count": 18,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "알테오젠",
+    "count": 18,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "발표할",
+    "count": 18,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "변동성 주의",
+    "count": 18,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "한미약품",
+    "count": 17,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "테크놀로지스",
+    "count": 17,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "연환산",
+    "count": 17,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "SC",
+    "count": 16,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "한화엔진",
+    "count": 16,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "네덜란드",
+    "count": 16,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "법원",
+    "count": 16,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "호텔",
+    "count": 16,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "매장",
+    "count": 16,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "혼조세 지속",
+    "count": 16,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "진입 기회",
+    "count": 16,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "년물 입찰",
+    "count": 15,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "Claude",
+    "count": 15,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "이익률",
+    "count": 15,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "원에서",
+    "count": 15,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "표시",
+    "count": 15,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "답변",
+    "count": 15,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "순손실",
+    "count": 15,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   }
+  ],
+  "top_posts": [
+   {
+    "channels": 5,
+    "channel": "AWAKE - 실시간 주식 공시 정리채널",
+    "head": "2026.10.08 07:44:36 기업명: 삼성전자(시가총액: 1,572조 6,489억) A005930 보고서명: 연결재무제표기준영업(잠정)실적(공정공시) 매출액 : 1,950,000억(예상치 : 2,008,422억/ -3%) 영업익 : 1,074,000억(예상치 : 1,067,467억/ +1%) 순이익 : -(예상치…",
+    "url": "https://t.me/darthacking/154395",
+    "time_kst": "10-08 07:44"
+   },
+   {
+    "channels": 5,
+    "channel": "AWAKE - 실시간 주식 공시 정리채널",
+    "head": "2026.10.08 08:34:49 기업명: LG에너지솔루션(시가총액: 91조 4,940억) A373220 보고서명: 연결재무제표기준영업(잠정)실적(공정공시) 매출액 : 96,434억(예상치 : 87,815억+/ 10%) 영업익 : 7,560억(예상치 : 3,200억/ +136%) 순이익 : -(예상치 : 2,344억)…",
+    "url": "https://t.me/darthacking/154398",
+    "time_kst": "10-08 08:34"
+   },
+   {
+    "channels": 4,
+    "channel": "텐렙",
+    "head": "[알테오젠 네덜란드 판결 코멘트] 미국은 특허심판원이 특허 무효 판결 결론, 영국은 구체적 침해 근거 자료 요청했으나 할로자임이 자료 제출 포기해 EP622 특허가 아예 취소된 상황 그런데 영국에서 취소 결론난 EP622 특허를 네덜란드에서는 침해한다는 이례적 판결. 네덜란드는 영국과 달리 구체적 침해 근거 제시가 제외된…",
+    "url": "https://t.me/Ten_level/92807",
+    "time_kst": "10-08 07:21"
+   },
+   {
+    "channels": 3,
+    "channel": "키움증권 전략/시황 한지영",
+    "head": "[10/8, 장 시작 전 생각: 삼성전자 실적 이후, 키움 한지영] - 다우 -0.2%, S&P500 -0.2%, 나스닥 -0.7% - 마이크론 +4.1%, 샌디스크 +1.9%, 엔비디아 -0.8% - 미 10년물 금리 5.29%, 30년물 금리 5.67%, WTI 89.0달러 1. 미국 증시는 장중 낙폭을 축소했던 하루…",
+    "url": "https://t.me/hedgecat0301/2959",
+    "time_kst": "10-08 07:47"
+   },
+   {
+    "channels": 3,
+    "channel": "다올투자증권 리서치센터",
+    "head": "[다올투자증권 조선/기계/방산 최광식] 10/8(목) 데일리뉴스 🛳 조선 [TradeWinds] Chinese auto giants line up $2.5bn haul to drive car carrier orders to new record ‘Do I take my gazillion a day?’: Sinokor and…",
+    "url": "https://t.me/daolresearch/15191",
+    "time_kst": "10-08 09:04"
+   },
+   {
+    "channels": 3,
+    "channel": "DAOL 조선/기계/방산 | 최광식",
+    "head": "🔩 #HD현대마린엔진 「중국향 수주 폭발인데! PER 6배대로?」 ☞ https://bit.ly/HME3Q26PRE ▶️ Issue: 3Q26 증익 프리뷰. 억울한 주가와 멀티플(2028 PER 6.5배), 선호주 견지 ▶️ Pitch: > 환율 하락에도 엔진 납품 증가와 빈티지 효과로 3Q26 증익 > 적정주가를 괴리율…",
+    "url": "https://t.me/HI_GS/7191",
+    "time_kst": "10-08 07:33"
+   },
+   {
+    "channels": 2,
+    "channel": "서화백의 AI놀이🚀",
+    "head": "📝 텔레그램 심층 분석 Report (07시 07분) 기준 🌡️ 센티먼트 관망 (-20) 💡 요약 미국 국채금리 상승과 국제유가 강세로 인해 시장 전반의 하방 압력이 작용하며 주요 지수가 하락했으나, AI 기술의 지속적인 발전과 일부 반도체 종목의 긍정적 전망이 낙폭을 제한했습니다. 🗣️ Top 키워드: AI(105),…",
+    "url": "https://t.me/easobi_ai/22155",
+    "time_kst": "10-08 07:07"
+   },
+   {
+    "channels": 2,
+    "channel": "허혜민의 제약/바이오 소식통",
+    "head": "26/10/08 (목) 키움 제약바이오 데일리 💊 [제약/바이오 Analyst 허혜민, RA 김종현] 키움 제약/바이오/의료기기 소식통: t.me/huhpharm <‍📈 주요 지수 등락> * 코스피 -1.98% vs 코스피 제약 -0.79% * 코스닥 -2.34% vs 코스닥 제약 +0.33% * S&P500 -0.22%…",
+    "url": "https://t.me/huhpharm/11846",
+    "time_kst": "10-08 07:40"
+   },
+   {
+    "channels": 2,
+    "channel": "서화백의 그림놀이 🚀",
+    "head": "📝 텔레그램 심층 분석 Report (23시 05분) 기준 🌡️ 센티먼트 공포 (-80) 💡 요약 미국 국채금리 급등 및 유가 불안정으로 글로벌 증시 전반에 하방 압력이 가중되고 있으며, AI 데이터센터 전력 부족, 지정학적 리스크, 그리고 연준의 추가 금리 인상 시사 발언이 투자 심리를 크게 위축시키고 있습니다. 🗣️…",
+    "url": "https://t.me/easobi/16915",
+    "time_kst": "10-08 23:05"
+   },
+   {
+    "channels": 2,
+    "channel": "서화백의 AI놀이🚀",
+    "head": "📝 텔레그램 심층 분석 Report (19시 08분) 기준 🌡️ 센티먼트 관망 (-20) 💡 요약 주요 기업의 호실적 발표에도 불구하고 코스피 지수가 하락하고 금리 인상 및 에너지 가격 상승 등 거시 경제 지표에 대한 우려가 커지며 시장 전반의 조정 압력이 심화되고 있습니다. AI, 반도체 등 일부 성장 산업은 긍정적 전…",
+    "url": "https://t.me/easobi_ai/22309",
+    "time_kst": "10-08 19:08"
+   },
+   {
+    "channels": 2,
+    "channel": "키움증권 미국주식 톡톡",
+    "head": "[키움 미국전략/주식 김승혁] 🌏US Daily (10/8) (10/7 종가기준) - 주요 지수 수익률 S&P500 7,801.77 / -0.22% NASDAQ 종합 27,538.69 / -0.22% 다우산업 51,179.87 / -0.66% 러셀2000 2,793.20 / -1.31% 필라델피아 반도체 13,066.15…",
+    "url": "https://t.me/kwusa/61085",
+    "time_kst": "10-08 08:06"
+   },
+   {
+    "channels": 2,
+    "channel": "서화백의 AI놀이🚀",
+    "head": "2026년 10월 7일 글로벌 마감 시황 브리핑 📈📉 2026년 10월 7일 수요일 미국 증시는 장중 큰 폭의 하락세를 기록했으나, 장 후반 메가캡 및 기술주 중심의 회복세와 국채 금리 하락에 힘입어 주요 지수 대부분 낙폭을 상당 부분 만회하며 마감했습니다. 다우존스 산업평균지수는 341.11포인트(0.66%) 하락한 5…",
+    "url": "https://t.me/easobi_ai/22152",
+    "time_kst": "10-08 06:33"
+   },
+   {
+    "channels": 2,
+    "channel": "허혜민의 제약/바이오 소식통",
+    "head": "안녕하세요, 알테오젠입니다. 최근 이슈에 대한 설명문 공유드립니다. 키트루다 SC 관련 최근 특허 소송 및 사업 영향에 대한 설명 주주 여러분께서 보내주신 변함없는 신뢰와 성원에 깊이 감사드립니다. 최근 키트루다 SC의 유럽 내 판매와 관련한 특허 소송 결과에 대해 주주 여러분의 우려가 있을 수 있어, 현재까지 확인된 내…",
+    "url": "https://t.me/huhpharm/11847",
+    "time_kst": "10-08 09:28"
+   },
+   {
+    "channels": 2,
+    "channel": "[신한 리서치본부] IT(반도체/전기전자/디스플레이)",
+    "head": "[신한투자증권 IT팀 오강호, 김형태, 박현우, 송혜수, 김예성] 10/8(목) 🕗Daily IT 예습하기 ✅ 반도체/장비 ▶️ 삼성 'HBM4E', 엔비디아 문턱 넘었다…주요 고객사 품질테스트 통과 (서울경제) https://alie.kr/AF3BTdv ▶️ SK하이닉스 솔리다임, 대만 신설 데이터센터 SSD 사이트 주…",
+    "url": "https://t.me/c/1355104422/7410",
+    "time_kst": "10-08 07:43"
+   },
+   {
+    "channels": 2,
+    "channel": "서화백의 AI놀이🚀",
+    "head": "📝 텔레그램 심층 분석 Report (11시 08분) 기준 🌡️ 센티먼트 기대 (+30) 💡 요약 반도체, AI, 배터리 등 주요 성장 산업의 긍정적 실적과 투자 확대 소식이 시장 전반의 기대감을 높이고 있으나, 바이오 섹터의 지속적인 부진과 글로벌 금리 인상 및 지정학적 리스크가 국내 증시의 상승을 제한하고 있습니다.…",
+    "url": "https://t.me/easobi_ai/22204",
+    "time_kst": "10-08 11:08"
+   }
+  ]
+ },
+ "community_dc": {
+  "source": "DC인사이드",
+  "galleries": [
+   {
+    "id": "krstock",
+    "name": "국내주식갤러리",
+    "posts": 1915,
+    "capped": true,
+    "burst": 1.5,
+    "base_daily": 1251.0
+   },
+   {
+    "id": "stockus",
+    "name": "해외주식갤러리",
+    "posts": 3767,
+    "capped": true,
+    "burst": 1.5,
+    "base_daily": 2452.1
+   }
+  ],
+  "posts_sampled": 561,
+  "keywords": [
+   {
+    "term": "오픈",
+    "count": 10,
+    "burst": 99.0,
+    "new": true
+   },
+   {
+    "term": "존야",
+    "count": 7,
+    "burst": 96.5,
+    "new": true
+   },
+   {
+    "term": "애플",
+    "count": 7,
+    "burst": 96.5,
+    "new": true
+   },
+   {
+    "term": "코루",
+    "count": 7,
+    "burst": 96.5,
+    "new": true
+   },
+   {
+    "term": "이렇게",
+    "count": 6,
+    "burst": 82.7,
+    "new": true
+   },
+   {
+    "term": "솔직히",
+    "count": 6,
+    "burst": 82.7,
+    "new": true
+   },
+   {
+    "term": "인데",
+    "count": 5,
+    "burst": 68.9,
+    "new": true
+   },
+   {
+    "term": "드디어",
+    "count": 5,
+    "burst": 68.9,
+    "new": true
+   },
+   {
+    "term": "채권",
+    "count": 5,
+    "burst": 68.9,
+    "new": true
+   },
+   {
+    "term": "ai",
+    "count": 19,
+    "burst": 9.7,
+    "new": false
+   },
+   {
+    "term": "트럼프",
+    "count": 8,
+    "burst": 10.0,
+    "new": false
+   },
+   {
+    "term": "AI",
+    "count": 13,
+    "burst": 6.6,
+    "new": false
+   },
+   {
+    "term": "그래",
+    "count": 8,
+    "burst": 8.5,
+    "new": false
+   },
+   {
+    "term": "지금",
+    "count": 15,
+    "burst": 5.0,
+    "new": false
+   },
+   {
+    "term": "미장",
+    "count": 9,
+    "burst": 6.5,
+    "new": false
+   }
+  ],
+  "top_recommended": [
+   {
+    "gallery": "해외주식갤러리",
+    "title": "이새끼 오늘밤 심장마비로 뒤지기 바라면 개추.jpg",
+    "views": 8747,
+    "recommend": 240,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=17932716&exception_mode=recommend&page=1",
+    "time_kst": "10-08 17:52"
+   },
+   {
+    "gallery": "해외주식갤러리",
+    "title": "삼닉 주주 현재 상황ㅋㅋㅋㅋㅋ",
+    "views": 11952,
+    "recommend": 190,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=17929640&exception_mode=recommend&page=1",
+    "time_kst": "10-08 09:05"
+   },
+   {
+    "gallery": "해외주식갤러리",
+    "title": "삼하닉 성과급 압수해야되면 개추",
+    "views": 2795,
+    "recommend": 119,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=17937179&exception_mode=recommend&page=1",
+    "time_kst": "10-09 02:24"
+   },
+   {
+    "gallery": "국내주식갤러리",
+    "title": "근데 씨발 예상 하회가 왜 기업이 못한거임?",
+    "views": 6968,
+    "recommend": 112,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3605011&exception_mode=recommend&page=1",
+    "time_kst": "10-08 08:06"
+   },
+   {
+    "gallery": "해외주식갤러리",
+    "title": "삼전 실적 하회 맞는데 말이많노 ㅋㅋ",
+    "views": 7868,
+    "recommend": 111,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=17929594&exception_mode=recommend&page=1",
+    "time_kst": "10-08 08:55"
+   }
+  ],
+  "top_viewed": [
+   {
+    "gallery": "국내주식갤러리",
+    "title": "딱 이때가 반도체 고점 신호였음....",
+    "views": 578,
+    "recommend": 0,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3612614&page=2",
+    "time_kst": "10-09 04:17"
+   },
+   {
+    "gallery": "국내주식갤러리",
+    "title": "결국엔 장투하는 사람이 승리함",
+    "views": 483,
+    "recommend": 0,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3612601&page=2",
+    "time_kst": "10-09 03:53"
+   },
+   {
+    "gallery": "국내주식갤러리",
+    "title": "2시에 뭔일이 있었던거냐????",
+    "views": 448,
+    "recommend": 0,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3612624&page=2",
+    "time_kst": "10-09 04:43"
+   },
+   {
+    "gallery": "국내주식갤러리",
+    "title": "월요일엔 국장 조기폐장까지도 볼수있을듯?",
+    "views": 442,
+    "recommend": 1,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3612598&page=2",
+    "time_kst": "10-09 03:51"
+   },
+   {
+    "gallery": "국내주식갤러리",
+    "title": "7월보다 더 느낌이 안좋은데",
+    "views": 434,
+    "recommend": 0,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3612617&page=2",
+    "time_kst": "10-09 04:21"
+   },
+   {
+    "gallery": "해외주식갤러리",
+    "title": "[속보] AI 버블 간단하게 설명해줌",
+    "views": 378,
+    "recommend": 3,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=17938460&page=4",
+    "time_kst": "10-09 05:13"
+   },
+   {
+    "gallery": "국내주식갤러리",
+    "title": "7월 폭락장이랑 느낌이 많이 다르제?",
+    "views": 374,
+    "recommend": 1,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3612670&page=1",
+    "time_kst": "10-09 05:53"
+   },
+   {
+    "gallery": "해외주식갤러리",
+    "title": "딱 이때가 반도체 고점 신호였음....",
+    "views": 362,
+    "recommend": 3,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=17938273&page=7",
+    "time_kst": "10-09 04:16"
+   }
+  ]
+ }
+}

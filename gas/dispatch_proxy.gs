@@ -35,6 +35,7 @@ const WF = {
   trend:     'market-trend.yml',       // 시장관심.내러티브 (구독 채널 트렌드)
   etf:       'etf-signal.yml',         // ETF/섹터 신호
   holdings:  'etf-holdings.yml',       // 액티브 ETF 구성 변화
+  macro:     'macro-desk.yml',         // 매크로 데스크(금리·환율·발표일정)
   valuation: 'valuation.yml',          // 밸류에이션 PER·PBR·ROE·PSR (야후 수집)
   dart:      'dart-shiporder-bot.yml', // 조선 수주공시 → 텔레그램 (입력 필요)
   recipe:    'recipe-bot.yml',         // 유튜브 요리 숏츠 → Notion 레시피 (입력 필요)
@@ -203,6 +204,8 @@ const SCHEDULE = [
   { wf: 'flow',      hours: [16],     minute: 40, days: 'weekday', label: '시장 수급(확정)' },
   { wf: 'holdings',  hours: [9, 10, 11, 12, 13, 14, 15, 16],   // 장중~마감 직후까지만
                      minute: 17, days: 'weekday', label: '액티브ETF 매매동향',
+                     inputs: { via: 'scheduler' } },
+  { wf: 'macro',     hours: [21],     minute: 0,  days: 'daily',   label: '매크로 데스크',
                      inputs: { via: 'scheduler' } },
   { wf: 'consensus', hours: [17],     minute: 0,  days: 'fri,sat', label: '코스피200 컨센' },
   // 스크립트 자체에 '오늘 이미 발송' 가드가 있어 GitHub 크론 안전망과 겹쳐도 한 통만 간다

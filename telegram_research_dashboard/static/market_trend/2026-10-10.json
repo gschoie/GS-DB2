@@ -1,0 +1,614 @@
+{
+ "date": "2026-10-10",
+ "meta": {
+  "window": "10-09 06:00~10-10 06:00 KST",
+  "engine": "Gemini(gemini-2.5-flash)",
+  "generated_at": "2026-10-10T06:35+09:00"
+ },
+ "stats": {
+  "channels": 44,
+  "messages": 793,
+  "groups": 767
+ },
+ "one_liner": "AI/반도체 섹터의 실망감과 지정학적 긴장 완화 기대가 교차하며 시장의 변동성이 확대되는 모습입니다.",
+ "themes": [
+  {
+   "name": "AI/반도체 투자 심리 위축",
+   "narrative": "오픈AI의 연환산 매출이 기존 기대치보다 낮다는 보도가 나오면서 AI 기술주 전반에 대한 수요 낙관론이 위축되고, 엔비디아 등 주요 반도체 종목들이 동반 하락하며 AI 수익성에 대한 의문이 재점화되었습니다.",
+   "status": "new",
+   "strength": 5,
+   "keywords": [
+    "AI 연환산",
+    "있으나 조정",
+    "반도체"
+   ],
+   "evidence": [
+    {
+     "channel": "서화백의 AI놀이🚀",
+     "quote": "9월 연환산 순매출 500억 달러로 수정 (기존 700억 달러 기대치보다 낮음)으로 인한 AI 수요 낙관론 위축, 매출 논란으로 인한 AI 관련주 전반적인 하락 영향, AI 수익성 의문 재점화"
+    },
+    {
+     "channel": "epic AI - 투자 어시스턴트",
+     "quote": "파이낸셜타임스(FT)가 오픈AI의 9월 말 기준 연환산 매출이 약 500억 달러로, 투자자들에게 제시된 700억 달러보다 200억 달러 적다고 보도하면서 엔비디아(-2.94%), 브로드컴(-4.35%), 마이크론테크놀로지(-4.79%), AMD(-3.90%), SK하이닉스 ADR(-4.35%) 등 주요 반도체 종목이 동반…"
+    },
+    {
+     "channel": "사제콩이_서상영",
+     "quote": "이런 가운데 금요일 아시아 증시는 미국 증시에서 OpenAI 매출 이슈로 AI, 반도체 업종 급락 여파로 하락 출발했지만 장중 낙폭을 축소하거나 상승 전환하는 등 견조한 모습."
+    }
+   ]
+  },
+  {
+   "name": "지정학적 긴장 완화 기대",
+   "narrative": "트럼프 전 대통령이 미국 중간선거 이전에는 이란을 공격하지 않겠다고 밝히면서 중동발 지정학적 긴장감이 완화되고 국제유가 급등세가 진정되는 긍정적인 영향을 미쳤습니다.",
+   "status": "new",
+   "strength": 4,
+   "keywords": [
+    "공격하지",
+    "이란 공격하지",
+    "푸틴",
+    "경유"
+   ],
+   "evidence": [
+    {
+     "channel": "우주방산AI로봇 아카이브",
+     "quote": "트럼프 대통령이 이란과 '생산적인 논의'가 진행 중이라며 11월 3일 미국 중간선거 이전에는 이란을 공격하지 않겠다고 밝혔습니다."
+    },
+    {
+     "channel": "사제콩이_서상영",
+     "quote": "특히 트럼프 대통령이 중간선거 이전에는 이란을 공격하지 않겠다고 언급하면서 국제유가의 급등세가 진정된 점이 긍정적."
+    },
+    {
+     "channel": "키움증권 해외선물 톡톡",
+     "quote": "- 트럼프, 이란 공격 유예·러 경유 공급 합의 발표"
+    }
+   ]
+  },
+  {
+   "name": "중국 배터리 섹터 강세",
+   "narrative": "중국 배터리 관련주들이 2거래일 연속 강세를 보이며 Tinci Materials가 상한가를 기록하는 등 주요 종목들의 상승폭이 확대되었습니다.",
+   "status": "ongoing",
+   "strength": 3,
+   "keywords": [
+    "중국 배터리 관련주"
+   ],
+   "evidence": [
+    {
+     "channel": "하나 중국/신흥국 전략 김경환",
+     "quote": "•중국 배터리 관련주 2거래일 연속 강세 •Tinci Materials(天赐材料) 상한가. Shida Shenghua(石大胜华), Tianli Lithium Energy(天力锂能), Defang Nano(德方纳米), CATL 등도 일제히 상승폭을 확대"
+    }
+   ]
+  },
+  {
+   "name": "애플 아이폰 수요 부진 우려",
+   "narrative": "애플이 신형 아이폰 18 프로 및 프로 맥스의 수요 부진을 이유로 부품 주문을 당초 계획보다 15~20% 줄였다는 소식이 전해지며 프리미엄 모델 판매에 대한 우려가 제기되었습니다.",
+   "status": "new",
+   "strength": 3,
+   "keywords": [
+    "애플",
+    "아이폰"
+   ],
+   "evidence": [
+    {
+     "channel": "TNBfolio",
+     "quote": "속보: 애플이 수요 부진을 이유로 신형 아이폰 18 프로와 프로 맥스의 부품 주문을 줄이고 있다. 복수의 공급망 소식통에 따르면, 10월 두 프리미엄 모델의 부품 주문은 당초 요청 대비 15~20% 감소했다."
+    }
+   ]
+  },
+  {
+   "name": "한-미 반도체 증시 괴리 심화",
+   "narrative": "한국 코스피 지수가 주요 지지선을 하향 이탈하며 하락세를 보이는 가운데, 미국 필라델피아 반도체 지수(SOX)와 단기적으로 큰 괴리를 보이고 있어 투자자들의 주목을 받고 있습니다.",
+   "status": "ongoing",
+   "strength": 3,
+   "keywords": [
+    "SOX",
+    "한국 증시",
+    "반도체"
+   ],
+   "evidence": [
+    {
+     "channel": "하나 중국/신흥국 전략 김경환",
+     "quote": ">>SOX vs 한국 증시: 누가 틀렸나? •한국 코스피지수가 최근 주요 지지선을 하향 이탈하며 하락한 가운데, 미국 필라델피아 반도체지수(SOX)와 단기적으로 큰 괴리를 보이고 있음. 특히 최근 투자자들이 SOX 관련 자산을 대거 매수했다는 점에 주목할 필요가 있음"
+    }
+   ]
+  }
+ ],
+ "community_mood": {
+  "score": -75,
+  "summary": "개인 투자자들은 전반적인 시장 하락세, 특히 AI 및 반도체 섹터의 부진에 대해 강한 우려와 불만을 표출하고 있으며, 건강한 조정이라는 의견에 대해 회의적인 시각을 보이고 있습니다.",
+  "hot_stocks": [
+   {
+    "name": "모더나",
+    "score": -80,
+    "reason": "모더나 투자자들에 대한 비난과 조롱이 나타나면서 부정적인 정서가 강합니다."
+   },
+   {
+    "name": "삼성전자",
+    "score": -70,
+    "reason": "삼성전자와 SK하이닉스 주가 하락에 대한 우려와 매수 시점에 대한 고민이 나타납니다."
+   },
+   {
+    "name": "SK하이닉스",
+    "score": -70,
+    "reason": "SK하이닉스의 외국인 매도세와 주가 하락에 대한 불만이 높으며, 장기 투자에 대한 회의적인 시각이 보입니다."
+   },
+   {
+    "name": "나스닥",
+    "score": -60,
+    "reason": "나스닥 장기 투자에 대한 부정적인 전망과 함께 하락장에 대한 우려가 확산되고 있습니다."
+   }
+  ]
+ },
+ "signals": {
+  "spikes": [
+   {
+    "term": "비율 하락세",
+    "count": 22,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "RSI 중립",
+    "count": 20,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "주파수",
+    "count": 19,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "존재할",
+    "count": 18,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "유지된다면",
+    "count": 18,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "Agreement",
+    "count": 17,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "공격하지",
+    "count": 16,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "이란 공격하지",
+    "count": 16,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "푸틴",
+    "count": 15,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "AT&T",
+    "count": 15,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "조항",
+    "count": 15,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "비율 양호하나",
+    "count": 14,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "양호하나",
+    "count": 14,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "클래스 보통주",
+    "count": 14,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "있으나 조정",
+    "count": 14,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "적절한 조건",
+    "count": 14,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "필요함",
+    "count": 14,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "설정되어",
+    "count": 14,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "AI 연환산",
+    "count": 13,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "등급",
+    "count": 13,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "뉴욕주",
+    "count": 13,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "약해질",
+    "count": 13,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "공모",
+    "count": 13,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "신호 있으나",
+    "count": 13,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "위해서 거래량",
+    "count": 13,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   }
+  ],
+  "top_posts": [
+   {
+    "channels": 3,
+    "channel": "하나 중국/신흥국 전략 김경환",
+    "head": "•중국 배터리 관련주 2거래일 연속 강세 •Tinci Materials(天赐材料) 상한가. Shida Shenghua(石大胜华), Tianli Lithium Energy(天力锂能), Defang Nano(德方纳米), CATL 등도 일제히 상승폭을 확대 >【电池板块再度拉升，天赐材料涨停】电池板块再度拉升，天赐材料涨停，石大胜华、…",
+    "url": "https://t.me/HANAchina/70120",
+    "time_kst": "10-09 12:48"
+   },
+   {
+    "channels": 2,
+    "channel": "서화백의 AI놀이🚀",
+    "head": "📝 텔레그램 심층 분석 Report (11시 07분) 기준 🌡️ 센티먼트 관망/경계 (-45) 💡 요약 AI 기술주의 성장 기대감과 OpenAI 매출 논란에 따른 실망감이 혼재하며 전반적인 시장은 매크로 불확실성(미국 재정적자, 고금리, 유가 급등)으로 경계심이 높습니다. 🗣️ Top 키워드: OpenAI(20), AI(…",
+    "url": "https://t.me/easobi_ai/22378",
+    "time_kst": "10-09 11:07"
+   },
+   {
+    "channels": 2,
+    "channel": "서화백의 그림놀이 🚀",
+    "head": "📝 텔레그램 심층 분석 Report (19시 07분) 기준 🌡️ 센티먼트 환호 (+60) 💡 요약 AI 및 반도체 섹터의 강한 성장 기대감과 주요 기업들의 구체적인 계약 및 투자 소식이 시장 전반에 긍정적인 분위기를 조성하고 있습니다. 다만, 일부 글로벌 기업의 실적 부진과 가상자산 시장의 변동성, 거시 경제의 불확실성이…",
+    "url": "https://t.me/easobi/16918",
+    "time_kst": "10-09 19:07"
+   },
+   {
+    "channels": 2,
+    "channel": "서화백의 그림놀이 🚀",
+    "head": "📝 텔레그램 심층 분석 Report (07시 07분) 기준 🌡️ 센티먼트 우려 (-15) 💡 요약 AI 투자 수익성 우려와 국제유가 상승 압력으로 기술주와 반도체가 하락세를 보였으나, 일부 금리 안정화 시그널도 감지되며 혼조세를 나타냈습니다. 🗣️ Top 키워드: AI(13), 반도체(11), 유가(10), 금리(8),…",
+    "url": "https://t.me/easobi/16916",
+    "time_kst": "10-09 07:07"
+   },
+   {
+    "channels": 2,
+    "channel": "서화백의 AI놀이🚀",
+    "head": "📝 텔레그램 심층 분석 Report (23시 07분) 기준 🌡️ 센티먼트 긍정 (+35) 💡 요약 반도체/HBM 호조와 AI/데이터센터 산업 성장 기대, 중동 지정학적 긴장 완화 및 증시 상승세가 복합적으로 작용 🗣️ Top 키워드: AI(60), 데이터센터(58), 반도체(52), HBM(46), 미국(45) 🔥 주목받…",
+    "url": "https://t.me/easobi_ai/22391",
+    "time_kst": "10-09 23:07"
+   },
+   {
+    "channels": 2,
+    "channel": "TNBfolio",
+    "head": "속보: 애플이 수요 부진을 이유로 신형 아이폰 18 프로와 프로 맥스의 부품 주문을 줄이고 있다. 복수의 공급망 소식통에 따르면, 10월 두 프리미엄 모델의 부품 주문은 당초 요청 대비 15~20% 감소했다. 애플은 9월 초부터 출하에 보수적으로 돌아섰으며, 11월 이후 추가 조정 여부는 아직 불확실하다. 원인은 가격이다…",
+    "url": "https://t.me/TNBfolio/71487",
+    "time_kst": "10-09 16:53"
+   },
+   {
+    "channels": 2,
+    "channel": "우주방산AI로봇 아카이브",
+    "head": "📌 트럼프 \"중간선거 전 이란 공격 없다\"…국제유가 하락 전환 트럼프 대통령이 이란과 '생산적인 논의'가 진행 중이라며 11월 3일 미국 중간선거 이전에는 이란을 공격하지 않겠다고 밝혔습니다. 🇺🇸 미국의 군사행동 유보 - 미국의 대규모 이란 공습 가능성이 보도된 가운데 트럼프가 직접 추가 공격 중단 방침을 확인 - 다만…",
+    "url": "https://t.me/defence_24/6347",
+    "time_kst": "10-09 08:18"
+   },
+   {
+    "channels": 2,
+    "channel": "GS의 조선/기계/방산 「바담」",
+    "head": "[하이마스서 쏘는 극초음속, 美 '블랙비어드' 지상발사 첫 공개] • 미국 캐스텔리온사, M142 하이마스 운용 목적의 저비용 극초음속 미사일 블랙비어드 지상발사 장면 첫 공개 • 약 800km 사거리 목표로 기존 고가 다크이글 대비 저렴한 비용 및 연간 최소 500발 양산 체제 추진 • 미 육군 2027 회계연도 예산안…",
+    "url": "https://t.me/c/1405984327/8231",
+    "time_kst": "10-09 20:30"
+   },
+   {
+    "channels": 2,
+    "channel": "하나 중국/신흥국 전략 김경환",
+    "head": ">>SOX vs 한국 증시: 누가 틀렸나? •한국 코스피지수가 최근 주요 지지선을 하향 이탈하며 하락한 가운데, 미국 필라델피아 반도체지수(SOX)와 단기적으로 큰 괴리를 보이고 있음. 특히 최근 투자자들이 SOX 관련 자산을 대거 매수했다는 점에 주목할 필요가 있음 >韩国股指Kospi近期破位下跌，其与美国费城半导体指数SO…",
+    "url": "https://t.me/HANAchina/70102",
+    "time_kst": "10-09 09:18"
+   },
+   {
+    "channels": 2,
+    "channel": "Rafiki research",
+    "head": "주말 칼럼 “유럽 재정위기” 독일은 중국에 벤츠 팔고, 러시아에서 가스 수입하고, 미군이 지켜줬습니다. 지금은 중국산 전기차 들어오고, 러시아 가스 가격은 오르고, 미국은 스스로 지키라고 합니다. 프랑스 파리 식당들은 매달 9일 북적입니다. 파리 시가 매달 9일 은퇴자들에게 연금을 지급하기 때문입니다. https://ra…",
+    "url": "https://t.me/rafikiresearch/25742",
+    "time_kst": "10-09 06:50"
+   }
+  ]
+ },
+ "community_dc": {
+  "source": "DC인사이드",
+  "galleries": [
+   {
+    "id": "krstock",
+    "name": "국내주식갤러리",
+    "posts": 1375,
+    "capped": true,
+    "burst": 1.1,
+    "base_daily": 1291.6
+   },
+   {
+    "id": "stockus",
+    "name": "해외주식갤러리",
+    "posts": 3198,
+    "capped": true,
+    "burst": 1.2,
+    "base_daily": 2606.0
+   }
+  ],
+  "posts_sampled": 559,
+  "keywords": [
+   {
+    "term": "러시아",
+    "count": 12,
+    "burst": 99.0,
+    "new": true
+   },
+   {
+    "term": "내가",
+    "count": 7,
+    "burst": 97.3,
+    "new": true
+   },
+   {
+    "term": "사주",
+    "count": 7,
+    "burst": 97.3,
+    "new": true
+   },
+   {
+    "term": "지진",
+    "count": 7,
+    "burst": 97.3,
+    "new": true
+   },
+   {
+    "term": "경유",
+    "count": 7,
+    "burst": 97.3,
+    "new": true
+   },
+   {
+    "term": "시발",
+    "count": 6,
+    "burst": 83.4,
+    "new": true
+   },
+   {
+    "term": "지수추종",
+    "count": 6,
+    "burst": 83.4,
+    "new": true
+   },
+   {
+    "term": "애들",
+    "count": 6,
+    "burst": 83.4,
+    "new": true
+   },
+   {
+    "term": "삼하",
+    "count": 6,
+    "burst": 83.4,
+    "new": true
+   },
+   {
+    "term": "파나마",
+    "count": 5,
+    "burst": 69.5,
+    "new": true
+   },
+   {
+    "term": "ewy",
+    "count": 5,
+    "burst": 69.5,
+    "new": true
+   },
+   {
+    "term": "미래",
+    "count": 5,
+    "burst": 69.5,
+    "new": true
+   },
+   {
+    "term": "제일",
+    "count": 5,
+    "burst": 69.5,
+    "new": true
+   },
+   {
+    "term": "속보",
+    "count": 5,
+    "burst": 69.5,
+    "new": true
+   },
+   {
+    "term": "확실히",
+    "count": 5,
+    "burst": 69.5,
+    "new": true
+   }
+  ],
+  "top_recommended": [
+   {
+    "gallery": "해외주식갤러리",
+    "title": "트럼프가 손대고 망한것들",
+    "views": 7507,
+    "recommend": 208,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=17942513&exception_mode=recommend&page=1",
+    "time_kst": "10-09 20:33"
+   },
+   {
+    "gallery": "해외주식갤러리",
+    "title": "난 주딱이랑 파딱들 글 보면 무조건 비추누름",
+    "views": 4318,
+    "recommend": 183,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=17942074&exception_mode=recommend&page=1",
+    "time_kst": "10-09 19:14"
+   },
+   {
+    "gallery": "해외주식갤러리",
+    "title": "실시간 산 타는데 새줍함 .. jpg",
+    "views": 10275,
+    "recommend": 112,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=17939502&exception_mode=recommend&page=1",
+    "time_kst": "10-09 11:15"
+   },
+   {
+    "gallery": "해외주식갤러리",
+    "title": "뉴비들 귀엽네 ㅋㅋ 하락장 시작도 안했는데 ㅋㅋㅋ",
+    "views": 6428,
+    "recommend": 75,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=17939371&exception_mode=recommend&page=1",
+    "time_kst": "10-09 10:48"
+   },
+   {
+    "gallery": "해외주식갤러리",
+    "title": "건강한 조정은 뭔 개좆빠는 소리인지",
+    "views": 5844,
+    "recommend": 68,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=17940813&exception_mode=recommend&page=1",
+    "time_kst": "10-09 15:31"
+   }
+  ],
+  "top_viewed": [
+   {
+    "gallery": "해외주식갤러리",
+    "title": "모더나 산새끼들 ㄹㅇ 꼴좋네 씨발 ㅋㅋㅋㅋㅋ",
+    "views": 393,
+    "recommend": 1,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=17945542&page=2",
+    "time_kst": "10-10 05:22"
+   },
+   {
+    "gallery": "국내주식갤러리",
+    "title": "삼닉 어디까지 내리면 사야됨?",
+    "views": 351,
+    "recommend": 0,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3615489&page=1",
+    "time_kst": "10-10 05:32"
+   },
+   {
+    "gallery": "국내주식갤러리",
+    "title": "다음주 국장의 미래.gif",
+    "views": 344,
+    "recommend": 3,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3615484&page=1",
+    "time_kst": "10-10 05:24"
+   },
+   {
+    "gallery": "해외주식갤러리",
+    "title": "걱정많았찌 애들아...",
+    "views": 324,
+    "recommend": 0,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=17945552&page=2",
+    "time_kst": "10-10 05:29"
+   },
+   {
+    "gallery": "국내주식갤러리",
+    "title": "미장으로 떠난 서학개미들 개웃기네 ㅋ ㅋ ㅋ ㅋ",
+    "views": 319,
+    "recommend": 0,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3615401&page=3",
+    "time_kst": "10-10 02:52"
+   },
+   {
+    "gallery": "국내주식갤러리",
+    "title": "하이닉스 외국인 무빙이 최악이었음",
+    "views": 304,
+    "recommend": 0,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3615373&page=3",
+    "time_kst": "10-10 02:25"
+   },
+   {
+    "gallery": "국내주식갤러리",
+    "title": "설마 삼전 하닉 장투하면서.jpg",
+    "views": 284,
+    "recommend": 1,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3615287&page=5",
+    "time_kst": "10-10 01:28"
+   },
+   {
+    "gallery": "국내주식갤러리",
+    "title": "지금부터 나스닥 장투는 별로일듯",
+    "views": 277,
+    "recommend": 0,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3615313&page=4",
+    "time_kst": "10-10 01:41"
+   }
+  ]
+ }
+}

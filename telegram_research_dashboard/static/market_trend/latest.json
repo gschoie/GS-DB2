@@ -1,385 +1,352 @@
 {
- "date": "2026-10-07",
+ "date": "2026-10-13",
  "meta": {
-  "window": "10-06 06:00~10-07 06:00 KST",
+  "window": "10-12 06:00~10-13 06:00 KST",
   "engine": "Gemini(gemini-2.5-flash)",
-  "generated_at": "2026-10-07T06:35+09:00"
+  "generated_at": "2026-10-13T06:35+09:00"
  },
  "stats": {
-  "channels": 97,
-  "messages": 1919,
-  "groups": 1770
+  "channels": 96,
+  "messages": 1502,
+  "groups": 1349
  },
- "one_liner": "AI/반도체와 전력기기 테마가 시장 상승을 주도하는 가운데, 3분기 실적 시즌을 맞아 기업별 희비가 엇갈리고 있으며, 시장의 기술적 지지선과 변동성에 대한 경계심도 공존합니다.",
+ "one_liner": "AI 관련 불확실성 속 한국 증시의 차별적 약세가 나타났으나, 반도체 실적 기대와 해운/항공 성수기 진입 등 개별 섹터의 긍정적 모멘텀이 포착된 하루.",
  "themes": [
   {
-   "name": "AI/반도체 섹터 강세 및 시장 최고치 경신",
-   "narrative": "미국 증시에서 기술주가 주도하는 상승세가 이어지며 나스닥과 S&P 500 지수가 사상 최고치를 경신했습니다. 국내에서도 주성엔지니어링 등 반도체 소부장 종목의 강세가 두드러지며 AI 및 반도체 섹터의 성장 기대감이 확산되고 있습니다.",
-   "status": "ongoing",
+   "name": "시장 전반의 불확실성 및 한국 증시 디커플링",
+   "narrative": "오픈AI 매출 축소 논란으로 AI 주식 변동성이 확대되고, 중동발 유가 상승 및 지정학적 리스크가 고조되는 등 시장 전반에 불확실성과 공포 심리가 확산되고 있다. 특히 한국 증시는 매크로 부담 완화에도 불구하고 수급 공백과 마이크로 모멘텀 부족으로 차별적인 약세를 보이며 혼조세를 기록했다.",
+   "status": "new",
    "strength": 5,
    "keywords": [
-    "주성엔지니어링",
-    "최고치 경신",
-    "전반적 상승세",
-    "확대되",
-    "본업"
+    "부정 강한",
+    "등락",
+    "부정 강화",
+    "하향 부정",
+    "과도한",
+    "부담 완화",
+    "공백",
+    "투자증권 뉘앙스",
+    "우크라이나 에너지"
    ],
    "evidence": [
     {
      "channel": "서화백의 AI놀이🚀",
-     "quote": "나스닥 종합 지수는 27498.35포인트로 286.45포인트(1.05%) 상승하며 사상 최고치를 경신했습니다. S&P 500 지수 또한 51.23포인트(0.66%) 오른 7774.05포인트를 기록하며 견조…"
+     "quote": "💡 요약 러시아-우크라이나 에너지 휴전 불이행, 중동발 유가 상승 및 지정학적 리스크 고조, 예상치를 하회한 오픈AI 실적 등으로 시장에 전반적인 불확실성과 공포 심리가 확산되고 있으며, 주요 경제지표 발표를 앞두고 관망세도 짙어지고 있습니다."
     },
     {
-     "channel": "epic AI - 투자 어시스턴트",
-     "quote": "업종별로는 반도체(+3.77%, 기여 +1.01%)가 주성엔지니어링(+17.51%), 두산테스나(+12.25%), HPSP(+5.04%) 등 소부장 종목의 강세에 힘입어 지수 상승을 가장 크게 견인했으며, 이차전지재료및장비(+7.22%, 기여 +0.57%)는 에코프로비엠(+11.41%)과 에코프로(+7.31%)의 강한 반…"
+     "channel": "키움증권 전략/시황 한지영",
+     "quote": "a. 국내 휴장기간(8~9일) 미국 증시는 오픈 AI의 매출액 축소 논란에 따른 AI주 변동성 확대 등 상방요인과 vs 미 30년물 국채 입찰 수요 호조 등 상방 요인이 공존하면서 혼조세"
     },
+    {
+     "channel": "대신 전략. 돌직구",
+     "quote": "저점을 높여가던 KOSPI가 지난주 차별적인 약세로 6,600선대로 레벨다운. 매크로 리스크(금리·유가·AI 자금조달) + 수급 공백(자사주 종료·ETF 리밸런싱·옵션 만기) 영향. 특히, 수급 변수로 인해 한국만 소외된 '디커플링'의 한 주."
+    }
+   ]
+  },
+  {
+   "name": "반도체 산업 — 실적 기대와 후공정 투자 확대",
+   "narrative": "오픈AI 관련 우려와 미국 반도체 지수 약세에도 불구하고, SK하이닉스의 3분기 영업이익이 시장 기대치를 상회할 것으로 전망되며 메모리 강세가 예상된다. 또한, 후공정 업종에 대한 장기적인 투자 시계열 확대와 자동화 장비 업체들의 수혜가 부각되고 있다.",
+   "status": "new",
+   "strength": 4,
+   "keywords": [
+    "자체 AI",
+    "안정화",
+    "AI 스타트업",
+    "호남",
+    "반도치",
+    "반도체"
+   ],
+   "evidence": [
+    {
+     "channel": "메리츠증권 리서치",
+     "quote": "📮[메리츠증권 반도체/디스플레이 김선우] ▶ SK하이닉스 (000660): 3Q26 OP 80.1조원 실적 서프라이즈 예상"
+    },
+    {
+     "channel": "[ IT는 SK ]",
+     "quote": "[SK증권 반도체 한동희, 손 건] SK하이닉스 (000660): 환율을 이기는 호실적 예상 3Q26 OP 79조원, 컨센서스 상회 예상"
+    },
+    {
+     "channel": "여의도스토리 Ver2.0-习近平是个狗东西",
+     "quote": "반도체: 후공정도 멀리 봐도 된다 [대신증권 IT 스몰캡/김진형, 반도체/류형근] 결론부터 말씀드리자면 후공정 또한 투자의 시계열을 길게 가져가야할 때라고 판단합니다."
+    }
+   ]
+  },
+  {
+   "name": "자동차 산업 — 로봇 액추에이터 및 자율주행 기술 변화",
+   "narrative": "현대모비스는 3분기 영업이익 증가와 함께 4분기 로봇 액추에이터 사업 본격화에 대한 기대감이 커지고 있다. 한편, 테슬라의 완전자율주행(FSD) 명칭이 유럽에서 '운전자 보조'로 변경되는 등 자율주행 기술의 규제 및 명칭 변화가 주목받고 있다. 국내 신차 등록대수는 감소했으나 수입차는 증가세를 보였다.",
+   "status": "new",
+   "strength": 3,
+   "keywords": [
+    "현대모비스",
+    "자율주행",
+    "신차",
+    "제품군"
+   ],
+   "evidence": [
+    {
+     "channel": "다올투자증권 리서치센터",
+     "quote": "■현대모비스 3Q 영업익 17%↑ 전망…4Q '로봇 액추에이터' 본격화 기대"
+    },
+    {
+     "channel": "메리츠 김준성, Mobility War",
+     "quote": "- Tesla가 유럽에서 감독형 FSD의 명칭을 'Tesla 보조 주행(Tesla Assisted Driving)'으로 변경. 이는 유럽 규제 당국이 기존 명칭이 실제 기능보다 높은 수준의 자율주행을 제공하는 것처럼 오해를 일으킬 수 있다고 지적한 데 따른 조치"
+    },
+    {
+     "channel": "신한 리서치",
+     "quote": ": 올해 1~9월 국내 신차 등록대수 123.9만대(-2.9% YoY). 국산차는 95.5만대(-8.6%)로 감소한 반면 수입차는 28.4만대(+22.8%) 기록"
+    }
+   ]
+  },
+  {
+   "name": "해운/항공 산업 — 운임 상승 및 성수기 기대감",
+   "narrative": "해운 업종은 운임비 상승에 따른 실적 기대감으로 HMM, 팬오션 등이 강세를 보였다. 항공 화물은 4분기 전통적인 성수기 진입과 중동 허브 공항 운영 차질로 인한 화물 수송력 감소가 맞물려 운임이 재차 상승할 것으로 전망되며, 대한항공 등 항공사들의 이익 개선 가능성이 제기된다.",
+   "status": "new",
+   "strength": 3,
+   "keywords": [
+    "팬오션",
+    "성수기",
+    "대한항공"
+   ],
+   "evidence": [
     {
      "channel": "김현석(자본주의 바이어스 있는 채널입니다)",
-     "quote": "대만 패키지기판 업체들이 일제히 신고가를 경신. 최근 3개월 Unimicron +48%, Nan Ya PCB +46%, Kinsus +40% 상승. 핵심 동인은 Agentic AI 확산에 따른 서버 CPU…"
-    }
-   ]
-  },
-  {
-   "name": "전력기기 및 에너지 인프라 투자 확대",
-   "narrative": "미국 내 전력 수요 증가와 노후 설비 교체 수요가 맞물리면서 전력기기 섹터의 질주가 예상됩니다. 특히 데이터센터 신규 수요와 함께 미 상원의 에너지 프로젝트 승인 촉진법 합의, 빅테크 기업들의 청정 전력 구매 움직임이 관련 산업의 성장을 견인하고 있습니다.",
-   "status": "ongoing",
-   "strength": 4,
-   "keywords": [
-    "결합",
-    "스피어",
-    "외형",
-    "유치"
-   ],
-   "evidence": [
-    {
-     "channel": "다올투자증권 리서치센터",
-     "quote": "미국 전력 수요가 장기 정체를 벗어나 증가 국면 진입. 데이터센터가 신규 수요를 촉발하는 가운데 1960~70년대 설치된 송전망·변압기 교체 수요까지 누적"
-    },
-    {
-     "channel": "유진투자증권 산업분석실 테크/인프라팀",
-     "quote": "미 상원, 에너지 프로젝트 승인 촉진법 합의 ☞ 상원에서 공화, 민주 위원회 초안 합의, 에너지 부족 문제 해결 핵심 법 미 상원, BAAJA 입법 절차 시작 합의"
-    },
-    {
-     "channel": "한투증권 미국/중국전략 정정영",
-     "quote": "구글 & Constellation, 10억달러 규모 원자력 발전 협정 논의. 빅테크의 청정 전력 구매 본격화"
-    }
-   ]
-  },
-  {
-   "name": "3분기 실적 시즌, 컨센서스 하회 우려 확산",
-   "narrative": "3분기 실적 발표 시즌이 다가오면서 주요 기업들의 실적 전망치가 하향 조정되고 있습니다. 마케팅 비용 증가, 생산 물량 감소, 환율 하락 등의 영향으로 다수의 기업이 컨센서스를 소폭 하회할 것으로 예상되며, 특히 삼성전자와 SK하이닉스 등 반도체 대형주도 실적 추정치 하향 조정이 나타나고 있습니다.",
-   "status": "ongoing",
-   "strength": 4,
-   "keywords": [
-    "YoY QoQ",
-    "본업",
-    "외형",
-    "훼손"
-   ],
-   "evidence": [
-    {
-     "channel": "다올투자증권 리서치센터",
-     "quote": "3Q26E 매출액 1.1조원(YoY +10%, QoQ -5%), 영업이익 1,082억원(YoY +18%, QoQ -8%)으로 컨센서스 하회 전망. OPM 9.7%(YoY +0.7%p)로 2Q26(10.0%)과 유사한 수준. 아마존 빅딜데이를 앞두고 AP 본업과 COSRX 모두 인플루언서 시딩 등 마케팅비를 3분기에 선제…"
-    },
-    {
-     "channel": "[DAOL퀀트 김경훈] 탑다운 전략",
-     "quote": "삼성전자: 최근 다수의 리포트 모두 하향되며 3Q26 OP 99조원 vs 컨센 108조원으로 컨센과의 괴리 -8%, 2주 전…"
+     "quote": "반면, 해운 업종은 운임비 상승에 따른 실적 기대감이 긍정적. HMM(+5.8%), 팬오션(+7.6%), 현대글로비스(+0.6%) 등 강세"
     },
     {
      "channel": "NH투자증권 리서치",
-     "quote": "현대모비스의 3분기 매출액은 15조7,440억원(+4.7% y-y, -3.6% q-q), 영업이익은 8,910억원(+14.2% y-y, -8.6% q-q)으로 컨센서스를 소폭 하회할 전망."
+     "quote": "■ 하지만 4분기는 전통적인 항공 화물 성수기. 최근 사우디를 비롯한 중동 허브 공항의 운영 차질이 증가하면서 중동 경유 항공편 축소와 이에 따른 화물 수송력 감소 가능성 존재. 성수기 수요와 공급 감소가 맞물리면서 항공 화물 운임은 재차 상승할 전망."
+    },
+    {
+     "channel": "[시그널랩] Signal Lab 리서치",
+     "quote": "외국인 입국과 환승 수요가 국제선 성장을 견인하는 가운데 대한항공·진에어 통합과 추가적인 LCC 재편은 공급 경쟁을 완화할 전망. 유가와 환율 부담까지 낮아질 경우 비용 효율화와 함께 항공사 이익 개선이 본격화될 가능성."
     }
    ]
   },
   {
-   "name": "시장의 기술적 지지선 테스트 및 변동성 확대",
-   "narrative": "현재 주가는 지지선과 저항선 사이에 위치하며 기술적 지표들이 혼합된 신호를 보내고 있습니다. 단기적으로 하락세가 지속될 가능성과 매도 압력이 강한 상황이지만, 일부 종목은 과매도 구간에 진입하여 반등의 가능성도 혼재되어 있어 신중한 접근이 요구됩니다.",
-   "status": "new",
-   "strength": 3,
-   "keywords": [
-    "단기적으로 지지선",
-    "있지 조정",
-    "조정 필요할",
-    "돌파 반등",
-    "값이 과매",
-    "혼재된 신호",
-    "매도하 것이"
-   ],
-   "evidence": [
-    {
-     "channel": "키움증권 해외선물 톡톡",
-     "quote": "현재 주가는 지지선과 저항선 사이에 위치하고 있으며, 기술적 지표들이 혼합된 신호를 보내고 있습니다. 단기적으로는 하락세가 지속되고 있으나, 거래량이 감소하고 있어 안정적인 시장 상황을 나타냅니다."
-    },
-    {
-     "channel": "Macro Trader",
-     "quote": "예상보다 약한 고용에 시장이 반영한 10월 긴축폭은 주초 약 17bp에서 4bp로…"
-    },
-    {
-     "channel": "epic AI - 투자 어시스턴트",
-     "quote": "[시황] 10월 6일 장마감 - 코스피 6,941선 약세 마감… 외국인 1조7천억 순매도, 코스닥은 920선 돌파 강세"
-    }
-   ]
-  },
-  {
-   "name": "제약/바이오 임상 및 규제 불확실성 지속",
-   "narrative": "9월에 이어 제약/바이오 섹터에서는 개별 기업의 임상 및 규제 관련 이벤트가 연달아 발생하며 불확실성이 지속되고 있습니다. 일부 개발 중단이나 임상 권고, 부분 임상 보류 등의 소식이 있었고, HLB의 제조시설 실사 결과도 '자발적 시정조치 권고'로 분류되는 등 업계 전반의 신중한 접근이 요구됩니다.",
-   "status": "ongoing",
-   "strength": 3,
-   "keywords": [
-    "훼손",
-    "정기"
-   ],
-   "evidence": [
-    {
-     "channel": "이지스스트레티지 리서치",
-     "quote": "9월은 개별 기업의 임상·규제 이벤트가 연달아 발생한 달이었다. BMS는 오름테라퓨틱으로부터 인수한 ORM-6151의 개발을 중단했고(9/17), FDA는 컴퍼스에 토베시미그 BLA 제출에 앞서 생존 혜택을 입증하는 임상을 권고했으며(9/22), SK바이오팜이 도입한 오파칼림은 부분 임상보류를 받았다(9/14)."
-    },
-    {
-     "channel": "허혜민의 제약/바이오 소식통",
-     "quote": "HLB는 FDA가 ‘리보세라닙’ 완제의약품 제조시설에 대한 정기 cGMP(미국 우수 의약품 제조 및 품질관리 기준) 실사를 ‘자발적 시정조치 권고(VAI)’로 분류했다고 밝혔습니다."
-    }
-   ]
-  },
-  {
-   "name": "해외 시장 기업 활동 및 자금 조달",
-   "narrative": "나스닥 상장 기업들의 합병, 상장 폐지, 사모 투자 유치 등 다양한 기업 활동 소식이 전해졌습니다. 특히 AI 데이터센터 수요에 힘입어 사상 최대 분기 실적을 기록한 기업도 있으며, 대규모 자금 조달 및 증권신고서 정정본 제출 등 활발한 움직임이 관찰됩니다.",
+   "name": "개별 종목 및 섹터 이슈 (셀트리온, 폴더블, IP)",
+   "narrative": "셀트리온은 예상치를 상회하는 매출액을 기록하며 견조한 실적을 보였고, 짐펜트라의 미국 처방 근거 확대 소식도 있었다. 폴더블 제품군 확대로 인한 파인엠텍의 두 자릿수 마진 회복 기대감, 그리고 SAMG엔터와 대원미디어 등 캐릭터 IP 관련주의 상승세도 주목할 만하다.",
    "status": "new",
    "strength": 2,
    "keywords": [
-    "Inc. NASDAQ",
-    "워런트",
-    "유치"
+    "셀트리온",
+    "제품군",
+    "성수기"
    ],
    "evidence": [
     {
-     "channel": "키움증권 해외선물 톡톡",
-     "quote": "미국 미디어 기업 워너 브로스디스커버리(Warner Bros. Discovery, NASDAQ:WBD)가 스카이댄스 코퍼레이션(Skydance Corporation)에 인수돼 나스닥 상장 폐지 절차에 들어갔다."
+     "channel": "AWAKE - 실시간 주식 공시 정리채널",
+     "quote": "기업명: 셀트리온(시가총액: 41조 6,385억) A068270 보고서명: 연결재무제표기준영업(잠정)실적(공정공시) 매출액 : 15,000억(예상치 : 14,636억+/ 2%)"
     },
     {
-     "channel": "키움증권 해외선물 톡톡",
-     "quote": "인공지능(AI) 팩토리 플랫폼기업 펭귄 솔루션스(Penguin Solutions, Inc., NASDAQ:PENG)가 AI 데이터센터 수요에 힘입어 사상 최대 분기 실적을 내고 2027회계연도 연간전망을 상향 조정했다."
+     "channel": "여의도스토리 Ver2.0-习近平是个狗东西",
+     "quote": "[메리츠증권 전기전자/IT부품 양승수] 파인엠텍(441270): 이제부터 말보다 숫자로 ▶️ 3Q26 Preview: 오랜만에 기대되는 두 자릿수 마진"
     },
     {
-     "channel": "서화백의 AI놀이🚀",
-     "quote": "GPT-6 Astra·GPT-6.1 Sol 기본 속도 약 50% 향상, 300억 달러 규모 자금 조달 협의, UAE 펀드·블랙록과 40조원 투자유치 협상"
+     "channel": "신한 리서치",
+     "quote": "[신한투자증권 김아람] 서브컬쳐 Update 티니핑 x 치이카와, 귀여운게 최고야 ▶️ 낮아진 멀티플 + 주가 재료 = 트레이딩 가능 환경 ."
     }
    ]
   }
  ],
  "community_mood": {
-  "score": -20,
-  "summary": "반도체 섹터에 대한 관심이 높지만, 실적 우려와 시장 전반의 하락 가능성에 대한 불안감이 공존하며 투자 심리는 다소 위축된 모습입니다. 해외 주식 시장의 부정적 소식에도 주목하고 있습니다.",
+  "score": 20,
+  "summary": "개미 투자자들은 AI 버블에 대한 강한 비관론과 전문가 불신을 표출하면서도, 야간선물과 반도체 섹터의 반등에 기대를 걸며 적극적으로 투자 기회를 모색하는 혼재된 심리를 보였다.",
   "hot_stocks": [
    {
-    "name": "인텔",
-    "score": 0,
-    "reason": "커뮤니티 내에서 관심이 높으나 긍정적/부정적 의견이 혼재되어 있습니다."
+    "name": "SOXL",
+    "score": 70,
+    "reason": "레버리지 반도체 ETF에 대한 강한 상승 기대감과 열광적인 반응을 보였다."
    },
    {
-    "name": "삼성전자",
-    "score": 10,
-    "reason": "실적 발표를 앞두고 커뮤니티의 주목을 받고 있습니다."
+    "name": "삼닉",
+    "score": 60,
+    "reason": "반도체 롱장 기대와 높은 목표가 설정에 대한 관심이 높았다."
    },
    {
-    "name": "SK하이닉스",
-    "score": -10,
-    "reason": "주가 하락 우려와 ADR 관련 논의가 활발합니다."
+    "name": "BYD",
+    "score": -50,
+    "reason": "BYD의 근황에 대한 부정적인 언급이 있었다."
    },
    {
-    "name": "알테오젠",
-    "score": 20,
-    "reason": "'알상무 요즘 폼 좋네'와 같은 긍정적 언급이 있습니다."
-   },
-   {
-    "name": "테슬라",
-    "score": -10,
-    "reason": "국내 보호무역 논란에 대한 언급이 있습니다."
-   },
-   {
-    "name": "룰루레몬",
-    "score": -20,
-    "reason": "마이클 버리의 청산 언급으로 부정적인 시선이 있습니다."
-   },
-   {
-    "name": "휴머노이드 관련주",
-    "score": -20,
-    "reason": "'휴머노이드에 몰빵한 놈들 좆된 이유'와 같은 부정적 언급이 있습니다."
+    "name": "국장",
+    "score": 30,
+    "reason": "국내 증시의 하락 속에서도 매수 기회를 찾는 움직임이 포착되었다."
    }
   ]
  },
  "signals": {
   "spikes": [
    {
-    "term": "지분공시 국민연금공단",
-    "count": 32,
+    "term": "우크라이나 에너지",
+    "count": 21,
     "burst": 99.0,
     "base_daily": 0.0,
     "new": true
    },
    {
-    "term": "YoY QoQ",
-    "count": 24,
-    "burst": 99.0,
-    "base_daily": 0.0,
-    "new": true
-   },
-   {
-    "term": "단기적으로 지지선",
-    "count": 23,
-    "burst": 99.0,
-    "base_daily": 0.0,
-    "new": true
-   },
-   {
-    "term": "조희대",
-    "count": 22,
-    "burst": 99.0,
-    "base_daily": 0.0,
-    "new": true
-   },
-   {
-    "term": "주성엔지니어링",
-    "count": 22,
-    "burst": 99.0,
-    "base_daily": 0.0,
-    "new": true
-   },
-   {
-    "term": "Inc. NASDAQ",
-    "count": 22,
-    "burst": 99.0,
-    "base_daily": 0.0,
-    "new": true
-   },
-   {
-    "term": "있지 조정",
-    "count": 20,
-    "burst": 99.0,
-    "base_daily": 0.0,
-    "new": true
-   },
-   {
-    "term": "유치",
-    "count": 19,
-    "burst": 99.0,
-    "base_daily": 0.0,
-    "new": true
-   },
-   {
-    "term": "조정 필요할",
+    "term": "팬오션",
     "count": 18,
     "burst": 99.0,
     "base_daily": 0.0,
     "new": true
    },
    {
-    "term": "돌파 반등",
+    "term": "부정 강한",
     "count": 18,
     "burst": 99.0,
     "base_daily": 0.0,
     "new": true
    },
    {
-    "term": "워런트",
-    "count": 17,
-    "burst": 99.0,
-    "base_daily": 0.0,
-    "new": true
-   },
-   {
-    "term": "최고치 경신",
-    "count": 17,
-    "burst": 99.0,
-    "base_daily": 0.0,
-    "new": true
-   },
-   {
-    "term": "훼손",
-    "count": 17,
-    "burst": 99.0,
-    "base_daily": 0.0,
-    "new": true
-   },
-   {
-    "term": "확대되",
-    "count": 17,
-    "burst": 99.0,
-    "base_daily": 0.0,
-    "new": true
-   },
-   {
-    "term": "메리츠",
+    "term": "등락",
     "count": 16,
     "burst": 99.0,
     "base_daily": 0.0,
     "new": true
    },
    {
-    "term": "결합",
+    "term": "고정비",
     "count": 16,
     "burst": 99.0,
     "base_daily": 0.0,
     "new": true
    },
    {
-    "term": "스피어",
-    "count": 16,
-    "burst": 99.0,
-    "base_daily": 0.0,
-    "new": true
-   },
-   {
-    "term": "값이 과매",
-    "count": 16,
-    "burst": 99.0,
-    "base_daily": 0.0,
-    "new": true
-   },
-   {
-    "term": "전반적 상승세",
-    "count": 16,
-    "burst": 99.0,
-    "base_daily": 0.0,
-    "new": true
-   },
-   {
-    "term": "혼재된 신호",
-    "count": 16,
-    "burst": 99.0,
-    "base_daily": 0.0,
-    "new": true
-   },
-   {
-    "term": "매도하 것이",
-    "count": 16,
-    "burst": 99.0,
-    "base_daily": 0.0,
-    "new": true
-   },
-   {
-    "term": "본업",
+    "term": "신차",
     "count": 15,
     "burst": 99.0,
     "base_daily": 0.0,
     "new": true
    },
    {
-    "term": "외형",
+    "term": "성수기",
     "count": 15,
     "burst": 99.0,
     "base_daily": 0.0,
     "new": true
    },
    {
-    "term": "존재함",
+    "term": "본문",
     "count": 15,
     "burst": 99.0,
     "base_daily": 0.0,
     "new": true
    },
    {
-    "term": "정기",
+    "term": "부정 강화",
     "count": 15,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "하향 부정",
+    "count": 15,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "부담 완화",
+    "count": 14,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "현대모비스",
+    "count": 14,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "자율주행",
+    "count": 14,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "제품군",
+    "count": 14,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "과도한",
+    "count": 14,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "한투증권",
+    "count": 14,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "자체 AI",
+    "count": 14,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "셀트리온",
+    "count": 14,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "개최 개최일자",
+    "count": 14,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "투자증권 뉘앙스",
+    "count": 14,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "공백",
+    "count": 22,
+    "burst": 33.52070316636662,
+    "base_daily": 0.4,
+    "new": false
+   },
+   {
+    "term": "안정화",
+    "count": 22,
+    "burst": 33.52070316636662,
+    "base_daily": 0.4,
+    "new": false
+   },
+   {
+    "term": "AI 스타트업",
+    "count": 13,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "호남",
+    "count": 13,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "대한항공",
+    "count": 13,
     "burst": 99.0,
     "base_daily": 0.0,
     "new": true
@@ -389,107 +356,107 @@
    {
     "channels": 5,
     "channel": "키움증권 전략/시황 한지영",
-    "head": "[10/6, Kiwoom Weekly, 키움 전략 한지영] \"금리와 실적을 둘러싼 시장의 시선 이동\" ------ <Weekly Three Points> a. 국내 휴장 기간(3일~5일) 미국 증시는 시장 금리 상승에도, 엔비디아 신고가 경신 속 실적시즌 기대감, 연준 긴축 우려 완화, 유가 하락 등으로 2거래일 연속 강…",
-    "url": "https://t.me/hedgecat0301/2957",
-    "time_kst": "10-06 07:33"
+    "head": "[10/12, Kiwoom Weekly, 키움 전략 한지영] \"주가 방향성 vs 이익 방향성\" ------ <Weekly Three Points> a. 국내 휴장기간(8~9일) 미국 증시는 오픈 AI의 매출액 축소 논란에 따른 AI주 변동성 확대 등 상방요인과 vs 미 30년물 국채 입찰 수요 호조 등 상방 요인이 공존하…",
+    "url": "https://t.me/hedgecat0301/2960",
+    "time_kst": "10-12 07:33"
+   },
+   {
+    "channels": 5,
+    "channel": "여의도스토리 Ver2.0-习近平是个狗东西",
+    "head": "[메리츠증권 전기전자/IT부품 양승수] 파인엠텍(441270): 이제부터 말보다 숫자로 ▶️ 3Q26 Preview: 오랜만에 기대되는 두 자릿수 마진 - 3Q26 매출액과 영업이익 추정치를 각각 1,520억원(+164.1% YoY), 180억원(+1,065.6% YoY, OPM 11.8%)으로 기존 대비 12.0%, 5…",
+    "url": "https://t.me/YeouidoStory2/118282",
+    "time_kst": "10-12 08:48"
    },
    {
     "channels": 5,
     "channel": "AWAKE - 실시간 주식 공시 정리채널",
-    "head": "2026.10.06 11:14:53 기업명: 삼성전기(시가총액: 125조 1,119억) A009150 보고서명: 단일판매ㆍ공급계약체결 계약상대 : 글로벌 대형기업 계약내용 : ( 기타 판매ㆍ공급계약 ) MLCC(Multilayer Ceramic Capacitor) 공급계약 공급지역 : - 계약금액 : 2,856억 계약시작…",
-    "url": "https://t.me/darthacking/154221",
-    "time_kst": "10-06 11:14"
+    "head": "2026.10.12 15:43:06 기업명: 올릭스(시가총액: 2조 4,293억) A226950 보고서명: 투자판단관련주요경영사항 (임상시험계획 승인 신청 반려) 제목 : 양측성 지도 모양 위축(GA)을 동반한 노인성 황반변성(AMD) 환자를 대상으로 유리체강 내 주사로 투여하는 OLX10212의 유효성 및 안전성 평가를…",
+    "url": "https://t.me/darthacking/154544",
+    "time_kst": "10-12 15:43"
    },
    {
-    "channels": 4,
-    "channel": "이지스스트레티지 리서치",
-    "head": "[미래에셋 김승민] 제약/바이오 F/W 시즌, 빅파마의 쇼핑 ▶️악재는 9월에 먼저 반영됐다 9월은 개별 기업의 임상·규제 이벤트가 연달아 발생한 달이었다. BMS는 오름테라퓨틱으로부터 인수한 ORM-6151의 개발을 중단했고(9/17), FDA는 컴퍼스에 토베시미그 BLA 제출에 앞서 생존 혜택을 입증하는 임상을 권고했…",
-    "url": "https://t.me/jeilstock/46766",
-    "time_kst": "10-06 14:53"
+    "channels": 5,
+    "channel": "💊🧬🦠다올 제약/바이오 이지수",
+    "head": "안녕하세요, 올릭스 커뮤니케이션실입니다. 금일 황반변성 치료제 OLX301A의 뉴질랜드 임상 2a상 시험계획(IND)이 현지 규제당국으로부터 반려된 공시로 인하여 주주 여러분께서 우려가 크실 것으로 생각합니다. 이번 반려는 임상시험 관련 제출자료 중 일부 보완이 필요하다는 규제당국의 의견에 따른 것으로, 당사는 관련 사항…",
+    "url": "https://t.me/c/1182075044/2767",
+    "time_kst": "10-12 15:57"
    },
    {
     "channels": 4,
     "channel": "메리츠증권 리서치",
-    "head": "📮[메리츠증권 전기전자/IT부품 양승수] 덕산하이메탈(077360) : 전방위로 좋아지는 그림 ▶ 3Q26 Preview: 잠깐의 숨 고르기, 방향성은 유효 - 3Q26 별도 실적은 매출액 630억원(+75.8% YoY), 영업이익 82억원(+61.7% YoY, OPM 13.8%)으로 영업이익 기준 시장 컨센서스(100억…",
-    "url": "https://t.me/meritz_research/44748",
-    "time_kst": "10-06 07:31"
+    "head": "📮[메리츠증권 반도체/디스플레이 김선우] ▶ SK하이닉스 (000660): 3Q26 OP 80.1조원 실적 서프라이즈 예상 [3Q26 영업이익: 상반기와 다르다. 억제 요인들의 추세 반전 전환] - SK하이닉스의 3Q26 영업이익은 전분기 대비 32% 증가한 80.1조원으로 시장기대치를 능가할 전망 - 최근 원화강세 흐름…",
+    "url": "https://t.me/meritz_research/44791",
+    "time_kst": "10-12 07:38"
    },
    {
     "channels": 4,
-    "channel": "김현석(자본주의 바이어스 있는 채널입니다)",
-    "head": "[iM증권 고의영(전기전자)] [전기전자/Overweight] ★대만 패키지기판 업체들 신고가 → 국내 캐치업 기대 대만 패키지기판 업체들이 일제히 신고가를 경신. 최근 3개월 Unimicron +48%, Nan Ya PCB +46%, Kinsus +40% 상승. 핵심 동인은 Agentic AI 확산에 따른 서버 CPU…",
-    "url": "https://t.me/kimu_nim/46424",
-    "time_kst": "10-06 07:57"
+    "channel": "iM전략 김준영",
+    "head": "[iM증권 김준영] [주식전략] ★ AI 인프라 없이 오르는 미국, 할인받는 한국 ▶️ AI 인프라 없이 신고가 - S&P500 신고가 랠리. 필라델피아 반도체 -4.3% 사이 유틸리티(+4.0%), 소프트웨어(+3.9%), 필수소비재(+3.6%), 헬스케어(+2.8%) 상승. - 9월 고용 +2.9만명, 월러 이사 연속…",
+    "url": "https://t.me/crazyecon/1739",
+    "time_kst": "10-12 07:39"
    },
    {
     "channels": 4,
-    "channel": "[DAOL퀀트 김경훈] 탑다운 전략",
-    "head": "[DAOL퀀트 김경훈] 3분기 전종목 실적발표 스케줄 3Q26 Earnings Calendar - 10/6 업데이트 ■ 실적발표 예정 - (10/13) 삼성전자 106.9조원 (+779%y / +20%q) - (10/29) SK하이닉스 77.2조원 (+578%y / +28%q) - (10/30) 현대차 3조원 (+19%y…",
-    "url": "https://t.me/toptownquant/13787",
-    "time_kst": "10-06 08:39"
+    "channel": "[ IT는 SK ]",
+    "head": "[SK증권 반도체 한동희, 손 건] SK하이닉스 (000660): 환율을 이기는 호실적 예상 3Q26 OP 79조원, 컨센서스 상회 예상 3Q26 영업이익을 79조원(+31% QoQ)으로 예상 컨센서스 7% 수준 상회 환율 하락 감안하면, 메모리 강세 예상 상회 중 (ASP) DRAM +26%, NAND +16%, (B/…",
+    "url": "https://t.me/skitteam/4704",
+    "time_kst": "10-12 08:29"
+   },
+   {
+    "channels": 4,
+    "channel": "메리츠증권 리서치",
+    "head": "📮[메리츠증권 통신/우주/미디어 정지수] Meritz 통신서비스 Weekly 2026.10.12(월) (Report) https://tinyurl.com/yaemmhvu ▶ 10/8 기준 주가수익률: SK텔레콤 (-1.8% WoW) KT (-0.4% WoW) LG유플러스 (-0.9% WoW) ▶ 금주전망: - 과기정통부는…",
+    "url": "https://t.me/meritz_research/44790",
+    "time_kst": "10-12 07:38"
+   },
+   {
+    "channels": 4,
+    "channel": "키움증권 리서치센터",
+    "head": "[키움 혁신성장리서치/스몰캡 오현진] ▶️제너셈(217190) : 후공정 투자 수혜주 ◎ 기업개요: 반도체 후공정 자동화 장비 전문 업체 - 동사는 2000년 설립된 반도체 후공정 자동화 장비 전문 업체로, 국내 IDM 및 OSAT 업체, 기판 업체 등이 주요 고객사 - 주요 제품 라인업은 Saw Singulation,…",
+    "url": "https://t.me/KiwoomResearch/24237",
+    "time_kst": "10-12 07:59"
+   },
+   {
+    "channels": 4,
+    "channel": "키움증권 리서치센터",
+    "head": "[10/12, 국장만 빠지는 배경, 키움 한지영] 1. 연휴 끝나고 첫날부터 코스피, 코스닥 모두 급락이 나오고 있네요. 지금 미국 나스닥 선물이나 마이크론 시간외 주가는 별 다른 변화가 없는 걸 보면, 미국쪽에서 발생한 AI 이슈는 아닌거 같네요. 또 미국 10년물 금리는 5.22%대에서 약보합, 유가는 1%대 하락하는…",
+    "url": "https://t.me/KiwoomResearch/24240",
+    "time_kst": "10-12 13:15"
    },
    {
     "channels": 4,
     "channel": "AWAKE - 실시간 주식 공시 정리채널",
-    "head": "2026.10.06 16:15:52 기업명: 알테오젠(시가총액: 18조 1,103억) A196170 보고서명: 주요사항보고서(유상증자결정) 보통주 : 우선주 : 174,066주(발행가격 : 287,246원) 발행비율 : 0% * 투자자 스카이알트 유한회사 발표일자 : 2026-10-06 납입일자 : 2026-10-14 상…",
-    "url": "https://t.me/darthacking/154259",
-    "time_kst": "10-06 16:15"
-   },
-   {
-    "channels": 3,
-    "channel": "메리츠증권 리서치",
-    "head": "📮[메리츠증권 전기전자/IT부품 양승수] LG전자(066570): 이제는 K-Vertiv ▶ 3Q26 Preview: 별도 기준 컨센서스 소폭 하회 전망 - 3Q26 연결 기준 실적은 매출액 24.2조원(+10.6% YoY), 영업이익 8,817억원(+28.0% YoY)로, 영업이익 기준 시장 컨센서스 1조 479억원을…",
-    "url": "https://t.me/meritz_research/44749",
-    "time_kst": "10-06 07:31"
-   },
-   {
-    "channels": 3,
-    "channel": "이지스스트레티지 리서치",
-    "head": "[재생에너지 / 유진투자증권 코스닥벤처팀 / 그린산업&ESG 한병화 ☎️02)368-6171] ★ 미 상원, 에너지 프로젝트 승인 촉진법 합의 ☞ 상원에서 공화, 민주 위원회 초안 합의, 에너지 부족 문제 해결 핵심 법 미 상원, BAAJA 입법 절차 시작 합의 1) 연방 기관의 환경평가 및 인허가 검토 절차에 법적 시한…",
-    "url": "https://t.me/jeilstock/46755",
-    "time_kst": "10-06 09:42"
-   },
-   {
-    "channels": 3,
-    "channel": "[DAOL퀀트 김경훈] 탑다운 전략",
-    "head": "[DAOL퀀트 김경훈] Active Quant의 定石 - 10/6 \"실적시즌 전 강하게 압축되는 추정치 향방\" 3Q26분기 4번째 업데이트 (10.6 ~ 10.16) ■ 시총 TOP3 실적 현황 * 삼성전자: 최근 다수의 리포트 모두 하향되며 3Q26 OP 99조원 vs 컨센 108조원으로 컨센과의 괴리 -8%, 2주 전…",
-    "url": "https://t.me/toptownquant/13789",
-    "time_kst": "10-06 09:50"
+    "head": "2026.10.12 07:46:33 기업명: 셀트리온(시가총액: 41조 6,385억) A068270 보고서명: 연결재무제표기준영업(잠정)실적(공정공시) 매출액 : 15,000억(예상치 : 14,636억+/ 2%) 영업익 : 5,100억(예상치 : 5,141억/ -1%) 순이익 : -(예상치 : 4,337억) **최근 실적…",
+    "url": "https://t.me/darthacking/154505",
+    "time_kst": "10-12 07:46"
    },
    {
     "channels": 3,
     "channel": "다올투자증권 리서치센터",
-    "head": "[전력기기(Overweight) | 다올 전력기기/철강금속 이정우] ★ 전력, 질주 ▶ 전력기기 현 주소 점검 - 미국 전력 수요가 장기 정체를 벗어나 증가 국면 진입. 데이터센터가 신규 수요를 촉발하는 가운데 1960~70년대 설치된 송전망·변압기 교체 수요까지 누적 - 지난 사이클이 노후 설비 교체였다면 이번은 송전·…",
-    "url": "https://t.me/daolresearch/15167",
-    "time_kst": "10-06 07:38"
+    "head": "[다올투자증권 조선/기계/방산 최광식] 10/12(월) 데일리뉴스 🛳 조선 [TradeWinds] Gas turbines proving bigger bottleneck than FSRUs in data centre rollouts Wagenborg family gets hands on first multi-fuel shi…",
+    "url": "https://t.me/daolresearch/15209",
+    "time_kst": "10-12 09:06"
    },
    {
     "channels": 3,
-    "channel": "[ IT는 SK ]",
-    "head": "[SK증권 반도체 한동희, 손 건] 현저한 저평가 3Q26 영업이익 106 조원 예상 기존 전망치 111조원 대비 4.5% 하향 원/달러 기존 1,450 원에서 1,400 원으로 3.4% 하향, MX/NW 사업부 전망 변경 (-0.5 조원 -> -1.4 조원) 메모리 판가 DRAM +17%, NAND +15%. 오히려 예…",
-    "url": "https://t.me/skitteam/4685",
-    "time_kst": "10-06 08:25"
+    "channel": "메리츠증권 리서치",
+    "head": "📮[메리츠증권 모빌리티 김준성] 안녕하세요 메리츠증권 김준성입니다. 현대차/기아 업데이트 드리겠습니다. (URL: https://han.gl/PUF6j) ▶ 팔아도 · 안 팔아도 · 앞으로도, 문제 ▶ 엇갈린 판매 성과 · 동일한 실적 부진, 원인은 전기차 원가경쟁력 - 늘 같은 흐름을 보여왔던 현대차 · 기아의 판매 성…",
+    "url": "https://t.me/meritz_research/44792",
+    "time_kst": "10-12 07:40"
    },
    {
     "channels": 3,
-    "channel": "AWAKE - 실시간 주식 공시 정리채널",
-    "head": "2026.10.06 08:01:27 기업명: 한미반도체(시가총액: 25조 9,249억) A042700 보고서명: 단일판매ㆍ공급계약체결(자율공시) 계약상대 : 삼성전기 (SAMSUNG ELECTRO-MECHANICS CO., LTD.) 계약내용 : ( 기타 판매ㆍ공급계약 ) AI 반도체 기판 제조용 대면적 micro SAW…",
-    "url": "https://t.me/darthacking/154211",
-    "time_kst": "10-06 08:01"
+    "channel": "신한 리서치",
+    "head": "[신한투자증권 김아람] 서브컬쳐 Update 티니핑 x 치이카와, 귀여운게 최고야 ▶️ 낮아진 멀티플 + 주가 재료 = 트레이딩 가능 환경 . 지난주 캐릭터 관련주인 SAMG엔터와 대원미디어가 각각 19.6%, 13.3% 상승. IP 사업은 흥행사업. 미국/중국 시장에서 티니핑, 국내 시장에서 치이카와 화제성 높아질수록…",
+    "url": "https://t.me/shinhanresearch/53042",
+    "time_kst": "10-12 07:49"
    },
    {
     "channels": 3,
-    "channel": "한투증권 미국/중국전략 정정영",
-    "head": "구글 & Constellation, 10억달러 규모 원자력 발전 협정 논의. 빅테크의 청정 전력 구매 본격화 • 아마존은 지난주 Constellation과 비슷한 계약 체결 • 구글과의 합의가 예정대로 발표되면 Constellation은 2주 안에 두 빅테크 기업과 잇따라 계약 체결 • 신규 원자로 건설 승인은 10년 이…",
-    "url": "https://t.me/G2strategy/33542",
-    "time_kst": "10-06 11:42"
-   },
-   {
-    "channels": 3,
-    "channel": "AWAKE - 실시간 주식 공시 정리채널",
-    "head": "2026.10.06 14:53:03 기업명: 산일전기(시가총액: 7조 1,091억) A062040 보고서명: 단일판매ㆍ공급계약체결 계약상대 : - 계약내용 : ( 기타 판매ㆍ공급계약 ) 미국 BESS Project Pad Mount transformer 공급지역 : 미국 계약금액 : 351억 계약시작 : 2026-09-2…",
-    "url": "https://t.me/darthacking/154241",
-    "time_kst": "10-06 14:53"
+    "channel": "여의도스토리 Ver2.0-习近平是个狗东西",
+    "head": "반도체: 후공정도 멀리 봐도 된다 [대신증권 IT 스몰캡/김진형, 반도체/류형근] 최근 후공정 업종 전반적으로 주가 급등을 겪으면서 이 상승 랠리의 지속 가능성에 대한 고민도 늘어날 수 있는 시점입니다. 결론부터 말씀드리자면 후공정 또한 투자의 시계열을 길게 가져가야할 때라고 판단합니다. 타이트한 후공정 Capa를 감안하…",
+    "url": "https://t.me/YeouidoStory2/118287",
+    "time_kst": "10-12 09:01"
    }
   ]
  },
@@ -499,219 +466,219 @@
    {
     "id": "krstock",
     "name": "국내주식갤러리",
-    "posts": 1319,
+    "posts": 1329,
     "capped": true,
     "burst": 1.0,
-    "base_daily": 1273.1
+    "base_daily": 1294.1
    },
    {
     "id": "stockus",
     "name": "해외주식갤러리",
-    "posts": 2771,
+    "posts": 363,
     "capped": true,
-    "burst": 0.9,
-    "base_daily": 3029.3
+    "burst": 0.1,
+    "base_daily": 2709.6
    }
   ],
-  "posts_sampled": 558,
+  "posts_sampled": 482,
   "keywords": [
    {
-    "term": "인텔",
-    "count": 32,
+    "term": "반도치",
+    "count": 7,
     "burst": 99.0,
     "new": true
    },
    {
-    "term": "삼성전자",
-    "count": 10,
+    "term": "브컴",
+    "count": 7,
     "burst": 99.0,
     "new": true
    },
    {
-    "term": "adr",
-    "count": 9,
-    "burst": 99.0,
-    "new": true
-   },
-   {
-    "term": "소부장",
+    "term": "야선",
     "count": 6,
-    "burst": 82.3,
+    "burst": 97.4,
     "new": true
    },
    {
-    "term": "대만",
+    "term": "사우디",
     "count": 6,
-    "burst": 82.3,
+    "burst": 97.4,
     "new": true
    },
    {
-    "term": "펭귄",
+    "term": "오면",
     "count": 5,
-    "burst": 68.5,
+    "burst": 81.2,
     "new": true
    },
    {
-    "term": "슬슬",
+    "term": "공포",
     "count": 5,
-    "burst": 68.5,
+    "burst": 81.2,
     "new": true
    },
    {
-    "term": "보면",
+    "term": "ceo",
     "count": 5,
-    "burst": 68.5,
+    "burst": 81.2,
     "new": true
    },
    {
-    "term": "미붕이들",
-    "count": 5,
-    "burst": 68.5,
-    "new": true
-   },
-   {
-    "term": "SK하이닉스",
-    "count": 37,
-    "burst": 15.4,
-    "new": false
-   },
-   {
-    "term": "양닉",
-    "count": 15,
-    "burst": 13.7,
-    "new": false
-   },
-   {
-    "term": "속슬",
-    "count": 15,
-    "burst": 13.7,
+    "term": "반도체",
+    "count": 8,
+    "burst": 10.0,
     "new": false
    },
    {
     "term": "국장",
-    "count": 19,
-    "burst": 6.7,
+    "count": 13,
+    "burst": 5.4,
     "new": false
    },
    {
-    "term": "펩시코",
-    "count": 9,
-    "burst": 8.2,
+    "term": "존나",
+    "count": 7,
+    "burst": 7.6,
+    "new": false
+   },
+   {
+    "term": "미장",
+    "count": 8,
+    "burst": 6.8,
     "new": false
    },
    {
     "term": "삼닉",
-    "count": 15,
-    "burst": 5.0,
+    "count": 14,
+    "burst": 4.8,
+    "new": false
+   },
+   {
+    "term": "속슬",
+    "count": 10,
+    "burst": 5.2,
+    "new": false
+   },
+   {
+    "term": "SK하이닉스",
+    "count": 17,
+    "burst": 3.7,
+    "new": false
+   },
+   {
+    "term": "다들",
+    "count": 5,
+    "burst": 7.4,
     "new": false
    }
   ],
   "top_recommended": [
    {
     "gallery": "해외주식갤러리",
-    "title": "빚탕감 받았던사람들 근황.jpg",
-    "views": 10095,
-    "recommend": 176,
-    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=17914720&exception_mode=recommend&page=1",
-    "time_kst": "10-06 12:40"
+    "title": "닷컴 버블 붕괴 6개월 전 뉴스 헤드라인",
+    "views": 9455,
+    "recommend": 148,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=17959671&exception_mode=recommend&page=1",
+    "time_kst": "10-12 15:20"
    },
    {
     "gallery": "해외주식갤러리",
-    "title": "마이클버리 \" 룰루레몬 청산 \"",
-    "views": 10026,
-    "recommend": 113,
-    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=17915455&exception_mode=recommend&page=1",
-    "time_kst": "10-06 14:59"
+    "title": "전문가, 현직자 말 절대믿지마라",
+    "views": 7587,
+    "recommend": 131,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=17959702&exception_mode=recommend&page=1",
+    "time_kst": "10-12 15:24"
    },
    {
     "gallery": "해외주식갤러리",
-    "title": "테슬라 국내에서 보호무역 당했노ㅋㅋㅋㅋㅋㅋㅋㅋ",
-    "views": 8753,
-    "recommend": 113,
-    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=17914789&exception_mode=recommend&page=1",
-    "time_kst": "10-06 12:53"
+    "title": "버블도 아니고 그냥 ai는 사기임",
+    "views": 8429,
+    "recommend": 122,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=17959752&exception_mode=recommend&page=1",
+    "time_kst": "10-12 15:30"
    },
    {
     "gallery": "해외주식갤러리",
-    "title": "휴머노이드에 몰빵한 놈들 좆된 이유",
-    "views": 8569,
-    "recommend": 112,
-    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=17914143&exception_mode=recommend&page=1",
-    "time_kst": "10-06 10:38"
-   },
-   {
-    "gallery": "해외주식갤러리",
-    "title": "파월 이새낀 진짜 악질이였네",
-    "views": 9013,
+    "title": "니애1비차 byd 근황 ...jpg",
+    "views": 9458,
     "recommend": 100,
-    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=17913672&exception_mode=recommend&page=1",
-    "time_kst": "10-06 08:53"
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=17956851&exception_mode=recommend&page=1",
+    "time_kst": "10-12 08:43"
+   },
+   {
+    "gallery": "해외주식갤러리",
+    "title": "오늘 하루만에 벌어진 일.jpg",
+    "views": 9191,
+    "recommend": 99,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=17961190&exception_mode=recommend&page=1",
+    "time_kst": "10-12 18:11"
    }
   ],
   "top_viewed": [
    {
     "gallery": "해외주식갤러리",
-    "title": "인텔 빠는 새기 필독",
-    "views": 938,
-    "recommend": 14,
-    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=17920302&page=6",
-    "time_kst": "10-07 04:07"
+    "title": "SOXL씨발 황말올 개씨발 개지려",
+    "views": 1036,
+    "recommend": 17,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=17966013&page=4",
+    "time_kst": "10-13 05:05"
    },
    {
     "gallery": "국내주식갤러리",
-    "title": "머임 반도치 대풀롱아니었나",
-    "views": 465,
-    "recommend": 0,
-    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3596655&page=4",
-    "time_kst": "10-07 02:38"
+    "title": "이미 야선은 양전했네 ㅋㅎㅋㅎㅋㅎ",
+    "views": 682,
+    "recommend": 7,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3629008&page=6",
+    "time_kst": "10-13 01:12"
    },
    {
     "gallery": "국내주식갤러리",
-    "title": "알상무 요즘 폼 좋네",
-    "views": 404,
+    "title": "반도치는 또 롱장이구나..",
+    "views": 543,
     "recommend": 0,
-    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3596643&page=4",
-    "time_kst": "10-07 02:29"
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3629224&page=2",
+    "time_kst": "10-13 04:35"
    },
    {
     "gallery": "국내주식갤러리",
-    "title": "하닉 떨어지는거 이거 때문이에요?",
-    "views": 394,
+    "title": "삼닉 27.5만 180만 가면 걍 다 팔까..?",
+    "views": 471,
     "recommend": 0,
-    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3596737&page=3",
-    "time_kst": "10-07 04:41"
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3629052&page=5",
+    "time_kst": "10-13 01:38"
    },
    {
     "gallery": "국내주식갤러리",
-    "title": "내일 반도체 떨어지면 추세이탈아닌가",
-    "views": 382,
+    "title": "의외로 4년 밖에 안남은거......ㄹ ㅇ",
+    "views": 448,
     "recommend": 0,
-    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3596585&page=5",
-    "time_kst": "10-07 01:38"
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3629255&page=1",
+    "time_kst": "10-13 05:39"
    },
    {
     "gallery": "국내주식갤러리",
-    "title": "하닉 adr 금액 자체가 말이 안되긴 함",
-    "views": 353,
+    "title": "긴급 속보) 비상, 트럼프 이란 수장한테 미사일 발사 ㄷㄷㄷㄷㄷ",
+    "views": 443,
     "recommend": 0,
-    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3596773&page=2",
-    "time_kst": "10-07 05:06"
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3629172&page=3",
+    "time_kst": "10-13 03:28"
    },
    {
     "gallery": "국내주식갤러리",
-    "title": "마이클버리 말이 점점 현실화되는중",
-    "views": 344,
+    "title": "국장 지금사야될종목",
+    "views": 435,
     "recommend": 0,
-    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3596779&page=2",
-    "time_kst": "10-07 05:09"
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3629183&page=3",
+    "time_kst": "10-13 03:42"
    },
    {
     "gallery": "국내주식갤러리",
-    "title": "삼전 실적발표 낼 몇시냐",
-    "views": 336,
+    "title": "공포같은 소리하고있네 ㅋ ㅋ ㅋ ㅋ ㅋ ㅋ",
+    "views": 430,
     "recommend": 0,
-    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3596617&page=5",
-    "time_kst": "10-07 02:03"
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3629247&page=2",
+    "time_kst": "10-13 05:32"
    }
   ]
  }

@@ -1,131 +1,40 @@
 {
-  "date": "2026-10-07",
-  "prev_date": "2026-10-05",
-  "generated_at": "2026-10-07 10:20",
+  "date": "2026-10-13",
+  "prev_date": "2026-10-12",
+  "generated_at": "2026-10-13 10:20",
   "base_date": "",
   "prev_base_date": "",
-  "market_date": "2026-10-07",
-  "prev_market_date": "",
-  "fetched_at": "2026-10-07 10:20",
-  "prev_fetched_at": "2026-10-05 11:21",
+  "market_date": "2026-10-13",
+  "prev_market_date": "2026-10-12",
+  "fetched_at": "2026-10-13 10:20",
+  "prev_fetched_at": "2026-10-12 09:20",
   "first_run": false,
   "etfs": [
     {
-      "code": "471780",
-      "label": "TIGER 코리아테크액티브",
-      "group": "TIGER",
-      "flow_factor": 1.0,
-      "new": [
-        {
-          "key": "007660",
-          "name": "이수페타시스",
-          "code": "007660",
-          "weight": 3.23,
-          "shares": 100.0
-        }
-      ],
-      "gone": [
-        {
-          "key": "039030",
-          "name": "이오테크닉스",
-          "code": "039030",
-          "weight_prev": 3.55,
-          "shares_prev": 27.0
-        }
-      ],
-      "moves": [
-        {
-          "key": "005930",
-          "name": "삼성전자",
-          "code": "005930",
-          "shares_now": 362.0,
-          "shares_prev": 331.0,
-          "active_share_pct": 9.4,
-          "active_weight_pp": 1.57,
-          "weight_now": 24.14,
-          "weight_prev": 22.55,
-          "headline": false
-        }
-      ],
-      "has_weight": true
-    },
-    {
-      "code": "0162Y0",
-      "label": "TIME 코스닥액티브",
+      "code": "426020",
+      "label": "TIME 미국S&P500액티브",
       "group": "TIME(구 TIMEFOLIO)",
       "flow_factor": 1.0,
       "new": [
         {
-          "key": "277810",
-          "name": "레인보우로보틱스",
-          "code": "277810",
-          "weight": 2.83,
-          "shares": 27.0
+          "key": "VERIZON COMMUNICATIONS INC",
+          "name": "VERIZON COMMUNICATIONS INC",
+          "code": "",
+          "weight": 0.0,
+          "shares": 46.0
         }
       ],
       "gone": [
         {
-          "key": "196170",
-          "name": "알테오젠",
-          "code": "196170",
-          "weight_prev": 2.85,
-          "shares_prev": 47.0
+          "key": "ROBINHOOD MARKETS INC - A",
+          "name": "ROBINHOOD MARKETS INC - A",
+          "code": "",
+          "weight_prev": 0.0,
+          "shares_prev": 63.0
         }
       ],
       "moves": [],
-      "has_weight": true
-    },
-    {
-      "code": "463050",
-      "label": "TIME K바이오액티브",
-      "group": "TIME(구 TIMEFOLIO)",
-      "flow_factor": 1.0,
-      "new": [
-        {
-          "key": "347850",
-          "name": "디앤디파마텍",
-          "code": "347850",
-          "weight": 4.0,
-          "shares": 501.0
-        }
-      ],
-      "gone": [
-        {
-          "key": "476830",
-          "name": "알지노믹스",
-          "code": "476830",
-          "weight_prev": 3.73,
-          "shares_prev": 768.0
-        }
-      ],
-      "moves": [],
-      "has_weight": true
-    },
-    {
-      "code": "0163Y0",
-      "label": "KoAct 코스닥액티브",
-      "group": "KoAct",
-      "flow_factor": 1.0,
-      "new": [
-        {
-          "key": "052710",
-          "name": "아모텍",
-          "code": "052710",
-          "weight": 1.95,
-          "shares": 477.0
-        }
-      ],
-      "gone": [
-        {
-          "key": "319660",
-          "name": "피에스케이",
-          "code": "319660",
-          "weight_prev": 1.93,
-          "shares_prev": 69.0
-        }
-      ],
-      "moves": [],
-      "has_weight": true
+      "has_weight": false
     },
     {
       "code": "365040",
@@ -134,20 +43,20 @@
       "flow_factor": 1.0,
       "new": [
         {
-          "key": "066570",
-          "name": "LG전자",
-          "code": "066570",
-          "weight": 0.84,
-          "shares": 134.0
+          "key": "105560",
+          "name": "KB금융",
+          "code": "105560",
+          "weight": 0.85,
+          "shares": 176.0
         }
       ],
       "gone": [
         {
-          "key": "012450",
-          "name": "한화에어로스페이스",
-          "code": "012450",
-          "weight_prev": 0.81,
-          "shares_prev": 28.0
+          "key": "006400",
+          "name": "삼성SDI",
+          "code": "006400",
+          "weight_prev": 0.83,
+          "shares_prev": 51.0
         }
       ],
       "moves": [],
@@ -160,50 +69,59 @@
       "flow_factor": 1.0,
       "new": [
         {
-          "key": "066970",
-          "name": "엘앤에프",
-          "code": "066970",
-          "weight": 3.5,
-          "shares": 35.0
+          "key": "003670",
+          "name": "포스코퓨처엠",
+          "code": "003670",
+          "weight": 3.89,
+          "shares": 25.0
         }
       ],
       "gone": [
         {
-          "key": "012330",
-          "name": "현대모비스",
-          "code": "012330",
-          "weight_prev": 3.51,
-          "shares_prev": 11.0
+          "key": "066970",
+          "name": "엘앤에프",
+          "code": "066970",
+          "weight_prev": 3.41,
+          "shares_prev": 35.0
         }
       ],
       "moves": [],
       "has_weight": true
     },
     {
-      "code": "481180",
-      "label": "SOL 미국AI소프트웨어액티브",
-      "group": "SOL",
-      "flow_factor": 0.9614,
-      "new": [
+      "code": "0162Y0",
+      "label": "TIME 코스닥액티브",
+      "group": "TIME(구 TIMEFOLIO)",
+      "flow_factor": 1.0,
+      "new": [],
+      "gone": [],
+      "moves": [
         {
-          "key": "Nebius Group",
-          "name": "Nebius Group",
-          "code": "",
-          "weight": 0.0,
-          "shares": 124.0
+          "key": "039030",
+          "name": "이오테크닉스",
+          "code": "039030",
+          "shares_now": 46.0,
+          "shares_prev": 33.0,
+          "active_share_pct": 39.4,
+          "active_weight_pp": 1.31,
+          "weight_now": 5.83,
+          "weight_prev": 4.05,
+          "headline": false
+        },
+        {
+          "key": "031980",
+          "name": "피에스케이홀딩스",
+          "code": "031980",
+          "shares_now": 80.0,
+          "shares_prev": 60.0,
+          "active_share_pct": 33.3,
+          "active_weight_pp": 0.76,
+          "weight_now": 4.0,
+          "weight_prev": 2.94,
+          "headline": false
         }
       ],
-      "gone": [
-        {
-          "key": "ADOBE SYSTEMS INC",
-          "name": "ADOBE SYSTEMS INC",
-          "code": "",
-          "weight_prev": 0.0,
-          "shares_prev": 112.0
-        }
-      ],
-      "moves": [],
-      "has_weight": false
+      "has_weight": true
     }
   ],
   "thresholds": {
@@ -212,10 +130,10 @@
     "share_pct_min": 30.0
   },
   "summary": {
-    "etfs_changed": 7,
-    "new_total": 7,
-    "gone_total": 7,
-    "moves_total": 1,
+    "etfs_changed": 4,
+    "new_total": 3,
+    "gone_total": 3,
+    "moves_total": 2,
     "universe": 20
   }
 }

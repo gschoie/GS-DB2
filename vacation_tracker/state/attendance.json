@@ -1,8 +1,9 @@
 {
  "campaigns": {
   "2026-09": {
+   "closed_at": "2026-10-07T10:39+09:00",
    "opened_at": "2026-10-06T15:07+09:00",
-   "status": "open"
+   "status": "closed"
   }
  },
  "months": {
@@ -66,6 +67,14 @@
    "박영도": {
     "checked": true,
     "msg_date": "2026-10-07T08:09+09:00",
+    "note": "",
+    "source": "manual",
+    "text": "",
+    "uid": ""
+   },
+   "박종현": {
+    "checked": true,
+    "msg_date": "2026-10-07T10:39+09:00",
     "note": "",
     "source": "manual",
     "text": "",
