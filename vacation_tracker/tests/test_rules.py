@@ -161,6 +161,28 @@ class KazakhDates(unittest.TestCase):
                          (date(2026, 9, 15), date(2026, 9, 18)))
 
 
+class EventTripKeyword(unittest.TestCase):
+    """행사 참석형 출장 — '출장'이란 말 없이 행사명만 말하는 보고 (10/13 이정우 실사례)."""
+
+    def test_valueday_message(self):
+        msg = "아 팀장님 저 포스코인터 인니팜사업 밸류데이 11.24-11.27(27일 오전 8시 도착) 입니다!"
+        self.assertTrue(is_candidate(msg))
+        self.assertEqual(detect_kind(msg), "출장")
+        entry = rule_extract(msg, datetime(2026, 10, 13, 9, 0, tzinfo=KST))
+        self.assertEqual((entry["start"], entry["end"]), ("2026-11-24", "2026-11-27"))
+        self.assertFalse(entry["needs_review"])
+
+    def test_other_event_words(self):
+        self.assertEqual(detect_kind("다음주 NDR 다녀오겠습니다"), "출장")
+        self.assertEqual(detect_kind("기업탐방 갑니다"), "탐방")
+        self.assertEqual(detect_kind("벨류 데이 참석합니다"), "출장")
+        self.assertEqual(detect_kind("컨퍼런스 참석차 이동합니다"), "출장")
+
+    def test_conference_call_is_not_trip(self):
+        for text in ("컨퍼런스 콜 예정입니다", "실적 컨퍼런스콜 참석", "컨콜 있습니다"):
+            self.assertFalse(is_candidate(text), text)
+
+
 class TravelKeyword(unittest.TestCase):
     def test_travel_report_is_candidate(self):
         self.assertEqual(detect_kind("다음주 제주 여행 갑니다"), "여행")
