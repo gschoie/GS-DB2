@@ -1,12 +1,12 @@
 {
   "date": "2026-10-14",
   "prev_date": "2026-10-13",
-  "generated_at": "2026-10-14 09:20",
+  "generated_at": "2026-10-14 10:20",
   "base_date": "",
   "prev_base_date": "",
   "market_date": "2026-10-14",
   "prev_market_date": "2026-10-13",
-  "fetched_at": "2026-10-14 09:20",
+  "fetched_at": "2026-10-14 10:20",
   "prev_fetched_at": "2026-10-13 10:20",
   "first_run": false,
   "etfs": [
@@ -17,11 +17,11 @@
       "flow_factor": 1.0,
       "new": [
         {
-          "key": "JOHNSON & JOHNSON",
-          "name": "JOHNSON & JOHNSON",
+          "key": "MICROSOFT CORP",
+          "name": "MICROSOFT CORP",
           "code": "",
           "weight": 0.0,
-          "shares": 41.0
+          "shares": 45.0
         },
         {
           "key": "ROBINHOOD MARKETS INC - A",
@@ -31,11 +31,11 @@
           "shares": 43.0
         },
         {
-          "key": "MICROSOFT CORP",
-          "name": "MICROSOFT CORP",
+          "key": "JOHNSON & JOHNSON",
+          "name": "JOHNSON & JOHNSON",
           "code": "",
           "weight": 0.0,
-          "shares": 45.0
+          "shares": 41.0
         }
       ],
       "gone": [
@@ -59,6 +59,46 @@
           "code": "",
           "weight_prev": 0.0,
           "shares_prev": 69.0
+        }
+      ],
+      "moves": [],
+      "has_weight": false
+    },
+    {
+      "code": "426030",
+      "label": "TIME 미국나스닥100액티브",
+      "group": "TIME(구 TIMEFOLIO)",
+      "flow_factor": 0.8802,
+      "new": [
+        {
+          "key": "MARVELL TECHNOLOGY INC",
+          "name": "MARVELL TECHNOLOGY INC",
+          "code": "",
+          "weight": 0.0,
+          "shares": 85.0
+        },
+        {
+          "key": "PALANTIR TECHNOLOGIES INC-A",
+          "name": "PALANTIR TECHNOLOGIES INC-A",
+          "code": "",
+          "weight": 0.0,
+          "shares": 106.0
+        }
+      ],
+      "gone": [
+        {
+          "key": "STRATEGY INC",
+          "name": "STRATEGY INC",
+          "code": "",
+          "weight_prev": 0.0,
+          "shares_prev": 82.0
+        },
+        {
+          "key": "NEBIUS GROUP NV",
+          "name": "NEBIUS GROUP NV",
+          "code": "",
+          "weight_prev": 0.0,
+          "shares_prev": 76.0
         }
       ],
       "moves": [],
@@ -127,18 +167,18 @@
       ],
       "gone": [
         {
-          "key": "207940",
-          "name": "삼성바이오로직스",
-          "code": "207940",
-          "weight_prev": 0.85,
-          "shares_prev": 24.0
-        },
-        {
           "key": "105560",
           "name": "KB금융",
           "code": "105560",
           "weight_prev": 0.85,
           "shares_prev": 176.0
+        },
+        {
+          "key": "207940",
+          "name": "삼성바이오로직스",
+          "code": "207940",
+          "weight_prev": 0.85,
+          "shares_prev": 24.0
         }
       ],
       "moves": [],
@@ -169,6 +209,32 @@
       ],
       "moves": [],
       "has_weight": false
+    },
+    {
+      "code": "445290",
+      "label": "KODEX 로봇액티브",
+      "group": "KODEX",
+      "flow_factor": 1.0,
+      "new": [
+        {
+          "key": "018260",
+          "name": "삼성에스디에스",
+          "code": "018260",
+          "weight": 3.83,
+          "shares": 265.0
+        }
+      ],
+      "gone": [
+        {
+          "key": "000660",
+          "name": "SK하이닉스",
+          "code": "000660",
+          "weight_prev": 4.0,
+          "shares_prev": 35.0
+        }
+      ],
+      "moves": [],
+      "has_weight": true
     },
     {
       "code": "441640",
@@ -250,9 +316,9 @@
     "share_pct_min": 30.0
   },
   "summary": {
-    "etfs_changed": 6,
-    "new_total": 9,
-    "gone_total": 9,
+    "etfs_changed": 8,
+    "new_total": 12,
+    "gone_total": 12,
     "moves_total": 3,
     "universe": 20
   }
