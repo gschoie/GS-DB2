@@ -46,11 +46,16 @@ GEMINI_SYSTEM_PROMPT = """너는 텔레그램 대화에서 '자리 비움 보고
 메시지마다 아래를 판정해 JSON 배열로만 답하라(설명 금지):
 [{"i": <메시지 번호>, "vacation": true|false, "start": "YYYY-MM-DD"|null,
   "end": "YYYY-MM-DD"|null, "kind": "연차|반차|오전반차|오후반차|휴가|출장|해외출장|탐방|병가|휴무|기타",
-  "note": "짧은 메모(선택)", "who": "상대"|"본인"}]
+  "note": "짧은 메모(선택)", "who": "상대"|"본인"|"주인"}]
 
 판정 기준:
-- vacation=true는 '보낸 사람 본인이 자리를 비운다는 보고'만. 남 얘기, 과거 회상,
+- vacation=true는 '보낸 사람 본인이 자리를 비운다는 보고'가 기본. 과거 회상,
   질문("휴가 언제 가?"), 일반 잡담은 false.
+- 예외: **사수님·팀장님·사수·팀장 호칭은 계정 주인(팀장)을 가리킨다** — 누가 보냈든
+  그 호칭의 자리 비움 보고는 vacation=true, **who="주인"**(일정은 계정 주인의 것).
+  상대가 전하는 경우("팀장님 내일 연차시죠")도, **계정 주인이 주니어에게 자기 일정을
+  3인칭으로 알려주는 경우**("사수님 21-22 휴가시다"를 계정 주인이 보냄)도 같다.
+  계정 주인이 아닌 제3의 팀원 이야기는 여전히 false.
 - "내일", "다음주 수요일" 같은 상대 날짜는 그 메시지의 보낸 시각을 기준으로 계산한다.
 - 종료일이 없으면 end=start(하루짜리). "3일간"이면 시작일 포함 3일.
 - 날짜를 도저히 못 정하면 vacation=true라도 start=null로 두라(사람이 확인한다).
@@ -463,9 +468,17 @@ def _gemini_extract(candidates: list[dict]) -> dict[int, dict] | None:
 
 
 def resolve_entry_name(cand: dict, verdict: dict | None, owner: str) -> str:
-    """항목이 붙을 사람 이름. 내가 쓴 메시지를 Gemini가 '본인 일정'으로 판정하면
-    계정 주인(owner) 이름으로 — "나 휴가임"이 대화 상대 일정으로 붙는 오귀속 방지."""
-    if owner and cand.get("by_me") and str((verdict or {}).get("who") or "").strip() == "본인":
+    """항목이 붙을 사람 이름.
+
+    - 내가 쓴 메시지를 Gemini가 '본인 일정'으로 판정하면 계정 주인(owner) 이름으로
+      — "나 휴가임"이 대화 상대 일정으로 붙는 오귀속 방지.
+    - 상대가 계정 주인의 일정을 보고한 것(who="주인", "사수님 21-22 휴가시다")도
+      owner 로 — 10/14 실사례: 이준범의 보고가 이준범 휴가로 붙었다.
+    """
+    who = str((verdict or {}).get("who") or "").strip()
+    if owner and who == "주인":
+        return owner
+    if owner and cand.get("by_me") and who == "본인":
         return owner
     return cand["name"]
 
