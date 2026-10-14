@@ -5,12 +5,16 @@ KOSPI200 종목의 **영업이익 컨센서스**를 매주 스냅샷으로 저�
 추적 대상 (종목별):
 - **분기 컨센 전부** — 당분기뿐 아니라 다음 분기(3Q·4Q 등)까지, 네이버가 주는 추정(E) 분기를 모두 저장
 - **연간 E** 영업이익 컨센 (올해·내년·내후년, 연도는 자동)
+- **확정 실적(A)** — 과거 분기(모바일API)·과거 연도(연간 그리드)도 `quarter_actual`/`annual_actual`로
+  저장 → 화면 QoQ/YoY(직전·전년 대비)의 분모
 - (보너스) 매출액·당기순이익 컨센도 함께 저장
 
 화면 상단 4개 시계: **당분기 / 다음분기 / 올해E / 내년E**.
 - 당분기 앵커는 **법정 보고서 마감(분기말+45일, 4Q는 90일) 경과 시 자동으로 다음 분기로 이동**
   (예: 반기보고서 마감 8/14 경과 → 당분기 2Q→3Q 자동 전환).
 - 화면의 `분기 시점 ◀▶` 버튼으로 수동 이동 가능(브라우저 localStorage 저장, `↺ 자동으로` 버튼으로 복귀).
+- **QoQ/YoY 칼럼**: 분기 탭 = 직전·전년동기 대비, 연간 탭 = 전년 대비(내년E는 올해E 대비).
+  같은 스냅샷 내 비교, 실적(A) 우선 — 분모 적자면 `흑전`/`적지`, 분자만 적자면 `적전`.
 
 ## 데이터 소스
 
@@ -53,7 +57,7 @@ python report.py --metric quarter                    # 이번분기
 
 ```
 universe.py      KOSPI200 코드+종목명 크롤 → data/universe.json
-scrape.py        fetch_quarters() 모바일JSON(E분기 전부) · scrape_annual() Playwright
+scrape.py        fetch_quarters() 모바일JSON(E분기 전부+실적A) · scrape_annual() Playwright
 db.py / schema.sql   SQLite (data/consensus.db), consensus_snapshots (long 포맷)
 run_snapshot.py  유니버스→스크랩→저장 (매주 1회)
 report.py        snapshot_date 간 영업이익 컨센 diff → 상향/하향 랭킹
