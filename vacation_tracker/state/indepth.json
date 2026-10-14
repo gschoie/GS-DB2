@@ -698,6 +698,7 @@
    "topic": "전기전자"
   },
   "5415366498:1221999#3": {
+   "deleted": true,
    "detected_at": "2026-10-05T22:39+09:00",
    "done": false,
    "engine": "gemini",
@@ -993,6 +994,20 @@
    "target_text": "",
    "text": "직접 기입",
    "topic": "데쎈 콜라보"
+  },
+  "manual:20261014121038": {
+   "detected_at": "2026-10-14T12:10+09:00",
+   "done": false,
+   "engine": "manual",
+   "kind": "인뎁스",
+   "msg_date": "2026-10-14T12:10+09:00",
+   "name": "유지웅",
+   "needs_review": false,
+   "note": "",
+   "target": "2026-10-14",
+   "target_text": "",
+   "text": "직접 기입",
+   "topic": "유지웅-이정우 2차전지"
   }
  }
 }
