@@ -61,6 +61,10 @@ jobs:
           pip install -r requirements.txt
           python -m playwright install --with-deps chromium
 
+      - name: 수집·성장률 산식 테스트
+        working-directory: kospi_consensus
+        run: python tests/test_growth.py
+
       - name: 주간 컨센 스냅샷 (KOSPI200)
         working-directory: kospi_consensus
         run: python run_snapshot.py --refresh-universe

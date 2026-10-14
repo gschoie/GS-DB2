@@ -57,9 +57,11 @@ def run(limit=None, snapshot_date=None, refresh_universe=False, delay=0.3):
                 print(f"  ⚠ {name}({code}) 분기 수집 오류: {e}")
                 quarters = []
             for q in quarters:
-                db.upsert_consensus(con, snap, code, name, "quarter", q["period"],
-                                    q["sales"], q["op_profit"], q["net_profit"])
-            if quarters:
+                # 실적(A)은 'quarter_actual'로 분리 저장 — 화면 QoQ/YoY 분모용
+                db.upsert_consensus(con, snap, code, name,
+                                    "quarter" if q.get("est") else "quarter_actual",
+                                    q["period"], q["sales"], q["op_profit"], q["net_profit"])
+            if any(q.get("est") for q in quarters):
                 ok_q += 1
 
             try:
@@ -68,9 +70,10 @@ def run(limit=None, snapshot_date=None, refresh_universe=False, delay=0.3):
                 print(f"  ⚠ {name}({code}) 연간 수집 오류: {e}")
                 annual = []
             for row in annual:
-                db.upsert_consensus(con, snap, code, name, "annual", row["period"],
-                                    row["sales"], row["op_profit"], row["net_profit"])
-            if annual:
+                db.upsert_consensus(con, snap, code, name,
+                                    "annual" if row.get("est") else "annual_actual",
+                                    row["period"], row["sales"], row["op_profit"], row["net_profit"])
+            if any(r.get("est") for r in annual):
                 ok_a += 1
             if not quarters and not annual:
                 fail += 1
@@ -80,8 +83,8 @@ def run(limit=None, snapshot_date=None, refresh_universe=False, delay=0.3):
                 db.upsert_price(con, snap, code, pr["price_date"], pr["close"])
 
             con.commit()
-            e_years = ",".join(r["period"][:4] for r in annual) or "-"
-            q_periods = ",".join(q["period"] for q in quarters) or "-"
+            e_years = ",".join(r["period"][:4] for r in annual if r.get("est")) or "-"
+            q_periods = ",".join(q["period"] for q in quarters if q.get("est")) or "-"
             print(f"[{i}/{total}] {name}({code})  Q={q_periods}  연간E={e_years}")
             time.sleep(delay)
 

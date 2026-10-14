@@ -43,10 +43,11 @@ def _num(x):
 
 
 def fetch_quarters(code, session=None):
-    """추정(E) 분기 전부의 영업이익 컨센. 시간순 list[dict] (없으면 빈 리스트).
+    """분기 영업이익: 추정(E) 전부 + 과거 실적(A) 분기. 시간순 list[dict] (없으면 빈 리스트).
 
-    당분기뿐 아니라 다음 분기(3Q·4Q 등)도 함께 저장해 두면, 분기보고서 발간으로
-    당분기 시점이 넘어가도 다음 분기의 리비전 히스토리가 이미 쌓여 있게 된다.
+    - est=True: 컨센서스(E). 당분기뿐 아니라 다음 분기도 저장해 두면 당분기 시점이
+      넘어가도 다음 분기의 리비전 히스토리가 이미 쌓여 있게 된다.
+    - est=False: 확정 실적(A). 화면의 QoQ/YoY(직전·전년 분기 대비) 분모용.
     """
     s = session or requests
     headers = {"User-Agent": UA, "Referer": "https://m.stock.naver.com/"}
@@ -58,17 +59,20 @@ def fetch_quarters(code, session=None):
     fi = (d.get("financeInfo") if isinstance(d, dict) else None) or {}
     titles = fi.get("trTitleList") or []
     rows = fi.get("rowList") or []
-    cons = [t for t in titles if t.get("isConsensus") == "Y"]
 
     def val(title, key):
         row = next((r for r in rows if r.get("title", "").strip() == title), None)
         return _num(((row.get("columns") or {}).get(key) or {}).get("value")) if row else None
 
     out = []
-    for tgt in cons:
-        key = tgt["key"]
+    for tgt in titles:
+        key = tgt.get("key")
+        period = str(tgt.get("title", "")).rstrip(".")  # 'YYYY.MM'
+        if not key or not re.match(r"^20\d\d\.(03|06|09|12)$", period):
+            continue
         out.append({
-            "period": tgt["title"].rstrip("."),  # 'YYYY.MM'
+            "period": period,
+            "est": tgt.get("isConsensus") == "Y",
             "sales": val("매출액", key),
             "op_profit": val("영업이익", key),
             "net_profit": val("당기순이익", key) or val("당기순이익(지배)", key),
@@ -99,8 +103,9 @@ def fetch_close(code, on_date=None, session=None):
 
 
 def scrape_annual(page, code, timeout_ms=20000):
-    """연간 재무연월 그리드에서 추정(E) 연도들의 컨센 추출. list[dict].
+    """연간 재무연월 그리드에서 추정(E) + 실적(A) 연도들의 영업이익 추출. list[dict].
 
+    est=True 는 컨센서스(E), est=False 는 확정 실적(A) — 연간 YoY 분모용.
     page: 재사용하는 Playwright Page. 각 종목마다 goto만 다시 호출.
     """
     page.goto(CONSENSUS_URL.format(code=code),
@@ -136,10 +141,11 @@ def scrape_annual(page, code, timeout_ms=20000):
     for _, r in df.iterrows():
         p = str(r.get(c_period, ""))
         m = re.match(r"(20\d\d)\.(\d\d)\((A|E)\)", p)
-        if not m or m.group(3) != "E":   # 추정치만 저장 (실적은 안 변함)
+        if not m:
             continue
         out.append({
             "period": f"{m.group(1)}.{m.group(2)}",
+            "est": m.group(3) == "E",
             "sales": _num(r.get(c_sales)) if c_sales else None,
             "op_profit": _num(r.get(c_op)) if c_op else None,
             "net_profit": _num(r.get(c_net)) if c_net else None,
