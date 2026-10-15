@@ -170,15 +170,20 @@ def scrape_wisereport(page, code, timeout_ms=20000):
 
     out = {}
     for want_q, label in ((False, "연간"), (True, "분기")):
-        try:
-            page.get_by_text(label, exact=True).first.click(timeout=3000)
-        except Exception:
-            pass   # 토글이 없거나 못 찾음 → 현재 모드가 맞는지 아래에서 확인
-        try:
-            page.wait_for_function(_GRID_MODE_JS, arg=want_q, timeout=timeout_ms)
-        except Exception:
-            continue   # 이 모드 그리드가 안 뜸 → 해당 모드만 건너뜀
-        out[want_q] = _parse_grid(page)
+        # 클릭이 간헐적으로 안 먹는다(10/15 첫 전체 run에서 종목 10개의 연간이 빠짐)
+        # → 클릭+모드대기를 2회 시도. 토글이 없거나 이미 그 모드면 클릭 실패해도 대기가 통과한다.
+        for attempt in range(2):
+            try:
+                page.get_by_text(label, exact=True).first.click(timeout=3000)
+            except Exception:
+                pass
+            try:
+                page.wait_for_function(_GRID_MODE_JS, arg=want_q,
+                                       timeout=timeout_ms if attempt == 0 else 8000)
+                out[want_q] = _parse_grid(page)
+                break
+            except Exception:
+                continue   # 재클릭 후 한 번 더 — 그래도 안 뜨면 해당 모드만 건너뜀
     return out.get(False, []), out.get(True, [])
 
 
