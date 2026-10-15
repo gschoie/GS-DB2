@@ -25,6 +25,7 @@ import premarket  # noqa: E402
 KST = timezone(timedelta(hours=9))
 NOW = datetime(2026, 10, 15, 7, 40, tzinfo=KST)
 SRC = {"key": "hanwha_5things", "name": "한화 임혜윤 · 개장전 5가지", "premarket": True}
+SRC2 = {"key": "kiwoom_premkt", "name": "키움 한지영 · 장 시작 전 생각", "premarket": True}
 
 
 @dataclass
@@ -89,6 +90,14 @@ class TestRecord(Base):
     def test_falls_back_to_now_without_published_at(self):
         self.rec(SRC, [Item("a")])
         self.assertTrue(premarket.load(self.tmp)[0]["at"].startswith("2026-10-15T07:40"))
+
+    def test_sources_do_not_wipe_each_other(self):
+        # 한 소스를 적을 때 파일을 통째로 다시 쓴다 — 다른 소스 글이 날아가면
+        # 화면에 한화만(또는 키움만) 남는다. 둘은 각자 다른 run 에서 걸릴 수 있다.
+        self.rec(SRC, [Item("h1", published_at=NOW - timedelta(minutes=10))])
+        self.rec(SRC2, [Item("k1", published_at=NOW)])
+        got = premarket.load(self.tmp)
+        self.assertEqual([o["key"] for o in got], ["kiwoom_premkt", "hanwha_5things"])
 
     def test_long_body_is_capped(self):
         self.rec(SRC, [Item("a", body="가" * (premarket.BODY_CAP + 500))])
