@@ -69,18 +69,22 @@ SNIPPET = """<!--gs-gate--><script>
    w.innerHTML='<form style="background:#fff;border:1px solid #ededeb;border-radius:12px;'+
      'padding:28px 26px;width:min(340px,100%);box-shadow:0 10px 40px rgba(17,24,39,.08)">'+
      '<div style="font-size:13px;letter-spacing:.12em;color:#9ca3af;font-weight:700">GS RESEARCH DESK</div>'+
-     '<h1 style="margin:6px 0 16px;font-size:20px;font-weight:800;color:#111827">비밀번호를 넣어 주세요</h1>'+
+     '<h1 style="margin:6px 0 6px;font-size:20px;font-weight:800;color:#111827">비밀번호를 넣어 주세요</h1>'+
+     '<p style="margin:0 0 15px;font-size:12.5px;color:#6b7280;line-height:1.5">'+
+     '비밀번호는 <b style="color:#374151">GS최</b> 님에게 문의하세요.</p>'+
      '<input type="password" autocomplete="current-password" autofocus '+
      'style="width:100%;box-sizing:border-box;border:1px solid #ededeb;border-radius:8px;'+
      'padding:12px 13px;font-size:15px;font-family:inherit;color:#111827;background:#fff">'+
-     '<p style="margin:9px 2px 0;min-height:18px;font-size:12.5px;color:#bd4335"></p>'+
+     '<p data-err style="margin:9px 2px 0;min-height:18px;font-size:12.5px;color:#bd4335"></p>'+
      '<button type="submit" style="margin-top:12px;width:100%;border:0;border-radius:8px;'+
      'background:#2383e2;color:#fff;font:700 15px/1 inherit;padding:13px;cursor:pointer">들어가기</button>'+
      '<p style="margin:14px 2px 0;font-size:11.5px;color:#9ca3af;line-height:1.5">'+
      (OWNER?"이 화면은 주인 비밀번호가 필요합니다. ":"")+
      '이 기기에서는 __DAYS__일 동안 다시 묻지 않습니다.</p></form>';
    document.body.appendChild(w);
-   var f=w.querySelector("form"),i=w.querySelector("input"),msg=w.querySelector("p");
+   // 오류 문구는 반드시 data-err 로 집는다 — querySelector("p") 는 **첫 p** 라서
+   // 위에 안내문 p 를 하나 더 두면 오류가 안내문을 덮어쓴다.
+   var f=w.querySelector("form"),i=w.querySelector("input"),msg=w.querySelector("p[data-err]");
    f.addEventListener("submit",async function(e){
      e.preventDefault();
      var h=await digest(SALT+i.value);
