@@ -568,6 +568,22 @@ font-size:13px;width:15px;text-align:center;flex:none;transition:transform .12s}
 .bcard:not([open])>summary::before{{transform:rotate(-90deg)}}
 .gcard>summary:hover::before,.bcard>summary:hover::before{{color:var(--accent)}}
 summary .meta{{color:var(--muted);font-size:11.5px;font-weight:400;margin-left:6px}}
+/* 장 시작 전 코멘트 */
+.pre{{border:1px solid var(--line);border-radius:10px;background:var(--card);margin:0 0 8px}}
+.pre>summary{{list-style:none;cursor:pointer;padding:9px 11px;display:flex;
+align-items:center;gap:7px;flex-wrap:wrap}}
+.pre>summary::-webkit-details-marker{{display:none}}
+.pre>summary::before{{content:"▼";color:var(--muted);font-size:13px;width:15px;
+text-align:center;flex:none;transition:transform .12s}}
+.pre:not([open])>summary::before{{transform:rotate(-90deg)}}
+.pre>summary:hover::before{{color:var(--accent)}}
+.pre .who{{font-weight:700;font-size:13px}}
+.pre .when{{color:var(--muted);font-size:11.5px;margin-left:auto;white-space:nowrap}}
+.pre .tit{{flex-basis:100%;font-size:12.5px;color:var(--muted);margin-left:22px}}
+.pre .body{{margin:0;padding:2px 13px 12px 26px;font-size:12.5px;line-height:1.75;
+white-space:pre-wrap;word-break:keep-all;overflow-wrap:break-word}}
+.pre .src{{display:block;padding:0 13px 11px 26px;font-size:11.5px}}
+
 /* 시세표에서 누를 수 있는 줄 + 그 밑에 펼쳐지는 시계열 */
 tr.qrow{{cursor:pointer}}
 tr.qrow:hover th,tr.qrow:focus th{{color:var(--accent)}}
@@ -618,6 +634,11 @@ a{{color:inherit}} .yt{{font-size:12px}}
 <details class="sec" id="s-now" open>
 <summary><h2>📈 지금 숫자</h2></summary>
 <div class="card">{quote_table(cfg, data)}</div>
+</details>
+
+<details class="sec" id="s-pre" open>
+<summary><h2>🌅 장 시작 전</h2></summary>
+<div class="card" id="pre-wrap"><p class="na" id="pre-none">불러오는 중…</p></div>
 </details>
 
 <details class="sec" id="s-cal" open>
@@ -762,6 +783,51 @@ document.querySelectorAll('tr.qrow').forEach(function(row){{
     if(e.key==='Enter'||e.key===' '){{ e.preventDefault(); toggle(); }}
   }});
 }});
+}})();
+
+// 장 시작 전 코멘트 — **페이지에 박지 않고 열 때 읽는다**. 이 페이지는 저녁 9시에
+// 구워지는데 개장전 글은 아침 7시대에 오므로, 박아두면 아침엔 반드시 어제 글이다.
+// (차트 데이터는 페이지와 같은 주기로 바뀌어 박는 게 맞았다 — 여기는 반대 경우다.)
+// file:// 로 열거나 아직 배포 전이면 fetch 가 실패하는데, 그때는 섹션을 통째로 접는다.
+(function(){{
+  var wrap=document.getElementById('pre-wrap'),sec=document.getElementById('s-pre');
+  if(!wrap) return;
+  function esc(s){{ var d=document.createElement('div'); d.textContent=s==null?'':s; return d.innerHTML; }}
+  // **KST 로 못 박는다.** new Date(...).getHours() 는 보는 기기의 시간대라,
+  // 해외에서 열면 07:36 글이 '10/14 22:36' 으로 보인다(실측 — 컨테이너가 UTC).
+  // 이 대시보드의 시각은 전부 KST 기준이므로 표기도 KST 하나로 고정한다.
+  function when(iso){{
+    var d=new Date(iso);
+    if(isNaN(d)) return '';
+    try{{
+      var P={{}};
+      new Intl.DateTimeFormat('en-GB',{{timeZone:'Asia/Seoul',month:'numeric',
+        day:'numeric',hour:'2-digit',minute:'2-digit',hour12:false}})
+        .formatToParts(d).forEach(function(p){{ P[p.type]=p.value; }});
+      return P.month+'/'+P.day+' '+P.hour+':'+P.minute;
+    }}catch(e){{ return ''; }}
+  }}
+  fetch('premarket.json?t='+Date.now()).then(function(r){{
+    if(!r.ok) throw new Error(r.status); return r.json();
+  }}).then(function(d){{
+    var items=(d&&d.items)||[];
+    if(!items.length) throw new Error('empty');
+    wrap.innerHTML=items.slice(0,6).map(function(it,i){{
+      return '<details class="pre"'+(i===0?' open':'')+'>'
+        +'<summary><span class="who">'+esc(it.name)+'</span>'
+        +'<span class="when">'+esc(when(it.at))+'</span>'
+        +(it.title?'<span class="tit">'+esc(it.title)+'</span>':'')
+        +'</summary><p class="body">'+esc(it.body)+'</p>'
+        +(it.url?'<a class="src" href="'+esc(it.url)+'" target="_blank" rel="noopener">🔗 원문 보기</a>':'')
+        +'</details>';
+    }}).join('');
+  }}).catch(function(){{
+    // 못 읽으면 빈 칸을 남기지 않고 섹션을 접어 둔다 — '불러오는 중…' 이 영영
+    // 떠 있으면 고장으로 보인다.
+    if(sec) sec.open=false;
+    wrap.innerHTML='<p class="na">장 시작 전 코멘트가 아직 없습니다 '
+      +'(소스 감시가 그날 글을 받아 배포된 뒤에 보입니다).</p>';
+  }});
 }})();
 </script>
 </body></html>"""
