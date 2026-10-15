@@ -45,7 +45,7 @@ jobs:
     needs: guard
     if: ${{ always() && needs.guard.outputs.skip != 'true' }}
     runs-on: ubuntu-latest
-    timeout-minutes: 35   # 네이버가 클라우드 IP를 스로틀하면 스크랩이 느려짐 → 완주 여지 확보
+    timeout-minutes: 60   # 종목당 연간+분기 토글 2회(기존 전체 ~25분 → 여유 확보). 네이버 스로틀 변수 포함
     steps:
       - uses: actions/checkout@v5
 
