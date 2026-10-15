@@ -22,7 +22,7 @@ jobs:
           python-version: "3.12"
       - name: 패키지 설치
         run: |
-          pip install requests playwright
+          pip install -r kospi_consensus/requirements.txt
           python -m playwright install --with-deps chromium
       - name: 프로브 실행
         working-directory: kospi_consensus

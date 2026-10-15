@@ -1,59 +1,49 @@
 # -*- coding: utf-8 -*-
-"""4Q26(다음 분기) 컨센 소스 탐색 프로브 v2 — Playwright 렌더링 후 표 전수 덤프.
+"""fwd 분기 수집 E2E 검증 프로브 v3 (일회용, GitHub 러너에서 실행).
 
-1차 결과: 모바일 API는 E=3Q26 하나뿐, FnGuide는 러너 차단.
-→ 이미 종목마다 여는 와이즈리포트 페이지(c1050001/c1010001)를 JS 주입 후 뒤져
-  분기(E) 그리드가 있는지 확인한다. 파악 후 이 파일과 consensus-probe.yml 삭제.
+run_snapshot --limit 6 을 실제로 돌리고(DB는 러너 로컬, 커밋 안 됨)
+- 분기(E)가 당분기+2개(fwd)로 들어왔는지
+- 연간 kind에 12월 외 period가 섞이지 않았는지(토글 회귀 검사)
+를 출력한다. 검증 후 이 파일과 consensus-probe.yml 삭제.
 """
-import re
+import sqlite3
+import subprocess
 import sys
-
-from playwright.sync_api import sync_playwright
 
 sys.stdout.reconfigure(encoding="utf-8")
 
-UA = ("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
-      "(KHTML, like Gecko) Chrome/120.0 Safari/537.36")
-E_PAT = re.compile(r"20\d\d[./](?:03|06|09|12)\s*\(E\)")
+subprocess.run([sys.executable, "run_snapshot.py", "--limit", "6"], check=True)
 
+con = sqlite3.connect("data/consensus.db")
+snap = con.execute("SELECT MAX(snapshot_date) FROM consensus_snapshots").fetchone()[0]
+print(f"\n===== 검증: 스냅샷 {snap} =====")
 
-def dump_tables(page, tag, click_text=None):
-    if click_text:
-        try:   # '분기' 토글 등 — 같은 텍스트 요소가 여럿이면 첫 번째
-            page.get_by_text(click_text, exact=True).first.click(timeout=3000)
-            page.wait_for_timeout(2500)
-            print(f"  ('{click_text}' 클릭 성공)")
-        except Exception as e:
-            print(f"  ('{click_text}' 클릭 실패: {type(e).__name__})")
-    for i, t in enumerate(page.query_selector_all("table")):
-        tx = t.inner_text()
-        es = sorted(set(E_PAT.findall(tx)))
-        if not es:
-            continue
-        head = re.sub(r"\s+", " ", tx)[:450]
-        print(f"  [{tag} 표#{i}] (E)={es}")
-        print(f"    내용: {head}")
+print("\n[분기 kind 종목별 period]")
+for code, name in con.execute(
+        "SELECT DISTINCT code, name FROM consensus_snapshots WHERE snapshot_date=? ORDER BY code",
+        (snap,)):
+    for kind in ("quarter", "quarter_actual"):
+        rows = con.execute(
+            "SELECT period, op_profit FROM consensus_snapshots "
+            "WHERE snapshot_date=? AND code=? AND kind=? ORDER BY period",
+            (snap, code, kind)).fetchall()
+        if rows:
+            print(f"  {name}({code}) {kind}: " +
+                  " ".join(f"{p}={v:,.0f}" for p, v in rows))
 
+print("\n[연간 kind period 분포 — 12월 외가 있으면 토글 회귀]")
+for r in con.execute(
+        "SELECT kind, period, COUNT(*) FROM consensus_snapshots "
+        "WHERE snapshot_date=? AND kind IN ('annual','annual_actual') GROUP BY 1,2 ORDER BY 1,2",
+        (snap,)):
+    print(" ", r)
 
-with sync_playwright() as p:
-    browser = p.chromium.launch()
-    ctx = browser.new_context(user_agent=UA,
-                              extra_http_headers={"Referer": "https://finance.naver.com/"})
-    page = ctx.new_page()
-    for code in ("005930", "042660"):
-        print(f"\n{'=' * 70}\n### {code} — c1050001 (컨센서스 탭, 현행 연간 수집 페이지)\n{'=' * 70}")
-        page.goto(f"https://navercomp.wisereport.co.kr/company/c1050001.aspx?cmp_cd={code}&cn=",
-                  wait_until="domcontentloaded", timeout=30000)
-        page.wait_for_timeout(6000)
-        dump_tables(page, "기본")
-        dump_tables(page, "분기클릭후", click_text="분기")
-
-        print(f"\n{'=' * 70}\n### {code} — c1010001 (기업현황 Financial Highlight)\n{'=' * 70}")
-        page.goto(f"https://navercomp.wisereport.co.kr/company/c1010001.aspx?cmp_cd={code}&cn=",
-                  wait_until="domcontentloaded", timeout=30000)
-        page.wait_for_timeout(6000)
-        dump_tables(page, "기본")
-        dump_tables(page, "분기클릭후", click_text="분기")
-    browser.close()
-
-print("\n프로브 v2 완료")
+bad = con.execute(
+    "SELECT COUNT(*) FROM consensus_snapshots WHERE snapshot_date=? "
+    "AND kind IN ('annual','annual_actual') AND period NOT LIKE '%.12'", (snap,)).fetchone()[0]
+fwd = con.execute(
+    "SELECT COUNT(DISTINCT period) FROM consensus_snapshots WHERE snapshot_date=? "
+    "AND kind='quarter'", (snap,)).fetchone()[0]
+print(f"\n연간에 섞인 비12월 행: {bad} (0이어야 함) · 분기(E) period 종류: {fwd} (2 이상이어야 함)")
+assert bad == 0 and fwd >= 2
+print("검증 통과")
