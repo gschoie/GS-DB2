@@ -468,10 +468,13 @@ function closeNavFlyout(el){if(!matchMedia('(max-width:950px)').matches)return;c
 $$('.nav').forEach(b=>b.onclick=()=>{closeOtherNavGroups(b);closeNavFlyout(b);view(b.dataset.view)});$$('[data-go]').forEach(b=>b.onclick=()=>view(b.dataset.go));
 // 서브메뉴 안의 일반 링크(외부 링크 등)를 눌러도 모바일 플라이아웃은 닫는다.
 document.addEventListener('click',e=>{const a=e.target.closest?.('.nav-submenu a');if(a)closeNavFlyout(a)});
+// data-keep-open 하위 그룹은 그룹을 열 때마다 다시 펼친다 — 그룹을 닫으면 아래
+// 아코디언들이 서브그룹을 접어버리므로, 다음에 열 때 접힌 채로 남는 것을 막는다.
+function keepSubsOpen(g){g?.querySelectorAll?.('details.nav-subgroup[data-keep-open]').forEach(s=>{s.open=true})}
 // 한 메뉴 그룹을 열면 나머지 그룹의 서브메뉴는 닫는다(모바일·PC 공통, 아코디언).
-$$('details.nav-group').forEach(d=>d.addEventListener('toggle',()=>{if(!d.open)return;$$('details.nav-group').forEach(o=>{if(o!==d&&o.open){o.open=false;o.querySelectorAll('details.nav-subgroup').forEach(s=>s.open=false)}})}));
-// 같은 그룹 안의 하위 그룹(2단 서브메뉴)도 하나만 열리도록.
-$$('details.nav-subgroup').forEach(d=>d.addEventListener('toggle',()=>{if(!d.open)return;$$('details.nav-subgroup').forEach(o=>{if(o!==d)o.open=false})}));
+$$('details.nav-group').forEach(d=>d.addEventListener('toggle',()=>{if(!d.open)return;$$('details.nav-group').forEach(o=>{if(o!==d&&o.open){o.open=false;o.querySelectorAll('details.nav-subgroup').forEach(s=>s.open=false)}});keepSubsOpen(d)}));
+// 같은 그룹 안의 하위 그룹(2단 서브메뉴)도 하나만 열리도록(항상 펼쳐 둘 것은 건드리지 않는다).
+$$('details.nav-subgroup').forEach(d=>d.addEventListener('toggle',()=>{if(!d.open)return;$$('details.nav-subgroup').forEach(o=>{if(o!==d&&!o.hasAttribute('data-keep-open'))o.open=false})}));
 let timer;$('#search').oninput=e=>{clearTimeout(timer);timer=setTimeout(()=>{state.q=e.target.value;load()},250)};
 $('#report-company').onchange=e=>{state.reportCompany=e.target.value;load()};
 $('#news-company').onchange=e=>{state.newsCompany=e.target.value;load()};
