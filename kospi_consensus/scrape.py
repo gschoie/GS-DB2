@@ -43,10 +43,11 @@ def _num(x):
 
 
 def fetch_quarters(code, session=None):
-    """추정(E) 분기 전부의 영업이익 컨센. 시간순 list[dict] (없으면 빈 리스트).
+    """분기 영업이익: 추정(E) 전부 + 과거 실적(A) 분기. 시간순 list[dict] (없으면 빈 리스트).
 
-    당분기뿐 아니라 다음 분기(3Q·4Q 등)도 함께 저장해 두면, 분기보고서 발간으로
-    당분기 시점이 넘어가도 다음 분기의 리비전 히스토리가 이미 쌓여 있게 된다.
+    - est=True: 컨센서스(E). 당분기뿐 아니라 다음 분기도 저장해 두면 당분기 시점이
+      넘어가도 다음 분기의 리비전 히스토리가 이미 쌓여 있게 된다.
+    - est=False: 확정 실적(A). 화면의 QoQ/YoY(직전·전년 분기 대비) 분모용.
     """
     s = session or requests
     headers = {"User-Agent": UA, "Referer": "https://m.stock.naver.com/"}
@@ -58,17 +59,20 @@ def fetch_quarters(code, session=None):
     fi = (d.get("financeInfo") if isinstance(d, dict) else None) or {}
     titles = fi.get("trTitleList") or []
     rows = fi.get("rowList") or []
-    cons = [t for t in titles if t.get("isConsensus") == "Y"]
 
     def val(title, key):
         row = next((r for r in rows if r.get("title", "").strip() == title), None)
         return _num(((row.get("columns") or {}).get(key) or {}).get("value")) if row else None
 
     out = []
-    for tgt in cons:
-        key = tgt["key"]
+    for tgt in titles:
+        key = tgt.get("key")
+        period = str(tgt.get("title", "")).rstrip(".")  # 'YYYY.MM'
+        if not key or not re.match(r"^20\d\d\.(03|06|09|12)$", period):
+            continue
         out.append({
-            "period": tgt["title"].rstrip("."),  # 'YYYY.MM'
+            "period": period,
+            "est": tgt.get("isConsensus") == "Y",
             "sales": val("매출액", key),
             "op_profit": val("영업이익", key),
             "net_profit": val("당기순이익", key) or val("당기순이익(지배)", key),
@@ -98,18 +102,8 @@ def fetch_close(code, on_date=None, session=None):
     return {"price_date": f"{d[:4]}-{d[4:6]}-{d[6:8]}", "close": float(last[4])}
 
 
-def scrape_annual(page, code, timeout_ms=20000):
-    """연간 재무연월 그리드에서 추정(E) 연도들의 컨센 추출. list[dict].
-
-    page: 재사용하는 Playwright Page. 각 종목마다 goto만 다시 호출.
-    """
-    page.goto(CONSENSUS_URL.format(code=code),
-              wait_until="domcontentloaded", timeout=30000)
-    try:
-        page.wait_for_function(_GRID_READY_JS, timeout=timeout_ms)
-    except Exception:
-        return []
-
+def _parse_grid(page):
+    """현재 화면의 재무연월 그리드를 파싱. list[dict(period, est, sales, op_profit, net_profit)]."""
     grid_html = None
     for t in page.query_selector_all("table"):
         tx = t.inner_text()
@@ -136,12 +130,59 @@ def scrape_annual(page, code, timeout_ms=20000):
     for _, r in df.iterrows():
         p = str(r.get(c_period, ""))
         m = re.match(r"(20\d\d)\.(\d\d)\((A|E)\)", p)
-        if not m or m.group(3) != "E":   # 추정치만 저장 (실적은 안 변함)
+        if not m:
             continue
         out.append({
             "period": f"{m.group(1)}.{m.group(2)}",
+            "est": m.group(3) == "E",
             "sales": _num(r.get(c_sales)) if c_sales else None,
             "op_profit": _num(r.get(c_op)) if c_op else None,
             "net_profit": _num(r.get(c_net)) if c_net else None,
         })
     return out
+
+
+# 그리드가 원하는 모드인지: 연간 = 12월 결산 행만, 분기 = 03/06/09월 행 존재
+_GRID_MODE_JS = (
+    "(wantQuarter) => { for (const t of document.querySelectorAll('table')) {"
+    " const x = t.innerText;"
+    " if (!x.includes('재무연월') || !/\\d{2,},\\d{3}/.test(x)) continue;"
+    " const hasQ = /20\\d\\d\\.(03|06|09)\\(/.test(x);"
+    " return wantQuarter ? hasQ : !hasQ;"
+    " } return false; }"
+)
+
+
+def scrape_wisereport(page, code, timeout_ms=20000):
+    """컨센서스 탭 재무연월 그리드에서 연간 + 분기 둘 다 추출 (A/E 모두).
+
+    그리드에 연간/분기 토글이 있고 분기 모드에는 fwd 분기 컨센(당분기+2개, E)이 있다.
+    토글 상태가 세션에 들러붙으므로(한 종목에서 분기를 누르면 다음 종목도 분기로 열림)
+    종목마다 '연간 클릭→파싱→분기 클릭→파싱'으로 모드를 명시한다.
+    반환: (annual_rows, quarter_rows). page는 재사용하는 Playwright Page.
+    """
+    page.goto(CONSENSUS_URL.format(code=code),
+              wait_until="domcontentloaded", timeout=30000)
+    try:
+        page.wait_for_function(_GRID_READY_JS, timeout=timeout_ms)
+    except Exception:
+        return [], []
+
+    out = {}
+    for want_q, label in ((False, "연간"), (True, "분기")):
+        try:
+            page.get_by_text(label, exact=True).first.click(timeout=3000)
+        except Exception:
+            pass   # 토글이 없거나 못 찾음 → 현재 모드가 맞는지 아래에서 확인
+        try:
+            page.wait_for_function(_GRID_MODE_JS, arg=want_q, timeout=timeout_ms)
+        except Exception:
+            continue   # 이 모드 그리드가 안 뜸 → 해당 모드만 건너뜀
+        out[want_q] = _parse_grid(page)
+    return out.get(False, []), out.get(True, [])
+
+
+def scrape_annual(page, code, timeout_ms=20000):
+    """(하위호환) 연간 그리드만. 신규 코드는 scrape_wisereport를 쓸 것."""
+    annual, _ = scrape_wisereport(page, code, timeout_ms)
+    return annual

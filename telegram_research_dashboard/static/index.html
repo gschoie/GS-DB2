@@ -112,14 +112,17 @@
           <button class="nav" data-view="tone">🎯 DAOL 리서치 톤</button>
           <a href="https://gemini.google.com/gem/6c5032cc72cc?usp=sharing" target="_blank" rel="noopener">🏢 기업.톺아보기</a>
           <div class="nav-sep"></div>
+          <button class="nav" data-view="macro">💸 매크로.데스크</button>
           <button class="nav" data-view="flow">🌊 시장.수급.동향</button>
           <button class="nav" data-view="trend">🧠 시장관심.내러티브</button>
           <button class="nav" data-view="etf">📡 ETF/섹터.신호 포착</button>
           <button class="nav" data-view="holdings">🧩 액티브ETF.매매동향</button>
-          <button class="nav" data-view="consensus">📊 코스피200.컨센.추적</button>
+          <button class="nav" data-view="consensus">📉 코스피200.컨센.추적</button>
+          <a href="invest.html" target="_blank" rel="noopener" title="위 투자 화면만 모은 공유용 페이지입니다. 친구에게는 이 주소와 공유 비밀번호만 주면 됩니다 — 사이드바가 없어 팀원 메뉴는 열리지 않습니다.">🔗 투자 모음(공유용)</a>
           <div class="nav-sep"></div>
           <button class="nav" data-view="mzdiary">📈 MZ일기</button>
           <a href="https://finance.naver.com/mystock/summary.naver" target="_blank" rel="noopener" onclick="if(/iPhone|iPad|iPod/.test(navigator.userAgent)){window.location.href='googlechromes://finance.naver.com/mystock/summary.naver';return false;}">🖥️ 네이버 전광판</a>
+          <a href="https://www.stockplus.com/m/my/favorite_stock_lists/29122639" target="_blank" rel="noopener">📱 증권플러스</a>
         </div>
       </details>
       <details class="nav-group">
@@ -232,9 +235,7 @@
         <div id="today-plan" class="brief-card tone-plan" style="flex:20 1 0;min-width:190px;margin:0"></div>
       </div>
       <div class="grid grid-quad">
-        <section class="panel"><div class="panel-head"><div><small>LATEST RESEARCH</small><h2>GS의 발간 보고서</h2></div><button data-go="reports">전체 보기 →</button></div><div id="latest-reports"></div></section>
         <section class="panel"><div class="panel-head"><div><small>DAOL RESEARCH TONE</small><h2>DAOL 리서치 톤</h2></div><button data-go="tone">전체 보기 →</button></div><div id="tone-latest"></div></section>
-        <section class="panel"><div class="panel-head"><div><small>BREAKING & NEWS</small><h2>조/방/기 스크랩 뉴스</h2></div><button data-go="news">주간 보기 →</button></div><div id="latest-news"></div></section>
         <section class="panel"><div class="panel-head"><div><small>UNION BOARD</small><h2>현중 노조 월 TOP</h2></div><button data-go="union-board">전체 보기 →</button></div><div id="union-top"></div></section>
       </div>
     </section>
@@ -246,7 +247,7 @@
     </section>
 
     <section id="news" class="view">
-      <div class="archive-intro"><div><p class="eyebrow">NEWS ARCHIVE</p><h2>연도·월별 뉴스 디렉토리</h2></div><div class="etf-actions"><button id="news-refresh" class="refresh-btn" type="button" title="뉴스 아카이브만 다시 수집·반영합니다 (톤·매크로는 그대로, 몇 분 소요).">🔄 뉴스 갱신</button><span id="news-status" class="task-sync"></span><a class="open-new" href="./?focus=1#news" target="_blank" rel="noopener" title="사이드바 없이 뉴스.아카이브만 새 창으로 엽니다">🔗 새 창으로</a></div></div>
+      <div class="archive-intro"><div><p class="eyebrow">NEWS ARCHIVE</p><h2>연도·월별 뉴스 디렉토리</h2></div><div class="etf-actions"><a class="view-link" href="#press" title="같은 뉴스 데이터를 섹터·중요도로 정리해 기간별로 뽑는 화면입니다. 엑셀로 내려받을 수 있습니다.">📊 GS채널기사.취합 (엑셀)</a><button id="news-refresh" class="refresh-btn" type="button" title="뉴스 아카이브만 다시 수집·반영합니다 (톤·매크로는 그대로, 몇 분 소요).">🔄 뉴스 갱신</button><span id="news-status" class="task-sync"></span><a class="open-new" href="./?focus=1#news" target="_blank" rel="noopener" title="사이드바 없이 뉴스.아카이브만 새 창으로 엽니다">🔗 새 창으로</a></div></div>
       <div class="toolbar"><p>전체 기간 · 최신순</p><div class="news-filters"><input id="news-search" type="search" placeholder="키워드 검색 · 예: 페루, MLRS" aria-label="뉴스 키워드 검색"><select id="news-company"><option value="">모든 기업</option></select></div></div>
       <div id="news-list"></div>
     </section>
@@ -257,6 +258,7 @@
         <label>시작일<input id="press-start" type="date"></label>
         <span>—</span>
         <label>종료일<input id="press-end" type="date"></label>
+        <label>기업<select id="press-company-sel" title="고른 기업 기사만 표로 보고 엑셀로 받습니다"><option value="">모든 기업</option></select></label>
         <button id="press-refresh" type="button">조회</button>
         <button id="press-export" class="export-button" type="button">엑셀 다운로드</button>
         <strong id="press-count">0건</strong>
@@ -398,6 +400,11 @@
     <section id="flow" class="view">
       <div class="archive-intro"><div><p class="eyebrow">INVEST · FLOW</p><h2>시장 수급 동향</h2></div><div class="etf-actions"><button id="flow-refresh" class="refresh-btn" type="button" title="정해진 시간(10:00/13:00/15:40/16:40) 외에 지금 수급을 다시 수집합니다 (자동 실행, 몇 분 소요).">🔄 수급 갱신</button><span id="flow-status" class="task-sync"></span><a class="open-new" href="market_flow_report.html" target="_blank" rel="noopener">🔗 새 창으로</a></div></div>
       <iframe id="flow-frame" class="union-board-frame" title="시장 수급 동향" loading="lazy"></iframe>
+    </section>
+
+    <section id="macro" class="view">
+      <div class="archive-intro"><div><p class="eyebrow">INVEST · MACRO</p><h2>매크로 데스크</h2></div><div class="etf-actions"><button id="macro-refresh" class="refresh-btn" type="button" title="정해진 시간(저녁 9시) 외에 지금 금리·환율·원자재를 다시 수집합니다 (자동 실행, 1~2분 소요).">🔄 지표 갱신</button><span id="macro-status" class="task-sync"></span><a class="open-new" href="macro_desk_report.html" target="_blank" rel="noopener">🔗 새 창으로</a></div></div>
+      <iframe id="macro-frame" class="union-board-frame" title="매크로 데스크" loading="lazy"></iframe>
     </section>
 
     <section id="trend" class="view">

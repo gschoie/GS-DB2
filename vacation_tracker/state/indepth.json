@@ -698,6 +698,7 @@
    "topic": "전기전자"
   },
   "5415366498:1221999#3": {
+   "deleted": true,
    "detected_at": "2026-10-05T22:39+09:00",
    "done": false,
    "engine": "gemini",
@@ -737,6 +738,20 @@
    "target": null,
    "target_text": "",
    "text": "넵 곧 발간하려합니다",
+   "topic": ""
+  },
+  "5415366498:1226700": {
+   "detected_at": "2026-10-15T10:41+09:00",
+   "done": false,
+   "engine": "gemini",
+   "kind": "기타",
+   "msg_date": "2026-10-15T07:15+09:00",
+   "name": "이준범",
+   "needs_review": false,
+   "note": "",
+   "target": null,
+   "target_text": "",
+   "text": "나: 발간하지? → 넵",
    "topic": ""
   },
   "5460814526:1188290": {
@@ -993,6 +1008,20 @@
    "target_text": "",
    "text": "직접 기입",
    "topic": "데쎈 콜라보"
+  },
+  "manual:20261014121038": {
+   "detected_at": "2026-10-14T12:10+09:00",
+   "done": false,
+   "engine": "manual",
+   "kind": "인뎁스",
+   "msg_date": "2026-10-14T12:10+09:00",
+   "name": "유지웅",
+   "needs_review": false,
+   "note": "",
+   "target": "2026-10-14",
+   "target_text": "",
+   "text": "직접 기입",
+   "topic": "유지웅-이정우 2차전지"
   }
  }
 }

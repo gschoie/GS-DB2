@@ -5,7 +5,7 @@ CREATE TABLE IF NOT EXISTS consensus_snapshots (
   snapshot_date TEXT NOT NULL,          -- 추적 주차 기준일 (해당 주 월요일, YYYY-MM-DD)
   code          TEXT NOT NULL,          -- 종목코드 6자리
   name          TEXT NOT NULL,          -- 종목명
-  kind          TEXT NOT NULL,          -- 'annual' | 'quarter'
+  kind          TEXT NOT NULL,          -- 'annual' | 'quarter' (컨센 E) | 'annual_actual' | 'quarter_actual' (확정 실적 A — QoQ/YoY 분모)
   period        TEXT NOT NULL,          -- 'YYYY.MM' (연간=12월결산, 분기=해당분기말)
   sales         REAL,                   -- 매출액 컨센 (억원)
   op_profit     REAL,                   -- 영업이익 컨센 (억원)  ← 핵심

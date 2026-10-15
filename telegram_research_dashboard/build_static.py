@@ -17,6 +17,12 @@ from tone_market import attach_tone_market
 
 
 ROOT = Path(__file__).resolve().parent
+# ⚠️ 로컬에서 그냥 돌리지 말 것 — 기본값이면 OUTPUT.parent 가 **리포 루트**라
+# ① 배포본 400여 개가 루트에 쏟아지고 ② 마지막의 apply_to_tree(OUTPUT.parent) 가
+# **리포 전체를 훑어 소스 HTML에 비밀번호 가림막을 주입**한다(실측: 추적 파일 437개
+# 수정 + 미추적 220개). CI 는 DASHBOARD_OUTPUT=_site/index.html 을 줘서 안전하다.
+# 손으로 확인할 때도 반드시 임시 폴더를 지정한다:
+#   DASHBOARD_OUTPUT=/tmp/site/index.html python build_static.py
 OUTPUT = Path(os.getenv("DASHBOARD_OUTPUT", ROOT.parent / "GS_최광식_리서치_대시보드.html"))
 
 
@@ -246,6 +252,11 @@ def build() -> Path:
     consensus_report = ROOT / "static" / "consensus_revision.html"
     if consensus_report.exists():
         shutil.copy2(consensus_report, OUTPUT.parent / "consensus_revision.html")
+    # 투자 공유 허브 — 친구에게 줄 주소 하나. OWNER_ONLY_PAGES 에 없으므로
+    # 아래 apply_to_tree 가 공유 비번으로 열리는 등급을 매긴다.
+    invest_hub = ROOT / "static" / "invest.html"
+    if invest_hub.exists():
+        shutil.copy2(invest_hub, OUTPUT.parent / "invest.html")
     flow_report = ROOT / "static" / "market_flow_report.html"
     if flow_report.exists():
         shutil.copy2(flow_report, OUTPUT.parent / "market_flow_report.html")
@@ -255,6 +266,12 @@ def build() -> Path:
     trend_dir = ROOT / "static" / "market_trend"
     if trend_dir.is_dir():
         shutil.copytree(trend_dir, OUTPUT.parent / "market_trend", dirs_exist_ok=True)
+    macro_report = ROOT / "static" / "macro_desk_report.html"
+    if macro_report.exists():
+        shutil.copy2(macro_report, OUTPUT.parent / "macro_desk_report.html")
+    macro_dir = ROOT / "static" / "macro_desk"
+    if macro_dir.is_dir():
+        shutil.copytree(macro_dir, OUTPUT.parent / "macro_desk", dirs_exist_ok=True)
     consensus_xlsx = ROOT / "static" / "consensus_full.xlsx"
     if consensus_xlsx.exists():
         shutil.copy2(consensus_xlsx, OUTPUT.parent / "consensus_full.xlsx")

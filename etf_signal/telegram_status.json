@@ -1,8 +1,54 @@
 {
-  "when_utc": "2026-10-09 22:08:43Z",
+  "when_utc": "2026-10-14 22:08:27Z",
   "ok": true,
-  "note": "no_alert_skip",
+  "note": "alert_sent",
   "chat_id_tail": "5171",
   "token_set": true,
-  "response": null
+  "response": {
+    "ok": true,
+    "result": {
+      "message_id": 635,
+      "from": {
+        "id": 8875725998,
+        "is_bot": true,
+        "first_name": "GB Investing Signal",
+        "username": "gs_invest_signal_bot"
+      },
+      "chat": {
+        "id": 279385171,
+        "first_name": "광식",
+        "last_name": "최",
+        "username": "gschoie",
+        "type": "private"
+      },
+      "date": 1792015707,
+      "text": "📡 ETF/섹터 신호 · 2026-10-14 (전일 확정)\n\n★ 매수 신호(골든크로스) 1개\n\n🟢 TIGER 미디어컨텐츠 · 게임/콘텐츠\n   ＋DI가 −DI 상향돌파·추세전환 · Stochastic 골든크로스 · 외인·기관 동반 순매수\n   ADX 12.0 · %K 52.8/49.8 · 외인·기관 쌍끌이\n   [B] 거래대금 1.82배 · 상대강도 상위 21%\n\n전체 신호판 › 대시보드\n🎴 GS Research Desk · ETF/섹터 신호",
+      "entities": [
+        {
+          "offset": 0,
+          "length": 12,
+          "type": "bold"
+        },
+        {
+          "offset": 50,
+          "length": 1,
+          "type": "bold"
+        },
+        {
+          "offset": 57,
+          "length": 12,
+          "type": "bold"
+        },
+        {
+          "offset": 216,
+          "length": 4,
+          "type": "text_link",
+          "url": "https://gschoie.github.io/GS-DB2/etf_signal_report.html"
+        }
+      ],
+      "link_preview_options": {
+        "is_disabled": true
+      }
+    }
+  }
 }
