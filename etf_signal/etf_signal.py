@@ -272,7 +272,7 @@ def build_history(px, ev, n=HIST_N):
     """차트용 시계열: 최근 n봉의 (날짜, 종가)와 과거 신호 발생 위치.
     t = +DI가 -DI 상향돌파(추세 골든크로스), s = 과매도권 Stochastic 골든크로스,
     dt = +DI가 -DI 하향이탈(추세 데드크로스), ds = 과열권 Stochastic 데드크로스,
-    rb = RSI 30 이하 진입(매수), rs = RSI 70 하향이탈(매도)."""
+    rb = RSI 30 이하 진입(매수), rs = RSI 70 하향이탈(참고 — 매도 신호 아님)."""
     m = min(len(px), n)
 
     def idx(key):
@@ -382,11 +382,15 @@ def scan_one(u):
         "alert_adx": bool(adx_stage
                           and flow != ("개인몰림" if adx_up else "쌍끌이")
                           and turnover >= LIQ_MIN_EOK),
-        # RSI 알림(메인): 30 이하 진입 = 매수, 70 하향이탈 = 매도. 규칙 그대로 쓰고
-        # 수급 필터는 걸지 않는다(유동성만). 과매도에서 개인이 받는 건 흔한 일이라
-        # '개인몰림 제외'를 걸면 RSI 매수 대부분이 지워진다.
+        # RSI 알림(메인): 30 이하 진입 = 매수. 수급 필터는 걸지 않는다(유동성만).
+        # 과매도에서 개인이 받는 건 흔한 일이라 '개인몰림 제외'를 걸면 대부분 지워진다.
+        # 백테스트(2023-10~2026-10, 48종목, N=284): D+5 초과 +0.92%p·승률 66%로 판에서
+        # 가장 좋지만 D+20은 −0.25%p — **1주 단기 반등용**이다.
+        #
+        # RSI 70 하향이탈은 매도 알림에서 뺐다(감지·차트 마커·표 배지만 남김).
+        # 같은 백테스트에서 이후 오히려 기준선보다 더 올랐다 — D+5 +0.98%p,
+        # D+20 +1.04%p(N=670). 스토캐스틱 과열이탈과 같은 결과다.
         "alert_rsi_buy": bool(ev_rsi_buy and turnover >= LIQ_MIN_EOK),
-        "alert_rsi_sell": bool(ev_rsi_sell and turnover >= LIQ_MIN_EOK),
         "history": build_history(px, ev),
     }
 
@@ -463,7 +467,7 @@ def scan_all():
         try:
             rec = scan_one(u); out.append(rec)
             mark = "  ◆RSI매수" if rec["alert_rsi_buy"] else ""
-            mark += "  ◇RSI매도" if rec["alert_rsi_sell"] else ""
+            mark += "  ◇RSI70↓(참고)" if rec["ev_rsi_sell"] else ""
             mark += "  ★BUY" if rec["alert"] else ""
             mark += "  ▼SELL" if rec["alert_sell"] else ""
             if rec["alert_adx"]:
@@ -485,9 +489,9 @@ def scan_all():
     n_sell = sum(1 for s in out if s["alert_sell"])
     n_adx = sum(1 for s in out if s["alert_adx"])
     n_rb = sum(1 for s in out if s["alert_rsi_buy"])
-    n_rs = sum(1 for s in out if s["alert_rsi_sell"])
+    n_rs = sum(1 for s in out if s["ev_rsi_sell"])
     print(f"\n스캔 {len(out)}/{len(uni)}개 완료 · 에러 {len(errs)} · "
-          f"RSI 매수 {n_rb}개 · RSI 매도 {n_rs}개 · 오늘 매수 {n_buy}개 · 매도 {n_sell}개 · 추세강도 {n_adx}개 → signals.json")
+          f"RSI 매수 {n_rb}개 · RSI 70↓(참고) {n_rs}개 · 오늘 매수 {n_buy}개 · 매도 {n_sell}개 · 추세강도 {n_adx}개 → signals.json")
     return payload
 
 if __name__ == "__main__":

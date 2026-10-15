@@ -25,12 +25,13 @@ def _load_env():
 
 def esc(s): return html.escape(str(s))
 
+# 백테스트 근거 — 화면(build_report)도 이 문구를 가져다 쓴다(숫자를 두 군데 박지 않는다).
+RSI_BUY_NOTE = "1주 단기 반등용 — 백테스트 D+5 승률 66%(초과 +0.92%p), D+20엔 효과 소멸"
+
+
 def reasons_rsi(s):
     """RSI 사유 — 전일 → 기준일 RSI 값을 같이 적어 '어디서 어디로 넘었나'를 보인다."""
-    move = f"RSI {s.get('rsi_prev')}→{s.get('rsi')}"
-    if s.get("alert_rsi_buy"):
-        return f"{move} · 30 이하 진입(과매도)"
-    return f"{move} · 70 하향이탈(과열 꺾임)"
+    return f"RSI {s.get('rsi_prev')}→{s.get('rsi')} · 30 이하 진입(과매도)"
 
 def reasons(s):
     r = []
@@ -87,13 +88,13 @@ def _adx_icon(s):
 MIN_GRADE = ("A", "B")   # 텔레그램은 B 이상만 — 대시보드에는 C까지 전부 표시된다
 
 
-RSI_FLAGS = ("alert_rsi_buy", "alert_rsi_sell")
+RSI_FLAGS = ("alert_rsi_buy",)
 
 
 def _keep(s, flag=None):
     """알림 피로를 줄이려고 등급이 낮은 신호는 발송하지 않는다.
     등급이 없는 구버전 payload는 그대로 통과시킨다.
-    RSI는 메인 지표라 등급과 무관하게 규칙(30 이하 진입·70 하향이탈) 그대로 보낸다."""
+    RSI 매수는 메인 지표라 등급과 무관하게 규칙(30 이하 진입) 그대로 보낸다."""
     if flag in RSI_FLAGS:
         return True
     return s.get("grade", "A") in MIN_GRADE
@@ -102,23 +103,20 @@ def _keep(s, flag=None):
 def build_message(payload):
     sig = payload["signals"]
     rbuys = [s for s in sig if s.get("alert_rsi_buy")]
-    rsells = [s for s in sig if s.get("alert_rsi_sell")]
     buys = [s for s in sig if s["alert"] and _keep(s)]
     sells = [s for s in sig if s.get("alert_sell") and _keep(s)]
     # 추세 강도는 강력(25↑) 먼저, 그다음 확인(20↑)
     adxs = sorted([s for s in sig if s.get("alert_adx") and _keep(s)],
                   key=lambda s: -(s.get("adx_stage") or 0))
-    if not rbuys and not rsells and not buys and not sells and not adxs:
+    if not rbuys and not buys and not sells and not adxs:
         return None
     asof = sig[0]["asof"]
     lines = [f"<b>📡 ETF/섹터 신호</b> · {esc(asof)} (전일 확정)", ""]
     # 1순위 RSI → 2순위 스토캐스틱(골든·데드) → 3순위 ADX
     if rbuys:
-        lines += [f"◆ RSI 매수(30 이하) <b>{len(rbuys)}</b>개", ""]
+        lines += [f"◆ RSI 매수(30 이하) <b>{len(rbuys)}</b>개",
+                  f"   <i>{esc(RSI_BUY_NOTE)}</i>", ""]
         lines += _block(rbuys, "🟩", reasons_rsi)
-    if rsells:
-        lines += [f"◇ RSI 매도(70 하향이탈) <b>{len(rsells)}</b>개", ""]
-        lines += _block(rsells, "🟥", reasons_rsi)
     if buys:
         lines += [f"★ 매수 신호(골든크로스) <b>{len(buys)}</b>개", ""]
         lines += _block(buys, "🟢", reasons)
@@ -265,7 +263,7 @@ def weekly_message(today=None):
     span = f"{start:%m/%d}~{end:%m/%d}"
     lines = [f"<b>📡 ETF/섹터 신호 · 월~금 누적</b> · {span} ({len(days)}거래일)", ""]
 
-    rbuys, rsells = _tally(days, "alert_rsi_buy"), _tally(days, "alert_rsi_sell")
+    rbuys = _tally(days, "alert_rsi_buy")
     buys, sells, adxs = _tally(days, "alert"), _tally(days, "alert_sell"), _tally(days, "alert_adx")
     rets = _week_returns(days)
 
@@ -284,8 +282,7 @@ def weekly_message(today=None):
             out += [f"   … 외 {len(picked) - len(rows)}개", ""]
         return out
 
-    body = (block("◆ RSI 매수(30 이하)", rbuys, "🟩")
-            + block("◇ RSI 매도(70 하향이탈)", rsells, "🟥")
+    body = (block("◆ RSI 매수(30 이하 · 1주 단기)", rbuys, "🟩")
             + block("★ 매수 신호", buys, "🟢")
             + block("▼ 매도 경고", sells, "🔴")
             + block("⚡ 추세 강도", adxs, "⚡"))
