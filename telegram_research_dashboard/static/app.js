@@ -468,6 +468,10 @@ function closeNavFlyout(el){if(!matchMedia('(max-width:950px)').matches)return;c
 $$('.nav').forEach(b=>b.onclick=()=>{closeOtherNavGroups(b);closeNavFlyout(b);view(b.dataset.view)});$$('[data-go]').forEach(b=>b.onclick=()=>view(b.dataset.go));
 // 서브메뉴 안의 일반 링크(외부 링크 등)를 눌러도 모바일 플라이아웃은 닫는다.
 document.addEventListener('click',e=>{const a=e.target.closest?.('.nav-submenu a');if(a)closeNavFlyout(a)});
+// 서브그룹 머리글 안의 링크: summary 를 누른 것으로 처리되면 그룹이 접히므로,
+// 기본 동작(네비게이션+토글)을 둘 다 막고 새 창만 직접 연다.
+$$('.nav-subgroup>summary a').forEach(a=>a.addEventListener('click',e=>{
+  e.preventDefault();window.open(a.href,'_blank','noopener')}));
 // data-keep-open 하위 그룹은 그룹을 열 때마다 다시 펼친다 — 그룹을 닫으면 아래
 // 아코디언들이 서브그룹을 접어버리므로, 다음에 열 때 접힌 채로 남는 것을 막는다.
 function keepSubsOpen(g){g?.querySelectorAll?.('details.nav-subgroup[data-keep-open]').forEach(s=>{s.open=true})}
