@@ -1,241 +1,351 @@
 {
-  "generated_at": "2026-08-18 23:00",
+  "generated_at": "2026-10-15 13:08",
   "horizons": [
     5,
     20
   ],
   "meta": {
-    "symbols": 53,
+    "symbols": 48,
     "errors": [
       {
-        "name": "KODEX 방산TOP10",
-        "err": "봉 부족(266)"
+        "name": "KODEX 반도체",
+        "err": "403 Client Error: Forbidden for url: https://openapi.koreainvestment.com:9443/oauth2/tokenP"
+      },
+      {
+        "name": "KODEX AI반도체TOP2플러스",
+        "err": "403 Client Error: Forbidden for url: https://openapi.koreainvestment.com:9443/oauth2/tokenP"
+      },
+      {
+        "name": "TIGER 미국필라델피아반도체나스닥",
+        "err": "403 Client Error: Forbidden for url: https://openapi.koreainvestment.com:9443/oauth2/tokenP"
+      },
+      {
+        "name": "KODEX 로봇액티브",
+        "err": "403 Client Error: Forbidden for url: https://openapi.koreainvestment.com:9443/oauth2/tokenP"
+      },
+      {
+        "name": "RISE AI&로봇",
+        "err": "403 Client Error: Forbidden for url: https://openapi.koreainvestment.com:9443/oauth2/tokenP"
+      },
+      {
+        "name": "TIGER 인터넷TOP10",
+        "err": "403 Client Error: Forbidden for url: https://openapi.koreainvestment.com:9443/oauth2/tokenP"
       },
       {
         "name": "PLUS K방산소부장",
-        "err": "봉 부족(237)"
+        "err": "봉 부족(275)"
       },
       {
         "name": "SOL 조선기자재",
-        "err": "봉 부족(162)"
+        "err": "봉 부족(200)"
       }
     ],
     "span": [
-      "2023-08-14",
-      "2026-08-14"
+      "2023-10-11",
+      "2026-10-14"
     ]
   },
   "baseline": {
     "5": {
-      "n": 37180,
-      "mean": 0.41,
-      "median": 0.33,
-      "win": 53.1
+      "n": 33490,
+      "mean": 0.32,
+      "median": 0.25,
+      "win": 52.2
     },
     "20": {
-      "n": 36385,
-      "mean": 1.5,
-      "median": 0.77,
+      "n": 32770,
+      "mean": 1.46,
+      "median": 0.76,
       "win": 53.9
     }
   },
   "signals": {
-    "추세골든(+DI↑)": {
+    "RSI 30이하 진입(매수)": {
       "5": {
-        "n": 1685,
-        "mean": 0.54,
-        "median": 0.36,
-        "win": 53.4,
-        "excess": 0.13,
-        "win_vs_base": 0.3
+        "n": 284,
+        "mean": 1.24,
+        "median": 1.65,
+        "win": 65.8,
+        "excess": 0.92,
+        "win_vs_base": 13.6
       },
       "20": {
-        "n": 1654,
-        "mean": 1.48,
-        "median": 0.62,
-        "win": 53.3,
-        "excess": -0.02,
-        "win_vs_base": -0.6
+        "n": 278,
+        "mean": 1.21,
+        "median": 1.58,
+        "win": 58.3,
+        "excess": -0.25,
+        "win_vs_base": 4.4
+      }
+    },
+    "RSI 70 하향이탈(매도)": {
+      "5": {
+        "n": 670,
+        "mean": 1.3,
+        "median": 0.95,
+        "win": 60.7,
+        "excess": 0.98,
+        "win_vs_base": 8.5
+      },
+      "20": {
+        "n": 670,
+        "mean": 2.5,
+        "median": 1.57,
+        "win": 58.4,
+        "excess": 1.04,
+        "win_vs_base": 4.5
+      }
+    },
+    "RSI 30 상향복귀(참고)": {
+      "5": {
+        "n": 292,
+        "mean": 0.71,
+        "median": 1.09,
+        "win": 59.6,
+        "excess": 0.39,
+        "win_vs_base": 7.4
+      },
+      "20": {
+        "n": 286,
+        "mean": 0.08,
+        "median": 0.2,
+        "win": 51.7,
+        "excess": -1.38,
+        "win_vs_base": -2.2
+      }
+    },
+    "추세골든(+DI↑)": {
+      "5": {
+        "n": 1592,
+        "mean": 0.16,
+        "median": 0.15,
+        "win": 51.3,
+        "excess": -0.16,
+        "win_vs_base": -0.9
+      },
+      "20": {
+        "n": 1552,
+        "mean": 1.12,
+        "median": 0.31,
+        "win": 51.7,
+        "excess": -0.34,
+        "win_vs_base": -2.2
       }
     },
     "과매도반등(%K↑<25)": {
       "5": {
-        "n": 1893,
-        "mean": 0.4,
-        "median": 0.48,
-        "win": 53.9,
-        "excess": -0.01,
+        "n": 1671,
+        "mean": 0.34,
+        "median": 0.39,
+        "win": 53.0,
+        "excess": 0.02,
         "win_vs_base": 0.8
       },
       "20": {
-        "n": 1807,
-        "mean": 1.22,
-        "median": 0.85,
-        "win": 54.3,
-        "excess": -0.28,
-        "win_vs_base": 0.4
+        "n": 1605,
+        "mean": 1.04,
+        "median": 0.63,
+        "win": 53.0,
+        "excess": -0.42,
+        "win_vs_base": -0.9
       }
     },
     "추세데드(+DI↓)": {
       "5": {
-        "n": 1709,
-        "mean": 0.26,
-        "median": 0.33,
-        "win": 53.3,
-        "excess": -0.15,
-        "win_vs_base": 0.2
+        "n": 1589,
+        "mean": 0.16,
+        "median": 0.19,
+        "win": 51.8,
+        "excess": -0.16,
+        "win_vs_base": -0.4
       },
       "20": {
-        "n": 1690,
-        "mean": 1.07,
-        "median": 0.47,
-        "win": 52.4,
-        "excess": -0.43,
-        "win_vs_base": -1.5
+        "n": 1542,
+        "mean": 1.13,
+        "median": 0.54,
+        "win": 52.7,
+        "excess": -0.33,
+        "win_vs_base": -1.2
       }
     },
     "과열이탈(%K↓>75)": {
       "5": {
-        "n": 2282,
-        "mean": 0.55,
-        "median": 0.36,
-        "win": 54.0,
-        "excess": 0.14,
-        "win_vs_base": 0.9
+        "n": 2062,
+        "mean": 0.48,
+        "median": 0.25,
+        "win": 52.8,
+        "excess": 0.16,
+        "win_vs_base": 0.6
       },
       "20": {
-        "n": 2274,
-        "mean": 2.41,
-        "median": 1.37,
-        "win": 56.7,
-        "excess": 0.91,
-        "win_vs_base": 2.8
+        "n": 2048,
+        "mean": 2.06,
+        "median": 1.0,
+        "win": 55.2,
+        "excess": 0.6,
+        "win_vs_base": 1.3
       }
     },
     "ADX20 돌파": {
       "5": {
-        "n": 705,
-        "mean": 0.78,
-        "median": 0.71,
-        "win": 57.0,
-        "excess": 0.37,
-        "win_vs_base": 3.9
+        "n": 633,
+        "mean": 0.76,
+        "median": 0.63,
+        "win": 55.8,
+        "excess": 0.44,
+        "win_vs_base": 3.6
       },
       "20": {
-        "n": 694,
-        "mean": 2.77,
-        "median": 1.68,
-        "win": 57.6,
-        "excess": 1.27,
-        "win_vs_base": 3.7
+        "n": 620,
+        "mean": 2.25,
+        "median": 1.11,
+        "win": 55.3,
+        "excess": 0.79,
+        "win_vs_base": 1.4
       }
     },
     "ADX25 돌파": {
       "5": {
-        "n": 583,
-        "mean": 1.14,
-        "median": 0.73,
-        "win": 58.7,
-        "excess": 0.73,
-        "win_vs_base": 5.6
+        "n": 521,
+        "mean": 1.15,
+        "median": 0.83,
+        "win": 59.7,
+        "excess": 0.83,
+        "win_vs_base": 7.5
       },
       "20": {
-        "n": 569,
-        "mean": 2.84,
-        "median": 1.94,
-        "win": 59.1,
-        "excess": 1.34,
-        "win_vs_base": 5.2
+        "n": 512,
+        "mean": 2.21,
+        "median": 1.23,
+        "win": 55.5,
+        "excess": 0.75,
+        "win_vs_base": 1.6
+      }
+    },
+    "ADX20 돌파(+DI>−DI)": {
+      "5": {
+        "n": 327,
+        "mean": 0.91,
+        "median": 0.37,
+        "win": 52.9,
+        "excess": 0.59,
+        "win_vs_base": 0.7
+      },
+      "20": {
+        "n": 324,
+        "mean": 3.03,
+        "median": 1.25,
+        "win": 56.2,
+        "excess": 1.57,
+        "win_vs_base": 2.3
+      }
+    },
+    "ADX20 돌파(−DI>+DI)": {
+      "5": {
+        "n": 306,
+        "mean": 0.6,
+        "median": 0.8,
+        "win": 58.8,
+        "excess": 0.28,
+        "win_vs_base": 6.6
+      },
+      "20": {
+        "n": 296,
+        "mean": 1.4,
+        "median": 0.86,
+        "win": 54.4,
+        "excess": -0.06,
+        "win_vs_base": 0.5
       }
     },
     "과매도반등+거래대금": {
       "5": {
-        "n": 235,
-        "mean": -0.06,
-        "median": 0.58,
-        "win": 54.9,
-        "excess": -0.47,
-        "win_vs_base": 1.8
+        "n": 203,
+        "mean": -0.08,
+        "median": 0.62,
+        "win": 55.2,
+        "excess": -0.4,
+        "win_vs_base": 3.0
       },
       "20": {
-        "n": 226,
-        "mean": 0.34,
-        "median": 0.7,
-        "win": 52.2,
-        "excess": -1.16,
-        "win_vs_base": -1.7
+        "n": 197,
+        "mean": 0.17,
+        "median": 0.32,
+        "win": 50.3,
+        "excess": -1.29,
+        "win_vs_base": -3.6
       }
     },
     "추세골든+거래대금": {
       "5": {
-        "n": 388,
-        "mean": 0.48,
+        "n": 351,
+        "mean": 0.26,
         "median": 0.38,
-        "win": 52.8,
-        "excess": 0.07,
-        "win_vs_base": -0.3
+        "win": 52.4,
+        "excess": -0.06,
+        "win_vs_base": 0.2
       },
       "20": {
-        "n": 384,
-        "mean": 2.25,
-        "median": 1.44,
-        "win": 56.2,
-        "excess": 0.75,
-        "win_vs_base": 2.3
+        "n": 341,
+        "mean": 1.59,
+        "median": 0.41,
+        "win": 52.2,
+        "excess": 0.13,
+        "win_vs_base": -1.7
       }
     },
     "추세골든+상승추세": {
       "5": {
-        "n": 651,
-        "mean": 0.32,
-        "median": 0.24,
-        "win": 51.9,
-        "excess": -0.09,
-        "win_vs_base": -1.2
+        "n": 601,
+        "mean": -0.25,
+        "median": -0.17,
+        "win": 48.4,
+        "excess": -0.57,
+        "win_vs_base": -3.8
       },
       "20": {
-        "n": 639,
-        "mean": 0.32,
-        "median": 0.41,
-        "win": 52.7,
-        "excess": -1.18,
-        "win_vs_base": -1.2
+        "n": 593,
+        "mean": 0.3,
+        "median": 0.23,
+        "win": 52.4,
+        "excess": -1.16,
+        "win_vs_base": -1.5
       }
     },
     "과열이탈-강한상승제외": {
       "5": {
-        "n": 1559,
-        "mean": 0.43,
-        "median": 0.2,
-        "win": 52.3,
-        "excess": 0.02,
+        "n": 1456,
+        "mean": 0.41,
+        "median": 0.13,
+        "win": 51.4,
+        "excess": 0.09,
         "win_vs_base": -0.8
       },
       "20": {
-        "n": 1551,
-        "mean": 2.27,
-        "median": 1.37,
-        "win": 57.4,
-        "excess": 0.77,
-        "win_vs_base": 3.5
+        "n": 1443,
+        "mean": 2.08,
+        "median": 1.26,
+        "win": 56.7,
+        "excess": 0.62,
+        "win_vs_base": 2.8
       }
     },
     "과열이탈(강한상승중)": {
       "5": {
-        "n": 723,
-        "mean": 0.81,
-        "median": 0.76,
-        "win": 57.7,
-        "excess": 0.4,
-        "win_vs_base": 4.6
+        "n": 606,
+        "mean": 0.65,
+        "median": 0.65,
+        "win": 56.1,
+        "excess": 0.33,
+        "win_vs_base": 3.9
       },
       "20": {
-        "n": 723,
-        "mean": 2.72,
-        "median": 1.4,
-        "win": 55.2,
-        "excess": 1.22,
-        "win_vs_base": 1.3
+        "n": 605,
+        "mean": 2.02,
+        "median": 0.34,
+        "win": 51.6,
+        "excess": 0.56,
+        "win_vs_base": -2.3
       }
     }
   }

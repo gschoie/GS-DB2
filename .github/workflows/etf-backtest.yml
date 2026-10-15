@@ -35,6 +35,10 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
+      - name: 신호 산식 테스트
+        working-directory: etf_signal
+        run: python -m unittest discover -s tests -p "test_*.py"
+
       - name: 백테스트 실행
         working-directory: etf_signal
         env:
