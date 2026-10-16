@@ -586,3 +586,10 @@ main input[type=date]:focus,main input[type=number]:focus,main select:focus,main
 /* 뉴스 검색칸·셀렉트도 같은 헤어라인으로 */
 #news .news-filters input,#news .news-filters select{
   border:1px solid #ededeb;border-radius:6px;padding:8px 11px;font-size:13px;background:#fff}
+
+/* 서브그룹 머리글에 붙는 '모아보기' 링크 — 머리글을 눌러 접히지 않도록 app.js 에서
+   기본 동작을 막고 새 창을 직접 연다. */
+.nav-subgroup>summary{display:flex;align-items:center;gap:6px}
+.nav-subgroup>summary .sub-hub{margin-left:auto;flex:none;color:#1b6ec2;text-decoration:none;
+  font-size:11px;font-weight:700;padding:3px 7px;border-radius:999px;background:#e7f3fe;line-height:1.2}
+.nav-subgroup>summary .sub-hub:hover{background:#d3e9fd;color:#155ca3}

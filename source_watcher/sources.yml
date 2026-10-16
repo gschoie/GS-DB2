@@ -191,7 +191,8 @@ sources:
     exclude_chats:
       - "@HI_GS"
       - "GS의 조선/기계/방산 「바담」"
-    premarket: true
+    # 텔레그램으로만 받는다 — 대시보드 '장 시작 전'에는 안 띄운다(화면은 한화만).
+    premarket: false
 
   # 계정 로그인 없이 공개 채널 몇 개만 지정해서 훑는 대안(ship_all 대신, 또는 함께).
   # channels 목록 하나가 채널 수만큼의 소스로 펼쳐지고, 목록 안 채널끼리는 자동으로
