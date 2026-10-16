@@ -27,6 +27,7 @@ from pathlib import Path
 
 import adapters
 import notify
+import premarket
 
 BASE_DIR = Path(__file__).resolve().parent
 REGISTRY_PATH = BASE_DIR / "sources.yml"
@@ -513,6 +514,11 @@ def run_source(source: dict, state: dict, now: datetime, args) -> int:
         sent += 1
 
     if not args.dry_run:
+        # 개장전 코멘트는 본문을 따로 보관해 매크로 데스크 화면에서도 보게 한다.
+        # **보낸 것만** 적는다 — 봇에 온 것과 화면이 어긋나지 않게.
+        kept = premarket.record(source, to_send, now)
+        if kept:
+            print(f"  · 장 시작 전 보관 {kept}건")
         # 상한에 걸려 못 보낸 글도 읽음 처리한다. 그러지 않으면 다음 실행에서 다시 밀려온다.
         remember(state, source["key"], [item.uid for item in candidates], now, pushed=sent > 0)
     return sent

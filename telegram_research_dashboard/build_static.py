@@ -257,6 +257,13 @@ def build() -> Path:
     invest_hub = ROOT / "static" / "invest.html"
     if invest_hub.exists():
         shutil.copy2(invest_hub, OUTPUT.parent / "invest.html")
+    # 장 시작 전 코멘트 — 매크로 데스크 페이지가 **열릴 때 읽는다**(페이지에 박지 않는다).
+    # 매크로 페이지는 저녁 9시에 한 번 구워지는데 개장전 글은 아침 7시대에 오므로,
+    # 박아두면 아침에 열었을 때 반드시 어제 글이 보인다. 이 파일만 따로 나르면
+    # 09:10 배포부터 그날 글이 보인다(차트 데이터는 페이지와 같은 주기라 박는 게 맞다).
+    premarket = ROOT.parent / "source_watcher" / "state" / "premarket.json"
+    if premarket.exists():
+        shutil.copy2(premarket, OUTPUT.parent / "premarket.json")
     flow_report = ROOT / "static" / "market_flow_report.html"
     if flow_report.exists():
         shutil.copy2(flow_report, OUTPUT.parent / "market_flow_report.html")

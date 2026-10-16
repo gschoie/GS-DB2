@@ -103,7 +103,9 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
+          # premarket.json 은 매크로 데스크 '장 시작 전' 이 읽는다(없을 수도 있으므로 -- 로 무시)
           git add source_watcher/state/seen.json
+          git add -- source_watcher/state/premarket.json 2>/dev/null || true
           if git diff --cached --quiet; then
             echo "새 글 없음 — 커밋 생략"
             exit 0

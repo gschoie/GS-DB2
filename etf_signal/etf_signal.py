@@ -19,6 +19,9 @@ OVERSOLD = 25            # Stochastic 과매도 기준(골든크로스 직전 %K
 OVERBOUGHT = 75          # Stochastic 과열 기준(데드크로스 직전 %K)
 ADX_LV1 = 20             # 추세 확립: ADX 상향돌파 → '확인' 신호
 ADX_LV2 = 25             # 추세 강화: ADX 상향돌파 → '강력' 신호
+RSI_N = 14               # RSI 기간(Wilder)
+RSI_BUY = 30             # RSI가 이 선 이하로 내려선 날 = 매수
+RSI_SELL = 70            # RSI가 이 선을 위에서 아래로 뚫은 날 = 매도
 EPS = 1e-6               # 지표 동률 판정 허용오차(%K·DI 포인트)
 
 # ── 키 로딩: 로컬 .env → 없으면 환경변수(GitHub Actions) ──
@@ -112,6 +115,16 @@ def stoch_slow(df, n=14, k=3, d=3):
     ll = df["l"].rolling(n).min(); hh = df["h"].rolling(n).max()
     slowk = (100*(df["c"]-ll)/(hh-ll)).rolling(k).mean()
     return slowk, slowk.rolling(d).mean()
+
+def rsi(df, n=RSI_N):
+    """RSI(Wilder). 평균 상승폭/평균 하락폭을 ADX와 같은 지수평활(alpha=1/n)로 잡는다.
+    하락이 한 번도 없으면 100, 상승이 없으면 0."""
+    d = df["c"].diff()
+    a = 1 / n
+    up = d.clip(lower=0).ewm(alpha=a, adjust=False).mean()
+    dn = (-d.clip(upper=0)).ewm(alpha=a, adjust=False).mean()
+    r = 100 - 100 / (1 + up / dn.replace(0, np.nan))
+    return r.where(dn > 0, 100.0).where(d.notna())
 
 def _ret(px, days_back):
     """기준일 대비 days_back(달력일) 이전 마지막 확정 종가 대비 등락률(%).
@@ -229,7 +242,11 @@ def _cross_level(a, lv):
     """a가 고정 임계선 lv를 상향돌파한 봉(True). 지표 대 지표가 아닌 대 상수 버전."""
     return (a - lv > EPS) & (a.shift(1) - lv <= EPS)
 
-def cross_events(adx, pdi, ndi, sk, sd):
+def _cross_below(a, lv):
+    """a가 lv '이하'로 내려선 봉(True). 직전 봉은 lv 초과, 이번 봉은 lv 이하."""
+    return (a - lv <= EPS) & (a.shift(1) - lv > EPS)
+
+def cross_events(adx, pdi, ndi, sk, sd, r):
     """전 구간 크로스 이벤트(bool Series). 마지막 값 = '오늘 새로 뜬' 신호.
     횡보·박스권에서 두 지표가 같은 값에 붙는 구간이 있어, 부동소수점 오차(1e-14 수준)를
     크로스로 오판하지 않도록 EPS 이내 차이는 '같다'로 본다.
@@ -243,6 +260,10 @@ def cross_events(adx, pdi, ndi, sk, sd):
         # 추세 '강도' 이벤트 — DI 교차와 무관하게 ADX가 임계선을 뚫은 날
         "adx20": _cross_level(adx, ADX_LV1),
         "adx25": _cross_level(adx, ADX_LV2),
+        # RSI(메인 지표) — 30 이하로 내려선 날 매수, 70을 위에서 아래로 뚫은 날 매도.
+        # 30 이하에 머무는 동안 매일 뜨지 않도록 '내려선 첫날'만 이벤트로 본다.
+        "rsi_buy": _cross_below(r, RSI_BUY),
+        "rsi_sell": _cross_below(r, RSI_SELL),
     }
 
 HIST_N = 120  # 차트용 이력 봉 수
@@ -250,7 +271,8 @@ HIST_N = 120  # 차트용 이력 봉 수
 def build_history(px, ev, n=HIST_N):
     """차트용 시계열: 최근 n봉의 (날짜, 종가)와 과거 신호 발생 위치.
     t = +DI가 -DI 상향돌파(추세 골든크로스), s = 과매도권 Stochastic 골든크로스,
-    dt = +DI가 -DI 하향이탈(추세 데드크로스), ds = 과열권 Stochastic 데드크로스."""
+    dt = +DI가 -DI 하향이탈(추세 데드크로스), ds = 과열권 Stochastic 데드크로스,
+    rb = RSI 30 이하 진입(매수), rs = RSI 70 하향이탈(참고 — 매도 신호 아님)."""
     m = min(len(px), n)
 
     def idx(key):
@@ -262,6 +284,7 @@ def build_history(px, ev, n=HIST_N):
         "close": [int(v) for v in px["c"].iloc[-m:]],
         "t": idx("trend"), "s": idx("oversold"),
         "dt": idx("trend_dead"), "ds": idx("overbought"),
+        "rb": idx("rsi_buy"), "rs": idx("rsi_sell"),
     }
 
 def load_universe():
@@ -274,7 +297,7 @@ def load_universe():
 
 def scan_one(u):
     px = fetch_ohlc(u["code"]); fl = fetch_flow(u["code"])
-    adx, pdi, ndi = adx_di(px); sk, sd = stoch_slow(px)
+    adx, pdi, ndi = adx_di(px); sk, sd = stoch_slow(px); rv = rsi(px)
     turnover = float((px["c"] * px["v"]).tail(20).mean() / 1e8)   # 20일 평균 거래대금(억)
     f5 = fl.tail(5)[["개인","외국인","기관"]].sum() if len(fl) else None
 
@@ -282,7 +305,9 @@ def scan_one(u):
     up_trend = bool(pdi.iloc[-1] > ndi.iloc[-1] and adx.iloc[-1] > 20)
     down_trend = bool(pdi.iloc[-1] < ndi.iloc[-1] and adx.iloc[-1] > 20)
     # 오늘 새로 뜬 크로스오버(마지막 봉) — 골든(매수) / 데드(매도)
-    ev = cross_events(adx, pdi, ndi, sk, sd)
+    ev = cross_events(adx, pdi, ndi, sk, sd, rv)
+    ev_rsi_buy = bool(ev["rsi_buy"].iloc[-1])
+    ev_rsi_sell = bool(ev["rsi_sell"].iloc[-1])
     ev_trend = bool(ev["trend"].iloc[-1])
     ev_stoch = bool(ev["stoch"].iloc[-1])
     stoch_oversold = bool(ev["oversold"].iloc[-1])
@@ -319,6 +344,9 @@ def scan_one(u):
         "adx": round(float(adx.iloc[-1]), 1),
         "pdi": round(float(pdi.iloc[-1]), 1), "ndi": round(float(ndi.iloc[-1]), 1),
         "k": round(float(sk.iloc[-1]), 1), "d": round(float(sd.iloc[-1]), 1),
+        "rsi": None if pd.isna(rv.iloc[-1]) else round(float(rv.iloc[-1]), 1),
+        "rsi_prev": None if len(rv) < 2 or pd.isna(rv.iloc[-2]) else round(float(rv.iloc[-2]), 1),
+        "ev_rsi_buy": ev_rsi_buy, "ev_rsi_sell": ev_rsi_sell,
         "turnover": round(turnover, 1), "liquid": bool(turnover >= LIQ_MIN_EOK),
         "up_trend": up_trend, "down_trend": down_trend,
         "ev_trend": ev_trend, "ev_stoch": ev_stoch, "stoch_oversold": stoch_oversold,
@@ -354,6 +382,15 @@ def scan_one(u):
         "alert_adx": bool(adx_stage
                           and flow != ("개인몰림" if adx_up else "쌍끌이")
                           and turnover >= LIQ_MIN_EOK),
+        # RSI 알림(메인): 30 이하 진입 = 매수. 수급 필터는 걸지 않는다(유동성만).
+        # 과매도에서 개인이 받는 건 흔한 일이라 '개인몰림 제외'를 걸면 대부분 지워진다.
+        # 백테스트(2023-10~2026-10, 48종목, N=284): D+5 초과 +0.92%p·승률 66%로 판에서
+        # 가장 좋지만 D+20은 −0.25%p — **1주 단기 반등용**이다.
+        #
+        # RSI 70 하향이탈은 매도 알림에서 뺐다(감지·차트 마커·표 배지만 남김).
+        # 같은 백테스트에서 이후 오히려 기준선보다 더 올랐다 — D+5 +0.98%p,
+        # D+20 +1.04%p(N=670). 스토캐스틱 과열이탈과 같은 결과다.
+        "alert_rsi_buy": bool(ev_rsi_buy and turnover >= LIQ_MIN_EOK),
         "history": build_history(px, ev),
     }
 
@@ -381,7 +418,8 @@ def add_conviction(out):
     왜 빠졌는지 알 수 없지만, 등급은 화면에 다 보여주면서 우선순위만 정한다.
     텔레그램은 B 이상만 보내 알림 피로를 줄인다(대시보드에는 전부 표시)."""
     for r in out:
-        side_up = bool(r["alert"] or (r.get("alert_adx") and r.get("adx_up")))
+        side_up = bool(r["alert"] or r.get("alert_rsi_buy")
+                       or (r.get("alert_adx") and r.get("adx_up")))
         pts, why = 0, []
         if r.get("vol_surge"):
             pts += 25; why.append(f"거래대금 {r['vol_ratio']}배")
@@ -428,11 +466,13 @@ def scan_all():
     for i, u in enumerate(uni, 1):
         try:
             rec = scan_one(u); out.append(rec)
-            mark = "  ★BUY" if rec["alert"] else ""
+            mark = "  ◆RSI매수" if rec["alert_rsi_buy"] else ""
+            mark += "  ◇RSI70↓(참고)" if rec["ev_rsi_sell"] else ""
+            mark += "  ★BUY" if rec["alert"] else ""
             mark += "  ▼SELL" if rec["alert_sell"] else ""
             if rec["alert_adx"]:
                 mark += f"  ⚡ADX{ADX_LV2 if rec['adx_stage'] == 2 else ADX_LV1}↑"
-            print(f"  [{i}/{len(uni)}] OK {u['name']}  ADX{rec['adx']} flow={rec['flow']}{mark}")
+            print(f"  [{i}/{len(uni)}] OK {u['name']}  RSI{rec['rsi']} ADX{rec['adx']} flow={rec['flow']}{mark}")
         except Exception as e:
             errs.append({"name": u["name"], "code": u["code"], "err": str(e)[:120]})
             print(f"  [{i}/{len(uni)}] ERR {u['name']}: {str(e)[:80]}")
@@ -448,8 +488,10 @@ def scan_all():
     n_buy = sum(1 for s in out if s["alert"])
     n_sell = sum(1 for s in out if s["alert_sell"])
     n_adx = sum(1 for s in out if s["alert_adx"])
+    n_rb = sum(1 for s in out if s["alert_rsi_buy"])
+    n_rs = sum(1 for s in out if s["ev_rsi_sell"])
     print(f"\n스캔 {len(out)}/{len(uni)}개 완료 · 에러 {len(errs)} · "
-          f"오늘 매수 {n_buy}개 · 매도 {n_sell}개 · 추세강도 {n_adx}개 → signals.json")
+          f"RSI 매수 {n_rb}개 · RSI 70↓(참고) {n_rs}개 · 오늘 매수 {n_buy}개 · 매도 {n_sell}개 · 추세강도 {n_adx}개 → signals.json")
     return payload
 
 if __name__ == "__main__":

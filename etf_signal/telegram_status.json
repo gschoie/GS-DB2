@@ -1,5 +1,5 @@
 {
-  "when_utc": "2026-10-13 22:08:42Z",
+  "when_utc": "2026-10-15 22:08:41Z",
   "ok": true,
   "note": "alert_sent",
   "chat_id_tail": "5171",
@@ -7,7 +7,7 @@
   "response": {
     "ok": true,
     "result": {
-      "message_id": 621,
+      "message_id": 648,
       "from": {
         "id": 8875725998,
         "is_bot": true,
@@ -21,8 +21,8 @@
         "username": "gschoie",
         "type": "private"
       },
-      "date": 1791929322,
-      "text": "📡 ETF/섹터 신호 · 2026-10-13 (전일 확정)\n\n★ 매수 신호(골든크로스) 1개\n\n🟢 KODEX 코스닥150선물인버스 · 인버스/숏\n   ＋DI가 −DI 상향돌파·추세전환 · 외인·기관 동반 순매수\n   ADX 17.2 · %K 49.6/31.9 · 외인·기관 쌍끌이\n   [B] 거래대금 1.59배 · 상대강도 상위 25%\n\n⚡ 추세 강도 1개\n\n🔻 KoAct 바이오헬스케어액티브 · 바이오/헬스케어\n   ADX 20 상향돌파 · 하락추세 확립(확인)\n   ADX 21.5 · %K 12.8/36.9 · 수급 중립\n   [A] 거래대금 1.7배 · 상대강도 하위 21% · ADX 하락추세 · 52주 신저가권\n\n전체 신호판 › 대시보드\n🎴 GS Research Desk · ETF/섹터 신호",
+      "date": 1792102121,
+      "text": "📡 ETF/섹터 신호 · 2026-10-15 (전일 확정)\n\n◆ RSI 매수(30 이하) 9개\n   1주 단기 반등용 — 백테스트 D+5 승률 66%(초과 +0.92%p), D+20엔 효과 소멸\n\n🟩 KODEX AI반도체TOP2플러스 · 반도체/AI\n   RSI 33.9→26.9 · 30 이하 진입(과매도)\n   RSI 26.9 · ADX 16.8 · %K 5.4/11.0 · 수급 중립\n   [C] 거래대금 1.58배\n\n🟩 KODEX 로봇액티브 · 로봇\n   RSI 32.3→26.0 · 30 이하 진입(과매도)\n   RSI 26.0 · ADX 16.5 · %K 13.0/11.6 · 수급 중립\n   [C] 거래대금 1.67배 · 과매도반등 단독 — 백테스트상 초과수익 없음\n\n🟩 RISE AI&로봇 · 로봇\n   RSI 32.2→26.2 · 30 이하 진입(과매도)\n   RSI 26.2 · ADX 19.6 · %K 14.7/14.9 · 수급 중립\n   [C] 거래대금 3.71배\n\n🟩 KODEX 자동차 · 자동차\n   RSI 34.3→28.5 · 30 이하 진입(과매도)\n   RSI 28.5 · ADX 38.2 · %K 26.8/20.6 · 외인·기관 쌍끌이\n\n🟩 KoAct 바이오헬스케어액티브 · 바이오/헬스케어\n   RSI 30.9→28.2 · 30 이하 진입(과매도)\n   RSI 28.2 · ADX 24.7 · %K 9.0/9.4 · 수급 중립\n   [C] 거래대금 1.67배\n\n🟩 TIME K바이오액티브 · 바이오/헬스케어\n   RSI 31.2→29.1 · 30 이하 진입(과매도)\n   RSI 29.1 · ADX 25.0 · %K 9.0/8.8 · 외인·기관 쌍끌이\n   [C] 과매도반등 단독 — 백테스트상 초과수익 없음\n\n🟩 KODEX 건설 · 건설\n   RSI 33.2→26.9 · 30 이하 진입(과매도)\n   RSI 26.9 · ADX 18.0 · %K 11.6/9.7 · 수급 중립\n\n🟩 SOL 조선기자재 · 조선\n   RSI 35.3→29.0 · 30 이하 진입(과매도)\n   RSI 29.0 · ADX 20.6 · %K 20.5/15.8 · 외인·기관 쌍끌이\n   [C] 거래대금 1.83배\n\n🟩 KODEX 삼성그룹 · 배당/그룹\n   RSI 33.8→25.6 · 30 이하 진입(과매도)\n   RSI 25.6 · ADX 17.9 · %K 15.1/16.7 · 개인몰림 주의\n   [C] 거래대금 2.01배\n\n⚡ 추세 강도 2개\n\n🔻 KODEX 철강 · 철강/소재\n   ADX 20 상향돌파 · 하락추세 확립(확인)\n   RSI 30.6 · ADX 20.8 · %K 23.1/20.2 · 수급 중립\n   [B] 상대강도 하위 29% · ADX 하락추세\n\n🔻 KODEX 바이오 · 바이오/헬스케어\n   ADX 20 상향돌파 · 하락추세 확립(확인) · 외인·기관 동반 순매도\n   RSI 32.1 · ADX 21.2 · %K 11.4/14.0 · 개인몰림 주의\n   [B] ADX 하락추세 · 52주 신저가권\n\n전체 신호판 › 대시보드\n🎴 GS Research Desk · ETF/섹터 신호",
       "entities": [
         {
           "offset": 0,
@@ -30,27 +30,77 @@
           "type": "bold"
         },
         {
-          "offset": 50,
+          "offset": 51,
           "length": 1,
           "type": "bold"
         },
         {
           "offset": 57,
-          "length": 17,
+          "length": 52,
+          "type": "italic"
+        },
+        {
+          "offset": 114,
+          "length": 18,
           "type": "bold"
         },
         {
-          "offset": 200,
-          "length": 1,
+          "offset": 242,
+          "length": 11,
           "type": "bold"
         },
         {
-          "offset": 207,
+          "offset": 387,
+          "length": 10,
+          "type": "bold"
+        },
+        {
+          "offset": 504,
+          "length": 9,
+          "type": "bold"
+        },
+        {
+          "offset": 607,
           "length": 16,
           "type": "bold"
         },
         {
-          "offset": 362,
+          "offset": 734,
+          "length": 12,
+          "type": "bold"
+        },
+        {
+          "offset": 875,
+          "length": 8,
+          "type": "bold"
+        },
+        {
+          "offset": 971,
+          "length": 9,
+          "type": "bold"
+        },
+        {
+          "offset": 1091,
+          "length": 10,
+          "type": "bold"
+        },
+        {
+          "offset": 1218,
+          "length": 1,
+          "type": "bold"
+        },
+        {
+          "offset": 1225,
+          "length": 8,
+          "type": "bold"
+        },
+        {
+          "offset": 1351,
+          "length": 9,
+          "type": "bold"
+        },
+        {
+          "offset": 1501,
           "length": 4,
           "type": "text_link",
           "url": "https://gschoie.github.io/GS-DB2/etf_signal_report.html"

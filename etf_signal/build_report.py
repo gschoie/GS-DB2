@@ -3,6 +3,7 @@
 매 실행 시 signals.json을 history/{asof}.json으로 아카이브하고,
 과거 일자를 ◀▶ 네비게이션으로 조회 (최근 MAX_DAYS일 임베드)."""
 import os, json, glob, html, datetime
+from etf_telegram import RSI_BUY_NOTE
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 HIST_DIR = os.path.join(HERE, "history")
@@ -30,6 +31,21 @@ def fmt_day(iso):
     except ValueError:
         return iso
     return f"{t.month}/{t.day}({WD[t.weekday()]})"
+
+def reasons_rsi(s):
+    """RSI 사유. 전일 → 기준일 값을 함께 적어 어느 선을 넘었는지 보이게 한다."""
+    return [f"RSI {s.get('rsi_prev')} → {s.get('rsi')} · 30 이하 진입(과매도)"]
+
+def rsi_cell(s):
+    """표의 RSI 칸. 30 이하·70 이상은 색을 주고, 오늘 이벤트는 배지로."""
+    v = s.get("rsi")
+    if v is None:
+        return '<span class="mut">–</span>'
+    cls = "rsi-lo" if v <= 30 else ("rsi-hi" if v >= 70 else "")
+    ev = ""
+    if s.get("ev_rsi_buy"): ev = '<span class="mini rsib">30↓매수</span>'
+    elif s.get("ev_rsi_sell"): ev = '<span class="mini rsis" title="백테스트상 매도 신호로 무효 — 이후 오히려 더 올랐다">70↓참고</span>'
+    return f'<span class="{cls}">{v}</span> {ev}'
 
 def reasons(s):
     r = []
@@ -205,8 +221,13 @@ LOGIC_DOC = """
 <p><b>전제.</b> 모든 계산은 <b>전일 확정 종가</b>로 한다. 스캔이 도는 아침 7시엔 당일 봉이
 없고, 장중 값으로 계산하면 오후에 뒤집히는 신호가 나온다. 대신 신호는 하루 늦게 잡힌다.</p>
 
-<details class="sec"><summary>1. 무엇을 신호로 보는가 — 3종류</summary>
+<details class="sec"><summary>1. 무엇을 신호로 보는가 — 우선순위 ① RSI ② 스토캐스틱 ③ ADX</summary>
 <ul>
+<li><b>◆ RSI 매수 (메인)</b> · RSI(14, Wilder)가 <b>30 이하로 내려선 날</b>. 30 아래에 머무는
+동안 매일 뜨지 않도록 '내려선 첫날'만 잡는다. <b>1주 단기 반등용</b>이다(아래 4번 —
+D+5는 판에서 가장 좋고 D+20엔 효과가 사라진다). 70을 하향이탈한 날은 <b>매도에서 뺐다</b>
+— 표에 '70↓참고' 배지로만 남는다. 수급 필터는 걸지 않고(과매도 구간은 개인이 받는 게 보통이다) 유동성만 본다.
+등급과 무관하게 <b>텔레그램에도 전부</b> 나간다.</li>
 <li><b>⚡ 추세 강도</b> · ADX가 20을 상향돌파하면 <b>확인</b>, 25를 넘으면 <b>강력</b>.
 ADX는 방향이 없는 강도 지표라 방향은 ＋DI/−DI로 정한다. <b>맨 위에 두는 이유</b>는
 '추세가 진짜인가'가 '무엇이 교차했나'보다 먼저이기 때문이다 — 교차만 보면 힘없는
@@ -249,6 +270,9 @@ ADX는 방향이 없는 강도 지표라 방향은 ＋DI/−DI로 정한다. <b>
 매수는 초과가 +여야, 매도는 −여야 유효하다.</p>
 <table class="logic-tb">
 <tr><th>신호</th><th>D+5 초과</th><th>D+20 초과</th><th>N</th><th>판정</th></tr>
+<tr><td>RSI 30 이하 진입 <small>(10/15 측정)</small></td><td>+0.92%p</td><td>−0.25%p</td><td>284</td><td>✅ 1주 단기(승률 66%)</td></tr>
+<tr><td>RSI 70 하향이탈 <small>(10/15 측정)</small></td><td>+0.98%p</td><td>+1.04%p</td><td>670</td><td>❌ 역방향 → 매도 제외</td></tr>
+<tr><td>RSI 30 상향복귀 <small>(참고)</small></td><td>+0.39%p</td><td>−1.38%p</td><td>292</td><td>⚪ 진입형보다 못함</td></tr>
 <tr><td>ADX 25 돌파</td><td>+0.73%p</td><td>+1.34%p</td><td>583</td><td>✅ 뚜렷(승률 59%)</td></tr>
 <tr><td>ADX 20 돌파</td><td>+0.37%p</td><td>+1.27%p</td><td>705</td><td>✅ 뚜렷</td></tr>
 <tr><td>추세골든 ＋DI↑</td><td>+0.13%p</td><td>−0.02%p</td><td>1,685</td><td>⚪ 기준선 수준</td></tr>
@@ -319,6 +343,7 @@ def day_html(payload, is_latest):
     """하루치 본문(네비게이션으로 교체되는 부분)."""
     sig = payload["signals"]
     scanned = len(sig)
+    rbuys = [s for s in sig if s.get("alert_rsi_buy")]
     alerts = [s for s in sig if s["alert"]]
     sells = [s for s in sig if s.get("alert_sell")]
     # 강력(25↑)을 확인(20↑)보다 앞에 — 맨 위 섹션이라 확신도 높은 것부터 보이게
@@ -333,15 +358,17 @@ def day_html(payload, is_latest):
     day = fmt_day(asof)
 
     def cards(rows, kind):
-        """kind: 'buy'(골든크로스) | 'sell'(데드크로스) | 'adx'(추세 강도)"""
+        """kind: 'rsib'(RSI 매수) | 'buy'(골든크로스) | 'sell'(데드크로스) | 'adx'(추세 강도)"""
         if not rows:
-            msg = {"buy": "이날 새로 뜬 매수 신호가 없습니다. (조정·횡보 국면일 가능성)",
+            msg = {"rsib": "이날 RSI가 30 이하로 새로 내려선 종목이 없습니다.",
+                   "buy": "이날 새로 뜬 매수 신호가 없습니다. (조정·횡보 국면일 가능성)",
                    "sell": "이날 새로 뜬 매도 경고가 없습니다.",
                    "adx": "이날 ADX 20·25를 새로 돌파한 종목이 없습니다."}[kind]
             return f'<p class="none">{msg}</p>'
         out = ""
         for s in rows:
-            why = {"buy": reasons, "sell": reasons_sell, "adx": reasons_adx}[kind]
+            why = {"rsib": reasons_rsi,
+                   "buy": reasons, "sell": reasons_sell, "adx": reasons_adx}[kind]
             rs = " · ".join(why(s)) or "신호 발생"
             # 추세 강도 카드는 방향(상승/하락)과 강도(확인/강력)로 색을 나눈다
             cls = kind
@@ -353,15 +380,18 @@ def day_html(payload, is_latest):
         <div class="ac-head"><span class="ac-title">{grade_badge(s)}<b>{name_link(s)}</b><button class="btn-chart" data-code="{esc(s.get("code") or "")}" title="최근 120거래일 가격 · 신호 발생 시점">추세</button></span><small>{esc(s["group"])} · {s["close"]:,}원</small></div>
         <p>{esc(rs)}</p>
         {why_line(s)}
-        <div class="ac-meta">ADX {s["adx"]} · %K {s["k"]}/{s["d"]} · {flow_badge(s["flow"])}{extra_meta(s)}</div>
+        <div class="ac-meta">RSI {s.get("rsi", "–")} · ADX {s["adx"]} · %K {s["k"]}/{s["d"]} · {flow_badge(s["flow"])}{extra_meta(s)}</div>
       </article>'''
         return out
 
-    # 전체 표 — 매수 알림 → 매도 경고 → 추세강도 → 나머지, 각 그룹 내부는 스캔순
+    rsi_cards = cards(rbuys, "rsib")
+
+    # 전체 표 — RSI 매수·매도 → 매수 알림 → 매도 경고 → 추세강도 → 나머지, 각 그룹 내부는 스캔순
     def row_order(x):
         s = x[1]
-        rank = 0 if s["alert"] else (1 if s.get("alert_sell") else
-                                     (2 if s.get("alert_adx") else 3))
+        rank = (0 if s.get("alert_rsi_buy") else
+                2 if s["alert"] else 3 if s.get("alert_sell") else
+                4 if s.get("alert_adx") else 5)
         return (rank, x[0])
 
     # 수익률 열은 데이터가 있을 때만 붙인다(구버전 아카이브 호환)
@@ -371,7 +401,10 @@ def day_html(payload, is_latest):
     rows_sorted = sorted(enumerate(sig), key=row_order)
     trs = ""
     for _, s in rows_sorted:
-        flag = '<span class="star">★ 매수</span>' if s["alert"] else ""
+        flag = '<span class="rflag b">◆ RSI매수</span>' if s.get("alert_rsi_buy") else ""
+        if s["alert"]:
+            flag += '<span class="star">★ 매수</span>'
+        
         if s.get("alert_sell"):
             flag += '<span class="skull">▼ 매도</span>'
         if s.get("alert_adx"):
@@ -384,7 +417,7 @@ def day_html(payload, is_latest):
         elif s.get("stoch_overbought"): stoch_ev = '<span class="mini dead">과열이탈</span>'
         elif s["ev_stoch"]: stoch_ev = '<span class="mini gold">골든</span>'
         elif s.get("ev_stoch_dead"): stoch_ev = '<span class="mini dead">데드</span>'
-        cls = "hl" if s["alert"] else ("hs" if s.get("alert_sell")
+        cls = "hl" if (s["alert"] or s.get("alert_rsi_buy")) else ("hs" if s.get("alert_sell")
                                        else ("ha" if s.get("alert_adx")
                                              else ("dim" if not s["liquid"] else "")))
         adx_ev = ""
@@ -393,13 +426,15 @@ def day_html(payload, is_latest):
         # 정렬용 원시값(표시값이 아닌 실제 숫자/랭크)
         tr_rank = 2 if s["up_trend"] else (0 if s["pdi"] < s["ndi"] else 1)
         fl_rank = {"쌍끌이": 3, "중립": 2, "수급없음": 1, "개인몰림": 0}.get(s["flow"], 2)
-        fg_rank = (3 if s["alert"] else (2 if s.get("alert_sell") else
-                                         (1 if s.get("alert_adx") else 0))) + (0 if s["liquid"] else -1)
+        fg_rank = (5 if s.get("alert_rsi_buy") else
+                   3 if s["alert"] else 2 if s.get("alert_sell") else
+                   1 if s.get("alert_adx") else 0) + (0 if s["liquid"] else -1)
         trs += f'''
       <tr class="{cls}" data-flow="{esc(s["flow"])}">
         <td class="etf" data-v="{esc(s["name"])}"><div class="etf-row"><b>{name_link(s)}</b><button class="btn-chart" data-code="{esc(s.get("code") or "")}" title="최근 120거래일 가격 · 신호 발생 시점">추세</button></div><div class="etf-sub"><small>{esc(s["group"])}</small>{mini_spark(s, 46, 13)}</div></td>
         <td class="r" data-v="{s["close"]}">{s["close"]:,}</td>
         {ret_cells(s, rscale)}
+        <td class="c" data-v="{sv(s.get("rsi"))}">{rsi_cell(s)}</td>
         <td class="c" data-v="{s["adx"]}">{s["adx"]} {adx_ev}<small class="di">{s["pdi"]}/{s["ndi"]}</small></td>
         <td class="c" data-v="{tr_rank}">{trend_badge(s)}</td>
         <td class="c" data-v="{s["k"]}">{s["k"]}/{s["d"]} {stoch_ev}</td>
@@ -413,16 +448,21 @@ def day_html(payload, is_latest):
 {LOGIC_DOC if is_latest else ""}
 <p class="sub">신호 기준일(전일 확정) <b>{esc(asof)}</b><br>
 {sched_badge(payload.get("generated_at"))}<br>
-ADX(추세) + Stochastic Slow(타이밍) + 수급(외인·기관·개인 5일 순매수, 억원). 신호는 장중 흔들림을 피해 <b>전일 확정 종가</b>로 계산.</p>
+<b>RSI(메인)</b> + Stochastic Slow(타이밍) + ADX(추세) + 수급(외인·기관·개인 5일 순매수, 억원). 신호는 장중 흔들림을 피해 <b>전일 확정 종가</b>로 계산.</p>
 
 <section class="stats">
   <a class="tile" href="#sec-board"><small>스캔 종목</small><strong>{scanned}</strong></a>
+  <a class="tile" href="#sec-rsi"><small>RSI 매수(30↓)</small><strong class="g">{len(rbuys)}</strong></a>
   <a class="tile" href="#sec-buy"><small>매수 신호</small><strong class="g">{len(alerts)}</strong></a>
   <a class="tile" href="#sec-sell"><small>매도 경고</small><strong class="r">{len(sells)}</strong></a>
   <a class="tile" href="#sec-adx"><small>추세 강도</small><strong class="b">{len(adxs)}</strong></a>
   <a class="tile" href="#sec-board" data-flow="쌍끌이"><small>외인·기관 쌍끌이</small><strong class="g">{n_buy}</strong></a>
   <a class="tile" href="#sec-board" data-flow="개인몰림"><small>개인몰림 경계</small><strong class="w">{n_warn}</strong></a>
 </section>
+
+<h2 id="sec-rsi">{day}의 RSI 신호 <small style="font:400 12px Inter;color:#9ca3af">— 메인 지표 · RSI(14) 30 이하로 내려선 날 매수 · 유동성 확보 종목</small></h2>
+<p class="sub rsi-note">⏱ {esc(RSI_BUY_NOTE)}. 70 하향이탈은 매도 신호로 쓰지 않는다(백테스트상 이후 오히려 더 올랐다) — 표에 '70↓참고' 배지로만 남긴다.</p>
+<div class="alerts">{rsi_cards}</div>
 
 <h2 id="sec-adx">{day}의 추세 강도 <small style="font:400 12px Inter;color:#9ca3af">— ADX 20 돌파(확인) · 25 돌파(강력) · 방향은 DI로 판정</small></h2>
 <div class="alerts">{cards(adxs, "adx")}</div>
@@ -441,6 +481,7 @@ ADX(추세) + Stochastic Slow(타이밍) + 수급(외인·기관·개인 5일 �
 <thead><tr>
 <th data-type="text">ETF</th><th class="r" data-type="num">종가</th>
 {ret_heads}
+<th class="c" data-type="num" title="RSI(14) — 30 이하 진입 = 매수(1주 단기). 70 하향이탈은 참고 배지(매도 아님)">RSI</th>
 <th class="c" data-type="num">ADX<br>+DI/−DI</th><th class="c" data-type="num">추세</th>
 <th class="c" data-type="num">%K/%D</th><th class="c" data-type="num">수급</th>
 <th class="r" data-type="num" title="외국인 5일 순매수(억원)">외인5D</th><th class="r" data-type="num" title="기관 5일 순매수(억원)">기관5D</th><th class="c" data-type="num">플래그</th>
@@ -508,6 +549,7 @@ def weekly_html(end=None):
     # 구분해 두고, 읽는 사람이 어느 편인지만 바로 알게 한다.
     up_adx = lambda s: bool(s.get("adx_up"))
     for gi, (label, picked, icon, side) in enumerate((
+            ("RSI(매수)", tg._tally(days, "alert_rsi_buy"), "🟩", "pos"),
             ("추세(매수)", tg._tally(days, "alert_adx", up_adx), "⚡", "pos"),
             ("매수", tg._tally(days, "alert"), "🟢", "pos"),
             ("매도", tg._tally(days, "alert_sell"), "🔴", "neg"),
@@ -539,7 +581,7 @@ def weekly_html(end=None):
             badge = ('<span class="mini bolt2">25↑</span>' if stage == 2 else
                      '<span class="mini bolt1">20↑</span>' if stage == 1 else "")
             # 종류 칸의 정렬값은 '그룹 번호 + 그룹 안 순서' — 이 열로 오름차순
-            # 정렬하면 기본 배치(추세매수→매수→매도→추세매도)로 정확히 되돌아온다.
+            # 정렬하면 기본 배치(RSI매수→추세매수→매수→매도→추세매도)로 정확히 되돌아온다.
             ord_v = str(gi) + "-" + format(ri, "03d")
             last_day = r["dates"][-1] if r.get("dates") else None
             # 종목 칸은 일별 표와 같은 구성 — 이름은 네이버 차트로, 옆에 '추세' 버튼
@@ -579,6 +621,8 @@ def weekly_html(end=None):
                 + format(days[-1][0], "%m/%d") + " 종가 누적. 신호는 전일 확정 종가로 "
                 "계산해 다음 날 아침에 나가므로 실제 진입은 하루 뒤다 — 이 숫자는 그만큼 "
                 "후하게 잡힌다.<br>"
+                "🟩 RSI = 메인 지표. 30 이하 진입 = 매수(등급과 무관하게 전부 표시) — " + esc(RSI_BUY_NOTE) + ". "
+                "<b>1주 수익률로 볼 것</b> — 오래된 RSI 행의 '신호 후'는 이 신호가 노린 구간이 아니다.<br>"
                 "⚡ 추세 = ADX 상향돌파(20 확인 · 25 강력). "
                 "진입 트리거가 아니라 <b>가던 방향이 굳었다</b>는 확인이고, "
                 "방향은 DI로 갈라 매수편·매도편으로 나눠 적었다.<br>"
@@ -670,7 +714,7 @@ padding:3px 9px;margin:3px 0;font-size:11px;color:#6b7280}}
 .sched b{{color:#1d4ed8}}
 .schedq{{color:#9ca3af}}
 @media(max-width:620px){{.schedq{{display:none}}}}
-.stats{{display:grid;grid-template-columns:repeat(6,1fr);gap:12px;margin:22px 0 8px}}
+.stats{{display:grid;grid-template-columns:repeat(7,1fr);gap:12px;margin:22px 0 8px}}
 .stats .tile{{background:var(--card);border:1px solid var(--line);padding:18px 20px;
   display:block;text-decoration:none;color:inherit;cursor:pointer;transition:border-color .12s,box-shadow .12s}}
 .stats .tile:hover{{border-color:#b9c2bd;box-shadow:0 1px 6px rgba(0,0,0,.06)}}
@@ -692,6 +736,10 @@ h2{{font:600 18px Georgia,"Noto Serif KR",serif;margin:30px 0 12px}}
 .alerts{{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px}}
 .alert-card{{background:#fff;border:1px solid var(--line);border-left:4px solid var(--green);padding:15px 17px}}
 .alert-card.sell{{border-left-color:var(--red)}}
+.alert-card.rsib{{border-left:7px solid #0f9d58}}.alert-card.rsis{{border-left:7px solid #c0392b}}
+.rflag{{font-size:10px;font-weight:800;margin-right:5px}}.rflag.b{{color:#0f9d58}}.rflag.s{{color:#c0392b}}
+.mini.rsib{{background:#dcf5e7;color:#0f7a45}}.mini.rsis{{background:#fbe1dd;color:#b03a2e}}
+.rsi-lo{{color:#0f7a45;font-weight:700}}.rsi-hi{{color:#b03a2e;font-weight:700}}
 .alert-card.adx{{border-left-color:#2b5f8a}}
 .alert-card.adx.adx-down{{border-left-color:#b06a2c}}
 .alert-card.adx.strong{{border-left-width:7px}}
@@ -826,8 +874,10 @@ padding:18px 22px 16px;box-shadow:0 12px 40px rgba(23,33,29,.22)}}
 .chart-tip b{{font-size:12px;letter-spacing:.2px}}
 .chart-legend{{margin:10px 0 0;font-size:11px;color:var(--muted);line-height:1.8}}
 .chart-legend .lg-t{{color:#16a34a}}.chart-legend .lg-s{{color:#c98a1e}}
+.mk-rb{{fill:#0f9d58}}.mk-rs{{fill:#c0392b}}
+.chart-legend .lg-rb{{color:#0f9d58}}.chart-legend .lg-rs{{color:#c0392b}}
 .chart-legend .lg-dt{{color:#bd4335}}.chart-legend .lg-ds{{color:#8e5ba6}}
-@media(max-width:1180px){{.stats{{grid-template-columns:repeat(3,1fr)}}}}
+@media(max-width:1180px){{.stats{{grid-template-columns:repeat(4,1fr)}}}}
 @media(max-width:620px){{body{{padding:20px 12px 50px}}.stats{{grid-template-columns:1fr 1fr}}
 table{{min-width:760px}}}}
 
@@ -860,6 +910,7 @@ tbody tr:hover td{{background:rgba(55,53,47,.04)}}
 <div id="day"></div>
 
 <p class="legend">
+<b>RSI(메인)</b> RSI(14)가 30 이하로 내려선 날 = ◆매수(1주 단기), 70 하향이탈 = 참고 배지(매도 아님) ·
 <b>추세</b> +DI&gt;−DI &amp; ADX&gt;20 = 상승추세, −DI&gt;+DI &amp; ADX&gt;20 = 하락추세 ·
 <b>과매도반등</b> Stochastic %K가 %D를 25 미만에서 상향돌파 · <b>과열이탈</b> %K가 %D를 75 초과에서 하향이탈 ·
 <b>쌍끌이</b> 외인+기관 5일 동반 순매수 · <b>개인몰림</b> 개인만 순매수(외인·기관 이탈) = 경계 ·
@@ -1074,9 +1125,21 @@ function renderChart(c) {{
     s += mk(i, '<path d="M' + x + ' ' + (y + 7).toFixed(1) + ' l5 5 l-5 5 l-5 -5 z" class="mk-ds"/>',
             12, '과열 이탈(Stochastic 데드크로스)');
   }});
+  (c.rb || []).forEach(function (i) {{
+    var x = X(i), y = Y(c.close[i]);
+    s += mk(i, '<rect x="' + (x - 4.5).toFixed(1) + '" y="' + (y + 16).toFixed(1) +
+            '" width="9" height="9" class="mk-rb"/>', 20, 'RSI 30 이하 진입(매수)');
+  }});
+  (c.rs || []).forEach(function (i) {{
+    var x = X(i), y = Y(c.close[i]);
+    s += mk(i, '<rect x="' + (x - 4.5).toFixed(1) + '" y="' + (y - 25).toFixed(1) +
+            '" width="9" height="9" class="mk-rs"/>', -20, 'RSI 70 하향이탈(참고 — 매도 신호 아님)');
+  }});
   s += '</svg><div class="chart-tip" hidden></div>';
   s = '<div class="chartwrap">' + s + '</div>';
-  s += '<p class="chart-legend"><span class="lg-t">▲</span> 추세 골든크로스(+DI가 −DI 상향돌파, 라인 아래) · ' +
+  s += '<p class="chart-legend"><span class="lg-rb">■</span> RSI 30 이하 진입(매수, 라인 아래) · ' +
+       '<span class="lg-rs">■</span> RSI 70 하향이탈(참고, 라인 위)<br>' +
+       '<span class="lg-t">▲</span> 추세 골든크로스(+DI가 −DI 상향돌파, 라인 아래) · ' +
        '<span class="lg-s">●</span> 과매도 반등(Stochastic %K↑%D, 라인 위)<br>' +
        '<span class="lg-dt">▼</span> 추세 데드크로스(+DI가 −DI 하향이탈, 라인 위) · ' +
        '<span class="lg-ds">◆</span> 과열 이탈(Stochastic %K↓%D, 라인 아래)<br>' +
