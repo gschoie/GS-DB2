@@ -51,12 +51,19 @@ def _num(s):
         return 0.0
 
 
-def naver_etf_holdings(code):
-    """네이버 etfAnalysis → [{code, name, weight}] (Top10, 비중 %)."""
+def naver_etf_analysis(code):
+    """네이버 etfAnalysis → (구성 Top10 [{code,name,weight}], 순유입 {inflow_1d, inflow_1w, inflow_ref}).
+    순유입(cumulativeNetInflowList)은 네이버가 집계한 설정·환매 금액(억) — 기준일이 하루 늦지만
+    우리 상장주수 차분의 교차 확인용으로 ETF 표에 같이 적는다(10/17 프로브로 확인)."""
     j = requests.get(NAVER_ETF.format(code=code), headers=NAVER_H, timeout=15).json()
     top = j.get("etfTop10MajorConstituentAssets") or []
-    return [{"code": (h.get("itemCode") or "").strip(), "name": h.get("itemName", ""),
+    hold = [{"code": (h.get("itemCode") or "").strip(), "name": h.get("itemName", ""),
              "weight": _num(h.get("etfWeight"))} for h in top if h.get("itemCode")]
+    inf = j.get("cumulativeNetInflowList") or {}
+    flow = {"inflow_1d": metrics.parse_eok(inf.get("cumulativeNetInflow1d")),
+            "inflow_1w": metrics.parse_eok(inf.get("cumulativeNetInflow1w")),
+            "inflow_ref": inf.get("referenceDate", "")}
+    return hold, flow
 
 
 def collect_stock(u, today, live=True):
@@ -80,14 +87,14 @@ def collect_etfs(etf_rows):
         try:
             px = kis.fetch_price(e["code"])
             time.sleep(0.12)
-            hold = naver_etf_holdings(e["code"])
+            hold, inflow = naver_etf_analysis(e["code"])
             name = px.get("name") or e["name"]
             # 코드가 틀려 엉뚱한 종목을 받아오면 조용히 섞이지 않게 이름 키워드로 거른다
             if not any(k in name for k in ("조선", "방산", "기계", "해운", "디펜스", "중공업")):
                 errors.append(f"{e['code']} 이름 불일치: {name!r}")
                 continue
             out.append({"code": e["code"], "name": name, "sector": e.get("sector", ""),
-                        "listed": px.get("listed"), "price": px.get("price"), "holdings": hold})
+                        "listed": px.get("listed"), "price": px.get("price"), "holdings": hold, **inflow})
         except Exception as ex:
             errors.append(f"{e['code']} {e['name']}: {type(ex).__name__}: {ex}")
     return out, errors

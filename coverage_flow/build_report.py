@@ -76,12 +76,15 @@ def passive_table(rows, etfs, active, active_date):
     et = []
     for e in etfs:
         d = e.get("delta_shares")
+        ref = f"<small>{esc(e.get('inflow_ref'))}</small>" if e.get("inflow_ref") else ""
         et.append(f"<tr><td>{esc(e.get('name'))}<small>{esc(e.get('code'))}</small></td>"
                   f"<td class='r'>{n(d, 0) if d is not None else '<span class=na>직전 값 없음</span>'}</td>"
                   f"<td class='r'>{n(e.get('amt'), 1)}</td>"
-                  f"<td class='r'>{n(e.get('listed'), 0, sign=False) if e.get('listed') else '–'}</td></tr>")
-    etft = ("<table class='compact'><thead><tr><th>섹터 ETF</th><th class='r'>상장주수 변동</th><th class='r'>설정·환매(억)</th><th class='r'>상장주수</th></tr></thead>"
-            f"<tbody>{''.join(et) or '<tr><td colspan=4 class=empty>ETF 수집 없음</td></tr>'}</tbody></table>")
+                  f"<td class='r'>{n(e.get('listed'), 0, sign=False) if e.get('listed') else '–'}</td>"
+                  f"<td class='r'>{n(e.get('inflow_1d'), 1)} / {n(e.get('inflow_1w'), 0)}{ref}</td></tr>")
+    etft = ("<table class='compact'><thead><tr><th>섹터 ETF</th><th class='r'>상장주수 변동</th><th class='r'>설정·환매(억)</th><th class='r'>상장주수</th>"
+            "<th class='r'>네이버 순유입 1d / 1w(억)<br><small>교차 확인 · 기준일 하루 지연</small></th></tr></thead>"
+            f"<tbody>{''.join(et) or '<tr><td colspan=5 class=empty>ETF 수집 없음</td></tr>'}</tbody></table>")
     at = []
     for h in active:
         pct = f"{h['pct']:+.0f}%" if h.get("pct") is not None else ""

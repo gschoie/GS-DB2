@@ -202,13 +202,14 @@ def passive_flow(etfs, prev_shares):
     for e in etfs:
         prev = prev_shares.get(e["code"])
         listed, price = e.get("listed"), e.get("price")
+        base = {"code": e["code"], "name": e.get("name", ""), "listed": listed,
+                "inflow_1d": e.get("inflow_1d"), "inflow_1w": e.get("inflow_1w"), "inflow_ref": e.get("inflow_ref", "")}
         if not prev or not listed or not price:
-            per_etf.append({"code": e["code"], "name": e.get("name", ""), "delta_shares": None, "amt": None})
+            per_etf.append({**base, "delta_shares": None, "amt": None})
             continue
         d_sh = listed - prev
         amt_total = d_sh * price / 1e8
-        per_etf.append({"code": e["code"], "name": e.get("name", ""), "delta_shares": d_sh,
-                        "amt": round(amt_total, 1), "listed": listed, "prev": prev})
+        per_etf.append({**base, "delta_shares": d_sh, "amt": round(amt_total, 1), "prev": prev})
         for h in e.get("holdings", []):
             w = h.get("weight") or 0
             if not h.get("code") or not w:
@@ -221,6 +222,27 @@ def passive_flow(etfs, prev_shares):
         s["amt"] = round(s["amt"], 1)
         s["etfs"].sort(key=lambda x: abs(x[1]), reverse=True)
     return per_stock, per_etf
+
+
+def parse_eok(s):
+    """네이버 금액 문자열 → 억원 float. '1조 1,560억'→11560, '-99.2억'→-99.2, '-1,536억'→-1536. 못 읽으면 None."""
+    if s is None:
+        return None
+    t = str(s).replace(",", "").replace(" ", "").strip()
+    if not t or t in ("-", "–"):
+        return None
+    sign = -1 if t.startswith("-") else 1
+    t = t.lstrip("+-")
+    total, ok = 0.0, False
+    import re as _re
+    m = _re.match(r"^(?:(\d+(?:\.\d+)?)조)?(?:(\d+(?:\.\d+)?)억)?$", t)
+    if not m or not (m.group(1) or m.group(2)):
+        return None
+    if m.group(1):
+        total += float(m.group(1)) * 10000
+    if m.group(2):
+        total += float(m.group(2))
+    return sign * total
 
 
 def adv_pct(amt, adv20):
