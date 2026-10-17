@@ -242,7 +242,7 @@ def one_liner(facts: list[str]) -> str:
 # ── 조립 ───────────────────────────────────────────────────────────────────
 def build_message(cfg: dict, guide: dict, data: dict, now: dt.datetime) -> str:
     today = now.date()
-    head = (f"📊 매크로 데스크 · {today.month}/{today.day}({WD[today.weekday()]}) "
+    head = (f"📊 GS의 매크로 데스크 · {today.month}/{today.day}({WD[today.weekday()]}) "
             f'{now.strftime("%H:%M")}\n'
             "숫자는 직전 미국 장 종가 기준입니다 (한국 저녁엔 미 장이 아직 안 열렸습니다)")
     if data.get("date") and data["date"] != today.isoformat():
