@@ -279,6 +279,9 @@ def build() -> Path:
     macro_dir = ROOT / "static" / "macro_desk"
     if macro_dir.is_dir():
         shutil.copytree(macro_dir, OUTPUT.parent / "macro_desk", dirs_exist_ok=True)
+    covflow_report = ROOT / "static" / "coverage_flow_report.html"
+    if covflow_report.exists():
+        shutil.copy2(covflow_report, OUTPUT.parent / "coverage_flow_report.html")
     consensus_xlsx = ROOT / "static" / "consensus_full.xlsx"
     if consensus_xlsx.exists():
         shutil.copy2(consensus_xlsx, OUTPUT.parent / "consensus_full.xlsx")
