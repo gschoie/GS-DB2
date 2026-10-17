@@ -61,4 +61,5 @@ jobs:
           # 공개채널은 Actions 에서 직접 고를 때만(10/17 사용자 요청: 폼은 공개채널로 보내지 않음).
           TELEGRAM_CHAT_ID: ${{ inputs.target == '공개채널' && secrets.TELEGRAM_CHAT_ID || inputs.target == '비공개(미리보기)' && secrets.TELEGRAM_CHAT_ID_PRIVATE || secrets.BADAM_TELEGRAM_CHAT_ID || secrets.COVFLOW_TELEGRAM_CHAT_ID }}
           DART_COMMENT: ${{ inputs.comment }}
+          DART_TARGET: ${{ inputs.target }}   # 로그에 실제 발송 대상을 찍기 위해
         run: python dart_shiporder_bot.py --url "${{ inputs.dart_url }}"

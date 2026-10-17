@@ -330,7 +330,10 @@ def run(url_or_rcp: str, comment: str = "", dry: bool = False) -> None:
         print("[dry-run] 텔레그램 전송 생략")
         return
     send_photo(image, message)
-    print("텔레그램 전송 완료 → 공개채널 https://t.me/HI_GS", flush=True)
+    # 어디로 갔는지는 워크플로가 넘긴 DART_TARGET 으로 적는다 — 하드코딩 '공개채널' 은
+    # 바담 방으로 보낸 run 에서도 공개채널이라고 찍혀 로그가 거짓말을 했다(10/17 실측).
+    target = os.environ.get("DART_TARGET", "(대상 미지정)")
+    print(f"텔레그램 전송 완료 → {target}", flush=True)
 
 
 if __name__ == "__main__":
