@@ -102,6 +102,17 @@ jobs:
         working-directory: coverage_flow
         run: python build_report.py
 
+      # 텔레그램에 링크 대신 화면 캡쳐를 보낸다(대시보드 주소 비노출). 수주공시 봇과 같은 방식.
+      # 캡쳐 실패는 발송을 막지 않는다(본문만 간다).
+      - name: 화면 캡쳐 (Playwright)
+        if: ${{ steps.collect.outputs.skipped != 'true' && (github.event_name == 'schedule' || inputs.via == 'scheduler' || inputs.force_telegram) }}
+        working-directory: coverage_flow
+        continue-on-error: true
+        run: |
+          pip install -q playwright
+          python -m playwright install --with-deps chromium
+          python capture.py
+
       - name: 커밋 및 푸시 (→ Pages 재배포)
         if: steps.collect.outputs.skipped != 'true'
         run: |
@@ -129,4 +140,4 @@ jobs:
           COVFLOW_TELEGRAM_CHAT_ID: ${{ secrets.COVFLOW_TELEGRAM_CHAT_ID }}
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID_PRIVATE: ${{ secrets.TELEGRAM_CHAT_ID_PRIVATE }}
-        run: python notify.py || echo "::warning::텔레그램 미발송 — 채널 시크릿을 확인하세요"
+        run: python notify.py --photos "data/capture_*.png" || echo "::warning::텔레그램 미발송 — 채널 시크릿을 확인하세요"

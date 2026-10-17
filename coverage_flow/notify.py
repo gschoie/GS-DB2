@@ -105,8 +105,55 @@ def compose(d):
 
     L.append("")
     L.append("기계적 수급은 섹터 ETF 7개 Top10 비중 기준 하한값 · 규칙 기반 상태값이며 검증 전입니다.")
-    L.append(PAGE)
+    # 대시보드 주소는 적지 않는다(반비공개 주소) — 화면은 캡쳐 사진으로 따로 보낸다(send_photo).
     return "\n".join(L)
+
+
+def _multipart(fields, files):
+    """fields: {name: str}, files: {field_name: path} → (body, content-type)"""
+    import uuid
+    boundary = "----covflow" + uuid.uuid4().hex
+    parts = []
+    for k, v in fields.items():
+        parts.append(f"--{boundary}\r\nContent-Disposition: form-data; name=\"{k}\"\r\n\r\n{v}\r\n".encode("utf-8"))
+    for field, path in files.items():
+        with open(path, "rb") as f:
+            data = f.read()
+        parts.append((f"--{boundary}\r\nContent-Disposition: form-data; name=\"{field}\"; "
+                      f"filename=\"{os.path.basename(path)}\"\r\nContent-Type: image/png\r\n\r\n").encode("utf-8") + data + b"\r\n")
+    parts.append(f"--{boundary}--\r\n".encode("utf-8"))
+    return b"".join(parts), f"multipart/form-data; boundary={boundary}"
+
+
+def send_photos(paths, caption=""):
+    """캡쳐 PNG 들을 앨범(sendMediaGroup) 한 묶음으로. 캡션은 첫 장에만(1024자 한도).
+    한 장이면 sendPhoto. 본문은 send() 로 따로 보낸다."""
+    tok, chat = _creds()
+    if not tok or not chat:
+        return {"ok": False, "description": "텔레그램 토큰/채팅ID 미설정"}
+    paths = [p for p in paths if os.path.exists(p)]
+    if not paths:
+        return {"ok": False, "description": "캡쳐 파일 없음"}
+    if len(paths) == 1:
+        body, ctype = _multipart({"chat_id": chat, "caption": caption[:1000]}, {"photo": paths[0]})
+        url = f"https://api.telegram.org/bot{tok}/sendPhoto"
+    else:
+        media = [{"type": "photo", "media": f"attach://p{i}", **({"caption": caption[:1000]} if i == 0 else {})}
+                 for i in range(len(paths))]
+        body, ctype = _multipart({"chat_id": chat, "media": json.dumps(media, ensure_ascii=False)},
+                                 {f"p{i}": p for i, p in enumerate(paths)})
+        url = f"https://api.telegram.org/bot{tok}/sendMediaGroup"
+    req = urllib.request.Request(url, data=body, headers={"Content-Type": ctype})
+    try:
+        with urllib.request.urlopen(req, timeout=60) as r:
+            return json.loads(r.read().decode("utf-8"))
+    except urllib.error.HTTPError as e:
+        try:
+            return json.loads(e.read().decode("utf-8"))
+        except Exception:
+            return {"ok": False, "description": f"HTTP {e.code}"}
+    except Exception as e:
+        return {"ok": False, "description": f"{type(e).__name__}: {e}"}
 
 
 def send(text):
@@ -129,7 +176,12 @@ def send(text):
 
 
 def main(argv=None):
-    dry = "--dry" in (argv or sys.argv[1:])
+    args = list(argv if argv is not None else sys.argv[1:])
+    dry = "--dry" in args
+    photos = []
+    if "--photos" in args:
+        import glob as _g
+        photos = sorted(_g.glob(args[args.index("--photos") + 1]))
     with open(LATEST, encoding="utf-8") as f:
         d = json.load(f)
     text = compose(d)
@@ -137,11 +189,17 @@ def main(argv=None):
     if dry:
         return 0
     res = send(text)
+    # 사진은 본문 뒤에 — 본문이 실패하면 사진도 안 보낸다(반쪽 메시지 방지). 사진 실패는 경고만.
+    pres = None
+    if res.get("ok") and photos:
+        pres = send_photos(photos, f"커버리지 수급 화면 · {d.get('asof', '')}")
+        print(f"사진 {len(photos)}장:", "성공" if pres.get("ok") else f"실패 — {pres.get('description')}")
     tok, chat = _creds()
     with open(STATUS, "w", encoding="utf-8") as f:
         json.dump({"at": datetime.now(KST).strftime("%Y-%m-%d %H:%M"), "ok": bool(res.get("ok")),
                    "description": res.get("description", ""), "token_set": bool(tok), "chat_set": bool(chat),
-                   "slot": d.get("slot")}, f, ensure_ascii=False, indent=1)
+                   "slot": d.get("slot"), "photo_ok": (None if pres is None else bool(pres.get("ok")))},
+                  f, ensure_ascii=False, indent=1)
     print("전송:", "성공" if res.get("ok") else f"실패 — {res.get('description')}")
     return 0 if res.get("ok") else 1
 
