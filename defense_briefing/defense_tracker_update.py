@@ -49,7 +49,9 @@ def gemini_extract(catalog: list[dict], briefing_md: str) -> list[dict]:
         "- country, name: 국가와 사업/예산 이름(한국어).\n"
         "- text_ko: 한국어 한 문장 요약(금액·단계 포함).\n"
         "- importance: 트래킹 가치 0~10. 단순 시황·주가 언급은 3 이하.\n"
-        "일반 뉴스·기업 실적·이미 로그에 있을 법한 반복 언급은 제외한다."
+        "일반 뉴스·기업 실적·이미 로그에 있을 법한 반복 언급은 제외한다.\n"
+        "함정(군함·잠수함·호위함·구축함·초계함 등 해군 함정) 입찰/수주경쟁은 별도의 "
+        "수상함·잠수함 입찰 트래커가 추적하므로 여기서는 제외한다(section을 'none'으로)."
     )
     user_text = json.dumps(
         {"tracker_items": catalog, "briefing": briefing_md[:15000]}, ensure_ascii=False
