@@ -45,7 +45,9 @@ jobs:
             'telegram_research_dashboard/static/chatgpt_construction/' \
             'telegram_research_dashboard/static/chatgpt_construction_report.html' \
             'telegram_research_dashboard/static/construction_unified/' \
-            'telegram_research_dashboard/static/construction_unified_report.html'; do
+            'telegram_research_dashboard/static/construction_unified_report.html' \
+            'telegram_research_dashboard/static/construction_strategy/' \
+            'telegram_research_dashboard/static/construction_strategy_report.html'; do
             git checkout origin/claude/defense-brief-daily -- "$p" \
               || echo "skip: $p (브랜치에 없음)"
           done
@@ -67,7 +69,7 @@ jobs:
           if [ -d telegram_research_dashboard/static/defense_unified ]; then
             git add telegram_research_dashboard/static/defense_unified
           fi
-          for p in chatgpt_construction construction_unified; do
+          for p in chatgpt_construction construction_unified construction_strategy; do
             if [ -d "telegram_research_dashboard/static/$p" ]; then
               git add "telegram_research_dashboard/static/$p"
             fi

@@ -1,0 +1,24 @@
+{
+  "_doc": "건기 전략 레이더 데이터 — 건설기계 브리핑에서 잡힌 신제품(product)·CAPEX(capex)·M&A/제휴(ma) 이벤트 누적. 세션 루틴 [7.7]이 매일 추가하고 construction_briefing/strategy_tracker_publish.py 가 페이지를 굽는다. date=보도일(KST), ref=근거 브리핑 페이지(static 루트 기준 상대경로), url=원 기사(선택).",
+  "events": [
+    {"date": "2026-08-20", "cat": "ma", "company": "Komatsu × AIM", "title": "미국·일본 자율 건설 확장 파트너십", "note": "자율 불도저·굴착기 공동 개발로 확장(10월 상세 보도 — AIM 제휴 심화)", "ref": "construction_daily/2026-08-20.html"},
+    {"date": "2026-08-20", "cat": "product", "company": "HD현대인프라코어 (Develon)", "title": "미니 굴착기 업그레이드 버전 출시", "note": "소형 라인업 제품 경쟁력 강화", "ref": "construction_daily/2026-08-21.html"},
+    {"date": "2026-08-23", "cat": "capex", "company": "Escorts Kubota", "title": "인도 공장 대규모 투자 — 글로벌 트랙터 수출 확대", "note": "인도를 수출 기지화하는 Kubota 그룹 전략의 일부", "ref": "construction_daily/2026-08-24.html"},
+    {"date": "2026-08-25", "cat": "product", "company": "두산밥캣", "title": "T86-2 콤팩트 트랙로더용 공장 설치형 Land Management Package 출시", "note": "조경·토지관리 틈새 — 대당 단가·마진을 올리는 믹스 개선", "ref": "construction_daily/2026-08-26.html"},
+    {"date": "2026-08-26", "cat": "product", "company": "Komatsu", "title": "신형 임업 기계 출시", "note": "임업 특수 장비 라인업 보강", "ref": "construction_daily/2026-08-26.html"},
+    {"date": "2026-09-01", "cat": "capex", "company": "HD현대건설기계", "title": "인도 877억원 증설·브라질 효율화 — 시장별 맞춤 해외 전략 공개", "note": "인도 굴착기 1위 지위에 산업차량(지게차) 확장 병행", "ref": "construction_daily/2026-09-02.html"},
+    {"date": "2026-09-02", "cat": "ma", "company": "Caterpillar × FieldAI", "title": "산업 현장용 AI 로보틱스 파트너십", "note": "자율 장비 — 건설 인력난 국면의 장비 프리미엄 축", "ref": "construction_daily/2026-09-03.html"},
+    {"date": "2026-09-03", "cat": "ma", "company": "Komatsu × Williams F1", "title": "파트너십 갱신 — 기술 협력 확대", "note": "스폰서십을 넘어 시뮬레이션·데이터 엔지니어링 공동 작업으로 격상", "ref": "construction_daily/2026-09-04.html"},
+    {"date": "2026-09-13", "cat": "product", "company": "HD현대인프라코어 (Develon)", "title": "북미 33톤급 스마트 굴착기 DX300LC-9 공개", "note": "반자동 작업 보조 탑재 중대형 — 9/29 북미 정식 출시('-9 시리즈' 5번째 모델)", "ref": "construction_daily/2026-09-13.html"},
+    {"date": "2026-09-16", "cat": "product", "company": "두산밥캣", "title": "L100 휠로더 신규 출시 + L85 업데이트", "note": "소형 휠로더 라인업 확장", "ref": "construction_daily/2026-09-16.html"},
+    {"date": "2026-09-17", "cat": "capex", "company": "Kubota", "title": "인도 신공장 부지 매입", "note": "인도 생산분 수출 확대 전략의 후속 집행", "ref": "construction_daily/2026-09-18.html"},
+    {"date": "2026-09-21", "cat": "product", "company": "Caterpillar", "title": "인도 bauma CONEXPO 신기종 3종 동시 출시 — Cat 355 굴착기·D5 도저·120 GC 그레이더", "note": "글로벌 대형사가 라인업을 직접 확장하는 인도 성장 시장", "ref": "construction_daily/2026-09-21.html"},
+    {"date": "2026-09-23", "cat": "ma", "company": "Ashtead Technology ← Ember", "title": "수중장비 렌탈사에 $660m 인수 제안", "note": "렌탈 대기업 Ashtead Group(현 Sunbelt)과 별개사 — 특수 렌탈 자산의 PE 수요 확인", "ref": "construction_daily/2026-09-24.html"},
+    {"date": "2026-09-24", "cat": "ma", "company": "Berkshire → Lennar", "title": "주택건설 Lennar 지분 ~10% 확보", "note": "착공 최저 국면의 저점 매수 — 소형장비 '27 회복 시나리오의 인접 신호", "ref": "construction_daily/2026-09-24.html"},
+    {"date": "2026-09-25", "cat": "capex", "company": "JCB (비상장)", "title": "미국 산안토니오 공장 채용 이정표", "note": "관세 대응형 미국 현지 생산 — 미국 내 생산능력 경쟁의 진척", "ref": "construction_daily/2026-09-25.html"},
+    {"date": "2026-09-29", "cat": "ma", "company": "Caterpillar → Fabick Cat", "title": "최대 딜러 Fabick Cat(37개 지점) 인수 합의", "note": "딜러 직영화 — 애프터마켓 마진 직취·자율화 시대 고객 데이터 장악, 10월 말 클로징 예정(금액 비공개)", "ref": "construction_daily/2026-09-30.html"},
+    {"date": "2026-10-14", "cat": "ma", "company": "BHP × Liebherr", "title": "글로벌 프레임워크 협약", "note": "광산 장비 조달의 장기계약화 — Epiroc·Sandvik·CAT 자원장비에 동일 모델 확산 시사", "ref": "construction_daily/2026-10-15.html"},
+    {"date": "2026-10-15", "cat": "product", "company": "HD현대건설기계", "title": "데이터센터용 발전기 엔진 'DX77' 공개", "note": "2027년 37L 1.5MW → 2028년 77L 3MW 로드맵의 선공개 — CAT·커민스 틈새 공략", "ref": "construction_daily/2026-10-16.html"},
+    {"date": "2026-10-15", "cat": "capex", "company": "HD현대건설기계", "title": "군산 엔진공장 — 1~3MW DC 발전엔진 생산 거점(10월 준공 예정)", "note": "ERock 2027~28년 약 3,900억원($290M) 22L 가스엔진 롱블록 공급의 생산 기반", "ref": "chatgpt_construction/2026-10-16.html"}
+  ]
+}
