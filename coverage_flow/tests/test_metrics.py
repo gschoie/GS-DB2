@@ -210,6 +210,24 @@ class Outputs(unittest.TestCase):
         self.assertIn("한화오션 RSI 69 · 1년 최고권", txt)
         self.assertIn("검증 전", txt); self.assertLess(len(txt), 4000)
 
+    def test_pctl_zero_is_lowest_not_missing(self):
+        d = fake_payload()
+        d["rows"][1]["tech"].update(rsi_pctl=0.0, extreme="1년 최저권 (하위 0%)")
+        d["rows"][0]["tech"].update(rsi_pctl=3.0, extreme="1년 최저권 (하위 3%)")
+        txt = notify.compose(d)
+        i0, i1 = txt.index("한화에어로스페이스 RSI"), txt.index("한화오션 RSI")
+        self.assertLess(i0, i1)                       # 0% 가 3% 보다 먼저
+        self.assertEqual(metrics.pctl_or(0.0, 50), 0.0); self.assertEqual(metrics.pctl_or(None, 50), 50)
+        h = build_report.render(d)
+        self.assertIn("RSI 1년 최저권", h)
+        self.assertIn("mini b'>1년 최저권 (하위 0%)", h)
+
+    def test_not_live_keeps_confirmed_only(self):
+        df = ohlc([100 + i * 0.3 for i in range(300)])
+        today = df["date"].iloc[-1] + pd.Timedelta(days=2)      # 토요일 격
+        t = metrics.technicals(df, today, None)
+        self.assertFalse(t["provisional"]); self.assertEqual(t["rsi"], t["rsi_prev"])
+
     def test_compose_empty(self):
         txt = notify.compose({"asof": "2026-10-16 10:01", "rows": [], "etfs": [], "active": []})
         self.assertIn("순매수 종목 없음", txt); self.assertIn("첫 수집", txt); self.assertIn("극단권 종목 없음", txt)

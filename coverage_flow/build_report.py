@@ -104,7 +104,7 @@ def tech_table(rows):
         cls = "rsi-lo" if rsi is not None and rsi <= metrics.RSI_LO else ("rsi-hi" if rsi is not None and rsi >= metrics.RSI_HI else "")
         pct = t.get("rsi_pctl")
         pct_s = "–" if pct is None else (f"하위 {pct:.0f}%" if pct <= 50 else f"상위 {100 - pct:.0f}%")
-        ex = f"<span class='mini {'b' if (pct or 50) <= 50 else 's'}'>{esc(t['extreme'])}</span>" if t.get("extreme") else ""
+        ex = f"<span class='mini {'b' if metrics.pctl_or(pct, 50) <= 50 else 's'}'>{esc(t['extreme'])}</span>" if t.get("extreme") else ""
         rsi_s = "" if rsi is None else f"{rsi:.0f}"
         prev_s = "" if t.get("rsi_prev") is None else f"{t['rsi_prev']:.0f}"
         tr.append(f"<tr><td>{esc(r['name'])}</td><td class='r {cls}'>{rsi_s}</td>"
@@ -119,8 +119,8 @@ def tech_table(rows):
 
 def summary_tiles(rows, d):
     buy, sell = metrics.rank_flow(rows)
-    ex_lo = [r["name"] for r in rows if r.get("tech", {}).get("extreme") and (r["tech"].get("rsi_pctl") or 50) <= 50]
-    ex_hi = [r["name"] for r in rows if r.get("tech", {}).get("extreme") and (r["tech"].get("rsi_pctl") or 50) > 50]
+    ex_lo = [r["name"] for r in rows if r.get("tech", {}).get("extreme") and metrics.pctl_or(r["tech"].get("rsi_pctl"), 50) <= 50]
+    ex_hi = [r["name"] for r in rows if r.get("tech", {}).get("extreme") and metrics.pctl_or(r["tech"].get("rsi_pctl"), 50) > 50]
     pas = [r["name"] for r in rows if r.get("passive") and abs(r["passive"].get("adv_pct") or 0) >= 3]
     def tile(label, items, cls):
         body = esc(" · ".join(items)) if items else "<span class='na'>없음</span>"
