@@ -76,12 +76,15 @@ def passive_table(rows, etfs, active, active_date):
     et = []
     for e in etfs:
         d = e.get("delta_shares")
+        ref = f"<small>{esc(e.get('inflow_ref'))}</small>" if e.get("inflow_ref") else ""
         et.append(f"<tr><td>{esc(e.get('name'))}<small>{esc(e.get('code'))}</small></td>"
                   f"<td class='r'>{n(d, 0) if d is not None else '<span class=na>직전 값 없음</span>'}</td>"
                   f"<td class='r'>{n(e.get('amt'), 1)}</td>"
-                  f"<td class='r'>{n(e.get('listed'), 0, sign=False) if e.get('listed') else '–'}</td></tr>")
-    etft = ("<table class='compact'><thead><tr><th>섹터 ETF</th><th class='r'>상장주수 변동</th><th class='r'>설정·환매(억)</th><th class='r'>상장주수</th></tr></thead>"
-            f"<tbody>{''.join(et) or '<tr><td colspan=4 class=empty>ETF 수집 없음</td></tr>'}</tbody></table>")
+                  f"<td class='r'>{n(e.get('listed'), 0, sign=False) if e.get('listed') else '–'}</td>"
+                  f"<td class='r'>{n(e.get('inflow_1d'), 1)} / {n(e.get('inflow_1w'), 0)}{ref}</td></tr>")
+    etft = ("<table class='compact'><thead><tr><th>섹터 ETF</th><th class='r'>상장주수 변동</th><th class='r'>설정·환매(억)</th><th class='r'>상장주수</th>"
+            "<th class='r'>네이버 순유입 1d / 1w(억)<br><small>교차 확인 · 기준일 하루 지연</small></th></tr></thead>"
+            f"<tbody>{''.join(et) or '<tr><td colspan=5 class=empty>ETF 수집 없음</td></tr>'}</tbody></table>")
     at = []
     for h in active:
         pct = f"{h['pct']:+.0f}%" if h.get("pct") is not None else ""
@@ -104,7 +107,7 @@ def tech_table(rows):
         cls = "rsi-lo" if rsi is not None and rsi <= metrics.RSI_LO else ("rsi-hi" if rsi is not None and rsi >= metrics.RSI_HI else "")
         pct = t.get("rsi_pctl")
         pct_s = "–" if pct is None else (f"하위 {pct:.0f}%" if pct <= 50 else f"상위 {100 - pct:.0f}%")
-        ex = f"<span class='mini {'b' if (pct or 50) <= 50 else 's'}'>{esc(t['extreme'])}</span>" if t.get("extreme") else ""
+        ex = f"<span class='mini {'b' if metrics.pctl_or(pct, 50) <= 50 else 's'}'>{esc(t['extreme'])}</span>" if t.get("extreme") else ""
         rsi_s = "" if rsi is None else f"{rsi:.0f}"
         prev_s = "" if t.get("rsi_prev") is None else f"{t['rsi_prev']:.0f}"
         tr.append(f"<tr><td>{esc(r['name'])}</td><td class='r {cls}'>{rsi_s}</td>"
@@ -119,8 +122,8 @@ def tech_table(rows):
 
 def summary_tiles(rows, d):
     buy, sell = metrics.rank_flow(rows)
-    ex_lo = [r["name"] for r in rows if r.get("tech", {}).get("extreme") and (r["tech"].get("rsi_pctl") or 50) <= 50]
-    ex_hi = [r["name"] for r in rows if r.get("tech", {}).get("extreme") and (r["tech"].get("rsi_pctl") or 50) > 50]
+    ex_lo = [r["name"] for r in rows if r.get("tech", {}).get("extreme") and metrics.pctl_or(r["tech"].get("rsi_pctl"), 50) <= 50]
+    ex_hi = [r["name"] for r in rows if r.get("tech", {}).get("extreme") and metrics.pctl_or(r["tech"].get("rsi_pctl"), 50) > 50]
     pas = [r["name"] for r in rows if r.get("passive") and abs(r["passive"].get("adv_pct") or 0) >= 3]
     def tile(label, items, cls):
         body = esc(" · ".join(items)) if items else "<span class='na'>없음</span>"
@@ -173,7 +176,9 @@ table.compact{{font-size:12px}}
 .note{{font-size:12px;color:var(--muted);line-height:1.6;margin:8px 0 0}}
 .errs{{margin:16px 0;font-size:12px;color:#b45309}}.errs ul{{margin:6px 0 0 18px}}
 .wrap{{overflow-x:auto}}
+#cap-1,#cap-2,#cap-3{{padding:6px 0 4px;background:#fff}}
 </style></head><body>
+<div id="cap-1">
 <p class="eyebrow">COVERAGE · FLOW &amp; TECHNICALS</p>
 <h1>커버리지 기업 수급 / 기술적 지표</h1>
 <p class="sub">조선·방산·건설기계 커버리지 + 커버예정 <b>{len(rows)}종목</b>. 외인·기관 순매수(시총 대비) · 섹터 ETF 패시브 추정 + 액티브 ETF 계약수 · RSI 1년 극단.
@@ -185,15 +190,18 @@ table.compact{{font-size:12px}}
 <h2 id="flow">① 외국인·기관 순매수 <small style="font:400 12px Inter;color:#6b7280">5일 합산 억원 · 시총 대비 % 순</small></h2>
 <div class="wrap">{flow_table(rows)}</div>
 <p class="note">5일 창은 오늘 잠정 행을 포함한 최근 5거래일. 연속일수 배지는 2일 이상만. 시총 대비 %는 (외인+기관 5일 합산)/시총.</p>
-
+</div>
+<div id="cap-2">
 <h2 id="passive">② 기계적 수급 <small style="font:400 12px Inter;color:#6b7280">ETF 설정·환매 × 비중 (하한값) · 액티브 ETF 계약수</small></h2>
 <div class="wrap">{passive_table(rows, d.get('etfs', []), d.get('active', []), d.get('active_date', ''))}</div>
 <p class="note">패시브 추정 = Σ(섹터 ETF 상장주수 변동 × 가격 × 종목 비중). 비중은 네이버 Top10 구성종목만 있어 비중 밖 종목의 몫은 잡히지 않는다 → 하한값. ADV 대비 = 추정 매매 / 20일 평균 거래대금.</p>
-
+</div>
+<div id="cap-3">
 <h2 id="tech">③ 과매수 · 과매도 <small style="font:400 12px Inter;color:#6b7280">RSI(14, Wilder) · 1년 백분위 · 52주 위치</small></h2>
 <div class="wrap">{tech_table(rows)}</div>
 <p class="note">RSI 잠정 = 오늘 현재가를 종가로 둔 값, 전일 확정과 나란히 둔다. 1년 백분위는 확정 RSI 252거래일 분포 안에서 잠정 RSI 의 자리 — 하위/상위 {metrics.EXTREME_PCTL}% 안이면 극단. 30 이하 진입은 ETF 신호판 백테스트에서 '1주 단기 반등' 성격(D+5 +0.9%p)이었고 70 하향이탈은 역방향이었다.</p>
 
+</div>
 <p class="note" style="margin-top:28px">출처: 한국투자증권 OpenAPI(일봉·투자자별·현재가·상장주수) · 네이버 증권(ETF 구성 비중) · 액티브ETF.매매동향(etf_holdings). 유니버스는 <code>coverage_flow/universe.csv</code>, 섹터 ETF 는 <code>etf_universe.csv</code>.</p>
 </body></html>"""
 

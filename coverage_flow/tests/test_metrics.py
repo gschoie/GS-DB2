@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """순수 계산부 검산 — 네트워크 없음. 컨테이너·러너 모두에서 돈다.
 python tests/test_metrics.py"""
-import os, sys, json, unittest
+import os, sys, json, unittest, unittest.mock
 import numpy as np, pandas as pd
 from datetime import datetime, timezone, timedelta
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -123,6 +123,15 @@ class Passive(unittest.TestCase):
         per_stock, per_etf = metrics.passive_flow(self.etfs(), {})
         self.assertEqual(per_stock, {})
         self.assertTrue(all(e["delta_shares"] is None for e in per_etf))
+        self.assertEqual(per_etf[0]["listed"], 1_100_000)     # 첫 수집도 상장주수는 표에 보여야 한다
+
+    def test_parse_eok(self):
+        self.assertEqual(metrics.parse_eok("1조 1,560억"), 11560.0)
+        self.assertEqual(metrics.parse_eok("-99.2억"), -99.2)
+        self.assertEqual(metrics.parse_eok("-1,536억"), -1536.0)
+        self.assertEqual(metrics.parse_eok("1조 247억"), 10247.0)
+        self.assertEqual(metrics.parse_eok("2조"), 20000.0)
+        self.assertIsNone(metrics.parse_eok("")); self.assertIsNone(metrics.parse_eok(None)); self.assertIsNone(metrics.parse_eok("n/a"))
 
     def test_delta_times_weight(self):
         per_stock, per_etf = metrics.passive_flow(self.etfs(), {"1": 1_000_000, "2": 520_000})
@@ -209,6 +218,36 @@ class Outputs(unittest.TestCase):
         self.assertIn("한화에어로스페이스 RSI 20 · 1년 최저권 (하위 1%)", txt)
         self.assertIn("한화오션 RSI 69 · 1년 최고권", txt)
         self.assertIn("검증 전", txt); self.assertLess(len(txt), 4000)
+        self.assertNotIn("github.io", txt)                                  # 대시보드 주소 비노출
+
+    def test_pctl_zero_is_lowest_not_missing(self):
+        d = fake_payload()
+        d["rows"][1]["tech"].update(rsi_pctl=0.0, extreme="1년 최저권 (하위 0%)")
+        d["rows"][0]["tech"].update(rsi_pctl=3.0, extreme="1년 최저권 (하위 3%)")
+        txt = notify.compose(d)
+        i0, i1 = txt.index("한화에어로스페이스 RSI"), txt.index("한화오션 RSI")
+        self.assertLess(i0, i1)                       # 0% 가 3% 보다 먼저
+        self.assertEqual(metrics.pctl_or(0.0, 50), 0.0); self.assertEqual(metrics.pctl_or(None, 50), 50)
+        h = build_report.render(d)
+        self.assertIn("RSI 1년 최저권", h)
+        self.assertIn("mini b'>1년 최저권 (하위 0%)", h)
+
+    def test_not_live_keeps_confirmed_only(self):
+        df = ohlc([100 + i * 0.3 for i in range(300)])
+        today = df["date"].iloc[-1] + pd.Timedelta(days=2)      # 토요일 격
+        t = metrics.technicals(df, today, None)
+        self.assertFalse(t["provisional"]); self.assertEqual(t["rsi"], t["rsi_prev"])
+
+    def test_creds_never_fall_back_to_public_channel(self):
+        env = {"TELEGRAM_BOT_TOKEN": "t", "TELEGRAM_CHAT_ID": "@public"}
+        with unittest.mock.patch.dict(os.environ, env, clear=True):
+            self.assertEqual(notify._creds(), ("t", ""))                       # 공개채널은 무시
+        env["TELEGRAM_CHAT_ID_PRIVATE"] = "-100123"
+        with unittest.mock.patch.dict(os.environ, env, clear=True):
+            self.assertEqual(notify._creds(), ("t", "-100123"))
+        env["COVFLOW_TELEGRAM_CHAT_ID"] = "-100999"; env["COVFLOW_TELEGRAM_BOT_TOKEN"] = "t2"
+        with unittest.mock.patch.dict(os.environ, env, clear=True):
+            self.assertEqual(notify._creds(), ("t2", "-100999"))
 
     def test_compose_empty(self):
         txt = notify.compose({"asof": "2026-10-16 10:01", "rows": [], "etfs": [], "active": []})

@@ -923,8 +923,11 @@
     - 평일 장중 3회 **10:00 · 13:30 · 15:30** — GAS 시계 `covflow` 슬롯 3개가 정시(via=scheduler),
       `coverage-flow.yml` 크론은 안전망(guard: 슬롯 경계 11:45/14:30, 자기 제외·fail-open, 24번 방식).
       휴장일은 collect.py 가 네이버 지수 API 거래일로 스스로 생략(30번 방식).
-    - 텔레는 **수주공시 봇·채널**(TELEGRAM_BOT_TOKEN/CHAT_ID, COVFLOW_* 있으면 우선) 평문 한 통.
-      발송은 정시 실행에만(schedule·via=scheduler·force_telegram) — 화면 `🔄 지금 수집` 은 페이지만.
+    - 텔레는 평문 한 통. 봇 토큰 COVFLOW_TELEGRAM_BOT_TOKEN → TELEGRAM_BOT_TOKEN(수주공시 봇),
+      채널 COVFLOW_TELEGRAM_CHAT_ID → TELEGRAM_CHAT_ID_PRIVATE. **공개채널(TELEGRAM_CHAT_ID)로는
+      폴백하지 않는다**(첫 테스트가 공개채널로 간 뒤 사용자 요청으로 제외; 비공개 채널은 봇을
+      관리자로 넣고 `-100…` ID 를 시크릿에). 발송은 정시 실행에만(schedule·via=scheduler·
+      force_telegram) — 화면 `🔄 지금 수집` 은 페이지만.
     - 소스는 전부 한투 OpenAPI(일봉·투자자별·현재가/시총/상장주수/외인보유비율, etf_signal 과 같은
       키) + 네이버 etfAnalysis(ETF 비중, etf_holdings 와 같은 엔드포인트). 컨테이너에선 둘 다 못
       불러 `tests/test_metrics.py` 19개(슬롯·RSI 잠정/확정·백분위·5일 창·패시브 산식·상장주수
@@ -936,9 +939,31 @@
     - 사이드바 `🦿 업무자동화 > 📡 커버리지 기업 수급/기술적 지표`(피어그룹.Valuation 밑),
       산출물 `static/coverage_flow_report.html` + `coverage_flow/data/latest.json`(+history 30일).
       deploy-pages workflow_run·build_static 복사 추가. **GAS 재붙여넣기 필요**(WF covflow +
-      SCHEDULE 3슬롯; '배포 관리 → 새 버전', 새 배포 금지). 러너 첫 실행에서 KIS 필드명
-      (acml_tr_pbmn·lstn_stcn·hts_avls·오늘 잠정 행 유무)을 실측 확인할 것 — 거래대금이 없으면
-      종가×거래량으로 폴백한다.
+      SCHEDULE 3슬롯; '배포 관리 → 새 버전', 새 배포 금지).
+    - **첫 실행 실측** (10/17 토, force): 종목 21/21·ETF 7/7·오류 0, 텔레 도착. 주식용
+      inquire-price 가 ETF 에도 `lstn_stcn`(상장주수)·`hts_avls` 를 준다 — 첫 run 화면에
+      상장주수가 비어 보인 건 per_etf 가 첫 수집 때 listed 를 안 실은 표시 문제였다(수정).
+      프로브(`--probe-etf`)로 확인한 덤: KIS etfetn inquire-price 는 `etf_crcl_stcn`·
+      `etf_cu_unit_scrt_cnt`(CU 50,000)·`etf_ntas_ttam`(순자산 억), 네이버 etfAnalysis 는
+      `cumulativeNetInflowList`(1d/1w/1m 순유입 억, 기준일 하루 지연) 를 준다 → 순유입은
+      ETF 표에 교차 확인 열로 추가(`metrics.parse_eok` 가 '1조 1,560억' 을 억으로).
+      실측 버그 둘: rsi_pctl 0.0 을 `or 50` 이 '없음' 으로 읽어 1년 최저가 목록 중간으로
+      갔던 것(30번 부류 — 0 은 값이다), 토요일 force 에서 금요일 종가가 '오늘 잠정' 으로
+      붙던 것(거래일이 오늘일 때만 잠정 봉). 패시브 추정은 10/20(월) 첫 슬롯부터 채워진다.
+    - **수주공시 폼도 바담 방으로** (10/17 저녁): 대시보드 '조선 수주공시 → 텔레' 폼이 늘 공개채널로
+      가던 것을 비공개 바담 방 기본으로. dart-shiporder-bot.yml target 에 '비공개(바담)' 옵션
+      (기본값) 추가 — chat_id 는 BADAM_TELEGRAM_CHAT_ID → COVFLOW_TELEGRAM_CHAT_ID 재사용(같은 방).
+      app.js 폼이 target 을 명시해 보내므로 GAS 재붙여넣기 없이도 바담으로 가고, GAS 정본의
+      기본값도 바담으로 맞춤. 공개채널은 Actions 에서 대상을 직접 고를 때만.
+    - **텔레 = 본문 + 화면 캡쳐 앨범, 링크 없음** (10/17 저녁): 대시보드 주소(반비공개, 리네임
+      운영)를 채널에 남기지 않으려 본문의 링크를 빼고 `capture.py`(Playwright, 수주공시 봇과
+      같은 방식)가 페이지를 **섹션 3장**(`#cap-1` 제목+타일+①수급 / `#cap-2` ②기계적 수급 /
+      `#cap-3` ③과매수·과매도)으로 찍어 `sendMediaGroup` 앨범으로 보낸다. 한 장(2000×6400)으로
+      찍으면 텔레그램이 399×1280 으로 줄여 글자가 안 읽혔다(실측) — 장당 세로/가로 ≤ 3 유지.
+      캡쳐 실패는 본문 발송을 막지 않는다(continue-on-error). 컨테이너 검증은
+      `/opt/pw-browsers/chromium-*/chrome-linux/chrome` 을 executable_path 로(36번 교훈).
+      사용자 대안 2안("링크는 두되 주소를 가리기")은 텔레그램이 링크 미리보기·탭 시 도메인을
+      드러내 사실상 불가능해 채택하지 않았다.
     - 2판 후보(미구현): 수급 × 컨센 변화 교차(kospi_consensus), 외국인 보유비율 1년 백분위,
       섹터 ETF 대비 상대강도, 수주 공시·실적일 이벤트 뱃지, 공매도(소스 확인 필요).
 

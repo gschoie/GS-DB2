@@ -14,6 +14,10 @@ on:
         description: "텔레그램 지금 한 통 보내기 (휴장일 게이트도 무시)"
         type: boolean
         default: false
+      probe_etf:
+        description: "ETF 상장주수 소스 탐색만(응답 키 출력, 저장·발송 없음)"
+        type: boolean
+        default: false
   schedule:
     - cron: "0 1 * * 1-5"     # 01:00 UTC = 10:00 KST
     - cron: "30 4 * * 1-5"    # 04:30 UTC = 13:30 KST
@@ -87,6 +91,9 @@ jobs:
           KIS_APP_KEY: ${{ secrets.KIS_APP_KEY }}
           KIS_APP_SECRET: ${{ secrets.KIS_APP_SECRET }}
         run: |
+          if [ "${{ inputs.probe_etf }}" = "true" ]; then
+            python collect.py --probe-etf; echo "skipped=true" >> "$GITHUB_OUTPUT"; exit 0
+          fi
           python collect.py ${{ inputs.force_telegram && '--force' || '' }} | tee collect.log
           if grep -q "휴장일로 판단" collect.log; then echo "skipped=true" >> "$GITHUB_OUTPUT"; fi
 
@@ -94,6 +101,17 @@ jobs:
         if: steps.collect.outputs.skipped != 'true'
         working-directory: coverage_flow
         run: python build_report.py
+
+      # 텔레그램에 링크 대신 화면 캡쳐를 보낸다(대시보드 주소 비노출). 수주공시 봇과 같은 방식.
+      # 캡쳐 실패는 발송을 막지 않는다(본문만 간다).
+      - name: 화면 캡쳐 (Playwright)
+        if: ${{ steps.collect.outputs.skipped != 'true' && (github.event_name == 'schedule' || inputs.via == 'scheduler' || inputs.force_telegram) }}
+        working-directory: coverage_flow
+        continue-on-error: true
+        run: |
+          pip install -q playwright
+          python -m playwright install --with-deps chromium
+          python capture.py
 
       - name: 커밋 및 푸시 (→ Pages 재배포)
         if: steps.collect.outputs.skipped != 'true'
@@ -111,7 +129,9 @@ jobs:
 
       # 정시 실행(GAS 시계 via=scheduler, 또는 크론 안전망)에만 보낸다 — 화면 '🔄 지금 수집'
       # 버튼은 via 가 없어 발송에서 빠진다(30번 교훈). force_telegram 은 테스트 경로.
-      # 봇·채널은 수주공시 봇(TELEGRAM_BOT_TOKEN/CHAT_ID)과 같고, COVFLOW_* 가 있으면 그쪽 우선.
+      # 봇 토큰은 COVFLOW_* → 수주공시 봇(TELEGRAM_BOT_TOKEN). 채널은 COVFLOW_TELEGRAM_CHAT_ID →
+      # 수주공시 봇의 비공개 미리보기 방(TELEGRAM_CHAT_ID_PRIVATE). **공개채널(TELEGRAM_CHAT_ID)은
+      # 일부러 안 넘긴다** — 사용자 요청(10/17)으로 공개채널 제외. 둘 다 없으면 발송 스킵(실패 아님).
       - name: 텔레그램 발송
         if: ${{ steps.collect.outputs.skipped != 'true' && (github.event_name == 'schedule' || inputs.via == 'scheduler' || inputs.force_telegram) }}
         working-directory: coverage_flow
@@ -119,5 +139,5 @@ jobs:
           COVFLOW_TELEGRAM_BOT_TOKEN: ${{ secrets.COVFLOW_TELEGRAM_BOT_TOKEN }}
           COVFLOW_TELEGRAM_CHAT_ID: ${{ secrets.COVFLOW_TELEGRAM_CHAT_ID }}
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
-          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
-        run: python notify.py
+          TELEGRAM_CHAT_ID_PRIVATE: ${{ secrets.TELEGRAM_CHAT_ID_PRIVATE }}
+        run: python notify.py --photos "data/capture_*.png" || echo "::warning::텔레그램 미발송 — 채널 시크릿을 확인하세요"
