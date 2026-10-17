@@ -856,4 +856,18 @@
       `<p>` 가 되자 오류가 뜰 때마다 안내문을 덮어썼다** → `p[data-err]`.
       `gate.py` 는 빌드 때 전 페이지에 주입되므로 `deploy-pages` 한 번으로 435개 반영.
 
+43. **건기 전략 레이더 신설 — 신제품·CAPEX·M&A 누적 대시보드** (10/17): 건설기계 브리핑에서
+    잡히는 뉴스 중 ① 신제품 출시 ② CAPEX(공장 신설·증설) ③ M&A·지분·장기 파트너십을
+    따로 떼어 계속 쌓는 페이지(방산 수주 파이프라인/LNG FID와 같은 발상). 사용자 요청.
+    - 데이터 정본 `static/construction_strategy/events.json` — **static 밑에 두는 이유:
+      claude-brief-ingest 가 static 경로만 main 으로 나르므로** 세션 브랜치의 이벤트 추가가
+      데이터째 main 에 보존된다. 렌더러 `construction_briefing/strategy_tracker_publish.py`
+      → `static/construction_tracker.html`(카테고리 탭 필터·월 구분·근거 브리핑 링크 — lng/dc/defense_tracker 와 같은 *_tracker.html 주소 가족, 브리핑 인덱스 상단 📌 버튼).
+    - 운영: 아침 루틴 [7.7] — 그날 건기 뉴스에서 세 분류 이벤트가 있으면 events.json 추가
+      (같은 사건의 후속 보도는 새 줄 금지, 기존 항목 note 갱신) → 렌더 → 건기 3종 커밋에
+      동승 → ingest 가 main 반영. 이벤트 없는 날은 무동작(억지로 채우지 않는다).
+    - 사이드바 `🏗️ 글로벌건기.브리핑 > 🧭 ┗건기.전략레이더`, build_static 복사,
+      ingest 경로 2개 추가. 백필: 8/20~10/16 아카이브에서 19건 큐레이션(Fabick 인수·
+      BHP-Liebherr·DX77/군산·DX300LC-9·CAT 인도 3종 등).
+
 이후 작업은 git log와 이 파일을 갱신하며 이어간다.
