@@ -1,0 +1,151 @@
+{
+ "meta": {
+  "_doc": "글로벌 수상함·잠수함 입찰 트래커 데이터 — 각국 해군 함정(수상함·잠수함) 조달 수주전을 프로그램 단위로 추적한다. 세션 아침 루틴 [6.7]이 그날 방산 브리핑 3판에서 관련 보도를 골라 해당 프로그램 log에 추가하고, 새 수주전은 programs에 직접 신설한다(구조화 필드는 확인된 것만 — 모르는 값은 '미정'/'—'). landscape는 특정 입찰에 안 붙는 판 구도 메모. 페이지(naval_tracker.html)가 이 파일을 런타임 fetch 하므로 렌더 스크립트는 없다. 초기값은 2026-10-17 브리핑 아카이브(8/13~10/17) 일괄 백필.",
+  "updated": "2026-10-17"
+ },
+ "programs": [
+  {
+   "id": "th-frigate",
+   "country": "태국",
+   "program": "차기 호위함 2차 사업",
+   "type": "수상함",
+   "scale": "167.3억 바트(약 6,833억원) — 호위함 1척+통합군수지원",
+   "candidates": "HD현대중공업 vs 스페인(Navantia)·싱가포르·튀르키예",
+   "kr": "HD현대중공업 — 우선협상",
+   "stage": "결정 임박",
+   "timeline": "우선협상 확정(9월) → 내각 승인·본계약 절차",
+   "note": "푸미폰함(2018 인도) 이력이 결정적. 태국 해군 2037년 호위함 4→8척 계획 — 후속 3척 기대. 성사 시 캐나다 잠수함 고배 이후 첫 수출 함정",
+   "log": [
+    {"date": "2026-08-28", "text": "2018년 납품한 푸미폰함 CIWS(Phalanx) 장기 미가동 의혹이 현지 공방 — 막판 변수로 부상.", "link": "claude_defense/2026-08-28.html"},
+    {"date": "2026-09-01", "text": "태국 측 '행정절차 완료·승인 단계' — '도장만 남음' 보도.", "link": "claude_defense/2026-09-01.html"},
+    {"date": "2026-09-10", "text": "HD현대중공업 우선협상 확정 — 167.3억 바트(약 6,833억원), 스페인·싱가포르·튀르키예를 제침. 푸미폰함 인도 이력이 결정적.", "link": "claude_defense/2026-09-10.html"}
+   ]
+  },
+  {
+   "id": "dk-frigate",
+   "country": "덴마크",
+   "program": "신형 프리깃 사업",
+   "type": "수상함",
+   "scale": "미정",
+   "candidates": "Babcock(Arrowhead 140 기반) 등 — 구도 상세 미확인",
+   "kr": "—",
+   "stage": "진행",
+   "timeline": "Babcock, Arrowhead 140 기반 하이브리드 함정·자율체계 협력으로 사업 겨냥(8월 보도)",
+   "note": "유럽 재무장 속 북해·발트 소요",
+   "log": [
+    {"date": "2026-08-21", "text": "Babcock이 Arrowhead 140 기반 하이브리드 함정·자율체계 협력으로 덴마크 프리깃 사업을 겨냥.", "link": "claude_defense/2026-08-21.html"}
+   ]
+  },
+  {
+   "id": "co-naval",
+   "country": "콜롬비아",
+   "program": "해군 함정·잠수함 현대화",
+   "type": "혼합",
+   "scale": "미정",
+   "candidates": "HD현대중공업·한화오션 접촉(해군 방문)",
+   "kr": "HD현대중공업·한화오션",
+   "stage": "논의 초기",
+   "timeline": "콜롬비아 해군이 양사를 방문해 현대화 사업 논의(8월, 더구루 단독)",
+   "note": "남미 시장 개척 행보",
+   "log": [
+    {"date": "2026-08-13", "text": "콜롬비아 해군이 HD현대중공업·한화오션을 방문해 군함·잠수함 현대화 사업을 논의했다는 단독 보도.", "link": "claude_defense/2026-08-13.html"}
+   ]
+  },
+  {
+   "id": "pl-orka",
+   "country": "폴란드",
+   "program": "Orka 차기 잠수함",
+   "type": "잠수함",
+   "scale": "미정",
+   "candidates": "한화오션(KSS-III) 등 — 경쟁 구도는 브리핑 미표기",
+   "kr": "한화오션",
+   "stage": "발표 대기",
+   "timeline": "K-방산의 다음 실계약 촉매로 반복 거론(9~10월)",
+   "note": "폴란드 2차 패키지(K2 현지화 등)와 병행 거론",
+   "log": [
+    {"date": "2026-09-23", "text": "4분기 수출 계약(사우디 방공·폴란드 2차·필리핀 잠수함) 실체화가 K-방산 조정 반전의 조건으로 거론.", "link": "claude_defense/2026-09-23.html"}
+   ]
+  },
+  {
+   "id": "ph-sub",
+   "country": "필리핀",
+   "program": "잠수함 도입 사업",
+   "type": "잠수함",
+   "scale": "미정",
+   "candidates": "한화오션 등 — 경쟁 구도는 브리핑 미표기",
+   "kr": "한화오션",
+   "stage": "진행",
+   "timeline": "4분기 수출 계약 실체화 후보로 거론(9~10월)",
+   "note": "태국 호위함 '우협→본계약' 체인의 다음 주자로 거론",
+   "log": [
+    {"date": "2026-09-10", "text": "태국 호위함 우협 확정으로 '건조 이력 → 후속 수주' 선순환 실증 — 필리핀 잠수함·중동 함정 파이프라인 신뢰도 상승 평가.", "link": "claude_defense/2026-09-10.html"}
+   ]
+  },
+  {
+   "id": "ca-sub",
+   "country": "캐나다",
+   "program": "차기 잠수함 사업",
+   "type": "잠수함",
+   "scale": "미정",
+   "candidates": "TKMS(212CD) vs 한화오션(KSS-III)",
+   "kr": "한화오션 — 탈락",
+   "stage": "종료 — TKMS 선정",
+   "timeline": "TKMS 212CD 선정(2026.08 이전 확정 — 브리핑 8/24 기준 기정사실)",
+   "note": "이후 TKMS-Navantia 유럽 잠수함 연합 추진의 배경 — K-잠수함 수출 경쟁 환경 변수",
+   "log": [
+    {"date": "2026-08-24", "text": "TKMS-Navantia 연합 보도에서 '캐나다 잠수함 사업은 TKMS가 한화오션을 제침'으로 재확인 — 212CD의 국제 입지 강화.", "link": "claude_defense/2026-08-24.html"}
+   ]
+  },
+  {
+   "id": "it-ddx",
+   "country": "이탈리아",
+   "program": "DDX 차세대 구축함",
+   "type": "수상함",
+   "scale": "2척 €3.7bn($4.2bn)",
+   "candidates": "Fincantieri-Leonardo 합작(OSN)",
+   "kr": "—",
+   "stage": "종료 — 계약 체결",
+   "timeline": "OCCAR, OSN에 설계·건조 발주(9/25 보도)",
+   "note": "독일 F126 취소로 위축됐던 유럽 수상함 발주 흐름의 반전 신호",
+   "log": [
+    {"date": "2026-09-25", "text": "OCCAR가 Fincantieri-Leonardo 합작(OSN)에 차세대 구축함 2척 €3.7bn($4.2bn) 설계·건조 계약 발주.", "link": "defense_unified/2026-09-25.html"}
+   ]
+  },
+  {
+   "id": "de-f126",
+   "country": "독일",
+   "program": "F126 호위함",
+   "type": "수상함",
+   "scale": "—",
+   "candidates": "Damen Naval 주계약(장비: Rheinmetall 등)",
+   "kr": "—",
+   "stage": "종료 — 계약 취소",
+   "timeline": "2026.06 취소 확정",
+   "note": "Rheinmetall 매출 전망 -€300M 여파 — 이후 이탈리아 DDX가 발주 흐름 반전",
+   "log": [
+    {"date": "2026-09-05", "text": "F126 취소(6월 확정)의 Rheinmetall 매출 전망 -€300M 여파가 독일 매체에서 재조명.", "link": "claude_defense/2026-09-05.html"}
+   ]
+  },
+  {
+   "id": "kr-kddx",
+   "country": "한국",
+   "program": "KDDX 차기 구축함",
+   "type": "수상함",
+   "scale": "상세설계·선도함 8,380억원",
+   "candidates": "한화오션 vs HD현대중공업 → 한화오션",
+   "kr": "한화오션 — 상세설계·선도함 수주",
+   "stage": "종료 — 본계약 체결",
+   "timeline": "7/2 우선협상대상자 공시 → 7/31 방위사업청 본계약",
+   "note": "2032년 첫 국산 이지스급 전력화 목표 — 후속함(2~6번함) 배분·MRO·수출 파생 관전",
+   "log": [
+    {"date": "2026-08-17", "text": "[정정] 한화오션이 7/2 우선협상 공시 뒤 7/31 상세설계·선도함 본계약(8,380억원)을 이미 체결 — '우협 유력'은 6월 기사 재유통이었음.", "link": "claude_defense/2026-08-17.html"},
+    {"date": "2026-09-18", "text": "Leonardo DRS가 KDDX 전기추진 시스템 공급 계약 수주 — 한국 첫 전기추진 구축함.", "link": "defense_unified/2026-09-18.html"}
+   ]
+  }
+ ],
+ "landscape": [
+  {"date": "2026-08-24", "text": "TKMS-Navantia 잠수함 연합 — 프레임워크 연내 확정 목표(2차 MOU 7/24). 수출 잠수함 시장이 '개별사 경쟁'에서 '연합 대 연합'으로 재편되는 흐름, K-잠수함 수출 경쟁 변수.", "link": "claude_defense/2026-08-24.html"},
+  {"date": "2026-09-21", "text": "한화오션·HD현대중공업이 잠수함과 수상함 양쪽에서 수주 경쟁을 확대한다는 기획 보도.", "link": "defense_unified/2026-09-21.html"},
+  {"date": "2026-09-24", "text": "Navantia S-83 3세대 AIP 시험 완료('수 주간 잠항') — 스페인 잠수함의 수출 경쟁력 보강, 한국 잠수함 수출의 경쟁 변수.", "link": "defense_unified/2026-09-24.html"}
+ ]
+}
