@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
 """data/latest.json → 텔레그램 한 통(평문). 수주공시 봇과 같은 봇·채널로 보낸다.
 
-시크릿: COVFLOW_TELEGRAM_BOT_TOKEN/CHAT_ID 우선 → 없으면 TELEGRAM_BOT_TOKEN/TELEGRAM_CHAT_ID
-(dart_shiporder_bot 이 쓰는 공개채널 봇). 전송 결과는 telegram_status.json 에 남긴다.
+시크릿: 봇 토큰은 COVFLOW_TELEGRAM_BOT_TOKEN → TELEGRAM_BOT_TOKEN(수주공시 봇) 순.
+채널은 COVFLOW_TELEGRAM_CHAT_ID → TELEGRAM_CHAT_ID_PRIVATE(수주공시 봇의 비공개 미리보기 방) 순 —
+**공개채널(TELEGRAM_CHAT_ID)로는 절대 폴백하지 않는다**(10/17 사용자 요청: 공개채널 제외).
+둘 다 없으면 발송을 건너뛰고 status 에 사유만 남긴다. 전송 결과는 telegram_status.json 에.
 """
 from __future__ import annotations
 import os, sys, json, urllib.request, urllib.error
@@ -21,7 +23,7 @@ WD = "월화수목금토일"
 
 def _creds():
     tok = os.environ.get("COVFLOW_TELEGRAM_BOT_TOKEN") or os.environ.get("TELEGRAM_BOT_TOKEN", "")
-    chat = os.environ.get("COVFLOW_TELEGRAM_CHAT_ID") or os.environ.get("TELEGRAM_CHAT_ID", "")
+    chat = os.environ.get("COVFLOW_TELEGRAM_CHAT_ID") or os.environ.get("TELEGRAM_CHAT_ID_PRIVATE", "")
     return tok, chat
 
 
@@ -110,7 +112,7 @@ def compose(d):
 def send(text):
     tok, chat = _creds()
     if not tok or not chat:
-        return {"ok": False, "description": "텔레그램 토큰/채팅ID 미설정"}
+        return {"ok": False, "description": "텔레그램 토큰/채팅ID 미설정 (COVFLOW_TELEGRAM_CHAT_ID 또는 TELEGRAM_CHAT_ID_PRIVATE 필요 — 공개채널로는 보내지 않음)"}
     data = json.dumps({"chat_id": chat, "text": text, "disable_web_page_preview": True}).encode("utf-8")
     req = urllib.request.Request(f"https://api.telegram.org/bot{tok}/sendMessage", data=data,
                                  headers={"Content-Type": "application/json"})
