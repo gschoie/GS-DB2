@@ -61,6 +61,11 @@ def percentile_of_last(series, window=PCTL_DAYS):
     return float((s < cur).mean() * 100)
 
 
+def pctl_or(v, default):
+    """None 이면 default, 0.0 은 0.0 그대로(`v or default` 는 0.0 을 '없음' 으로 읽는다)."""
+    return default if v is None else v
+
+
 def extreme_label(pctl):
     """'1년 최저권 (하위 1%)' / '1년 최고권 (상위 3%)' / None"""
     if pctl is None:

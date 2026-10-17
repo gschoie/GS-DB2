@@ -14,6 +14,10 @@ on:
         description: "텔레그램 지금 한 통 보내기 (휴장일 게이트도 무시)"
         type: boolean
         default: false
+      probe_etf:
+        description: "ETF 상장주수 소스 탐색만(응답 키 출력, 저장·발송 없음)"
+        type: boolean
+        default: false
   schedule:
     - cron: "0 1 * * 1-5"     # 01:00 UTC = 10:00 KST
     - cron: "30 4 * * 1-5"    # 04:30 UTC = 13:30 KST
@@ -87,6 +91,9 @@ jobs:
           KIS_APP_KEY: ${{ secrets.KIS_APP_KEY }}
           KIS_APP_SECRET: ${{ secrets.KIS_APP_SECRET }}
         run: |
+          if [ "${{ inputs.probe_etf }}" = "true" ]; then
+            python collect.py --probe-etf; echo "skipped=true" >> "$GITHUB_OUTPUT"; exit 0
+          fi
           python collect.py ${{ inputs.force_telegram && '--force' || '' }} | tee collect.log
           if grep -q "휴장일로 판단" collect.log; then echo "skipped=true" >> "$GITHUB_OUTPUT"; fi
 

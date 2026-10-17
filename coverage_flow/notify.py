@@ -85,9 +85,10 @@ def compose(d):
     L.append("")
     L.append("RSI 1년 극단" + (" (잠정)" if prov else ""))
     ex = [r for r in rows if r.get("tech", {}).get("extreme")]
-    ex.sort(key=lambda r: r["tech"].get("rsi_pctl") or 50)
-    lo = [r for r in ex if (r["tech"].get("rsi_pctl") or 50) <= 50]
-    hi = [r for r in ex if (r["tech"].get("rsi_pctl") or 50) > 50][::-1]
+    # 주의: pctl 0.0 은 '최저' 이지 '없음' 이 아니다 — `or 50` 으로 쓰면 1년 최저가 중간으로 간다
+    ex.sort(key=lambda r: metrics.pctl_or(r["tech"].get("rsi_pctl"), 50))
+    lo = [r for r in ex if metrics.pctl_or(r["tech"].get("rsi_pctl"), 50) <= 50]
+    hi = [r for r in ex if metrics.pctl_or(r["tech"].get("rsi_pctl"), 50) > 50][::-1]
     for r in lo + hi:
         t = r["tech"]
         L.append(f"· {r['name']} RSI {t['rsi']:.0f} · {t['extreme']}")

@@ -59,7 +59,9 @@ def naver_etf_holdings(code):
              "weight": _num(h.get("etfWeight"))} for h in top if h.get("itemCode")]
 
 
-def collect_stock(u, today):
+def collect_stock(u, today, live=True):
+    """live=False(휴장일·--force 테스트)면 현재가를 '오늘 잠정 봉' 으로 붙이지 않는다 —
+    금요일 종가를 토요일 잠정치로 찍으면 거짓 라벨이다."""
     code = u["code"]
     px = kis.fetch_price(code)
     time.sleep(0.12)
@@ -67,7 +69,7 @@ def collect_stock(u, today):
     time.sleep(0.12)
     inv = kis.fetch_investor(code)
     time.sleep(0.12)
-    tech = metrics.technicals(ohlc, today, px.get("price"))
+    tech = metrics.technicals(ohlc, today, px.get("price") if live else None)
     flow = metrics.flow_summary(inv, today, px.get("mcap"))
     return {**u, "px": px, "tech": tech, "flow": flow}
 
@@ -89,6 +91,42 @@ def collect_etfs(etf_rows):
         except Exception as ex:
             errors.append(f"{e['code']} {e['name']}: {type(ex).__name__}: {ex}")
     return out, errors
+
+
+def probe_etf(code):
+    """러너 프로브: ETF 상장주수를 어디서 받을 수 있는지 응답 키를 찍는다.
+    첫 실행(10/17)에서 주식용 inquire-price 의 lstn_stcn 이 ETF 7개 전부 None 이었다."""
+    def show(label, obj):
+        print(f"== {label}")
+        if isinstance(obj, dict):
+            for k, v in obj.items():
+                print(f"   {k}: {str(v)[:80]}")
+        else:
+            print("  ", str(obj)[:400])
+    try:
+        j = kis.get("/uapi/domestic-stock/v1/quotations/inquire-price", "FHKST01010100",
+                    {"FID_COND_MRKT_DIV_CODE": "J", "FID_INPUT_ISCD": code})
+        show("KIS inquire-price(J) output", j.get("output"))
+    except Exception as ex:
+        print("KIS inquire-price(J) 실패:", ex)
+    try:
+        j = kis.get("/uapi/etfetn/v1/quotations/inquire-price", "FHPST02400000",
+                    {"FID_COND_MRKT_DIV_CODE": "J", "FID_INPUT_ISCD": code})
+        show("KIS etfetn inquire-price output", j.get("output"))
+    except Exception as ex:
+        print("KIS etfetn inquire-price 실패:", ex)
+    for url in (NAVER_ETF.format(code=code), f"https://m.stock.naver.com/api/stock/{code}/basic",
+                f"https://m.stock.naver.com/api/stock/{code}/integration"):
+        try:
+            j = requests.get(url, headers=NAVER_H, timeout=15).json()
+            top = {k: v for k, v in j.items() if not isinstance(v, (list, dict))}
+            show(url, top)
+            for k, v in j.items():
+                if isinstance(v, dict):
+                    show(f"  └ {k}", {kk: vv for kk, vv in v.items() if not isinstance(vv, (list, dict))})
+        except Exception as ex:
+            print(url, "실패:", ex)
+    return 0
 
 
 def load_json(p, default):
@@ -121,6 +159,7 @@ def main(argv=None):
     ap = argparse.ArgumentParser()
     ap.add_argument("--force", action="store_true", help="휴장일 게이트 무시")
     ap.add_argument("--limit", type=int, default=0, help="종목 수 제한(프로브용)")
+    ap.add_argument("--probe-etf", action="store_true", help="ETF 상장주수 소스 탐색 — 응답 키만 찍고 끝(저장 없음)")
     a = ap.parse_args(argv)
 
     now = datetime.now(KST)
@@ -130,13 +169,16 @@ def main(argv=None):
         print(f"휴장일로 판단(마지막 거래일 {mday}) — 수집 생략")
         return 0
     slot = metrics.decide_slot(now)
+    live = (mday == today) or not mday   # 거래일을 모르면 평소대로(fail-open)
+    if a.probe_etf:
+        return probe_etf(load_csv("etf_universe.csv")[0]["code"])
     uni = load_csv("universe.csv")
     if a.limit:
         uni = uni[:a.limit]
     rows, errors = [], []
     for u in uni:
         try:
-            rows.append(collect_stock(u, today))
+            rows.append(collect_stock(u, today, live))
             print(f"  {u['name']:<14} RSI {rows[-1]['tech'].get('rsi')}  5일 외인+기관 {rows[-1]['flow'].get('fi5')}")
         except Exception as ex:
             errors.append(f"{u['code']} {u['name']}: {type(ex).__name__}: {ex}")
