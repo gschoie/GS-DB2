@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """순수 계산부 검산 — 네트워크 없음. 컨테이너·러너 모두에서 돈다.
 python tests/test_metrics.py"""
-import os, sys, json, unittest
+import os, sys, json, unittest, unittest.mock
 import numpy as np, pandas as pd
 from datetime import datetime, timezone, timedelta
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -236,6 +236,17 @@ class Outputs(unittest.TestCase):
         today = df["date"].iloc[-1] + pd.Timedelta(days=2)      # 토요일 격
         t = metrics.technicals(df, today, None)
         self.assertFalse(t["provisional"]); self.assertEqual(t["rsi"], t["rsi_prev"])
+
+    def test_creds_never_fall_back_to_public_channel(self):
+        env = {"TELEGRAM_BOT_TOKEN": "t", "TELEGRAM_CHAT_ID": "@public"}
+        with unittest.mock.patch.dict(os.environ, env, clear=True):
+            self.assertEqual(notify._creds(), ("t", ""))                       # 공개채널은 무시
+        env["TELEGRAM_CHAT_ID_PRIVATE"] = "-100123"
+        with unittest.mock.patch.dict(os.environ, env, clear=True):
+            self.assertEqual(notify._creds(), ("t", "-100123"))
+        env["COVFLOW_TELEGRAM_CHAT_ID"] = "-100999"; env["COVFLOW_TELEGRAM_BOT_TOKEN"] = "t2"
+        with unittest.mock.patch.dict(os.environ, env, clear=True):
+            self.assertEqual(notify._creds(), ("t2", "-100999"))
 
     def test_compose_empty(self):
         txt = notify.compose({"asof": "2026-10-16 10:01", "rows": [], "etfs": [], "active": []})

@@ -118,7 +118,9 @@ jobs:
 
       # 정시 실행(GAS 시계 via=scheduler, 또는 크론 안전망)에만 보낸다 — 화면 '🔄 지금 수집'
       # 버튼은 via 가 없어 발송에서 빠진다(30번 교훈). force_telegram 은 테스트 경로.
-      # 봇·채널은 수주공시 봇(TELEGRAM_BOT_TOKEN/CHAT_ID)과 같고, COVFLOW_* 가 있으면 그쪽 우선.
+      # 봇 토큰은 COVFLOW_* → 수주공시 봇(TELEGRAM_BOT_TOKEN). 채널은 COVFLOW_TELEGRAM_CHAT_ID →
+      # 수주공시 봇의 비공개 미리보기 방(TELEGRAM_CHAT_ID_PRIVATE). **공개채널(TELEGRAM_CHAT_ID)은
+      # 일부러 안 넘긴다** — 사용자 요청(10/17)으로 공개채널 제외. 둘 다 없으면 발송 스킵(실패 아님).
       - name: 텔레그램 발송
         if: ${{ steps.collect.outputs.skipped != 'true' && (github.event_name == 'schedule' || inputs.via == 'scheduler' || inputs.force_telegram) }}
         working-directory: coverage_flow
@@ -126,5 +128,5 @@ jobs:
           COVFLOW_TELEGRAM_BOT_TOKEN: ${{ secrets.COVFLOW_TELEGRAM_BOT_TOKEN }}
           COVFLOW_TELEGRAM_CHAT_ID: ${{ secrets.COVFLOW_TELEGRAM_CHAT_ID }}
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
-          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
-        run: python notify.py
+          TELEGRAM_CHAT_ID_PRIVATE: ${{ secrets.TELEGRAM_CHAT_ID_PRIVATE }}
+        run: python notify.py || echo "::warning::텔레그램 미발송 — 채널 시크릿을 확인하세요"

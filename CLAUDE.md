@@ -923,8 +923,11 @@
     - 평일 장중 3회 **10:00 · 13:30 · 15:30** — GAS 시계 `covflow` 슬롯 3개가 정시(via=scheduler),
       `coverage-flow.yml` 크론은 안전망(guard: 슬롯 경계 11:45/14:30, 자기 제외·fail-open, 24번 방식).
       휴장일은 collect.py 가 네이버 지수 API 거래일로 스스로 생략(30번 방식).
-    - 텔레는 **수주공시 봇·채널**(TELEGRAM_BOT_TOKEN/CHAT_ID, COVFLOW_* 있으면 우선) 평문 한 통.
-      발송은 정시 실행에만(schedule·via=scheduler·force_telegram) — 화면 `🔄 지금 수집` 은 페이지만.
+    - 텔레는 평문 한 통. 봇 토큰 COVFLOW_TELEGRAM_BOT_TOKEN → TELEGRAM_BOT_TOKEN(수주공시 봇),
+      채널 COVFLOW_TELEGRAM_CHAT_ID → TELEGRAM_CHAT_ID_PRIVATE. **공개채널(TELEGRAM_CHAT_ID)로는
+      폴백하지 않는다**(첫 테스트가 공개채널로 간 뒤 사용자 요청으로 제외; 비공개 채널은 봇을
+      관리자로 넣고 `-100…` ID 를 시크릿에). 발송은 정시 실행에만(schedule·via=scheduler·
+      force_telegram) — 화면 `🔄 지금 수집` 은 페이지만.
     - 소스는 전부 한투 OpenAPI(일봉·투자자별·현재가/시총/상장주수/외인보유비율, etf_signal 과 같은
       키) + 네이버 etfAnalysis(ETF 비중, etf_holdings 와 같은 엔드포인트). 컨테이너에선 둘 다 못
       불러 `tests/test_metrics.py` 19개(슬롯·RSI 잠정/확정·백분위·5일 창·패시브 산식·상장주수
