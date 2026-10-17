@@ -936,9 +936,17 @@
     - 사이드바 `🦿 업무자동화 > 📡 커버리지 기업 수급/기술적 지표`(피어그룹.Valuation 밑),
       산출물 `static/coverage_flow_report.html` + `coverage_flow/data/latest.json`(+history 30일).
       deploy-pages workflow_run·build_static 복사 추가. **GAS 재붙여넣기 필요**(WF covflow +
-      SCHEDULE 3슬롯; '배포 관리 → 새 버전', 새 배포 금지). 러너 첫 실행에서 KIS 필드명
-      (acml_tr_pbmn·lstn_stcn·hts_avls·오늘 잠정 행 유무)을 실측 확인할 것 — 거래대금이 없으면
-      종가×거래량으로 폴백한다.
+      SCHEDULE 3슬롯; '배포 관리 → 새 버전', 새 배포 금지).
+    - **첫 실행 실측** (10/17 토, force): 종목 21/21·ETF 7/7·오류 0, 텔레 도착. 주식용
+      inquire-price 가 ETF 에도 `lstn_stcn`(상장주수)·`hts_avls` 를 준다 — 첫 run 화면에
+      상장주수가 비어 보인 건 per_etf 가 첫 수집 때 listed 를 안 실은 표시 문제였다(수정).
+      프로브(`--probe-etf`)로 확인한 덤: KIS etfetn inquire-price 는 `etf_crcl_stcn`·
+      `etf_cu_unit_scrt_cnt`(CU 50,000)·`etf_ntas_ttam`(순자산 억), 네이버 etfAnalysis 는
+      `cumulativeNetInflowList`(1d/1w/1m 순유입 억, 기준일 하루 지연) 를 준다 → 순유입은
+      ETF 표에 교차 확인 열로 추가(`metrics.parse_eok` 가 '1조 1,560억' 을 억으로).
+      실측 버그 둘: rsi_pctl 0.0 을 `or 50` 이 '없음' 으로 읽어 1년 최저가 목록 중간으로
+      갔던 것(30번 부류 — 0 은 값이다), 토요일 force 에서 금요일 종가가 '오늘 잠정' 으로
+      붙던 것(거래일이 오늘일 때만 잠정 봉). 패시브 추정은 10/20(월) 첫 슬롯부터 채워진다.
     - 2판 후보(미구현): 수급 × 컨센 변화 교차(kospi_consensus), 외국인 보유비율 1년 백분위,
       섹터 ETF 대비 상대강도, 수주 공시·실적일 이벤트 뱃지, 공매도(소스 확인 필요).
 

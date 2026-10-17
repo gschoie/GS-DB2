@@ -123,6 +123,15 @@ class Passive(unittest.TestCase):
         per_stock, per_etf = metrics.passive_flow(self.etfs(), {})
         self.assertEqual(per_stock, {})
         self.assertTrue(all(e["delta_shares"] is None for e in per_etf))
+        self.assertEqual(per_etf[0]["listed"], 1_100_000)     # 첫 수집도 상장주수는 표에 보여야 한다
+
+    def test_parse_eok(self):
+        self.assertEqual(metrics.parse_eok("1조 1,560억"), 11560.0)
+        self.assertEqual(metrics.parse_eok("-99.2억"), -99.2)
+        self.assertEqual(metrics.parse_eok("-1,536억"), -1536.0)
+        self.assertEqual(metrics.parse_eok("1조 247억"), 10247.0)
+        self.assertEqual(metrics.parse_eok("2조"), 20000.0)
+        self.assertIsNone(metrics.parse_eok("")); self.assertIsNone(metrics.parse_eok(None)); self.assertIsNone(metrics.parse_eok("n/a"))
 
     def test_delta_times_weight(self):
         per_stock, per_etf = metrics.passive_flow(self.etfs(), {"1": 1_000_000, "2": 520_000})
