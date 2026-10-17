@@ -203,7 +203,7 @@ class TestBuildMessage(unittest.TestCase):
         msg = nt.build_message(CFG, GUIDE, DATA, now)
         self.assertNotIn("💬 한 줄", msg)
         self.assertIn("🧭 지금 구간", msg)          # 근거는 그대로 간다
-        self.assertIn("📊 매크로 데스크 · 10/12(월) 21:00", msg)
+        self.assertIn("📊 GS의 매크로 데스크 · 10/12(월) 21:00", msg)
         self.assertIn(nt.PAGE, msg)
 
     def test_header_says_numbers_are_previous_us_close(self):
