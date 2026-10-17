@@ -164,14 +164,14 @@ def main(argv=None):
 
     now = datetime.now(KST)
     today = now.date().isoformat()
+    if a.probe_etf:   # 휴장일 게이트보다 먼저 — 프로브는 거래일과 무관
+        return probe_etf(load_csv("etf_universe.csv")[0]["code"])
     mday, mstatus = market_day()
     if mday and mday != today and not a.force:
         print(f"휴장일로 판단(마지막 거래일 {mday}) — 수집 생략")
         return 0
     slot = metrics.decide_slot(now)
     live = (mday == today) or not mday   # 거래일을 모르면 평소대로(fail-open)
-    if a.probe_etf:
-        return probe_etf(load_csv("etf_universe.csv")[0]["code"])
     uni = load_csv("universe.csv")
     if a.limit:
         uni = uni[:a.limit]
