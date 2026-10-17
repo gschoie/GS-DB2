@@ -159,6 +159,43 @@ class ForwardConsensus(unittest.TestCase):
             self.assertIsNone(far[metric])
 
 
+class NanTailRows(unittest.TestCase):
+    """장외 시간에 야후가 붙이는 NaN 꼬리 행 — 진짜 종가를 덮으면 안 된다.
+
+    아침(KST) 실행마다 미국·유럽 전 종목의 현재가가 비어 FWD PER·PSR이
+    통째로 공란이 되던 사고(10/3·10/10·10/17 스냅샷 실측)의 재현이다.
+    """
+
+    def test_nan_row_on_a_later_date_is_ignored(self):
+        history = pd.DataFrame(
+            {"Close": [20.0, 24.0, 28.0, 32.0, 40.0, float("nan")]},
+            index=pd.to_datetime(["2022-12-30", "2023-12-29", "2024-12-31",
+                                  "2025-12-31", "2026-08-14", "2026-08-15"]),
+        )
+        record = run(FakeTicker(history=history))
+        self.assertEqual(record["price"], 40.0)
+        self.assertEqual({y["label"]: y for y in record["years"]}["2026E"]["per"], 20.0)
+
+    def test_nan_duplicate_of_last_date_does_not_mask_the_real_close(self):
+        # 같은 날짜가 둘(정규장 종가 + NaN 라이브 바)이면 날짜 중복 정리의
+        # keep="last" 가 NaN 쪽을 남기던 것이 사고의 기전이다.
+        history = pd.DataFrame(
+            {"Close": [20.0, 24.0, 28.0, 32.0, 40.0, float("nan")]},
+            index=pd.to_datetime(["2022-12-30 00:00", "2023-12-29 00:00", "2024-12-31 00:00",
+                                  "2025-12-31 00:00", "2026-08-14 00:00", "2026-08-14 20:00"]),
+        )
+        record = run(FakeTicker(history=history))
+        self.assertEqual(record["price"], 40.0)
+        self.assertEqual({y["label"]: y for y in record["years"]}["2026E"]["per"], 20.0)
+
+    def test_all_nan_closes_bail_out_with_a_warning(self):
+        history = pd.DataFrame({"Close": [float("nan")] * 2},
+                               index=pd.to_datetime(["2026-08-13", "2026-08-14"]))
+        record = run(FakeTicker(history=history))
+        self.assertEqual(record["years"], [])
+        self.assertTrue(any("종가" in w for w in record["warnings"]))
+
+
 class CurrencyHandling(unittest.TestCase):
     def test_pence_quotes_are_scaled_to_pounds(self):
         # 야후는 영국주를 pence 로 준다. 100으로 나눠야 재무제표(GBP)와 자릿수가 맞는다.

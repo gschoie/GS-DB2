@@ -218,6 +218,14 @@ def collect(company):
         return record
 
     closes = history["Close"].copy()
+    # 미국·유럽 장외 시간(아침 KST 실행)에 야후가 마지막 날짜에 NaN 꼬리 행을
+    # 붙인다 — 중복 정리(keep="last") 전에 떨구지 않으면 NaN이 진짜 종가를 덮어
+    # 현재가가 비고 FWD PER·PSR이 통째로 공란이 된다(10/3·10/10·10/17 실측).
+    closes = closes.dropna()
+    if closes.empty:
+        record["warnings"].append("종가가 전부 비어 있어 지표를 만들 수 없습니다")
+        record["years"] = []
+        return record
     closes.index = pd.to_datetime(closes.index).tz_localize(None).normalize()
     closes = closes[~closes.index.duplicated(keep="last")]
 
