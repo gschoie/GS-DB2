@@ -47,7 +47,8 @@ jobs:
             'telegram_research_dashboard/static/construction_unified/' \
             'telegram_research_dashboard/static/construction_unified_report.html' \
             'telegram_research_dashboard/static/construction_strategy/' \
-            'telegram_research_dashboard/static/construction_tracker.html'; do
+            'telegram_research_dashboard/static/construction_tracker.html' \
+            'telegram_research_dashboard/static/naval_tracker.json'; do
             git checkout origin/claude/defense-brief-daily -- "$p" \
               || echo "skip: $p (브랜치에 없음)"
           done
@@ -71,6 +72,9 @@ jobs:
           fi
           if [ -f telegram_research_dashboard/static/construction_tracker.html ]; then
             git add telegram_research_dashboard/static/construction_tracker.html
+          fi
+          if [ -f telegram_research_dashboard/static/naval_tracker.json ]; then
+            git add telegram_research_dashboard/static/naval_tracker.json
           fi
           for p in chatgpt_construction construction_unified construction_strategy; do
             if [ -d "telegram_research_dashboard/static/$p" ]; then

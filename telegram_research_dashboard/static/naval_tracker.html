@@ -1,0 +1,274 @@
+<title>글로벌 수상함·잠수함 입찰 트래커</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+  :root {
+    color-scheme: light;
+    --bg: #f3f5f6; --surface: #fbfcfd; --surface-2: #ecf0f2;
+    --ink: #13181c; --ink-2: #4e565c; --muted: #828b92;
+    --line: #dde3e7; --line-strong: #c0cad1;
+    --accent: #1f6fb5; --accent-ink: #175a94; --accent-wash: rgba(31, 111, 181, 0.10);
+    --open: #2a78d6; --hot: #c53030; --done: #8b887f; --pass: #1baf7a;
+    --shadow: 0 1px 2px rgba(19, 24, 28, 0.05), 0 4px 14px rgba(19, 24, 28, 0.04);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      color-scheme: dark;
+      --bg: #101316; --surface: #171c21; --surface-2: #1f262c;
+      --ink: #ecf0f3; --ink-2: #b9c2c9; --muted: #87929b;
+      --line: #28313a; --line-strong: #39434d;
+      --accent: #4596e6; --accent-ink: #6cb0f0; --accent-wash: rgba(69, 150, 230, 0.12);
+      --open: #3987e5; --hot: #e66767; --done: #8f8d84; --pass: #199e70;
+      --shadow: 0 1px 2px rgba(0, 0, 0, 0.35), 0 4px 14px rgba(0, 0, 0, 0.25);
+    }
+  }
+  :root[data-theme="dark"] {
+    color-scheme: dark;
+    --bg: #101316; --surface: #171c21; --surface-2: #1f262c;
+    --ink: #ecf0f3; --ink-2: #b9c2c9; --muted: #87929b;
+    --line: #28313a; --line-strong: #39434d;
+    --accent: #4596e6; --accent-ink: #6cb0f0; --accent-wash: rgba(69, 150, 230, 0.12);
+    --open: #3987e5; --hot: #e66767; --done: #8f8d84; --pass: #199e70;
+    --shadow: 0 1px 2px rgba(0, 0, 0, 0.35), 0 4px 14px rgba(0, 0, 0, 0.25);
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--bg); color: var(--ink);
+    font-family: "IBM Plex Sans KR", "Apple SD Gothic Neo", "Malgun Gothic", system-ui, sans-serif;
+    font-size: 14.5px; line-height: 1.5;
+  }
+  a { color: inherit; }
+  .mono { font-family: "IBM Plex Mono", ui-monospace, monospace; }
+  .wrap { max-width: 1280px; margin: 0 auto; padding: 0 16px 80px; }
+
+  header {
+    display: flex; flex-wrap: wrap; align-items: baseline; gap: 8px 18px;
+    padding: 26px 0 14px; border-bottom: 2px solid var(--ink);
+  }
+  .brand-eyebrow {
+    width: 100%; font-size: 11px; font-weight: 600; letter-spacing: 0.14em;
+    color: var(--accent-ink); text-transform: uppercase;
+  }
+  h1 { margin: 0; font-size: 24px; font-weight: 700; letter-spacing: -0.01em; }
+  .head-meta { margin-left: auto; font-size: 12.5px; color: var(--ink-2); display: flex; gap: 14px; align-items: baseline; }
+  .head-meta a { color: var(--accent-ink); font-weight: 600; text-decoration: none; }
+  .head-meta a:hover { text-decoration: underline; }
+
+  .notice {
+    margin: 14px 0 0; padding: 9px 12px;
+    background: var(--accent-wash); border: 1px solid var(--accent);
+    border-radius: 8px; font-size: 12.5px; color: var(--ink);
+  }
+
+  h2 { font-size: 16px; margin: 30px 0 10px; padding-bottom: 6px; border-bottom: 1px solid var(--line-strong); }
+  h2 .sub { font-size: 12px; font-weight: 500; color: var(--muted); margin-left: 8px; }
+
+  .bar { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin: 14px 0 10px; font-size: 13px; }
+  .bar input[type="search"] {
+    font: inherit; color: var(--ink); background: var(--surface);
+    border: 1px solid var(--line-strong); border-radius: 6px; padding: 5px 8px; min-width: 220px;
+  }
+  .bar label { display: flex; gap: 5px; align-items: center; color: var(--ink-2); }
+  .bar .seg { display: flex; gap: 0; border: 1px solid var(--line-strong); border-radius: 6px; overflow: hidden; }
+  .bar .seg button {
+    font: inherit; font-size: 12.5px; color: var(--ink-2); background: var(--surface);
+    border: 0; border-right: 1px solid var(--line); padding: 5px 11px; cursor: pointer;
+  }
+  .bar .seg button:last-child { border-right: 0; }
+  .bar .seg button.on { background: var(--accent-wash); color: var(--accent-ink); font-weight: 600; }
+  input:focus-visible, a:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  .tblwrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); box-shadow: var(--shadow); }
+  table { border-collapse: collapse; width: 100%; min-width: 1150px; font-size: 12.8px; }
+  thead th {
+    position: sticky; top: 0; background: var(--surface-2); z-index: 1;
+    text-align: left; font-size: 11.5px; letter-spacing: 0.03em; color: var(--ink-2);
+    padding: 8px 9px; border-bottom: 1px solid var(--line-strong); white-space: nowrap;
+  }
+  tbody td { padding: 7px 9px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  tbody tr:hover { background: var(--accent-wash); }
+  td.nowrap { white-space: nowrap; }
+  .pname { font-weight: 600; }
+  .pname .op { display: block; font-weight: 400; font-size: 11.5px; color: var(--muted); }
+  .badge { display: inline-block; padding: 1px 7px; border-radius: 999px; font-size: 11px; font-weight: 600; border: 1px solid; white-space: nowrap; }
+  .b-open { color: var(--open); border-color: var(--open); }
+  .b-hot  { color: var(--hot);  border-color: var(--hot); }
+  .b-done { color: var(--done); border-color: var(--done); }
+  .b-pass { color: var(--pass); border-color: var(--pass); }
+  .kr { color: var(--accent-ink); font-weight: 600; }
+  .dim { color: var(--muted); }
+  td .cell { max-width: 330px; }
+
+  .log { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 4px 14px; box-shadow: var(--shadow); }
+  .log .entry { display: flex; gap: 12px; padding: 9px 0; border-bottom: 1px solid var(--line); font-size: 13px; }
+  .log .entry:last-child { border-bottom: 0; }
+  .log .d { flex: 0 0 86px; color: var(--muted); font-family: "IBM Plex Mono", monospace; font-size: 12px; }
+  .log .p { font-weight: 600; margin-right: 6px; }
+  .empty { color: var(--muted); font-size: 13px; padding: 14px 2px; }
+  footer { margin-top: 40px; font-size: 12px; color: var(--muted); }
+</style>
+
+<div class="wrap">
+  <header>
+    <div class="brand-eyebrow">Global Naval · Surface Combatants / Submarines / Fleet MRO</div>
+    <h1>글로벌 수상함·잠수함 입찰 트래커</h1>
+    <div class="head-meta">
+      <span id="metaLine" class="mono"></span>
+      <a href="defense_tracker.html">📌 입찰·예산 트래커</a>
+      <a href="defense_unified_report.html">← 방산 브리핑</a>
+    </div>
+  </header>
+
+  <div class="notice">
+    각국 해군의 <b>수상함·잠수함 조달 수주전</b>(입찰·우선협상·계약·취소)을 프로그램 단위로 추적한다 —
+    방산 입찰·예산 트래커의 함정 전문판. 매일 방산 브리핑에서 관련 보도가 확인되면 로그로 누적.
+    초기값은 <b>2026-10-17</b> 아카이브(8/13~) 일괄 정리 기준. 상선·해양플랜트는 다루지 않는다.
+    한국 조선사 관련 항목은 <span class="kr">파란색</span>으로 표시.
+  </div>
+
+  <div class="bar">
+    <input type="search" id="fQ" placeholder="국가·프로그램·업체 검색">
+    <div class="seg" id="fType">
+      <button data-t="" class="on">전체</button>
+      <button data-t="수상함">수상함</button>
+      <button data-t="잠수함">잠수함</button>
+    </div>
+    <label><input type="checkbox" id="fKr"> 한국 관련만</label>
+  </div>
+
+  <h2>① 진행 중 입찰·경쟁 <span class="sub" id="tSum"></span></h2>
+  <div class="tblwrap">
+    <table>
+      <thead><tr>
+        <th>국가</th><th>프로그램 / 함종</th><th>규모</th><th>경쟁 구도</th>
+        <th>한국 관련</th><th>단계</th><th>일정·최근 경과</th><th>비고</th>
+      </tr></thead>
+      <tbody id="tBody"></tbody>
+    </table>
+  </div>
+
+  <h2>①-1 종료된 경쟁 — 선정·계약·취소 <span class="sub" id="cSum"></span></h2>
+  <div class="tblwrap">
+    <table>
+      <thead><tr>
+        <th>국가</th><th>프로그램 / 함종</th><th>규모</th><th>경쟁 구도</th>
+        <th>한국 관련</th><th>결과</th><th>일정·최근 경과</th><th>비고</th>
+      </tr></thead>
+      <tbody id="cBody"></tbody>
+    </table>
+  </div>
+
+  <h2>② 판 구도 메모 <span class="sub">특정 입찰에 붙지 않는 경쟁 지형 변화 (연합·신기술·행보)</span></h2>
+  <div id="landscape" class="log"></div>
+
+  <h2>업데이트 로그 <span class="sub">방산 브리핑에서 쌓는 프로그램별 뉴스 기록 (최신순)</span></h2>
+  <div id="log" class="log"></div>
+
+  <footer id="foot"></footer>
+</div>
+
+<script>
+"use strict";
+const $ = (id) => document.getElementById(id);
+const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => (
+  { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]
+));
+
+let DATA = null;
+let TYPE = "";
+
+function stageBadge(stage) {
+  const s = String(stage || "");
+  let cls = "b-open";
+  if (s.includes("취소")) cls = "b-hot";
+  else if (s.startsWith("종료")) cls = "b-done";
+  else if (s.includes("임박")) cls = "b-hot";
+  return `<span class="badge ${cls}">${esc(s)}</span>`;
+}
+const cell = (v) => v && v !== "-" && v !== "—" ? `<div class="cell">${esc(v)}</div>` : '<span class="dim">—</span>';
+const isKr = (x) => x.kr && x.kr !== "-" && x.kr !== "—";
+
+function filters() {
+  return {
+    q: $("fQ").value.trim().toLowerCase(),
+    kr: $("fKr").checked,
+    type: TYPE,
+  };
+}
+const matchQ = (x, q) => !q || JSON.stringify(x).toLowerCase().includes(q);
+const matchType = (x, t) => !t || x.type === t || x.type === "혼합";
+const isClosed = (t) => String(t.stage || "").startsWith("종료");
+
+function row(t) {
+  return `
+    <tr>
+      <td class="nowrap">${esc(t.country)}</td>
+      <td class="pname">${esc(t.program)}<span class="op">${esc(t.type)}</span></td>
+      <td>${cell(t.scale)}</td>
+      <td>${cell(t.candidates)}</td>
+      <td>${isKr(t) ? `<span class="kr">${esc(t.kr)}</span>` : '<span class="dim">—</span>'}</td>
+      <td class="nowrap">${stageBadge(t.stage)}</td>
+      <td>${cell(t.timeline)}</td>
+      <td>${cell(t.note)}</td>
+    </tr>`;
+}
+
+function render() {
+  const f = filters();
+  const keep = (t) => matchQ(t, f.q) && matchType(t, f.type) && (!f.kr || isKr(t));
+  const active = DATA.programs.filter(t => !isClosed(t));
+  const closed = DATA.programs.filter(isClosed);
+
+  const ts = active.filter(keep);
+  $("tSum").textContent = `${ts.length} / ${active.length}건`;
+  $("tBody").innerHTML = ts.map(row).join("")
+    || `<tr><td colspan="8" class="empty">조건에 맞는 항목 없음</td></tr>`;
+
+  const cs = closed.filter(keep);
+  $("cSum").textContent = `${cs.length} / ${closed.length}건`;
+  $("cBody").innerHTML = cs.map(row).join("")
+    || `<tr><td colspan="8" class="empty">조건에 맞는 항목 없음</td></tr>`;
+}
+
+const logEntry = (e, pname) => `
+  <div class="entry">
+    <div class="d">${esc(e.date)}</div>
+    <div>${pname ? `<span class="p">${esc(pname)}</span>` : ""}${e.link
+      ? `<a href="${esc(e.link)}" target="_blank" rel="noopener">${esc(e.text)}</a>` : esc(e.text)}</div>
+  </div>`;
+
+function renderLog() {
+  const entries = [];
+  DATA.programs.forEach(x => (x.log || []).forEach(e => entries.push({ ...e, pname: x.program })));
+  entries.sort((a, b) => (b.date || "").localeCompare(a.date || ""));
+  $("log").innerHTML = entries.length
+    ? entries.map(e => logEntry(e, e.pname)).join("")
+    : '<div class="empty">아직 쌓인 로그가 없습니다. 매일 방산 브리핑 발행 후 누적됩니다.</div>';
+
+  const land = [...(DATA.landscape || [])].sort((a, b) => (b.date || "").localeCompare(a.date || ""));
+  $("landscape").innerHTML = land.length
+    ? land.map(e => logEntry(e, "")).join("")
+    : '<div class="empty">메모 없음</div>';
+}
+
+fetch("naval_tracker.json", { cache: "no-store" })
+  .then(r => r.json())
+  .then(d => {
+    DATA = d;
+    $("metaLine").textContent = `기준 ${d.meta.updated}`;
+    render();
+    renderLog();
+    $("foot").textContent = "데이터: naval_tracker.json — 매일 방산 브리핑에서 세션이 큐레이션 · 모르는 값은 '미정/—'으로 남긴다 (추정 금지)";
+    $("fKr").addEventListener("change", render);
+    $("fQ").addEventListener("input", render);
+    document.querySelectorAll("#fType button").forEach(b => b.addEventListener("click", () => {
+      TYPE = b.dataset.t;
+      document.querySelectorAll("#fType button").forEach(x => x.classList.toggle("on", x === b));
+      render();
+    }));
+  })
+  .catch(e => { $("tBody").innerHTML = `<tr><td colspan="8" class="empty">데이터 로드 실패: ${esc(e)}</td></tr>`; });
+</script>
