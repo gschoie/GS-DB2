@@ -1,0 +1,276 @@
+# -*- coding: utf-8 -*-
+"""커버리지 수급 대시보드의 계산부 — 네트워크 없이 순수 함수만.
+
+세 꼭지 + 액티브 ETF 한 줄:
+  ① 외인·기관 순매수(5일 합산, 시총 대비 %, 연속일수, 오늘 잠정)
+  ② 기계적 수급 — 섹터 ETF 설정·환매(상장주수 변동) × 종목 비중 = 패시브 매매 추정(하한값)
+     + 액티브 ETF 계약수 변동(etf_holdings/changes.json)
+  ③ 과매수·과매도 — RSI(14, Wilder) + 1년 백분위 + 52주 위치
+
+규칙 기반 상태값이며 검증 전이다(화면·텔레에 그대로 적는다).
+"""
+from __future__ import annotations
+import numpy as np
+import pandas as pd
+from datetime import datetime, timedelta, timezone
+
+KST = timezone(timedelta(hours=9))
+RSI_N = 14
+FLOW_DAYS = 5          # 순매수 합산 창(거래일)
+ADV_DAYS = 20          # 평균 거래대금 창
+PCTL_DAYS = 252        # RSI 1년 백분위 창
+EXTREME_PCTL = 5       # 1년 하위/상위 5% 안이면 '극단'
+RSI_LO, RSI_HI = 30, 70
+
+# ── 슬롯 ────────────────────────────────────────────────────────
+SLOTS = [("10:00", "11:45"), ("13:30", "14:30"), ("15:30", "24:00")]
+
+
+def decide_slot(now=None):
+    """KST 시각 → 슬롯 라벨. 경계(11:45/14:30)는 워크플로 guard 와 같아야 한다."""
+    now = now or datetime.now(KST)
+    hm = now.hour * 100 + now.minute
+    if hm < 1145:
+        return "10:00"
+    if hm < 1430:
+        return "13:30"
+    return "15:30"
+
+
+# ── 기술 지표 ────────────────────────────────────────────────────
+def rsi(close, n=RSI_N):
+    s = pd.Series(close, dtype="float64")
+    d = s.diff()
+    up = d.clip(lower=0)
+    dn = -d.clip(upper=0)
+    au = up.ewm(alpha=1 / n, adjust=False).mean()
+    ad = dn.ewm(alpha=1 / n, adjust=False).mean()
+    rs = au / ad.replace(0, np.nan)
+    out = 100 - 100 / (1 + rs)
+    out[(ad == 0) & (au > 0)] = 100.0
+    return out
+
+
+def percentile_of_last(series, window=PCTL_DAYS):
+    """마지막 값이 직전 window 개 값 중 몇 % 자리인지(0=최저, 100=최고). 표본 20개 미만이면 None."""
+    s = pd.Series(series, dtype="float64").dropna()
+    if len(s) < 20:
+        return None
+    s = s.iloc[-window:]
+    cur = s.iloc[-1]
+    return float((s < cur).mean() * 100)
+
+
+def extreme_label(pctl):
+    """'1년 최저권 (하위 1%)' / '1년 최고권 (상위 3%)' / None"""
+    if pctl is None:
+        return None
+    if pctl <= EXTREME_PCTL:
+        return f"1년 최저권 (하위 {pctl:.0f}%)"
+    if pctl >= 100 - EXTREME_PCTL:
+        return f"1년 최고권 (상위 {100 - pctl:.0f}%)"
+    return None
+
+
+def technicals(ohlc, today, price_now=None):
+    """일봉 + (있으면) 오늘 현재가 → {rsi, rsi_prev, rsi_pctl, extreme, hi52_pct, lo52_pct, adv20, provisional}.
+
+    오늘 봉이 일봉에 없고 현재가가 있으면 오늘 종가로 붙여 '잠정' RSI 를 낸다.
+    확정(전일) RSI 는 rsi_prev 로 따로 둔다 — 장중 숫자는 마감 때 바뀐다.
+    """
+    df = ohlc.copy()
+    if df.empty:
+        return {}
+    today = pd.Timestamp(today)
+    confirmed = df[df["date"] < today]
+    provisional = False
+    if price_now and (df["date"] == today).sum() == 0:
+        df = pd.concat([confirmed, pd.DataFrame([{"date": today, "o": price_now, "h": price_now,
+                                                  "l": price_now, "c": price_now, "v": 0, "amt": 0}])],
+                       ignore_index=True)
+        provisional = True
+    elif (df["date"] == today).sum():
+        provisional = True
+    r_all = rsi(df["c"])
+    r_conf = rsi(confirmed["c"]) if len(confirmed) else pd.Series(dtype="float64")
+    # 백분위는 확정 RSI 분포 안에서 오늘 값의 자리 — 오늘 값을 분포에 넣으면 자기 자신과 비교한다
+    hist = list(r_conf.dropna().iloc[-PCTL_DAYS:]) if len(r_conf) else []
+    cur = float(r_all.iloc[-1]) if len(r_all) and not np.isnan(r_all.iloc[-1]) else None
+    pctl = None
+    if cur is not None and len(hist) >= 20:
+        pctl = float((np.array(hist) < cur).mean() * 100)
+    year = confirmed.iloc[-PCTL_DAYS:]
+    hi52 = float(year["h"].max()) if len(year) else None
+    lo52 = float(year["l"].min()) if len(year) else None
+    last = price_now or (float(df["c"].iloc[-1]) if len(df) else None)
+    adv = float(confirmed["amt"].iloc[-ADV_DAYS:].mean()) if len(confirmed) else None
+    return {
+        "rsi": None if cur is None else round(cur, 1),
+        "rsi_prev": (None if not len(r_conf) or np.isnan(r_conf.iloc[-1]) else round(float(r_conf.iloc[-1]), 1)),
+        "rsi_pctl": None if pctl is None else round(pctl, 1),
+        "extreme": extreme_label(pctl),
+        "hi52_pct": (None if not (hi52 and last) else round((last / hi52 - 1) * 100, 1)),
+        "lo52_pct": (None if not (lo52 and last) else round((last / lo52 - 1) * 100, 1)),
+        "adv20": None if adv is None or np.isnan(adv) else round(adv, 1),
+        "provisional": provisional,
+    }
+
+
+# ── 수급 ────────────────────────────────────────────────────────
+def streak(vals):
+    """최근 값부터 같은 부호가 며칠 이어졌나(+n 순매수, −n 순매도). 0 이면 0."""
+    n = 0
+    vals = [v for v in vals][::-1]
+    if not vals or vals[0] == 0 or pd.isna(vals[0]):
+        return 0
+    sign = 1 if vals[0] > 0 else -1
+    for v in vals:
+        if pd.isna(v) or ((v > 0) - (v < 0)) != sign:
+            break
+        n += 1
+    return n * sign
+
+
+def flow_summary(inv, today, mcap, days=FLOW_DAYS):
+    """투자자별 일별(억원) → 5일 합산·시총 대비·연속일수·오늘(잠정).
+
+    5일 창은 **오늘 잠정 포함** 최근 5행이다(장중 3회 발송이라 오늘을 빼면 10시·13시반·
+    15시반 메시지가 전부 같아진다). 오늘 행이 없으면(장 시작 전·휴장) 확정 5일이다.
+    """
+    if inv is None or inv.empty:
+        return {}
+    today = pd.Timestamp(today)
+    inv = inv[inv["date"] <= today]
+    has_today = bool((inv["date"] == today).sum())
+    win = inv.iloc[-days:]
+    f5, o5, p5 = float(win["외국인"].sum()), float(win["기관"].sum()), float(win["개인"].sum())
+    out = {
+        "frgn5": round(f5, 1), "inst5": round(o5, 1), "indiv5": round(p5, 1),
+        "fi5": round(f5 + o5, 1),
+        "fi5_mcap_pct": (round((f5 + o5) / mcap * 100, 2) if mcap else None),
+        "frgn_streak": streak(inv["외국인"]), "inst_streak": streak(inv["기관"]),
+        "has_today": has_today, "days": int(len(win)),
+        "window": [d.strftime("%m/%d") for d in win["date"]],
+    }
+    if has_today:
+        t = inv.iloc[-1]
+        out.update(frgn_today=round(float(t["외국인"]), 1), inst_today=round(float(t["기관"]), 1),
+                   indiv_today=round(float(t["개인"]), 1))
+    return out
+
+
+def rank_flow(rows, n=3):
+    """시총 대비 5일 외인+기관 순매수 % 기준 사는 쪽 상위 n · 파는 쪽 하위 n."""
+    ok = [r for r in rows if r.get("flow", {}).get("fi5_mcap_pct") is not None]
+    ok.sort(key=lambda r: r["flow"]["fi5_mcap_pct"], reverse=True)
+    buy = [r for r in ok[:n] if r["flow"]["fi5_mcap_pct"] > 0]
+    sell = [r for r in ok[::-1][:n] if r["flow"]["fi5_mcap_pct"] < 0]
+    return buy, sell
+
+
+def today_movers(rows, n=3):
+    """오늘 잠정 외인/기관 순매수 절대값 상위 n — '오늘: 한국콜마 기관 -165' 줄."""
+    items = []
+    for r in rows:
+        f = r.get("flow", {})
+        if not f.get("has_today"):
+            continue
+        for who, key in (("외인", "frgn_today"), ("기관", "inst_today")):
+            v = f.get(key)
+            if v is not None and abs(v) >= 1:
+                items.append((r["name"], who, v))
+    items.sort(key=lambda x: abs(x[2]), reverse=True)
+    return items[:n]
+
+
+# ── 기계적 수급(패시브) ──────────────────────────────────────────
+def passive_flow(etfs, prev_shares):
+    """섹터 ETF 설정·환매 × 종목 비중 → 종목별 추정 매매(억원).
+
+    etfs: [{code, name, listed(상장주수), price, holdings:[{code, weight(%)}]}]
+    prev_shares: {etf_code: 직전 저장 상장주수}
+    반환 {stock_code: {"amt": 억원, "etfs": [(etf명, 억원)]}} 와 ETF별 설정·환매 요약.
+    직전 값이 없는 ETF 는 건너뛴다(첫 수집은 '다음 수집부터'). 비중은 Top10 만 있으므로
+    **하한값**이다 — 비중 밖 종목의 몫은 잡히지 않는다.
+    """
+    per_stock, per_etf = {}, []
+    for e in etfs:
+        prev = prev_shares.get(e["code"])
+        listed, price = e.get("listed"), e.get("price")
+        if not prev or not listed or not price:
+            per_etf.append({"code": e["code"], "name": e.get("name", ""), "delta_shares": None, "amt": None})
+            continue
+        d_sh = listed - prev
+        amt_total = d_sh * price / 1e8
+        per_etf.append({"code": e["code"], "name": e.get("name", ""), "delta_shares": d_sh,
+                        "amt": round(amt_total, 1), "listed": listed, "prev": prev})
+        for h in e.get("holdings", []):
+            w = h.get("weight") or 0
+            if not h.get("code") or not w:
+                continue
+            a = amt_total * w / 100
+            s = per_stock.setdefault(h["code"], {"amt": 0.0, "etfs": []})
+            s["amt"] += a
+            s["etfs"].append((e.get("name", ""), round(a, 1)))
+    for s in per_stock.values():
+        s["amt"] = round(s["amt"], 1)
+        s["etfs"].sort(key=lambda x: abs(x[1]), reverse=True)
+    return per_stock, per_etf
+
+
+def adv_pct(amt, adv20):
+    """패시브 금액을 20일 평균 거래대금 대비 % 로. ADV 를 모르면 None."""
+    if amt is None or not adv20:
+        return None
+    return round(amt / adv20 * 100, 1)
+
+
+def passive_label(adv):
+    if adv is None:
+        return ""
+    a = abs(adv)
+    size = "큼" if a >= 20 else ("" if a >= 3 else "미미")
+    side = "순매수" if adv > 0 else "순매도"
+    return f"패시브 {side}{(' ' + size) if size else ''}"
+
+
+# ── 액티브 ETF ───────────────────────────────────────────────────
+def active_etf_hits(changes, universe_codes):
+    """etf_holdings/changes.json → 유니버스 종목이 걸린 액티브 ETF 매매만.
+    [{etf, stock_code, stock, kind(편입/제외/증가/감소), pct, weight}]"""
+    hits = []
+    for e in (changes or {}).get("etfs", []):
+        label = e.get("label", e.get("code", ""))
+        for h in e.get("new", []):
+            if h.get("code") in universe_codes:
+                hits.append({"etf": label, "stock_code": h["code"], "stock": h.get("name", ""),
+                             "kind": "편입", "pct": None, "weight": h.get("weight")})
+        for h in e.get("gone", []):
+            if h.get("code") in universe_codes:
+                hits.append({"etf": label, "stock_code": h["code"], "stock": h.get("name", ""),
+                             "kind": "제외", "pct": None, "weight": h.get("weight_prev")})
+        for h in e.get("moves", []):
+            if h.get("code") in universe_codes:
+                p = h.get("active_share_pct")
+                hits.append({"etf": label, "stock_code": h["code"], "stock": h.get("name", ""),
+                             "kind": "증가" if (p or 0) > 0 else "감소", "pct": p, "weight": h.get("weight_now")})
+    hits.sort(key=lambda x: abs(x["pct"] or 999), reverse=True)
+    return hits
+
+
+# ── 포맷 ────────────────────────────────────────────────────────
+def signed(v, nd=0):
+    if v is None:
+        return "–"
+    s = f"{v:+,.{nd}f}"
+    return s
+
+
+def streak_text(f):
+    bits = []
+    fs, os_ = f.get("frgn_streak", 0), f.get("inst_streak", 0)
+    if abs(fs) >= 3:
+        bits.append(f"외인 {abs(fs)}일째 {'순매수' if fs > 0 else '순매도'}")
+    if abs(os_) >= 3:
+        bits.append(f"기관 {abs(os_)}일째 {'순매수' if os_ > 0 else '순매도'}")
+    return bits

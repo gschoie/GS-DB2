@@ -904,4 +904,33 @@
       `.trk+a.trk{margin-left:0}`), 사이드바 방산 서브메뉴 `⚓ ┗수상함·잠수함.입찰`,
       defense_tracker ↔ naval_tracker 상호 헤더 링크. build_static 복사·ingest 경로 추가.
 
+46. **커버리지 기업 수급/기술적 지표 신설** (10/17): `coverage_flow/` — 조선·방산·건설기계
+    커버리지 16 + 커버예정 5(동성화인텍·세진중공업·현대힘스·성광벤드·태광) = 21종목(`universe.csv`, 사용자 지정 목록, status 열로 구분)의 ① 외인·기관 순매수(5일 합산,
+    **시총 대비 %** 로 정렬, 연속일수, 오늘 잠정) ② 기계적 수급 — 섹터 ETF 7개(`etf_universe.csv`:
+    SOL 조선TOP3플러스·TIGER 조선TOP10·KODEX K조선TOP10·HANARO Fn조선해운·PLUS K방산·
+    TIGER K방산&우주·KODEX 기계장비) **상장주수 변동 × 가격 × Top10 비중 = 패시브 추정(하한값)**
+    + 액티브 ETF 계약수 변동(`etf_holdings/changes.json` 재사용) ③ RSI(14) 잠정/확정 + **1년
+    백분위 극단**(하위·상위 5%) + 52주 위치. 다올 의료기기 수급 브리핑 형식을 따랐다.
+    - 평일 장중 3회 **10:00 · 13:30 · 15:30** — GAS 시계 `covflow` 슬롯 3개가 정시(via=scheduler),
+      `coverage-flow.yml` 크론은 안전망(guard: 슬롯 경계 11:45/14:30, 자기 제외·fail-open, 24번 방식).
+      휴장일은 collect.py 가 네이버 지수 API 거래일로 스스로 생략(30번 방식).
+    - 텔레는 **수주공시 봇·채널**(TELEGRAM_BOT_TOKEN/CHAT_ID, COVFLOW_* 있으면 우선) 평문 한 통.
+      발송은 정시 실행에만(schedule·via=scheduler·force_telegram) — 화면 `🔄 지금 수집` 은 페이지만.
+    - 소스는 전부 한투 OpenAPI(일봉·투자자별·현재가/시총/상장주수/외인보유비율, etf_signal 과 같은
+      키) + 네이버 etfAnalysis(ETF 비중, etf_holdings 와 같은 엔드포인트). 컨테이너에선 둘 다 못
+      불러 `tests/test_metrics.py` 19개(슬롯·RSI 잠정/확정·백분위·5일 창·패시브 산식·상장주수
+      직전값·액티브 필터·KIS 응답 변환·텔레 문안·렌더)로 검산, 워크플로가 매번 돈다.
+    - **5일 창은 오늘 잠정 행 포함**(빼면 장중 3통이 전부 같아진다) · **패시브 직전값은 오늘이
+      아닌 가장 최근 날짜**(같은 날 두 번째 슬롯도 전일 대비 = 하루 누적) · 첫 수집은 설정·환매
+      비교 불가라 '다음 거래일부터' 로 적는다 · ETF 코드가 틀려 엉뚱한 종목이 오면 이름 키워드로
+      걸러 오류 목록에 남긴다(조용히 섞이지 않게).
+    - 사이드바 `🦿 업무자동화 > 📡 커버리지 기업 수급/기술적 지표`(피어그룹.Valuation 밑),
+      산출물 `static/coverage_flow_report.html` + `coverage_flow/data/latest.json`(+history 30일).
+      deploy-pages workflow_run·build_static 복사 추가. **GAS 재붙여넣기 필요**(WF covflow +
+      SCHEDULE 3슬롯; '배포 관리 → 새 버전', 새 배포 금지). 러너 첫 실행에서 KIS 필드명
+      (acml_tr_pbmn·lstn_stcn·hts_avls·오늘 잠정 행 유무)을 실측 확인할 것 — 거래대금이 없으면
+      종가×거래량으로 폴백한다.
+    - 2판 후보(미구현): 수급 × 컨센 변화 교차(kospi_consensus), 외국인 보유비율 1년 백분위,
+      섹터 ETF 대비 상대강도, 수주 공시·실적일 이벤트 뱃지, 공매도(소스 확인 필요).
+
 이후 작업은 git log와 이 파일을 갱신하며 이어간다.

@@ -1,0 +1,123 @@
+name: 커버리지 수급·기술지표
+
+# 조선·방산·건설기계 커버리지 종목의 외인·기관 순매수 / ETF 패시브·액티브 수급 / RSI 극단을
+# 평일 장중 3회(KST 10:00 · 13:30 · 15:30) 수집해 페이지를 굽고 텔레그램(수주공시 봇 채널)으로 보낸다.
+# 정시성은 GAS 시계(gas/dispatch_proxy.gs SCHEDULE covflow 슬롯)가 담당, 아래 크론은 안전망
+# — 무료 러너 크론은 몇 시간씩 밀린다(CLAUDE.md 17번).
+on:
+  workflow_dispatch:
+    inputs:
+      via:
+        description: "호출 주체 — scheduler면 GAS 시계가 쏜 것"
+        default: ""
+      force_telegram:
+        description: "텔레그램 지금 한 통 보내기 (휴장일 게이트도 무시)"
+        type: boolean
+        default: false
+  schedule:
+    - cron: "0 1 * * 1-5"     # 01:00 UTC = 10:00 KST
+    - cron: "30 4 * * 1-5"    # 04:30 UTC = 13:30 KST
+    - cron: "30 6 * * 1-5"    # 06:30 UTC = 15:30 KST
+
+permissions:
+  contents: write
+
+concurrency:
+  group: coverage-flow
+  cancel-in-progress: false
+
+jobs:
+  # 24번 교훈: "이 슬롯이 이미 처리됐나"를 묻는다 — 이벤트를 가리지 않고 슬롯 창 안의
+  # 성공·진행중 run 을 세되 자기 자신만 뺀다. 슬롯 경계는 metrics.decide_slot 과 같다
+  # (11:45 / 14:30 KST). 밀린 크론이 다음 슬롯을 덮어 텔레가 두 번 가는 것을 막는다. fail-open.
+  guard:
+    runs-on: ubuntu-latest
+    permissions: {actions: read}
+    outputs:
+      skip: ${{ steps.check.outputs.skip }}
+    steps:
+      - name: 슬롯 안의 선행 실행 확인
+        id: check
+        if: github.event_name == 'schedule'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          hm=$(TZ=Asia/Seoul date +%H%M)
+          if   [ "$hm" -lt 1145 ]; then slot=1000; from="00:00"
+          elif [ "$hm" -lt 1430 ]; then slot=1330; from="11:45"
+          else                          slot=1530; from="14:30"
+          fi
+          since=$(TZ=Asia/Seoul date -u -d "today $from" +%Y-%m-%dT%H:%M)
+          n=$(gh api "repos/${{ github.repository }}/actions/workflows/coverage-flow.yml/runs?created=%3E${since}" \
+                --jq "[.workflow_runs[] | select(.id != ${{ github.run_id }}) \
+                       | select(.conclusion==\"success\" or .status==\"in_progress\" or .status==\"queued\")] | length" || echo 0)
+          echo "슬롯 ${slot}(${from} KST~) 안의 선행 실행 ${n:-0}건"
+          if [ "${n:-0}" -gt 0 ]; then
+            echo "::notice::이 슬롯은 이미 처리됐습니다 — 이 예약 실행은 건너뜁니다"
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+          fi
+
+  collect:
+    needs: guard
+    if: ${{ always() && needs.guard.outputs.skip != 'true' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: 패키지 설치
+        working-directory: coverage_flow
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: 테스트 — 지표·수급·패시브 산식
+        working-directory: coverage_flow
+        run: python tests/test_metrics.py
+
+      # 휴장일이면 collect.py 가 스스로 생략한다(네이버 지수 API 거래일 게이트, 조회 실패는 fail-open).
+      - name: 수집 (KIS + 네이버 ETF 비중)
+        id: collect
+        working-directory: coverage_flow
+        env:
+          KIS_APP_KEY: ${{ secrets.KIS_APP_KEY }}
+          KIS_APP_SECRET: ${{ secrets.KIS_APP_SECRET }}
+        run: |
+          python collect.py ${{ inputs.force_telegram && '--force' || '' }} | tee collect.log
+          if grep -q "휴장일로 판단" collect.log; then echo "skipped=true" >> "$GITHUB_OUTPUT"; fi
+
+      - name: 리포트 생성
+        if: steps.collect.outputs.skipped != 'true'
+        working-directory: coverage_flow
+        run: python build_report.py
+
+      - name: 커밋 및 푸시 (→ Pages 재배포)
+        if: steps.collect.outputs.skipped != 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add coverage_flow/data telegram_research_dashboard/static/coverage_flow_report.html
+          if git diff --cached --quiet; then
+            echo "변경 없음 — 커밋 생략"
+          else
+            git commit -m "chore(covflow): 커버리지 수급 갱신 $(TZ=Asia/Seoul date +%Y-%m-%d\ %H:%M)"
+            git pull --rebase origin main
+            git push origin HEAD:main
+          fi
+
+      # 정시 실행(GAS 시계 via=scheduler, 또는 크론 안전망)에만 보낸다 — 화면 '🔄 지금 수집'
+      # 버튼은 via 가 없어 발송에서 빠진다(30번 교훈). force_telegram 은 테스트 경로.
+      # 봇·채널은 수주공시 봇(TELEGRAM_BOT_TOKEN/CHAT_ID)과 같고, COVFLOW_* 가 있으면 그쪽 우선.
+      - name: 텔레그램 발송
+        if: ${{ steps.collect.outputs.skipped != 'true' && (github.event_name == 'schedule' || inputs.via == 'scheduler' || inputs.force_telegram) }}
+        working-directory: coverage_flow
+        env:
+          COVFLOW_TELEGRAM_BOT_TOKEN: ${{ secrets.COVFLOW_TELEGRAM_BOT_TOKEN }}
+          COVFLOW_TELEGRAM_CHAT_ID: ${{ secrets.COVFLOW_TELEGRAM_CHAT_ID }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: python notify.py
