@@ -218,6 +218,7 @@ class Outputs(unittest.TestCase):
         self.assertIn("한화에어로스페이스 RSI 20 · 1년 최저권 (하위 1%)", txt)
         self.assertIn("한화오션 RSI 69 · 1년 최고권", txt)
         self.assertIn("검증 전", txt); self.assertLess(len(txt), 4000)
+        self.assertNotIn("github.io", txt)                                  # 대시보드 주소 비노출
 
     def test_pctl_zero_is_lowest_not_missing(self):
         d = fake_payload()

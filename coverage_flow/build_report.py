@@ -176,7 +176,9 @@ table.compact{{font-size:12px}}
 .note{{font-size:12px;color:var(--muted);line-height:1.6;margin:8px 0 0}}
 .errs{{margin:16px 0;font-size:12px;color:#b45309}}.errs ul{{margin:6px 0 0 18px}}
 .wrap{{overflow-x:auto}}
+#cap-1,#cap-2,#cap-3{{padding:6px 0 4px;background:#fff}}
 </style></head><body>
+<div id="cap-1">
 <p class="eyebrow">COVERAGE · FLOW &amp; TECHNICALS</p>
 <h1>커버리지 기업 수급 / 기술적 지표</h1>
 <p class="sub">조선·방산·건설기계 커버리지 + 커버예정 <b>{len(rows)}종목</b>. 외인·기관 순매수(시총 대비) · 섹터 ETF 패시브 추정 + 액티브 ETF 계약수 · RSI 1년 극단.
@@ -188,15 +190,18 @@ table.compact{{font-size:12px}}
 <h2 id="flow">① 외국인·기관 순매수 <small style="font:400 12px Inter;color:#6b7280">5일 합산 억원 · 시총 대비 % 순</small></h2>
 <div class="wrap">{flow_table(rows)}</div>
 <p class="note">5일 창은 오늘 잠정 행을 포함한 최근 5거래일. 연속일수 배지는 2일 이상만. 시총 대비 %는 (외인+기관 5일 합산)/시총.</p>
-
+</div>
+<div id="cap-2">
 <h2 id="passive">② 기계적 수급 <small style="font:400 12px Inter;color:#6b7280">ETF 설정·환매 × 비중 (하한값) · 액티브 ETF 계약수</small></h2>
 <div class="wrap">{passive_table(rows, d.get('etfs', []), d.get('active', []), d.get('active_date', ''))}</div>
 <p class="note">패시브 추정 = Σ(섹터 ETF 상장주수 변동 × 가격 × 종목 비중). 비중은 네이버 Top10 구성종목만 있어 비중 밖 종목의 몫은 잡히지 않는다 → 하한값. ADV 대비 = 추정 매매 / 20일 평균 거래대금.</p>
-
+</div>
+<div id="cap-3">
 <h2 id="tech">③ 과매수 · 과매도 <small style="font:400 12px Inter;color:#6b7280">RSI(14, Wilder) · 1년 백분위 · 52주 위치</small></h2>
 <div class="wrap">{tech_table(rows)}</div>
 <p class="note">RSI 잠정 = 오늘 현재가를 종가로 둔 값, 전일 확정과 나란히 둔다. 1년 백분위는 확정 RSI 252거래일 분포 안에서 잠정 RSI 의 자리 — 하위/상위 {metrics.EXTREME_PCTL}% 안이면 극단. 30 이하 진입은 ETF 신호판 백테스트에서 '1주 단기 반등' 성격(D+5 +0.9%p)이었고 70 하향이탈은 역방향이었다.</p>
 
+</div>
 <p class="note" style="margin-top:28px">출처: 한국투자증권 OpenAPI(일봉·투자자별·현재가·상장주수) · 네이버 증권(ETF 구성 비중) · 액티브ETF.매매동향(etf_holdings). 유니버스는 <code>coverage_flow/universe.csv</code>, 섹터 ETF 는 <code>etf_universe.csv</code>.</p>
 </body></html>"""
 
