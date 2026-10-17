@@ -1,5 +1,5 @@
 {
- "asof": "2026-10-17 20:32",
+ "asof": "2026-10-17 21:45",
  "date": "2026-10-17",
  "slot": "15:30",
  "market_day": "2026-10-16",
@@ -29,7 +29,7 @@
     "hi52_pct": -46.5,
     "lo52_pct": 2.9,
     "adv20": 585.9,
-    "provisional": true
+    "provisional": false
    },
    "flow": {
     "frgn5": 104.5,
@@ -74,7 +74,7 @@
     "hi52_pct": -54.1,
     "lo52_pct": 2.3,
     "adv20": 993.0,
-    "provisional": true
+    "provisional": false
    },
    "flow": {
     "frgn5": 632.4,
@@ -119,7 +119,7 @@
     "hi52_pct": -65.2,
     "lo52_pct": 10.0,
     "adv20": 94.9,
-    "provisional": true
+    "provisional": false
    },
    "flow": {
     "frgn5": 13.5,
@@ -164,7 +164,7 @@
     "hi52_pct": -26.5,
     "lo52_pct": 33.5,
     "adv20": 193.8,
-    "provisional": true
+    "provisional": false
    },
    "flow": {
     "frgn5": 13.0,
@@ -209,7 +209,7 @@
     "hi52_pct": -47.9,
     "lo52_pct": 7.1,
     "adv20": 648.0,
-    "provisional": true
+    "provisional": false
    },
    "flow": {
     "frgn5": 133.7,
@@ -254,7 +254,7 @@
     "hi52_pct": -58.3,
     "lo52_pct": 5.4,
     "adv20": 571.1,
-    "provisional": true
+    "provisional": false
    },
    "flow": {
     "frgn5": 336.3,
@@ -299,7 +299,7 @@
     "hi52_pct": -60.1,
     "lo52_pct": 9.3,
     "adv20": 367.2,
-    "provisional": true
+    "provisional": false
    },
    "flow": {
     "frgn5": 78.0,
@@ -344,7 +344,7 @@
     "hi52_pct": -62.7,
     "lo52_pct": 13.6,
     "adv20": 17.0,
-    "provisional": true
+    "provisional": false
    },
    "flow": {
     "frgn5": 18.9,
@@ -389,7 +389,7 @@
     "hi52_pct": -67.0,
     "lo52_pct": 3.2,
     "adv20": 29.7,
-    "provisional": true
+    "provisional": false
    },
    "flow": {
     "frgn5": 24.5,
@@ -434,7 +434,7 @@
     "hi52_pct": -45.6,
     "lo52_pct": 14.9,
     "adv20": 1543.4,
-    "provisional": true
+    "provisional": false
    },
    "flow": {
     "frgn5": -355.1,
@@ -479,7 +479,7 @@
     "hi52_pct": -56.2,
     "lo52_pct": 79.9,
     "adv20": 704.0,
-    "provisional": true
+    "provisional": false
    },
    "flow": {
     "frgn5": -464.3,
@@ -524,7 +524,7 @@
     "hi52_pct": -50.0,
     "lo52_pct": 13.2,
     "adv20": 374.4,
-    "provisional": true
+    "provisional": false
    },
    "flow": {
     "frgn5": 63.8,
@@ -569,7 +569,7 @@
     "hi52_pct": -48.1,
     "lo52_pct": 61.1,
     "adv20": 685.5,
-    "provisional": true
+    "provisional": false
    },
    "flow": {
     "frgn5": -69.1,
@@ -614,7 +614,7 @@
     "hi52_pct": -65.4,
     "lo52_pct": 8.6,
     "adv20": 418.8,
-    "provisional": true
+    "provisional": false
    },
    "flow": {
     "frgn5": 262.0,
@@ -659,7 +659,7 @@
     "hi52_pct": -35.9,
     "lo52_pct": 2.5,
     "adv20": 90.1,
-    "provisional": true
+    "provisional": false
    },
    "flow": {
     "frgn5": -18.9,
@@ -704,7 +704,7 @@
     "hi52_pct": -57.6,
     "lo52_pct": 7.6,
     "adv20": 336.2,
-    "provisional": true
+    "provisional": false
    },
    "flow": {
     "frgn5": 163.6,
@@ -749,7 +749,7 @@
     "hi52_pct": -55.9,
     "lo52_pct": 6.4,
     "adv20": 14.9,
-    "provisional": true
+    "provisional": false
    },
    "flow": {
     "frgn5": 0.6,
@@ -794,7 +794,7 @@
     "hi52_pct": -67.0,
     "lo52_pct": 6.9,
     "adv20": 11.6,
-    "provisional": true
+    "provisional": false
    },
    "flow": {
     "frgn5": 15.2,
@@ -839,7 +839,7 @@
     "hi52_pct": -58.1,
     "lo52_pct": 8.9,
     "adv20": 11.1,
-    "provisional": true
+    "provisional": false
    },
    "flow": {
     "frgn5": 14.8,
@@ -884,7 +884,7 @@
     "hi52_pct": -49.2,
     "lo52_pct": 20.2,
     "adv20": 49.6,
-    "provisional": true
+    "provisional": false
    },
    "flow": {
     "frgn5": 17.9,
@@ -929,7 +929,7 @@
     "hi52_pct": -48.3,
     "lo52_pct": 36.5,
     "adv20": 53.6,
-    "provisional": true
+    "provisional": false
    },
    "flow": {
     "frgn5": -3.3,
@@ -956,42 +956,70 @@
   {
    "code": "466920",
    "name": "SOL 조선TOP3플러스",
+   "listed": 51700000.0,
+   "inflow_1d": -99.2,
+   "inflow_1w": -272.0,
+   "inflow_ref": "2026.10.15",
    "delta_shares": null,
    "amt": null
   },
   {
    "code": "494670",
    "name": "TIGER 조선TOP10",
+   "listed": 25200000.0,
+   "inflow_1d": -8.71,
+   "inflow_1w": -17.9,
+   "inflow_ref": "2026.10.15",
    "delta_shares": null,
    "amt": null
   },
   {
    "code": "0115D0",
    "name": "KODEX K조선TOP10",
+   "listed": 26950000.0,
+   "inflow_1d": 5.99,
+   "inflow_1w": 21.7,
+   "inflow_ref": "2026.10.15",
    "delta_shares": null,
    "amt": null
   },
   {
    "code": "441540",
    "name": "HANARO Fn조선해운",
+   "listed": 2700000.0,
+   "inflow_1d": null,
+   "inflow_1w": null,
+   "inflow_ref": "2026.10.15",
    "delta_shares": null,
    "amt": null
   },
   {
    "code": "449450",
    "name": "PLUS K방산",
+   "listed": 19290000.0,
+   "inflow_1d": 24.7,
+   "inflow_1w": 68.4,
+   "inflow_ref": "2026.10.15",
    "delta_shares": null,
    "amt": null
   },
   {
    "code": "463250",
    "name": "TIGER K방산&우주",
+   "listed": 14900000.0,
+   "inflow_1d": 13.6,
+   "inflow_1w": 42.1,
+   "inflow_ref": "2026.10.15",
    "delta_shares": null,
    "amt": null
   },
   {
    "code": "102960",
    "name": "KODEX 기계장비",
+   "listed": 980000.0,
+   "inflow_1d": null,
+   "inflow_1w": 2.4,
+   "inflow_ref": "2026.10.15",
    "delta_shares": null,
    "amt": null
   }
