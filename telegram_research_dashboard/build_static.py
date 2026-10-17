@@ -378,9 +378,9 @@ def build() -> Path:
     if conuni_dir.is_dir():
         shutil.copytree(conuni_dir, OUTPUT.parent / "construction_unified", dirs_exist_ok=True)
     # 건기 전략 레이더(신제품·CAPEX·M&A 누적) — 페이지 + 데이터(events.json)
-    constrat_index = ROOT / "static" / "construction_strategy_report.html"
+    constrat_index = ROOT / "static" / "construction_tracker.html"
     if constrat_index.exists():
-        shutil.copy2(constrat_index, OUTPUT.parent / "construction_strategy_report.html")
+        shutil.copy2(constrat_index, OUTPUT.parent / "construction_tracker.html")
     constrat_dir = ROOT / "static" / "construction_strategy"
     if constrat_dir.is_dir():
         shutil.copytree(constrat_dir, OUTPUT.parent / "construction_strategy", dirs_exist_ok=True)

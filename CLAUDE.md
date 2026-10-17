@@ -862,7 +862,7 @@
     - 데이터 정본 `static/construction_strategy/events.json` — **static 밑에 두는 이유:
       claude-brief-ingest 가 static 경로만 main 으로 나르므로** 세션 브랜치의 이벤트 추가가
       데이터째 main 에 보존된다. 렌더러 `construction_briefing/strategy_tracker_publish.py`
-      → `static/construction_strategy_report.html`(카테고리 탭 필터·월 구분·근거 브리핑 링크).
+      → `static/construction_tracker.html`(카테고리 탭 필터·월 구분·근거 브리핑 링크 — lng/dc/defense_tracker 와 같은 *_tracker.html 주소 가족, 브리핑 인덱스 상단 📌 버튼).
     - 운영: 아침 루틴 [7.7] — 그날 건기 뉴스에서 세 분류 이벤트가 있으면 events.json 추가
       (같은 사건의 후속 보도는 새 줄 금지, 기존 항목 note 갱신) → 렌더 → 건기 3종 커밋에
       동승 → ingest 가 main 반영. 이벤트 없는 날은 무동작(억지로 채우지 않는다).

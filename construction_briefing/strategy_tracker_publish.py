@@ -9,7 +9,8 @@
 데이터 정본: telegram_research_dashboard/static/construction_strategy/events.json
   (static 밑에 두는 이유 — claude-brief-ingest 가 static 경로만 main 으로
    나르므로, 세션 브랜치에서 추가한 이벤트가 데이터째 main 에 보존된다.)
-산출물:    telegram_research_dashboard/static/construction_strategy_report.html
+산출물:    telegram_research_dashboard/static/construction_tracker.html
+  (lng_tracker·dc_tracker·defense_tracker 와 같은 *_tracker.html 주소 가족)
 
 세션 루틴 [7.7]: 그날 건기 뉴스에서 세 분류에 해당하는 이벤트가 있으면
 events.json 에 추가(중복 금지 — 같은 사건의 후속 보도는 기존 항목 note 갱신)
@@ -31,7 +32,7 @@ ROOT = Path(__file__).resolve().parent
 REPO = ROOT.parent
 DASH_STATIC = REPO / "telegram_research_dashboard" / "static"
 DATA = DASH_STATIC / "construction_strategy" / "events.json"
-PAGE = DASH_STATIC / "construction_strategy_report.html"
+PAGE = DASH_STATIC / "construction_tracker.html"
 
 CATS = {
     "product": ("🆕 신제품", "#6aa8ff"),
@@ -163,7 +164,7 @@ document.querySelectorAll('.tab').forEach(function(b){{
 def main() -> None:
     events = load_events()
     PAGE.write_text(build(events), encoding="utf-8")
-    print(f"[전략레이더] construction_strategy_report.html 생성 (이벤트 {len(events)}건)")
+    print(f"[전략레이더] construction_tracker.html 생성 (이벤트 {len(events)}건)")
 
 
 if __name__ == "__main__":
