@@ -91,8 +91,8 @@ class Returns(unittest.TestCase):
         sp = metrics.spark_points(df, today, price_now=250)
         self.assertEqual(len(sp), 63); self.assertEqual(sp[-1], 250.0); self.assertEqual(sp[0], 100 + 99 - 61)
         self.assertEqual(metrics.spark_points(pd.DataFrame(), today), [])
-        svg = build_report.spark_svg(sp); self.assertIn("<svg", svg); self.assertIn("#15803d", svg)
-        self.assertIn("#dc2626", build_report.spark_svg([10, 9, 8])); self.assertIn("na", build_report.spark_svg([5]))
+        svg = build_report.spark_svg(sp); self.assertIn("<svg", svg); self.assertIn("rgb(220,38,38)", svg)   # 오르면 빨강(한국식)
+        self.assertIn("rgb(37,99,235)", build_report.spark_svg([10, 9, 8]))   # 내리면 파랑; self.assertIn("na", build_report.spark_svg([5]))
 
     def test_short_history_none(self):
         df = ohlc([100, 101, 102, 103], start="2026-10-05")
@@ -336,9 +336,10 @@ class Outputs(unittest.TestCase):
             self.assertIn(s, h)
         self.assertNotIn("chr(", h)
         self.assertNotIn("5일 외인+기관", h)                                  # 시총 대비 열 제거
-        # 조건부서식 음영: 값 있는 칸에 양수=초록·음수=빨강 rgba 배경이 붙는다.
-        self.assertIn("background:rgba(21,128,61,", h)
+        # 조건부서식 음영: 값 있는 칸에 양수=빨강·음수=파랑 rgba 배경이 붙는다(한국식).
         self.assertIn("background:rgba(220,38,38,", h)
+        self.assertIn("background:rgba(37,99,235,", h)
+        self.assertNotIn('<span class="pos">250,000', h)                             # 시총엔 색 없음
 
     def test_frgn_backfill_from_previous_snapshot(self):
         """외인 보유비율 None 은 직전 스냅샷 값 + 기준일로 채운다. 실측값·직전도 없음은 불변."""
@@ -374,9 +375,9 @@ class Outputs(unittest.TestCase):
         self.assertEqual(build_report.shade(0, 10), "")
         self.assertEqual(build_report.shade(5, 0), "")
         full = build_report.shade(10, 10); half = build_report.shade(5, 10)
-        self.assertIn("rgba(21,128,61,0.34)", full)                            # 최대 알파
-        self.assertIn("rgba(21,128,61,0.21)", half)
-        self.assertIn("rgba(220,38,38,", build_report.shade(-3, 10))           # 음수=빨강
+        self.assertIn("rgba(220,38,38,0.45)", full)                            # 최대 알파, 양수=빨강
+        self.assertIn("rgba(220,38,38,0.27)", half)
+        self.assertIn("rgba(37,99,235,", build_report.shade(-3, 10))           # 음수=파랑
         self.assertEqual(build_report.shade(999, 10), full)                    # cap 초과도 상한 고정
         caps = build_report.col_caps({"a": [1, -7, None], "b": [None, None]})
         self.assertEqual(caps["a"], 7); self.assertEqual(caps["b"], 0.0)
