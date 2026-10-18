@@ -175,7 +175,7 @@ def build_xlsx(payload):
                         target = sheet.cell(row=row_index, column=start + offset,
                                             value=value_of(company, entry["year"], key))
                         target.font = body_font
-                        target.number_format = "0.0" if key == "roe" else "0.00"
+                        target.number_format = "0.0"
                         if entry["kind"] == "E":
                             target.fill = est_fill
                 row_index += 1
@@ -212,7 +212,7 @@ def build_xlsx(payload):
                 cell = detail.cell(row=offset, column=index, value=value)
                 cell.font = body_font
                 if index >= 6:
-                    cell.number_format = "0.0" if key == "roe" else "0.00"
+                    cell.number_format = "0.0"
         detail.freeze_panes = "F2"
         for index, width in enumerate([18, 11, 10, 10, 12] + [10] * len(axis), 1):
             detail.column_dimensions[get_column_letter(index)].width = width
@@ -297,7 +297,7 @@ def _write_summary(sheet, row_index, end_column, metric_spans, axis, label, comp
             target = sheet.cell(row=row_index, column=start + offset,
                                 value=median_of(companies, entry["year"], key))
             target.font = font
-            target.number_format = "0.0" if key == "roe" else "0.00"
+            target.number_format = "0.0"
             target.fill = fill
 
 
@@ -471,7 +471,7 @@ function axisFor(){
   return [...solid.filter(x=>x.kind==='A').slice(-2),
           ...solid.filter(x=>x.kind==='E').slice(0, 2)];
 }
-const fmt = (v,m) => v==null ? '' : (m==='roe' ? v.toFixed(1) : v.toFixed(2));
+const fmt = (v,m) => v==null ? '' : v.toFixed(1);   /* 전 지표 소수 1자리(사용자 지정) */
 
 /* 값의 출처 표시. ᴺ = 국내 컨센(에프앤가이드/네이버) 원본, * = 우리가 롤포워드로 만든 값.
    출처가 섞인 표라 어느 쪽인지 숨기지 않는다. */
