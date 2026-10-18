@@ -340,6 +340,34 @@ class Outputs(unittest.TestCase):
         self.assertIn("background:rgba(21,128,61,", h)
         self.assertIn("background:rgba(220,38,38,", h)
 
+    def test_frgn_backfill_from_previous_snapshot(self):
+        """외인 보유비율 None 은 직전 스냅샷 값 + 기준일로 채운다. 실측값·직전도 없음은 불변."""
+        import collect
+        prev = {"market_day": "2026-10-16", "date": "2026-10-17", "rows": [
+            {"code": "A", "px": {"frgn_pct": 12.34}},
+            {"code": "B", "px": {"frgn_pct": 5.0, "frgn_pct_asof": "2026-10-15"}},
+            {"code": "C", "px": {"frgn_pct": None}},
+            {"code": "E", "px": {"frgn_pct": 0.0}},
+        ]}
+        rows = [
+            {"code": "A", "px": {"frgn_pct": None}},     # 직전 실측 → 채움, asof=직전 market_day
+            {"code": "B", "px": {"frgn_pct": None}},     # 직전도 이월분 → 원 날짜 승계
+            {"code": "C", "px": {"frgn_pct": None}},     # 직전도 없음 → None 유지
+            {"code": "D", "px": {"frgn_pct": 7.7}},      # 당일 실측 → 불변·asof 없음
+            {"code": "E", "px": {"frgn_pct": None}},     # 직전이 '가짜 0' → 이월 금지
+        ]
+        collect.backfill_frgn(rows, prev)
+        self.assertEqual(rows[0]["px"]["frgn_pct"], 12.34)
+        self.assertEqual(rows[0]["px"]["frgn_pct_asof"], "2026-10-16")
+        self.assertEqual(rows[1]["px"]["frgn_pct_asof"], "2026-10-15")
+        self.assertIsNone(rows[2]["px"]["frgn_pct"])
+        self.assertEqual(rows[3]["px"], {"frgn_pct": 7.7})
+        self.assertIsNone(rows[4]["px"]["frgn_pct"])
+        # 화면: 이월분은 기준일을 작게 병기, 당일 실측은 날짜 없음
+        self.assertIn("10/16</small>", build_report.frgn_cell(rows[0]["px"]))
+        self.assertNotIn("stale", build_report.frgn_cell(rows[3]["px"]))
+        self.assertIn("na", build_report.frgn_cell({"frgn_pct": None}))
+
     def test_shade_scales_and_skips_blanks(self):
         """음영은 열 최대값 대비 강도, 0·결측·cap 0 은 음영 없음, 상한을 넘지 않는다."""
         self.assertEqual(build_report.shade(None, 10), "")
