@@ -408,7 +408,8 @@ position:static;min-width:0}
 
 <div class="legend">
   <b>회사 행을 클릭</b>하면 그 회사의 <b>매출·영업이익·순이익·OPM·NPM</b> 상세
-  (연간: 야후가 주는 전 기간 + 올해E·내년E / 분기: 최근 분기 + 다음 2개 분기 컨센)가 펼쳐진다.<br>
+  (연간 전 기간 + 올해E·내년E / 분기 최근 + 컨센)가 펼쳐진다 —
+  국내 종목의 분기·연간E는 <b>네이버(에프앤가이드) 컨센<span class="src">ᴺ</span></b>으로 보강(영업이익 포함), 해외는 야후 기준.<br>
   <b>확정(A)</b> = 회계연도 기말 주가·재무제표 기준 · <b>컨센(E)</b> = 음영 열, 현재 주가 기준 ·
   <b>시가총액</b> = 백만달러 환산<br>
   <b><span class="src">ᴺ</span> 표시</b>는 <b>국내 컨센(에프앤가이드 · 네이버 금융)</b> 원본이다 —
@@ -621,7 +622,7 @@ function finTable(title, rows, scale){
   if(!rows || !rows.length)
     return `<div class="fnote">${title}: 야후에 데이터가 없습니다.</div>`;
   let h=`<table><tr><th>${title}</th>`+
-    rows.map(r=>`<th class="${r.kind==='E'?'est':''}">${r.label}</th>`).join('')+'</tr>';
+    rows.map(r=>`<th class="${r.kind==='E'?'est':''}">${r.label}${r.src==='naver'?'<span class="src">ᴺ</span>':''}</th>`).join('')+'</tr>';
   for(const [k,l] of FIN_ROWS){
     h+=`<tr><td>${l}${k==='opm'||k==='npm'?' (%)':''}</td>`+rows.map(r=>{
       const v=r[k];
@@ -642,11 +643,14 @@ function finDetail(c, span){
     const div=(kr||jp)?1e8:1e6;
     const unit=kr?'억원':(jp?'억엔':'백만 '+(ccy||'?'));
     const scale=v=>Math.round(v/div).toLocaleString();
+    const hasN=[...(f.annual||[]),...(f.quarterly||[])].some(r=>r.src==='naver');
     body=`<div class="fwrap"><div>${finTable('연간',f.annual,scale)}</div>`+
          `<div>${finTable('분기',f.quarterly,scale)}</div></div>`+
-         `<div class="fnote">단위 ${unit} · OPM=영업이익률 · NPM=순이익률 · 음영=컨센(E, 야후 기준) · `+
-         `영업이익 컨센과 다다음 분기 너머의 분기 컨센은 야후가 제공하지 않아 공란 · `+
-         `분기 확정치는 야후 무료 API가 최근 5개 분기 안팎까지만 준다</div>`;
+         `<div class="fnote">단위 ${unit} · OPM=영업이익률 · NPM=순이익률 · 음영=컨센(E) · `+
+         (hasN
+           ? `<span class="src">ᴺ</span>=네이버(에프앤가이드) 국내 컨센 — 분기와 연간E는 영업이익 컨센까지 네이버로 보강, 표식 없는 열은 야후 · `
+           : `컨센은 야후 기준 — 영업이익 컨센과 다다음 분기 너머의 분기 컨센은 야후가 제공하지 않아 공란 · `)+
+         `분기 확정치는 무료 소스가 최근 4~5개 분기까지만 준다</div>`;
   }
   return `<tr class="fin"><td class="inner" colspan="${span}">${body}</td></tr>`;
 }

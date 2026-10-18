@@ -78,6 +78,54 @@ class Parsing(unittest.TestCase):
             nc.read_tables = saved
 
 
+class FinancialRows(unittest.TestCase):
+    """기업실적분석 표의 분기·연간 매출/영업이익/순이익 파싱(억원 → 원 환산)."""
+
+    def table(self):
+        columns = pd.MultiIndex.from_tuples([
+            ("주요재무정보", "주요재무정보", "주요재무정보"),
+            ("최근 연간 실적", "2025.12", "IFRS연결"),
+            ("최근 연간 실적", "2026.12(E)", "IFRS연결"),
+            ("최근 분기 실적", "2026.03", "IFRS연결"),
+            ("최근 분기 실적", "2026.06", "IFRS연결"),
+            ("최근 분기 실적", "2026.09(E)", "IFRS연결"),
+        ])
+        rows = [
+            ["매출액", "1,200", "1,400", "300", "320", "350"],
+            ["영업이익", "240", "280", "60", "64", "70"],
+            ["영업이익률", "20.00", "20.00", "20.00", "20.00", "20.00"],
+            ["당기순이익", "120", "140", "30", "32", "36"],
+            ["PER(배)", "14.20", "9.80", "-", "-", "-"],
+            ["ROE(지배주주)", "11.20", "12.80", "-", "-", "-"],
+        ]
+        return pd.DataFrame(rows, columns=columns)
+
+    def test_quarterly_and_annual_split(self):
+        out = nc.financial_rows("005380", tables=[self.table()])
+        self.assertEqual([(q["year"], q["month"], q["est"]) for q in out["quarterly"]],
+                         [(2026, 3, False), (2026, 6, False), (2026, 9, True)])
+        self.assertEqual([(a["year"], a["est"]) for a in out["annual"]],
+                         [(2025, False), (2026, True)])
+
+    def test_values_scaled_to_won(self):
+        out = nc.financial_rows("005380", tables=[self.table()])
+        q = out["quarterly"][0]                      # 2026.03
+        self.assertEqual(q["sales"], 300e8)
+        self.assertEqual(q["op"], 60e8)              # '영업이익률' 행에 걸리면 20×1e8 이 된다
+        self.assertEqual(q["ni"], 30e8)
+
+    def test_fetch_failure_returns_empty(self):
+        def boom(*a, **k):
+            raise OSError("네이버 차단")
+        saved = nc.read_tables
+        nc.read_tables = boom
+        try:
+            out = nc.financial_rows("005380")
+        finally:
+            nc.read_tables = saved
+        self.assertEqual(out, {"quarterly": [], "annual": []})
+
+
 class ColumnYear(unittest.TestCase):
     def test_estimate_marker_detected(self):
         self.assertEqual(nc._column_year(("최근 연간 실적", "2026.12(E)", "IFRS연결")), (2026, True))
