@@ -336,6 +336,22 @@ class Outputs(unittest.TestCase):
             self.assertIn(s, h)
         self.assertNotIn("chr(", h)
         self.assertNotIn("5일 외인+기관", h)                                  # 시총 대비 열 제거
+        # 조건부서식 음영: 값 있는 칸에 양수=초록·음수=빨강 rgba 배경이 붙는다.
+        self.assertIn("background:rgba(21,128,61,", h)
+        self.assertIn("background:rgba(220,38,38,", h)
+
+    def test_shade_scales_and_skips_blanks(self):
+        """음영은 열 최대값 대비 강도, 0·결측·cap 0 은 음영 없음, 상한을 넘지 않는다."""
+        self.assertEqual(build_report.shade(None, 10), "")
+        self.assertEqual(build_report.shade(0, 10), "")
+        self.assertEqual(build_report.shade(5, 0), "")
+        full = build_report.shade(10, 10); half = build_report.shade(5, 10)
+        self.assertIn("rgba(21,128,61,0.34)", full)                            # 최대 알파
+        self.assertIn("rgba(21,128,61,0.21)", half)
+        self.assertIn("rgba(220,38,38,", build_report.shade(-3, 10))           # 음수=빨강
+        self.assertEqual(build_report.shade(999, 10), full)                    # cap 초과도 상한 고정
+        caps = build_report.col_caps({"a": [1, -7, None], "b": [None, None]})
+        self.assertEqual(caps["a"], 7); self.assertEqual(caps["b"], 0.0)
 
     def test_grouped_tables(self):
         """표는 조선(조선+조기)·방산·기계 묶음, 성광벤드·태광은 조선 묶음 맨 밑. 묶음 안은 기존 정렬."""
