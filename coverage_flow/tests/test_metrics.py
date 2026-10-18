@@ -336,18 +336,51 @@ class Outputs(unittest.TestCase):
             self.assertIn(s, h)
         self.assertNotIn("chr(", h)
         self.assertNotIn("5일 외인+기관", h)                                  # 시총 대비 열 제거
-
-    def test_heat_conditional_format(self):
-        """조건부 서식: 양수 빨강·음수 파랑 배경, 열 |최대값| 대비 비례, None·0 은 배경 없음."""
-        self.assertEqual(build_report.heat(None, 10), ""); self.assertEqual(build_report.heat(0, 10), "")
-        self.assertEqual(build_report.heat(5, 0), "")
-        hi, lo = build_report.heat(10, 10), build_report.heat(1, 10)
-        self.assertIn("rgba(220,38,38,0.55)", hi); self.assertIn("rgba(220,38,38,0.1", lo)
-        self.assertIn("rgba(37,99,235,0.55)", build_report.heat(-10, 10))
-        self.assertIn("rgba(37,99,235,0.55)", build_report.heat(-99, 10))             # cap 초과는 포화
-        h = build_report.render(fake_payload())
-        self.assertIn("style='background:rgba(220,38,38,", h)                       # 등락·수급 표에 적용
+        # 조건부서식 음영: 값 있는 칸에 양수=빨강·음수=파랑 rgba 배경이 붙는다(한국식).
+        self.assertIn("background:rgba(220,38,38,", h)
+        self.assertIn("background:rgba(37,99,235,", h)
         self.assertNotIn('<span class="pos">250,000', h)                             # 시총엔 색 없음
+
+    def test_frgn_backfill_from_previous_snapshot(self):
+        """외인 보유비율 None 은 직전 스냅샷 값 + 기준일로 채운다. 실측값·직전도 없음은 불변."""
+        import collect
+        prev = {"market_day": "2026-10-16", "date": "2026-10-17", "rows": [
+            {"code": "A", "px": {"frgn_pct": 12.34}},
+            {"code": "B", "px": {"frgn_pct": 5.0, "frgn_pct_asof": "2026-10-15"}},
+            {"code": "C", "px": {"frgn_pct": None}},
+            {"code": "E", "px": {"frgn_pct": 0.0}},
+        ]}
+        rows = [
+            {"code": "A", "px": {"frgn_pct": None}},     # 직전 실측 → 채움, asof=직전 market_day
+            {"code": "B", "px": {"frgn_pct": None}},     # 직전도 이월분 → 원 날짜 승계
+            {"code": "C", "px": {"frgn_pct": None}},     # 직전도 없음 → None 유지
+            {"code": "D", "px": {"frgn_pct": 7.7}},      # 당일 실측 → 불변·asof 없음
+            {"code": "E", "px": {"frgn_pct": None}},     # 직전이 '가짜 0' → 이월 금지
+        ]
+        collect.backfill_frgn(rows, prev)
+        self.assertEqual(rows[0]["px"]["frgn_pct"], 12.34)
+        self.assertEqual(rows[0]["px"]["frgn_pct_asof"], "2026-10-16")
+        self.assertEqual(rows[1]["px"]["frgn_pct_asof"], "2026-10-15")
+        self.assertIsNone(rows[2]["px"]["frgn_pct"])
+        self.assertEqual(rows[3]["px"], {"frgn_pct": 7.7})
+        self.assertIsNone(rows[4]["px"]["frgn_pct"])
+        # 화면: 이월분은 기준일을 작게 병기, 당일 실측은 날짜 없음
+        self.assertIn("10/16</small>", build_report.frgn_cell(rows[0]["px"]))
+        self.assertNotIn("stale", build_report.frgn_cell(rows[3]["px"]))
+        self.assertIn("na", build_report.frgn_cell({"frgn_pct": None}))
+
+    def test_shade_scales_and_skips_blanks(self):
+        """음영은 열 최대값 대비 강도, 0·결측·cap 0 은 음영 없음, 상한을 넘지 않는다."""
+        self.assertEqual(build_report.shade(None, 10), "")
+        self.assertEqual(build_report.shade(0, 10), "")
+        self.assertEqual(build_report.shade(5, 0), "")
+        full = build_report.shade(10, 10); half = build_report.shade(5, 10)
+        self.assertIn("rgba(220,38,38,0.45)", full)                            # 최대 알파, 양수=빨강
+        self.assertIn("rgba(220,38,38,0.27)", half)
+        self.assertIn("rgba(37,99,235,", build_report.shade(-3, 10))           # 음수=파랑
+        self.assertEqual(build_report.shade(999, 10), full)                    # cap 초과도 상한 고정
+        caps = build_report.col_caps({"a": [1, -7, None], "b": [None, None]})
+        self.assertEqual(caps["a"], 7); self.assertEqual(caps["b"], 0.0)
 
     def test_grouped_tables(self):
         """표는 조선(조선+조기)·방산·기계 묶음, 성광벤드·태광은 조선 묶음 맨 밑. 묶음 안은 기존 정렬."""

@@ -18,17 +18,17 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 import fetch_valuation as fv
 import naver_consensus as nc
 
-_REAL_READ_TABLES = nc.read_tables
+_REAL_FETCH_FINANCE = nc.fetch_finance
 
 
 def setUpModule():
-    """collect() 는 .KS 종목마다 네이버 컨센을 부른다 → 테스트에서는 끊는다.
-    (빈 표를 주면 estimates() 가 조용히 {} 를 돌려주고 기존 산출값이 남는다)"""
-    nc.read_tables = lambda *a, **k: []
+    """collect() 는 .KS 종목마다 네이버 모바일 금융 API를 부른다 → 테스트에서는 끊는다.
+    (None 을 주면 estimates/financial_rows 가 조용히 비고 기존 산출값이 남는다)"""
+    nc.fetch_finance = lambda *a, **k: None
 
 
 def tearDownModule():
-    nc.read_tables = _REAL_READ_TABLES
+    nc.fetch_finance = _REAL_FETCH_FINANCE
 
 
 def frame(rows, periods):
@@ -216,6 +216,86 @@ class FinancialDetails(unittest.TestCase):
         # 확정 분기가 하나도 없으면 0q·+1q 라벨을 지어낼 기준이 없다 → 분기 전체 공란.
         fin = run(FakeTicker(quarterly=pd.DataFrame()))["financials"]
         self.assertEqual(fin["quarterly"], [])
+
+
+class NaverFinancialEnrichment(unittest.TestCase):
+    """국내 종목: 재무 상세의 분기·연간E 를 네이버(에프앤가이드) 컨센으로 교체·보강."""
+
+    @staticmethod
+    def finance_info(periods, rows):
+        keys = [f"c{i}" for i in range(len(periods))]
+        tr = [{"key": k, "title": p, "isConsensus": "Y" if est else "N"}
+              for k, (p, est) in zip(keys, periods)]
+        row_list = [{"title": t, "columns": {k: {"value": v} for k, v in zip(keys, vals)}}
+                    for t, vals in rows.items()]
+        return {"trTitleList": tr, "rowList": row_list}
+
+    @classmethod
+    def naver_annual(cls):
+        return cls.finance_info(
+            [("2025.12.", False), ("2026.12.", True)],
+            {
+                "매출액": ["1,200", "1,400"],
+                "영업이익": ["240", "280"],
+                "영업이익률": ["20.00", "20.00"],
+                "당기순이익": ["120", "140"],
+                "PER(배)": ["14.20", "9.80"],
+                "PBR(배)": ["1.42", "0.98"],
+                "ROE(지배주주지분)": ["11.20", "12.80"],
+            })
+
+    @classmethod
+    def naver_quarter(cls):
+        return cls.finance_info(
+            [("2026.03.", False), ("2026.06.", False), ("2026.09.", True)],
+            {
+                "매출액": ["300", "320", "350"],
+                "영업이익": ["60", "64", "70"],
+                "영업이익률": ["20.00", "20.00", "20.00"],
+                "당기순이익": ["30", "32", "36"],
+            })
+
+    def setUp(self):
+        self._saved = nc.fetch_finance
+        annual, quarter = self.naver_annual(), self.naver_quarter()
+        nc.fetch_finance = lambda code, period, **k: annual if period == "annual" else quarter
+        self.record = run(FakeTicker())
+        self.fin = self.record["financials"]
+
+    def tearDown(self):
+        nc.fetch_finance = self._saved
+
+    def test_quarterly_replaced_with_naver_plus_yahoo_tail(self):
+        # 네이버 분기(1Q~당분기E)가 야후 분기를 대체하고, 네이버 범위 밖 미래
+        # 분기(4Q26E)만 야후 컨센으로 꼬리에 남는다.
+        labels = [(r["label"], r.get("src")) for r in self.fin["quarterly"]]
+        self.assertEqual(labels, [("1Q26", "naver"), ("2Q26", "naver"),
+                                  ("3Q26E", "naver"), ("4Q26E", None)])
+
+    def test_naver_quarter_has_operating_income(self):
+        q = {r["label"]: r for r in self.fin["quarterly"]}["3Q26E"]
+        self.assertEqual(q["kind"], "E")
+        self.assertEqual(q["op"], 70e8)      # 야후엔 없는 분기 영업이익 컨센
+        self.assertEqual(q["opm"], 20.0)
+
+    def test_annual_estimate_row_takes_naver_values(self):
+        rows = {r["label"]: r for r in self.fin["annual"]}
+        e26 = rows["2026E"]
+        self.assertEqual(e26.get("src"), "naver")
+        self.assertEqual(e26["revenue"], 1400e8)
+        self.assertEqual(e26["op"], 280e8)
+        self.assertEqual(e26["opm"], 20.0)
+        # 네이버 표에 없는 내년E 는 야후 값 그대로(영업이익 공란 유지).
+        e27 = rows["2027E"]
+        self.assertNotIn("src", e27)
+        self.assertIsNone(e27["op"])
+
+    def test_annual_estimates_override_per_with_naver_badge(self):
+        # 연간 API 의 컨센 PER 이 야후 산출값을 덮고 ᴺ 출처가 남는다
+        # (분기 API 의 PER 행은 estimates 가 아예 보지 않는다).
+        y = {x["label"]: x for x in self.record["years"]}["2026E"]
+        self.assertEqual(y["per"], 9.8)
+        self.assertIn("per", y.get("naver", []))
 
 
 class NanTailRows(unittest.TestCase):

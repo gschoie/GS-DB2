@@ -250,6 +250,27 @@ def update_shares(etfs, today, prev_store):
     return store, prev
 
 
+def backfill_frgn(rows, prev_latest):
+    """외인 보유비율 None 을 직전 스냅샷 값으로 채운다(기준일 frgn_pct_asof 병기).
+
+    장 시작 전·휴장일엔 한투가 0을 줘 None 으로 비는데, 보유비율은 하루 사이 거의
+    안 변한다 → 직전 값으로 채우되 어느 날 값인지 남겨 '오늘 값'처럼 보이지 않게 한다.
+    직전 값도 이월분이면 원 날짜를 승계. 당일 실측값이 있는 행은 건드리지 않는다.
+    """
+    prev_px = {r.get("code"): (r.get("px") or {}) for r in (prev_latest or {}).get("rows") or []}
+    for r in rows:
+        px = r.get("px") or {}
+        if px.get("frgn_pct") is None:
+            old = prev_px.get(r.get("code")) or {}
+            # 직전 값이 0 이면 안 가져온다 — 장 전 수집이 남긴 '가짜 0'과 진짜 0을
+            # 소스가 구분해 주지 않아서, 이월하면 모름이 0.00%로 둔갑한다.
+            if old.get("frgn_pct"):
+                px["frgn_pct"] = old["frgn_pct"]
+                px["frgn_pct_asof"] = (old.get("frgn_pct_asof")
+                                       or prev_latest.get("market_day") or prev_latest.get("date"))
+    return rows
+
+
 def main(argv=None):
     ap = argparse.ArgumentParser()
     ap.add_argument("--force", action="store_true", help="휴장일 게이트 무시")
@@ -284,6 +305,7 @@ def main(argv=None):
 
     etfs, etf_err = collect_etfs(load_csv("etf_universe.csv"))
     errors += etf_err
+    backfill_frgn(rows, load_json(LATEST, {}))   # LATEST 를 덮어쓰기 전에 읽어야 한다
     store, prev = update_shares(etfs, today, load_json(SHARES, {}))
     per_stock, per_etf = metrics.passive_flow(etfs, prev)
     for r in rows:
