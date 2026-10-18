@@ -475,6 +475,7 @@ def collect(company):
 
     # ── 재무 상세(회사 행 클릭 시 펼침): 매출·영업이익·순이익·OPM·NPM ──────
     # 연간은 HISTORY_YEARS 로 자르지 않고 야후가 주는 전 기간을 담는다(보통 4~5개 연도).
+    # 국내 종목은 아래 네이버 블록에서 분기·연간E 를 국내 컨센으로 교체·보강한다.
     fin_annual = []
     if income is not None and hasattr(income, "columns") and not income.empty:
         for period in sorted(income.columns):
@@ -517,18 +518,18 @@ def collect(company):
             if row:
                 fin_quarterly.append(row)
 
-    record["financials"] = {
-        "currency": fin_ccy or normalized_quote or None,
-        "annual": fin_annual + fin_forward,
-        "quarterly": fin_quarterly,
-    }
-
     # 국내 종목은 컨센(E) PER·PBR·ROE 를 네이버(에프앤가이드)로 덮어쓴다.
     # 야후엔 EPS·매출 컨센뿐이라 PBR·ROE 를 롤포워드로 만들어 왔는데, 국내는
     # 에프앤가이드 추정치가 원본이다. 못 가져오면 기존 산출값이 그대로 남는다.
     if ticker.upper().endswith((".KS", ".KQ")):
         code = ticker.split(".")[0]
-        overrides = naver_consensus.estimates(code)
+        # 같은 페이지(기업실적분석)를 컨센 PER·PBR·ROE 와 재무 상세가 같이 쓴다 → 1회만 조회.
+        try:
+            naver_tables = naver_consensus.read_tables(code)
+        except Exception as exc:
+            print(f"    · 네이버 조회 실패({code}): {exc}")
+            naver_tables = []
+        overrides = naver_consensus.estimates(code, tables=naver_tables)
         if overrides:
             applied = 0
             for entry in years:
@@ -549,6 +550,50 @@ def collect(company):
                     applied += len(taken)
             if applied:
                 print(f"    📊 네이버 컨센 {applied}칸 적용")
+
+        # 재무 상세 보강: 분기는 네이버가 영업이익까지(E 포함) 주므로 야후 분기를
+        # 네이버로 교체하고, 네이버 범위 밖(더 미래)의 야후 E 분기만 뒤에 남긴다.
+        fin_naver = naver_consensus.financial_rows(code, tables=naver_tables)
+        naver_q = []
+        for q in fin_naver["quarterly"]:
+            q_no = q["month"] // 3
+            row = fin_row(f"{q_no}Q{q['year'] % 100}" + ("E" if q["est"] else ""),
+                          "E" if q["est"] else "A", q["sales"], q["op"], q["ni"])
+            if row:
+                row["src"] = "naver"
+                row["_key"] = (q["year"], q_no)
+                naver_q.append(row)
+        if naver_q:
+            last_key = max(r["_key"] for r in naver_q)
+            tail = []
+            for r in fin_quarterly:
+                m = re.match(r"^(\d)Q(\d\d)E$", r["label"])
+                if r["kind"] == "E" and m and (2000 + int(m.group(2)), int(m.group(1))) > last_key:
+                    tail.append(r)
+            for r in naver_q:
+                del r["_key"]
+            fin_quarterly = naver_q + tail
+            print(f"    📊 네이버 분기 재무 {len(naver_q)}개 적용")
+        # 연간 E 줄: 영업이익 컨센은 네이버에만 있다 → 같은 연도 E 줄을 네이버 값으로 교체
+        # (네이버에 없는 칸은 야후 값 유지).
+        for a in fin_naver["annual"]:
+            if not a["est"]:
+                continue
+            for row in fin_forward:
+                if row["label"] == f"{a['year']}E":
+                    merged = fin_row(row["label"], "E",
+                                     a["sales"] if a["sales"] is not None else row["revenue"],
+                                     a["op"],
+                                     a["ni"] if a["ni"] is not None else row["ni"])
+                    if merged:
+                        merged["src"] = "naver"
+                        row.update(merged)
+
+    record["financials"] = {
+        "currency": fin_ccy or normalized_quote or None,
+        "annual": fin_annual + fin_forward,
+        "quarterly": fin_quarterly,
+    }
 
     record["years"] = years
     return record

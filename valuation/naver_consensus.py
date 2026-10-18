@@ -81,6 +81,72 @@ def _pick_table(tables):
     return None
 
 
+EOKWON = 1e8   # 기업실적분석 표의 금액 단위(억원) → 원
+
+# 재무 상세용 행. '영업이익률' 행이 '영업이익'에 걸리지 않게 lookahead 로 자른다.
+FIN_ROW_KEYS = [
+    ("sales", r"^매출액"),
+    ("op", r"^영업이익(?!률)"),
+    ("ni", r"^당기순이익"),
+]
+
+
+def _column_period(column):
+    """열 머리글 → (연도, 월, 분기열 여부, 추정 여부). 기간 표기가 없으면 None.
+
+    연간/분기 구분은 그룹 머리글('최근 연간 실적'/'최근 분기 실적')의 낱말로 본다.
+    """
+    parts = column if isinstance(column, tuple) else (column,)
+    text = " ".join(str(p) for p in parts)
+    match = YEAR_PATTERN.search(text)
+    if not match:
+        return None
+    return (int(match.group(1)), int(match.group(2)),
+            ("분기" in text), ("(E)" in text.replace(" ", "")))
+
+
+def financial_rows(code, tables=None):
+    """기업실적분석 표에서 기간별 매출·영업이익·당기순이익(억원 → 원 환산)을 뽑는다.
+
+    반환: {"quarterly": [...], "annual": [...]} — 각 행 {year, month, est, sales, op, ni}.
+    분기는 확정(A) 4~5개 + 당분기(E)까지, 연간 E엔 야후에 없는 영업이익 컨센이 실린다.
+    실패하면 빈 목록 — 호출 쪽이 야후 값을 그대로 쓴다.
+    """
+    empty = {"quarterly": [], "annual": []}
+    try:
+        frames = tables if tables is not None else read_tables(code)
+    except Exception as exc:
+        print(f"    · 네이버 재무 조회 실패({code}): {exc}")
+        return empty
+    table = _pick_table(frames or [])
+    if table is None:
+        return empty
+    labels = table.iloc[:, 0].astype(str)
+
+    def cell(pattern, position):
+        match = labels.str.match(pattern)
+        if not match.any():
+            return None
+        value = _number(table.iloc[match.idxmax(), position])
+        return value * EOKWON if value is not None else None
+
+    out = {"quarterly": [], "annual": []}
+    for position, column in enumerate(table.columns):
+        period = _column_period(column)
+        if period is None:
+            continue
+        year, month, quarterly, est = period
+        entry = {"year": year, "month": month, "est": est}
+        for key, pattern in FIN_ROW_KEYS:
+            entry[key] = cell(pattern, position)
+        if entry["sales"] is None and entry["op"] is None and entry["ni"] is None:
+            continue
+        out["quarterly" if quarterly else "annual"].append(entry)
+    for bucket in out.values():
+        bucket.sort(key=lambda r: (r["year"], r["month"]))
+    return out
+
+
 def estimates(code, tables=None):
     """종목코드 → {연도: {'per':…, 'pbr':…, 'roe':…}} (추정치 열만).
 
@@ -99,6 +165,9 @@ def estimates(code, tables=None):
     labels = table.iloc[:, 0].astype(str)
     result = {}
     for position, column in enumerate(table.columns):
+        info = _column_period(column)
+        if info and info[2]:
+            continue          # '최근 분기 실적' 열 — 분기 PER·ROE 가 연간 컨센을 덮지 않게
         year, is_estimate = _column_year(column)
         if not year or not is_estimate:
             continue          # 확정 실적 열은 쓰지 않는다(우리 산식으로 계산)

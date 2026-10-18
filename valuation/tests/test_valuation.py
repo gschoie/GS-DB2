@@ -218,6 +218,69 @@ class FinancialDetails(unittest.TestCase):
         self.assertEqual(fin["quarterly"], [])
 
 
+class NaverFinancialEnrichment(unittest.TestCase):
+    """국내 종목: 재무 상세의 분기·연간E 를 네이버(에프앤가이드) 컨센으로 교체·보강."""
+
+    @staticmethod
+    def naver_table():
+        columns = pd.MultiIndex.from_tuples([
+            ("주요재무정보", "주요재무정보", "주요재무정보"),
+            ("최근 연간 실적", "2025.12", "IFRS연결"),
+            ("최근 연간 실적", "2026.12(E)", "IFRS연결"),
+            ("최근 분기 실적", "2026.03", "IFRS연결"),
+            ("최근 분기 실적", "2026.06", "IFRS연결"),
+            ("최근 분기 실적", "2026.09(E)", "IFRS연결"),
+        ])
+        rows = [
+            ["매출액", "1,200", "1,400", "300", "320", "350"],
+            ["영업이익", "240", "280", "60", "64", "70"],
+            ["영업이익률", "20.00", "20.00", "20.00", "20.00", "20.00"],
+            ["당기순이익", "120", "140", "30", "32", "36"],
+            ["PER(배)", "14.20", "9.80", "-", "-", "99.00"],
+            ["PBR(배)", "1.42", "0.98", "-", "-", "-"],
+            ["ROE(지배주주)", "11.20", "12.80", "-", "-", "-"],
+        ]
+        return pd.DataFrame(rows, columns=columns)
+
+    def setUp(self):
+        self._saved = nc.read_tables
+        nc.read_tables = lambda *a, **k: [self.naver_table()]
+        self.record = run(FakeTicker())
+        self.fin = self.record["financials"]
+
+    def tearDown(self):
+        nc.read_tables = self._saved
+
+    def test_quarterly_replaced_with_naver_plus_yahoo_tail(self):
+        # 네이버 분기(1Q~당분기E)가 야후 분기를 대체하고, 네이버 범위 밖 미래
+        # 분기(4Q26E)만 야후 컨센으로 꼬리에 남는다.
+        labels = [(r["label"], r.get("src")) for r in self.fin["quarterly"]]
+        self.assertEqual(labels, [("1Q26", "naver"), ("2Q26", "naver"),
+                                  ("3Q26E", "naver"), ("4Q26E", None)])
+
+    def test_naver_quarter_has_operating_income(self):
+        q = {r["label"]: r for r in self.fin["quarterly"]}["3Q26E"]
+        self.assertEqual(q["kind"], "E")
+        self.assertEqual(q["op"], 70e8)      # 야후엔 없는 분기 영업이익 컨센
+        self.assertEqual(q["opm"], 20.0)
+
+    def test_annual_estimate_row_takes_naver_values(self):
+        rows = {r["label"]: r for r in self.fin["annual"]}
+        e26 = rows["2026E"]
+        self.assertEqual(e26.get("src"), "naver")
+        self.assertEqual(e26["revenue"], 1400e8)
+        self.assertEqual(e26["op"], 280e8)
+        self.assertEqual(e26["opm"], 20.0)
+        # 네이버 표에 없는 내년E 는 야후 값 그대로(영업이익 공란 유지).
+        e27 = rows["2027E"]
+        self.assertNotIn("src", e27)
+        self.assertIsNone(e27["op"])
+
+    def test_quarterly_per_column_does_not_override_annual_consensus(self):
+        y = {x["label"]: x for x in self.record["years"]}["2026E"]
+        self.assertEqual(y["per"], 9.8)      # 분기열의 99.00 이 아니라 연간 컨센
+
+
 class NanTailRows(unittest.TestCase):
     """장외 시간에 야후가 붙이는 NaN 꼬리 행 — 진짜 종가를 덮으면 안 된다.
 
