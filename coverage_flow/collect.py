@@ -28,6 +28,10 @@ NAVER_ETF = "https://m.stock.naver.com/api/stock/{code}/etfAnalysis"
 NAVER_H = {"User-Agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 16_0 like Mac OS X) AppleWebKit/605",
            "Referer": "https://m.stock.naver.com/"}
 INDEX_BASIC = "https://m.stock.naver.com/api/index/KOSPI/basic"
+# 종목별 일별 수급(수량) — pageSize 상한 60, page 는 무시, **bizdate 커서**(그 날짜 이전 60행)로
+# 뒤로 넘긴다(10/19 프로브 실측: bizdate=20260720 → 7/16~4/20). 3개월·YTD 구간의 소스.
+NAVER_TREND = "https://m.stock.naver.com/api/stock/{code}/trend?pageSize=60"
+TREND_MAX_PAGES = 8   # 60×8 = 480행 ≈ 2년 — YTD 는 늦어도 4~5페이지 안에 전년으로 넘어간다
 
 
 def load_csv(name):
@@ -66,6 +70,26 @@ def naver_etf_analysis(code):
     return hold, flow
 
 
+def naver_investor_history(code, until):
+    """네이버 trend 를 bizdate 커서로 `until`(YYYYMMDD) 이전 날짜가 나올 때까지 긁어 행 목록으로.
+    until 은 보통 전년 12/31 — flow_windows 의 YTD 판정은 전년 행이 하나라도 있어야 선다."""
+    rows, cursor = [], None
+    for _ in range(TREND_MAX_PAGES):
+        url = NAVER_TREND.format(code=code) + (f"&bizdate={cursor}" if cursor else "")
+        r = requests.get(url, headers=NAVER_H, timeout=15)
+        r.raise_for_status()
+        page = r.json()
+        if not isinstance(page, list) or not page:
+            break
+        rows += page
+        last = str(page[-1].get("bizdate", ""))
+        if not last or last <= until or len(page) < 60:
+            break
+        cursor = last
+        time.sleep(0.1)
+    return rows
+
+
 def collect_stock(u, today, live=True):
     """live=False(휴장일·--force 테스트)면 현재가를 '오늘 잠정 봉' 으로 붙이지 않는다 —
     금요일 종가를 토요일 잠정치로 찍으면 거짓 라벨이다."""
@@ -76,6 +100,13 @@ def collect_stock(u, today, live=True):
     time.sleep(0.12)
     inv = kis.fetch_investor(code)
     time.sleep(0.12)
+    # 3개월·YTD 는 한투 30행으로 부족 → 네이버 trend(수량×종가 근사)로 전년까지 보충.
+    # 네이버가 죽어도 한투 30행으로 오늘·5일·1개월은 그대로 나온다(그 구간만 '–').
+    try:
+        until = f"{int(today[:4]) - 1}1231"
+        inv = kis.merge_investor(inv, kis.naver_trend_frame(naver_investor_history(code, until)))
+    except Exception as ex:
+        print(f"  {u['name']} 네이버 수급 이력 실패(한투 30행만 사용): {type(ex).__name__}: {ex}")
     tech = metrics.technicals(ohlc, today, px.get("price") if live else None)
     tech["ret"] = metrics.returns(ohlc, today, px.get("price") if live else None, px.get("chg_pct"))
     flow = metrics.flow_summary(inv, today, px.get("mcap"))

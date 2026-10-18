@@ -215,7 +215,7 @@ table.flow{{font-size:12px}}table.flow td,table.flow th{{padding:6px 5px}}th.c{{
 
 <h2 id="flow2">①-2 투자자별 순매수 <small style="font:400 12px Inter;color:#6b7280">억원 · 오늘 · 5일 · 1개월 · 3개월 · YTD · 외인 5일 순</small></h2>
 <div class="wrap">{flow_table(rows)}</div>
-<p class="note">구간은 오늘 잠정 행을 포함한 최근 거래일 수. 이력이 모자라는 구간은 '–'(합계를 작게 적는 것보다 빈칸이 낫다). 연속일수 배지는 2일 이상만.</p>
+<p class="note">구간은 오늘 잠정 행을 포함한 최근 거래일 수(5·21·63일, YTD 는 올해 1월부터). 최근 30거래일은 한투 금액(정확), 그 이전은 네이버 순매수 수량 × 종가 <b>근사</b> — 3개월·YTD 합계는 체결 평균가 대신 종가를 써서 몇 % 어긋날 수 있다. 이력이 모자라는 구간은 '–'. 연속일수 배지는 2일 이상만.</p>
 </div>
 <div id="cap-2">
 <h2 id="passive">② 기계적 수급 <small style="font:400 12px Inter;color:#6b7280">ETF 설정·환매 × 비중 (하한값) · 액티브 ETF 계약수</small></h2>

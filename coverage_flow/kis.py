@@ -121,6 +121,40 @@ def investor_frame(rows):
     return df[["date", "개인", "외국인", "기관"]].drop_duplicates("date").sort_values("date").reset_index(drop=True)
 
 
+def naver_trend_frame(rows):
+    """네이버 /api/stock/{code}/trend 행 → DataFrame[date,개인,외국인,기관] (억원 **근사**).
+    네이버는 순매수 '수량'만 주므로 금액 = 수량 × 그날 종가 / 1e8. 체결 평균가가 아니라
+    종가라 정확한 금액과 몇 % 어긋난다 — 한투 금액(최근 30행)이 있는 날짜는 그쪽을 쓴다."""
+    out = []
+    for r in rows or []:
+        try:
+            close = _f(r.get("closePrice"))
+            if not close:
+                continue
+            out.append({"date": pd.to_datetime(str(r["bizdate"])),
+                        "개인": (_f(r.get("individualPureBuyQuant"), 0.0) or 0.0) * close / 1e8,
+                        "외국인": (_f(r.get("foreignerPureBuyQuant"), 0.0) or 0.0) * close / 1e8,
+                        "기관": (_f(r.get("organPureBuyQuant"), 0.0) or 0.0) * close / 1e8})
+        except Exception:
+            continue
+    if not out:
+        return pd.DataFrame(columns=["date", "개인", "외국인", "기관"])
+    df = pd.DataFrame(out).drop_duplicates("date").sort_values("date").reset_index(drop=True)
+    for c in ("개인", "외국인", "기관"):
+        df[c] = df[c].round(1)
+    return df
+
+
+def merge_investor(kis_df, naver_df):
+    """한투(정확, 최근 30행) 우선 + 그 밖의 날짜는 네이버 근사로 보충. 날짜 오름차순."""
+    if naver_df is None or naver_df.empty:
+        return kis_df
+    if kis_df is None or kis_df.empty:
+        return naver_df
+    extra = naver_df[~naver_df["date"].isin(kis_df["date"])]
+    return pd.concat([kis_df, extra], ignore_index=True).sort_values("date").reset_index(drop=True)
+
+
 def fetch_price(code):
     """현재가 스냅: price·chg_pct·mcap(억)·listed(주)·frgn_pct·amt_today(억)."""
     j = get("/uapi/domestic-stock/v1/quotations/inquire-price", "FHKST01010100",
