@@ -107,8 +107,12 @@ def collect_stock(u, today, live=True):
         inv = kis.merge_investor(inv, kis.naver_trend_frame(naver_investor_history(code, until)))
     except Exception as ex:
         print(f"  {u['name']} 네이버 수급 이력 실패(한투 30행만 사용): {type(ex).__name__}: {ex}")
+    if not live:
+        # 장 시작 전·휴장일: 소스가 미리 내주는 '오늘 0' 행을 버리고 KIS 전일대비(0.00)도 안 쓴다
+        inv = metrics.drop_today(inv, today)
     tech = metrics.technicals(ohlc, today, px.get("price") if live else None)
-    tech["ret"] = metrics.returns(ohlc, today, px.get("price") if live else None, px.get("chg_pct"))
+    tech["ret"] = metrics.returns(ohlc, today, px.get("price") if live else None,
+                                  px.get("chg_pct") if live else None)
     flow = metrics.flow_summary(inv, today, px.get("mcap"))
     return {**u, "px": px, "tech": tech, "flow": flow}
 

@@ -134,6 +134,14 @@ class Flow(unittest.TestCase):
         self.assertIsNone(short["frgn"]["ytd"])              # 전년 행 없음 → ytd 모름
         self.assertEqual(metrics.flow_windows(pd.DataFrame(), today), {"rows": 0})
 
+    def test_drop_today_premarket_zero_row(self):
+        inv = self.inv([10, 20, 30, 40, 50, 0], [1, 1, 1, 1, 1, 0])     # 마지막 행 = 장 전 '오늘 0'
+        today = inv["date"].iloc[-1]
+        f = metrics.flow_summary(metrics.drop_today(inv, today), today, mcap=None)
+        self.assertFalse(f["has_today"]); self.assertEqual(f["frgn5"], 10 + 20 + 30 + 40 + 50)
+        self.assertEqual(f["frgn_streak"], 5)                              # 0 행이 연속일수를 끊지 않는다
+        self.assertTrue(metrics.drop_today(pd.DataFrame(), today).empty)
+
     def test_rank_and_today_movers(self):
         rows = [
             {"name": "A", "flow": {"fi5_mcap_pct": 0.7, "has_today": True, "frgn_today": 108, "inst_today": 19}},
