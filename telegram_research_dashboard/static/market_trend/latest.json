@@ -1,352 +1,354 @@
 {
- "date": "2026-10-18",
+ "date": "2026-10-19",
  "meta": {
-  "window": "10-17 06:00~10-18 06:00 KST",
+  "window": "10-18 06:00~10-19 06:00 KST",
   "engine": "Gemini(gemini-2.5-flash)",
-  "generated_at": "2026-10-18T06:35+09:00"
+  "generated_at": "2026-10-19T06:35+09:00"
  },
  "stats": {
-  "channels": 41,
-  "messages": 285,
-  "groups": 268
+  "channels": 47,
+  "messages": 375,
+  "groups": 349
  },
- "one_liner": "AI/반도체 섹터의 신용 위험과 투자 심리 위축이 시장 전반의 공포를 유발하는 가운데, K조선은 해외 잠수함 수주 경쟁에 집중하고 소방관 순직 관련 정치적 논란이 확산되고 있다.",
+ "one_liner": "글로벌 사회 불안과 지정학적 리스크가 고조되는 가운데, 국내 증시는 국민연금 손실로 인한 하방 압력에 직면했으며, AI/반도체 섹터는 변동성 속에서 장기 전망과 단기 과열 해소 사이의 줄다리기를 하고 있습니다.",
  "themes": [
   {
-   "name": "AI/반도체 섹터 신용 위험 및 투자 심리 위축",
-   "narrative": "AI 및 반도체 섹터가 2008년 금융위기 이후 최장 연속 하락세를 기록하며 투자자들의 피로감이 확산되고 있다. 헤지펀드의 AI 장기 포지션 청산과 데이터센터 자금 조달 비용 상승 우려가 겹치며 시장 전반에 공포 심리가 확산되고 있다.",
+   "name": "글로벌 사회 불안 및 지정학적 리스크 고조",
+   "narrative": "유럽 전역에서 생활비 상승에 대한 대규모 시위가 폭력 사태로 번지며 사회 불안이 심화되고 있으며, 프랑스 마크롱 대통령에 대한 비판 여론이 확산되고 있습니다. 동시에 우크라이나-러시아, 파키스탄-아프가니스탄 국경 분쟁 및 중동 지역의 긴장이 이어지며 지정학적 리스크가 시장에 부담을 주고 있습니다.",
    "status": "ongoing",
    "strength": 5,
    "keywords": [
-    "최장",
-    "공포 요약",
-    "센티먼트 공포",
-    "포지션 청산",
-    "헤지펀드",
-    "차입 비용",
-    "하락률",
-    "최장 연속"
-   ],
-   "evidence": [
-    {
-     "channel": "서화백의 AI놀이🚀",
-     "quote": "전반적인 기술주/AI주 급락, 8거래일 연속 하락 (20년래 최장)"
-    },
-    {
-     "channel": "연수르 해외주식",
-     "quote": "Bloomberg는 반도체 주가지수가 2008년 금융위기 이후 최장 연속 하락 스트릭에 진입했다고 보도했으며..."
-    },
-    {
-     "channel": "사제콩이_서상영",
-     "quote": "헤지펀드들의 AI 관련 롱 포지션 청산까지 겹치면서 반도체, 서버, 광통신 등으로 매도가 확대."
-    }
-   ]
-  },
-  {
-   "name": "AI 인프라 투자 지속 가능성 논쟁 심화",
-   "narrative": "가트너가 AI 인프라 투자액의 손상 위험을 경고한 가운데, 아마존 웹 서비스(AWS) CFO는 AI 서버 투자 회수 기간이 짧고 지출이 지속 가능하다고 반박하며 AI 투자에 대한 상반된 시각이 대립하고 있다.",
-   "status": "ongoing",
-   "strength": 4,
-   "keywords": [
-    "AWS",
-    "지출 지속",
-    "AI 지출",
-    "가트너"
-   ],
-   "evidence": [
-    {
-     "channel": "서화백의 그림놀이 🚀",
-     "quote": "AMZN 웹 서비스(AWS) CFO, 'AI 지출은 지속 가능하다' 발언, AMZN, 가트너 의견 반박하며 AI 인프라 지출 지속 가능성 강조"
-    },
-    {
-     "channel": "이상헌 부장 iM 지주/ESG/중소형주",
-     "quote": "AWS의 AI 서버 투자 회수기간은 3년 미만이며, 상당한 투자 수익과 생산성 개선을 확인하고 있다면서 AI 수요는 실재하고 AI 지출은 지속 가능하다"
-    },
-    {
-     "channel": "사제콩이_서상영",
-     "quote": "가트너에서는 기업들의 AI 도입 속도와 투자비용, 생산성 향상 및 실제 ROI가 주요 주제로 다뤄지고..."
-    }
-   ]
-  },
-  {
-   "name": "앤스로픽, AI 안전 규제 법안 초안 미 의회에 제안",
-   "narrative": "AI 기업 앤스로픽이 자체적으로 마련한 AI 안전 규제 법안 초안을 미 의회에 비공개로 제안하며 관련 입법을 추진 중이다. 이 법안에는 정부의 자의적인 모델 개발·배포 중단을 방지하는 조항도 포함되어 정부 감독 권한과 주정부 규제 무력화 여부를 둘러싼 논쟁이 예상된다.",
-   "status": "new",
-   "strength": 3,
-   "keywords": [
-    "법안",
-    "조항",
-    "앤트로픽"
+    "시위",
+    "마크롱",
+    "분노",
+    "시청",
+    "청년들",
+    "국경",
+    "이란 외무장관",
+    "상트페테르부르크"
    ],
    "evidence": [
     {
      "channel": "미국 주식 인사이더 🇺🇸 (US Stocks Insider)",
-     "quote": "앤트로픽은 미국 의회에 자체적으로 마련한 인공지능 안전 규제 법안을 제안하며 관련 입법을 추진 중이라고 폴리티코가 보도."
+     "quote": "• 프랑스에서 생활비 상승에 항의하는 대규모 시위가 발생해 약 80만 명이 참여했다고 AFP가 보도. 학생들과 노란 조끼 시위대가 합류한 가운데 리옹에서는 관광안내소 건물에 화재가 발생. 마크롱 대통령은 폭력을 통한 정치적 요구 관철을 용납하지 않겠다고 강조하며 상점과 공공시설을 공격한 가담자들을 처벌하겠다고 밝혀."
     },
     {
-     "channel": "[삼성 이영진] 글로벌 AI/SW",
-     "quote": "앤스로픽, AI 안전 규제 법안 초안 마련해 미 의회에 비공개 제안"
+     "channel": "서화백의 AI놀이🚀",
+     "quote": "📝 우크라이나 장거리 드론이 러시아 상트페테르부르크 항구의 석유 터미널을 잇..."
+    },
+    {
+     "channel": "이상헌 부장 iM 지주/ESG/중소형주",
+     "quote": "* 이란 외무 \"호르무즈 재개방, 美 선택에 달려…대화 문 열렸다\" - 아바스 아라그치 이란 외무장관은 17일(현지시간) 호르무즈 해협 재개방은 미국의 선택에 달려 있다고 강조했다."
     }
    ]
   },
   {
-   "name": "K조선, 해외 잠수함 수주 경쟁 심화",
-   "narrative": "국내 디젤 잠수함 건조 일감이 줄어드는 가운데, HD현대중공업과 한화오션이 아르헨티나, 그리스, 페루, 필리핀 등 해외 시장에서 잠수함 수주를 위해 치열하게 경쟁하고 있으며, 유럽 경쟁사들과도 재격돌할 전망이다.",
-   "status": "ongoing",
-   "strength": 4,
-   "keywords": [
-    "잠수함",
-    "수주",
-    "HD현대중공업",
-    "한화오션",
-    "그리스",
-    "필리핀"
-   ],
-   "evidence": [
-    {
-     "channel": "GS의 조선/기계/방산 「바담」",
-     "quote": "[해외 잠수함 수주 사활 건 방산업계... 국내 물량 딱 1척 남았다] • 국내 디젤 잠수함 건조 일감이 2029년 예정인 장보고-Ⅲ 배치-Ⅱ 3번함 1척만 남아 내수 절벽 직면"
-    },
-    {
-     "channel": "GS의 조선/기계/방산 「바담」",
-     "quote": "[K조선, 그리스 잠수함 수주전… 유럽 경쟁력 시험대] • 그리스 해군 차세대 잠수함 4척 도입 사업에 한화오션(KSS-III)과 HD현대중공업(HDS-2300급) 제안서 제출"
-    },
-    {
-     "channel": "GS의 조선/기계/방산 「바담」",
-     "quote": "[현대重-한화오션, 필리핀 잠수함 수주전서 '격돌'] • 필리핀 해군 중형급 잠수함 2척 도입 사업에서 HD현대중공업과 한화오션 맞대결"
-    }
-   ]
-  },
-  {
-   "name": "소방관 순직 및 추미애 '재정 빨대' 발언 논란",
-   "narrative": "부천 화재 현장에서 소방관이 순직하면서 국민적 분노가 커진 가운데, 추미애 의원의 과거 '소방 재정 빨대' 발언이 재조명되며 논란이 확산되었다. 추 의원은 빈소에서 사과했지만, 경기도의 순직 추모 행사 예산 감액 사실이 알려지며 비판이 이어지고 있다.",
+   "name": "국내 증시 하방 압력 및 국민연금 손실",
+   "narrative": "국민연금의 대규모 평가손실 소식이 국내 증시의 투자 심리를 크게 위축시키고 있으며, 코스피/코스닥의 급격한 하락세와 반대매매 증가로 전반적인 시장에 공포감이 팽배합니다. 이는 AI 산업의 자금 조달 리스크와 맞물려 시장의 하방 압력을 가중시키고 있습니다.",
    "status": "new",
    "strength": 5,
    "keywords": [
-    "소방관",
-    "순직",
-    "추미애",
-    "빨대",
-    "부천",
-    "순직 소방관",
-    "사과",
-    "소방",
-    "재정 빨대"
+    "국민연금",
+    "조정될"
    ],
    "evidence": [
     {
-     "channel": "main news",
-     "quote": "[국민일보] 소방관 순직에 커진 분노…추미애 ‘재정 빨대’ 논란 확산"
+     "channel": "서화백의 AI놀이🚀",
+     "quote": "💡 요약 국민연금의 대규모 평가손실과 코스피/코스닥의 급격한 하락세로 인해 전반적인 투자 심리가 공포에 휩싸였으며, 반도체 업황 둔화 및 AI 산업의 자금 조달 리스크가 부각되고 있습니다."
     },
     {
-     "channel": "main news",
-     "quote": "[국민일보] “의도와 다르게 전달됐다면…” 추미애, 빈소서 ‘소방 빨대’ 사과"
+     "channel": "서화백의 AI놀이🚀",
+     "quote": "💡 요약 국민연금의 대규모 주식 손실과 AI 인프라 기업의 자금조달 부담, 지정학적 리스크가 시장을 압박하고 있습니다. 주요 기술주 및 가상자산 시장의 급락, 반대매매 증가 등으로 투자 심리가 위축되고 있습니다."
     },
     {
-     "channel": "main news",
-     "quote": "[경향신문] ‘소방 빨대’ 발언, 말뿐 아니었다···경기도, “매년 이어가겠다”던 순직 추모 행사 예산도 전액 감액"
+     "channel": "서화백의 그림놀이 🚀",
+     "quote": "💡 요약 미국 증시 AI/반도체 매도세, 국민연금 대규모 손실, 증시의 금융 위기급 하락폭 등 전반적인 시장 하방 압력과 불안 심리가 팽배하며, 물가고 시위 등 거시 경제 불확실성이 가중되고 있습니다."
+    }
+   ]
+  },
+  {
+   "name": "AI/반도체 섹터 변동성 및 전망",
+   "narrative": "AI 인프라 및 HBM 투자 확대에 대한 강한 기대감이 존재하지만, AI 섹터의 과열 해소 과정이 진행될 가능성과 자금 조달 비용 상승으로 인한 인프라 프로젝트 지연 우려가 동시에 나타나고 있습니다. 일부에서는 DRAM 가격 상승폭 상향 조정 전망과 함께 반도체 시장의 잠재적 과잉 공급 우려도 제기되고 있습니다.",
+   "status": "ongoing",
+   "strength": 4,
+   "keywords": [
+    "AI",
+    "반도체",
+    "HBM",
+    "메모리 공급",
+    "조정될",
+    "과잉",
+    "딥시크",
+    "다이",
+    "배분",
+    "진행될"
+   ],
+   "evidence": [
+    {
+     "channel": "서화백의 AI놀이🚀",
+     "quote": "💡 요약 AI 인프라 및 HBM 투자 확대, 서버 시장 전망 상향 등 기술 섹터에 대한 강한 기대감이 존재하나, 국내 증시(코스피)의 급락과 국민연금 손실, 메모리 반도체 업황 둔화 우려, 지정학적 리스크가 시장에 부담으로 작용하고 있습니다."
+    },
+    {
+     "channel": "하나 중국/신흥국 전략 김경환",
+     "quote": "•GAM 인베스트먼트 매니지먼트의 취리히 소재 펀드매니저 제인 시 콜테시는 “자금조달 비용은 AI 호황을 억누르는 중력과 같음. 차입 비용이 상승하면 인프라 프로젝트의 자금조달이 어려워지고 자본지출이 지연됨. 단순히 일정이 연기되는 것만으로도 아시아 공급업체의 이익 전망과 밸류에이션이 하향 조정될 수 있음”이라고 밝힘"
+    },
+    {
+     "channel": "서화백의 AI놀이🚀",
+     "quote": "- ASML: 고무적인 실적을 발표하며, 고객사들이 AI 관련 투자를 중심으로 장비 수요를 늘리고 있다고 밝혔습니다. 하지만 2028년 생산 능력을 대폭 늘릴 계획은 반도체 시장의 잠재적 과잉 공급 우려를 낳았습니다."
+    }
+   ]
+  },
+  {
+   "name": "글로벌 경제 지표 및 기업 실적 발표 집중",
+   "narrative": "이번 주는 중국의 3분기 GDP 및 9월 소매 판매/산업 생산 데이터와 미국의 구매관리자지수(PMI) 등 주요 거시 경제 지표 발표가 예정되어 있습니다. 더불어 AXP, BE, BX, IBM, LRCX, META, TS, RTX, GM, NOC 등 미국 및 유럽 주요 기업들의 실적 발표가 시장의 핵심 동인이 될 것으로 예상됩니다.",
+   "status": "ongoing",
+   "strength": 3,
+   "keywords": [
+    "PMI",
+    "RTX",
+    "GM",
+    "선진국"
+   ],
+   "evidence": [
+    {
+     "channel": "서화백의 AI놀이🚀",
+     "quote": "🎯 10월 19일 주간은 글로벌 경제 지표와 함께 중요한 기업들의 실적 발표로 매우 바쁜 한 주가 될 예정입니다. 중국의 3분기 GDP 및 9월 소매 판매/산업 생산 데이터가 주 초반 주목되며, 주 후반에는 미국 구매관리자지수(PMI) 발표가 예정되어 있습니다."
+    },
+    {
+     "channel": "서화백의 AI놀이🚀",
+     "quote": "• RTX (Raytheon): 국방 및 항공우주 사업의 강력한 순풍, 경영진의 우수한 실행 실적 (방산/항공우주 주식에 영향)."
+    },
+    {
+     "channel": "서화백의 AI놀이🚀",
+     "quote": "• GM (General Motors): 우수한 실행 실적, 합리적인 밸류에이션, 공격적인 자본 환원(자사주 매입) (자동차 주식에 영향)."
+    }
+   ]
+  },
+  {
+   "name": "해운 시장 강세 지속",
+   "narrative": "VLGC(초대형 가스 운반선) 수주 랠리가 지속되고 있으며, FLNG(부유식 액화천연가스 생산설비) 프로젝트가 베네수엘라와 브라질로 확대될 조짐을 보이고 있습니다. 탱커 중고선가도 급등하는 등 해운 시장의 특정 부문에서 강세가 이어지고 있으며, 특히 VLCC 운임이 이슈로 부상하고 있습니다.",
+   "status": "ongoing",
+   "strength": 3,
+   "keywords": [
+    "VLGC",
+    "선가",
+    "운임",
+    "유지될"
+   ],
+   "evidence": [
+    {
+     "channel": "DAOL 조선/기계/방산 | 최광식",
+     "quote": "🛳 VLGC 수주 랠리 계속. FLNG 베네수엘라와 브라질로 확대 ☞ http://bit.ly/DOS844 ⚓️ 주시 뉴스 💲 선가, 실적, 캐파 △ LNG선 신조선가 또 하락, 울트라막스 컨테이너선 6주 연속 하락, 탱커 중고선가 또 급등 △ 22년된 수에즈막스 60백만달러에 매각해서 1년만에 100% 수익 🌏 그린쉽…"
+    },
+    {
+     "channel": "하나증권/에너지화학/윤재성",
+     "quote": "[하나/에너지화학/윤재성] Weekly Monitor: 이제는 VLCC 운임이 이슈 ▶ 보고서: https://bit.ly/4BdskVm [총평] ▶ WTI 101.4$(+10.4%), Dubai 106.0$ (-2.3%). 정제마진 37.1$(WoW 보합). 석유화학 혼조세 ▶ Top Picks: SK이노베이션, S-O…"
+    },
+    {
+     "channel": "[한국투자 최고운] 운송",
+     "quote": "올해 이렇게 강세가 오래 유지될 수 있는건, 미주와 유럽 항로가 번갈아 상승하는 양상이기 때문입니다. 중동 전쟁 초기에는 지리적으로 항로가 겹치는 유럽이 SCFI 반등을 견인했고, 여름 들어 유럽 시황은 껶였지만 시차를 두고 올라온 미주 항로가 상승세를 이어받았습니다."
     }
    ]
   }
  ],
  "community_mood": {
   "score": -70,
-  "summary": "해외주식 갤러리를 중심으로 AI 및 기술주 하락에 대한 공포와 회의감이 지배적이며, 전반적으로 투자에 대한 비관적인 정서가 강하게 나타나고 있다.",
+  "summary": "국내 주식 커뮤니티는 국민연금 손실과 전반적인 증시 하락에 대한 깊은 공포와 비관적인 정서에 휩싸여 있습니다. 특히 AI 관련주와 대형 반도체주에 대한 고점 물림 우려가 크며, 시장의 추가 하락을 예상하는 분위기가 지배적입니다.",
   "hot_stocks": [
    {
-    "name": "하닉",
-    "score": 0,
-    "reason": "삼전과 함께 평단가에 대한 관심이 높음."
-   },
-   {
-    "name": "삼전",
-    "score": 0,
-    "reason": "하닉과 함께 평단가 및 7만원 도달 여부에 대한 관심이 높음."
-   },
-   {
-    "name": "파두",
+    "name": "나이키",
     "score": -50,
-    "reason": "5만원 밑으로 하락할 가능성에 대한 우려가 언급됨."
+    "reason": "해외주식갤러리에서 매도를 권고하는 글이 높은 추천을 받으며 부정적인 시각이 확산되고 있습니다."
    },
    {
-    "name": "로드스터",
-    "score": 30,
-    "reason": "어따 쓰냐는 비판에도 불구하고 일부 지지하는 의견이 있음."
+    "name": "하이닉스",
+    "score": -60,
+    "reason": "과거 고점 기사 언급 및 현재 주가 하락에 대한 고점 물림 우려와 후회가 커뮤니티에서 확산되고 있습니다."
+   },
+   {
+    "name": "삼성전자",
+    "score": -60,
+    "reason": "하이닉스와 함께 고점 물림에 대한 우려가 언급되며, 대형 반도체주 전반에 대한 비관적인 시각이 나타나고 있습니다."
+   },
+   {
+    "name": "AI 관련주",
+    "score": -30,
+    "reason": "AI 섹터의 과열에 대한 경계심과 회의적인 시각이 커뮤니티 내에서 표출되고 있습니다."
    }
   ]
  },
  "signals": {
   "spikes": [
    {
-    "term": "소방관",
-    "count": 15,
+    "term": "국민연금",
+    "count": 11,
     "burst": 99.0,
     "base_daily": 0.0,
     "new": true
    },
    {
-    "term": "최장",
-    "count": 13,
-    "burst": 99.0,
-    "base_daily": 0.0,
-    "new": true
-   },
-   {
-    "term": "추미애",
-    "count": 12,
-    "burst": 99.0,
-    "base_daily": 0.0,
-    "new": true
-   },
-   {
-    "term": "순직",
-    "count": 10,
-    "burst": 99.0,
-    "base_daily": 0.0,
-    "new": true
-   },
-   {
-    "term": "공포 요약",
+    "term": "시위",
     "count": 9,
-    "burst": 99.0,
-    "base_daily": 0.0,
-    "new": true
+    "burst": 85.5541547277937,
+    "base_daily": 0.3,
+    "new": false
    },
    {
-    "term": "센티먼트 공포",
-    "count": 9,
-    "burst": 79.90618336886993,
+    "term": "PMI",
+    "count": 8,
+    "burst": 76.04813753581661,
+    "base_daily": 0.3,
+    "new": false
+   },
+   {
+    "term": "RTX",
+    "count": 8,
+    "burst": 54.32009823986901,
     "base_daily": 0.4,
     "new": false
    },
    {
-    "term": "법안",
-    "count": 8,
+    "term": "마크롱",
+    "count": 6,
     "burst": 99.0,
     "base_daily": 0.0,
     "new": true
    },
    {
-    "term": "빨대",
-    "count": 8,
+    "term": "국경",
+    "count": 6,
     "burst": 99.0,
     "base_daily": 0.0,
     "new": true
    },
    {
-    "term": "블랙스톤",
-    "count": 7,
+    "term": "선진국",
+    "count": 6,
     "burst": 99.0,
     "base_daily": 0.0,
     "new": true
    },
    {
-    "term": "포지션 청산",
-    "count": 7,
+    "term": "시청",
+    "count": 6,
     "burst": 99.0,
     "base_daily": 0.0,
     "new": true
    },
    {
-    "term": "AWS",
-    "count": 7,
+    "term": "청년들",
+    "count": 6,
     "burst": 99.0,
     "base_daily": 0.0,
     "new": true
    },
    {
-    "term": "부천",
-    "count": 7,
+    "term": "분노",
+    "count": 6,
     "burst": 99.0,
     "base_daily": 0.0,
     "new": true
    },
    {
-    "term": "순직 소방관",
-    "count": 7,
+    "term": "아빠",
+    "count": 6,
     "burst": 99.0,
     "base_daily": 0.0,
     "new": true
    },
    {
-    "term": "사과",
-    "count": 7,
+    "term": "GM",
+    "count": 6,
     "burst": 99.0,
     "base_daily": 0.0,
     "new": true
    },
    {
-    "term": "헤지펀드",
-    "count": 10,
-    "burst": 36.55838454784899,
-    "base_daily": 1.1,
+    "term": "문자",
+    "count": 9,
+    "burst": 38.88825214899714,
+    "base_daily": 0.7,
     "new": false
    },
    {
-    "term": "차입 비용",
-    "count": 6,
+    "term": "조정될",
+    "count": 5,
     "burst": 99.0,
     "base_daily": 0.0,
     "new": true
    },
    {
-    "term": "지출 지속",
-    "count": 6,
+    "term": "딥시크",
+    "count": 5,
     "burst": 99.0,
     "base_daily": 0.0,
     "new": true
    },
    {
-    "term": "하락률",
-    "count": 6,
+    "term": "과잉",
+    "count": 5,
     "burst": 99.0,
     "base_daily": 0.0,
     "new": true
    },
    {
-    "term": "최장 연속",
-    "count": 6,
+    "term": "건물",
+    "count": 5,
     "burst": 99.0,
     "base_daily": 0.0,
     "new": true
    },
    {
-    "term": "조항",
-    "count": 6,
+    "term": "이란 외무장관",
+    "count": 5,
     "burst": 99.0,
     "base_daily": 0.0,
     "new": true
    },
    {
-    "term": "출신",
-    "count": 6,
+    "term": "진행될",
+    "count": 5,
     "burst": 99.0,
     "base_daily": 0.0,
     "new": true
    },
    {
-    "term": "소방",
-    "count": 6,
+    "term": "같음",
+    "count": 5,
     "burst": 99.0,
     "base_daily": 0.0,
     "new": true
    },
    {
-    "term": "재정 빨대",
-    "count": 6,
+    "term": "유지될",
+    "count": 5,
     "burst": 99.0,
     "base_daily": 0.0,
     "new": true
    },
    {
-    "term": "AI 지출",
-    "count": 6,
+    "term": "메모리 공급",
+    "count": 5,
     "burst": 99.0,
     "base_daily": 0.0,
     "new": true
    },
    {
-    "term": "가트너",
+    "term": "배분",
+    "count": 5,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "다이",
+    "count": 5,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "상트페테르부르크",
     "count": 5,
     "burst": 99.0,
     "base_daily": 0.0,
@@ -355,81 +357,109 @@
   ],
   "top_posts": [
    {
+    "channels": 3,
+    "channel": "DAOL 조선/기계/방산 | 최광식",
+    "head": "🛳 VLGC 수주 랠리 계속. FLNG 베네수엘라와 브라질로 확대 ☞ http://bit.ly/DOS844 ⚓️ 주시 뉴스 💲 선가, 실적, 캐파 △ LNG선 신조선가 또 하락, 울트라막스 컨테이너선 6주 연속 하락, 탱커 중고선가 또 급등 △ 22년된 수에즈막스 60백만달러에 매각해서 1년만에 100% 수익 🌏 그린쉽…",
+    "url": "https://t.me/HI_GS/7238",
+    "time_kst": "10-18 15:54"
+   },
+   {
+    "channels": 2,
+    "channel": "서화백의 AI놀이🚀",
+    "head": "🔁 Catalyst Watch Delta (week of Mon 10/19 vs Mon 10/12) 🧭 변화 한눈에 이번 주는 지난주 대비 훨씬 더 광범위하고 상세한 기업 실적 발표에 초점이 맞춰져 있습니다. 미국 및 유럽의 주요 기업 실적 발표 목록이 크게 확장되었으며, 각 기업에 대한 상세한 프리뷰와 스트리트 컨센서스…",
+    "url": "https://t.me/easobi_ai/23399",
+    "time_kst": "10-18 17:40"
+   },
+   {
+    "channels": 2,
+    "channel": "서화백의 AI놀이🚀",
+    "head": "📅 Catalyst Watch (week of Mon 10/19) - 주간 전략 프리뷰 🧭 한눈에 보는 주간 핵심 🎯 10월 19일 주간은 글로벌 경제 지표와 함께 중요한 기업들의 실적 발표로 매우 바쁜 한 주가 될 예정입니다. 중국의 3분기 GDP 및 9월 소매 판매/산업 생산 데이터가 주 초반 주목되며, 주 후반에는…",
+    "url": "https://t.me/easobi_ai/23401",
+    "time_kst": "10-18 18:00"
+   },
+   {
+    "channels": 2,
+    "channel": "서화백의 AI놀이🚀",
+    "head": "📘 Weekly Recap (week ended Friday October 16, 2026) - 지난주 미국 시황 리뷰 🧭 한눈에 보는 주간 핵심 이번 주는 AI 관련 주식과 채권의 폭락, 기대에 못 미치는 Anthropic의 3분기 실적(기업공개(IPO) 가치 예상치 냉각), 엇갈리거나 실망스러운 은행 실적, 명품 섹터…",
+    "url": "https://t.me/easobi_ai/23397",
+    "time_kst": "10-18 17:30"
+   },
+   {
+    "channels": 2,
+    "channel": "서화백의 AI놀이🚀",
+    "head": "📝 텔레그램 심층 분석 Report (19시 05분) 기준 🌡️ 센티먼트 상승 기대 (+45) 💡 요약 AI 인프라 및 HBM 투자 확대, 서버 시장 전망 상향 등 기술 섹터에 대한 강한 기대감이 존재하나, 국내 증시(코스피)의 급락과 국민연금 손실, 메모리 반도체 업황 둔화 우려, 지정학적 리스크가 시장에 부담으로 작용…",
+    "url": "https://t.me/easobi_ai/23411",
+    "time_kst": "10-18 19:06"
+   },
+   {
+    "channels": 2,
+    "channel": "서화백의 AI놀이🚀",
+    "head": "📝 텔레그램 심층 분석 Report (11시 07분) 기준 🌡️ 센티먼트 공포 (-65) 💡 요약 국민연금의 대규모 평가손실과 코스피/코스닥의 급격한 하락세로 인해 전반적인 투자 심리가 공포에 휩싸였으며, 반도체 업황 둔화 및 AI 산업의 자금 조달 리스크가 부각되고 있습니다. 🗣️ Top 키워드: AI(191), 반도체…",
+    "url": "https://t.me/easobi_ai/23392",
+    "time_kst": "10-18 11:07"
+   },
+   {
+    "channels": 2,
+    "channel": "서화백의 AI놀이🚀",
+    "head": "📝 텔레그램 심층 분석 Report (15시 07분) 기준 🌡️ 센티먼트 부정 (-35) 💡 요약 국민연금의 대규모 주식 손실과 AI 인프라 기업의 자금조달 부담, 지정학적 리스크가 시장을 압박하고 있습니다. 주요 기술주 및 가상자산 시장의 급락, 반대매매 증가 등으로 투자 심리가 위축되고 있습니다. 지정학적 리스크와 거…",
+    "url": "https://t.me/easobi_ai/23395",
+    "time_kst": "10-18 15:07"
+   },
+   {
     "channels": 2,
     "channel": "서화백의 그림놀이 🚀",
-    "head": "📝 텔레그램 심층 분석 Report (11시 07분) 기준 🌡️ 센티먼트 공포 (-45) 💡 요약 AI 및 반도체 섹터의 신용 위험과 급락이 시장 전반의 하락세를 주도하고 있으며, 미국 재정 적자 확대와 국제유가 상승이 투자 심리를 더욱 위축시키고 있습니다. 일부 종목의 긍정적 소식에도 불구하고 전반적인 시장은 위험 회피…",
-    "url": "https://t.me/easobi/16989",
-    "time_kst": "10-17 11:07"
+    "head": "📝 텔레그램 심층 분석 Report (07시 05분) 기준 🌡️ 센티먼트 공포 (-75) 💡 요약 미국 증시 AI/반도체 매도세, 국민연금 대규모 손실, 증시의 금융 위기급 하락폭 등 전반적인 시장 하방 압력과 불안 심리가 팽배하며, 물가고 시위 등 거시 경제 불확실성이 가중되고 있습니다. 🗣️ Top 키워드: AI(13…",
+    "url": "https://t.me/easobi/16992",
+    "time_kst": "10-18 07:05"
+   },
+   {
+    "channels": 2,
+    "channel": "하나 중국/신흥국 전략 김경환",
+    "head": "하나증권 중국테마전략 김성은(T.02-3771-7520) [중국 테마 전략] 중국 반도체 수급 경쟁: YMTC 상장 VS CXMT 지수 편입 자료: https://bit.ly/4zFDYqA [YMTC 상장에 따른 단기 수급 부담] 최근 글로벌 매크로 악재와 반도체 섹터 심리 위축으로 인해 중국 테크지수도 동반 조정을 겪고…",
+    "url": "https://t.me/HANAchina/70608",
+    "time_kst": "10-18 17:56"
    },
    {
     "channels": 2,
     "channel": "서화백의 AI놀이🚀",
-    "head": "📝 텔레그램 심층 분석 Report (19시 05분) 기준 🌡️ 센티먼트 공포 (-60) 💡 요약 지정학적 리스크 심화와 금리 및 채권 시장 불확실성 속에서 주요 빅테크 현금흐름 및 AI 인프라 투자 둔화 우려가 시장 전반의 공포 심리를 유발하고 있습니다. 🗣️ Top 키워드: AI(10), 데이터센터(5), 지정학적 리…",
-    "url": "https://t.me/easobi_ai/23383",
-    "time_kst": "10-17 19:05"
+    "head": "• BX (Blackstone): 세계 선두 자산운용사로서의 지위, 탁월한 프랜차이즈, 모든 주요 성장 분야(특히 AI)에 대한 상당한 노출 (금융/자산운용 주식에 영향). • HON (Honeywell): 자동화 최종 시장의 펀더멘털 강세 (산업재 주식에 영향). • LMT (Lockheed Martin): 지정학적 배…",
+    "url": "https://t.me/easobi_ai/23400",
+    "time_kst": "10-18 17:40"
+   },
+   {
+    "channels": 2,
+    "channel": "껄무새 이웅찬의 개소리시황",
+    "head": "<10/18 주말: 바틈업에서 답을 찾으려니까 계속 틀리지> 금요일 미장이 폭락했습니다. 미국 주식시장은 이번이 첫 공포 같은 느낌은 있네요. 주말에 하이퍼리퀴드 같은데서 더 빠지는데 이건 큰 의미는 두지 않아도 될 것 같습니다. 왜 주식이 빠지는가.. 아니 전닉이 빠질 수 있다는 가능성 자체를 국내에서는 인식도 언급도…",
+    "url": "https://t.me/c/3610008147/2202",
+    "time_kst": "10-18 19:21"
+   },
+   {
+    "channels": 2,
+    "channel": "하나증권/에너지화학/윤재성",
+    "head": "[하나/에너지화학/윤재성] 효성티앤씨, KCC, 롯데케미칼, 롯데정밀화학 Preview ▶ 보고서: https://bit.ly/4suQQO5 ▶ [효성티앤씨] 실적 선방 예상. 다시 가격 인상 시작 - 3Q26 영업이익 1,176억원(QoQ -38%, YoY +110%)으로 컨센(1,415억원) 17% 하회 예상. 스판덱…",
+    "url": "https://t.me/energy_youn/3295",
+    "time_kst": "10-18 17:58"
    },
    {
     "channels": 2,
     "channel": "서화백의 AI놀이🚀",
-    "head": "📝 텔레그램 심층 분석 Report (15시 06분) 기준 🌡️ 센티먼트 불안 (-45) 💡 요약 글로벌 증시의 반도체 섹터 하락세 및 고금리 우려가 지속되는 가운데, AI 관련 투자 심리가 위축되고 개인 투자자들의 손실이 커지며 전반적으로 불안감이 지배적입니다. 다만, 일부 기업의 AI 지출 지속 가능성 및 긍정적 실적…",
-    "url": "https://t.me/easobi_ai/23378",
-    "time_kst": "10-17 15:06"
+    "head": "AI 섹터의 과열 해소 과정은 아직 더 진행될 가능성이 높으며, 이는 단기적인 \"저점 매수\" 전략을 어렵게 할 수 있습니다. 중동과 우크라이나의 지정학적 상황 악화는 유가와 에너지 시장에 지속적인 상승 압력을 가하고, 이는 광범위한 경제 전반에 인플레이션 압력을 가중시킬 위험이 있습니다. ⛽ AI 붐이 부채와 주식 발행에…",
+    "url": "https://t.me/easobi_ai/23398",
+    "time_kst": "10-18 17:30"
    },
    {
     "channels": 2,
-    "channel": "서화백의 AI놀이🚀",
-    "head": "📝 텔레그램 심층 분석 Report (07시 07분) 기준 🌡️ 센티먼트 공포 (-60) 💡 요약 AI 및 반도체 섹터의 심각한 부채 우려와 기술주 폭락이 시장 전반에 극심한 공포를 불러일으키고 있습니다. 국제유가 급등에 따른 인플레이션 압력과 중동발 지정학적 리스크가 투자 심리를 최악으로 몰고 있습니다. 🗣️ Top 키…",
-    "url": "https://t.me/easobi_ai/23369",
-    "time_kst": "10-17 07:07"
+    "channel": "하나증권/에너지화학/윤재성",
+    "head": "[하나/에너지화학/윤재성] Weekly Monitor: 이제는 VLCC 운임이 이슈 ▶ 보고서: https://bit.ly/4BdskVm [총평] ▶ WTI 101.4$(+10.4%), Dubai 106.0$ (-2.3%). 정제마진 37.1$(WoW 보합). 석유화학 혼조세 ▶ Top Picks: SK이노베이션, S-O…",
+    "url": "https://t.me/energy_youn/3296",
+    "time_kst": "10-18 17:58"
    },
    {
     "channels": 2,
     "channel": "이상헌 부장 iM 지주/ESG/중소형주",
-    "head": "* CXMT, 3분기 매출 600%대 급증 전망…최대 4천억원 자사주 매입 - 17일(현지시간) 과창판일보•제일재경 등에 따르면 CXMT는 전날 실적 예고를 통해 3분기 매출이 전년 동기 대비 589∼619% 증가한 1천147억∼1천197억 위안(약 22조 9천억∼23조9천억원) 수준일 것으로 추정했다. 2분기 대비로는…",
-    "url": "https://t.me/INSIGHTVALUELEE/10658",
-    "time_kst": "10-17 13:45"
-   },
-   {
-    "channels": 2,
-    "channel": "TNBfolio",
-    "head": "속보: 앤스로픽이 600억 달러 규모 반도체 파이낸싱에서 블랙스톤에 10%가 넘는 수익률을 제시했다. '프로젝트 노스스타'로 불리는 이번 부채 패키지는 구글이 개발한 TPU 반도체 약 1.5GW 분량을 조달하는 데 쓰인다. 성사되면 역대 최대 규모의 반도체 파이낸싱이 될 전망이다. 블랙스톤 펀드는 180억 달러 규모 후순…",
-    "url": "https://t.me/TNBfolio/71588",
-    "time_kst": "10-17 10:07"
-   },
-   {
-    "channels": 2,
-    "channel": "GS의 조선/기계/방산 「바담」",
-    "head": "[해외 잠수함 수주 사활 건 방산업계... 국내 물량 딱 1척 남았다] • 국내 디젤 잠수함 건조 일감이 2029년 예정인 장보고-Ⅲ 배치-Ⅱ 3번함 1척만 남아 내수 절벽 직면 • HD현대중공업은 3조원 이상 규모 아르헨티나 신형 잠수함 사업에 자체 개발 HDS-1500 제안서 제출 • HD현대와 한화오션은 페루·필리핀…",
-    "url": "https://t.me/c/1405984327/8285",
-    "time_kst": "10-17 20:04"
-   },
-   {
-    "channels": 2,
-    "channel": "GS의 조선/기계/방산 「바담」",
-    "head": "[K조선, 그리스 잠수함 수주전… 유럽 경쟁력 시험대] • 그리스 해군 차세대 잠수함 4척 도입 사업에 한화오션(KSS-III)과 HD현대중공업(HDS-2300급) 제안서 제출 • 캐나다 수주전에 이어 독일 티센크루프마린시스템스(TKMS, 212CD급)와 유럽 시장에서 재격돌 전망 • 한화오션은 그리스 현지 조선사 오넥스…",
-    "url": "https://t.me/c/1405984327/8284",
-    "time_kst": "10-17 18:39"
-   },
-   {
-    "channels": 2,
-    "channel": "GS의 조선/기계/방산 「바담」",
-    "head": "[현대重-한화오션, 필리핀 잠수함 수주전서 '격돌'] • 필리핀 해군 중형급 잠수함 2척 도입 사업에서 HD현대중공업과 한화오션 맞대결 • HD현대중공업은 1700t급 HDS-1700과 통합 지원 패키지 제안 • 한화오션은 도산안창호급 기술 기반 장보고-III 수출형 모델 제안 • 동남아 해양 안보 수요 증가 속 수주 성…",
-    "url": "https://t.me/c/1405984327/8286",
-    "time_kst": "10-17 21:24"
-   },
-   {
-    "channels": 2,
-    "channel": "한투증권 미국/중국전략 정정영",
-    "head": "~ 이날 블룸버그에 따르면 마이클 인트레이터는 최고경영자(CEO)는 올해들어 9억7000만달러가 넘는 주식을 처분했다. 지난해 7000만달러 미만의 주식을 매각하는 데 그쳤으나 올해 들어 현금화 속도를 높인 것이다. 이로 인해 그는 최근 2분기 연속 미국 기업 내에서 가장 많은 자사주를 처분한 상위 5인 중 한명으로 이름…",
-    "url": "https://t.me/G2strategy/33782",
-    "time_kst": "10-17 07:38"
-   },
-   {
-    "channels": 2,
-    "channel": "Rafiki research",
-    "head": "주말 칼럼 “가수요” 밸류체인 위치에 따라 사이클의 진폭을 어느 정도 맞는지가 결정됩니다. 오픈AI, 앤트로픽은 수요자, 빅테크는 소매상, 데이터센터는 도매상, 메모리는 제조업체여서 메모리 주문에는 가수요가 있을 겁니다. https://rafikiresearch.blogspot.com/2026/10/column202610…",
-    "url": "https://t.me/rafikiresearch/25941",
-    "time_kst": "10-17 08:01"
+    "head": "* 이란 외무 \"호르무즈 재개방, 美 선택에 달려…대화 문 열렸다\" - 아바스 아라그치 이란 외무장관은 17일(현지시간) 호르무즈 해협 재개방은 미국의 선택에 달려 있다고 강조했다. 이란 반관영 메흐르통신에 따르면 아라그치 장관은 이날 이라크 바그다드에서 열린 이슬람협력기구(OIC) 외교장관회의에서 \"이란은 호르무즈 해협…",
+    "url": "https://t.me/INSIGHTVALUELEE/10667",
+    "time_kst": "10-18 12:08"
    }
   ]
  },
@@ -439,219 +469,219 @@
    {
     "id": "krstock",
     "name": "국내주식갤러리",
-    "posts": 1482,
+    "posts": 1780,
     "capped": true,
-    "burst": 0.8,
-    "base_daily": 1778.4
+    "burst": 1.0,
+    "base_daily": 1850.3
    },
    {
     "id": "stockus",
     "name": "해외주식갤러리",
-    "posts": 2679,
+    "posts": 3985,
     "capped": true,
-    "burst": 0.7,
-    "base_daily": 4032.6
+    "burst": 1.0,
+    "base_daily": 4059.3
    }
   ],
-  "posts_sampled": 529,
+  "posts_sampled": 574,
   "keywords": [
    {
-    "term": "외노자",
-    "count": 33,
+    "term": "마크롱",
+    "count": 14,
     "burst": 99.0,
     "new": true
    },
    {
-    "term": "이민자",
+    "term": "자영업",
     "count": 13,
     "burst": 99.0,
     "new": true
    },
    {
-    "term": "보면",
+    "term": "프랑스",
+    "count": 11,
+    "burst": 99.0,
+    "new": true
+   },
+   {
+    "term": "국민연금",
+    "count": 10,
+    "burst": 99.0,
+    "new": true
+   },
+   {
+    "term": "연기금",
     "count": 9,
     "burst": 99.0,
     "new": true
    },
    {
-    "term": "애들",
-    "count": 9,
-    "burst": 99.0,
+    "term": "보니까",
+    "count": 7,
+    "burst": 92.5,
     "new": true
    },
    {
-    "term": "외노자들",
-    "count": 8,
-    "burst": 99.0,
+    "term": "아침",
+    "count": 6,
+    "burst": 79.3,
     "new": true
+   },
+   {
+    "term": "새끼들",
+    "count": 5,
+    "burst": 66.0,
+    "new": true
+   },
+   {
+    "term": "인생",
+    "count": 5,
+    "burst": 66.0,
+    "new": true
+   },
+   {
+    "term": "평단",
+    "count": 5,
+    "burst": 66.0,
+    "new": true
+   },
+   {
+    "term": "얼마나",
+    "count": 5,
+    "burst": 66.0,
+    "new": true
+   },
+   {
+    "term": "나도",
+    "count": 5,
+    "burst": 66.0,
+    "new": true
+   },
+   {
+    "term": "SK하이닉스",
+    "count": 38,
+    "burst": 2.6,
+    "new": false
+   },
+   {
+    "term": "반등",
+    "count": 7,
+    "burst": 6.2,
+    "new": false
    },
    {
     "term": "AI",
     "count": 7,
-    "burst": 99.0,
-    "new": true
-   },
-   {
-    "term": "없음",
-    "count": 6,
-    "burst": 87.1,
-    "new": true
-   },
-   {
-    "term": "차트",
-    "count": 5,
-    "burst": 72.6,
-    "new": true
-   },
-   {
-    "term": "동남아",
-    "count": 5,
-    "burst": 72.6,
-    "new": true
-   },
-   {
-    "term": "ai",
-    "count": 24,
-    "burst": 31.7,
-    "new": false
-   },
-   {
-    "term": "한국",
-    "count": 13,
-    "burst": 9.9,
-    "new": false
-   },
-   {
-    "term": "트럼프",
-    "count": 7,
-    "burst": 9.2,
-    "new": false
-   },
-   {
-    "term": "진지하게",
-    "count": 7,
-    "burst": 9.2,
-    "new": false
-   },
-   {
-    "term": "삼성전자",
-    "count": 16,
-    "burst": 5.7,
-    "new": false
-   },
-   {
-    "term": "SK하이닉스",
-    "count": 28,
-    "burst": 3.0,
+    "burst": 6.2,
     "new": false
    }
   ],
   "top_recommended": [
    {
     "gallery": "해외주식갤러리",
-    "title": "고백받아준다며 ㅅㅂ",
-    "views": 8352,
-    "recommend": 170,
-    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=18024208&exception_mode=recommend&page=1",
-    "time_kst": "10-17 12:45"
+    "title": "나이키 주식 다 팔아라,,,,,,",
+    "views": 14107,
+    "recommend": 250,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=18034019&exception_mode=recommend&page=1",
+    "time_kst": "10-18 19:28"
    },
    {
     "gallery": "해외주식갤러리",
-    "title": "로드스터 저거 어따 쓰냐는새기들 <- 병신들",
-    "views": 6592,
-    "recommend": 158,
-    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=18022898&exception_mode=recommend&page=2",
-    "time_kst": "10-17 09:55"
+    "title": "프랑스가 기회의 땅인건 맞는듯",
+    "views": 11785,
+    "recommend": 217,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=18032786&exception_mode=recommend&page=1",
+    "time_kst": "10-18 16:13"
    },
    {
     "gallery": "해외주식갤러리",
-    "title": "내가 다팔아이새끼야 결심한 EU.jpg",
-    "views": 7781,
-    "recommend": 155,
-    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=18026144&exception_mode=recommend&page=1",
-    "time_kst": "10-17 17:29"
+    "title": "하이닉스 280만원일때 나온 기사",
+    "views": 11053,
+    "recommend": 201,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=18030145&exception_mode=recommend&page=1",
+    "time_kst": "10-18 08:50"
    },
    {
     "gallery": "해외주식갤러리",
-    "title": "워렌버핏 근황",
-    "views": 7857,
-    "recommend": 147,
-    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=18025467&exception_mode=recommend&page=1",
-    "time_kst": "10-17 15:27"
+    "title": "국민연금 182조 증발로 2분기 번돈 다 날림",
+    "views": 9147,
+    "recommend": 162,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=18031081&exception_mode=recommend&page=1",
+    "time_kst": "10-18 11:50"
    },
    {
     "gallery": "해외주식갤러리",
-    "title": "너희 증권사가 제일 싫어하는 게 뭔줄 아냐?",
-    "views": 8129,
-    "recommend": 141,
-    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=18023408&exception_mode=recommend&page=1",
-    "time_kst": "10-17 11:01"
+    "title": "2주전 블라인드 시발 ㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋ",
+    "views": 12715,
+    "recommend": 151,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=18031749&exception_mode=recommend&page=1",
+    "time_kst": "10-18 13:31"
    }
   ],
   "top_viewed": [
    {
     "gallery": "국내주식갤러리",
-    "title": "ai가 이미지도 올리면 존나 가관일듯",
-    "views": 24440,
-    "recommend": 0,
-    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3689286&page=1",
-    "time_kst": "10-18 05:56"
+    "title": "금요일에 반등 나왔을때 들어갔으면 진짜 조옷될 뻔했네",
+    "views": 17008,
+    "recommend": 1,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3694298&page=2",
+    "time_kst": "10-19 05:24"
    },
    {
     "gallery": "국내주식갤러리",
-    "title": "버핏 봐라 늙어봐야 돈 다 필요없다",
-    "views": 24439,
+    "title": "하따치려는 새끼들 많은거보니깐",
+    "views": 16993,
     "recommend": 0,
-    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3689285&page=1",
-    "time_kst": "10-18 05:55"
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3694297&page=2",
+    "time_kst": "10-19 05:23"
    },
    {
     "gallery": "국내주식갤러리",
-    "title": "하닉, 삼전 딱 중간 평단은 어느 정도 되냐???",
-    "views": 24439,
+    "title": "하닉 180 삼전 27 두번 다시 안올 고점에 물린거냐",
+    "views": 16898,
     "recommend": 0,
-    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3689284&page=1",
-    "time_kst": "10-18 05:51"
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3694296&page=2",
+    "time_kst": "10-19 05:22"
    },
    {
     "gallery": "국내주식갤러리",
-    "title": "동전주 1억치 사면",
-    "views": 24435,
-    "recommend": 0,
-    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3689282&page=1",
-    "time_kst": "10-18 05:46"
+    "title": "아니 ai한테 휘둘리지마!!!",
+    "views": 16766,
+    "recommend": 1,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3694295&page=2",
+    "time_kst": "10-19 05:21"
    },
    {
     "gallery": "국내주식갤러리",
-    "title": "파두는 5만 밑까지 뺄라나",
-    "views": 24418,
+    "title": "오늘 갭하락 시작은 확정이지?",
+    "views": 16566,
     "recommend": 0,
-    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3689281&page=1",
-    "time_kst": "10-18 05:45"
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3694303&page=2",
+    "time_kst": "10-19 05:26"
    },
    {
     "gallery": "국내주식갤러리",
-    "title": "ai가 있다고??",
-    "views": 24411,
+    "title": "아메헤카,,",
+    "views": 16464,
     "recommend": 0,
-    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3689280&page=1",
-    "time_kst": "10-18 05:43"
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3694302&page=2",
+    "time_kst": "10-19 05:26"
    },
    {
     "gallery": "국내주식갤러리",
-    "title": "갤 ai 댓글 꼬라지보면",
-    "views": 24398,
+    "title": "여기 온도 보니까 저점 아직 멀었다 ㅇㅇ",
+    "views": 16447,
     "recommend": 0,
-    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3689279&page=1",
-    "time_kst": "10-18 05:38"
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3694301&page=2",
+    "time_kst": "10-19 05:25"
    },
    {
     "gallery": "국내주식갤러리",
-    "title": "삼전7만원 가면",
-    "views": 24394,
+    "title": "9시 예상",
+    "views": 16435,
     "recommend": 0,
-    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3689278&page=1",
-    "time_kst": "10-18 05:37"
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3694294&page=2",
+    "time_kst": "10-19 05:20"
    }
   ]
  }
