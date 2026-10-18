@@ -109,11 +109,16 @@ def probe_flow(code):
         print(f"== KIS inquire-investor rows={len(inv)} range={inv['date'].min().date() if len(inv) else '-'} ~ {inv['date'].max().date() if len(inv) else '-'}")
     except Exception as ex:
         print("KIS inquire-investor 실패:", ex)
+    # 1차 프로브(10/19 05:52 KST): KIS 30행(9/2~10/19), 네이버 /api/stock/{code}/trend 는
+    # pageSize=60 에 60행(7/20~10/16, 수량+종가), page 파라미터는 무시(page=4 가 page=1 과 동일),
+    # front-api /stock/domestic/trend 는 reutersCode 로 400. → pageSize 상한과 bizdate 커서를 본다.
     cands = [
-        f"https://m.stock.naver.com/api/stock/{code}/trend?pageSize=60&page=1",
-        f"https://m.stock.naver.com/api/stock/{code}/trend?pageSize=60&page=4",
-        f"https://m.stock.naver.com/front-api/stock/domestic/trend?reutersCode={code}&pageSize=60",
-        f"https://m.stock.naver.com/front-api/stock/domestic/trend?reutersCode={code}",
+        f"https://m.stock.naver.com/api/stock/{code}/trend?pageSize=120",
+        f"https://m.stock.naver.com/api/stock/{code}/trend?pageSize=300",
+        f"https://m.stock.naver.com/api/stock/{code}/trend?pageSize=600",
+        f"https://m.stock.naver.com/api/stock/{code}/trend?pageSize=60&bizdate=20260720",
+        f"https://m.stock.naver.com/api/stock/{code}/trend?pageSize=60&endDate=20260720",
+        f"https://m.stock.naver.com/api/stock/{code}/trend?pageSize=60&startDate=20260101&endDate=20260720",
     ]
     for url in cands:
         try:
