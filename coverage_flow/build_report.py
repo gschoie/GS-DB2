@@ -111,7 +111,7 @@ def frgn_cell(px):
         return "<td class='r'><span class=na>–</span></td>"
     asof = px.get("frgn_pct_asof") or ""
     tag = f" <small class='stale'>{esc(asof[5:].replace('-', '/'))}</small>" if asof else ""
-    return f"<td class='r'>{n(v, 2, sign=False)}%{tag}</td>"
+    return f"<td class='r'>{n(v, 1, sign=False)}%{tag}</td>"
 
 
 def returns_table(rows):
