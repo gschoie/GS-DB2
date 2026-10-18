@@ -1,0 +1,88 @@
+name: DART 생산능력·가동률
+
+# OpenDART 정기보고서(사업·반기·분기)에서 생산능력/생산실적/가동률 표를 모아 대시보드로.
+# 보고서 시즌(3·5·8·11월 20일 KST 07:00)에 자동 실행 + 수동 실행(일부 회사·단계 선택).
+# 원문 zip 은 actions/cache 에만 보관(리포에는 추출 결과·정규화 JSON 만 커밋).
+on:
+  workflow_dispatch:
+    inputs:
+      codes:
+        description: "종목코드 콤마 목록 (비우면 config 전체)"
+        default: ""
+      stage:
+        description: "실행 단계"
+        type: choice
+        default: "fetch-extract"
+        options: ["fetch-extract", "full"]
+      force:
+        description: "이미 추출/정규화한 보고서도 다시"
+        type: boolean
+        default: false
+      years:
+        description: "최근 n년"
+        default: "3"
+  schedule:
+    - cron: "0 22 19 3,5,8,11 *"   # 20일 07:00 KST
+
+permissions:
+  contents: write
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: 패키지 설치
+        working-directory: dart_capacity
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: 테스트 — 표 선정 규칙
+        working-directory: dart_capacity
+        run: python tests/test_extract.py
+
+      - name: 원문 zip 캐시 복원
+        uses: actions/cache@v4
+        with:
+          path: dart_capacity/data/raw
+          key: dart-capacity-raw-${{ github.run_id }}
+          restore-keys: dart-capacity-raw-
+
+      - name: 수집 (OpenDART)
+        working-directory: dart_capacity
+        env:
+          DART_API_KEY: ${{ secrets.DART_API_KEY }}
+        run: python fetch.py --codes "${{ inputs.codes }}" --years "${{ inputs.years || '3' }}"
+
+      - name: 추출 (표 잘라내기)
+        working-directory: dart_capacity
+        run: python extract.py --codes "${{ inputs.codes }}" --preview ${{ inputs.force && '--force' || '' }}
+
+      - name: 정규화 (Claude API)
+        if: ${{ inputs.stage == 'full' || github.event_name == 'schedule' }}
+        working-directory: dart_capacity
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: |
+          if [ -f normalize.py ]; then python normalize.py --codes "${{ inputs.codes }}" ${{ inputs.force && '--force' || '' }}
+          else echo "::notice::normalize.py 아직 없음 — 추출까지만"; fi
+
+      - name: 커밋 및 푸시
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add dart_capacity/data
+          if git diff --cached --quiet; then
+            echo "변경 없음 — 커밋 생략"
+          else
+            git commit -m "chore(dart-capacity): 수집·추출 $(TZ=Asia/Seoul date +%Y-%m-%d\ %H:%M)"
+            git pull --rebase origin "${{ github.ref_name }}"
+            git push origin HEAD:"${{ github.ref_name }}"
+          fi

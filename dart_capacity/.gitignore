@@ -1,0 +1,3 @@
+# 원문 zip 캐시(회사당 수십 MB) — 러너의 actions/cache 로만 보관하고 리포에는 넣지 않는다
+data/raw/
+__pycache__/
