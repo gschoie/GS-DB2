@@ -208,6 +208,26 @@ class Active(unittest.TestCase):
         self.assertEqual(metrics.active_etf_hits({}, {"x"}), [])
 
 
+class NaverTrend(unittest.TestCase):
+    def test_frame_and_merge(self):
+        rows = [{"itemCode": "009540", "bizdate": "20261016", "foreignerPureBuyQuant": "+16,135", "organPureBuyQuant": "-6,507",
+                 "individualPureBuyQuant": "-10,120", "closePrice": "264,500"},
+                {"itemCode": "009540", "bizdate": "20261015", "foreignerPureBuyQuant": "-1,000", "organPureBuyQuant": "0",
+                 "individualPureBuyQuant": "+1,000", "closePrice": "260,000"},
+                {"itemCode": "009540", "bizdate": "20261014", "foreignerPureBuyQuant": "x", "closePrice": "0"}]   # 종가 0 → 버림
+        nv = kis.naver_trend_frame(rows)
+        self.assertEqual(len(nv), 2)
+        self.assertAlmostEqual(nv.iloc[-1]["외국인"], round(16135 * 264500 / 1e8, 1))   # 42.7억 근사
+        self.assertAlmostEqual(nv.iloc[0]["개인"], round(1000 * 260000 / 1e8, 1))
+        k = kis.investor_frame([{"stck_bsop_date": "20261016", "prsn_ntby_tr_pbmn": "-1000", "frgn_ntby_tr_pbmn": "4000", "orgn_ntby_tr_pbmn": "-1700"}])
+        m = kis.merge_investor(k, nv)
+        self.assertEqual(len(m), 2)
+        self.assertEqual(float(m[m["date"] == "2026-10-16"]["외국인"].iloc[0]), 40.0)   # 같은 날짜는 한투 금액 우선
+        self.assertEqual(float(m[m["date"] == "2026-10-15"]["외국인"].iloc[0]), -2.6)  # 없는 날짜만 네이버 근사
+        self.assertTrue(kis.naver_trend_frame([]).empty)
+        self.assertIs(kis.merge_investor(k, kis.naver_trend_frame([])), k)
+
+
 class Frames(unittest.TestCase):
     def test_kis_frames(self):
         rows = [{"stck_bsop_date": "20261016", "stck_oprc": "100", "stck_hgpr": "110", "stck_lwpr": "90", "stck_clpr": "105", "acml_vol": "1000", "acml_tr_pbmn": "200000000"},
