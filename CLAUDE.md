@@ -28,6 +28,7 @@
 | `source_watcher/` | 외부 소스 감시 |
 | `vacation_tracker/` | 친구 휴가 일정 추적 — 지정 친구와의 텔레그램 1:1 대화에서 휴가 보고를 잡아 정리 |
 | `macro_desk/` | 매크로 데스크 — 금리·환율·원자재 + 발표 일정 달력 + 지표 해석 가이드 (`macro-desk.yml`, 매일 21:00) |
+| `dart_capacity/` | OpenDART 정기보고서의 생산능력·생산실적·가동률 표 수집 → 정규화 → 대시보드 (`dart-capacity.yml`, 3·5·8·11월 20일) |
 | `gas/` | Google Apps Script 정본 (dispatch_proxy 등) |
 
 관련 별도 리포: `gschoie/tradewinds_telegram_bot`(TradeWinds 해운뉴스, Python+Playwright, 매시 실행), family-talk-daily(이쁘게.말하기).
@@ -1017,5 +1018,18 @@
     - 내년 분기 컨센은 이 표에 없다(WiseReport 분기 그리드엔 fwd 3개가 있으나 Playwright
       필요 — kospi_consensus 40번 방식). 필요해지면 kospi_consensus DB 재사용이 다음 후보.
     - 테스트 60→67개(파서 3 + 보강 4), Playwright 로 ᴺ 배지·국내/해외 안내문 분기 실클릭 검증.
+
+49. **DART 생산능력·가동률 수집 신설 — 1단계(fetch/extract)** (10/19): `dart_capacity/` —
+    config/companies.yaml 16개사(조선·조기·방산·건기, 대한조선은 종목코드 공란 → corpCode 이름 매칭).
+    `fetch.py`(corpCode → list.json 정기공시 A → document.xml zip, data/raw 는 actions/cache 만·리포 미포함)
+    → `extract.py`(표 본문 **또는 바로 앞 제목·단위 문구**에 키워드가 있는 표만, 이전 표 이후 블록만 문맥으로;
+    원본 마크업 그대로 `data/extracted/<코드>_<rcept_no>.html|.json`) → normalize.py(미작성, 다음 단계).
+    - **컨테이너는 OpenDART·DART 둘 다 프록시 403** → 실행은 러너에서만. `tests/test_extract.py` 가
+      가짜 DART XML 로 선정 규칙 검산.
+    - **main 에 없는 새 워크플로는 dispatch 가 404** — GitHub 가 색인하지 않는다. 브랜치 push 트리거
+      (워크플로 파일 경로 한정, 임시)로 1회 돌려 등록시켰다. 머지 전 push 트리거 제거할 것.
+    - **첫 실행(3개사)은 `DART_API_KEY` 시크릿 부재로 수집 단계에서 중단** — 사용자가 OpenDART
+      인증키를 리포 시크릿에 넣어야 다음으로 간다. 등록 뒤 `codes=329180,012450,241560`,
+      stage=fetch-extract 로 dispatch → 결과가 브랜치에 커밋되면 표 모양을 보고 정규화 설계.
 
 이후 작업은 git log와 이 파일을 갱신하며 이어간다.
