@@ -26,7 +26,7 @@ def esc(s):
 def n(v, nd=0, sign=True):
     if v is None:
         return '<span class="na">–</span>'
-    cls = "pos" if v > 0 else ("neg" if v < 0 else "")
+    cls = ("pos" if v > 0 else ("neg" if v < 0 else "")) if sign else ""
     s = f"{v:+,.{nd}f}" if sign else f"{v:,.{nd}f}"
     return f'<span class="{cls}">{s}</span>'
 
@@ -41,16 +41,20 @@ def _pct(v):
     return n(v, 1) + ("%" if v is not None else "")
 
 
-def shade(v, cap):
-    """조건부서식 음영 — 열별 최대 |값|(cap) 대비 강도. 양수=초록·음수=빨강(.pos/.neg 와 동일 체계).
+UP, DN = "220,38,38", "37,99,235"      # 빨강 / 파랑 (한국 증시 관행: 오르면 빨강, 내리면 파랑)
 
-    0·결측은 음영 없음. 알파 0.08~0.34 — 라이트·다크 모두에서 글자(.pos/.neg)가 살아야
-    하고, 텔레 캡쳐 앨범으로 축소돼도 켜짐/꺼짐이 구분되는 하한을 둔다.
+
+def shade(v, cap):
+    """조건부서식 음영 — 열별 최대 |값|(cap) 대비 강도. **양수=빨강·음수=파랑**(한국 증시 관행,
+    사용자 지정 — .pos/.neg·스파크와 같은 체계).
+
+    0·결측은 음영 없음. 알파 0.08~0.45 — 글자(진한 빨강/파랑)가 살고, 텔레 캡쳐 앨범으로
+    축소돼도 켜짐/꺼짐이 구분되는 하한을 둔다.
     """
     if not v or not cap:
         return ""
-    alpha = 0.08 + 0.26 * min(abs(v) / cap, 1.0)
-    rgb = "21,128,61" if v > 0 else "220,38,38"
+    alpha = 0.08 + 0.37 * min(abs(v) / cap, 1.0)
+    rgb = UP if v > 0 else DN
     return f' style="background:rgba({rgb},{alpha:.2f})"'
 
 
@@ -69,7 +73,7 @@ def spark_svg(vals, w=120, h=30):
     span = (hi - lo) or 1.0
     step = (w - 2) / (len(pts) - 1)
     coords = " ".join(f"{1 + i * step:.1f},{1 + (h - 2) * (1 - (v - lo) / span):.1f}" for i, v in enumerate(pts))
-    color = "#15803d" if pts[-1] >= pts[0] else "#dc2626"
+    color = f"rgb({UP})" if pts[-1] >= pts[0] else f"rgb({DN})"
     return (f'<svg class="spark" width="{w}" height="{h}" viewBox="0 0 {w} {h}" aria-label="3개월 주가">'
             f'<polyline fill="none" stroke="{color}" stroke-width="1.5" points="{coords}"/></svg>')
 
@@ -276,10 +280,10 @@ table{{width:100%;border-collapse:collapse;font-size:13px}}th,td{{padding:7px 8p
 th{{font-size:11px;color:var(--muted);font-weight:700;letter-spacing:.03em;background:#f9fafb}}th small{{font-weight:400}}
 td small{{display:block;color:var(--muted);font-size:11px}}
 th.r,td.r{{text-align:right;font-variant-numeric:tabular-nums}}
-.pos{{color:#15803d}}.neg{{color:#dc2626}}.na{{color:#9ca3af}}
+.pos{{color:#b91c1c}}.neg{{color:#1d4ed8}}.na{{color:#9ca3af}}
 .mini{{display:inline-block;font-size:10px;font-weight:800;padding:1px 6px;border-radius:3px;margin-left:4px;white-space:nowrap}}
-.mini.b{{background:#dcf5e7;color:#0f7a45}}.mini.s{{background:#fbe1dd;color:#b03a2e}}
-.rsi-lo{{color:#0f7a45;font-weight:700}}.rsi-hi{{color:#b03a2e;font-weight:700}}
+.mini.b{{background:#fde2e2;color:#b91c1c}}.mini.s{{background:#dbe6fd;color:#1d4ed8}}
+.rsi-lo{{color:#1d4ed8;font-weight:700}}.rsi-hi{{color:#b91c1c;font-weight:700}}
 td.empty{{color:var(--muted);text-align:center;padding:18px}}
 tr.gh td{{background:#eef2f7;color:#1f2937;font:700 12px Georgia,"Noto Serif KR",serif;letter-spacing:.06em;padding:6px 8px}}
 table.compact{{font-size:12px}}
