@@ -1017,5 +1017,11 @@
     - 내년 분기 컨센은 이 표에 없다(WiseReport 분기 그리드엔 fwd 3개가 있으나 Playwright
       필요 — kospi_consensus 40번 방식). 필요해지면 kospi_consensus DB 재사용이 다음 후보.
     - 테스트 60→67개(파서 3 + 보강 4), Playwright 로 ᴺ 배지·국내/해외 안내문 분기 실클릭 검증.
+    - **첫 run 실측 — ᴺ 이 통째로 죽어 있었다**: 전 국내 종목이 `read_tables` 에서
+      "Import html5lib failed". 러너의 pandas 3.x/lxml 6.x 업데이트 이후 lxml 플레이버가
+      네이버 페이지 파싱에 실패해 bs4+html5lib 폴백을 찾는데 미설치였고, **10/17 스냅샷부터
+      이미 naver=None** — 기존 컨센 PER ᴺ 덮어쓰기도 조용히 야후 산출값으로 돌아가 있었다
+      (30번 부류: 예외를 삼키는 폴백은 죽어도 티가 안 난다). requirements.txt 에 html5lib
+      한 줄로 복구. 수집 로그의 '📊 네이버 컨센/분기 재무 적용' 줄이 살아있는지가 관측 지점.
 
 이후 작업은 git log와 이 파일을 갱신하며 이어간다.
