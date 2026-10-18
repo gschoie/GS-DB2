@@ -42,6 +42,7 @@ INCOME = frame({
     "Total Revenue":  [1000.0, 1200.0, 1400.0, 1600.0],
     "Net Income":     [100.0,  120.0,  140.0,  160.0],
     "EBITDA":         [200.0,  240.0,  280.0,  320.0],
+    "Operating Income": [150.0, 180.0, 210.0, 240.0],
     "Diluted Average Shares": [100.0, 100.0, 100.0, 100.0],
 }, PERIODS)
 
@@ -60,13 +61,21 @@ HISTORY = pd.DataFrame(
 EARNINGS_EST = pd.DataFrame({"avg": [0.5, 0.6, 2.0, 2.4]}, index=["0q", "+1q", "0y", "+1y"])
 REVENUE_EST = pd.DataFrame({"avg": [400.0, 450.0, 1800.0, 2100.0]}, index=["0q", "+1q", "0y", "+1y"])
 
+QUARTER_PERIODS = [pd.Timestamp(d) for d in
+                   ("2025-06-30", "2025-09-30", "2025-12-31", "2026-03-31", "2026-06-30")]
+QUARTERLY = frame({
+    "Total Revenue":    [300.0, 310.0, 320.0, 330.0, 340.0],
+    "Operating Income": [30.0,  31.0,  32.0,  33.0,  34.0],
+    "Net Income":       [20.0,  21.0,  22.0,  23.0,  24.0],
+}, QUARTER_PERIODS)
+
 # 환율 시계열(주가통화 → 재무통화). 전 구간 0.5로 두면 환산 검산이 단순해진다.
 FX_HISTORY = pd.DataFrame({"Close": [0.5] * 5}, index=HISTORY.index)
 
 
 class FakeTicker:
     def __init__(self, info=None, history=None, income=None, balance=None,
-                 earnings=None, revenue=None):
+                 earnings=None, revenue=None, quarterly=None):
         self.info = info if info is not None else {"currency": "KRW", "financialCurrency": "KRW",
                                                    "payoutRatio": 0.2}
         self._history = HISTORY if history is None else history
@@ -74,6 +83,7 @@ class FakeTicker:
         self.balance_sheet = BALANCE if balance is None else balance
         self.earnings_estimate = EARNINGS_EST if earnings is None else earnings
         self.revenue_estimate = REVENUE_EST if revenue is None else revenue
+        self.quarterly_income_stmt = QUARTERLY if quarterly is None else quarterly
 
     def history(self, **kwargs):
         return self._history
@@ -157,6 +167,55 @@ class ForwardConsensus(unittest.TestCase):
         self.assertTrue(far["unavailable"])
         for metric in ("per", "pbr", "roe", "psr"):
             self.assertIsNone(far[metric])
+
+
+class FinancialDetails(unittest.TestCase):
+    """회사 행 클릭 시 펼치는 재무 상세(매출·영업이익·순이익·OPM·NPM) 조립 검산."""
+
+    def setUp(self):
+        self.fin = run(FakeTicker())["financials"]
+
+    def test_annual_covers_all_yahoo_years_plus_consensus(self):
+        labels = [r["label"] for r in self.fin["annual"]]
+        self.assertEqual(labels, ["2022", "2023", "2024", "2025", "2026E", "2027E"])
+
+    def test_annual_margins(self):
+        y = {r["label"]: r for r in self.fin["annual"]}["2025"]
+        self.assertEqual(y["revenue"], 1600)
+        self.assertEqual(y["op"], 240)
+        self.assertEqual(y["ni"], 160)
+        self.assertEqual(y["opm"], 15.0)
+        self.assertEqual(y["npm"], 10.0)
+
+    def test_consensus_year_has_no_operating_income(self):
+        # 야후에 영업이익 컨센 항목이 없다 → E 줄의 영업이익·OPM 은 공란이 정직하다.
+        e = {r["label"]: r for r in self.fin["annual"]}["2026E"]
+        self.assertIsNone(e["op"])
+        self.assertIsNone(e["opm"])
+        self.assertEqual(e["revenue"], 1800)
+        self.assertEqual(e["ni"], 200)          # EPS 2.0 × 100주
+        self.assertEqual(e["npm"], 11.11)
+
+    def test_quarterly_actuals_plus_two_estimate_quarters(self):
+        labels = [r["label"] for r in self.fin["quarterly"]]
+        # 확정 5개 분기 + 0q·+1q 컨센(마지막 확정 분기에서 3개월씩 굴린 라벨).
+        self.assertEqual(labels, ["2Q25", "3Q25", "4Q25", "1Q26", "2Q26", "3Q26E", "4Q26E"])
+        est = {r["label"]: r for r in self.fin["quarterly"]}["3Q26E"]
+        self.assertEqual(est["kind"], "E")
+        self.assertEqual(est["ni"], 50)          # EPS 0.5 × 100주
+        self.assertEqual(est["revenue"], 400)
+        self.assertEqual(est["npm"], 12.5)
+        self.assertIsNone(est["op"])
+
+    def test_quarterly_margins(self):
+        q = {r["label"]: r for r in self.fin["quarterly"]}["2Q26"]
+        self.assertEqual(q["opm"], 10.0)         # 34/340
+        self.assertEqual(q["npm"], 7.06)         # 24/340
+
+    def test_no_quarterly_statement_means_no_estimate_quarters(self):
+        # 확정 분기가 하나도 없으면 0q·+1q 라벨을 지어낼 기준이 없다 → 분기 전체 공란.
+        fin = run(FakeTicker(quarterly=pd.DataFrame()))["financials"]
+        self.assertEqual(fin["quarterly"], [])
 
 
 class NanTailRows(unittest.TestCase):

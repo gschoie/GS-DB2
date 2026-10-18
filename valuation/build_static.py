@@ -366,6 +366,18 @@ font-size:13px;padding:0 6px 0 0;line-height:1}
 td.name .tk{color:var(--muted);font-size:11px;margin-left:6px}
 tr.co:hover td{background:rgba(24,95,165,.07)}
 tr.co:hover td.name{background:rgba(24,95,165,.07)}
+/* 회사 행 클릭 → 매출·이익 상세 패널 */
+tr.co td{cursor:pointer}
+tr.fin td.inner{background:var(--grp);text-align:left;white-space:normal;padding:10px 14px 12px}
+.fwrap{display:flex;gap:26px;flex-wrap:wrap;align-items:flex-start}
+.fin table{border-collapse:collapse;font-size:12px;white-space:nowrap}
+.fin th,.fin td{border:0;border-bottom:1px solid var(--line);padding:3px 9px;background:transparent;
+position:static;min-width:0}
+.fin th{font-size:11px;color:var(--muted);font-weight:600}
+.fin th:first-child,.fin td:first-child{text-align:left}
+.fin .est{background:var(--est)}
+.fin .neg{color:var(--bad)}
+.fnote{margin-top:8px;font-size:11px;color:var(--muted)}
 .na{color:var(--muted)}
 .mark{color:var(--accent);font-weight:700}
 .src{color:#0a8f5b;font-weight:700}
@@ -395,6 +407,8 @@ tr.co:hover td.name{background:rgba(24,95,165,.07)}
 <div class="tablewrap"><table><thead id="head"></thead><tbody id="body"></tbody></table></div>
 
 <div class="legend">
+  <b>회사 행을 클릭</b>하면 그 회사의 <b>매출·영업이익·순이익·OPM·NPM</b> 상세
+  (연간: 야후가 주는 전 기간 + 올해E·내년E / 분기: 최근 분기 + 다음 2개 분기 컨센)가 펼쳐진다.<br>
   <b>확정(A)</b> = 회계연도 기말 주가·재무제표 기준 · <b>컨센(E)</b> = 음영 열, 현재 주가 기준 ·
   <b>시가총액</b> = 백만달러 환산<br>
   <b><span class="src">ᴺ</span> 표시</b>는 <b>국내 컨센(에프앤가이드 · 네이버 금융)</b> 원본이다 —
@@ -531,7 +545,7 @@ function render(){
             ` <button class="del all" data-del="__all" title="임시 조회 전체 지우기">전체 지우기</button></td>`+
             `<td colspan="${span-1}"></td></tr>`;
     for(const c of adhoc){
-      html += `<tr class="co"><td class="name">`+
+      html += `<tr class="co" data-co="${c.ticker}|${c.name}"><td class="name">`+
               `<button class="del" data-del="${c.ticker}|${c.name}" title="이 종목 지우기">×</button>`+
               `${c.name}<span class="tk">${c.ticker}</span></td>`+
               `<td>${c.market_cap_musd!=null?c.market_cap_musd.toLocaleString():''}</td>`+
@@ -557,7 +571,7 @@ function render(){
       html += `<tr class="reg"><td class="name">${region.region}`+
               `<span class="cnt">${list.length}</span></td><td colspan="${span-1}"></td></tr>`;
       for(const c of list){
-        html += `<tr class="co"><td class="name">${c.name}<span class="tk">${c.ticker}</span></td>`+
+        html += `<tr class="co" data-co="${c.ticker}|${c.name}"><td class="name">${c.name}<span class="tk">${c.ticker}</span></td>`+
                 `<td>${c.market_cap_musd!=null?c.market_cap_musd.toLocaleString():''}</td>`+
                 cells((m,a)=>{
                   const y=(c.years||[]).find(y=>y.year===a.year);
@@ -597,8 +611,55 @@ document.getElementById('chips').addEventListener('click', e=>{
   render();
 });
 document.getElementById('q').addEventListener('input', e=>{ state.q = e.target.value; render(); });
+
+/* ── 회사 행 클릭 → 매출·영업이익·순이익·OPM·NPM 상세 ──
+   연간은 야후가 주는 전 기간(보통 4~5개 연도) + 올해E·내년E 컨센,
+   분기는 야후가 주는 최근 분기(보통 5개) + 0q·+1q 컨센.
+   영업이익 컨센·그 너머 분기 컨센은 야후에 항목이 없어 비워 둔다(지어내지 않는다). */
+const FIN_ROWS=[['revenue','매출'],['op','영업이익'],['ni','순이익'],['opm','OPM'],['npm','NPM']];
+function finTable(title, rows, scale){
+  if(!rows || !rows.length)
+    return `<div class="fnote">${title}: 야후에 데이터가 없습니다.</div>`;
+  let h=`<table><tr><th>${title}</th>`+
+    rows.map(r=>`<th class="${r.kind==='E'?'est':''}">${r.label}</th>`).join('')+'</tr>';
+  for(const [k,l] of FIN_ROWS){
+    h+=`<tr><td>${l}${k==='opm'||k==='npm'?' (%)':''}</td>`+rows.map(r=>{
+      const v=r[k];
+      const s=v==null?'':(k==='opm'||k==='npm'?v.toFixed(1):scale(v));
+      return `<td class="${r.kind==='E'?'est':''}${v!=null&&v<0?' neg':''}">${s}</td>`;
+    }).join('')+'</tr>';
+  }
+  return h+'</table>';
+}
+function finDetail(c, span){
+  const f=c.financials;
+  let body;
+  if(!f || (!(f.annual||[]).length && !(f.quarterly||[]).length)){
+    body='재무 상세가 아직 수집되지 않았습니다 — <b>▶ 수집 실행</b> 후(배포까지 3~5분) 새로고침하면 보입니다.';
+  }else{
+    const ccy=f.currency||'';
+    const kr=ccy==='KRW', jp=ccy==='JPY';
+    const div=(kr||jp)?1e8:1e6;
+    const unit=kr?'억원':(jp?'억엔':'백만 '+(ccy||'?'));
+    const scale=v=>Math.round(v/div).toLocaleString();
+    body=`<div class="fwrap"><div>${finTable('연간',f.annual,scale)}</div>`+
+         `<div>${finTable('분기',f.quarterly,scale)}</div></div>`+
+         `<div class="fnote">단위 ${unit} · OPM=영업이익률 · NPM=순이익률 · 음영=컨센(E, 야후 기준) · `+
+         `영업이익 컨센과 다다음 분기 너머의 분기 컨센은 야후가 제공하지 않아 공란 · `+
+         `분기 확정치는 야후 무료 API가 최근 5개 분기 안팎까지만 준다</div>`;
+  }
+  return `<tr class="fin"><td class="inner" colspan="${span}">${body}</td></tr>`;
+}
+
 document.getElementById('body').addEventListener('click', e=>{
-  const b = e.target.closest('.del'); if(b) hideAdhoc(b.dataset.del);
+  const b = e.target.closest('.del'); if(b){ hideAdhoc(b.dataset.del); return; }
+  const row = e.target.closest('tr.co[data-co]'); if(!row) return;
+  const open = row.nextElementSibling;
+  if(open && open.classList.contains('fin')){ open.remove(); return; }
+  const c = [...DATA.companies, ...(DATA.adhoc||[])].find(x=>x.ticker+'|'+x.name===row.dataset.co);
+  if(!c) return;
+  const span = 2 + activeMetrics().length*axisFor().length;
+  row.insertAdjacentHTML('afterend', finDetail(c, span));
 });
 
 /* 수집 실행 — GAS 프록시가 valuation.yml 을 workflow_dispatch 로 돌린다.
