@@ -77,6 +77,7 @@ def collect_stock(u, today, live=True):
     inv = kis.fetch_investor(code)
     time.sleep(0.12)
     tech = metrics.technicals(ohlc, today, px.get("price") if live else None)
+    tech["ret"] = metrics.returns(ohlc, today, px.get("price") if live else None, px.get("chg_pct"))
     flow = metrics.flow_summary(inv, today, px.get("mcap"))
     return {**u, "px": px, "tech": tech, "flow": flow}
 
@@ -98,6 +99,49 @@ def collect_etfs(etf_rows):
         except Exception as ex:
             errors.append(f"{e['code']} {e['name']}: {type(ex).__name__}: {ex}")
     return out, errors
+
+
+def probe_flow(code):
+    """러너 프로브: 종목별 일별 수급을 얼마나 길게 받을 수 있나.
+    KIS inquire-investor 행 수·날짜 범위 + 네이버 종목 trend API 후보들의 응답 키."""
+    try:
+        inv = kis.fetch_investor(code)
+        print(f"== KIS inquire-investor rows={len(inv)} range={inv['date'].min().date() if len(inv) else '-'} ~ {inv['date'].max().date() if len(inv) else '-'}")
+    except Exception as ex:
+        print("KIS inquire-investor 실패:", ex)
+    cands = [
+        f"https://m.stock.naver.com/api/stock/{code}/trend?pageSize=60&page=1",
+        f"https://m.stock.naver.com/api/stock/{code}/trend?pageSize=60&page=4",
+        f"https://m.stock.naver.com/front-api/stock/domestic/trend?reutersCode={code}&pageSize=60",
+        f"https://m.stock.naver.com/front-api/stock/domestic/trend?reutersCode={code}",
+    ]
+    for url in cands:
+        try:
+            r = requests.get(url, headers=NAVER_H, timeout=15)
+            body = r.text
+            print(f"== {url}\n   status={r.status_code} len={len(body)}")
+            try:
+                j = r.json()
+                items = j if isinstance(j, list) else (j.get("result") or j.get("data") or j.get("items") or j)
+                if isinstance(items, dict):
+                    print("   top keys:", list(items.keys())[:20])
+                    for k, v in items.items():
+                        if isinstance(v, list) and v and isinstance(v[0], dict):
+                            print(f"   list '{k}' n={len(v)} first keys:", list(v[0].keys()))
+                            print("   first:", {kk: str(vv)[:30] for kk, vv in v[0].items()})
+                            print("   last :", {kk: str(vv)[:30] for kk, vv in v[-1].items()})
+                            break
+                elif isinstance(items, list):
+                    print(f"   list n={len(items)}")
+                    if items and isinstance(items[0], dict):
+                        print("   first keys:", list(items[0].keys()))
+                        print("   first:", {kk: str(vv)[:30] for kk, vv in items[0].items()})
+                        print("   last :", {kk: str(vv)[:30] for kk, vv in items[-1].items()})
+            except Exception:
+                print("   body:", body[:300].replace("\n", " "))
+        except Exception as ex:
+            print(url, "실패:", ex)
+    return 0
 
 
 def probe_etf(code):
@@ -167,12 +211,15 @@ def main(argv=None):
     ap.add_argument("--force", action="store_true", help="휴장일 게이트 무시")
     ap.add_argument("--limit", type=int, default=0, help="종목 수 제한(프로브용)")
     ap.add_argument("--probe-etf", action="store_true", help="ETF 상장주수 소스 탐색 — 응답 키만 찍고 끝(저장 없음)")
+    ap.add_argument("--probe-flow", action="store_true", help="종목별 수급 이력 길이 탐색(KIS 행수·네이버 trend) — 저장 없음")
     a = ap.parse_args(argv)
 
     now = datetime.now(KST)
     today = now.date().isoformat()
     if a.probe_etf:   # 휴장일 게이트보다 먼저 — 프로브는 거래일과 무관
         return probe_etf(load_csv("etf_universe.csv")[0]["code"])
+    if a.probe_flow:
+        return probe_flow(load_csv("universe.csv")[0]["code"])
     mday, mstatus = market_day()
     if mday and mday != today and not a.force:
         print(f"휴장일로 판단(마지막 거래일 {mday}) — 수집 생략")

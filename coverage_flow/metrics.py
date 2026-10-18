@@ -121,6 +121,62 @@ def technicals(ohlc, today, price_now=None):
     }
 
 
+RET_WINDOWS = {"w1": 5, "m1": 21, "m3": 63}      # 거래일 오프셋(건기 브리핑과 같은 규칙)
+
+
+def returns(ohlc, today, price_now=None, chg_pct=None):
+    """등락률 {d1, w1, m1, m3, ytd} (%). 기준가 = 오늘 현재가(장중) 또는 마지막 종가.
+    w1/m1/m3 는 거래일 5/21/63 전 종가 대비, ytd 는 전년 마지막 종가 대비.
+    d1 은 KIS 전일대비(chg_pct)를 그대로 쓴다 — 장중엔 현재가/전일종가, 휴장일엔 마지막 종가의 전일대비.
+    과거 봉이 모자라면 그 칸만 None."""
+    if ohlc is None or ohlc.empty:
+        return {}
+    today = pd.Timestamp(today)
+    conf = ohlc[ohlc["date"] < today]
+    closes = list(conf["c"])
+    dates = list(conf["date"])
+    if price_now:
+        closes.append(float(price_now)); dates.append(today)
+    elif (ohlc["date"] == today).sum():
+        row = ohlc[ohlc["date"] == today].iloc[-1]
+        closes.append(float(row["c"])); dates.append(today)
+    if not closes:
+        return {}
+    last = closes[-1]
+    out = {"d1": None if chg_pct is None else round(float(chg_pct), 2)}
+    if out["d1"] is None and len(closes) >= 2 and closes[-2]:
+        out["d1"] = round((last / closes[-2] - 1) * 100, 2)
+    for k, n in RET_WINDOWS.items():
+        out[k] = round((last / closes[-1 - n] - 1) * 100, 2) if len(closes) > n and closes[-1 - n] else None
+    prev_year = [c for c, d in zip(closes, dates) if d.year < today.year]
+    out["ytd"] = round((last / prev_year[-1] - 1) * 100, 2) if prev_year and prev_year[-1] else None
+    return out
+
+
+FLOW_WINDOWS = {"d5": 5, "m1": 21, "m3": 63}
+
+
+def flow_windows(inv, today):
+    """투자자별 구간 합산(억원) {"frgn":{today,d5,m1,m3,ytd}, "inst":…, "indiv":…, "rows": n}.
+    창은 오늘 잠정 행 포함 최근 n행. 행이 모자라면 그 칸은 None(합산이 '작게' 나오는 것보다
+    빈칸이 낫다 — 30번 교훈). ytd 는 전년도 행이 하나라도 있어 연초가 덮일 때만."""
+    out = {"rows": 0}
+    if inv is None or inv.empty:
+        return out
+    today = pd.Timestamp(today)
+    inv = inv[inv["date"] <= today]
+    has_today = bool((inv["date"] == today).sum())
+    out["rows"] = int(len(inv))
+    covers_year = bool((inv["date"].dt.year < today.year).any())
+    for who, col in (("frgn", "외국인"), ("inst", "기관"), ("indiv", "개인")):
+        w = {"today": round(float(inv.iloc[-1][col]), 1) if has_today else None}
+        for k, nrow in FLOW_WINDOWS.items():
+            w[k] = round(float(inv[col].iloc[-nrow:].sum()), 1) if len(inv) >= nrow else None
+        w["ytd"] = round(float(inv[inv["date"].dt.year == today.year][col].sum()), 1) if covers_year else None
+        out[who] = w
+    return out
+
+
 # ── 수급 ────────────────────────────────────────────────────────
 def streak(vals):
     """최근 값부터 같은 부호가 며칠 이어졌나(+n 순매수, −n 순매도). 0 이면 0."""
@@ -161,6 +217,7 @@ def flow_summary(inv, today, mcap, days=FLOW_DAYS):
         t = inv.iloc[-1]
         out.update(frgn_today=round(float(t["외국인"]), 1), inst_today=round(float(t["기관"]), 1),
                    indiv_today=round(float(t["개인"]), 1))
+    out["win"] = flow_windows(inv, today)
     return out
 
 
