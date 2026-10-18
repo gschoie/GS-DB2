@@ -1,87 +1,39 @@
 # -*- coding: utf-8 -*-
-"""네이버 금융 '기업실적분석'에서 국내 종목의 컨센서스 PER·PBR·ROE를 읽는다.
+"""네이버 모바일 금융 JSON API에서 국내 종목의 컨센 지표·재무를 읽는다.
 
-왜 필요한가
------------
-야후는 국내 종목의 컨센으로 EPS·매출만 준다. 그래서 컨센 PBR·ROE는 우리가
-이익잉여금 롤포워드로 자체 산출해 왔다(화면에 `*` 표기). 반면 네이버가 싣는
-에프앤가이드 컨센은 **추정 PER·PBR·ROE를 그대로** 준다 — 국내 종목은 이쪽이
-원본이고, 국내 증권사 추정치라 시장에서 통용되는 값과도 맞는다.
+왜 모바일 API인가
+-----------------
+원래는 PC 종목 페이지(finance.naver.com/item/main.naver)의 '기업실적분석' 표를
+pd.read_html 로 긁었다. Npay 증권 전면 개편(CLAUDE.md 31번)으로 옛 PC 페이지가
+표 없는 SPA 로 바뀌며 죽었다 — 10/19 러너 실측 'No tables found', 스냅샷
+역추적으로는 10/3 이전부터 naver=None. 모바일 JSON API
+(m.stock.naver.com/api/stock/{code}/finance/annual·quarter)는 같은 표를 JSON 으로
+주고, kospi_consensus.scrape.fetch_quarters 가 분기판을 지금도 쓰고 있다
+(러너 생존 확인 10/15).
 
-확정(A) 지표는 건드리지 않는다. 그건 41종목 전부 같은 산식(기말시총÷순이익)으로
-계산해야 피어 비교가 성립하기 때문이다. 여기서 가져오는 건 컨센(E)뿐이다.
+무엇을 가져오나
+---------------
+- estimates(): 연간 추정(E) 열의 PER·PBR·ROE — 국내 종목은 에프앤가이드 컨센이
+  원본이라 야후 산출값을 이걸로 덮어쓴다(화면 ᴺ 표기). 확정(A) 지표는 건드리지
+  않는다(41종목 전부 같은 산식이어야 피어 비교가 성립).
+- financial_rows(): 연간·분기의 매출액·영업이익·당기순이익(억원 → 원 환산) —
+  회사 행 클릭 상세 패널의 국내 보강용. 분기에는 야후에 없는 분기 영업이익
+  컨센까지 실린다.
 
-주의: 표 구조가 바뀌면 조용히 빈 값이 된다(예외를 삼키고 None). 호출 쪽에서
-값이 없으면 기존 롤포워드 산출로 자동 폴백하므로 화면이 비지는 않는다.
+주의: 실패하면 빈 값(예외를 삼킨다). 호출 쪽이 야후 값으로 폴백하므로 화면이
+비지는 않지만, 그만큼 죽어도 티가 안 난다(30번 교훈) — 수집 로그의
+'📊 네이버 컨센/분기 재무 적용' 줄이 살아있는지가 관측 지점이다.
 """
 
 from __future__ import annotations
 
-import io
+import json
 import re
 from urllib.request import Request, urlopen
 
-import pandas as pd
+FINANCE_API = "https://m.stock.naver.com/api/stock/{code}/finance/{period}"
 
-NAVER_ITEM = "https://finance.naver.com/item/main.naver?code={code}"
-
-# 네이버 표의 행 이름 → 우리가 쓰는 키. 'PER(배)' 처럼 단위가 붙어 있어 부분일치로 본다.
-ROW_KEYS = [
-    ("per", ("PER",)),
-    ("pbr", ("PBR",)),
-    ("roe", ("ROE",)),
-]
-
-YEAR_PATTERN = re.compile(r"(20\d{2})\.(\d{2})")
-
-
-def read_tables(code, timeout=20):
-    """네이버 종목 페이지의 표들을 DataFrame 목록으로. (테스트에서 갈아끼우는 이음매)"""
-    request = Request(
-        NAVER_ITEM.format(code=code),
-        headers={"User-Agent": "Mozilla/5.0", "Referer": "https://finance.naver.com/"},
-    )
-    with urlopen(request, timeout=timeout) as response:
-        raw = response.read()
-    # 네이버는 EUC-KR(cp949)로 내려준다.
-    html = raw.decode("cp949", errors="replace")
-    return pd.read_html(io.StringIO(html))
-
-
-def _column_year(column):
-    """열 머리글 → (연도, 추정치 여부). '2026.12(E)' → (2026, True)"""
-    parts = column if isinstance(column, tuple) else (column,)
-    text = " ".join(str(p) for p in parts)
-    match = YEAR_PATTERN.search(text)
-    if not match:
-        return None, False
-    return int(match.group(1)), "(E)" in text.replace(" ", "")
-
-
-def _number(value):
-    if value is None:
-        return None
-    text = str(value).replace(",", "").replace("%", "").strip()
-    if text in ("", "-", "nan", "N/A"):
-        return None
-    try:
-        return float(text)
-    except ValueError:
-        return None
-
-
-def _pick_table(tables):
-    """PER 행을 가진 '기업실적분석' 표를 고른다."""
-    for table in tables:
-        if table is None or table.empty or table.shape[1] < 2:
-            continue
-        labels = table.iloc[:, 0].astype(str)
-        if labels.str.contains("PER").any() and labels.str.contains("ROE").any():
-            return table
-    return None
-
-
-EOKWON = 1e8   # 기업실적분석 표의 금액 단위(억원) → 원
+EOKWON = 1e8   # 표 단위: 억원 → 원
 
 # 재무 상세용 행. '영업이익률' 행이 '영업이익'에 걸리지 않게 lookahead 로 자른다.
 FIN_ROW_KEYS = [
@@ -90,95 +42,126 @@ FIN_ROW_KEYS = [
     ("ni", r"^당기순이익"),
 ]
 
+# 컨센 지표 행. 'PER(배)'처럼 단위가 붙으므로 앞부분 일치로 본다.
+METRIC_ROW_KEYS = [
+    ("per", r"^PER"),
+    ("pbr", r"^PBR"),
+    ("roe", r"^ROE"),
+]
 
-def _column_period(column):
-    """열 머리글 → (연도, 월, 분기열 여부, 추정 여부). 기간 표기가 없으면 None.
 
-    연간/분기 구분은 그룹 머리글('최근 연간 실적'/'최근 분기 실적')의 낱말로 본다.
+def fetch_finance(code, period, timeout=15):
+    """모바일 금융 API 호출 → financeInfo dict. (테스트에서 갈아끼우는 이음매)
+
+    period 는 'annual' 또는 'quarter'. 재무 정보가 없는 종목(신규상장·스팩 등)은
+    financeInfo 가 null 로 온다 → None.
     """
-    parts = column if isinstance(column, tuple) else (column,)
-    text = " ".join(str(p) for p in parts)
-    match = YEAR_PATTERN.search(text)
-    if not match:
-        return None
-    return (int(match.group(1)), int(match.group(2)),
-            ("분기" in text), ("(E)" in text.replace(" ", "")))
+    request = Request(
+        FINANCE_API.format(code=code, period=period),
+        headers={"User-Agent": "Mozilla/5.0", "Referer": "https://m.stock.naver.com/"},
+    )
+    with urlopen(request, timeout=timeout) as response:
+        data = json.loads(response.read().decode("utf-8", errors="replace"))
+    return (data.get("financeInfo") if isinstance(data, dict) else None) or None
 
 
-def financial_rows(code, tables=None):
-    """기업실적분석 표에서 기간별 매출·영업이익·당기순이익(억원 → 원 환산)을 뽑는다.
-
-    반환: {"quarterly": [...], "annual": [...]} — 각 행 {year, month, est, sales, op, ni}.
-    분기는 확정(A) 4~5개 + 당분기(E)까지, 연간 E엔 야후에 없는 영업이익 컨센이 실린다.
-    실패하면 빈 목록 — 호출 쪽이 야후 값을 그대로 쓴다.
-    """
-    empty = {"quarterly": [], "annual": []}
+def safe_fetch(code, period):
+    """fetch_finance 의 예외 흡수판 — 실패 시 None (호출 쪽이 야후로 폴백)."""
     try:
-        frames = tables if tables is not None else read_tables(code)
+        return fetch_finance(code, period)
     except Exception as exc:
-        print(f"    · 네이버 재무 조회 실패({code}): {exc}")
-        return empty
-    table = _pick_table(frames or [])
-    if table is None:
-        return empty
-    labels = table.iloc[:, 0].astype(str)
+        print(f"    · 네이버 재무 조회 실패({code}/{period}): {exc}")
+        return None
 
-    def cell(pattern, position):
-        match = labels.str.match(pattern)
-        if not match.any():
-            return None
-        value = _number(table.iloc[match.idxmax(), position])
-        return value * EOKWON if value is not None else None
 
-    out = {"quarterly": [], "annual": []}
-    for position, column in enumerate(table.columns):
-        period = _column_period(column)
-        if period is None:
+def _number(value):
+    if value is None:
+        return None
+    text = str(value).replace(",", "").replace("%", "").strip()
+    if text in ("", "-", "nan", "N/A", "None"):
+        return None
+    try:
+        return float(text)
+    except ValueError:
+        return None
+
+
+def _columns(info):
+    """trTitleList → [(key, 연도, 월, 추정 여부)]. 기간 표기가 아닌 열은 버린다."""
+    out = []
+    for title in (info or {}).get("trTitleList") or []:
+        key = title.get("key")
+        match = re.match(r"^(20\d\d)\.(\d\d)", str(title.get("title", "")))
+        if not key or not match:
             continue
-        year, month, quarterly, est = period
-        entry = {"year": year, "month": month, "est": est}
-        for key, pattern in FIN_ROW_KEYS:
-            entry[key] = cell(pattern, position)
-        if entry["sales"] is None and entry["op"] is None and entry["ni"] is None:
-            continue
-        out["quarterly" if quarterly else "annual"].append(entry)
-    for bucket in out.values():
-        bucket.sort(key=lambda r: (r["year"], r["month"]))
+        out.append((key, int(match.group(1)), int(match.group(2)),
+                    title.get("isConsensus") == "Y"))
     return out
 
 
-def estimates(code, tables=None):
-    """종목코드 → {연도: {'per':…, 'pbr':…, 'roe':…}} (추정치 열만).
+def _row(info, pattern):
+    """rowList 에서 제목이 패턴에 처음 걸리는 행의 columns dict (없으면 None)."""
+    for row in (info or {}).get("rowList") or []:
+        if re.match(pattern, str(row.get("title", "")).strip()):
+            return row.get("columns") or {}
+    return None
 
-    실패하면 빈 dict. 호출 쪽이 기존 산출로 폴백한다.
+
+def _value(columns, key):
+    if not columns:
+        return None
+    return _number(((columns.get(key) or {}).get("value")))
+
+
+# '안 넘겼다'와 '조회했는데 실패(None)'를 구분하는 보초값 — None 을 넘기면
+# 다시 조회하지 않는다(실패를 두 번 두드리지 않게).
+_UNSET = object()
+
+
+def estimates(code, finance=_UNSET):
+    """종목코드 → {연도: {'per':…, 'pbr':…, 'roe':…}} (연간 추정 열만).
+
+    실패하면 빈 dict. 호출 쪽이 기존 산출(롤포워드)로 폴백한다.
     """
-    try:
-        frames = tables if tables is not None else read_tables(code)
-    except Exception as exc:
-        print(f"    · 네이버 컨센 조회 실패({code}): {exc}")
+    info = finance if finance is not _UNSET else safe_fetch(code, "annual")
+    if not info:
         return {}
-
-    table = _pick_table(frames or [])
-    if table is None:
-        return {}
-
-    labels = table.iloc[:, 0].astype(str)
+    rows = {metric: _row(info, pattern) for metric, pattern in METRIC_ROW_KEYS}
     result = {}
-    for position, column in enumerate(table.columns):
-        info = _column_period(column)
-        if info and info[2]:
-            continue          # '최근 분기 실적' 열 — 분기 PER·ROE 가 연간 컨센을 덮지 않게
-        year, is_estimate = _column_year(column)
-        if not year or not is_estimate:
+    for key, year, _month, est in _columns(info):
+        if not est:
             continue          # 확정 실적 열은 쓰지 않는다(우리 산식으로 계산)
         bucket = {}
-        for key, needles in ROW_KEYS:
-            match = labels.str.contains(needles[0], regex=False)
-            if not match.any():
-                continue
-            value = _number(table.iloc[match.idxmax(), position])
+        for metric, columns in rows.items():
+            value = _value(columns, key)
             if value is not None:
-                bucket[key] = value
+                bucket[metric] = value
         if bucket:
             result[year] = bucket
     return result
+
+
+def financial_rows(code, annual=_UNSET, quarter=_UNSET):
+    """연간·분기의 매출·영업이익·당기순이익(억원 → 원 환산)을 기간별로 뽑는다.
+
+    반환: {"quarterly": [...], "annual": [...]} — 각 행 {year, month, est, sales, op, ni}.
+    실패하면 빈 목록 — 호출 쪽이 야후 값을 그대로 쓴다.
+    """
+    out = {"quarterly": [], "annual": []}
+    for bucket, period, info in (("annual", "annual", annual),
+                                 ("quarterly", "quarter", quarter)):
+        if info is _UNSET:
+            info = safe_fetch(code, period)
+        if not info:
+            continue
+        rows = {field: _row(info, pattern) for field, pattern in FIN_ROW_KEYS}
+        for key, year, month, est in _columns(info):
+            entry = {"year": year, "month": month, "est": est}
+            for field, columns in rows.items():
+                value = _value(columns, key)
+                entry[field] = value * EOKWON if value is not None else None
+            if entry["sales"] is None and entry["op"] is None and entry["ni"] is None:
+                continue
+            out[bucket].append(entry)
+        out[bucket].sort(key=lambda r: (r["year"], r["month"]))
+    return out
