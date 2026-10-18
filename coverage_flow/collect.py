@@ -108,11 +108,15 @@ def collect_stock(u, today, live=True):
     except Exception as ex:
         print(f"  {u['name']} 네이버 수급 이력 실패(한투 30행만 사용): {type(ex).__name__}: {ex}")
     if not live:
-        # 장 시작 전·휴장일: 소스가 미리 내주는 '오늘 0' 행을 버리고 KIS 전일대비(0.00)도 안 쓴다
+        # 장 시작 전·휴장일: 소스가 미리 내주는 '오늘 0' 행을 버리고 KIS 전일대비(0.00)도 안 쓴다.
+        # 외국인 보유비율도 장 전엔 0.00 으로 와서(10/19 05:57 실측) 0 은 '모름' 으로 읽는다.
         inv = metrics.drop_today(inv, today)
+        if not px.get("frgn_pct"):
+            px["frgn_pct"] = None
     tech = metrics.technicals(ohlc, today, px.get("price") if live else None)
     tech["ret"] = metrics.returns(ohlc, today, px.get("price") if live else None,
                                   px.get("chg_pct") if live else None)
+    tech["spark"] = metrics.spark_points(ohlc, today, px.get("price") if live else None)
     flow = metrics.flow_summary(inv, today, px.get("mcap"))
     return {**u, "px": px, "tech": tech, "flow": flow}
 
