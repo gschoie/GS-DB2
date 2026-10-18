@@ -177,6 +177,15 @@ def flow_windows(inv, today):
     return out
 
 
+def drop_today(inv, today):
+    """장이 아직 안 열렸는데(live=False) 소스가 '오늘' 행을 0으로 미리 내주면 버린다.
+    10/19 05:57 실측: 한투 inquire-investor 가 당일 행을 0 으로 주어 '오늘 0' 이 찍히고
+    5일 창의 하루를 잡아먹었다. 거짓 0 은 빈칸보다 나쁘다(30번 교훈)."""
+    if inv is None or inv.empty:
+        return inv
+    return inv[inv["date"] < pd.Timestamp(today)].reset_index(drop=True)
+
+
 # ── 수급 ────────────────────────────────────────────────────────
 def streak(vals):
     """최근 값부터 같은 부호가 며칠 이어졌나(+n 순매수, −n 순매도). 0 이면 0."""
