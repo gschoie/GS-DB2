@@ -268,12 +268,17 @@ function todoLightbox(src){let ov=$('#todo-lightbox');
  ov.querySelector('img').src=src;ov.classList.add('on')}
 function fillTodoGroups(){const sel=$('#todo-group');if(!sel)return;const cur=sel.value;
  sel.innerHTML='<option value="">기본</option>'+todoGroups().map(g=>`<option value="${esc(g)}"${g===cur?' selected':''}>${esc(g)}</option>`).join('')}
+const todoNoteRows=n=>Math.min(6,Math.max(1,String(n||'').split('\n').length));
+function todoNoteSave(i,text){/* 메모는 타이핑 중 재렌더하면 포커스가 날아가므로 저장·동기화만 하고 다시 그리지 않는다 */
+ const a=todoLoad(),t=a[i];if(!t)return;const v=text.replace(/\s+$/,'');if((t.note||'')===v)return;if(v)t.note=v;else delete t.note;
+ try{localStorage.setItem(TODO_KEY,JSON.stringify(a))}catch{}taskPush('#todo-sync')}
+const todoNoteGrow=el=>{el.style.height='auto';el.style.height=Math.min(el.scrollHeight,180)+'px'};
 const todoImgs=t=>(t.imgs||[]).map((d,k)=>`<img class="todo-thumb" src="${d}" alt="첨부 ${k+1}" title="클릭하면 크게 보기">`).join('');
 function renderTodoArch(){const box=$('#todo-arch-list');if(!box)return;const a=todoArchLoad(),cnt=$('#todo-arch-count');
  if(cnt)cnt.textContent=a.length;
  if(!a.length){box.innerHTML='<p class="empty">보관한 항목이 없습니다. 체크한 뒤 <b>보관</b>을 누르면 여기로 옮겨집니다.</p>';return}
  const row=(t,i)=>{const imgs=todoImgs(t);
-  return `<div class="todo-row arch" data-i="${i}"><span class="todo-text">${esc(t.text)}${imgs?`<span class="todo-thumbs">${imgs}</span>`:''}</span><span class="todo-ts" title="등록 ${todoFmt(t.ts)}">${t.doneTs?'✔':'📦'} ${todoFmt(t.doneTs||t.archTs||t.ts)}</span><button class="todo-restore" type="button" title="진행 중 목록으로 되돌리기">↩</button><button class="todo-arch-del" type="button" title="이 항목만 완전히 삭제">✕</button></div>`};
+  return `<div class="todo-row arch" data-i="${i}"><span class="todo-text">${esc(t.text)}${imgs?`<span class="todo-thumbs">${imgs}</span>`:''}${t.note?`<small class="todo-note-ro">${esc(t.note)}</small>`:''}</span><span class="todo-ts" title="등록 ${todoFmt(t.ts)}">${t.doneTs?'✔':'📦'} ${todoFmt(t.doneTs||t.archTs||t.ts)}</span><button class="todo-restore" type="button" title="진행 중 목록으로 되돌리기">↩</button><button class="todo-arch-del" type="button" title="이 항목만 완전히 삭제">✕</button></div>`};
  const names=['기본',...todoGroups()],buckets=Object.fromEntries(names.map(n=>[n,[]]));
  a.forEach((t,i)=>{buckets[t.group&&names.includes(t.group)?t.group:'기본'].push([t,i])});
  box.innerHTML=names.filter(n=>buckets[n].length).map(n=>
@@ -281,7 +286,7 @@ function renderTodoArch(){const box=$('#todo-arch-list');if(!box)return;const a=
 function renderTodo(){renderTodoArch();const box=$('#todo-list');if(!box)return;fillTodoGroups();const a=todoLoad(),groups=todoGroups();
  if(!a.length&&!groups.length){box.innerHTML='<p class="empty">할 일을 한 줄 적고 ＋추가를 누르세요.</p>';return}
  const row=(t,i)=>{const imgs=todoImgs(t);
-  return `<div class="todo-row${t.done?' done':''}" data-i="${i}"><span class="todo-grip" draggable="true" title="드래그해서 다른 그룹으로 이동">⠿</span><input type="checkbox" ${t.done?'checked':''}><span class="todo-text">${esc(t.text)}${imgs?`<span class="todo-thumbs">${imgs}</span>`:''}</span><span class="todo-ts"${t.doneTs?` title="완료 ${todoFmt(t.doneTs)}"`:''}>${todoFmt(t.ts)}</span><button class="todo-move" type="button" data-mv="-1" title="같은 그룹 안에서 위로">▲</button><button class="todo-move" type="button" data-mv="1" title="같은 그룹 안에서 아래로">▼</button><button class="todo-edit" type="button" title="내용 수정">✎</button><button class="todo-del" type="button" title="삭제">✕</button><button class="todo-arch-one" type="button" title="이 항목만 보관함으로 이동 (삭제 아님)">📦</button></div>`};
+  return `<div class="todo-row${t.done?' done':''}" data-i="${i}"><span class="todo-grip" draggable="true" title="드래그해서 다른 그룹으로 이동">⠿</span><input type="checkbox" ${t.done?'checked':''}><span class="todo-text">${esc(t.text)}${imgs?`<span class="todo-thumbs">${imgs}</span>`:''}<textarea class="todo-note" rows="${todoNoteRows(t.note)}" placeholder="메모…" spellcheck="false" title="항목 메모 — Enter로 저장, Shift+Enter 줄바꿈">${esc(t.note||'')}</textarea></span><span class="todo-ts"${t.doneTs?` title="완료 ${todoFmt(t.doneTs)}"`:''}>${todoFmt(t.ts)}</span><button class="todo-move" type="button" data-mv="-1" title="같은 그룹 안에서 위로">▲</button><button class="todo-move" type="button" data-mv="1" title="같은 그룹 안에서 아래로">▼</button><button class="todo-edit" type="button" title="내용 수정">✎</button><button class="todo-del" type="button" title="삭제">✕</button><button class="todo-arch-one" type="button" title="이 항목만 보관함으로 이동 (삭제 아님)">📦</button></div>`};
  const names=['기본',...groups],buckets=Object.fromEntries(names.map(n=>[n,[]]));
  a.forEach((t,i)=>{buckets[t.group&&names.includes(t.group)?t.group:'기본'].push([t,i])});
  box.innerHTML=names.map(n=>{const list=buckets[n],undone=list.filter(([t])=>!t.done).length;
@@ -552,6 +557,10 @@ $('#todo-arch-list')?.addEventListener('click',e=>{
   const{archTs,doneTs,...rest}=t;todoArchStore(a);todoSave([{...rest,done:false},...todoLoad()]);return}
  const del=e.target.closest('.todo-arch-del');if(!del)return;const i=+del.closest('.todo-row').dataset.i,t=a[i];if(!t)return;
  if(!confirm(`보관함에서 완전히 삭제할까요? — ${t.text}`))return;a.splice(i,1);todoArchSave(a)});
+let todoNoteT;
+$('#todo-list')?.addEventListener('input',e=>{const el=e.target.closest('.todo-note');if(!el)return;todoNoteGrow(el);clearTimeout(todoNoteT);const i=+el.closest('.todo-row').dataset.i;todoNoteT=setTimeout(()=>todoNoteSave(i,el.value),400)});
+$('#todo-list')?.addEventListener('focusout',e=>{const el=e.target.closest('.todo-note');if(!el)return;clearTimeout(todoNoteT);todoNoteSave(+el.closest('.todo-row').dataset.i,el.value);el.value=el.value.replace(/\s+$/,'');todoNoteGrow(el)});
+$('#todo-list')?.addEventListener('keydown',e=>{const el=e.target.closest('.todo-note');if(!el)return;e.stopPropagation();if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();el.blur()}if(e.key==='Escape')el.blur()});
 $('#todo-list')?.addEventListener('change',e=>{const row=e.target.closest('.todo-row');if(!row||e.target.type!=='checkbox')return;const a=todoLoad(),t=a[+row.dataset.i];if(!t)return;t.done=e.target.checked;if(t.done)t.doneTs=Date.now();else delete t.doneTs;todoSave(a)});
 $('#todo-list')?.addEventListener('click',e=>{
  if(e.target.closest('.todo-g-grip')){e.preventDefault();return}/* 그립 클릭이 그룹 접힘 토글로 번지지 않게 */
@@ -574,7 +583,7 @@ $('#todo-list')?.addEventListener('click',e=>{
  const del=e.target.closest('.todo-del');if(!del)return;const row=del.closest('.todo-row'),a=todoLoad(),t=a[+row.dataset.i];if(!t)return;if(!confirm(`삭제할까요? — ${t.text}`))return;a.splice(+row.dataset.i,1);todoSave(a)});
 // 드래그 앤 드랍으로 할 일을 다른 그룹에 떨어뜨려 이동
 let TODO_DRAG=-1;
-$('#todo-list')?.addEventListener('dragstart',e=>{const row=e.target.closest('.todo-row');if(!row)return;TODO_DRAG=+row.dataset.i;e.dataTransfer.effectAllowed='move';row.classList.add('dragging')});
+$('#todo-list')?.addEventListener('dragstart',e=>{if(e.target.closest?.('.todo-note'))return;const row=e.target.closest('.todo-row');if(!row)return;TODO_DRAG=+row.dataset.i;e.dataTransfer.effectAllowed='move';row.classList.add('dragging')});
 $('#todo-list')?.addEventListener('dragend',()=>{TODO_DRAG=-1;$$('#todo-list .drop-hover,#todo-list .dragging,#todo-list .drop-before,#todo-list .drop-after').forEach(x=>x.classList.remove('drop-hover','dragging','drop-before','drop-after'))});
 $('#todo-list')?.addEventListener('dragover',e=>{if(TODO_DRAG<0)return;
  const rowEl=e.target.closest('.todo-row');
