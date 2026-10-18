@@ -91,8 +91,8 @@ class Returns(unittest.TestCase):
         sp = metrics.spark_points(df, today, price_now=250)
         self.assertEqual(len(sp), 63); self.assertEqual(sp[-1], 250.0); self.assertEqual(sp[0], 100 + 99 - 61)
         self.assertEqual(metrics.spark_points(pd.DataFrame(), today), [])
-        svg = build_report.spark_svg(sp); self.assertIn("<svg", svg); self.assertIn("#15803d", svg)
-        self.assertIn("#dc2626", build_report.spark_svg([10, 9, 8])); self.assertIn("na", build_report.spark_svg([5]))
+        svg = build_report.spark_svg(sp); self.assertIn("<svg", svg); self.assertIn("rgb(220,38,38)", svg)   # 오르면 빨강(한국식)
+        self.assertIn("rgb(37,99,235)", build_report.spark_svg([10, 9, 8]))   # 내리면 파랑; self.assertIn("na", build_report.spark_svg([5]))
 
     def test_short_history_none(self):
         df = ohlc([100, 101, 102, 103], start="2026-10-05")
@@ -336,6 +336,18 @@ class Outputs(unittest.TestCase):
             self.assertIn(s, h)
         self.assertNotIn("chr(", h)
         self.assertNotIn("5일 외인+기관", h)                                  # 시총 대비 열 제거
+
+    def test_heat_conditional_format(self):
+        """조건부 서식: 양수 빨강·음수 파랑 배경, 열 |최대값| 대비 비례, None·0 은 배경 없음."""
+        self.assertEqual(build_report.heat(None, 10), ""); self.assertEqual(build_report.heat(0, 10), "")
+        self.assertEqual(build_report.heat(5, 0), "")
+        hi, lo = build_report.heat(10, 10), build_report.heat(1, 10)
+        self.assertIn("rgba(220,38,38,0.55)", hi); self.assertIn("rgba(220,38,38,0.1", lo)
+        self.assertIn("rgba(37,99,235,0.55)", build_report.heat(-10, 10))
+        self.assertIn("rgba(37,99,235,0.55)", build_report.heat(-99, 10))             # cap 초과는 포화
+        h = build_report.render(fake_payload())
+        self.assertIn("style='background:rgba(220,38,38,", h)                       # 등락·수급 표에 적용
+        self.assertNotIn('<span class="pos">250,000', h)                             # 시총엔 색 없음
 
     def test_grouped_tables(self):
         """표는 조선(조선+조기)·방산·기계 묶음, 성광벤드·태광은 조선 묶음 맨 밑. 묶음 안은 기존 정렬."""

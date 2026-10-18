@@ -26,7 +26,7 @@ def esc(s):
 def n(v, nd=0, sign=True):
     if v is None:
         return '<span class="na">–</span>'
-    cls = "pos" if v > 0 else ("neg" if v < 0 else "")
+    cls = ("pos" if v > 0 else ("neg" if v < 0 else "")) if sign else ""
     s = f"{v:+,.{nd}f}" if sign else f"{v:,.{nd}f}"
     return f'<span class="{cls}">{s}</span>'
 
@@ -41,6 +41,27 @@ def _pct(v):
     return n(v, 1) + ("%" if v is not None else "")
 
 
+UP, DN = "220,38,38", "37,99,235"      # 빨강 / 파랑 (한국 증시 관행: 오르면 빨강, 내리면 파랑)
+
+
+def heat(v, cap):
+    """조건부 서식 — 값의 크기(|v| / cap)에 비례해 칸 배경을 진하게. cap 은 그 열의 |최대값|.
+    None·0·cap 0 이면 배경 없음. 투명도 0.07~0.55 로 글자(진한 빨강/파랑)가 늘 읽히게 한다."""
+    if v is None or not cap or v == 0:
+        return ""
+    a = 0.07 + 0.48 * min(abs(v) / cap, 1.0)
+    return f" style='background:rgba({UP if v > 0 else DN},{a:.2f})'"
+
+
+def col_caps(rows, getter, keys):
+    """열별 |최대값| — 열 안에서 상대 비교(엑셀 색조 척도와 같은 방식)."""
+    caps = {}
+    for k in keys:
+        vals = [abs(getter(r, k)) for r in rows if getter(r, k) is not None]
+        caps[k] = max(vals) if vals else 0
+    return caps
+
+
 def spark_svg(vals, w=120, h=30):
     """종가 목록 → 인라인 SVG 선 차트. 첫 값 대비 끝 값이 오르면 초록, 내리면 빨강. 데이터 없으면 빈칸."""
     pts = [v for v in (vals or []) if v is not None]
@@ -50,7 +71,7 @@ def spark_svg(vals, w=120, h=30):
     span = (hi - lo) or 1.0
     step = (w - 2) / (len(pts) - 1)
     coords = " ".join(f"{1 + i * step:.1f},{1 + (h - 2) * (1 - (v - lo) / span):.1f}" for i, v in enumerate(pts))
-    color = "#15803d" if pts[-1] >= pts[0] else "#dc2626"
+    color = f"rgb({UP})" if pts[-1] >= pts[0] else f"rgb({DN})"
     return (f'<svg class="spark" width="{w}" height="{h}" viewBox="0 0 {w} {h}" aria-label="3개월 주가">'
             f'<polyline fill="none" stroke="{color}" stroke-width="1.5" points="{coords}"/></svg>')
 
@@ -90,12 +111,14 @@ def returns_table(rows):
     rs = [r for r in rows if r.get("tech")]
     key = lambda r: (r["tech"].get("ret") or {}).get("d1") if (r["tech"].get("ret") or {}).get("d1") is not None else -1e9
     tr = []
+    rk = ("d1", "w1", "m1", "m3", "ytd")
+    caps = col_caps(rs, lambda r, k: (r["tech"].get("ret") or {}).get(k), rk)
     for g, grs in grouped(rs, key, reverse=True):
         tr.append(group_row(g, 9))
         for r in grs:
             ret, px = r["tech"].get("ret") or {}, r.get("px", {})
             tr.append(f"<tr><td>{esc(r['name'])}<small>{esc(r['industry'])}{' · ' + esc(r['status']) if r['status'] != '커버리지' else ''}</small></td>"
-                      + "".join(f"<td class='r'>{_pct(ret.get(k))}</td>" for k in ("d1", "w1", "m1", "m3", "ytd"))
+                      + "".join(f"<td class='r'{heat(ret.get(k), caps[k])}>{_pct(ret.get(k))}</td>" for k in rk)
                       + f"<td class='c'>{spark_svg(r['tech'].get('spark'))}</td>"
                       + f"<td class='r'>{n(px.get('frgn_pct'), 2, sign=False) + '%' if px.get('frgn_pct') is not None else '<span class=na>–</span>'}</td>"
                       f"<td class='r'>{n(px.get('mcap'), 0, sign=False)}</td></tr>")
@@ -111,6 +134,9 @@ def flow_table(rows):
     key = lambda r: r["flow"].get("frgn5") if r["flow"].get("frgn5") is not None else -1e9
     tr = []
     keys = ("today", "d5", "m1", "m3", "ytd")
+    whos = ("frgn", "inst", "indiv")
+    caps = col_caps(rs, lambda r, wk: ((r["flow"].get("win") or {}).get(wk[0]) or {}).get(wk[1]),
+                    [(w, k) for w in whos for k in keys])
     for g, grs in grouped(rs, key, reverse=True):
         tr.append(group_row(g, 16))
         for r in grs:
@@ -122,7 +148,7 @@ def flow_table(rows):
                     v = ww.get(k)
                     badge = streak_cell(f.get(sk, 0)) if (k == "d5" and sk) else ""
                     cls = "r grp" if k == "today" else "r"
-                    cells.append(f"<td class='{cls}'>{n(v)}{(' ' + badge) if badge else ''}</td>")
+                    cells.append(f"<td class='{cls}'{heat(v, caps[(who, k)])}>{n(v)}{(' ' + badge) if badge else ''}</td>")
             tr.append(f"<tr><td>{esc(r['name'])}</td>{''.join(cells)}</tr>")
     sub = "".join(f"<th class='r{' grp' if k == 'today' else ''}'>{lbl}</th>" for _ in range(3) for k, lbl in zip(keys, ("오늘", "5일", "1개월", "3개월", "YTD")))
     return ("<table class='flow'><thead><tr><th rowspan='2'>종목</th><th colspan='5' class='grp c'>외국인</th><th colspan='5' class='grp c'>기관</th><th colspan='5' class='grp c'>개인</th></tr>"
@@ -242,10 +268,10 @@ table{{width:100%;border-collapse:collapse;font-size:13px}}th,td{{padding:7px 8p
 th{{font-size:11px;color:var(--muted);font-weight:700;letter-spacing:.03em;background:#f9fafb}}th small{{font-weight:400}}
 td small{{display:block;color:var(--muted);font-size:11px}}
 th.r,td.r{{text-align:right;font-variant-numeric:tabular-nums}}
-.pos{{color:#15803d}}.neg{{color:#dc2626}}.na{{color:#9ca3af}}
+.pos{{color:#b91c1c}}.neg{{color:#1d4ed8}}.na{{color:#9ca3af}}
 .mini{{display:inline-block;font-size:10px;font-weight:800;padding:1px 6px;border-radius:3px;margin-left:4px;white-space:nowrap}}
-.mini.b{{background:#dcf5e7;color:#0f7a45}}.mini.s{{background:#fbe1dd;color:#b03a2e}}
-.rsi-lo{{color:#0f7a45;font-weight:700}}.rsi-hi{{color:#b03a2e;font-weight:700}}
+.mini.b{{background:#fde2e2;color:#b91c1c}}.mini.s{{background:#dbe6fd;color:#1d4ed8}}
+.rsi-lo{{color:#1d4ed8;font-weight:700}}.rsi-hi{{color:#b91c1c;font-weight:700}}
 td.empty{{color:var(--muted);text-align:center;padding:18px}}
 tr.gh td{{background:#eef2f7;color:#1f2937;font:700 12px Georgia,"Noto Serif KR",serif;letter-spacing:.06em;padding:6px 8px}}
 table.compact{{font-size:12px}}
