@@ -41,6 +41,25 @@ def _pct(v):
     return n(v, 1) + ("%" if v is not None else "")
 
 
+def shade(v, cap):
+    """조건부서식 음영 — 열별 최대 |값|(cap) 대비 강도. 양수=초록·음수=빨강(.pos/.neg 와 동일 체계).
+
+    0·결측은 음영 없음. 알파 0.08~0.34 — 라이트·다크 모두에서 글자(.pos/.neg)가 살아야
+    하고, 텔레 캡쳐 앨범으로 축소돼도 켜짐/꺼짐이 구분되는 하한을 둔다.
+    """
+    if not v or not cap:
+        return ""
+    alpha = 0.08 + 0.26 * min(abs(v) / cap, 1.0)
+    rgb = "21,128,61" if v > 0 else "220,38,38"
+    return f' style="background:rgba({rgb},{alpha:.2f})"'
+
+
+def col_caps(values_by_key):
+    """{열키: [값…]} → {열키: max|값|} (전부 결측이면 0 → 음영 없음)."""
+    return {k: max((abs(v) for v in vs if v is not None), default=0.0)
+            for k, vs in values_by_key.items()}
+
+
 def spark_svg(vals, w=120, h=30):
     """종가 목록 → 인라인 SVG 선 차트. 첫 값 대비 끝 값이 오르면 초록, 내리면 빨강. 데이터 없으면 빈칸."""
     pts = [v for v in (vals or []) if v is not None]
@@ -89,13 +108,15 @@ def returns_table(rows):
     """등락률 표: 오늘 · 1W · 1M · 3M · YTD (+ 외인 보유 · 시총)."""
     rs = [r for r in rows if r.get("tech")]
     key = lambda r: (r["tech"].get("ret") or {}).get("d1") if (r["tech"].get("ret") or {}).get("d1") is not None else -1e9
+    ret_keys = ("d1", "w1", "m1", "m3", "ytd")
+    caps = col_caps({k: [(r["tech"].get("ret") or {}).get(k) for r in rs] for k in ret_keys})
     tr = []
     for g, grs in grouped(rs, key, reverse=True):
         tr.append(group_row(g, 9))
         for r in grs:
             ret, px = r["tech"].get("ret") or {}, r.get("px", {})
             tr.append(f"<tr><td>{esc(r['name'])}<small>{esc(r['industry'])}{' · ' + esc(r['status']) if r['status'] != '커버리지' else ''}</small></td>"
-                      + "".join(f"<td class='r'>{_pct(ret.get(k))}</td>" for k in ("d1", "w1", "m1", "m3", "ytd"))
+                      + "".join(f"<td class='r'{shade(ret.get(k), caps[k])}>{_pct(ret.get(k))}</td>" for k in ret_keys)
                       + f"<td class='c'>{spark_svg(r['tech'].get('spark'))}</td>"
                       + f"<td class='r'>{n(px.get('frgn_pct'), 2, sign=False) + '%' if px.get('frgn_pct') is not None else '<span class=na>–</span>'}</td>"
                       f"<td class='r'>{n(px.get('mcap'), 0, sign=False)}</td></tr>")
@@ -111,6 +132,8 @@ def flow_table(rows):
     key = lambda r: r["flow"].get("frgn5") if r["flow"].get("frgn5") is not None else -1e9
     tr = []
     keys = ("today", "d5", "m1", "m3", "ytd")
+    caps = col_caps({(who, k): [((r["flow"].get("win") or {}).get(who) or {}).get(k) for r in rs]
+                     for who in ("frgn", "inst", "indiv") for k in keys})
     for g, grs in grouped(rs, key, reverse=True):
         tr.append(group_row(g, 16))
         for r in grs:
@@ -122,7 +145,7 @@ def flow_table(rows):
                     v = ww.get(k)
                     badge = streak_cell(f.get(sk, 0)) if (k == "d5" and sk) else ""
                     cls = "r grp" if k == "today" else "r"
-                    cells.append(f"<td class='{cls}'>{n(v)}{(' ' + badge) if badge else ''}</td>")
+                    cells.append(f"<td class='{cls}'{shade(v, caps[(who, k)])}>{n(v)}{(' ' + badge) if badge else ''}</td>")
             tr.append(f"<tr><td>{esc(r['name'])}</td>{''.join(cells)}</tr>")
     sub = "".join(f"<th class='r{' grp' if k == 'today' else ''}'>{lbl}</th>" for _ in range(3) for k, lbl in zip(keys, ("오늘", "5일", "1개월", "3개월", "YTD")))
     return ("<table class='flow'><thead><tr><th rowspan='2'>종목</th><th colspan='5' class='grp c'>외국인</th><th colspan='5' class='grp c'>기관</th><th colspan='5' class='grp c'>개인</th></tr>"
