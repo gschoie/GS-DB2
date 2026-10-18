@@ -15,7 +15,7 @@ ROOT = os.path.dirname(HERE)
 PAGE = os.path.join(ROOT, "telegram_research_dashboard", "static", "coverage_flow_report.html")
 OUT_PREFIX = os.path.join(HERE, "data", "capture")   # capture_1.png · capture_2.png · capture_3.png
 WIDTH = 1000          # 표 9열이 줄바꿈 없이 들어가는 폭. 더 넓히면 글자가 작아져 폰에서 안 읽힌다.
-SECTIONS = ("#cap-1", "#cap-2", "#cap-3")   # 제목+타일+① 수급 / ② 기계적 수급 / ③ 과매수·과매도
+SECTIONS = ("#cap-1", "#cap-2", "#cap-3")   # 제목+타일+① 등락·수급 / ② 과매수·과매도 / ③ 기계적 수급(접힘, 펼쳐 찍음)
 # 한 장으로 찍으면 2000×6400 이 돼 텔레그램이 399×1280 으로 줄여 글자가 안 읽힌다(10/17 실측) —
 # 섹션 3장으로 나눠 앨범(sendMediaGroup)으로 보낸다. 장당 세로가 가로의 2~3배 안쪽.
 
@@ -45,6 +45,7 @@ def capture(page=PAGE, out_prefix=OUT_PREFIX, width=WIDTH):
         pg = b.new_page(viewport={"width": width, "height": 900}, device_scale_factor=2)
         pg.goto("file://" + os.path.abspath(page))
         pg.wait_for_load_state("load")
+        pg.evaluate("document.querySelectorAll('details').forEach(d => { d.open = true })")   # ③ 접힘 섹션도 펼쳐 찍는다
         for i, sel in enumerate(SECTIONS, 1):
             if pg.locator(sel).count() == 0:
                 continue

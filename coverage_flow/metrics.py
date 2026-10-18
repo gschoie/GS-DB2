@@ -153,6 +153,22 @@ def returns(ohlc, today, price_now=None, chg_pct=None):
     return out
 
 
+SPARK_DAYS = 63
+
+
+def spark_points(ohlc, today, price_now=None, n=SPARK_DAYS):
+    """등락률 표의 3개월 미니 차트용 종가 n개(오름차순). 장중이면 오늘 현재가를 끝에 붙인다."""
+    if ohlc is None or ohlc.empty:
+        return []
+    today = pd.Timestamp(today)
+    closes = [float(x) for x in ohlc[ohlc["date"] < today]["c"] if x == x]
+    if price_now:
+        closes.append(float(price_now))
+    elif (ohlc["date"] == today).sum():
+        closes.append(float(ohlc[ohlc["date"] == today].iloc[-1]["c"]))
+    return [round(x, 2) for x in closes[-n:]]
+
+
 FLOW_WINDOWS = {"d5": 5, "m1": 21, "m3": 63}
 
 

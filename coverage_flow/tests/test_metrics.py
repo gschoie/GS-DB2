@@ -85,6 +85,15 @@ class Returns(unittest.TestCase):
         prev_year_last = c[[x.year == 2025 for x in d]].iloc[-1]
         self.assertAlmostEqual(r["ytd"], round((210 / prev_year_last - 1) * 100, 2))
 
+    def test_spark_points(self):
+        df = ohlc([100 + i for i in range(100)])
+        today = df["date"].iloc[-1] + pd.Timedelta(days=1)
+        sp = metrics.spark_points(df, today, price_now=250)
+        self.assertEqual(len(sp), 63); self.assertEqual(sp[-1], 250.0); self.assertEqual(sp[0], 100 + 99 - 61)
+        self.assertEqual(metrics.spark_points(pd.DataFrame(), today), [])
+        svg = build_report.spark_svg(sp); self.assertIn("<svg", svg); self.assertIn("#15803d", svg)
+        self.assertIn("#dc2626", build_report.spark_svg([10, 9, 8])); self.assertIn("na", build_report.spark_svg([5]))
+
     def test_short_history_none(self):
         df = ohlc([100, 101, 102, 103], start="2026-10-05")
         r = metrics.returns(df, df["date"].iloc[-1] + pd.Timedelta(days=1), None, None)
@@ -259,7 +268,7 @@ def fake_payload():
                  "flow": {"fi5_mcap_pct": 0.7, "frgn5": 108, "inst5": 19, "indiv5": -120, "frgn_streak": 13, "inst_streak": 1, "has_today": True, "frgn_today": 50, "inst_today": 3,
                           "win": {"rows": 30, "frgn": {"today": 50, "d5": 108, "m1": 300, "m3": None, "ytd": None}, "inst": {"today": 3, "d5": 19, "m1": -40, "m3": None, "ytd": None}, "indiv": {"today": -53, "d5": -120, "m1": -260, "m3": None, "ytd": None}}},
                  "tech": {"rsi": 69.0, "rsi_prev": 66.0, "rsi_pctl": 96.5, "extreme": "1년 최고권 (상위 4%)", "hi52_pct": -1.0, "lo52_pct": 80.0, "adv20": 500, "provisional": True,
-                          "ret": {"d1": 0.4, "w1": 3.2, "m1": -5.1, "m3": None, "ytd": 42.0}},
+                          "ret": {"d1": 0.4, "w1": 3.2, "m1": -5.1, "m3": None, "ytd": 42.0}, "spark": [100, 102, 99, 105, 110]},
                  "passive": {"amt": 12.0, "adv_pct": 2.4, "etfs": [("SOL 조선TOP3플러스", 12.0)]}},
                 {"code": "012450", "name": "한화에어로스페이스", "industry": "방산", "status": "커버리지",
                  "px": {"chg_pct": -1.2, "frgn_pct": 30.0, "mcap": 400000},
@@ -323,10 +332,29 @@ class Outputs(unittest.TestCase):
     def test_render(self):
         h = build_report.render(fake_payload())
         for s in ("한화오션", "13일째 매수", "1년 최저권", "SOL 조선TOP3플러스", "수집 오류 1건", "커버예정", "직전 값 없음", "TIME 코스피액티브",
-                  "① 등락률", "①-2 투자자별 순매수", "+42.0", "+300"):
+                  "① 등락률", "①-2 투자자별 순매수", "+42.0", "+300", "② 과매수", "③ 기계적 수급", '<details id="cap-3"', "3개월 차트"):
             self.assertIn(s, h)
         self.assertNotIn("chr(", h)
         self.assertNotIn("5일 외인+기관", h)                                  # 시총 대비 열 제거
+
+    def test_grouped_tables(self):
+        """표는 조선(조선+조기)·방산·기계 묶음, 성광벤드·태광은 조선 묶음 맨 밑. 묶음 안은 기존 정렬."""
+        rows = [
+            {"name": "태광", "industry": "조기"}, {"name": "한화오션", "industry": "조선"},
+            {"name": "성광벤드", "industry": "조기"}, {"name": "HD현대중공업", "industry": "조선"},
+            {"name": "한화시스템", "industry": "방산"}, {"name": "두산밥캣", "industry": "건기"},
+        ]
+        score = {"태광": 99, "한화오션": 1, "성광벤드": 50, "HD현대중공업": 5, "한화시스템": 0, "두산밥캣": 0}
+        g = build_report.grouped(rows, key=lambda r: score[r["name"]], reverse=True)
+        self.assertEqual([x[0] for x in g], ["조선", "방산", "기계"])
+        self.assertEqual([r["name"] for r in g[0][1]], ["HD현대중공업", "한화오션", "성광벤드", "태광"])  # 점수 높은 태광도 맨 뒤
+        d = fake_payload()
+        d["rows"][2].update(industry="건기", tech=dict(d["rows"][0]["tech"]), flow=dict(d["rows"][0]["flow"]))  # 오류 행에 지표를 줘서 표에 올린다
+        h = build_report.render(d)
+        self.assertIn("<tr class='gh'><td colspan='9'>조선</td></tr>", h)
+        self.assertIn("<tr class='gh'><td colspan='16'>방산</td></tr>", h)
+        self.assertIn("<tr class='gh'><td colspan='8'>기계</td></tr>", h)
+        self.assertLess(h.index(">조선</td>"), h.index(">방산</td>")); self.assertLess(h.index(">방산</td>"), h.index(">기계</td>"))
 
 
 if __name__ == "__main__":
