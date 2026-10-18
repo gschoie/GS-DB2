@@ -37,26 +37,47 @@ def streak_cell(v):
     return f'<span class="mini {"b" if v > 0 else "s"}">{abs(v)}일째 {"매수" if v > 0 else "매도"}</span>'
 
 
-def flow_table(rows):
-    rs = [r for r in rows if r.get("flow")]
-    rs.sort(key=lambda r: r["flow"].get("fi5_mcap_pct") if r["flow"].get("fi5_mcap_pct") is not None else -1e9, reverse=True)
+def _pct(v):
+    return n(v, 1) + ("%" if v is not None else "")
+
+
+def returns_table(rows):
+    """등락률 표: 오늘 · 1W · 1M · 3M · YTD (+ 외인 보유 · 시총)."""
+    rs = [r for r in rows if r.get("tech")]
+    rs.sort(key=lambda r: (r["tech"].get("ret") or {}).get("d1") if (r["tech"].get("ret") or {}).get("d1") is not None else -1e9, reverse=True)
     tr = []
     for r in rs:
-        f, px = r["flow"], r.get("px", {})
-        today = (f"{n(f.get('frgn_today'))} / {n(f.get('inst_today'))}" if f.get("has_today") else '<span class="na">–</span>')
+        ret, px = r["tech"].get("ret") or {}, r.get("px", {})
         tr.append(f"<tr><td>{esc(r['name'])}<small>{esc(r['industry'])}{' · ' + esc(r['status']) if r['status'] != '커버리지' else ''}</small></td>"
-                  f"<td class='r'>{n(px.get('chg_pct'), 1)}%</td>"
-                  f"<td class='r'><b>{n(f.get('fi5_mcap_pct'), 2)}%</b></td>"
-                  f"<td class='r'>{n(f.get('frgn5'))} {streak_cell(f.get('frgn_streak', 0))}</td>"
-                  f"<td class='r'>{n(f.get('inst5'))} {streak_cell(f.get('inst_streak', 0))}</td>"
-                  f"<td class='r'>{n(f.get('indiv5'))}</td>"
-                  f"<td class='r'>{today}</td>"
-                  f"<td class='r'>{n(px.get('frgn_pct'), 2, sign=False)}%</td>"
+                  + "".join(f"<td class='r'>{_pct(ret.get(k))}</td>" for k in ("d1", "w1", "m1", "m3", "ytd"))
+                  + f"<td class='r'>{n(px.get('frgn_pct'), 2, sign=False)}%</td>"
                   f"<td class='r'>{n(px.get('mcap'), 0, sign=False)}</td></tr>")
-    return ("<table><thead><tr><th>종목</th><th class='r'>등락</th><th class='r'>5일 외인+기관<br><small>시총 대비</small></th>"
-            "<th class='r'>외인 5일</th><th class='r'>기관 5일</th><th class='r'>개인 5일</th>"
-            "<th class='r'>오늘(잠정)<br><small>외인 / 기관</small></th><th class='r'>외인 보유</th><th class='r'>시총(억)</th></tr></thead>"
+    return ("<table><thead><tr><th>종목</th><th class='r'>오늘</th><th class='r'>1주</th><th class='r'>1개월</th>"
+            "<th class='r'>3개월</th><th class='r'>YTD</th><th class='r'>외인 보유</th><th class='r'>시총(억)</th></tr></thead>"
             f"<tbody>{''.join(tr)}</tbody></table>")
+
+
+def flow_table(rows):
+    """투자자별 순매수(억원) 표: 외인 · 기관 · 개인 × (오늘 · 5일 · 1개월 · 3개월 · YTD).
+    5일 칸에 연속일수 배지. 정렬은 외인 5일 순."""
+    rs = [r for r in rows if r.get("flow")]
+    rs.sort(key=lambda r: r["flow"].get("frgn5") if r["flow"].get("frgn5") is not None else -1e9, reverse=True)
+    tr = []
+    keys = ("today", "d5", "m1", "m3", "ytd")
+    for r in rs:
+        f = r["flow"]; w = f.get("win") or {}
+        cells = []
+        for who, sk in (("frgn", "frgn_streak"), ("inst", "inst_streak"), ("indiv", None)):
+            ww = w.get(who) or {}
+            for k in keys:
+                v = ww.get(k)
+                badge = streak_cell(f.get(sk, 0)) if (k == "d5" and sk) else ""
+                cls = "r grp" if k == "today" else "r"
+                cells.append(f"<td class='{cls}'>{n(v)}{(' ' + badge) if badge else ''}</td>")
+        tr.append(f"<tr><td>{esc(r['name'])}</td>{''.join(cells)}</tr>")
+    sub = "".join(f"<th class='r{' grp' if k == 'today' else ''}'>{lbl}</th>" for _ in range(3) for k, lbl in zip(keys, ("오늘", "5일", "1개월", "3개월", "YTD")))
+    return ("<table class='flow'><thead><tr><th rowspan='2'>종목</th><th colspan='5' class='grp c'>외국인</th><th colspan='5' class='grp c'>기관</th><th colspan='5' class='grp c'>개인</th></tr>"
+            f"<tr>{sub}</tr></thead><tbody>{''.join(tr)}</tbody></table>")
 
 
 def passive_table(rows, etfs, active, active_date):
@@ -173,6 +194,7 @@ th.r,td.r{{text-align:right;font-variant-numeric:tabular-nums}}
 .rsi-lo{{color:#0f7a45;font-weight:700}}.rsi-hi{{color:#b03a2e;font-weight:700}}
 td.empty{{color:var(--muted);text-align:center;padding:18px}}
 table.compact{{font-size:12px}}
+table.flow{{font-size:12px}}table.flow td,table.flow th{{padding:6px 5px}}th.c{{text-align:center}}td.grp,th.grp{{border-left:2px solid #e5e7eb}}
 .note{{font-size:12px;color:var(--muted);line-height:1.6;margin:8px 0 0}}
 .errs{{margin:16px 0;font-size:12px;color:#b45309}}.errs ul{{margin:6px 0 0 18px}}
 .wrap{{overflow-x:auto}}
@@ -187,9 +209,13 @@ table.compact{{font-size:12px}}
 {err_html}
 {summary_tiles(rows, d)}
 
-<h2 id="flow">① 외국인·기관 순매수 <small style="font:400 12px Inter;color:#6b7280">5일 합산 억원 · 시총 대비 % 순</small></h2>
+<h2 id="flow">① 등락률 <small style="font:400 12px Inter;color:#6b7280">오늘 · 1주 · 1개월 · 3개월 · YTD</small></h2>
+<div class="wrap">{returns_table(rows)}</div>
+<p class="note">오늘은 전일 종가 대비(장중 현재가). 1주·1개월·3개월은 거래일 5·21·63일 전 종가 대비, YTD 는 전년 마지막 종가 대비.</p>
+
+<h2 id="flow2">①-2 투자자별 순매수 <small style="font:400 12px Inter;color:#6b7280">억원 · 오늘 · 5일 · 1개월 · 3개월 · YTD · 외인 5일 순</small></h2>
 <div class="wrap">{flow_table(rows)}</div>
-<p class="note">5일 창은 오늘 잠정 행을 포함한 최근 5거래일. 연속일수 배지는 2일 이상만. 시총 대비 %는 (외인+기관 5일 합산)/시총.</p>
+<p class="note">구간은 오늘 잠정 행을 포함한 최근 거래일 수. 이력이 모자라는 구간은 '–'(합계를 작게 적는 것보다 빈칸이 낫다). 연속일수 배지는 2일 이상만.</p>
 </div>
 <div id="cap-2">
 <h2 id="passive">② 기계적 수급 <small style="font:400 12px Inter;color:#6b7280">ETF 설정·환매 × 비중 (하한값) · 액티브 ETF 계약수</small></h2>

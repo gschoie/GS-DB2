@@ -70,6 +70,28 @@ class Rsi(unittest.TestCase):
         self.assertEqual(t["adv20"], 10.0)
 
 
+class Returns(unittest.TestCase):
+    def test_windows_and_ytd(self):
+        # 2025-12-01 부터 영업일 100개: 전년 마지막 종가 → ytd 기준
+        d = pd.bdate_range("2025-12-01", periods=100)
+        c = pd.Series(np.arange(100, 200, dtype="float64"))
+        df = pd.DataFrame({"date": d, "o": c, "h": c, "l": c, "c": c, "v": 1, "amt": 1.0})
+        today = d[-1] + pd.Timedelta(days=1)
+        r = metrics.returns(df, today, price_now=210.0, chg_pct=5.53)
+        self.assertEqual(r["d1"], 5.53)                                   # KIS 전일대비 그대로
+        self.assertAlmostEqual(r["w1"], round((210 / c.iloc[-5] - 1) * 100, 2))
+        self.assertAlmostEqual(r["m1"], round((210 / c.iloc[-21] - 1) * 100, 2))
+        self.assertAlmostEqual(r["m3"], round((210 / c.iloc[-63] - 1) * 100, 2))
+        prev_year_last = c[[x.year == 2025 for x in d]].iloc[-1]
+        self.assertAlmostEqual(r["ytd"], round((210 / prev_year_last - 1) * 100, 2))
+
+    def test_short_history_none(self):
+        df = ohlc([100, 101, 102, 103], start="2026-10-05")
+        r = metrics.returns(df, df["date"].iloc[-1] + pd.Timedelta(days=1), None, None)
+        self.assertIsNone(r["m1"]); self.assertIsNone(r["m3"]); self.assertIsNone(r["ytd"]); self.assertIsNone(r["w1"])
+        self.assertAlmostEqual(r["d1"], round((103 / 102 - 1) * 100, 2))  # chg_pct 없으면 종가로
+
+
 class Flow(unittest.TestCase):
     def inv(self, f, o, start="2026-10-01"):
         d = pd.bdate_range(start, periods=len(f))
@@ -96,6 +118,21 @@ class Flow(unittest.TestCase):
         f = metrics.flow_summary(inv, today, mcap=None)
         self.assertFalse(f["has_today"]); self.assertNotIn("frgn_today", f)
         self.assertIsNone(f["fi5_mcap_pct"]); self.assertEqual(f["inst_streak"], 0)
+
+    def test_flow_windows(self):
+        d = pd.bdate_range("2025-12-15", periods=80)          # 전년 행 포함 → ytd 유효
+        inv = pd.DataFrame({"date": d, "개인": 0.0, "외국인": np.ones(80), "기관": -np.ones(80)})
+        today = d[-1]
+        w = metrics.flow_windows(inv, today)
+        self.assertEqual(w["rows"], 80)
+        self.assertEqual(w["frgn"]["today"], 1.0); self.assertEqual(w["frgn"]["d5"], 5.0)
+        self.assertEqual(w["frgn"]["m1"], 21.0); self.assertEqual(w["frgn"]["m3"], 63.0)
+        self.assertEqual(w["frgn"]["ytd"], float(sum(1 for x in d if x.year == 2026)))
+        self.assertEqual(w["inst"]["m3"], -63.0)
+        short = metrics.flow_windows(inv.iloc[-10:], today)   # 10행뿐
+        self.assertEqual(short["frgn"]["d5"], 5.0); self.assertIsNone(short["frgn"]["m1"])
+        self.assertIsNone(short["frgn"]["ytd"])              # 전년 행 없음 → ytd 모름
+        self.assertEqual(metrics.flow_windows(pd.DataFrame(), today), {"rows": 0})
 
     def test_rank_and_today_movers(self):
         rows = [
@@ -191,8 +228,10 @@ def fake_payload():
             "rows": [
                 {"code": "042660", "name": "한화오션", "industry": "조선", "status": "커버리지",
                  "px": {"chg_pct": 0.4, "frgn_pct": 20.1, "mcap": 250000},
-                 "flow": {"fi5_mcap_pct": 0.7, "frgn5": 108, "inst5": 19, "indiv5": -120, "frgn_streak": 13, "inst_streak": 1, "has_today": True, "frgn_today": 50, "inst_today": 3},
-                 "tech": {"rsi": 69.0, "rsi_prev": 66.0, "rsi_pctl": 96.5, "extreme": "1년 최고권 (상위 4%)", "hi52_pct": -1.0, "lo52_pct": 80.0, "adv20": 500, "provisional": True},
+                 "flow": {"fi5_mcap_pct": 0.7, "frgn5": 108, "inst5": 19, "indiv5": -120, "frgn_streak": 13, "inst_streak": 1, "has_today": True, "frgn_today": 50, "inst_today": 3,
+                          "win": {"rows": 30, "frgn": {"today": 50, "d5": 108, "m1": 300, "m3": None, "ytd": None}, "inst": {"today": 3, "d5": 19, "m1": -40, "m3": None, "ytd": None}, "indiv": {"today": -53, "d5": -120, "m1": -260, "m3": None, "ytd": None}}},
+                 "tech": {"rsi": 69.0, "rsi_prev": 66.0, "rsi_pctl": 96.5, "extreme": "1년 최고권 (상위 4%)", "hi52_pct": -1.0, "lo52_pct": 80.0, "adv20": 500, "provisional": True,
+                          "ret": {"d1": 0.4, "w1": 3.2, "m1": -5.1, "m3": None, "ytd": 42.0}},
                  "passive": {"amt": 12.0, "adv_pct": 2.4, "etfs": [("SOL 조선TOP3플러스", 12.0)]}},
                 {"code": "012450", "name": "한화에어로스페이스", "industry": "방산", "status": "커버리지",
                  "px": {"chg_pct": -1.2, "frgn_pct": 30.0, "mcap": 400000},
@@ -255,9 +294,11 @@ class Outputs(unittest.TestCase):
 
     def test_render(self):
         h = build_report.render(fake_payload())
-        for s in ("한화오션", "13일째 매수", "1년 최저권", "SOL 조선TOP3플러스", "수집 오류 1건", "커버예정", "직전 값 없음", "TIME 코스피액티브"):
+        for s in ("한화오션", "13일째 매수", "1년 최저권", "SOL 조선TOP3플러스", "수집 오류 1건", "커버예정", "직전 값 없음", "TIME 코스피액티브",
+                  "① 등락률", "①-2 투자자별 순매수", "+42.0", "+300"):
             self.assertIn(s, h)
         self.assertNotIn("chr(", h)
+        self.assertNotIn("5일 외인+기관", h)                                  # 시총 대비 열 제거
 
 
 if __name__ == "__main__":
