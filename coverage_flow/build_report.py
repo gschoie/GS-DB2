@@ -104,6 +104,16 @@ def group_row(g, ncol):
     return f"<tr class='gh'><td colspan='{ncol}'>{esc(g)}</td></tr>"
 
 
+def frgn_cell(px):
+    """외인 보유비율 칸. 직전 수집값으로 채운 경우(frgn_pct_asof) 기준일을 작게 병기."""
+    v = px.get("frgn_pct")
+    if v is None:
+        return "<td class='r'><span class=na>–</span></td>"
+    asof = px.get("frgn_pct_asof") or ""
+    tag = f" <small class='stale'>{esc(asof[5:].replace('-', '/'))}</small>" if asof else ""
+    return f"<td class='r'>{n(v, 2, sign=False)}%{tag}</td>"
+
+
 def returns_table(rows):
     """등락률 표: 오늘 · 1W · 1M · 3M · YTD (+ 외인 보유 · 시총)."""
     rs = [r for r in rows if r.get("tech")]
@@ -118,8 +128,8 @@ def returns_table(rows):
             tr.append(f"<tr><td>{esc(r['name'])}<small>{esc(r['industry'])}{' · ' + esc(r['status']) if r['status'] != '커버리지' else ''}</small></td>"
                       + "".join(f"<td class='r'{shade(ret.get(k), caps[k])}>{_pct(ret.get(k))}</td>" for k in ret_keys)
                       + f"<td class='c'>{spark_svg(r['tech'].get('spark'))}</td>"
-                      + f"<td class='r'>{n(px.get('frgn_pct'), 2, sign=False) + '%' if px.get('frgn_pct') is not None else '<span class=na>–</span>'}</td>"
-                      f"<td class='r'>{n(px.get('mcap'), 0, sign=False)}</td></tr>")
+                      + frgn_cell(px)
+                      + f"<td class='r'>{n(px.get('mcap'), 0, sign=False)}</td></tr>")
     return ("<table><thead><tr><th>종목</th><th class='r'>오늘</th><th class='r'>1주</th><th class='r'>1개월</th>"
             "<th class='r'>3개월</th><th class='r'>YTD</th><th class='c'>3개월 차트</th><th class='r'>외인 보유</th><th class='r'>시총(억)</th></tr></thead>"
             f"<tbody>{''.join(tr)}</tbody></table>")
@@ -250,6 +260,7 @@ def render(d):
 details.sec>summary{{cursor:pointer;list-style:none}}details.sec>summary::-webkit-details-marker{{display:none}}
 details.sec>summary h2::before{{content:"▶ ";font-size:13px;color:#6b7280}}details.sec[open]>summary h2::before{{content:"▼ "}}
 svg.spark{{display:block;margin:0 auto}}td.c{{text-align:center}}
+small.stale{{color:#9ca3af;font-size:10px}}
 .eyebrow{{font-size:10px;font-weight:800;letter-spacing:1.6px;color:#6b7280;margin:0 0 7px}}
 h1{{font:500 30px Georgia,"Noto Serif KR",serif;margin:0}}
 h2{{font:600 18px Georgia,"Noto Serif KR",serif;margin:34px 0 10px}}
@@ -289,7 +300,7 @@ table.flow{{font-size:12px}}table.flow td,table.flow th{{padding:6px 5px}}th.c{{
 
 <h2 id="flow">① 등락률 <small style="font:400 12px Inter;color:#6b7280">오늘 · 1주 · 1개월 · 3개월 · YTD</small></h2>
 <div class="wrap">{returns_table(rows)}</div>
-<p class="note">오늘은 전일 종가 대비(장중 현재가). 1주·1개월·3개월은 거래일 5·21·63일 전 종가 대비, YTD 는 전년 마지막 종가 대비.</p>
+<p class="note">오늘은 전일 종가 대비(장중 현재가). 1주·1개월·3개월은 거래일 5·21·63일 전 종가 대비, YTD 는 전년 마지막 종가 대비. 외인 보유 옆의 작은 날짜는 장 시작 전·휴장이라 그 날짜의 직전 수집값으로 채운 것 — 장중 첫 수집부터 당일 값으로 바뀐다.</p>
 
 <h2 id="flow2">①-2 투자자별 순매수 <small style="font:400 12px Inter;color:#6b7280">억원 · 오늘 · 5일 · 1개월 · 3개월 · YTD · 외인 5일 순</small></h2>
 <div class="wrap">{flow_table(rows)}</div>
