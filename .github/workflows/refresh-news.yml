@@ -117,6 +117,35 @@ jobs:
         with:
           path: telegram_research_dashboard/_site
 
+      # 공유용 주소(https://gs-research-desk.github.io)에도 같은 산출물을 올린다 — GitHub 조직
+      # `gs-research-desk` 의 Pages 리포(gs-research-desk/gs-research-desk.github.io) main 에 _site 를
+      # 통째로 push(매번 orphan 커밋이라 이력이 안 쌓인다). 대시보드의 '새 창으로'·사이드바 새 탭
+      # 링크·공유 허브(invest.html)가 전부 이 주소로 열려, 화면 공유 때 주소창에
+      # gschoie.github.io/GS-DB2 와 사이드바가 보이지 않는다.
+      # 시크릿 SHARE_DEPLOY_TOKEN(그 리포 Contents 쓰기 권한 PAT)이 없거나 실패해도
+      # 본 GitHub Pages 배포는 그대로 간다(continue-on-error).
+      # secrets 컨텍스트는 step `if` 에서 못 쓴다(워크플로 파일 자체가 거부돼 잡 0개로 실패 —
+      # 10/19 실측) → 셸 스텝이 유무를 출력으로 바꿔 넘긴다.
+      - name: 공유용 주소 토큰 확인
+        id: share
+        env:
+          SHARE_DEPLOY_TOKEN: ${{ secrets.SHARE_DEPLOY_TOKEN }}
+        run: |
+          if [ -n "$SHARE_DEPLOY_TOKEN" ]; then echo "on=1" >> "$GITHUB_OUTPUT"
+          else echo "on=0" >> "$GITHUB_OUTPUT"; echo "::warning::SHARE_DEPLOY_TOKEN 시크릿 없음 — 공유용 주소 배포 생략"; fi
+      - name: 공유용 주소 배포 (gs-research-desk.github.io)
+        if: steps.share.outputs.on == '1'
+        continue-on-error: true
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          personal_token: ${{ secrets.SHARE_DEPLOY_TOKEN }}
+          external_repository: gs-research-desk/gs-research-desk.github.io
+          publish_branch: main
+          publish_dir: telegram_research_dashboard/_site
+          force_orphan: true
+          user_name: github-actions[bot]
+          user_email: 41898282+github-actions[bot]@users.noreply.github.com
+
   deploy:
     environment:
       name: github-pages

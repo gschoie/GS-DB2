@@ -17,6 +17,16 @@ ROOT = os.path.dirname(HERE)
 sys.path.insert(0, HERE)
 import kis, metrics  # noqa: E402
 
+# 수집 부족 가드 — 이 비율 미만이면 저장·커밋·텔레 전부 막는다(10/19 실측: 한투 토큰 403 으로
+# 21종목 중 2종목만 모인 화면이 채널에 나갔다). 직전 정상 페이지를 그대로 두는 편이 낫다.
+MIN_OK_RATIO = float(os.environ.get("COVFLOW_MIN_OK_RATIO", "0.7"))
+
+
+def enough(n_ok, n_total, ratio=None):
+    """수집 성공 종목이 유니버스의 ratio 이상인가. 유니버스가 비면 False(아무것도 없는 run 은 실패)."""
+    r = MIN_OK_RATIO if ratio is None else ratio
+    return n_total > 0 and n_ok >= n_total * r
+
 KST = timezone(timedelta(hours=9))
 DATA = os.path.join(HERE, "data")
 HIST = os.path.join(DATA, "history")
@@ -302,6 +312,12 @@ def main(argv=None):
         except Exception as ex:
             errors.append(f"{u['code']} {u['name']}: {type(ex).__name__}: {ex}")
             print(f"  {u['name']} 실패: {ex}")
+
+    if not enough(len(rows), len(uni)):
+        print(f"수집 부족 — {len(rows)}/{len(uni)}종목(기준 {MIN_OK_RATIO:.0%}). 저장·발송하지 않고 실패로 끝낸다.")
+        for e in errors:
+            print("  " + e)
+        return 2
 
     etfs, etf_err = collect_etfs(load_csv("etf_universe.csv"))
     errors += etf_err

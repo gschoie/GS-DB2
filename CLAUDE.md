@@ -999,6 +999,26 @@
       사용자 요청 "좋은 거 빨강, 나쁜 거 파랑". 전역 `.pos`/`.neg` 를 **빨강/파랑**으로, 스파크라인·
       연속일수 배지·RSI 과매수/과매도·`shade` 음영도 같은 축(알파 0.08~0.45). 시총·상장주수처럼
       부호 없는 숫자는 색을 안 준다(`n(sign=False)`). 위 항목의 '서구식 초록/빨강' 서술은 폐기.
+    - **수집 실패 가드 2단 + 수집 시각 표기** (10/19): 10:04 run 이 한투 토큰 403 으로 21종목 중
+      2종목만 모은 화면을 바담 방에 보낸 뒤 사용자 규칙 — ① **오류가 하나라도 있으면 텔레그램 생략**
+      (`notify.main`, 종목·ETF 오류 모두, status 에 skipped 사유. 페이지는 오류 목록과 함께 갱신되므로
+      거기서 본다) ② 성공 종목이 **70% 미만**(`collect.enough`, `COVFLOW_MIN_OK_RATIO`)이면 latest.json·
+      페이지도 덮어쓰지 않고 종료코드 2 — 직전 정상 페이지가 남고 run 은 실패로 찍혀 늦은 크론이
+      재시도한다(guard 는 성공 run 만 센다). ① 등락률 표 위에 `📅 수집 시각 … · 장중 잠정/직전 거래일
+      종가 기준` 한 줄(사용자 요청). 테스트 34 → 37개.
+    - **표 정렬 = 시총 순** (10/19): 사용자 요청으로 세 표(등락률·투자자별 순매수·과매수/과매도)의
+      묶음 안 정렬을 각자 기준(오늘 등락·외인 5일·RSI)에서 **시총 내림차순**(`build_report.mcap_key`)
+      으로 통일. 성광벤드·태광 조선 맨 밑 고정은 유지.
+    - **텔레 머리글 볼드** (10/19): 사용자 요청. `notify.compose_html` 이 평문(compose)의 첫 줄만
+      `<b>` 로 감싸고 나머지는 전부 escape(LIG D&A 의 & 안전) → `parse_mode=HTML` 로 발송,
+      텔레그램이 parse 오류를 돌려주면 평문으로 폴백. 테스트 38 → 39개.
+    - **본문을 앨범 캡션으로 — 사진 밑에** (10/19): 사용자 요청 "텍스트가 이미지 밑에 붙게". 캡쳐가 있고
+      본문(compose_html)이 **1,024자**(일반 봇 캡션 한도, `CAPTION_MAX`) 이내면 sendMediaGroup 첫 장
+      캡션에 HTML 로 실어 한 덩어리로 보낸다(현재 ~650자). parse 거부 → 평문 캡션, 그래도 실패 →
+      옛 방식(본문 따로 + 사진). 캡션 한도를 넘거나 캡쳐가 없으면 본문 따로. 테스트 39 → 40개.
+    - **텔레 섹션 제목 볼드 + 이모티콘** (10/19): 사용자 지정 — 머리글 `[GS🎴 조선·방산·건기]`,
+      `📈 사는 쪽` · `📉 파는 쪽` · `⚙️ 기계적 수급 (ETF/패시브)` 세 섹션 제목을 볼드
+      (`notify.SECTION_HEADS` 접두어 매칭, compose_html). RSI 섹션은 요청에 없어 그대로.
     - 2판 후보(미구현): 수급 × 컨센 변화 교차(kospi_consensus), 외국인 보유비율 1년 백분위,
       섹터 ETF 대비 상대강도, 수주 공시·실적일 이벤트 뱃지, 공매도(소스 확인 필요).
 
@@ -1052,5 +1072,42 @@
       (화면 JS + 엑셀, 2곳 미만 블록은 생략 — 조선 이탈리아 1·건기 스웨덴 1 은 안 뜬다).
     - 배수 표기 전 지표 소수 1자리(`0.0`) — 화면 fmt()·엑셀 number_format (PR #390).
     - 화면·엑셀은 valuation.yml 이 다시 돌아야 반영(빌드 산출물 커밋 구조).
+
+50. **화면 공유용 주소 — 새 창 링크를 gs-research-desk.github.io 로** (10/19): 사람들 앞에서 화면을
+    공유할 때 주소창의 `gschoie.github.io/GS-DB2` 와 사이드바(팀원 메뉴)가 드러나는 문제.
+    사용자 선택지 셋(GitHub 그대로 / GitHub 조직 주소 / Cloudflare) 중 **GitHub 조직 주소**.
+    GitHub Pages 는 그대로 두고 **같은 `_site` 를 조직 리포에도 push 하는 이중 배포** — 외부 서비스 0.
+    - 조직 `gs-research-desk` + 리포 `gs-research-desk/gs-research-desk.github.io`(public, Pages 는
+      main 루트에서 자동) → 주소 `https://gs-research-desk.github.io/`. 워크플로 5종(deploy-pages·
+      refresh-news/union/macro/reports)의 build 잡 끝에 `peaceiris/actions-gh-pages@v4`
+      (external_repository·publish_branch main·**force_orphan** — 하루 7회+ 배포라 이력을 안 쌓는다,
+      커밋 작성자는 github-actions[bot] — 조직 리포에 gschoie 가 안 남는다). 시크릿
+      **`SHARE_DEPLOY_TOKEN`**(그 리포 Contents 쓰기 PAT)이 없으면 스텝을 건너뛴다 — **`secrets` 는 step
+      `if` 에서 못 쓴다**(첫 머지 run 이 잡 0개·0초로 실패, 배포 5종 전부 멈춤) → 셸 스텝 출력(`steps.share.outputs.on`)으로 판정,
+      실패해도 본 배포는 그대로(continue-on-error). 두 배포가 겹쳐도 force push 라 마지막 것이 남는다.
+    - `static/app.js` `SHARE_SITE`/`shareUrl`/`shareLinks`: **`target=_blank` 인 같은 사이트
+      링크만** 절대주소로 바꾼다(로드 때 1회 + 캡처 단계 click/auxclick 로 나중에 그려지는
+      오늘의 요약 카드 링크까지). 대시보드 안 iframe(data-view)은 상대경로 그대로.
+      조직 이름을 다르게 지으면 **`SHARE_SITE` 한 줄 + 워크플로 5곳의 external_repository** 를 고친다.
+    - 외부 사이트 둘도 래퍼로: 챗봇 새 창 → `chat_full.html`(있던 것), 콜라보 레이더 →
+      `collab_full.html` 신설(build_static 복사 목록에 추가). 주소창엔 공유용 주소만 보인다.
+    - 공유 허브 `invest.html` 에 **아침 브리핑 3장**(방산 통합·건기 통합·친환경E/FDC) 추가 —
+      공유 때 이 페이지를 공유용 주소로 띄워 두면 된다.
+    - 비번 가림막(gate.py)은 산출물에 박혀 있어 공유용 주소에서도 그대로 — 단 localStorage 가
+      origin 별이라 거기서 비번을 한 번 더 넣는다. `build_static.previous_payload()` 안전망은
+      계속 github.io/GS-DB2 를 읽는다(원본 배포).
+    - 왜 Cloudflare 가 아닌가: 8/18 의 CF Pages 프로젝트는 Access 상태·토큰 유효성을 컨테이너에서
+      확인할 수 없고(pages.dev egress 차단) 외부 서비스 하나가 더 붙는다. 조직 주소는 GitHub 안에서 끝난다.
+    - 검증: 스크래치 빌드를 Playwright 로 열어 open-new 22개·새 탭 링크 35개 전부 공유용 주소,
+      동적 링크 클릭 시점 치환 확인. `cf-access-public-reports.yml` 은 11번에 '삭제'로 적혀 있지만
+      실제로 남아 있다(수동 실행 전용, 무해).
+    - **사용자 설치**: ① github.com → New organization(Free) 이름 `gs-research-desk`(이미 있으면 다른
+      이름 → SHARE_SITE·external_repository 변경) ② 그 조직에 **public** 리포
+      `gs-research-desk.github.io` 생성(README 하나로 초기화해 main 을 만든다) ③ Settings → Pages 에서
+      Source=Deploy from a branch, main / (root) 확인 ④ Settings → Developer settings → Fine-grained
+      PAT: Resource owner = 조직 gs-research-desk, 리포 그 하나, **Contents: Read and write** →
+      GS-DB2 리포 시크릿 `SHARE_DEPLOY_TOKEN` ⑤ deploy-pages 를 Run workflow → 조직 리포에 커밋이
+      생기고 몇 분 뒤 `https://gs-research-desk.github.io/invest.html` 이 열리면 끝.
+      조직 멤버는 기본 비공개라 조직 페이지에 gschoie 가 안 보인다(확인: 조직 People → Private).
 
 이후 작업은 git log와 이 파일을 갱신하며 이어간다.
