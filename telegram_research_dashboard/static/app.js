@@ -5,6 +5,16 @@ const state={q:'',reportCompany:'',newsCompany:'',newsQ:'',reportType:'',weeklyF
 const fmtDate=s=>new Intl.DateTimeFormat('ko-KR',{year:'2-digit',month:'2-digit',day:'2-digit'}).format(new Date(s));
 const won=n=>n?`${Number(n).toLocaleString()}원`:'—';
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+// ── 공유용 주소 ──
+// 새 창·새 탭(target=_blank)으로 여는 같은 사이트 페이지는 전부 gs-research-desk.github.io 로 보낸다.
+// 화면 공유 때 주소창에 gschoie.github.io/GS-DB2 와 사이드바가 보이지 않게 하기 위함 —
+// 5개 배포 워크플로가 같은 _site 를 GitHub 조직 gs-research-desk 의 Pages 리포에도 push 한다('공유용 주소 배포' 스텝).
+// 대시보드 안 iframe(data-view 뷰)은 상대경로 그대로다. 바꾸는 것은 새 탭 링크뿐.
+const SHARE_SITE='https://gs-research-desk.github.io/';
+function shareUrl(href){if(!href||/^(https?:|mailto:|tel:|#|javascript:)/i.test(href))return href;return SHARE_SITE+href.replace(/^\.?\//,'')}
+function shareLinks(root=document){root.querySelectorAll('a[target="_blank"]').forEach(a=>{const h=a.getAttribute('href'),s=shareUrl(h);if(s!==h)a.setAttribute('href',s)})}
+// 나중에 그려지는 링크(오늘의 요약 카드 등)는 누르는 순간에 바꾼다 — 캡처 단계라 새 탭이 열리기 전이다.
+['click','auxclick'].forEach(ev=>document.addEventListener(ev,e=>{const a=e.target.closest?.('a[target="_blank"]');if(a){const h=a.getAttribute('href'),s=shareUrl(h);if(s!==h)a.setAttribute('href',s)}},true));
 function localData(url){
  const data=window.__DASHBOARD_DATA__;if(!data)return null;
  const [path,raw='']=url.split('?'),params=new URLSearchParams(raw),q=(params.get('q')||'').toLocaleLowerCase(),nq=(params.get('nq')||'').toLocaleLowerCase(),company=params.get('company')||'',type=params.get('type')||'',weekly=params.get('weekly')||'';
@@ -724,3 +734,4 @@ async function freshDownload(key,btn){
   return done('⌛ 지연',true);
  }catch(e){return done('⚠ 오류',true)}}
 $$('[data-fresh]').forEach(b=>b.onclick=()=>freshDownload(b.dataset.fresh,b));
+shareLinks();
