@@ -191,11 +191,14 @@ function chart(pts, seriesDefs, unit) {
   if (!defs.length) return `<div class="chart"><div class="cap">${seriesDefs.map(d => d[1]).join(" · ")}</div><div class="empty" style="padding:16px 0">값 없음</div></div>`;
   const vals = defs.flatMap(([key]) => pts.map(p => +p[key]).filter(v => !Number.isNaN(v)));
   let lo = Math.min(0, ...vals), hi = Math.max(...vals); if (hi === lo) hi = lo + 1;
-  const pad = (hi - lo) * 0.08; hi += pad; if (lo < 0) lo -= pad;
+  // 눈금은 1·2·5×10^k 의 '둥근' 간격으로 — 90.6/68/45.3 같은 눈금은 읽는 사람이 환산해야 한다
+  const rawStep = (hi - lo) / 4, mag = Math.pow(10, Math.floor(Math.log10(rawStep)));
+  const tstep = [1, 2, 2.5, 5, 10].map(m => m * mag).find(st => st >= rawStep) || 10 * mag;
+  lo = Math.floor(lo / tstep) * tstep; hi = Math.ceil(hi / tstep) * tstep; if (hi === lo) hi = lo + tstep;
   const x = i => L + (pts.length === 1 ? (W - L - R) / 2 : i * (W - L - R) / (pts.length - 1));
   const y = v => T + (H - T - B) * (1 - (v - lo) / (hi - lo));
-  const ticks = 4; let g = "";
-  for (let t = 0; t <= ticks; t++) { const v = lo + (hi - lo) * t / ticks; g += `<line class="gl" x1="${L}" x2="${W - R}" y1="${y(v)}" y2="${y(v)}"/><text class="ax" x="${L - 6}" y="${y(v) + 4}" text-anchor="end">${fmtTick(v)}</text>`; }
+  let g = "";
+  for (let v = lo; v <= hi + tstep / 1e6; v += tstep) { g += `<line class="gl" x1="${L}" x2="${W - R}" y1="${y(v)}" y2="${y(v)}"/><text class="ax" x="${L - 6}" y="${y(v) + 4}" text-anchor="end">${fmtTick(v)}</text>`; }
   const step = Math.max(1, Math.ceil(pts.length / 6));
   pts.forEach((p, i) => { if (i % step === 0 || i === pts.length - 1) g += `<text class="ax" x="${x(i)}" y="${H - 8}" text-anchor="middle">${esc(shortLabel(p))}</text>`; });
   let paths = "";
@@ -210,7 +213,7 @@ function chart(pts, seriesDefs, unit) {
   const cap = defs.map(([, name, color]) => `<span><i style="background:${color}"></i>${name}</span>`).join("") + `<span style="color:var(--ink3)">${esc(unit)}</span>`;
   return `<div class="chart"><div class="cap">${cap}</div><svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${defs.map(d => d[1]).join(", ")} 추이">${g}${paths}</svg></div>`;
 }
-const fmtTick = v => Math.abs(v) >= 1e6 ? (v / 1e6).toFixed(1) + "M" : Math.abs(v) >= 1e4 ? (v / 1e3).toFixed(0) + "k" : (+v.toFixed(1)).toLocaleString("ko-KR");
+const fmtTick = v => Math.abs(v) >= 1e6 ? (+(v / 1e6).toFixed(2)) + "M" : Math.abs(v) >= 1e4 ? (+(v / 1e3).toFixed(1)) + "k" : (+v.toFixed(2)).toLocaleString("ko-KR");
 const shortLabel = r => { const [yy, mm] = (r.period || "").split("-"); const t = {annual: "FY", half: "H1", quarter: mm === "03" ? "1Q" : "3Q"}[r.report_type] || mm; return `${(yy || "").slice(2)}.${t}`; };
 
 function wireTips() {
