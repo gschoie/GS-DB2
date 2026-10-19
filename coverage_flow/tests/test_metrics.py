@@ -325,6 +325,44 @@ class Outputs(unittest.TestCase):
         with unittest.mock.patch.dict(os.environ, env, clear=True):
             self.assertEqual(notify._creds(), ("t2", "-100999"))
 
+    def test_compose_html_bold_header_and_escape(self):
+        d = fake_payload(); d["rows"][0]["name"] = "LIG D&A"; d["errors"] = []
+        h = notify.compose_html(d)
+        first = h.split("\n")[0]
+        self.assertTrue(first.startswith("<b>[GS 조선·방산·건기] 수급 브리핑") and first.endswith("</b>"), first)
+        self.assertIn("LIG D&amp;A", h); self.assertNotIn("D&A", h)
+        self.assertEqual(h.count("<b>"), 1)                                    # 머리글만 볼드
+        sent = []
+        with tempfile.TemporaryDirectory() as tmp:
+            latest, status = os.path.join(tmp, "l.json"), os.path.join(tmp, "s.json")
+            with open(latest, "w", encoding="utf-8") as f:
+                json.dump(d, f, ensure_ascii=False)
+            with unittest.mock.patch.object(notify, "LATEST", latest), unittest.mock.patch.object(notify, "STATUS", status), \
+                 unittest.mock.patch.object(notify, "send", lambda text, parse_mode=None: sent.append((text[:3], parse_mode)) or {"ok": True}):
+                notify.main([])
+        self.assertEqual(sent, [("<b>", "HTML")])
+
+    def test_text_rides_as_album_caption(self):
+        """캡쳐가 있으면 본문이 앨범 캡션(사진 밑)으로 간다 — 1024자 이내면 send() 미호출, 넘치면 옛 방식."""
+        d = fake_payload(); d["errors"] = []
+        calls = []
+        with tempfile.TemporaryDirectory() as tmp:
+            latest, status = os.path.join(tmp, "l.json"), os.path.join(tmp, "s.json")
+            for i in range(3):
+                open(os.path.join(tmp, f"capture_{i}.png"), "wb").write(b"x")
+            with open(latest, "w", encoding="utf-8") as f:
+                json.dump(d, f, ensure_ascii=False)
+            with unittest.mock.patch.object(notify, "LATEST", latest), unittest.mock.patch.object(notify, "STATUS", status), \
+                 unittest.mock.patch.object(notify, "send", lambda text, parse_mode=None: calls.append(("text", parse_mode)) or {"ok": True}), \
+                 unittest.mock.patch.object(notify, "send_photos", lambda paths, caption="", parse_mode=None: calls.append(("album", parse_mode, len(paths), caption[:3], len(caption))) or {"ok": True}):
+                notify.main(["--photos", os.path.join(tmp, "capture_*.png")])
+                self.assertEqual(calls, [("album", "HTML", 3, "<b>", len(notify.compose_html(d)))])
+                # 긴 본문: 캡션 한도 초과 → 본문 따로(HTML) + 사진은 짧은 캡션
+                calls.clear()
+                with unittest.mock.patch.object(notify, "compose_html", lambda dd: "<b>x</b>" + "y" * 1100):
+                    notify.main(["--photos", os.path.join(tmp, "capture_*.png")])
+                self.assertEqual(calls[0], ("text", "HTML")); self.assertEqual(calls[1][:2], ("album", None))
+
     def test_compose_empty(self):
         txt = notify.compose({"asof": "2026-10-16 10:01", "rows": [], "etfs": [], "active": []})
         self.assertIn("순매수 종목 없음", txt); self.assertIn("첫 수집", txt); self.assertIn("극단권 종목 없음", txt)
@@ -400,6 +438,22 @@ class Outputs(unittest.TestCase):
         self.assertIn("<tr class='gh'><td colspan='16'>방산</td></tr>", h)
         self.assertIn("<tr class='gh'><td colspan='8'>기계</td></tr>", h)
         self.assertLess(h.index(">조선</td>"), h.index(">방산</td>")); self.assertLess(h.index(">방산</td>"), h.index(">기계</td>"))
+
+    def test_tables_sorted_by_mcap(self):
+        """세 표 모두 묶음 안은 시총 내림차순, 성광벤드·태광은 여전히 조선 맨 밑."""
+        d = fake_payload()
+        base = d["rows"][0]
+        def mk(name, mcap, ind="조선"):
+            r = json.loads(json.dumps(base)); r.update(name=name, industry=ind, code=name); r["px"]["mcap"] = mcap
+            r["tech"]["rsi"] = 10 if name == "작은" else 90          # RSI 순이면 '작은' 이 먼저 올 값
+            r["flow"]["frgn5"] = 999 if name == "작은" else 1       # 외인 5일 순이면 '작은' 이 먼저 올 값
+            return r
+        d["rows"] = [mk("작은", 100), mk("큰", 5000), mk("성광벤드", 9999), mk("중간", 1000)]
+        h = build_report.render(d)
+        for tbl in h.split("<table")[1:4]:                                       # 등락률·수급·과매수 세 표
+            order = [n for n in ("큰", "중간", "작은", "성광벤드") if n in tbl]
+            idx = [tbl.index(f"<td>{n}") for n in order]
+            self.assertEqual(idx, sorted(idx), order)
 
 
 class KisToken(unittest.TestCase):
@@ -502,7 +556,7 @@ class CollectGuard(unittest.TestCase):
                 json.dump(payload, f, ensure_ascii=False)
             sent = []
             with unittest.mock.patch.object(notify, "LATEST", latest), unittest.mock.patch.object(notify, "STATUS", status), \
-                 unittest.mock.patch.object(notify, "send", lambda text: sent.append(text) or {"ok": True}), \
+                 unittest.mock.patch.object(notify, "send", lambda text, parse_mode=None: sent.append(text) or {"ok": True}), \
                  unittest.mock.patch.object(notify, "send_photos", lambda *a, **k: sent.append("photo") or {"ok": True}):
                 rc = notify.main(["--photos", os.path.join(d, "none_*.png")])
             self.assertEqual(rc, 0); self.assertEqual(sent, [])
@@ -514,7 +568,7 @@ class CollectGuard(unittest.TestCase):
             with open(latest, "w", encoding="utf-8") as f:
                 json.dump(payload, f, ensure_ascii=False)
             with unittest.mock.patch.object(notify, "LATEST", latest), unittest.mock.patch.object(notify, "STATUS", status), \
-                 unittest.mock.patch.object(notify, "send", lambda text: sent.append(text) or {"ok": True}):
+                 unittest.mock.patch.object(notify, "send", lambda text, parse_mode=None: sent.append(text) or {"ok": True}):
                 notify.main([])
             self.assertEqual(len(sent), 1)
 
