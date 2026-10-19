@@ -179,7 +179,7 @@ function renderSeries(rows) {
           ${chart(pts, [["utilization_pct", "가동률", "var(--s3)"]], "%")}
         </div>
         <div class="tscroll"><table><thead><tr><th>보고 기간</th><th>보고서</th><th>생산능력${r0.capacity_unit ? " (" + esc(r0.capacity_unit) + ")" : ""}</th><th>생산실적${r0.production_unit ? " (" + esc(r0.production_unit) + ")" : ""}</th><th>가동률</th><th style="text-align:left">비고</th></tr></thead><tbody>
-        ${pts.map(r => `<tr><td>${esc(periodLabel(r))}</td><td class="lbl">${link(r, esc(r.report_type_label || r.report_type || "원문"))}</td><td>${link(r, fmt(r.capacity))}</td><td>${link(r, fmt(r.production))}</td><td>${link(r, fmt(r.utilization_pct, "utilization_pct"))}</td><td class="lbl" style="white-space:normal;min-width:200px">${esc(r.note || "")}</td></tr>`).join("")}
+        ${pts.map(r => `<tr><td>${esc(periodLabel(r))}</td><td class="lbl">${link(r, esc(r.report_label || r.report_type || "원문"))}</td><td>${link(r, fmt(r.capacity))}</td><td>${link(r, fmt(r.production))}</td><td>${link(r, fmt(r.utilization_pct, "utilization_pct"))}</td><td class="lbl" style="white-space:normal;min-width:200px">${esc(r.note || "")}</td></tr>`).join("")}
         </tbody></table></div>`;
     }
     html += `</div>`;
@@ -218,7 +218,8 @@ function chart(pts, seriesDefs, unit) {
   return `<div class="chart"><div class="cap">${cap}</div><svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${defs.map(d => d[1]).join(", ")} 추이">${g}${paths}</svg></div>`;
 }
 const fmtTick = v => Math.abs(v) >= 1e6 ? (+(v / 1e6).toFixed(2)) + "M" : Math.abs(v) >= 1e4 ? (+(v / 1e3).toFixed(1)) + "k" : (+v.toFixed(2)).toLocaleString("ko-KR");
-const shortLabel = r => { const [yy, mm] = (r.period || "").split("-"); const t = {annual: "FY", half: "H1", quarter: mm === "03" ? "1Q" : "3Q"}[r.report_type] || mm; return `${(yy || "").slice(2)}.${t}`; };
+// x축 라벨은 데이터 열의 기간(period)에서 — 사업보고서 한 장에 3개 연도가 실리므로 보고서 종류로는 못 정한다
+const shortLabel = r => { const [yy, mm] = (r.period || "").split("-"); const t = {"12": "FY", "03": "1Q", "06": "H1", "09": "3Q"}[mm] || mm; return `${(yy || "").slice(2)}.${t}`; };
 
 function wireTips() {
   const tip = $("#tip");
