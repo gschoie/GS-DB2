@@ -40,10 +40,10 @@ def compose(d):
     except Exception:
         head_dt = d.get("asof", "")
     prov = any(r.get("flow", {}).get("has_today") for r in rows)
-    L = [f"[GS 조선·방산·건기] 수급 브리핑 {head_dt}", ""]
+    L = [f"[GS🎴 조선·방산·건기] 수급 브리핑 {head_dt}", ""]
     L.append(f"외국인·기관 순매수 · {len(rows)}종목 · 5일 합산 억원{' · 오늘 잠정 포함' if prov else ''}")
     buy, sell = metrics.rank_flow(rows)
-    L.append("사는 쪽 · 시총 대비 5일")
+    L.append("📈 사는 쪽 · 시총 대비 5일")
     for r in buy or []:
         f = r["flow"]
         bits = [f"{r['name']} {f['fi5_mcap_pct']:+.1f}%", f"외인 {_sign_won(f['frgn5'])}", f"기관 {_sign_won(f['inst5'])}"]
@@ -51,7 +51,7 @@ def compose(d):
         L.append("· " + " · ".join(bits))
     if not buy:
         L.append("· 시총 대비 순매수 종목 없음")
-    L.append("파는 쪽 · 시총 대비 5일")
+    L.append("📉 파는 쪽 · 시총 대비 5일")
     for r in sell or []:
         f = r["flow"]
         bits = [f"{r['name']} {f['fi5_mcap_pct']:+.1f}%", f"외인 {_sign_won(f['frgn5'])}", f"기관 {_sign_won(f['inst5'])}"]
@@ -65,7 +65,7 @@ def compose(d):
 
     # 기계적 수급
     L.append("")
-    L.append("기계적 수급 (ETF/패시브)")
+    L.append("⚙️ 기계적 수급 (ETF/패시브)")
     pas = [r for r in rows if r.get("passive") and r["passive"].get("adv_pct") is not None and abs(r["passive"]["adv_pct"]) >= 1]
     pas.sort(key=lambda r: abs(r["passive"]["adv_pct"]), reverse=True)
     for r in pas[:5]:
@@ -109,11 +109,17 @@ def compose(d):
     return "\n".join(L)
 
 
+SECTION_HEADS = ("📈 사는 쪽", "📉 파는 쪽", "⚙️ 기계적 수급")   # HTML 모드에서 볼드로 찍는 섹션 제목
+
+
 def compose_html(d):
-    """compose() 의 평문을 HTML 모드용으로 — 머리글(첫 줄)만 <b>…</b>(사용자 요청 10/19).
-    본문은 전부 escape 하므로 종목명의 '&'(LIG D&A)도 안전하다."""
+    """compose() 의 평문을 HTML 모드용으로 — 머리글(첫 줄)과 SECTION_HEADS 로 시작하는 섹션 제목을
+    <b>…</b>(사용자 요청 10/19). 본문은 전부 escape 하므로 종목명의 '&'(LIG D&A)도 안전하다."""
     lines = compose(d).split("\n")
-    out = [f"<b>{html.escape(lines[0])}</b>"] + [html.escape(x) for x in lines[1:]]
+    out = []
+    for i, x in enumerate(lines):
+        e = html.escape(x)
+        out.append(f"<b>{e}</b>" if (i == 0 or x.startswith(SECTION_HEADS)) else e)
     return "\n".join(out)
 
 
