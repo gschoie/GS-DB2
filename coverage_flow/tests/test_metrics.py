@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
 """순수 계산부 검산 — 네트워크 없음. 컨테이너·러너 모두에서 돈다.
 python tests/test_metrics.py"""
-import os, sys, json, unittest, unittest.mock
+import os, sys, json, tempfile, unittest, unittest.mock
 import numpy as np, pandas as pd
 from datetime import datetime, timezone, timedelta
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, os.path.dirname(HERE))
-import metrics, kis, notify, build_report  # noqa: E402
+import metrics, kis, notify, build_report, collect  # noqa: E402
 
 KST = timezone(timedelta(hours=9))
 
@@ -332,7 +332,7 @@ class Outputs(unittest.TestCase):
     def test_render(self):
         h = build_report.render(fake_payload())
         for s in ("한화오션", "13일째 매수", "1년 최저권", "SOL 조선TOP3플러스", "수집 오류 1건", "커버예정", "직전 값 없음", "TIME 코스피액티브",
-                  "① 등락률", "①-2 투자자별 순매수", "+42.0", "+300", "② 과매수", "③ 기계적 수급", '<details id="cap-3"', "3개월 차트"):
+                  "① 등락률", "①-2 투자자별 순매수", "+42.0", "+300", "② 과매수", "③ 기계적 수급", '<details id="cap-3"', "3개월 차트", "📅 수집 시각 <b>10/16(금) 13:31</b>"):
             self.assertIn(s, h)
         self.assertNotIn("chr(", h)
         self.assertNotIn("5일 외인+기관", h)                                  # 시총 대비 열 제거
@@ -457,6 +457,66 @@ class KisToken(unittest.TestCase):
             kis.requests.post, kis.time.sleep = saved_post, saved_sleep
             kis._c.update(saved_cache)
         self.assertEqual(naps, [1, 1])           # 마지막 시도는 기다리지 않고 올린다
+
+
+class CollectGuard(unittest.TestCase):
+    def test_enough_blocks_partial_runs(self):
+        """21종목 중 2종목(10/19 토큰 403 사고)은 부족, 15종목(71%)은 통과, 유니버스 0은 실패."""
+        self.assertFalse(collect.enough(2, 21))
+        self.assertTrue(collect.enough(15, 21))
+        self.assertFalse(collect.enough(14, 21))
+        self.assertTrue(collect.enough(21, 21))
+        self.assertFalse(collect.enough(0, 0))
+        self.assertTrue(collect.enough(1, 2, ratio=0.5))
+
+    def test_partial_run_keeps_previous_latest(self):
+        """부족한 run 은 latest.json 을 덮어쓰지 않고 종료코드 2."""
+        with tempfile.TemporaryDirectory() as d:
+            latest = os.path.join(d, "latest.json")
+            with open(latest, "w") as f:
+                json.dump({"asof": "이전 정상본"}, f)
+            uni = [{"code": str(i), "name": f"s{i}", "industry": "조선", "status": "커버리지"} for i in range(5)]
+            calls = {"n": 0}
+            def fake_stock(u, today, live):
+                calls["n"] += 1
+                if calls["n"] > 1:
+                    raise RuntimeError("403 tokenP")
+                return {"code": u["code"], "name": u["name"], "industry": "조선", "status": "커버리지",
+                        "tech": {}, "flow": {}, "px": {}}
+            with unittest.mock.patch.object(collect, "LATEST", latest), \
+                 unittest.mock.patch.object(collect, "market_day", lambda: ("2026-10-19", "OPEN")), \
+                 unittest.mock.patch.object(collect, "load_csv", lambda fn: uni), \
+                 unittest.mock.patch.object(collect, "collect_stock", fake_stock), \
+                 unittest.mock.patch.object(collect.sys, "argv", ["collect.py", "--force"]):
+                rc = collect.main()
+            self.assertEqual(rc, 2)
+            with open(latest) as f:
+                self.assertEqual(json.load(f)["asof"], "이전 정상본")
+
+    def test_notify_skips_when_any_error(self):
+        """수집 오류가 하나라도 있으면 send() 를 부르지 않고 status 에 생략 사유만 남긴다."""
+        with tempfile.TemporaryDirectory() as d:
+            latest, status = os.path.join(d, "latest.json"), os.path.join(d, "status.json")
+            payload = fake_payload(); payload["errors"] = ["000490 대동: RuntimeError: 예시"]
+            with open(latest, "w", encoding="utf-8") as f:
+                json.dump(payload, f, ensure_ascii=False)
+            sent = []
+            with unittest.mock.patch.object(notify, "LATEST", latest), unittest.mock.patch.object(notify, "STATUS", status), \
+                 unittest.mock.patch.object(notify, "send", lambda text: sent.append(text) or {"ok": True}), \
+                 unittest.mock.patch.object(notify, "send_photos", lambda *a, **k: sent.append("photo") or {"ok": True}):
+                rc = notify.main(["--photos", os.path.join(d, "none_*.png")])
+            self.assertEqual(rc, 0); self.assertEqual(sent, [])
+            with open(status, encoding="utf-8") as f:
+                st = json.load(f)
+            self.assertTrue(st["skipped"]); self.assertIn("오류 1건", st["description"])
+            # 오류가 없으면 평소대로 보낸다
+            payload["errors"] = []
+            with open(latest, "w", encoding="utf-8") as f:
+                json.dump(payload, f, ensure_ascii=False)
+            with unittest.mock.patch.object(notify, "LATEST", latest), unittest.mock.patch.object(notify, "STATUS", status), \
+                 unittest.mock.patch.object(notify, "send", lambda text: sent.append(text) or {"ok": True}):
+                notify.main([])
+            self.assertEqual(len(sent), 1)
 
 
 if __name__ == "__main__":

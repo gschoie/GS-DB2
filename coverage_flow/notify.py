@@ -188,6 +188,20 @@ def main(argv=None):
     print(text)
     if dry:
         return 0
+    # 수집 오류가 하나라도 있으면 보내지 않는다(10/19 사용자 규칙). 빠진 종목이 섞인 표·캡쳐가
+    # 채널에 남는 것보다 한 번 거르는 게 낫다 — 페이지는 오류 목록과 함께 갱신돼 있으니 거기서 본다.
+    errs = d.get("errors") or []
+    if errs:
+        msg = f"수집 오류 {len(errs)}건 — 텔레그램 발송 생략"
+        print(msg)
+        for e in errs:
+            print("  " + e)
+        tok, chat = _creds()
+        with open(STATUS, "w", encoding="utf-8") as f:
+            json.dump({"at": datetime.now(KST).strftime("%Y-%m-%d %H:%M"), "ok": False, "skipped": True,
+                       "description": msg, "token_set": bool(tok), "chat_set": bool(chat),
+                       "slot": d.get("slot"), "photo_ok": None}, f, ensure_ascii=False, indent=1)
+        return 0
     res = send(text)
     # 사진은 본문 뒤에 — 본문이 실패하면 사진도 안 보낸다(반쪽 메시지 방지). 사진 실패는 경고만.
     pres = None
