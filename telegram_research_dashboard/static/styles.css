@@ -368,13 +368,14 @@ body.item-locked #task-item{appearance:none;-webkit-appearance:none;border-color
 #todo .todo-row{align-items:flex-start}
 #todo .todo-row>input[type=checkbox]{margin-top:4px}
 #todo .todo-grip,#todo .todo-move,#todo .todo-edit,#todo .todo-del,#todo .todo-arch-one,#todo .todo-ts{margin-top:2px}
-.todo-note{display:block;width:100%;margin:2px 0 0;padding:2px 6px;border:1px solid transparent;border-bottom-color:#e5e7eb;border-radius:4px;background:transparent;
-  font:13px/1.5 inherit;color:#4b5563;resize:none;overflow:hidden;min-height:24px;max-height:180px;outline:0;field-sizing:content;box-sizing:border-box}
-.todo-note::placeholder{color:#c4c9d1}
-.todo-note:hover{background:rgba(55,53,47,.04)}
-.todo-note:focus{background:#fff;border-color:#93c5fd}
-.todo-row.done .todo-note{color:#9ca3af}
-.todo-note-ro{display:block;margin-top:2px;font-size:12px;line-height:1.5;color:#8a948e;white-space:pre-wrap}
+.todo-note{display:block;width:100%;margin:5px 0 2px;padding:7px 10px;border:1px solid #e5e7eb;border-radius:8px;background:#f3f4f6;
+  font:14.5px/1.55 inherit;color:#374151;resize:none;overflow:hidden;min-height:38px;max-height:220px;outline:0;field-sizing:content;box-sizing:border-box;
+  box-shadow:inset 0 1px 2px rgba(17,24,39,.06);transition:background .12s,border-color .12s}
+.todo-note::placeholder{color:#9ca3af}
+.todo-note:hover{background:#eceef1;border-color:#d1d5db}
+.todo-note:focus{background:#fff;border-color:#93c5fd;box-shadow:inset 0 1px 2px rgba(17,24,39,.04),0 0 0 3px rgba(37,99,235,.12)}
+.todo-row.done .todo-note{color:#9ca3af;background:#f7f8f9}
+.todo-note-ro{display:block;margin:5px 0 2px;padding:6px 10px;border-radius:8px;background:#f3f4f6;font-size:13.5px;line-height:1.5;color:#6b7280;white-space:pre-wrap}
 #todo .todo-grip,#todo .todo-edit,#todo .todo-del,#todo .todo-arch-one,#todo .todo-restore,#todo .todo-arch-del,#todo .todo-ts{
   opacity:0;transition:opacity .12s}
 #todo .todo-row:hover .todo-grip,#todo .todo-row:hover .todo-edit,#todo .todo-row:hover .todo-del,
