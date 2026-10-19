@@ -11,7 +11,11 @@ normalize.py  Claude API 로 공통 스키마 JSON → data/normalized/, 모호�
 dashboard/    정적 HTML (회사·섹터 필터, 시계열, 가동률 비교)
 ```
 
-- 환경변수: `DART_API_KEY`(OpenDART 인증키, 무료 발급), `ANTHROPIC_API_KEY`(정규화).
+- 환경변수: `DART_API_KEY`(OpenDART 인증키, 무료 발급), `ANTHROPIC_API_KEY`(정규화, 모델 기본 claude-opus-5-5 — `DART_CAPACITY_MODEL` 로 교체).
+- 정규화 스키마: company, stock_code, sector, period(데이터 열 기말 YYYY-MM), period_label(원문 열 이름), report_type,
+  segment, product, unit, capacity, production, utilization_pct, basis(quantity|amount|hours|other), cumulative,
+  capacity_unit, production_unit, source_rcept_no, dart_url, note. 대시보드는 `data/normalized/all.json` 하나를 읽는다.
+- 수동 검토: `data/review.csv`(무관한 표·confidence=low·기간 형식 오류). 고친 뒤 `python normalize.py --rebuild` 로 all.json 재생성.
 - 워크플로 `dart-capacity.yml`: 3·5·8·11월 20일 07:00 KST + 수동(종목·단계 선택).
   원문 zip 은 `actions/cache` 로만 보관한다.
 - 단위는 바꾸지 않는다(척·CGT·톤·대·억원 그대로). 금액 기준인지 수량 기준인지는 note 에.

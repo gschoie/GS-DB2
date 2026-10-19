@@ -1019,17 +1019,36 @@
       필요 — kospi_consensus 40번 방식). 필요해지면 kospi_consensus DB 재사용이 다음 후보.
     - 테스트 60→67개(파서 3 + 보강 4), Playwright 로 ᴺ 배지·국내/해외 안내문 분기 실클릭 검증.
 
-49. **DART 생산능력·가동률 수집 신설 — 1단계(fetch/extract)** (10/19): `dart_capacity/` —
-    config/companies.yaml 16개사(조선·조기·방산·건기, 대한조선은 종목코드 공란 → corpCode 이름 매칭).
-    `fetch.py`(corpCode → list.json 정기공시 A → document.xml zip, data/raw 는 actions/cache 만·리포 미포함)
-    → `extract.py`(표 본문 **또는 바로 앞 제목·단위 문구**에 키워드가 있는 표만, 이전 표 이후 블록만 문맥으로;
-    원본 마크업 그대로 `data/extracted/<코드>_<rcept_no>.html|.json`) → normalize.py(미작성, 다음 단계).
-    - **컨테이너는 OpenDART·DART 둘 다 프록시 403** → 실행은 러너에서만. `tests/test_extract.py` 가
-      가짜 DART XML 로 선정 규칙 검산.
-    - **main 에 없는 새 워크플로는 dispatch 가 404** — GitHub 가 색인하지 않는다. 브랜치 push 트리거
-      (워크플로 파일 경로 한정, 임시)로 1회 돌려 등록시켰다. 머지 전 push 트리거 제거할 것.
-    - **첫 실행(3개사)은 `DART_API_KEY` 시크릿 부재로 수집 단계에서 중단** — 사용자가 OpenDART
-      인증키를 리포 시크릿에 넣어야 다음으로 간다. 등록 뒤 `codes=329180,012450,241560`,
-      stage=fetch-extract 로 dispatch → 결과가 브랜치에 커밋되면 표 모양을 보고 정규화 설계.
+49. **DART 생산능력·생산실적·가동률 수집 신설** (10/19): `dart_capacity/` — config/companies.yaml 16개사
+    (조선·조기·방산·건기, 대한조선은 종목코드 공란 → corpCode 이름 매칭). 파이프라인 fetch → extract →
+    normalize(Claude) → dashboard. 워크플로 `dart-capacity.yml`(3·5·8·11월 20일 07:00 KST + 수동: codes·
+    stage=fetch-extract|full·force). 사이드바 `🦿 업무자동화 > 🏭 생산능력·가동률(DART)` + 🔄 수집 버튼
+    (GAS `dartcap` 라우트, stage=full — **GAS 재붙여넣기 필요**), build_static 이 dashboard/index.html →
+    `dart_capacity_report.html`, data/normalized/ → `dart_capacity/normalized/`(런타임 fetch) 복사.
+    - **컨테이너는 OpenDART·DART 둘 다 프록시 403** → 실행은 러너에서만. 가짜 DART XML 테스트
+      (`tests/test_extract.py` 4개·`tests/test_normalize.py` 3개)로 규칙을 검산한다.
+    - **OpenDART document.xml 은 건당 ~30초** (200KB~1MB) — 직렬이면 41건에 20분(실측). 병렬 4로 받는다.
+      원문 zip 은 actions/cache 만(리포 미포함). `[첨부정정]`은 014(파일 없음)로 오는 게 정상.
+    - **main 에 없는 새 워크플로는 dispatch 가 404** — GitHub 가 색인하지 않는다. 브랜치 push 트리거를 임시로
+      넣어 1회 돌려 등록시킨 뒤 제거했다(등록 후엔 브랜치 ref 로 dispatch 가능).
+    - **표 선정 규칙(실측으로 다듬음)**: ① 표 본문은 **셀 하나가 통째로 지표명**(생산능력/생산실적/가동률(%))
+      이거나 머리글에 있을 때만 — '생산능력 향상'(투자표 기대효과 셀)·'생산능력증가'는 제외. ② 제목은
+      **가장 가까운 제목 줄의 마지막 소항목**으로 판정 — '다. 주요 원재료 및 생산능력 (1) 주요 원재료 등의
+      현황' 에 원재료 표가 끌려오던 것 차단. '…입니다.' 로 끝나는 각주 문장은 제목이 아니다. ③ DART 는
+      '(단위 : 백만원)' 과 '※ 각주' 를 **한 칸짜리 표**로 따로 둔다 → 표로 세지 않고 다음 표의 단위 /
+      **바로 앞** 채택 표의 각주로 붙인다(다른 표를 지나왔으면 안 붙임 — 처음엔 문서 뒤쪽 각주 50개가
+      두산밥캣 가동률 표에 붙었다). ④ 제목 여러 줄이 한 요소에 올 수 있어(두산밥캣 '…제외하였습니다.
+      라. 생산실적 및 가동률 (1) 생산실적') 문맥은 **요소가 아니라 줄 단위**. ⑤ 표마다 뒤로 되짚는
+      `find_all_previous` 는 큰 보고서에서 문서당 40초 → 한 번 훑는 버퍼 방식(400표 문서 5.8초).
+    - **회사마다 표 모양이 다르다**: 한화에어로 = 능력·실적·가동률이 한 표(구분 열), **금액 기준 백만원**,
+      사업보고서에 3개 연도 열(→ 연도별로 행을 쪼갠다, period 는 데이터 열 기간). 두산밥캣 = 능력/실적/
+      가동률 3표, 단위 '대', 기간이 **제12기·제11기**(기수 → 보고 기간이 당기). HD현대중공업 = 능력(천GT·
+      천BHP, 셀 안에 단위)·가동률(천M/H 가동가능/실제시간)·실적(백만원) 3표 + 개요 중복 1표 — 능력·실적
+      단위가 달라 스키마에 `capacity_unit`/`production_unit` 을 두고 대시보드는 단위가 다르면 차트를
+      나눈다(한 축 원칙). 정규화는 보고서당 모델 1회(표 전부를 한 번에 넘겨 (부문·제품·기간)으로 합치게).
+    - **현재 상태**: 3개사(HD현중·한화에어로·두산밥캣) 39건 수집·추출 완료(브랜치 data/extracted).
+      **정규화는 `ANTHROPIC_API_KEY` 시크릿 부재로 미실행** — 등록 후 stage=full 로 dispatch 하면
+      data/normalized/all.json 이 생기고 대시보드가 채워진다. 나머지 13개사는 codes 비워 실행.
+    - 운영 메모: 3/20 크론은 사업보고서 마감(3/31) 전이라 그해 사업보고서는 5/20 실행에 잡힌다.
 
 이후 작업은 git log와 이 파일을 갱신하며 이어간다.
