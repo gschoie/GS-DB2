@@ -23,18 +23,69 @@
    "headings": [
     "다. 생산능력 및 산출근거 (1) 생산능력"
    ],
-   "unit": "",
+   "context": [
+    "다. 생산능력 및 산출근거 (1) 생산능력",
+    "(단위: 대)"
+   ],
+   "unit": "(단위: 대)",
    "keywords": [
     "생산능력"
    ],
    "keyword_in": "heading",
    "rows": [
     [
-     "(단위: 대)"
+     "제품군",
+     "사업소",
+     "제11기 1분기",
+     "제10기",
+     "제9기"
+    ],
+    [
+     "Compact Equipment",
+     "국내",
+     "-",
+     "-",
+     "-"
+    ],
+    [
+     "해외",
+     "31,400",
+     "120,200",
+     "119,600"
+    ],
+    [
+     "Portable Power",
+     "국내",
+     "-",
+     "-",
+     "-"
+    ],
+    [
+     "해외",
+     "5,200",
+     "20,200",
+     "20,200"
+    ],
+    [
+     "Material Handling",
+     "국내",
+     "6,661",
+     "25,592",
+     "24,353"
+    ],
+    [
+     "해외",
+     "1,062",
+     "4,668",
+     "5,244"
     ]
    ],
-   "html": "<table aclass=\"NORMAL\" afixtable=\"N\" border=\"0\" width=\"624\">\n<colgroup>\n<col width=\"615\"/>\n</colgroup>\n<tbody>\n<tr acopy=\"Y\" adelete=\"Y\">\n<td align=\"RIGHT\" height=\"30\" valign=\"MIDDLE\" width=\"624\">(단위: 대)</td>\n</tr>\n</tbody>\n</table>",
-   "digest": "a32d24fecdbc",
+   "html": "<table aclass=\"NORMAL\" afixtable=\"N\" border=\"1\" width=\"622\">\n<colgroup>\n<col width=\"141\"/>\n<col width=\"89\"/>\n<col width=\"116\"/>\n<col width=\"116\"/>\n<col width=\"115\"/>\n</colgroup>\n<thead align=\"LEFT\" valign=\"TOP\">\n<tr acopy=\"Y\" adelete=\"Y\">\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"30\" valign=\"MIDDLE\" width=\"150\">제품군</th>\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"30\" valign=\"MIDDLE\" width=\"98\">사업소</th>\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"30\" valign=\"MIDDLE\" width=\"125\">제11기 1분기</th>\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"30\" valign=\"MIDDLE\" width=\"125\">제10기</th>\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"30\" valign=\"MIDDLE\" width=\"124\">제9기</th>\n</tr>\n</thead>\n<tbody>\n<tr acopy=\"Y\" adelete=\"Y\">\n<td align=\"CENTER\" height=\"60\" rowspan=\"2\" valign=\"MIDDLE\" width=\"150\">Compact Equipment</td>\n<td align=\"CENTER\" height=\"30\" valign=\"MIDDLE\" width=\"98\">국내</td>\n<td align=\"CENTER\" height=\"30\" valign=\"MIDDLE\" width=\"125\">-</td>\n<td align=\"CENTER\" height=\"30\" valign=\"MIDDLE\" width=\"125\">-</td>\n<td align=\"CENTER\" height=\"30\" valign=\"MIDDLE\" width=\"124\">-</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\">\n<td align=\"CENTER\" height=\"30\" valign=\"MIDDLE\" width=\"98\">해외</td>\n<td align=\"RIGHT\" height=\"30\" valign=\"MIDDLE\" width=\"125\">31,400</td>\n<td align=\"RIGHT\" height=\"30\" valign=\"MIDDLE\" width=\"125\">120,200</td>\n<td align=\"RIGHT\" height=\"30\" valign=\"MIDDLE\" width=\"124\">119,600</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\">\n<td align=\"CENTER\" height=\"60\" rowspan=\"2\" valign=\"MIDDLE\" width=\"150\">Portable Power</td>\n<td align=\"CENTER\" height=\"30\" valign=\"MIDDLE\" width=\"98\">국내</td>\n<td align=\"CENTER\" height=\"30\" valign=\"MIDDLE\" width=\"125\">-</td>\n<td align=\"CENTER\" height=\"30\" valign=\"MIDDLE\" width=\"125\">-</td>\n<td align=\"CENTER\" height=\"30\" valign=\"MIDDLE\" width=\"124\">-</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\">\n<td align=\"CENTER\" height=\"30\" valign=\"MIDDLE\" width=\"98\">해외</td>\n<td align=\"RIGHT\" height=\"30\" valign=\"MIDDLE\" width=\"125\">5,200</td>\n<td align=\"RIGHT\" height=\"30\" valign=\"MIDDLE\" width=\"125\">20,200</td>\n<td align=\"RIGHT\" height=\"30\" valign=\"MIDDLE\" width=\"124\">20,200</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\">\n<td align=\"CENTER\" height=\"60\" rowspan=\"2\" valign=\"MIDDLE\" width=\"150\">Material Handling</td>\n<td align=\"CENTER\" height=\"30\" valign=\"MIDDLE\" width=\"98\">국내</td>\n<td align=\"RIGHT\" height=\"30\" valign=\"MIDDLE\" width=\"125\">6,661</td>\n<td align=\"RIGHT\" height=\"30\" valign=\"MIDDLE\" width=\"125\">25,592</td>\n<td align=\"RIGHT\" height=\"30\" valign=\"MIDDLE\" width=\"124\">   24,353</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\">\n<td align=\"CENTER\" height=\"30\" valign=\"MIDDLE\" width=\"98\">해외</td>\n<td align=\"RIGHT\" height=\"30\" valign=\"MIDDLE\" width=\"125\">1,062</td>\n<td align=\"RIGHT\" height=\"30\" valign=\"MIDDLE\" width=\"125\">4,668</td>\n<td align=\"RIGHT\" height=\"30\" valign=\"MIDDLE\" width=\"124\">     5,244</td>\n</tr>\n</tbody>\n</table>",
+   "footnotes": [
+    "주1) 일부 제품에 대해서는 외주생산(OEM)을 통해 공급받고 있습니다.주2) 주공장이 아닌 Attachment 및 특수장비는 제외하였습니다.주3) 제9기부터 Compact Equipment 내, 기존의 Skid-Steer Loader, Compact Track Loader, Mini Excavator, Telehandler, Backhoe Loader에 추가로 Mower가 포함되었습니다.",
+    "주1) 일부 제품에 대해서는 외주생산(OEM)을 통해 공급받고 있습니다.주2) 주공장이 아닌 Attachment 및 특수장비는 제외하였습니다.주3) 제9기부터 Compact Equipment 내, 기존의 Skid-Steer Loader, Compact Track Loader, Mini Excavator, Telehandler, Backhoe Loader에 추가로 Mower가 포함되었습니다."
+   ],
+   "digest": "c86c1543e8ad",
    "file": "20240514001585.xml"
   },
   {
@@ -46,18 +97,162 @@
    "headings": [
     "(2) 당해 사업연도의 가동률"
    ],
-   "unit": "",
+   "context": [
+    "주1) 일부 제품에 대해서는 외주생산(OEM)을 통해 공급받고 있습니다.주2) 주공장이 아닌 Attachment 및 특수장비는 제외하였습니다.주3) 제9기부터 Compact Equipment 내, 기존의 Skid-Steer Loader, Compact Track Loader, Mini Excavator, Telehandler, Backhoe Loader에 추가로 Mower가 포함되었습니다.",
+    "(2) 당해 사업연도의 가동률",
+    "(단위: %)"
+   ],
+   "unit": "(단위: %)",
    "keywords": [
     "가동률"
    ],
    "keyword_in": "heading",
    "rows": [
     [
-     "(단위: %)"
+     "제품군",
+     "사업소",
+     "제11기 1분기"
+    ],
+    [
+     "Compact Equipment",
+     "국내",
+     "-"
+    ],
+    [
+     "해외",
+     "80.3%"
+    ],
+    [
+     "Portable Power",
+     "국내",
+     "-"
+    ],
+    [
+     "해외",
+     "30.8%"
+    ],
+    [
+     "Material Handling",
+     "국내",
+     "65.3%"
+    ],
+    [
+     "해외",
+     "83.7%"
+    ],
+    [
+     "계",
+     "67.8%"
     ]
    ],
-   "html": "<table aclass=\"NORMAL\" afixtable=\"N\" border=\"0\" width=\"409\">\n<colgroup>\n<col width=\"400\"/>\n</colgroup>\n<tbody>\n<tr acopy=\"Y\" adelete=\"Y\">\n<td align=\"RIGHT\" height=\"30\" valign=\"MIDDLE\" width=\"409\">(단위: %)</td>\n</tr>\n</tbody>\n</table>",
-   "digest": "c45c320c9097",
+   "html": "<table aclass=\"NORMAL\" afixtable=\"N\" border=\"1\" width=\"406\">\n<colgroup>\n<col width=\"141\"/>\n<col width=\"89\"/>\n<col width=\"149\"/>\n</colgroup>\n<thead align=\"LEFT\" valign=\"TOP\">\n<tr acopy=\"Y\" adelete=\"Y\">\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"30\" valign=\"MIDDLE\" width=\"150\">제품군</th>\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"30\" valign=\"MIDDLE\" width=\"98\">사업소</th>\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"30\" valign=\"MIDDLE\" width=\"158\">제11기 1분기</th>\n</tr>\n</thead>\n<tbody>\n<tr acopy=\"Y\" adelete=\"Y\">\n<td align=\"CENTER\" height=\"60\" rowspan=\"2\" valign=\"MIDDLE\" width=\"150\">Compact Equipment</td>\n<td align=\"CENTER\" height=\"30\" valign=\"MIDDLE\" width=\"98\">국내</td>\n<td align=\"CENTER\" height=\"30\" valign=\"MIDDLE\" width=\"158\">-</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\">\n<td align=\"CENTER\" height=\"30\" valign=\"MIDDLE\" width=\"98\">해외</td>\n<td align=\"CENTER\" height=\"30\" valign=\"MIDDLE\" width=\"158\">80.3%</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\">\n<td align=\"CENTER\" height=\"60\" rowspan=\"2\" valign=\"MIDDLE\" width=\"150\">Portable Power</td>\n<td align=\"CENTER\" height=\"30\" valign=\"MIDDLE\" width=\"98\">국내</td>\n<td align=\"CENTER\" height=\"30\" valign=\"MIDDLE\" width=\"158\">-</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\">\n<td align=\"CENTER\" height=\"30\" valign=\"MIDDLE\" width=\"98\">해외</td>\n<td align=\"CENTER\" height=\"30\" valign=\"MIDDLE\" width=\"158\">30.8%</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\">\n<td align=\"CENTER\" height=\"90\" rowspan=\"3\" valign=\"MIDDLE\" width=\"150\">Material Handling</td>\n<td align=\"CENTER\" height=\"30\" valign=\"MIDDLE\" width=\"98\">국내</td>\n<td align=\"CENTER\" height=\"30\" valign=\"MIDDLE\" width=\"158\">65.3%</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\">\n<td align=\"CENTER\" height=\"30\" valign=\"MIDDLE\" width=\"98\">해외</td>\n<td align=\"CENTER\" height=\"30\" valign=\"MIDDLE\" width=\"158\">83.7%</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\">\n<td align=\"CENTER\" height=\"30\" valign=\"MIDDLE\" width=\"98\">계</td>\n<td align=\"CENTER\" height=\"30\" valign=\"MIDDLE\" width=\"158\">67.8%</td>\n</tr>\n</tbody>\n</table>",
+   "footnotes": [
+    "주1) 가동률 = 생산실적/생산능력",
+    "※ 투자금액은 향후 사업상황에 따라 조정될 수 있습니다.",
+    "※ Compact Equipment, Portable Power 판매 기준입니다.",
+    "※ 시장점유율은 타사 판매 현황을 확인할 수 없어, 기재를 생략하였습니다.",
+    "주요 주주에 대한 공시",
+    "주식의 분류에 대한 공시",
+    "주식기준보상약정의 조건에 대한 공시",
+    "주식결제형 주식기준보상 당분기말",
+    "주식결제형 기초 잔여주 96,490 부여 0 취소 0 기말 잔여주 96,490",
+    "주식결제형 기초 잔여주 33,117 부여 67,107 취소 (3,734) 기말 잔여주 96,490",
+    "주당이익 당분기",
+    "※ 연결 당기순이익, 연결 현금배당성향은 K-IFRS 연결재무제표 지배기업 소유주지분 당기순이익 기준입니다.※ 제10기(전기)에 대한 현금배당수익률(%)은 배당 결정 이사회결의일의 직전 매매거래일부터 과거 1주일간의 거래소 시장에서 형성된 최종가격의 산술평균으로 산출하였으며, 백분율을 소수점 이하 첫째자리까지 기재하였습니다.※ 제9기(전전기)에 대한 현금배당수익률(%)은 배당기준일 2매매거래일 전일부터 과거 1주일간 배당부 종가의 산술평균으로 산출하였으며, 백분율을 소수점 이하 첫째자리까지 기재하였습니다.※ 분기배당 실시 현황 - 제10기(2023년) 2분기 80,122,140,800원 (주당 800원, 자기주식 제외) - 제9기 (2022년) 2분기 60,129,629,400원 (주당 600원, 자기주식 제외)",
+    "※ 연속 배당횟수는 당기 분기배당 및 최근사업연도 결산배당을 포함하고 있습니다※ 상기 평균 배당수익률은 보통주식 기준이며, 최근 3사업연도(2021년~2023년) 및 최근 5사업연도(2019년~2023년) 배당에 대한 배당수익률의 단순 평균값입니다.",
+    "주1) 당분기 검토 결과 분기재무제표 및 분기연결재무제표가 기업회계기준서 제1034호에 따라 중요성의 관점에서 공정하게 표시하지 않은 사항이 발견되지 아니하였습니다.",
+    "주) 연결재무제표 기준※ 당사는 단일의 영업부문으로 구성되어 있습니다.",
+    "주1) 당분기 검토 결과 분기연결재무제표가 기업회계기준서 제1034호에 따라 중요성의 관점에서 공정하게 표시하지 않은 사항이 발견되지 아니하였습니다.",
+    "주1) 당분기 검토 결과 분기재무제표가 기업회계기준서 제1034호에 따라 중요성의 관점에서 공정하게 표시하지 않은 사항이 발견되지 아니하였습니다.",
+    "※ 전기 중 Doosan Industrial Vehicle China Co., Ltd. 사명이 Doosan Bobcat China Yantai co., Ltd. 로 변경되었습니다.",
+    "※ 내부감사기구와 2024년 2월 논의한 감사인은 삼일회계법인, 2024년 4월 논의한 감사인은 한영회계법인입니다.",
+    "※ 당사는 자기주식을 96,490주 보유하고 있습니다.",
+    "※ 두산에너빌리티㈜는 주권상장법인으로서 출자자수는 최근 주주명부 폐쇄 기준일인 '24.3.31 기준으로 기재하였습니다.",
+    "※ 2021년 03월 30일 : 대표이사 변경※ 2021년 04월 02일 : 두산퓨얼셀㈜ 현물 출자※ 2021년 07월 01일 : 두산인프라코어㈜ 분할합병※ 2022년 02월 18일 : 유상증자로 인한 지분율 변동 반영※ 2017년 05월 04일자로 발행한 신주인수권부사채의 신주인수권증권(1WR) 26,573,034주가 2022년 04월 04일까지 행사 됨에 따라 해당 기간별 지분율 변동 반영※ 2021년 07월 01일 두산인프라코어㈜ 투자사업부문 합병으로 발생한 신주인수권 부사채의 신주인수권증권(2WR) 6,641,313주가 2022년 07월 01일까지 행사 됨에 따라 해당 기간별 지분율 변동 반영※ 2022년 08월 31일 ㈜두산이 보유중인 두산에너빌리티㈜의 주식 223,231천주 (34.97%)중 28,540천주(4.47%)를 매각하여 최대출자자의 지분율이 30.50%로 변동 반영※ 2023.03.29 제59회, 제60회 전환사채의 전부 전환에 따라 총 2,253,113주 신규 발행에 따라 최대출자자의 지분율이 30.39%로 변동 반영",
+    "※ 위 재무현황은 최근 결산기말('23.12.31) 별도 기준입니다.",
+    "※ ㈜두산은 주권상장법인으로서 출자자수는 최근 주주명부 폐쇄 기준일인 '24.3.31 기준으로 기재하였습니다.※ ㈜두산의 출자자수 및 대표이사 등의 지분율은 종류주식을 포함한 발행주식총수 기준입니다.※ ㈜두산의 최대주주 및 그 특수관계인은 총 30명이며, 이 중 보통주식 기준 최대출자자는 대표이사 박정원 입니다. (이하 변동내역 기재 시 동일)",
+    "※ 위 재무현황은 최근 결산기말('23.12.31) 별도 기준입니다.",
+    "※상기 현황은 2024년 3월 31일자 당사 주주명부 기준입니다.",
+    "※ 소액주주는 발행주식 총수의 100분의 1에 미달하는 주식을 보유한 주주입니다.※ 상기 현황은 2024년 3월 31일자 당사 주주명부 기준입니다.",
+    "※ 위 현황은 해당 일자의 종가 기준입니다.",
+    "※ 당기 중 두산산업차량㈜가 두산밥캣코리아㈜를 흡수합병 하였으며, 사명을 두산밥캣코리아㈜로 변경하였습니다.※ 전기 중 Clark Equipment Co.에서 Doosan Bobcat North America, Inc.로 사명 변경 되었습니다.",
+    "※ 상기 신고일자는 최초 공시일자입니다.※ 자세한 내용은 2022년 4월 4일 공시한 '자기주식취득결과보고서', 2023년 3월 28일 공시한 '자기주식취득결과보고서', 2024년 4월 19일 공시한 '풍문 또는 보도에 대한 해명(미확정)', 2024년 4월 29일 공시한 '자기주식취득결정'을 참고하시기 바랍니다.",
+    "※ 2024년 1월에 두산산업차량㈜가 두산밥캣코리아㈜를 흡수합병하였으며, 사명을 두산밥캣코리아㈜로 변경하였습니다.",
+    "※ 2024년 1월에 두산산업차량㈜가 두산밥캣코리아㈜를 흡수합병하였으며, 사명을 두산밥캣코리아㈜로 변경하였습니다.",
+    "※ 발행회사는 (주)두산의 물적분할을 통해 신설된 법인입니다.※ 두산산업차량(주)는 2024년 1월 1일 두산밥캣코리아(주)를 흡수합병 하였으며, 2024년 1월 2일 사명을 두산밥캣코리아(주)로 변경하였습니다.",
+    "※ 1차연도는 2021년이며, 2차연도는 2022년입니다.※ 상기 예측자료는 외부평가기관(안진회계법인)의 평가의견서 상의 평가자료입니다.※ 예측치 대비 차이 발생 원인 - 1차연도 : 2021년 1월부터 12월까지의 연간 예측치이며, 실적은 영업양수일인 2021년 7월부터 12월 까지 6개월분만 인식 되었습니다. - 2차연도 : 매출액은 대형 렌털사향 매출 증가 등 북미 시장의 견조한 수요에 힘입어 계획 대비 46% 초과 달성 하였습니다. 영업이익은 판매량 증가에 더해, 판가인상을 통한 원가부담 최소화 로 계획 대비 43% 초과 달성 하였습니다."
+   ],
+   "digest": "51b3326e66e5",
+   "file": "20240514001585.xml"
+  }
+ ],
+ "rejected": [
+  {
+   "section": [
+    "II. 사업의 내용",
+    "1. 사업의 개요",
+    "2. 주요 제품 및 서비스"
+   ],
+   "headings": [
+    "5. 정관에 관한 사항",
+    "II. 사업의 내용",
+    "1. 사업의 개요",
+    "2. 주요 제품 및 서비스",
+    "가. 주요 제품 등의 현황"
+   ],
+   "context": [
+    "5. 정관에 관한 사항",
+    "- 기업공시서식 작성기준에 따라 분기보고서의 경우 기재하지 아니할 수 있습니다. 관련 내용은 2023년 사업보고서 를 참고하시기 바랍니다.",
+    "II. 사업의 내용",
+    "1. 사업의 개요",
+    "당사는 북미, 유럽, 아프리카, 아시아, 라틴아메리카 지역 내 종속회사를 두고 있는 외국기업지배지주회사로서, 타회사의 주식취득을 통하여 그 회사의 실질적인 지배권을 취득하는 것을 목적으로 하고 있습니다.",
+    "당사는 연결기준으로 단일의 영업부문 'Construction Equipment' 의 생산 및 판매 사업을 영위하고 있으며 북미(이하 NA로 병기), 유럽/중동/아프리카(이하 EMEA로 병기), 아시아/라틴아메리카/오세아니아(이하 ALAO로 병기) 등에 광범위한 글로벌 네트워크를 보유하고 있습니다. 주요 제품군은 건설/농업/조경용 소형장비 제품군 'Compact Equipment', 이동식 전기 및 공압 생산장비 제품군 'Portable Power', 지게차 제품군 'Material Handling'입니다. Compact Equipment의 주요 제품은 Skid-Steer Loader, Compact Track Loader, Mini Excavator, Telehandler, Backhoe Loader 등의 소형 건설기계와 Compact Tractor, Mower 등 농업/조경용 소형 장비가 있습니다. Portable Power는 Portable Air Compressor, Generator, Lighting System 등의 제품이 대표적입니다. Material Handling의 주요 제품은 엔진지게차와 전동지게차이며 핸드파렛트부터 30톤급 지게차까지 Fork로 운반하는 장비류의 Full line-up을 갖추고 있습니다.",
+    "당사는 2024년 1분기 말 기준으로 Compact Equipment 제품 판매를 통해 1,453,581천USD의 매출액을(매출 비중 80.6%), Portable Power 제품 판매를 통해 82,428천USD의 매출액을(매출 비중 4.6%), Material Handling 제품 판매를 통해 266,527천USD의 매출액을(매출 비중 14.8%) 달성했습니다. 당사가 판매하는 제품 가격은 원자재 가격, 인건비, 임대료 등에 따라 변동되며, 상세 내용은 아래 2. 주요 제품 및 서비스, 4. 매출 및 수주상황 항목을 참고하여 주시기 바랍니다.",
+    "당사 제품의 주요 원재료는 Hydraulics & Powertrain, Steel & Weldment, Petrochemical 등으로 주요 매입처를 통해 안정적으로 공급받고 있습니다. 당사는 2024년 1분기 말 기준으로 Compact Equipment 제품군에서 가동률 80.3%를, Portable Power 제품군에서 가동률 30.8%를 기록했습니다. Material Handling 제품군은 가동률 67.8%를 기록했습니다. 상세 내용은 아래 3. 원재료 및 생산설비 항목을 참고하여 주시기 바랍니다.",
+    "당사의 판매 채널은 직접판매, 당사 소유의 판매 대리점, 그리고 전문 판매 딜러 등 크게 세 가지입니다. 정부, 군대, 대기업 등의 경우에는 직접 판매 및 관리를 하고, 독일, 프랑스 등 유럽의 일부 국가에서는 당사가 소유한 판매 대리점을 활용하고 있습니다. 이 외 대부분의 경우에는 당사가 지역별로 선정한 전문 판매 딜러를 통하여 제품 판매가 이루어지고 있습니다. 판매 조건 및 전략 등 상세 내용은 아래 4. 매출 및 수주상황을 참고하여 주시기 바랍니다.",
+    "당사가 영위하고 있는 Construction Equipment 산업은 기계 산업 전반에 걸친 다양한 기술이 요구되는 첨단 산업입니다. 당사는 신제품 개발, 제품 개선, 기존 제품의 활용도 추가 발굴, 환경규제 대응, IT 기술 응용, 안전성 향상, 성능 및 내구성 향상, 연료 저감, 특정 수요에 대한 전략적 기술 등을 중심으로 지속적인 연구개발을 진행하고 있습니다. 상세 내용은 아래 6. 주요계약 및 연구개발활동을 참고하여 주시기 바랍니다.",
+    "2. 주요 제품 및 서비스",
+    "가. 주요 제품 등의 현황",
+    "(단위: USD천)"
+   ],
+   "unit": "(단위: USD천)",
+   "keywords": [
+    "가동률"
+   ],
+   "keyword_in": "",
+   "rows": [
+    [
+     "제품군",
+     "매출유형",
+     "품목",
+     "제11기 1분기",
+     "제10기",
+     "제9기"
+    ],
+    [
+     "매출액",
+     "비율",
+     "매출액",
+     "비율",
+     "매출액",
+     "비율"
+    ],
+    [
+     "Compact Equipment",
+     "제품",
+     "소형 건설기계, 농업/조경용 소형 장비",
+     "1,453,581",
+     "80.6%",
+     "5,762,725",
+     "77.0%",
+     "5,249,836",
+     "78.7%"
+    ]
+   ],
+   "html": "",
+   "footnotes": [],
+   "digest": "74ab917a25c4",
+   "why": "셀 전체가 지표명이 아니거나 멀리 있는 문장에만 키워드",
    "file": "20240514001585.xml"
   },
   {
@@ -67,20 +262,109 @@
     "3. 원재료 및 생산설비"
    ],
    "headings": [],
-   "unit": "",
+   "context": [
+    "주1) 일부 제품에 대해서는 외주생산(OEM)을 통해 공급받고 있습니다.주2) 주공장이 아닌 Attachment 및 특수장비는 제외하였습니다.주3) 제9기부터 Compact Equipment 내, 기존의 Skid-Steer Loader, Compact Track Loader, Mini Excavator, Telehandler, Backhoe Loader에 추가로 Mower가 포함되었습니다.",
+    "(2) 생산능력 산출의 근거각 공장별 연간 표준작업시간 및 가동형태(2교대, 3교대)등의 기준으로 작성되었 으며 주공장이 아닌 Attachment 및 특수장비는 제외하였습니다. 라. 생산실적 및 가동률 (1) 생산실적",
+    "(단위: 대)"
+   ],
+   "unit": "(단위: 대)",
    "keywords": [
     "가동률",
     "생산능력",
     "생산실적"
    ],
-   "keyword_in": "table",
+   "keyword_in": "",
    "rows": [
     [
-     "주1) 가동률 = 생산실적/생산능력"
+     "제품군",
+     "사업소",
+     "제11기 1분기",
+     "제10기",
+     "제9기"
+    ],
+    [
+     "Compact Equipment",
+     "국내",
+     "-",
+     "-",
+     "-"
+    ],
+    [
+     "해외",
+     "25,200",
+     "99,800",
+     "89,100"
     ]
    ],
-   "html": "<table aclass=\"NORMAL\" afixtable=\"N\" border=\"0\" width=\"409\">\n<colgroup>\n<col width=\"400\"/>\n</colgroup>\n<tbody align=\"LEFT\" valign=\"TOP\">\n<tr acopy=\"Y\" adelete=\"Y\">\n<td height=\"30\" width=\"409\">주1) 가동률 = 생산실적/생산능력</td>\n</tr>\n</tbody>\n</table>",
-   "digest": "4a188427da91",
+   "html": "",
+   "footnotes": [],
+   "digest": "731a0a34ed5d",
+   "why": "셀 전체가 지표명이 아니거나 멀리 있는 문장에만 키워드",
+   "file": "20240514001585.xml"
+  },
+  {
+   "section": [
+    "1. 사업의 개요",
+    "2. 주요 제품 및 서비스",
+    "3. 원재료 및 생산설비"
+   ],
+   "headings": [
+    "마. 생산설비의 현황 (1) 현황",
+    "1) 당분기"
+   ],
+   "context": [
+    "주1) 가동률 = 생산실적/생산능력",
+    "마. 생산설비의 현황 (1) 현황",
+    "당사의 종속회사는 국내 인천 및 미국, 유럽, 인도, 중국 등 해외 공장과 사업소에서 사업활동을 수행하고 있으며, 생산에 중요한 시설 등으로 토지, 건물, 구축물, 기계장치, 중장비, 차량운반구, 공기구ㆍ비품 등을 보유하고 있습니다. 당분기말 현재 연결회사가 보유중인 유형자산의 현황 및 기중 변동내역은 다음과 같습니다.",
+    "1) 당분기",
+    "(단위: USD천)"
+   ],
+   "unit": "(단위: USD천)",
+   "keywords": [
+    "가동률",
+    "생산능력",
+    "생산실적"
+   ],
+   "keyword_in": "",
+   "rows": [
+    [
+     "구 분",
+     "토지",
+     "건물",
+     "기계장치",
+     "차량운반구",
+     "비품",
+     "건설중인자산",
+     "사용권자산",
+     "합 계"
+    ],
+    [
+     "기초",
+     "135,613",
+     "235,818",
+     "331,608",
+     "1,995",
+     "34,457",
+     "112,149",
+     "124,760",
+     "976,400"
+    ],
+    [
+     "취득/자본적지출",
+     "-",
+     "221",
+     "7,640",
+     "132",
+     "1,052",
+     "19,647",
+     "9,277",
+     "37,969"
+    ]
+   ],
+   "html": "",
+   "footnotes": [],
+   "digest": "c562a2667fa4",
+   "why": "셀 전체가 지표명이 아니거나 멀리 있는 문장에만 키워드",
    "file": "20240514001585.xml"
   }
  ]

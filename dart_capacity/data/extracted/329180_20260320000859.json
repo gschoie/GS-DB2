@@ -21,21 +21,60 @@
     "1. 사업의 개요"
    ],
    "headings": [
-    "※ 상기 매출액은 연결기준 매출액이며, 내부매출액을 차감한 수치입니다.",
     "다. 주요 원재료 및 생산능력 (1) 주요 원재료 등의 현황"
    ],
-   "unit": "",
+   "context": [
+    "※ 상기 매출액은 연결기준 매출액이며, 내부매출액을 차감한 수치입니다.",
+    "나. 주요 사업의 특성 조선산업은 대형 건조설비를 필수적으로 갖추어야 하기 때문에 막대한 설비투자가 필요한 장치산업이자 자본 집약적 산업입니다. 건조공정이 매우 다양하고 작업특성상 자동화에도 한계가 있기 때문에 다수의 기술 및 기능 인력을 필요로 하는 노동집약적 산업으로 높은 고용효과를 유발합니다. 또한, 사업특성상 전방산업인 해운산업의 시황에 많은 영향을 받고 있으며, 후방산업인 철강·기계산업 등에 대한 파급효과가 매우 큽니다. 아울러, 일반 상선 외에 국가방위에 필요한 해경·해군 함정을 건조하는 방위 산업의 특징을 갖고 있습니다.",
+    "해양플랜트 산업은 해양 유전과 가스전에서 원유와 천연가스를 생산하는 다양한 형태의 설비에 대한 설계, 구매, 제작, 운송, 설치 및 시운전까지 포함하는 산업입니다. 설비가 설치되는 지역과 원유 또는 천연가스의 특질에 따라 설비가 방대하고 사양이 복잡하며 고객사의 기술적 요구사항이 매 공사마다 상이하기 때문에, 표준화된 설계 적용이 어렵고 프로젝트 공기가 길며 공사 금액이 큰 특징을 지니고 있습니다.",
+    "최근에는 에너지 전환 흐름에 발맞추어 정부 및 민간 발전사업자가 추진하는 해상풍력발전 등 신재생에너지사업 뿐만 아니라 소형모듈원자로(SMR)와 같은 차세대 원전사업에도 참여하며 사업 포트폴리오를 확장해 나가고 있습니다.",
+    "엔진기계사업은 선박의 추진 및 발전기용 엔진을 주요 제품으로 하며, 조선산업과 밀접한 관련이 있습니다. 따라서, 조선 및 해운산업이 발달한 국가에 경쟁력 있는 엔진제조사가 밀집해 있습니다. 대형 선박(상선)의 추진기관인 대형엔진은 Everllence(舊 MAN ES)社와 WinGD(Winterthur Gas&Diesel)社의 제품이 양분하고 있으며, 당사를 비롯한 엔진 제조사들은 Licensee로서 엔진을 제작해 조선소에 납품하고 있습니다.대형 선박(상선) 발전기용으로 사용되는 중형엔진의 경우, 당사는 국내 유일 자체 브랜드인 힘센(HiMSEN)엔진을 보유하고 있습니다. 힘센엔진은 선박용 발전기 중속엔진 분야에서 세계 1위, 시장점유율 약 35%로 세계 다수의 엔진 메이커들과 경쟁 중입니다. 중소형 선박(관공선, 여객선)의 주기관으로 사용되는 중형엔진의 경우, Wartsila(핀란드)社가 약 30%의 점유율로 시장을 이끌며, 다수의 엔진 메이커들이 경쟁 중입니다. 당사도 힘센엔진을 주축으로 관련 선박에 엔진을 납품하고 있습니다. 육상용 엔진발전의 주요 수요처는 전력청, 민간발전사업자, 중앙 전력망이 닿기 어려운 도서지역 및 광산/공장의 사업주이며, 주로 대규모 발전소 건설이 여의치 않고 긴급히 전력이 필요한 개발도상국의 수요가 많습니다. 중속엔진을 이용한 육상 엔진발전 사업은 현재 Wartsila(핀란드)社가 시장을 선도하고 있으며, Everllence(독일), Bergen(노르웨이), ABC(벨기에)社 등도 중속엔진 발전설비를 생산하고 있습니다. 당사도 자체 기술로 개발한 힘센엔진을 기반으로 시장 확대를 위한 지속적인 노력 중에 있습니다.",
+    "다. 주요 원재료 및 생산능력 (1) 주요 원재료 등의 현황",
+    "(단위 : 백만원)"
+   ],
+   "unit": "(단위 : 백만원)",
    "keywords": [
     "생산능력"
    ],
    "keyword_in": "heading",
    "rows": [
     [
-     "(단위 : 백만원)"
+     "사 업 부 문",
+     "회 사 명",
+     "품 목",
+     "매 입 액(비 중)",
+     "주요 매입처"
+    ],
+    [
+     "조 선",
+     "HD현대중공업㈜HD현대엠엔에스㈜",
+     "기자재강재의장재 등",
+     "6,067,774(62.46%)",
+     "㈜포스코, 현대제철㈜ 外"
+    ],
+    [
+     "해양플랜트",
+     "HD현대중공업㈜",
+     "의장재기계류 등",
+     "663,658(6.83%)",
+     "한국하니웰㈜, 에스에프에프코리아 外"
+    ],
+    [
+     "엔 진 기 계",
+     "HD현대중공업㈜HD현대엔진(유)",
+     "엔진부품 등(대형+중형)",
+     "2,984,061(30.71%)",
+     "㈜포스코 外"
+    ],
+    [
+     "합 계",
+     "9,715,493(100.00%)",
+     "-"
     ]
    ],
-   "html": "<table aclass=\"NORMAL\" afixtable=\"N\" border=\"0\" width=\"942\">\n<colgroup width=\"942\">\n<col width=\"942\"/>\n</colgroup>\n<tbody>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"30\">\n<td align=\"RIGHT\" height=\"23\" width=\"933\">(단위 : 백만원)</td>\n</tr>\n</tbody>\n</table>",
-   "digest": "bb1859247615",
+   "html": "<table aclass=\"NORMAL\" afixtable=\"N\" border=\"1\" width=\"943\">\n<colgroup width=\"943\">\n<col width=\"112\"/>\n<col width=\"184\"/>\n<col width=\"130\"/>\n<col width=\"136\"/>\n<col width=\"381\"/>\n</colgroup>\n<tbody>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"53\">\n<td align=\"CENTER\" height=\"46\" usermark=\"BC0XD7D7D7\" valign=\"MIDDLE\" width=\"103\">사 업 부 문</td>\n<td align=\"CENTER\" height=\"46\" usermark=\"BC0XD7D7D7\" valign=\"MIDDLE\" width=\"175\">회  사  명</td>\n<td align=\"CENTER\" height=\"46\" usermark=\"BC0XD7D7D7\" valign=\"MIDDLE\" width=\"121\">품     목</td>\n<td align=\"CENTER\" height=\"46\" usermark=\"BC0XD7D7D7\" valign=\"MIDDLE\" width=\"127\">매  입  액(비     중)</td>\n<td align=\"CENTER\" height=\"46\" usermark=\"BC0XD7D7D7\" valign=\"MIDDLE\" width=\"372\">주요 매입처</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"76\">\n<td align=\"CENTER\" height=\"69\" width=\"103\">조         선</td>\n<td align=\"CENTER\" height=\"69\" width=\"175\">HD현대중공업㈜HD현대엠엔에스㈜</td>\n<td align=\"CENTER\" height=\"69\" valign=\"MIDDLE\" width=\"121\">기자재강재의장재 등</td>\n<td align=\"RIGHT\" height=\"69\" valign=\"MIDDLE\" width=\"127\">6,067,774(62.46%)</td>\n<td align=\"CENTER\" height=\"69\" width=\"372\">㈜포스코, 현대제철㈜ 外</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"53\">\n<td align=\"CENTER\" height=\"46\" width=\"103\">해양플랜트</td>\n<td align=\"CENTER\" height=\"46\" width=\"175\">HD현대중공업㈜</td>\n<td align=\"CENTER\" height=\"46\" valign=\"MIDDLE\" width=\"121\">의장재기계류 등</td>\n<td align=\"RIGHT\" height=\"46\" valign=\"MIDDLE\" width=\"127\">663,658(6.83%)</td>\n<td align=\"CENTER\" height=\"46\" width=\"372\">한국하니웰㈜, 에스에프에프코리아 外</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"53\">\n<td align=\"CENTER\" height=\"46\" width=\"103\">엔 진 기 계</td>\n<td align=\"CENTER\" height=\"46\" width=\"175\">HD현대중공업㈜HD현대엔진(유)</td>\n<td align=\"CENTER\" height=\"46\" valign=\"MIDDLE\" width=\"121\">엔진부품 등(대형+중형)</td>\n<td align=\"RIGHT\" height=\"46\" valign=\"MIDDLE\" width=\"127\">2,984,061(30.71%)</td>\n<td align=\"CENTER\" height=\"46\" width=\"372\">㈜포스코 外 </td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"53\">\n<td align=\"CENTER\" colspan=\"3\" height=\"46\" valign=\"MIDDLE\" width=\"417\">합               계</td>\n<td align=\"RIGHT\" height=\"46\" valign=\"MIDDLE\" width=\"127\">9,715,493(100.00%)</td>\n<td align=\"CENTER\" height=\"46\" valign=\"MIDDLE\" width=\"372\">-</td>\n</tr>\n</tbody>\n</table>",
+   "footnotes": [],
+   "digest": "1ee1c9f1c42c",
    "file": "20260320000859.xml"
   },
   {
@@ -45,6 +84,9 @@
     "1. 사업의 개요"
    ],
    "headings": [
+    "(2) 생산능력"
+   ],
+   "context": [
     "(2) 생산능력"
    ],
    "unit": "",
@@ -100,6 +142,7 @@
     ]
    ],
    "html": "<table aclass=\"NORMAL\" afixtable=\"N\" border=\"1\" width=\"952\">\n<colgroup width=\"952\">\n<col width=\"121\"/>\n<col width=\"120\"/>\n<col width=\"271\"/>\n<col width=\"147\"/>\n<col width=\"147\"/>\n<col width=\"146\"/>\n</colgroup>\n<thead>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"30\">\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"23\" valign=\"MIDDLE\" width=\"112\">사  업  부  문</th>\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"23\" valign=\"MIDDLE\" width=\"111\">품   목</th>\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"23\" valign=\"MIDDLE\" width=\"262\">사 업 소</th>\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"23\" usermark=\"BC0XD2D2D2\" valign=\"MIDDLE\" width=\"138\">2025년</th>\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"23\" usermark=\"BC0XD2D2D2\" valign=\"MIDDLE\" width=\"138\">2024년</th>\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"23\" usermark=\"BC0XD2D2D2\" valign=\"MIDDLE\" width=\"137\">2023년</th>\n</tr>\n</thead>\n<tbody>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"30\">\n<td align=\"CENTER\" height=\"53\" rowspan=\"2\" valign=\"MIDDLE\" width=\"112\">조        선</td>\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"111\">선   박</td>\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"262\">HD현대중공업㈜</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"138\">12,467천 GT(*1)</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"138\">10,000천 GT</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"137\">10,000천 GT</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"30\">\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"111\">블   록</td>\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"262\">HD현대엠엔에스㈜</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"138\">46,031톤</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"138\">-</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"137\">-</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"30\">\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"112\">해양플랜트</td>\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"111\">해양플랜트설비</td>\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"262\">HD현대중공업㈜</td>\n<td align=\"CENTER\" height=\"23\" usermark=\"F-10 \" valign=\"MIDDLE\" width=\"138\">(*2)</td>\n<td align=\"CENTER\" height=\"23\" usermark=\"F-10 \" valign=\"MIDDLE\" width=\"138\">(*2)</td>\n<td align=\"CENTER\" height=\"23\" usermark=\"F-10 \" valign=\"MIDDLE\" width=\"137\">(*2)</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"30\">\n<td align=\"CENTER\" height=\"53\" rowspan=\"2\" valign=\"MIDDLE\" width=\"112\">엔 진 기 계</td>\n<td align=\"CENTER\" height=\"53\" rowspan=\"2\" valign=\"MIDDLE\" width=\"111\">선박엔진</td>\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"262\">HD현대중공업㈜</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"138\">16,000천 BHP</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"138\">16,000천 BHP</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"137\">16,000천 BHP</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"30\">\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"262\">HD현대엔진(유)</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"138\">982천 BHP</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"138\">982천 BHP</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"137\">454천 BHP</td>\n</tr>\n</tbody>\n</table>",
+   "footnotes": [],
    "digest": "0f039dbf4ec3",
    "file": "20260320000859.xml"
   },
@@ -110,6 +153,17 @@
     "3. 원재료 및 생산설비"
    ],
    "headings": [
+    "ㆍSTEEL PLATE : 스틸데일리 공시기준(시중 유통가, SS275 20T)",
+    "2) 주요 가격변동원인",
+    "ㆍSTEEL PLATE : 철광석, 유연탄 등 후판제조 원재료 가격",
+    "다. 생산능력 및 산출근거",
+    "(1) 생산능력"
+   ],
+   "context": [
+    "※ 가격변동추이는 사업연도 개시일부터 작성기준일까지의 가격 평균치를 기재하였습니다. 1) 산출기준",
+    "ㆍSTEEL PLATE : 스틸데일리 공시기준(시중 유통가, SS275 20T)",
+    "2) 주요 가격변동원인",
+    "ㆍSTEEL PLATE : 철광석, 유연탄 등 후판제조 원재료 가격",
     "다. 생산능력 및 산출근거",
     "(1) 생산능력"
    ],
@@ -166,6 +220,7 @@
     ]
    ],
    "html": "<table aclass=\"NORMAL\" afixtable=\"N\" border=\"1\" width=\"738\">\n<colgroup width=\"738\">\n<col width=\"108\"/>\n<col width=\"123\"/>\n<col width=\"143\"/>\n<col width=\"122\"/>\n<col width=\"121\"/>\n<col width=\"121\"/>\n</colgroup>\n<thead>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"30\">\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"23\" valign=\"MIDDLE\" width=\"99\">사  업  부  문</th>\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"23\" valign=\"MIDDLE\" width=\"114\">품   목</th>\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"23\" width=\"134\">사업소</th>\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"23\" valign=\"MIDDLE\" width=\"113\">2025년</th>\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"23\" valign=\"MIDDLE\" width=\"112\">2024년</th>\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"23\" valign=\"MIDDLE\" width=\"112\">2023년</th>\n</tr>\n</thead>\n<tbody>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"30\">\n<td align=\"CENTER\" height=\"53\" rowspan=\"2\" valign=\"MIDDLE\" width=\"99\">조        선</td>\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"114\">선   박</td>\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"134\">HD현대중공업㈜</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"113\">12,467천GT(*1)</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"112\">10,000천GT</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"112\">10,000천GT</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"30\">\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"114\">블   록</td>\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"134\">HD현대엠엔에스㈜</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"113\">46,031톤</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"112\">-</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"112\">-</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"30\">\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"99\">해양플랜트</td>\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"114\">해양플랜트설비</td>\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"134\">HD현대중공업㈜</td>\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"113\">(*2)</td>\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"112\">(*2)</td>\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"112\">(*2)</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"30\">\n<td align=\"CENTER\" height=\"53\" rowspan=\"2\" valign=\"MIDDLE\" width=\"99\">엔 진 기 계</td>\n<td align=\"CENTER\" height=\"53\" rowspan=\"2\" valign=\"MIDDLE\" width=\"114\">선박엔진</td>\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"134\">HD현대중공업㈜</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"113\">16,000천BHP</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"112\">16,000천BHP</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"112\">16,000천BHP</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"30\">\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"134\">HD현대엔진(유)</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"113\">982천BHP</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"112\">982천BHP</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"112\">454천BHP</td>\n</tr>\n</tbody>\n</table>",
+   "footnotes": [],
    "digest": "f16aaa4c97dd",
    "file": "20260320000859.xml"
   },
@@ -176,67 +231,10 @@
     "3. 원재료 및 생산설비"
    ],
    "headings": [
-    "(1) 산출기준"
+    "(3) 당해 사업연도의 가동률"
    ],
-   "unit": "",
-   "keywords": [
-    "생산능력"
-   ],
-   "keyword_in": "table",
-   "rows": [
-    [
-     "ㆍ선 박",
-     ": 도크의 최대 건조가능 용량 기준"
-    ],
-    [
-     "ㆍ기 타",
-     ": 최대 생산능력 기준"
-    ]
-   ],
-   "html": "<table aclass=\"NORMAL\" afixtable=\"N\" border=\"0\" width=\"600\">\n<colgroup width=\"600\">\n<col width=\"114\"/>\n<col width=\"486\"/>\n</colgroup>\n<tbody>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"31\">\n<td height=\"24\" usermark=\"F-BT12 \" width=\"105\">  ㆍ선      박</td>\n<td height=\"24\" usermark=\"F-BT12 \" width=\"477\">: 도크의 최대 건조가능 용량 기준</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"31\">\n<td height=\"24\" usermark=\"F-BT12 \" width=\"105\">  ㆍ기      타</td>\n<td height=\"24\" usermark=\"F-BT12 \" width=\"477\">: 최대 생산능력 기준</td>\n</tr>\n</tbody>\n</table>",
-   "digest": "ab1adc352045",
-   "file": "20260320000859.xml"
-  },
-  {
-   "section": [
-    "1. 사업의 개요",
-    "2. 주요 제품 및 서비스",
-    "3. 원재료 및 생산설비"
-   ],
-   "headings": [
-    "※ 선박의 최대생산능력은 도크 공기단축 및 생산성 향상 등에 따라 증가될 수 있습니다.",
-    "(2) 산출방법"
-   ],
-   "unit": "",
-   "keywords": [
-    "생산능력"
-   ],
-   "keyword_in": "table",
-   "rows": [
-    [
-     "ㆍ선 박",
-     ": 건조 용량(Gross Ton) 기준"
-    ],
-    [
-     "ㆍ블 록",
-     ": 조립 용량 기준"
-    ],
-    [
-     "ㆍ엔진기계",
-     ": 대형엔진 및 중형엔진 생산능력 합산"
-    ]
-   ],
-   "html": "<table aclass=\"NORMAL\" afixtable=\"N\" border=\"0\" width=\"637\">\n<colgroup width=\"637\">\n<col width=\"118\"/>\n<col width=\"519\"/>\n</colgroup>\n<tbody>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"31\">\n<td height=\"24\" usermark=\"F-BT12 \" width=\"109\">  ㆍ선      박</td>\n<td height=\"24\" usermark=\"F-BT12 \" width=\"510\">: 건조 용량(Gross Ton) 기준</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"31\">\n<td height=\"24\" usermark=\"F-BT12 \" width=\"109\">  ㆍ블      록</td>\n<td height=\"24\" usermark=\"F-BT12 \" width=\"510\">: 조립 용량 기준</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"31\">\n<td height=\"24\" usermark=\"F-BT12 \" width=\"109\">  ㆍ엔진기계</td>\n<td height=\"24\" usermark=\"F-BT12 \" width=\"510\">: 대형엔진 및 중형엔진 생산능력 합산</td>\n</tr>\n</tbody>\n</table>",
-   "digest": "1980af639453",
-   "file": "20260320000859.xml"
-  },
-  {
-   "section": [
-    "1. 사업의 개요",
-    "2. 주요 제품 및 서비스",
-    "3. 원재료 및 생산설비"
-   ],
-   "headings": [
+   "context": [
+    "※ 해양플랜트 사업부문은 제품의 성격, 기능, 옵션사양 등이 매우 다양하여 제품별로 생산능력을 구분 산출하는 것이 큰 의미가 없을 뿐 아니라 수치화하기가 어렵습니다.",
     "(3) 당해 사업연도의 가동률"
    ],
    "unit": "",
@@ -292,6 +290,7 @@
     ]
    ],
    "html": "<table aclass=\"NORMAL\" afixtable=\"N\" border=\"1\" width=\"921\">\n<colgroup width=\"921\">\n<col width=\"118\"/>\n<col width=\"210\"/>\n<col width=\"195\"/>\n<col width=\"151\"/>\n<col width=\"151\"/>\n<col width=\"96\"/>\n</colgroup>\n<thead>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"53\">\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"46\" valign=\"MIDDLE\" width=\"109\">사  업  부  문</th>\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"46\" valign=\"MIDDLE\" width=\"201\">품   목</th>\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"46\" valign=\"MIDDLE\" width=\"186\">사 업 소</th>\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"46\" valign=\"MIDDLE\" width=\"142\">당기 가동가능시간(생산가능량)</th>\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"46\" valign=\"MIDDLE\" width=\"142\">당기 실제가동시간(실제생산량)</th>\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"46\" valign=\"MIDDLE\" width=\"87\">평균가동률</th>\n</tr>\n</thead>\n<tbody>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"30\">\n<td align=\"CENTER\" height=\"53\" rowspan=\"2\" valign=\"MIDDLE\" width=\"109\">조        선</td>\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"201\">선    박(*1)</td>\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"186\">HD현대중공업㈜</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"142\">27,981천M/H</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"142\">28,096천M/H</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"87\">100.4%</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"30\">\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"201\">블    록</td>\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"186\">HD현대엠엔에스㈜</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"142\">833천M/H</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"142\">856천M/H</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"87\">102.8%</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"30\">\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"109\">해양플랜트</td>\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"201\">해상구조물 등</td>\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"186\">HD현대중공업㈜</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"142\">3,751천M/H</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"142\">1,850천M/H</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"87\">49.3%</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"30\">\n<td align=\"CENTER\" height=\"53\" rowspan=\"2\" valign=\"MIDDLE\" width=\"109\">엔 진 기 계</td>\n<td align=\"CENTER\" height=\"53\" rowspan=\"2\" valign=\"MIDDLE\" width=\"201\">엔진류, 기계설비 등</td>\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"186\">HD현대중공업㈜</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"142\">3,036천M/H</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"142\">3,406천M/H</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"87\">112.2%</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"30\">\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"186\">HD현대엔진(유)</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"142\">176천M/H</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"142\">174천M/H</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"87\">98.9%</td>\n</tr>\n</tbody>\n</table>",
+   "footnotes": [],
    "digest": "e78f4791ab4c",
    "file": "20260320000859.xml"
   },
@@ -301,19 +300,279 @@
     "2. 주요 제품 및 서비스",
     "3. 원재료 및 생산설비"
    ],
-   "headings": [],
-   "unit": "",
+   "headings": [
+    "(4) 생산실적"
+   ],
+   "context": [
+    "(4) 생산실적",
+    "(단위 : 백만원)"
+   ],
+   "unit": "(단위 : 백만원)",
    "keywords": [
     "생산실적"
    ],
-   "keyword_in": "table",
+   "keyword_in": "heading",
    "rows": [
     [
-     "※상기의 생산실적은 내부매출액을 차감한 수치입니다."
+     "사 업 부 문",
+     "품 목",
+     "사 업 소",
+     "2025년",
+     "2024년",
+     "2023년"
+    ],
+    [
+     "조 선",
+     "선 박",
+     "HD현대중공업㈜ 外",
+     "12,463,099",
+     "10,623,294",
+     "7,901,471"
+    ],
+    [
+     "해양플랜트",
+     "해상구조물, 발전설비 등",
+     "HD현대중공업㈜",
+     "1,239,028",
+     "649,152",
+     "1,269,740"
+    ],
+    [
+     "엔 진 기 계",
+     "선박엔진 등",
+     "HD현대중공업㈜ 外",
+     "3,790,789",
+     "3,134,343",
+     "2,709,815"
+    ],
+    [
+     "기 타",
+     "기타매출",
+     "HD현대중공업㈜",
+     "87,717",
+     "79,665",
+     "82,900"
+    ],
+    [
+     "합 계",
+     "17,580,633",
+     "14,486,454",
+     "11,963,926"
     ]
    ],
-   "html": "<table aclass=\"NORMAL\" afixtable=\"N\" border=\"0\" width=\"797\">\n<colgroup width=\"797\">\n<col width=\"797\"/>\n</colgroup>\n<tbody>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"28\">\n<td height=\"21\" usermark=\"F-BT10 \" width=\"788\">※상기의 생산실적은 내부매출액을 차감한 수치입니다.</td>\n</tr>\n</tbody>\n</table>",
-   "digest": "b56257b015fa",
+   "html": "<table aclass=\"NORMAL\" afixtable=\"N\" border=\"1\" width=\"796\">\n<colgroup width=\"796\">\n<col width=\"121\"/>\n<col width=\"186\"/>\n<col width=\"167\"/>\n<col width=\"108\"/>\n<col width=\"107\"/>\n<col width=\"107\"/>\n</colgroup>\n<thead>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"30\">\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"23\" valign=\"MIDDLE\" width=\"112\">사  업  부  문</th>\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"23\" valign=\"MIDDLE\" width=\"177\">품   목</th>\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"23\" valign=\"MIDDLE\" width=\"158\">사 업 소</th>\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"23\" valign=\"MIDDLE\" width=\"99\">2025년</th>\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"23\" valign=\"MIDDLE\" width=\"98\">2024년</th>\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"23\" valign=\"MIDDLE\" width=\"98\">2023년</th>\n</tr>\n</thead>\n<tbody>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"30\">\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"112\">조        선</td>\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"177\">선   박</td>\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"158\">HD현대중공업㈜ 外</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"99\">12,463,099</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"98\">10,623,294</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"98\">7,901,471</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"30\">\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"112\">해양플랜트</td>\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"177\">해상구조물, 발전설비 등</td>\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"158\">HD현대중공업㈜</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"99\">1,239,028</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"98\">649,152</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"98\">1,269,740</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"30\">\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"112\">엔 진 기 계</td>\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"177\">선박엔진 등</td>\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"158\">HD현대중공업㈜ 外</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"99\">3,790,789</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"98\">3,134,343</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"98\">2,709,815</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"30\">\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"112\">기        타</td>\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"177\">기타매출</td>\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"158\">HD현대중공업㈜</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"99\">87,717</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"98\">79,665</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"98\">82,900</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"30\">\n<td align=\"CENTER\" colspan=\"3\" height=\"23\" valign=\"MIDDLE\" width=\"465\">합               계</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"99\">17,580,633</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"98\">14,486,454</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"98\">11,963,926</td>\n</tr>\n</tbody>\n</table>",
+   "footnotes": [
+    "※상기의 생산실적은 내부매출액을 차감한 수치입니다.",
+    "※ 기말수주잔고 = 기초수주잔액 + 신규증감 - 기납품액 ※ 외화계약의 환율변동에 따른 증감액, 계약의 취소 및 계약 금액의 변경에 따른 증감액 등이 포함된 금액입니다.",
+    "※ HD현대중공업㈜의 경영상의 주요계약은 분할 전의 계약을 포함하여 작성하였습니다.",
+    "주) 공통 판매비와 관리비 및 자산은 HD현대중공업㈜ 기타사업부문 등의 해당액임",
+    "주) 공통 판매비와관리비는 HD현대중공업㈜ 기타사업부문 등의 해당액임",
+    "※ 당사는 사업부문별 책임경영제를 도입하여 독립경영체계를 구축하였고, 이에 따라 각사업부문을 별도의 경제적 실체로 간주하여 사업부문간 사내매출인식 및 공통 판매비와 관리비 배부 후 사업부문별 재무정보를 산출하면 다음과 같습니다.",
+    "주요 경영진에 대한 보상에 대한 설명 상기의 주요 경영진은 연결실체 활동의 계획, 운영, 통제에 대한 중요한 권한과 책임을 가진 이사(사외이사 포함) 및 감사로 구성되어 있습니다.",
+    "주요 경영진에 대한 보상에 대한 설명 상기의 주요 경영진은 당사 활동의 계획, 운영, 통제에 대한 중요한 권한과 책임을 가진 이사(사외이사 포함)로 구성되어 있습니다.",
+    "※상세 현황은 '상세표-2. 계열회사 현황(상세)' 참조",
+    "※상세 현황은 '상세표-3. 타법인출자 현황(상세)' 참조"
+   ],
+   "digest": "5350155a01e0",
+   "file": "20260320000859.xml"
+  }
+ ],
+ "rejected": [
+  {
+   "section": [
+    "5. 정관에 관한 사항",
+    "II. 사업의 내용",
+    "1. 사업의 개요"
+   ],
+   "headings": [],
+   "context": [
+    "(*1) HD현대미포(주)와의 2025년 12월 1일 흡수합병에 따라 HD현대미포(주)의 생산능력을 추가로 반영하였습니다.(*2) 해양플랜트 사업부문은 현재 해양플랜트설비를 주로 제작하고 있으며, 선박 Block 제작에도 일부 참여하고 있습니다. (해양 H-Dock에서 선박 생산시 Max. Capa. : 연간 1,200천 GT)",
+    "라. 주요 종속회사 현황 지배기업인 당사와 주요 종속회사의 사업부문별 현황은 다음과 같습니다."
+   ],
+   "unit": "",
+   "keywords": [
+    "생산능력"
+   ],
+   "keyword_in": "",
+   "rows": [
+    [
+     "사업부문",
+     "주요종속회사"
+    ],
+    [
+     "조 선",
+     "HD현대엠엔에스㈜"
+    ],
+    [
+     "엔 진 기 계",
+     "HD현대엔진유한회사"
+    ]
+   ],
+   "html": "",
+   "footnotes": [],
+   "digest": "6296f08a6e4b",
+   "why": "셀 전체가 지표명이 아니거나 멀리 있는 문장에만 키워드",
+   "file": "20260320000859.xml"
+  },
+  {
+   "section": [
+    "1. 사업의 개요",
+    "2. 주요 제품 및 서비스",
+    "3. 원재료 및 생산설비"
+   ],
+   "headings": [
+    "(1) 산출기준"
+   ],
+   "context": [
+    "(*1) HD현대미포(주)와의 2025년 12월 1일 흡수합병에 따라 HD현대미포(주)의 생산능력을 추가로 반영하였습니다.(*2) 해양플랜트 사업부문은 현재 해양플랜트설비를 주로 제작하고 있으며, 선박 Block 제작에도 일부 참여하고 있습니다. (해양 H-Dock에서 선박 생산시 Max. Capa. : 연간 1,200천 GT) (2) 산출근거",
+    "(1) 산출기준"
+   ],
+   "unit": "",
+   "keywords": [
+    "생산능력"
+   ],
+   "keyword_in": "",
+   "rows": [
+    [
+     "ㆍ선 박",
+     ": 도크의 최대 건조가능 용량 기준"
+    ],
+    [
+     "ㆍ기 타",
+     ": 최대 생산능력 기준"
+    ]
+   ],
+   "html": "",
+   "footnotes": [],
+   "digest": "ab1adc352045",
+   "why": "셀 전체가 지표명이 아니거나 멀리 있는 문장에만 키워드",
+   "file": "20260320000859.xml"
+  },
+  {
+   "section": [
+    "1. 사업의 개요",
+    "2. 주요 제품 및 서비스",
+    "3. 원재료 및 생산설비"
+   ],
+   "headings": [
+    "(2) 산출방법"
+   ],
+   "context": [
+    "※ 선박의 최대생산능력은 도크 공기단축 및 생산성 향상 등에 따라 증가될 수 있습니다.",
+    "(2) 산출방법"
+   ],
+   "unit": "",
+   "keywords": [
+    "생산능력"
+   ],
+   "keyword_in": "",
+   "rows": [
+    [
+     "ㆍ선 박",
+     ": 건조 용량(Gross Ton) 기준"
+    ],
+    [
+     "ㆍ블 록",
+     ": 조립 용량 기준"
+    ],
+    [
+     "ㆍ엔진기계",
+     ": 대형엔진 및 중형엔진 생산능력 합산"
+    ]
+   ],
+   "html": "",
+   "footnotes": [],
+   "digest": "1980af639453",
+   "why": "셀 전체가 지표명이 아니거나 멀리 있는 문장에만 키워드",
+   "file": "20260320000859.xml"
+  },
+  {
+   "section": [
+    "1. 사업의 개요",
+    "2. 주요 제품 및 서비스",
+    "3. 원재료 및 생산설비"
+   ],
+   "headings": [
+    "<가동가능시간(생산가능량) 산출근거>"
+   ],
+   "context": [
+    "※ 상기의 생산실적은 내부매출액을 차감한 수치입니다.(*1) HD현대미포(주)를 2025년 12월 1일 흡수합병함에 따라 HD현대미포(주)의 1개월치 가동률을 반영하였습니다.",
+    "<가동가능시간(생산가능량) 산출근거>"
+   ],
+   "unit": "",
+   "keywords": [
+    "가동률",
+    "생산실적"
+   ],
+   "keyword_in": "",
+   "rows": [
+    [
+     "ㆍ조 선",
+     ": 정상조업도에 해당하는 당기 투입 M/H(Man Hour) 기준 특수선은 생산직 평균인원의 당기 투입계획 M/H 기준"
+    ],
+    [
+     "ㆍ해양플랜트",
+     ": 정상조업도에 해당하는 당기 투입 M/H 기준"
+    ],
+    [
+     "ㆍ엔진기계",
+     ": 정상조업도에 해당하는 당기 투입 M/H 기준"
+    ]
+   ],
+   "html": "",
+   "footnotes": [],
+   "digest": "0420519e5c1d",
+   "why": "셀 전체가 지표명이 아니거나 멀리 있는 문장에만 키워드",
+   "file": "20260320000859.xml"
+  },
+  {
+   "section": [
+    "1. 사업의 개요",
+    "2. 주요 제품 및 서비스",
+    "3. 원재료 및 생산설비"
+   ],
+   "headings": [
+    "라. 생산설비에 관한 사항(1) 생산설비의 현황"
+   ],
+   "context": [
+    "※상기의 생산실적은 내부매출액을 차감한 수치입니다.",
+    "라. 생산설비에 관한 사항(1) 생산설비의 현황",
+    "(기준일: 2025년 12월 31일) (단위:백만원)"
+   ],
+   "unit": "(기준일: 2025년 12월 31일) (단위:백만원)",
+   "keywords": [
+    "생산실적"
+   ],
+   "keyword_in": "",
+   "rows": [
+    [
+     "(단위:백만원)"
+    ],
+    [
+     "구 분",
+     "토지",
+     "건물",
+     "구축물",
+     "기계장치",
+     "건설중인자산",
+     "기타자산",
+     "합 계"
+    ],
+    [
+     "기초",
+     "3,113,990",
+     "1,067,217",
+     "885,050",
+     "795,142",
+     "269,022",
+     "479,368",
+     "6,609,789"
+    ]
+   ],
+   "html": "",
+   "footnotes": [],
+   "digest": "579a6e4986d2",
+   "why": "셀 전체가 지표명이 아니거나 멀리 있는 문장에만 키워드",
    "file": "20260320000859.xml"
   },
   {
@@ -323,11 +582,16 @@
     "3. 원재료 및 생산설비"
    ],
    "headings": [],
-   "unit": "",
+   "context": [
+    "(*) 당기 중 건설중인자산 취득관련 지출액은 154,784백만원입니다.",
+    "(2) 설비의 신설 및 매입계획 등 1) 진행중인 투자 당기말 기준 주요 투자 현황은 아래와 같습니다.",
+    "(기준일: 2025년 12월 31일) (단위 : 억원)"
+   ],
+   "unit": "(기준일: 2025년 12월 31일) (단위 : 억원)",
    "keywords": [
     "생산능력"
    ],
-   "keyword_in": "table",
+   "keyword_in": "",
    "rows": [
     [
      "사업부문",
@@ -359,69 +623,12 @@
      "1,911",
      "1,911(1,911)",
      "-"
-    ],
-    [
-     "HD현대엠엔에스㈜",
-     "전산시스템 도입",
-     "'25.03-'25.12",
-     "공기구비품",
-     "생산능력증가外",
-     "2",
-     "2(2)",
-     "-"
-    ],
-    [
-     "해양플랜트",
-     "HD현대중공업㈜",
-     "생산설비 구축 外",
-     "'25.01-'25.12",
-     "기계장치外",
-     "생산능력증가",
-     "284",
-     "284(284)",
-     "-"
-    ],
-    [
-     "엔진기계",
-     "HD현대중공업㈜",
-     "생산설비 구축 外",
-     "'25.01-'25.12",
-     "기계장치外",
-     "생산능력증가",
-     "1,216",
-     "1,216(1,216)",
-     "-"
-    ],
-    [
-     "HD현대엔진(유)",
-     "생산설비 구축 外",
-     "'25.01-'25.12",
-     "기계장치外",
-     "생산능력증가",
-     "11",
-     "11(11)",
-     "-"
-    ],
-    [
-     "기 타",
-     "HD현대중공업㈜",
-     "전산, 통신 노후교체 外",
-     "'25.01-'25.12",
-     "기계장치外",
-     "생산능력증가",
-     "466",
-     "466(466)",
-     "-"
-    ],
-    [
-     "합 계",
-     "5,791",
-     "5,791(3,890)",
-     "-"
     ]
    ],
-   "html": "<table aclass=\"NORMAL\" afixtable=\"N\" border=\"1\" width=\"954\">\n<colgroup width=\"954\">\n<col width=\"93\"/>\n<col width=\"143\"/>\n<col width=\"173\"/>\n<col width=\"110\"/>\n<col width=\"93\"/>\n<col width=\"123\"/>\n<col width=\"78\"/>\n<col width=\"78\"/>\n<col width=\"63\"/>\n</colgroup>\n<thead>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"53\">\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"46\" valign=\"MIDDLE\" width=\"84\">사업부문</th>\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"46\" valign=\"MIDDLE\" width=\"134\">회    사 </th>\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"46\" valign=\"MIDDLE\" width=\"164\">구    분</th>\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"46\" valign=\"MIDDLE\" width=\"101\">투  자기  간</th>\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"46\" valign=\"MIDDLE\" width=\"84\">투자대상자      산</th>\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"46\" valign=\"MIDDLE\" width=\"114\">투자효과</th>\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"46\" valign=\"MIDDLE\" width=\"69\">총투자액</th>\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"46\" valign=\"MIDDLE\" width=\"69\">기투자액(당기분)</th>\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"46\" valign=\"MIDDLE\" width=\"54\">향   후투자액</th>\n</tr>\n</thead>\n<tbody>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"53\">\n<td align=\"CENTER\" height=\"152\" rowspan=\"3\" valign=\"MIDDLE\" width=\"84\">조       선</td>\n<td align=\"CENTER\" height=\"99\" rowspan=\"2\" valign=\"MIDDLE\" width=\"134\">HD현대중공업㈜</td>\n<td align=\"CENTER\" height=\"46\" valign=\"MIDDLE\" width=\"164\">VOCs 저감설비 및 도장공장 공조설비</td>\n<td align=\"CENTER\" height=\"46\" valign=\"MIDDLE\" width=\"101\">'18.01-'25.12</td>\n<td align=\"CENTER\" height=\"46\" valign=\"MIDDLE\" width=\"84\">구축물</td>\n<td align=\"CENTER\" height=\"46\" valign=\"MIDDLE\" width=\"114\">생산능력증가</td>\n<td align=\"RIGHT\" height=\"46\" valign=\"MIDDLE\" width=\"69\">1,901</td>\n<td align=\"RIGHT\" height=\"46\" valign=\"MIDDLE\" width=\"69\">1,901(-)</td>\n<td align=\"RIGHT\" height=\"46\" valign=\"MIDDLE\" width=\"54\">-</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"53\">\n<td align=\"CENTER\" height=\"46\" valign=\"MIDDLE\" width=\"164\"> 크레인 노후교체 外</td>\n<td align=\"CENTER\" height=\"46\" valign=\"MIDDLE\" width=\"101\">'25.01-'25.12</td>\n<td align=\"CENTER\" height=\"46\" valign=\"MIDDLE\" width=\"84\">기계장치外</td>\n<td align=\"CENTER\" height=\"46\" valign=\"MIDDLE\" width=\"114\">생산능력증가</td>\n<td align=\"RIGHT\" height=\"46\" valign=\"MIDDLE\" width=\"69\">1,911</td>\n<td align=\"RIGHT\" height=\"46\" valign=\"MIDDLE\" width=\"69\">1,911(1,911)</td>\n<td align=\"RIGHT\" height=\"46\" valign=\"MIDDLE\" width=\"54\">-</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"53\">\n<td align=\"CENTER\" height=\"46\" valign=\"MIDDLE\" width=\"134\">HD현대엠엔에스㈜</td>\n<td align=\"CENTER\" height=\"46\" valign=\"MIDDLE\" width=\"164\">전산시스템 도입</td>\n<td align=\"CENTER\" height=\"46\" valign=\"MIDDLE\" width=\"101\">'25.03-'25.12</td>\n<td align=\"CENTER\" height=\"46\" valign=\"MIDDLE\" width=\"84\">공기구비품</td>\n<td align=\"CENTER\" height=\"46\" valign=\"MIDDLE\" width=\"114\">생산능력증가外</td>\n<td align=\"RIGHT\" height=\"46\" valign=\"MIDDLE\" width=\"69\">2</td>\n<td align=\"RIGHT\" height=\"46\" valign=\"MIDDLE\" width=\"69\">2(2)</td>\n<td align=\"RIGHT\" height=\"46\" valign=\"MIDDLE\" width=\"54\">-</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"53\">\n<td align=\"CENTER\" height=\"46\" valign=\"MIDDLE\" width=\"84\">해양플랜트</td>\n<td align=\"CENTER\" height=\"46\" valign=\"MIDDLE\" width=\"134\">HD현대중공업㈜</td>\n<td align=\"CENTER\" height=\"46\" valign=\"MIDDLE\" width=\"164\"> 생산설비 구축 外</td>\n<td align=\"CENTER\" height=\"46\" valign=\"MIDDLE\" width=\"101\">'25.01-'25.12</td>\n<td align=\"CENTER\" height=\"46\" valign=\"MIDDLE\" width=\"84\">기계장치外</td>\n<td align=\"CENTER\" height=\"46\" valign=\"MIDDLE\" width=\"114\">생산능력증가</td>\n<td align=\"RIGHT\" height=\"46\" valign=\"MIDDLE\" width=\"69\">284</td>\n<td align=\"RIGHT\" height=\"46\" valign=\"MIDDLE\" width=\"69\">284(284)</td>\n<td align=\"RIGHT\" height=\"46\" valign=\"MIDDLE\" width=\"54\">-</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"53\">\n<td align=\"CENTER\" height=\"99\" rowspan=\"2\" valign=\"MIDDLE\" width=\"84\">엔진기계</td>\n<td align=\"CENTER\" height=\"46\" valign=\"MIDDLE\" width=\"134\">HD현대중공업㈜</td>\n<td align=\"CENTER\" height=\"46\" valign=\"MIDDLE\" width=\"164\">생산설비 구축 外</td>\n<td align=\"CENTER\" height=\"46\" valign=\"MIDDLE\" width=\"101\">'25.01-'25.12</td>\n<td align=\"CENTER\" height=\"46\" valign=\"MIDDLE\" width=\"84\">기계장치外</td>\n<td align=\"CENTER\" height=\"46\" valign=\"MIDDLE\" width=\"114\">생산능력증가</td>\n<td align=\"RIGHT\" height=\"46\" valign=\"MIDDLE\" width=\"69\">1,216</td>\n<td align=\"RIGHT\" height=\"46\" valign=\"MIDDLE\" width=\"69\">1,216(1,216)</td>\n<td align=\"RIGHT\" height=\"46\" valign=\"MIDDLE\" width=\"54\">-</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"53\">\n<td align=\"CENTER\" height=\"46\" valign=\"MIDDLE\" width=\"134\">HD현대엔진(유)</td>\n<td align=\"CENTER\" height=\"46\" valign=\"MIDDLE\" width=\"164\">생산설비 구축 外</td>\n<td align=\"CENTER\" height=\"46\" valign=\"MIDDLE\" width=\"101\">'25.01-'25.12</td>\n<td align=\"CENTER\" height=\"46\" valign=\"MIDDLE\" width=\"84\">기계장치外</td>\n<td align=\"CENTER\" height=\"46\" valign=\"MIDDLE\" width=\"114\">생산능력증가</td>\n<td align=\"RIGHT\" height=\"46\" valign=\"MIDDLE\" width=\"69\">11</td>\n<td align=\"RIGHT\" height=\"46\" valign=\"MIDDLE\" width=\"69\">11(11)</td>\n<td align=\"RIGHT\" height=\"46\" valign=\"MIDDLE\" width=\"54\">-</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"53\">\n<td align=\"CENTER\" height=\"46\" valign=\"MIDDLE\" width=\"84\">기      타</td>\n<td align=\"CENTER\" height=\"46\" valign=\"MIDDLE\" width=\"134\">HD현대중공업㈜</td>\n<td align=\"CENTER\" height=\"46\" valign=\"MIDDLE\" width=\"164\">전산, 통신 노후교체 外</td>\n<td align=\"CENTER\" height=\"46\" valign=\"MIDDLE\" width=\"101\">'25.01-'25.12</td>\n<td align=\"CENTER\" height=\"46\" valign=\"MIDDLE\" width=\"84\">기계장치外</td>\n<td align=\"CENTER\" height=\"46\" valign=\"MIDDLE\" width=\"114\">생산능력증가</td>\n<td align=\"RIGHT\" height=\"46\" valign=\"MIDDLE\" width=\"69\">466</td>\n<td align=\"RIGHT\" height=\"46\" valign=\"MIDDLE\" width=\"69\">466(466)</td>\n<td align=\"RIGHT\" height=\"46\" valign=\"MIDDLE\" width=\"54\">-</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"53\">\n<td align=\"CENTER\" colspan=\"6\" height=\"46\" valign=\"MIDDLE\" width=\"726\">합               계</td>\n<td align=\"RIGHT\" height=\"46\" valign=\"MIDDLE\" width=\"69\">5,791</td>\n<td align=\"RIGHT\" height=\"46\" valign=\"MIDDLE\" width=\"69\">5,791(3,890)</td>\n<td align=\"RIGHT\" height=\"46\" valign=\"MIDDLE\" width=\"54\">-</td>\n</tr>\n</tbody>\n</table>",
+   "html": "",
+   "footnotes": [],
    "digest": "ced8f635c6c8",
+   "why": "셀 전체가 지표명이 아니거나 멀리 있는 문장에만 키워드",
    "file": "20260320000859.xml"
   },
   {
@@ -430,12 +637,19 @@
     "2. 주요 제품 및 서비스",
     "3. 원재료 및 생산설비"
    ],
-   "headings": [],
-   "unit": "",
+   "headings": [
+    "2) 향후 투자계획"
+   ],
+   "context": [
+    "※ 주요한 설비만 기재하였습니다.※ VOCs : Volatile Organic Compounds (휘발성 유기화합물)",
+    "2) 향후 투자계획",
+    "(기준일: 2025년 12월 31일) (단위 : 억원)"
+   ],
+   "unit": "(기준일: 2025년 12월 31일) (단위 : 억원)",
    "keywords": [
     "생산능력"
    ],
-   "keyword_in": "table",
+   "keyword_in": "",
    "rows": [
     [
      "사 업 부 문",
@@ -462,61 +676,12 @@
      "-",
      "-",
      "생산능력 증가外"
-    ],
-    [
-     "해양플랜트",
-     "HD현대중공업㈜",
-     "생산설비 外",
-     "기계장치外",
-     "-",
-     "-",
-     "-",
-     "-",
-     "생산능력 증가外"
-    ],
-    [
-     "엔진기계",
-     "HD현대중공업㈜",
-     "생산설비 外",
-     "기계장치外",
-     "-",
-     "-",
-     "-",
-     "-",
-     "생산능력 증가外"
-    ],
-    [
-     "HD현대엔진(유)",
-     "생산설비 外",
-     "기계장치外",
-     "-",
-     "-",
-     "-",
-     "-",
-     "생산능력 증가外"
-    ],
-    [
-     "기 타",
-     "HD현대중공업㈜",
-     "노후교체 外",
-     "기계장치外",
-     "-",
-     "-",
-     "-",
-     "-",
-     "생산능력 증가外"
-    ],
-    [
-     "합 계",
-     "-",
-     "-",
-     "-",
-     "-",
-     "-"
     ]
    ],
-   "html": "<table aclass=\"NORMAL\" afixtable=\"N\" border=\"1\" width=\"803\">\n<colgroup width=\"803\">\n<col width=\"93\"/>\n<col width=\"143\"/>\n<col width=\"98\"/>\n<col width=\"93\"/>\n<col width=\"53\"/>\n<col width=\"65\"/>\n<col width=\"65\"/>\n<col width=\"65\"/>\n<col width=\"128\"/>\n</colgroup>\n<thead>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"30\">\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"53\" rowspan=\"2\" valign=\"MIDDLE\" width=\"84\">사 업 부 문</th>\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"53\" rowspan=\"2\" valign=\"MIDDLE\" width=\"134\">회    사 </th>\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"53\" rowspan=\"2\" valign=\"MIDDLE\" width=\"89\">계획명칭</th>\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" colspan=\"2\" height=\"23\" valign=\"MIDDLE\" width=\"137\">예상투자총액</th>\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" colspan=\"3\" height=\"23\" valign=\"MIDDLE\" width=\"186\">연도별 예상투자액</th>\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"53\" rowspan=\"2\" valign=\"MIDDLE\" width=\"119\">투자효과</th>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"30\">\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"23\" valign=\"MIDDLE\" width=\"84\">자산형태</th>\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"23\" valign=\"MIDDLE\" width=\"44\">금 액</th>\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"23\" valign=\"MIDDLE\" width=\"56\">2026년</th>\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"23\" valign=\"MIDDLE\" width=\"56\">2027년</th>\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"23\" valign=\"MIDDLE\" width=\"56\">2028년</th>\n</tr>\n</thead>\n<tbody>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"30\">\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"84\">조      선</td>\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"134\">HD현대중공업㈜</td>\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"89\">생산설비 外</td>\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"84\">기계장치外</td>\n<td align=\"RIGHT\" height=\"23\" usermark=\"F-10 \" valign=\"MIDDLE\" width=\"44\">-</td>\n<td align=\"RIGHT\" height=\"23\" usermark=\"F-10 \" valign=\"MIDDLE\" width=\"56\">-</td>\n<td align=\"RIGHT\" height=\"23\" usermark=\"F-10 \" valign=\"MIDDLE\" width=\"56\">-</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"56\">-</td>\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"119\">생산능력 증가外</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"30\">\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"84\">해양플랜트</td>\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"134\">HD현대중공업㈜</td>\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"89\">생산설비 外</td>\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"84\">기계장치外</td>\n<td align=\"RIGHT\" height=\"23\" usermark=\"F-10 \" valign=\"MIDDLE\" width=\"44\">-</td>\n<td align=\"RIGHT\" height=\"23\" usermark=\"F-10 \" valign=\"MIDDLE\" width=\"56\">-</td>\n<td align=\"RIGHT\" height=\"23\" usermark=\"F-10 \" valign=\"MIDDLE\" width=\"56\">-</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"56\">-</td>\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"119\">생산능력 증가外</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"30\">\n<td align=\"CENTER\" height=\"53\" rowspan=\"2\" valign=\"MIDDLE\" width=\"84\">엔진기계</td>\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"134\">HD현대중공업㈜</td>\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"89\">생산설비 外</td>\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"84\">기계장치外</td>\n<td align=\"RIGHT\" height=\"23\" usermark=\"F-10 \" valign=\"MIDDLE\" width=\"44\">-</td>\n<td align=\"RIGHT\" height=\"23\" usermark=\"F-10 \" valign=\"MIDDLE\" width=\"56\">-</td>\n<td align=\"RIGHT\" height=\"23\" usermark=\"F-10 \" valign=\"MIDDLE\" width=\"56\">-</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"56\">-</td>\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"119\">생산능력 증가外</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"30\">\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"134\">HD현대엔진(유)</td>\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"89\">생산설비 外</td>\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"84\">기계장치外</td>\n<td align=\"RIGHT\" height=\"23\" usermark=\"F-10 \" valign=\"MIDDLE\" width=\"44\">-</td>\n<td align=\"RIGHT\" height=\"23\" usermark=\"F-10 \" valign=\"MIDDLE\" width=\"56\">-</td>\n<td align=\"RIGHT\" height=\"23\" usermark=\"F-10 \" valign=\"MIDDLE\" width=\"56\">-</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"56\">-</td>\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"119\">생산능력 증가外</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"30\">\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"84\">기      타</td>\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"134\">HD현대중공업㈜</td>\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"89\">노후교체 外</td>\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"84\">기계장치外</td>\n<td align=\"RIGHT\" height=\"23\" usermark=\"F-10 \" valign=\"MIDDLE\" width=\"44\">-</td>\n<td align=\"RIGHT\" height=\"23\" usermark=\"F-10 \" valign=\"MIDDLE\" width=\"56\">-</td>\n<td align=\"RIGHT\" height=\"23\" usermark=\"F-10 \" valign=\"MIDDLE\" width=\"56\">-</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"56\">-</td>\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"119\">생산능력 증가外</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"30\">\n<td align=\"CENTER\" colspan=\"4\" height=\"23\" valign=\"MIDDLE\" width=\"418\">합           계</td>\n<td align=\"RIGHT\" height=\"23\" usermark=\"F-10 \" valign=\"MIDDLE\" width=\"44\">-</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"56\">-</td>\n<td align=\"RIGHT\" height=\"23\" usermark=\"F-10 \" valign=\"MIDDLE\" width=\"56\">-</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"56\">-</td>\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"119\">-</td>\n</tr>\n</tbody>\n</table>",
+   "html": "",
+   "footnotes": [],
    "digest": "62481e65e1d6",
+   "why": "셀 전체가 지표명이 아니거나 멀리 있는 문장에만 키워드",
    "file": "20260320000859.xml"
   }
  ]
