@@ -70,3 +70,46 @@ if __name__ == "__main__":
     test_false_positives_go_to_rejected()
     test_html_preserved()
     print("ok — test_extract 3개 통과")
+
+
+# ── 10/19 실측 케이스 (두산밥캣·HD현대중공업) ──────────────────────────────
+DOC2 = """<?xml version="1.0" encoding="utf-8"?>
+<DOCUMENT><BODY>
+<SECTION-1><TITLE>II. 사업의 내용</TITLE>
+<SECTION-2><TITLE>1. 사업의 개요</TITLE>
+<P>다. 주요 원재료 및 생산능력<BR/>(1) 주요 원재료 등의 현황</P>
+<TABLE><TR><TD></TD><TD>(단위 : 백만원)</TD></TR></TABLE>
+<TABLE><TR><TH>사업부문</TH><TH>품목</TH><TH>매입액</TH></TR><TR><TD>조선</TD><TD>강재</TD><TD>6,067,774</TD></TR></TABLE>
+<P>(2) 생산능력</P>
+<TABLE><TR><TH>사업부문</TH><TH>품목</TH><TH>2025년</TH></TR><TR><TD>조선</TD><TD>선박</TD><TD>12,467천 GT(*1)</TD></TR></TABLE>
+<TABLE><TR><TD>ㆍ선 박</TD><TD>: 도크의 최대 건조가능 용량 기준</TD></TR><TR><TD>ㆍ기 타</TD><TD>: 최대 생산능력 기준</TD></TR></TABLE>
+<TABLE><TR><TD>주1) 일부 제품은 외주생산(OEM)입니다.</TD></TR></TABLE>
+<P>(2) 생산능력 산출의 근거<BR/>각 공장별 연간 표준작업시간 기준으로 작성되었으며 주공장이 아닌 특수장비는 제외하였습니다.<BR/>라. 생산실적 및 가동률<BR/>(1) 생산실적</P>
+<TABLE><TR><TD>(단위: 대)</TD></TR></TABLE>
+<TABLE><TR><TH>제품군</TH><TH>사업소</TH><TH>제12기</TH></TR><TR><TD>Compact Equipment</TD><TD>해외</TD><TD>76,500</TD></TR></TABLE>
+<P>마. 임직원 현황</P>
+<TABLE><TR><TH>구분</TH><TH>인원</TH></TR><TR><TD>생산직</TD><TD>1,000</TD></TR></TABLE>
+<TABLE><TR><TD>※ 상기 근속연수는 지원업무 담당 기간입니다.</TD></TR></TABLE>
+</SECTION-2></SECTION-1></BODY></DOCUMENT>"""
+
+
+def test_real_world_cases():
+    found, rejected = extract_tables(DOC2)
+    firsts = [t["rows"][0][0] for t in found]
+    # 원재료 표는 상위 항목('다. 주요 원재료 및 생산능력')이 아니라 소항목('(1) 주요 원재료')로 판정 → 탈락
+    assert firsts == ["사업부문", "제품군"], (firsts, [r["rows"][0][:1] for r in rejected])
+    cap, prod = found
+    assert cap["rows"][1][2] == "12,467천 GT(*1)"
+    # 산출기준 2열 표 + 주1) 한 칸 표는 바로 뒤에 왔으니 능력표의 각주로 붙는다
+    assert any("도크의 최대 건조가능 용량" in f for f in cap["footnotes"])
+    assert any(f.startswith("주1)") for f in cap["footnotes"])
+    # 한 요소에 줄바꿈으로 붙어 온 '라. 생산실적 및 가동률 / (1) 생산실적' 을 줄 단위로 읽어 제목으로 잡는다
+    assert prod["keyword_in"] == "heading" and prod["keywords"] == ["생산실적"]
+    assert prod["unit"] == "(단위: 대)"
+    # 임직원 표 뒤의 ※ 각주는 다른 표를 지나왔으므로 생산실적 표에 붙지 않는다
+    assert prod["footnotes"] == []
+
+
+if __name__ == "__main__":
+    test_real_world_cases()
+    print("ok — test_extract 실측 케이스 통과")

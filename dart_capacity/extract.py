@@ -60,8 +60,15 @@ def _text(el: Tag) -> str:
     return re.sub(r"\s+", " ", el.get_text(" ", strip=True)).strip()
 
 
+def _lines(el: Tag) -> list[str]:
+    """요소 안의 줄(태그 경계)을 따로 — DART 는 제목 여러 줄을 한 요소에 담기도 한다
+    ('(2) 산출의 근거 … 라. 생산실적 및 가동률 (1) 생산실적' 이 한 P 로 온 두산밥캣 실측)."""
+    raw = el.get_text("\n", strip=True)
+    return [re.sub(r"\s+", " ", ln).strip() for ln in raw.split("\n") if ln.strip()]
+
+
 def _context(table: Tag) -> list[str]:
-    """이전 표 이후 ~ 이 표 사이의 제목·문단 텍스트(문서 순서)."""
+    """이전 표 이후 ~ 이 표 사이의 제목·문단 텍스트(문서 순서, 줄 단위)."""
     out: list[str] = []
     seen = 0
     for el in table.find_all_previous(True):
@@ -79,10 +86,10 @@ def _context(table: Tag) -> list[str]:
             continue
         if any(el.find_parent(t) is not None for t in ("p", "title", "tu", "te")) and el.name in ("span", "div"):
             continue                                  # 부모 문단이 이미 담는 텍스트
-        txt = _text(el)
-        if not txt:
+        lines = _lines(el)
+        if not lines:
             continue
-        out.append(txt)
+        out.extend(reversed(lines))                   # 역순으로 모으는 중이므로 줄도 역순
         seen += 1
         if seen >= CONTEXT_MAX:
             break
@@ -113,6 +120,50 @@ def _is_heading(txt: str) -> bool:
     return True
 
 
+_SUB_RE = re.compile(r"(?=\(\d+\)\s*)|(?=\b\d+\)\s*)|(?=[가-힣]\.\s)|(?=[①-⑳])")
+
+
+def _heading_tail(txt: str) -> str:
+    """'다. 주요 원재료 및 생산능력 (1) 주요 원재료 등의 현황' → '(1) 주요 원재료 등의 현황'.
+    상위 항목 이름에 든 키워드로 하위 표가 끌려오지 않게 마지막 소항목만 본다."""
+    parts = [p.strip() for p in _SUB_RE.split(txt) if p and p.strip()]
+    return parts[-1] if parts else txt
+
+
+def _is_note_table(rows: list[list[str]], ttext: str) -> bool:
+    """산출기준·산출방법 같은 짧은 2열 목록 표(숫자 표가 아님)."""
+    if not rows or len(rows) > 8 or len(ttext) > 400:
+        return False
+    if any(len(r) > 2 for r in rows):
+        return False
+    digits = sum(ch.isdigit() for ch in ttext)
+    return digits < len(ttext) * 0.1 and any(r[0].startswith(("ㆍ", "·", "-", "※")) or (len(r) > 1 and r[1].startswith(":")) for r in rows)
+
+
+def _level(txt: str) -> int:
+    """제목 위계: 1 '가.' · 2 '(1)' · 3 '1)'/'가)'/'①'/'[라벨]' · 0 번호 없음."""
+    if re.match(r"^[가-힣]\.\s", txt):
+        return 1
+    if re.match(r"^\(\d+\)", txt):
+        return 2
+    if re.match(r"^(\d+\)|[가-힣]\)|[①-⑳]|\[)", txt):
+        return 3
+    return 0
+
+
+def _nearest_heading_kw(near: list[str]) -> list[str]:
+    """가장 가까운 제목 한 줄로 판정한다 — 상위 항목('다. 주요 원재료 및 생산능력')의 키워드가
+    하위 표(원재료 현황)로 흘러들지 않게. 가까운 줄이 하위 라벨('가) 국내', '[회사명]')이면 한 줄 더 올라간다."""
+    for h in reversed(near):
+        kws = sorted(set(_KW_RE.findall(_heading_tail(h))))
+        if kws:
+            return kws
+        if _level(h) >= 3:
+            continue
+        return []
+    return []
+
+
 def _cell_hit(rows: list[list[str]]) -> list[str]:
     """지표 이름 셀(또는 머리글 포함)에서 적중한 키워드."""
     hits = set()
@@ -141,6 +192,7 @@ def extract_tables(doc: str) -> tuple[list[dict], list[dict]]:
     found: list[dict] = []
     rejected: list[dict] = []
     pending_unit = ""        # 바로 앞 '단위 표'의 문구
+    since_found = 1          # 마지막 채택 표 이후 지나간 일반 표 수 — 0일 때만 각주·산출기준 표를 붙인다
     for table in soup.find_all("table"):
         if table.find_parent("table") is not None:
             continue                                  # 중첩 표는 바깥 표에 포함
@@ -151,15 +203,21 @@ def extract_tables(doc: str) -> tuple[list[dict], list[dict]]:
         if ncells <= _TINY_CELLS and _UNIT_RE.search(ttext):
             pending_unit = ttext
             continue
-        # '※ …' 한 칸짜리 각주 표 → 직전 채택 표의 각주
-        if ncells <= _TINY_CELLS and found and (ttext.startswith("※") or ttext.startswith("주")):
-            found[-1]["footnotes"].append(ttext)
+        # '※ …'·'주1) …' 한 칸짜리 각주 표 → **바로 앞** 채택 표의 각주 (다른 표를 지나왔으면 무관한 각주)
+        if ncells <= _TINY_CELLS and (ttext.startswith("※") or re.match(r"주\s*\d*\)", ttext)):
+            if found and since_found == 0 and ttext not in found[-1]["footnotes"]:
+                found[-1]["footnotes"].append(ttext)
+            continue
+        # 'ㆍ선 박 | : 도크의 최대 건조가능 용량 기준' 꼴의 산출기준 표(짧은 2열 목록) → 바로 앞 채택 표의 각주
+        if _is_note_table(rows, ttext):
+            if found and since_found == 0:
+                found[-1]["footnotes"].append(" / ".join(" ".join(r) for r in rows))
             continue
         ctx = _context(table)
         headings = [t for t in ctx if _is_heading(t) and not _UNIT_RE.search(t)]
         near = [t for t in ctx[-NEAR:] if _is_heading(t) and not _UNIT_RE.search(t)]
         kw_table = _cell_hit(rows)
-        kw_ctx = sorted({k for t in near for k in _KW_RE.findall(t)})
+        kw_ctx = _nearest_heading_kw(near)
         unit_texts = [t for t in ctx if _UNIT_RE.search(t)]
         unit = unit_texts[-1] if unit_texts else pending_unit
         pending_unit = ""
@@ -177,7 +235,9 @@ def extract_tables(doc: str) -> tuple[list[dict], list[dict]]:
         }
         if kw_table or kw_ctx:
             found.append(record)
+            since_found = 0
             continue
+        since_found += 1
         loose = sorted(set(_KW_RE.findall(ttext)) | {k for t in ctx for k in _KW_RE.findall(t)})
         if loose:
             rejected.append({**record, "keywords": loose, "html": "", "rows": rows[:3],
