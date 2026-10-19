@@ -364,6 +364,17 @@ body.item-locked #task-item{appearance:none;-webkit-appearance:none;border-color
 #todo .todo-row input[type=checkbox]{width:16px;height:16px;accent-color:#2383e2}
 #todo .todo-text{font-size:15px;line-height:1.55}
 #todo .todo-row.done .todo-text{color:#9ca3af}
+/* 항목 메모: 본문 바로 아래 빈칸 하나. 체크박스·버튼은 첫 줄에 맞춰 위 정렬 */
+#todo .todo-row{align-items:flex-start}
+#todo .todo-row>input[type=checkbox]{margin-top:4px}
+#todo .todo-grip,#todo .todo-move,#todo .todo-edit,#todo .todo-del,#todo .todo-arch-one,#todo .todo-ts{margin-top:2px}
+.todo-note{display:block;width:100%;margin:2px 0 0;padding:2px 6px;border:1px solid transparent;border-bottom-color:#e5e7eb;border-radius:4px;background:transparent;
+  font:13px/1.5 inherit;color:#4b5563;resize:none;overflow:hidden;min-height:24px;max-height:180px;outline:0;field-sizing:content;box-sizing:border-box}
+.todo-note::placeholder{color:#c4c9d1}
+.todo-note:hover{background:rgba(55,53,47,.04)}
+.todo-note:focus{background:#fff;border-color:#93c5fd}
+.todo-row.done .todo-note{color:#9ca3af}
+.todo-note-ro{display:block;margin-top:2px;font-size:12px;line-height:1.5;color:#8a948e;white-space:pre-wrap}
 #todo .todo-grip,#todo .todo-edit,#todo .todo-del,#todo .todo-arch-one,#todo .todo-restore,#todo .todo-arch-del,#todo .todo-ts{
   opacity:0;transition:opacity .12s}
 #todo .todo-row:hover .todo-grip,#todo .todo-row:hover .todo-edit,#todo .todo-row:hover .todo-del,
