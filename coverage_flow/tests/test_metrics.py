@@ -401,6 +401,22 @@ class Outputs(unittest.TestCase):
         self.assertIn("<tr class='gh'><td colspan='8'>기계</td></tr>", h)
         self.assertLess(h.index(">조선</td>"), h.index(">방산</td>")); self.assertLess(h.index(">방산</td>"), h.index(">기계</td>"))
 
+    def test_tables_sorted_by_mcap(self):
+        """세 표 모두 묶음 안은 시총 내림차순, 성광벤드·태광은 여전히 조선 맨 밑."""
+        d = fake_payload()
+        base = d["rows"][0]
+        def mk(name, mcap, ind="조선"):
+            r = json.loads(json.dumps(base)); r.update(name=name, industry=ind, code=name); r["px"]["mcap"] = mcap
+            r["tech"]["rsi"] = 10 if name == "작은" else 90          # RSI 순이면 '작은' 이 먼저 올 값
+            r["flow"]["frgn5"] = 999 if name == "작은" else 1       # 외인 5일 순이면 '작은' 이 먼저 올 값
+            return r
+        d["rows"] = [mk("작은", 100), mk("큰", 5000), mk("성광벤드", 9999), mk("중간", 1000)]
+        h = build_report.render(d)
+        for tbl in h.split("<table")[1:4]:                                       # 등락률·수급·과매수 세 표
+            order = [n for n in ("큰", "중간", "작은", "성광벤드") if n in tbl]
+            idx = [tbl.index(f"<td>{n}") for n in order]
+            self.assertEqual(idx, sorted(idx), order)
+
 
 class KisToken(unittest.TestCase):
     def test_token_retries_past_rate_limit_403(self):

@@ -104,6 +104,12 @@ def grouped(rows, key, reverse=False):
     return out
 
 
+def mcap_key(r):
+    """표 정렬 공통 키 — 시총(억) 내림차순. 시총을 모르면 맨 뒤(사용자 요청 10/19: 기업 정렬은 시총 순)."""
+    v = (r.get("px") or {}).get("mcap")
+    return v if v is not None else -1e18
+
+
 def group_row(g, ncol):
     return f"<tr class='gh'><td colspan='{ncol}'>{esc(g)}</td></tr>"
 
@@ -121,7 +127,7 @@ def frgn_cell(px):
 def returns_table(rows):
     """등락률 표: 오늘 · 1W · 1M · 3M · YTD (+ 외인 보유 · 시총)."""
     rs = [r for r in rows if r.get("tech")]
-    key = lambda r: (r["tech"].get("ret") or {}).get("d1") if (r["tech"].get("ret") or {}).get("d1") is not None else -1e9
+    key = mcap_key
     ret_keys = ("d1", "w1", "m1", "m3", "ytd")
     caps = col_caps({k: [(r["tech"].get("ret") or {}).get(k) for r in rs] for k in ret_keys})
     tr = []
@@ -141,9 +147,9 @@ def returns_table(rows):
 
 def flow_table(rows):
     """투자자별 순매수(억원) 표: 외인 · 기관 · 개인 × (오늘 · 5일 · 1개월 · 3개월 · YTD).
-    5일 칸에 연속일수 배지. 정렬은 외인 5일 순."""
+    5일 칸에 연속일수 배지. 정렬은 시총 순."""
     rs = [r for r in rows if r.get("flow")]
-    key = lambda r: r["flow"].get("frgn5") if r["flow"].get("frgn5") is not None else -1e9
+    key = mcap_key
     tr = []
     keys = ("today", "d5", "m1", "m3", "ytd")
     caps = col_caps({(who, k): [((r["flow"].get("win") or {}).get(who) or {}).get(k) for r in rs]
@@ -206,9 +212,9 @@ def passive_table(rows, etfs, active, active_date):
 
 def tech_table(rows):
     ts = [r for r in rows if r.get("tech")]
-    key = lambda r: r["tech"].get("rsi") if r["tech"].get("rsi") is not None else 50
+    key = mcap_key
     tr = []
-    for g, grs in grouped(ts, key):
+    for g, grs in grouped(ts, key, reverse=True):
         tr.append(group_row(g, 8))
         for r in grs:
             t = r["tech"]
@@ -308,7 +314,7 @@ table.flow{{font-size:12px}}table.flow td,table.flow th{{padding:6px 5px}}th.c{{
 <div class="wrap">{returns_table(rows)}</div>
 <p class="note">오늘은 전일 종가 대비(장중 현재가). 1주·1개월·3개월은 거래일 5·21·63일 전 종가 대비, YTD 는 전년 마지막 종가 대비. 외인 보유 옆의 작은 날짜는 장 시작 전·휴장이라 그 날짜의 직전 수집값으로 채운 것 — 장중 첫 수집부터 당일 값으로 바뀐다.</p>
 
-<h2 id="flow2">①-2 투자자별 순매수 <small style="font:400 12px Inter;color:#6b7280">억원 · 오늘 · 5일 · 1개월 · 3개월 · YTD · 외인 5일 순</small></h2>
+<h2 id="flow2">①-2 투자자별 순매수 <small style="font:400 12px Inter;color:#6b7280">억원 · 오늘 · 5일 · 1개월 · 3개월 · YTD · 시총 순</small></h2>
 <div class="wrap">{flow_table(rows)}</div>
 <p class="note">구간은 오늘 잠정 행을 포함한 최근 거래일 수(5·21·63일, YTD 는 올해 1월부터). 최근 30거래일은 한투 금액(정확), 그 이전은 네이버 순매수 수량 × 종가 <b>근사</b> — 3개월·YTD 합계는 체결 평균가 대신 종가를 써서 몇 % 어긋날 수 있다. 이력이 모자라는 구간은 '–'. 연속일수 배지는 2일 이상만.</p>
 </div>
