@@ -6,7 +6,8 @@
   python normalize.py --rebuild       # 모델 호출 없이 data/normalized/*.json → all.json 만 다시 묶기
 
 보고서 하나 = 모델 호출 하나(그 보고서의 채택 표 전부를 한 번에 넘겨 능력·실적·가동률 표를
-부문/제품/기간으로 합치게 한다). 결과는 data/normalized/<코드>_<rcept_no>.json,
+부문/제품/기간으로 합치게 한다). **모델은 Gemini 무료 티어가 기본**(`GEMINI_API_KEY`, 이 리포의
+다른 모듈과 같은 키) — `DART_CAPACITY_PROVIDER=claude` + `ANTHROPIC_API_KEY` 가 있으면 Claude. 결과는 data/normalized/<코드>_<rcept_no>.json,
 전체 묶음은 data/normalized/all.json(대시보드가 읽는 파일), 모호한 건 data/review.csv.
 
 규칙(프롬프트에도 같은 말이 있다 — 두 곳을 같이 고칠 것):
@@ -28,7 +29,10 @@ from pathlib import Path
 from common import DART_VIEWER, EXTRACTED, NORMALIZED, REVIEW_CSV, DATA
 
 PROCESSED = DATA / "processed.json"
-MODEL = os.environ.get("DART_CAPACITY_MODEL", "claude-opus-5-5")
+PROVIDER = os.environ.get("DART_CAPACITY_PROVIDER") or ("gemini" if os.environ.get("GEMINI_API_KEY") else "claude")
+MODEL = os.environ.get("DART_CAPACITY_MODEL", "claude-opus-5-5" if PROVIDER == "claude" else "gemini-flash-latest")
+GEMINI_FALLBACKS = ["gemini-flash-lite-latest"]
+GEMINI_PAUSE = 6             # 무료 티어 분당 한도 보호(초)
 MAX_TABLE_ROWS = 60          # 이보다 큰 표는 모델에 안 넘기고 검토로(생산능력 표는 보통 30행 미만)
 
 SCHEMA = {
@@ -90,6 +94,14 @@ SYSTEM = """당신은 한국 상장사 정기보고서(DART)의 '생산능력 / 
 
 
 def _client():
+    if PROVIDER == "gemini":
+        if not os.environ.get("GEMINI_API_KEY"):
+            sys.exit("GEMINI_API_KEY 환경변수가 없습니다.")
+        try:
+            from google import genai
+        except ImportError:
+            sys.exit("google-genai 패키지가 없습니다: pip install google-genai")
+        return genai.Client()
     try:
         import anthropic
     except ImportError:
@@ -97,6 +109,53 @@ def _client():
     if not os.environ.get("ANTHROPIC_API_KEY"):
         sys.exit("ANTHROPIC_API_KEY 환경변수가 없습니다.")
     return anthropic.Anthropic()
+
+
+SCHEMA_NOTE = """
+## 출력 형식 (JSON 하나만, 다른 글 없이)
+{"rows": [ {행}, … ], "review": [ {"table": 표번호, "reason": "…"}, … ]}
+행 = {"period": "YYYY-MM", "period_label": "열 머리글 그대로", "segment": "", "product": "", "unit": "",
+      "capacity": 숫자|null, "production": 숫자|null, "utilization_pct": 숫자|null, "note": "",
+      "basis": "quantity|amount|hours|other", "cumulative": true|false|null,
+      "capacity_unit": "", "production_unit": "", "confidence": "high|low"}
+빈 문자열은 "" 로, 모르는 숫자는 null 로. 키는 전부 적는다."""
+
+
+def _parse_json(text: str) -> dict:
+    t = (text or "").strip()
+    if t.startswith("```"):
+        t = t.strip("`")
+        t = t[4:] if t.lower().startswith("json") else t
+    return json.loads(t.strip())
+
+
+def call_gemini(client, meta: dict, tables: list[dict]) -> dict:
+    from google.genai import types as genai_types
+    prompt = build_prompt(meta, tables)
+    config = genai_types.GenerateContentConfig(
+        system_instruction=SYSTEM + "\n" + SCHEMA_NOTE,
+        temperature=0.1,
+        max_output_tokens=16384,
+        response_mime_type="application/json",
+    )
+    last: Exception | None = None
+    for model in dict.fromkeys([MODEL, *GEMINI_FALLBACKS]):
+        for attempt in range(1, 3):
+            try:
+                resp = client.models.generate_content(model=model, contents=prompt, config=config)
+                out = _parse_json(resp.text)
+                um = getattr(resp, "usage_metadata", None)
+                out["_usage"] = {"in": getattr(um, "prompt_token_count", 0) or 0,
+                                 "out": getattr(um, "candidates_token_count", 0) or 0, "model": model}
+                time.sleep(GEMINI_PAUSE)
+                return out
+            except Exception as exc:  # noqa: BLE001
+                last = exc
+                msg = str(exc)
+                wait = 65 if "429" in msg or "RESOURCE_EXHAUSTED" in msg else 10 * attempt
+                print(f"  ! [{model}] {msg[:120]} — {wait}s 대기 후 재시도({attempt}/2)")
+                time.sleep(wait)
+    raise RuntimeError(f"Gemini 호출 실패: {last}")
 
 
 def fiscal_hint(meta: dict, tables: list[dict]) -> str:
@@ -139,6 +198,8 @@ def build_prompt(meta: dict, tables: list[dict]) -> str:
 
 
 def call_model(client, meta: dict, tables: list[dict]) -> dict:
+    if PROVIDER == "gemini":
+        return call_gemini(client, meta, tables)
     import anthropic
     prompt = build_prompt(meta, tables)
     for attempt in range(1, 4):
@@ -277,7 +338,7 @@ def main() -> int:
         todo.append(f)
     if args.limit:
         todo = todo[: args.limit]
-    print(f"정규화 대상 {len(todo)}건 (전체 {len(files)}, 처리됨 {len(processed)})")
+    print(f"정규화 대상 {len(todo)}건 (전체 {len(files)}, 처리됨 {len(processed)}) · 공급자 {PROVIDER} / 모델 {MODEL}")
     if not todo:
         rebuild_all()
         return 0

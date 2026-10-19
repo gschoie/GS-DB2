@@ -72,10 +72,12 @@ jobs:
         working-directory: dart_capacity
         run: python extract.py --codes "$CODES" --preview ${{ inputs.force && '--force' || '' }}
 
-      - name: 정규화 (Claude API)
+      # 모델은 Gemini 무료 티어(GEMINI_API_KEY — 다른 모듈과 같은 키). ANTHROPIC_API_KEY 는 선택.
+      - name: 정규화 (Gemini)
         if: ${{ inputs.stage == 'full' || github.event_name == 'schedule' }}
         working-directory: dart_capacity
         env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
         run: python normalize.py --codes "$CODES" ${{ inputs.force && '--force' || '' }}
 
