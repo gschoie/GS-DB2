@@ -130,6 +130,9 @@ def _parse_json(text: str) -> dict:
 
 
 def call_gemini(client, meta: dict, tables: list[dict]) -> dict:
+    """429(분당 한도)·503(혼잡)이 나면 같은 모델을 기다리지 않고 **다른 모델로 바로 갈아탄다** —
+    flash 와 flash-lite 는 한도 버킷이 따로라서(10/19 실측: 같은 모델 65초 재시도는 거의 매번 또 429).
+    두 모델이 한 바퀴 다 막혔을 때만 65초 쉰다."""
     from google.genai import types as genai_types
     prompt = build_prompt(meta, tables)
     config = genai_types.GenerateContentConfig(
@@ -138,9 +141,10 @@ def call_gemini(client, meta: dict, tables: list[dict]) -> dict:
         max_output_tokens=16384,
         response_mime_type="application/json",
     )
+    models = list(dict.fromkeys([MODEL, *GEMINI_FALLBACKS]))
     last: Exception | None = None
-    for model in dict.fromkeys([MODEL, *GEMINI_FALLBACKS]):
-        for attempt in range(1, 3):
+    for round_no in range(1, 5):
+        for model in models:
             try:
                 resp = client.models.generate_content(model=model, contents=prompt, config=config)
                 out = _parse_json(resp.text)
@@ -151,10 +155,10 @@ def call_gemini(client, meta: dict, tables: list[dict]) -> dict:
                 return out
             except Exception as exc:  # noqa: BLE001
                 last = exc
-                msg = str(exc)
-                wait = 65 if "429" in msg or "RESOURCE_EXHAUSTED" in msg else 10 * attempt
-                print(f"  ! [{model}] {msg[:120]} — {wait}s 대기 후 재시도({attempt}/2)")
-                time.sleep(wait)
+                print(f"  ! [{model}] {str(exc)[:90]} → 다음 모델")
+        wait = 65 if round_no < 4 else 0
+        print(f"  ! 모델 전부 막힘 — {wait}s 대기 후 재시도({round_no}/4)")
+        time.sleep(wait)
     raise RuntimeError(f"Gemini 호출 실패: {last}")
 
 
