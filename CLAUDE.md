@@ -1060,26 +1060,40 @@
     - 배수 표기 전 지표 소수 1자리(`0.0`) — 화면 fmt()·엑셀 number_format (PR #390).
     - 화면·엑셀은 valuation.yml 이 다시 돌아야 반영(빌드 산출물 커밋 구조).
 
-50. **화면 공유용 주소 — 새 창 링크를 gs-research-desk.pages.dev 로** (10/19): 사람들 앞에서 화면을
+50. **화면 공유용 주소 — 새 창 링크를 gs-research-desk.github.io 로** (10/19): 사람들 앞에서 화면을
     공유할 때 주소창의 `gschoie.github.io/GS-DB2` 와 사이드바(팀원 메뉴)가 드러나는 문제.
-    8/18 에 만들었다가 8/23 원복한 Cloudflare Pages 프로젝트 **`gs-research-desk`** 를 다시 쓴다 —
-    GitHub Pages 는 그대로 두고 **같은 `_site` 를 두 곳에 올리는 이중 배포**.
-    - 워크플로 5종(deploy-pages·refresh-news/union/macro/reports)의 build 잡 끝에
-      `npx wrangler@3 pages deploy … --project-name=gs-research-desk --branch=main` 스텝.
-      `CLOUDFLARE_API_TOKEN`·`CLOUDFLARE_ACCOUNT_ID` 시크릿(8/18 것 잔존)이 없거나 실패해도
-      GitHub Pages 배포는 그대로 간다(continue-on-error). 컨테이너는 pages.dev egress 가 막혀
-      **사이트 상태(Access 로그인 벽이 아직 켜져 있는지)를 여기서 확인 못 했다** — 켜져 있으면
-      Cloudflare Zero Trust → Access → Applications 에서 끌 것(안 끄면 새 창마다 OTP).
+    사용자 선택지 셋(GitHub 그대로 / GitHub 조직 주소 / Cloudflare) 중 **GitHub 조직 주소**.
+    GitHub Pages 는 그대로 두고 **같은 `_site` 를 조직 리포에도 push 하는 이중 배포** — 외부 서비스 0.
+    - 조직 `gs-research-desk` + 리포 `gs-research-desk/gs-research-desk.github.io`(public, Pages 는
+      main 루트에서 자동) → 주소 `https://gs-research-desk.github.io/`. 워크플로 5종(deploy-pages·
+      refresh-news/union/macro/reports)의 build 잡 끝에 `peaceiris/actions-gh-pages@v4`
+      (external_repository·publish_branch main·**force_orphan** — 하루 7회+ 배포라 이력을 안 쌓는다,
+      커밋 작성자는 github-actions[bot] — 조직 리포에 gschoie 가 안 남는다). 시크릿
+      **`SHARE_DEPLOY_TOKEN`**(그 리포 Contents 쓰기 PAT)이 없으면 스텝 자체를 건너뛰고(`if: secrets.…`),
+      실패해도 본 배포는 그대로(continue-on-error). 두 배포가 겹쳐도 force push 라 마지막 것이 남는다.
     - `static/app.js` `SHARE_SITE`/`shareUrl`/`shareLinks`: **`target=_blank` 인 같은 사이트
       링크만** 절대주소로 바꾼다(로드 때 1회 + 캡처 단계 click/auxclick 로 나중에 그려지는
       오늘의 요약 카드 링크까지). 대시보드 안 iframe(data-view)은 상대경로 그대로.
-      주소 한 곳(`SHARE_SITE`)만 고치면 공유 도메인을 바꿀 수 있다.
+      조직 이름을 다르게 지으면 **`SHARE_SITE` 한 줄 + 워크플로 5곳의 external_repository** 를 고친다.
     - 외부 사이트 둘도 래퍼로: 챗봇 새 창 → `chat_full.html`(있던 것), 콜라보 레이더 →
-      `collab_full.html` 신설(build_static 복사 목록에 추가). 주소창엔 pages.dev 만 보인다.
+      `collab_full.html` 신설(build_static 복사 목록에 추가). 주소창엔 공유용 주소만 보인다.
     - 공유 허브 `invest.html` 에 **아침 브리핑 3장**(방산 통합·건기 통합·친환경E/FDC) 추가 —
-      공유 때 이 페이지를 pages.dev 로 띄워 두면 된다.
-    - 검증: 스크래치 빌드를 Playwright 로 열어 open-new 22개·새 탭 링크 35개 전부 pages.dev,
-      동적 링크 클릭 시점 치환 확인. `cf-access-public-reports.yml` 은 CLAUDE.md 11번에 '삭제'로
-      적혀 있지만 실제로 남아 있다(수동 실행 전용, 무해).
+      공유 때 이 페이지를 공유용 주소로 띄워 두면 된다.
+    - 비번 가림막(gate.py)은 산출물에 박혀 있어 공유용 주소에서도 그대로 — 단 localStorage 가
+      origin 별이라 거기서 비번을 한 번 더 넣는다. `build_static.previous_payload()` 안전망은
+      계속 github.io/GS-DB2 를 읽는다(원본 배포).
+    - 왜 Cloudflare 가 아닌가: 8/18 의 CF Pages 프로젝트는 Access 상태·토큰 유효성을 컨테이너에서
+      확인할 수 없고(pages.dev egress 차단) 외부 서비스 하나가 더 붙는다. 조직 주소는 GitHub 안에서 끝난다.
+    - 검증: 스크래치 빌드를 Playwright 로 열어 open-new 22개·새 탭 링크 35개 전부 공유용 주소,
+      동적 링크 클릭 시점 치환 확인. `cf-access-public-reports.yml` 은 11번에 '삭제'로 적혀 있지만
+      실제로 남아 있다(수동 실행 전용, 무해).
+    - **사용자 설치**: ① github.com → New organization(Free) 이름 `gs-research-desk`(이미 있으면 다른
+      이름 → SHARE_SITE·external_repository 변경) ② 그 조직에 **public** 리포
+      `gs-research-desk.github.io` 생성(README 하나로 초기화해 main 을 만든다) ③ Settings → Pages 에서
+      Source=Deploy from a branch, main / (root) 확인 ④ Settings → Developer settings → Fine-grained
+      PAT: Resource owner = 조직 gs-research-desk, 리포 그 하나, **Contents: Read and write** →
+      GS-DB2 리포 시크릿 `SHARE_DEPLOY_TOKEN` ⑤ deploy-pages 를 Run workflow → 조직 리포에 커밋이
+      생기고 몇 분 뒤 `https://gs-research-desk.github.io/invest.html` 이 열리면 끝.
+      조직 멤버는 기본 비공개라 조직 페이지에 gschoie 가 안 보인다(확인: 조직 People → Private).
 
 이후 작업은 git log와 이 파일을 갱신하며 이어간다.
