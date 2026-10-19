@@ -270,6 +270,7 @@ h1{{font:500 30px Georgia,"Noto Serif KR",serif;margin:0}}
 h2{{font:600 18px Georgia,"Noto Serif KR",serif;margin:34px 0 10px}}
 h3{{font:600 14px Inter;margin:22px 0 8px}}h3 small{{color:var(--muted);font-weight:400;margin-left:6px}}
 .sub{{color:var(--muted);font-size:12px;margin:8px 0 0;line-height:1.6}}.sub b{{color:#4b5563}}
+.asof{{margin:34px 0 0;font-size:12px;color:#6b7280}}.asof b{{color:#111827}}
 .sched{{display:inline-block;background:#eff6ff;border:1px solid var(--line);border-radius:4px;padding:3px 9px;margin:3px 0;font-size:11px;color:#6b7280}}.sched b{{color:#1d4ed8}}
 .stats{{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px;margin:22px 0 8px}}
 @media(max-width:900px){{.stats{{grid-template-columns:repeat(2,minmax(0,1fr))}}body{{padding:16px}}}}
@@ -302,7 +303,8 @@ table.flow{{font-size:12px}}table.flow td,table.flow th{{padding:6px 5px}}th.c{{
 {err_html}
 {summary_tiles(rows, d)}
 
-<h2 id="flow">① 등락률 <small style="font:400 12px Inter;color:#6b7280">오늘 · 1주 · 1개월 · 3개월 · YTD</small></h2>
+<p class="asof">📅 수집 시각 <b>{esc(asof)}</b> · {'장중 잠정(오늘 현재가·오늘 수급 포함)' if prov else '직전 거래일 종가 기준(장 시작 전 또는 휴장일 수집)'}</p>
+<h2 id="flow" style="margin-top:6px">① 등락률 <small style="font:400 12px Inter;color:#6b7280">오늘 · 1주 · 1개월 · 3개월 · YTD</small></h2>
 <div class="wrap">{returns_table(rows)}</div>
 <p class="note">오늘은 전일 종가 대비(장중 현재가). 1주·1개월·3개월은 거래일 5·21·63일 전 종가 대비, YTD 는 전년 마지막 종가 대비. 외인 보유 옆의 작은 날짜는 장 시작 전·휴장이라 그 날짜의 직전 수집값으로 채운 것 — 장중 첫 수집부터 당일 값으로 바뀐다.</p>
 
