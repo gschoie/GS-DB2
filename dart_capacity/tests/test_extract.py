@@ -1,4 +1,5 @@
-"""extract.py 표 선정 규칙 검산 — 가짜 DART XML (컨테이너는 OpenDART 차단)."""
+"""extract.py 표 선정 규칙 검산 — 가짜 DART XML (컨테이너는 OpenDART 차단).
+한화에어로스페이스 2023 사업보고서 실측 구조를 본떴다(단위 표·각주 표·투자현황 표·사업장 표)."""
 import sys
 from pathlib import Path
 
@@ -11,15 +12,20 @@ DOC = """<?xml version="1.0" encoding="utf-8"?>
 <SECTION-2><TITLE ATOC="Y">3. 원재료 및 생산설비</TITLE>
 <P>가. 주요 원재료</P>
 <TABLE><TR><TH>품목</TH><TH>금액</TH></TR><TR><TD>후판</TD><TD>1,000</TD></TR></TABLE>
-<P>나. 생산 및 설비</P>
-<P>(1) 생산능력</P>
-<P>(단위 : 척)</P>
-<TABLE ACLASS="NORMAL"><TR><TH>사업부문</TH><TH>2024년</TH></TR><TR><TD><P>조선</P></TD><TD>50</TD></TR></TABLE>
-<P>(2) 생산실적 및 가동률</P>
-<TABLE><TR><TH>구분</TH><TH>실적</TH><TH>가동률</TH></TR><TR><TD>조선</TD><TD>45</TD><TD>90%</TD></TR></TABLE>
-<P>다. 생산설비의 현황</P>
-<P>당사는 울산에 본사를 두고 있으며 생산설비 현황은 다음과 같습니다. 이 문장은 길어서 제목이 아니며 가동률이라는 낱말이 들어 있어도 제목으로 치지 않아야 합니다. 그러나 문단 자체는 문맥으로 남는다.</P>
-<TABLE><TR><TH>구분</TH><TH>장부가액</TH></TR><TR><TD>토지</TD><TD>10</TD></TR></TABLE>
+<P>나. 생산능력, 생산실적 및 가동률</P>
+<TABLE><TR><TD></TD><TD>(단위 : 백만원)</TD></TR></TABLE>
+<TABLE ACLASS="NORMAL"><TR><TH>사업부문</TH><TH>구 분</TH><TH>2023년</TH><TH>2022년</TH></TR>
+<TR><TD ROWSPAN="3"><P>항공</P></TD><TD>생산능력</TD><TD>2,159,431</TD><TD>1,689,112</TD></TR>
+<TR><TD>생산실적</TD><TD>1,721,548</TD><TD>1,290,113</TD></TR>
+<TR><TD>가동률(%)</TD><TD>79.72</TD><TD>76.38</TD></TR></TABLE>
+<TABLE><TR><TD>※ 항공 및 방산사업은 보안 관계상 수량 대신 금액으로 기재</TD></TR></TABLE>
+<P>[한화에어로스페이스㈜ 방산부문] "시간당 생산실적×일일 가동가능시간×연간가동가능일수"로 정상가동률 기준으로 계산된 최대 생산가능금액입니다.</P>
+<P>다. 생산설비의 현황 등</P>
+<P>(1) 주요 사업장 현황</P>
+<TABLE><TR><TH>지역</TH><TH>사업장</TH><TH>소재지</TH></TR><TR><TD>국내</TD><TD>창원1사업장</TD><TD>경남 창원시</TD></TR></TABLE>
+<P>(2) 설비의 신설·매입 계획</P>
+<TABLE><TR><TH>투자명</TH><TH>기간</TH><TH>총 소요자금</TH><TH>향후 기대효과</TH></TR>
+<TR><TD>PW 엔진부품 제조설비 투자</TD><TD>2019~2024</TD><TD>25,360</TD><TD>생산능력 향상</TD></TR></TABLE>
 </SECTION-2></SECTION-1>
 <SECTION-1><TITLE>III. 재무에 관한 사항</TITLE>
 <TABLE><TR><TD>매출액</TD><TD>100</TD></TR></TABLE>
@@ -27,29 +33,40 @@ DOC = """<?xml version="1.0" encoding="utf-8"?>
 </BODY></DOCUMENT>"""
 
 
-def test_picks_capacity_tables_only():
-    tables = extract_tables(DOC)
-    assert len(tables) == 2, [t["headings"] for t in tables]
-    cap, prod = tables
-    assert cap["keywords"] == ["생산능력"] and cap["keyword_in"] == "heading"
-    assert cap["unit"] == "(단위 : 척)"
-    assert cap["rows"] == [["사업부문", "2024년"], ["조선", "50"]]
-    assert cap["section"][-1] == "3. 원재료 및 생산설비"
-    assert "가동률" in prod["keywords"] and "생산실적" in prod["keywords"]
-    assert prod["keyword_in"] == "table"
-    # 앞 표 이후의 문맥만 — 원재료 제목이 생산능력 표 문맥에 섞이지 않는다
-    assert all("원재료" not in h for h in cap["headings"])
-    # 긴 본문 문단(가동률 포함)은 제목으로 치지 않으므로 생산설비 현황 표는 안 뽑힌다
-    assert all("토지" not in t["html"] for t in tables)
+def test_picks_only_the_capacity_table():
+    found, rejected = extract_tables(DOC)
+    assert len(found) == 1, [t["headings"] for t in found]
+    t = found[0]
+    assert t["keyword_in"] == "table" and t["keywords"] == ["가동률", "생산능력", "생산실적"]
+    assert t["section"][-1] == "3. 원재료 및 생산설비"
+    assert t["headings"][-1] == "나. 생산능력, 생산실적 및 가동률"
+    # 단위만 든 한 칸짜리 표는 표로 세지 않고 다음 표의 단위가 된다
+    assert t["unit"] == "(단위 : 백만원)"
+    # '※ …' 한 칸짜리 표는 직전 표의 각주
+    assert t["footnotes"] == ["※ 항공 및 방산사업은 보안 관계상 수량 대신 금액으로 기재"]
+    assert t["rows"][1] == ["항공", "생산능력", "2,159,431", "1,689,112"]
+    # 앞 표(원재료) 제목은 문맥에 섞이지 않는다
+    assert all("원재료" not in h for h in t["headings"])
 
 
-def test_nested_and_html_preserved():
-    tables = extract_tables(DOC)
-    assert 'aclass="normal"' in tables[0]["html"].lower()
-    assert "<p>조선</p>" in tables[0]["html"].lower()
+def test_false_positives_go_to_rejected():
+    found, rejected = extract_tables(DOC)
+    # 사업장 현황 표: 멀리 있는 각주 문장('…입니다.')의 가동률은 제목이 아니다
+    # 투자현황 표: '생산능력 향상'은 지표명 셀이 아니다
+    whys = {r["rows"][0][0] for r in rejected}
+    assert whys == {"지역", "투자명"}, whys
+    assert all(r["html"] == "" for r in rejected)           # 검토용이라 원문은 안 담는다
+    assert all("토지" not in t["html"] and "투자명" not in t["html"] for t in found)
+
+
+def test_html_preserved():
+    found, _ = extract_tables(DOC)
+    assert 'aclass="normal"' in found[0]["html"].lower()
+    assert 'rowspan="3"' in found[0]["html"].lower()
 
 
 if __name__ == "__main__":
-    test_picks_capacity_tables_only()
-    test_nested_and_html_preserved()
-    print("ok — test_extract 2개 통과")
+    test_picks_only_the_capacity_table()
+    test_false_positives_go_to_rejected()
+    test_html_preserved()
+    print("ok — test_extract 3개 통과")

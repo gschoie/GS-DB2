@@ -20,6 +20,7 @@ import sys
 import time
 import zipfile
 import xml.etree.ElementTree as ET
+from concurrent.futures import ThreadPoolExecutor
 
 import requests
 
@@ -31,6 +32,7 @@ LIST_DIR = RAW / "list"
 DOC_DIR = RAW / "doc"
 PAUSE = 0.4
 RETRIES = 3
+WORKERS = 4               # 원문 zip 병렬 다운로드 — OpenDART 가 건당 ~30초라 직렬이면 40건에 20분(10/19 실측)
 
 sys.stdout.reconfigure(line_buffering=True)   # 러너 로그에 진행 상황이 바로 보이게
 _session = requests.Session()
@@ -187,7 +189,7 @@ def main() -> int:
     print(f"  상장사 {len(table)}개")
     companies = resolve(companies, table)
     index = load_index()
-    new_docs = 0
+    jobs: list[tuple[dict, dict]] = []
     for c in companies:
         reports = periodic_reports(key, c["corp_code"], args.years)
         print(f"\n[{c['sector']}] {c['name']}({c['stock_code']}) 정기보고서 {len(reports)}건 (최근 {args.years}년)")
@@ -196,12 +198,23 @@ def main() -> int:
             index.setdefault(r["rcept_no"], {}).update(entry)
             if args.list_only:
                 print(f"  {r['rcept_dt']} {r['report_nm']:<28} {r['rcept_no']}")
-                continue
+            else:
+                jobs.append((c, r))
+    new_docs = 0
+    if jobs:
+        print(f"\n원문 다운로드 {len(jobs)}건 (병렬 {WORKERS})…")
+
+        def _one(job):
+            c, r = job
             t0 = time.monotonic()
             fresh, msg = download_document(key, r["rcept_no"])
-            index[r["rcept_no"]]["raw"] = bool(fresh or msg == "캐시")
-            new_docs += int(fresh)
-            print(f"  {r['rcept_dt']} {r['report_nm']:<28} {r['rcept_no']}  {msg} ({time.monotonic() - t0:.1f}s)")
+            return c, r, fresh, msg, time.monotonic() - t0
+
+        with ThreadPoolExecutor(max_workers=WORKERS) as pool:
+            for c, r, fresh, msg, dt_s in pool.map(_one, jobs):
+                index[r["rcept_no"]]["raw"] = bool(fresh or msg == "캐시")
+                new_docs += int(fresh)
+                print(f"  {c['name']:<10} {r['rcept_dt']} {r['report_nm']:<28} {r['rcept_no']}  {msg} ({dt_s:.1f}s)")
     save_index(index)
     print(f"\n보고서 인덱스 {len(index)}건 저장, 원문 신규 {new_docs}건")
     return 0

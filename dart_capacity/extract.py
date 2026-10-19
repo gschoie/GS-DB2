@@ -28,6 +28,7 @@ import warnings
 from bs4 import BeautifulSoup, Tag, XMLParsedAsHTMLWarning
 
 warnings.filterwarnings("ignore", category=XMLParsedAsHTMLWarning)
+sys.stdout.reconfigure(line_buffering=True)
 
 from common import DART_VIEWER, EXTRACTED, load_index
 
@@ -35,8 +36,13 @@ DOC_DIR = Path(__file__).resolve().parent / "data" / "raw" / "doc"
 KEYWORDS = ("생산능력", "생산실적", "가동률", "가동율")
 _KW_RE = re.compile("|".join(KEYWORDS))
 _UNIT_RE = re.compile(r"단\s*위")
-HEADING_MAX = 90          # 이보다 긴 문단은 제목이 아니라 본문으로 본다
-CONTEXT_MAX = 12          # 표 앞에서 거슬러 올라가 보는 블록 수 상한
+HEADING_MAX = 60          # 이보다 긴 문단은 제목이 아니라 본문(각주 문장)으로 본다
+CONTEXT_MAX = 12          # 표 앞에서 거슬러 올라가 담아 두는 블록 수 상한(문맥 보존용)
+NEAR = 4                  # 키워드 판정에 쓰는 '바로 앞' 블록 수 — 멀리 있는 각주 문장에 끌려가지 않게
+# 셀 하나가 통째로 지표 이름인 경우만 표 본문 적중으로 친다 — '생산능력 향상'(투자 기대효과) 같은
+# 서술형 셀은 제외. 머리글 행(첫 행·th)은 포함 일치로 본다.
+_CELL_RE = re.compile(r"^(생산능력|생산실적|가동률|가동율)\s*(\([^)]*\)\s*)*(\(%\))?\s*(\(.*\))?$")
+_TINY_CELLS = 2           # 이 수 이하의 셀만 가진 표는 '단위 표'나 '각주 표'로 본다
 
 
 def _decode(raw: bytes) -> str:
@@ -60,6 +66,12 @@ def _context(table: Tag) -> list[str]:
     seen = 0
     for el in table.find_all_previous(True):
         if el.name == "table":
+            # 단위·각주만 든 한두 칸짜리 표는 경계가 아니라 문맥이다 — 지나서 계속 올라간다
+            if sum(len(r) for r in _rows(el)) <= _TINY_CELLS:
+                txt = _text(el)
+                if txt:
+                    out.append(txt)
+                continue
             break
         if el.name not in ("p", "title", "tu", "te", "span", "div", "h1", "h2", "h3", "h4"):
             continue
@@ -90,6 +102,30 @@ def _section_titles(table: Tag) -> list[str]:
     return titles
 
 
+def _is_heading(txt: str) -> bool:
+    """짧고 서술형이 아닌 문장만 제목으로 — '…입니다.' '…합니다.' '※ …' 는 각주 문장."""
+    if not txt or len(txt) > HEADING_MAX:
+        return False
+    if txt.startswith(("※", "주)", "주1", "(주")):
+        return False
+    if re.search(r"(다|음|함|임)\s*\.?$", txt):
+        return False
+    return True
+
+
+def _cell_hit(rows: list[list[str]]) -> list[str]:
+    """지표 이름 셀(또는 머리글 포함)에서 적중한 키워드."""
+    hits = set()
+    for i, row in enumerate(rows):
+        for cell in row:
+            c = cell.strip()
+            if i == 0:
+                hits.update(_KW_RE.findall(c))
+            elif _CELL_RE.match(c):
+                hits.update(_KW_RE.findall(c))
+    return sorted(hits)
+
+
 def _rows(table: Tag) -> list[list[str]]:
     rows = []
     for tr in table.find_all("tr"):
@@ -99,35 +135,59 @@ def _rows(table: Tag) -> list[list[str]]:
     return rows
 
 
-def extract_tables(doc: str) -> list[dict]:
+def extract_tables(doc: str) -> tuple[list[dict], list[dict]]:
+    """(채택 표, 탈락 후보). 탈락 후보는 느슨한 일치(아무 셀·아무 문맥)만 된 것 — 검토용."""
     soup = BeautifulSoup(doc, "lxml")
-    found = []
+    found: list[dict] = []
+    rejected: list[dict] = []
+    pending_unit = ""        # 바로 앞 '단위 표'의 문구
     for table in soup.find_all("table"):
         if table.find_parent("table") is not None:
             continue                                  # 중첩 표는 바깥 표에 포함
+        rows = _rows(table)
         ttext = _text(table)
-        ctx = _context(table)
-        headings = [t for t in ctx if len(t) <= HEADING_MAX]
-        kw_table = sorted(set(_KW_RE.findall(ttext)))
-        kw_ctx = sorted({k for t in headings for k in _KW_RE.findall(t)})
-        if not kw_table and not kw_ctx:
+        ncells = sum(len(r) for r in rows)
+        # (단위 : 백만원) 만 든 한두 칸짜리 표 → 다음 표의 단위
+        if ncells <= _TINY_CELLS and _UNIT_RE.search(ttext):
+            pending_unit = ttext
             continue
-        units = [t for t in headings if _UNIT_RE.search(t)]
-        found.append({
+        # '※ …' 한 칸짜리 각주 표 → 직전 채택 표의 각주
+        if ncells <= _TINY_CELLS and found and (ttext.startswith("※") or ttext.startswith("주")):
+            found[-1]["footnotes"].append(ttext)
+            continue
+        ctx = _context(table)
+        headings = [t for t in ctx if _is_heading(t) and not _UNIT_RE.search(t)]
+        near = [t for t in ctx[-NEAR:] if _is_heading(t) and not _UNIT_RE.search(t)]
+        kw_table = _cell_hit(rows)
+        kw_ctx = sorted({k for t in near for k in _KW_RE.findall(t)})
+        unit_texts = [t for t in ctx if _UNIT_RE.search(t)]
+        unit = unit_texts[-1] if unit_texts else pending_unit
+        pending_unit = ""
+        record = {
             "section": _section_titles(table),
             "headings": headings,
-            "unit": units[-1] if units else "",
+            "context": ctx,
+            "unit": unit,
             "keywords": sorted(set(kw_table) | set(kw_ctx)),
-            "keyword_in": "table" if kw_table else "heading",
-            "rows": _rows(table),
+            "keyword_in": "table" if kw_table else ("heading" if kw_ctx else ""),
+            "rows": rows,
             "html": str(table),
+            "footnotes": [],
             "digest": hashlib.md5(ttext.encode("utf-8")).hexdigest()[:12],
-        })
-    return found
+        }
+        if kw_table or kw_ctx:
+            found.append(record)
+            continue
+        loose = sorted(set(_KW_RE.findall(ttext)) | {k for t in ctx for k in _KW_RE.findall(t)})
+        if loose:
+            rejected.append({**record, "keywords": loose, "html": "", "rows": rows[:3],
+                             "why": "셀 전체가 지표명이 아니거나 멀리 있는 문장에만 키워드"})
+    return found, rejected
 
 
-def extract_zip(zip_path: Path) -> list[dict]:
+def extract_zip(zip_path: Path) -> tuple[list[dict], list[dict]]:
     tables: list[dict] = []
+    rejected: list[dict] = []
     seen: set[str] = set()
     with zipfile.ZipFile(zip_path) as zf:
         names = sorted(n for n in zf.namelist() if n.lower().endswith((".xml", ".html", ".htm")))
@@ -135,13 +195,17 @@ def extract_zip(zip_path: Path) -> list[dict]:
         names.sort(key=lambda n: (0 if re.fullmatch(r"\d+\.xml", Path(n).name) else 1, n))
         for name in names:
             doc = _decode(zf.read(name))
-            for t in extract_tables(doc):
+            got, rej = extract_tables(doc)
+            for t in got:
                 if t["digest"] in seen:
                     continue
                 seen.add(t["digest"])
                 t["file"] = Path(name).name
                 tables.append(t)
-    return tables
+            for t in rej:
+                t["file"] = Path(name).name
+                rejected.append(t)
+    return tables, rejected
 
 
 def _esc(s: str) -> str:
@@ -157,11 +221,14 @@ def render_html(meta: dict, tables: list[dict]) -> str:
         parts.append(
             f"<section data-table=\"{i}\" data-keywords=\"{_esc(','.join(t['keywords']))}\" data-file=\"{_esc(t['file'])}\">"
             f"<h2>표 {i} <small>[{_esc(' › '.join(t['section']))}]</small></h2>"
-            f"<div class=\"ctx\">{'<br>'.join(_esc(h) for h in t['headings'])}</div>"
-            f"{t['html']}</section>")
+            f"<div class=\"ctx\">{'<br>'.join(_esc(h) for h in t['headings'])}"
+            f"{('<br><b>단위:</b> ' + _esc(t['unit'])) if t['unit'] else ''}</div>"
+            f"{t['html']}"
+            f"{''.join('<p class=fn>' + _esc(f) + '</p>' for f in t.get('footnotes', []))}</section>")
     css = ("body{font-family:system-ui,sans-serif;margin:24px;max-width:1100px}h2{margin:32px 0 4px;font-size:16px}"
            "h2 small{color:#666;font-weight:normal}.ctx{color:#444;font-size:13px;margin:4px 0 8px;white-space:pre-wrap}"
-           "table{border-collapse:collapse;font-size:12px}td,th{border:1px solid #999;padding:3px 6px;vertical-align:top}")
+           "table{border-collapse:collapse;font-size:12px}td,th{border:1px solid #999;padding:3px 6px;vertical-align:top}"
+           ".fn{color:#555;font-size:12px;margin:4px 0}")
     return f"<!doctype html><meta charset=\"utf-8\"><title>{_esc(meta.get('company',''))} {meta['rcept_no']}</title><style>{css}</style>{head}{''.join(parts)}"
 
 
@@ -187,21 +254,23 @@ def main() -> int:
         if out_json.exists() and not args.force:
             skipped += 1
             continue
-        tables = extract_zip(zip_path)
+        tables, rejected = extract_zip(zip_path)
         meta_out = {k: meta.get(k, "") for k in ("company", "sector", "stock_code", "corp_code", "rcept_no", "rcept_dt",
                                                   "report_nm", "report_type", "period", "period_label", "corrected")}
         meta_out["rcept_no"] = rcept_no
         meta_out["dart_url"] = DART_VIEWER.format(rcept_no=rcept_no)
         (EXTRACTED / f"{stem}.html").write_text(render_html(meta_out, tables), encoding="utf-8")
-        out_json.write_text(json.dumps({"meta": meta_out, "tables": tables}, ensure_ascii=False, indent=1), encoding="utf-8")
+        out_json.write_text(json.dumps({"meta": meta_out, "tables": tables, "rejected": rejected}, ensure_ascii=False, indent=1), encoding="utf-8")
         index[rcept_no]["extracted"] = len(tables)
         done += 1
-        print(f"{meta.get('company','?')} {meta.get('report_nm','')} {rcept_no}: 표 {len(tables)}개")
+        print(f"{meta.get('company','?')} {meta.get('report_nm','')} {rcept_no}: 표 {len(tables)}개 (탈락 후보 {len(rejected)})")
         if args.preview:
             for i, t in enumerate(tables, 1):
                 print(f"  ── 표 {i} [{' › '.join(t['section'][-2:])}] kw={','.join(t['keywords'])}({t['keyword_in']}) unit='{t['unit']}'")
                 for h in t["headings"][-3:]:
                     print(f"     ▸ {h[:HEADING_MAX]}")
+                for f in t["footnotes"]:
+                    print(f"     ※ {f[:100]}")
                 for row in t["rows"][:8]:
                     print("     | " + " | ".join(c[:18] for c in row))
                 if len(t["rows"]) > 8:
