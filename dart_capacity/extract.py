@@ -67,46 +67,8 @@ def _lines(el: Tag) -> list[str]:
     return [re.sub(r"\s+", " ", ln).strip() for ln in raw.split("\n") if ln.strip()]
 
 
-def _context(table: Tag) -> list[str]:
-    """이전 표 이후 ~ 이 표 사이의 제목·문단 텍스트(문서 순서, 줄 단위)."""
-    out: list[str] = []
-    seen = 0
-    for el in table.find_all_previous(True):
-        if el.name == "table":
-            # 단위·각주만 든 한두 칸짜리 표는 경계가 아니라 문맥이다 — 지나서 계속 올라간다
-            if sum(len(r) for r in _rows(el)) <= _TINY_CELLS:
-                txt = _text(el)
-                if txt:
-                    out.append(txt)
-                continue
-            break
-        if el.name not in ("p", "title", "tu", "te", "span", "div", "h1", "h2", "h3", "h4"):
-            continue
-        if el.find_parent("table") is not None:
-            continue
-        if any(el.find_parent(t) is not None for t in ("p", "title", "tu", "te")) and el.name in ("span", "div"):
-            continue                                  # 부모 문단이 이미 담는 텍스트
-        lines = _lines(el)
-        if not lines:
-            continue
-        out.extend(reversed(lines))                   # 역순으로 모으는 중이므로 줄도 역순
-        seen += 1
-        if seen >= CONTEXT_MAX:
-            break
-    out.reverse()
-    return out
-
-
-def _section_titles(table: Tag) -> list[str]:
-    titles = []
-    for el in table.find_all_previous("title"):
-        if el.find_parent("table") is not None:
-            continue
-        titles.append(_text(el))
-        if len(titles) >= 3:
-            break
-    titles.reverse()
-    return titles
+_BLOCK_TAGS = ("p", "title", "tu", "te", "span", "div", "h1", "h2", "h3", "h4")
+_TEXT_PARENTS = ("p", "title", "tu", "te")
 
 
 def _is_heading(txt: str) -> bool:
@@ -187,61 +149,94 @@ def _rows(table: Tag) -> list[list[str]]:
 
 
 def extract_tables(doc: str) -> tuple[list[dict], list[dict]]:
-    """(채택 표, 탈락 후보). 탈락 후보는 느슨한 일치(아무 셀·아무 문맥)만 된 것 — 검토용."""
+    """(채택 표, 탈락 후보). 문서를 **한 번만** 앞으로 훑으며 '이전 표 이후의 제목·문단 줄'을
+    버퍼에 모아 두었다가 표를 만나면 그 버퍼가 문맥이 된다 — 표마다 뒤로 되짚는 방식은
+    큰 보고서(표 수백 개)에서 문서당 40초가 걸렸다(10/19 실측).
+    탈락 후보는 느슨한 일치(아무 셀·아무 문맥)만 된 것 — 검토용."""
     soup = BeautifulSoup(doc, "lxml")
     found: list[dict] = []
     rejected: list[dict] = []
-    pending_unit = ""        # 바로 앞 '단위 표'의 문구
-    since_found = 1          # 마지막 채택 표 이후 지나간 일반 표 수 — 0일 때만 각주·산출기준 표를 붙인다
-    for table in soup.find_all("table"):
-        if table.find_parent("table") is not None:
-            continue                                  # 중첩 표는 바깥 표에 포함
-        rows = _rows(table)
-        ttext = _text(table)
-        ncells = sum(len(r) for r in rows)
-        # (단위 : 백만원) 만 든 한두 칸짜리 표 → 다음 표의 단위
-        if ncells <= _TINY_CELLS and _UNIT_RE.search(ttext):
-            pending_unit = ttext
+    ctx: list[str] = []          # 이전 (일반) 표 이후의 문맥 줄
+    titles: list[str] = []       # 최근 TITLE 3개 (섹션 경로)
+    pending_unit = ""            # 바로 앞 '단위 표'의 문구
+    since_found = 1              # 마지막 채택 표 이후 지나간 일반 표 수 — 0일 때만 각주·산출기준 표를 붙인다
+    for el in soup.find_all(True):
+        name = el.name
+        if name == "table":
+            if el.find_parent("table") is not None:
+                continue                              # 중첩 표는 바깥 표에 포함
+            rows = _rows(el)
+            ttext = _text(el)
+            ncells = sum(len(r) for r in rows)
+            # (단위 : 백만원) 만 든 한두 칸짜리 표 → 다음 표의 단위 (문맥에도 남긴다)
+            if ncells <= _TINY_CELLS and _UNIT_RE.search(ttext):
+                pending_unit = ttext
+                ctx.append(ttext)
+                continue
+            # '※ …'·'주1) …' 한 칸짜리 각주 표 → **바로 앞** 채택 표의 각주 (다른 표를 지나왔으면 무관한 각주)
+            if ncells <= _TINY_CELLS and (ttext.startswith("※") or re.match(r"주\s*\d*\)", ttext)):
+                if found and since_found == 0 and ttext not in found[-1]["footnotes"]:
+                    found[-1]["footnotes"].append(ttext)
+                ctx.append(ttext)
+                continue
+            if ncells <= _TINY_CELLS:
+                if ttext:
+                    ctx.append(ttext)
+                continue
+            # 'ㆍ선 박 | : 도크의 최대 건조가능 용량 기준' 꼴의 산출기준 표(짧은 2열 목록) → 바로 앞 채택 표의 각주
+            if _is_note_table(rows, ttext):
+                if found and since_found == 0:
+                    found[-1]["footnotes"].append(" / ".join(" ".join(r) for r in rows))
+                continue
+            context = ctx[-CONTEXT_MAX * 3:]
+            headings = [t for t in context if _is_heading(t) and not _UNIT_RE.search(t)]
+            near = [t for t in context[-NEAR:] if _is_heading(t) and not _UNIT_RE.search(t)]
+            kw_table = _cell_hit(rows)
+            kw_ctx = _nearest_heading_kw(near)
+            unit_texts = [t for t in context if _UNIT_RE.search(t)]
+            unit = unit_texts[-1] if unit_texts else pending_unit
+            pending_unit = ""
+            record = {
+                "section": list(titles[-3:]),
+                "headings": headings,
+                "context": context,
+                "unit": unit,
+                "keywords": sorted(set(kw_table) | set(kw_ctx)),
+                "keyword_in": "table" if kw_table else ("heading" if kw_ctx else ""),
+                "rows": rows,
+                "html": str(el),
+                "footnotes": [],
+                "digest": hashlib.md5(ttext.encode("utf-8")).hexdigest()[:12],
+            }
+            ctx = []                                  # 일반 표를 지났으니 문맥은 여기서 끊긴다
+            if kw_table or kw_ctx:
+                found.append(record)
+                since_found = 0
+                continue
+            since_found += 1
+            loose = sorted(set(_KW_RE.findall(ttext)) | {k for t in context for k in _KW_RE.findall(t)})
+            if loose:
+                rejected.append({**record, "keywords": loose, "html": "", "rows": rows[:3],
+                                 "why": "셀 전체가 지표명이 아니거나 멀리 있는 문장에만 키워드"})
             continue
-        # '※ …'·'주1) …' 한 칸짜리 각주 표 → **바로 앞** 채택 표의 각주 (다른 표를 지나왔으면 무관한 각주)
-        if ncells <= _TINY_CELLS and (ttext.startswith("※") or re.match(r"주\s*\d*\)", ttext)):
-            if found and since_found == 0 and ttext not in found[-1]["footnotes"]:
-                found[-1]["footnotes"].append(ttext)
+        if name not in _BLOCK_TAGS:
             continue
-        # 'ㆍ선 박 | : 도크의 최대 건조가능 용량 기준' 꼴의 산출기준 표(짧은 2열 목록) → 바로 앞 채택 표의 각주
-        if _is_note_table(rows, ttext):
-            if found and since_found == 0:
-                found[-1]["footnotes"].append(" / ".join(" ".join(r) for r in rows))
+        if el.find_parent("table") is not None:
             continue
-        ctx = _context(table)
-        headings = [t for t in ctx if _is_heading(t) and not _UNIT_RE.search(t)]
-        near = [t for t in ctx[-NEAR:] if _is_heading(t) and not _UNIT_RE.search(t)]
-        kw_table = _cell_hit(rows)
-        kw_ctx = _nearest_heading_kw(near)
-        unit_texts = [t for t in ctx if _UNIT_RE.search(t)]
-        unit = unit_texts[-1] if unit_texts else pending_unit
-        pending_unit = ""
-        record = {
-            "section": _section_titles(table),
-            "headings": headings,
-            "context": ctx,
-            "unit": unit,
-            "keywords": sorted(set(kw_table) | set(kw_ctx)),
-            "keyword_in": "table" if kw_table else ("heading" if kw_ctx else ""),
-            "rows": rows,
-            "html": str(table),
-            "footnotes": [],
-            "digest": hashlib.md5(ttext.encode("utf-8")).hexdigest()[:12],
-        }
-        if kw_table or kw_ctx:
-            found.append(record)
-            since_found = 0
+        if name in ("span", "div") and any(el.find_parent(t) is not None for t in _TEXT_PARENTS):
+            continue                                  # 부모 문단이 이미 담는 텍스트
+        if name == "div" and el.find(["p", "div", "table", "title"]) is not None:
+            continue                                  # 블록을 품은 컨테이너 — 자식이 각자 줄을 낸다(중복 방지)
+        if name in ("p", "div") and el.find_parent(["p", "div", "tu", "te"]) is not None and name == "p":
+            pass
+        lines = _lines(el)
+        if not lines:
             continue
-        since_found += 1
-        loose = sorted(set(_KW_RE.findall(ttext)) | {k for t in ctx for k in _KW_RE.findall(t)})
-        if loose:
-            rejected.append({**record, "keywords": loose, "html": "", "rows": rows[:3],
-                             "why": "셀 전체가 지표명이 아니거나 멀리 있는 문장에만 키워드"})
+        if name == "title":
+            titles.append(" ".join(lines))
+        ctx.extend(lines)
+        if len(ctx) > CONTEXT_MAX * 6:
+            ctx = ctx[-CONTEXT_MAX * 3:]
     return found, rejected
 
 
