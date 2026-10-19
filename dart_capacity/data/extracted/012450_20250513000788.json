@@ -1,0 +1,470 @@
+{
+ "meta": {
+  "company": "한화에어로스페이스",
+  "sector": "방산",
+  "stock_code": "012450",
+  "corp_code": "00126566",
+  "rcept_no": "20250513000788",
+  "rcept_dt": "20250513",
+  "report_nm": "분기보고서 (2025.03)",
+  "report_type": "quarter",
+  "period": "2025-03",
+  "period_label": "2025.03 1Q",
+  "corrected": false,
+  "dart_url": "https://dart.fss.or.kr/dsaf001/main.do?rcpNo=20250513000788"
+ },
+ "tables": [
+  {
+   "section": [
+    "1. 사업의 개요",
+    "2. 주요 제품 및 서비스",
+    "3. 원재료 및 생산설비"
+   ],
+   "headings": [
+    "다. 생산능력, 생산실적 및 가동률"
+   ],
+   "unit": "",
+   "keywords": [
+    "가동률",
+    "생산능력",
+    "생산실적"
+   ],
+   "keyword_in": "heading",
+   "rows": [
+    [
+     "",
+     "(단위 : 백만원, MH, MT)"
+    ]
+   ],
+   "html": "<table aclass=\"NORMAL\" afixtable=\"N\" border=\"0\" width=\"1128\">\n<colgroup width=\"1128\">\n<col width=\"561\"/>\n<col width=\"567\"/>\n</colgroup>\n<tbody>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"30\">\n<td height=\"23\" valign=\"BOTTOM\" width=\"552\"></td>\n<td align=\"RIGHT\" height=\"23\" valign=\"BOTTOM\" width=\"558\">(단위 : 백만원, MH, MT)</td>\n</tr>\n</tbody>\n</table>",
+   "digest": "5a1670b4826c",
+   "file": "20250513000788.xml"
+  },
+  {
+   "section": [
+    "1. 사업의 개요",
+    "2. 주요 제품 및 서비스",
+    "3. 원재료 및 생산설비"
+   ],
+   "headings": [],
+   "unit": "",
+   "keywords": [
+    "가동률",
+    "생산능력",
+    "생산실적"
+   ],
+   "keyword_in": "table",
+   "rows": [
+    [
+     "사업부문",
+     "해당 회사",
+     "사업소",
+     "품 목",
+     "구 분",
+     "2025년 1분기",
+     "2024년",
+     "2023년"
+    ],
+    [
+     "항공",
+     "한화에어로스페이스㈜ 및해외생산법인",
+     "창원1사업장, 아산사업장베트남 하노이, 미국 코네티컷",
+     "항공기ㆍ발사체ㆍ각종 엔진 등의 부품 생산 및 정비",
+     "생산능력",
+     "627,624",
+     "2,071,383",
+     "2,159,431"
+    ],
+    [
+     "생산실적",
+     "508,411",
+     "1,576,645",
+     "1,721,548"
+    ],
+    [
+     "가동률(%)",
+     "81.01",
+     "76.12",
+     "79.72"
+    ],
+    [
+     "방산",
+     "한화에어로스페이스㈜",
+     "창원2, 3사업장,여수사업장, 대전사업장,보은사업장, 화순공장",
+     "자주포, 장갑차, 발사대, 탄약/유도무기류 및 항법장치 등",
+     "생산능력",
+     "1,411,499",
+     "4,596,404",
+     "3,190,416"
+    ],
+    [
+     "생산실적",
+     "1,246,316",
+     "4,101,818",
+     "2,825,122"
+    ],
+    [
+     "가동률(%)",
+     "88.30",
+     "89.24",
+     "88.55"
+    ],
+    [
+     "한화시스템㈜",
+     "구미사업장",
+     "전술통신장비, 조준경, 관측장비, 함정 전투체계 등",
+     "생산능력",
+     "363,775",
+     "1,289,684",
+     "1,166,248"
+    ],
+    [
+     "생산실적",
+     "293,237",
+     "1,101,233",
+     "1,060,056"
+    ],
+    [
+     "가동률(%)",
+     "80.61",
+     "85.99",
+     "90.89"
+    ],
+    [
+     "해양",
+     "한화오션 ㈜ 및 종속회사",
+     "옥포조선소, 전남 광양 ,중국 연타이 등",
+     "LNGC, LPGC, 잠수함, 수상함 등 선박 및 특수선 건조, 해양 제품 생산 및 서비스 제공 등",
+     "목표 가동시간",
+     "8,787,704",
+     "38,194,802",
+     "-"
+    ],
+    [
+     "실제 가동시간",
+     "8,734,398",
+     "38,100,904",
+     "-"
+    ],
+    [
+     "가동률(%)",
+     "99.39",
+     "99.75",
+     "-"
+    ],
+    [
+     "Hanwha Offshore Singapore Pte. Ltd.",
+     "싱가포르",
+     "FPSO를 위한 상부 모듈 제작",
+     "생산능력 (MT)",
+     "9,000",
+     "59,200",
+     "-"
+    ],
+    [
+     "생산실적 (MT)",
+     "8,270",
+     "29,522",
+     "-"
+    ],
+    [
+     "가동률(%)",
+     "91.89",
+     "49.87",
+     "-"
+    ],
+    [
+     "항공우주",
+     "㈜쎄트렉아이",
+     "대전사업장",
+     "위성시스템, 전자광학카메라,위성지상국 등",
+     "생산능력",
+     "40,175",
+     "173,421",
+     "120,074"
+    ],
+    [
+     "생산실적",
+     "38,160",
+     "161,502",
+     "114,435"
+    ],
+    [
+     "가동률(%)",
+     "94.98",
+     "93.13",
+     "95.30"
+    ]
+   ],
+   "html": "<table aclass=\"NORMAL\" afixtable=\"N\" border=\"1\" width=\"1129\">\n<colgroup width=\"1129\">\n<col width=\"78\"/>\n<col width=\"180\"/>\n<col width=\"213\"/>\n<col width=\"232\"/>\n<col width=\"110\"/>\n<col width=\"106\"/>\n<col width=\"105\"/>\n<col width=\"105\"/>\n</colgroup>\n<thead align=\"LEFT\" valign=\"TOP\">\n<tr acopy=\"Y\" adelete=\"Y\" height=\"30\">\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"23\" valign=\"MIDDLE\" width=\"69\">사업부문</th>\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"23\" valign=\"MIDDLE\" width=\"171\">해당 회사</th>\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"23\" valign=\"MIDDLE\" width=\"204\">사업소</th>\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"23\" valign=\"MIDDLE\" width=\"223\">품 목</th>\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"23\" valign=\"MIDDLE\" width=\"101\">구 분</th>\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"23\" valign=\"MIDDLE\" width=\"97\">2025년 1분기</th>\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"23\" valign=\"MIDDLE\" width=\"96\">2024년</th>\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"23\" valign=\"MIDDLE\" width=\"96\">2023년</th>\n</tr>\n</thead>\n<tbody>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"30\">\n<td align=\"CENTER\" height=\"83\" rowspan=\"3\" valign=\"MIDDLE\" width=\"69\">항공</td>\n<td height=\"83\" rowspan=\"3\" valign=\"MIDDLE\" width=\"171\">한화에어로스페이스㈜ 및해외생산법인</td>\n<td align=\"CENTER\" height=\"83\" rowspan=\"3\" valign=\"MIDDLE\" width=\"204\">창원1사업장, 아산사업장베트남 하노이, 미국 코네티컷</td>\n<td height=\"83\" rowspan=\"3\" valign=\"MIDDLE\" width=\"223\">항공기ㆍ발사체ㆍ각종 엔진 등의 부품 생산 및 정비</td>\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"101\">생산능력</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"97\">627,624</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"96\">2,071,383</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"96\">2,159,431</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"30\">\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"101\">생산실적</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"97\">508,411</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"96\">1,576,645</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"96\">1,721,548</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"30\">\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"101\">가동률(%)</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"97\">81.01</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"96\">76.12</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"96\">79.72</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"30\">\n<td align=\"CENTER\" height=\"173\" rowspan=\"6\" valign=\"MIDDLE\" width=\"69\">방산</td>\n<td height=\"83\" rowspan=\"3\" valign=\"MIDDLE\" width=\"171\">한화에어로스페이스㈜</td>\n<td align=\"CENTER\" height=\"83\" rowspan=\"3\" valign=\"MIDDLE\" width=\"204\">창원2, 3사업장,여수사업장, 대전사업장,보은사업장, 화순공장</td>\n<td height=\"83\" rowspan=\"3\" valign=\"MIDDLE\" width=\"223\">자주포, 장갑차, 발사대, 탄약/유도무기류 및 항법장치 등</td>\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"101\">생산능력</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"97\">1,411,499</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"96\">4,596,404</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"96\">3,190,416</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"30\">\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"101\">생산실적</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"97\">1,246,316</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"96\">4,101,818</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"96\">2,825,122</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"30\">\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"101\">가동률(%)</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"97\">88.30</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"96\">89.24</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"96\">88.55</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"30\">\n<td height=\"83\" rowspan=\"3\" valign=\"MIDDLE\" width=\"171\">한화시스템㈜</td>\n<td align=\"CENTER\" height=\"83\" rowspan=\"3\" valign=\"MIDDLE\" width=\"204\">구미사업장</td>\n<td height=\"83\" rowspan=\"3\" valign=\"MIDDLE\" width=\"223\">전술통신장비, 조준경, 관측장비, 함정 전투체계 등</td>\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"101\">생산능력</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"97\">363,775</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"96\">1,289,684</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"96\">1,166,248</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"30\">\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"101\">생산실적</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"97\">293,237</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"96\">1,101,233</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"96\">1,060,056</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"30\">\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"101\">가동률(%)</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"97\">80.61</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"96\">85.99</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"96\">90.89</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"30\">\n<td align=\"CENTER\" height=\"173\" rowspan=\"6\" valign=\"MIDDLE\" width=\"69\">해양</td>\n<td height=\"83\" rowspan=\"3\" valign=\"MIDDLE\" width=\"171\">한화오션\n<span usermark=\"0X000000\">㈜ 및 종속회사</span>\n</td>\n<td align=\"CENTER\" height=\"83\" rowspan=\"3\" valign=\"MIDDLE\" width=\"204\">옥포조선소, \n<span usermark=\"0X000000\">전남 광양</span>,중국 연타이 등\n</td>\n<td height=\"83\" rowspan=\"3\" valign=\"MIDDLE\" width=\"223\">LNGC, LPGC, 잠수함, 수상함 등 \n<span usermark=\"0X000000\">선박 및 특수선 건조, 해양 제품 생산 및 서비스 제공 등</span>\n</td>\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"101\">목표 가동시간</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"97\">8,787,704</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"96\">38,194,802</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"96\">-</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"30\">\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"101\">실제 가동시간</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"97\">8,734,398</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"96\">38,100,904</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"96\">-</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"30\">\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"101\">가동률(%)</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"97\">99.39</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"96\">99.75</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"96\">-</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"30\">\n<td height=\"83\" rowspan=\"3\" valign=\"MIDDLE\" width=\"171\">Hanwha Offshore Singapore Pte. Ltd.</td>\n<td align=\"CENTER\" height=\"83\" rowspan=\"3\" valign=\"MIDDLE\" width=\"204\">싱가포르</td>\n<td height=\"83\" rowspan=\"3\" valign=\"MIDDLE\" width=\"223\">FPSO를 위한 상부 모듈 제작</td>\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"101\">생산능력\n<span usermark=\"0X000000\">(MT)</span>\n</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"97\">9,000</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"96\">59,200</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"96\">-</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"30\">\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"101\">생산실적\n<span usermark=\"0X000000\">(MT)</span>\n</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"97\">8,270</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"96\">29,522</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"96\">-</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"30\">\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"101\">가동률(%)</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"97\">91.89</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"96\">49.87</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"96\">-</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"30\">\n<td align=\"CENTER\" height=\"83\" rowspan=\"3\" valign=\"MIDDLE\" width=\"69\">항공우주</td>\n<td height=\"83\" rowspan=\"3\" valign=\"MIDDLE\" width=\"171\">㈜쎄트렉아이</td>\n<td align=\"CENTER\" height=\"83\" rowspan=\"3\" valign=\"MIDDLE\" width=\"204\">대전사업장</td>\n<td height=\"83\" rowspan=\"3\" valign=\"MIDDLE\" width=\"223\">위성시스템, 전자광학카메라,위성지상국 등</td>\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"101\">생산능력</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"97\">40,175</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"96\">173,421</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"96\">120,074</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"30\">\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"101\">생산실적</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"97\">38,160</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"96\">161,502</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"96\">114,435</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"30\">\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"101\">가동률(%)</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"97\">       94.98</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"96\">93.13</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"96\">95.30</td>\n</tr>\n</tbody>\n</table>",
+   "digest": "1452b23bbe8b",
+   "file": "20250513000788.xml"
+  },
+  {
+   "section": [
+    "1. 사업의 개요",
+    "2. 주요 제품 및 서비스",
+    "3. 원재료 및 생산설비"
+   ],
+   "headings": [],
+   "unit": "",
+   "keywords": [
+    "가동률",
+    "생산능력",
+    "생산실적"
+   ],
+   "keyword_in": "table",
+   "rows": [
+    [
+     "※ 항공 및 방산사업은 보안 관계상, 항공우주사업은 수주에 따른 주문생산방식으로 구체적인 생산능력 산출 및 수량 표시가 불가능하므로 생산설비의 현황(생산 라인의 수, 인력 규모, 평균가동시간, 생산방식 등)을 종합적으로 고려하여 금액기준으로 기재하였습니다.※ 항공, 방산사업은 수주에 의한 납기일정 및 사업 내용에 따라 생산방식이 유동적이고 항공우주사업은 수주에 따른 주문생산방식 등 생산방식이 다양하여 가동시간에 근거한 정확한 가동률 계산이 곤란하므로 금액기준으로 생산능력과 생산실적을 대비하여 가동률을 계산하였습니다."
+    ]
+   ],
+   "html": "<table aclass=\"NORMAL\" afixtable=\"N\" border=\"0\" width=\"1128\">\n<colgroup width=\"1128\">\n<col width=\"1128\"/>\n</colgroup>\n<tbody>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"99\">\n<td height=\"92\" valign=\"MIDDLE\" width=\"1119\">※ 항공 및 방산사업은 보안 관계상, 항공우주사업은 수주에 따른 주문생산방식으로 구체적인 생산능력 산출 및 수량 표시가 불가능하므로 생산설비의 현황(생산 라인의 수, 인력 규모, 평균가동시간, 생산방식 등)을 종합적으로 고려하여 금액기준으로 기재하였습니다.※ 항공, 방산사업은 수주에 의한 납기일정 및 사업 내용에 따라 생산방식이 유동적이고 항공우주사업은 수주에 따른 주문생산방식 등 생산방식이 다양하여 가동시간에 근거한 정확한 가동률 계산이 곤란하므로 금액기준으로 생산능력과 생산실적을 대비하여 가동률을 계산하였습니다.</td>\n</tr>\n</tbody>\n</table>",
+   "digest": "38c83672bdd0",
+   "file": "20250513000788.xml"
+  },
+  {
+   "section": [
+    "1. 사업의 개요",
+    "2. 주요 제품 및 서비스",
+    "3. 원재료 및 생산설비"
+   ],
+   "headings": [],
+   "unit": "",
+   "keywords": [
+    "생산능력"
+   ],
+   "keyword_in": "table",
+   "rows": [
+    [
+     "회사",
+     "투자명",
+     "투자목적",
+     "내용",
+     "기간",
+     "총 소요자금",
+     "기 지출금액",
+     "향후 기대효과"
+    ],
+    [
+     "한화에어로스페이스㈜",
+     "KF-21 엔진부품 제조설비 투자",
+     "생산설비 증설",
+     "엔진 제조설비 증설",
+     "2023년 12월~2025년 10월",
+     "20,465",
+     "9,901",
+     "생산능력 향상"
+    ],
+    [
+     "PW 엔진부품 제조설비 투자",
+     "생산설비 증설",
+     "엔진 제조설비 증설",
+     "2024년 4월~2025년 5월",
+     "3,320",
+     "667",
+     "생산능력 향상"
+    ],
+    [
+     "창원1사업장 제조설비 투자",
+     "생산/검사설비 증설",
+     "엔진 제조설비 증설",
+     "2019년 10월~2025년 12월",
+     "35,416",
+     "12,228",
+     "생산능력 향상"
+    ],
+    [
+     "창원1사업장 공실증축 투자",
+     "공실 확대 증축",
+     "엔진 제조공장 증설",
+     "2023년 12월~2025년 11월",
+     "38,600",
+     "32,059",
+     "생산능력 향상"
+    ],
+    [
+     "미래항공연구소 IT인프라 등",
+     "개발 IT 인프라 구축 등",
+     "개발용 H/W, S/W 확보",
+     "2022년 10월~2025년 12월",
+     "15,100",
+     "11,203",
+     "생산능력 향상"
+    ],
+    [
+     "아산사업장 제조설비 투자",
+     "생산/검사설비 증설",
+     "항공부품 제조설비 증설(KF-21 관련 설비 및 공용 제조/지원설비, 치공구 등)",
+     "2022년 10월~2025년 12월",
+     "10,452",
+     "8,245",
+     "생산능력 향상"
+    ],
+    [
+     "대전 Capa. 증대 투자",
+     "생산/검사설비 신설 및 증설",
+     "인프라 증설",
+     "2023년 7월~2025년 12월",
+     "37,750",
+     "22,952",
+     "생산능력 향상"
+    ],
+    [
+     "보은 Capa. 증대 투자",
+     "생산/검사설비 증설, 제조 경쟁력 향상 및 안전, 품질사고 제로화",
+     "인프라 증설",
+     "2023년 7월~ 2026년 12월",
+     "686,738",
+     "31,587",
+     "생산능력 향상"
+    ],
+    [
+     "여수 Capa. 증대 투자",
+     "생산/검사설비 신설 및 증설",
+     "인프라 증설",
+     "2023년 12월~2025년 3월",
+     "12,466",
+     "12,466",
+     "생산능력 향상"
+    ],
+    [
+     "창원 3사업장 설비투자",
+     "생산/지원설비 신설",
+     "계약이행 등을 위한 생산시설 구축",
+     "2025년 1월~2025년 12월",
+     "3,410",
+     "-",
+     "생산능력 향상"
+    ],
+    [
+     "순천 단조립장 구축",
+     "생산설비 신설",
+     "우주발사체 제조설비/인프라 신설",
+     "2023년 9월~2025년 12월",
+     "50,800",
+     "34,919",
+     "생산능력 향상"
+    ],
+    [
+     "배터리셀 제조 공장/설비 투자",
+     "배터리셀 생산설비 신설",
+     "방산 특수목적용 배터리셀 생산설비 신설",
+     "2023년 10월~2026년 3월",
+     "59,600",
+     "4,058",
+     "생산 Capa 확보"
+    ],
+    [
+     "IT 인프라 투자",
+     "IT 인프라 확충",
+     "IT 인프라 확충",
+     "2022년 11월~2025년 7월",
+     "98,714",
+     "85,215",
+     "생산능력 향상"
+    ],
+    [
+     "한화시스템㈜",
+     "방산용 생산설비 투자",
+     "생산설비의 신설/증설, 신기술/신제품 개발, 생산활동을 위한 사업장 확보",
+     "각종 군사장비의 제조 및 판매를 위한 기계장치 신설/증설, 생산활동을 위한 자가 사업장 확보",
+     "2025년 1월~2025년12월",
+     "322,529",
+     "99,947",
+     "생산능력 및제품품질 향상"
+    ],
+    [
+     "ICT 운영사업 IT인프라 투자",
+     "자사 솔루션 개선 및 서비스용 인프라 증설",
+     "IT서비스 제공을 위한 S/W 및 H/W인프라 자산 증설 및 개선",
+     "2025년 1월~2025년12월",
+     "54,780",
+     "6,098",
+     "서비스품질 및 인프라수요충족"
+    ],
+    [
+     "한화오션㈜",
+     "설비 등에 대한 투자",
+     "무재해/최적 생산체계 구축",
+     "생산시설 등 투자",
+     "2025년 1월~2025년12월",
+     "1,028,131",
+     "72,270",
+     "생산능력 향상"
+    ],
+    [
+     "한화오션에코텍㈜",
+     "설비 등에 대한 투자",
+     "무재해/최적 생산체계 구축",
+     "생산시설 등 투자",
+     "2025년 1월~2025년12월",
+     "49,019",
+     "319",
+     "생산능력 향상"
+    ],
+    [
+     "Hanwha Aero Engines Co., Ltd.",
+     "베트남 제조설비 투자",
+     "생산설비 신설",
+     "엔진 제조설비 증설",
+     "2017년 7월~2025년 12월",
+     "231,694",
+     "206,773",
+     "생산능력 향상"
+    ],
+    [
+     "베트남 치공구 및 IT인프라",
+     "치공구 및 IT인프라",
+     "인프라 증설",
+     "2017년 7월~2025년 12월",
+     "31,879",
+     "27,708",
+     "생산능력 향상"
+    ],
+    [
+     "Hanwha AerospaceUSA Co.,",
+     "미국 법인 제조설비 투자",
+     "생산설비 증설/유지보수",
+     "제조설비 증설/유지보수",
+     "2025년 1월~2025년 12월",
+     "10,477",
+     "1,946",
+     "생산능력 향상"
+    ],
+    [
+     "미국 법인 IT/인프라 투자",
+     "IT 등 인프라 확충/유지보수",
+     "인프라 확충/유지보수",
+     "2025년 1월~2025년 12월",
+     "1,720",
+     "320",
+     "생산능력 향상"
+    ],
+    [
+     "Hanwha Defense Australia Pty Ltd",
+     "호주법인 공장 건설 투자",
+     "생산시설 건설",
+     "인프라 신설",
+     "2022년 10월~2025년 12월",
+     "209,452",
+     "166,592",
+     "생산능력 향상"
+    ],
+    [
+     "한화해양공정(산동) 유한공사",
+     "설비 등에 대한 투자",
+     "무재해/최적 생산체계 구축",
+     "생산시설 등 투자",
+     "2025년 1월~2025년12월",
+     "133,305",
+     "1,571",
+     "생산능력 향상"
+    ]
+   ],
+   "html": "<table aclass=\"NORMAL\" afixtable=\"N\" border=\"1\" width=\"1128\">\n<colgroup width=\"1128\">\n<col width=\"130\"/>\n<col width=\"198\"/>\n<col width=\"197\"/>\n<col width=\"197\"/>\n<col width=\"103\"/>\n<col width=\"94\"/>\n<col width=\"94\"/>\n<col width=\"115\"/>\n</colgroup>\n<thead>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"30\">\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"23\" valign=\"MIDDLE\" width=\"121\">회사</th>\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"23\" valign=\"MIDDLE\" width=\"189\">투자명</th>\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"23\" valign=\"MIDDLE\" width=\"188\">투자목적</th>\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"23\" valign=\"MIDDLE\" width=\"188\">내용</th>\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"23\" valign=\"MIDDLE\" width=\"94\">기간</th>\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"23\" valign=\"MIDDLE\" width=\"85\">총 소요자금</th>\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"23\" valign=\"MIDDLE\" width=\"85\">기 지출금액</th>\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"23\" valign=\"MIDDLE\" width=\"106\">향후 기대효과</th>\n</tr>\n</thead>\n<tbody>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"53\">\n<td align=\"CENTER\" height=\"728\" rowspan=\"13\" valign=\"MIDDLE\" width=\"121\">한화에어로스페이스㈜</td>\n<td height=\"46\" valign=\"MIDDLE\" width=\"189\">KF-21 엔진부품 제조설비 투자</td>\n<td height=\"46\" valign=\"MIDDLE\" width=\"188\">생산설비 증설</td>\n<td height=\"46\" valign=\"MIDDLE\" width=\"188\">엔진 제조설비 증설</td>\n<td height=\"46\" valign=\"MIDDLE\" width=\"94\">2023년 12월~2025년 10월</td>\n<td align=\"RIGHT\" height=\"46\" valign=\"MIDDLE\" width=\"85\">20,465</td>\n<td align=\"RIGHT\" height=\"46\" valign=\"MIDDLE\" width=\"85\">9,901</td>\n<td align=\"CENTER\" height=\"46\" valign=\"MIDDLE\" width=\"106\">생산능력 향상</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"53\">\n<td height=\"46\" valign=\"MIDDLE\" width=\"189\">PW 엔진부품 제조설비 투자</td>\n<td height=\"46\" valign=\"MIDDLE\" width=\"188\">생산설비 증설</td>\n<td height=\"46\" valign=\"MIDDLE\" width=\"188\">엔진 제조설비 증설</td>\n<td height=\"46\" valign=\"MIDDLE\" width=\"94\">2024년 4월~2025년 5월</td>\n<td align=\"RIGHT\" height=\"46\" valign=\"MIDDLE\" width=\"85\">3,320</td>\n<td align=\"RIGHT\" height=\"46\" valign=\"MIDDLE\" width=\"85\">667</td>\n<td align=\"CENTER\" height=\"46\" valign=\"MIDDLE\" width=\"106\">생산능력 향상</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"53\">\n<td height=\"46\" valign=\"MIDDLE\" width=\"189\">창원1사업장 제조설비 투자</td>\n<td height=\"46\" valign=\"MIDDLE\" width=\"188\">생산/검사설비 증설</td>\n<td height=\"46\" valign=\"MIDDLE\" width=\"188\">엔진 제조설비 증설</td>\n<td height=\"46\" valign=\"MIDDLE\" width=\"94\">2019년 10월~2025년 12월</td>\n<td align=\"RIGHT\" height=\"46\" valign=\"MIDDLE\" width=\"85\">35,416</td>\n<td align=\"RIGHT\" height=\"46\" valign=\"MIDDLE\" width=\"85\">12,228</td>\n<td align=\"CENTER\" height=\"46\" valign=\"MIDDLE\" width=\"106\">생산능력 향상</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"53\">\n<td height=\"46\" valign=\"MIDDLE\" width=\"189\">창원1사업장 공실증축 투자</td>\n<td height=\"46\" valign=\"MIDDLE\" width=\"188\">공실 확대 증축</td>\n<td height=\"46\" valign=\"MIDDLE\" width=\"188\">엔진 제조공장 증설</td>\n<td height=\"46\" valign=\"MIDDLE\" width=\"94\">2023년 12월~2025년 11월</td>\n<td align=\"RIGHT\" height=\"46\" valign=\"MIDDLE\" width=\"85\">38,600</td>\n<td align=\"RIGHT\" height=\"46\" valign=\"MIDDLE\" width=\"85\">32,059</td>\n<td align=\"CENTER\" height=\"46\" valign=\"MIDDLE\" width=\"106\">생산능력 향상</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"53\">\n<td height=\"46\" valign=\"MIDDLE\" width=\"189\">미래항공연구소 IT인프라 등</td>\n<td height=\"46\" valign=\"MIDDLE\" width=\"188\">개발 IT 인프라 구축 등</td>\n<td height=\"46\" valign=\"MIDDLE\" width=\"188\">개발용 H/W, S/W 확보</td>\n<td height=\"46\" valign=\"MIDDLE\" width=\"94\">2022년 10월~2025년 12월</td>\n<td align=\"RIGHT\" height=\"46\" valign=\"MIDDLE\" width=\"85\">15,100</td>\n<td align=\"RIGHT\" height=\"46\" valign=\"MIDDLE\" width=\"85\">11,203</td>\n<td align=\"CENTER\" height=\"46\" valign=\"MIDDLE\" width=\"106\">생산능력 향상</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"76\">\n<td height=\"69\" valign=\"MIDDLE\" width=\"189\">아산사업장 제조설비 투자</td>\n<td height=\"69\" valign=\"MIDDLE\" width=\"188\">생산/검사설비 증설</td>\n<td height=\"69\" valign=\"MIDDLE\" width=\"188\">항공부품 제조설비 증설(KF-21 관련 설비 및 공용 제조/지원설비, 치공구 등)</td>\n<td height=\"69\" valign=\"MIDDLE\" width=\"94\">2022년 10월~2025년 12월</td>\n<td align=\"RIGHT\" height=\"69\" valign=\"MIDDLE\" width=\"85\">10,452</td>\n<td align=\"RIGHT\" height=\"69\" valign=\"MIDDLE\" width=\"85\">8,245</td>\n<td align=\"CENTER\" height=\"69\" valign=\"MIDDLE\" width=\"106\">생산능력 향상</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"53\">\n<td height=\"46\" valign=\"MIDDLE\" width=\"189\">대전 Capa. 증대 투자</td>\n<td height=\"46\" valign=\"MIDDLE\" width=\"188\">생산/검사설비 신설 및 증설</td>\n<td height=\"46\" valign=\"MIDDLE\" width=\"188\">인프라 증설</td>\n<td height=\"46\" valign=\"MIDDLE\" width=\"94\">2023년 7월~2025년 12월</td>\n<td align=\"RIGHT\" height=\"46\" valign=\"MIDDLE\" width=\"85\">37,750</td>\n<td align=\"RIGHT\" height=\"46\" valign=\"MIDDLE\" width=\"85\">22,952</td>\n<td align=\"CENTER\" height=\"46\" valign=\"MIDDLE\" width=\"106\">생산능력 향상</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"76\">\n<td height=\"69\" valign=\"MIDDLE\" width=\"189\">보은 Capa. 증대 투자</td>\n<td height=\"69\" valign=\"MIDDLE\" width=\"188\">\n<span>생산/검사설비 증설,</span>\n<span usermark=\"0X000000\">제조 경쟁력 향상 및 안전, 품질사고 제로화</span>\n</td>\n<td height=\"69\" valign=\"MIDDLE\" width=\"188\">인프라 증설</td>\n<td height=\"69\" valign=\"MIDDLE\" width=\"94\">\n<span>2023년 7월~</span>\n<span usermark=\"0X000000\">2026년 12월</span>\n</td>\n<td align=\"RIGHT\" height=\"69\" valign=\"MIDDLE\" width=\"85\">686,738</td>\n<td align=\"RIGHT\" height=\"69\" valign=\"MIDDLE\" width=\"85\">31,587</td>\n<td align=\"CENTER\" height=\"69\" valign=\"MIDDLE\" width=\"106\">생산능력 향상</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"53\">\n<td height=\"46\" valign=\"MIDDLE\" width=\"189\">여수 Capa. 증대 투자</td>\n<td height=\"46\" valign=\"MIDDLE\" width=\"188\">생산/검사설비 신설 및 증설</td>\n<td height=\"46\" valign=\"MIDDLE\" width=\"188\">인프라 증설</td>\n<td height=\"46\" valign=\"MIDDLE\" width=\"94\">2023년 12월~2025년 3월</td>\n<td align=\"RIGHT\" height=\"46\" valign=\"MIDDLE\" width=\"85\">12,466</td>\n<td align=\"RIGHT\" height=\"46\" valign=\"MIDDLE\" width=\"85\">12,466</td>\n<td align=\"CENTER\" height=\"46\" valign=\"MIDDLE\" width=\"106\">생산능력 향상</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"53\">\n<td height=\"46\" valign=\"MIDDLE\" width=\"189\">창원 3사업장 설비투자</td>\n<td height=\"46\" valign=\"MIDDLE\" width=\"188\">생산/지원설비 신설</td>\n<td height=\"46\" valign=\"MIDDLE\" width=\"188\">계약이행 등을 위한 생산시설 구축</td>\n<td height=\"46\" valign=\"MIDDLE\" width=\"94\">2025년 1월~2025년 12월</td>\n<td align=\"RIGHT\" height=\"46\" valign=\"MIDDLE\" width=\"85\">3,410</td>\n<td align=\"RIGHT\" height=\"46\" valign=\"MIDDLE\" width=\"85\">-</td>\n<td align=\"CENTER\" height=\"46\" valign=\"MIDDLE\" width=\"106\">생산능력 향상</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"53\">\n<td height=\"46\" valign=\"MIDDLE\" width=\"189\">순천 단조립장 구축</td>\n<td height=\"46\" valign=\"MIDDLE\" width=\"188\">생산설비 신설</td>\n<td height=\"46\" valign=\"MIDDLE\" width=\"188\">우주발사체 제조설비/인프라 신설</td>\n<td height=\"46\" valign=\"MIDDLE\" width=\"94\">2023년 9월~2025년 12월</td>\n<td align=\"RIGHT\" height=\"46\" valign=\"MIDDLE\" width=\"85\">50,800</td>\n<td align=\"RIGHT\" height=\"46\" valign=\"MIDDLE\" width=\"85\">34,919</td>\n<td align=\"CENTER\" height=\"46\" valign=\"MIDDLE\" width=\"106\">생산능력 향상</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"53\">\n<td height=\"46\" valign=\"MIDDLE\" width=\"189\">배터리셀 제조 공장/설비 투자</td>\n<td height=\"46\" valign=\"MIDDLE\" width=\"188\">배터리셀 생산설비 신설</td>\n<td height=\"46\" valign=\"MIDDLE\" width=\"188\">방산 특수목적용 배터리셀 생산설비 신설</td>\n<td height=\"46\" valign=\"MIDDLE\" width=\"94\">2023년 10월~2026년 3월</td>\n<td align=\"RIGHT\" height=\"46\" valign=\"MIDDLE\" width=\"85\">59,600</td>\n<td align=\"RIGHT\" height=\"46\" valign=\"MIDDLE\" width=\"85\">4,058</td>\n<td align=\"CENTER\" height=\"46\" valign=\"MIDDLE\" width=\"106\">생산 Capa 확보</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"53\">\n<td height=\"46\" valign=\"MIDDLE\" width=\"189\">IT 인프라 투자</td>\n<td height=\"46\" valign=\"MIDDLE\" width=\"188\">IT 인프라 확충</td>\n<td height=\"46\" valign=\"MIDDLE\" width=\"188\">IT 인프라 확충</td>\n<td height=\"46\" valign=\"MIDDLE\" width=\"94\">2022년 11월~2025년 7월</td>\n<td align=\"RIGHT\" height=\"46\" valign=\"MIDDLE\" width=\"85\">98,714</td>\n<td align=\"RIGHT\" height=\"46\" valign=\"MIDDLE\" width=\"85\">85,215</td>\n<td align=\"CENTER\" height=\"46\" valign=\"MIDDLE\" width=\"106\">생산능력 향상</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"99\">\n<td align=\"CENTER\" height=\"168\" rowspan=\"2\" valign=\"MIDDLE\" width=\"121\">한화시스템㈜</td>\n<td height=\"92\" valign=\"MIDDLE\" width=\"189\">방산용 생산설비 투자</td>\n<td height=\"92\" valign=\"MIDDLE\" width=\"188\">생산설비의 신설/증설, 신기술/신제품 개발, 생산활동을 위한 사업장 확보</td>\n<td height=\"92\" valign=\"MIDDLE\" width=\"188\">각종 군사장비의 제조 및 판매를 위한 기계장치 신설/증설, 생산활동을 위한 자가 사업장 확보</td>\n<td height=\"92\" valign=\"MIDDLE\" width=\"94\">2025년 1월~2025년12월</td>\n<td align=\"RIGHT\" height=\"92\" valign=\"MIDDLE\" width=\"85\">322,529</td>\n<td align=\"RIGHT\" height=\"92\" valign=\"MIDDLE\" width=\"85\">99,947</td>\n<td align=\"CENTER\" height=\"92\" valign=\"MIDDLE\" width=\"106\">생산능력 및제품품질 향상</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"76\">\n<td height=\"69\" valign=\"MIDDLE\" width=\"189\">ICT 운영사업 IT인프라 투자</td>\n<td height=\"69\" valign=\"MIDDLE\" width=\"188\">자사 솔루션 개선 및 서비스용 인프라 증설</td>\n<td height=\"69\" valign=\"MIDDLE\" width=\"188\">IT서비스 제공을 위한 S/W 및 H/W인프라 자산 증설 및 개선</td>\n<td height=\"69\" valign=\"MIDDLE\" width=\"94\">2025년 1월~2025년12월</td>\n<td align=\"RIGHT\" height=\"69\" valign=\"MIDDLE\" width=\"85\">54,780</td>\n<td align=\"RIGHT\" height=\"69\" valign=\"MIDDLE\" width=\"85\">6,098</td>\n<td align=\"CENTER\" height=\"69\" valign=\"MIDDLE\" width=\"106\">서비스품질 및 인프라수요충족</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"53\">\n<td align=\"CENTER\" height=\"46\" valign=\"MIDDLE\" width=\"121\">한화오션㈜</td>\n<td height=\"46\" valign=\"MIDDLE\" width=\"189\">설비 등에 대한 투자</td>\n<td height=\"46\" valign=\"MIDDLE\" width=\"188\">무재해/최적 생산체계 구축</td>\n<td height=\"46\" valign=\"MIDDLE\" width=\"188\">생산시설 등 투자</td>\n<td height=\"46\" valign=\"MIDDLE\" width=\"94\">2025년 1월~2025년12월</td>\n<td align=\"RIGHT\" height=\"46\" valign=\"MIDDLE\" width=\"85\">1,028,131</td>\n<td align=\"RIGHT\" height=\"46\" valign=\"MIDDLE\" width=\"85\">72,270</td>\n<td align=\"CENTER\" height=\"46\" valign=\"MIDDLE\" width=\"106\">생산능력 향상</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"53\">\n<td align=\"CENTER\" height=\"46\" valign=\"MIDDLE\" width=\"121\">한화오션에코텍㈜</td>\n<td height=\"46\" valign=\"MIDDLE\" width=\"189\">설비 등에 대한 투자</td>\n<td height=\"46\" valign=\"MIDDLE\" width=\"188\">무재해/최적 생산체계 구축</td>\n<td height=\"46\" valign=\"MIDDLE\" width=\"188\">생산시설 등 투자</td>\n<td height=\"46\" valign=\"MIDDLE\" width=\"94\">2025년 1월~2025년12월</td>\n<td align=\"RIGHT\" height=\"46\" valign=\"MIDDLE\" width=\"85\">49,019</td>\n<td align=\"RIGHT\" height=\"46\" valign=\"MIDDLE\" width=\"85\">319</td>\n<td align=\"CENTER\" height=\"46\" valign=\"MIDDLE\" width=\"106\">생산능력 향상</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"53\">\n<td align=\"CENTER\" height=\"99\" rowspan=\"2\" valign=\"MIDDLE\" width=\"121\">Hanwha Aero Engines Co., Ltd.</td>\n<td height=\"46\" valign=\"MIDDLE\" width=\"189\">베트남 제조설비 투자</td>\n<td height=\"46\" valign=\"MIDDLE\" width=\"188\">생산설비 신설</td>\n<td height=\"46\" valign=\"MIDDLE\" width=\"188\">엔진 제조설비 증설</td>\n<td height=\"46\" valign=\"MIDDLE\" width=\"94\">2017년 7월~2025년 12월</td>\n<td align=\"RIGHT\" height=\"46\" valign=\"MIDDLE\" width=\"85\">231,694</td>\n<td align=\"RIGHT\" height=\"46\" valign=\"MIDDLE\" width=\"85\">206,773</td>\n<td align=\"CENTER\" height=\"46\" valign=\"MIDDLE\" width=\"106\">생산능력 향상</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"53\">\n<td height=\"46\" valign=\"MIDDLE\" width=\"189\">베트남 치공구 및 IT인프라</td>\n<td height=\"46\" valign=\"MIDDLE\" width=\"188\">치공구 및 IT인프라</td>\n<td height=\"46\" valign=\"MIDDLE\" width=\"188\">인프라 증설</td>\n<td height=\"46\" valign=\"MIDDLE\" width=\"94\">2017년 7월~2025년 12월</td>\n<td align=\"RIGHT\" height=\"46\" valign=\"MIDDLE\" width=\"85\">31,879</td>\n<td align=\"RIGHT\" height=\"46\" valign=\"MIDDLE\" width=\"85\">27,708</td>\n<td align=\"CENTER\" height=\"46\" valign=\"MIDDLE\" width=\"106\">생산능력 향상</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"53\">\n<td align=\"CENTER\" height=\"99\" rowspan=\"2\" valign=\"MIDDLE\" width=\"121\">Hanwha AerospaceUSA Co.,</td>\n<td height=\"46\" valign=\"MIDDLE\" width=\"189\">미국 법인 제조설비 투자</td>\n<td height=\"46\" valign=\"MIDDLE\" width=\"188\">생산설비 증설/유지보수</td>\n<td height=\"46\" valign=\"MIDDLE\" width=\"188\">제조설비 증설/유지보수</td>\n<td height=\"46\" valign=\"MIDDLE\" width=\"94\">2025년 1월~2025년 12월</td>\n<td align=\"RIGHT\" height=\"46\" valign=\"MIDDLE\" width=\"85\">10,477</td>\n<td align=\"RIGHT\" height=\"46\" valign=\"MIDDLE\" width=\"85\">1,946</td>\n<td align=\"CENTER\" height=\"46\" valign=\"MIDDLE\" width=\"106\">생산능력 향상</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"53\">\n<td height=\"46\" valign=\"MIDDLE\" width=\"189\">미국 법인 IT/인프라 투자</td>\n<td height=\"46\" valign=\"MIDDLE\" width=\"188\">IT 등 인프라 확충/유지보수</td>\n<td height=\"46\" valign=\"MIDDLE\" width=\"188\">인프라 확충/유지보수</td>\n<td height=\"46\" valign=\"MIDDLE\" width=\"94\">2025년 1월~2025년 12월</td>\n<td align=\"RIGHT\" height=\"46\" valign=\"MIDDLE\" width=\"85\">1,720</td>\n<td align=\"RIGHT\" height=\"46\" valign=\"MIDDLE\" width=\"85\">320</td>\n<td align=\"CENTER\" height=\"46\" valign=\"MIDDLE\" width=\"106\">생산능력 향상</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"76\">\n<td align=\"CENTER\" height=\"69\" valign=\"MIDDLE\" width=\"121\">Hanwha Defense Australia Pty Ltd</td>\n<td height=\"69\" valign=\"MIDDLE\" width=\"189\">호주법인 공장 건설 투자</td>\n<td height=\"69\" valign=\"MIDDLE\" width=\"188\">생산시설 건설</td>\n<td height=\"69\" valign=\"MIDDLE\" width=\"188\">인프라 신설</td>\n<td height=\"69\" valign=\"MIDDLE\" width=\"94\">2022년 10월~2025년 12월</td>\n<td align=\"RIGHT\" height=\"69\" valign=\"MIDDLE\" width=\"85\">209,452</td>\n<td align=\"RIGHT\" height=\"69\" valign=\"MIDDLE\" width=\"85\">166,592</td>\n<td align=\"CENTER\" height=\"69\" valign=\"MIDDLE\" width=\"106\">생산능력 향상</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"53\">\n<td align=\"CENTER\" height=\"46\" valign=\"MIDDLE\" width=\"121\">한화해양공정(산동) 유한공사</td>\n<td height=\"46\" valign=\"MIDDLE\" width=\"189\">설비 등에 대한 투자</td>\n<td height=\"46\" valign=\"MIDDLE\" width=\"188\">무재해/최적 생산체계 구축</td>\n<td height=\"46\" valign=\"MIDDLE\" width=\"188\">생산시설 등 투자</td>\n<td height=\"46\" valign=\"MIDDLE\" width=\"94\">2025년 1월~2025년12월</td>\n<td align=\"RIGHT\" height=\"46\" valign=\"MIDDLE\" width=\"85\">133,305</td>\n<td align=\"RIGHT\" height=\"46\" valign=\"MIDDLE\" width=\"85\">1,571</td>\n<td align=\"CENTER\" height=\"46\" valign=\"MIDDLE\" width=\"106\">생산능력 향상</td>\n</tr>\n</tbody>\n</table>",
+   "digest": "9c57c827f986",
+   "file": "20250513000788.xml"
+  }
+ ]
+}

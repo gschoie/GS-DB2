@@ -1,0 +1,87 @@
+{
+ "meta": {
+  "company": "두산밥캣",
+  "sector": "건기",
+  "stock_code": "241560",
+  "corp_code": "01032486",
+  "rcept_no": "20250813001634",
+  "rcept_dt": "20250813",
+  "report_nm": "반기보고서 (2025.06)",
+  "report_type": "half",
+  "period": "2025-06",
+  "period_label": "2025.06 반기",
+  "corrected": false,
+  "dart_url": "https://dart.fss.or.kr/dsaf001/main.do?rcpNo=20250813001634"
+ },
+ "tables": [
+  {
+   "section": [
+    "1. 사업의 개요",
+    "2. 주요 제품 및 서비스",
+    "3. 원재료 및 생산설비"
+   ],
+   "headings": [
+    "다. 생산능력 및 산출근거 (1) 생산능력"
+   ],
+   "unit": "",
+   "keywords": [
+    "생산능력"
+   ],
+   "keyword_in": "heading",
+   "rows": [
+    [
+     "(단위: 대)"
+    ]
+   ],
+   "html": "<table aclass=\"NORMAL\" afixtable=\"N\" border=\"0\" width=\"624\">\n<colgroup width=\"624\">\n<col width=\"624\"/>\n</colgroup>\n<tbody>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"30\">\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"615\">(단위: 대)</td>\n</tr>\n</tbody>\n</table>",
+   "digest": "a32d24fecdbc",
+   "file": "20250813001634.xml"
+  },
+  {
+   "section": [
+    "1. 사업의 개요",
+    "2. 주요 제품 및 서비스",
+    "3. 원재료 및 생산설비"
+   ],
+   "headings": [
+    "(2) 당해 사업연도의 가동률"
+   ],
+   "unit": "",
+   "keywords": [
+    "가동률"
+   ],
+   "keyword_in": "heading",
+   "rows": [
+    [
+     "(단위: %)"
+    ]
+   ],
+   "html": "<table aclass=\"NORMAL\" afixtable=\"N\" border=\"0\" width=\"409\">\n<colgroup width=\"409\">\n<col width=\"409\"/>\n</colgroup>\n<tbody>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"30\">\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"400\">(단위: %)</td>\n</tr>\n</tbody>\n</table>",
+   "digest": "c45c320c9097",
+   "file": "20250813001634.xml"
+  },
+  {
+   "section": [
+    "1. 사업의 개요",
+    "2. 주요 제품 및 서비스",
+    "3. 원재료 및 생산설비"
+   ],
+   "headings": [],
+   "unit": "",
+   "keywords": [
+    "가동률",
+    "생산능력",
+    "생산실적"
+   ],
+   "keyword_in": "table",
+   "rows": [
+    [
+     "주1) 가동률 = 생산실적/생산능력"
+    ]
+   ],
+   "html": "<table aclass=\"NORMAL\" afixtable=\"N\" border=\"0\" width=\"409\">\n<colgroup width=\"409\">\n<col width=\"409\"/>\n</colgroup>\n<tbody>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"30\">\n<td height=\"23\" width=\"400\">주1) 가동률 = 생산실적/생산능력</td>\n</tr>\n</tbody>\n</table>",
+   "digest": "4a188427da91",
+   "file": "20250813001634.xml"
+  }
+ ]
+}

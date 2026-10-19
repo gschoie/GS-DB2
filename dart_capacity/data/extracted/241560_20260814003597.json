@@ -1,0 +1,126 @@
+{
+ "meta": {
+  "company": "두산밥캣",
+  "sector": "건기",
+  "stock_code": "241560",
+  "corp_code": "01032486",
+  "rcept_no": "20260814003597",
+  "rcept_dt": "20260814",
+  "report_nm": "[기재정정]반기보고서 (2026.06)",
+  "report_type": "half",
+  "period": "2026-06",
+  "period_label": "2026.06 반기",
+  "corrected": true,
+  "dart_url": "https://dart.fss.or.kr/dsaf001/main.do?rcpNo=20260814003597"
+ },
+ "tables": [
+  {
+   "section": [
+    "1. 사업의 개요",
+    "2. 주요 제품 및 서비스",
+    "3. 원재료 및 생산설비"
+   ],
+   "headings": [
+    "다. 생산능력 및 산출근거 (1) 생산능력"
+   ],
+   "unit": "",
+   "keywords": [
+    "생산능력"
+   ],
+   "keyword_in": "heading",
+   "rows": [
+    [
+     "(단위: 대)"
+    ]
+   ],
+   "html": "<table aclass=\"NORMAL\" afixtable=\"N\" border=\"0\" width=\"624\">\n<colgroup width=\"624\">\n<col width=\"624\"/>\n</colgroup>\n<tbody>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"30\">\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"615\">(단위: 대)</td>\n</tr>\n</tbody>\n</table>",
+   "digest": "a32d24fecdbc",
+   "file": "20260814003597.xml"
+  },
+  {
+   "section": [
+    "1. 사업의 개요",
+    "2. 주요 제품 및 서비스",
+    "3. 원재료 및 생산설비"
+   ],
+   "headings": [],
+   "unit": "",
+   "keywords": [
+    "생산능력"
+   ],
+   "keyword_in": "table",
+   "rows": [
+    [
+     "※",
+     "일부 제품에 대해서는 외주생산(OEM)을 통해 공급받고 있습니다."
+    ],
+    [
+     "※",
+     "주공장이 아닌 Attachment 및 특수장비는 제외하였습니다."
+    ],
+    [
+     "※",
+     "Compact Equipment 제품군 산출에는 Skid-Steer Loader, Compact Track Loader, Mini Excavator, Telescopic Handler, Backhoe Loader, Mower가 포함되어 있습니다."
+    ],
+    [
+     "※",
+     "유압기기는 생산능력은 당사가 두산모트롤(주) 지분을 인수한 제11기(2024년 10월)부터 반영되어 있습니다."
+    ]
+   ],
+   "html": "<table aclass=\"NORMAL\" afixtable=\"N\" border=\"0\" width=\"625\">\n<colgroup width=\"625\">\n<col width=\"26\"/>\n<col width=\"599\"/>\n</colgroup>\n<tbody>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"28\">\n<td align=\"CENTER\" height=\"21\" usermark=\"F-10 \" width=\"17\">※</td>\n<td height=\"21\" usermark=\"F-10 \" width=\"590\">일부 제품에 대해서는 외주생산(OEM)을 통해 공급받고 있습니다.</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"28\">\n<td align=\"CENTER\" height=\"21\" usermark=\"F-10 \" width=\"17\">※</td>\n<td height=\"21\" usermark=\"F-10 \" width=\"590\">주공장이 아닌 Attachment 및 특수장비는 제외하였습니다. </td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"49\">\n<td align=\"CENTER\" height=\"42\" usermark=\"F-10 \" width=\"17\">※</td>\n<td height=\"42\" usermark=\"F-10 \" width=\"590\">Compact Equipment 제품군 산출에는 Skid-Steer Loader, Compact Track Loader, Mini Excavator, Telescopic Handler, Backhoe Loader, Mower가 포함되어 있습니다.</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"49\">\n<td align=\"CENTER\" height=\"42\" usermark=\"F-10 \" width=\"17\">※</td>\n<td height=\"42\" usermark=\"F-10 \" width=\"590\">유압기기는 생산능력은 당사가 두산모트롤(주) 지분을 인수한 제11기(2024년 10월)부터 반영되어 있습니다.</td>\n</tr>\n</tbody>\n</table>",
+   "digest": "ef0f8764f961",
+   "file": "20260814003597.xml"
+  },
+  {
+   "section": [
+    "1. 사업의 개요",
+    "2. 주요 제품 및 서비스",
+    "3. 원재료 및 생산설비"
+   ],
+   "headings": [
+    "(2) 당해 사업연도의 가동률"
+   ],
+   "unit": "",
+   "keywords": [
+    "가동률"
+   ],
+   "keyword_in": "heading",
+   "rows": [
+    [
+     "(단위: %)"
+    ]
+   ],
+   "html": "<table aclass=\"NORMAL\" afixtable=\"N\" border=\"0\" width=\"409\">\n<colgroup width=\"409\">\n<col width=\"409\"/>\n</colgroup>\n<tbody>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"30\">\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"400\">(단위: %)</td>\n</tr>\n</tbody>\n</table>",
+   "digest": "c45c320c9097",
+   "file": "20260814003597.xml"
+  },
+  {
+   "section": [
+    "1. 사업의 개요",
+    "2. 주요 제품 및 서비스",
+    "3. 원재료 및 생산설비"
+   ],
+   "headings": [],
+   "unit": "",
+   "keywords": [
+    "가동률",
+    "생산능력",
+    "생산실적"
+   ],
+   "keyword_in": "table",
+   "rows": [
+    [
+     "※",
+     "가동률 = 생산실적/생산능력"
+    ],
+    [
+     "※",
+     "Compact Equipment 가동률은 멕시코 몬테레이 공장 신규 가동에 따른 생산능력 확대 및 램프업 영향으로 직전 분기대비 하락"
+    ]
+   ],
+   "html": "<table aclass=\"NORMAL\" afixtable=\"N\" border=\"0\" width=\"419\">\n<colgroup width=\"419\">\n<col width=\"32\"/>\n<col width=\"387\"/>\n</colgroup>\n<tbody>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"28\">\n<td align=\"CENTER\" height=\"21\" usermark=\"F-10 \" width=\"23\">※</td>\n<td height=\"21\" usermark=\"F-10 \" width=\"378\">가동률 = 생산실적/생산능력</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"49\">\n<td align=\"CENTER\" height=\"42\" usermark=\"F-10 \" width=\"23\">※</td>\n<td height=\"42\" usermark=\"F-10 \" width=\"378\">Compact Equipment 가동률은 멕시코 몬테레이 공장 신규 가동에 따른 생산능력 확대 및 램프업 영향으로 직전 분기대비 하락</td>\n</tr>\n</tbody>\n</table>",
+   "digest": "d5c532ec98fa",
+   "file": "20260814003597.xml"
+  }
+ ]
+}
