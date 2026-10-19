@@ -1,12 +1,16 @@
 <!DOCTYPE html>
 <!--
-  투자 공유 허브 — 대시보드 사이드바 '투자' 그룹 9개만 모아 링크한다.
+  투자 공유 허브 — 대시보드 사이드바 '투자' 그룹 9개 + 아침 브리핑 3개(방산·건기·친환경E/FDC)를 모아 링크한다.
 
   왜 있나: #press 같은 대시보드 뷰는 index.html 안에 있어 **주인 비번**으로만
   열린다(사이드바가 팀원 메뉴까지 통째로 노출하기 때문, gate.py 참고). 그래서
   친구에게 투자 화면만 주려면 독립 페이지 주소를 하나하나 복사해 줘야 했다.
   이 페이지는 그 주소 모음이고, 자신은 **공유 비번으로 열린다**(OWNER_ONLY_PAGES
   에 없으므로 gate 가 공유 등급으로 통과시킨다).
+  화면 공유용이기도 하다: 대시보드의 새 창 링크가 전부 공유용 주소
+  (https://gs-research-desk.pages.dev, 5개 배포 워크플로가 같은 _site 를 Cloudflare
+  Pages 에도 올린다)로 열리므로, 이 페이지를 그 주소로 띄워 두면 주소창·사이드바에
+  gschoie.github.io/GS-DB2 가 드러나지 않는다(static/app.js shareUrl 참고).
 
   주의: 링크 대상이 바뀌면 여기도 같이 고쳐야 한다. 대상은 대시보드 각 화면
   우상단 '🔗 새 창으로' 가 가리키는 것과 같은 파일이다(static/index.html).
@@ -50,7 +54,7 @@ padding:10px 12px;font-size:12.5px;margin:18px 0 0}
 <body><div class="wrap">
 
 <h1>📈 투자 모음</h1>
-<p class="sub">GS Research Desk 의 투자 화면만 모았습니다. 각 항목은 그 자리에서 바로 열립니다.</p>
+<p class="sub">GS Research Desk 의 투자 화면과 아침 브리핑을 모았습니다. 각 항목은 그 자리에서 바로 열립니다.</p>
 
 <h2>지표 · 시황</h2>
 <div class="grid">
@@ -78,6 +82,19 @@ padding:10px 12px;font-size:12.5px;margin:18px 0 0}
     <p class="desc">당분기·다음분기·올해E·내년E 컨센서스가 어디로 움직였나</p></a>
 </div>
 
+<h2>아침 브리핑</h2>
+<div class="grid">
+  <a class="item" href="defense_unified_report.html">
+    <div class="ico">🛡️</div><p class="name">글로벌방산.브리핑(통합)</p>
+    <p class="desc">제미나이·클로드·RSS 3판을 편집장 관점으로 합친 일간 브리핑. 매일 아침 6시경</p></a>
+  <a class="item" href="construction_unified_report.html">
+    <div class="ico">🏗️</div><p class="name">글로벌건기.브리핑(통합)</p>
+    <p class="desc">건설기계 데일리 + GPT판 합본. 한국 3사·글로벌 피어·중국·광산장비</p></a>
+  <a class="item" href="energy_briefing_report.html">
+    <div class="ico">🌊</div><p class="name">친환경E·FDC.브리핑</p>
+    <p class="desc">친환경 선박 추진·FDC·FLNG/FSRU·LNG 액화 FID·미국 발전원·데이터센터 투자</p></a>
+</div>
+
 <h2>리서치 톤 · 도구</h2>
 <div class="grid">
   <a class="item" href="tone_full.html">
@@ -96,7 +113,7 @@ padding:10px 12px;font-size:12.5px;margin:18px 0 0}
 <p class="note"><b>외부</b> 표시 둘은 <b>이 사이트 밖</b>입니다 — 여기 비밀번호가 걸리지
 않으므로 주소를 아는 사람은 바로 열 수 있습니다.</p>
 
-<p class="foot">숫자는 각 화면에 적힌 갱신 시각 기준입니다. 이 모음은 투자 화면만 담고
+<p class="foot">숫자는 각 화면에 적힌 갱신 시각 기준입니다. 이 모음은 투자 화면과 브리핑만 담고
 있어, 팀원 일정 같은 다른 메뉴는 여기서 열리지 않습니다.</p>
 
 </div></body></html>
