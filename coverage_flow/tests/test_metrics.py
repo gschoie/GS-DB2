@@ -18,14 +18,12 @@ def ohlc(closes, start="2025-01-01"):
 
 
 class Slot(unittest.TestCase):
-    def test_boundaries(self):
+    def test_single_daily_slot(self):
+        # 10/19부터 하루 1회(16:00) — 수동 수집도 같은 슬롯에 붙는다.
         mk = lambda h, m: datetime(2026, 10, 17, h, m, tzinfo=KST)
-        self.assertEqual(metrics.decide_slot(mk(10, 5)), "10:00")
-        self.assertEqual(metrics.decide_slot(mk(11, 44)), "10:00")
-        self.assertEqual(metrics.decide_slot(mk(11, 45)), "13:30")
-        self.assertEqual(metrics.decide_slot(mk(14, 29)), "13:30")
-        self.assertEqual(metrics.decide_slot(mk(14, 30)), "15:30")
-        self.assertEqual(metrics.decide_slot(mk(23, 0)), "15:30")
+        self.assertEqual(metrics.decide_slot(mk(10, 5)), "16:00")
+        self.assertEqual(metrics.decide_slot(mk(16, 5)), "16:00")
+        self.assertEqual(metrics.decide_slot(mk(23, 0)), "16:00")
 
 
 class Rsi(unittest.TestCase):
