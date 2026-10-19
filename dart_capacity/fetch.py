@@ -32,6 +32,7 @@ DOC_DIR = RAW / "doc"
 PAUSE = 0.4
 RETRIES = 3
 
+sys.stdout.reconfigure(line_buffering=True)   # 러너 로그에 진행 상황이 바로 보이게
 _session = requests.Session()
 _session.headers["User-Agent"] = "gs-research-desk dart_capacity/1.0"
 
@@ -47,7 +48,7 @@ def _get(url: str, params: dict) -> requests.Response:
     last = None
     for attempt in range(1, RETRIES + 1):
         try:
-            resp = _session.get(url, params=params, timeout=60)
+            resp = _session.get(url, params=params, timeout=(15, 120))   # (연결, 읽기) 초
             if resp.status_code >= 500:
                 raise requests.HTTPError(f"HTTP {resp.status_code}")
             time.sleep(PAUSE)
@@ -196,10 +197,11 @@ def main() -> int:
             if args.list_only:
                 print(f"  {r['rcept_dt']} {r['report_nm']:<28} {r['rcept_no']}")
                 continue
+            t0 = time.monotonic()
             fresh, msg = download_document(key, r["rcept_no"])
             index[r["rcept_no"]]["raw"] = bool(fresh or msg == "캐시")
             new_docs += int(fresh)
-            print(f"  {r['rcept_dt']} {r['report_nm']:<28} {r['rcept_no']}  {msg}")
+            print(f"  {r['rcept_dt']} {r['report_nm']:<28} {r['rcept_no']}  {msg} ({time.monotonic() - t0:.1f}s)")
     save_index(index)
     print(f"\n보고서 인덱스 {len(index)}건 저장, 원문 신규 {new_docs}건")
     return 0
