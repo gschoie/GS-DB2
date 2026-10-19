@@ -39,6 +39,9 @@ METRICS = [
     ("psr", "PSR", "배"),
 ]
 
+# '유럽 중앙값' 묶음 — 유럽 피어는 나라별 1곳씩이라 지역 중앙값이 안 서서 합산한다(방산: 독일·영국·이탈리아·스웨덴).
+EUROPE_REGIONS = ["독일", "영국", "이탈리아", "스웨덴", "프랑스", "노르웨이", "스페인", "핀란드"]
+
 NAVY = "1F4E79"
 EST_FILL = "FFF6E5"
 GROUP_FILL = "EDF1F6"
@@ -175,7 +178,7 @@ def build_xlsx(payload):
                         target = sheet.cell(row=row_index, column=start + offset,
                                             value=value_of(company, entry["year"], key))
                         target.font = body_font
-                        target.number_format = "0.0" if key == "roe" else "0.00"
+                        target.number_format = "0.0"
                         if entry["kind"] == "E":
                             target.fill = est_fill
                 row_index += 1
@@ -185,6 +188,12 @@ def build_xlsx(payload):
             _write_summary(sheet, row_index, column, metric_spans, axis,
                            f"  {region['region']} 중앙값", region["companies"],
                            bold_font, summary_fill)
+            row_index += 1
+        europe = [c for r in block["regions"] if r["region"] in EUROPE_REGIONS
+                  for c in r["companies"]]
+        if len(europe) >= 2:
+            _write_summary(sheet, row_index, column, metric_spans, axis,
+                           "  유럽 중앙값", europe, bold_font, summary_fill)
             row_index += 1
         _write_summary(sheet, row_index, column, metric_spans, axis,
                        f"{block['industry']} 전체 중앙값", block["companies"],
@@ -212,7 +221,7 @@ def build_xlsx(payload):
                 cell = detail.cell(row=offset, column=index, value=value)
                 cell.font = body_font
                 if index >= 6:
-                    cell.number_format = "0.0" if key == "roe" else "0.00"
+                    cell.number_format = "0.0"
         detail.freeze_panes = "F2"
         for index, width in enumerate([18, 11, 10, 10, 12] + [10] * len(axis), 1):
             detail.column_dimensions[get_column_letter(index)].width = width
@@ -297,7 +306,7 @@ def _write_summary(sheet, row_index, end_column, metric_spans, axis, label, comp
             target = sheet.cell(row=row_index, column=start + offset,
                                 value=median_of(companies, entry["year"], key))
             target.font = font
-            target.number_format = "0.0" if key == "roe" else "0.00"
+            target.number_format = "0.0"
             target.fill = fill
 
 
@@ -429,6 +438,7 @@ const DATA = __PAYLOAD__;
 const METRICS = __METRICS__;
 const AXIS = __AXIS__;
 const BLOCKS = __BLOCKS__;
+const EU_REGIONS = __EU__;   /* 나라별 1곳뿐인 유럽 피어를 '유럽 중앙값' 한 줄로 합산 */
 /* 갱신 버튼 → GitHub Actions 디스패치 GAS 웹앱 (gas/dispatch_proxy.gs).
    workflow 키 'valuation' 은 그 파일의 WF 매핑과 1:1이어야 한다. */
 const DISPATCH_ENDPOINT='https://script.google.com/macros/s/AKfycbx3RjIjtlO2Z6fIYo2T3LhJrFg9Wp2hS7dMS3Is52-JVF1hizoCWewbQ1uM_v5sdhR2jw/exec';
@@ -471,7 +481,7 @@ function axisFor(){
   return [...solid.filter(x=>x.kind==='A').slice(-2),
           ...solid.filter(x=>x.kind==='E').slice(0, 2)];
 }
-const fmt = (v,m) => v==null ? '' : (m==='roe' ? v.toFixed(1) : v.toFixed(2));
+const fmt = (v,m) => v==null ? '' : v.toFixed(1);   /* 전 지표 소수 1자리(사용자 지정) */
 
 /* 값의 출처 표시. ᴺ = 국내 컨센(에프앤가이드/네이버) 원본, * = 우리가 롤포워드로 만든 값.
    출처가 섞인 표라 어느 쪽인지 숨기지 않는다. */
@@ -587,6 +597,10 @@ function render(){
       html += `<tr class="sum"><td class="name">${region.region} 중앙값</td><td></td>`+
               cells((m,a)=>fmt(median(list,a.year,m),m), axis) + '</tr>';
     }
+    const eu = inBlock.filter(c=>EU_REGIONS.includes(c.region));
+    if(eu.length>=2)
+      html += `<tr class="sum"><td class="name">유럽 중앙값</td><td></td>`+
+              cells((m,a)=>fmt(median(eu,a.year,m),m), axis) + '</tr>';
     html += `<tr class="sum"><td class="name">${block.industry} 전체 중앙값</td><td></td>`+
             cells((m,a)=>fmt(median(inBlock,a.year,m),m), axis) + '</tr>';
   }
@@ -743,6 +757,7 @@ def build_html(payload):
             .replace("__METRICS__", json.dumps([[k, l, u] for k, l, u in METRICS], ensure_ascii=False))
             .replace("__AXIS__", json.dumps(axis, ensure_ascii=False))
             .replace("__BLOCKS__", json.dumps(blocks, ensure_ascii=False))
+            .replace("__EU__", json.dumps(EUROPE_REGIONS, ensure_ascii=False))
             .replace("__HY__", str(payload.get("history_years", 4)))
             .replace("__UPDATED__", payload.get("updated_at", "")[:16].replace("T", " ")))
     OUT_HTML.parent.mkdir(parents=True, exist_ok=True)

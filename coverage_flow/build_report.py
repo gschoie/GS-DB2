@@ -15,7 +15,7 @@ import metrics  # noqa: E402
 
 LATEST = os.path.join(HERE, "data", "latest.json")
 OUT = os.path.join(ROOT, "telegram_research_dashboard", "static", "coverage_flow_report.html")
-SCHEDULE_TIME = "평일 10:00 · 13:30 · 15:30"
+SCHEDULE_TIME = "평일 16:00 (장 마감 후)"
 WD = "월화수목금토일"
 
 
@@ -26,7 +26,7 @@ def esc(s):
 def n(v, nd=0, sign=True):
     if v is None:
         return '<span class="na">–</span>'
-    cls = "pos" if v > 0 else ("neg" if v < 0 else "")
+    cls = ("pos" if v > 0 else ("neg" if v < 0 else "")) if sign else ""
     s = f"{v:+,.{nd}f}" if sign else f"{v:,.{nd}f}"
     return f'<span class="{cls}">{s}</span>'
 
@@ -41,6 +41,29 @@ def _pct(v):
     return n(v, 1) + ("%" if v is not None else "")
 
 
+UP, DN = "220,38,38", "37,99,235"      # 빨강 / 파랑 (한국 증시 관행: 오르면 빨강, 내리면 파랑)
+
+
+def shade(v, cap):
+    """조건부서식 음영 — 열별 최대 |값|(cap) 대비 강도. **양수=빨강·음수=파랑**(한국 증시 관행,
+    사용자 지정 — .pos/.neg·스파크와 같은 체계).
+
+    0·결측은 음영 없음. 알파 0.08~0.45 — 글자(진한 빨강/파랑)가 살고, 텔레 캡쳐 앨범으로
+    축소돼도 켜짐/꺼짐이 구분되는 하한을 둔다.
+    """
+    if not v or not cap:
+        return ""
+    alpha = 0.08 + 0.37 * min(abs(v) / cap, 1.0)
+    rgb = UP if v > 0 else DN
+    return f' style="background:rgba({rgb},{alpha:.2f})"'
+
+
+def col_caps(values_by_key):
+    """{열키: [값…]} → {열키: max|값|} (전부 결측이면 0 → 음영 없음)."""
+    return {k: max((abs(v) for v in vs if v is not None), default=0.0)
+            for k, vs in values_by_key.items()}
+
+
 def spark_svg(vals, w=120, h=30):
     """종가 목록 → 인라인 SVG 선 차트. 첫 값 대비 끝 값이 오르면 초록, 내리면 빨강. 데이터 없으면 빈칸."""
     pts = [v for v in (vals or []) if v is not None]
@@ -50,7 +73,7 @@ def spark_svg(vals, w=120, h=30):
     span = (hi - lo) or 1.0
     step = (w - 2) / (len(pts) - 1)
     coords = " ".join(f"{1 + i * step:.1f},{1 + (h - 2) * (1 - (v - lo) / span):.1f}" for i, v in enumerate(pts))
-    color = "#15803d" if pts[-1] >= pts[0] else "#dc2626"
+    color = f"rgb({UP})" if pts[-1] >= pts[0] else f"rgb({DN})"
     return (f'<svg class="spark" width="{w}" height="{h}" viewBox="0 0 {w} {h}" aria-label="3개월 주가">'
             f'<polyline fill="none" stroke="{color}" stroke-width="1.5" points="{coords}"/></svg>')
 
@@ -81,24 +104,42 @@ def grouped(rows, key, reverse=False):
     return out
 
 
+def mcap_key(r):
+    """표 정렬 공통 키 — 시총(억) 내림차순. 시총을 모르면 맨 뒤(사용자 요청 10/19: 기업 정렬은 시총 순)."""
+    v = (r.get("px") or {}).get("mcap")
+    return v if v is not None else -1e18
+
+
 def group_row(g, ncol):
     return f"<tr class='gh'><td colspan='{ncol}'>{esc(g)}</td></tr>"
+
+
+def frgn_cell(px):
+    """외인 보유비율 칸. 직전 수집값으로 채운 경우(frgn_pct_asof) 기준일을 작게 병기."""
+    v = px.get("frgn_pct")
+    if v is None:
+        return "<td class='r'><span class=na>–</span></td>"
+    asof = px.get("frgn_pct_asof") or ""
+    tag = f" <small class='stale'>{esc(asof[5:].replace('-', '/'))}</small>" if asof else ""
+    return f"<td class='r'>{n(v, 1, sign=False)}%{tag}</td>"
 
 
 def returns_table(rows):
     """등락률 표: 오늘 · 1W · 1M · 3M · YTD (+ 외인 보유 · 시총)."""
     rs = [r for r in rows if r.get("tech")]
-    key = lambda r: (r["tech"].get("ret") or {}).get("d1") if (r["tech"].get("ret") or {}).get("d1") is not None else -1e9
+    key = mcap_key
+    ret_keys = ("d1", "w1", "m1", "m3", "ytd")
+    caps = col_caps({k: [(r["tech"].get("ret") or {}).get(k) for r in rs] for k in ret_keys})
     tr = []
     for g, grs in grouped(rs, key, reverse=True):
         tr.append(group_row(g, 9))
         for r in grs:
             ret, px = r["tech"].get("ret") or {}, r.get("px", {})
             tr.append(f"<tr><td>{esc(r['name'])}<small>{esc(r['industry'])}{' · ' + esc(r['status']) if r['status'] != '커버리지' else ''}</small></td>"
-                      + "".join(f"<td class='r'>{_pct(ret.get(k))}</td>" for k in ("d1", "w1", "m1", "m3", "ytd"))
+                      + "".join(f"<td class='r'{shade(ret.get(k), caps[k])}>{_pct(ret.get(k))}</td>" for k in ret_keys)
                       + f"<td class='c'>{spark_svg(r['tech'].get('spark'))}</td>"
-                      + f"<td class='r'>{n(px.get('frgn_pct'), 2, sign=False) + '%' if px.get('frgn_pct') is not None else '<span class=na>–</span>'}</td>"
-                      f"<td class='r'>{n(px.get('mcap'), 0, sign=False)}</td></tr>")
+                      + frgn_cell(px)
+                      + f"<td class='r'>{n(px.get('mcap'), 0, sign=False)}</td></tr>")
     return ("<table><thead><tr><th>종목</th><th class='r'>오늘</th><th class='r'>1주</th><th class='r'>1개월</th>"
             "<th class='r'>3개월</th><th class='r'>YTD</th><th class='c'>3개월 차트</th><th class='r'>외인 보유</th><th class='r'>시총(억)</th></tr></thead>"
             f"<tbody>{''.join(tr)}</tbody></table>")
@@ -106,11 +147,13 @@ def returns_table(rows):
 
 def flow_table(rows):
     """투자자별 순매수(억원) 표: 외인 · 기관 · 개인 × (오늘 · 5일 · 1개월 · 3개월 · YTD).
-    5일 칸에 연속일수 배지. 정렬은 외인 5일 순."""
+    5일 칸에 연속일수 배지. 정렬은 시총 순."""
     rs = [r for r in rows if r.get("flow")]
-    key = lambda r: r["flow"].get("frgn5") if r["flow"].get("frgn5") is not None else -1e9
+    key = mcap_key
     tr = []
     keys = ("today", "d5", "m1", "m3", "ytd")
+    caps = col_caps({(who, k): [((r["flow"].get("win") or {}).get(who) or {}).get(k) for r in rs]
+                     for who in ("frgn", "inst", "indiv") for k in keys})
     for g, grs in grouped(rs, key, reverse=True):
         tr.append(group_row(g, 16))
         for r in grs:
@@ -122,7 +165,7 @@ def flow_table(rows):
                     v = ww.get(k)
                     badge = streak_cell(f.get(sk, 0)) if (k == "d5" and sk) else ""
                     cls = "r grp" if k == "today" else "r"
-                    cells.append(f"<td class='{cls}'>{n(v)}{(' ' + badge) if badge else ''}</td>")
+                    cells.append(f"<td class='{cls}'{shade(v, caps[(who, k)])}>{n(v)}{(' ' + badge) if badge else ''}</td>")
             tr.append(f"<tr><td>{esc(r['name'])}</td>{''.join(cells)}</tr>")
     sub = "".join(f"<th class='r{' grp' if k == 'today' else ''}'>{lbl}</th>" for _ in range(3) for k, lbl in zip(keys, ("오늘", "5일", "1개월", "3개월", "YTD")))
     return ("<table class='flow'><thead><tr><th rowspan='2'>종목</th><th colspan='5' class='grp c'>외국인</th><th colspan='5' class='grp c'>기관</th><th colspan='5' class='grp c'>개인</th></tr>"
@@ -169,9 +212,9 @@ def passive_table(rows, etfs, active, active_date):
 
 def tech_table(rows):
     ts = [r for r in rows if r.get("tech")]
-    key = lambda r: r["tech"].get("rsi") if r["tech"].get("rsi") is not None else 50
+    key = mcap_key
     tr = []
-    for g, grs in grouped(ts, key):
+    for g, grs in grouped(ts, key, reverse=True):
         tr.append(group_row(g, 8))
         for r in grs:
             t = r["tech"]
@@ -227,11 +270,13 @@ def render(d):
 details.sec>summary{{cursor:pointer;list-style:none}}details.sec>summary::-webkit-details-marker{{display:none}}
 details.sec>summary h2::before{{content:"▶ ";font-size:13px;color:#6b7280}}details.sec[open]>summary h2::before{{content:"▼ "}}
 svg.spark{{display:block;margin:0 auto}}td.c{{text-align:center}}
+small.stale{{color:#9ca3af;font-size:10px}}
 .eyebrow{{font-size:10px;font-weight:800;letter-spacing:1.6px;color:#6b7280;margin:0 0 7px}}
 h1{{font:500 30px Georgia,"Noto Serif KR",serif;margin:0}}
 h2{{font:600 18px Georgia,"Noto Serif KR",serif;margin:34px 0 10px}}
 h3{{font:600 14px Inter;margin:22px 0 8px}}h3 small{{color:var(--muted);font-weight:400;margin-left:6px}}
 .sub{{color:var(--muted);font-size:12px;margin:8px 0 0;line-height:1.6}}.sub b{{color:#4b5563}}
+.asof{{margin:34px 0 0;font-size:12px;color:#6b7280}}.asof b{{color:#111827}}
 .sched{{display:inline-block;background:#eff6ff;border:1px solid var(--line);border-radius:4px;padding:3px 9px;margin:3px 0;font-size:11px;color:#6b7280}}.sched b{{color:#1d4ed8}}
 .stats{{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px;margin:22px 0 8px}}
 @media(max-width:900px){{.stats{{grid-template-columns:repeat(2,minmax(0,1fr))}}body{{padding:16px}}}}
@@ -242,10 +287,10 @@ table{{width:100%;border-collapse:collapse;font-size:13px}}th,td{{padding:7px 8p
 th{{font-size:11px;color:var(--muted);font-weight:700;letter-spacing:.03em;background:#f9fafb}}th small{{font-weight:400}}
 td small{{display:block;color:var(--muted);font-size:11px}}
 th.r,td.r{{text-align:right;font-variant-numeric:tabular-nums}}
-.pos{{color:#15803d}}.neg{{color:#dc2626}}.na{{color:#9ca3af}}
+.pos{{color:#b91c1c}}.neg{{color:#1d4ed8}}.na{{color:#9ca3af}}
 .mini{{display:inline-block;font-size:10px;font-weight:800;padding:1px 6px;border-radius:3px;margin-left:4px;white-space:nowrap}}
-.mini.b{{background:#dcf5e7;color:#0f7a45}}.mini.s{{background:#fbe1dd;color:#b03a2e}}
-.rsi-lo{{color:#0f7a45;font-weight:700}}.rsi-hi{{color:#b03a2e;font-weight:700}}
+.mini.b{{background:#fde2e2;color:#b91c1c}}.mini.s{{background:#dbe6fd;color:#1d4ed8}}
+.rsi-lo{{color:#1d4ed8;font-weight:700}}.rsi-hi{{color:#b91c1c;font-weight:700}}
 td.empty{{color:var(--muted);text-align:center;padding:18px}}
 tr.gh td{{background:#eef2f7;color:#1f2937;font:700 12px Georgia,"Noto Serif KR",serif;letter-spacing:.06em;padding:6px 8px}}
 table.compact{{font-size:12px}}
@@ -264,11 +309,12 @@ table.flow{{font-size:12px}}table.flow td,table.flow th{{padding:6px 5px}}th.c{{
 {err_html}
 {summary_tiles(rows, d)}
 
-<h2 id="flow">① 등락률 <small style="font:400 12px Inter;color:#6b7280">오늘 · 1주 · 1개월 · 3개월 · YTD</small></h2>
+<p class="asof">📅 수집 시각 <b>{esc(asof)}</b> · {'장중 잠정(오늘 현재가·오늘 수급 포함)' if prov else '직전 거래일 종가 기준(장 시작 전 또는 휴장일 수집)'}</p>
+<h2 id="flow" style="margin-top:6px">① 등락률 <small style="font:400 12px Inter;color:#6b7280">오늘 · 1주 · 1개월 · 3개월 · YTD</small></h2>
 <div class="wrap">{returns_table(rows)}</div>
-<p class="note">오늘은 전일 종가 대비(장중 현재가). 1주·1개월·3개월은 거래일 5·21·63일 전 종가 대비, YTD 는 전년 마지막 종가 대비.</p>
+<p class="note">오늘은 전일 종가 대비(장중 현재가). 1주·1개월·3개월은 거래일 5·21·63일 전 종가 대비, YTD 는 전년 마지막 종가 대비. 외인 보유 옆의 작은 날짜는 장 시작 전·휴장이라 그 날짜의 직전 수집값으로 채운 것 — 장중 첫 수집부터 당일 값으로 바뀐다.</p>
 
-<h2 id="flow2">①-2 투자자별 순매수 <small style="font:400 12px Inter;color:#6b7280">억원 · 오늘 · 5일 · 1개월 · 3개월 · YTD · 외인 5일 순</small></h2>
+<h2 id="flow2">①-2 투자자별 순매수 <small style="font:400 12px Inter;color:#6b7280">억원 · 오늘 · 5일 · 1개월 · 3개월 · YTD · 시총 순</small></h2>
 <div class="wrap">{flow_table(rows)}</div>
 <p class="note">구간은 오늘 잠정 행을 포함한 최근 거래일 수(5·21·63일, YTD 는 올해 1월부터). 최근 30거래일은 한투 금액(정확), 그 이전은 네이버 순매수 수량 × 종가 <b>근사</b> — 3개월·YTD 합계는 체결 평균가 대신 종가를 써서 몇 % 어긋날 수 있다. 이력이 모자라는 구간은 '–'. 연속일수 배지는 2일 이상만.</p>
 </div>

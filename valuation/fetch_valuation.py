@@ -523,13 +523,10 @@ def collect(company):
     # 에프앤가이드 추정치가 원본이다. 못 가져오면 기존 산출값이 그대로 남는다.
     if ticker.upper().endswith((".KS", ".KQ")):
         code = ticker.split(".")[0]
-        # 같은 페이지(기업실적분석)를 컨센 PER·PBR·ROE 와 재무 상세가 같이 쓴다 → 1회만 조회.
-        try:
-            naver_tables = naver_consensus.read_tables(code)
-        except Exception as exc:
-            print(f"    · 네이버 조회 실패({code}): {exc}")
-            naver_tables = []
-        overrides = naver_consensus.estimates(code, tables=naver_tables)
+        # 모바일 금융 API(annual·quarter)를 각 1회 조회해 컨센 지표와 재무 상세가 나눠 쓴다.
+        naver_annual = naver_consensus.safe_fetch(code, "annual")
+        naver_quarter = naver_consensus.safe_fetch(code, "quarter")
+        overrides = naver_consensus.estimates(code, finance=naver_annual)
         if overrides:
             applied = 0
             for entry in years:
@@ -553,7 +550,7 @@ def collect(company):
 
         # 재무 상세 보강: 분기는 네이버가 영업이익까지(E 포함) 주므로 야후 분기를
         # 네이버로 교체하고, 네이버 범위 밖(더 미래)의 야후 E 분기만 뒤에 남긴다.
-        fin_naver = naver_consensus.financial_rows(code, tables=naver_tables)
+        fin_naver = naver_consensus.financial_rows(code, annual=naver_annual, quarter=naver_quarter)
         naver_q = []
         for q in fin_naver["quarterly"]:
             q_no = q["month"] // 3

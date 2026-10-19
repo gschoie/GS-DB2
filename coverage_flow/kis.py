@@ -27,15 +27,23 @@ def _keys():
     return k, s
 
 
-def token():
+def token(tries=5, wait=20):
+    """한투는 토큰 발급을 분당 1회로 제한 — 같은 앱키를 쓰는 다른 잡(수급 10:00 등)과
+    같은 분에 시작하면 403 이 온다(10/19 10:04 실측: market-flow 와 동시 시작 →
+    19/21종목 연쇄 실패). 종목별 재시도(0.7s)로는 같은 분을 못 벗어나므로
+    여기서 분 경계를 넘겨 기다렸다 다시 받는다."""
     if _c["t"] and time.time() - _c["ts"] < 60 * 60 * 23:
         return _c["t"]
     k, s = _keys()
-    r = requests.post(f"{BASE}/oauth2/tokenP", timeout=15,
-                      json={"grant_type": "client_credentials", "appkey": k, "appsecret": s})
-    r.raise_for_status()
-    _c.update(t=r.json()["access_token"], ts=time.time())
-    return _c["t"]
+    for i in range(tries):
+        r = requests.post(f"{BASE}/oauth2/tokenP", timeout=15,
+                          json={"grant_type": "client_credentials", "appkey": k, "appsecret": s})
+        if r.status_code == 403 and i < tries - 1:
+            time.sleep(wait)
+            continue
+        r.raise_for_status()
+        _c.update(t=r.json()["access_token"], ts=time.time())
+        return _c["t"]
 
 
 def _h(tr):

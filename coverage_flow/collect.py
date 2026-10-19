@@ -4,7 +4,7 @@
 흐름: 거래일 게이트 → 종목별 KIS(현재가·일봉·투자자) → 섹터 ETF(KIS 상장주수 + 네이버
 구성 비중) → 패시브 추정 → 액티브 ETF(etf_holdings/changes.json) → 저장.
 
-장중 3회(10:00·13:30·15:30) 돌므로 '오늘' 숫자는 전부 **잠정**이다 — 저장 데이터에
+평일 16:00(장 마감 후) 하루 1회 돈다 — '오늘' 숫자는 당일 잠정 집계다 — 저장 데이터에
 provisional 플래그를 남기고 화면·텔레가 그대로 적는다.
 """
 from __future__ import annotations
@@ -16,6 +16,16 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
 sys.path.insert(0, HERE)
 import kis, metrics  # noqa: E402
+
+# 수집 부족 가드 — 이 비율 미만이면 저장·커밋·텔레 전부 막는다(10/19 실측: 한투 토큰 403 으로
+# 21종목 중 2종목만 모인 화면이 채널에 나갔다). 직전 정상 페이지를 그대로 두는 편이 낫다.
+MIN_OK_RATIO = float(os.environ.get("COVFLOW_MIN_OK_RATIO", "0.7"))
+
+
+def enough(n_ok, n_total, ratio=None):
+    """수집 성공 종목이 유니버스의 ratio 이상인가. 유니버스가 비면 False(아무것도 없는 run 은 실패)."""
+    r = MIN_OK_RATIO if ratio is None else ratio
+    return n_total > 0 and n_ok >= n_total * r
 
 KST = timezone(timedelta(hours=9))
 DATA = os.path.join(HERE, "data")
@@ -250,6 +260,27 @@ def update_shares(etfs, today, prev_store):
     return store, prev
 
 
+def backfill_frgn(rows, prev_latest):
+    """외인 보유비율 None 을 직전 스냅샷 값으로 채운다(기준일 frgn_pct_asof 병기).
+
+    장 시작 전·휴장일엔 한투가 0을 줘 None 으로 비는데, 보유비율은 하루 사이 거의
+    안 변한다 → 직전 값으로 채우되 어느 날 값인지 남겨 '오늘 값'처럼 보이지 않게 한다.
+    직전 값도 이월분이면 원 날짜를 승계. 당일 실측값이 있는 행은 건드리지 않는다.
+    """
+    prev_px = {r.get("code"): (r.get("px") or {}) for r in (prev_latest or {}).get("rows") or []}
+    for r in rows:
+        px = r.get("px") or {}
+        if px.get("frgn_pct") is None:
+            old = prev_px.get(r.get("code")) or {}
+            # 직전 값이 0 이면 안 가져온다 — 장 전 수집이 남긴 '가짜 0'과 진짜 0을
+            # 소스가 구분해 주지 않아서, 이월하면 모름이 0.00%로 둔갑한다.
+            if old.get("frgn_pct"):
+                px["frgn_pct"] = old["frgn_pct"]
+                px["frgn_pct_asof"] = (old.get("frgn_pct_asof")
+                                       or prev_latest.get("market_day") or prev_latest.get("date"))
+    return rows
+
+
 def main(argv=None):
     ap = argparse.ArgumentParser()
     ap.add_argument("--force", action="store_true", help="휴장일 게이트 무시")
@@ -282,8 +313,15 @@ def main(argv=None):
             errors.append(f"{u['code']} {u['name']}: {type(ex).__name__}: {ex}")
             print(f"  {u['name']} 실패: {ex}")
 
+    if not enough(len(rows), len(uni)):
+        print(f"수집 부족 — {len(rows)}/{len(uni)}종목(기준 {MIN_OK_RATIO:.0%}). 저장·발송하지 않고 실패로 끝낸다.")
+        for e in errors:
+            print("  " + e)
+        return 2
+
     etfs, etf_err = collect_etfs(load_csv("etf_universe.csv"))
     errors += etf_err
+    backfill_frgn(rows, load_json(LATEST, {}))   # LATEST 를 덮어쓰기 전에 읽어야 한다
     store, prev = update_shares(etfs, today, load_json(SHARES, {}))
     per_stock, per_etf = metrics.passive_flow(etfs, prev)
     for r in rows:
