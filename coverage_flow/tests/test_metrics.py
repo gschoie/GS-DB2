@@ -402,5 +402,62 @@ class Outputs(unittest.TestCase):
         self.assertLess(h.index(">조선</td>"), h.index(">방산</td>")); self.assertLess(h.index(">방산</td>"), h.index(">기계</td>"))
 
 
+class KisToken(unittest.TestCase):
+    def test_token_retries_past_rate_limit_403(self):
+        """토큰 발급 403(분당 1회 제한, 다른 잡과 동시 시작)은 기다렸다 재시도한다."""
+        import kis
+
+        class R:
+            def __init__(self, code):
+                self.status_code = code
+
+            def raise_for_status(self):
+                if self.status_code != 200:
+                    raise RuntimeError(f"HTTP {self.status_code}")
+
+            def json(self):
+                return {"access_token": "tok"}
+
+        calls, naps = [], []
+        responses = [R(403), R(403), R(200)]
+        saved_post, saved_sleep = kis.requests.post, kis.time.sleep
+        saved_cache = dict(kis._c)
+        kis.requests.post = lambda *a, **k: (calls.append(1), responses[len(calls) - 1])[1]
+        kis.time.sleep = lambda s: naps.append(s)
+        kis._c.update(t=None, ts=0)
+        os.environ.setdefault("KIS_APP_KEY", "k"); os.environ.setdefault("KIS_APP_SECRET", "s")
+        try:
+            self.assertEqual(kis.token(tries=5, wait=20), "tok")
+        finally:
+            kis.requests.post, kis.time.sleep = saved_post, saved_sleep
+            kis._c.update(saved_cache)
+        self.assertEqual(len(calls), 3)          # 403 두 번 뒤 성공
+        self.assertEqual(naps, [20, 20])         # 분 경계를 넘길 대기
+
+    def test_token_gives_up_after_tries(self):
+        import kis
+
+        class R403:
+            status_code = 403
+
+            def raise_for_status(self):
+                raise RuntimeError("HTTP 403")
+
+        naps = []
+        saved_post, saved_sleep = kis.requests.post, kis.time.sleep
+        saved_cache = dict(kis._c)
+        kis.requests.post = lambda *a, **k: R403()
+        kis.time.sleep = lambda s: naps.append(s)
+        kis._c.update(t=None, ts=0)
+        os.environ.setdefault("KIS_APP_KEY", "k"); os.environ.setdefault("KIS_APP_SECRET", "s")
+        try:
+            with self.assertRaises(RuntimeError):
+                kis.token(tries=3, wait=1)
+        finally:
+            kis.requests.post, kis.time.sleep = saved_post, saved_sleep
+            kis._c.update(saved_cache)
+        self.assertEqual(naps, [1, 1])           # 마지막 시도는 기다리지 않고 올린다
+
+
 if __name__ == "__main__":
     unittest.main(verbosity=1)
