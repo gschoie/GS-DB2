@@ -86,8 +86,17 @@ jobs:
       # gschoie.github.io/GS-DB2 와 사이드바가 보이지 않는다.
       # 시크릿 SHARE_DEPLOY_TOKEN(그 리포 Contents 쓰기 권한 PAT)이 없거나 실패해도
       # 본 GitHub Pages 배포는 그대로 간다(continue-on-error).
+      # secrets 컨텍스트는 step `if` 에서 못 쓴다(워크플로 파일 자체가 거부돼 잡 0개로 실패 —
+      # 10/19 실측) → 셸 스텝이 유무를 출력으로 바꿔 넘긴다.
+      - name: 공유용 주소 토큰 확인
+        id: share
+        env:
+          SHARE_DEPLOY_TOKEN: ${{ secrets.SHARE_DEPLOY_TOKEN }}
+        run: |
+          if [ -n "$SHARE_DEPLOY_TOKEN" ]; then echo "on=1" >> "$GITHUB_OUTPUT"
+          else echo "on=0" >> "$GITHUB_OUTPUT"; echo "::warning::SHARE_DEPLOY_TOKEN 시크릿 없음 — 공유용 주소 배포 생략"; fi
       - name: 공유용 주소 배포 (gs-research-desk.github.io)
-        if: ${{ secrets.SHARE_DEPLOY_TOKEN != '' }}
+        if: steps.share.outputs.on == '1'
         continue-on-error: true
         uses: peaceiris/actions-gh-pages@v4
         with:
