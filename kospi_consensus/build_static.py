@@ -515,7 +515,10 @@ tbody tr:hover td{background:rgba(55,53,47,.04)}
 </div>
 <script>
 var D=__DATA__;
-var pi=0, sel=0, sortKey=null, sortDir=-1, showAll=false, secFilter='', grpFilter='', MODE='wk', TOP=30;
+var DEFAULT_SEC='조선';   // 첫 화면 기본 섹터 — 데이터에 없으면 전체 섹터로
+var DEFAULT_SEL=2;       // 첫 화면 기본 시계 탭: 0 당분기 · 1 다음분기 · 2 올해E · 3 내년E
+var pi=0, sel=DEFAULT_SEL, sortKey=null, sortDir=-1, showAll=false, grpFilter='', MODE='wk', TOP=30;
+var secFilter=(D.sectors||[]).indexOf(DEFAULT_SEC)>=0?DEFAULT_SEC:'';
 var qOverride=null; try{qOverride=localStorage.getItem('kc_anchor')||null}catch(e){}
 function P(){return D.periods[pi]}
 function $(id){return document.getElementById(id)}

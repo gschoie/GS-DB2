@@ -4,7 +4,7 @@
 흐름: 거래일 게이트 → 종목별 KIS(현재가·일봉·투자자) → 섹터 ETF(KIS 상장주수 + 네이버
 구성 비중) → 패시브 추정 → 액티브 ETF(etf_holdings/changes.json) → 저장.
 
-장중 3회(10:00·13:30·15:30) 돌므로 '오늘' 숫자는 전부 **잠정**이다 — 저장 데이터에
+평일 16:00(장 마감 후) 하루 1회 돈다 — '오늘' 숫자는 당일 잠정 집계다 — 저장 데이터에
 provisional 플래그를 남기고 화면·텔레가 그대로 적는다.
 """
 from __future__ import annotations
@@ -17,6 +17,16 @@ ROOT = os.path.dirname(HERE)
 sys.path.insert(0, HERE)
 import kis, metrics  # noqa: E402
 
+# 수집 부족 가드 — 이 비율 미만이면 저장·커밋·텔레 전부 막는다(10/19 실측: 한투 토큰 403 으로
+# 21종목 중 2종목만 모인 화면이 채널에 나갔다). 직전 정상 페이지를 그대로 두는 편이 낫다.
+MIN_OK_RATIO = float(os.environ.get("COVFLOW_MIN_OK_RATIO", "0.7"))
+
+
+def enough(n_ok, n_total, ratio=None):
+    """수집 성공 종목이 유니버스의 ratio 이상인가. 유니버스가 비면 False(아무것도 없는 run 은 실패)."""
+    r = MIN_OK_RATIO if ratio is None else ratio
+    return n_total > 0 and n_ok >= n_total * r
+
 KST = timezone(timedelta(hours=9))
 DATA = os.path.join(HERE, "data")
 HIST = os.path.join(DATA, "history")
@@ -28,6 +38,10 @@ NAVER_ETF = "https://m.stock.naver.com/api/stock/{code}/etfAnalysis"
 NAVER_H = {"User-Agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 16_0 like Mac OS X) AppleWebKit/605",
            "Referer": "https://m.stock.naver.com/"}
 INDEX_BASIC = "https://m.stock.naver.com/api/index/KOSPI/basic"
+# 종목별 일별 수급(수량) — pageSize 상한 60, page 는 무시, **bizdate 커서**(그 날짜 이전 60행)로
+# 뒤로 넘긴다(10/19 프로브 실측: bizdate=20260720 → 7/16~4/20). 3개월·YTD 구간의 소스.
+NAVER_TREND = "https://m.stock.naver.com/api/stock/{code}/trend?pageSize=60"
+TREND_MAX_PAGES = 8   # 60×8 = 480행 ≈ 2년 — YTD 는 늦어도 4~5페이지 안에 전년으로 넘어간다
 
 
 def load_csv(name):
@@ -66,6 +80,26 @@ def naver_etf_analysis(code):
     return hold, flow
 
 
+def naver_investor_history(code, until):
+    """네이버 trend 를 bizdate 커서로 `until`(YYYYMMDD) 이전 날짜가 나올 때까지 긁어 행 목록으로.
+    until 은 보통 전년 12/31 — flow_windows 의 YTD 판정은 전년 행이 하나라도 있어야 선다."""
+    rows, cursor = [], None
+    for _ in range(TREND_MAX_PAGES):
+        url = NAVER_TREND.format(code=code) + (f"&bizdate={cursor}" if cursor else "")
+        r = requests.get(url, headers=NAVER_H, timeout=15)
+        r.raise_for_status()
+        page = r.json()
+        if not isinstance(page, list) or not page:
+            break
+        rows += page
+        last = str(page[-1].get("bizdate", ""))
+        if not last or last <= until or len(page) < 60:
+            break
+        cursor = last
+        time.sleep(0.1)
+    return rows
+
+
 def collect_stock(u, today, live=True):
     """live=False(휴장일·--force 테스트)면 현재가를 '오늘 잠정 봉' 으로 붙이지 않는다 —
     금요일 종가를 토요일 잠정치로 찍으면 거짓 라벨이다."""
@@ -76,7 +110,23 @@ def collect_stock(u, today, live=True):
     time.sleep(0.12)
     inv = kis.fetch_investor(code)
     time.sleep(0.12)
+    # 3개월·YTD 는 한투 30행으로 부족 → 네이버 trend(수량×종가 근사)로 전년까지 보충.
+    # 네이버가 죽어도 한투 30행으로 오늘·5일·1개월은 그대로 나온다(그 구간만 '–').
+    try:
+        until = f"{int(today[:4]) - 1}1231"
+        inv = kis.merge_investor(inv, kis.naver_trend_frame(naver_investor_history(code, until)))
+    except Exception as ex:
+        print(f"  {u['name']} 네이버 수급 이력 실패(한투 30행만 사용): {type(ex).__name__}: {ex}")
+    if not live:
+        # 장 시작 전·휴장일: 소스가 미리 내주는 '오늘 0' 행을 버리고 KIS 전일대비(0.00)도 안 쓴다.
+        # 외국인 보유비율도 장 전엔 0.00 으로 와서(10/19 05:57 실측) 0 은 '모름' 으로 읽는다.
+        inv = metrics.drop_today(inv, today)
+        if not px.get("frgn_pct"):
+            px["frgn_pct"] = None
     tech = metrics.technicals(ohlc, today, px.get("price") if live else None)
+    tech["ret"] = metrics.returns(ohlc, today, px.get("price") if live else None,
+                                  px.get("chg_pct") if live else None)
+    tech["spark"] = metrics.spark_points(ohlc, today, px.get("price") if live else None)
     flow = metrics.flow_summary(inv, today, px.get("mcap"))
     return {**u, "px": px, "tech": tech, "flow": flow}
 
@@ -98,6 +148,54 @@ def collect_etfs(etf_rows):
         except Exception as ex:
             errors.append(f"{e['code']} {e['name']}: {type(ex).__name__}: {ex}")
     return out, errors
+
+
+def probe_flow(code):
+    """러너 프로브: 종목별 일별 수급을 얼마나 길게 받을 수 있나.
+    KIS inquire-investor 행 수·날짜 범위 + 네이버 종목 trend API 후보들의 응답 키."""
+    try:
+        inv = kis.fetch_investor(code)
+        print(f"== KIS inquire-investor rows={len(inv)} range={inv['date'].min().date() if len(inv) else '-'} ~ {inv['date'].max().date() if len(inv) else '-'}")
+    except Exception as ex:
+        print("KIS inquire-investor 실패:", ex)
+    # 1차 프로브(10/19 05:52 KST): KIS 30행(9/2~10/19), 네이버 /api/stock/{code}/trend 는
+    # pageSize=60 에 60행(7/20~10/16, 수량+종가), page 파라미터는 무시(page=4 가 page=1 과 동일),
+    # front-api /stock/domestic/trend 는 reutersCode 로 400. → pageSize 상한과 bizdate 커서를 본다.
+    cands = [
+        f"https://m.stock.naver.com/api/stock/{code}/trend?pageSize=120",
+        f"https://m.stock.naver.com/api/stock/{code}/trend?pageSize=300",
+        f"https://m.stock.naver.com/api/stock/{code}/trend?pageSize=600",
+        f"https://m.stock.naver.com/api/stock/{code}/trend?pageSize=60&bizdate=20260720",
+        f"https://m.stock.naver.com/api/stock/{code}/trend?pageSize=60&endDate=20260720",
+        f"https://m.stock.naver.com/api/stock/{code}/trend?pageSize=60&startDate=20260101&endDate=20260720",
+    ]
+    for url in cands:
+        try:
+            r = requests.get(url, headers=NAVER_H, timeout=15)
+            body = r.text
+            print(f"== {url}\n   status={r.status_code} len={len(body)}")
+            try:
+                j = r.json()
+                items = j if isinstance(j, list) else (j.get("result") or j.get("data") or j.get("items") or j)
+                if isinstance(items, dict):
+                    print("   top keys:", list(items.keys())[:20])
+                    for k, v in items.items():
+                        if isinstance(v, list) and v and isinstance(v[0], dict):
+                            print(f"   list '{k}' n={len(v)} first keys:", list(v[0].keys()))
+                            print("   first:", {kk: str(vv)[:30] for kk, vv in v[0].items()})
+                            print("   last :", {kk: str(vv)[:30] for kk, vv in v[-1].items()})
+                            break
+                elif isinstance(items, list):
+                    print(f"   list n={len(items)}")
+                    if items and isinstance(items[0], dict):
+                        print("   first keys:", list(items[0].keys()))
+                        print("   first:", {kk: str(vv)[:30] for kk, vv in items[0].items()})
+                        print("   last :", {kk: str(vv)[:30] for kk, vv in items[-1].items()})
+            except Exception:
+                print("   body:", body[:300].replace("\n", " "))
+        except Exception as ex:
+            print(url, "실패:", ex)
+    return 0
 
 
 def probe_etf(code):
@@ -162,17 +260,41 @@ def update_shares(etfs, today, prev_store):
     return store, prev
 
 
+def backfill_frgn(rows, prev_latest):
+    """외인 보유비율 None 을 직전 스냅샷 값으로 채운다(기준일 frgn_pct_asof 병기).
+
+    장 시작 전·휴장일엔 한투가 0을 줘 None 으로 비는데, 보유비율은 하루 사이 거의
+    안 변한다 → 직전 값으로 채우되 어느 날 값인지 남겨 '오늘 값'처럼 보이지 않게 한다.
+    직전 값도 이월분이면 원 날짜를 승계. 당일 실측값이 있는 행은 건드리지 않는다.
+    """
+    prev_px = {r.get("code"): (r.get("px") or {}) for r in (prev_latest or {}).get("rows") or []}
+    for r in rows:
+        px = r.get("px") or {}
+        if px.get("frgn_pct") is None:
+            old = prev_px.get(r.get("code")) or {}
+            # 직전 값이 0 이면 안 가져온다 — 장 전 수집이 남긴 '가짜 0'과 진짜 0을
+            # 소스가 구분해 주지 않아서, 이월하면 모름이 0.00%로 둔갑한다.
+            if old.get("frgn_pct"):
+                px["frgn_pct"] = old["frgn_pct"]
+                px["frgn_pct_asof"] = (old.get("frgn_pct_asof")
+                                       or prev_latest.get("market_day") or prev_latest.get("date"))
+    return rows
+
+
 def main(argv=None):
     ap = argparse.ArgumentParser()
     ap.add_argument("--force", action="store_true", help="휴장일 게이트 무시")
     ap.add_argument("--limit", type=int, default=0, help="종목 수 제한(프로브용)")
     ap.add_argument("--probe-etf", action="store_true", help="ETF 상장주수 소스 탐색 — 응답 키만 찍고 끝(저장 없음)")
+    ap.add_argument("--probe-flow", action="store_true", help="종목별 수급 이력 길이 탐색(KIS 행수·네이버 trend) — 저장 없음")
     a = ap.parse_args(argv)
 
     now = datetime.now(KST)
     today = now.date().isoformat()
     if a.probe_etf:   # 휴장일 게이트보다 먼저 — 프로브는 거래일과 무관
         return probe_etf(load_csv("etf_universe.csv")[0]["code"])
+    if a.probe_flow:
+        return probe_flow(load_csv("universe.csv")[0]["code"])
     mday, mstatus = market_day()
     if mday and mday != today and not a.force:
         print(f"휴장일로 판단(마지막 거래일 {mday}) — 수집 생략")
@@ -191,8 +313,15 @@ def main(argv=None):
             errors.append(f"{u['code']} {u['name']}: {type(ex).__name__}: {ex}")
             print(f"  {u['name']} 실패: {ex}")
 
+    if not enough(len(rows), len(uni)):
+        print(f"수집 부족 — {len(rows)}/{len(uni)}종목(기준 {MIN_OK_RATIO:.0%}). 저장·발송하지 않고 실패로 끝낸다.")
+        for e in errors:
+            print("  " + e)
+        return 2
+
     etfs, etf_err = collect_etfs(load_csv("etf_universe.csv"))
     errors += etf_err
+    backfill_frgn(rows, load_json(LATEST, {}))   # LATEST 를 덮어쓰기 전에 읽어야 한다
     store, prev = update_shares(etfs, today, load_json(SHARES, {}))
     per_stock, per_etf = metrics.passive_flow(etfs, prev)
     for r in rows:

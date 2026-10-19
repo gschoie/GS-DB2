@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
 """순수 계산부 검산 — 네트워크 없음. 컨테이너·러너 모두에서 돈다.
 python tests/test_metrics.py"""
-import os, sys, json, unittest, unittest.mock
+import os, sys, json, tempfile, unittest, unittest.mock
 import numpy as np, pandas as pd
 from datetime import datetime, timezone, timedelta
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, os.path.dirname(HERE))
-import metrics, kis, notify, build_report  # noqa: E402
+import metrics, kis, notify, build_report, collect  # noqa: E402
 
 KST = timezone(timedelta(hours=9))
 
@@ -18,14 +18,12 @@ def ohlc(closes, start="2025-01-01"):
 
 
 class Slot(unittest.TestCase):
-    def test_boundaries(self):
+    def test_single_daily_slot(self):
+        # 10/19부터 하루 1회(16:00) — 수동 수집도 같은 슬롯에 붙는다.
         mk = lambda h, m: datetime(2026, 10, 17, h, m, tzinfo=KST)
-        self.assertEqual(metrics.decide_slot(mk(10, 5)), "10:00")
-        self.assertEqual(metrics.decide_slot(mk(11, 44)), "10:00")
-        self.assertEqual(metrics.decide_slot(mk(11, 45)), "13:30")
-        self.assertEqual(metrics.decide_slot(mk(14, 29)), "13:30")
-        self.assertEqual(metrics.decide_slot(mk(14, 30)), "15:30")
-        self.assertEqual(metrics.decide_slot(mk(23, 0)), "15:30")
+        self.assertEqual(metrics.decide_slot(mk(10, 5)), "16:00")
+        self.assertEqual(metrics.decide_slot(mk(16, 5)), "16:00")
+        self.assertEqual(metrics.decide_slot(mk(23, 0)), "16:00")
 
 
 class Rsi(unittest.TestCase):
@@ -70,6 +68,37 @@ class Rsi(unittest.TestCase):
         self.assertEqual(t["adv20"], 10.0)
 
 
+class Returns(unittest.TestCase):
+    def test_windows_and_ytd(self):
+        # 2025-12-01 부터 영업일 100개: 전년 마지막 종가 → ytd 기준
+        d = pd.bdate_range("2025-12-01", periods=100)
+        c = pd.Series(np.arange(100, 200, dtype="float64"))
+        df = pd.DataFrame({"date": d, "o": c, "h": c, "l": c, "c": c, "v": 1, "amt": 1.0})
+        today = d[-1] + pd.Timedelta(days=1)
+        r = metrics.returns(df, today, price_now=210.0, chg_pct=5.53)
+        self.assertEqual(r["d1"], 5.53)                                   # KIS 전일대비 그대로
+        self.assertAlmostEqual(r["w1"], round((210 / c.iloc[-5] - 1) * 100, 2))
+        self.assertAlmostEqual(r["m1"], round((210 / c.iloc[-21] - 1) * 100, 2))
+        self.assertAlmostEqual(r["m3"], round((210 / c.iloc[-63] - 1) * 100, 2))
+        prev_year_last = c[[x.year == 2025 for x in d]].iloc[-1]
+        self.assertAlmostEqual(r["ytd"], round((210 / prev_year_last - 1) * 100, 2))
+
+    def test_spark_points(self):
+        df = ohlc([100 + i for i in range(100)])
+        today = df["date"].iloc[-1] + pd.Timedelta(days=1)
+        sp = metrics.spark_points(df, today, price_now=250)
+        self.assertEqual(len(sp), 63); self.assertEqual(sp[-1], 250.0); self.assertEqual(sp[0], 100 + 99 - 61)
+        self.assertEqual(metrics.spark_points(pd.DataFrame(), today), [])
+        svg = build_report.spark_svg(sp); self.assertIn("<svg", svg); self.assertIn("rgb(220,38,38)", svg)   # 오르면 빨강(한국식)
+        self.assertIn("rgb(37,99,235)", build_report.spark_svg([10, 9, 8]))   # 내리면 파랑; self.assertIn("na", build_report.spark_svg([5]))
+
+    def test_short_history_none(self):
+        df = ohlc([100, 101, 102, 103], start="2026-10-05")
+        r = metrics.returns(df, df["date"].iloc[-1] + pd.Timedelta(days=1), None, None)
+        self.assertIsNone(r["m1"]); self.assertIsNone(r["m3"]); self.assertIsNone(r["ytd"]); self.assertIsNone(r["w1"])
+        self.assertAlmostEqual(r["d1"], round((103 / 102 - 1) * 100, 2))  # chg_pct 없으면 종가로
+
+
 class Flow(unittest.TestCase):
     def inv(self, f, o, start="2026-10-01"):
         d = pd.bdate_range(start, periods=len(f))
@@ -96,6 +125,29 @@ class Flow(unittest.TestCase):
         f = metrics.flow_summary(inv, today, mcap=None)
         self.assertFalse(f["has_today"]); self.assertNotIn("frgn_today", f)
         self.assertIsNone(f["fi5_mcap_pct"]); self.assertEqual(f["inst_streak"], 0)
+
+    def test_flow_windows(self):
+        d = pd.bdate_range("2025-12-15", periods=80)          # 전년 행 포함 → ytd 유효
+        inv = pd.DataFrame({"date": d, "개인": 0.0, "외국인": np.ones(80), "기관": -np.ones(80)})
+        today = d[-1]
+        w = metrics.flow_windows(inv, today)
+        self.assertEqual(w["rows"], 80)
+        self.assertEqual(w["frgn"]["today"], 1.0); self.assertEqual(w["frgn"]["d5"], 5.0)
+        self.assertEqual(w["frgn"]["m1"], 21.0); self.assertEqual(w["frgn"]["m3"], 63.0)
+        self.assertEqual(w["frgn"]["ytd"], float(sum(1 for x in d if x.year == 2026)))
+        self.assertEqual(w["inst"]["m3"], -63.0)
+        short = metrics.flow_windows(inv.iloc[-10:], today)   # 10행뿐
+        self.assertEqual(short["frgn"]["d5"], 5.0); self.assertIsNone(short["frgn"]["m1"])
+        self.assertIsNone(short["frgn"]["ytd"])              # 전년 행 없음 → ytd 모름
+        self.assertEqual(metrics.flow_windows(pd.DataFrame(), today), {"rows": 0})
+
+    def test_drop_today_premarket_zero_row(self):
+        inv = self.inv([10, 20, 30, 40, 50, 0], [1, 1, 1, 1, 1, 0])     # 마지막 행 = 장 전 '오늘 0'
+        today = inv["date"].iloc[-1]
+        f = metrics.flow_summary(metrics.drop_today(inv, today), today, mcap=None)
+        self.assertFalse(f["has_today"]); self.assertEqual(f["frgn5"], 10 + 20 + 30 + 40 + 50)
+        self.assertEqual(f["frgn_streak"], 5)                              # 0 행이 연속일수를 끊지 않는다
+        self.assertTrue(metrics.drop_today(pd.DataFrame(), today).empty)
 
     def test_rank_and_today_movers(self):
         rows = [
@@ -171,6 +223,26 @@ class Active(unittest.TestCase):
         self.assertEqual(metrics.active_etf_hits({}, {"x"}), [])
 
 
+class NaverTrend(unittest.TestCase):
+    def test_frame_and_merge(self):
+        rows = [{"itemCode": "009540", "bizdate": "20261016", "foreignerPureBuyQuant": "+16,135", "organPureBuyQuant": "-6,507",
+                 "individualPureBuyQuant": "-10,120", "closePrice": "264,500"},
+                {"itemCode": "009540", "bizdate": "20261015", "foreignerPureBuyQuant": "-1,000", "organPureBuyQuant": "0",
+                 "individualPureBuyQuant": "+1,000", "closePrice": "260,000"},
+                {"itemCode": "009540", "bizdate": "20261014", "foreignerPureBuyQuant": "x", "closePrice": "0"}]   # 종가 0 → 버림
+        nv = kis.naver_trend_frame(rows)
+        self.assertEqual(len(nv), 2)
+        self.assertAlmostEqual(nv.iloc[-1]["외국인"], round(16135 * 264500 / 1e8, 1))   # 42.7억 근사
+        self.assertAlmostEqual(nv.iloc[0]["개인"], round(1000 * 260000 / 1e8, 1))
+        k = kis.investor_frame([{"stck_bsop_date": "20261016", "prsn_ntby_tr_pbmn": "-1000", "frgn_ntby_tr_pbmn": "4000", "orgn_ntby_tr_pbmn": "-1700"}])
+        m = kis.merge_investor(k, nv)
+        self.assertEqual(len(m), 2)
+        self.assertEqual(float(m[m["date"] == "2026-10-16"]["외국인"].iloc[0]), 40.0)   # 같은 날짜는 한투 금액 우선
+        self.assertEqual(float(m[m["date"] == "2026-10-15"]["외국인"].iloc[0]), -2.6)  # 없는 날짜만 네이버 근사
+        self.assertTrue(kis.naver_trend_frame([]).empty)
+        self.assertIs(kis.merge_investor(k, kis.naver_trend_frame([])), k)
+
+
 class Frames(unittest.TestCase):
     def test_kis_frames(self):
         rows = [{"stck_bsop_date": "20261016", "stck_oprc": "100", "stck_hgpr": "110", "stck_lwpr": "90", "stck_clpr": "105", "acml_vol": "1000", "acml_tr_pbmn": "200000000"},
@@ -191,8 +263,10 @@ def fake_payload():
             "rows": [
                 {"code": "042660", "name": "한화오션", "industry": "조선", "status": "커버리지",
                  "px": {"chg_pct": 0.4, "frgn_pct": 20.1, "mcap": 250000},
-                 "flow": {"fi5_mcap_pct": 0.7, "frgn5": 108, "inst5": 19, "indiv5": -120, "frgn_streak": 13, "inst_streak": 1, "has_today": True, "frgn_today": 50, "inst_today": 3},
-                 "tech": {"rsi": 69.0, "rsi_prev": 66.0, "rsi_pctl": 96.5, "extreme": "1년 최고권 (상위 4%)", "hi52_pct": -1.0, "lo52_pct": 80.0, "adv20": 500, "provisional": True},
+                 "flow": {"fi5_mcap_pct": 0.7, "frgn5": 108, "inst5": 19, "indiv5": -120, "frgn_streak": 13, "inst_streak": 1, "has_today": True, "frgn_today": 50, "inst_today": 3,
+                          "win": {"rows": 30, "frgn": {"today": 50, "d5": 108, "m1": 300, "m3": None, "ytd": None}, "inst": {"today": 3, "d5": 19, "m1": -40, "m3": None, "ytd": None}, "indiv": {"today": -53, "d5": -120, "m1": -260, "m3": None, "ytd": None}}},
+                 "tech": {"rsi": 69.0, "rsi_prev": 66.0, "rsi_pctl": 96.5, "extreme": "1년 최고권 (상위 4%)", "hi52_pct": -1.0, "lo52_pct": 80.0, "adv20": 500, "provisional": True,
+                          "ret": {"d1": 0.4, "w1": 3.2, "m1": -5.1, "m3": None, "ytd": 42.0}, "spark": [100, 102, 99, 105, 110]},
                  "passive": {"amt": 12.0, "adv_pct": 2.4, "etfs": [("SOL 조선TOP3플러스", 12.0)]}},
                 {"code": "012450", "name": "한화에어로스페이스", "industry": "방산", "status": "커버리지",
                  "px": {"chg_pct": -1.2, "frgn_pct": 30.0, "mcap": 400000},
@@ -249,15 +323,311 @@ class Outputs(unittest.TestCase):
         with unittest.mock.patch.dict(os.environ, env, clear=True):
             self.assertEqual(notify._creds(), ("t2", "-100999"))
 
+    def test_compose_html_bold_header_and_escape(self):
+        d = fake_payload(); d["rows"][0]["name"] = "LIG D&A"; d["errors"] = []
+        h = notify.compose_html(d)
+        first = h.split("\n")[0]
+        self.assertTrue(first.startswith("<b>[GS🎴 조선·방산·건기] 수급 브리핑") and first.endswith("</b>"), first)
+        self.assertIn("LIG D&amp;A", h); self.assertNotIn("D&A", h)
+        for head in ("<b>📈 사는 쪽 · 시총 대비 5일</b>", "<b>📉 파는 쪽 · 시총 대비 5일</b>", "<b>⚙️ 기계적 수급 (ETF/패시브)</b>"):
+            self.assertIn(head, h)
+        self.assertEqual(h.count("<b>"), 4)                                    # 머리글 + 섹션 제목 3개만 볼드
+        sent = []
+        with tempfile.TemporaryDirectory() as tmp:
+            latest, status = os.path.join(tmp, "l.json"), os.path.join(tmp, "s.json")
+            with open(latest, "w", encoding="utf-8") as f:
+                json.dump(d, f, ensure_ascii=False)
+            with unittest.mock.patch.object(notify, "LATEST", latest), unittest.mock.patch.object(notify, "STATUS", status), \
+                 unittest.mock.patch.object(notify, "send", lambda text, parse_mode=None: sent.append((text[:3], parse_mode)) or {"ok": True}):
+                notify.main([])
+        self.assertEqual(sent, [("<b>", "HTML")])
+
+    def test_text_rides_as_album_caption(self):
+        """캡쳐가 있으면 본문이 앨범 캡션(사진 밑)으로 간다 — 1024자 이내면 send() 미호출, 넘치면 옛 방식."""
+        d = fake_payload(); d["errors"] = []
+        calls = []
+        with tempfile.TemporaryDirectory() as tmp:
+            latest, status = os.path.join(tmp, "l.json"), os.path.join(tmp, "s.json")
+            for i in range(3):
+                open(os.path.join(tmp, f"capture_{i}.png"), "wb").write(b"x")
+            with open(latest, "w", encoding="utf-8") as f:
+                json.dump(d, f, ensure_ascii=False)
+            with unittest.mock.patch.object(notify, "LATEST", latest), unittest.mock.patch.object(notify, "STATUS", status), \
+                 unittest.mock.patch.object(notify, "send", lambda text, parse_mode=None: calls.append(("text", parse_mode)) or {"ok": True}), \
+                 unittest.mock.patch.object(notify, "send_photos", lambda paths, caption="", parse_mode=None: calls.append(("album", parse_mode, len(paths), caption[:3], len(caption))) or {"ok": True}):
+                notify.main(["--photos", os.path.join(tmp, "capture_*.png")])
+                self.assertEqual(calls, [("album", "HTML", 3, "<b>", len(notify.compose_html(d)))])
+                # 긴 본문: 캡션 한도 초과 → 본문 따로(HTML) + 사진은 짧은 캡션
+                calls.clear()
+                with unittest.mock.patch.object(notify, "compose_html", lambda dd: "<b>x</b>" + "y" * 1100):
+                    notify.main(["--photos", os.path.join(tmp, "capture_*.png")])
+                self.assertEqual(calls[0], ("text", "HTML")); self.assertEqual(calls[1][:2], ("album", None))
+
     def test_compose_empty(self):
         txt = notify.compose({"asof": "2026-10-16 10:01", "rows": [], "etfs": [], "active": []})
         self.assertIn("순매수 종목 없음", txt); self.assertIn("첫 수집", txt); self.assertIn("극단권 종목 없음", txt)
 
     def test_render(self):
         h = build_report.render(fake_payload())
-        for s in ("한화오션", "13일째 매수", "1년 최저권", "SOL 조선TOP3플러스", "수집 오류 1건", "커버예정", "직전 값 없음", "TIME 코스피액티브"):
+        for s in ("한화오션", "13일째 매수", "1년 최저권", "SOL 조선TOP3플러스", "수집 오류 1건", "커버예정", "직전 값 없음", "TIME 코스피액티브",
+                  "① 등락률", "①-2 투자자별 순매수", "+42.0", "+300", "② 과매수", "③ 기계적 수급", '<details id="cap-3"', "3개월 차트", "📅 수집 시각 <b>10/16(금) 13:31</b>"):
             self.assertIn(s, h)
         self.assertNotIn("chr(", h)
+        self.assertNotIn("5일 외인+기관", h)                                  # 시총 대비 열 제거
+        # 조건부서식 음영: 값 있는 칸에 양수=빨강·음수=파랑 rgba 배경이 붙는다(한국식).
+        self.assertIn("background:rgba(220,38,38,", h)
+        self.assertIn("background:rgba(37,99,235,", h)
+        self.assertNotIn('<span class="pos">250,000', h)                             # 시총엔 색 없음
+
+    def test_frgn_backfill_from_previous_snapshot(self):
+        """외인 보유비율 None 은 직전 스냅샷 값 + 기준일로 채운다. 실측값·직전도 없음은 불변."""
+        import collect
+        prev = {"market_day": "2026-10-16", "date": "2026-10-17", "rows": [
+            {"code": "A", "px": {"frgn_pct": 12.34}},
+            {"code": "B", "px": {"frgn_pct": 5.0, "frgn_pct_asof": "2026-10-15"}},
+            {"code": "C", "px": {"frgn_pct": None}},
+            {"code": "E", "px": {"frgn_pct": 0.0}},
+        ]}
+        rows = [
+            {"code": "A", "px": {"frgn_pct": None}},     # 직전 실측 → 채움, asof=직전 market_day
+            {"code": "B", "px": {"frgn_pct": None}},     # 직전도 이월분 → 원 날짜 승계
+            {"code": "C", "px": {"frgn_pct": None}},     # 직전도 없음 → None 유지
+            {"code": "D", "px": {"frgn_pct": 7.7}},      # 당일 실측 → 불변·asof 없음
+            {"code": "E", "px": {"frgn_pct": None}},     # 직전이 '가짜 0' → 이월 금지
+        ]
+        collect.backfill_frgn(rows, prev)
+        self.assertEqual(rows[0]["px"]["frgn_pct"], 12.34)
+        self.assertEqual(rows[0]["px"]["frgn_pct_asof"], "2026-10-16")
+        self.assertEqual(rows[1]["px"]["frgn_pct_asof"], "2026-10-15")
+        self.assertIsNone(rows[2]["px"]["frgn_pct"])
+        self.assertEqual(rows[3]["px"], {"frgn_pct": 7.7})
+        self.assertIsNone(rows[4]["px"]["frgn_pct"])
+        # 화면: 이월분은 기준일을 작게 병기, 당일 실측은 날짜 없음
+        self.assertIn("10/16</small>", build_report.frgn_cell(rows[0]["px"]))
+        self.assertNotIn("stale", build_report.frgn_cell(rows[3]["px"]))
+        self.assertIn("na", build_report.frgn_cell({"frgn_pct": None}))
+
+    def test_shade_scales_and_skips_blanks(self):
+        """음영은 열 최대값 대비 강도, 0·결측·cap 0 은 음영 없음, 상한을 넘지 않는다."""
+        self.assertEqual(build_report.shade(None, 10), "")
+        self.assertEqual(build_report.shade(0, 10), "")
+        self.assertEqual(build_report.shade(5, 0), "")
+        full = build_report.shade(10, 10); half = build_report.shade(5, 10)
+        self.assertIn("rgba(220,38,38,0.45)", full)                            # 최대 알파, 양수=빨강
+        self.assertIn("rgba(220,38,38,0.27)", half)
+        self.assertIn("rgba(37,99,235,", build_report.shade(-3, 10))           # 음수=파랑
+        self.assertEqual(build_report.shade(999, 10), full)                    # cap 초과도 상한 고정
+        caps = build_report.col_caps({"a": [1, -7, None], "b": [None, None]})
+        self.assertEqual(caps["a"], 7); self.assertEqual(caps["b"], 0.0)
+
+    def test_grouped_tables(self):
+        """표는 조선(조선+조기)·방산·기계 묶음, 성광벤드·태광은 조선 묶음 맨 밑. 묶음 안은 기존 정렬."""
+        rows = [
+            {"name": "태광", "industry": "조기"}, {"name": "한화오션", "industry": "조선"},
+            {"name": "성광벤드", "industry": "조기"}, {"name": "HD현대중공업", "industry": "조선"},
+            {"name": "한화시스템", "industry": "방산"}, {"name": "두산밥캣", "industry": "건기"},
+        ]
+        score = {"태광": 99, "한화오션": 1, "성광벤드": 50, "HD현대중공업": 5, "한화시스템": 0, "두산밥캣": 0}
+        g = build_report.grouped(rows, key=lambda r: score[r["name"]], reverse=True)
+        self.assertEqual([x[0] for x in g], ["조선", "방산", "기계"])
+        self.assertEqual([r["name"] for r in g[0][1]], ["HD현대중공업", "한화오션", "성광벤드", "태광"])  # 점수 높은 태광도 맨 뒤
+        d = fake_payload()
+        d["rows"][2].update(industry="건기", tech=dict(d["rows"][0]["tech"]), flow=dict(d["rows"][0]["flow"]))  # 오류 행에 지표를 줘서 표에 올린다
+        h = build_report.render(d)
+        self.assertIn("<tr class='gh'><td colspan='9'>조선</td></tr>", h)
+        self.assertIn("<tr class='gh'><td colspan='16'>방산</td></tr>", h)
+        self.assertIn("<tr class='gh'><td colspan='8'>기계</td></tr>", h)
+        self.assertLess(h.index(">조선</td>"), h.index(">방산</td>")); self.assertLess(h.index(">방산</td>"), h.index(">기계</td>"))
+
+    def test_tables_sorted_by_mcap(self):
+        """세 표 모두 묶음 안은 시총 내림차순, 성광벤드·태광은 여전히 조선 맨 밑."""
+        d = fake_payload()
+        base = d["rows"][0]
+        def mk(name, mcap, ind="조선"):
+            r = json.loads(json.dumps(base)); r.update(name=name, industry=ind, code=name); r["px"]["mcap"] = mcap
+            r["tech"]["rsi"] = 10 if name == "작은" else 90          # RSI 순이면 '작은' 이 먼저 올 값
+            r["flow"]["frgn5"] = 999 if name == "작은" else 1       # 외인 5일 순이면 '작은' 이 먼저 올 값
+            return r
+        d["rows"] = [mk("작은", 100), mk("큰", 5000), mk("성광벤드", 9999), mk("중간", 1000)]
+        h = build_report.render(d)
+        for tbl in h.split("<table")[1:4]:                                       # 등락률·수급·과매수 세 표
+            order = [n for n in ("큰", "중간", "작은", "성광벤드") if n in tbl]
+            idx = [tbl.index(f"<td>{n}") for n in order]
+            self.assertEqual(idx, sorted(idx), order)
+
+
+class KisToken(unittest.TestCase):
+    def test_token_retries_past_rate_limit_403(self):
+        """토큰 발급 403(분당 1회 제한, 다른 잡과 동시 시작)은 기다렸다 재시도한다."""
+        import kis
+
+        class R:
+            def __init__(self, code):
+                self.status_code = code
+
+            def raise_for_status(self):
+                if self.status_code != 200:
+                    raise RuntimeError(f"HTTP {self.status_code}")
+
+            def json(self):
+                return {"access_token": "tok"}
+
+        calls, naps = [], []
+        responses = [R(403), R(403), R(200)]
+        saved_post, saved_sleep = kis.requests.post, kis.time.sleep
+        saved_cache = dict(kis._c)
+        kis.requests.post = lambda *a, **k: (calls.append(1), responses[len(calls) - 1])[1]
+        kis.time.sleep = lambda s: naps.append(s)
+        kis._c.update(t=None, ts=0)
+        os.environ.setdefault("KIS_APP_KEY", "k"); os.environ.setdefault("KIS_APP_SECRET", "s")
+        try:
+            self.assertEqual(kis.token(tries=5, wait=20), "tok")
+        finally:
+            kis.requests.post, kis.time.sleep = saved_post, saved_sleep
+            kis._c.update(saved_cache)
+        self.assertEqual(len(calls), 3)          # 403 두 번 뒤 성공
+        self.assertEqual(naps, [20, 20])         # 분 경계를 넘길 대기
+
+    def test_token_gives_up_after_tries(self):
+        import kis
+
+        class R403:
+            status_code = 403
+
+            def raise_for_status(self):
+                raise RuntimeError("HTTP 403")
+
+        naps = []
+        saved_post, saved_sleep = kis.requests.post, kis.time.sleep
+        saved_cache = dict(kis._c)
+        kis.requests.post = lambda *a, **k: R403()
+        kis.time.sleep = lambda s: naps.append(s)
+        kis._c.update(t=None, ts=0)
+        os.environ.setdefault("KIS_APP_KEY", "k"); os.environ.setdefault("KIS_APP_SECRET", "s")
+        try:
+            with self.assertRaises(RuntimeError):
+                kis.token(tries=3, wait=1)
+        finally:
+            kis.requests.post, kis.time.sleep = saved_post, saved_sleep
+            kis._c.update(saved_cache)
+        self.assertEqual(naps, [1, 1])           # 마지막 시도는 기다리지 않고 올린다
+
+
+class CollectGuard(unittest.TestCase):
+    def test_enough_blocks_partial_runs(self):
+        """21종목 중 2종목(10/19 토큰 403 사고)은 부족, 15종목(71%)은 통과, 유니버스 0은 실패."""
+        self.assertFalse(collect.enough(2, 21))
+        self.assertTrue(collect.enough(15, 21))
+        self.assertFalse(collect.enough(14, 21))
+        self.assertTrue(collect.enough(21, 21))
+        self.assertFalse(collect.enough(0, 0))
+        self.assertTrue(collect.enough(1, 2, ratio=0.5))
+
+    def test_partial_run_keeps_previous_latest(self):
+        """부족한 run 은 latest.json 을 덮어쓰지 않고 종료코드 2."""
+        with tempfile.TemporaryDirectory() as d:
+            latest = os.path.join(d, "latest.json")
+            with open(latest, "w") as f:
+                json.dump({"asof": "이전 정상본"}, f)
+            uni = [{"code": str(i), "name": f"s{i}", "industry": "조선", "status": "커버리지"} for i in range(5)]
+            calls = {"n": 0}
+            def fake_stock(u, today, live):
+                calls["n"] += 1
+                if calls["n"] > 1:
+                    raise RuntimeError("403 tokenP")
+                return {"code": u["code"], "name": u["name"], "industry": "조선", "status": "커버리지",
+                        "tech": {}, "flow": {}, "px": {}}
+            with unittest.mock.patch.object(collect, "LATEST", latest), \
+                 unittest.mock.patch.object(collect, "market_day", lambda: ("2026-10-19", "OPEN")), \
+                 unittest.mock.patch.object(collect, "load_csv", lambda fn: uni), \
+                 unittest.mock.patch.object(collect, "collect_stock", fake_stock), \
+                 unittest.mock.patch.object(collect.sys, "argv", ["collect.py", "--force"]):
+                rc = collect.main()
+            self.assertEqual(rc, 2)
+            with open(latest) as f:
+                self.assertEqual(json.load(f)["asof"], "이전 정상본")
+
+    def test_notify_skips_when_any_error(self):
+        """수집 오류가 하나라도 있으면 send() 를 부르지 않고 status 에 생략 사유만 남긴다."""
+        with tempfile.TemporaryDirectory() as d:
+            latest, status = os.path.join(d, "latest.json"), os.path.join(d, "status.json")
+            payload = fake_payload(); payload["errors"] = ["000490 대동: RuntimeError: 예시"]
+            with open(latest, "w", encoding="utf-8") as f:
+                json.dump(payload, f, ensure_ascii=False)
+            sent = []
+            with unittest.mock.patch.object(notify, "LATEST", latest), unittest.mock.patch.object(notify, "STATUS", status), \
+                 unittest.mock.patch.object(notify, "send", lambda text, parse_mode=None: sent.append(text) or {"ok": True}), \
+                 unittest.mock.patch.object(notify, "send_photos", lambda *a, **k: sent.append("photo") or {"ok": True}):
+                rc = notify.main(["--photos", os.path.join(d, "none_*.png")])
+            self.assertEqual(rc, 0); self.assertEqual(sent, [])
+            with open(status, encoding="utf-8") as f:
+                st = json.load(f)
+            self.assertTrue(st["skipped"]); self.assertIn("오류 1건", st["description"])
+            # 오류가 없으면 평소대로 보낸다
+            payload["errors"] = []
+            with open(latest, "w", encoding="utf-8") as f:
+                json.dump(payload, f, ensure_ascii=False)
+            with unittest.mock.patch.object(notify, "LATEST", latest), unittest.mock.patch.object(notify, "STATUS", status), \
+                 unittest.mock.patch.object(notify, "send", lambda text, parse_mode=None: sent.append(text) or {"ok": True}):
+                notify.main([])
+            self.assertEqual(len(sent), 1)
+
+
+class KisToken(unittest.TestCase):
+    def test_token_retries_past_rate_limit_403(self):
+        """토큰 발급 403(분당 1회 제한, 다른 잡과 동시 시작)은 기다렸다 재시도한다."""
+        import kis
+
+        class R:
+            def __init__(self, code):
+                self.status_code = code
+
+            def raise_for_status(self):
+                if self.status_code != 200:
+                    raise RuntimeError(f"HTTP {self.status_code}")
+
+            def json(self):
+                return {"access_token": "tok"}
+
+        calls, naps = [], []
+        responses = [R(403), R(403), R(200)]
+        saved_post, saved_sleep = kis.requests.post, kis.time.sleep
+        saved_cache = dict(kis._c)
+        kis.requests.post = lambda *a, **k: (calls.append(1), responses[len(calls) - 1])[1]
+        kis.time.sleep = lambda s: naps.append(s)
+        kis._c.update(t=None, ts=0)
+        os.environ.setdefault("KIS_APP_KEY", "k"); os.environ.setdefault("KIS_APP_SECRET", "s")
+        try:
+            self.assertEqual(kis.token(tries=5, wait=20), "tok")
+        finally:
+            kis.requests.post, kis.time.sleep = saved_post, saved_sleep
+            kis._c.update(saved_cache)
+        self.assertEqual(len(calls), 3)          # 403 두 번 뒤 성공
+        self.assertEqual(naps, [20, 20])         # 분 경계를 넘길 대기
+
+    def test_token_gives_up_after_tries(self):
+        import kis
+
+        class R403:
+            status_code = 403
+
+            def raise_for_status(self):
+                raise RuntimeError("HTTP 403")
+
+        naps = []
+        saved_post, saved_sleep = kis.requests.post, kis.time.sleep
+        saved_cache = dict(kis._c)
+        kis.requests.post = lambda *a, **k: R403()
+        kis.time.sleep = lambda s: naps.append(s)
+        kis._c.update(t=None, ts=0)
+        os.environ.setdefault("KIS_APP_KEY", "k"); os.environ.setdefault("KIS_APP_SECRET", "s")
+        try:
+            with self.assertRaises(RuntimeError):
+                kis.token(tries=3, wait=1)
+        finally:
+            kis.requests.post, kis.time.sleep = saved_post, saved_sleep
+            kis._c.update(saved_cache)
+        self.assertEqual(naps, [1, 1])           # 마지막 시도는 기다리지 않고 올린다
 
 
 if __name__ == "__main__":

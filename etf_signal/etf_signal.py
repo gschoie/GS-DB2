@@ -39,14 +39,20 @@ def _load_keys():
 APP_KEY, APP_SECRET = _load_keys()
 
 _c = {"t": None, "ts": 0}
-def token():
+def token(tries=5, wait=20):
+    # 한투 토큰 발급은 분당 1회 제한 — 같은 앱키의 다른 잡과 같은 분에 겹치면 403.
+    # (10/15 백테스트 6종목 누락·10/19 covflow 19종목 누락의 원인) 분 경계를 넘겨 재시도.
     if _c["t"] and time.time() - _c["ts"] < 60*60*23:
         return _c["t"]
-    r = requests.post(f"{BASE}/oauth2/tokenP",
-        json={"grant_type": "client_credentials", "appkey": APP_KEY, "appsecret": APP_SECRET})
-    r.raise_for_status()
-    _c.update(t=r.json()["access_token"], ts=time.time())
-    return _c["t"]
+    for i in range(tries):
+        r = requests.post(f"{BASE}/oauth2/tokenP",
+            json={"grant_type": "client_credentials", "appkey": APP_KEY, "appsecret": APP_SECRET})
+        if r.status_code == 403 and i < tries - 1:
+            time.sleep(wait)
+            continue
+        r.raise_for_status()
+        _c.update(t=r.json()["access_token"], ts=time.time())
+        return _c["t"]
 
 def H(tr):
     return {"authorization": f"Bearer {token()}", "appkey": APP_KEY, "appsecret": APP_SECRET,

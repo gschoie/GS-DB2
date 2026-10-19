@@ -964,7 +964,156 @@
       `/opt/pw-browsers/chromium-*/chrome-linux/chrome` 을 executable_path 로(36번 교훈).
       사용자 대안 2안("링크는 두되 주소를 가리기")은 텔레그램이 링크 미리보기·탭 시 도메인을
       드러내 사실상 불가능해 채택하지 않았다.
+    - **등락률·투자자별 5구간 + 메뉴명** (10/19 새벽): 사용자 요청으로 ① 등락률(오늘·1주·1개월·
+      3개월·YTD — `metrics.returns`, 거래일 5/21/63 오프셋·전년 마지막 종가) 표와 ①-2 투자자별
+      순매수(외인·기관·개인 × 오늘·5일·1개월·3개월·YTD — `metrics.flow_windows`) 표로 개편,
+      '5일 외인+기관 시총 대비' 열 삭제(텔레 본문의 '사는 쪽/파는 쪽' 랭킹엔 그대로 씀).
+      메뉴명 `📡 커버리지 수급 등`. **수급 이력 소스 프로브**(`--probe-flow`, 러너 2회):
+      한투 inquire-investor 는 **30행**(≈1개월)뿐 → 3개월·YTD 는 네이버 구 모바일 API
+      `/api/stock/{code}/trend?pageSize=60` — **pageSize 상한 60, page 무시, `bizdate=` 커서**로
+      그 날짜 이전 60행씩 뒤로(실측 bizdate=20260720 → 7/16~4/20), front-api 쪽
+      `/stock/domestic/trend?reutersCode=` 는 400. 네이버는 **순매수 수량**만 주므로 금액은
+      수량×종가/1e8 **근사**(`kis.naver_trend_frame`), 같은 날짜는 한투 금액 우선
+      (`kis.merge_investor`), 표 각주에 근사 명시. 전년 12/31 이전 행이 나올 때까지 긁어
+      (`naver_investor_history`, 최대 8페이지) YTD 판정이 서게 한다. 네이버 실패 시 한투
+      30행만으로 오늘·5일·1개월은 그대로. 이력이 모자라는 구간은 '–'(30번 교훈).
+    - **화면 손질** (10/18): ① 등락률 표를 오늘·1주·1개월·3개월·YTD(거래일 5/21/63 오프셋, YTD 는 전년
+      마지막 종가 대비) + **3개월 스파크라인**(인라인 SVG, 수집 때 `spark` 63개 종가를 payload 에 박음 —
+      다음 수집부터 표시) 으로, '5일 외인+기관 시총대비' 열은 삭제(텔레·타일 순위에는 계속 사용).
+      투자자별 순매수는 외인·기관·개인 × 오늘·5일·1개월·3개월·YTD. 넓은 화면은 `max-width:1180px`.
+      섹션 순서 ① 등락률/수급 → **② 과매수·과매도** → **③ 기계적 수급(접힘 `<details>`)** —
+      캡쳐는 details 를 전부 펼친 뒤 찍는다. 표 3개는 **조선(조선+조기)·방산·기계 묶음 헤더 행**
+      (`build_report.grouped`), 묶음 안은 기존 정렬이되 **성광벤드·태광은 조선 묶음 맨 밑 고정**(사용자
+      지정, `PIN_LAST`). 장 시작 전 run 은 외인 보유비율 0.00 도 None 으로(한투가 0 을 준다).
+    - **조건부서식 음영** (10/19): 등락률·투자자별 순매수 표 셀에 엑셀식 음영 —
+      열별 최대 |값| 대비 강도(`build_report.shade`/`col_caps`), 양수=초록·음수=빨강
+      (.pos/.neg·스파크와 같은 서구식 체계 유지). 알파 0.08~0.34 — 다크모드·텔레 캡쳐
+      축소에서도 켜짐/꺼짐이 구분되는 하한. 0·결측·열 전체 결측(cap 0)은 음영 없음.
+    - **외인 보유비율 전일값 이월** (10/19): 장 전·휴장 run 에서 비던 외인보유를 직전
+      latest.json 값으로 채운다(`collect.backfill_frgn`, LATEST 덮어쓰기 전에 읽음).
+      이월분은 `frgn_pct_asof` 에 기준일을 남기고 화면에 `12.34% 10/16` 처럼 작게 병기
+      (당일 실측은 날짜 없음), 연쇄 이월은 원 기준일 승계. **직전 값이 0 이면 이월 금지** —
+      옛 코드가 남긴 '가짜 0'(장 전 한투 응답)과 진짜 0 을 소스가 구분해 주지 않아서,
+      이월하면 모름이 0.00% 로 둔갑한다(30번 부류). 직전도 없으면 '–' 그대로.
+    - **색 체계를 한국식으로 전환** (10/19, 바로 위 음영과 같은 날 두 세션이 충돌 — 이 쪽이 최종):
+      사용자 요청 "좋은 거 빨강, 나쁜 거 파랑". 전역 `.pos`/`.neg` 를 **빨강/파랑**으로, 스파크라인·
+      연속일수 배지·RSI 과매수/과매도·`shade` 음영도 같은 축(알파 0.08~0.45). 시총·상장주수처럼
+      부호 없는 숫자는 색을 안 준다(`n(sign=False)`). 위 항목의 '서구식 초록/빨강' 서술은 폐기.
+    - **수집 실패 가드 2단 + 수집 시각 표기** (10/19): 10:04 run 이 한투 토큰 403 으로 21종목 중
+      2종목만 모은 화면을 바담 방에 보낸 뒤 사용자 규칙 — ① **오류가 하나라도 있으면 텔레그램 생략**
+      (`notify.main`, 종목·ETF 오류 모두, status 에 skipped 사유. 페이지는 오류 목록과 함께 갱신되므로
+      거기서 본다) ② 성공 종목이 **70% 미만**(`collect.enough`, `COVFLOW_MIN_OK_RATIO`)이면 latest.json·
+      페이지도 덮어쓰지 않고 종료코드 2 — 직전 정상 페이지가 남고 run 은 실패로 찍혀 늦은 크론이
+      재시도한다(guard 는 성공 run 만 센다). ① 등락률 표 위에 `📅 수집 시각 … · 장중 잠정/직전 거래일
+      종가 기준` 한 줄(사용자 요청). 테스트 34 → 37개.
+    - **표 정렬 = 시총 순** (10/19): 사용자 요청으로 세 표(등락률·투자자별 순매수·과매수/과매도)의
+      묶음 안 정렬을 각자 기준(오늘 등락·외인 5일·RSI)에서 **시총 내림차순**(`build_report.mcap_key`)
+      으로 통일. 성광벤드·태광 조선 맨 밑 고정은 유지.
+    - **텔레 머리글 볼드** (10/19): 사용자 요청. `notify.compose_html` 이 평문(compose)의 첫 줄만
+      `<b>` 로 감싸고 나머지는 전부 escape(LIG D&A 의 & 안전) → `parse_mode=HTML` 로 발송,
+      텔레그램이 parse 오류를 돌려주면 평문으로 폴백. 테스트 38 → 39개.
+    - **본문을 앨범 캡션으로 — 사진 밑에** (10/19): 사용자 요청 "텍스트가 이미지 밑에 붙게". 캡쳐가 있고
+      본문(compose_html)이 **1,024자**(일반 봇 캡션 한도, `CAPTION_MAX`) 이내면 sendMediaGroup 첫 장
+      캡션에 HTML 로 실어 한 덩어리로 보낸다(현재 ~650자). parse 거부 → 평문 캡션, 그래도 실패 →
+      옛 방식(본문 따로 + 사진). 캡션 한도를 넘거나 캡쳐가 없으면 본문 따로. 테스트 39 → 40개.
+    - **텔레 섹션 제목 볼드 + 이모티콘** (10/19): 사용자 지정 — 머리글 `[GS🎴 조선·방산·건기]`,
+      `📈 사는 쪽` · `📉 파는 쪽` · `⚙️ 기계적 수급 (ETF/패시브)` 세 섹션 제목을 볼드
+      (`notify.SECTION_HEADS` 접두어 매칭, compose_html). RSI 섹션은 요청에 없어 그대로.
+    - **평일 16:00 하루 1회로 축소** (10/19, PR #404): "하루 3번은 너무 많다" — GAS covflow
+      슬롯 3개 → 16:00 하나(재붙여넣기 필요), 크론 1개(16:05)·guard 15:30 이후 단일 창,
+      decide_slot 은 상시 "16:00"(수동 수집도 같은 슬롯). 장 마감 후라 당일 수급이 사실상
+      확정 집계. 같은 날 오전엔 KIS 토큰 발급 403(분당 1회 제한, market-flow 와 동시 시작)
+      으로 19/21종목이 누락된 사고가 있었다 → token() 이 403 이면 20초씩 분 경계를 넘겨
+      재발급(PR #395, etf_signal 에도 동일 적용 — 41번 백테스트 6종목 누락의 원인이 이것).
     - 2판 후보(미구현): 수급 × 컨센 변화 교차(kospi_consensus), 외국인 보유비율 1년 백분위,
       섹터 ETF 대비 상대강도, 수주 공시·실적일 이벤트 뱃지, 공매도(소스 확인 필요).
+
+47. **피어그룹 Valuation — 회사 행 클릭 → 매출·영업이익·순이익·OPM·NPM 상세** (10/18):
+    표의 회사 행을 클릭하면 그 자리에 재무 상세 패널(연간 + 분기, 지표는 행·기간은 열)이
+    펼쳐진다. 연간은 HISTORY_YEARS(4)로 자르지 않고 **야후가 주는 전 기간**(보통 4~5개
+    연도) + 올해E·내년E, 분기는 quarterly_income_stmt 가 주는 **최근 5개 안팎** + 0q·+1q
+    컨센(기말은 마지막 확정 분기에서 3개월씩 굴려 라벨링). 데이터는 fetch 가
+    `record["financials"]` 로 담고 build_static 의 payload 에 그대로 실린다.
+    - **야후의 한계를 지어내지 않는다**: 영업이익 컨센 항목이 없어 E 줄의 영업이익·OPM 은
+      공란, 분기 컨센도 0q·+1q 가 전부라 '내년 분기'는 담지 않는다(34번 교훈 부류).
+      분기 확정치도 최근 5개 분기 안팎이 야후 무료 API 의 전부 — 작년 초 분기는 없을 수 있다.
+    - 단위는 재무통화별: KRW·JPY 는 억, 그 외는 백만(패널 하단에 명기). OPM·NPM 은
+      적자면 음수 그대로(빨강) — ROE 와 같은 원칙.
+    - financials 가 없는 옛 스냅샷에서는 "수집 실행 후 새로고침" 폴백 문구 — **머지만으로는
+      안 보이고 수집이 한 번 돌아야 패널이 채워진다**(37번과 같은 가드).
+    - 검증: 단위테스트 6개(연간 전 기간+컨센 라벨·마진 산식·E 줄 영업이익 공란·분기
+      라벨·분기 없음 폴백) + Playwright 실클릭(열림/닫힘/값 스케일/폴백 문구, 36번 방식).
+
+48. **피어그룹 Valuation — 국내 종목 재무 상세를 네이버 분기 컨센으로 보강** (10/19): 47번
+    패널의 국내(.KS/.KQ) 분기·연간E 를 네이버 기업실적분석(에프앤가이드) 값으로 교체.
+    **새 요청 0** — 컨센 PER·PBR·ROE 덮어쓰기가 이미 읽던 그 페이지(read_tables 1회 공유)의
+    분기 열(매출·영업이익·당기순이익, 억원)을 `naver_consensus.financial_rows()` 로 같이 파싱.
+    - 분기는 네이버(확정 4~5개 + 당분기E, **영업이익·OPM 포함 — 야후엔 분기 영업이익 컨센이
+      없다**)가 야후분을 대체하고, 네이버 범위 밖 미래 분기(다음분기E)만 야후 꼬리로 남긴다.
+      연간E 도 해당 연도 줄을 네이버 값(영업이익 컨센 포함)으로 교체 — 네이버에 없는 내년E 는
+      야후 유지. 행에 `src:"naver"`, 화면 열 머리글에 ᴺ 배지 + 안내문 분기(국내/해외).
+    - **덤으로 잡은 잠재 버그**: `estimates()` 가 분기 열도 연도로 읽어 '최근 분기 실적'
+      E 열의 PER 이 연간 컨센을 덮을 수 있었다 → `_column_period()` 로 분기 열 스킵.
+    - 내년 분기 컨센은 이 표에 없다(WiseReport 분기 그리드엔 fwd 3개가 있으나 Playwright
+      필요 — kospi_consensus 40번 방식). 필요해지면 kospi_consensus DB 재사용이 다음 후보.
+    - 테스트 60→67개(파서 3 + 보강 4), Playwright 로 ᴺ 배지·국내/해외 안내문 분기 실클릭 검증.
+    - **첫 run 실측 — ᴺ 이 통째로 죽어 있었다**: 전 국내 종목이 `read_tables` 에서
+      "Import html5lib failed" → html5lib 설치 후에도 **"No tables found"**. 원인은
+      파서가 아니라 **PC 페이지(item/main.naver) 자체가 Npay 개편(31번)으로 표 없는
+      SPA 가 된 것** — 스냅샷 역추적으로 10/3 이전부터 naver=None, 기존 컨센 PER ᴺ
+      덮어쓰기도 조용히 야후 산출값으로 돌아가 있었다(30번 부류: 예외를 삼키는 폴백은
+      죽어도 티가 안 난다). → 소스를 **모바일 금융 JSON API**
+      (`m.stock.naver.com/api/stock/{code}/finance/annual·quarter` — 같은 기업실적분석을
+      JSON 으로, kospi_consensus fetch_quarters 가 쓰는 그 API)로 전면 교체.
+      naver_consensus 는 이제 pd.read_html 을 안 쓴다(html5lib 는 requirements 에 잔존,
+      무해). 값 단위는 억원, est 는 isConsensus 플래그. 수집 로그의
+      '📊 네이버 컨센/분기 재무 적용' 줄이 살아있는지가 관측 지점.
+
+49. **피어그룹 Valuation — 대시보드 뷰 전환 + 유럽 중앙값 + 소수 1자리** (10/19): 잔손질 3건.
+    - **사이드바 새창 링크 → 대시보드 안 iframe 뷰**: 8/15 신설 때 `<a target="_blank">`로만
+      달아 혼자 새창으로 나가던 것을 covflow 와 같은 `data-view="valuation"` 뷰로 전환
+      (index.html 섹션 + app.js 제목·lazy src). `🔗 새 창으로` 는 섹션 헤더에 유지.
+    - **유럽 중앙값**: 방산 유럽 피어(독일·영국·이탈리아·스웨덴)는 나라별 1곳씩이라 지역
+      중앙값이 안 섰다 → `EUROPE_REGIONS` 합산 행을 지역 중앙값들 뒤·전체 중앙값 앞에
+      (화면 JS + 엑셀, 2곳 미만 블록은 생략 — 조선 이탈리아 1·건기 스웨덴 1 은 안 뜬다).
+    - 배수 표기 전 지표 소수 1자리(`0.0`) — 화면 fmt()·엑셀 number_format (PR #390).
+    - 화면·엑셀은 valuation.yml 이 다시 돌아야 반영(빌드 산출물 커밋 구조).
+
+50. **화면 공유용 주소 — 새 창 링크를 gs-research-desk.github.io 로** (10/19): 사람들 앞에서 화면을
+    공유할 때 주소창의 `gschoie.github.io/GS-DB2` 와 사이드바(팀원 메뉴)가 드러나는 문제.
+    사용자 선택지 셋(GitHub 그대로 / GitHub 조직 주소 / Cloudflare) 중 **GitHub 조직 주소**.
+    GitHub Pages 는 그대로 두고 **같은 `_site` 를 조직 리포에도 push 하는 이중 배포** — 외부 서비스 0.
+    - 조직 `gs-research-desk` + 리포 `gs-research-desk/gs-research-desk.github.io`(public, Pages 는
+      main 루트에서 자동) → 주소 `https://gs-research-desk.github.io/`. 워크플로 5종(deploy-pages·
+      refresh-news/union/macro/reports)의 build 잡 끝에 `peaceiris/actions-gh-pages@v4`
+      (external_repository·publish_branch main·**force_orphan** — 하루 7회+ 배포라 이력을 안 쌓는다,
+      커밋 작성자는 github-actions[bot] — 조직 리포에 gschoie 가 안 남는다). 시크릿
+      **`SHARE_DEPLOY_TOKEN`**(그 리포 Contents 쓰기 PAT)이 없으면 스텝을 건너뛴다 — **`secrets` 는 step
+      `if` 에서 못 쓴다**(첫 머지 run 이 잡 0개·0초로 실패, 배포 5종 전부 멈춤) → 셸 스텝 출력(`steps.share.outputs.on`)으로 판정,
+      실패해도 본 배포는 그대로(continue-on-error). 두 배포가 겹쳐도 force push 라 마지막 것이 남는다.
+    - `static/app.js` `SHARE_SITE`/`shareUrl`/`shareLinks`: **`target=_blank` 인 같은 사이트
+      링크만** 절대주소로 바꾼다(로드 때 1회 + 캡처 단계 click/auxclick 로 나중에 그려지는
+      오늘의 요약 카드 링크까지). 대시보드 안 iframe(data-view)은 상대경로 그대로.
+      조직 이름을 다르게 지으면 **`SHARE_SITE` 한 줄 + 워크플로 5곳의 external_repository** 를 고친다.
+    - 외부 사이트 둘도 래퍼로: 챗봇 새 창 → `chat_full.html`(있던 것), 콜라보 레이더 →
+      `collab_full.html` 신설(build_static 복사 목록에 추가). 주소창엔 공유용 주소만 보인다.
+    - 공유 허브 `invest.html` 에 **아침 브리핑 3장**(방산 통합·건기 통합·친환경E/FDC) 추가 —
+      공유 때 이 페이지를 공유용 주소로 띄워 두면 된다.
+    - 비번 가림막(gate.py)은 산출물에 박혀 있어 공유용 주소에서도 그대로 — 단 localStorage 가
+      origin 별이라 거기서 비번을 한 번 더 넣는다. `build_static.previous_payload()` 안전망은
+      계속 github.io/GS-DB2 를 읽는다(원본 배포).
+    - 왜 Cloudflare 가 아닌가: 8/18 의 CF Pages 프로젝트는 Access 상태·토큰 유효성을 컨테이너에서
+      확인할 수 없고(pages.dev egress 차단) 외부 서비스 하나가 더 붙는다. 조직 주소는 GitHub 안에서 끝난다.
+    - 검증: 스크래치 빌드를 Playwright 로 열어 open-new 22개·새 탭 링크 35개 전부 공유용 주소,
+      동적 링크 클릭 시점 치환 확인. `cf-access-public-reports.yml` 은 11번에 '삭제'로 적혀 있지만
+      실제로 남아 있다(수동 실행 전용, 무해).
+    - **사용자 설치**: ① github.com → New organization(Free) 이름 `gs-research-desk`(이미 있으면 다른
+      이름 → SHARE_SITE·external_repository 변경) ② 그 조직에 **public** 리포
+      `gs-research-desk.github.io` 생성(README 하나로 초기화해 main 을 만든다) ③ Settings → Pages 에서
+      Source=Deploy from a branch, main / (root) 확인 ④ Settings → Developer settings → Fine-grained
+      PAT: Resource owner = 조직 gs-research-desk, 리포 그 하나, **Contents: Read and write** →
+      GS-DB2 리포 시크릿 `SHARE_DEPLOY_TOKEN` ⑤ deploy-pages 를 Run workflow → 조직 리포에 커밋이
+      생기고 몇 분 뒤 `https://gs-research-desk.github.io/invest.html` 이 열리면 끝.
+      조직 멤버는 기본 비공개라 조직 페이지에 gschoie 가 안 보인다(확인: 조직 People → Private).
 
 이후 작업은 git log와 이 파일을 갱신하며 이어간다.

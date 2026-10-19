@@ -27,15 +27,23 @@ def _keys():
     return k, s
 
 
-def token():
+def token(tries=5, wait=20):
+    """한투는 토큰 발급을 분당 1회로 제한 — 같은 앱키를 쓰는 다른 잡(수급 10:00 등)과
+    같은 분에 시작하면 403 이 온다(10/19 10:04 실측: market-flow 와 동시 시작 →
+    19/21종목 연쇄 실패). 종목별 재시도(0.7s)로는 같은 분을 못 벗어나므로
+    여기서 분 경계를 넘겨 기다렸다 다시 받는다."""
     if _c["t"] and time.time() - _c["ts"] < 60 * 60 * 23:
         return _c["t"]
     k, s = _keys()
-    r = requests.post(f"{BASE}/oauth2/tokenP", timeout=15,
-                      json={"grant_type": "client_credentials", "appkey": k, "appsecret": s})
-    r.raise_for_status()
-    _c.update(t=r.json()["access_token"], ts=time.time())
-    return _c["t"]
+    for i in range(tries):
+        r = requests.post(f"{BASE}/oauth2/tokenP", timeout=15,
+                          json={"grant_type": "client_credentials", "appkey": k, "appsecret": s})
+        if r.status_code == 403 and i < tries - 1:
+            time.sleep(wait)
+            continue
+        r.raise_for_status()
+        _c.update(t=r.json()["access_token"], ts=time.time())
+        return _c["t"]
 
 
 def _h(tr):
@@ -119,6 +127,40 @@ def investor_frame(rows):
     for a, b in [("개인", "prsn_ntby_tr_pbmn"), ("외국인", "frgn_ntby_tr_pbmn"), ("기관", "orgn_ntby_tr_pbmn")]:
         df[a] = pd.to_numeric(df.get(b), errors="coerce").fillna(0) / 100   # 백만원→억원
     return df[["date", "개인", "외국인", "기관"]].drop_duplicates("date").sort_values("date").reset_index(drop=True)
+
+
+def naver_trend_frame(rows):
+    """네이버 /api/stock/{code}/trend 행 → DataFrame[date,개인,외국인,기관] (억원 **근사**).
+    네이버는 순매수 '수량'만 주므로 금액 = 수량 × 그날 종가 / 1e8. 체결 평균가가 아니라
+    종가라 정확한 금액과 몇 % 어긋난다 — 한투 금액(최근 30행)이 있는 날짜는 그쪽을 쓴다."""
+    out = []
+    for r in rows or []:
+        try:
+            close = _f(r.get("closePrice"))
+            if not close:
+                continue
+            out.append({"date": pd.to_datetime(str(r["bizdate"])),
+                        "개인": (_f(r.get("individualPureBuyQuant"), 0.0) or 0.0) * close / 1e8,
+                        "외국인": (_f(r.get("foreignerPureBuyQuant"), 0.0) or 0.0) * close / 1e8,
+                        "기관": (_f(r.get("organPureBuyQuant"), 0.0) or 0.0) * close / 1e8})
+        except Exception:
+            continue
+    if not out:
+        return pd.DataFrame(columns=["date", "개인", "외국인", "기관"])
+    df = pd.DataFrame(out).drop_duplicates("date").sort_values("date").reset_index(drop=True)
+    for c in ("개인", "외국인", "기관"):
+        df[c] = df[c].round(1)
+    return df
+
+
+def merge_investor(kis_df, naver_df):
+    """한투(정확, 최근 30행) 우선 + 그 밖의 날짜는 네이버 근사로 보충. 날짜 오름차순."""
+    if naver_df is None or naver_df.empty:
+        return kis_df
+    if kis_df is None or kis_df.empty:
+        return naver_df
+    extra = naver_df[~naver_df["date"].isin(kis_df["date"])]
+    return pd.concat([kis_df, extra], ignore_index=True).sort_values("date").reset_index(drop=True)
 
 
 def fetch_price(code):

@@ -202,6 +202,23 @@ def estimate_row(frame, key):
     return None
 
 
+def fin_row(label, kind, rev, op, ni, end=None):
+    """재무 상세(매출·영업이익·순이익·OPM·NPM) 한 줄. 셋 다 없으면 줄을 만들지 않는다.
+
+    OPM·NPM 은 적자면 음수를 그대로 둔다(ROE 와 같은 원칙 — 해석 가능한 정보).
+    """
+    if rev is None and op is None and ni is None:
+        return None
+    return {
+        "label": label, "kind": kind, "end": end,
+        "revenue": round(rev) if rev is not None else None,
+        "op": round(op) if op is not None else None,
+        "ni": round(ni) if ni is not None else None,
+        "opm": pct(op, rev),
+        "npm": pct(ni, rev),
+    }
+
+
 def collect(company):
     ticker = company["ticker"]
     record = {**company, "warnings": []}
@@ -211,6 +228,7 @@ def collect(company):
     history = call_with_retry("history", lambda: stock.history(period="6y", auto_adjust=False))
     income = call_with_retry("income_stmt", lambda: stock.income_stmt)
     balance = call_with_retry("balance_sheet", lambda: stock.balance_sheet)
+    quarterly = call_with_retry("quarterly_income_stmt", lambda: stock.quarterly_income_stmt)
 
     if history is None or history.empty:
         record["warnings"].append("주가 이력을 가져오지 못했습니다")
@@ -218,6 +236,14 @@ def collect(company):
         return record
 
     closes = history["Close"].copy()
+    # 미국·유럽 장외 시간(아침 KST 실행)에 야후가 마지막 날짜에 NaN 꼬리 행을
+    # 붙인다 — 중복 정리(keep="last") 전에 떨구지 않으면 NaN이 진짜 종가를 덮어
+    # 현재가가 비고 FWD PER·PSR이 통째로 공란이 된다(10/3·10/10·10/17 실측).
+    closes = closes.dropna()
+    if closes.empty:
+        record["warnings"].append("종가가 전부 비어 있어 지표를 만들 수 없습니다")
+        record["years"] = []
+        return record
     closes.index = pd.to_datetime(closes.index).tz_localize(None).normalize()
     closes = closes[~closes.index.duplicated(keep="last")]
 
@@ -390,6 +416,7 @@ def collect(company):
     base_year = (latest_fy + 1) if latest_fy else datetime.now(KST).year
     forward_equity = prior_equity  # 마지막 확정 회계연도의 기말자본
     forward_keys = ["0y", "+1y"]   # 야후가 주는 건 여기까지. 2년후는 항목이 없다.
+    fin_forward = []               # 재무 상세의 올해E·내년E 줄(매출·순이익 컨센)
 
     for offset in range(FORWARD_YEARS):
         fy = base_year + offset
@@ -409,6 +436,11 @@ def collect(company):
             continue
 
         ni_est = (eps_est * latest_shares) if (eps_est and latest_shares) else None
+
+        # 영업이익 컨센은 야후에 없다 → E 줄의 영업이익·OPM 은 공란으로 둔다.
+        forward_fin = fin_row(f"{fy}E", "E", rev_est, None, ni_est)
+        if forward_fin:
+            fin_forward.append(forward_fin)
 
         # 이익잉여금 롤포워드로 예상자본을 굴린다(컨센이 아니라 자체 산출).
         opening_equity = forward_equity
@@ -441,12 +473,60 @@ def collect(company):
             "derived": ["pbr", "roe"],
         })
 
+    # ── 재무 상세(회사 행 클릭 시 펼침): 매출·영업이익·순이익·OPM·NPM ──────
+    # 연간은 HISTORY_YEARS 로 자르지 않고 야후가 주는 전 기간을 담는다(보통 4~5개 연도).
+    # 국내 종목은 아래 네이버 블록에서 분기·연간E 를 국내 컨센으로 교체·보강한다.
+    fin_annual = []
+    if income is not None and hasattr(income, "columns") and not income.empty:
+        for period in sorted(income.columns):
+            stamp = pd.Timestamp(period).tz_localize(None).normalize()
+            row = fin_row(str(stamp.year), "A",
+                          at(revenue, period), at(operating_row, period), at(net_income, period),
+                          end=stamp.date().isoformat())
+            if row:
+                fin_annual.append(row)
+
+    # 분기 확정치는 야후 quarterly_income_stmt 가 주는 전 분기(보통 최근 5개 — 그보다
+    # 옛 분기는 야후 무료 API 가 주지 않는다).
+    fin_quarterly = []
+    last_q_end = None
+    if quarterly is not None and hasattr(quarterly, "columns") and not quarterly.empty:
+        q_net = pick(quarterly, ROW_NET_INCOME)
+        q_rev = pick(quarterly, ROW_REVENUE)
+        q_op = pick(quarterly, ROW_OPERATING)
+        for period in sorted(quarterly.columns):
+            stamp = pd.Timestamp(period).tz_localize(None).normalize()
+            q_no = (stamp.month - 1) // 3 + 1
+            row = fin_row(f"{q_no}Q{stamp.year % 100}", "A",
+                          at(q_rev, period), at(q_op, period), at(q_net, period),
+                          end=stamp.date().isoformat())
+            if row:
+                fin_quarterly.append(row)
+                last_q_end = stamp
+
+    # 분기 컨센은 야후가 0q(진행분기)·+1q(다음분기)까지만 준다 — 내년 분기 컨센은
+    # 항목 자체가 없어 담지 않는다(추정으로 채우지 않음). 분기 기말은 마지막 확정
+    # 분기에서 3개월씩 굴려 적는다(0q 는 아직 발표 전인 그다음 분기).
+    if last_q_end is not None:
+        for step, key in enumerate(("0q", "+1q"), start=1):
+            eps_q = estimate_row(earnings_est, key)
+            rev_q = estimate_row(revenue_est, key)
+            ni_q = (eps_q * latest_shares) if (eps_q is not None and latest_shares) else None
+            q_end = last_q_end + pd.DateOffset(months=3 * step)
+            q_no = (q_end.month - 1) // 3 + 1
+            row = fin_row(f"{q_no}Q{q_end.year % 100}E", "E", rev_q, None, ni_q)
+            if row:
+                fin_quarterly.append(row)
+
     # 국내 종목은 컨센(E) PER·PBR·ROE 를 네이버(에프앤가이드)로 덮어쓴다.
     # 야후엔 EPS·매출 컨센뿐이라 PBR·ROE 를 롤포워드로 만들어 왔는데, 국내는
     # 에프앤가이드 추정치가 원본이다. 못 가져오면 기존 산출값이 그대로 남는다.
     if ticker.upper().endswith((".KS", ".KQ")):
         code = ticker.split(".")[0]
-        overrides = naver_consensus.estimates(code)
+        # 모바일 금융 API(annual·quarter)를 각 1회 조회해 컨센 지표와 재무 상세가 나눠 쓴다.
+        naver_annual = naver_consensus.safe_fetch(code, "annual")
+        naver_quarter = naver_consensus.safe_fetch(code, "quarter")
+        overrides = naver_consensus.estimates(code, finance=naver_annual)
         if overrides:
             applied = 0
             for entry in years:
@@ -467,6 +547,50 @@ def collect(company):
                     applied += len(taken)
             if applied:
                 print(f"    📊 네이버 컨센 {applied}칸 적용")
+
+        # 재무 상세 보강: 분기는 네이버가 영업이익까지(E 포함) 주므로 야후 분기를
+        # 네이버로 교체하고, 네이버 범위 밖(더 미래)의 야후 E 분기만 뒤에 남긴다.
+        fin_naver = naver_consensus.financial_rows(code, annual=naver_annual, quarter=naver_quarter)
+        naver_q = []
+        for q in fin_naver["quarterly"]:
+            q_no = q["month"] // 3
+            row = fin_row(f"{q_no}Q{q['year'] % 100}" + ("E" if q["est"] else ""),
+                          "E" if q["est"] else "A", q["sales"], q["op"], q["ni"])
+            if row:
+                row["src"] = "naver"
+                row["_key"] = (q["year"], q_no)
+                naver_q.append(row)
+        if naver_q:
+            last_key = max(r["_key"] for r in naver_q)
+            tail = []
+            for r in fin_quarterly:
+                m = re.match(r"^(\d)Q(\d\d)E$", r["label"])
+                if r["kind"] == "E" and m and (2000 + int(m.group(2)), int(m.group(1))) > last_key:
+                    tail.append(r)
+            for r in naver_q:
+                del r["_key"]
+            fin_quarterly = naver_q + tail
+            print(f"    📊 네이버 분기 재무 {len(naver_q)}개 적용")
+        # 연간 E 줄: 영업이익 컨센은 네이버에만 있다 → 같은 연도 E 줄을 네이버 값으로 교체
+        # (네이버에 없는 칸은 야후 값 유지).
+        for a in fin_naver["annual"]:
+            if not a["est"]:
+                continue
+            for row in fin_forward:
+                if row["label"] == f"{a['year']}E":
+                    merged = fin_row(row["label"], "E",
+                                     a["sales"] if a["sales"] is not None else row["revenue"],
+                                     a["op"],
+                                     a["ni"] if a["ni"] is not None else row["ni"])
+                    if merged:
+                        merged["src"] = "naver"
+                        row.update(merged)
+
+    record["financials"] = {
+        "currency": fin_ccy or normalized_quote or None,
+        "annual": fin_annual + fin_forward,
+        "quarterly": fin_quarterly,
+    }
 
     record["years"] = years
     return record

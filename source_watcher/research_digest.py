@@ -50,6 +50,8 @@ ENTRY_RE = re.compile(r"^\s*\d{1,2}\.\s+(.+?)(?=^\s*\d{1,2}\.\s|\Z)", re.M | re.
 BULLET_RE = re.compile(r"^\s*[-•]\s+(.+)$", re.M)
 # 제목 정규화용 — 같은 요약이 여러 채널로 퍼날라진 것을 접는다.
 TITLE_NOISE_RE = re.compile(r"[^0-9a-z가-힣]+")
+# 낱개 요약 본문에서 리포트 제목을 감싸는 따옴표 글자들
+QUOTES = "\"'“”‘’"
 
 DEFAULT_WINDOW_HOURS = 24
 MAX_WINDOW_HOURS = 48   # 어제 크론이 통째로 죽었어도 이틀치까지만 몰아 보낸다
@@ -123,6 +125,37 @@ def explode_entries(items: list[adapters.Item]) -> list[adapters.Item]:
                 published_at=item.published_at, origin=item.origin,
             ))
     return exploded
+
+
+def summary_detail(body: str) -> dict | None:
+    """낱개 요약 글 본문에서 실제 리포트 제목·증권사·목표주가를 뽑는다.
+
+    채널 형식(10/19 실측):
+        [✨ 리서치 요약] 쎄트렉아이 목표주가 하향 리포트 요약
+        목표주가 하향 | 쎄트렉아이 | "[혁신성장] 변동성에 대응하는 방법 - 기업"
+        목표주가 210,000원 >> 100,000원 | 투자의견 매수-유지 | 신한투자증권
+    따옴표로 감싼 칸이 리포트 제목이다. 형식이 바뀌어 못 읽으면 None —
+    표시만 첫 줄 요약 제목으로 폴백하고 수집·매칭에는 영향이 없다.
+    """
+    detail: dict = {}
+    lines = [ln.strip() for ln in (body or "").splitlines() if ln.strip()]
+    for line in lines[1:6]:
+        if "|" not in line:
+            continue
+        parts = [p.strip() for p in line.split("|")]
+        quoted = next((p for p in parts
+                       if len(p) >= 2 and p[0] in QUOTES and p[-1] in QUOTES), None)
+        if quoted and "title" not in detail:
+            detail["title"] = quoted.strip(QUOTES).strip()
+            rest = [p for p in parts if p is not quoted]
+            if len(rest) >= 2:
+                detail["company"] = rest[1]
+        elif any(p.startswith("목표주가") for p in parts) and "tp" not in detail:
+            tp = next(p for p in parts if p.startswith("목표주가"))
+            detail["tp"] = " ".join(tp.replace(">>", "→").split())
+            if len(parts) >= 2:
+                detail["broker"] = parts[-1]
+    return detail if detail.get("title") else None
 
 
 def load_digest_state() -> dict:
@@ -209,9 +242,19 @@ def build_digest(items: list[adapters.Item], groups: list[tuple[str, list[str]]]
         item, labels = entry["item"], entry["labels"]
         when = f"{item.published_at.astimezone(KST):%H:%M}" if item.published_at else "?"
         title = MARKER_STRIP_RE.sub("", item.title).strip(" []✨-·:") or item.title
+        # 낱개 요약 글은 "회사 목표주가 하향 리포트 요약" 대신 실제 리포트 제목을 보여준다.
+        detail = (summary_detail(item.body)
+                  if re.search(r"리서치\s*요약", item.title or "") else None)
+        tp_note = ""
+        if detail:
+            bits = [detail.get("company") or "", f"“{detail['title']}”", detail.get("broker") or ""]
+            title = " | ".join(b for b in bits if b)
+            tp_note = detail.get("tp") or ""
         line = f"• <b>[{escape(labels[0])}]</b> {escape(title)}"
         extra = len(entry["channels"]) - 1
         meta = f"{when}" + (f" · {extra + 1}개 채널" if extra > 0 else "")
+        if tp_note:
+            meta = f"{escape(tp_note)} · {meta}"
         if item.url:
             line += f'\n   <a href="{escape(item.url)}">원문</a> · {meta}'
         else:

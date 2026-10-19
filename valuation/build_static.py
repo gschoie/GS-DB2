@@ -39,6 +39,9 @@ METRICS = [
     ("psr", "PSR", "배"),
 ]
 
+# '유럽 중앙값' 묶음 — 유럽 피어는 나라별 1곳씩이라 지역 중앙값이 안 서서 합산한다(방산: 독일·영국·이탈리아·스웨덴).
+EUROPE_REGIONS = ["독일", "영국", "이탈리아", "스웨덴", "프랑스", "노르웨이", "스페인", "핀란드"]
+
 NAVY = "1F4E79"
 EST_FILL = "FFF6E5"
 GROUP_FILL = "EDF1F6"
@@ -175,7 +178,7 @@ def build_xlsx(payload):
                         target = sheet.cell(row=row_index, column=start + offset,
                                             value=value_of(company, entry["year"], key))
                         target.font = body_font
-                        target.number_format = "0.0" if key == "roe" else "0.00"
+                        target.number_format = "0.0"
                         if entry["kind"] == "E":
                             target.fill = est_fill
                 row_index += 1
@@ -185,6 +188,12 @@ def build_xlsx(payload):
             _write_summary(sheet, row_index, column, metric_spans, axis,
                            f"  {region['region']} 중앙값", region["companies"],
                            bold_font, summary_fill)
+            row_index += 1
+        europe = [c for r in block["regions"] if r["region"] in EUROPE_REGIONS
+                  for c in r["companies"]]
+        if len(europe) >= 2:
+            _write_summary(sheet, row_index, column, metric_spans, axis,
+                           "  유럽 중앙값", europe, bold_font, summary_fill)
             row_index += 1
         _write_summary(sheet, row_index, column, metric_spans, axis,
                        f"{block['industry']} 전체 중앙값", block["companies"],
@@ -212,7 +221,7 @@ def build_xlsx(payload):
                 cell = detail.cell(row=offset, column=index, value=value)
                 cell.font = body_font
                 if index >= 6:
-                    cell.number_format = "0.0" if key == "roe" else "0.00"
+                    cell.number_format = "0.0"
         detail.freeze_panes = "F2"
         for index, width in enumerate([18, 11, 10, 10, 12] + [10] * len(axis), 1):
             detail.column_dimensions[get_column_letter(index)].width = width
@@ -297,7 +306,7 @@ def _write_summary(sheet, row_index, end_column, metric_spans, axis, label, comp
             target = sheet.cell(row=row_index, column=start + offset,
                                 value=median_of(companies, entry["year"], key))
             target.font = font
-            target.number_format = "0.0" if key == "roe" else "0.00"
+            target.number_format = "0.0"
             target.fill = fill
 
 
@@ -366,6 +375,18 @@ font-size:13px;padding:0 6px 0 0;line-height:1}
 td.name .tk{color:var(--muted);font-size:11px;margin-left:6px}
 tr.co:hover td{background:rgba(24,95,165,.07)}
 tr.co:hover td.name{background:rgba(24,95,165,.07)}
+/* 회사 행 클릭 → 매출·이익 상세 패널 */
+tr.co td{cursor:pointer}
+tr.fin td.inner{background:var(--grp);text-align:left;white-space:normal;padding:10px 14px 12px}
+.fwrap{display:flex;gap:26px;flex-wrap:wrap;align-items:flex-start}
+.fin table{border-collapse:collapse;font-size:12px;white-space:nowrap}
+.fin th,.fin td{border:0;border-bottom:1px solid var(--line);padding:3px 9px;background:transparent;
+position:static;min-width:0}
+.fin th{font-size:11px;color:var(--muted);font-weight:600}
+.fin th:first-child,.fin td:first-child{text-align:left}
+.fin .est{background:var(--est)}
+.fin .neg{color:var(--bad)}
+.fnote{margin-top:8px;font-size:11px;color:var(--muted)}
 .na{color:var(--muted)}
 .mark{color:var(--accent);font-weight:700}
 .src{color:#0a8f5b;font-weight:700}
@@ -395,6 +416,9 @@ tr.co:hover td.name{background:rgba(24,95,165,.07)}
 <div class="tablewrap"><table><thead id="head"></thead><tbody id="body"></tbody></table></div>
 
 <div class="legend">
+  <b>회사 행을 클릭</b>하면 그 회사의 <b>매출·영업이익·순이익·OPM·NPM</b> 상세
+  (연간 전 기간 + 올해E·내년E / 분기 최근 + 컨센)가 펼쳐진다 —
+  국내 종목의 분기·연간E는 <b>네이버(에프앤가이드) 컨센<span class="src">ᴺ</span></b>으로 보강(영업이익 포함), 해외는 야후 기준.<br>
   <b>확정(A)</b> = 회계연도 기말 주가·재무제표 기준 · <b>컨센(E)</b> = 음영 열, 현재 주가 기준 ·
   <b>시가총액</b> = 백만달러 환산<br>
   <b><span class="src">ᴺ</span> 표시</b>는 <b>국내 컨센(에프앤가이드 · 네이버 금융)</b> 원본이다 —
@@ -414,6 +438,7 @@ const DATA = __PAYLOAD__;
 const METRICS = __METRICS__;
 const AXIS = __AXIS__;
 const BLOCKS = __BLOCKS__;
+const EU_REGIONS = __EU__;   /* 나라별 1곳뿐인 유럽 피어를 '유럽 중앙값' 한 줄로 합산 */
 /* 갱신 버튼 → GitHub Actions 디스패치 GAS 웹앱 (gas/dispatch_proxy.gs).
    workflow 키 'valuation' 은 그 파일의 WF 매핑과 1:1이어야 한다. */
 const DISPATCH_ENDPOINT='https://script.google.com/macros/s/AKfycbx3RjIjtlO2Z6fIYo2T3LhJrFg9Wp2hS7dMS3Is52-JVF1hizoCWewbQ1uM_v5sdhR2jw/exec';
@@ -456,7 +481,7 @@ function axisFor(){
   return [...solid.filter(x=>x.kind==='A').slice(-2),
           ...solid.filter(x=>x.kind==='E').slice(0, 2)];
 }
-const fmt = (v,m) => v==null ? '' : (m==='roe' ? v.toFixed(1) : v.toFixed(2));
+const fmt = (v,m) => v==null ? '' : v.toFixed(1);   /* 전 지표 소수 1자리(사용자 지정) */
 
 /* 값의 출처 표시. ᴺ = 국내 컨센(에프앤가이드/네이버) 원본, * = 우리가 롤포워드로 만든 값.
    출처가 섞인 표라 어느 쪽인지 숨기지 않는다. */
@@ -531,7 +556,7 @@ function render(){
             ` <button class="del all" data-del="__all" title="임시 조회 전체 지우기">전체 지우기</button></td>`+
             `<td colspan="${span-1}"></td></tr>`;
     for(const c of adhoc){
-      html += `<tr class="co"><td class="name">`+
+      html += `<tr class="co" data-co="${c.ticker}|${c.name}"><td class="name">`+
               `<button class="del" data-del="${c.ticker}|${c.name}" title="이 종목 지우기">×</button>`+
               `${c.name}<span class="tk">${c.ticker}</span></td>`+
               `<td>${c.market_cap_musd!=null?c.market_cap_musd.toLocaleString():''}</td>`+
@@ -557,7 +582,7 @@ function render(){
       html += `<tr class="reg"><td class="name">${region.region}`+
               `<span class="cnt">${list.length}</span></td><td colspan="${span-1}"></td></tr>`;
       for(const c of list){
-        html += `<tr class="co"><td class="name">${c.name}<span class="tk">${c.ticker}</span></td>`+
+        html += `<tr class="co" data-co="${c.ticker}|${c.name}"><td class="name">${c.name}<span class="tk">${c.ticker}</span></td>`+
                 `<td>${c.market_cap_musd!=null?c.market_cap_musd.toLocaleString():''}</td>`+
                 cells((m,a)=>{
                   const y=(c.years||[]).find(y=>y.year===a.year);
@@ -572,6 +597,10 @@ function render(){
       html += `<tr class="sum"><td class="name">${region.region} 중앙값</td><td></td>`+
               cells((m,a)=>fmt(median(list,a.year,m),m), axis) + '</tr>';
     }
+    const eu = inBlock.filter(c=>EU_REGIONS.includes(c.region));
+    if(eu.length>=2)
+      html += `<tr class="sum"><td class="name">유럽 중앙값</td><td></td>`+
+              cells((m,a)=>fmt(median(eu,a.year,m),m), axis) + '</tr>';
     html += `<tr class="sum"><td class="name">${block.industry} 전체 중앙값</td><td></td>`+
             cells((m,a)=>fmt(median(inBlock,a.year,m),m), axis) + '</tr>';
   }
@@ -597,8 +626,58 @@ document.getElementById('chips').addEventListener('click', e=>{
   render();
 });
 document.getElementById('q').addEventListener('input', e=>{ state.q = e.target.value; render(); });
+
+/* ── 회사 행 클릭 → 매출·영업이익·순이익·OPM·NPM 상세 ──
+   연간은 야후가 주는 전 기간(보통 4~5개 연도) + 올해E·내년E 컨센,
+   분기는 야후가 주는 최근 분기(보통 5개) + 0q·+1q 컨센.
+   영업이익 컨센·그 너머 분기 컨센은 야후에 항목이 없어 비워 둔다(지어내지 않는다). */
+const FIN_ROWS=[['revenue','매출'],['op','영업이익'],['ni','순이익'],['opm','OPM'],['npm','NPM']];
+function finTable(title, rows, scale){
+  if(!rows || !rows.length)
+    return `<div class="fnote">${title}: 야후에 데이터가 없습니다.</div>`;
+  let h=`<table><tr><th>${title}</th>`+
+    rows.map(r=>`<th class="${r.kind==='E'?'est':''}">${r.label}${r.src==='naver'?'<span class="src">ᴺ</span>':''}</th>`).join('')+'</tr>';
+  for(const [k,l] of FIN_ROWS){
+    h+=`<tr><td>${l}${k==='opm'||k==='npm'?' (%)':''}</td>`+rows.map(r=>{
+      const v=r[k];
+      const s=v==null?'':(k==='opm'||k==='npm'?v.toFixed(1):scale(v));
+      return `<td class="${r.kind==='E'?'est':''}${v!=null&&v<0?' neg':''}">${s}</td>`;
+    }).join('')+'</tr>';
+  }
+  return h+'</table>';
+}
+function finDetail(c, span){
+  const f=c.financials;
+  let body;
+  if(!f || (!(f.annual||[]).length && !(f.quarterly||[]).length)){
+    body='재무 상세가 아직 수집되지 않았습니다 — <b>▶ 수집 실행</b> 후(배포까지 3~5분) 새로고침하면 보입니다.';
+  }else{
+    const ccy=f.currency||'';
+    const kr=ccy==='KRW', jp=ccy==='JPY';
+    const div=(kr||jp)?1e8:1e6;
+    const unit=kr?'억원':(jp?'억엔':'백만 '+(ccy||'?'));
+    const scale=v=>Math.round(v/div).toLocaleString();
+    const hasN=[...(f.annual||[]),...(f.quarterly||[])].some(r=>r.src==='naver');
+    body=`<div class="fwrap"><div>${finTable('연간',f.annual,scale)}</div>`+
+         `<div>${finTable('분기',f.quarterly,scale)}</div></div>`+
+         `<div class="fnote">단위 ${unit} · OPM=영업이익률 · NPM=순이익률 · 음영=컨센(E) · `+
+         (hasN
+           ? `<span class="src">ᴺ</span>=네이버(에프앤가이드) 국내 컨센 — 분기와 연간E는 영업이익 컨센까지 네이버로 보강, 표식 없는 열은 야후 · `
+           : `컨센은 야후 기준 — 영업이익 컨센과 다다음 분기 너머의 분기 컨센은 야후가 제공하지 않아 공란 · `)+
+         `분기 확정치는 무료 소스가 최근 4~5개 분기까지만 준다</div>`;
+  }
+  return `<tr class="fin"><td class="inner" colspan="${span}">${body}</td></tr>`;
+}
+
 document.getElementById('body').addEventListener('click', e=>{
-  const b = e.target.closest('.del'); if(b) hideAdhoc(b.dataset.del);
+  const b = e.target.closest('.del'); if(b){ hideAdhoc(b.dataset.del); return; }
+  const row = e.target.closest('tr.co[data-co]'); if(!row) return;
+  const open = row.nextElementSibling;
+  if(open && open.classList.contains('fin')){ open.remove(); return; }
+  const c = [...DATA.companies, ...(DATA.adhoc||[])].find(x=>x.ticker+'|'+x.name===row.dataset.co);
+  if(!c) return;
+  const span = 2 + activeMetrics().length*axisFor().length;
+  row.insertAdjacentHTML('afterend', finDetail(c, span));
 });
 
 /* 수집 실행 — GAS 프록시가 valuation.yml 을 workflow_dispatch 로 돌린다.
@@ -678,6 +757,7 @@ def build_html(payload):
             .replace("__METRICS__", json.dumps([[k, l, u] for k, l, u in METRICS], ensure_ascii=False))
             .replace("__AXIS__", json.dumps(axis, ensure_ascii=False))
             .replace("__BLOCKS__", json.dumps(blocks, ensure_ascii=False))
+            .replace("__EU__", json.dumps(EUROPE_REGIONS, ensure_ascii=False))
             .replace("__HY__", str(payload.get("history_years", 4)))
             .replace("__UPDATED__", payload.get("updated_at", "")[:16].replace("T", " ")))
     OUT_HTML.parent.mkdir(parents=True, exist_ok=True)

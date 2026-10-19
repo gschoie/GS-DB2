@@ -23,18 +23,14 @@ EXTREME_PCTL = 5       # 1년 하위/상위 5% 안이면 '극단'
 RSI_LO, RSI_HI = 30, 70
 
 # ── 슬롯 ────────────────────────────────────────────────────────
-SLOTS = [("10:00", "11:45"), ("13:30", "14:30"), ("15:30", "24:00")]
+# 10/19 사용자 요청으로 장중 3회(10:00·13:30·15:30) → 장 마감 후 16:00 하루 1회.
+# 하루 한 슬롯이라 수동 🔄 수집도 같은 슬롯에 붙는다(히스토리 파일명 공유 = 그날 최신본 유지).
+SLOTS = [("16:00", "24:00")]
 
 
 def decide_slot(now=None):
-    """KST 시각 → 슬롯 라벨. 경계(11:45/14:30)는 워크플로 guard 와 같아야 한다."""
-    now = now or datetime.now(KST)
-    hm = now.hour * 100 + now.minute
-    if hm < 1145:
-        return "10:00"
-    if hm < 1430:
-        return "13:30"
-    return "15:30"
+    """하루 한 슬롯 — 언제 돌아도 16:00 슬롯 소속."""
+    return "16:00"
 
 
 # ── 기술 지표 ────────────────────────────────────────────────────
@@ -121,6 +117,87 @@ def technicals(ohlc, today, price_now=None):
     }
 
 
+RET_WINDOWS = {"w1": 5, "m1": 21, "m3": 63}      # 거래일 오프셋(건기 브리핑과 같은 규칙)
+
+
+def returns(ohlc, today, price_now=None, chg_pct=None):
+    """등락률 {d1, w1, m1, m3, ytd} (%). 기준가 = 오늘 현재가(장중) 또는 마지막 종가.
+    w1/m1/m3 는 거래일 5/21/63 전 종가 대비, ytd 는 전년 마지막 종가 대비.
+    d1 은 KIS 전일대비(chg_pct)를 그대로 쓴다 — 장중엔 현재가/전일종가, 휴장일엔 마지막 종가의 전일대비.
+    과거 봉이 모자라면 그 칸만 None."""
+    if ohlc is None or ohlc.empty:
+        return {}
+    today = pd.Timestamp(today)
+    conf = ohlc[ohlc["date"] < today]
+    closes = list(conf["c"])
+    dates = list(conf["date"])
+    if price_now:
+        closes.append(float(price_now)); dates.append(today)
+    elif (ohlc["date"] == today).sum():
+        row = ohlc[ohlc["date"] == today].iloc[-1]
+        closes.append(float(row["c"])); dates.append(today)
+    if not closes:
+        return {}
+    last = closes[-1]
+    out = {"d1": None if chg_pct is None else round(float(chg_pct), 2)}
+    if out["d1"] is None and len(closes) >= 2 and closes[-2]:
+        out["d1"] = round((last / closes[-2] - 1) * 100, 2)
+    for k, n in RET_WINDOWS.items():
+        out[k] = round((last / closes[-1 - n] - 1) * 100, 2) if len(closes) > n and closes[-1 - n] else None
+    prev_year = [c for c, d in zip(closes, dates) if d.year < today.year]
+    out["ytd"] = round((last / prev_year[-1] - 1) * 100, 2) if prev_year and prev_year[-1] else None
+    return out
+
+
+SPARK_DAYS = 63
+
+
+def spark_points(ohlc, today, price_now=None, n=SPARK_DAYS):
+    """등락률 표의 3개월 미니 차트용 종가 n개(오름차순). 장중이면 오늘 현재가를 끝에 붙인다."""
+    if ohlc is None or ohlc.empty:
+        return []
+    today = pd.Timestamp(today)
+    closes = [float(x) for x in ohlc[ohlc["date"] < today]["c"] if x == x]
+    if price_now:
+        closes.append(float(price_now))
+    elif (ohlc["date"] == today).sum():
+        closes.append(float(ohlc[ohlc["date"] == today].iloc[-1]["c"]))
+    return [round(x, 2) for x in closes[-n:]]
+
+
+FLOW_WINDOWS = {"d5": 5, "m1": 21, "m3": 63}
+
+
+def flow_windows(inv, today):
+    """투자자별 구간 합산(억원) {"frgn":{today,d5,m1,m3,ytd}, "inst":…, "indiv":…, "rows": n}.
+    창은 오늘 잠정 행 포함 최근 n행. 행이 모자라면 그 칸은 None(합산이 '작게' 나오는 것보다
+    빈칸이 낫다 — 30번 교훈). ytd 는 전년도 행이 하나라도 있어 연초가 덮일 때만."""
+    out = {"rows": 0}
+    if inv is None or inv.empty:
+        return out
+    today = pd.Timestamp(today)
+    inv = inv[inv["date"] <= today]
+    has_today = bool((inv["date"] == today).sum())
+    out["rows"] = int(len(inv))
+    covers_year = bool((inv["date"].dt.year < today.year).any())
+    for who, col in (("frgn", "외국인"), ("inst", "기관"), ("indiv", "개인")):
+        w = {"today": round(float(inv.iloc[-1][col]), 1) if has_today else None}
+        for k, nrow in FLOW_WINDOWS.items():
+            w[k] = round(float(inv[col].iloc[-nrow:].sum()), 1) if len(inv) >= nrow else None
+        w["ytd"] = round(float(inv[inv["date"].dt.year == today.year][col].sum()), 1) if covers_year else None
+        out[who] = w
+    return out
+
+
+def drop_today(inv, today):
+    """장이 아직 안 열렸는데(live=False) 소스가 '오늘' 행을 0으로 미리 내주면 버린다.
+    10/19 05:57 실측: 한투 inquire-investor 가 당일 행을 0 으로 주어 '오늘 0' 이 찍히고
+    5일 창의 하루를 잡아먹었다. 거짓 0 은 빈칸보다 나쁘다(30번 교훈)."""
+    if inv is None or inv.empty:
+        return inv
+    return inv[inv["date"] < pd.Timestamp(today)].reset_index(drop=True)
+
+
 # ── 수급 ────────────────────────────────────────────────────────
 def streak(vals):
     """최근 값부터 같은 부호가 며칠 이어졌나(+n 순매수, −n 순매도). 0 이면 0."""
@@ -161,6 +238,7 @@ def flow_summary(inv, today, mcap, days=FLOW_DAYS):
         t = inv.iloc[-1]
         out.update(frgn_today=round(float(t["외국인"]), 1), inst_today=round(float(t["기관"]), 1),
                    indiv_today=round(float(t["개인"]), 1))
+    out["win"] = flow_windows(inv, today)
     return out
 
 
