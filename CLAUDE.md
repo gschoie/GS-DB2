@@ -1022,7 +1022,7 @@
 49. **DART 생산능력·생산실적·가동률 수집 신설** (10/19): `dart_capacity/` — config/companies.yaml 16개사
     (조선·조기·방산·건기, 대한조선은 종목코드 공란 → corpCode 이름 매칭). 파이프라인 fetch → extract →
     normalize(Claude) → dashboard. 워크플로 `dart-capacity.yml`(3·5·8·11월 20일 07:00 KST + 수동: codes·
-    stage=fetch-extract|full·force). 사이드바 `🦿 업무자동화 > 🏭 생산능력·가동률(DART)` + 🔄 수집 버튼
+    stage=fetch-extract|full·force). 사이드바 `🦿 업무자동화 > 🏭 전자공시 - 생산능력` + 🔄 수집 버튼
     (GAS `dartcap` 라우트, stage=full — **GAS 재붙여넣기 필요**), build_static 이 dashboard/index.html →
     `dart_capacity_report.html`, data/normalized/ → `dart_capacity/normalized/`(런타임 fetch) 복사.
     - **컨테이너는 OpenDART·DART 둘 다 프록시 403** → 실행은 러너에서만. 가짜 DART XML 테스트
