@@ -342,6 +342,27 @@ class Outputs(unittest.TestCase):
                 notify.main([])
         self.assertEqual(sent, [("<b>", "HTML")])
 
+    def test_text_rides_as_album_caption(self):
+        """캡쳐가 있으면 본문이 앨범 캡션(사진 밑)으로 간다 — 1024자 이내면 send() 미호출, 넘치면 옛 방식."""
+        d = fake_payload(); d["errors"] = []
+        calls = []
+        with tempfile.TemporaryDirectory() as tmp:
+            latest, status = os.path.join(tmp, "l.json"), os.path.join(tmp, "s.json")
+            for i in range(3):
+                open(os.path.join(tmp, f"capture_{i}.png"), "wb").write(b"x")
+            with open(latest, "w", encoding="utf-8") as f:
+                json.dump(d, f, ensure_ascii=False)
+            with unittest.mock.patch.object(notify, "LATEST", latest), unittest.mock.patch.object(notify, "STATUS", status), \
+                 unittest.mock.patch.object(notify, "send", lambda text, parse_mode=None: calls.append(("text", parse_mode)) or {"ok": True}), \
+                 unittest.mock.patch.object(notify, "send_photos", lambda paths, caption="", parse_mode=None: calls.append(("album", parse_mode, len(paths), caption[:3], len(caption))) or {"ok": True}):
+                notify.main(["--photos", os.path.join(tmp, "capture_*.png")])
+                self.assertEqual(calls, [("album", "HTML", 3, "<b>", len(notify.compose_html(d)))])
+                # 긴 본문: 캡션 한도 초과 → 본문 따로(HTML) + 사진은 짧은 캡션
+                calls.clear()
+                with unittest.mock.patch.object(notify, "compose_html", lambda dd: "<b>x</b>" + "y" * 1100):
+                    notify.main(["--photos", os.path.join(tmp, "capture_*.png")])
+                self.assertEqual(calls[0], ("text", "HTML")); self.assertEqual(calls[1][:2], ("album", None))
+
     def test_compose_empty(self):
         txt = notify.compose({"asof": "2026-10-16 10:01", "rows": [], "etfs": [], "active": []})
         self.assertIn("순매수 종목 없음", txt); self.assertIn("첫 수집", txt); self.assertIn("극단권 종목 없음", txt)
