@@ -39,6 +39,11 @@
 - **뉴스 캐시**: 캐시는 뉴스DB·노조로 분리, 복원은 읽기전용·저장은 수집 run만. push 배포도 캐시 DB 사용(옛 커밋 DB로 덮어쓰는 7/8 리버트 사고의 원인이었음). 전체 재분류(rebuild)는 파서 변경 시 1회만.
 - **Gemini 쿼터**: recipe_bot은 전용 키 `RECIPE_GEMINI_API_KEY`(별도 GCP 프로젝트) 사용, 모델은 `gemini-flash-lite-latest` 등 최신 별칭 우선, 429 시 65초 대기·재시도.
 - **배포 안전망(verify)**: 메뉴명 하드코딩 대신 키워드 매칭 — 메뉴 이름을 바꿔도 배포가 깨지지 않게 유지할 것.
+- **셸에서 KST 시각을 UTC로 바꿀 때 `TZ=Asia/Seoul date -u -d "today HH:MM"` 금지** — `-u`가 TZ를
+  덮어써 HH:MM을 UTC로 읽는다(10/19 수급 텔레 재발송 사고: 가드의 since가 미래가 되어 무력화).
+  올바른 형태: `d=$(TZ=Asia/Seoul date +%F); date -u -d "TZ=\"Asia/Seoul\" $d HH:MM"`.
+  또한 지연 크론은 슬롯 **정시 이전**에도 떨어질 수 있다(10:00 크론이 14:39 도착) — 가드에
+  "정시 전 도착이면 스킵(정시는 GAS 시계 담당)" 조건을 함께 둘 것.
 - **`telegram_research_dashboard/build_static.py` 를 로컬에서 그냥 돌리지 말 것**:
   `DASHBOARD_OUTPUT` 이 없으면 `OUTPUT.parent` 가 **리포 루트**라 ① 배포본 400여 개가
   루트에 쏟아지고 ② 마지막의 `apply_to_tree(OUTPUT.parent)` 가 리포 전체를 훑어

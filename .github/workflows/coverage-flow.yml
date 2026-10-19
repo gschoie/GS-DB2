@@ -49,7 +49,17 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          since=$(TZ=Asia/Seoul date -u -d "today 15:30" +%Y-%m-%dT%H:%M)
+          hm=$(TZ=Asia/Seoul date +%H%M)
+          # 슬롯 정시(16:00) 전에 도착한 밀린 크론은 버린다 — 정시는 GAS 시계가 쏜다.
+          if [ "$hm" -lt 1600 ]; then
+            echo "::notice::정시(16:00) 전 도착한 지연 크론 — 건너뜁니다"
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          # KST 15:30 → UTC 변환. 'date -u -d "today 15:30"'은 -u가 TZ를 덮어써
+          # 15:30을 UTC로 읽는 버그(10/19 market-flow 재발송 사고와 동일 패턴).
+          d=$(TZ=Asia/Seoul date +%F)
+          since=$(date -u -d "TZ=\"Asia/Seoul\" $d 15:30" +%Y-%m-%dT%H:%M)
           slot=1600; from="15:30"
           n=$(gh api "repos/${{ github.repository }}/actions/workflows/coverage-flow.yml/runs?created=%3E${since}" \
                 --jq "[.workflow_runs[] | select(.id != ${{ github.run_id }}) \
