@@ -93,6 +93,8 @@ const dartUrl = r => `https://dart.fss.or.kr/dsaf001/main.do?rcpNo=${r.source_rc
 const link = (r, text) => `<a href="${dartUrl(r)}" target="_blank" rel="noopener" title="${esc(r.report_label || r.source_rcept_no)}">${text}</a>`;
 const periodKey = r => r.period;                       // 'YYYY-MM' 기말 — 정렬 키
 const periodLabel = r => r.period_label || r.period;    // '2025.06 반기'
+// 능력·실적 단위가 같을 때만 한 차트(한 축)에 같이 그린다 — HD현대중공업처럼 능력 천GT·실적 백만원이면 따로.
+const sameUnit = r => !r.production_unit || !r.capacity_unit || r.production_unit === r.capacity_unit;
 const lineKey = r => `${r.stock_code}|${r.segment || ""}|${r.product || ""}|${r.unit || ""}`;
 
 async function load() {
@@ -169,12 +171,14 @@ function renderSeries(rows) {
       const pts = [...dedup.values()].sort((a, b) => a.period.localeCompare(b.period));
       const r0 = pts[0];
       const title = [r0.segment, r0.product].filter(Boolean).join(" / ") || "전체";
-      html += `<h4 style="margin:12px 0 4px;font-size:14px">${esc(title)} <span class="pill">${esc(r0.unit || "단위 미기재")}</span></h4>
+      html += `<h4 style="margin:12px 0 4px;font-size:14px">${esc(title)} <span class="pill">${esc(sameUnit(r0) ? (r0.unit || r0.capacity_unit || "단위 미기재") : `능력 ${r0.capacity_unit || "?"} · 실적 ${r0.production_unit || "?"}`)}</span></h4>
         <div class="charts">
-          ${chart(pts, [["capacity", "생산능력", "var(--s1)"], ["production", "생산실적", "var(--s2)"]], r0.unit || "")}
+          ${sameUnit(r0)
+            ? chart(pts, [["capacity", "생산능력", "var(--s1)"], ["production", "생산실적", "var(--s2)"]], r0.unit || "")
+            : chart(pts, [["capacity", "생산능력", "var(--s1)"]], r0.capacity_unit || r0.unit || "") + chart(pts, [["production", "생산실적", "var(--s2)"]], r0.production_unit || "")}
           ${chart(pts, [["utilization_pct", "가동률", "var(--s3)"]], "%")}
         </div>
-        <div class="tscroll"><table><thead><tr><th>보고 기간</th><th>보고서</th><th>생산능력</th><th>생산실적</th><th>가동률</th><th style="text-align:left">비고</th></tr></thead><tbody>
+        <div class="tscroll"><table><thead><tr><th>보고 기간</th><th>보고서</th><th>생산능력${r0.capacity_unit ? " (" + esc(r0.capacity_unit) + ")" : ""}</th><th>생산실적${r0.production_unit ? " (" + esc(r0.production_unit) + ")" : ""}</th><th>가동률</th><th style="text-align:left">비고</th></tr></thead><tbody>
         ${pts.map(r => `<tr><td>${esc(periodLabel(r))}</td><td class="lbl">${link(r, esc(r.report_type_label || r.report_type || "원문"))}</td><td>${link(r, fmt(r.capacity))}</td><td>${link(r, fmt(r.production))}</td><td>${link(r, fmt(r.utilization_pct, "utilization_pct"))}</td><td class="lbl" style="white-space:normal;min-width:200px">${esc(r.note || "")}</td></tr>`).join("")}
         </tbody></table></div>`;
     }
