@@ -7,7 +7,7 @@
 둘 다 없으면 발송을 건너뛰고 status 에 사유만 남긴다. 전송 결과는 telegram_status.json 에.
 """
 from __future__ import annotations
-import os, sys, json, urllib.request, urllib.error
+import os, sys, json, html, urllib.request, urllib.error
 from datetime import datetime, timezone, timedelta
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -109,6 +109,14 @@ def compose(d):
     return "\n".join(L)
 
 
+def compose_html(d):
+    """compose() 의 평문을 HTML 모드용으로 — 머리글(첫 줄)만 <b>…</b>(사용자 요청 10/19).
+    본문은 전부 escape 하므로 종목명의 '&'(LIG D&A)도 안전하다."""
+    lines = compose(d).split("\n")
+    out = [f"<b>{html.escape(lines[0])}</b>"] + [html.escape(x) for x in lines[1:]]
+    return "\n".join(out)
+
+
 def _multipart(fields, files):
     """fields: {name: str}, files: {field_name: path} → (body, content-type)"""
     import uuid
@@ -156,11 +164,14 @@ def send_photos(paths, caption=""):
         return {"ok": False, "description": f"{type(e).__name__}: {e}"}
 
 
-def send(text):
+def send(text, parse_mode=None):
     tok, chat = _creds()
     if not tok or not chat:
         return {"ok": False, "description": "텔레그램 토큰/채팅ID 미설정 (COVFLOW_TELEGRAM_CHAT_ID 또는 TELEGRAM_CHAT_ID_PRIVATE 필요 — 공개채널로는 보내지 않음)"}
-    data = json.dumps({"chat_id": chat, "text": text, "disable_web_page_preview": True}).encode("utf-8")
+    body = {"chat_id": chat, "text": text, "disable_web_page_preview": True}
+    if parse_mode:
+        body["parse_mode"] = parse_mode
+    data = json.dumps(body).encode("utf-8")
     req = urllib.request.Request(f"https://api.telegram.org/bot{tok}/sendMessage", data=data,
                                  headers={"Content-Type": "application/json"})
     try:
@@ -202,7 +213,9 @@ def main(argv=None):
                        "description": msg, "token_set": bool(tok), "chat_set": bool(chat),
                        "slot": d.get("slot"), "photo_ok": None}, f, ensure_ascii=False, indent=1)
         return 0
-    res = send(text)
+    res = send(compose_html(d), parse_mode="HTML")
+    if not res.get("ok") and "parse" in str(res.get("description", "")).lower():
+        res = send(text)                      # HTML 파싱 거부 시 평문 폴백(머리글만 볼드가 빠진다)
     # 사진은 본문 뒤에 — 본문이 실패하면 사진도 안 보낸다(반쪽 메시지 방지). 사진 실패는 경고만.
     pres = None
     if res.get("ok") and photos:

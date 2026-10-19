@@ -325,6 +325,23 @@ class Outputs(unittest.TestCase):
         with unittest.mock.patch.dict(os.environ, env, clear=True):
             self.assertEqual(notify._creds(), ("t2", "-100999"))
 
+    def test_compose_html_bold_header_and_escape(self):
+        d = fake_payload(); d["rows"][0]["name"] = "LIG D&A"; d["errors"] = []
+        h = notify.compose_html(d)
+        first = h.split("\n")[0]
+        self.assertTrue(first.startswith("<b>[GS 조선·방산·건기] 수급 브리핑") and first.endswith("</b>"), first)
+        self.assertIn("LIG D&amp;A", h); self.assertNotIn("D&A", h)
+        self.assertEqual(h.count("<b>"), 1)                                    # 머리글만 볼드
+        sent = []
+        with tempfile.TemporaryDirectory() as tmp:
+            latest, status = os.path.join(tmp, "l.json"), os.path.join(tmp, "s.json")
+            with open(latest, "w", encoding="utf-8") as f:
+                json.dump(d, f, ensure_ascii=False)
+            with unittest.mock.patch.object(notify, "LATEST", latest), unittest.mock.patch.object(notify, "STATUS", status), \
+                 unittest.mock.patch.object(notify, "send", lambda text, parse_mode=None: sent.append((text[:3], parse_mode)) or {"ok": True}):
+                notify.main([])
+        self.assertEqual(sent, [("<b>", "HTML")])
+
     def test_compose_empty(self):
         txt = notify.compose({"asof": "2026-10-16 10:01", "rows": [], "etfs": [], "active": []})
         self.assertIn("순매수 종목 없음", txt); self.assertIn("첫 수집", txt); self.assertIn("극단권 종목 없음", txt)
@@ -518,7 +535,7 @@ class CollectGuard(unittest.TestCase):
                 json.dump(payload, f, ensure_ascii=False)
             sent = []
             with unittest.mock.patch.object(notify, "LATEST", latest), unittest.mock.patch.object(notify, "STATUS", status), \
-                 unittest.mock.patch.object(notify, "send", lambda text: sent.append(text) or {"ok": True}), \
+                 unittest.mock.patch.object(notify, "send", lambda text, parse_mode=None: sent.append(text) or {"ok": True}), \
                  unittest.mock.patch.object(notify, "send_photos", lambda *a, **k: sent.append("photo") or {"ok": True}):
                 rc = notify.main(["--photos", os.path.join(d, "none_*.png")])
             self.assertEqual(rc, 0); self.assertEqual(sent, [])
@@ -530,7 +547,7 @@ class CollectGuard(unittest.TestCase):
             with open(latest, "w", encoding="utf-8") as f:
                 json.dump(payload, f, ensure_ascii=False)
             with unittest.mock.patch.object(notify, "LATEST", latest), unittest.mock.patch.object(notify, "STATUS", status), \
-                 unittest.mock.patch.object(notify, "send", lambda text: sent.append(text) or {"ok": True}):
+                 unittest.mock.patch.object(notify, "send", lambda text, parse_mode=None: sent.append(text) or {"ok": True}):
                 notify.main([])
             self.assertEqual(len(sent), 1)
 
