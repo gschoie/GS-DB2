@@ -26,6 +26,7 @@ import sys
 import time
 from pathlib import Path
 
+from canonical import canonicalize
 from common import DART_VIEWER, EXTRACTED, NORMALIZED, REVIEW_CSV, DATA
 
 PROCESSED = DATA / "processed.json"
@@ -90,7 +91,12 @@ SYSTEM = """당신은 한국 상장사 정기보고서(DART)의 '생산능력 / 
 6. 합계 행(계·합계·소계)도 segment='합계'(또는 '<부문> 계') 로 남긴다. 회사 이름이 행에 있으면(연결 자회사별) product 에 넣는다.
 7. 능력이 금액 기준(백만원 등)이면 basis='amount' 로 적고 note 에 '금액 기준' 을 쓴다. 가동률 산식·산출기준·(*1) 주석은 note 에 요약한다.
 8. 생산능력·실적·가동률과 무관한 표(투자 계획, 사업장 주소, 원재료 매입)는 행을 만들지 말고 review 에 표 번호와 이유를 적어라. 숫자를 읽을 수 없거나 구조가 모호한 표도 review 로.
-9. 숫자는 쉼표를 뺀 숫자형으로. 가동률 '79.72%'→79.72. 음수·괄호는 그대로 음수로."""
+9. 숫자는 쉼표를 뺀 숫자형으로. 가동률 '79.72%'→79.72. 음수·괄호는 그대로 음수로.
+10. segment·product 는 원문 글자를 쓰되 글자 사이 공백은 지워라('엔 진 기 계'→'엔진기계', '선 박'→'선박'). 회사·사업소가
+    행을 가르면 product 를 '품목 (회사)' 꼴로 적고, 품목 설명이 길면 첫 품목 이름만 쓴다(같은 줄이 보고서마다 같은 이름이 되게).
+11. 능력·실적·가동률 표가 따로 있고 각 표가 (사업부문, 회사/사업소) 로 행을 가르면, 품목 설명이 표마다 달라도
+    **같은 (사업부문, 회사/사업소) 는 한 줄**로 합치고 product 는 능력 표의 품목을 쓴다(HD현대중공업: 능력 '선박엔진',
+    가동률 '엔진류, 기계설비 등' 은 같은 줄)."""
 
 
 def _client():
@@ -243,6 +249,7 @@ def finalize(meta: dict, result: dict) -> tuple[list[dict], list[dict]]:
                            "reason": r.get("reason", "")} for r in result.get("review", [])]
     seen: set[tuple] = set()
     for r in result.get("rows", []):
+        r = _zero_dash(r)
         if r.get("capacity") is None and r.get("production") is None and r.get("utilization_pct") is None:
             continue                                                  # 숫자가 하나도 없으면 행이 아니다
         if r.get("confidence") == "low":
@@ -271,6 +278,14 @@ def finalize(meta: dict, result: dict) -> tuple[list[dict], list[dict]]:
             "note": r.get("note", ""),
         })
     return rows_out, review
+
+
+def _zero_dash(r: dict) -> dict:
+    """원문 '-'(해당 없음)를 모델이 0 으로 적는 경우(두산밥캣 '국내' 행 실측) — 능력·실적이 둘 다 0 이고
+    가동률이 없으면 값이 아니라 '없음'으로 읽는다(생산능력 0 은 정보가 아니다)."""
+    if (r.get("capacity") in (0, 0.0)) and (r.get("production") in (0, 0.0)) and r.get("utilization_pct") is None:
+        return {**r, "capacity": None, "production": None}
+    return r
 
 
 def _valid_period(p: str) -> bool:
@@ -304,8 +319,11 @@ def rebuild_all() -> dict:
         if f.name == "all.json":
             continue
         d = json.loads(f.read_text(encoding="utf-8"))
-        rows.extend(d.get("rows", []))
+        kept = [r for r in (_zero_dash(x) for x in d.get("rows", []))
+                if not (r.get("capacity") is None and r.get("production") is None and r.get("utilization_pct") is None)]
+        rows.extend(kept)
         reports += 1
+    rows = canonicalize(rows)      # 보고서마다 다른 부문·품목 표기를 회사 안에서 통일 + 같은 (줄, 기간) 병합
     payload = {"generated_at": dt.datetime.now(dt.timezone(dt.timedelta(hours=9))).strftime("%Y-%m-%d %H:%M KST"),
                "report_count": reports, "rows": rows}
     NORMALIZED.mkdir(parents=True, exist_ok=True)

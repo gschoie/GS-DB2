@@ -57,6 +57,17 @@ def test_review_csv_and_all_json(tmp: Path):
     assert p["report_count"] == 1 and len(p["rows"]) == 2 and (N.NORMALIZED / "all.json").exists()
 
 
+def test_zero_dash_rows_dropped():
+    res = {"rows": [{"period": "2025-12", "period_label": "제12기", "segment": "Compact", "product": "국내", "unit": "대",
+                     "capacity": 0, "production": 0, "utilization_pct": None, "note": "없음", "basis": "quantity",
+                     "cumulative": None, "capacity_unit": "대", "production_unit": "대", "confidence": "high"},
+                    {"period": "2025-12", "period_label": "제12기", "segment": "Compact", "product": "해외", "unit": "대",
+                     "capacity": 125000, "production": 76500, "utilization_pct": 61.2, "note": "", "basis": "quantity",
+                     "cumulative": None, "capacity_unit": "대", "production_unit": "대", "confidence": "high"}], "review": []}
+    rows, _ = N.finalize(META, res)
+    assert [r["product"] for r in rows] == ["해외"]           # '-' 를 0 으로 적은 행은 버린다
+
+
 def test_prompt_has_fiscal_hint_and_html():
     tables = [{"section": ["3. 원재료 및 생산설비"], "headings": ["(1) 생산능력"], "unit": "(단위: 대)",
                "footnotes": ["주1) OEM 포함"], "rows": [["제품군", "사업소", "제12기", "제11기"]], "html": "<table><tr><td>x</td></tr></table>"}]
@@ -72,4 +83,5 @@ if __name__ == "__main__":
     with tempfile.TemporaryDirectory() as d:
         test_review_csv_and_all_json(Path(d))
     test_prompt_has_fiscal_hint_and_html()
-    print("ok — test_normalize 3개 통과")
+    test_zero_dash_rows_dropped()
+    print("ok — test_normalize 4개 통과")
