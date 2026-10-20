@@ -365,26 +365,17 @@ class Outputs(unittest.TestCase):
                  unittest.mock.patch.object(notify, "send_photos", lambda paths, caption="", parse_mode=None, chat=None: calls.append(("album", chat, len(paths), caption)) or {"ok": chat not in fail, "description": "chat not found"}):
                 rc = notify.main(["--photos", os.path.join(tmp, "capture_*.png")])
             self.assertEqual(rc, 0)                                                   # 기본 방 성공이면 0
-            self.assertEqual([c[:3] for c in calls[:2]], [("album", "-100111", 3), ("album", "-100222", 3)])   # 공유용 없음 → 같은 묶음
-            self.assertEqual(calls[2][:2], ("album", "@HI_GS")); self.assertEqual(calls[3], ("text", "@HI_GS"))  # 실패 방만 폴백
+            # 그림은 세 방 같은 묶음, 캡션은 기본 방 = 본문 / 추가 방 = 머리글+링크만
+            self.assertEqual([c[:3] for c in calls[:3]], [("album", "-100111", 3), ("album", "-100222", 3), ("album", "@HI_GS", 3)])
+            self.assertTrue(calls[0][3].startswith("<b>[GS🎴")); self.assertIn("사는 쪽", calls[0][3])
+            cap = calls[1][3]
+            self.assertTrue(cap.startswith("<b>[GS🎴 조선·방산·건기] 수급 브리핑"), cap)
+            self.assertTrue(cap.endswith("\n" + notify.SHARE_URL), cap); self.assertNotIn("사는 쪽", cap)
+            self.assertEqual(len(calls), 3)                                           # 추가 방 실패는 본문 폴백 없이 기록만
             with open(status, encoding="utf-8") as f:
                 st = json.load(f)
             self.assertTrue(st["ok"]); self.assertEqual([e["chat"] for e in st["extra"]], ["-100222", "@HI_GS"])
             self.assertTrue(st["extra"][0]["ok"]); self.assertFalse(st["extra"][1]["ok"])
-            # 공유용 2장(① 등락률 / ①-2 순매수)이 있으면 추가 방은 그 2장 + 머리글·링크 캡션만, 기본 방은 그대로 3장+본문.
-            for i in (1, 2):
-                open(os.path.join(tmp, f"share_{i}.png"), "wb").write(b"x")
-            calls.clear(); fail.clear()
-            with unittest.mock.patch.object(notify, "LATEST", latest), unittest.mock.patch.object(notify, "STATUS", status), \
-                 unittest.mock.patch.object(notify, "send", lambda text, parse_mode=None, chat=None: calls.append(("text", chat)) or {"ok": True}), \
-                 unittest.mock.patch.object(notify, "send_photos", lambda paths, caption="", parse_mode=None, chat=None: calls.append(("album", chat, len(paths), caption)) or {"ok": True}):
-                rc = notify.main(["--photos", os.path.join(tmp, "capture_*.png"), "--share", os.path.join(tmp, "share_*.png")])
-            self.assertEqual(rc, 0); self.assertEqual(len(calls), 3)
-            self.assertEqual(calls[0][:3], ("album", "-100111", 3)); self.assertTrue(calls[0][3].startswith("<b>[GS🎴"))
-            self.assertEqual(calls[1][:3], ("album", "-100222", 2)); self.assertEqual(calls[2][:3], ("album", "@HI_GS", 2))
-            cap = calls[1][3]
-            self.assertTrue(cap.startswith("<b>[GS🎴 조선·방산·건기] 수급 브리핑"), cap)
-            self.assertTrue(cap.endswith("\n" + notify.SHARE_URL), cap); self.assertNotIn("사는 쪽", cap)
             # 추가 방 미설정이면 기본 방 한 곳뿐
             with unittest.mock.patch.dict(os.environ, {"COVFLOW_TELEGRAM_CHAT_ID_EXTRA": ""}):
                 self.assertEqual(notify.targets(), ["-100111"])

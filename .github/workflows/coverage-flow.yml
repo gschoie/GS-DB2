@@ -166,4 +166,4 @@ jobs:
           COVFLOW_TELEGRAM_CHAT_ID_EXTRA: ${{ secrets.COVFLOW_TELEGRAM_CHAT_ID_EXTRA || '@HI_GS' }}
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID_PRIVATE: ${{ secrets.TELEGRAM_CHAT_ID_PRIVATE }}
-        run: python notify.py --photos "data/capture_*.png" --share "data/share_*.png" || echo "::warning::텔레그램 미발송 — 채널 시크릿을 확인하세요"
+        run: python notify.py --photos "data/capture_*.png" || echo "::warning::텔레그램 미발송 — 채널 시크릿을 확인하세요"
