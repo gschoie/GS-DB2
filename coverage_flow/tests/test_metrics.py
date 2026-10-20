@@ -365,11 +365,10 @@ class Outputs(unittest.TestCase):
                  unittest.mock.patch.object(notify, "send_photos", lambda paths, caption="", parse_mode=None, chat=None: calls.append(("album", chat, len(paths), caption)) or {"ok": chat not in fail, "description": "chat not found"}):
                 rc = notify.main(["--photos", os.path.join(tmp, "capture_*.png")])
             self.assertEqual(rc, 0)                                                   # 기본 방 성공이면 0
-            # 그림·본문은 세 방 같고, 추가 방만 본문 끝에 공유 링크 한 줄(바담 방은 링크 없음)
+            # 그림·본문·맨 밑 공유 링크까지 세 방 전부 같다
             self.assertEqual([c[:3] for c in calls[:3]], [("album", "-100111", 3), ("album", "-100222", 3), ("album", "@HI_GS", 3)])
-            body = notify.compose_html(d)
-            self.assertEqual(calls[0][3], body); self.assertNotIn(notify.SHARE_URL, calls[0][3])
-            self.assertEqual(calls[1][3], body + "\n\n" + notify.SHARE_URL)
+            body = notify.compose_html(d) + "\n\n" + notify.SHARE_URL
+            self.assertEqual(calls[0][3], body); self.assertEqual(calls[1][3], body); self.assertEqual(calls[2][3], body)
             self.assertTrue(notify.visible_len(calls[1][3]) <= notify.CAPTION_MAX)
             self.assertEqual(notify.visible_len("<b>a&amp;b</b>"), 3)                 # 태그·이스케이프 제외
             self.assertEqual(calls[3], ("text", "@HI_GS"))                            # 실패 방만 본문 따로 폴백
@@ -395,7 +394,7 @@ class Outputs(unittest.TestCase):
                  unittest.mock.patch.object(notify, "send", lambda text, parse_mode=None, chat=None: calls.append(("text", parse_mode)) or {"ok": True}), \
                  unittest.mock.patch.object(notify, "send_photos", lambda paths, caption="", parse_mode=None, chat=None: calls.append(("album", parse_mode, len(paths), caption[:3], len(caption))) or {"ok": True}):
                 notify.main(["--photos", os.path.join(tmp, "capture_*.png")])
-                self.assertEqual(calls, [("album", "HTML", 3, "<b>", len(notify.compose_html(d)))])
+                self.assertEqual(calls, [("album", "HTML", 3, "<b>", len(notify.compose_html(d) + "\n\n" + notify.SHARE_URL))])   # 본문 + 맨 밑 링크
                 # 긴 본문: 캡션 한도 초과 → 본문 따로(HTML) + 사진은 짧은 캡션
                 calls.clear()
                 with unittest.mock.patch.object(notify, "compose_html", lambda dd: "<b>x</b>" + "y" * 1100):
