@@ -134,8 +134,8 @@ def canonicalize(rows: list[dict]) -> list[dict]:
                     cur[f] = r[f]
                     if u:
                         cur[u] = r.get(u) or cur.get(u, "")
-            if r.get("note") and r["note"] not in (cur.get("note") or ""):
-                cur["note"] = (cur.get("note") + " / " if cur.get("note") else "") + r["note"]
+            if not cur.get("note") and r.get("note"):
+                cur["note"] = r["note"]                # 비고는 최신 보고서 것만(이어 붙이면 같은 말이 세 번 반복된다)
             if r.get("source_rcept_no") not in cur["sources"]:
                 cur["sources"].append(r.get("source_rcept_no", ""))
         for row in merged.values():
