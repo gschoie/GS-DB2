@@ -442,6 +442,24 @@ class Outputs(unittest.TestCase):
         self.assertIn("<tr class='gh'><td colspan='8'>기계</td></tr>", h)
         self.assertLess(h.index(">조선</td>"), h.index(">방산</td>")); self.assertLess(h.index(">방산</td>"), h.index(">기계</td>"))
 
+    def test_group_summary_rows(self):
+        """묶음 끝에 요약 행 — 등락률은 단순평균, 수급은 합계, None 은 빼고 센다."""
+        self.assertAlmostEqual(build_report.agg([1, None, 3], "mean"), 2.0)
+        self.assertEqual(build_report.agg([1, None, 3], "sum"), 4)
+        self.assertIsNone(build_report.agg([None, None], "sum"))
+        d = fake_payload()
+        base = d["rows"][0]
+        def mk(name, d1, frgn5):
+            r = json.loads(json.dumps(base)); r.update(name=name, industry="조선", code=name)
+            r["tech"]["ret"]["d1"] = d1; r["flow"]["win"]["frgn"]["d5"] = frgn5; return r
+        d["rows"] = [mk("A", 2.0, 100), mk("B", -1.0, -40), mk("C", None, None)]
+        h = build_report.render(d)
+        self.assertIn("조선 평균<small>3종목 · 단순평균</small>", h)
+        i = h.index("조선 평균"); seg = h[i:i + 400]
+        self.assertIn("+0.5", seg)                                               # (2 − 1) / 2, None 제외
+        j = h.index("조선 합계"); seg2 = h[j:j + 600]
+        self.assertIn("+60", seg2)                                               # 100 − 40
+
     def test_tables_sorted_by_mcap(self):
         """세 표 모두 묶음 안은 시총 내림차순, 성광벤드·태광은 여전히 조선 맨 밑."""
         d = fake_payload()

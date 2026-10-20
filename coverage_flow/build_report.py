@@ -114,6 +114,14 @@ def group_row(g, ncol):
     return f"<tr class='gh'><td colspan='{ncol}'>{esc(g)}</td></tr>"
 
 
+def agg(vals, how):
+    """묶음 요약 — how='mean' 단순평균 / 'sum' 합계. None 은 빼고, 값이 하나도 없으면 None."""
+    xs = [v for v in vals if v is not None]
+    if not xs:
+        return None
+    return sum(xs) / len(xs) if how == "mean" else sum(xs)
+
+
 def frgn_cell(px):
     """외인 보유비율 칸. 직전 수집값으로 채운 경우(frgn_pct_asof) 기준일을 작게 병기."""
     v = px.get("frgn_pct")
@@ -140,6 +148,12 @@ def returns_table(rows):
                       + f"<td class='c'>{spark_svg(r['tech'].get('spark'))}</td>"
                       + frgn_cell(px)
                       + f"<td class='r'>{n(px.get('mcap'), 0, sign=False)}</td></tr>")
+        # 묶음 요약: 등락률 단순평균(10/20 사용자 요청) + 시총 합계
+        avg = {k: agg([(r["tech"].get("ret") or {}).get(k) for r in grs], "mean") for k in ret_keys}
+        mcap_sum = agg([(r.get("px") or {}).get("mcap") for r in grs], "sum")
+        tr.append(f"<tr class='sub'><td>{esc(g)} 평균<small>{len(grs)}종목 · 단순평균</small></td>"
+                  + "".join(f"<td class='r'{shade(avg[k], caps[k])}>{_pct(avg[k])}</td>" for k in ret_keys)
+                  + f"<td class='c'></td><td class='r'></td><td class='r'>{n(mcap_sum, 0, sign=False)}</td></tr>")
     return ("<table><thead><tr><th>종목</th><th class='r'>오늘</th><th class='r'>1주</th><th class='r'>1개월</th>"
             "<th class='r'>3개월</th><th class='r'>YTD</th><th class='c'>3개월 차트</th><th class='r'>외인 보유</th><th class='r'>시총(억)</th></tr></thead>"
             f"<tbody>{''.join(tr)}</tbody></table>")
@@ -167,6 +181,14 @@ def flow_table(rows):
                     cls = "r grp" if k == "today" else "r"
                     cells.append(f"<td class='{cls}'{shade(v, caps[(who, k)])}>{n(v)}{(' ' + badge) if badge else ''}</td>")
             tr.append(f"<tr><td>{esc(r['name'])}</td>{''.join(cells)}</tr>")
+        # 묶음 요약: 투자자별 순매수 합계(10/20 사용자 요청)
+        cells = []
+        for who in ("frgn", "inst", "indiv"):
+            for k in keys:
+                tot = agg([((r["flow"].get("win") or {}).get(who) or {}).get(k) for r in grs], "sum")
+                cls = "r grp" if k == "today" else "r"
+                cells.append(f"<td class='{cls}'{shade(tot, caps[(who, k)])}>{n(tot)}</td>")
+        tr.append(f"<tr class='sub'><td>{esc(g)} 합계<small>{len(grs)}종목</small></td>{''.join(cells)}</tr>")
     sub = "".join(f"<th class='r{' grp' if k == 'today' else ''}'>{lbl}</th>" for _ in range(3) for k, lbl in zip(keys, ("오늘", "5일", "1개월", "3개월", "YTD")))
     return ("<table class='flow'><thead><tr><th rowspan='2'>종목</th><th colspan='5' class='grp c'>외국인</th><th colspan='5' class='grp c'>기관</th><th colspan='5' class='grp c'>개인</th></tr>"
             f"<tr>{sub}</tr></thead><tbody>{''.join(tr)}</tbody></table>")
@@ -292,6 +314,7 @@ th.r,td.r{{text-align:right;font-variant-numeric:tabular-nums}}
 .mini.b{{background:#fde2e2;color:#b91c1c}}.mini.s{{background:#dbe6fd;color:#1d4ed8}}
 .rsi-lo{{color:#1d4ed8;font-weight:700}}.rsi-hi{{color:#b91c1c;font-weight:700}}
 td.empty{{color:var(--muted);text-align:center;padding:18px}}
+tr.sub td{{font-weight:700;border-top:2px solid #cbd5e1;background:#fafafa}}tr.sub td small{{font-weight:400}}
 tr.gh td{{background:#eef2f7;color:#1f2937;font:700 12px Georgia,"Noto Serif KR",serif;letter-spacing:.06em;padding:6px 8px}}
 table.compact{{font-size:12px}}
 table.flow{{font-size:12px}}table.flow td,table.flow th{{padding:6px 5px}}th.c{{text-align:center}}td.grp,th.grp{{border-left:2px solid #e5e7eb}}
