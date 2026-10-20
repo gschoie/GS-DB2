@@ -269,12 +269,14 @@ def main(argv=None):
     for i, chat in enumerate(targets()):
         if i and share:
             res, pres = _deliver_share(chat, text, share)
+            n_photo = len(share)
         else:
             res, pres = _deliver(chat, d, text, html_text, photos)
+            n_photo = len(photos)
         outs.append((chat, res, pres))
         tag = "기본 방" if i == 0 else f"추가 방 {chat}"
         if pres is not None:
-            print(f"[{tag}] 사진 {len(photos)}장:", "성공" if pres.get("ok") else f"실패 — {pres.get('description')}")
+            print(f"[{tag}] 사진 {n_photo}장:", "성공" if pres.get("ok") else f"실패 — {pres.get('description')}")
         print(f"[{tag}] 전송:", "성공" if res.get("ok") else f"실패 — {res.get('description')}")
     _, res, pres = outs[0]
     tok, chat = _creds()
