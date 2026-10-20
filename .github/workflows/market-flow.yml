@@ -52,17 +52,27 @@ jobs:
             echo "skip=true" >> "$GITHUB_OUTPUT"
             exit 0
           fi
-          # 슬롯 시작(KST)을 UTC로 변환. 'date -u -d "today HH:MM"'은 -u가 TZ를 덮어써
-          # HH:MM을 UTC로 읽는 버그가 있었다(10/19: since가 미래가 되어 선행 실행 검색이
-          # 항상 0건 → 밀린 크론 4번이 전부 재발송). 날짜는 KST로 뽑고 변환은 TZ= 구문으로.
+          # '이 슬롯이 이미 처리됐나'는 run 개수가 아니라 **수집 결과(run_meta.json)**로 묻는다.
+          # 가드가 스킵한 run도 conclusion=success라, run을 세면 '스킵된 선행 실행'이
+          # 진짜 늦은 크론까지 막는다(10/20 실측: 11:00 크론이 15:49 도착→정시 전 스킵,
+          # 그 success가 밤의 16:00 크론을 막아 그날 수급 0건). 교훈 24의 완성형.
           d=$(TZ=Asia/Seoul date +%F)
+          meta=$(curl -sS -m 10 "https://raw.githubusercontent.com/${{ github.repository }}/main/market_flow/data/run_meta.json" || echo '{}')
+          done_today=$(echo "$meta" | jq -r --arg d "$d" --arg s "$slot" \
+            'if ((.when_kst // "")[:10]) == $d and ((.slot // "") == $s or .ran == false) then "yes" else "no" end' 2>/dev/null || echo no)
+          if [ "$done_today" = "yes" ]; then
+            echo "::notice::오늘 슬롯 ${slot}은 이미 수집됨(또는 휴장) — 예약 실행은 건너뜁니다"
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          # 지금 다른 run이 돌고 있으면 그 쪽에 맡긴다 (완료된 run은 위 run_meta가 판정)
           since=$(date -u -d "TZ=\"Asia/Seoul\" $d $from" +%Y-%m-%dT%H:%M)
           n=$(gh api "repos/${{ github.repository }}/actions/workflows/market-flow.yml/runs?created=%3E${since}" \
                 --jq "[.workflow_runs[] | select(.id != ${{ github.run_id }}) \
-                       | select(.conclusion==\"success\" or .status==\"in_progress\" or .status==\"queued\")] | length" || echo 0)
-          echo "슬롯 ${slot}(${from} KST~) 안의 선행 실행 ${n:-0}건"
+                       | select(.status==\"in_progress\" or .status==\"queued\")] | length" || echo 0)
+          echo "슬롯 ${slot}(${from} KST~) 진행 중 run ${n:-0}건"
           if [ "${n:-0}" -gt 0 ]; then
-            echo "::notice::이 슬롯은 이미 처리됐습니다 — 예약 실행은 건너뜁니다"
+            echo "::notice::같은 슬롯 run이 진행 중 — 예약 실행은 건너뜁니다"
             echo "skip=true" >> "$GITHUB_OUTPUT"
           fi
 
