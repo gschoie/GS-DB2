@@ -80,6 +80,7 @@ def display(s: str) -> str:
     """표시 이름: '엔 진 기 계'·'합    계'처럼 글자를 띄어 쓴 낱말만 붙인다(모든 토큰이 2자 이하일 때).
     '엔진류, 기계설비 등' 같은 설명은 그대로 둔다."""
     s = re.sub(r"\s+", " ", (s or "").strip())
+    s = re.sub(r"(?<=[a-z])(?=[A-Z])", " ", s)          # 모델이 붙여 쓴 영문('MaterialHandling')은 다시 띄운다
     toks = s.split(" ")
     if len(toks) > 1 and len("".join(toks)) <= 4 and all(len(t) <= 2 and re.fullmatch(r"[가-힣]+", t) for t in toks):
         return "".join(toks)                           # 낱말 하나를 띄어 쓴 경우만('상선 조립 및 건조 등' 은 그대로)

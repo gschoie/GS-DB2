@@ -97,6 +97,8 @@ const periodLabel = r => r.period_label || r.period;    // 회사 표기 그대�
 const genericLabel = p => { const [yy, mm] = (p || "").split("-"); return `${yy} ${{"12": "FY", "03": "1Q", "06": "H1", "09": "3Q"}[mm] || mm}`; };
 // 능력·실적 단위가 같을 때만 한 차트(한 축)에 같이 그린다 — HD현대중공업처럼 능력 천GT·실적 백만원이면 따로.
 const sameUnit = r => !r.production_unit || !r.capacity_unit || r.production_unit === r.capacity_unit;
+// 줄 이름: 품목이 부문 이름으로 시작하면('유압기기 (국내)') 부문을 되풀이하지 않는다
+const lineName = r => { const seg = r.segment || "", prod = r.product || ""; if (!prod) return seg || "전체"; if (!seg || prod.startsWith(seg)) return prod; return `${seg} / ${prod}`; };
 const lineKey = r => `${r.stock_code}|${r.segment || ""}|${r.product || ""}`;   // 단위는 기간마다 달라질 수 있어 키에 안 넣는다
 
 async function load() {
@@ -150,7 +152,7 @@ function renderCompare(rows) {
   let lastSector = null;
   for (const {r, cells} of ordered) {
     if (!state.sector && r.sector !== lastSector) { html += `<tr class="grp"><td colspan="${periods.length + 2}">${esc(r.sector)}</td></tr>`; lastSector = r.sector; }
-    const name = `${esc(r.company)} › ${esc([r.segment, r.product].filter(Boolean).join(" / ") || "전체")}`;
+    const name = `${esc(r.company)} › ${esc(lineName(r))}`;
     const unit = metric === "utilization_pct" ? "%" : (r.unit || "–");
     html += `<tr><td>${name}</td><td class="lbl">${esc(unit)}</td>${periods.map(p => { const c = cells[p]; return `<td>${c ? link(c, fmt(c[metric], metric)) : "–"}</td>`; }).join("")}</tr>`;
   }
@@ -175,7 +177,7 @@ function renderSeries(rows) {
       for (const r of lrows) { const cur = dedup.get(r.period); if (!cur || r.source_rcept_no > cur.source_rcept_no) dedup.set(r.period, r); }
       const pts = [...dedup.values()].sort((a, b) => a.period.localeCompare(b.period));
       const r0 = pts[0];
-      const title = [r0.segment, r0.product].filter(Boolean).join(" / ") || "전체";
+      const title = lineName(r0);
       html += `<h4 style="margin:12px 0 4px;font-size:14px">${esc(title)} <span class="pill">${esc(sameUnit(r0) ? (r0.unit || r0.capacity_unit || "단위 미기재") : `능력 ${r0.capacity_unit || "?"} · 실적 ${r0.production_unit || "?"}`)}</span></h4>
         <div class="charts">
           ${sameUnit(r0)

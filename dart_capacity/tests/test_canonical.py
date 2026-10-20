@@ -55,6 +55,7 @@ def test_company_outside_parentheses_and_renames():
     assert display("엔 진 기 계") == "엔진기계" and display("합    계") == "합계"
     assert display("엔진류, 기계설비 등 (HD현대엔진(유))") == "엔진류, 기계설비 등 (HD현대엔진(유))"
     assert display("상선 조립 및 건조 등") == "상선 조립 및 건조 등"
+    assert display("MaterialHandling (국내)") == "Material Handling (국내)"
     k5 = line_key({"segment": "시큐리티", "product": "한화비전㈜(舊. 한화테크윈㈜) 및해외생산법인 / 감시장비 등"})
     k6 = line_key({"segment": "시큐리티", "product": "한화비전㈜ 및 해외생산법인 (감시장비 등)"})
     assert k5[1] == k6[1] == "감시장비" and _same_line(k5, k6)
