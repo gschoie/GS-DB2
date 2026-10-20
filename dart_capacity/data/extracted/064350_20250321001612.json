@@ -1,0 +1,141 @@
+{
+ "meta": {
+  "company": "현대로템",
+  "sector": "방산",
+  "stock_code": "064350",
+  "corp_code": "00302926",
+  "rcept_no": "20250321001612",
+  "rcept_dt": "20250321",
+  "report_nm": "[기재정정]사업보고서 (2024.12)",
+  "report_type": "annual",
+  "period": "2024-12",
+  "period_label": "2024.12 사업보고서",
+  "corrected": true,
+  "dart_url": "https://dart.fss.or.kr/dsaf001/main.do?rcpNo=20250321001612"
+ },
+ "tables": [
+  {
+   "section": [
+    "1. 사업의 개요",
+    "2. 주요 제품 및 서비스",
+    "3. 원재료 및 생산설비"
+   ],
+   "headings": [
+    "나. 생산 및 설비에 관한 사항",
+    "(2) 생산실적"
+   ],
+   "context": [
+    "* 산출기준 : SUS LT 2T SHEET 기준 정상가격* 변동원인 : 환율 및 니켈 등 주요 원료가격 상승 반영",
+    "나. 생산 및 설비에 관한 사항",
+    "1) 주요 제품에 대한 생산능력 ·생산실적 ·가동률(1) 생산능력 및 산출기준① 레일솔루션 부문 : 창원공장- 생산능력 : 552량- 생산능력 산출기준 : 철도차량 의장 연간 생산기준② 에코플랜트 부문 : 에코제철공장 (당진공장)- 생산능력 : 10,800톤- 생산능력 산출기준 : 에코제철공장(당진공장) 용접물량 기준",
+    "(2) 생산실적",
+    "(단위: 백만원)"
+   ],
+   "unit": "(단위: 백만원)",
+   "keywords": [
+    "생산실적"
+   ],
+   "keyword_in": "heading",
+   "rows": [
+    [
+     "사업부문",
+     "품 목",
+     "사업소",
+     "제26기",
+     "제25기",
+     "제24기"
+    ],
+    [
+     "디펜스솔루션부문",
+     "방산물자",
+     "창원",
+     "1,678,439",
+     "1,326,159",
+     "885,506"
+    ],
+    [
+     "레일솔루션부문",
+     "전동차",
+     "창원",
+     "1,365,399",
+     "1,305,102",
+     "1,567,658"
+    ],
+    [
+     "에코플랜트부문",
+     "자동차/제철설비 外",
+     "당진",
+     "470,345",
+     "421,169",
+     "295,756"
+    ],
+    [
+     "합 계",
+     "3,514,183",
+     "3,052,430",
+     "2,748,920"
+    ]
+   ],
+   "html": "<table aclass=\"NORMAL\" afixtable=\"N\" border=\"1\" width=\"597\">\n<colgroup width=\"597\">\n<col width=\"102\"/>\n<col width=\"102\"/>\n<col width=\"77\"/>\n<col width=\"106\"/>\n<col width=\"105\"/>\n<col width=\"105\"/>\n</colgroup>\n<thead align=\"LEFT\" valign=\"TOP\">\n<tr acopy=\"Y\" adelete=\"Y\" height=\"30\">\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"23\" valign=\"MIDDLE\" width=\"93\">사업부문</th>\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"23\" valign=\"MIDDLE\" width=\"93\">품 목</th>\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"23\" valign=\"MIDDLE\" width=\"68\">사업소</th>\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"23\" valign=\"MIDDLE\" width=\"97\">제26기</th>\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"23\" valign=\"MIDDLE\" width=\"96\">제25기</th>\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"23\" valign=\"MIDDLE\" width=\"96\">제24기</th>\n</tr>\n</thead>\n<tbody>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"53\">\n<td align=\"CENTER\" height=\"46\" valign=\"MIDDLE\" width=\"93\">디펜스솔루션부문</td>\n<td align=\"CENTER\" height=\"46\" valign=\"MIDDLE\" width=\"93\">방산물자</td>\n<td align=\"CENTER\" height=\"46\" valign=\"MIDDLE\" width=\"68\">창원</td>\n<td align=\"RIGHT\" height=\"46\" valign=\"MIDDLE\" width=\"97\">1,678,439</td>\n<td align=\"RIGHT\" height=\"46\" valign=\"MIDDLE\" width=\"96\">1,326,159</td>\n<td align=\"RIGHT\" height=\"46\" valign=\"MIDDLE\" width=\"96\">885,506</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"53\">\n<td align=\"CENTER\" height=\"46\" valign=\"MIDDLE\" width=\"93\">레일솔루션부문</td>\n<td align=\"CENTER\" height=\"46\" valign=\"MIDDLE\" width=\"93\">전동차 </td>\n<td align=\"CENTER\" height=\"46\" valign=\"MIDDLE\" width=\"68\">창원</td>\n<td align=\"RIGHT\" height=\"46\" valign=\"MIDDLE\" width=\"97\">1,365,399</td>\n<td align=\"RIGHT\" height=\"46\" valign=\"MIDDLE\" width=\"96\">1,305,102</td>\n<td align=\"RIGHT\" height=\"46\" valign=\"MIDDLE\" width=\"96\">1,567,658</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"53\">\n<td align=\"CENTER\" height=\"46\" valign=\"MIDDLE\" width=\"93\">에코플랜트부문</td>\n<td align=\"CENTER\" height=\"46\" valign=\"MIDDLE\" width=\"93\">자동차/제철설비 外</td>\n<td align=\"CENTER\" height=\"46\" valign=\"MIDDLE\" width=\"68\">당진</td>\n<td align=\"RIGHT\" height=\"46\" valign=\"MIDDLE\" width=\"97\">470,345</td>\n<td align=\"RIGHT\" height=\"46\" valign=\"MIDDLE\" width=\"96\">421,169</td>\n<td align=\"RIGHT\" height=\"46\" valign=\"MIDDLE\" width=\"96\">295,756</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"30\">\n<td align=\"CENTER\" colspan=\"3\" height=\"23\" valign=\"MIDDLE\" width=\"272\">합 계</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"97\">3,514,183</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"96\">3,052,430</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"96\">2,748,920</td>\n</tr>\n</tbody>\n</table>",
+   "footnotes": [],
+   "digest": "ee95774b1685",
+   "file": "20250321001612.xml"
+  },
+  {
+   "section": [
+    "1. 사업의 개요",
+    "2. 주요 제품 및 서비스",
+    "3. 원재료 및 생산설비"
+   ],
+   "headings": [
+    "(3) 가동률"
+   ],
+   "context": [
+    "(3) 가동률",
+    "(단위 : MH, %)"
+   ],
+   "unit": "(단위 : MH, %)",
+   "keywords": [
+    "가동률"
+   ],
+   "keyword_in": "table",
+   "rows": [
+    [
+     "사업부문",
+     "가동가능시간",
+     "실제가동시간",
+     "평균가동률"
+    ],
+    [
+     "디펜스솔루션 부문",
+     "901,714",
+     "924,525",
+     "102.5%"
+    ],
+    [
+     "레일솔루션 부문",
+     "535,197",
+     "517,462",
+     "97.0%"
+    ],
+    [
+     "에코플랜트 부문",
+     "169,926",
+     "187,761",
+     "110.5%"
+    ],
+    [
+     "합계",
+     "1,606,837",
+     "1,629,748",
+     "101.4%"
+    ]
+   ],
+   "html": "<table aclass=\"NORMAL\" afixtable=\"N\" border=\"1\" width=\"578\">\n<colgroup width=\"578\">\n<col width=\"148\"/>\n<col width=\"148\"/>\n<col width=\"148\"/>\n<col width=\"134\"/>\n</colgroup>\n<thead align=\"LEFT\" valign=\"TOP\">\n<tr acopy=\"Y\" adelete=\"Y\" height=\"30\">\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"23\" usermark=\"BC0XDCDCDC\" valign=\"MIDDLE\" width=\"139\">사업부문</th>\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"23\" usermark=\"BC0XDCDCDC\" valign=\"MIDDLE\" width=\"139\">가동가능시간</th>\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"23\" usermark=\"BC0XDCDCDC\" valign=\"MIDDLE\" width=\"139\">실제가동시간</th>\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"23\" usermark=\"BC0XDCDCDC\" valign=\"MIDDLE\" width=\"125\">평균가동률</th>\n</tr>\n</thead>\n<tbody>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"30\">\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"139\">디펜스솔루션 부문</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"139\">901,714</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"139\">924,525</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"125\">102.5%</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"30\">\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"139\">레일솔루션 부문</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"139\">535,197</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"139\">517,462</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"125\">97.0%</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"30\">\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"139\">에코플랜트 부문</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"139\">169,926</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"139\">187,761</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"125\">110.5%</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"30\">\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"139\">합계</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"139\">1,606,837</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"139\">1,629,748</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"125\">101.4%</td>\n</tr>\n</tbody>\n</table>",
+   "footnotes": [],
+   "digest": "969216c7086b",
+   "file": "20250321001612.xml"
+  }
+ ],
+ "rejected": []
+}

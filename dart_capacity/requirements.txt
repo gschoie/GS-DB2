@@ -1,0 +1,6 @@
+requests>=2.31
+PyYAML>=6.0
+beautifulsoup4>=4.12
+lxml>=5.0
+google-genai>=1.0
+anthropic>=0.80   # 선택: DART_CAPACITY_PROVIDER=claude 일 때만

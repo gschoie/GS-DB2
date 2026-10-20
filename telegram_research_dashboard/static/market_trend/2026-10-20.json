@@ -1,0 +1,691 @@
+{
+ "date": "2026-10-20",
+ "meta": {
+  "window": "10-19 06:00~10-20 06:00 KST",
+  "engine": "Gemini(gemini-2.5-flash)",
+  "generated_at": "2026-10-20T06:35+09:00"
+ },
+ "stats": {
+  "channels": 98,
+  "messages": 1470,
+  "groups": 1356
+ },
+ "one_liner": "중국 ESS 기업의 미국 시장 철수와 휴머노이드 로봇 시장 부상 속 AI 인프라 투자 리스크와 우주/방산 산업 재편이 시장의 주요 관심사로 떠올랐습니다.",
+ "themes": [
+  {
+   "name": "ESS — 중국 기업 미국 시장 철수 및 한국 기업 수혜 기대",
+   "narrative": "중국 에너지저장장치(ESS) 거대 기업들이 미국의 고강도 법규 제한과 관세로 인해 미국 시장에서 집단 철수하고 있다는 소식이 전해지면서, 한국 기업들이 탈중국 배터리 공급망 재편의 기회를 얻을 것이라는 기대감이 형성되고 있습니다.",
+   "status": "new",
+   "strength": 4,
+   "keywords": [
+    "철수",
+    "중국 ESS 기업",
+    "미국 시장",
+    "한국 기업 수혜"
+   ],
+   "evidence": [
+    {
+     "channel": "YM리서치",
+     "quote": "(단독) 중국 에너지저장장치(ESS) 거대 기업들, 미국 시장 집단 철수설"
+    },
+    {
+     "channel": "서화백의 AI놀이🚀",
+     "quote": "중국 ESS 기업의 미국 시장 철수 (규제 강화)에 따른 한국 기업 수혜 기대, 미국 탈중국 배터리 공급망 재편 기회 부각"
+    }
+   ]
+  },
+  {
+   "name": "휴머노이드 로봇 시장 부상",
+   "narrative": "삼성SDI가 전고체 배터리를 휴머노이드 로봇에 먼저 적용하여 내년 양산을 본격화할 계획이며, 마이크론도 휴머노이드용 ‘Edge Inference Memory’를 개발하는 등 휴머노이드 로봇 시장이 새로운 성장 동력으로 부각되고 있습니다.",
+   "status": "new",
+   "strength": 4,
+   "keywords": [
+    "휴머노이드",
+    "삼성SDI",
+    "전고체 배터리",
+    "마이크론"
+   ],
+   "evidence": [
+    {
+     "channel": "텐렙",
+     "quote": "[삼성SDI, 전고체 배터리 내년 양산 본격화...휴머노이드 선점·전기차 확대 추진]"
+    },
+    {
+     "channel": "[신한 리서치본부] IT(반도체/전기전자/디스플레이)",
+     "quote": "▶️ 마이크론, 휴머노이드용 ‘Edge Inference Memory’ 개발…LPDDR 위에 로직 적층 (RPRNA)"
+    }
+   ]
+  },
+  {
+   "name": "AI 인프라 투자 리스크 부각",
+   "narrative": "AI 인프라 투자 확대 과정에서 자금 조달 우려와 신용 위험이 부각되고 있으며, 마이크로소프트가 영국 데이터센터 기업 Nscale과의 계약을 중단하고 엔비디아 투자기업의 IPO가 철회되는 등 AI 관련 대형 프로젝트의 지속 가능성에 대한 불확실성이 커지고 있습니다.",
+   "status": "ongoing",
+   "strength": 4,
+   "keywords": [
+    "AI 설비투자",
+    "Nscale",
+    "AI 인프라 자산손상 위험",
+    "신용 위험",
+    "IPO 철회"
+   ],
+   "evidence": [
+    {
+     "channel": "키움증권 전략/시황 한지영",
+     "quote": "AI 인프라주 자금 조달 우려 재점화 등으로…"
+    },
+    {
+     "channel": "키움증권 미국주식 톡톡",
+     "quote": "AI 인프라의 투자수익률과 신용 위험이 동시 부각. 엔비디아 투자기업 퍼머스의 IPO 철회, 가트너의 AI 인프라 자산손상 위험 경고,…"
+    },
+    {
+     "channel": "미국 주식 인사이더 🇺🇸 (US Stocks Insider)",
+     "quote": "• Microsoft는 영국 데이터센터 기업 Nscale과 추진하던 데이터센터 계약을 중단한 것으로 보도. AI 인프라 투자 확대 과정에서 일부 대형 프로젝트의 사업 구조와 투자 지속 가능성에 대한 불확실성 부각."
+    }
+   ]
+  },
+  {
+   "name": "우주항공 및 방산 산업 재편과 성장",
+   "narrative": "KBI동양철관이 스페이스X 로켓 발사시설에 강관을 공급한다는 소식에 상한가를 기록했으며, 현대위아가 방산사업부를 현대로템에 양도하고 한화시스템이 조선 사업에서 철수하고 위성에 집중하는 등 우주항공 및 방산 산업 내에서 사업 재편과 성장이 활발하게 이루어지고 있습니다.",
+   "status": "new",
+   "strength": 5,
+   "keywords": [
+    "KBI동양철관",
+    "스페이스X",
+    "현대위아",
+    "현대로템",
+    "방산사업부",
+    "한화시스템",
+    "조선 철수",
+    "위성 올인"
+   ],
+   "evidence": [
+    {
+     "channel": "여의도스토리 Ver2.0-习近平是个狗东西",
+     "quote": "[특징주] KBI동양철관, 스페이스X 로켓 발사시설 강관 공급 소식에 ‘상한가’"
+    },
+    {
+     "channel": "DAOL 자동차/배터리 유지웅",
+     "quote": "★ 현대위아, 방산사업부 현대로템에 3,584억원 영업양도 결정 (10/19)"
+    },
+    {
+     "channel": "▩발간자료PDF.저장",
+     "quote": "🔥 #한화의 우주 「한화시스템의 조선 철수, 위성 올인 배경」"
+    }
+   ]
+  },
+  {
+   "name": "제약/바이오 섹터 방어적 매력 부각",
+   "narrative": "시장 변동성이 높아지는 가운데 제약/바이오 산업이 방어적 특성으로 주목받고 있으며, 삼성바이오로직스의 파업 영향이 제한적일 것이라는 안도감과 지투지바이오의 플랫폼 평가 계약 체결, 머크와 모더나의 mRNA 암 백신 데이터 공개 등 개별 기업의 긍정적 소식이 이어지고 있습니다.",
+   "status": "ongoing",
+   "strength": 3,
+   "keywords": [
+    "제한적일",
+    "삼성바이오로직스",
+    "제약/바이오 산업",
+    "약효지속성 주사제",
+    "mRNA 암 백신"
+   ],
+   "evidence": [
+    {
+     "channel": "한투 제약/바이오 위해주",
+     "quote": "특히 삼성바이오로직스의 경우 주요 변수였던 2차 파업이 새로운 국면을 맞으며 실질적 타격이 제한적일 것이라는 안도감이 주가에 반영될 수 있습니다."
+    },
+    {
+     "channel": "AWAKE - 실시간 주식 공시 정리채널",
+     "quote": "기업명: 지투지바이오(시가총액: 5,305억) A456160 보고서명: 투자판단관련주요경영사항 (약효지속성 주사제 개발관련 플랫폼평가 계약 체결)"
+    },
+    {
+     "channel": "TNBfolio",
+     "quote": "속보: 머크와 모더나가 이번 주 마드리드에서 열리는 유럽종양학회(ESMO) 2026에서 맞춤형 mRNA 암 백신의 3상 세부 데이터를 공개한다."
+    }
+   ]
+  },
+  {
+   "name": "중국 경기 둔화 및 산업별 공급과잉 우려",
+   "narrative": "중국 경기 부진으로 철강 산업의 공급과잉 우려가 제기되고 있으며, 중국 디램 기업 창신메모리(CXMT)의 실적 증가율 둔화가 주가 급락으로 이어지는 등 중국발 경제 지표 둔화가 여러 산업에 영향을 미치고 있습니다.",
+   "status": "ongoing",
+   "strength": 3,
+   "keywords": [
+    "中부진",
+    "철강 공급과잉",
+    "CXMT",
+    "증가율 둔화",
+    "비철금속"
+   ],
+   "evidence": [
+    {
+     "channel": "신한 리서치",
+     "quote": "▶️中부진에 철강 공급과잉?..AI 인프라로 눈돌리는 K철강 돌파구 찾나"
+    },
+    {
+     "channel": "[메리츠 중국 최설화]",
+     "quote": "[CXMT 3Q26 잠정실적: 증가율 둔화와 주가 급락] 오늘 중국의 디램 기업인 창신메모리(CXMT) 주가가 -7.8% 하락했습니다."
+    }
+   ]
+  }
+ ],
+ "community_mood": {
+  "score": -30,
+  "summary": "시장의 높은 변동성, 특히 반도체 관련 주식(SOX, 하닉)의 급락에 대한 개미 투자자들의 불만과 불안감이 고조되어 있으며, 숏 포지션과 롱 포지션 간의 격렬한 논쟁이 벌어지고 있습니다.",
+  "hot_stocks": [
+   {
+    "name": "SK하이닉스",
+    "score": -50,
+    "reason": "주가 하락에 대한 강한 불만과 부정적 감정이 표출되고 있습니다."
+   },
+   {
+    "name": "반도체 ETF (SOX 관련)",
+    "score": -40,
+    "reason": "급격한 변동성에 대한 좌절감과 함께 추가 하락 시 매수 기회를 엿보는 심리가 혼재되어 있습니다."
+   }
+  ]
+ },
+ "signals": {
+  "spikes": [
+   {
+    "term": "철수",
+    "count": 18,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "휴머노이드",
+    "count": 17,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "방법",
+    "count": 15,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "KBI",
+    "count": 15,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "KBI 동양철관",
+    "count": 14,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "동양철관",
+    "count": 14,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "AI 설비투자",
+    "count": 13,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "교보증권",
+    "count": 13,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "반드시",
+    "count": 12,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "세부",
+    "count": 12,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "부지",
+    "count": 12,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "투자전략",
+    "count": 12,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "제한적일",
+    "count": 12,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "가온전선",
+    "count": 12,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "하이브",
+    "count": 12,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "공급과잉",
+    "count": 11,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "현대건설",
+    "count": 11,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "yoy",
+    "count": 11,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "현대위아",
+    "count": 11,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "시총대비",
+    "count": 11,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "하위",
+    "count": 16,
+    "burst": 38.73510324483775,
+    "base_daily": 0.3,
+    "new": false
+   },
+   {
+    "term": "Nscale",
+    "count": 21,
+    "burst": 23.10901045856798,
+    "base_daily": 0.7,
+    "new": false
+   },
+   {
+    "term": "시진핑",
+    "count": 10,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "비철금속",
+    "count": 10,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "시차",
+    "count": 10,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   }
+  ],
+  "top_posts": [
+   {
+    "channels": 6,
+    "channel": "AWAKE - 실시간 주식 공시 정리채널",
+    "head": "2026.10.19 11:53:41 기업명: 현대로템(시가총액: 11조 125억) A064350 보고서명: 연결재무제표기준영업(잠정)실적(공정공시) 매출액 : 16,207억(예상치 : 17,860억/ -9%) 영업익 : 2,471억(예상치 : 2,737억/ -10%) 순이익 : 1,766억(예상치 : 2,045억/ -14…",
+    "url": "https://t.me/darthacking/154909",
+    "time_kst": "10-19 11:53"
+   },
+   {
+    "channels": 5,
+    "channel": "YM리서치",
+    "head": "(단독) 중국 에너지저장장치(ESS) 거대 기업들, 미국 시장 집단 철수설 미국 공급망 업계에 따르면, 미국 측의 고강도 법규 제한, 관세 중첩 및 엄격한 지분 심사라는 다중 타격으로 인해 과거 미국 시장을 주도했던 중국 에너지저장시스템(ESS) 대기업들이 2026년 들어 사실상 집단으로 사업을 철수한 것으로 전해졌다.…",
+    "url": "https://t.me/ym_research/6499",
+    "time_kst": "10-19 08:37"
+   },
+   {
+    "channels": 4,
+    "channel": "▩발간자료PDF.저장",
+    "head": "🔥 #현대로템 「2026-2027 감익-증익의 벼랑끝, 전선」 ☞ https://bit.ly/ROTEM3Q26RE ▶️ Issue: 3Q26 실적 리뷰. 적정주가 하향 ▶️ Pitch: > 3Q26은 컨센 하회했지만, 제 예상치보다는 좋았고 - 방산 수출 마진 30% 후반으로 추정. 잘 나옴 > 2026-2027 방산은…",
+    "url": "https://t.me/c/1416673238/1548",
+    "time_kst": "10-19 17:25"
+   },
+   {
+    "channels": 4,
+    "channel": "AWAKE - 실시간 주식 공시 정리채널",
+    "head": "2026.10.19 15:30:29 기업명: 지투지바이오(시가총액: 5,305억) A456160 보고서명: 투자판단관련주요경영사항 (약효지속성 주사제 개발관련 플랫폼평가 계약 체결) 제목 : 약효지속성 주사제 개발관련 플랫폼평가 계약 체결 * 주요내용 (1) 계약 상대방: The United Bio-Technology (…",
+    "url": "https://t.me/darthacking/154924",
+    "time_kst": "10-19 15:30"
+   },
+   {
+    "channels": 4,
+    "channel": "텐렙",
+    "head": "[삼성SDI, 전고체 배터리 내년 양산 본격화...휴머노이드 선점·전기차 확대 추진] : 전고체 배터리 상용화를 추진하는 삼성SDI가 2027년 하반기 양산을 목표로 핵심 소재 공급망과 고객사 협력을 강화 : 전기차보다 휴머노이드 로봇에 먼저 적용한 뒤 사업 영역을 확대하는 전략 : 첫 상용화 대상으로는 휴머노이드 로봇이…",
+    "url": "https://t.me/Ten_level/93187",
+    "time_kst": "10-19 12:38"
+   },
+   {
+    "channels": 4,
+    "channel": "AWAKE - 실시간 주식 공시 정리채널",
+    "head": "2026.10.19 14:43:38 기업명: 비나텍(시가총액: 5,888억) A126340 보고서명: 단일판매ㆍ공급계약체결 계약상대 : ACBEL POLYTECH INC 계약내용 : 데이터센터용 슈퍼커패시터 공급계약 공급지역 : 대만 계약금액 : 1,230억 계약시작 : 2026-10-16 계약종료 : 2028-02-01…",
+    "url": "https://t.me/darthacking/154918",
+    "time_kst": "10-19 14:43"
+   },
+   {
+    "channels": 4,
+    "channel": "한화투자증권 경제 임혜윤",
+    "head": "<2027 연간전망: Silver Lining> 1. 경제: 높아지는 문턱 2. 채권: 지루한 박스 3. 크레딧: Tight & Steady 4. 주식: 생각보다 쉬운 코스피 리레이팅 공식 5. 퀀트: 바이오가 되는 그림",
+    "url": "https://t.me/lim_econ/2101",
+    "time_kst": "10-19 06:24"
+   },
+   {
+    "channels": 3,
+    "channel": "키움증권 전략/시황 한지영",
+    "head": "[10/19, Kiwoom Weekly, 키움 전략 한지영] \"하단 테스트 구간에서 반전의 기회는? ------ <Weekly Three Points> a. 금요일 미국 증시는 WTI 100달러 돌파, 코어위브(-11.9%)의 회사채 수익률 상승 및 CDS 프리미엄 급등에 따른 AI 인프라주 자금 조달 우려 재점화 등으로…",
+    "url": "https://t.me/hedgecat0301/2972",
+    "time_kst": "10-19 07:32"
+   },
+   {
+    "channels": 3,
+    "channel": "[DAOL퀀트 김경훈] 탑다운 전략",
+    "head": "[DAOL퀀트 김경훈] Active Quant의 定石 - 10/20 \"숏 밭\" 3Q26분기 5번째 업데이트 (10.20 ~ 10.30) ■ 반도체, 대형 IT - \"대형주의 실적 방향성보다 주변부의 부진이 두드러지는 구도\" * 삼성전자(-0.4%, No Position): 컨센서스와 거의 동일한 실적 전망. 고평가 판정이…",
+    "url": "https://t.me/toptownquant/13825",
+    "time_kst": "10-19 14:29"
+   },
+   {
+    "channels": 3,
+    "channel": "신한 리서치",
+    "head": "[신한투자증권 혁신성장 이병화, 최승환, 허성규, 김유민, 김지영, 이채윤] 변동성에 대응하는 방법 ▶️ 신한생각: 어닝 서프 다수, 다만 변동성 높아진 시장 대응 필요 - 8~9월 코스피(+3.7%) 대비 코스닥(+18.9%) 우위 속 반도체 소부장 기업들의 약진 - 10월 대형 IT 중심 급락 재현되며 중국 메모리 기…",
+    "url": "https://t.me/shinhanresearch/53158",
+    "time_kst": "10-19 08:14"
+   },
+   {
+    "channels": 3,
+    "channel": "DAOL 자동차/배터리 유지웅",
+    "head": "★ 현대위아, 방산사업부 현대로템에 3,584억원 영업양도 결정 (10/19) ■ 영업양도 주요 내용 - 양도 대상: 특수사업부문(방산사업) 영업 일체 - 양수 회사: 현대로템 - 양도가액: 3,584억원(현금 지급) - 양도 대상 매출액: 3,931억원(전사 매출 대비 4.6%) - 양도 대상 자산: 3,549억원(전사…",
+    "url": "https://t.me/auto_revolution/4729",
+    "time_kst": "10-19 10:34"
+   },
+   {
+    "channels": 3,
+    "channel": "[메리츠 중국 최설화]",
+    "head": "[CXMT 3Q26 잠정실적: 증가율 둔화와 주가 급락] 오늘 중국의 디램 기업인 창신메모리(CXMT) 주가가 -7.8% 하락했습니다. 해외 메모리 기업과 비교했을 때 주가 낙폭이 컸는데, 이는 17일 발표된 3분기 잠정실적의 QoQ 증가율이 예상보다 크게 둔화되었기 때문으로 보입니다. (3Q 잠정실적 기준) -매출액:…",
+    "url": "https://t.me/china_kis/3990",
+    "time_kst": "10-19 18:44"
+   },
+   {
+    "channels": 3,
+    "channel": "한투 제약/바이오 위해주",
+    "head": "[한투증권 위해주/이다용] 제약/바이오 산업 Note: 지금 필요한 보고서: https://vo.la/fjYEzR6 시장 변동성 헤지를 위해 대형 제약주 추천드립니다. 방어적 산업의 특성으로 S&P 헬스케어 지수는 최근 5영업일 동안 S&P 500 지수를 앞서고 있으며 KRX 헬스케어 지수도 반등을 시작했습니다. 방어주로…",
+    "url": "https://t.me/KIS_Healthcare/1979",
+    "time_kst": "10-19 07:43"
+   },
+   {
+    "channels": 3,
+    "channel": "텐렙",
+    "head": "안녕하세요. 지투지바이오입니다. 지투지바이오가 유나이티드 바이오 테크놀로지(이하 ‘UBT’, ‘United Bio Technology’)와 '플랫폼 평가 계약'을 체결했습니다. UBT는 바이오의약품 개발을 하는 기업으로 25년 3월 노보 노디스크와 당뇨·비만 치료후보제 'UBT251'에 대하여 계약금 2억달러, 마일스톤…",
+    "url": "https://t.me/Ten_level/93193",
+    "time_kst": "10-19 15:56"
+   },
+   {
+    "channels": 3,
+    "channel": "▩발간자료PDF.저장",
+    "head": "🔥 #한화의 우주 「한화시스템의 조선 철수, 위성 올인 배경」 ☞ https://bit.ly/4i6PdRA ▶️ 꼭지들 한화시스템 조선에서 철수하면서 현금 3조원대 확보 그리고 2040년까지, 51조원 투자(한화시스템 23조원) 투자 내역 브레이크다운 투자 일정 각 시스템 기대 효과 리스크: 자본 조달 우려 0) 한화시스…",
+    "url": "https://t.me/c/1416673238/1545",
+    "time_kst": "10-19 07:18"
+   }
+  ]
+ },
+ "community_dc": {
+  "source": "DC인사이드",
+  "galleries": [
+   {
+    "id": "krstock",
+    "name": "국내주식갤러리",
+    "posts": 1289,
+    "capped": true,
+    "burst": 0.7,
+    "base_daily": 1954.9
+   },
+   {
+    "id": "stockus",
+    "name": "해외주식갤러리",
+    "posts": 2731,
+    "capped": true,
+    "burst": 0.6,
+    "base_daily": 4362.4
+   }
+  ],
+  "posts_sampled": 564,
+  "keywords": [
+   {
+    "term": "나선",
+    "count": 8,
+    "burst": 99.0,
+    "new": true
+   },
+   {
+    "term": "내가",
+    "count": 6,
+    "burst": 81.0,
+    "new": true
+   },
+   {
+    "term": "뭐임",
+    "count": 6,
+    "burst": 81.0,
+    "new": true
+   },
+   {
+    "term": "코어위브",
+    "count": 6,
+    "burst": 81.0,
+    "new": true
+   },
+   {
+    "term": "속스",
+    "count": 5,
+    "burst": 67.5,
+    "new": true
+   },
+   {
+    "term": "누가",
+    "count": 5,
+    "burst": 67.5,
+    "new": true
+   },
+   {
+    "term": "이란",
+    "count": 5,
+    "burst": 67.5,
+    "new": true
+   },
+   {
+    "term": "시발",
+    "count": 9,
+    "burst": 8.1,
+    "new": false
+   },
+   {
+    "term": "ai",
+    "count": 15,
+    "burst": 3.4,
+    "new": false
+   },
+   {
+    "term": "트럼프",
+    "count": 7,
+    "burst": 3.8,
+    "new": false
+   },
+   {
+    "term": "야선",
+    "count": 13,
+    "burst": 2.3,
+    "new": false
+   },
+   {
+    "term": "이유",
+    "count": 8,
+    "burst": 3.1,
+    "new": false
+   },
+   {
+    "term": "AI",
+    "count": 7,
+    "burst": 3.3,
+    "new": false
+   },
+   {
+    "term": "프랑스",
+    "count": 5,
+    "burst": 2.9,
+    "new": false
+   },
+   {
+    "term": "반도체",
+    "count": 7,
+    "burst": 1.9,
+    "new": false
+   }
+  ],
+  "top_recommended": [
+   {
+    "gallery": "해외주식갤러리",
+    "title": "이 분 환율의 신이면 개추 ㅋㅋㅋㅋㅋㅋㅋㅋㅋ",
+    "views": 12706,
+    "recommend": 147,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=18040544&exception_mode=recommend&page=1",
+    "time_kst": "10-19 11:25"
+   },
+   {
+    "gallery": "해외주식갤러리",
+    "title": "2027 새해 프리뷰.jpg",
+    "views": 7184,
+    "recommend": 135,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=18039595&exception_mode=recommend&page=1",
+    "time_kst": "10-19 09:41"
+   },
+   {
+    "gallery": "해외주식갤러리",
+    "title": "숏순이들 현재 상황ㅋㅋㅋ.jpg",
+    "views": 12038,
+    "recommend": 130,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=18040003&exception_mode=recommend&page=1",
+    "time_kst": "10-19 10:22"
+   },
+   {
+    "gallery": "해외주식갤러리",
+    "title": "하닉 산 새끼들 애미가 뒤진 이유 ㅋㅋ",
+    "views": 9667,
+    "recommend": 127,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=18038440&exception_mode=recommend&page=1",
+    "time_kst": "10-19 08:16"
+   },
+   {
+    "gallery": "해외주식갤러리",
+    "title": "3억 파이어 계좌변화",
+    "views": 11043,
+    "recommend": 124,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=18044105&exception_mode=recommend&page=1",
+    "time_kst": "10-19 19:32"
+   }
+  ],
+  "top_viewed": [
+   {
+    "gallery": "국내주식갤러리",
+    "title": "형들오늘머임",
+    "views": 20052,
+    "recommend": 0,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3705042&page=1",
+    "time_kst": "10-20 05:50"
+   },
+   {
+    "gallery": "국내주식갤러리",
+    "title": "6월이 그립다",
+    "views": 20051,
+    "recommend": 0,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3705044&page=1",
+    "time_kst": "10-20 05:54"
+   },
+   {
+    "gallery": "국내주식갤러리",
+    "title": "오선방 채팅창 보면 힐링된다",
+    "views": 20048,
+    "recommend": 0,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3705039&page=1",
+    "time_kst": "10-20 05:43"
+   },
+   {
+    "gallery": "국내주식갤러리",
+    "title": "승리의 롱붕이들 기상",
+    "views": 20047,
+    "recommend": 0,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3705043&page=1",
+    "time_kst": "10-20 05:52"
+   },
+   {
+    "gallery": "국내주식갤러리",
+    "title": "오늘 얘 부활가능?",
+    "views": 20044,
+    "recommend": 0,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3705041&page=1",
+    "time_kst": "10-20 05:45"
+   },
+   {
+    "gallery": "국내주식갤러리",
+    "title": "속스 시발년아 좀 줍게 떨어져봐 ㅅㅂ",
+    "views": 20041,
+    "recommend": 0,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3705040&page=1",
+    "time_kst": "10-20 05:43"
+   },
+   {
+    "gallery": "국내주식갤러리",
+    "title": "속스 불쌍해 오른것도 얼마없는데",
+    "views": 20039,
+    "recommend": 0,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3705037&page=1",
+    "time_kst": "10-20 05:42"
+   },
+   {
+    "gallery": "국내주식갤러리",
+    "title": "숏치는 저능아들은 뭐임??",
+    "views": 20035,
+    "recommend": 0,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3705035&page=1",
+    "time_kst": "10-20 05:41"
+   }
+  ]
+ }
+}

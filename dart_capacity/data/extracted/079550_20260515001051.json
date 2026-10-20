@@ -1,0 +1,277 @@
+{
+ "meta": {
+  "company": "LIG D&A",
+  "sector": "방산",
+  "stock_code": "079550",
+  "corp_code": "00503668",
+  "rcept_no": "20260515001051",
+  "rcept_dt": "20260515",
+  "report_nm": "분기보고서 (2026.03)",
+  "report_type": "quarter",
+  "period": "2026-03",
+  "period_label": "2026.03 1Q",
+  "corrected": false,
+  "dart_url": "https://dart.fss.or.kr/dsaf001/main.do?rcpNo=20260515001051"
+ },
+ "tables": [
+  {
+   "section": [
+    "1. 사업의 개요",
+    "2. 주요 제품 및 서비스",
+    "3. 원재료 및 생산설비"
+   ],
+   "headings": [
+    "나. 주요 원재료 가격변동 요인",
+    "다. 생산능력, 생산실적, 가동률",
+    "(1) 생산능력"
+   ],
+   "context": [
+    "나. 주요 원재료 가격변동 요인",
+    "지배회사의 원재료 가격 관련 사항은 보안 관계상 기재를 생략합니다.",
+    "다. 생산능력, 생산실적, 가동률",
+    "(1) 생산능력",
+    "(단위 : 억원)"
+   ],
+   "unit": "(단위 : 억원)",
+   "keywords": [
+    "생산능력"
+   ],
+   "keyword_in": "heading",
+   "rows": [
+    [
+     "사업부문",
+     "사업소",
+     "제25기 (2026년 1분기)",
+     "제24기 (2025년)",
+     "제23기 (2024년)"
+    ],
+    [
+     "방위산업부문",
+     "생산본부",
+     "12,506",
+     "40,461",
+     "30,770"
+    ]
+   ],
+   "html": "<table aclass=\"NORMAL\" afixtable=\"N\" border=\"1\" width=\"607\">\n<colgroup width=\"607\">\n<col width=\"108\"/>\n<col width=\"78\"/>\n<col width=\"141\"/>\n<col width=\"140\"/>\n<col width=\"140\"/>\n</colgroup>\n<thead>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"53\">\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"46\" valign=\"MIDDLE\" width=\"99\">\n<p>사업부문</p>\n</th>\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"46\" valign=\"MIDDLE\" width=\"69\">\n<p>사업소</p>\n</th>\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"46\" valign=\"MIDDLE\" width=\"132\">\n<p>제25기</p>\n<p>(2026년 1분기)</p>\n</th>\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"46\" valign=\"MIDDLE\" width=\"131\">\n<p>제24기</p>\n<p>(2025년)</p>\n</th>\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"46\" valign=\"MIDDLE\" width=\"131\">\n<p>제23기</p>\n<p>(2024년)</p>\n</th>\n</tr>\n</thead>\n<tbody>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"30\">\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"99\">\n<p>방위산업부문</p>\n</td>\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"69\">\n<p>생산본부</p>\n</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"132\">12,506</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"131\">40,461</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"131\">30,770</td>\n</tr>\n</tbody>\n</table>",
+   "footnotes": [],
+   "digest": "c5a165e61a57",
+   "file": "20260515001051.xml"
+  },
+  {
+   "section": [
+    "1. 사업의 개요",
+    "2. 주요 제품 및 서비스",
+    "3. 원재료 및 생산설비"
+   ],
+   "headings": [
+    "(2) 생산능력의 산출근거① 산출방법",
+    "(3) 생산실적"
+   ],
+   "context": [
+    "주1) 방위산업의 보안 관계상 구체적인 생산능력 제시는 불가능하여 운영자원(인원, 설비 등)과 평균가동시간(근무일수, 평균 추가근무 시간 등) 등을 종합적으로 고려하여 산출하였습니다.",
+    "주2) 다품종 주문생산방식으로 각 사업의 연도별 생산수량 변동이 많고, 이에 따른 생산인력이 조정 배치됨에 따라 생산능력이 변동될 수 있습니다.",
+    "(2) 생산능력의 산출근거① 산출방법",
+    "운영자원(인원, 설비 등)과 평균가동시간(근무일수, 평균 추가근무 시간 등)을 기준으로 산정된 사업별 생산 소요기간(Lead-time)을 고려하여 연간 생산할 수 있는 능력을 산정하였습니다.",
+    "② 평균가동시간- 1일 평균 가동시간 : [법정근로시간(8시간)+평균 추가근무시간(1.50hr)]*실동율 78.1%- 월 평균 가동일수, 연간 가동일수 : Calendar day 에서 법정휴일을 차감- 2026년 총 근무일 : 236일- 평균 추가근무시간, 실동율은 2025년 실적을 적용함- 연간 평균 가동시간 : 2026년 기준 평균 1,751 M/H 으로 정의함- 상기 총 근무일수, 연간 평균 가동시간은 추정치로 당사 경영상의 사유로 변동될 수 있음.",
+    "(3) 생산실적",
+    "(단위 : 억원)"
+   ],
+   "unit": "(단위 : 억원)",
+   "keywords": [
+    "생산실적"
+   ],
+   "keyword_in": "heading",
+   "rows": [
+    [
+     "사업부문",
+     "사업소",
+     "제25기 (2026년 1분기)",
+     "제24기 (2025년)",
+     "제23기 (2024년)"
+    ],
+    [
+     "방위산업부문",
+     "구미,김천,대전",
+     "9,642",
+     "31,600",
+     "19,875"
+    ]
+   ],
+   "html": "<table aclass=\"NORMAL\" afixtable=\"N\" border=\"1\" width=\"594\">\n<colgroup width=\"594\">\n<col width=\"119\"/>\n<col width=\"122\"/>\n<col width=\"116\"/>\n<col width=\"119\"/>\n<col width=\"118\"/>\n</colgroup>\n<thead>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"53\">\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"46\" valign=\"MIDDLE\" width=\"110\">\n<p>사업부문</p>\n</th>\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"46\" valign=\"MIDDLE\" width=\"113\">\n<p>사업소</p>\n</th>\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"46\" valign=\"MIDDLE\" width=\"107\">\n<p>제25기</p>\n<p>(2026년 1분기)</p>\n</th>\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"46\" valign=\"MIDDLE\" width=\"110\">\n<p>제24기</p>\n<p>(2025년)</p>\n</th>\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"46\" valign=\"MIDDLE\" width=\"109\">\n<p>제23기</p>\n<p>(2024년)</p>\n</th>\n</tr>\n</thead>\n<tbody>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"30\">\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"110\">\n<p>방위산업부문</p>\n</td>\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"113\">\n<p>구미,김천,대전</p>\n</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"107\">9,642</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"110\">31,600</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"109\">19,875</td>\n</tr>\n</tbody>\n</table>",
+   "footnotes": [],
+   "digest": "26c0d221c72e",
+   "file": "20260515001051.xml"
+  },
+  {
+   "section": [
+    "1. 사업의 개요",
+    "2. 주요 제품 및 서비스",
+    "3. 원재료 및 생산설비"
+   ],
+   "headings": [],
+   "context": [
+    "- 생산실적은 공장의 제품매출액을 기재하였음",
+    "(4) 당해 사업연도의 가동률2026년 1분기 누적 가동일수는 58일이며, 평균가동율은 77.1%로 산정되었습니다.",
+    "(단위 : 시간, %)"
+   ],
+   "unit": "(단위 : 시간, %)",
+   "keywords": [
+    "가동률"
+   ],
+   "keyword_in": "table",
+   "rows": [
+    [
+     "사업부문",
+     "사업소",
+     "제25기 (2026년 1분기)"
+    ],
+    [
+     "누적 가동시간",
+     "누적 실제가동시간",
+     "가동률"
+    ],
+    [
+     "방위산업부문",
+     "생산본부",
+     "491,930",
+     "379,139",
+     "77.1%"
+    ]
+   ],
+   "html": "<table aclass=\"NORMAL\" afixtable=\"N\" border=\"1\" width=\"621\">\n<colgroup width=\"621\">\n<col width=\"125\"/>\n<col width=\"124\"/>\n<col width=\"124\"/>\n<col width=\"150\"/>\n<col width=\"98\"/>\n</colgroup>\n<thead>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"30\">\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"53\" rowspan=\"2\" valign=\"MIDDLE\" width=\"116\">\n<p>사업부문</p>\n</th>\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"53\" rowspan=\"2\" valign=\"MIDDLE\" width=\"115\">\n<p>사업소</p>\n</th>\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" colspan=\"3\" height=\"23\" valign=\"MIDDLE\" width=\"363\">제25기 (2026년 1분기)</th>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"30\">\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"23\" valign=\"MIDDLE\" width=\"115\">\n<p>누적 가동시간</p>\n</th>\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"23\" valign=\"MIDDLE\" width=\"141\">\n<p>누적 실제가동시간</p>\n</th>\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"23\" valign=\"MIDDLE\" width=\"89\">\n<p>가동률</p>\n</th>\n</tr>\n</thead>\n<tbody>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"30\">\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"116\">\n<p>방위산업부문</p>\n</td>\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"115\">\n<p>생산본부</p>\n</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"115\">491,930</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"141\">379,139</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"89\">77.1%</td>\n</tr>\n</tbody>\n</table>",
+   "footnotes": [],
+   "digest": "ea39fd534536",
+   "file": "20260515001051.xml"
+  },
+  {
+   "section": [
+    "1. 사업의 개요",
+    "2. 주요 제품 및 서비스",
+    "3. 원재료 및 생산설비"
+   ],
+   "headings": [
+    "나. 주요 원재료 가격변동 요인",
+    "다. 생산능력, 생산실적, 가동률",
+    "(1) 생산능력"
+   ],
+   "context": [
+    "나. 주요 원재료 가격변동 요인",
+    "종속회사의 원재료 가격 관련 사항은 보안 관계상 기재를 생략합니다.",
+    "다. 생산능력, 생산실적, 가동률",
+    "(1) 생산능력",
+    "(단위 : 공장 총 가동시간)"
+   ],
+   "unit": "(단위 : 공장 총 가동시간)",
+   "keywords": [
+    "생산능력"
+   ],
+   "keyword_in": "heading",
+   "rows": [
+    [
+     "사업부문",
+     "사업소",
+     "2026년 1분기",
+     "2025년",
+     "2024년"
+    ],
+    [
+     "방위산업부문",
+     "대전사업장",
+     "22,876",
+     "79,060",
+     "69,576"
+    ]
+   ],
+   "html": "<table aclass=\"NORMAL\" afixtable=\"N\" border=\"1\" width=\"616\">\n<colgroup width=\"616\">\n<col width=\"124\"/>\n<col width=\"123\"/>\n<col width=\"123\"/>\n<col width=\"123\"/>\n<col width=\"123\"/>\n</colgroup>\n<thead>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"30\">\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"23\" valign=\"MIDDLE\" width=\"115\">\n<p>사업부문</p>\n</th>\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"23\" valign=\"MIDDLE\" width=\"114\">\n<p>사업소</p>\n</th>\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"23\" valign=\"MIDDLE\" width=\"114\">2026년 1분기</th>\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"23\" valign=\"MIDDLE\" width=\"114\">2025년</th>\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"23\" valign=\"MIDDLE\" width=\"114\">2024년</th>\n</tr>\n</thead>\n<tbody>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"30\">\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"115\">방위산업부문</td>\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"114\">대전사업장</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"114\">22,876</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"114\">79,060</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"114\">69,576</td>\n</tr>\n</tbody>\n</table>",
+   "footnotes": [],
+   "digest": "ff2666aea5d4",
+   "file": "20260515001051.xml"
+  },
+  {
+   "section": [
+    "1. 사업의 개요",
+    "2. 주요 제품 및 서비스",
+    "3. 원재료 및 생산설비"
+   ],
+   "headings": [
+    "주3) 공장 총 가동시간 : 기본(8시간)+잔업+휴가+교육훈련",
+    "(3) 생산실적"
+   ],
+   "context": [
+    "주1) 방위산업의 보안 관계상 구체적인 생산능력 제시는 불가능하여 가동시간(근무일수, 평균 추가근무 시간) 등을 종합적으로 고려하여 산출하였습니다.주2) 다품종 주문생산방식으로 각 사업의 년도별 생산수량 변동이 많고, 이에 따른 생산인력이 조정 배치됨에 따라 생산능력이 변동될 수 있습니다.",
+    "주3) 공장 총 가동시간 : 기본(8시간)+잔업+휴가+교육훈련",
+    "(2) 생산능력의 산출근거① 산출방법운영자원(인원, 설비 등)과 평균가동시간(근무일수, 평균 추가근무 시간 등)을 기준으로 산정된 사업별 생산 소요기간(Lead-time)을 고려하여 연간 생산할 수 있는 능력을 산정하였습니다.② 평균가동시간 - 1일 평균 가동시간 : [법정근로시간(8시간)+평균 추가근무시간(2hr)] - 월 평균 가동일수, 연간 가동일수 : Calendar day 에서 법정휴일을 차감 - 2026년 총 근무일 : 246일 - 연간 평균 가동시간 : 2026년 기준 평균 2,460 M/H 으로 정의함 - 상기 총 근무일수, 연간 평균 가동시간은 추정치로 당사 경영상의 사유로 변동 될 수 있음.",
+    "(3) 생산실적",
+    "(단위 : 억원)"
+   ],
+   "unit": "(단위 : 억원)",
+   "keywords": [
+    "생산실적"
+   ],
+   "keyword_in": "heading",
+   "rows": [
+    [
+     "사업부문",
+     "사업소",
+     "2026년 1분기",
+     "2025년",
+     "2024년"
+    ],
+    [
+     "방위산업부문",
+     "대전사업장",
+     "108",
+     "446",
+     "391"
+    ]
+   ],
+   "html": "<table aclass=\"NORMAL\" afixtable=\"N\" border=\"1\" width=\"620\">\n<colgroup width=\"620\">\n<col width=\"137\"/>\n<col width=\"111\"/>\n<col width=\"124\"/>\n<col width=\"124\"/>\n<col width=\"124\"/>\n</colgroup>\n<thead>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"30\">\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"23\" valign=\"MIDDLE\" width=\"128\">\n<p>사업부문</p>\n</th>\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"23\" valign=\"MIDDLE\" width=\"102\">\n<p>사업소</p>\n</th>\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"23\" valign=\"MIDDLE\" width=\"115\">2026년 1분기</th>\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"23\" valign=\"MIDDLE\" width=\"115\">2025년</th>\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"23\" valign=\"MIDDLE\" width=\"115\">2024년</th>\n</tr>\n</thead>\n<tbody>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"30\">\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"128\">방위산업부문</td>\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"102\">대전사업장</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"115\">108</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"115\">446</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"115\">391</td>\n</tr>\n</tbody>\n</table>",
+   "footnotes": [],
+   "digest": "de13f3fe3f86",
+   "file": "20260515001051.xml"
+  },
+  {
+   "section": [
+    "1. 사업의 개요",
+    "2. 주요 제품 및 서비스",
+    "3. 원재료 및 생산설비"
+   ],
+   "headings": [],
+   "context": [
+    "- 생산실적은 공장의 제품매출액을 기재하였음",
+    "(4) 당해 사업연도의 가동률2026년 1분기 기준 누적 가동일수는 59일이며, 평균가동율은 98.3%로 산정되었습니다.",
+    "(단위 : 시간, %)"
+   ],
+   "unit": "(단위 : 시간, %)",
+   "keywords": [
+    "가동률"
+   ],
+   "keyword_in": "table",
+   "rows": [
+    [
+     "사업부문",
+     "사업소",
+     "2026년 1분기"
+    ],
+    [
+     "누적 가동시간",
+     "누적 실제가동시간",
+     "가동률"
+    ],
+    [
+     "방위산업부문",
+     "대전사업장",
+     "22,876",
+     "22,486",
+     "98.3%"
+    ]
+   ],
+   "html": "<table aclass=\"NORMAL\" afixtable=\"N\" border=\"1\" width=\"617\">\n<colgroup width=\"617\">\n<col width=\"136\"/>\n<col width=\"112\"/>\n<col width=\"107\"/>\n<col width=\"138\"/>\n<col width=\"124\"/>\n</colgroup>\n<thead>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"30\">\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"76\" rowspan=\"2\" valign=\"MIDDLE\" width=\"127\">\n<p>사업부문</p>\n</th>\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"76\" rowspan=\"2\" valign=\"MIDDLE\" width=\"103\">\n<p>사업소</p>\n</th>\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" colspan=\"3\" height=\"23\" valign=\"MIDDLE\" width=\"360\">\n<p>2026년 1분기</p>\n</th>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"53\">\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"46\" valign=\"MIDDLE\" width=\"98\">\n<p>누적 가동시간</p>\n</th>\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"46\" valign=\"MIDDLE\" width=\"129\">\n<p>누적 실제가동시간</p>\n</th>\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"46\" valign=\"MIDDLE\" width=\"115\">\n<p>가동률</p>\n</th>\n</tr>\n</thead>\n<tbody>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"30\">\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"127\">\n<p>방위산업부문</p>\n</td>\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"103\">\n<p>대전사업장</p>\n</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"98\">22,876</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"129\">22,486</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"115\">98.3%</td>\n</tr>\n</tbody>\n</table>",
+   "footnotes": [],
+   "digest": "376355fc2130",
+   "file": "20260515001051.xml"
+  }
+ ],
+ "rejected": []
+}

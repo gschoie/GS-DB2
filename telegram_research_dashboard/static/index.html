@@ -57,6 +57,7 @@
           <button class="nav" data-view="consensus">📈 코스피200.컨센.추적</button>
           <button class="nav" data-view="valuation">📊 피어그룹.Valuation</button>
           <button class="nav" data-view="covflow">📡 커버리지 수급 등</button>
+          <button class="nav" data-view="dartcap">🏭 전자공시 - 생산능력</button>
           <div class="nav-sep"></div>
           <button data-fresh="peer" title="야후파이낸스에서 새로 수집한 뒤 엑셀을 내려받습니다 (1~2분)">📈 피어그룹.주가 다운로드</button>
           <details class="nav-subgroup">
@@ -149,6 +150,7 @@
           <div class="nav-sep"></div>
           <a href="https://corpday-calendar.animsam09.workers.dev/" target="_blank" rel="noopener">📆 코퍼레잇데이.DAOL</a>
           <a href="https://daol-analyst-schedule.netlify.app/" target="_blank" rel="noopener">🗓️ 활동관리.DAOL</a>
+          <a href="https://claude.ai/artifact/B95kGMgA6prDEG3uhEkypG" target="_blank" rel="noopener">📑 2H26_NPS</a>
         </div>
       </details>
       <details class="nav-group">
@@ -289,7 +291,7 @@
     </section>
 
     <section id="tone" class="view">
-      <div class="archive-intro tone-intro"><div><p class="eyebrow" style="margin:0">DAOL RESEARCH TONE</p></div><div class="etf-actions"><span style="font-size:11px;color:#8a938d">산업의견 · AI 톤 · TP 4분류 · 투자포인트 변화 · 타사 비교</span><a class="open-new" href="tone_full.html" target="_blank" rel="noopener">🔗 새 창으로</a></div></div>
+      <div class="archive-intro tone-intro"><div><p class="eyebrow" style="margin:0">DAOL RESEARCH TONE</p></div><div class="etf-actions"><span style="font-size:11px;color:#8a938d">산업의견 · AI 톤 · TP 4분류 · 투자포인트 변화 · 타사 비교</span><a class="open-new" href="https://daol-securities-research-center.github.io/DAOL-RESEARCH-TONE/" target="_blank" rel="noopener">🔗 새 창으로</a></div></div>
       <iframe id="tone-frame" class="union-board-frame" title="DAOL 리서치 톤" loading="lazy"></iframe>
     </section>
 
@@ -299,7 +301,7 @@
     </section>
 
     <section id="collab" class="view">
-      <div class="archive-intro"><div><p class="eyebrow">CROSS-SECTOR RADAR</p><h2>섹터 콜라보 레이더</h2></div><div class="etf-actions"><span>매크로·미국공략·원자재·산업테마를 여러 섹터가 동시에 다루면 콜라보 후보, 방향이 갈리면 수혜vs피해 페어로 잡아냅니다.</span><a class="open-new" href="https://gschoie.github.io/DAOL-RESEARCH-TONE/daol_collab_radar.html" target="_blank" rel="noopener">🔗 새 창으로</a></div></div>
+      <div class="archive-intro"><div><p class="eyebrow">CROSS-SECTOR RADAR</p><h2>섹터 콜라보 레이더</h2></div><div class="etf-actions"><span>매크로·미국공략·원자재·산업테마를 여러 섹터가 동시에 다루면 콜라보 후보, 방향이 갈리면 수혜vs피해 페어로 잡아냅니다.</span><a class="open-new" href="collab_full.html" target="_blank" rel="noopener">🔗 새 창으로</a></div></div>
       <iframe id="collab-frame" class="union-board-frame" title="섹터 콜라보 레이더" loading="lazy"></iframe>
     </section>
 
@@ -411,8 +413,12 @@
     </section>
 
     <section id="covflow" class="view">
-      <div class="archive-intro"><div><p class="eyebrow">COVERAGE · FLOW</p><h2>커버리지 기업 수급 / 기술적 지표</h2></div><div class="etf-actions"><button id="covflow-refresh" class="refresh-btn" type="button" title="정해진 시간(평일 10:00·13:30·15:30) 외에 지금 수급·지표를 다시 수집합니다 (자동 실행, 2~3분 소요 · 텔레그램은 안 갑니다).">🔄 지금 수집</button><span id="covflow-status" class="task-sync"></span><a class="open-new" href="coverage_flow_report.html" target="_blank" rel="noopener">🔗 새 창으로</a></div></div>
+      <div class="archive-intro"><div><p class="eyebrow">COVERAGE · FLOW</p><h2>커버리지 기업 수급 / 기술적 지표</h2></div><div class="etf-actions"><button id="covflow-refresh" class="refresh-btn" type="button" title="정해진 시간(평일 13:00·16:00) 외에 지금 수급·지표를 다시 수집합니다 (자동 실행, 2~3분 소요 · 텔레그램은 안 갑니다).">🔄 지금 수집</button><span id="covflow-status" class="task-sync"></span><a class="open-new" href="coverage_flow_report.html" target="_blank" rel="noopener">🔗 새 창으로</a></div></div>
       <iframe id="covflow-frame" class="union-board-frame" title="커버리지 기업 수급 / 기술적 지표" loading="lazy"></iframe>
+    </section>
+    <section id="dartcap" class="view">
+      <div class="archive-intro"><div><p class="eyebrow">DART · CAPACITY</p><h2>전자공시 - 생산능력 · 생산실적 · 가동률</h2></div><div class="etf-actions"><button id="dartcap-refresh" class="refresh-btn" type="button" title="OpenDART에서 새 정기보고서를 받아 표를 추출·정규화합니다 (자동 실행은 3·5·8·11월 20일, 10분 안팎 소요).">🔄 지금 수집</button><span id="dartcap-status" class="task-sync"></span><a class="open-new" href="dart_capacity_report.html" target="_blank" rel="noopener">🔗 새 창으로</a></div></div>
+      <iframe id="dartcap-frame" class="union-board-frame" title="생산능력 · 생산실적 · 가동률" loading="lazy"></iframe>
     </section>
 
     <section id="macro" class="view">

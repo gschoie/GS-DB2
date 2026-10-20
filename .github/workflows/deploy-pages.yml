@@ -7,7 +7,7 @@ on:
   # 봇(GITHUB_TOKEN)이 스냅샷을 push하면 on:push가 안 걸리므로(무한루프 방지 정책),
   # 컨센 워크플로 완료 이벤트로 배포를 잇는다. workflow_run은 토큰 제약을 우회한다.
   workflow_run:
-    workflows: ["KOSPI200 컨센 트래킹", "시장 수급 동향", "시장관심 내러티브", "글로벌 방산 브리핑", "글로벌 방산 주간정리", "글로벌 건설기계 브리핑", "글로벌 건설기계 주간정리", "친환경 에너지 브리핑", "유튜브 3일 모음", "휴가 일정 추적", "ETF 섹터 신호", "Claude 방산 브리핑 수집", "ChatGPT 방산 브리핑", "건설기계 GPT 브리핑", "밸류에이션 PER·PBR·ROE·PSR", "매크로 데스크", "커버리지 수급·기술지표"]
+    workflows: ["KOSPI200 컨센 트래킹", "시장 수급 동향", "시장관심 내러티브", "글로벌 방산 브리핑", "글로벌 방산 주간정리", "글로벌 건설기계 브리핑", "글로벌 건설기계 주간정리", "친환경 에너지 브리핑", "유튜브 3일 모음", "휴가 일정 추적", "ETF 섹터 신호", "Claude 방산 브리핑 수집", "ChatGPT 방산 브리핑", "건설기계 GPT 브리핑", "밸류에이션 PER·PBR·ROE·PSR", "매크로 데스크", "커버리지 수급·기술지표", "DART 생산능력·가동률"]
     types: [completed]
   schedule:
     # 한국시간 06·09·12·15·18·21·24시 (3시간 간격, 하루 7회) 자동 갱신.
@@ -191,6 +191,36 @@ jobs:
       - uses: actions/upload-pages-artifact@v5
         with:
           path: telegram_research_dashboard/_site
+
+      # 공유용 주소(https://gs-research-desk.github.io)에도 같은 산출물을 올린다 — GitHub 조직
+      # `gs-research-desk` 의 Pages 리포(gs-research-desk/gs-research-desk.github.io) main 에 _site 를
+      # 통째로 push(매번 orphan 커밋이라 이력이 안 쌓인다). 대시보드의 '새 창으로'·사이드바 새 탭
+      # 링크·공유 허브(invest.html)가 전부 이 주소로 열려, 화면 공유 때 주소창에
+      # gschoie.github.io/GS-DB2 와 사이드바가 보이지 않는다.
+      # 시크릿 SHARE_DEPLOY_TOKEN(그 리포 Contents 쓰기 권한 PAT)이 없거나 실패해도
+      # 본 GitHub Pages 배포는 그대로 간다(continue-on-error).
+      # secrets 컨텍스트는 step `if` 에서 못 쓴다(워크플로 파일 자체가 거부돼 잡 0개로 실패 —
+      # 10/19 실측) → 셸 스텝이 유무를 출력으로 바꿔 넘긴다.
+      - name: 공유용 주소 토큰 확인
+        id: share
+        env:
+          # 사용자가 등록한 시크릿 이름이 다를 수 있어 두 이름 중 있는 쪽을 쓴다
+          SHARE_DEPLOY_TOKEN: ${{ secrets.SHARE_DEPLOY_TOKEN || secrets.SHARE_DEPLOY_2_GS_RESEARCH_DESK }}
+        run: |
+          if [ -n "$SHARE_DEPLOY_TOKEN" ]; then echo "on=1" >> "$GITHUB_OUTPUT"
+          else echo "on=0" >> "$GITHUB_OUTPUT"; echo "::warning::SHARE_DEPLOY_TOKEN 시크릿 없음 — 공유용 주소 배포 생략"; fi
+      - name: 공유용 주소 배포 (gs-research-desk.github.io)
+        if: steps.share.outputs.on == '1'
+        continue-on-error: true
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          personal_token: ${{ secrets.SHARE_DEPLOY_TOKEN || secrets.SHARE_DEPLOY_2_GS_RESEARCH_DESK }}
+          external_repository: gs-research-desk/gs-research-desk.github.io
+          publish_branch: main
+          publish_dir: telegram_research_dashboard/_site
+          force_orphan: true
+          user_name: github-actions[bot]
+          user_email: 41898282+github-actions[bot]@users.noreply.github.com
 
   deploy:
     environment:

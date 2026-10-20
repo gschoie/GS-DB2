@@ -15,7 +15,7 @@ import metrics  # noqa: E402
 
 LATEST = os.path.join(HERE, "data", "latest.json")
 OUT = os.path.join(ROOT, "telegram_research_dashboard", "static", "coverage_flow_report.html")
-SCHEDULE_TIME = "평일 10:00 · 13:30 · 15:30"
+SCHEDULE_TIME = "평일 13:00 (장중) · 16:00 (장 마감 후)"
 WD = "월화수목금토일"
 
 
@@ -104,8 +104,22 @@ def grouped(rows, key, reverse=False):
     return out
 
 
+def mcap_key(r):
+    """표 정렬 공통 키 — 시총(억) 내림차순. 시총을 모르면 맨 뒤(사용자 요청 10/19: 기업 정렬은 시총 순)."""
+    v = (r.get("px") or {}).get("mcap")
+    return v if v is not None else -1e18
+
+
 def group_row(g, ncol):
     return f"<tr class='gh'><td colspan='{ncol}'>{esc(g)}</td></tr>"
+
+
+def agg(vals, how):
+    """묶음 요약 — how='mean' 단순평균 / 'sum' 합계. None 은 빼고, 값이 하나도 없으면 None."""
+    xs = [v for v in vals if v is not None]
+    if not xs:
+        return None
+    return sum(xs) / len(xs) if how == "mean" else sum(xs)
 
 
 def frgn_cell(px):
@@ -121,7 +135,7 @@ def frgn_cell(px):
 def returns_table(rows):
     """등락률 표: 오늘 · 1W · 1M · 3M · YTD (+ 외인 보유 · 시총)."""
     rs = [r for r in rows if r.get("tech")]
-    key = lambda r: (r["tech"].get("ret") or {}).get("d1") if (r["tech"].get("ret") or {}).get("d1") is not None else -1e9
+    key = mcap_key
     ret_keys = ("d1", "w1", "m1", "m3", "ytd")
     caps = col_caps({k: [(r["tech"].get("ret") or {}).get(k) for r in rs] for k in ret_keys})
     tr = []
@@ -134,6 +148,12 @@ def returns_table(rows):
                       + f"<td class='c'>{spark_svg(r['tech'].get('spark'))}</td>"
                       + frgn_cell(px)
                       + f"<td class='r'>{n(px.get('mcap'), 0, sign=False)}</td></tr>")
+        # 묶음 요약: 등락률 단순평균(10/20 사용자 요청) + 시총 합계
+        avg = {k: agg([(r["tech"].get("ret") or {}).get(k) for r in grs], "mean") for k in ret_keys}
+        mcap_sum = agg([(r.get("px") or {}).get("mcap") for r in grs], "sum")
+        tr.append(f"<tr class='sub'><td>{esc(g)} 평균<small>{len(grs)}종목 · 단순평균</small></td>"
+                  + "".join(f"<td class='r'{shade(avg[k], caps[k])}>{_pct(avg[k])}</td>" for k in ret_keys)
+                  + f"<td class='c'></td><td class='r'></td><td class='r'>{n(mcap_sum, 0, sign=False)}</td></tr>")
     return ("<table><thead><tr><th>종목</th><th class='r'>오늘</th><th class='r'>1주</th><th class='r'>1개월</th>"
             "<th class='r'>3개월</th><th class='r'>YTD</th><th class='c'>3개월 차트</th><th class='r'>외인 보유</th><th class='r'>시총(억)</th></tr></thead>"
             f"<tbody>{''.join(tr)}</tbody></table>")
@@ -141,9 +161,9 @@ def returns_table(rows):
 
 def flow_table(rows):
     """투자자별 순매수(억원) 표: 외인 · 기관 · 개인 × (오늘 · 5일 · 1개월 · 3개월 · YTD).
-    5일 칸에 연속일수 배지. 정렬은 외인 5일 순."""
+    5일 칸에 연속일수 배지. 정렬은 시총 순."""
     rs = [r for r in rows if r.get("flow")]
-    key = lambda r: r["flow"].get("frgn5") if r["flow"].get("frgn5") is not None else -1e9
+    key = mcap_key
     tr = []
     keys = ("today", "d5", "m1", "m3", "ytd")
     caps = col_caps({(who, k): [((r["flow"].get("win") or {}).get(who) or {}).get(k) for r in rs]
@@ -161,6 +181,14 @@ def flow_table(rows):
                     cls = "r grp" if k == "today" else "r"
                     cells.append(f"<td class='{cls}'{shade(v, caps[(who, k)])}>{n(v)}{(' ' + badge) if badge else ''}</td>")
             tr.append(f"<tr><td>{esc(r['name'])}</td>{''.join(cells)}</tr>")
+        # 묶음 요약: 투자자별 순매수 합계(10/20 사용자 요청)
+        cells = []
+        for who in ("frgn", "inst", "indiv"):
+            for k in keys:
+                tot = agg([((r["flow"].get("win") or {}).get(who) or {}).get(k) for r in grs], "sum")
+                cls = "r grp" if k == "today" else "r"
+                cells.append(f"<td class='{cls}'{shade(tot, caps[(who, k)])}>{n(tot)}</td>")
+        tr.append(f"<tr class='sub'><td>{esc(g)} 합계<small>{len(grs)}종목</small></td>{''.join(cells)}</tr>")
     sub = "".join(f"<th class='r{' grp' if k == 'today' else ''}'>{lbl}</th>" for _ in range(3) for k, lbl in zip(keys, ("오늘", "5일", "1개월", "3개월", "YTD")))
     return ("<table class='flow'><thead><tr><th rowspan='2'>종목</th><th colspan='5' class='grp c'>외국인</th><th colspan='5' class='grp c'>기관</th><th colspan='5' class='grp c'>개인</th></tr>"
             f"<tr>{sub}</tr></thead><tbody>{''.join(tr)}</tbody></table>")
@@ -206,9 +234,9 @@ def passive_table(rows, etfs, active, active_date):
 
 def tech_table(rows):
     ts = [r for r in rows if r.get("tech")]
-    key = lambda r: r["tech"].get("rsi") if r["tech"].get("rsi") is not None else 50
+    key = mcap_key
     tr = []
-    for g, grs in grouped(ts, key):
+    for g, grs in grouped(ts, key, reverse=True):
         tr.append(group_row(g, 8))
         for r in grs:
             t = r["tech"]
@@ -270,6 +298,7 @@ h1{{font:500 30px Georgia,"Noto Serif KR",serif;margin:0}}
 h2{{font:600 18px Georgia,"Noto Serif KR",serif;margin:34px 0 10px}}
 h3{{font:600 14px Inter;margin:22px 0 8px}}h3 small{{color:var(--muted);font-weight:400;margin-left:6px}}
 .sub{{color:var(--muted);font-size:12px;margin:8px 0 0;line-height:1.6}}.sub b{{color:#4b5563}}
+.asof{{margin:34px 0 0;font-size:12px;color:#6b7280}}.asof b{{color:#111827}}
 .sched{{display:inline-block;background:#eff6ff;border:1px solid var(--line);border-radius:4px;padding:3px 9px;margin:3px 0;font-size:11px;color:#6b7280}}.sched b{{color:#1d4ed8}}
 .stats{{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px;margin:22px 0 8px}}
 @media(max-width:900px){{.stats{{grid-template-columns:repeat(2,minmax(0,1fr))}}body{{padding:16px}}}}
@@ -285,6 +314,7 @@ th.r,td.r{{text-align:right;font-variant-numeric:tabular-nums}}
 .mini.b{{background:#fde2e2;color:#b91c1c}}.mini.s{{background:#dbe6fd;color:#1d4ed8}}
 .rsi-lo{{color:#1d4ed8;font-weight:700}}.rsi-hi{{color:#b91c1c;font-weight:700}}
 td.empty{{color:var(--muted);text-align:center;padding:18px}}
+tr.sub td{{font-weight:700;border-top:2px solid #cbd5e1;background:#fafafa}}tr.sub td small{{font-weight:400}}
 tr.gh td{{background:#eef2f7;color:#1f2937;font:700 12px Georgia,"Noto Serif KR",serif;letter-spacing:.06em;padding:6px 8px}}
 table.compact{{font-size:12px}}
 table.flow{{font-size:12px}}table.flow td,table.flow th{{padding:6px 5px}}th.c{{text-align:center}}td.grp,th.grp{{border-left:2px solid #e5e7eb}}
@@ -302,11 +332,12 @@ table.flow{{font-size:12px}}table.flow td,table.flow th{{padding:6px 5px}}th.c{{
 {err_html}
 {summary_tiles(rows, d)}
 
-<h2 id="flow">① 등락률 <small style="font:400 12px Inter;color:#6b7280">오늘 · 1주 · 1개월 · 3개월 · YTD</small></h2>
+<p class="asof">📅 수집 시각 <b>{esc(asof)}</b> · {'장중 잠정(오늘 현재가·오늘 수급 포함)' if prov else '직전 거래일 종가 기준(장 시작 전 또는 휴장일 수집)'}</p>
+<h2 id="flow" style="margin-top:6px">① 등락률 <small style="font:400 12px Inter;color:#6b7280">오늘 · 1주 · 1개월 · 3개월 · YTD</small></h2>
 <div class="wrap">{returns_table(rows)}</div>
 <p class="note">오늘은 전일 종가 대비(장중 현재가). 1주·1개월·3개월은 거래일 5·21·63일 전 종가 대비, YTD 는 전년 마지막 종가 대비. 외인 보유 옆의 작은 날짜는 장 시작 전·휴장이라 그 날짜의 직전 수집값으로 채운 것 — 장중 첫 수집부터 당일 값으로 바뀐다.</p>
 
-<h2 id="flow2">①-2 투자자별 순매수 <small style="font:400 12px Inter;color:#6b7280">억원 · 오늘 · 5일 · 1개월 · 3개월 · YTD · 외인 5일 순</small></h2>
+<h2 id="flow2">①-2 투자자별 순매수 <small style="font:400 12px Inter;color:#6b7280">억원 · 오늘 · 5일 · 1개월 · 3개월 · YTD · 시총 순</small></h2>
 <div class="wrap">{flow_table(rows)}</div>
 <p class="note">구간은 오늘 잠정 행을 포함한 최근 거래일 수(5·21·63일, YTD 는 올해 1월부터). 최근 30거래일은 한투 금액(정확), 그 이전은 네이버 순매수 수량 × 종가 <b>근사</b> — 3개월·YTD 합계는 체결 평균가 대신 종가를 써서 몇 % 어긋날 수 있다. 이력이 모자라는 구간은 '–'. 연속일수 배지는 2일 이상만.</p>
 </div>

@@ -235,8 +235,8 @@ def build() -> Path:
     (OUTPUT.parent / "version.json").write_text(
         json.dumps({"updated_at": summary["updated_at"]}), encoding="utf-8"
     )
-    # 리서치 톤·챗봇 새 창 래퍼 — 주소창에 톤 사이트 주소 대신 대시보드 주소만 보이게
-    for wrapper in ("tone_full.html", "chat_full.html"):
+    # 리서치 톤·챗봇·콜라보 새 창 래퍼 — 주소창에 톤 사이트 주소 대신 대시보드 주소만 보이게
+    for wrapper in ("tone_full.html", "chat_full.html", "collab_full.html"):
         wrapper_src = ROOT / "static" / wrapper
         if wrapper_src.exists():
             shutil.copy2(wrapper_src, OUTPUT.parent / wrapper)
@@ -282,6 +282,13 @@ def build() -> Path:
     covflow_report = ROOT / "static" / "coverage_flow_report.html"
     if covflow_report.exists():
         shutil.copy2(covflow_report, OUTPUT.parent / "coverage_flow_report.html")
+    # DART 생산능력·가동률: 페이지(dashboard/index.html) + 정규화 JSON(런타임 fetch)
+    dartcap_page = ROOT.parent / "dart_capacity" / "dashboard" / "index.html"
+    if dartcap_page.exists():
+        shutil.copy2(dartcap_page, OUTPUT.parent / "dart_capacity_report.html")
+    dartcap_data = ROOT.parent / "dart_capacity" / "data" / "normalized"
+    if dartcap_data.is_dir():
+        shutil.copytree(dartcap_data, OUTPUT.parent / "dart_capacity" / "normalized", dirs_exist_ok=True)
     consensus_xlsx = ROOT / "static" / "consensus_full.xlsx"
     if consensus_xlsx.exists():
         shutil.copy2(consensus_xlsx, OUTPUT.parent / "consensus_full.xlsx")

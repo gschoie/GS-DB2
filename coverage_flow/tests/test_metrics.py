@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
 """순수 계산부 검산 — 네트워크 없음. 컨테이너·러너 모두에서 돈다.
 python tests/test_metrics.py"""
-import os, sys, json, unittest, unittest.mock
+import os, sys, json, tempfile, unittest, unittest.mock
 import numpy as np, pandas as pd
 from datetime import datetime, timezone, timedelta
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, os.path.dirname(HERE))
-import metrics, kis, notify, build_report  # noqa: E402
+import metrics, kis, notify, build_report, collect  # noqa: E402
 
 KST = timezone(timedelta(hours=9))
 
@@ -18,14 +18,15 @@ def ohlc(closes, start="2025-01-01"):
 
 
 class Slot(unittest.TestCase):
-    def test_boundaries(self):
+    def test_two_daily_slots(self):
+        # 10/20부터 하루 2회(13:00·16:00) — 경계 14:30. 수동 수집도 시각으로 슬롯에 붙는다.
         mk = lambda h, m: datetime(2026, 10, 17, h, m, tzinfo=KST)
-        self.assertEqual(metrics.decide_slot(mk(10, 5)), "10:00")
-        self.assertEqual(metrics.decide_slot(mk(11, 44)), "10:00")
-        self.assertEqual(metrics.decide_slot(mk(11, 45)), "13:30")
-        self.assertEqual(metrics.decide_slot(mk(14, 29)), "13:30")
-        self.assertEqual(metrics.decide_slot(mk(14, 30)), "15:30")
-        self.assertEqual(metrics.decide_slot(mk(23, 0)), "15:30")
+        self.assertEqual(metrics.decide_slot(mk(10, 5)), "13:00")
+        self.assertEqual(metrics.decide_slot(mk(13, 5)), "13:00")
+        self.assertEqual(metrics.decide_slot(mk(14, 29)), "13:00")
+        self.assertEqual(metrics.decide_slot(mk(14, 30)), "16:00")
+        self.assertEqual(metrics.decide_slot(mk(16, 5)), "16:00")
+        self.assertEqual(metrics.decide_slot(mk(23, 0)), "16:00")
 
 
 class Rsi(unittest.TestCase):
@@ -325,6 +326,46 @@ class Outputs(unittest.TestCase):
         with unittest.mock.patch.dict(os.environ, env, clear=True):
             self.assertEqual(notify._creds(), ("t2", "-100999"))
 
+    def test_compose_html_bold_header_and_escape(self):
+        d = fake_payload(); d["rows"][0]["name"] = "LIG D&A"; d["errors"] = []
+        h = notify.compose_html(d)
+        first = h.split("\n")[0]
+        self.assertTrue(first.startswith("<b>[GS🎴 조선·방산·건기] 수급 브리핑") and first.endswith("</b>"), first)
+        self.assertIn("LIG D&amp;A", h); self.assertNotIn("D&A", h)
+        for head in ("<b>📈 사는 쪽 · 시총 대비 5일</b>", "<b>📉 파는 쪽 · 시총 대비 5일</b>", "<b>⚙️ 기계적 수급 (ETF/패시브)</b>"):
+            self.assertIn(head, h)
+        self.assertEqual(h.count("<b>"), 4)                                    # 머리글 + 섹션 제목 3개만 볼드
+        sent = []
+        with tempfile.TemporaryDirectory() as tmp:
+            latest, status = os.path.join(tmp, "l.json"), os.path.join(tmp, "s.json")
+            with open(latest, "w", encoding="utf-8") as f:
+                json.dump(d, f, ensure_ascii=False)
+            with unittest.mock.patch.object(notify, "LATEST", latest), unittest.mock.patch.object(notify, "STATUS", status), \
+                 unittest.mock.patch.object(notify, "send", lambda text, parse_mode=None: sent.append((text[:3], parse_mode)) or {"ok": True}):
+                notify.main([])
+        self.assertEqual(sent, [("<b>", "HTML")])
+
+    def test_text_rides_as_album_caption(self):
+        """캡쳐가 있으면 본문이 앨범 캡션(사진 밑)으로 간다 — 1024자 이내면 send() 미호출, 넘치면 옛 방식."""
+        d = fake_payload(); d["errors"] = []
+        calls = []
+        with tempfile.TemporaryDirectory() as tmp:
+            latest, status = os.path.join(tmp, "l.json"), os.path.join(tmp, "s.json")
+            for i in range(3):
+                open(os.path.join(tmp, f"capture_{i}.png"), "wb").write(b"x")
+            with open(latest, "w", encoding="utf-8") as f:
+                json.dump(d, f, ensure_ascii=False)
+            with unittest.mock.patch.object(notify, "LATEST", latest), unittest.mock.patch.object(notify, "STATUS", status), \
+                 unittest.mock.patch.object(notify, "send", lambda text, parse_mode=None: calls.append(("text", parse_mode)) or {"ok": True}), \
+                 unittest.mock.patch.object(notify, "send_photos", lambda paths, caption="", parse_mode=None: calls.append(("album", parse_mode, len(paths), caption[:3], len(caption))) or {"ok": True}):
+                notify.main(["--photos", os.path.join(tmp, "capture_*.png")])
+                self.assertEqual(calls, [("album", "HTML", 3, "<b>", len(notify.compose_html(d)))])
+                # 긴 본문: 캡션 한도 초과 → 본문 따로(HTML) + 사진은 짧은 캡션
+                calls.clear()
+                with unittest.mock.patch.object(notify, "compose_html", lambda dd: "<b>x</b>" + "y" * 1100):
+                    notify.main(["--photos", os.path.join(tmp, "capture_*.png")])
+                self.assertEqual(calls[0], ("text", "HTML")); self.assertEqual(calls[1][:2], ("album", None))
+
     def test_compose_empty(self):
         txt = notify.compose({"asof": "2026-10-16 10:01", "rows": [], "etfs": [], "active": []})
         self.assertIn("순매수 종목 없음", txt); self.assertIn("첫 수집", txt); self.assertIn("극단권 종목 없음", txt)
@@ -332,7 +373,7 @@ class Outputs(unittest.TestCase):
     def test_render(self):
         h = build_report.render(fake_payload())
         for s in ("한화오션", "13일째 매수", "1년 최저권", "SOL 조선TOP3플러스", "수집 오류 1건", "커버예정", "직전 값 없음", "TIME 코스피액티브",
-                  "① 등락률", "①-2 투자자별 순매수", "+42.0", "+300", "② 과매수", "③ 기계적 수급", '<details id="cap-3"', "3개월 차트"):
+                  "① 등락률", "①-2 투자자별 순매수", "+42.0", "+300", "② 과매수", "③ 기계적 수급", '<details id="cap-3"', "3개월 차트", "📅 수집 시각 <b>10/16(금) 13:31</b>"):
             self.assertIn(s, h)
         self.assertNotIn("chr(", h)
         self.assertNotIn("5일 외인+기관", h)                                  # 시총 대비 열 제거
@@ -400,6 +441,214 @@ class Outputs(unittest.TestCase):
         self.assertIn("<tr class='gh'><td colspan='16'>방산</td></tr>", h)
         self.assertIn("<tr class='gh'><td colspan='8'>기계</td></tr>", h)
         self.assertLess(h.index(">조선</td>"), h.index(">방산</td>")); self.assertLess(h.index(">방산</td>"), h.index(">기계</td>"))
+
+    def test_group_summary_rows(self):
+        """묶음 끝에 요약 행 — 등락률은 단순평균, 수급은 합계, None 은 빼고 센다."""
+        self.assertAlmostEqual(build_report.agg([1, None, 3], "mean"), 2.0)
+        self.assertEqual(build_report.agg([1, None, 3], "sum"), 4)
+        self.assertIsNone(build_report.agg([None, None], "sum"))
+        d = fake_payload()
+        base = d["rows"][0]
+        def mk(name, d1, frgn5):
+            r = json.loads(json.dumps(base)); r.update(name=name, industry="조선", code=name)
+            r["tech"]["ret"]["d1"] = d1; r["flow"]["win"]["frgn"]["d5"] = frgn5; return r
+        d["rows"] = [mk("A", 2.0, 100), mk("B", -1.0, -40), mk("C", None, None)]
+        h = build_report.render(d)
+        self.assertIn("조선 평균<small>3종목 · 단순평균</small>", h)
+        i = h.index("조선 평균"); seg = h[i:i + 400]
+        self.assertIn("+0.5", seg)                                               # (2 − 1) / 2, None 제외
+        j = h.index("조선 합계"); seg2 = h[j:j + 600]
+        self.assertIn("+60", seg2)                                               # 100 − 40
+
+    def test_tables_sorted_by_mcap(self):
+        """세 표 모두 묶음 안은 시총 내림차순, 성광벤드·태광은 여전히 조선 맨 밑."""
+        d = fake_payload()
+        base = d["rows"][0]
+        def mk(name, mcap, ind="조선"):
+            r = json.loads(json.dumps(base)); r.update(name=name, industry=ind, code=name); r["px"]["mcap"] = mcap
+            r["tech"]["rsi"] = 10 if name == "작은" else 90          # RSI 순이면 '작은' 이 먼저 올 값
+            r["flow"]["frgn5"] = 999 if name == "작은" else 1       # 외인 5일 순이면 '작은' 이 먼저 올 값
+            return r
+        d["rows"] = [mk("작은", 100), mk("큰", 5000), mk("성광벤드", 9999), mk("중간", 1000)]
+        h = build_report.render(d)
+        for tbl in h.split("<table")[1:4]:                                       # 등락률·수급·과매수 세 표
+            order = [n for n in ("큰", "중간", "작은", "성광벤드") if n in tbl]
+            idx = [tbl.index(f"<td>{n}") for n in order]
+            self.assertEqual(idx, sorted(idx), order)
+
+
+class KisToken(unittest.TestCase):
+    def test_token_retries_past_rate_limit_403(self):
+        """토큰 발급 403(분당 1회 제한, 다른 잡과 동시 시작)은 기다렸다 재시도한다."""
+        import kis
+
+        class R:
+            def __init__(self, code):
+                self.status_code = code
+
+            def raise_for_status(self):
+                if self.status_code != 200:
+                    raise RuntimeError(f"HTTP {self.status_code}")
+
+            def json(self):
+                return {"access_token": "tok"}
+
+        calls, naps = [], []
+        responses = [R(403), R(403), R(200)]
+        saved_post, saved_sleep = kis.requests.post, kis.time.sleep
+        saved_cache = dict(kis._c)
+        kis.requests.post = lambda *a, **k: (calls.append(1), responses[len(calls) - 1])[1]
+        kis.time.sleep = lambda s: naps.append(s)
+        kis._c.update(t=None, ts=0)
+        os.environ.setdefault("KIS_APP_KEY", "k"); os.environ.setdefault("KIS_APP_SECRET", "s")
+        try:
+            self.assertEqual(kis.token(tries=5, wait=20), "tok")
+        finally:
+            kis.requests.post, kis.time.sleep = saved_post, saved_sleep
+            kis._c.update(saved_cache)
+        self.assertEqual(len(calls), 3)          # 403 두 번 뒤 성공
+        self.assertEqual(naps, [20, 20])         # 분 경계를 넘길 대기
+
+    def test_token_gives_up_after_tries(self):
+        import kis
+
+        class R403:
+            status_code = 403
+
+            def raise_for_status(self):
+                raise RuntimeError("HTTP 403")
+
+        naps = []
+        saved_post, saved_sleep = kis.requests.post, kis.time.sleep
+        saved_cache = dict(kis._c)
+        kis.requests.post = lambda *a, **k: R403()
+        kis.time.sleep = lambda s: naps.append(s)
+        kis._c.update(t=None, ts=0)
+        os.environ.setdefault("KIS_APP_KEY", "k"); os.environ.setdefault("KIS_APP_SECRET", "s")
+        try:
+            with self.assertRaises(RuntimeError):
+                kis.token(tries=3, wait=1)
+        finally:
+            kis.requests.post, kis.time.sleep = saved_post, saved_sleep
+            kis._c.update(saved_cache)
+        self.assertEqual(naps, [1, 1])           # 마지막 시도는 기다리지 않고 올린다
+
+
+class CollectGuard(unittest.TestCase):
+    def test_enough_blocks_partial_runs(self):
+        """21종목 중 2종목(10/19 토큰 403 사고)은 부족, 15종목(71%)은 통과, 유니버스 0은 실패."""
+        self.assertFalse(collect.enough(2, 21))
+        self.assertTrue(collect.enough(15, 21))
+        self.assertFalse(collect.enough(14, 21))
+        self.assertTrue(collect.enough(21, 21))
+        self.assertFalse(collect.enough(0, 0))
+        self.assertTrue(collect.enough(1, 2, ratio=0.5))
+
+    def test_partial_run_keeps_previous_latest(self):
+        """부족한 run 은 latest.json 을 덮어쓰지 않고 종료코드 2."""
+        with tempfile.TemporaryDirectory() as d:
+            latest = os.path.join(d, "latest.json")
+            with open(latest, "w") as f:
+                json.dump({"asof": "이전 정상본"}, f)
+            uni = [{"code": str(i), "name": f"s{i}", "industry": "조선", "status": "커버리지"} for i in range(5)]
+            calls = {"n": 0}
+            def fake_stock(u, today, live):
+                calls["n"] += 1
+                if calls["n"] > 1:
+                    raise RuntimeError("403 tokenP")
+                return {"code": u["code"], "name": u["name"], "industry": "조선", "status": "커버리지",
+                        "tech": {}, "flow": {}, "px": {}}
+            with unittest.mock.patch.object(collect, "LATEST", latest), \
+                 unittest.mock.patch.object(collect, "market_day", lambda: ("2026-10-19", "OPEN")), \
+                 unittest.mock.patch.object(collect, "load_csv", lambda fn: uni), \
+                 unittest.mock.patch.object(collect, "collect_stock", fake_stock), \
+                 unittest.mock.patch.object(collect.sys, "argv", ["collect.py", "--force"]):
+                rc = collect.main()
+            self.assertEqual(rc, 2)
+            with open(latest) as f:
+                self.assertEqual(json.load(f)["asof"], "이전 정상본")
+
+    def test_notify_skips_when_any_error(self):
+        """수집 오류가 하나라도 있으면 send() 를 부르지 않고 status 에 생략 사유만 남긴다."""
+        with tempfile.TemporaryDirectory() as d:
+            latest, status = os.path.join(d, "latest.json"), os.path.join(d, "status.json")
+            payload = fake_payload(); payload["errors"] = ["000490 대동: RuntimeError: 예시"]
+            with open(latest, "w", encoding="utf-8") as f:
+                json.dump(payload, f, ensure_ascii=False)
+            sent = []
+            with unittest.mock.patch.object(notify, "LATEST", latest), unittest.mock.patch.object(notify, "STATUS", status), \
+                 unittest.mock.patch.object(notify, "send", lambda text, parse_mode=None: sent.append(text) or {"ok": True}), \
+                 unittest.mock.patch.object(notify, "send_photos", lambda *a, **k: sent.append("photo") or {"ok": True}):
+                rc = notify.main(["--photos", os.path.join(d, "none_*.png")])
+            self.assertEqual(rc, 0); self.assertEqual(sent, [])
+            with open(status, encoding="utf-8") as f:
+                st = json.load(f)
+            self.assertTrue(st["skipped"]); self.assertIn("오류 1건", st["description"])
+            # 오류가 없으면 평소대로 보낸다
+            payload["errors"] = []
+            with open(latest, "w", encoding="utf-8") as f:
+                json.dump(payload, f, ensure_ascii=False)
+            with unittest.mock.patch.object(notify, "LATEST", latest), unittest.mock.patch.object(notify, "STATUS", status), \
+                 unittest.mock.patch.object(notify, "send", lambda text, parse_mode=None: sent.append(text) or {"ok": True}):
+                notify.main([])
+            self.assertEqual(len(sent), 1)
+
+
+class KisToken(unittest.TestCase):
+    def test_token_retries_past_rate_limit_403(self):
+        """토큰 발급 403(분당 1회 제한, 다른 잡과 동시 시작)은 기다렸다 재시도한다."""
+        import kis
+
+        class R:
+            def __init__(self, code):
+                self.status_code = code
+
+            def raise_for_status(self):
+                if self.status_code != 200:
+                    raise RuntimeError(f"HTTP {self.status_code}")
+
+            def json(self):
+                return {"access_token": "tok"}
+
+        calls, naps = [], []
+        responses = [R(403), R(403), R(200)]
+        saved_post, saved_sleep = kis.requests.post, kis.time.sleep
+        saved_cache = dict(kis._c)
+        kis.requests.post = lambda *a, **k: (calls.append(1), responses[len(calls) - 1])[1]
+        kis.time.sleep = lambda s: naps.append(s)
+        kis._c.update(t=None, ts=0)
+        os.environ.setdefault("KIS_APP_KEY", "k"); os.environ.setdefault("KIS_APP_SECRET", "s")
+        try:
+            self.assertEqual(kis.token(tries=5, wait=20), "tok")
+        finally:
+            kis.requests.post, kis.time.sleep = saved_post, saved_sleep
+            kis._c.update(saved_cache)
+        self.assertEqual(len(calls), 3)          # 403 두 번 뒤 성공
+        self.assertEqual(naps, [20, 20])         # 분 경계를 넘길 대기
+
+    def test_token_gives_up_after_tries(self):
+        import kis
+
+        class R403:
+            status_code = 403
+
+            def raise_for_status(self):
+                raise RuntimeError("HTTP 403")
+
+        naps = []
+        saved_post, saved_sleep = kis.requests.post, kis.time.sleep
+        saved_cache = dict(kis._c)
+        kis.requests.post = lambda *a, **k: R403()
+        kis.time.sleep = lambda s: naps.append(s)
+        kis._c.update(t=None, ts=0)
+        os.environ.setdefault("KIS_APP_KEY", "k"); os.environ.setdefault("KIS_APP_SECRET", "s")
+        try:
+            with self.assertRaises(RuntimeError):
+                kis.token(tries=3, wait=1)
+        finally:
+            kis.requests.post, kis.time.sleep = saved_post, saved_sleep
+            kis._c.update(saved_cache)
+        self.assertEqual(naps, [1, 1])           # 마지막 시도는 기다리지 않고 올린다
 
 
 if __name__ == "__main__":

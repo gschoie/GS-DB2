@@ -1,0 +1,126 @@
+{
+ "meta": {
+  "company": "현대로템",
+  "sector": "방산",
+  "stock_code": "064350",
+  "corp_code": "00302926",
+  "rcept_no": "20240516001877",
+  "rcept_dt": "20240516",
+  "report_nm": "분기보고서 (2024.03)",
+  "report_type": "quarter",
+  "period": "2024-03",
+  "period_label": "2024.03 1Q",
+  "corrected": false,
+  "dart_url": "https://dart.fss.or.kr/dsaf001/main.do?rcpNo=20240516001877"
+ },
+ "tables": [
+  {
+   "section": [
+    "1. 사업의 개요",
+    "2. 주요 제품 및 서비스",
+    "3. 원재료 및 생산설비"
+   ],
+   "headings": [],
+   "context": [
+    "(3) 가동률 (단위 : MH, %)"
+   ],
+   "unit": "(3) 가동률 (단위 : MH, %)",
+   "keywords": [
+    "가동률"
+   ],
+   "keyword_in": "table",
+   "rows": [
+    [
+     "사업부문",
+     "가동가능시간",
+     "실제가동시간",
+     "평균가동률"
+    ],
+    [
+     "디펜스솔루션 부문",
+     "207,056",
+     "232,265",
+     "112.2%"
+    ],
+    [
+     "레일솔루션 부문",
+     "127,708",
+     "134,141",
+     "105.0%"
+    ],
+    [
+     "에코플랜트 부문",
+     "2,640",
+     "1,105",
+     "41.9%"
+    ],
+    [
+     "합계",
+     "337,404",
+     "367,511",
+     "108.9%"
+    ]
+   ],
+   "html": "<table aclass=\"NORMAL\" afixtable=\"N\" border=\"1\" width=\"578\">\n<colgroup>\n<col width=\"139\"/>\n<col width=\"139\"/>\n<col width=\"139\"/>\n<col width=\"125\"/>\n</colgroup>\n<thead align=\"LEFT\" valign=\"TOP\">\n<tr acopy=\"Y\" adelete=\"Y\">\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"30\" valign=\"MIDDLE\" width=\"148\">사업부문</th>\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"30\" valign=\"MIDDLE\" width=\"148\">가동가능시간</th>\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"30\" valign=\"MIDDLE\" width=\"148\">실제가동시간</th>\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"30\" valign=\"MIDDLE\" width=\"134\">평균가동률</th>\n</tr>\n</thead>\n<tbody>\n<tr acopy=\"Y\" adelete=\"Y\">\n<td align=\"CENTER\" height=\"30\" valign=\"MIDDLE\" width=\"148\">디펜스솔루션 부문</td>\n<td align=\"RIGHT\" height=\"30\" width=\"148\">207,056</td>\n<td align=\"RIGHT\" height=\"30\" width=\"148\">232,265</td>\n<td align=\"RIGHT\" height=\"30\" valign=\"MIDDLE\" width=\"134\">112.2%</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\">\n<td align=\"CENTER\" height=\"30\" valign=\"MIDDLE\" width=\"148\">레일솔루션 부문</td>\n<td align=\"RIGHT\" height=\"30\" width=\"148\">127,708</td>\n<td align=\"RIGHT\" height=\"30\" width=\"148\">134,141</td>\n<td align=\"RIGHT\" height=\"30\" valign=\"MIDDLE\" width=\"134\">105.0%</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\">\n<td align=\"CENTER\" height=\"30\" valign=\"MIDDLE\" width=\"148\">에코플랜트 부문</td>\n<td align=\"RIGHT\" height=\"30\" width=\"148\">2,640</td>\n<td align=\"RIGHT\" height=\"30\" width=\"148\">1,105</td>\n<td align=\"RIGHT\" height=\"30\" valign=\"MIDDLE\" width=\"134\">41.9%</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\">\n<td align=\"CENTER\" height=\"30\" valign=\"MIDDLE\" width=\"148\">합계</td>\n<td align=\"RIGHT\" height=\"30\" width=\"148\">337,404</td>\n<td align=\"RIGHT\" height=\"30\" width=\"148\">367,511</td>\n<td align=\"RIGHT\" height=\"30\" valign=\"MIDDLE\" width=\"134\">108.9%</td>\n</tr>\n</tbody>\n</table>",
+   "footnotes": [],
+   "digest": "97b90ceea862",
+   "file": "20240516001877.xml"
+  }
+ ],
+ "rejected": [
+  {
+   "section": [
+    "1. 사업의 개요",
+    "2. 주요 제품 및 서비스",
+    "3. 원재료 및 생산설비"
+   ],
+   "headings": [
+    "* 산출기준 : SUS LT 2T SHEET 기준 정상가격",
+    "나. 생산 및 설비에 관한 사항"
+   ],
+   "context": [
+    "* 산출기준 : SUS LT 2T SHEET 기준 정상가격",
+    "나. 생산 및 설비에 관한 사항",
+    "1) 주요 제품에 대한 생산능력 ·생산실적 ·가동률(1) 생산능력 및 산출기준① 레일솔루션 부문 : 창원공장- 생산능력 : 800량- 생산능력 산출기준 : 철도차량 의장 연간 생산기준(2) 생산실적 (단위: 백만원)"
+   ],
+   "unit": "1) 주요 제품에 대한 생산능력 ·생산실적 ·가동률(1) 생산능력 및 산출기준① 레일솔루션 부문 : 창원공장- 생산능력 : 800량- 생산능력 산출기준 : 철도차량 의장 연간 생산기준(2) 생산실적 (단위: 백만원)",
+   "keywords": [
+    "가동률",
+    "생산능력",
+    "생산실적"
+   ],
+   "keyword_in": "",
+   "rows": [
+    [
+     "사업부문",
+     "품 목",
+     "사업소",
+     "제26기 1분기",
+     "제25기",
+     "제24기"
+    ],
+    [
+     "디펜스솔루션부문",
+     "방산물자",
+     "창원",
+     "252,010",
+     "1,326,159",
+     "885,506"
+    ],
+    [
+     "레일솔루션부문",
+     "전동차",
+     "창원",
+     "257,449",
+     "1,305,102",
+     "1,567,658"
+    ]
+   ],
+   "html": "",
+   "footnotes": [],
+   "digest": "6ded3a495352",
+   "why": "셀 전체가 지표명이 아니거나 멀리 있는 문장에만 키워드",
+   "file": "20240516001877.xml"
+  }
+ ]
+}
