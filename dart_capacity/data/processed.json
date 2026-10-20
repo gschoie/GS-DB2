@@ -2,197 +2,851 @@
  "20231114000792": {
   "at": "2026-10-20T00:09:39",
   "rows": 18,
-  "model": "gemini-flash-latest"
+  "model": "gemini-flash-latest",
+  "topics": {
+   "material": {
+    "at": "2026-10-20T04:58:30",
+    "rows": 6,
+    "model": "gemini-flash-lite-latest"
+   },
+   "material_price": {
+    "at": "2026-10-20T04:58:39",
+    "rows": 0
+   },
+   "product_price": {
+    "at": "2026-10-20T04:58:39",
+    "rows": 15,
+    "model": "gemini-flash-lite-latest"
+   }
+  }
  },
  "20240318000952": {
   "at": "2026-10-20T00:09:52",
   "rows": 18,
-  "model": "gemini-flash-lite-latest"
+  "model": "gemini-flash-lite-latest",
+  "topics": {
+   "material": {
+    "at": "2026-10-20T04:58:49",
+    "rows": 6,
+    "model": "gemini-flash-lite-latest"
+   },
+   "material_price": {
+    "at": "2026-10-20T04:58:58",
+    "rows": 0
+   },
+   "product_price": {
+    "at": "2026-10-20T04:58:58",
+    "rows": 15,
+    "model": "gemini-flash-lite-latest"
+   }
+  }
  },
  "20240329000902": {
   "at": "2026-10-20T00:10:09",
   "rows": 18,
-  "model": "gemini-flash-lite-latest"
+  "model": "gemini-flash-lite-latest",
+  "topics": {
+   "material": {
+    "at": "2026-10-20T04:59:07",
+    "rows": 6,
+    "model": "gemini-flash-lite-latest"
+   },
+   "material_price": {
+    "at": "2026-10-20T04:59:16",
+    "rows": 0
+   },
+   "product_price": {
+    "at": "2026-10-20T04:59:16",
+    "rows": 15,
+    "model": "gemini-flash-lite-latest"
+   }
+  }
  },
  "20240514000801": {
   "at": "2026-10-20T00:10:22",
   "rows": 18,
-  "model": "gemini-flash-lite-latest"
+  "model": "gemini-flash-lite-latest",
+  "topics": {
+   "material": {
+    "at": "2026-10-20T04:59:26",
+    "rows": 6,
+    "model": "gemini-flash-lite-latest"
+   },
+   "material_price": {
+    "at": "2026-10-20T04:59:35",
+    "rows": 0
+   },
+   "product_price": {
+    "at": "2026-10-20T04:59:35",
+    "rows": 15,
+    "model": "gemini-flash-lite-latest"
+   }
+  }
  },
  "20240814002253": {
   "at": "2026-10-20T00:12:03",
   "rows": 18,
-  "model": "gemini-flash-latest"
+  "model": "gemini-flash-latest",
+  "topics": {
+   "material": {
+    "at": "2026-10-20T04:59:44",
+    "rows": 6,
+    "model": "gemini-flash-lite-latest"
+   },
+   "material_price": {
+    "at": "2026-10-20T04:59:53",
+    "rows": 0
+   },
+   "product_price": {
+    "at": "2026-10-20T04:59:53",
+    "rows": 15,
+    "model": "gemini-flash-lite-latest"
+   }
+  }
  },
  "20241113000565": {
   "at": "2026-10-20T00:12:15",
   "rows": 18,
-  "model": "gemini-flash-lite-latest"
+  "model": "gemini-flash-lite-latest",
+  "topics": {
+   "material": {
+    "at": "2026-10-20T05:00:03",
+    "rows": 6,
+    "model": "gemini-flash-lite-latest"
+   },
+   "material_price": {
+    "at": "2026-10-20T05:00:11",
+    "rows": 0
+   },
+   "product_price": {
+    "at": "2026-10-20T05:00:11",
+    "rows": 15,
+    "model": "gemini-flash-lite-latest"
+   }
+  }
  },
  "20250317000990": {
   "at": "2026-10-20T00:12:28",
   "rows": 19,
-  "model": "gemini-flash-lite-latest"
+  "model": "gemini-flash-lite-latest",
+  "topics": {
+   "material": {
+    "at": "2026-10-20T05:00:21",
+    "rows": 7,
+    "model": "gemini-flash-lite-latest"
+   },
+   "material_price": {
+    "at": "2026-10-20T05:00:32",
+    "rows": 9,
+    "model": "gemini-flash-lite-latest"
+   },
+   "product_price": {
+    "at": "2026-10-20T05:00:40",
+    "rows": 27,
+    "model": "gemini-flash-lite-latest"
+   }
+  }
  },
  "20250513000788": {
   "at": "2026-10-20T00:12:43",
   "rows": 16,
-  "model": "gemini-flash-lite-latest"
+  "model": "gemini-flash-lite-latest",
+  "topics": {
+   "material": {
+    "at": "2026-10-20T05:00:53",
+    "rows": 7,
+    "model": "gemini-flash-lite-latest"
+   },
+   "material_price": {
+    "at": "2026-10-20T05:01:03",
+    "rows": 9,
+    "model": "gemini-flash-lite-latest"
+   },
+   "product_price": {
+    "at": "2026-10-20T05:01:12",
+    "rows": 15,
+    "model": "gemini-flash-lite-latest"
+   }
+  }
  },
  "20250814002734": {
   "at": "2026-10-20T00:12:57",
   "rows": 18,
-  "model": "gemini-flash-lite-latest"
+  "model": "gemini-flash-lite-latest",
+  "topics": {
+   "material": {
+    "at": "2026-10-20T05:01:22",
+    "rows": 8,
+    "model": "gemini-flash-lite-latest"
+   },
+   "material_price": {
+    "at": "2026-10-20T05:01:31",
+    "rows": 9,
+    "model": "gemini-flash-lite-latest"
+   },
+   "product_price": {
+    "at": "2026-10-20T05:01:40",
+    "rows": 15,
+    "model": "gemini-flash-lite-latest"
+   }
+  }
  },
  "20251113000661": {
   "at": "2026-10-20T00:13:11",
   "rows": 18,
-  "model": "gemini-flash-lite-latest"
+  "model": "gemini-flash-lite-latest",
+  "topics": {
+   "material": {
+    "at": "2026-10-20T05:01:50",
+    "rows": 8,
+    "model": "gemini-flash-lite-latest"
+   },
+   "material_price": {
+    "at": "2026-10-20T05:01:59",
+    "rows": 9,
+    "model": "gemini-flash-lite-latest"
+   },
+   "product_price": {
+    "at": "2026-10-20T05:02:07",
+    "rows": 15,
+    "model": "gemini-flash-lite-latest"
+   }
+  }
  },
  "20260316001112": {
   "at": "2026-10-20T00:13:25",
   "rows": 18,
-  "model": "gemini-flash-lite-latest"
+  "model": "gemini-flash-lite-latest",
+  "topics": {
+   "material": {
+    "at": "2026-10-20T05:02:17",
+    "rows": 8,
+    "model": "gemini-flash-lite-latest"
+   },
+   "material_price": {
+    "at": "2026-10-20T05:02:27",
+    "rows": 9,
+    "model": "gemini-flash-lite-latest"
+   },
+   "product_price": {
+    "at": "2026-10-20T05:02:35",
+    "rows": 15,
+    "model": "gemini-flash-lite-latest"
+   }
+  }
  },
  "20260814003198": {
   "at": "2026-10-20T00:13:38",
   "rows": 21,
-  "model": "gemini-flash-lite-latest"
+  "model": "gemini-flash-lite-latest",
+  "topics": {
+   "material": {
+    "at": "2026-10-20T05:02:45",
+    "rows": 8,
+    "model": "gemini-flash-lite-latest"
+   },
+   "material_price": {
+    "at": "2026-10-20T05:02:55",
+    "rows": 9,
+    "model": "gemini-flash-lite-latest"
+   },
+   "product_price": {
+    "at": "2026-10-20T05:03:03",
+    "rows": 15,
+    "model": "gemini-flash-lite-latest"
+   }
+  }
  },
  "20231110000693": {
   "at": "2026-10-20T00:13:54",
   "rows": 13,
-  "model": "gemini-flash-lite-latest"
+  "model": "gemini-flash-lite-latest",
+  "topics": {
+   "material": {
+    "at": "2026-10-20T05:03:13",
+    "rows": 1,
+    "model": "gemini-flash-lite-latest"
+   },
+   "material_price": {
+    "at": "2026-10-20T05:03:20",
+    "rows": 9,
+    "model": "gemini-flash-lite-latest"
+   },
+   "product_price": {
+    "at": "2026-10-20T05:03:29",
+    "rows": 15,
+    "model": "gemini-flash-lite-latest"
+   }
+  }
  },
  "20240315000835": {
   "at": "2026-10-20T00:14:05",
   "rows": 13,
-  "model": "gemini-flash-lite-latest"
+  "model": "gemini-flash-lite-latest",
+  "topics": {
+   "material": {
+    "at": "2026-10-20T05:03:39",
+    "rows": 1,
+    "model": "gemini-flash-lite-latest"
+   },
+   "material_price": {
+    "at": "2026-10-20T05:03:47",
+    "rows": 9,
+    "model": "gemini-flash-lite-latest"
+   },
+   "product_price": {
+    "at": "2026-10-20T05:03:56",
+    "rows": 15,
+    "model": "gemini-flash-lite-latest"
+   }
+  }
  },
  "20240329003259": {
   "at": "2026-10-20T00:14:17",
   "rows": 13,
-  "model": "gemini-flash-lite-latest"
+  "model": "gemini-flash-lite-latest",
+  "topics": {
+   "material": {
+    "at": "2026-10-20T05:04:06",
+    "rows": 1,
+    "model": "gemini-flash-lite-latest"
+   },
+   "material_price": {
+    "at": "2026-10-20T05:04:14",
+    "rows": 9,
+    "model": "gemini-flash-lite-latest"
+   },
+   "product_price": {
+    "at": "2026-10-20T05:04:23",
+    "rows": 15,
+    "model": "gemini-flash-lite-latest"
+   }
+  }
  },
  "20240514001585": {
   "at": "2026-10-20T00:14:30",
   "rows": 13,
-  "model": "gemini-flash-lite-latest"
+  "model": "gemini-flash-lite-latest",
+  "topics": {
+   "material": {
+    "at": "2026-10-20T05:04:33",
+    "rows": 1,
+    "model": "gemini-flash-lite-latest"
+   },
+   "material_price": {
+    "at": "2026-10-20T05:04:40",
+    "rows": 9,
+    "model": "gemini-flash-lite-latest"
+   },
+   "product_price": {
+    "at": "2026-10-20T05:05:06",
+    "rows": 15,
+    "model": "gemini-flash-lite-latest"
+   }
+  }
  },
  "20240813001608": {
   "at": "2026-10-20T00:14:41",
   "rows": 13,
-  "model": "gemini-flash-lite-latest"
+  "model": "gemini-flash-lite-latest",
+  "topics": {
+   "material": {
+    "at": "2026-10-20T05:05:17",
+    "rows": 1,
+    "model": "gemini-flash-lite-latest"
+   },
+   "material_price": {
+    "at": "2026-10-20T05:05:24",
+    "rows": 9,
+    "model": "gemini-flash-lite-latest"
+   },
+   "product_price": {
+    "at": "2026-10-20T05:05:32",
+    "rows": 15,
+    "model": "gemini-flash-lite-latest"
+   }
+  }
  },
  "20240819000327": {
   "at": "2026-10-20T00:14:57",
   "rows": 13,
-  "model": "gemini-flash-lite-latest"
+  "model": "gemini-flash-lite-latest",
+  "topics": {
+   "material": {
+    "at": "2026-10-20T05:05:43",
+    "rows": 1,
+    "model": "gemini-flash-lite-latest"
+   },
+   "material_price": {
+    "at": "2026-10-20T05:05:51",
+    "rows": 9,
+    "model": "gemini-flash-lite-latest"
+   },
+   "product_price": {
+    "at": "2026-10-20T05:06:00",
+    "rows": 15,
+    "model": "gemini-flash-lite-latest"
+   }
+  }
  },
  "20241112000311": {
   "at": "2026-10-20T00:15:09",
   "rows": 13,
-  "model": "gemini-flash-lite-latest"
+  "model": "gemini-flash-lite-latest",
+  "topics": {
+   "material": {
+    "at": "2026-10-20T05:06:10",
+    "rows": 1,
+    "model": "gemini-flash-lite-latest"
+   },
+   "material_price": {
+    "at": "2026-10-20T05:06:19",
+    "rows": 9,
+    "model": "gemini-flash-lite-latest"
+   },
+   "product_price": {
+    "at": "2026-10-20T05:06:27",
+    "rows": 15,
+    "model": "gemini-flash-lite-latest"
+   }
+  }
  },
  "20250318001351": {
   "at": "2026-10-20T00:15:23",
   "rows": 13,
-  "model": "gemini-flash-lite-latest"
+  "model": "gemini-flash-lite-latest",
+  "topics": {
+   "material": {
+    "at": "2026-10-20T05:06:38",
+    "rows": 1,
+    "model": "gemini-flash-lite-latest"
+   },
+   "material_price": {
+    "at": "2026-10-20T05:06:46",
+    "rows": 9,
+    "model": "gemini-flash-lite-latest"
+   },
+   "product_price": {
+    "at": "2026-10-20T05:06:54",
+    "rows": 15,
+    "model": "gemini-flash-lite-latest"
+   }
+  }
  },
  "20250514001039": {
   "at": "2026-10-20T00:15:37",
   "rows": 13,
-  "model": "gemini-flash-lite-latest"
+  "model": "gemini-flash-lite-latest",
+  "topics": {
+   "material": {
+    "at": "2026-10-20T05:07:05",
+    "rows": 1,
+    "model": "gemini-flash-lite-latest"
+   },
+   "material_price": {
+    "at": "2026-10-20T05:07:13",
+    "rows": 9,
+    "model": "gemini-flash-lite-latest"
+   },
+   "product_price": {
+    "at": "2026-10-20T05:07:21",
+    "rows": 15,
+    "model": "gemini-flash-lite-latest"
+   }
+  }
  },
  "20250813001634": {
   "at": "2026-10-20T00:15:49",
   "rows": 13,
-  "model": "gemini-flash-lite-latest"
+  "model": "gemini-flash-lite-latest",
+  "topics": {
+   "material": {
+    "at": "2026-10-20T05:07:31",
+    "rows": 1,
+    "model": "gemini-flash-lite-latest"
+   },
+   "material_price": {
+    "at": "2026-10-20T05:07:39",
+    "rows": 9,
+    "model": "gemini-flash-lite-latest"
+   },
+   "product_price": {
+    "at": "2026-10-20T05:07:47",
+    "rows": 15,
+    "model": "gemini-flash-lite-latest"
+   }
+  }
  },
  "20251113000685": {
   "at": "2026-10-20T00:16:01",
   "rows": 13,
-  "model": "gemini-flash-lite-latest"
+  "model": "gemini-flash-lite-latest",
+  "topics": {
+   "material": {
+    "at": "2026-10-20T05:07:58",
+    "rows": 1,
+    "model": "gemini-flash-lite-latest"
+   },
+   "material_price": {
+    "at": "2026-10-20T05:08:06",
+    "rows": 9,
+    "model": "gemini-flash-lite-latest"
+   },
+   "product_price": {
+    "at": "2026-10-20T05:08:15",
+    "rows": 15,
+    "model": "gemini-flash-lite-latest"
+   }
+  }
  },
  "20260319001265": {
   "at": "2026-10-20T00:16:18",
   "rows": 18,
-  "model": "gemini-flash-lite-latest"
+  "model": "gemini-flash-lite-latest",
+  "topics": {
+   "material": {
+    "at": "2026-10-20T05:08:24",
+    "rows": 1,
+    "model": "gemini-flash-lite-latest"
+   },
+   "material_price": {
+    "at": "2026-10-20T05:08:32",
+    "rows": 9,
+    "model": "gemini-flash-lite-latest"
+   },
+   "product_price": {
+    "at": "2026-10-20T05:08:40",
+    "rows": 15,
+    "model": "gemini-flash-lite-latest"
+   }
+  }
  },
  "20260514001068": {
   "at": "2026-10-20T00:16:30",
   "rows": 20,
-  "model": "gemini-flash-lite-latest"
+  "model": "gemini-flash-lite-latest",
+  "topics": {
+   "material": {
+    "at": "2026-10-20T05:08:51",
+    "rows": 1,
+    "model": "gemini-flash-lite-latest"
+   },
+   "material_price": {
+    "at": "2026-10-20T05:08:58",
+    "rows": 9,
+    "model": "gemini-flash-lite-latest"
+   },
+   "product_price": {
+    "at": "2026-10-20T05:09:07",
+    "rows": 0
+   }
+  }
  },
  "20260813001784": {
   "at": "2026-10-20T00:16:44",
   "rows": 20,
-  "model": "gemini-flash-lite-latest"
+  "model": "gemini-flash-lite-latest",
+  "topics": {
+   "material": {
+    "at": "2026-10-20T05:09:07",
+    "rows": 1,
+    "model": "gemini-flash-lite-latest"
+   },
+   "material_price": {
+    "at": "2026-10-20T05:09:15",
+    "rows": 9,
+    "model": "gemini-flash-lite-latest"
+   },
+   "product_price": {
+    "at": "2026-10-20T05:09:23",
+    "rows": 0
+   }
+  }
  },
  "20260814003597": {
   "at": "2026-10-20T00:16:58",
   "rows": 20,
-  "model": "gemini-flash-lite-latest"
+  "model": "gemini-flash-lite-latest",
+  "topics": {
+   "material": {
+    "at": "2026-10-20T05:09:23",
+    "rows": 1,
+    "model": "gemini-flash-lite-latest"
+   },
+   "material_price": {
+    "at": "2026-10-20T05:09:31",
+    "rows": 9,
+    "model": "gemini-flash-lite-latest"
+   },
+   "product_price": {
+    "at": "2026-10-20T05:09:39",
+    "rows": 0
+   }
+  }
  },
  "20231114001059": {
   "at": "2026-10-20T00:17:11",
   "rows": 22,
-  "model": "gemini-flash-lite-latest"
+  "model": "gemini-flash-lite-latest",
+  "topics": {
+   "material": {
+    "at": "2026-10-20T05:09:39",
+    "rows": 17,
+    "model": "gemini-flash-lite-latest"
+   },
+   "material_price": {
+    "at": "2026-10-20T05:09:50",
+    "rows": 12,
+    "model": "gemini-flash-lite-latest"
+   },
+   "product_price": {
+    "at": "2026-10-20T05:09:59",
+    "rows": 27,
+    "model": "gemini-flash-lite-latest"
+   }
+  }
  },
  "20240318000459": {
   "at": "2026-10-20T00:17:24",
   "rows": 22,
-  "model": "gemini-flash-lite-latest"
+  "model": "gemini-flash-lite-latest",
+  "topics": {
+   "material": {
+    "at": "2026-10-20T05:10:11",
+    "rows": 18,
+    "model": "gemini-flash-lite-latest"
+   },
+   "material_price": {
+    "at": "2026-10-20T05:10:23",
+    "rows": 12,
+    "model": "gemini-flash-lite-latest"
+   },
+   "product_price": {
+    "at": "2026-10-20T05:10:31",
+    "rows": 27,
+    "model": "gemini-flash-lite-latest"
+   }
+  }
  },
  "20240516000877": {
   "at": "2026-10-20T00:17:38",
   "rows": 22,
-  "model": "gemini-flash-lite-latest"
+  "model": "gemini-flash-lite-latest",
+  "topics": {
+   "material": {
+    "at": "2026-10-20T05:10:43",
+    "rows": 18,
+    "model": "gemini-flash-lite-latest"
+   },
+   "material_price": {
+    "at": "2026-10-20T05:10:55",
+    "rows": 12,
+    "model": "gemini-flash-lite-latest"
+   },
+   "product_price": {
+    "at": "2026-10-20T05:11:04",
+    "rows": 27,
+    "model": "gemini-flash-lite-latest"
+   }
+  }
  },
  "20240814002485": {
   "at": "2026-10-20T00:17:52",
   "rows": 21,
-  "model": "gemini-flash-lite-latest"
+  "model": "gemini-flash-lite-latest",
+  "topics": {
+   "material": {
+    "at": "2026-10-20T05:11:15",
+    "rows": 18,
+    "model": "gemini-flash-lite-latest"
+   },
+   "material_price": {
+    "at": "2026-10-20T05:11:27",
+    "rows": 12,
+    "model": "gemini-flash-lite-latest"
+   },
+   "product_price": {
+    "at": "2026-10-20T05:11:36",
+    "rows": 27,
+    "model": "gemini-flash-lite-latest"
+   }
+  }
  },
  "20241114001816": {
   "at": "2026-10-20T00:18:05",
   "rows": 22,
-  "model": "gemini-flash-lite-latest"
+  "model": "gemini-flash-lite-latest",
+  "topics": {
+   "material": {
+    "at": "2026-10-20T05:11:47",
+    "rows": 18,
+    "model": "gemini-flash-lite-latest"
+   },
+   "material_price": {
+    "at": "2026-10-20T05:11:59",
+    "rows": 11,
+    "model": "gemini-flash-lite-latest"
+   },
+   "product_price": {
+    "at": "2026-10-20T05:12:08",
+    "rows": 27,
+    "model": "gemini-flash-lite-latest"
+   }
+  }
  },
  "20250318000897": {
   "at": "2026-10-20T00:18:18",
   "rows": 22,
-  "model": "gemini-flash-lite-latest"
+  "model": "gemini-flash-lite-latest",
+  "topics": {
+   "material": {
+    "at": "2026-10-20T05:12:19",
+    "rows": 18,
+    "model": "gemini-flash-lite-latest"
+   },
+   "material_price": {
+    "at": "2026-10-20T05:12:31",
+    "rows": 12,
+    "model": "gemini-flash-lite-latest"
+   },
+   "product_price": {
+    "at": "2026-10-20T05:12:40",
+    "rows": 27,
+    "model": "gemini-flash-lite-latest"
+   }
+  }
  },
  "20250515001993": {
   "at": "2026-10-20T00:18:33",
   "rows": 25,
-  "model": "gemini-flash-lite-latest"
+  "model": "gemini-flash-lite-latest",
+  "topics": {
+   "material": {
+    "at": "2026-10-20T05:12:51",
+    "rows": 18,
+    "model": "gemini-flash-lite-latest"
+   },
+   "material_price": {
+    "at": "2026-10-20T05:13:03",
+    "rows": 9,
+    "model": "gemini-flash-lite-latest"
+   },
+   "product_price": {
+    "at": "2026-10-20T05:13:14",
+    "rows": 27,
+    "model": "gemini-flash-lite-latest"
+   }
+  }
  },
  "20250814002347": {
   "at": "2026-10-20T00:18:48",
   "rows": 28,
-  "model": "gemini-flash-lite-latest"
+  "model": "gemini-flash-lite-latest",
+  "topics": {
+   "material": {
+    "at": "2026-10-20T05:13:26",
+    "rows": 18,
+    "model": "gemini-flash-lite-latest"
+   },
+   "material_price": {
+    "at": "2026-10-20T05:13:38",
+    "rows": 9,
+    "model": "gemini-flash-lite-latest"
+   },
+   "product_price": {
+    "at": "2026-10-20T05:13:46",
+    "rows": 27,
+    "model": "gemini-flash-lite-latest"
+   }
+  }
  },
  "20251114001468": {
   "at": "2026-10-20T00:19:04",
   "rows": 25,
-  "model": "gemini-flash-lite-latest"
+  "model": "gemini-flash-lite-latest",
+  "topics": {
+   "material": {
+    "at": "2026-10-20T05:13:57",
+    "rows": 18,
+    "model": "gemini-flash-lite-latest"
+   },
+   "material_price": {
+    "at": "2026-10-20T05:14:09",
+    "rows": 9,
+    "model": "gemini-flash-lite-latest"
+   },
+   "product_price": {
+    "at": "2026-10-20T05:14:17",
+    "rows": 27,
+    "model": "gemini-flash-lite-latest"
+   }
+  }
  },
  "20260320000859": {
   "at": "2026-10-20T00:19:20",
   "rows": 26,
-  "model": "gemini-flash-lite-latest"
+  "model": "gemini-flash-lite-latest",
+  "topics": {
+   "material": {
+    "at": "2026-10-20T05:14:29",
+    "rows": 19,
+    "model": "gemini-flash-lite-latest"
+   },
+   "material_price": {
+    "at": "2026-10-20T05:14:41",
+    "rows": 9,
+    "model": "gemini-flash-lite-latest"
+   },
+   "product_price": {
+    "at": "2026-10-20T05:14:51",
+    "rows": 36,
+    "model": "gemini-flash-lite-latest"
+   }
+  }
  },
  "20260515001837": {
   "at": "2026-10-20T00:19:37",
   "rows": 27,
-  "model": "gemini-flash-lite-latest"
+  "model": "gemini-flash-lite-latest",
+  "topics": {
+   "material": {
+    "at": "2026-10-20T05:16:11",
+    "rows": 7,
+    "model": "gemini-flash-lite-latest"
+   },
+   "material_price": {
+    "at": "2026-10-20T04:22:03",
+    "rows": 9,
+    "model": "gemini-flash-lite-latest"
+   },
+   "product_price": {
+    "at": "2026-10-20T05:19:35",
+    "rows": 36,
+    "model": "gemini-flash-lite-latest"
+   }
+  }
  },
  "20260814002879": {
   "at": "2026-10-20T00:19:53",
   "rows": 27,
-  "model": "gemini-flash-lite-latest"
+  "model": "gemini-flash-lite-latest",
+  "topics": {
+   "material": {
+    "at": "2026-10-20T05:20:54",
+    "rows": 7,
+    "model": "gemini-flash-lite-latest"
+   },
+   "material_price": {
+    "at": "2026-10-20T05:23:14",
+    "rows": 9,
+    "model": "gemini-flash-lite-latest"
+   },
+   "product_price": {
+    "at": "2026-10-20T04:22:42",
+    "rows": 36,
+    "model": "gemini-flash-lite-latest"
+   }
+  }
  },
  "20231114002444": {
   "at": "2026-10-20T04:14:40",

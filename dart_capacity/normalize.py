@@ -27,7 +27,8 @@ import time
 from pathlib import Path
 
 from canonical import canonicalize
-from common import DART_VIEWER, EXTRACTED, NORMALIZED, REVIEW_CSV, DATA
+from topics import SPECS as TOPIC_SPECS, TOPIC_ORDER, finalize_topic, dedupe_latest, migrate_row
+from common import DART_VIEWER, EXTRACTED, NORMALIZED, REVIEW_CSV, DATA, load_companies
 
 PROCESSED = DATA / "processed.json"
 PROVIDER = os.environ.get("DART_CAPACITY_PROVIDER") or ("gemini" if os.environ.get("GEMINI_API_KEY") else "claude")
@@ -136,14 +137,14 @@ def _parse_json(text: str) -> dict:
     return json.loads(t.strip())
 
 
-def call_gemini(client, meta: dict, tables: list[dict]) -> dict:
+def call_gemini(client, meta: dict, tables: list[dict], system: str = "", schema_note: str = "") -> dict:
     """429(분당 한도)·503(혼잡)이 나면 같은 모델을 기다리지 않고 **다른 모델로 바로 갈아탄다** —
     flash 와 flash-lite 는 한도 버킷이 따로라서(10/19 실측: 같은 모델 65초 재시도는 거의 매번 또 429).
     두 모델이 한 바퀴 다 막혔을 때만 65초 쉰다."""
     from google.genai import types as genai_types
     prompt = build_prompt(meta, tables)
     config = genai_types.GenerateContentConfig(
-        system_instruction=SYSTEM + "\n" + SCHEMA_NOTE,
+        system_instruction=(system or SYSTEM) + "\n" + (schema_note or SCHEMA_NOTE),
         temperature=0.1,
         max_output_tokens=16384,
         response_mime_type="application/json",
@@ -208,7 +209,12 @@ def build_prompt(meta: dict, tables: list[dict]) -> str:
     return "\n".join(parts)
 
 
-def call_model(client, meta: dict, tables: list[dict]) -> dict:
+def call_model(client, meta: dict, tables: list[dict], topic: str = "capacity") -> dict:
+    if topic != "capacity":
+        spec = TOPIC_SPECS[topic]
+        if PROVIDER != "gemini":
+            raise RuntimeError("원재료·가격 주제는 Gemini 경로만 구현돼 있습니다")
+        return call_gemini(client, meta, tables, spec["system"], spec["schema"])
     if PROVIDER == "gemini":
         return call_gemini(client, meta, tables)
     import anthropic
@@ -326,7 +332,15 @@ def rebuild_all() -> dict:
         reports += 1
     rows = canonicalize(rows)      # 보고서마다 다른 부문·품목 표기를 회사 안에서 통일 + 같은 (줄, 기간) 병합
     payload = {"generated_at": dt.datetime.now(dt.timezone(dt.timedelta(hours=9))).strftime("%Y-%m-%d %H:%M KST"),
-               "report_count": reports, "rows": rows}
+               "report_count": reports, "rows": rows, "topics": {}}
+    names = {c["stock_code"]: c["name"] for c in load_companies() if c["stock_code"]}
+    for topic in TOPIC_ORDER:                      # 원재료 매입·가격변동·제품 가격변동 — 주제별 하위 폴더
+        trows: list[dict] = []
+        for f in sorted((NORMALIZED / topic).glob("*.json")):
+            d = json.loads(f.read_text(encoding="utf-8"))
+            meta_name = (d.get("meta") or {}).get("company", "")
+            trows.extend(migrate_row(r, topic, names.get(r.get("stock_code"), meta_name)) for r in d.get("rows", []))
+        payload["topics"][topic] = dedupe_latest(trows, topic)
     NORMALIZED.mkdir(parents=True, exist_ok=True)
     (NORMALIZED / "all.json").write_text(json.dumps(payload, ensure_ascii=False, indent=1), encoding="utf-8")
     return payload
@@ -342,7 +356,12 @@ def main() -> int:
     ap.add_argument("--force", action="store_true")
     ap.add_argument("--rebuild", action="store_true", help="모델 호출 없이 all.json 만 다시")
     ap.add_argument("--limit", type=int, default=0)
+    ap.add_argument("--topics", default="", help="쉼표 구분 — 이 주제만 처리(capacity·material·material_price·product_price). 비우면 전부")
     args = ap.parse_args()
+    topics = [t.strip() for t in args.topics.split(",") if t.strip()] or ["capacity", *TOPIC_ORDER]
+    bad = [t for t in topics if t not in ("capacity", *TOPIC_ORDER)]
+    if bad:
+        ap.error(f"모르는 주제: {bad}")
     if args.rebuild:
         p = rebuild_all()
         print(f"all.json 재생성: 보고서 {p['report_count']}건, 행 {len(p['rows'])}개")
@@ -356,12 +375,14 @@ def main() -> int:
         code, rcept = f.stem.split("_", 1)
         if want and code not in want:
             continue
-        if rcept in processed and not args.force:
+        entry = processed.get(rcept, {})
+        all_done = all(("rows" in entry) if t == "capacity" else (t in entry.get("topics", {})) for t in topics)
+        if all_done and not args.force:
             continue
         todo.append(f)
     if args.limit:
         todo = todo[: args.limit]
-    print(f"정규화 대상 {len(todo)}건 (전체 {len(files)}, 처리됨 {len(processed)}) · 공급자 {PROVIDER} / 모델 {MODEL}")
+    print(f"정규화 대상 {len(todo)}건 (전체 {len(files)}, 처리됨 {len(processed)}) · 주제 {','.join(topics)} · 공급자 {PROVIDER} / 모델 {MODEL}")
     if not todo:
         rebuild_all()
         return 0
@@ -372,37 +393,52 @@ def main() -> int:
     total_in = total_out = 0
     for f in todo:
         d = json.loads(f.read_text(encoding="utf-8"))
-        meta, tables = d["meta"], d["tables"]
-        small = [t for t in tables if len(t["rows"]) <= MAX_TABLE_ROWS]
-        for i, t in enumerate(tables, 1):
-            if len(t["rows"]) > MAX_TABLE_ROWS:
-                review_all.append({"rcept_no": meta["rcept_no"], "company": meta["company"], "table": i,
-                                   "reason": f"표가 너무 큼({len(t['rows'])}행) — 모델에 넘기지 않음"})
-        if not small:
-            review_all.append({"rcept_no": meta["rcept_no"], "company": meta["company"], "table": None,
-                               "reason": "채택된 표 없음"})
-            processed[meta["rcept_no"]] = {"at": dt.datetime.now().isoformat(timespec="seconds"), "rows": 0}
-            continue
-        try:
-            result = call_model(client, meta, small)
-        except Exception as exc:  # noqa: BLE001 — 한 보고서 실패가 전체를 막지 않게
-            print(f"  ✗ {meta['company']} {meta['report_nm']} {meta['rcept_no']}: {exc}")
-            review_all.append({"rcept_no": meta["rcept_no"], "company": meta["company"], "table": None, "reason": f"모델 호출 실패: {exc}"[:200]})
-            continue
-        rows, review = finalize(meta, result)
-        review_all.extend(review)
-        usage = result.get("_usage", {})
-        total_in += usage.get("in", 0); total_out += usage.get("out", 0)
-        (NORMALIZED / f.name).write_text(json.dumps({"meta": meta, "rows": rows, "model": usage.get("model", MODEL),
-                                                     "normalized_at": dt.datetime.now().isoformat(timespec="seconds")},
-                                                    ensure_ascii=False, indent=1), encoding="utf-8")
-        processed[meta["rcept_no"]] = {"at": dt.datetime.now().isoformat(timespec="seconds"), "rows": len(rows), "model": usage.get("model", MODEL)}
-        print(f"  ✓ {meta['company']} {meta['report_nm']} {meta['rcept_no']}: 행 {len(rows)}, 검토 {len(review)} (토큰 {usage.get('in',0)}/{usage.get('out',0)})")
-        PROCESSED.write_text(json.dumps(processed, ensure_ascii=False, indent=1), encoding="utf-8")
+        meta = d["meta"]
+        entry = processed.setdefault(meta["rcept_no"], {})
+        entry.setdefault("topics", {})
+        for topic in topics:
+            done = ("rows" in entry) if topic == "capacity" else (topic in entry["topics"])
+            if done and not args.force:
+                continue
+            tables = [t for t in d["tables"] if t.get("topic", "capacity") == topic]
+            small = [t for t in tables if len(t["rows"]) <= MAX_TABLE_ROWS]
+            for i, t in enumerate(tables, 1):
+                if len(t["rows"]) > MAX_TABLE_ROWS:
+                    review_all.append({"rcept_no": meta["rcept_no"], "company": meta["company"], "table": i,
+                                       "reason": f"[{topic}] 표가 너무 큼({len(t['rows'])}행) — 모델에 넘기지 않음"})
+            stamp = dt.datetime.now().isoformat(timespec="seconds")
+            if not small:
+                if topic == "capacity":
+                    entry.update({"at": stamp, "rows": 0})
+                else:
+                    entry["topics"][topic] = {"at": stamp, "rows": 0}
+                continue
+            try:
+                result = call_model(client, meta, small, topic)
+            except Exception as exc:  # noqa: BLE001 — 한 보고서 실패가 전체를 막지 않게
+                print(f"  ✗ [{topic}] {meta['company']} {meta['report_nm']} {meta['rcept_no']}: {exc}")
+                review_all.append({"rcept_no": meta["rcept_no"], "company": meta["company"], "table": None,
+                                   "reason": f"[{topic}] 모델 호출 실패: {exc}"[:200]})
+                continue
+            rows, review = finalize(meta, result) if topic == "capacity" else finalize_topic(topic, meta, result)
+            review_all.extend(review)
+            usage = result.get("_usage", {})
+            total_in += usage.get("in", 0); total_out += usage.get("out", 0)
+            out_dir = NORMALIZED if topic == "capacity" else NORMALIZED / topic
+            out_dir.mkdir(parents=True, exist_ok=True)
+            (out_dir / f.name).write_text(json.dumps({"meta": meta, "topic": topic, "rows": rows, "model": usage.get("model", MODEL),
+                                                      "normalized_at": stamp}, ensure_ascii=False, indent=1), encoding="utf-8")
+            if topic == "capacity":
+                entry.update({"at": stamp, "rows": len(rows), "model": usage.get("model", MODEL)})
+            else:
+                entry["topics"][topic] = {"at": stamp, "rows": len(rows), "model": usage.get("model", MODEL)}
+            print(f"  ✓ [{topic}] {meta['company']} {meta['report_nm']} {meta['rcept_no']}: 행 {len(rows)}, 검토 {len(review)} (토큰 {usage.get('in',0)}/{usage.get('out',0)})")
+            PROCESSED.write_text(json.dumps(processed, ensure_ascii=False, indent=1), encoding="utf-8")
     if review_all:
         write_review(review_all)
     p = rebuild_all()
-    print(f"\nall.json: 보고서 {p['report_count']}건, 행 {len(p['rows'])}개 · 검토 {len(review_all)}건 · 토큰 in {total_in} / out {total_out}")
+    topic_counts = " · ".join(f"{k} {len(v)}" for k, v in p.get("topics", {}).items())
+    print(f"\nall.json: 보고서 {p['report_count']}건, 생산능력 행 {len(p['rows'])}개 · {topic_counts} · 검토 {len(review_all)}건 · 토큰 in {total_in} / out {total_out}")
     return 0
 
 

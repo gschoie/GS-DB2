@@ -1,0 +1,44 @@
+{
+ "meta": {
+  "company": "두산밥캣",
+  "sector": "건기",
+  "stock_code": "241560",
+  "corp_code": "01032486",
+  "rcept_no": "20260514001068",
+  "rcept_dt": "20260514",
+  "report_nm": "분기보고서 (2026.03)",
+  "report_type": "quarter",
+  "period": "2026-03",
+  "period_label": "2026.03 1Q",
+  "corrected": false,
+  "dart_url": "https://dart.fss.or.kr/dsaf001/main.do?rcpNo=20260514001068"
+ },
+ "topic": "material",
+ "rows": [
+  {
+   "company": "두산밥캣",
+   "stock_code": "241560",
+   "sector": "건기",
+   "topic": "material",
+   "period": "2026-03",
+   "period_label": "당기",
+   "report_type": "quarter",
+   "report_label": "분기보고서 (2026.03)",
+   "report_period": "2026-03",
+   "rcept_dt": "20260514",
+   "source_rcept_no": "20260514001068",
+   "dart_url": "https://dart.fss.or.kr/dsaf001/main.do?rcpNo=20260514001068",
+   "note": "특수관계여부: 해당사항없음, 공급시장의 독과점 정도: 해당사항없음, 공급의 안정성: 안정적 공급",
+   "segment": "",
+   "entity": "",
+   "purchase_type": "",
+   "item": "",
+   "amount": null,
+   "unit": "",
+   "share_pct": null,
+   "suppliers": "HD건설기계(주)"
+  }
+ ],
+ "model": "gemini-flash-lite-latest",
+ "normalized_at": "2026-10-20T05:08:51"
+}

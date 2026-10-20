@@ -21,6 +21,9 @@ on:
       years:
         description: "최근 n년"
         default: "3"
+      topics:
+        description: "정규화 주제 콤마 목록 (capacity,material,material_price,product_price — 비우면 전부; force 와 함께 쓰면 그 주제만 다시)"
+        default: ""
   schedule:
     - cron: "0 22 19 3,5,8,11 *"   # 20일 07:00 KST
 
@@ -30,6 +33,7 @@ permissions:
 env:
   CODES: ${{ inputs.codes }}
   YEARS: ${{ inputs.years || '3' }}
+  TOPICS: ${{ inputs.topics }}
   PYTHONUNBUFFERED: "1"
 
 jobs:
@@ -54,6 +58,8 @@ jobs:
         run: |
           python tests/test_extract.py
           python tests/test_normalize.py
+          python tests/test_canonical.py
+          python tests/test_topics.py
 
       - name: 원문 zip 캐시 복원
         uses: actions/cache@v4
@@ -79,7 +85,7 @@ jobs:
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
-        run: python normalize.py --codes "$CODES" ${{ inputs.force && '--force' || '' }}
+        run: python normalize.py --codes "$CODES" --topics "$TOPICS" ${{ inputs.force && '--force' || '' }}
 
       # 정규화는 무료 티어 한도 때문에 오래 걸릴 수 있다 — 중간에 죽어도 처리 장부(processed.json)와
       # 끝난 보고서는 커밋해 두고 다음 실행이 이어서 한다.
