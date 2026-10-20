@@ -1053,7 +1053,7 @@
       5줄로 쪼개졌다(실측). 16:17 앨범엔 요약 행이 이미 있었고 13:24 앨범(PR #416 머지 전)에 없었던 것.
     - **추가 방(DAOL 조선) 동시 발송** (10/20): 사용자 요청 "바담 방에다가 DAOL 조선 방에도". 시크릿
       `COVFLOW_TELEGRAM_CHAT_ID_EXTRA`(쉼표로 여러 개, 공개채널은 `@handle` 가능 — 같은 봇이 그 방에
-      있어야) → `notify.targets()` = 기본 방 + 추가 방(기본과 같은 ID·중복 제거). **추가 방은 공유용 2장**
+      있어야; **미설정 시 워크플로 기본값 `@HI_GS`** = 공개채널 'DAOL 조선/기계/방산 | 최광식', 사용자 확정) → `notify.targets()` = 기본 방 + 추가 방(기본과 같은 ID·중복 제거). **추가 방은 공유용 2장**
       (`capture.SHARE_SECTIONS` `#cap-1a` 제목+타일+① 등락률 / `#cap-1b` ①-2 투자자별, 파일 `data/share_*.png`
       — `capture_*.png` 글롭과 섞이지 않게 접두어를 달리) + **캡션은 머리글 볼드 + 공유 링크**
       (`SHARE_URL` = gs-research-desk.github.io/coverage_flow_report.html)만. 기본 방(바담)은 종전 그대로

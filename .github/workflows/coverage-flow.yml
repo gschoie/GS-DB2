@@ -161,8 +161,9 @@ jobs:
         env:
           COVFLOW_TELEGRAM_BOT_TOKEN: ${{ secrets.COVFLOW_TELEGRAM_BOT_TOKEN }}
           COVFLOW_TELEGRAM_CHAT_ID: ${{ secrets.COVFLOW_TELEGRAM_CHAT_ID }}
-          # 추가 방(10/20): 같은 묶음을 DAOL 조선 방에도. 쉼표로 여러 개, 공개채널은 @handle 도 됨.
-          COVFLOW_TELEGRAM_CHAT_ID_EXTRA: ${{ secrets.COVFLOW_TELEGRAM_CHAT_ID_EXTRA }}
+          # 추가 방(10/20 사용자 확정): 공개채널 'DAOL 조선/기계/방산 | 최광식'(t.me/HI_GS)에 공유용 2장 + 링크.
+          # 시크릿을 두면 그 값(쉼표로 여러 개)이 우선 — 끄려면 시크릿에 기본 방 ID 를 넣는다(중복 제거로 무효).
+          COVFLOW_TELEGRAM_CHAT_ID_EXTRA: ${{ secrets.COVFLOW_TELEGRAM_CHAT_ID_EXTRA || '@HI_GS' }}
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID_PRIVATE: ${{ secrets.TELEGRAM_CHAT_ID_PRIVATE }}
         run: python notify.py --photos "data/capture_*.png" --share "data/share_*.png" || echo "::warning::텔레그램 미발송 — 채널 시크릿을 확인하세요"
