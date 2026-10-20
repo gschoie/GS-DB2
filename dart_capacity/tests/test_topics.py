@@ -11,11 +11,11 @@ META = {"company": "HD현대중공업", "stock_code": "329180", "sector": "조�
 
 def test_material_rows():
     res = {"rows": [
-        {"period": "", "period_label": "당기", "segment": "조 선", "company": "HD현대중공업㈜", "purchase_type": "원재료",
+        {"period": "", "period_label": "당기", "segment": "조 선", "entity": "HD현대중공업㈜", "purchase_type": "원재료",
          "item": "기 자 재", "amount": 3044288, "unit": "백만원", "share_pct": 50.2, "suppliers": "㈜포스코, 현대제철㈜ 外", "note": "", "confidence": "high"},
-        {"period": "2025-12", "period_label": "당기", "segment": "합계", "company": "", "purchase_type": "", "item": "",
+        {"period": "2025-12", "period_label": "당기", "segment": "합계", "entity": "", "purchase_type": "", "item": "",
          "amount": None, "unit": "", "share_pct": None, "suppliers": "", "note": "", "confidence": "high"},          # 값 없음 → 버림
-        {"period": "2025-12", "period_label": "당기", "segment": "해양", "company": "", "purchase_type": "", "item": "의장재",
+        {"period": "2025-12", "period_label": "당기", "segment": "해양", "entity": "", "purchase_type": "", "item": "의장재",
          "amount": 10, "unit": "백만원", "share_pct": None, "suppliers": "", "note": "", "confidence": "low"},        # → 검토
     ], "review": [{"table": 2, "reason": "매출 표"}]}
     rows, review = T.finalize_topic("material", META, res)
@@ -43,8 +43,75 @@ def test_product_price_spec():
     assert rows[0]["spec"] == "320,000 DWT" and rows[0]["unit"] == "백만$" and rows[0]["price"] == 128.0
 
 
+
+
+def test_none_fields_do_not_break_keys():
+    """모델이 spec·segment 를 null 로 주면 정렬 키에 None 이 섞여 rebuild 가 터졌다(실측)."""
+    from topics import dedupe_latest, finalize_topic
+    meta = {"rcept_no": "20250101000001", "company": "A", "stock_code": "000001", "sector": "조선",
+            "period": "2024-12", "report_type": "annual", "report_nm": "사업보고서", "rcept_dt": "20250101"}
+    res = {"rows": [
+        {"segment": None, "product": "선박", "spec": None, "unit": "원", "price": 1.0, "period": "2024-12"},
+        {"segment": "조선", "product": None, "spec": "A", "unit": "원", "price": 2.0, "period": "2023-12"},
+    ], "review": []}
+    rows, review = finalize_topic("product_price", meta, res)
+    assert len(rows) == 2 and rows[0]["segment"] == "" and rows[0]["spec"] == ""
+    raw = [{"stock_code": "000001", "sector": None, "company": "A", "segment": None, "product": "선박",
+            "spec": None, "period": "2024-12", "source_rcept_no": "1", "price": 1},
+           {"stock_code": "000001", "sector": "조선", "company": "A", "segment": None, "product": "선박",
+            "spec": None, "period": "2024-12", "source_rcept_no": "2", "price": 9}]
+    out = dedupe_latest(raw, "product_price")
+    assert [r["price"] for r in out] == [9]                 # None 키끼리 같은 줄로 묶여 최신 접수만 남는다
+    assert dedupe_latest(raw + rows, "product_price")       # 섞여도 정렬이 터지지 않는다
+
+
+def test_migrate_old_material_rows():
+    from topics import migrate_row
+    old = {"company": "HD현대중공업㈜", "stock_code": "329180", "segment": "조선", "item": "강재", "spec": None, "amount": 1}
+    r = migrate_row(old, "material", "HD현대중공업")
+    assert r["entity"] == "HD현대중공업㈜" and r["company"] == "HD현대중공업" and r["spec"] == ""
+    new = {"company": "HD현대중공업", "entity": "", "stock_code": "329180", "segment": "Compact Equipment"}
+    assert migrate_row(new, "material", "X")["company"] == "HD현대중공업"      # 이미 새 모양이면 손대지 않는다
+    assert migrate_row({"product": "CompactEquipment"}, "product_price")["product"] == "Compact Equipment"
+
+
+
+
+def test_canonicalize_entity_spelling():
+    from topics import dedupe_latest
+    raw = [{"stock_code": "329180", "company": "HD현대중공업", "segment": "엔진기계", "entity": "HD현대중공업㈜HD현대엔진(유)",
+            "item": "기타", "purchase_type": "원재료", "period": "2024-12", "source_rcept_no": "20250301", "amount": 1},
+           {"stock_code": "329180", "company": "HD현대중공업", "segment": "엔진기계", "entity": "HD현대중공업㈜, HD현대엔진(유)",
+            "item": "기타", "purchase_type": "원재료", "period": "2025-12", "source_rcept_no": "20260320", "amount": 2}]
+    out = dedupe_latest(raw, "material")
+    assert len(out) == 2 and {r["entity"] for r in out} == {"HD현대중공업㈜, HD현대엔진(유)"}   # 최신 표기로 통일 → 대시보드 한 줄
+
+
+
+def test_subtotal_and_entity_merge():
+    from topics import _fix_subtotal, dedupe_latest
+    r = {"segment": "엔진기계", "purchase_type": "소계", "item": ""}; _fix_subtotal(r)
+    assert (r["segment"], r["purchase_type"], r["item"]) == ("엔진기계", "", "소계")
+    r = {"segment": "합계", "purchase_type": "", "item": ""}; _fix_subtotal(r)
+    assert (r["segment"], r["item"]) == ("합계", "합계")
+    r = {"segment": "소계", "purchase_type": "", "item": "소계"}; _fix_subtotal(r)
+    assert (r["segment"], r["item"]) == ("", "소계")
+    raw = [{"stock_code": "1", "company": "A", "segment": "조선", "entity": "", "item": "강재", "purchase_type": "원재료",
+            "period": "2025-03", "source_rcept_no": "20250515", "amount": 1},
+           {"stock_code": "1", "company": "A", "segment": "조선", "entity": "A㈜", "item": "강재", "purchase_type": "원재료",
+            "period": "2024-12", "source_rcept_no": "20250320", "amount": 2}]
+    out = dedupe_latest(raw, "material")
+    assert {r["entity"] for r in out} == {"A㈜"}            # 분기(법인 열 없음)가 사업보고서의 법인 줄로 합쳐진다
+    raw.append({"stock_code": "1", "company": "A", "segment": "조선", "entity": "B㈜", "item": "강재", "purchase_type": "원재료",
+                "period": "2024-12", "source_rcept_no": "20250320", "amount": 3})
+    assert {r["entity"] for r in dedupe_latest(raw, "material")} == {"", "A㈜", "B㈜"}   # 법인이 둘이면 빈 쪽은 못 정한다
+
 if __name__ == "__main__":
     test_material_rows()
     test_price_rows_and_dedupe()
     test_product_price_spec()
-    print("ok — test_topics 3개 통과")
+    test_none_fields_do_not_break_keys()
+    test_migrate_old_material_rows()
+    test_canonicalize_entity_spelling()
+    test_subtotal_and_entity_merge()
+    print("ok — test_topics 7개 통과")

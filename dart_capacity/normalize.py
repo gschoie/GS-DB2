@@ -27,8 +27,8 @@ import time
 from pathlib import Path
 
 from canonical import canonicalize
-from topics import SPECS as TOPIC_SPECS, TOPIC_ORDER, finalize_topic, dedupe_latest
-from common import DART_VIEWER, EXTRACTED, NORMALIZED, REVIEW_CSV, DATA
+from topics import SPECS as TOPIC_SPECS, TOPIC_ORDER, finalize_topic, dedupe_latest, migrate_row
+from common import DART_VIEWER, EXTRACTED, NORMALIZED, REVIEW_CSV, DATA, load_companies
 
 PROCESSED = DATA / "processed.json"
 PROVIDER = os.environ.get("DART_CAPACITY_PROVIDER") or ("gemini" if os.environ.get("GEMINI_API_KEY") else "claude")
@@ -333,10 +333,13 @@ def rebuild_all() -> dict:
     rows = canonicalize(rows)      # 보고서마다 다른 부문·품목 표기를 회사 안에서 통일 + 같은 (줄, 기간) 병합
     payload = {"generated_at": dt.datetime.now(dt.timezone(dt.timedelta(hours=9))).strftime("%Y-%m-%d %H:%M KST"),
                "report_count": reports, "rows": rows, "topics": {}}
+    names = {c["stock_code"]: c["name"] for c in load_companies() if c["stock_code"]}
     for topic in TOPIC_ORDER:                      # 원재료 매입·가격변동·제품 가격변동 — 주제별 하위 폴더
         trows: list[dict] = []
         for f in sorted((NORMALIZED / topic).glob("*.json")):
-            trows.extend(json.loads(f.read_text(encoding="utf-8")).get("rows", []))
+            d = json.loads(f.read_text(encoding="utf-8"))
+            meta_name = (d.get("meta") or {}).get("company", "")
+            trows.extend(migrate_row(r, topic, names.get(r.get("stock_code"), meta_name)) for r in d.get("rows", []))
         payload["topics"][topic] = dedupe_latest(trows, topic)
     NORMALIZED.mkdir(parents=True, exist_ok=True)
     (NORMALIZED / "all.json").write_text(json.dumps(payload, ensure_ascii=False, indent=1), encoding="utf-8")
@@ -353,7 +356,12 @@ def main() -> int:
     ap.add_argument("--force", action="store_true")
     ap.add_argument("--rebuild", action="store_true", help="모델 호출 없이 all.json 만 다시")
     ap.add_argument("--limit", type=int, default=0)
+    ap.add_argument("--topics", default="", help="쉼표 구분 — 이 주제만 처리(capacity·material·material_price·product_price). 비우면 전부")
     args = ap.parse_args()
+    topics = [t.strip() for t in args.topics.split(",") if t.strip()] or ["capacity", *TOPIC_ORDER]
+    bad = [t for t in topics if t not in ("capacity", *TOPIC_ORDER)]
+    if bad:
+        ap.error(f"모르는 주제: {bad}")
     if args.rebuild:
         p = rebuild_all()
         print(f"all.json 재생성: 보고서 {p['report_count']}건, 행 {len(p['rows'])}개")
@@ -368,13 +376,13 @@ def main() -> int:
         if want and code not in want:
             continue
         entry = processed.get(rcept, {})
-        all_done = "rows" in entry and all(t in entry.get("topics", {}) for t in TOPIC_ORDER)
+        all_done = all(("rows" in entry) if t == "capacity" else (t in entry.get("topics", {})) for t in topics)
         if all_done and not args.force:
             continue
         todo.append(f)
     if args.limit:
         todo = todo[: args.limit]
-    print(f"정규화 대상 {len(todo)}건 (전체 {len(files)}, 처리됨 {len(processed)}) · 공급자 {PROVIDER} / 모델 {MODEL}")
+    print(f"정규화 대상 {len(todo)}건 (전체 {len(files)}, 처리됨 {len(processed)}) · 주제 {','.join(topics)} · 공급자 {PROVIDER} / 모델 {MODEL}")
     if not todo:
         rebuild_all()
         return 0
@@ -388,7 +396,7 @@ def main() -> int:
         meta = d["meta"]
         entry = processed.setdefault(meta["rcept_no"], {})
         entry.setdefault("topics", {})
-        for topic in ["capacity", *TOPIC_ORDER]:
+        for topic in topics:
             done = ("rows" in entry) if topic == "capacity" else (topic in entry["topics"])
             if done and not args.force:
                 continue
