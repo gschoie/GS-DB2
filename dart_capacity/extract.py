@@ -35,6 +35,22 @@ from common import DART_VIEWER, EXTRACTED, load_index
 DOC_DIR = Path(__file__).resolve().parent / "data" / "raw" / "doc"
 KEYWORDS = ("생산능력", "생산실적", "가동률", "가동율")
 _KW_RE = re.compile("|".join(KEYWORDS))
+# 주제별 선정 규칙 — 제목(가장 가까운 소항목)과 표 머리글로 판정한다. 순서가 우선순위.
+#   capacity       생산능력·생산실적·가동률 (3. 원재료 및 생산설비 > 생산 및 설비)
+#   material       원재료 매입 현황 — 품목·매입액·비중·매입처 (3. 원재료 및 생산설비 > 가. 주요 원재료)
+#   material_price 주요 원재료 등의 가격변동추이
+#   product_price  주요 제품 등의 가격변동추이 (2. 주요 제품 및 서비스)
+TOPICS = {
+    "capacity":       {"label": "생산능력·생산실적·가동률", "heading": _KW_RE,
+                       "header": None},
+    "material":       {"label": "원재료 매입", "heading": re.compile(r"원재료.*(매입|현황)|매입.*원재료|원재료\s*등의\s*현황"),
+                       "header": re.compile(r"매입액|매입금액|매입\s*비중|주요\s*매입처|매입처")},
+    "material_price": {"label": "원재료 가격변동", "heading": re.compile(r"원재료.*가격\s*변동|원재료.*가격.*추이|원재료.*가격"),
+                       "header": None},
+    "product_price":  {"label": "제품 가격변동", "heading": re.compile(r"(제품|서비스|상품).*가격\s*변동|(제품|서비스|상품).*가격.*추이|판매\s*가격.*추이|제품.*가격"),
+                       "header": None},
+}
+_PRICE_ONLY = re.compile(r"가격\s*변동\s*추이|가격변동|가격\s*추이")   # '(2) 가격변동추이'처럼 주어 없는 소항목
 _UNIT_RE = re.compile(r"단\s*위")
 HEADING_MAX = 60          # 이보다 긴 문단은 제목이 아니라 본문(각주 문장)으로 본다
 CONTEXT_MAX = 12          # 표 앞에서 거슬러 올라가 담아 두는 블록 수 상한(문맥 보존용)
@@ -113,21 +129,44 @@ def _level(txt: str) -> int:
     return 0
 
 
-def _nearest_heading_kw(near: list[str]) -> list[str]:
+def _topic_of_heading(tail: str, section: str, near: list[str]) -> str:
+    """제목 꼬리 한 줄이 어느 주제인지. 주어 없는 '(2) 가격변동추이'는 섹션·상위 제목으로 원재료/제품을 가른다."""
+    for topic, spec in TOPICS.items():
+        if spec["heading"].search(tail):
+            return topic
+    if _PRICE_ONLY.search(tail):
+        around = " ".join([section, *near])
+        if "원재료" in around:
+            return "material_price"
+        if re.search(r"제품|서비스|상품", around):
+            return "product_price"
+    return ""
+
+
+def _nearest_heading_topic(near: list[str], section: str) -> tuple[str, list[str]]:
     """가장 가까운 제목 한 줄로 판정한다 — 상위 항목('다. 주요 원재료 및 생산능력')의 키워드가
-    하위 표(원재료 현황)로 흘러들지 않게. 가까운 줄이 하위 라벨('가) 국내', '[회사명]')이면 한 줄 더 올라간다."""
+    하위 표(원재료 현황)로 흘러들지 않게. 가까운 줄이 하위 라벨('가) 국내', '[회사명]')이면 한 줄 더 올라간다.
+    → (주제, 적중 키워드)."""
     for h in reversed(near):
-        kws = sorted(set(_KW_RE.findall(_heading_tail(h))))
-        if kws:
-            return kws
+        tail = _heading_tail(h)
+        topic = _topic_of_heading(tail, section, near)
+        if topic:
+            kws = sorted(set(_KW_RE.findall(tail))) if topic == "capacity" else [tail[:30]]
+            return topic, kws
         if _level(h) >= 3:
             continue
-        return []
-    return []
+        return "", []
+    return "", []
+
+
+def _nearest_heading_kw(near: list[str]) -> list[str]:
+    """(호환) 생산능력 주제의 키워드만."""
+    topic, kws = _nearest_heading_topic(near, "")
+    return kws if topic == "capacity" else []
 
 
 def _cell_hit(rows: list[list[str]]) -> list[str]:
-    """지표 이름 셀(또는 머리글 포함)에서 적중한 키워드."""
+    """(생산능력 주제) 지표 이름 셀(또는 머리글 포함)에서 적중한 키워드."""
     hits = set()
     for i, row in enumerate(rows):
         for cell in row:
@@ -137,6 +176,19 @@ def _cell_hit(rows: list[list[str]]) -> list[str]:
             elif _CELL_RE.match(c):
                 hits.update(_KW_RE.findall(c))
     return sorted(hits)
+
+
+def _table_topic(rows: list[list[str]]) -> tuple[str, list[str]]:
+    """표 본문·머리글로 주제 판정 → (주제, 키워드). 생산능력은 지표명 셀 규칙, 원재료 매입은 머리글(매입액·매입처)."""
+    kws = _cell_hit(rows)
+    if kws:
+        return "capacity", kws
+    if rows:
+        head = " ".join(rows[0])
+        spec = TOPICS["material"]["header"]
+        if spec.search(head) and "매출" not in head:
+            return "material", sorted(set(spec.findall(head)))
+    return "", []
 
 
 def _rows(table: Tag) -> list[list[str]]:
@@ -191,8 +243,10 @@ def extract_tables(doc: str) -> tuple[list[dict], list[dict]]:
             context = ctx[-CONTEXT_MAX * 3:]
             headings = [t for t in context if _is_heading(t) and not _UNIT_RE.search(t)]
             near = [t for t in context[-NEAR:] if _is_heading(t) and not _UNIT_RE.search(t)]
-            kw_table = _cell_hit(rows)
-            kw_ctx = _nearest_heading_kw(near)
+            section_txt = " ".join(titles[-2:])
+            topic_t, kw_table = _table_topic(rows)
+            topic_h, kw_ctx = _nearest_heading_topic(near, section_txt)
+            topic = topic_t or topic_h
             unit_texts = [t for t in context if _UNIT_RE.search(t)]
             unit = unit_texts[-1] if unit_texts else pending_unit
             pending_unit = ""
@@ -201,6 +255,7 @@ def extract_tables(doc: str) -> tuple[list[dict], list[dict]]:
                 "headings": headings,
                 "context": context,
                 "unit": unit,
+                "topic": topic,
                 "keywords": sorted(set(kw_table) | set(kw_ctx)),
                 "keyword_in": "table" if kw_table else ("heading" if kw_ctx else ""),
                 "rows": rows,
@@ -209,12 +264,13 @@ def extract_tables(doc: str) -> tuple[list[dict], list[dict]]:
                 "digest": hashlib.md5(ttext.encode("utf-8")).hexdigest()[:12],
             }
             ctx = []                                  # 일반 표를 지났으니 문맥은 여기서 끊긴다
-            if kw_table or kw_ctx:
+            if topic:
                 found.append(record)
                 since_found = 0
                 continue
             since_found += 1
-            loose = sorted(set(_KW_RE.findall(ttext)) | {k for t in context for k in _KW_RE.findall(t)})
+            loose = sorted(set(_KW_RE.findall(ttext)) | {k for t in context for k in _KW_RE.findall(t)}
+                           | {m for t in context for m in _PRICE_ONLY.findall(t)} | {m for t in context for m in re.findall(r"원재료", t)})
             if loose:
                 rejected.append({**record, "keywords": loose, "html": "", "rows": rows[:3],
                                  "why": "셀 전체가 지표명이 아니거나 멀리 있는 문장에만 키워드"})
@@ -275,7 +331,7 @@ def render_html(meta: dict, tables: list[dict]) -> str:
     for i, t in enumerate(tables, 1):
         parts.append(
             f"<section data-table=\"{i}\" data-keywords=\"{_esc(','.join(t['keywords']))}\" data-file=\"{_esc(t['file'])}\">"
-            f"<h2>표 {i} <small>[{_esc(' › '.join(t['section']))}]</small></h2>"
+            f"<h2>표 {i} · {_esc(TOPICS.get(t.get('topic', 'capacity'), {}).get('label', t.get('topic', '')))} <small>[{_esc(' › '.join(t['section']))}]</small></h2>"
             f"<div class=\"ctx\">{'<br>'.join(_esc(h) for h in t['headings'])}"
             f"{('<br><b>단위:</b> ' + _esc(t['unit'])) if t['unit'] else ''}</div>"
             f"{t['html']}"
@@ -321,7 +377,7 @@ def main() -> int:
         print(f"{meta.get('company','?')} {meta.get('report_nm','')} {rcept_no}: 표 {len(tables)}개 (탈락 후보 {len(rejected)})")
         if args.preview:
             for i, t in enumerate(tables, 1):
-                print(f"  ── 표 {i} [{' › '.join(t['section'][-2:])}] kw={','.join(t['keywords'])}({t['keyword_in']}) unit='{t['unit']}'")
+                print(f"  ── 표 {i} <{t.get('topic','')}> [{' › '.join(t['section'][-2:])}] kw={','.join(t['keywords'])}({t['keyword_in']}) unit='{t['unit']}'")
                 for h in t["headings"][-3:]:
                     print(f"     ▸ {h[:HEADING_MAX]}")
                 for f in t["footnotes"]:

@@ -54,7 +54,7 @@ def test_false_positives_go_to_rejected():
     # 사업장 현황 표: 멀리 있는 각주 문장('…입니다.')의 가동률은 제목이 아니다
     # 투자현황 표: '생산능력 향상'은 지표명 셀이 아니다
     whys = {r["rows"][0][0] for r in rejected}
-    assert whys == {"지역", "투자명"}, whys
+    assert whys == {"지역", "투자명", "품목"}, whys      # 품목=원재료 표(제목 '가. 주요 원재료'는 매입·현황 낱말이 없어 탈락 후보)
     assert all(r["html"] == "" for r in rejected)           # 검토용이라 원문은 안 담는다
     assert all("토지" not in t["html"] and "투자명" not in t["html"] for t in found)
 
@@ -95,10 +95,12 @@ DOC2 = """<?xml version="1.0" encoding="utf-8"?>
 
 def test_real_world_cases():
     found, rejected = extract_tables(DOC2)
-    firsts = [t["rows"][0][0] for t in found]
-    # 원재료 표는 상위 항목('다. 주요 원재료 및 생산능력')이 아니라 소항목('(1) 주요 원재료')로 판정 → 탈락
-    assert firsts == ["사업부문", "제품군"], (firsts, [r["rows"][0][:1] for r in rejected])
-    cap, prod = found
+    firsts = [(t["rows"][0][0], t["topic"]) for t in found]
+    # 원재료 표는 상위 항목('다. 주요 원재료 및 생산능력')이 아니라 소항목('(1) 주요 원재료 등의 현황')로 판정
+    # → 생산능력이 아니라 **원재료 매입** 주제(머리글 매입액)
+    assert firsts == [("사업부문", "material"), ("사업부문", "capacity"), ("제품군", "capacity")], firsts
+    mat, cap, prod = found
+    assert mat["unit"] == "(단위 : 백만원)"
     assert cap["rows"][1][2] == "12,467천 GT(*1)"
     # 산출기준 2열 표 + 주1) 한 칸 표는 바로 뒤에 왔으니 능력표의 각주로 붙는다
     assert any("도크의 최대 건조가능 용량" in f for f in cap["footnotes"])
@@ -110,6 +112,40 @@ def test_real_world_cases():
     assert prod["footnotes"] == []
 
 
+DOC3 = """<?xml version="1.0" encoding="utf-8"?>
+<DOCUMENT><BODY>
+<SECTION-1><TITLE>II. 사업의 내용</TITLE>
+<SECTION-2><TITLE>2. 주요 제품 및 서비스</TITLE>
+<P>가. 주요 제품 등의 현황</P>
+<TABLE><TR><TH>사업부문</TH><TH>품목</TH><TH>매출액</TH><TH>비중</TH></TR><TR><TD>조선</TD><TD>선박</TD><TD>12,000</TD><TD>70%</TD></TR></TABLE>
+<P>나. 주요 제품 등의 가격변동추이</P>
+<TABLE><TR><TD>(단위 : 백만달러/척)</TD></TR></TABLE>
+<TABLE><TR><TH>품목</TH><TH>2025년</TH><TH>2024년</TH></TR><TR><TD>VLCC</TD><TD>130</TD><TD>128</TD></TR></TABLE>
+</SECTION-2>
+<SECTION-2><TITLE>3. 원재료 및 생산설비</TITLE>
+<P>가. 주요 원재료 등의 현황</P>
+<TABLE><TR><TD>(단위 : 백만원)</TD></TR></TABLE>
+<TABLE><TR><TH>사업부문</TH><TH>품목</TH><TH>매입액</TH><TH>비중</TH><TH>주요 매입처</TH></TR><TR><TD>조선</TD><TD>후판</TD><TD>6,067,774</TD><TD>62%</TD><TD>포스코</TD></TR></TABLE>
+<P>나. 주요 원재료 등의 가격변동추이</P>
+<P>(1) 가격변동추이</P>
+<TABLE><TR><TH>품목</TH><TH>단위</TH><TH>2025년</TH><TH>2024년</TH></TR><TR><TD>후판</TD><TD>천원/톤</TD><TD>950</TD><TD>1,010</TD></TR></TABLE>
+<P>(2) 가격변동 원인</P>
+<TABLE><TR><TD>※ 후판 가격은 철광석 시세에 연동됩니다.</TD></TR></TABLE>
+</SECTION-2></SECTION-1></BODY></DOCUMENT>"""
+
+
+def test_material_and_price_topics():
+    found, rejected = extract_tables(DOC3)
+    got = [(t["topic"], t["rows"][1][0], t["unit"]) for t in found]
+    assert got == [("product_price", "VLCC", "(단위 : 백만달러/척)"),
+                   ("material", "조선", "(단위 : 백만원)"),
+                   ("material_price", "후판", "")], got
+    # '(1) 가격변동추이'처럼 주어 없는 소항목은 상위 제목 '원재료' 로 가른다 / 매출액 표(제품 현황)는 안 잡는다
+    assert all(t["rows"][0][2] != "매출액" for t in found)
+    assert found[2]["footnotes"] == ["※ 후판 가격은 철광석 시세에 연동됩니다."]
+
+
 if __name__ == "__main__":
     test_real_world_cases()
-    print("ok — test_extract 실측 케이스 통과")
+    test_material_and_price_topics()
+    print("ok — test_extract 실측 케이스 + 원재료·가격 주제 통과")

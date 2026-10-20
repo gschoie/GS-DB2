@@ -372,7 +372,8 @@ def main() -> int:
     total_in = total_out = 0
     for f in todo:
         d = json.loads(f.read_text(encoding="utf-8"))
-        meta, tables = d["meta"], d["tables"]
+        meta = d["meta"]
+        tables = [t for t in d["tables"] if t.get("topic", "capacity") == "capacity"]   # 원재료·가격 주제는 별도 정규화(추후)
         small = [t for t in tables if len(t["rows"]) <= MAX_TABLE_ROWS]
         for i, t in enumerate(tables, 1):
             if len(t["rows"]) > MAX_TABLE_ROWS:
