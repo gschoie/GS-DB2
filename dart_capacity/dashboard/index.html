@@ -56,6 +56,9 @@ details.src{font-size:12px;color:var(--ink3);margin-top:8px}
   <p class="sub">OpenDART 정기보고서(사업·반기·분기)의 「생산능력 / 생산실적 / 가동률」 표를 회사·부문별로 모았습니다.
     <span id="gen"></span> · 숫자를 누르면 DART 원문 공시로 갑니다.</p>
   <div class="filters">
+    <div class="seg" id="topic-seg"><button data-t="capacity" class="on">생산능력·가동률</button><button data-t="material">원재료 매입</button><button data-t="material_price">원재료 가격</button><button data-t="product_price">제품 가격</button></div>
+  </div>
+  <div class="filters">
     <div class="seg" id="sector-seg"></div>
     <select id="company-sel"><option value="">회사 전체</option></select>
     <div class="seg" id="span-seg"><button data-p="annual" class="on">연간만</button><button data-p="all">전체(분기 누적 포함)</button></div>
@@ -67,6 +70,7 @@ details.src{font-size:12px;color:var(--ink3);margin-top:8px}
   </div>
   <div class="note">단위는 보고서 원문 그대로입니다(척·CGT·톤·대·억원 등 — 능력이 금액 기준인지 수량 기준인지는 각 줄의 비고에). 분기·반기보고서의 실적은 보고서가 적은 기준(누적 또는 당기) 그대로이며 바꾸지 않았습니다.</div>
 
+  <div class="note" id="topic-note" style="display:none"></div>
   <h2 id="cmp-title">섹터 내 비교</h2>
   <div class="card tscroll" id="cmp"></div>
 
@@ -82,7 +86,16 @@ const SECTORS = ["조선", "조기", "방산", "건기"];
 const METRIC_LABEL = {utilization_pct: "가동률 %", capacity: "생산능력", production: "생산실적"};
 const $ = (s, r = document) => r.querySelector(s);
 const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({"&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;"}[c]));
-const state = {sector: "", company: "", metric: "utilization_pct", span: "annual", rows: [], reports: {}};
+const state = {topic: "capacity", sector: "", company: "", metric: "utilization_pct", span: "annual", rows: [], topics: {}, reports: {}};
+// 주제별 값 열·라벨 — 원재료 매입은 금액(+비중·매입처), 가격 둘은 단가
+const TOPIC_CFG = {
+  material: {label: "원재료 매입", valueKey: "amount", valueLabel: "매입액", color: "var(--s2)",
+             note: "매입액은 보고서 단위 그대로(대개 백만원). 비중은 같은 표의 '(비중)' 값, 매입처는 최신 보고서 표기입니다. 당기 현황만 적는 보고서가 많아 연도별 열이 비어 있을 수 있습니다."},
+  material_price: {label: "원재료 가격변동", valueKey: "price", valueLabel: "가격", color: "var(--s1)",
+             note: "원재료 가격은 각 사가 적은 단위 그대로(원/TON, USD, $/리터 …)이며 회사 간 직접 비교는 단위가 같을 때만 의미가 있습니다. 산출 기준(스틸데일리 DB, 대표 품목 구매계약가 등)은 비고에."},
+  product_price: {label: "제품 가격변동", valueKey: "price", valueLabel: "가격", color: "var(--s3)",
+             note: "제품 가격은 각 사가 적은 대표 기종·선종의 단가(백만$, 천원/대 등)입니다. 조선사는 Clarksons 신조선가 등 외부 지표를 인용하기도 합니다 — 출처는 비고에."},
+};
 
 function fmt(v, metric) {
   if (v === null || v === undefined || v === "" || Number.isNaN(+v)) return "–";
@@ -98,8 +111,15 @@ const genericLabel = p => { const [yy, mm] = (p || "").split("-"); return `${yy}
 // 능력·실적 단위가 같을 때만 한 차트(한 축)에 같이 그린다 — HD현대중공업처럼 능력 천GT·실적 백만원이면 따로.
 const sameUnit = r => !r.production_unit || !r.capacity_unit || r.production_unit === r.capacity_unit;
 // 줄 이름: 품목이 부문 이름으로 시작하면('유압기기 (국내)') 부문을 되풀이하지 않는다
-const lineName = r => { const seg = r.segment || "", prod = r.product || ""; if (!prod) return seg || "전체"; if (!seg || prod.startsWith(seg)) return prod; return `${seg} / ${prod}`; };
-const lineKey = r => `${r.stock_code}|${r.segment || ""}|${r.product || ""}`;   // 단위는 기간마다 달라질 수 있어 키에 안 넣는다
+const lineName = r => {
+  const seg = r.segment || "", prod = r.product || r.item || "";
+  let name = !prod ? (seg || "전체") : (!seg || prod.startsWith(seg)) ? prod : `${seg} / ${prod}`;
+  if (r.spec) name += ` ${r.spec}`;
+  if (r.purchase_type && r.topic === "material") name += ` [${r.purchase_type}]`;
+  if (r.topic === "material" && r.company && !name.includes(r.company)) name += ` (${r.company})`;
+  return name;
+};
+const lineKey = r => `${r.stock_code}|${r.segment || ""}|${r.product || r.item || ""}|${r.spec || ""}|${r.purchase_type || ""}|${r.topic === "material" ? (r.company || "") : ""}`;   // 단위는 기간마다 달라질 수 있어 키에 안 넣는다
 
 async function load() {
   for (const url of DATA_CANDIDATES) {
@@ -117,18 +137,21 @@ function buildFilters() {
   seg.innerHTML = ["", ...SECTORS].map(s => `<button data-s="${s}" class="${s === state.sector ? "on" : ""}">${s || "전체"}</button>`).join("");
   seg.querySelectorAll("button").forEach(b => b.onclick = () => { state.sector = b.dataset.s; state.company = ""; render(); });
   const sel = $("#company-sel");
-  const companies = [...new Map(state.rows.filter(r => !state.sector || r.sector === state.sector).map(r => [r.stock_code, r])).values()]
+  const companies = [...new Map(topicRows().filter(r => !state.sector || r.sector === state.sector).map(r => [r.stock_code, r])).values()]
     .sort((a, b) => SECTORS.indexOf(a.sector) - SECTORS.indexOf(b.sector) || a.company.localeCompare(b.company, "ko"));
   sel.innerHTML = `<option value="">회사 전체</option>` + companies.map(c => `<option value="${c.stock_code}" ${c.stock_code === state.company ? "selected" : ""}>[${c.sector}] ${esc(c.company)}</option>`).join("");
   sel.onchange = () => { state.company = sel.value; render(); };
+  $("#topic-seg").querySelectorAll("button").forEach(b => { b.classList.toggle("on", b.dataset.t === state.topic); b.onclick = () => { state.topic = b.dataset.t; state.company = ""; render(); }; });
+  $("#metric-sel").style.display = state.topic === "capacity" ? "" : "none";
   $("#span-seg").querySelectorAll("button").forEach(b => { b.classList.toggle("on", b.dataset.p === state.span); b.onclick = () => { state.span = b.dataset.p; render(); }; });
   $("#metric-sel").value = state.metric;
   $("#metric-sel").onchange = e => { state.metric = e.target.value; render(); };
 }
 
 // 분기·반기 열은 보통 연초 누적이라 연간과 한 선에 놓으면 톱니가 된다 → 기본은 연간(12월 기말)만
+function topicRows() { return state.topic === "capacity" ? state.rows : (state.topics[state.topic] || []); }
 function visibleRows() {
-  return state.rows.filter(r => (!state.sector || r.sector === state.sector) && (!state.company || r.stock_code === state.company)
+  return topicRows().filter(r => (!state.sector || r.sector === state.sector) && (!state.company || r.stock_code === state.company)
     && (state.span === "all" || (r.period || "").endsWith("-12")));
 }
 
@@ -240,14 +263,75 @@ function wireTips() {
 function render() {
   buildFilters();
   const rows = visibleRows();
-  renderCompare(rows);
-  renderSeries(rows);
+  const cfg = TOPIC_CFG[state.topic];
+  $("#topic-note").textContent = cfg ? cfg.note : "";
+  $("#topic-note").style.display = cfg ? "" : "none";
+  if (cfg) { renderCompareTopic(rows, cfg); renderSeriesTopic(rows, cfg); }
+  else { renderCompare(rows); renderSeries(rows); }
+}
+
+// ── 원재료·가격 주제: 값 하나(매입액/가격)짜리 비교표 + 카드 ──
+function renderCompareTopic(rows, cfg) {
+  const vk = cfg.valueKey;
+  $("#cmp-title").textContent = `${state.sector || "전체"} · ${cfg.label} 비교 (최근 8개 ${state.span === "all" ? "보고 기간" : "연도"})`;
+  const periods = [...new Set(rows.map(r => r.period))].sort().slice(-8);
+  const lines = new Map();
+  for (const r of rows) {
+    const k = lineKey(r);
+    if (!lines.has(k)) lines.set(k, {r, cells: {}});
+    const cur = lines.get(k).cells[r.period];
+    if (!cur || r.source_rcept_no > cur.source_rcept_no) lines.get(k).cells[r.period] = r;
+  }
+  const ordered = [...lines.values()].sort((a, b) => SECTORS.indexOf(a.r.sector) - SECTORS.indexOf(b.r.sector) || a.r.company.localeCompare(b.r.company, "ko") || lineName(a.r).localeCompare(lineName(b.r), "ko"));
+  if (!ordered.length) { $("#cmp").innerHTML = `<div class="empty">이 주제의 정규화 데이터가 아직 없습니다.</div>`; return; }
+  const extra = state.topic === "material" ? `<th style="text-align:left">주요 매입처</th>` : "";
+  let html = `<table><thead><tr><th>회사 › 부문/품목</th><th>단위</th>${periods.map(p => `<th>${esc(genericLabel(p))}</th>`).join("")}${extra}</tr></thead><tbody>`;
+  let lastSector = null;
+  for (const {r, cells} of ordered) {
+    if (!state.sector && r.sector !== lastSector) { html += `<tr class="grp"><td colspan="${periods.length + 3}">${esc(r.sector)}</td></tr>`; lastSector = r.sector; }
+    const latest = periods.map(p => cells[p]).filter(Boolean).pop();
+    const unit = latest ? (latest.unit || "–") : "–";
+    html += `<tr><td>${esc(r.company)} › ${esc(lineName(r))}</td><td class="lbl">${esc(unit)}</td>${periods.map(p => { const c = cells[p]; if (!c) return "<td>–</td>"; const v = fmt(c[vk]); const sh = c.share_pct != null ? ` <span class="pill">${fmt(c.share_pct)}%</span>` : ""; return `<td>${link(c, v)}${sh}</td>`; }).join("")}${state.topic === "material" ? `<td class="lbl" style="white-space:normal;min-width:160px">${esc(latest ? latest.suppliers || "" : "")}</td>` : ""}</tr>`;
+  }
+  $("#cmp").innerHTML = html + "</tbody></table>";
+}
+
+function renderSeriesTopic(rows, cfg) {
+  const vk = cfg.valueKey;
+  const byCompany = new Map();
+  for (const r of rows) { if (!byCompany.has(r.stock_code)) byCompany.set(r.stock_code, []); byCompany.get(r.stock_code).push(r); }
+  const companies = [...byCompany.entries()].sort((a, b) => SECTORS.indexOf(a[1][0].sector) - SECTORS.indexOf(b[1][0].sector) || a[1][0].company.localeCompare(b[1][0].company, "ko"));
+  if (!companies.length) { $("#series").innerHTML = `<div class="card"><div class="empty">표시할 회사가 없습니다.</div></div>`; return; }
+  let html = "";
+  for (const [code, crows] of companies) {
+    const lines = new Map();
+    for (const r of crows) { const k = lineKey(r); if (!lines.has(k)) lines.set(k, []); lines.get(k).push(r); }
+    const c0 = crows[0];
+    html += `<div class="card"><h3>${esc(c0.company)} <span class="pill">${esc(c0.sector)}</span> <span class="pill">${code}</span></h3>
+      <p class="meta">보고서 ${new Set(crows.map(r => r.source_rcept_no)).size}건 · 줄 ${lines.size}개</p>`;
+    for (const [k, lrows] of lines) {
+      const dedup = new Map();
+      for (const r of lrows) { const cur = dedup.get(r.period); if (!cur || r.source_rcept_no > cur.source_rcept_no) dedup.set(r.period, r); }
+      const pts = [...dedup.values()].sort((a, b) => a.period.localeCompare(b.period));
+      const r0 = pts[pts.length - 1];
+      html += `<h4 style="margin:12px 0 4px;font-size:14px">${esc(lineName(r0))} <span class="pill">${esc(r0.unit || "단위 미기재")}</span></h4>
+        <div class="charts">${pts.length > 1 ? chart(pts, [[vk, cfg.valueLabel, cfg.color]], r0.unit || "") : ""}</div>
+        <div class="tscroll"><table><thead><tr><th>보고 기간</th><th>보고서</th><th>${cfg.valueLabel}${r0.unit ? " (" + esc(r0.unit) + ")" : ""}</th>${state.topic === "material" ? "<th>비중</th><th style=\"text-align:left\">주요 매입처</th>" : ""}<th style="text-align:left">비고</th></tr></thead><tbody>
+        ${pts.map(r => `<tr><td>${esc(periodLabel(r))}</td><td class="lbl">${link(r, esc(r.report_label || "원문"))}</td><td>${link(r, fmt(r[vk]))}</td>${state.topic === "material" ? `<td>${r.share_pct != null ? fmt(r.share_pct) + "%" : "–"}</td><td class="lbl" style="white-space:normal;min-width:160px">${esc(r.suppliers || "")}</td>` : ""}<td class="lbl" style="white-space:normal;min-width:200px">${esc(r.note || "")}</td></tr>`).join("")}
+        </tbody></table></div>`;
+    }
+    html += `</div>`;
+  }
+  $("#series").innerHTML = html;
+  wireTips();
 }
 
 (async () => {
   const data = await load();
   if (!data) { $("#cmp").innerHTML = `<div class="empty">데이터(all.json)를 불러오지 못했습니다 — 수집·정규화가 한 번 돌아야 채워집니다.</div>`; $("#series").innerHTML = ""; return; }
   state.rows = (data.rows || []).map(r => ({...r, period: r.period || "", sector: r.sector || "", company: r.company || r.stock_code}));
+  state.topics = {};
+  for (const [k, arr] of Object.entries(data.topics || {})) state.topics[k] = (arr || []).map(r => ({...r, period: r.period || "", sector: r.sector || "", company: r.company || r.stock_code}));
   $("#gen").textContent = data.generated_at ? `갱신 ${data.generated_at} · 보고서 ${data.report_count ?? ""}건` : "";
   render();
 })();
