@@ -232,12 +232,10 @@ def send(text, parse_mode=None, chat=None):
 def main(argv=None):
     args = list(argv if argv is not None else sys.argv[1:])
     dry = "--dry" in args
-    photos, share = [], []
+    photos = []
     import glob as _g
     if "--photos" in args:
         photos = sorted(_g.glob(args[args.index("--photos") + 1]))
-    if "--share" in args:
-        share = sorted(_g.glob(args[args.index("--share") + 1]))
     with open(LATEST, encoding="utf-8") as f:
         d = json.load(f)
     text = compose(d)
@@ -262,21 +260,18 @@ def main(argv=None):
     photos = [p for p in photos if os.path.exists(p)]
     # 방마다 같은 묶음(앨범+캡션)을 보낸다 — 기본 방(바담)이 먼저, 추가 방(DAOL 조선 등)은 뒤에.
     # 추가 방 실패는 기본 방 결과(종료코드)를 바꾸지 않는다 — 늦은 크론이 재시도하면 바담 방에 두 통 간다.
-    # 추가 방은 공유용 2장(① 등락률 / ①-2 투자자별) + 머리글·링크 캡션만(10/20 사용자 요청) —
-    # 공유용 그림이 없으면(옛 페이지) 기본 방과 같은 묶음으로 폴백.
-    share = [p for p in share if os.path.exists(p)]
+    # 그림은 두 방 같은 2장(① 등락률 / ①-2 투자자별). 기본 방(바담)은 본문을 캡션으로, 추가 방(DAOL 조선)은
+    # 머리글·공유 링크만 캡션으로(10/20 사용자 요청). 그림이 없으면 추가 방도 본문으로 폴백.
     outs = []
     for i, chat in enumerate(targets()):
-        if i and share:
-            res, pres = _deliver_share(chat, text, share)
-            n_photo = len(share)
+        if i and photos:
+            res, pres = _deliver_share(chat, text, photos)
         else:
             res, pres = _deliver(chat, d, text, html_text, photos)
-            n_photo = len(photos)
         outs.append((chat, res, pres))
         tag = "기본 방" if i == 0 else f"추가 방 {chat}"
         if pres is not None:
-            print(f"[{tag}] 사진 {n_photo}장:", "성공" if pres.get("ok") else f"실패 — {pres.get('description')}")
+            print(f"[{tag}] 사진 {len(photos)}장:", "성공" if pres.get("ok") else f"실패 — {pres.get('description')}")
         print(f"[{tag}] 전송:", "성공" if res.get("ok") else f"실패 — {res.get('description')}")
     _, res, pres = outs[0]
     tok, chat = _creds()
@@ -291,7 +286,7 @@ def main(argv=None):
 
 
 def _deliver_share(chat, text, share):
-    """추가 방: 공유용 2장을 앨범으로, 캡션은 머리글+링크. HTML 거부면 평문 캡션."""
+    """추가 방: 같은 그림을 앨범으로, 캡션은 머리글+링크만(본문 없음). HTML 거부면 평문 캡션."""
     cap = share_caption(text)
     res = send_photos(share, cap, parse_mode="HTML", chat=chat)
     if not res.get("ok") and "parse" in str(res.get("description", "")).lower():
