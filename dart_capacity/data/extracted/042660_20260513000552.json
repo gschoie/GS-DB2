@@ -1,0 +1,329 @@
+{
+ "meta": {
+  "company": "한화오션",
+  "sector": "조선",
+  "stock_code": "042660",
+  "corp_code": "00111704",
+  "rcept_no": "20260513000552",
+  "rcept_dt": "20260513",
+  "report_nm": "분기보고서 (2026.03)",
+  "report_type": "quarter",
+  "period": "2026-03",
+  "period_label": "2026.03 1Q",
+  "corrected": false,
+  "dart_url": "https://dart.fss.or.kr/dsaf001/main.do?rcpNo=20260513000552"
+ },
+ "tables": [
+  {
+   "section": [
+    "1. 사업의 개요",
+    "2. 주요 제품 및 서비스",
+    "3. 원재료 및 생산설비"
+   ],
+   "headings": [
+    "(1) 산출기준 - STEEL PLATE : 스틸데일리 DB센터 국내 후판(Plate) 유통가 기준(평균가)",
+    "- SECTION : 스틸데일리 DB센터 국내 H 형강 유통가 기준(평균가)",
+    "3-2. 생산 및 설비가. 생산능력",
+    "(1) 생산능력"
+   ],
+   "context": [
+    "(1) 산출기준 - STEEL PLATE : 스틸데일리 DB센터 국내 후판(Plate) 유통가 기준(평균가)",
+    "- SECTION : 스틸데일리 DB센터 국내 H 형강 유통가 기준(평균가)",
+    "- PAINT : Epoxy Universal Primer (2026년 3월 31일 매매기준율 1,513.40원/USD)(2) 시황에 따라 제22기부터 변경된 산출기준으로 작성 (SECTION 국내 앵글 유통가 기준 → 국내 H 형강 유통가 기준으로 변경)",
+    "3-2. 생산 및 설비가. 생산능력",
+    "(1) 생산능력"
+   ],
+   "unit": "",
+   "keywords": [
+    "생산능력"
+   ],
+   "keyword_in": "heading",
+   "rows": [
+    [
+     "사업부문",
+     "단위",
+     "제27기 1분기(2026년 1분기)",
+     "제26기(2025년)",
+     "제25기(2024년)"
+    ],
+    [
+     "상선",
+     "천CGT",
+     "658",
+     "2,655",
+     "2,796"
+    ],
+    [
+     "상선(산동)",
+     "천CGT",
+     "101",
+     "391",
+     "336"
+    ],
+    [
+     "상선(에코텍)",
+     "TON",
+     "15,638",
+     "67,513",
+     "92,610"
+    ],
+    [
+     "EP 및 특수선",
+     "천MH",
+     "559",
+     "3,987",
+     "6,334"
+    ]
+   ],
+   "html": "<table aclass=\"NORMAL\" afixtable=\"N\" border=\"1\" width=\"641\">\n<colgroup width=\"641\">\n<col width=\"118\"/>\n<col width=\"62\"/>\n<col width=\"152\"/>\n<col width=\"157\"/>\n<col width=\"152\"/>\n</colgroup>\n<thead>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"53\">\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"46\" usermark=\"BC0XDCDCDC\" valign=\"MIDDLE\" width=\"109\">사업부문</th>\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"46\" usermark=\"BC0XDCDCDC\" valign=\"MIDDLE\" width=\"53\">단위</th>\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"46\" usermark=\"BC0XDCDCDC\" valign=\"MIDDLE\" width=\"143\">제27기 1분기(2026년 1분기) </th>\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"46\" usermark=\"BC0XDCDCDC\" valign=\"MIDDLE\" width=\"148\">제26기(2025년)</th>\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"46\" usermark=\"BC0XDCDCDC\" valign=\"MIDDLE\" width=\"143\">제25기(2024년)</th>\n</tr>\n</thead>\n<tbody>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"30\">\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"109\">상선</td>\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"53\">천CGT</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"143\">658</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"148\">2,655</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"143\">2,796</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"30\">\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"109\">상선(산동)</td>\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"53\">천CGT</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"143\">101</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"148\">391</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"143\">336</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"30\">\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"109\">상선(에코텍)</td>\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"53\">TON</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"143\">15,638</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"148\">67,513</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"143\">92,610</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"30\">\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"109\">EP 및 특수선</td>\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"53\">천MH</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"143\">559</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"148\">3,987</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"143\">6,334</td>\n</tr>\n</tbody>\n</table>",
+   "footnotes": [],
+   "digest": "8e746e88a12d",
+   "file": "20260513000552.xml"
+  },
+  {
+   "section": [
+    "1. 사업의 개요",
+    "2. 주요 제품 및 서비스",
+    "3. 원재료 및 생산설비"
+   ],
+   "headings": [
+    "(2) 생산능력의 산출근거",
+    "2) 평균가동 시간\"나. 생산실적 및 가동률 (2) 당해 사업연도의 가동률\" 참고",
+    "나. 생산실적 및 가동률",
+    "(1) 생산실적"
+   ],
+   "context": [
+    "* 2007년 변경된 OECD의 CGT 산정기준 적용** 컴퓨터 통합자문, 계약관리 등 물적 형태로 나타나지 않은 서비스업의 경우 생산능력, 가동률의 기재를 생략하였습니다.",
+    "(2) 생산능력의 산출근거",
+    "1) 산출방법 등① 산출기준 - 생산실적 기준 - 생산실적 기준 (조립완료)② 산출방법 - 선종별 CGT 산출 : 선박 선종별 GT × 보상계수 - 생산량 산출 : 선종별 CGT × 공정(상응실투입 ÷ 목표시수) - 주문주 검사완료 및 한화오션 ICOPS 생산 실적 완료",
+    "2) 평균가동 시간\"나. 생산실적 및 가동률 (2) 당해 사업연도의 가동률\" 참고",
+    "나. 생산실적 및 가동률",
+    "(1) 생산실적",
+    "(단위 : 백만원)"
+   ],
+   "unit": "(단위 : 백만원)",
+   "keywords": [
+    "생산실적"
+   ],
+   "keyword_in": "heading",
+   "rows": [
+    [
+     "사업부문",
+     "제27기 1분기(2026년 1분기)",
+     "제26기(2025년)",
+     "제25기(2024년)"
+    ],
+    [
+     "상선",
+     "2,792,686",
+     "10,523,365",
+     "8,675,613"
+    ],
+    [
+     "EP 및 특수선",
+     "529,274",
+     "2,850,280",
+     "2,480,383"
+    ],
+    [
+     "기타",
+     "48,120",
+     "140,694",
+     "95,358"
+    ],
+    [
+     "연결조정",
+     "(160,139)",
+     "(730,827)",
+     "(475,349)"
+    ],
+    [
+     "합 계",
+     "3,209,941",
+     "12,783,512",
+     "10,776,005"
+    ]
+   ],
+   "html": "<table aclass=\"NORMAL\" afixtable=\"N\" border=\"1\" width=\"614\">\n<colgroup width=\"614\">\n<col width=\"133\"/>\n<col width=\"161\"/>\n<col width=\"160\"/>\n<col width=\"160\"/>\n</colgroup>\n<thead>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"53\">\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"46\" usermark=\"BC0XDCDCDC\" valign=\"MIDDLE\" width=\"124\">사업부문</th>\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"46\" usermark=\"BC0XDCDCDC\" valign=\"MIDDLE\" width=\"152\">제27기 1분기(2026년 1분기) </th>\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"46\" usermark=\"BC0XDCDCDC\" valign=\"MIDDLE\" width=\"151\">제26기(2025년)</th>\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"46\" usermark=\"BC0XDCDCDC\" valign=\"MIDDLE\" width=\"151\">제25기(2024년)</th>\n</tr>\n</thead>\n<tbody>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"30\">\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"124\">상선</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"152\">2,792,686</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"151\">10,523,365</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"151\">8,675,613</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"30\">\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"124\">EP 및 특수선</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"152\">529,274</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"151\">2,850,280</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"151\">2,480,383</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"30\">\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"124\">기타</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"152\">48,120</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"151\">140,694</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"151\">95,358</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"30\">\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"124\">연결조정</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"152\">(160,139)</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"151\">(730,827)</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"151\">(475,349)</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"30\">\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"124\">합  계</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"152\">3,209,941</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"151\">12,783,512</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"151\">10,776,005</td>\n</tr>\n</tbody>\n</table>",
+   "footnotes": [],
+   "digest": "3b82d7f12971",
+   "file": "20260513000552.xml"
+  }
+ ],
+ "rejected": [
+  {
+   "section": [
+    "1. 사업의 개요",
+    "2. 주요 제품 및 서비스",
+    "3. 원재료 및 생산설비"
+   ],
+   "headings": [
+    "(2) 당해 사업연도의 가동률",
+    "② 당기실제 가동시간 = 7,313,010 MH",
+    "- 당기실제 가동시간 = 제품(선박/해양)생산에 실 투입된 MH",
+    "① 당기목표 가동시간 = 960,278 MH",
+    "② 당기실제 가동시간 = 899,217 MH",
+    "① 당기목표 가동시간 = 207,253 MH",
+    "② 당기실제 가동시간 = 166,957 MH",
+    "③ 평균가동률 = 80.6% 〔②÷①〕",
+    "- 당기목표 가동시간=평균생산인원×조업가능일수×목표출근율×목표근무시간",
+    "- 당기실제 가동시간=제품(선박/해양)생산에 실 투입된 MH",
+    "생산실적(선각/의장) 완료기준 상응시수 실적 MH 사용",
+    "다. 생산설비 현황 등"
+   ],
+   "context": [
+    "(2) 당해 사업연도의 가동률",
+    "한화오션㈜의 가동률은 일반제조업체의 양산체제 제품생산과는 달리 공장 생산설비의 가동률로 측정하기는 곤란하여 생산인력의 최대 투입 MH를 설정하고 이에 대해 비작업시간을 제외한 실투입 MH로 평균가동률을 계산하였습니다.① 당기목표 가동시간 = 7,351,948 MH",
+    "② 당기실제 가동시간 = 7,313,010 MH",
+    "③ 평균가동률 = 99.5%〔 ② ÷ ① 〕- 당기목표 가동시간 = 평균생산인원×조업가능일수×목표출근율×목표근무시간",
+    "- 당기실제 가동시간 = 제품(선박/해양)생산에 실 투입된 MH",
+    "한화해양공정(산동)유한공사의 가동률은 일반제조업체의 양산체제 제품생산과는 달리 공장 생산설비의 가동률로 측정하기는 곤란하여 생산인력의 최대 투입 MH를 설정하고 이에 대해 비작업시간을 제외한 실투입 MH로 평균가동률을 계산하였습니다.",
+    "① 당기목표 가동시간 = 960,278 MH",
+    "② 당기실제 가동시간 = 899,217 MH",
+    "③ 평균가동률 = 93.6%〔 ② ÷ ① 〕- 당기목표 가동시간 = 평균생산인원×조업가능일수×목표출근율×목표근무시간",
+    "- 당기실제 가동시간 = 제품생산에 실 투입된 MH한화오션에코텍㈜의 가동률은 일반제조업체의 양산체제 제품생산과는 달리 공장 생산설비의 가동률로 측정하기는 곤란하여 생산인력의 최대 투입 MH를 설정하고 이에 대해 비작업시간을 제외한 실투입 MH로 평균가동률을 계산하였습니다.",
+    "① 당기목표 가동시간 = 207,253 MH",
+    "② 당기실제 가동시간 = 166,957 MH",
+    "③ 평균가동률 = 80.6% 〔②÷①〕",
+    "- 당기목표 가동시간=평균생산인원×조업가능일수×목표출근율×목표근무시간",
+    "- 당기실제 가동시간=제품(선박/해양)생산에 실 투입된 MH",
+    "생산실적(선각/의장) 완료기준 상응시수 실적 MH 사용",
+    "다. 생산설비 현황 등",
+    "연결회사는 경상남도 거제시 거제대로 3370(아주동)에 위치한 한화오션㈜를 포함한 국내 사업장 및 중국 등에서 사업활동을 수행하고 있습니다."
+   ],
+   "unit": "",
+   "keywords": [
+    "가동률",
+    "생산실적"
+   ],
+   "keyword_in": "",
+   "rows": [
+    [
+     "회사명",
+     "주요사업",
+     "소재지"
+    ],
+    [
+     "한화오션㈜",
+     "선박건조업",
+     "경상남도 거제시 거제대로 3370(아주동)"
+    ],
+    [
+     "한화해양공정(산동)유한공사",
+     "선박블럭 및부품제작",
+     "Qingdao Street 2-1, Yantai Economic & TechnicalDevelopment Zone, Shandong Prov. China"
+    ]
+   ],
+   "html": "",
+   "footnotes": [],
+   "digest": "bc77d5b80a21",
+   "why": "셀 전체가 지표명이 아니거나 멀리 있는 문장에만 키워드",
+   "file": "20260513000552.xml"
+  },
+  {
+   "section": [
+    "1. 사업의 개요",
+    "2. 주요 제품 및 서비스",
+    "3. 원재료 및 생산설비"
+   ],
+   "headings": [
+    "라. 설비 등에 대한 투자 현황",
+    "1) 진행 중인 투자"
+   ],
+   "context": [
+    "(*1) 대체는 건설중인 자산의 미착고정자산 및 선급금 대체로 인한 변동을 포함하고 있습니다.(*2) 차입원가 자본화 금액이 포함되어 있습니다. 차입원가 자본화에 적용한 자본화 이자율은 3.12%이며, 당분기말 유형자산으로 자본화한 차입원가는 738백만원입니다.(*3) 기타증감은 환율변동효과 등을 포함하고 있습니다.(*4) 토지 취득원가는 재평가잉여금을 합산한 금액입니다. 역사적 원가로 인식하는 경우 금액은 1,512,803백만원입니다.",
+    "라. 설비 등에 대한 투자 현황",
+    "1) 진행 중인 투자",
+    "(단위 : 백만원)"
+   ],
+   "unit": "(단위 : 백만원)",
+   "keywords": [
+    "생산능력"
+   ],
+   "keyword_in": "",
+   "rows": [
+    [
+     "회사",
+     "사업부문",
+     "투자명",
+     "투자기간",
+     "투자대상 자산",
+     "투자효과",
+     "투자금액",
+     "비 고"
+    ],
+    [
+     "총투자액",
+     "기투자액",
+     "향후투자액"
+    ],
+    [
+     "한화오션㈜",
+     "조선 등",
+     "설비 등에 대한 투자",
+     "2026.01.01~2026.12.31",
+     "생산시설 등 투자",
+     "생산능력 향상",
+     "861,900",
+     "73,700",
+     "788,200",
+     "-"
+    ]
+   ],
+   "html": "",
+   "footnotes": [],
+   "digest": "b5aa53ba951c",
+   "why": "셀 전체가 지표명이 아니거나 멀리 있는 문장에만 키워드",
+   "file": "20260513000552.xml"
+  },
+  {
+   "section": [
+    "1. 사업의 개요",
+    "2. 주요 제품 및 서비스",
+    "3. 원재료 및 생산설비"
+   ],
+   "headings": [
+    "2) 향후 투자 계획"
+   ],
+   "context": [
+    "※ 기투자액은 진행 중인 투자의 현금 지급액까지 포함하여 표기하였습니다.",
+    "※ 한화해양공정(산동)유한공사 투자금액은 12,064천미불에 2026년 3월 31일 매매기준율 환율 1,513.40원을 적용하여 원화 환산하였습니다.",
+    "2) 향후 투자 계획",
+    "(단위 : 백만원)"
+   ],
+   "unit": "(단위 : 백만원)",
+   "keywords": [
+    "생산능력"
+   ],
+   "keyword_in": "",
+   "rows": [
+    [
+     "회사",
+     "사업부문",
+     "투자명",
+     "예상투자액(2026년 4월~12월)",
+     "투자효과",
+     "비 고"
+    ],
+    [
+     "자산형태",
+     "금 액"
+    ],
+    [
+     "한화오션㈜",
+     "조선 등",
+     "설비 등에 대한 투자",
+     "생산시설 등 투자",
+     "788,200",
+     "생산능력 향상",
+     "-"
+    ]
+   ],
+   "html": "",
+   "footnotes": [],
+   "digest": "30c32925ee58",
+   "why": "셀 전체가 지표명이 아니거나 멀리 있는 문장에만 키워드",
+   "file": "20260513000552.xml"
+  }
+ ]
+}
