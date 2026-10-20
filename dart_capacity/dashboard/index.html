@@ -58,6 +58,7 @@ details.src{font-size:12px;color:var(--ink3);margin-top:8px}
   <div class="filters">
     <div class="seg" id="sector-seg"></div>
     <select id="company-sel"><option value="">회사 전체</option></select>
+    <div class="seg" id="span-seg"><button data-p="annual" class="on">연간만</button><button data-p="all">전체(분기 누적 포함)</button></div>
     <select id="metric-sel">
       <option value="utilization_pct">가동률 %</option>
       <option value="capacity">생산능력</option>
@@ -81,7 +82,7 @@ const SECTORS = ["조선", "조기", "방산", "건기"];
 const METRIC_LABEL = {utilization_pct: "가동률 %", capacity: "생산능력", production: "생산실적"};
 const $ = (s, r = document) => r.querySelector(s);
 const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({"&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;"}[c]));
-const state = {sector: "", company: "", metric: "utilization_pct", rows: [], reports: {}};
+const state = {sector: "", company: "", metric: "utilization_pct", span: "annual", rows: [], reports: {}};
 
 function fmt(v, metric) {
   if (v === null || v === undefined || v === "" || Number.isNaN(+v)) return "–";
@@ -92,10 +93,11 @@ function fmt(v, metric) {
 const dartUrl = r => `https://dart.fss.or.kr/dsaf001/main.do?rcpNo=${r.source_rcept_no}`;
 const link = (r, text) => `<a href="${dartUrl(r)}" target="_blank" rel="noopener" title="${esc(r.report_label || r.source_rcept_no)}">${text}</a>`;
 const periodKey = r => r.period;                       // 'YYYY-MM' 기말 — 정렬 키
-const periodLabel = r => r.period_label || r.period;    // '2025.06 반기'
+const periodLabel = r => r.period_label || r.period;    // 회사 표기 그대로('제12기 반기') — 회사 안에서만 쓴다
+const genericLabel = p => { const [yy, mm] = (p || "").split("-"); return `${yy} ${{"12": "FY", "03": "1Q", "06": "H1", "09": "3Q"}[mm] || mm}`; };
 // 능력·실적 단위가 같을 때만 한 차트(한 축)에 같이 그린다 — HD현대중공업처럼 능력 천GT·실적 백만원이면 따로.
 const sameUnit = r => !r.production_unit || !r.capacity_unit || r.production_unit === r.capacity_unit;
-const lineKey = r => `${r.stock_code}|${r.segment || ""}|${r.product || ""}|${r.unit || ""}`;
+const lineKey = r => `${r.stock_code}|${r.segment || ""}|${r.product || ""}`;   // 단위는 기간마다 달라질 수 있어 키에 안 넣는다
 
 async function load() {
   for (const url of DATA_CANDIDATES) {
@@ -117,18 +119,21 @@ function buildFilters() {
     .sort((a, b) => SECTORS.indexOf(a.sector) - SECTORS.indexOf(b.sector) || a.company.localeCompare(b.company, "ko"));
   sel.innerHTML = `<option value="">회사 전체</option>` + companies.map(c => `<option value="${c.stock_code}" ${c.stock_code === state.company ? "selected" : ""}>[${c.sector}] ${esc(c.company)}</option>`).join("");
   sel.onchange = () => { state.company = sel.value; render(); };
+  $("#span-seg").querySelectorAll("button").forEach(b => { b.classList.toggle("on", b.dataset.p === state.span); b.onclick = () => { state.span = b.dataset.p; render(); }; });
   $("#metric-sel").value = state.metric;
   $("#metric-sel").onchange = e => { state.metric = e.target.value; render(); };
 }
 
+// 분기·반기 열은 보통 연초 누적이라 연간과 한 선에 놓으면 톱니가 된다 → 기본은 연간(12월 기말)만
 function visibleRows() {
-  return state.rows.filter(r => (!state.sector || r.sector === state.sector) && (!state.company || r.stock_code === state.company));
+  return state.rows.filter(r => (!state.sector || r.sector === state.sector) && (!state.company || r.stock_code === state.company)
+    && (state.span === "all" || (r.period || "").endsWith("-12")));
 }
 
 // 섹터 내 비교: 행 = 회사 › 부문/제품, 열 = 최근 기간(최대 8개)
 function renderCompare(rows) {
   const metric = state.metric;
-  $("#cmp-title").textContent = `${state.sector || "전체"} · ${METRIC_LABEL[metric]} 비교 (최근 8개 보고 기간)`;
+  $("#cmp-title").textContent = `${state.sector || "전체"} · ${METRIC_LABEL[metric]} 비교 (최근 8개 ${state.span === "all" ? "보고 기간" : "연도"})`;
   const periods = [...new Set(rows.map(periodKey))].sort().slice(-8);
   const lines = new Map();
   for (const r of rows) {
@@ -140,7 +145,7 @@ function renderCompare(rows) {
   }
   const ordered = [...lines.values()].sort((a, b) => SECTORS.indexOf(a.r.sector) - SECTORS.indexOf(b.r.sector) || a.r.company.localeCompare(b.r.company, "ko") || (a.r.segment || "").localeCompare(b.r.segment || "", "ko"));
   if (!ordered.length) { $("#cmp").innerHTML = `<div class="empty">아직 정규화된 데이터가 없습니다 — 수집이 한 번 돌아야 채워집니다.</div>`; return; }
-  const labelOf = p => { const any = rows.find(r => r.period === p); return any ? periodLabel(any) : p; };
+  const labelOf = genericLabel;      // 여러 회사를 한 표에 놓으므로 회사별 표기(제12기 반기)가 아니라 기간 일반형
   let html = `<table><thead><tr><th>회사 › 부문/제품</th><th>단위</th>${periods.map(p => `<th>${esc(labelOf(p))}</th>`).join("")}</tr></thead><tbody>`;
   let lastSector = null;
   for (const {r, cells} of ordered) {
