@@ -534,6 +534,42 @@ class KisToken(unittest.TestCase):
         self.assertEqual(naps, [1, 1])           # 마지막 시도는 기다리지 않고 올린다
 
 
+class Estimate(unittest.TestCase):
+    def test_parse_estimate_picks_latest_slot(self):
+        j = {"output2": [
+            {"bsop_hour_gb": "1", "frgn_fake_ntby_qty": "1000", "orgn_fake_ntby_qty": "-200", "sum_fake_ntby_qty": "800"},
+            {"bsop_hour_gb": "3", "frgn_fake_ntby_qty": "2500", "orgn_fake_ntby_qty": "-700", "sum_fake_ntby_qty": "1800"},
+        ]}
+        e = kis.parse_estimate(j)
+        self.assertEqual((e["time"], e["frgn_qty"], e["inst_qty"], e["unit"]), ("11:20", 2500.0, -700.0, "qty"))
+        self.assertIsNone(kis.parse_estimate({"output2": []})); self.assertIsNone(kis.parse_estimate({}))
+
+    def test_apply_estimate_fills_zero_today_only(self):
+        today = "2026-10-20"
+        inv = pd.DataFrame({"date": pd.to_datetime(["2026-10-17", "2026-10-20"]),
+                            "개인": [10.0, 0.0], "외국인": [-5.0, 0.0], "기관": [-5.0, 0.0]})
+        est = {"time": "11:20", "frgn_qty": 2000.0, "inst_qty": -500.0, "unit": "qty"}
+        out, ok = metrics.apply_estimate(inv, today, est, 50000)          # 2000×50000/1e8 = 1.0억
+        self.assertTrue(ok)
+        row = out[out["date"] == pd.Timestamp(today)].iloc[0]
+        self.assertAlmostEqual(row["외국인"], 1.0); self.assertAlmostEqual(row["기관"], -0.2); self.assertAlmostEqual(row["개인"], -0.8)
+        # 오늘 행이 없으면 추가
+        out2, ok2 = metrics.apply_estimate(inv.iloc[:1], today, est, 50000)
+        self.assertTrue(ok2); self.assertEqual(len(out2), 2)
+        # 확정치가 이미 있으면 손대지 않는다
+        inv3 = inv.copy(); inv3.loc[1, "외국인"] = 12.0
+        _, ok3 = metrics.apply_estimate(inv3, today, est, 50000)
+        self.assertFalse(ok3)
+        # 추정값이 없으면 그대로
+        self.assertFalse(metrics.apply_estimate(inv, today, None, 50000)[1])
+
+    def test_estimate_labels(self):
+        d = fake_payload(); d["errors"] = []
+        d["rows"][0]["flow"]["today_src"] = "estimate 11:20"
+        self.assertIn("추정가집계 11:20 기준", build_report.render(d))
+        self.assertIn("오늘 잠정(가집계 11:20) 포함", notify.compose(d))
+
+
 class CollectGuard(unittest.TestCase):
     def test_enough_blocks_partial_runs(self):
         """21종목 중 2종목(10/19 토큰 403 사고)은 부족, 15종목(71%)은 통과, 유니버스 0은 실패."""
