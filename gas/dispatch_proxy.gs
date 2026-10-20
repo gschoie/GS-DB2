@@ -203,9 +203,7 @@ const SCHEDULE = [
   // 일요일은 워크플로가 스스로 '월~금 누적' 모드로 바꾼다(mode 입력 기본값 auto)
   { wf: 'etf',       hours: [7],      minute: 0,  days: 'daily',   label: 'ETF/섹터 신호',
                      inputs: { via: 'scheduler' } },
-  { wf: 'flow',      hours: [10, 13], minute: 0,  days: 'weekday', label: '시장 수급' },
-  { wf: 'flow',      hours: [15],     minute: 40, days: 'weekday', label: '시장 수급(마감 잠정)' },
-  { wf: 'flow',      hours: [16],     minute: 40, days: 'weekday', label: '시장 수급(확정)' },
+  { wf: 'flow',      hours: [11, 16], minute: 0,  days: 'weekday', label: '시장 수급' },  // 10/20 4회→2회 축소
   { wf: 'holdings',  hours: [9, 10, 11, 12, 13, 14, 15, 16],   // 장중~마감 직후까지만
                      minute: 17, days: 'weekday', label: '액티브ETF 매매동향',
                      inputs: { via: 'scheduler' } },

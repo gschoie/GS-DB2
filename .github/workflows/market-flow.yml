@@ -1,14 +1,12 @@
 name: 시장 수급 동향
 
-# 하루 4회(평일, KST): 10:00 / 13:00 / 15:40(마감 잠정) / 16:40(확정)
+# 하루 2회(평일, KST): 11:00 / 16:00(마감) — 10/20 4회에서 축소
 # NAVER 증권에서 KOSPI 투자자별·프로그램 수급을 수집 → 리포트 → 텔레그램(gs_macro_get)
 on:
   workflow_dispatch:
   schedule:
-    - cron: "0 1 * * 1-5"    # 01:00 UTC = KST 10:00
-    - cron: "0 4 * * 1-5"    # 04:00 UTC = KST 13:00
-    - cron: "40 6 * * 1-5"   # 06:40 UTC = KST 15:40
-    - cron: "40 7 * * 1-5"   # 07:40 UTC = KST 16:40
+    - cron: "0 2 * * 1-5"    # 02:00 UTC = KST 11:00
+    - cron: "0 7 * * 1-5"    # 07:00 UTC = KST 16:00
 
 permissions:
   contents: write   # history.json·리포트 HTML 커밋 → deploy-pages(workflow_run) 재배포
@@ -21,7 +19,7 @@ jobs:
   # GAS 시계(gas/dispatch_proxy.gs의 tick)가 정시에 workflow_dispatch로 쏘고,
   # GitHub 크론은 안전망으로 남긴다. 크론이 뒤늦게 돌 때 같은 일을 두 번 하지
   # 않도록, **같은 슬롯 안에서** 이미 실행이 있었으면 이 예약 실행은 건너뛴다.
-  # 슬롯 경계는 scrape.decide_slot과 같다(11:30 / 14:30 / 16:10 KST) — 단순 분 단위
+  # 슬롯 경계는 scrape.decide_slot과 같다(13:30 KST) — 단순 분 단위
   # 창으로 하면 몇 시간 늦은 크론이 다음 슬롯을 덮어써 수급 메시지가 두 번 간다.
   #
   # **dispatch만 세면 안 된다** — 무료 러너 크론은 몇 시간씩 밀려(9/16 실측 +4.5~5.3h)
@@ -44,10 +42,8 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           hm=$(TZ=Asia/Seoul date +%H%M)
-          if   [ "$hm" -lt 1130 ]; then slot=1000; from="00:00"; nominal=1000
-          elif [ "$hm" -lt 1430 ]; then slot=1300; from="11:30"; nominal=1300
-          elif [ "$hm" -lt 1610 ]; then slot=1540; from="14:30"; nominal=1540
-          else                          slot=1640; from="16:10"; nominal=1640
+          if [ "$hm" -lt 1330 ]; then slot=1100; from="00:00"; nominal=1100
+          else                        slot=1600; from="13:30"; nominal=1600
           fi
           # 슬롯 정시 전에 도착한 밀린 크론은 그냥 버린다 — 정시는 GAS 시계가 쏜다.
           # (10/19 사고: 10:00 크론이 14:39에 떨어져 15:40 잠정 메시지를 1시간 일찍 발송)
