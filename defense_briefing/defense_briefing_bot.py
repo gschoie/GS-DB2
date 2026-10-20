@@ -176,8 +176,14 @@ NEWS_QUERIES = [
     ('(submarine OR frigate OR destroyer OR warship OR "naval shipbuilding") '
      '(contract OR procurement OR tender OR bid OR order OR program) when:1d',
      "en-US", "US", "US:en"),
+    # 예산 정치 축 — 10/20 중간선거發 K방산 급락을 수집이 사전에 못 잡은 교훈.
+    # '국방비가 정치 일정(선거·재정조정·세출법·셧다운)에 흔들린다'는 기사는
+    # 기업명·"defense budget" 단독 쿼리로는 빠진다.
+    ('("defense budget" OR "defense spending" OR Pentagon) '
+     '(midterm OR election OR reconciliation OR appropriations OR shutdown '
+     'OR "continuing resolution" OR Congress) when:1d', "en-US", "US", "US:en"),
     ("한화에어로스페이스 OR LIG넥스원 OR 한국항공우주 OR 한화오션 OR 현대로템 "
-     "OR 한화시스템 OR HD현대중공업 OR 방산수출 when:1d", "ko", "KR", "KR:ko"),
+     "OR 한화시스템 OR HD현대중공업 OR 방산수출 OR 방산주 when:1d", "ko", "KR", "KR:ko"),
 ]
 
 
