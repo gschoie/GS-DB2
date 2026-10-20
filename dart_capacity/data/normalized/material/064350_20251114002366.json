@@ -1,0 +1,44 @@
+{
+ "meta": {
+  "company": "현대로템",
+  "sector": "방산",
+  "stock_code": "064350",
+  "corp_code": "00302926",
+  "rcept_no": "20251114002366",
+  "rcept_dt": "20251114",
+  "report_nm": "분기보고서 (2025.09)",
+  "report_type": "quarter",
+  "period": "2025-09",
+  "period_label": "2025.09 3Q",
+  "corrected": false,
+  "dart_url": "https://dart.fss.or.kr/dsaf001/main.do?rcpNo=20251114002366"
+ },
+ "topic": "material",
+ "rows": [
+  {
+   "company": "현대로템",
+   "stock_code": "064350",
+   "sector": "방산",
+   "topic": "material",
+   "period": "2025-09",
+   "period_label": "당기",
+   "report_type": "quarter",
+   "report_label": "분기보고서 (2025.09)",
+   "report_period": "2025-09",
+   "rcept_dt": "20251114",
+   "source_rcept_no": "20251114002366",
+   "dart_url": "https://dart.fss.or.kr/dsaf001/main.do?rcpNo=20251114002366",
+   "note": "구체적용도: 차체 등",
+   "segment": "레일솔루션외",
+   "entity": "",
+   "purchase_type": "원재료",
+   "item": "금속소재등",
+   "amount": 1826116,
+   "unit": "백만원",
+   "share_pct": 45.0,
+   "suppliers": "현대비앤지스틸(특수관계인) 외"
+  }
+ ],
+ "model": "gemini-flash-lite-latest",
+ "normalized_at": "2026-10-20T09:44:08"
+}

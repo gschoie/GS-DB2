@@ -168,3 +168,9 @@ rcept_no,company,table,reason,dart_url
 20260814003309,한국항공우주,3,[material_price] 원재료 가격 추이가 아닌 '가격 변동 원인'에 대한 설명만 있는 표이며 구체적인 가격 데이터가 없음.,https://dart.fss.or.kr/dsaf001/main.do?rcpNo=20260814003309
 20260814003309,한국항공우주,4,[material_price] 원재료 가격 추이가 아닌 '가격 변동 원인'에 대한 설명만 있는 표이며 구체적인 가격 데이터가 없음.,https://dart.fss.or.kr/dsaf001/main.do?rcpNo=20260814003309
 20260814003309,한국항공우주,5,[material_price] 원재료 가격 추이가 아닌 '가격 변동 원인'에 대한 설명만 있는 표이며 구체적인 가격 데이터가 없음.,https://dart.fss.or.kr/dsaf001/main.do?rcpNo=20260814003309
+20250814001141,대한조선,1,"[material_price] 가격 변동 원인 설명 표로, 표 2의 가격변동추이 데이터에 note 항목으로 매핑하여 반영함.",https://dart.fss.or.kr/dsaf001/main.do?rcpNo=20250814001141
+20260323000620,대한조선,1,"[material_price] 원재료 가격 변동 원인에 대한 설명 표이며, 별도의 가격 데이터가 없어 표 2의 데이터에 note로 통합 반영함",https://dart.fss.or.kr/dsaf001/main.do?rcpNo=20260323000620
+20260515000685,대한조선,2,"[material] 파생상품(통화선도) 거래 현황 표로, 주요 원재료 매입 현황과 관련이 없음",https://dart.fss.or.kr/dsaf001/main.do?rcpNo=20260515000685
+20260515000685,대한조선,1,"[material_price] 가격변동 원인 설명 표로, 표 2의 가격변동추이 데이터에 note 항목으로 병합함",https://dart.fss.or.kr/dsaf001/main.do?rcpNo=20260515000685
+20260814001422,대한조선,2,[material] 파생상품(통화선도) 거래 현황표이므로 원재료 매입 현황과 무관함.,https://dart.fss.or.kr/dsaf001/main.do?rcpNo=20260814001422
+20260814001422,대한조선,1,"[material_price] 가격 변동 원인에 대한 설명 표이며, 별도의 수치 데이터가 없어 표 2의 품목별 행에 note로 병합하여 반영함.",https://dart.fss.or.kr/dsaf001/main.do?rcpNo=20260814001422

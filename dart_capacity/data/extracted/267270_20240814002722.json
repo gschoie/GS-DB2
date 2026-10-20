@@ -16,6 +16,226 @@
  "tables": [
   {
    "section": [
+    "II. 사업의 내용",
+    "1. 사업의 개요",
+    "2. 주요 제품 및 서비스"
+   ],
+   "headings": [
+    "나. 주요 제품 등의 가격변동추이"
+   ],
+   "context": [
+    "※ 회사는 기준서 제1115호 '고객과의 계약에서 생기는 수익'을 적용하였습니다.",
+    "나. 주요 제품 등의 가격변동추이",
+    "(단위 : 백만원)"
+   ],
+   "unit": "(단위 : 백만원)",
+   "topic": "product_price",
+   "keywords": [
+    "나. 주요 제품 등의 가격변동추이"
+   ],
+   "keyword_in": "heading",
+   "rows": [
+    [
+     "품 목",
+     "구 분",
+     "제8기 반기",
+     "제7기",
+     "제6기"
+    ],
+    [
+     "굴삭기",
+     "HW155A",
+     "157",
+     "157",
+     "151"
+    ],
+    [
+     "HX220A",
+     "154",
+     "154",
+     "148"
+    ],
+    [
+     "HX320A",
+     "197",
+     "194",
+     "187"
+    ]
+   ],
+   "html": "<table aclass=\"NORMAL\" afixtable=\"N\" border=\"1\" width=\"598\">\n<colgroup>\n<col width=\"107\"/>\n<col width=\"107\"/>\n<col width=\"113\"/>\n<col width=\"113\"/>\n<col width=\"113\"/>\n</colgroup>\n<tbody>\n<tr acopy=\"Y\" adelete=\"Y\">\n<td align=\"CENTER\" height=\"32\" usermark=\"F-12 BC0XD7D7D7\" valign=\"MIDDLE\" width=\"116\">품         목</td>\n<td align=\"CENTER\" height=\"32\" usermark=\"F-12 BC0XD7D7D7\" valign=\"MIDDLE\" width=\"116\">구 분</td>\n<td align=\"CENTER\" height=\"32\" usermark=\"F-12 BC0XD7D7D7\" valign=\"MIDDLE\" width=\"122\">제8기 반기</td>\n<td align=\"CENTER\" height=\"32\" usermark=\"F-12 BC0XD7D7D7\" valign=\"MIDDLE\" width=\"122\">제7기</td>\n<td align=\"CENTER\" height=\"32\" usermark=\"F-12 BC0XD7D7D7\" valign=\"MIDDLE\" width=\"122\">제6기</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\">\n<td align=\"CENTER\" height=\"93\" rowspan=\"3\" usermark=\"F-12\" valign=\"MIDDLE\" width=\"116\">굴삭기</td>\n<td align=\"CENTER\" height=\"31\" usermark=\"F-12\" valign=\"MIDDLE\" width=\"116\">HW155A</td>\n<td align=\"CENTER\" height=\"31\" usermark=\"F-12\" valign=\"MIDDLE\" width=\"122\">157</td>\n<td align=\"CENTER\" height=\"31\" usermark=\"F-12\" valign=\"MIDDLE\" width=\"122\">157</td>\n<td align=\"CENTER\" height=\"31\" usermark=\"F-12\" valign=\"MIDDLE\" width=\"122\">151</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\">\n<td align=\"CENTER\" height=\"31\" usermark=\"F-12\" valign=\"MIDDLE\" width=\"116\">HX220A</td>\n<td align=\"CENTER\" height=\"31\" usermark=\"F-12\" valign=\"MIDDLE\" width=\"122\">154</td>\n<td align=\"CENTER\" height=\"31\" usermark=\"F-12\" valign=\"MIDDLE\" width=\"122\">154</td>\n<td align=\"CENTER\" height=\"31\" usermark=\"F-12\" valign=\"MIDDLE\" width=\"122\">148</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\">\n<td align=\"CENTER\" height=\"31\" usermark=\"F-12\" valign=\"MIDDLE\" width=\"116\">HX320A</td>\n<td align=\"CENTER\" height=\"31\" usermark=\"F-12\" valign=\"MIDDLE\" width=\"122\">197</td>\n<td align=\"CENTER\" height=\"31\" usermark=\"F-12\" valign=\"MIDDLE\" width=\"122\">194</td>\n<td align=\"CENTER\" height=\"31\" usermark=\"F-12\" valign=\"MIDDLE\" width=\"122\">187</td>\n</tr>\n</tbody>\n</table>",
+   "footnotes": [],
+   "digest": "c5479238ad56",
+   "file": "20240814002722.xml"
+  },
+  {
+   "section": [
+    "1. 사업의 개요",
+    "2. 주요 제품 및 서비스",
+    "3. 원재료 및 생산설비"
+   ],
+   "headings": [
+    "3. 원재료 및 생산설비",
+    "가. 원재료",
+    "1) 주요 원재료 등의 현황"
+   ],
+   "context": [
+    "※ 산출기준 : 국내 최종 소비자 가격 기준",
+    "3. 원재료 및 생산설비",
+    "가. 원재료",
+    "1) 주요 원재료 등의 현황",
+    "(2024.06.30 현재) (단위 : 백만원)"
+   ],
+   "unit": "(2024.06.30 현재) (단위 : 백만원)",
+   "topic": "material",
+   "keywords": [
+    "1) 주요 원재료 등의 현황"
+   ],
+   "keyword_in": "heading",
+   "rows": [
+    [
+     "사업부문",
+     "회사명",
+     "매입유형",
+     "품 목",
+     "구체적용도",
+     "매 입 액(비 율)",
+     "비 고"
+    ],
+    [
+     "건설기계",
+     "HD현대건설기계㈜",
+     "원재료",
+     "Excavator, Wheel Loader 부품",
+     "굴삭기 제작 등",
+     "251,810 (36.8%)",
+     ""
+    ],
+    [
+     "HD Hyundai Construction Equipment India Private Ltd.",
+     "원재료",
+     "Excavator 부품",
+     "굴삭기 제작 등",
+     "226,803 (33.1%)"
+    ],
+    [
+     "현대강소공정기계유한공사",
+     "원재료",
+     "Excavator 부품",
+     "굴삭기 제작 등",
+     "127,993 (18.7%)"
+    ],
+    [
+     "HD Hyundai Construction Equipment Brasil- Manufacturing and Trading of Construction Equipment S.A",
+     "원재료",
+     "Excavator, Wheel Loader 부품",
+     "굴삭기 제작 등",
+     "78,437 (11.4%)"
+    ],
+    [
+     "합 계",
+     "-",
+     "-",
+     "685,043"
+    ]
+   ],
+   "html": "<table aclass=\"NORMAL\" afixtable=\"N\" border=\"1\" width=\"1085\">\n<colgroup>\n<col width=\"74\"/>\n<col width=\"446\"/>\n<col width=\"74\"/>\n<col width=\"152\"/>\n<col width=\"116\"/>\n<col width=\"84\"/>\n<col width=\"76\"/>\n</colgroup>\n<tbody>\n<tr acopy=\"Y\" adelete=\"Y\">\n<td align=\"CENTER\" height=\"55\" usermark=\"F-12 BC0XD7D7D7\" valign=\"MIDDLE\" width=\"83\">사업부문</td>\n<td align=\"CENTER\" height=\"55\" usermark=\"F-12 BC0XD7D7D7\" valign=\"MIDDLE\" width=\"455\">회사명</td>\n<td align=\"CENTER\" height=\"55\" usermark=\"F-12 BC0XD7D7D7\" valign=\"MIDDLE\" width=\"83\">매입유형</td>\n<td align=\"CENTER\" height=\"55\" usermark=\"F-12 BC0XD7D7D7\" valign=\"MIDDLE\" width=\"161\">품   목</td>\n<td align=\"CENTER\" height=\"55\" usermark=\"F-12 BC0XD7D7D7\" valign=\"MIDDLE\" width=\"125\">구체적용도</td>\n<td align=\"CENTER\" height=\"55\" usermark=\"F-12 BC0XD7D7D7\" valign=\"MIDDLE\" width=\"93\">매  입  액(비      율)</td>\n<td align=\"CENTER\" height=\"55\" usermark=\"F-12 BC0XD7D7D7\" valign=\"MIDDLE\" width=\"85\">비 고</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\">\n<td align=\"CENTER\" height=\"220\" rowspan=\"4\" usermark=\"F-12\" valign=\"MIDDLE\" width=\"83\">건설기계</td>\n<td align=\"CENTER\" height=\"55\" usermark=\"F-12\" valign=\"MIDDLE\" width=\"455\">HD현대건설기계㈜</td>\n<td align=\"CENTER\" height=\"55\" usermark=\"F-12\" valign=\"MIDDLE\" width=\"83\">원재료</td>\n<td align=\"CENTER\" height=\"55\" usermark=\"F-12\" valign=\"MIDDLE\" width=\"161\">\n<p usermark=\"F-12\">Excavator,</p>\n<p usermark=\"F-12\"> Wheel Loader 부품</p>\n</td>\n<td align=\"CENTER\" height=\"55\" usermark=\"F-12\" valign=\"MIDDLE\" width=\"125\">굴삭기 제작 등</td>\n<td align=\"RIGHT\" height=\"55\" usermark=\"F-12\" width=\"93\">\n<p usermark=\"F-12\">251,810\n<span></span>\n<span>(36.8%)</span>\n</p>\n</td>\n<td height=\"251\" rowspan=\"5\" usermark=\"F-12\" width=\"85\"></td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\">\n<td align=\"CENTER\" height=\"55\" usermark=\"F-12\" valign=\"MIDDLE\" width=\"455\">\n<p usermark=\"F-12\">HD Hyundai Construction Equipment India Private Ltd.</p>\n</td>\n<td align=\"CENTER\" height=\"55\" usermark=\"F-12\" valign=\"MIDDLE\" width=\"83\">원재료</td>\n<td align=\"CENTER\" height=\"55\" usermark=\"F-12\" valign=\"MIDDLE\" width=\"161\">Excavator 부품</td>\n<td align=\"CENTER\" height=\"55\" usermark=\"F-12\" valign=\"MIDDLE\" width=\"125\">굴삭기 제작 등</td>\n<td align=\"RIGHT\" height=\"55\" usermark=\"F-12\" width=\"93\">226,803\n<span></span>\n<span></span>\n<span></span>\n<span>(33.1%)</span>\n</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\">\n<td align=\"CENTER\" height=\"55\" usermark=\"F-12\" valign=\"MIDDLE\" width=\"455\">현대강소공정기계유한공사</td>\n<td align=\"CENTER\" height=\"55\" usermark=\"F-12\" valign=\"MIDDLE\" width=\"83\">원재료</td>\n<td align=\"CENTER\" height=\"55\" usermark=\"F-12\" valign=\"MIDDLE\" width=\"161\">Excavator 부품</td>\n<td align=\"CENTER\" height=\"55\" usermark=\"F-12\" valign=\"MIDDLE\" width=\"125\">굴삭기 제작 등</td>\n<td align=\"RIGHT\" height=\"55\" usermark=\"F-12\" width=\"93\">\n<p usermark=\"F-12\">127,993\n<span></span>\n<span>(18.7%)</span>\n</p>\n</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\">\n<td align=\"CENTER\" height=\"55\" usermark=\"F-12\" valign=\"MIDDLE\" width=\"455\">\n<span>HD Hyundai Construction Equipment Brasil- Manufacturing and Trading of Construction Equipment S.A</span>\n</td>\n<td align=\"CENTER\" height=\"55\" usermark=\"F-12\" valign=\"MIDDLE\" width=\"83\">\n<p usermark=\"F-12\">원재료</p>\n</td>\n<td align=\"CENTER\" height=\"55\" usermark=\"F-12\" valign=\"MIDDLE\" width=\"161\">\n<p usermark=\"F-12\">Excavator, Wheel Loader 부품</p>\n</td>\n<td align=\"CENTER\" height=\"55\" usermark=\"F-12\" valign=\"MIDDLE\" width=\"125\">\n<p usermark=\"F-12\">굴삭기 제작 등</p>\n</td>\n<td align=\"RIGHT\" height=\"55\" usermark=\"F-12\" width=\"93\">\n<p usermark=\"F-12 0X54AF00\">\n<span usermark=\" 0X000000\">78,437</span>\n<span usermark=\" 0X000000\"></span>\n<span usermark=\" 0X000000\">(11.4%)</span>\n</p>\n</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\">\n<td align=\"CENTER\" colspan=\"3\" height=\"31\" usermark=\"F-12\" valign=\"MIDDLE\" width=\"621\">합        계</td>\n<td align=\"CENTER\" height=\"31\" usermark=\"F-12\" valign=\"MIDDLE\" width=\"161\">-</td>\n<td align=\"CENTER\" height=\"31\" usermark=\"F-12\" valign=\"MIDDLE\" width=\"125\">-</td>\n<td align=\"RIGHT\" height=\"31\" usermark=\"F-12\" valign=\"MIDDLE\" width=\"93\">685,043</td>\n</tr>\n</tbody>\n</table>",
+   "footnotes": [],
+   "digest": "a45330dfc17f",
+   "file": "20240814002722.xml"
+  },
+  {
+   "section": [
+    "1. 사업의 개요",
+    "2. 주요 제품 및 서비스",
+    "3. 원재료 및 생산설비"
+   ],
+   "headings": [
+    "2) 주요 원재료 등의 가격변동추이"
+   ],
+   "context": [
+    "※ 지배기업 및 주요 종속회사를 기준으로 작성하였습니다.※ 내부 매입거래를 포함한 금액입니다.",
+    "2) 주요 원재료 등의 가격변동추이"
+   ],
+   "unit": "",
+   "topic": "material_price",
+   "keywords": [
+    "2) 주요 원재료 등의 가격변동추이"
+   ],
+   "keyword_in": "heading",
+   "rows": [
+    [
+     "품 목",
+     "제8기 반기",
+     "제7기",
+     "제6기"
+    ],
+    [
+     "Excavator Bucket Assy(천원/개)",
+     "국내",
+     "1,896",
+     "1,921",
+     "2,102"
+    ],
+    [
+     "Wheel Loader Main Control Valve(EUR/개)",
+     "해외",
+     "1,209",
+     "1,202",
+     "1,148"
+    ]
+   ],
+   "html": "<table aclass=\"NORMAL\" afixtable=\"N\" border=\"1\" width=\"649\">\n<colgroup>\n<col width=\"316\"/>\n<col width=\"42\"/>\n<col width=\"82\"/>\n<col width=\"82\"/>\n<col width=\"82\"/>\n</colgroup>\n<tbody>\n<tr acopy=\"Y\" adelete=\"Y\">\n<td align=\"CENTER\" colspan=\"2\" height=\"31\" usermark=\"F-12 BC0XD7D7D7\" valign=\"MIDDLE\" width=\"376\">품        목</td>\n<td align=\"CENTER\" height=\"31\" usermark=\"F-12 BC0XD7D7D7\" valign=\"MIDDLE\" width=\"91\">제8기 반기</td>\n<td align=\"CENTER\" height=\"31\" usermark=\"F-12 BC0XD7D7D7\" valign=\"MIDDLE\" width=\"91\">제7기</td>\n<td align=\"CENTER\" height=\"31\" usermark=\"F-12 BC0XD7D7D7\" valign=\"MIDDLE\" width=\"91\">제6기</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\">\n<td align=\"CENTER\" height=\"31\" usermark=\"F-12\" valign=\"MIDDLE\" width=\"325\"> Excavator Bucket Assy(천원/개)</td>\n<td align=\"CENTER\" height=\"31\" usermark=\"F-12\" valign=\"MIDDLE\" width=\"51\">국내</td>\n<td align=\"RIGHT\" height=\"31\" usermark=\"F-12\" valign=\"MIDDLE\" width=\"91\">1,896</td>\n<td align=\"RIGHT\" height=\"31\" usermark=\"F-12\" valign=\"MIDDLE\" width=\"91\">1,921</td>\n<td align=\"RIGHT\" height=\"31\" usermark=\"F-12\" valign=\"MIDDLE\" width=\"91\">2,102</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\">\n<td align=\"CENTER\" height=\"31\" usermark=\"F-12\" valign=\"MIDDLE\" width=\"325\">Wheel Loader Main Control Valve(EUR/개)</td>\n<td align=\"CENTER\" height=\"31\" usermark=\"F-12\" valign=\"MIDDLE\" width=\"51\">해외</td>\n<td align=\"RIGHT\" height=\"31\" usermark=\"F-12\" valign=\"MIDDLE\" width=\"91\">1,209</td>\n<td align=\"RIGHT\" height=\"31\" usermark=\"F-12\" valign=\"MIDDLE\" width=\"91\">1,202</td>\n<td align=\"RIGHT\" height=\"31\" usermark=\"F-12\" valign=\"MIDDLE\" width=\"91\">1,148</td>\n</tr>\n</tbody>\n</table>",
+   "footnotes": [],
+   "digest": "ade8635dfa24",
+   "file": "20240814002722.xml"
+  },
+  {
+   "section": [
+    "1. 사업의 개요",
+    "2. 주요 제품 및 서비스",
+    "3. 원재료 및 생산설비"
+   ],
+   "headings": [
+    "3) 주요 원재료 매입처 현황"
+   ],
+   "context": [
+    "※ 산출기준 : 부품별 대표 매입처 구매 계약가 기준※ 주요 가격변동원인 : 강재 등 원재료 가격 변동 및 설계변경에 따른 변동",
+    "3) 주요 원재료 매입처 현황"
+   ],
+   "unit": "",
+   "topic": "material",
+   "keywords": [
+    "3) 주요 원재료 매입처 현황",
+    "주요매입처"
+   ],
+   "keyword_in": "table",
+   "rows": [
+    [
+     "품 목",
+     "주요매입처",
+     "독과점여부",
+     "공급의 안정성"
+    ],
+    [
+     "Excavator 부품",
+     "티씨테크",
+     "낮음",
+     "높음"
+    ],
+    [
+     "Wheel Loader 부품",
+     "ZF Friedrichshafen AG",
+     "높음",
+     "높음"
+    ]
+   ],
+   "html": "<table aclass=\"NORMAL\" afixtable=\"N\" border=\"1\" width=\"555\">\n<colgroup>\n<col width=\"147\"/>\n<col width=\"171\"/>\n<col width=\"90\"/>\n<col width=\"111\"/>\n</colgroup>\n<tbody>\n<tr acopy=\"Y\" adelete=\"Y\">\n<td align=\"CENTER\" height=\"31\" usermark=\"F-12 BC0XD7D7D7\" valign=\"MIDDLE\" width=\"156\">품        목</td>\n<td align=\"CENTER\" height=\"31\" usermark=\"F-12 BC0XD7D7D7\" valign=\"MIDDLE\" width=\"180\">주요매입처</td>\n<td align=\"CENTER\" height=\"31\" usermark=\"F-12 BC0XD7D7D7\" valign=\"MIDDLE\" width=\"99\">독과점여부</td>\n<td align=\"CENTER\" height=\"31\" usermark=\"F-12 BC0XD7D7D7\" valign=\"MIDDLE\" width=\"120\">공급의 안정성</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\">\n<td align=\"CENTER\" height=\"31\" usermark=\"F-12\" valign=\"MIDDLE\" width=\"156\"> Excavator 부품</td>\n<td align=\"CENTER\" height=\"31\" usermark=\"F-12\" width=\"180\">티씨테크</td>\n<td align=\"CENTER\" height=\"31\" usermark=\"F-12\" width=\"99\">낮음</td>\n<td align=\"CENTER\" height=\"31\" usermark=\"F-12\" width=\"120\">높음</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\">\n<td align=\"CENTER\" height=\"31\" usermark=\"F-12\" valign=\"MIDDLE\" width=\"156\">Wheel Loader 부품</td>\n<td align=\"CENTER\" height=\"31\" usermark=\"F-12\" width=\"180\">ZF Friedrichshafen AG</td>\n<td align=\"CENTER\" height=\"31\" usermark=\"F-12\" width=\"99\">높음</td>\n<td align=\"CENTER\" height=\"31\" usermark=\"F-12\" width=\"120\">높음</td>\n</tr>\n</tbody>\n</table>",
+   "footnotes": [],
+   "digest": "f8d96bbc9e9f",
+   "file": "20240814002722.xml"
+  },
+  {
+   "section": [
     "1. 사업의 개요",
     "2. 주요 제품 및 서비스",
     "3. 원재료 및 생산설비"
@@ -29,6 +249,7 @@
     "1) 생산능력"
    ],
    "unit": "",
+   "topic": "capacity",
    "keywords": [
     "생산능력"
    ],
@@ -117,6 +338,7 @@
     "3) 생산실적"
    ],
    "unit": "",
+   "topic": "capacity",
    "keywords": [
     "생산실적"
    ],
@@ -184,6 +406,7 @@
     "4) 당해 사업연도의 가동률"
    ],
    "unit": "",
+   "topic": "capacity",
    "keywords": [
     "가동률"
    ],
@@ -275,10 +498,12 @@
     "(2024.06.30 현재) (단위 : 백만원)"
    ],
    "unit": "(2024.06.30 현재) (단위 : 백만원)",
+   "topic": "",
    "keywords": [
     "가동률",
     "생산능력",
-    "생산실적"
+    "생산실적",
+    "원재료"
    ],
    "keyword_in": "",
    "rows": [
@@ -325,6 +550,7 @@
     "의 사업활동을 수행하고 있습니다."
    ],
    "unit": "",
+   "topic": "",
    "keywords": [
     "가동률",
     "생산능력"

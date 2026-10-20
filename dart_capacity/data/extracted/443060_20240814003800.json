@@ -13,8 +13,192 @@
   "corrected": true,
   "dart_url": "https://dart.fss.or.kr/dsaf001/main.do?rcpNo=20240814003800"
  },
- "tables": [],
+ "tables": [
+  {
+   "section": [
+    "1. 사업의 개요",
+    "2. 주요 제품 및 서비스",
+    "3. 원재료 및 생산설비"
+   ],
+   "headings": [
+    "나. 주요 제품 등의 가격변동 추이 및 가격변동원인",
+    "3. 원재료 및 생산설비",
+    "가. 주요 원재료 등 매입처 현황",
+    "1) 주요 원재료 매입 현황"
+   ],
+   "context": [
+    "※ 상기 매출액은 연결기준으로 작성되었습니다.",
+    "나. 주요 제품 등의 가격변동 추이 및 가격변동원인",
+    "당사는 (신조)선박의 인도 후 약 25~30여년의 사용연령동안 발생할 수 있는 모든 일에 대응하는 업무를 수행하고 있는 바, 취급품목이 매우 다양하고 프로젝트 별 독립성이 매우 강하여 일원화된 가격을 산출하기 어렵습니다. 객관적인 자료에 따른 제품가격 산출이 곤란하여 동 항목에 대한 기재를 생략합니다.",
+    "3. 원재료 및 생산설비",
+    "가. 주요 원재료 등 매입처 현황",
+    "1) 주요 원재료 매입 현황",
+    "(단위 : 백만원)"
+   ],
+   "unit": "(단위 : 백만원)",
+   "topic": "material",
+   "keywords": [
+    "1) 주요 원재료 매입 현황",
+    "주요매입처"
+   ],
+   "keyword_in": "table",
+   "rows": [
+    [
+     "사업 부문",
+     "제품군",
+     "원ㆍ부재료 품목",
+     "주요매입처",
+     "2024년상반기",
+     "2023년",
+     "2022년",
+     "2021년"
+    ],
+    [
+     "선박After Service",
+     "AM 솔루션",
+     "대형엔진/중형엔진/전장품 등",
+     "A사, B사, C사, E사, F사, G사, H사 등",
+     "157,046",
+     "264,411",
+     "211,587",
+     "186,132"
+    ],
+    [
+     "벙커링",
+     "유류",
+     "H사 등",
+     "195,431",
+     "376,981",
+     "394,443",
+     "324,437"
+    ],
+    [
+     "친환경 개조",
+     "EGCS, BWTS 등",
+     "H사 , J사, K사, L사, M사 등",
+     "30,626",
+     "65,609",
+     "89,078",
+     "52,231"
+    ],
+    [
+     "디지털솔루션",
+     "선박자동화 외",
+     "N사, O사",
+     "20,038",
+     "35,226",
+     "25,815",
+     "30,456"
+    ],
+    [
+     "합계",
+     "-",
+     "-",
+     "-",
+     "403,141",
+     "742,227",
+     "720,923",
+     "593,256"
+    ]
+   ],
+   "html": "<table aclass=\"NORMAL\" afixtable=\"N\" border=\"1\" width=\"983\">\n<colgroup>\n<col width=\"92\"/>\n<col width=\"104\"/>\n<col width=\"206\"/>\n<col width=\"261\"/>\n<col width=\"62\"/>\n<col width=\"62\"/>\n<col width=\"62\"/>\n<col width=\"62\"/>\n</colgroup>\n<tbody>\n<tr acopy=\"Y\" adelete=\"Y\">\n<td align=\"CENTER\" height=\"53\" usermark=\" BC0XD7D7D7\" valign=\"MIDDLE\" width=\"101\"> 사업 부문</td>\n<td align=\"CENTER\" height=\"53\" usermark=\" BC0XD7D7D7\" valign=\"MIDDLE\" width=\"113\">제품군</td>\n<td align=\"CENTER\" height=\"53\" usermark=\" BC0XD7D7D7\" valign=\"MIDDLE\" width=\"215\">원ㆍ부재료 품목</td>\n<td align=\"CENTER\" height=\"53\" usermark=\" BC0XD7D7D7\" valign=\"MIDDLE\" width=\"270\">주요매입처</td>\n<td align=\"CENTER\" height=\"53\" usermark=\" BC0XD7D7D7\" valign=\"MIDDLE\" width=\"71\">2024년상반기</td>\n<td align=\"CENTER\" height=\"53\" usermark=\" BC0XD7D7D7\" valign=\"MIDDLE\" width=\"71\">2023년</td>\n<td align=\"CENTER\" height=\"53\" usermark=\" BC0XD7D7D7\" valign=\"MIDDLE\" width=\"71\">2022년</td>\n<td align=\"CENTER\" height=\"53\" usermark=\" BC0XD7D7D7\" valign=\"MIDDLE\" width=\"71\">2021년</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\">\n<td align=\"CENTER\" height=\"120\" rowspan=\"4\" valign=\"MIDDLE\" width=\"101\">선박After Service</td>\n<td align=\"CENTER\" height=\"30\" valign=\"MIDDLE\" width=\"113\">AM 솔루션</td>\n<td align=\"CENTER\" height=\"30\" valign=\"MIDDLE\" width=\"215\">대형엔진/중형엔진/전장품 등</td>\n<td align=\"CENTER\" height=\"30\" valign=\"MIDDLE\" width=\"270\">A사, B사, C사, E사, F사, G사, H사 등</td>\n<td align=\"RIGHT\" height=\"30\" valign=\"MIDDLE\" width=\"71\">157,046</td>\n<td align=\"RIGHT\" height=\"30\" valign=\"MIDDLE\" width=\"71\">264,411</td>\n<td align=\"RIGHT\" height=\"30\" valign=\"MIDDLE\" width=\"71\">211,587</td>\n<td align=\"RIGHT\" height=\"30\" valign=\"MIDDLE\" width=\"71\">186,132</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\">\n<td align=\"CENTER\" height=\"30\" valign=\"MIDDLE\" width=\"113\">벙커링</td>\n<td align=\"CENTER\" height=\"30\" valign=\"MIDDLE\" width=\"215\">유류</td>\n<td align=\"CENTER\" height=\"30\" valign=\"MIDDLE\" width=\"270\">H사 등</td>\n<td align=\"RIGHT\" height=\"30\" valign=\"MIDDLE\" width=\"71\">195,431</td>\n<td align=\"RIGHT\" height=\"30\" valign=\"MIDDLE\" width=\"71\">376,981</td>\n<td align=\"RIGHT\" height=\"30\" valign=\"MIDDLE\" width=\"71\">394,443</td>\n<td align=\"RIGHT\" height=\"30\" valign=\"MIDDLE\" width=\"71\">324,437</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\">\n<td align=\"CENTER\" height=\"30\" valign=\"MIDDLE\" width=\"113\">친환경 개조</td>\n<td align=\"CENTER\" height=\"30\" valign=\"MIDDLE\" width=\"215\">EGCS, BWTS 등</td>\n<td align=\"CENTER\" height=\"30\" valign=\"MIDDLE\" width=\"270\">H사\n<span>, J사, K사, L사, M사 등</span>\n</td>\n<td align=\"RIGHT\" height=\"30\" valign=\"MIDDLE\" width=\"71\">30,626</td>\n<td align=\"RIGHT\" height=\"30\" valign=\"MIDDLE\" width=\"71\">65,609</td>\n<td align=\"RIGHT\" height=\"30\" valign=\"MIDDLE\" width=\"71\">89,078</td>\n<td align=\"RIGHT\" height=\"30\" valign=\"MIDDLE\" width=\"71\">52,231</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\">\n<td align=\"CENTER\" height=\"30\" valign=\"MIDDLE\" width=\"113\">디지털솔루션</td>\n<td align=\"CENTER\" height=\"30\" valign=\"MIDDLE\" width=\"215\">선박자동화 외</td>\n<td align=\"CENTER\" height=\"30\" valign=\"MIDDLE\" width=\"270\">N사, O사</td>\n<td align=\"RIGHT\" height=\"30\" valign=\"MIDDLE\" width=\"71\">20,038</td>\n<td align=\"RIGHT\" height=\"30\" valign=\"MIDDLE\" width=\"71\">35,226</td>\n<td align=\"RIGHT\" height=\"30\" valign=\"MIDDLE\" width=\"71\">25,815</td>\n<td align=\"RIGHT\" height=\"30\" valign=\"MIDDLE\" width=\"71\">30,456</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\">\n<td align=\"CENTER\" height=\"30\" valign=\"MIDDLE\" width=\"101\">합계</td>\n<td align=\"CENTER\" height=\"30\" valign=\"MIDDLE\" width=\"113\">-</td>\n<td align=\"CENTER\" height=\"30\" valign=\"MIDDLE\" width=\"215\">-</td>\n<td align=\"CENTER\" height=\"30\" valign=\"MIDDLE\" width=\"270\">-</td>\n<td align=\"RIGHT\" height=\"30\" valign=\"MIDDLE\" width=\"71\">403,141</td>\n<td align=\"RIGHT\" height=\"30\" valign=\"MIDDLE\" width=\"71\">742,227</td>\n<td align=\"RIGHT\" height=\"30\" valign=\"MIDDLE\" width=\"71\">720,923</td>\n<td align=\"RIGHT\" height=\"30\" valign=\"MIDDLE\" width=\"71\">593,256</td>\n</tr>\n</tbody>\n</table>",
+   "footnotes": [],
+   "digest": "ee0520b1026c",
+   "file": "20240814003800.xml"
+  }
+ ],
  "rejected": [
+  {
+   "section": [
+    "1. 사업의 개요",
+    "2. 주요 제품 및 서비스",
+    "3. 원재료 및 생산설비"
+   ],
+   "headings": [],
+   "context": [
+    "※ 상기 매입현황은 별도 기준으로 작성하였습니다.※ 각 연도별 매입금액은 원화 매입금액 및 외화 매입금액을 합산한 금액으로 외화 매입금액은 입고시점의 환율을 적용하여 환산하였습니다.",
+    "2) 주요 원재료 가격 추이 및 가격 변동 원인당사는 취급품목이 매우 다양하며, 해당 품목 안에서도 고객/호선별 요구에 따른 Type이 다양한 바 표준화된 가격을 산출하는데 어려움이 있습니다. 다만 원재료의 경우원자재 가격 변동에 영향을 받는 바, 주요 원자재의 가격 추이 및 변동 원인은 다음과 같습니다.",
+    "(단위 : USD)"
+   ],
+   "unit": "(단위 : USD)",
+   "topic": "",
+   "keywords": [
+    "가격 추이",
+    "원재료"
+   ],
+   "keyword_in": "",
+   "rows": [
+    [
+     "품목",
+     "2024년 2분기",
+     "2023년",
+     "2022년",
+     "2021년"
+    ],
+    [
+     "구리(TON)",
+     "9,202",
+     "8,489",
+     "8,815",
+     "9,315"
+    ],
+    [
+     "아연(TON)",
+     "2,673",
+     "2,646",
+     "3,485",
+     "3,005"
+    ]
+   ],
+   "html": "",
+   "footnotes": [],
+   "digest": "fa19c02d74ea",
+   "why": "셀 전체가 지표명이 아니거나 멀리 있는 문장에만 키워드",
+   "file": "20240814003800.xml"
+  },
+  {
+   "section": [
+    "1. 사업의 개요",
+    "2. 주요 제품 및 서비스",
+    "3. 원재료 및 생산설비"
+   ],
+   "headings": [
+    "나. 생산 및 생산 설비에 관한 사항"
+   ],
+   "context": [
+    "※ 상기 가격은 해당기간 평균가를 기준으로 작성하였습니다.",
+    "※ 원유 가격은 두바이유 기준 입니다.",
+    "(가) 산출 기준 - 구리 : LME 공시가 - 아연 : LME 공시가 - 니켈 : LME 공시가 - 알루미늄합금 : LME 공시가 - 원유 : 두바이유 기준 국제 평균 유가(나) 주요 가격변동 원인 - 구리 : 구리광석 원재료 가격 및 생산량 변화 - 아연 : 아연석 원재료 가격 및 생산량 변화 - 니켈 : 니켈광석 원재료 가격 및 생산량 변화 - 알루미늄합금 : 보크사이트 원재료 가격 및 생산량 변화 - 원유 : OPEC 원유 생산량 및 미국 기준금리, 국제 경기에 따른 석유 수요 등",
+    "나. 생산 및 생산 설비에 관한 사항",
+    "당사는 직접 제품 생산을 수행하는 바 없이, 선주/선사 및 일부 조선소 고객의 요청에 따라 주요 기자재 제조사로부터 상품을 매입하여 납품하거나 개조공사 작업을 수행하고 있습니다."
+   ],
+   "unit": "",
+   "topic": "",
+   "keywords": [
+    "가격변동",
+    "원재료"
+   ],
+   "keyword_in": "",
+   "rows": [
+    [
+     "제품군",
+     "생산 및 납품 흐름"
+    ],
+    [
+     "AM솔루션",
+     "주문접수 → (견적 산출) → 물품 구매 → 고객 향 출고"
+    ],
+    [
+     "친환경개조",
+     "주문접수 → 설계/견적 → 물품 구매 → 설치/개조 → 시운전 → 선박 인도"
+    ]
+   ],
+   "html": "",
+   "footnotes": [],
+   "digest": "26a4ed922511",
+   "why": "셀 전체가 지표명이 아니거나 멀리 있는 문장에만 키워드",
+   "file": "20240814003800.xml"
+  },
   {
    "section": [
     "2. 주요 제품 및 서비스",
@@ -32,6 +216,7 @@
     "(단위 : 백만원)"
    ],
    "unit": "(단위 : 백만원)",
+   "topic": "",
    "keywords": [
     "가동률",
     "생산능력",
