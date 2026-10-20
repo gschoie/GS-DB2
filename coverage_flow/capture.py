@@ -16,6 +16,10 @@ PAGE = os.path.join(ROOT, "telegram_research_dashboard", "static", "coverage_flo
 OUT_PREFIX = os.path.join(HERE, "data", "capture")   # capture_1.png · capture_2.png · capture_3.png
 WIDTH = 1000          # 표 9열이 줄바꿈 없이 들어가는 폭. 더 넓히면 글자가 작아져 폰에서 안 읽힌다.
 SECTIONS = ("#cap-1", "#cap-2", "#cap-3")   # 제목+타일+① 등락·수급 / ② 과매수·과매도 / ③ 기계적 수급(접힘, 펼쳐 찍음)
+# 공유용 2장(10/20 사용자 요청, DAOL 조선 방): cap-1 을 '제목+타일+① 등락률' / '①-2 투자자별 순매수' 로 쪼갠 것.
+# 파일 접두어를 capture_ 와 다르게 둔다 — 바담 방 앨범은 capture_*.png 글롭이라 섞이면 5장이 된다.
+SHARE_SECTIONS = ("#cap-1a", "#cap-1b")
+SHARE_PREFIX = os.path.join(HERE, "data", "share")   # share_1.png · share_2.png
 # 한 장으로 찍으면 2000×6400 이 돼 텔레그램이 399×1280 으로 줄여 글자가 안 읽힌다(10/17 실측) —
 # 섹션 3장으로 나눠 앨범(sendMediaGroup)으로 보낸다. 장당 세로가 가로의 2~3배 안쪽.
 
@@ -31,8 +35,8 @@ def _chromium_exe():
     return None
 
 
-def capture(page=PAGE, out_prefix=OUT_PREFIX, width=WIDTH):
-    """섹션별 PNG 경로 목록을 돌려준다. 섹션 래퍼가 없는 옛 페이지면 전체 1장으로 폴백."""
+def capture(page=PAGE, out_prefix=OUT_PREFIX, width=WIDTH, share_prefix=SHARE_PREFIX):
+    """섹션별 PNG 경로 목록을 돌려준다(앨범 3장 + 공유용 2장). 섹션 래퍼가 없는 옛 페이지면 전체 1장으로 폴백."""
     from playwright.sync_api import sync_playwright
     os.makedirs(os.path.dirname(out_prefix), exist_ok=True)
     outs = []
@@ -56,6 +60,13 @@ def capture(page=PAGE, out_prefix=OUT_PREFIX, width=WIDTH):
             out = f"{out_prefix}_1.png"
             pg.screenshot(path=out, full_page=True)
             outs.append(out)
+        if share_prefix:
+            for i, sel in enumerate(SHARE_SECTIONS, 1):
+                if pg.locator(sel).count() == 0:
+                    continue
+                out = f"{share_prefix}_{i}.png"
+                pg.locator(sel).screenshot(path=out)
+                outs.append(out)
         b.close()
     return outs
 
