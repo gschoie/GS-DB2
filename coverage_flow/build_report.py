@@ -15,7 +15,7 @@ import metrics  # noqa: E402
 
 LATEST = os.path.join(HERE, "data", "latest.json")
 OUT = os.path.join(ROOT, "telegram_research_dashboard", "static", "coverage_flow_report.html")
-SCHEDULE_TIME = "평일 16:00 (장 마감 후)"
+SCHEDULE_TIME = "평일 13:00 (장중) · 16:00 (장 마감 후)"
 WD = "월화수목금토일"
 
 
