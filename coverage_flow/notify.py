@@ -88,7 +88,7 @@ def compose(d):
 
     # 기술 지표
     L.append("")
-    L.append("RSI 1년 극단" + (" (잠정)" if prov else ""))
+    L.append("🌡️ RSI 1년 극단" + (" (잠정)" if prov else ""))
     ex = [r for r in rows if r.get("tech", {}).get("extreme")]
     # 주의: pctl 0.0 은 '최저' 이지 '없음' 이 아니다 — `or 50` 으로 쓰면 1년 최저가 중간으로 간다
     ex.sort(key=lambda r: metrics.pctl_or(r["tech"].get("rsi_pctl"), 50))
@@ -112,7 +112,7 @@ def compose(d):
     return "\n".join(L)
 
 
-SECTION_HEADS = ("📈 사는 쪽", "📉 파는 쪽", "⚙️ 기계적 수급")   # HTML 모드에서 볼드로 찍는 섹션 제목
+SECTION_HEADS = ("📈 사는 쪽", "📉 파는 쪽", "⚙️ 기계적 수급", "🌡️ RSI 1년 극단")   # HTML 모드에서 볼드로 찍는 섹션 제목
 
 
 def compose_html(d):

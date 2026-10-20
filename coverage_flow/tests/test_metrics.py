@@ -332,9 +332,9 @@ class Outputs(unittest.TestCase):
         first = h.split("\n")[0]
         self.assertTrue(first.startswith("<b>[GS🎴 조선·방산·건기] 수급 브리핑") and first.endswith("</b>"), first)
         self.assertIn("LIG D&amp;A", h); self.assertNotIn("D&A", h)
-        for head in ("<b>📈 사는 쪽 · 시총 대비 5일</b>", "<b>📉 파는 쪽 · 시총 대비 5일</b>", "<b>⚙️ 기계적 수급 (ETF/패시브)</b>"):
+        for head in ("<b>📈 사는 쪽 · 시총 대비 5일</b>", "<b>📉 파는 쪽 · 시총 대비 5일</b>", "<b>⚙️ 기계적 수급 (ETF/패시브)</b>", "<b>🌡️ RSI 1년 극단"):
             self.assertIn(head, h)
-        self.assertEqual(h.count("<b>"), 4)                                    # 머리글 + 섹션 제목 3개만 볼드
+        self.assertEqual(h.count("<b>"), 5)                                    # 머리글 + 섹션 제목 4개만 볼드
         sent = []
         with tempfile.TemporaryDirectory() as tmp:
             latest, status = os.path.join(tmp, "l.json"), os.path.join(tmp, "s.json")
