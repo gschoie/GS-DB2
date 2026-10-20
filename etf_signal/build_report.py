@@ -884,6 +884,10 @@ table{{min-width:760px}}}}
 /* == 챗봇(톤 챗봇) 디자인 언어 정합: 라벤더 워시·그라데이션 타이틀·둥근 카드·필 배지·Pretendard == */
 @media (prefers-color-scheme:light){{html{{background:linear-gradient(180deg,#eef1fd 0%,#fff 240px) no-repeat #fff}}body{{background:transparent}}}}
 body{{font-family:'Pretendard Variable',Pretendard,'Apple SD Gothic Neo','Malgun Gothic',sans-serif;letter-spacing:-.01em}}
+/* 넓은 화면에서 표를 창 끝까지 늘리지 않는다 — 가운데로 모으고 좌우 여백을 준다.
+   표는 이 폭 안에서만 100% 라 칼럼이 과하게 벌어지지 않고, 폭이 모자라면
+   .tablewrap 의 overflow-x 가 그대로 받는다(min-width 900px 유지). */
+body{{max-width:1280px;margin:0 auto}}
 h1{{font-family:inherit;font-weight:800;font-size:21px;letter-spacing:-.02em;background:linear-gradient(135deg,#4f46e5,#7c3aed);-webkit-background-clip:text;background-clip:text;color:transparent;display:inline-block}}
 .eyebrow{{letter-spacing:.12em}}
 .sched{{border-radius:999px}}
