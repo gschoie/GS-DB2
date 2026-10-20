@@ -28,9 +28,9 @@
    "rcept_dt": "20250515",
    "source_rcept_no": "20250515001993",
    "dart_url": "https://dart.fss.or.kr/dsaf001/main.do?rcpNo=20250515001993",
-   "note": "",
-   "segment": "조선부문",
-   "item": "STEELPLATE",
+   "note": "스틸데일리 공시기준(시중 유통가, SS275 20T) / 철광석, 유연탄 등 후판제조 원재료 가격",
+   "segment": "조선",
+   "item": "STEEL PLATE",
    "unit": "원/TON",
    "price": 908000
   },
@@ -47,9 +47,9 @@
    "rcept_dt": "20250515",
    "source_rcept_no": "20250515001993",
    "dart_url": "https://dart.fss.or.kr/dsaf001/main.do?rcpNo=20250515001993",
-   "note": "",
-   "segment": "조선부문",
-   "item": "STEELPLATE",
+   "note": "스틸데일리 공시기준(시중 유통가, SS275 20T) / 철광석, 유연탄 등 후판제조 원재료 가격",
+   "segment": "조선",
+   "item": "STEEL PLATE",
    "unit": "원/TON",
    "price": 958500
   },
@@ -66,9 +66,9 @@
    "rcept_dt": "20250515",
    "source_rcept_no": "20250515001993",
    "dart_url": "https://dart.fss.or.kr/dsaf001/main.do?rcpNo=20250515001993",
-   "note": "",
-   "segment": "조선부문",
-   "item": "STEELPLATE",
+   "note": "스틸데일리 공시기준(시중 유통가, SS275 20T) / 철광석, 유연탄 등 후판제조 원재료 가격",
+   "segment": "조선",
+   "item": "STEEL PLATE",
    "unit": "원/TON",
    "price": 1130000
   },
@@ -85,8 +85,8 @@
    "rcept_dt": "20250515",
    "source_rcept_no": "20250515001993",
    "dart_url": "https://dart.fss.or.kr/dsaf001/main.do?rcpNo=20250515001993",
-   "note": "",
-   "segment": "조선부문",
+   "note": "스틸데일리 공시기준(시중 유통가, 앵글, SS400) / Scrap 가격",
+   "segment": "조선",
    "item": "형강",
    "unit": "원/TON",
    "price": 829000
@@ -104,8 +104,8 @@
    "rcept_dt": "20250515",
    "source_rcept_no": "20250515001993",
    "dart_url": "https://dart.fss.or.kr/dsaf001/main.do?rcpNo=20250515001993",
-   "note": "",
-   "segment": "조선부문",
+   "note": "스틸데일리 공시기준(시중 유통가, 앵글, SS400) / Scrap 가격",
+   "segment": "조선",
    "item": "형강",
    "unit": "원/TON",
    "price": 878000
@@ -123,8 +123,8 @@
    "rcept_dt": "20250515",
    "source_rcept_no": "20250515001993",
    "dart_url": "https://dart.fss.or.kr/dsaf001/main.do?rcpNo=20250515001993",
-   "note": "",
-   "segment": "조선부문",
+   "note": "스틸데일리 공시기준(시중 유통가, 앵글, SS400) / Scrap 가격",
+   "segment": "조선",
    "item": "형강",
    "unit": "원/TON",
    "price": 1021000
@@ -143,8 +143,8 @@
    "source_rcept_no": "20250515001993",
    "dart_url": "https://dart.fss.or.kr/dsaf001/main.do?rcpNo=20250515001993",
    "note": "",
-   "segment": "해양플랜트부문/엔진기계부문",
-   "item": "STEELPLATE",
+   "segment": "해양플랜트및엔진기계",
+   "item": "STEEL PLATE",
    "unit": "원/TON",
    "price": 908000
   },
@@ -162,8 +162,8 @@
    "source_rcept_no": "20250515001993",
    "dart_url": "https://dart.fss.or.kr/dsaf001/main.do?rcpNo=20250515001993",
    "note": "",
-   "segment": "해양플랜트부문/엔진기계부문",
-   "item": "STEELPLATE",
+   "segment": "해양플랜트및엔진기계",
+   "item": "STEEL PLATE",
    "unit": "원/TON",
    "price": 958500
   },
@@ -181,12 +181,12 @@
    "source_rcept_no": "20250515001993",
    "dart_url": "https://dart.fss.or.kr/dsaf001/main.do?rcpNo=20250515001993",
    "note": "",
-   "segment": "해양플랜트부문/엔진기계부문",
-   "item": "STEELPLATE",
+   "segment": "해양플랜트및엔진기계",
+   "item": "STEEL PLATE",
    "unit": "원/TON",
    "price": 1130000
   }
  ],
  "model": "gemini-flash-lite-latest",
- "normalized_at": "2026-10-20T04:19:50"
+ "normalized_at": "2026-10-20T05:13:03"
 }

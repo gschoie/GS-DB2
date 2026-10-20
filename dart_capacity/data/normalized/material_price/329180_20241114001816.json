@@ -29,8 +29,8 @@
    "source_rcept_no": "20241114001816",
    "dart_url": "https://dart.fss.or.kr/dsaf001/main.do?rcpNo=20241114001816",
    "note": "",
-   "segment": "조선부문",
-   "item": "STEELPLATE",
+   "segment": "조선",
+   "item": "STEEL PLATE",
    "unit": "원/TON",
    "price": 975000
   },
@@ -48,8 +48,8 @@
    "source_rcept_no": "20241114001816",
    "dart_url": "https://dart.fss.or.kr/dsaf001/main.do?rcpNo=20241114001816",
    "note": "",
-   "segment": "조선부문",
-   "item": "STEELPLATE",
+   "segment": "조선",
+   "item": "STEEL PLATE",
    "unit": "원/TON",
    "price": 1130000
   },
@@ -67,8 +67,8 @@
    "source_rcept_no": "20241114001816",
    "dart_url": "https://dart.fss.or.kr/dsaf001/main.do?rcpNo=20241114001816",
    "note": "",
-   "segment": "조선부문",
-   "item": "STEELPLATE",
+   "segment": "조선",
+   "item": "STEEL PLATE",
    "unit": "원/TON",
    "price": 1221000
   },
@@ -86,7 +86,7 @@
    "source_rcept_no": "20241114001816",
    "dart_url": "https://dart.fss.or.kr/dsaf001/main.do?rcpNo=20241114001816",
    "note": "",
-   "segment": "조선부문",
+   "segment": "조선",
    "item": "형강",
    "unit": "원/TON",
    "price": 884000
@@ -105,7 +105,7 @@
    "source_rcept_no": "20241114001816",
    "dart_url": "https://dart.fss.or.kr/dsaf001/main.do?rcpNo=20241114001816",
    "note": "",
-   "segment": "조선부문",
+   "segment": "조선",
    "item": "형강",
    "unit": "원/TON",
    "price": 1021000
@@ -124,7 +124,7 @@
    "source_rcept_no": "20241114001816",
    "dart_url": "https://dart.fss.or.kr/dsaf001/main.do?rcpNo=20241114001816",
    "note": "",
-   "segment": "조선부문",
+   "segment": "조선",
    "item": "형강",
    "unit": "원/TON",
    "price": 1188000
@@ -143,7 +143,7 @@
    "source_rcept_no": "20241114001816",
    "dart_url": "https://dart.fss.or.kr/dsaf001/main.do?rcpNo=20241114001816",
    "note": "",
-   "segment": "조선부문",
+   "segment": "조선",
    "item": "PAINT",
    "unit": "$/리터",
    "price": 3.1
@@ -162,7 +162,7 @@
    "source_rcept_no": "20241114001816",
    "dart_url": "https://dart.fss.or.kr/dsaf001/main.do?rcpNo=20241114001816",
    "note": "",
-   "segment": "조선부문",
+   "segment": "조선",
    "item": "PAINT",
    "unit": "$/리터",
    "price": 3.38
@@ -181,29 +181,10 @@
    "source_rcept_no": "20241114001816",
    "dart_url": "https://dart.fss.or.kr/dsaf001/main.do?rcpNo=20241114001816",
    "note": "",
-   "segment": "조선부문",
+   "segment": "조선",
    "item": "PAINT",
    "unit": "$/리터",
    "price": 4.2
-  },
-  {
-   "company": "HD현대중공업",
-   "stock_code": "329180",
-   "sector": "조선",
-   "topic": "material_price",
-   "period": "2024-09",
-   "period_label": "2024년 3분기",
-   "report_type": "quarter",
-   "report_label": "분기보고서 (2024.09)",
-   "report_period": "2024-09",
-   "rcept_dt": "20241114",
-   "source_rcept_no": "20241114001816",
-   "dart_url": "https://dart.fss.or.kr/dsaf001/main.do?rcpNo=20241114001816",
-   "note": "원문 오탈자(975,0000원) 정정 반영",
-   "segment": "해양플랜트부문",
-   "item": "STEELPLATE",
-   "unit": "원/TON",
-   "price": 975000
   },
   {
    "company": "HD현대중공업",
@@ -219,8 +200,8 @@
    "source_rcept_no": "20241114001816",
    "dart_url": "https://dart.fss.or.kr/dsaf001/main.do?rcpNo=20241114001816",
    "note": "",
-   "segment": "해양플랜트부문",
-   "item": "STEELPLATE",
+   "segment": "해양플랜트",
+   "item": "STEEL PLATE",
    "unit": "원/TON",
    "price": 1130000
   },
@@ -238,12 +219,12 @@
    "source_rcept_no": "20241114001816",
    "dart_url": "https://dart.fss.or.kr/dsaf001/main.do?rcpNo=20241114001816",
    "note": "",
-   "segment": "해양플랜트부문",
-   "item": "STEELPLATE",
+   "segment": "해양플랜트",
+   "item": "STEEL PLATE",
    "unit": "원/TON",
    "price": 1221000
   }
  ],
  "model": "gemini-flash-lite-latest",
- "normalized_at": "2026-10-20T04:18:45"
+ "normalized_at": "2026-10-20T05:11:59"
 }
