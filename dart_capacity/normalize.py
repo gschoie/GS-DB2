@@ -433,7 +433,9 @@ def main() -> int:
             else:
                 entry["topics"][topic] = {"at": stamp, "rows": len(rows), "model": usage.get("model", MODEL)}
             print(f"  ✓ [{topic}] {meta['company']} {meta['report_nm']} {meta['rcept_no']}: 행 {len(rows)}, 검토 {len(review)} (토큰 {usage.get('in',0)}/{usage.get('out',0)})")
-            PROCESSED.write_text(json.dumps(processed, ensure_ascii=False, indent=1), encoding="utf-8")
+        # 장부는 보고서마다 저장 — 모델 성공 경로에서만 쓰면 '해당 표 없음(rows 0)' 판정이 영영 기록되지 않아
+        # 다음 run 이 같은 보고서를 또 대상으로 잡는다(10/20 실측: 한화시스템·마린솔루션 반기 2건이 계속 '미완료').
+        PROCESSED.write_text(json.dumps(processed, ensure_ascii=False, indent=1), encoding="utf-8")
     if review_all:
         write_review(review_all)
     p = rebuild_all()
