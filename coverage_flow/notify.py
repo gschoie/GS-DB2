@@ -7,7 +7,7 @@
 둘 다 없으면 발송을 건너뛰고 status 에 사유만 남긴다. 전송 결과는 telegram_status.json 에.
 """
 from __future__ import annotations
-import os, sys, json, html, urllib.request, urllib.error
+import os, re, sys, json, html, urllib.request, urllib.error
 from datetime import datetime, timezone, timedelta
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -25,6 +25,33 @@ def _creds():
     tok = os.environ.get("COVFLOW_TELEGRAM_BOT_TOKEN") or os.environ.get("TELEGRAM_BOT_TOKEN", "")
     chat = os.environ.get("COVFLOW_TELEGRAM_CHAT_ID") or os.environ.get("TELEGRAM_CHAT_ID_PRIVATE", "")
     return tok, chat
+
+
+def _extra_chats():
+    """추가 발송 방(10/20 사용자 요청: 바담 방 + DAOL 조선 방). `COVFLOW_TELEGRAM_CHAT_ID_EXTRA` 에
+    쉼표·공백으로 여러 개(숫자 ID 또는 공개채널 @handle). 기본 방과 같은 ID 는 뺀다 — 두 번 안 간다.
+    같은 봇 토큰으로 보내므로 봇이 그 방에 들어가(채널이면 관리자) 있어야 한다."""
+    _, primary = _creds()
+    out = []
+    for c in re.split(r"[,\s]+", os.environ.get("COVFLOW_TELEGRAM_CHAT_ID_EXTRA", "")):
+        if c and c != primary and c not in out:
+            out.append(c)
+    return out
+
+
+SHARE_URL = "https://gs-research-desk.github.io/coverage_flow_report.html"   # 공유용 주소(50번) — 추가 방 캡션에만
+
+
+def share_caption(text):
+    """추가 방(DAOL 조선) 캡션 — 머리글 한 줄 볼드 + 공유용 링크(10/20 사용자 요청 '밑에 링크 남기자')."""
+    head = text.split("\n", 1)[0]
+    return f"<b>{html.escape(head)}</b>\n{SHARE_URL}"
+
+
+def targets():
+    """발송 방 목록 — 기본 방이 먼저(이 결과가 종료코드·status 를 정한다), 추가 방은 뒤에."""
+    _, primary = _creds()
+    return [primary] + _extra_chats()
 
 
 def _sign_won(v):
@@ -145,10 +172,12 @@ def _multipart(fields, files):
 CAPTION_MAX = 1024   # 텔레그램 캡션 한도(일반 봇)
 
 
-def send_photos(paths, caption="", parse_mode=None):
+def send_photos(paths, caption="", parse_mode=None, chat=None):
     """캡쳐 PNG 들을 앨범(sendMediaGroup) 한 묶음으로. 캡션은 첫 장에만 — 앨범에서는 사진 **밑에**
-    붙어 보인다(10/19 사용자 요청: 본문을 이미지 밑에). 한 장이면 sendPhoto. 캡션 한도는 호출부가 지킨다."""
-    tok, chat = _creds()
+    붙어 보인다(10/19 사용자 요청: 본문을 이미지 밑에). 한 장이면 sendPhoto. 캡션 한도는 호출부가 지킨다.
+    chat 을 주면 그 방으로(추가 방), 없으면 기본 방."""
+    tok, primary = _creds()
+    chat = chat or primary
     if not tok or not chat:
         return {"ok": False, "description": "텔레그램 토큰/채팅ID 미설정"}
     paths = [p for p in paths if os.path.exists(p)]
@@ -177,8 +206,9 @@ def send_photos(paths, caption="", parse_mode=None):
         return {"ok": False, "description": f"{type(e).__name__}: {e}"}
 
 
-def send(text, parse_mode=None):
-    tok, chat = _creds()
+def send(text, parse_mode=None, chat=None):
+    tok, primary = _creds()
+    chat = chat or primary
     if not tok or not chat:
         return {"ok": False, "description": "텔레그램 토큰/채팅ID 미설정 (COVFLOW_TELEGRAM_CHAT_ID 또는 TELEGRAM_CHAT_ID_PRIVATE 필요 — 공개채널로는 보내지 않음)"}
     body = {"chat_id": chat, "text": text, "disable_web_page_preview": True}
@@ -202,10 +232,12 @@ def send(text, parse_mode=None):
 def main(argv=None):
     args = list(argv if argv is not None else sys.argv[1:])
     dry = "--dry" in args
-    photos = []
+    photos, share = [], []
+    import glob as _g
     if "--photos" in args:
-        import glob as _g
         photos = sorted(_g.glob(args[args.index("--photos") + 1]))
+    if "--share" in args:
+        share = sorted(_g.glob(args[args.index("--share") + 1]))
     with open(LATEST, encoding="utf-8") as f:
         d = json.load(f)
     text = compose(d)
@@ -228,33 +260,64 @@ def main(argv=None):
         return 0
     html_text = compose_html(d)
     photos = [p for p in photos if os.path.exists(p)]
-    pres = None
-    if photos and len(html_text) <= CAPTION_MAX:
-        # 본문을 앨범 캡션으로 — 사진 밑에 한 덩어리로 붙는다(10/19 사용자 요청). 캡션이 거부되면
-        # (HTML parse 등) 평문 캡션 → 그래도 안 되면 옛 방식(본문 따로 + 사진)으로 내려간다.
-        res = send_photos(photos, html_text, parse_mode="HTML")
-        if not res.get("ok") and "parse" in str(res.get("description", "")).lower():
-            res = send_photos(photos, text)
-        pres = res
-        if not res.get("ok"):
-            print(f"캡션 앨범 실패 — {res.get('description')} → 본문 따로 발송")
-    if pres is None or not pres.get("ok"):
-        res = send(html_text, parse_mode="HTML")
-        if not res.get("ok") and "parse" in str(res.get("description", "")).lower():
-            res = send(text)                      # HTML 파싱 거부 시 평문 폴백(머리글만 볼드가 빠진다)
-        # 본문이 너무 길어 캡션에 못 담은 경우에만 사진을 짧은 캡션으로 뒤따라 보낸다.
-        if res.get("ok") and photos and pres is None:
-            pres = send_photos(photos, f"커버리지 수급 화면 · {d.get('asof', '')}")
-    if pres is not None:
-        print(f"사진 {len(photos)}장:", "성공" if pres.get("ok") else f"실패 — {pres.get('description')}")
+    # 방마다 같은 묶음(앨범+캡션)을 보낸다 — 기본 방(바담)이 먼저, 추가 방(DAOL 조선 등)은 뒤에.
+    # 추가 방 실패는 기본 방 결과(종료코드)를 바꾸지 않는다 — 늦은 크론이 재시도하면 바담 방에 두 통 간다.
+    # 추가 방은 공유용 2장(① 등락률 / ①-2 투자자별) + 머리글·링크 캡션만(10/20 사용자 요청) —
+    # 공유용 그림이 없으면(옛 페이지) 기본 방과 같은 묶음으로 폴백.
+    share = [p for p in share if os.path.exists(p)]
+    outs = []
+    for i, chat in enumerate(targets()):
+        if i and share:
+            res, pres = _deliver_share(chat, text, share)
+        else:
+            res, pres = _deliver(chat, d, text, html_text, photos)
+        outs.append((chat, res, pres))
+        tag = "기본 방" if i == 0 else f"추가 방 {chat}"
+        if pres is not None:
+            print(f"[{tag}] 사진 {len(photos)}장:", "성공" if pres.get("ok") else f"실패 — {pres.get('description')}")
+        print(f"[{tag}] 전송:", "성공" if res.get("ok") else f"실패 — {res.get('description')}")
+    _, res, pres = outs[0]
     tok, chat = _creds()
     with open(STATUS, "w", encoding="utf-8") as f:
         json.dump({"at": datetime.now(KST).strftime("%Y-%m-%d %H:%M"), "ok": bool(res.get("ok")),
                    "description": res.get("description", ""), "token_set": bool(tok), "chat_set": bool(chat),
-                   "slot": d.get("slot"), "photo_ok": (None if pres is None else bool(pres.get("ok")))},
+                   "slot": d.get("slot"), "photo_ok": (None if pres is None else bool(pres.get("ok"))),
+                   "extra": [{"chat": c, "ok": bool(r.get("ok")), "description": r.get("description", ""),
+                              "photo_ok": (None if p is None else bool(p.get("ok")))} for c, r, p in outs[1:]]},
                   f, ensure_ascii=False, indent=1)
-    print("전송:", "성공" if res.get("ok") else f"실패 — {res.get('description')}")
     return 0 if res.get("ok") else 1
+
+
+def _deliver_share(chat, text, share):
+    """추가 방: 공유용 2장을 앨범으로, 캡션은 머리글+링크. HTML 거부면 평문 캡션."""
+    cap = share_caption(text)
+    res = send_photos(share, cap, parse_mode="HTML", chat=chat)
+    if not res.get("ok") and "parse" in str(res.get("description", "")).lower():
+        res = send_photos(share, text.split("\n", 1)[0] + "\n" + SHARE_URL, chat=chat)
+    return res, res
+
+
+def _deliver(chat, d, text, html_text, photos):
+    """한 방에 본문+캡쳐를 보낸다. 반환 (본문/캡션 결과, 사진 결과 또는 None).
+    캡쳐가 있고 본문이 캡션 한도 안이면 앨범 캡션(사진 밑) 한 덩어리 → HTML 거부 시 평문 캡션 →
+    그래도 실패면 옛 방식(본문 따로 + 사진 짧은 캡션)."""
+    pres = None
+    res = {"ok": False, "description": "미발송"}
+    if photos and len(html_text) <= CAPTION_MAX:
+        res = send_photos(photos, html_text, parse_mode="HTML", chat=chat)
+        if not res.get("ok") and "parse" in str(res.get("description", "")).lower():
+            res = send_photos(photos, text, chat=chat)
+        pres = res
+        if not res.get("ok"):
+            print(f"캡션 앨범 실패 — {res.get('description')} → 본문 따로 발송")
+    if pres is None or not pres.get("ok"):
+        res = send(html_text, parse_mode="HTML", chat=chat)
+        if not res.get("ok") and "parse" in str(res.get("description", "")).lower():
+            res = send(text, chat=chat)                      # HTML 파싱 거부 시 평문 폴백(머리글만 볼드가 빠진다)
+        # 본문이 너무 길어 캡션에 못 담은 경우에만 사진을 짧은 캡션으로 뒤따라 보낸다.
+        if res.get("ok") and photos and pres is None:
+            pres = send_photos(photos, f"커버리지 수급 화면 · {d.get('asof', '')}", chat=chat)
+    return res, pres
 
 
 if __name__ == "__main__":

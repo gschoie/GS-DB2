@@ -341,9 +341,53 @@ class Outputs(unittest.TestCase):
             with open(latest, "w", encoding="utf-8") as f:
                 json.dump(d, f, ensure_ascii=False)
             with unittest.mock.patch.object(notify, "LATEST", latest), unittest.mock.patch.object(notify, "STATUS", status), \
-                 unittest.mock.patch.object(notify, "send", lambda text, parse_mode=None: sent.append((text[:3], parse_mode)) or {"ok": True}):
+                 unittest.mock.patch.object(notify, "send", lambda text, parse_mode=None, chat=None: sent.append((text[:3], parse_mode)) or {"ok": True}):
                 notify.main([])
         self.assertEqual(sent, [("<b>", "HTML")])
+
+    def test_extra_chats_get_the_same_album(self):
+        """COVFLOW_TELEGRAM_CHAT_ID_EXTRA 의 방들에도 같은 앨범+캡션이 간다(10/20: 바담 + DAOL 조선).
+        기본 방이 먼저, 기본 방과 같은 ID·중복은 한 번만, 추가 방 실패는 종료코드를 바꾸지 않는다."""
+        d = fake_payload(); d["errors"] = []
+        calls = []
+        env = {"COVFLOW_TELEGRAM_BOT_TOKEN": "t", "COVFLOW_TELEGRAM_CHAT_ID": "-100111",
+               "COVFLOW_TELEGRAM_CHAT_ID_EXTRA": "-100222, @HI_GS -100111 -100222"}
+        with tempfile.TemporaryDirectory() as tmp, unittest.mock.patch.dict(os.environ, env, clear=True):
+            self.assertEqual(notify.targets(), ["-100111", "-100222", "@HI_GS"])
+            latest, status = os.path.join(tmp, "l.json"), os.path.join(tmp, "s.json")
+            for i in range(3):
+                open(os.path.join(tmp, f"capture_{i}.png"), "wb").write(b"x")
+            with open(latest, "w", encoding="utf-8") as f:
+                json.dump(d, f, ensure_ascii=False)
+            fail = {"@HI_GS"}
+            with unittest.mock.patch.object(notify, "LATEST", latest), unittest.mock.patch.object(notify, "STATUS", status), \
+                 unittest.mock.patch.object(notify, "send", lambda text, parse_mode=None, chat=None: calls.append(("text", chat)) or {"ok": chat not in fail, "description": "x"}), \
+                 unittest.mock.patch.object(notify, "send_photos", lambda paths, caption="", parse_mode=None, chat=None: calls.append(("album", chat, len(paths), caption)) or {"ok": chat not in fail, "description": "chat not found"}):
+                rc = notify.main(["--photos", os.path.join(tmp, "capture_*.png")])
+            self.assertEqual(rc, 0)                                                   # 기본 방 성공이면 0
+            self.assertEqual([c[:3] for c in calls[:2]], [("album", "-100111", 3), ("album", "-100222", 3)])   # 공유용 없음 → 같은 묶음
+            self.assertEqual(calls[2][:2], ("album", "@HI_GS")); self.assertEqual(calls[3], ("text", "@HI_GS"))  # 실패 방만 폴백
+            with open(status, encoding="utf-8") as f:
+                st = json.load(f)
+            self.assertTrue(st["ok"]); self.assertEqual([e["chat"] for e in st["extra"]], ["-100222", "@HI_GS"])
+            self.assertTrue(st["extra"][0]["ok"]); self.assertFalse(st["extra"][1]["ok"])
+            # 공유용 2장(① 등락률 / ①-2 순매수)이 있으면 추가 방은 그 2장 + 머리글·링크 캡션만, 기본 방은 그대로 3장+본문.
+            for i in (1, 2):
+                open(os.path.join(tmp, f"share_{i}.png"), "wb").write(b"x")
+            calls.clear(); fail.clear()
+            with unittest.mock.patch.object(notify, "LATEST", latest), unittest.mock.patch.object(notify, "STATUS", status), \
+                 unittest.mock.patch.object(notify, "send", lambda text, parse_mode=None, chat=None: calls.append(("text", chat)) or {"ok": True}), \
+                 unittest.mock.patch.object(notify, "send_photos", lambda paths, caption="", parse_mode=None, chat=None: calls.append(("album", chat, len(paths), caption)) or {"ok": True}):
+                rc = notify.main(["--photos", os.path.join(tmp, "capture_*.png"), "--share", os.path.join(tmp, "share_*.png")])
+            self.assertEqual(rc, 0); self.assertEqual(len(calls), 3)
+            self.assertEqual(calls[0][:3], ("album", "-100111", 3)); self.assertTrue(calls[0][3].startswith("<b>[GS🎴"))
+            self.assertEqual(calls[1][:3], ("album", "-100222", 2)); self.assertEqual(calls[2][:3], ("album", "@HI_GS", 2))
+            cap = calls[1][3]
+            self.assertTrue(cap.startswith("<b>[GS🎴 조선·방산·건기] 수급 브리핑"), cap)
+            self.assertTrue(cap.endswith("\n" + notify.SHARE_URL), cap); self.assertNotIn("사는 쪽", cap)
+            # 추가 방 미설정이면 기본 방 한 곳뿐
+            with unittest.mock.patch.dict(os.environ, {"COVFLOW_TELEGRAM_CHAT_ID_EXTRA": ""}):
+                self.assertEqual(notify.targets(), ["-100111"])
 
     def test_text_rides_as_album_caption(self):
         """캡쳐가 있으면 본문이 앨범 캡션(사진 밑)으로 간다 — 1024자 이내면 send() 미호출, 넘치면 옛 방식."""
@@ -356,8 +400,8 @@ class Outputs(unittest.TestCase):
             with open(latest, "w", encoding="utf-8") as f:
                 json.dump(d, f, ensure_ascii=False)
             with unittest.mock.patch.object(notify, "LATEST", latest), unittest.mock.patch.object(notify, "STATUS", status), \
-                 unittest.mock.patch.object(notify, "send", lambda text, parse_mode=None: calls.append(("text", parse_mode)) or {"ok": True}), \
-                 unittest.mock.patch.object(notify, "send_photos", lambda paths, caption="", parse_mode=None: calls.append(("album", parse_mode, len(paths), caption[:3], len(caption))) or {"ok": True}):
+                 unittest.mock.patch.object(notify, "send", lambda text, parse_mode=None, chat=None: calls.append(("text", parse_mode)) or {"ok": True}), \
+                 unittest.mock.patch.object(notify, "send_photos", lambda paths, caption="", parse_mode=None, chat=None: calls.append(("album", parse_mode, len(paths), caption[:3], len(caption))) or {"ok": True}):
                 notify.main(["--photos", os.path.join(tmp, "capture_*.png")])
                 self.assertEqual(calls, [("album", "HTML", 3, "<b>", len(notify.compose_html(d)))])
                 # 긴 본문: 캡션 한도 초과 → 본문 따로(HTML) + 사진은 짧은 캡션
@@ -373,7 +417,7 @@ class Outputs(unittest.TestCase):
     def test_render(self):
         h = build_report.render(fake_payload())
         for s in ("한화오션", "13일째 매수", "1년 최저권", "SOL 조선TOP3플러스", "수집 오류 1건", "커버예정", "직전 값 없음", "TIME 코스피액티브",
-                  "① 등락률", "①-2 투자자별 순매수", "+42.0", "+300", "② 과매수", "③ 기계적 수급", '<details id="cap-3"', "3개월 차트", "📅 수집 시각 <b>10/16(금) 13:31</b>"):
+                  "① 등락률", "①-2 투자자별 순매수", "+42.0", "+300", "② 과매수", "③ 기계적 수급", '<details id="cap-3"', '<div id="cap-1a">', '<div id="cap-1b">', "3개월 차트", "📅 수집 시각 <b>10/16(금) 13:31</b>"):
             self.assertIn(s, h)
         self.assertNotIn("chr(", h)
         self.assertNotIn("5일 외인+기관", h)                                  # 시총 대비 열 제거
@@ -613,7 +657,7 @@ class CollectGuard(unittest.TestCase):
                 json.dump(payload, f, ensure_ascii=False)
             sent = []
             with unittest.mock.patch.object(notify, "LATEST", latest), unittest.mock.patch.object(notify, "STATUS", status), \
-                 unittest.mock.patch.object(notify, "send", lambda text, parse_mode=None: sent.append(text) or {"ok": True}), \
+                 unittest.mock.patch.object(notify, "send", lambda text, parse_mode=None, chat=None: sent.append(text) or {"ok": True}), \
                  unittest.mock.patch.object(notify, "send_photos", lambda *a, **k: sent.append("photo") or {"ok": True}):
                 rc = notify.main(["--photos", os.path.join(d, "none_*.png")])
             self.assertEqual(rc, 0); self.assertEqual(sent, [])
@@ -625,7 +669,7 @@ class CollectGuard(unittest.TestCase):
             with open(latest, "w", encoding="utf-8") as f:
                 json.dump(payload, f, ensure_ascii=False)
             with unittest.mock.patch.object(notify, "LATEST", latest), unittest.mock.patch.object(notify, "STATUS", status), \
-                 unittest.mock.patch.object(notify, "send", lambda text, parse_mode=None: sent.append(text) or {"ok": True}):
+                 unittest.mock.patch.object(notify, "send", lambda text, parse_mode=None, chat=None: sent.append(text) or {"ok": True}):
                 notify.main([])
             self.assertEqual(len(sent), 1)
 
