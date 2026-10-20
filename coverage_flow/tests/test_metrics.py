@@ -18,14 +18,12 @@ def ohlc(closes, start="2025-01-01"):
 
 
 class Slot(unittest.TestCase):
-    def test_boundaries(self):
+    def test_single_daily_slot(self):
+        # 10/19부터 하루 1회(16:00) — 수동 수집도 같은 슬롯에 붙는다.
         mk = lambda h, m: datetime(2026, 10, 17, h, m, tzinfo=KST)
-        self.assertEqual(metrics.decide_slot(mk(10, 5)), "10:00")
-        self.assertEqual(metrics.decide_slot(mk(11, 44)), "10:00")
-        self.assertEqual(metrics.decide_slot(mk(11, 45)), "13:30")
-        self.assertEqual(metrics.decide_slot(mk(14, 29)), "13:30")
-        self.assertEqual(metrics.decide_slot(mk(14, 30)), "15:30")
-        self.assertEqual(metrics.decide_slot(mk(23, 0)), "15:30")
+        self.assertEqual(metrics.decide_slot(mk(10, 5)), "16:00")
+        self.assertEqual(metrics.decide_slot(mk(16, 5)), "16:00")
+        self.assertEqual(metrics.decide_slot(mk(23, 0)), "16:00")
 
 
 class Rsi(unittest.TestCase):
@@ -329,9 +327,11 @@ class Outputs(unittest.TestCase):
         d = fake_payload(); d["rows"][0]["name"] = "LIG D&A"; d["errors"] = []
         h = notify.compose_html(d)
         first = h.split("\n")[0]
-        self.assertTrue(first.startswith("<b>[GS 조선·방산·건기] 수급 브리핑") and first.endswith("</b>"), first)
+        self.assertTrue(first.startswith("<b>[GS🎴 조선·방산·건기] 수급 브리핑") and first.endswith("</b>"), first)
         self.assertIn("LIG D&amp;A", h); self.assertNotIn("D&A", h)
-        self.assertEqual(h.count("<b>"), 1)                                    # 머리글만 볼드
+        for head in ("<b>📈 사는 쪽 · 시총 대비 5일</b>", "<b>📉 파는 쪽 · 시총 대비 5일</b>", "<b>⚙️ 기계적 수급 (ETF/패시브)</b>"):
+            self.assertIn(head, h)
+        self.assertEqual(h.count("<b>"), 4)                                    # 머리글 + 섹션 제목 3개만 볼드
         sent = []
         with tempfile.TemporaryDirectory() as tmp:
             latest, status = os.path.join(tmp, "l.json"), os.path.join(tmp, "s.json")
@@ -571,6 +571,63 @@ class CollectGuard(unittest.TestCase):
                  unittest.mock.patch.object(notify, "send", lambda text, parse_mode=None: sent.append(text) or {"ok": True}):
                 notify.main([])
             self.assertEqual(len(sent), 1)
+
+
+class KisToken(unittest.TestCase):
+    def test_token_retries_past_rate_limit_403(self):
+        """토큰 발급 403(분당 1회 제한, 다른 잡과 동시 시작)은 기다렸다 재시도한다."""
+        import kis
+
+        class R:
+            def __init__(self, code):
+                self.status_code = code
+
+            def raise_for_status(self):
+                if self.status_code != 200:
+                    raise RuntimeError(f"HTTP {self.status_code}")
+
+            def json(self):
+                return {"access_token": "tok"}
+
+        calls, naps = [], []
+        responses = [R(403), R(403), R(200)]
+        saved_post, saved_sleep = kis.requests.post, kis.time.sleep
+        saved_cache = dict(kis._c)
+        kis.requests.post = lambda *a, **k: (calls.append(1), responses[len(calls) - 1])[1]
+        kis.time.sleep = lambda s: naps.append(s)
+        kis._c.update(t=None, ts=0)
+        os.environ.setdefault("KIS_APP_KEY", "k"); os.environ.setdefault("KIS_APP_SECRET", "s")
+        try:
+            self.assertEqual(kis.token(tries=5, wait=20), "tok")
+        finally:
+            kis.requests.post, kis.time.sleep = saved_post, saved_sleep
+            kis._c.update(saved_cache)
+        self.assertEqual(len(calls), 3)          # 403 두 번 뒤 성공
+        self.assertEqual(naps, [20, 20])         # 분 경계를 넘길 대기
+
+    def test_token_gives_up_after_tries(self):
+        import kis
+
+        class R403:
+            status_code = 403
+
+            def raise_for_status(self):
+                raise RuntimeError("HTTP 403")
+
+        naps = []
+        saved_post, saved_sleep = kis.requests.post, kis.time.sleep
+        saved_cache = dict(kis._c)
+        kis.requests.post = lambda *a, **k: R403()
+        kis.time.sleep = lambda s: naps.append(s)
+        kis._c.update(t=None, ts=0)
+        os.environ.setdefault("KIS_APP_KEY", "k"); os.environ.setdefault("KIS_APP_SECRET", "s")
+        try:
+            with self.assertRaises(RuntimeError):
+                kis.token(tries=3, wait=1)
+        finally:
+            kis.requests.post, kis.time.sleep = saved_post, saved_sleep
+            kis._c.update(saved_cache)
+        self.assertEqual(naps, [1, 1])           # 마지막 시도는 기다리지 않고 올린다
 
 
 if __name__ == "__main__":

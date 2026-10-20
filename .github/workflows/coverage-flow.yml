@@ -1,7 +1,8 @@
 name: 커버리지 수급·기술지표
 
 # 조선·방산·건설기계 커버리지 종목의 외인·기관 순매수 / ETF 패시브·액티브 수급 / RSI 극단을
-# 평일 장중 3회(KST 10:00 · 13:30 · 15:30) 수집해 페이지를 굽고 텔레그램(수주공시 봇 채널)으로 보낸다.
+# 평일 장 마감 후 1회(KST 16:00) 수집해 페이지를 굽고 텔레그램(수주공시 봇 채널)으로 보낸다.
+# (10/19 사용자 요청: 장중 3회는 너무 많다 → 하루 1회로.)
 # 정시성은 GAS 시계(gas/dispatch_proxy.gs SCHEDULE covflow 슬롯)가 담당, 아래 크론은 안전망
 # — 무료 러너 크론은 몇 시간씩 밀린다(CLAUDE.md 17번).
 on:
@@ -23,9 +24,7 @@ on:
         type: boolean
         default: false
   schedule:
-    - cron: "0 1 * * 1-5"     # 01:00 UTC = 10:00 KST
-    - cron: "30 4 * * 1-5"    # 04:30 UTC = 13:30 KST
-    - cron: "30 6 * * 1-5"    # 06:30 UTC = 15:30 KST
+    - cron: "5 7 * * 1-5"     # 07:05 UTC = 16:05 KST (GAS 16:00 의 안전망)
 
 permissions:
   contents: write
@@ -35,9 +34,9 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  # 24번 교훈: "이 슬롯이 이미 처리됐나"를 묻는다 — 이벤트를 가리지 않고 슬롯 창 안의
-  # 성공·진행중 run 을 세되 자기 자신만 뺀다. 슬롯 경계는 metrics.decide_slot 과 같다
-  # (11:45 / 14:30 KST). 밀린 크론이 다음 슬롯을 덮어 텔레가 두 번 가는 것을 막는다. fail-open.
+  # 24번 교훈: "이 슬롯이 이미 처리됐나"를 묻는다 — 이벤트를 가리지 않고 16:00 슬롯 창
+  # (15:30 KST 이후) 안의 성공·진행중 run 을 세되 자기 자신만 뺀다. GAS 가 정시에 쐈으면
+  # 밀린 크론은 스킵해 텔레가 두 번 가지 않는다. fail-open.
   guard:
     runs-on: ubuntu-latest
     permissions: {actions: read}
@@ -51,11 +50,17 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           hm=$(TZ=Asia/Seoul date +%H%M)
-          if   [ "$hm" -lt 1145 ]; then slot=1000; from="00:00"
-          elif [ "$hm" -lt 1430 ]; then slot=1330; from="11:45"
-          else                          slot=1530; from="14:30"
+          # 슬롯 정시(16:00) 전에 도착한 밀린 크론은 버린다 — 정시는 GAS 시계가 쏜다.
+          if [ "$hm" -lt 1600 ]; then
+            echo "::notice::정시(16:00) 전 도착한 지연 크론 — 건너뜁니다"
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+            exit 0
           fi
-          since=$(TZ=Asia/Seoul date -u -d "today $from" +%Y-%m-%dT%H:%M)
+          # KST 15:30 → UTC 변환. 'date -u -d "today 15:30"'은 -u가 TZ를 덮어써
+          # 15:30을 UTC로 읽는 버그(10/19 market-flow 재발송 사고와 동일 패턴).
+          d=$(TZ=Asia/Seoul date +%F)
+          since=$(date -u -d "TZ=\"Asia/Seoul\" $d 15:30" +%Y-%m-%dT%H:%M)
+          slot=1600; from="15:30"
           n=$(gh api "repos/${{ github.repository }}/actions/workflows/coverage-flow.yml/runs?created=%3E${since}" \
                 --jq "[.workflow_runs[] | select(.id != ${{ github.run_id }}) \
                        | select(.conclusion==\"success\" or .status==\"in_progress\" or .status==\"queued\")] | length" || echo 0)

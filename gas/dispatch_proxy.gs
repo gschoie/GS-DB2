@@ -43,7 +43,7 @@ const WF = {
   gptbrief:  'chatgpt-brief.yml',      // ChatGPT 방산 브리핑 붙여넣기 발행 (content 입력 필요)
   congpt:    'construction-gpt.yml',   // ChatGPT 건설기계 브리핑 붙여넣기 발행 (content 입력 필요)
   research:  'research-digest.yml',    // 커버리지 리서치요약 아침 모음
-  covflow:   'coverage-flow.yml',      // 커버리지 종목 수급·기술지표 (장중 3회)
+  covflow:   'coverage-flow.yml',      // 커버리지 종목 수급·기술지표 (장 마감 후 1회)
   defweekly: 'defense-weekly.yml',     // 방산 주간정리 (토) — 스케줄러 정시 발사용
   conweekly: 'construction-weekly.yml',// 건설기계 주간정리 (토) — 스케줄러 정시 발사용
   // 다른 저장소의 워크플로는 {repo:'owner/name', file:'...'} 형태로 적는다.
@@ -209,12 +209,9 @@ const SCHEDULE = [
   { wf: 'macro',     hours: [21],     minute: 0,  days: 'daily',   label: '매크로 데스크',
                      inputs: { via: 'scheduler' } },
   { wf: 'consensus', hours: [17],     minute: 0,  days: 'fri,sat', label: '코스피200 컨센' },
-  // 커버리지 수급 — 장중 3회. 텔레는 via=scheduler 일 때만(화면 버튼은 페이지만 갱신)
-  { wf: 'covflow',   hours: [10],     minute: 0,  days: 'weekday', label: '커버리지 수급(10:00)',
-                     inputs: { via: 'scheduler' } },
-  { wf: 'covflow',   hours: [13],     minute: 30, days: 'weekday', label: '커버리지 수급(13:30)',
-                     inputs: { via: 'scheduler' } },
-  { wf: 'covflow',   hours: [15],     minute: 30, days: 'weekday', label: '커버리지 수급(15:30)',
+  // 커버리지 수급 — 장 마감 후 하루 1회(10/19 '장중 3회는 너무 많다').
+  // 텔레는 via=scheduler 일 때만(화면 버튼은 페이지만 갱신)
+  { wf: 'covflow',   hours: [16],     minute: 0,  days: 'weekday', label: '커버리지 수급(16:00)',
                      inputs: { via: 'scheduler' } },
   // 스크립트 자체에 '오늘 이미 발송' 가드가 있어 GitHub 크론 안전망과 겹쳐도 한 통만 간다
   { wf: 'research',  hours: [8],      minute: 50, days: 'weekday', label: '커버리지 리서치요약 모음' },   // 채널 아침 목록(~08:40) 뒤
