@@ -39,13 +39,7 @@ def _extra_chats():
     return out
 
 
-SHARE_URL = "https://gs-research-desk.github.io/coverage_flow_report.html"   # 공유용 주소(50번) — 추가 방 캡션에만
-
-
-def share_caption(text):
-    """추가 방(DAOL 조선) 캡션 — 머리글 한 줄 볼드 + 공유용 링크(10/20 사용자 요청 '밑에 링크 남기자')."""
-    head = text.split("\n", 1)[0]
-    return f"<b>{html.escape(head)}</b>\n{SHARE_URL}"
+SHARE_URL = "https://gs-research-desk.github.io/coverage_flow_report.html"   # 공유용 주소(50번) — 추가 방 본문 끝에만
 
 
 def targets():
@@ -260,12 +254,12 @@ def main(argv=None):
     photos = [p for p in photos if os.path.exists(p)]
     # 방마다 같은 묶음(앨범+캡션)을 보낸다 — 기본 방(바담)이 먼저, 추가 방(DAOL 조선 등)은 뒤에.
     # 추가 방 실패는 기본 방 결과(종료코드)를 바꾸지 않는다 — 늦은 크론이 재시도하면 바담 방에 두 통 간다.
-    # 그림은 두 방 같은 2장(① 등락률 / ①-2 투자자별). 기본 방(바담)은 본문을 캡션으로, 추가 방(DAOL 조선)은
-    # 머리글·공유 링크만 캡션으로(10/20 사용자 요청). 그림이 없으면 추가 방도 본문으로 폴백.
+    # 두 방 모두 같은 2장(① 등락률 / ①-2 투자자별) + 같은 본문(10/20 저녁 사용자 확정 "원래 그 글도
+    # 넣어, 2개 방에 다"). 추가 방(DAOL 조선)만 본문 맨 밑에 공유 링크 한 줄 — 바담 방은 링크 없음(10/17 규칙).
     outs = []
     for i, chat in enumerate(targets()):
-        if i and photos:
-            res, pres = _deliver_share(chat, text, photos)
+        if i:
+            res, pres = _deliver(chat, d, text + "\n\n" + SHARE_URL, html_text + "\n\n" + SHARE_URL, photos)
         else:
             res, pres = _deliver(chat, d, text, html_text, photos)
         outs.append((chat, res, pres))
@@ -285,13 +279,10 @@ def main(argv=None):
     return 0 if res.get("ok") else 1
 
 
-def _deliver_share(chat, text, share):
-    """추가 방: 같은 그림을 앨범으로, 캡션은 머리글+링크만(본문 없음). HTML 거부면 평문 캡션."""
-    cap = share_caption(text)
-    res = send_photos(share, cap, parse_mode="HTML", chat=chat)
-    if not res.get("ok") and "parse" in str(res.get("description", "")).lower():
-        res = send_photos(share, text.split("\n", 1)[0] + "\n" + SHARE_URL, chat=chat)
-    return res, res
+def visible_len(html_text):
+    """텔레그램 캡션 한도(1,024자)는 **파싱 뒤 보이는 글자** 기준 — <b> 태그·&amp; 같은 이스케이프는 안 센다.
+    태그 길이까지 세면 본문+링크가 1,046자로 한도를 넘는 것처럼 보여 본문이 사진 밑에서 떨어진다(10/20 실측)."""
+    return len(html.unescape(re.sub(r"<[^>]+>", "", html_text)))
 
 
 def _deliver(chat, d, text, html_text, photos):
@@ -300,7 +291,7 @@ def _deliver(chat, d, text, html_text, photos):
     그래도 실패면 옛 방식(본문 따로 + 사진 짧은 캡션)."""
     pres = None
     res = {"ok": False, "description": "미발송"}
-    if photos and len(html_text) <= CAPTION_MAX:
+    if photos and visible_len(html_text) <= CAPTION_MAX:
         res = send_photos(photos, html_text, parse_mode="HTML", chat=chat)
         if not res.get("ok") and "parse" in str(res.get("description", "")).lower():
             res = send_photos(photos, text, chat=chat)
