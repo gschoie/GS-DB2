@@ -43,12 +43,13 @@ _KW_RE = re.compile("|".join(KEYWORDS))
 TOPICS = {
     "capacity":       {"label": "생산능력·생산실적·가동률", "heading": _KW_RE,
                        "header": None},
-    "material":       {"label": "원재료 매입", "heading": re.compile(r"원재료.*(매입|현황)|매입.*원재료|원재료\s*등의\s*현황"),
-                       "header": re.compile(r"매입액|매입금액|매입\s*비중|주요\s*매입처|매입처")},
+    # 가격변동을 매입보다 먼저 본다 — '주요 원재료의 가격변동 현황' 이 '원재료…현황' 에 걸려 매입으로 가던 실측(10/20)
     "material_price": {"label": "원재료 가격변동", "heading": re.compile(r"원재료.*가격\s*변동|원재료.*가격.*추이|원재료.*가격"),
                        "header": None},
     "product_price":  {"label": "제품 가격변동", "heading": re.compile(r"(제품|서비스|상품).*가격\s*변동|(제품|서비스|상품).*가격.*추이|판매\s*가격.*추이|제품.*가격"),
                        "header": None},
+    "material":       {"label": "원재료 매입", "heading": re.compile(r"원재료.*(매입|현황)|매입.*원재료|원재료\s*등의\s*현황|주요\s*매입처|매입\s*업무"),
+                       "header": re.compile(r"매입액|매입금액|매입\s*비중|주요\s*매입처|매입처")},
 }
 _PRICE_ONLY = re.compile(r"가격\s*변동\s*추이|가격변동|가격\s*추이")   # '(2) 가격변동추이'처럼 주어 없는 소항목
 _UNIT_RE = re.compile(r"단\s*위")

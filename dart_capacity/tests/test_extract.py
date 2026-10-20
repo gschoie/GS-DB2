@@ -126,7 +126,7 @@ DOC3 = """<?xml version="1.0" encoding="utf-8"?>
 <P>가. 주요 원재료 등의 현황</P>
 <TABLE><TR><TD>(단위 : 백만원)</TD></TR></TABLE>
 <TABLE><TR><TH>사업부문</TH><TH>품목</TH><TH>매입액</TH><TH>비중</TH><TH>주요 매입처</TH></TR><TR><TD>조선</TD><TD>후판</TD><TD>6,067,774</TD><TD>62%</TD><TD>포스코</TD></TR></TABLE>
-<P>나. 주요 원재료 등의 가격변동추이</P>
+<P>나. 주요 원재료의 가격변동 현황</P>
 <P>(1) 가격변동추이</P>
 <TABLE><TR><TH>품목</TH><TH>단위</TH><TH>2025년</TH><TH>2024년</TH></TR><TR><TD>후판</TD><TD>천원/톤</TD><TD>950</TD><TD>1,010</TD></TR></TABLE>
 <P>(2) 가격변동 원인</P>

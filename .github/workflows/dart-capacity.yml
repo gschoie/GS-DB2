@@ -54,6 +54,8 @@ jobs:
         run: |
           python tests/test_extract.py
           python tests/test_normalize.py
+          python tests/test_canonical.py
+          python tests/test_topics.py
 
       - name: 원문 zip 캐시 복원
         uses: actions/cache@v4
