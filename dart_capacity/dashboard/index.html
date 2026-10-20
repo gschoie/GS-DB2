@@ -35,6 +35,8 @@ td.lbl{text-align:left;color:var(--ink2)}
 td a{color:inherit;text-decoration:none;border-bottom:1px dotted var(--ink3)}
 td a:hover{color:var(--link);border-bottom-color:var(--link)}
 .tscroll{overflow-x:auto}
+#cmp td:first-child,#cmp th:first-child{white-space:normal;text-align:left;min-width:220px;max-width:380px;word-break:keep-all}   /* 줄 이름(부문/품목/법인)이 길어 nowrap 이면 숫자 열이 화면 밖으로 밀린다 */
+#cmp td.sup{white-space:normal;min-width:160px;max-width:280px}
 .grp td{background:var(--chip);color:var(--ink2);font-weight:600;text-align:left}
 .charts{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:14px;margin:8px 0 10px}
 .chart{position:relative}
@@ -291,7 +293,7 @@ function renderCompareTopic(rows, cfg) {
     if (!state.sector && r.sector !== lastSector) { html += `<tr class="grp"><td colspan="${periods.length + 3}">${esc(r.sector)}</td></tr>`; lastSector = r.sector; }
     const latest = periods.map(p => cells[p]).filter(Boolean).pop();
     const unit = latest ? (latest.unit || "–") : "–";
-    html += `<tr><td>${esc(r.company)} › ${esc(lineName(r))}</td><td class="lbl">${esc(unit)}</td>${periods.map(p => { const c = cells[p]; if (!c) return "<td>–</td>"; const v = fmt(c[vk]); const sh = c.share_pct != null ? ` <span class="pill">${fmt(c.share_pct)}%</span>` : ""; return `<td>${link(c, v)}${sh}</td>`; }).join("")}${state.topic === "material" ? `<td class="lbl" style="white-space:normal;min-width:160px">${esc(latest ? latest.suppliers || "" : "")}</td>` : ""}</tr>`;
+    html += `<tr><td>${esc(r.company)} › ${esc(lineName(r))}</td><td class="lbl">${esc(unit)}</td>${periods.map(p => { const c = cells[p]; if (!c) return "<td>–</td>"; const v = fmt(c[vk]); const sh = c.share_pct != null ? ` <span class="pill">${fmt(c.share_pct)}%</span>` : ""; return `<td>${link(c, v)}${sh}</td>`; }).join("")}${state.topic === "material" ? `<td class="lbl sup">${esc(latest ? latest.suppliers || "" : "")}</td>` : ""}</tr>`;
   }
   $("#cmp").innerHTML = html + "</tbody></table>";
 }

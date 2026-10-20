@@ -160,14 +160,33 @@ def canonicalize_topic(rows: list[dict], topic: str) -> list[dict]:
         groups.setdefault(key, []).append(r)
     # 분기보고서는 '해당 회사' 열이 없어 entity 가 비고 사업보고서에는 있다(매입유형도 마찬가지) → 같은 줄에
     # 값이 하나뿐이면 빈 쪽을 거기로 합친다. 값이 둘 이상이면 빈 쪽이 어디인지 모르니 그대로 둔다.
-    for idx in (2, 5):                               # entity · purchase_type
-        by_line: dict[tuple, dict[str, tuple]] = {}
+    for drop in ((2,), (5,), (2, 5)):               # entity · purchase_type · 둘 다 다른 경우
+        by_line: dict[tuple, dict[tuple, tuple]] = {}
         for key in list(groups):
-            by_line.setdefault(key[:idx] + key[idx + 1:], {})[key[idx]] = key
+            line = tuple(v for i, v in enumerate(key) if i not in drop)
+            by_line.setdefault(line, {})[tuple(key[i] for i in drop)] = key
         for ents in by_line.values():
-            named = [k for k in ents if k]
-            if "" in ents and len(named) == 1:
-                groups[ents[named[0]]].extend(groups.pop(ents[""]))
+            if len(ents) < 2:
+                continue
+            blank = tuple("" for _ in drop)
+            named = [k for k in ents if k != blank]
+            if blank in ents and len(named) == 1:
+                groups[ents[named[0]]].extend(groups.pop(ents[blank]))
+                continue
+            # 표기가 둘 이상이라도 기간이 서로 안 겹치면(사업보고서 vs 분기보고서가 다르게 적은 것) 한 줄로 본다.
+            # 같은 기간에 둘 다 있으면(한화오션 vs Philly Shipyard '강재,기자재,의장재등') 진짜 다른 줄이다.
+            keys = list(ents.values())
+            seen: set[str] = set(); disjoint = True
+            for k in keys:
+                ps = {_s(r.get("period")) for r in groups[k]}
+                if ps & seen:
+                    disjoint = False; break
+                seen |= ps
+            if disjoint:
+                target = max(keys, key=lambda k: max(_s(r.get("source_rcept_no")) for r in groups[k]))
+                for k in keys:
+                    if k != target:
+                        groups[target].extend(groups.pop(k))
     out: list[dict] = []
     fields = ("segment", "entity", "item", "product", "spec", "purchase_type")
     for grp in groups.values():

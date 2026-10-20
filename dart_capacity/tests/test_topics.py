@@ -106,6 +106,18 @@ def test_subtotal_and_entity_merge():
                 "period": "2024-12", "source_rcept_no": "20250320", "amount": 3})
     assert {r["entity"] for r in dedupe_latest(raw, "material")} == {"", "A㈜", "B㈜"}   # 법인이 둘이면 빈 쪽은 못 정한다
 
+
+
+def test_disjoint_period_variants_merge():
+    from topics import dedupe_latest
+    base = {"stock_code": "1", "company": "A", "segment": "엔진기계", "item": "엔진부품등", "amount": 1}
+    raw = [{**base, "entity": "A㈜", "purchase_type": "", "period": "2023-12", "source_rcept_no": "20240301"},
+           {**base, "entity": "A㈜,B(유)", "purchase_type": "원재료", "period": "2025-12", "source_rcept_no": "20260301"}]
+    out = dedupe_latest(raw, "material")
+    assert {(r["entity"], r["purchase_type"]) for r in out} == {("A㈜,B(유)", "원재료")}   # 기간이 안 겹치면 최신 표기로 한 줄
+    raw.append({**base, "entity": "C㈜", "purchase_type": "원재료", "period": "2025-12", "source_rcept_no": "20260301"})
+    assert len({r["entity"] for r in dedupe_latest(raw, "material")}) == 3           # 같은 기간에 둘이면 다른 줄 — 2023 의 A㈜ 는 어느 쪽인지 모르니 그대로
+
 if __name__ == "__main__":
     test_material_rows()
     test_price_rows_and_dedupe()
@@ -114,4 +126,5 @@ if __name__ == "__main__":
     test_migrate_old_material_rows()
     test_canonicalize_entity_spelling()
     test_subtotal_and_entity_merge()
-    print("ok — test_topics 7개 통과")
+    test_disjoint_period_variants_merge()
+    print("ok — test_topics 8개 통과")
