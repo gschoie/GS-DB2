@@ -18,10 +18,13 @@ def ohlc(closes, start="2025-01-01"):
 
 
 class Slot(unittest.TestCase):
-    def test_single_daily_slot(self):
-        # 10/19부터 하루 1회(16:00) — 수동 수집도 같은 슬롯에 붙는다.
+    def test_two_daily_slots(self):
+        # 10/20부터 하루 2회(13:00·16:00) — 경계 14:30. 수동 수집도 시각으로 슬롯에 붙는다.
         mk = lambda h, m: datetime(2026, 10, 17, h, m, tzinfo=KST)
-        self.assertEqual(metrics.decide_slot(mk(10, 5)), "16:00")
+        self.assertEqual(metrics.decide_slot(mk(10, 5)), "13:00")
+        self.assertEqual(metrics.decide_slot(mk(13, 5)), "13:00")
+        self.assertEqual(metrics.decide_slot(mk(14, 29)), "13:00")
+        self.assertEqual(metrics.decide_slot(mk(14, 30)), "16:00")
         self.assertEqual(metrics.decide_slot(mk(16, 5)), "16:00")
         self.assertEqual(metrics.decide_slot(mk(23, 0)), "16:00")
 
@@ -439,6 +442,24 @@ class Outputs(unittest.TestCase):
         self.assertIn("<tr class='gh'><td colspan='8'>기계</td></tr>", h)
         self.assertLess(h.index(">조선</td>"), h.index(">방산</td>")); self.assertLess(h.index(">방산</td>"), h.index(">기계</td>"))
 
+    def test_group_summary_rows(self):
+        """묶음 끝에 요약 행 — 등락률은 단순평균, 수급은 합계, None 은 빼고 센다."""
+        self.assertAlmostEqual(build_report.agg([1, None, 3], "mean"), 2.0)
+        self.assertEqual(build_report.agg([1, None, 3], "sum"), 4)
+        self.assertIsNone(build_report.agg([None, None], "sum"))
+        d = fake_payload()
+        base = d["rows"][0]
+        def mk(name, d1, frgn5):
+            r = json.loads(json.dumps(base)); r.update(name=name, industry="조선", code=name)
+            r["tech"]["ret"]["d1"] = d1; r["flow"]["win"]["frgn"]["d5"] = frgn5; return r
+        d["rows"] = [mk("A", 2.0, 100), mk("B", -1.0, -40), mk("C", None, None)]
+        h = build_report.render(d)
+        self.assertIn("조선 평균<small>3종목 · 단순평균</small>", h)
+        i = h.index("조선 평균"); seg = h[i:i + 400]
+        self.assertIn("+0.5", seg)                                               # (2 − 1) / 2, None 제외
+        j = h.index("조선 합계"); seg2 = h[j:j + 600]
+        self.assertIn("+60", seg2)                                               # 100 − 40
+
     def test_tables_sorted_by_mcap(self):
         """세 표 모두 묶음 안은 시총 내림차순, 성광벤드·태광은 여전히 조선 맨 밑."""
         d = fake_payload()
@@ -511,6 +532,42 @@ class KisToken(unittest.TestCase):
             kis.requests.post, kis.time.sleep = saved_post, saved_sleep
             kis._c.update(saved_cache)
         self.assertEqual(naps, [1, 1])           # 마지막 시도는 기다리지 않고 올린다
+
+
+class Estimate(unittest.TestCase):
+    def test_parse_estimate_picks_latest_slot(self):
+        j = {"output2": [
+            {"bsop_hour_gb": "1", "frgn_fake_ntby_qty": "1000", "orgn_fake_ntby_qty": "-200", "sum_fake_ntby_qty": "800"},
+            {"bsop_hour_gb": "3", "frgn_fake_ntby_qty": "2500", "orgn_fake_ntby_qty": "-700", "sum_fake_ntby_qty": "1800"},
+        ]}
+        e = kis.parse_estimate(j)
+        self.assertEqual((e["time"], e["frgn_qty"], e["inst_qty"], e["unit"]), ("11:20", 2500.0, -700.0, "qty"))
+        self.assertIsNone(kis.parse_estimate({"output2": []})); self.assertIsNone(kis.parse_estimate({}))
+
+    def test_apply_estimate_fills_zero_today_only(self):
+        today = "2026-10-20"
+        inv = pd.DataFrame({"date": pd.to_datetime(["2026-10-17", "2026-10-20"]),
+                            "개인": [10.0, 0.0], "외국인": [-5.0, 0.0], "기관": [-5.0, 0.0]})
+        est = {"time": "11:20", "frgn_qty": 2000.0, "inst_qty": -500.0, "unit": "qty"}
+        out, ok = metrics.apply_estimate(inv, today, est, 50000)          # 2000×50000/1e8 = 1.0억
+        self.assertTrue(ok)
+        row = out[out["date"] == pd.Timestamp(today)].iloc[0]
+        self.assertAlmostEqual(row["외국인"], 1.0); self.assertAlmostEqual(row["기관"], -0.2); self.assertAlmostEqual(row["개인"], -0.8)
+        # 오늘 행이 없으면 추가
+        out2, ok2 = metrics.apply_estimate(inv.iloc[:1], today, est, 50000)
+        self.assertTrue(ok2); self.assertEqual(len(out2), 2)
+        # 확정치가 이미 있으면 손대지 않는다
+        inv3 = inv.copy(); inv3.loc[1, "외국인"] = 12.0
+        _, ok3 = metrics.apply_estimate(inv3, today, est, 50000)
+        self.assertFalse(ok3)
+        # 추정값이 없으면 그대로
+        self.assertFalse(metrics.apply_estimate(inv, today, None, 50000)[1])
+
+    def test_estimate_labels(self):
+        d = fake_payload(); d["errors"] = []
+        d["rows"][0]["flow"]["today_src"] = "estimate 11:20"
+        self.assertIn("추정가집계 11:20 기준", build_report.render(d))
+        self.assertIn("오늘 잠정(가집계 11:20) 포함", notify.compose(d))
 
 
 class CollectGuard(unittest.TestCase):

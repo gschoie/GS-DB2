@@ -122,7 +122,8 @@ jobs:
       - name: 공유용 주소 토큰 확인
         id: share
         env:
-          SHARE_DEPLOY_TOKEN: ${{ secrets.SHARE_DEPLOY_TOKEN }}
+          # 사용자가 등록한 시크릿 이름이 다를 수 있어 두 이름 중 있는 쪽을 쓴다
+          SHARE_DEPLOY_TOKEN: ${{ secrets.SHARE_DEPLOY_TOKEN || secrets.SHARE_DEPLOY_2_GS_RESEARCH_DESK }}
         run: |
           if [ -n "$SHARE_DEPLOY_TOKEN" ]; then echo "on=1" >> "$GITHUB_OUTPUT"
           else echo "on=0" >> "$GITHUB_OUTPUT"; echo "::warning::SHARE_DEPLOY_TOKEN 시크릿 없음 — 공유용 주소 배포 생략"; fi
@@ -131,7 +132,7 @@ jobs:
         continue-on-error: true
         uses: peaceiris/actions-gh-pages@v4
         with:
-          personal_token: ${{ secrets.SHARE_DEPLOY_TOKEN }}
+          personal_token: ${{ secrets.SHARE_DEPLOY_TOKEN || secrets.SHARE_DEPLOY_2_GS_RESEARCH_DESK }}
           external_repository: gs-research-desk/gs-research-desk.github.io
           publish_branch: main
           publish_dir: telegram_research_dashboard/_site

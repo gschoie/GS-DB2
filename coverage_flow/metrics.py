@@ -23,14 +23,17 @@ EXTREME_PCTL = 5       # 1년 하위/상위 5% 안이면 '극단'
 RSI_LO, RSI_HI = 30, 70
 
 # ── 슬롯 ────────────────────────────────────────────────────────
-# 10/19 사용자 요청으로 장중 3회(10:00·13:30·15:30) → 장 마감 후 16:00 하루 1회.
-# 하루 한 슬롯이라 수동 🔄 수집도 같은 슬롯에 붙는다(히스토리 파일명 공유 = 그날 최신본 유지).
-SLOTS = [("16:00", "24:00")]
+# 10/19 장중 3회 → 16:00 하루 1회 → 10/20 사용자 요청으로 **13:00(장중) + 16:00(장 마감 후)** 하루 2회.
+# 경계 14:30 — 그 전은 13:00 슬롯(장중 잠정), 그 후는 16:00 슬롯. 수동 🔄 수집도 시각으로 슬롯에 붙는다
+# (히스토리 파일명 공유 = 그 슬롯의 최신본 유지).
+SLOTS = [("13:00", "14:30"), ("16:00", "24:00")]
+SLOT_BOUNDARY = "14:30"
 
 
 def decide_slot(now=None):
-    """하루 한 슬롯 — 언제 돌아도 16:00 슬롯 소속."""
-    return "16:00"
+    """14:30 KST 전이면 13:00 슬롯, 아니면 16:00 슬롯."""
+    now = now or datetime.now(KST)
+    return "13:00" if now.strftime("%H:%M") < SLOT_BOUNDARY else "16:00"
 
 
 # ── 기술 지표 ────────────────────────────────────────────────────
@@ -166,6 +169,34 @@ def spark_points(ohlc, today, price_now=None, n=SPARK_DAYS):
 
 
 FLOW_WINDOWS = {"d5": 5, "m1": 21, "m3": 63}
+
+
+def apply_estimate(inv, today, est, price):
+    """장중 '오늘' 보정 — 한투 일별 투자자 API 는 장중엔 당일 행을 0 으로 내준다(10/19~20 실측:
+    11:00·13:35 전 종목 0, 15:35 에야 절반 채워짐). 추정가집계(est)가 있으면 오늘 행의
+    외국인·기관을 수량×현재가/1e8(억원, 근사)로 채우고 개인은 −(외국인+기관) 으로 둔다.
+    당일 행이 이미 0 이 아니면(마감 뒤 확정치 도착) 손대지 않는다. 반환 (inv, 적용 여부)."""
+    if inv is None or est is None or not price:
+        return inv, False
+    fq, oq = est.get("frgn_qty"), est.get("inst_qty")
+    if fq is None and oq is None:
+        return inv, False
+    scale = 1.0 / 100 if est.get("unit") == "amt" else price / 1e8   # 금액이면 백만원→억, 수량이면 ×현재가
+    frgn = round((fq or 0.0) * scale, 1)
+    inst = round((oq or 0.0) * scale, 1)
+    t = pd.Timestamp(today)
+    mask = inv["date"] == t
+    if mask.any():
+        row = inv.loc[mask].iloc[-1]
+        if any(abs(float(row[c])) > 0 for c in ("외국인", "기관", "개인")):
+            return inv, False                      # 확정(또는 소스 잠정)치가 이미 있다
+        inv = inv.copy()
+        inv.loc[mask, ["외국인", "기관", "개인"]] = [frgn, inst, round(-(frgn + inst), 1)]
+    else:
+        inv = pd.concat([inv, pd.DataFrame([{"date": t, "개인": round(-(frgn + inst), 1),
+                                              "외국인": frgn, "기관": inst}])], ignore_index=True)
+        inv = inv.sort_values("date").reset_index(drop=True)
+    return inv, True
 
 
 def flow_windows(inv, today):

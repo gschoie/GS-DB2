@@ -23,7 +23,12 @@ on:
         description: "종목별 수급 이력 길이 탐색만(KIS 행수·네이버 trend 응답 키, 저장·발송 없음)"
         type: boolean
         default: false
+      probe_estimate:
+        description: "종목별 외인기관 추정가집계 원본 응답 출력만(저장·발송 없음)"
+        type: boolean
+        default: false
   schedule:
+    - cron: "5 4 * * 1-5"     # 04:05 UTC = 13:05 KST (GAS 13:00 의 안전망)
     - cron: "5 7 * * 1-5"     # 07:05 UTC = 16:05 KST (GAS 16:00 의 안전망)
 
 permissions:
@@ -34,9 +39,10 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  # 24번 교훈: "이 슬롯이 이미 처리됐나"를 묻는다 — 이벤트를 가리지 않고 16:00 슬롯 창
-  # (15:30 KST 이후) 안의 성공·진행중 run 을 세되 자기 자신만 뺀다. GAS 가 정시에 쐈으면
-  # 밀린 크론은 스킵해 텔레가 두 번 가지 않는다. fail-open.
+  # 24번 교훈: "이 슬롯이 이미 처리됐나"를 묻는다 — 이벤트를 가리지 않고 현재 슬롯 창
+  # (13:00 슬롯은 12:30 KST~, 16:00 슬롯은 15:30 KST~; 경계 14:30 = metrics.SLOT_BOUNDARY)
+  # 안의 성공·진행중 run 을 세되 자기 자신만 뺀다. GAS 가 정시에 쐈으면 밀린 크론은 스킵해
+  # 텔레가 두 번 가지 않는다. fail-open.
   guard:
     runs-on: ubuntu-latest
     permissions: {actions: read}
@@ -49,8 +55,20 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          since=$(TZ=Asia/Seoul date -u -d "today 15:30" +%Y-%m-%dT%H:%M)
-          slot=1600; from="15:30"
+          hm=$(TZ=Asia/Seoul date +%H%M)
+          # 현재 시각으로 슬롯을 정한다(경계 14:30). 슬롯 정시 전에 도착한 밀린 크론은 버린다 —
+          # 정시는 GAS 시계가 쏜다. 13:05 크론이 몇 시간 밀려 14:30 을 넘기면 16:00 슬롯으로
+          # 읽혀 '정시 전' 으로 버려지고, 16:05 크론이 그 슬롯을 맡는다.
+          if [ "$hm" -lt 1430 ]; then slot=1300; from="12:30"; else slot=1600; from="15:30"; fi
+          if [ "$hm" -lt "$slot" ]; then
+            echo "::notice::정시(${slot}) 전 도착한 지연 크론 — 건너뜁니다"
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          # KST → UTC 변환. 'date -u -d "today 15:30"'은 -u가 TZ를 덮어써
+          # 15:30을 UTC로 읽는 버그(10/19 market-flow 재발송 사고와 동일 패턴).
+          d=$(TZ=Asia/Seoul date +%F)
+          since=$(date -u -d "TZ=\"Asia/Seoul\" $d $from" +%Y-%m-%dT%H:%M)
           n=$(gh api "repos/${{ github.repository }}/actions/workflows/coverage-flow.yml/runs?created=%3E${since}" \
                 --jq "[.workflow_runs[] | select(.id != ${{ github.run_id }}) \
                        | select(.conclusion==\"success\" or .status==\"in_progress\" or .status==\"queued\")] | length" || echo 0)
@@ -95,6 +113,9 @@ jobs:
           fi
           if [ "${{ inputs.probe_flow }}" = "true" ]; then
             python collect.py --probe-flow; echo "skipped=true" >> "$GITHUB_OUTPUT"; exit 0
+          fi
+          if [ "${{ inputs.probe_estimate }}" = "true" ]; then
+            python collect.py --probe-estimate; echo "skipped=true" >> "$GITHUB_OUTPUT"; exit 0
           fi
           python collect.py ${{ inputs.force_telegram && '--force' || '' }} | tee collect.log
           if grep -q "휴장일로 판단" collect.log; then echo "skipped=true" >> "$GITHUB_OUTPUT"; fi

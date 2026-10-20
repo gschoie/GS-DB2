@@ -18,16 +18,21 @@ OUT = Path(os.environ.get(
     HERE.parent / "telegram_research_dashboard" / "static" / "market_flow_report.html"))
 
 KST = dt.timezone(dt.timedelta(hours=9))
-SLOT_LABEL = {"1000": "10:00", "1300": "13:00",
+SLOT_LABEL = {"1100": "11:00", "1600": "16:00 마감",
+              # 종전 4회 체계(~10/20) — 과거 일자 history 표기용
+              "1000": "10:00", "1300": "13:00",
               "1540": "15:40 잠정", "1640": "16:40 확정"}
+SLOT_KEYS = ("1000", "1100", "1300", "1540", "1600", "1640")   # 시간순
 WD = "월화수목금토일"
 MAX_DAYS = 30  # 네비게이션으로 볼 수 있는 과거 일수(페이지 용량 상한)
-# 슬롯 표기. .github/workflows/market-flow.yml 의 cron 4개와 맞출 것.
-# scrape.decide_slot() 이 실행 시각을 구간으로 나눠 슬롯을 배정하므로(16:10 이전이면 1540)
-# 실제 수집 시각이 예약보다 이를 수도 있다 — '15:40 → 14:40' 처럼 보이는 게 정상.
-SCHEDULE_TIME = "평일 하루 4회"
-SLOT_SCHED = {"1000": ("1차", "10:00"), "1300": ("2차", "13:00"),
-              "1540": ("3차", "15:40"), "1640": ("4차", "16:40")}
+# 슬롯 표기. .github/workflows/market-flow.yml 의 cron·GAS 시계와 맞출 것.
+# scrape.decide_slot() 이 실행 시각을 구간으로 나눠 슬롯을 배정하므로
+# 실제 수집 시각이 예약보다 이를 수도 있다 — '16:00 → 15:50' 처럼 보이는 게 정상.
+SCHEDULE_TIME = "평일 하루 2회"
+SLOT_SCHED = {"1100": ("1차", "11:00"), "1600": ("2차", "16:00")}
+# 10/20 이전 과거 일자는 종전 4회 체계로 배지를 그린다
+SLOT_SCHED_OLD = {"1000": ("1차", "10:00"), "1300": ("2차", "13:00"),
+                  "1540": ("3차", "15:40"), "1640": ("4차", "16:40")}
 
 
 def sched_badge(slots):
@@ -37,13 +42,18 @@ def sched_badge(slots):
     얼마나 밀렸는지 알 수 없다. 각 슬롯의 time 필드(스크랩 시각)를 그대로 쓰고,
     아직 돌지 않은 차수는 '—'로 흐리게 둔다.
     """
+    # 그 날이 어느 체계였는지는 슬롯 키로 판단 — 새 키가 하나도 없고 옛 키가 있으면 옛 표
+    sched = SLOT_SCHED
+    if slots and not any(k in slots for k in SLOT_SCHED) \
+            and any(k in slots for k in SLOT_SCHED_OLD):
+        sched = SLOT_SCHED_OLD
     cells = []
-    for k, (nth, sched) in SLOT_SCHED.items():
+    for k, (nth, s_at) in sched.items():
         got = (slots.get(k) or {}).get("time") if slots else None
-        tip = f"예약 {sched} · 실제 수집 {got or '아직 없음'}"
+        tip = f"예약 {s_at} · 실제 수집 {got or '아직 없음'}"
         val = f"<b>{got}</b>" if got else "—"
         cells.append(f'<span class="slotpair{"" if got else " off"}" title="{tip}">'
-                     f'{nth} {sched} → {val}</span>')
+                     f'{nth} {s_at} → {val}</span>')
     return (f'<span class="sched">🕙 정기 업데이트 <b>{SCHEDULE_TIME}</b>(한국시간) · 예약 → 실제 갱신'
             f'<span class="slots">{"".join(cells)}</span>'
             f'<span class="schedq">대기열 지연으로 예약보다 늦을 수 있음</span></span>')
@@ -234,7 +244,7 @@ def stock_flow_block(today, is_latest):
 def basis_snapshot(day):
     """당일 베이시스 스냅샷 (최근 슬롯 우선, 없으면 일별 확정).
     반환: (값dict, 출처라벨) 또는 (None, None)"""
-    for k in ("1640", "1540", "1300", "1000"):
+    for k in reversed(SLOT_KEYS):
         b = (day.get("slots", {}).get(k) or {}).get("basis")
         if b:
             return b, SLOT_LABEL[k]
@@ -393,7 +403,7 @@ def build_signals(today, prev_slot_snap, basis=None, basis_src=""):
     slots = today.get("slots", {})
     latest = None
     need = ("foreign", "individual", "institution", "arb", "nonarb", "program")
-    for s in ("1640", "1540", "1300", "1000"):
+    for s in reversed(SLOT_KEYS):
         # 수집이 중간에 끊겨 값이 덜 찬 슬롯은 건너뛴다(해석보다 다음 슬롯이 낫다).
         if all(slots.get(s, {}).get(k) is not None for k in need):
             latest = slots[s]
@@ -445,7 +455,7 @@ def render_day(hist, all_dates, i):
     t_date = dt.date.fromisoformat(dkey)
     kospi = today.get("kospi", {})
     slots = today.get("slots", {})
-    slot_keys = [k for k in ("1000", "1300", "1540", "1640") if k in slots]
+    slot_keys = [k for k in SLOT_KEYS if k in slots]
 
     # ── 스냅샷 표 ──
     conf = today.get("confirmed", {})
@@ -717,7 +727,7 @@ h1{{background:none;-webkit-background-clip:unset;background-clip:unset;color:in
 <div id="day"></div>
 
 <footer>데이터: NAVER 증권(투자자별·프로그램·K200선물 매매동향) · 장중 수치는 거래소 잠정치로 확정치와 다를 수 있음
- · 하루 4회 자동 갱신(10:00 / 13:00 / 15:40 / 16:40 KST) · 과거 {len(nav_dates)}영업일 조회 가능 · GS Research Desk</footer>
+ · 하루 2회 자동 갱신(11:00 / 16:00 KST) · 과거 {len(nav_dates)}영업일 조회 가능 · GS Research Desk</footer>
 </div>
 <script>
 var PAGES = {pages_json};

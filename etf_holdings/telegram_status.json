@@ -1,5 +1,5 @@
 {
-  "when_utc": "2026-10-19 00:20:57Z",
+  "when_utc": "2026-10-20 00:20:45Z",
   "ok": true,
   "note": "change_sent",
   "chat_id_tail": "5171",
@@ -7,7 +7,7 @@
   "response": {
     "ok": true,
     "result": {
-      "message_id": 670,
+      "message_id": 683,
       "from": {
         "id": 8875725998,
         "is_bot": true,
@@ -21,8 +21,8 @@
         "username": "gschoie",
         "type": "private"
       },
-      "date": 1792369257,
-      "text": "🧩 액티브 ETF 구성 변화 · 감지 2026-10-19 09:20 (직전 거래일 매매)\n\n변화 ETF 9개 · 진입 12·이탈 12·실매매 9\n\n🟢 TIME 미국S&P500액티브 · TIME(구 TIMEFOLIO)\n   ⊕ 진입: VERIZON COMMUNICATIONS INC, AT&T INC, SS CONSUMER STAPLES SEL SECT\n   ⊖ 이탈: MICROSOFT CORP, WALMART INC, ROBINHOOD MARKETS INC - A\n   ▲ APPLE INC 계약수 +31%\n🟢 TIME K컬처액티브 · TIME(구 TIMEFOLIO)\n   ⊕ 진입: 올릭스, 시프트업\n   ⊖ 이탈: 서부T&D, NC\n   ▽ SAMG엔터 계약수 −23% · 비중 −1.1%p\n🟢 TIME 미국나스닥100액티브 · TIME(구 TIMEFOLIO)\n   ⊕ 진입: APPLIED OPTOELECTRONICS INC, APPLE INC\n   ⊖ 이탈: MARVELL TECHNOLOGY INC, COREWEAVE INC-CL A\n🟢 KoAct 글로벌AI&로봇액티브 · KoAct\n   ⊕ 진입: 티엘비\n   ⊖ 이탈: 삼성전기\n   ▲ 삼성전자 계약수 +267%\n   ▲ KODEX 차이나AI반도체TOP10 계약수 +267%\n🟢 TIME 코스피액티브 · TIME(구 TIMEFOLIO)\n   ⊕ 진입: 삼양식품\n   ⊖ 이탈: 코스맥스\n   ▽ 삼성전기 계약수 −40% · 비중 −1.4%p\n🟢 TIME 코스닥액티브 · TIME(구 TIMEFOLIO)\n   ⊕ 진입: 로보티즈\n   ⊖ 이탈: 두산테스나\n🟢 KoAct 코스닥액티브 · KoAct\n   ⊕ 진입: 선익시스템\n   ⊖ 이탈: HPSP\n🟢 KoAct 바이오헬스케어액티브 · KoAct\n   ⊕ 진입: 녹십자\n   ⊖ 이탈: 파마리서치\n🟢 TIME K바이오액티브 · TIME(구 TIMEFOLIO)\n   ▲ 삼성바이오로직스 계약수 +50% · 비중 +2.8%p\n   ▽ 올릭스 계약수 −31% · 비중 −2.9%p\n   ▲ 셀트리온 계약수 +16% · 비중 +2.4%p\n   ▽ 알테오젠 계약수 −8% · 비중 −1.4%p\n\n전체 상세 › 대시보드\n🎴 GS Research Desk · 액티브 ETF 트래커",
+      "date": 1792455645,
+      "text": "🧩 액티브 ETF 구성 변화 · 감지 2026-10-20 09:20 (직전 거래일 매매)\n\n변화 ETF 6개 · 진입 4·이탈 4·실매매 8\n\n🟢 KoAct 배당성장액티브 · KoAct\n   ⊕ 진입: LX인터내셔널\n   ⊖ 이탈: SK텔레콤\n   ▲ KB금융 계약수 +101% · 비중 +1.4%p\n   ▽ 삼성전기 계약수 −32% · 비중 −0.9%p\n🟢 TIGER 퓨처모빌리티액티브 · TIGER\n   ⊕ 진입: 현대모비스\n   ⊖ 이탈: 포스코퓨처엠\n   ▲ 이수페타시스 계약수 +85% · 비중 +2.9%p\n🟢 TIME K컬처액티브 · TIME(구 TIMEFOLIO)\n   ⊕ 진입: 휴젤\n   ⊖ 이탈: 엘앤씨바이오\n🟢 KoAct 바이오헬스케어액티브 · KoAct\n   ⊕ 진입: 알지노믹스\n   ⊖ 이탈: 녹십자\n🟢 TIME Korea플러스배당액티브 · TIME(구 TIMEFOLIO)\n   ▽ 삼성전자 계약수 −33% · 비중 −3.8%p\n   ▲ JB금융지주 계약수 +40% · 비중 +1.2%p\n   ▲ 한국금융지주 계약수 +35% · 비중 +1.1%p\n   ▽ SK하이닉스 계약수 −15% · 비중 −1.1%p\n🟢 TIME 글로벌AI인공지능액티브 · TIME(구 TIMEFOLIO)\n   ▲ FUJITSU LIMITED 계약수 +114%\n\n전체 상세 › 대시보드\n🎴 GS Research Desk · 액티브 ETF 트래커",
       "entities": [
         {
           "offset": 0,
@@ -40,52 +40,37 @@
           "type": "bold"
         },
         {
-          "offset": 86,
-          "length": 16,
+          "offset": 84,
+          "length": 13,
           "type": "bold"
         },
         {
-          "offset": 290,
+          "offset": 204,
+          "length": 15,
+          "type": "bold"
+        },
+        {
+          "offset": 295,
           "length": 11,
           "type": "bold"
         },
         {
-          "offset": 396,
+          "offset": 358,
           "length": 16,
           "type": "bold"
         },
         {
-          "offset": 536,
+          "offset": 414,
+          "length": 18,
+          "type": "bold"
+        },
+        {
+          "offset": 586,
           "length": 17,
           "type": "bold"
         },
         {
-          "offset": 647,
-          "length": 11,
-          "type": "bold"
-        },
-        {
-          "offset": 741,
-          "length": 11,
-          "type": "bold"
-        },
-        {
-          "offset": 805,
-          "length": 12,
-          "type": "bold"
-        },
-        {
-          "offset": 858,
-          "length": 16,
-          "type": "bold"
-        },
-        {
-          "offset": 914,
-          "length": 12,
-          "type": "bold"
-        },
-        {
-          "offset": 1082,
+          "offset": 664,
           "length": 4,
           "type": "text_link",
           "url": "https://gschoie.github.io/GS-DB2/etf_holdings_report.html"

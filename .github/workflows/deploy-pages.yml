@@ -7,7 +7,7 @@ on:
   # 봇(GITHUB_TOKEN)이 스냅샷을 push하면 on:push가 안 걸리므로(무한루프 방지 정책),
   # 컨센 워크플로 완료 이벤트로 배포를 잇는다. workflow_run은 토큰 제약을 우회한다.
   workflow_run:
-    workflows: ["KOSPI200 컨센 트래킹", "시장 수급 동향", "시장관심 내러티브", "글로벌 방산 브리핑", "글로벌 방산 주간정리", "글로벌 건설기계 브리핑", "글로벌 건설기계 주간정리", "친환경 에너지 브리핑", "유튜브 3일 모음", "휴가 일정 추적", "ETF 섹터 신호", "Claude 방산 브리핑 수집", "ChatGPT 방산 브리핑", "건설기계 GPT 브리핑", "밸류에이션 PER·PBR·ROE·PSR", "매크로 데스크", "커버리지 수급·기술지표"]
+    workflows: ["KOSPI200 컨센 트래킹", "시장 수급 동향", "시장관심 내러티브", "글로벌 방산 브리핑", "글로벌 방산 주간정리", "글로벌 건설기계 브리핑", "글로벌 건설기계 주간정리", "친환경 에너지 브리핑", "유튜브 3일 모음", "휴가 일정 추적", "ETF 섹터 신호", "Claude 방산 브리핑 수집", "ChatGPT 방산 브리핑", "건설기계 GPT 브리핑", "밸류에이션 PER·PBR·ROE·PSR", "매크로 데스크", "커버리지 수급·기술지표", "DART 생산능력·가동률"]
     types: [completed]
   schedule:
     # 한국시간 06·09·12·15·18·21·24시 (3시간 간격, 하루 7회) 자동 갱신.
@@ -204,7 +204,8 @@ jobs:
       - name: 공유용 주소 토큰 확인
         id: share
         env:
-          SHARE_DEPLOY_TOKEN: ${{ secrets.SHARE_DEPLOY_TOKEN }}
+          # 사용자가 등록한 시크릿 이름이 다를 수 있어 두 이름 중 있는 쪽을 쓴다
+          SHARE_DEPLOY_TOKEN: ${{ secrets.SHARE_DEPLOY_TOKEN || secrets.SHARE_DEPLOY_2_GS_RESEARCH_DESK }}
         run: |
           if [ -n "$SHARE_DEPLOY_TOKEN" ]; then echo "on=1" >> "$GITHUB_OUTPUT"
           else echo "on=0" >> "$GITHUB_OUTPUT"; echo "::warning::SHARE_DEPLOY_TOKEN 시크릿 없음 — 공유용 주소 배포 생략"; fi
@@ -213,7 +214,7 @@ jobs:
         continue-on-error: true
         uses: peaceiris/actions-gh-pages@v4
         with:
-          personal_token: ${{ secrets.SHARE_DEPLOY_TOKEN }}
+          personal_token: ${{ secrets.SHARE_DEPLOY_TOKEN || secrets.SHARE_DEPLOY_2_GS_RESEARCH_DESK }}
           external_repository: gs-research-desk/gs-research-desk.github.io
           publish_branch: main
           publish_dir: telegram_research_dashboard/_site

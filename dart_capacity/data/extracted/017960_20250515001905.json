@@ -1,0 +1,380 @@
+{
+ "meta": {
+  "company": "한국카본",
+  "sector": "조기",
+  "stock_code": "017960",
+  "corp_code": "00159795",
+  "rcept_no": "20250515001905",
+  "rcept_dt": "20250515",
+  "report_nm": "분기보고서 (2025.03)",
+  "report_type": "quarter",
+  "period": "2025-03",
+  "period_label": "2025.03 1Q",
+  "corrected": false,
+  "dart_url": "https://dart.fss.or.kr/dsaf001/main.do?rcpNo=20250515001905"
+ },
+ "tables": [
+  {
+   "section": [
+    "1. 사업의 개요",
+    "2. 주요 제품 및 서비스",
+    "3. 원재료 및 생산설비"
+   ],
+   "headings": [
+    "(2) 주요 가격변동원인",
+    "다. 생산능력, 생산실적, 가동률",
+    "(1) 생산능력"
+   ],
+   "context": [
+    "(2) 주요 가격변동원인",
+    "동사의 원재료중 카본원사, WOOD가 높은 비중을 차지하고, 구매처의 다각화로 원사의 가격을 인하토록 유도하고 있음. 또한 안정적인 물량을 확보중이며 당사는 USD,유로화로 결재하는 조건으로 계약이 되어있어 환율의 변동에 따라 가격이 변동됨.",
+    "다. 생산능력, 생산실적, 가동률",
+    "(1) 생산능력",
+    "( 단위 : 천㎡, 천장, 천개 )"
+   ],
+   "unit": "( 단위 : 천㎡, 천장, 천개 )",
+   "keywords": [
+    "생산능력"
+   ],
+   "keyword_in": "heading",
+   "rows": [
+    [
+     "사업부문",
+     "품 목",
+     "사업소",
+     "제42기 1분기",
+     "제41기",
+     "제40기"
+    ],
+    [
+     "일반재 및 산업재",
+     "카본",
+     "함양",
+     "15,600",
+     "31,577",
+     "23,288"
+    ],
+    [
+     "절연물외",
+     "밀양",
+     "524,475",
+     "1,515,396",
+     "307,100"
+    ],
+    [
+     "GP,NP",
+     "밀양,보은",
+     "593,448",
+     "2,395,659",
+     "1,996,360"
+    ],
+    [
+     "SB",
+     "밀양",
+     "45,656",
+     "129,432",
+     "81,492"
+    ],
+    [
+     "IP",
+     "밀양",
+     "20,358",
+     "55,488",
+     "30,930"
+    ],
+    [
+     "폼",
+     "밀양",
+     "6,942",
+     "21,507",
+     "15,861"
+    ],
+    [
+     "합 계",
+     "1,206,479",
+     "4,149,059",
+     "2,455,030"
+    ]
+   ],
+   "html": "<table aclass=\"NORMAL\" afixtable=\"N\" border=\"1\" width=\"620\">\n<colgroup width=\"620\">\n<col width=\"83\"/>\n<col width=\"78\"/>\n<col width=\"83\"/>\n<col width=\"136\"/>\n<col width=\"136\"/>\n<col width=\"104\"/>\n</colgroup>\n<thead align=\"LEFT\" valign=\"TOP\">\n<tr acopy=\"Y\" adelete=\"Y\" height=\"30\">\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"23\" valign=\"MIDDLE\" width=\"74\">사업부문</th>\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"23\" valign=\"MIDDLE\" width=\"69\">품 목</th>\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"23\" valign=\"MIDDLE\" width=\"74\">사업소</th>\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"23\" valign=\"MIDDLE\" width=\"127\">제42기 1분기</th>\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"23\" valign=\"MIDDLE\" width=\"127\">제41기</th>\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"23\" valign=\"MIDDLE\" width=\"95\">제40기</th>\n</tr>\n</thead>\n<tbody>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"30\">\n<td align=\"CENTER\" height=\"173\" rowspan=\"6\" valign=\"MIDDLE\" width=\"74\">일반재 및 산업재</td>\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"69\">카본</td>\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"74\">함양</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"127\">             15,600 </td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"127\">         31,577 </td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"95\">      23,288 </td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"30\">\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"69\">절연물외</td>\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"74\">밀양</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"127\">            524,475 </td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"127\">         1,515,396 </td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"95\">   307,100 </td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"30\">\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"69\">GP,NP</td>\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"74\">밀양,보은</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"127\">            593,448 </td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"127\">         2,395,659 </td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"95\">   1,996,360 </td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"30\">\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"69\">SB</td>\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"74\">밀양</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"127\">             45,656 </td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"127\">            129,432 </td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"95\">     81,492 </td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"30\">\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"69\">IP</td>\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"74\">밀양</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"127\">             20,358 </td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"127\">             55,488 </td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"95\">     30,930 </td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"30\">\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"69\">폼</td>\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"74\">밀양</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"127\">               6,942 </td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"127\">             21,507 </td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"95\">     15,861 </td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"30\">\n<td align=\"CENTER\" colspan=\"3\" height=\"23\" valign=\"MIDDLE\" width=\"235\">합  계</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"127\">         1,206,479 </td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"127\">         4,149,059 </td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"95\"> 2,455,030 </td>\n</tr>\n</tbody>\n</table>",
+   "footnotes": [],
+   "digest": "599378bd151a",
+   "file": "20250515001905.xml"
+  },
+  {
+   "section": [
+    "1. 사업의 개요",
+    "2. 주요 제품 및 서비스",
+    "3. 원재료 및 생산설비"
+   ],
+   "headings": [
+    "* 제조부문의 품목이 상이하므로 별도 산정함(3) 생산실적 및 가동률(가) 생산실적"
+   ],
+   "context": [
+    "* 제조부문의 품목이 상이하므로 별도 산정함(3) 생산실적 및 가동률(가) 생산실적",
+    "(단위 : 천㎡, 천㎥, 천장, 천개 )"
+   ],
+   "unit": "(단위 : 천㎡, 천㎥, 천장, 천개 )",
+   "keywords": [
+    "가동률",
+    "생산실적"
+   ],
+   "keyword_in": "heading",
+   "rows": [
+    [
+     "사업부문",
+     "사업소",
+     "품 목",
+     "제42기 1분기",
+     "제41기",
+     "제40기"
+    ],
+    [
+     "일반재 및 산업재",
+     "함양",
+     "CU",
+     "108",
+     "427",
+     "753"
+    ],
+    [
+     "함양",
+     "MCU",
+     "35",
+     "61",
+     "145"
+    ],
+    [
+     "함양",
+     "40LHCU",
+     "17",
+     "64",
+     "31"
+    ],
+    [
+     "밀양",
+     "R/T(2430)",
+     "120",
+     "340",
+     "365"
+    ],
+    [
+     "밀양",
+     "R/T(3050)",
+     "436",
+     "922",
+     "913"
+    ],
+    [
+     "밀양,보은",
+     "A/G",
+     "7,369",
+     "21,295",
+     "27,009"
+    ],
+    [
+     "밀양,보은",
+     "G/P",
+     "11,408",
+     "61,887",
+     "65,543"
+    ],
+    [
+     "밀양",
+     "F P",
+     "58",
+     "134",
+     "120"
+    ],
+    [
+     "밀양",
+     "C P",
+     "381",
+     "38",
+     "12"
+    ],
+    [
+     "밀양",
+     "B P",
+     "-",
+     "612",
+     "317"
+    ],
+    [
+     "밀양",
+     "R/F",
+     "265",
+     "243",
+     "152"
+    ],
+    [
+     "밀양,함양",
+     "기 타",
+     "28,915",
+     "15,272",
+     "2,198"
+    ],
+    [
+     "합 계",
+     "49,112",
+     "101,295",
+     "97,558"
+    ]
+   ],
+   "html": "<table aclass=\"NORMAL\" afixtable=\"N\" border=\"1\" width=\"687\">\n<colgroup width=\"687\">\n<col width=\"88\"/>\n<col width=\"93\"/>\n<col width=\"96\"/>\n<col width=\"136\"/>\n<col width=\"137\"/>\n<col width=\"137\"/>\n</colgroup>\n<thead align=\"LEFT\" valign=\"TOP\">\n<tr acopy=\"Y\" adelete=\"Y\" height=\"30\">\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"23\" valign=\"MIDDLE\" width=\"79\"> 사업부문 </th>\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"23\" valign=\"MIDDLE\" width=\"84\"> 사업소 </th>\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"23\" valign=\"MIDDLE\" width=\"87\"> 품  목 </th>\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"23\" valign=\"MIDDLE\" width=\"127\"> 제42기 1분기 </th>\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"23\" valign=\"MIDDLE\" width=\"128\"> 제41기 </th>\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"23\" valign=\"MIDDLE\" width=\"128\"> 제40기 </th>\n</tr>\n</thead>\n<tbody>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"30\">\n<td align=\"CENTER\" height=\"353\" rowspan=\"12\" valign=\"MIDDLE\" width=\"79\"> 일반재 및 산업재 </td>\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"84\"> 함양 </td>\n<td height=\"23\" valign=\"MIDDLE\" width=\"87\"> CU  </td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"127\">                 108 </td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"128\">                  427 </td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"128\">                  753 </td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"30\">\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"84\"> 함양 </td>\n<td height=\"23\" valign=\"MIDDLE\" width=\"87\"> MCU  </td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"127\">                   35 </td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"128\">                   61 </td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"128\">                  145 </td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"30\">\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"84\"> 함양 </td>\n<td height=\"23\" valign=\"MIDDLE\" width=\"87\"> 40LHCU </td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"127\">                   17 </td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"128\">                   64 </td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"128\">                   31 </td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"30\">\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"84\"> 밀양 </td>\n<td height=\"23\" valign=\"MIDDLE\" width=\"87\"> R/T(2430) </td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"127\">                 120 </td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"128\">                  340 </td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"128\">                  365 </td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"30\">\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"84\"> 밀양 </td>\n<td height=\"23\" valign=\"MIDDLE\" width=\"87\"> R/T(3050) </td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"127\">                 436 </td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"128\">                  922 </td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"128\">                  913 </td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"30\">\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"84\"> 밀양,보은 </td>\n<td height=\"23\" valign=\"MIDDLE\" width=\"87\"> A/G </td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"127\">               7,369 </td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"128\">             21,295 </td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"128\">             27,009 </td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"30\">\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"84\"> 밀양,보은 </td>\n<td height=\"23\" valign=\"MIDDLE\" width=\"87\"> G/P </td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"127\">             11,408 </td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"128\">             61,887 </td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"128\">             65,543 </td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"30\">\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"84\"> 밀양 </td>\n<td height=\"23\" valign=\"MIDDLE\" width=\"87\"> F P </td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"127\">                   58 </td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"128\">                  134 </td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"128\">                  120 </td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"30\">\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"84\"> 밀양 </td>\n<td height=\"23\" valign=\"MIDDLE\" width=\"87\"> C P </td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"127\">                 381 </td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"128\">                   38 </td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"128\">                   12 </td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"30\">\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"84\"> 밀양 </td>\n<td height=\"23\" valign=\"MIDDLE\" width=\"87\"> B P </td>\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"127\">- </td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"128\">                  612 </td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"128\">                  317 </td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"30\">\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"84\"> 밀양 </td>\n<td height=\"23\" valign=\"MIDDLE\" width=\"87\"> R/F </td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"127\">                 265 </td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"128\">                  243 </td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"128\">                  152 </td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"30\">\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"84\"> 밀양,함양 </td>\n<td height=\"23\" valign=\"MIDDLE\" width=\"87\"> 기 타 </td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"127\">             28,915 </td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"128\">             15,272 </td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"128\">               2,198 </td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"30\">\n<td align=\"CENTER\" colspan=\"3\" height=\"23\" valign=\"MIDDLE\" width=\"268\">합     계</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"127\">             49,112 </td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"128\">            101,295 </td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"128\">             97,558 </td>\n</tr>\n</tbody>\n</table>",
+   "footnotes": [],
+   "digest": "b7dd38af2caf",
+   "file": "20250515001905.xml"
+  },
+  {
+   "section": [
+    "1. 사업의 개요",
+    "2. 주요 제품 및 서비스",
+    "3. 원재료 및 생산설비"
+   ],
+   "headings": [
+    "(나) 당해 사업연도의 가동률"
+   ],
+   "context": [
+    "(나) 당해 사업연도의 가동률",
+    "(2025년 1분기) (단위 : 시간, % )"
+   ],
+   "unit": "(2025년 1분기) (단위 : 시간, % )",
+   "keywords": [
+    "가동률"
+   ],
+   "keyword_in": "table",
+   "rows": [
+    [
+     "사업소(부문)",
+     "품목",
+     "당기가동가능시간",
+     "당기실제가동시간",
+     "평균가동률"
+    ],
+    [
+     "함양(일반재)",
+     "카본",
+     "7,488",
+     "6,365",
+     "85%"
+    ],
+    [
+     "밀양(산업재)",
+     "절연물",
+     "6,000",
+     "3,000",
+     "50%"
+    ],
+    [
+     "밀양(산업재)",
+     "GP",
+     "7,200",
+     "6,850",
+     "95%"
+    ],
+    [
+     "보은(산업재)",
+     "NP",
+     "6,624",
+     "6,300",
+     "95%"
+    ],
+    [
+     "밀양(산업재)",
+     "SB",
+     "7,488",
+     "7,200",
+     "96%"
+    ],
+    [
+     "밀양(산업재)",
+     "IP",
+     "7,488",
+     "7,200",
+     "96%"
+    ],
+    [
+     "밀양(산업재)",
+     "FOAM",
+     "7,488",
+     "7,200",
+     "96%"
+    ],
+    [
+     "합 계",
+     "49,776",
+     "44,115",
+     ""
+    ]
+   ],
+   "html": "<table aclass=\"NORMAL\" afixtable=\"N\" border=\"1\" width=\"572\">\n<colgroup width=\"572\">\n<col width=\"115\"/>\n<col width=\"73\"/>\n<col width=\"143\"/>\n<col width=\"143\"/>\n<col width=\"98\"/>\n</colgroup>\n<thead align=\"LEFT\" valign=\"TOP\">\n<tr acopy=\"Y\" adelete=\"Y\" height=\"30\">\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"23\" valign=\"MIDDLE\" width=\"106\"> 사업소(부문) </th>\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"23\" valign=\"MIDDLE\" width=\"64\"> 품목 </th>\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"23\" valign=\"MIDDLE\" width=\"134\"> 당기가동가능시간 </th>\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"23\" valign=\"MIDDLE\" width=\"134\"> 당기실제가동시간 </th>\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"23\" valign=\"MIDDLE\" width=\"89\"> 평균가동률 </th>\n</tr>\n</thead>\n<tbody>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"30\">\n<td height=\"23\" valign=\"MIDDLE\" width=\"106\"> 함양(일반재) </td>\n<td height=\"23\" valign=\"MIDDLE\" width=\"64\"> 카본 </td>\n<td height=\"23\" valign=\"MIDDLE\" width=\"134\">               7,488 </td>\n<td height=\"23\" valign=\"MIDDLE\" width=\"134\">               6,365 </td>\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"89\">85%</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"30\">\n<td height=\"23\" valign=\"MIDDLE\" width=\"106\"> 밀양(산업재) </td>\n<td height=\"23\" valign=\"MIDDLE\" width=\"64\"> 절연물 </td>\n<td height=\"23\" valign=\"MIDDLE\" width=\"134\">               6,000 </td>\n<td height=\"23\" valign=\"MIDDLE\" width=\"134\">               3,000 </td>\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"89\">50%</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"30\">\n<td height=\"23\" valign=\"MIDDLE\" width=\"106\"> 밀양(산업재) </td>\n<td height=\"23\" valign=\"MIDDLE\" width=\"64\"> GP </td>\n<td height=\"23\" valign=\"MIDDLE\" width=\"134\">               7,200 </td>\n<td height=\"23\" valign=\"MIDDLE\" width=\"134\">               6,850 </td>\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"89\">95%</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"30\">\n<td height=\"23\" valign=\"MIDDLE\" width=\"106\"> 보은(산업재) </td>\n<td height=\"23\" valign=\"MIDDLE\" width=\"64\"> NP </td>\n<td height=\"23\" valign=\"MIDDLE\" width=\"134\">               6,624 </td>\n<td height=\"23\" valign=\"MIDDLE\" width=\"134\">               6,300 </td>\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"89\">95%</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"30\">\n<td height=\"23\" valign=\"MIDDLE\" width=\"106\"> 밀양(산업재) </td>\n<td height=\"23\" valign=\"MIDDLE\" width=\"64\"> SB </td>\n<td height=\"23\" valign=\"MIDDLE\" width=\"134\">               7,488 </td>\n<td height=\"23\" valign=\"MIDDLE\" width=\"134\">               7,200 </td>\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"89\">96%</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"30\">\n<td height=\"23\" valign=\"MIDDLE\" width=\"106\"> 밀양(산업재) </td>\n<td height=\"23\" valign=\"MIDDLE\" width=\"64\"> IP </td>\n<td height=\"23\" valign=\"MIDDLE\" width=\"134\">               7,488 </td>\n<td height=\"23\" valign=\"MIDDLE\" width=\"134\">               7,200 </td>\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"89\">96%</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"30\">\n<td height=\"23\" valign=\"MIDDLE\" width=\"106\"> 밀양(산업재) </td>\n<td height=\"23\" valign=\"MIDDLE\" width=\"64\"> FOAM </td>\n<td height=\"23\" valign=\"MIDDLE\" width=\"134\">               7,488 </td>\n<td height=\"23\" valign=\"MIDDLE\" width=\"134\">               7,200 </td>\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"89\">96%</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"30\">\n<td align=\"CENTER\" colspan=\"2\" height=\"23\" valign=\"MIDDLE\" width=\"179\">합     계</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"134\">49,776 </td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"134\">44,115 </td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"89\">　</td>\n</tr>\n</tbody>\n</table>",
+   "footnotes": [],
+   "digest": "0fbb4579df8d",
+   "file": "20250515001905.xml"
+  }
+ ],
+ "rejected": [
+  {
+   "section": [
+    "1. 사업의 개요",
+    "2. 주요 제품 및 서비스",
+    "3. 원재료 및 생산설비"
+   ],
+   "headings": [
+    "(2) 생산능력의 산출근거",
+    "(가) 산출방법 등",
+    "① 산출기준",
+    "② 산출방법",
+    "월평균근무일수 * 월평균생산량 * 근무월수(3개월)",
+    "(나) 평균가동시간"
+   ],
+   "context": [
+    "(2) 생산능력의 산출근거",
+    "(가) 산출방법 등",
+    "① 산출기준",
+    "각 사업부의 주요품목 생산을 기준으로 주요생산설비의 생산량으로 산정함",
+    "② 산출방법",
+    "월평균근무일수 * 월평균생산량 * 근무월수(3개월)",
+    "(나) 평균가동시간",
+    "(2025년 1분기) (단위 : 일,시간 )"
+   ],
+   "unit": "(2025년 1분기) (단위 : 일,시간 )",
+   "keywords": [
+    "생산능력"
+   ],
+   "keyword_in": "",
+   "rows": [
+    [
+     "사업부문",
+     "사업소",
+     "1일평균가동시간",
+     "월평균가동일수",
+     "연간가동일수",
+     "연간가동시간"
+    ],
+    [
+     "일반재",
+     "함양",
+     "24",
+     "26",
+     "312",
+     "7,488"
+    ],
+    [
+     "산업재(절연)",
+     "밀양",
+     "20",
+     "25",
+     "300",
+     "6,000"
+    ]
+   ],
+   "html": "",
+   "footnotes": [],
+   "digest": "16a9d88ea98e",
+   "why": "셀 전체가 지표명이 아니거나 멀리 있는 문장에만 키워드",
+   "file": "20250515001905.xml"
+  }
+ ]
+}

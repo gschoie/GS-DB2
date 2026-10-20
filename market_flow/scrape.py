@@ -32,6 +32,7 @@ import io
 import json
 import os
 import re
+import time
 import zipfile
 import datetime as dt
 from pathlib import Path
@@ -236,8 +237,10 @@ FO_MASTER = "https://new.real.download.dws.co.kr/common/master/fo_idx_code_mts.m
 _KIS_TOKEN = None
 
 
-def kis_token():
-    """접근토큰 1회 발급 후 재사용. 키가 없으면 빈 문자열(호출부가 섹션만 생략)."""
+def kis_token(tries=5, wait=20):
+    """접근토큰 1회 발급 후 재사용. 키가 없으면 빈 문자열(호출부가 섹션만 생략).
+    한투는 토큰 발급을 분당 1회로 제한 — 같은 앱키를 쓰는 다른 잡(covflow 16:00 등)과
+    같은 분에 시작하면 403 이 온다 → 분 경계를 넘겨 기다렸다 다시 받는다(coverage_flow와 동일)."""
     global _KIS_TOKEN
     if _KIS_TOKEN is not None:
         return _KIS_TOKEN
@@ -245,11 +248,15 @@ def kis_token():
     if not key or not sec:
         _KIS_TOKEN = ""
         return _KIS_TOKEN
-    r = SESSION.post(f"{KIS_BASE}/oauth2/tokenP", timeout=15, json={
-        "grant_type": "client_credentials", "appkey": key, "appsecret": sec})
-    r.raise_for_status()
-    _KIS_TOKEN = r.json()["access_token"]
-    return _KIS_TOKEN
+    for i in range(tries):
+        r = SESSION.post(f"{KIS_BASE}/oauth2/tokenP", timeout=15, json={
+            "grant_type": "client_credentials", "appkey": key, "appsecret": sec})
+        if r.status_code == 403 and i < tries - 1:
+            time.sleep(wait)
+            continue
+        r.raise_for_status()
+        _KIS_TOKEN = r.json()["access_token"]
+        return _KIS_TOKEN
 
 
 def kis_get(path, tr_id, params):
@@ -460,15 +467,12 @@ def curve_from_slots(day, kind):
     return sorted(out, key=lambda r: r[0])
 
 def decide_slot(t):
-    """실행 시각(KST) → 슬롯. 크론 지연(수십 분)을 감안해 넉넉한 경계."""
+    """실행 시각(KST) → 슬롯. 하루 2회(11:00 / 16:00), 크론 지연을 감안해 넉넉한 경계.
+    (10/20 축소 — 종전 10:00/13:00/15:40/16:40 4회의 슬롯 키는 history에만 남는다)"""
     hm = t.strftime("%H%M")
-    if hm < "1130":
-        return "1000"
-    if hm < "1430":
-        return "1300"
-    if hm < "1610":
-        return "1540"
-    return "1640"
+    if hm < "1330":
+        return "1100"
+    return "1600"
 
 
 def load_history():
@@ -565,7 +569,7 @@ def main():
         print(f"⚠️ 종목별 외국인 가집계 수집 실패(섹션 비표시): {e}")
 
     # 마감 이후 실행이면 장중 곡선 저장 (슬롯 스냅샷 기반 — 위 curve_from_slots 주석 참조)
-    if slot in ("1540", "1640"):
+    if slot == "1600":
         day["curve"] = {"investor": curve_from_slots(day, "investor"),
                         "program": curve_from_slots(day, "program")}
         print(f"장중 곡선(슬롯 기반): investor {len(day['curve']['investor'])}점, "

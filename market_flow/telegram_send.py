@@ -15,9 +15,11 @@ HERE = Path(__file__).resolve().parent
 DASH_URL = "https://gschoie.github.io/GS-DB2/market_flow_report.html"
 SIGNATURE = "🎴 GS Research Desk · 시장 수급"
 STATUS_PATH = HERE / "telegram_status.json"
-SLOT_LABEL = {"1000": "10:00", "1300": "13:00",
+SLOT_LABEL = {"1100": "11:00", "1600": "16:00 · 마감",
+              # 종전 4회 체계(~10/20) — 과거 일자 history 표기용
+              "1000": "10:00", "1300": "13:00",
               "1540": "15:40 · 마감 잠정", "1640": "16:40 · 확정"}
-SLOT_ORDER = ["1000", "1300", "1540", "1640"]
+SLOT_ORDER = ["1000", "1100", "1300", "1540", "1600", "1640"]
 WD = "월화수목금토일"
 
 
