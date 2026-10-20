@@ -25,18 +25,18 @@
    "report_period": "2024-09",
    "rcept_dt": "20241114",
    "segment": "조선",
-   "product": "선박",
+   "product": "선박 (HD현대중공업㈜)",
    "unit": "천 GT",
    "capacity_unit": "천 GT",
-   "production_unit": "천 GT",
+   "production_unit": "천 M/H",
    "capacity": 7500.0,
    "production": null,
-   "utilization_pct": null,
+   "utilization_pct": 94.6,
    "basis": "quantity",
    "cumulative": null,
    "source_rcept_no": "20241114001816",
    "dart_url": "https://dart.fss.or.kr/dsaf001/main.do?rcpNo=20241114001816",
-   "note": "도크의 최대 건조가능 용량 기준"
+   "note": "가동률 산식 기준: 당분기 가동가능시간(생산가능량) 20,361천M/H, 실제가동시간(실제생산량) 19,255천M/H"
   },
   {
    "company": "HD현대중공업",
@@ -49,7 +49,7 @@
    "report_period": "2024-09",
    "rcept_dt": "20241114",
    "segment": "조선",
-   "product": "선박",
+   "product": "선박 (HD현대중공업㈜)",
    "unit": "천 GT",
    "capacity_unit": "천 GT",
    "production_unit": "천 GT",
@@ -60,7 +60,7 @@
    "cumulative": null,
    "source_rcept_no": "20241114001816",
    "dart_url": "https://dart.fss.or.kr/dsaf001/main.do?rcpNo=20241114001816",
-   "note": "도크의 최대 건조가능 용량 기준"
+   "note": ""
   },
   {
    "company": "HD현대중공업",
@@ -73,7 +73,7 @@
    "report_period": "2024-09",
    "rcept_dt": "20241114",
    "segment": "조선",
-   "product": "선박",
+   "product": "선박 (HD현대중공업㈜)",
    "unit": "천 GT",
    "capacity_unit": "천 GT",
    "production_unit": "천 GT",
@@ -84,7 +84,7 @@
    "cumulative": null,
    "source_rcept_no": "20241114001816",
    "dart_url": "https://dart.fss.or.kr/dsaf001/main.do?rcpNo=20241114001816",
-   "note": "도크의 최대 건조가능 용량 기준"
+   "note": ""
   },
   {
    "company": "HD현대중공업",
@@ -96,19 +96,43 @@
    "report_label": "분기보고서 (2024.09)",
    "report_period": "2024-09",
    "rcept_dt": "20241114",
-   "segment": "엔 진 기 계",
-   "product": "선박엔진",
-   "unit": "천 BHP",
-   "capacity_unit": "천 BHP",
-   "production_unit": "천 BHP",
-   "capacity": 12000.0,
+   "segment": "해양플랜트",
+   "product": "해양플랜트설비 (HD현대중공업㈜)",
+   "unit": "천 M/H",
+   "capacity_unit": "천 M/H",
+   "production_unit": "천 M/H",
+   "capacity": null,
    "production": null,
-   "utilization_pct": null,
+   "utilization_pct": 29.4,
    "basis": "quantity",
    "cumulative": null,
    "source_rcept_no": "20241114001816",
    "dart_url": "https://dart.fss.or.kr/dsaf001/main.do?rcpNo=20241114001816",
-   "note": "대형엔진 9,000천 BHP, 중형엔진 3,000천 BHP 합산"
+   "note": "생산능력 표는 * Note 표기. 가동률 기준 가동가능시간 2,807천M/H, 실제가동시간 825천M/H"
+  },
+  {
+   "company": "HD현대중공업",
+   "stock_code": "329180",
+   "sector": "조선",
+   "period": "2024-09",
+   "period_label": "2024년 3분기",
+   "report_type": "quarter",
+   "report_label": "분기보고서 (2024.09)",
+   "report_period": "2024-09",
+   "rcept_dt": "20241114",
+   "segment": "엔진기계",
+   "product": "선박엔진 (HD현대중공업㈜)",
+   "unit": "천 BHP",
+   "capacity_unit": "천 BHP",
+   "production_unit": "천 M/H",
+   "capacity": 12000.0,
+   "production": null,
+   "utilization_pct": 146.3,
+   "basis": "quantity",
+   "cumulative": null,
+   "source_rcept_no": "20241114001816",
+   "dart_url": "https://dart.fss.or.kr/dsaf001/main.do?rcpNo=20241114001816",
+   "note": "가동률 산식 기준: 당분기 가동가능시간(생산가능량) 1,718천M/H, 실제가동시간(실제생산량) 2,513천M/H"
   },
   {
    "company": "HD현대중공업",
@@ -120,8 +144,8 @@
    "report_label": "분기보고서 (2024.09)",
    "report_period": "2024-09",
    "rcept_dt": "20241114",
-   "segment": "엔 진 기 계",
-   "product": "선박엔진",
+   "segment": "엔진기계",
+   "product": "선박엔진 (HD현대중공업㈜)",
    "unit": "천 BHP",
    "capacity_unit": "천 BHP",
    "production_unit": "천 BHP",
@@ -132,7 +156,7 @@
    "cumulative": null,
    "source_rcept_no": "20241114001816",
    "dart_url": "https://dart.fss.or.kr/dsaf001/main.do?rcpNo=20241114001816",
-   "note": "대형엔진 및 중형엔진 생산능력 합산"
+   "note": ""
   },
   {
    "company": "HD현대중공업",
@@ -144,8 +168,8 @@
    "report_label": "분기보고서 (2024.09)",
    "report_period": "2024-09",
    "rcept_dt": "20241114",
-   "segment": "엔 진 기 계",
-   "product": "선박엔진",
+   "segment": "엔진기계",
+   "product": "선박엔진 (HD현대중공업㈜)",
    "unit": "천 BHP",
    "capacity_unit": "천 BHP",
    "production_unit": "천 BHP",
@@ -156,79 +180,7 @@
    "cumulative": null,
    "source_rcept_no": "20241114001816",
    "dart_url": "https://dart.fss.or.kr/dsaf001/main.do?rcpNo=20241114001816",
-   "note": "대형엔진 및 중형엔진 생산능력 합산"
-  },
-  {
-   "company": "HD현대중공업",
-   "stock_code": "329180",
-   "sector": "조선",
-   "period": "2024-09",
-   "period_label": "당분기",
-   "report_type": "quarter",
-   "report_label": "분기보고서 (2024.09)",
-   "report_period": "2024-09",
-   "rcept_dt": "20241114",
-   "segment": "조선",
-   "product": "선    박",
-   "unit": "천 M/H",
-   "capacity_unit": "천 M/H",
-   "production_unit": "천 M/H",
-   "capacity": 20361.0,
-   "production": 19255.0,
-   "utilization_pct": 94.6,
-   "basis": "hours",
-   "cumulative": true,
-   "source_rcept_no": "20241114001816",
-   "dart_url": "https://dart.fss.or.kr/dsaf001/main.do?rcpNo=20241114001816",
-   "note": "상선은 정상조업도에 해당하는 3분기 투입 M/H 기준, 특수선은 생산직 평균인원의 3분기 투입계획 M/H 기준"
-  },
-  {
-   "company": "HD현대중공업",
-   "stock_code": "329180",
-   "sector": "조선",
-   "period": "2024-09",
-   "period_label": "당분기",
-   "report_type": "quarter",
-   "report_label": "분기보고서 (2024.09)",
-   "report_period": "2024-09",
-   "rcept_dt": "20241114",
-   "segment": "해양플랜트",
-   "product": "해상구조물 등",
-   "unit": "천 M/H",
-   "capacity_unit": "천 M/H",
-   "production_unit": "천 M/H",
-   "capacity": 2807.0,
-   "production": 825.0,
-   "utilization_pct": 29.4,
-   "basis": "hours",
-   "cumulative": true,
-   "source_rcept_no": "20241114001816",
-   "dart_url": "https://dart.fss.or.kr/dsaf001/main.do?rcpNo=20241114001816",
-   "note": "정상조업도에 해당하는 3분기 투입 M/H 기준"
-  },
-  {
-   "company": "HD현대중공업",
-   "stock_code": "329180",
-   "sector": "조선",
-   "period": "2024-09",
-   "period_label": "당분기",
-   "report_type": "quarter",
-   "report_label": "분기보고서 (2024.09)",
-   "report_period": "2024-09",
-   "rcept_dt": "20241114",
-   "segment": "엔 진 기 계",
-   "product": "엔진류, 기계설비 등",
-   "unit": "천 M/H",
-   "capacity_unit": "천 M/H",
-   "production_unit": "천 M/H",
-   "capacity": 1718.0,
-   "production": 2513.0,
-   "utilization_pct": 146.3,
-   "basis": "hours",
-   "cumulative": true,
-   "source_rcept_no": "20241114001816",
-   "dart_url": "https://dart.fss.or.kr/dsaf001/main.do?rcpNo=20241114001816",
-   "note": "정상조업도에 해당하는 3분기 투입 M/H 기준"
+   "note": ""
   },
   {
    "company": "HD현대중공업",
@@ -241,7 +193,7 @@
    "report_period": "2024-09",
    "rcept_dt": "20241114",
    "segment": "조선",
-   "product": "선   박",
+   "product": "선박 (HD현대중공업㈜)",
    "unit": "백만원",
    "capacity_unit": "백만원",
    "production_unit": "백만원",
@@ -252,7 +204,7 @@
    "cumulative": true,
    "source_rcept_no": "20241114001816",
    "dart_url": "https://dart.fss.or.kr/dsaf001/main.do?rcpNo=20241114001816",
-   "note": "내부매출액 차감 수치, 금액 기준"
+   "note": "금액 기준 생산실적"
   },
   {
    "company": "HD현대중공업",
@@ -265,7 +217,7 @@
    "report_period": "2024-09",
    "rcept_dt": "20241114",
    "segment": "조선",
-   "product": "선   박",
+   "product": "선박 (HD현대중공업㈜)",
    "unit": "백만원",
    "capacity_unit": "백만원",
    "production_unit": "백만원",
@@ -276,7 +228,7 @@
    "cumulative": false,
    "source_rcept_no": "20241114001816",
    "dart_url": "https://dart.fss.or.kr/dsaf001/main.do?rcpNo=20241114001816",
-   "note": "내부매출액 차감 수치, 금액 기준"
+   "note": "금액 기준 생산실적"
   },
   {
    "company": "HD현대중공업",
@@ -289,7 +241,7 @@
    "report_period": "2024-09",
    "rcept_dt": "20241114",
    "segment": "조선",
-   "product": "선   박",
+   "product": "선박 (HD현대중공업㈜)",
    "unit": "백만원",
    "capacity_unit": "백만원",
    "production_unit": "백만원",
@@ -300,7 +252,7 @@
    "cumulative": false,
    "source_rcept_no": "20241114001816",
    "dart_url": "https://dart.fss.or.kr/dsaf001/main.do?rcpNo=20241114001816",
-   "note": "내부매출액 차감 수치, 금액 기준"
+   "note": "금액 기준 생산실적"
   },
   {
    "company": "HD현대중공업",
@@ -313,7 +265,7 @@
    "report_period": "2024-09",
    "rcept_dt": "20241114",
    "segment": "해양플랜트",
-   "product": "해상구조물, 발전설비 등",
+   "product": "해상구조물, 발전설비 등 (HD현대중공업㈜)",
    "unit": "백만원",
    "capacity_unit": "백만원",
    "production_unit": "백만원",
@@ -324,7 +276,7 @@
    "cumulative": true,
    "source_rcept_no": "20241114001816",
    "dart_url": "https://dart.fss.or.kr/dsaf001/main.do?rcpNo=20241114001816",
-   "note": "내부매출액 차감 수치, 금액 기준"
+   "note": "금액 기준 생산실적"
   },
   {
    "company": "HD현대중공업",
@@ -337,7 +289,7 @@
    "report_period": "2024-09",
    "rcept_dt": "20241114",
    "segment": "해양플랜트",
-   "product": "해상구조물, 발전설비 등",
+   "product": "해상구조물, 발전설비 등 (HD현대중공업㈜)",
    "unit": "백만원",
    "capacity_unit": "백만원",
    "production_unit": "백만원",
@@ -348,7 +300,7 @@
    "cumulative": false,
    "source_rcept_no": "20241114001816",
    "dart_url": "https://dart.fss.or.kr/dsaf001/main.do?rcpNo=20241114001816",
-   "note": "내부매출액 차감 수치, 금액 기준"
+   "note": "금액 기준 생산실적"
   },
   {
    "company": "HD현대중공업",
@@ -361,7 +313,7 @@
    "report_period": "2024-09",
    "rcept_dt": "20241114",
    "segment": "해양플랜트",
-   "product": "해상구조물, 발전설비 등",
+   "product": "해상구조물, 발전설비 등 (HD현대중공업㈜)",
    "unit": "백만원",
    "capacity_unit": "백만원",
    "production_unit": "백만원",
@@ -372,7 +324,7 @@
    "cumulative": false,
    "source_rcept_no": "20241114001816",
    "dart_url": "https://dart.fss.or.kr/dsaf001/main.do?rcpNo=20241114001816",
-   "note": "내부매출액 차감 수치, 금액 기준"
+   "note": "금액 기준 생산실적"
   },
   {
    "company": "HD현대중공업",
@@ -384,8 +336,8 @@
    "report_label": "분기보고서 (2024.09)",
    "report_period": "2024-09",
    "rcept_dt": "20241114",
-   "segment": "엔 진 기 계",
-   "product": "선박엔진 등",
+   "segment": "엔진기계",
+   "product": "선박엔진 등 (HD현대중공업㈜)",
    "unit": "백만원",
    "capacity_unit": "백만원",
    "production_unit": "백만원",
@@ -396,7 +348,7 @@
    "cumulative": true,
    "source_rcept_no": "20241114001816",
    "dart_url": "https://dart.fss.or.kr/dsaf001/main.do?rcpNo=20241114001816",
-   "note": "내부매출액 차감 수치, 금액 기준"
+   "note": "금액 기준 생산실적"
   },
   {
    "company": "HD현대중공업",
@@ -408,8 +360,8 @@
    "report_label": "분기보고서 (2024.09)",
    "report_period": "2024-09",
    "rcept_dt": "20241114",
-   "segment": "엔 진 기 계",
-   "product": "선박엔진 등",
+   "segment": "엔진기계",
+   "product": "선박엔진 등 (HD현대중공업㈜)",
    "unit": "백만원",
    "capacity_unit": "백만원",
    "production_unit": "백만원",
@@ -420,7 +372,7 @@
    "cumulative": false,
    "source_rcept_no": "20241114001816",
    "dart_url": "https://dart.fss.or.kr/dsaf001/main.do?rcpNo=20241114001816",
-   "note": "내부매출액 차감 수치, 금액 기준"
+   "note": "금액 기준 생산실적"
   },
   {
    "company": "HD현대중공업",
@@ -432,8 +384,8 @@
    "report_label": "분기보고서 (2024.09)",
    "report_period": "2024-09",
    "rcept_dt": "20241114",
-   "segment": "엔 진 기 계",
-   "product": "선박엔진 등",
+   "segment": "엔진기계",
+   "product": "선박엔진 등 (HD현대중공업㈜)",
    "unit": "백만원",
    "capacity_unit": "백만원",
    "production_unit": "백만원",
@@ -444,7 +396,7 @@
    "cumulative": false,
    "source_rcept_no": "20241114001816",
    "dart_url": "https://dart.fss.or.kr/dsaf001/main.do?rcpNo=20241114001816",
-   "note": "내부매출액 차감 수치, 금액 기준"
+   "note": "금액 기준 생산실적"
   },
   {
    "company": "HD현대중공업",
@@ -456,8 +408,8 @@
    "report_label": "분기보고서 (2024.09)",
    "report_period": "2024-09",
    "rcept_dt": "20241114",
-   "segment": "기        타",
-   "product": "기타매출",
+   "segment": "기타",
+   "product": "기타매출 (HD현대중공업㈜)",
    "unit": "백만원",
    "capacity_unit": "백만원",
    "production_unit": "백만원",
@@ -468,7 +420,7 @@
    "cumulative": true,
    "source_rcept_no": "20241114001816",
    "dart_url": "https://dart.fss.or.kr/dsaf001/main.do?rcpNo=20241114001816",
-   "note": "내부매출액 차감 수치, 금액 기준"
+   "note": "금액 기준 생산실적"
   },
   {
    "company": "HD현대중공업",
@@ -480,8 +432,8 @@
    "report_label": "분기보고서 (2024.09)",
    "report_period": "2024-09",
    "rcept_dt": "20241114",
-   "segment": "기        타",
-   "product": "기타매출",
+   "segment": "기타",
+   "product": "기타매출 (HD현대중공업㈜)",
    "unit": "백만원",
    "capacity_unit": "백만원",
    "production_unit": "백만원",
@@ -492,7 +444,7 @@
    "cumulative": false,
    "source_rcept_no": "20241114001816",
    "dart_url": "https://dart.fss.or.kr/dsaf001/main.do?rcpNo=20241114001816",
-   "note": "내부매출액 차감 수치, 금액 기준"
+   "note": "금액 기준 생산실적"
   },
   {
    "company": "HD현대중공업",
@@ -504,8 +456,8 @@
    "report_label": "분기보고서 (2024.09)",
    "report_period": "2024-09",
    "rcept_dt": "20241114",
-   "segment": "기        타",
-   "product": "기타매출",
+   "segment": "기타",
+   "product": "기타매출 (HD현대중공업㈜)",
    "unit": "백만원",
    "capacity_unit": "백만원",
    "production_unit": "백만원",
@@ -516,7 +468,7 @@
    "cumulative": false,
    "source_rcept_no": "20241114001816",
    "dart_url": "https://dart.fss.or.kr/dsaf001/main.do?rcpNo=20241114001816",
-   "note": "내부매출액 차감 수치, 금액 기준"
+   "note": "금액 기준 생산실적"
   },
   {
    "company": "HD현대중공업",
@@ -529,7 +481,7 @@
    "report_period": "2024-09",
    "rcept_dt": "20241114",
    "segment": "합계",
-   "product": "합               계",
+   "product": "합계 (HD현대중공업㈜)",
    "unit": "백만원",
    "capacity_unit": "백만원",
    "production_unit": "백만원",
@@ -540,7 +492,7 @@
    "cumulative": true,
    "source_rcept_no": "20241114001816",
    "dart_url": "https://dart.fss.or.kr/dsaf001/main.do?rcpNo=20241114001816",
-   "note": "총합계, 내부매출액 차감 수치"
+   "note": "금액 기준 생산실적 합계"
   },
   {
    "company": "HD현대중공업",
@@ -553,7 +505,7 @@
    "report_period": "2024-09",
    "rcept_dt": "20241114",
    "segment": "합계",
-   "product": "합               계",
+   "product": "합계 (HD현대중공업㈜)",
    "unit": "백만원",
    "capacity_unit": "백만원",
    "production_unit": "백만원",
@@ -564,7 +516,7 @@
    "cumulative": false,
    "source_rcept_no": "20241114001816",
    "dart_url": "https://dart.fss.or.kr/dsaf001/main.do?rcpNo=20241114001816",
-   "note": "총합계, 내부매출액 차감 수치"
+   "note": "금액 기준 생산실적 합계"
   },
   {
    "company": "HD현대중공업",
@@ -577,7 +529,7 @@
    "report_period": "2024-09",
    "rcept_dt": "20241114",
    "segment": "합계",
-   "product": "합               계",
+   "product": "합계 (HD현대중공업㈜)",
    "unit": "백만원",
    "capacity_unit": "백만원",
    "production_unit": "백만원",
@@ -588,9 +540,9 @@
    "cumulative": false,
    "source_rcept_no": "20241114001816",
    "dart_url": "https://dart.fss.or.kr/dsaf001/main.do?rcpNo=20241114001816",
-   "note": "총합계, 내부매출액 차감 수치"
+   "note": "금액 기준 생산실적 합계"
   }
  ],
  "model": "gemini-flash-lite-latest",
- "normalized_at": "2026-10-19T23:57:04"
+ "normalized_at": "2026-10-20T00:18:05"
 }

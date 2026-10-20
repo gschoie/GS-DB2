@@ -252,7 +252,7 @@
    "cumulative": true,
    "source_rcept_no": "20250513000788",
    "dart_url": "https://dart.fss.or.kr/dsaf001/main.do?rcpNo=20250513000788",
-   "note": "목표 가동시간/실제 가동시간 기준"
+   "note": "목표 가동시간 및 실제 가동시간 기준"
   },
   {
    "company": "한화에어로스페이스",
@@ -276,7 +276,7 @@
    "cumulative": null,
    "source_rcept_no": "20250513000788",
    "dart_url": "https://dart.fss.or.kr/dsaf001/main.do?rcpNo=20250513000788",
-   "note": "목표 가동시간/실제 가동시간 기준"
+   "note": "목표 가동시간 및 실제 가동시간 기준"
   },
   {
    "company": "한화에어로스페이스",
@@ -300,7 +300,7 @@
    "cumulative": true,
    "source_rcept_no": "20250513000788",
    "dart_url": "https://dart.fss.or.kr/dsaf001/main.do?rcpNo=20250513000788",
-   "note": "중량 기준"
+   "note": ""
   },
   {
    "company": "한화에어로스페이스",
@@ -324,7 +324,7 @@
    "cumulative": null,
    "source_rcept_no": "20250513000788",
    "dart_url": "https://dart.fss.or.kr/dsaf001/main.do?rcpNo=20250513000788",
-   "note": "중량 기준"
+   "note": ""
   },
   {
    "company": "한화에어로스페이스",
@@ -400,5 +400,5 @@
   }
  ],
  "model": "gemini-flash-lite-latest",
- "normalized_at": "2026-10-19T23:51:23"
+ "normalized_at": "2026-10-20T00:12:43"
 }

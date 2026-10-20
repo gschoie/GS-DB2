@@ -29,14 +29,14 @@
    "unit": "천 GT",
    "capacity_unit": "천 GT",
    "production_unit": "천 M/H",
-   "capacity": 12467,
+   "capacity": 12467.0,
    "production": null,
    "utilization_pct": 100.4,
    "basis": "quantity",
    "cumulative": null,
    "source_rcept_no": "20260320000859",
    "dart_url": "https://dart.fss.or.kr/dsaf001/main.do?rcpNo=20260320000859",
-   "note": "가동률 산정 기준: 정상조업도에 해당하는 당기 투입 M/H 기준. 가동가능시간 27,981천 M/H, 실제가동시간 28,096천 M/H"
+   "note": "가동률은 M/H 기준(당기 가동가능시간 27,981천 M/H, 실제가동시간 28,096천 M/H). 도크의 최대 건조가능 용량 기준"
   },
   {
    "company": "HD현대중공업",
@@ -53,14 +53,14 @@
    "unit": "천 GT",
    "capacity_unit": "천 GT",
    "production_unit": "천 GT",
-   "capacity": 10000,
+   "capacity": 10000.0,
    "production": null,
    "utilization_pct": null,
    "basis": "quantity",
    "cumulative": null,
    "source_rcept_no": "20260320000859",
    "dart_url": "https://dart.fss.or.kr/dsaf001/main.do?rcpNo=20260320000859",
-   "note": ""
+   "note": "도크의 최대 건조가능 용량 기준"
   },
   {
    "company": "HD현대중공업",
@@ -77,14 +77,14 @@
    "unit": "천 GT",
    "capacity_unit": "천 GT",
    "production_unit": "천 GT",
-   "capacity": 10000,
+   "capacity": 10000.0,
    "production": null,
    "utilization_pct": null,
    "basis": "quantity",
    "cumulative": null,
    "source_rcept_no": "20260320000859",
    "dart_url": "https://dart.fss.or.kr/dsaf001/main.do?rcpNo=20260320000859",
-   "note": ""
+   "note": "도크의 최대 건조가능 용량 기준"
   },
   {
    "company": "HD현대중공업",
@@ -101,14 +101,14 @@
    "unit": "톤",
    "capacity_unit": "톤",
    "production_unit": "천 M/H",
-   "capacity": 46031,
+   "capacity": 46031.0,
    "production": null,
    "utilization_pct": 102.8,
    "basis": "quantity",
    "cumulative": null,
    "source_rcept_no": "20260320000859",
    "dart_url": "https://dart.fss.or.kr/dsaf001/main.do?rcpNo=20260320000859",
-   "note": "가동가능시간 833천 M/H, 실제가동시간 856천 M/H"
+   "note": "가동률은 M/H 기준(당기 가동가능시간 833천 M/H, 실제가동시간 856천 M/H). 조립 용량 기준"
   },
   {
    "company": "HD현대중공업",
@@ -121,9 +121,9 @@
    "report_period": "2025-12",
    "rcept_dt": "20260320",
    "segment": "해양플랜트",
-   "product": "해양플랜트설비/해상구조물 등 (HD현대중공업㈜)",
-   "unit": "천 M/H",
-   "capacity_unit": "천 M/H",
+   "product": "해양플랜트설비 (HD현대중공업㈜)",
+   "unit": "",
+   "capacity_unit": "",
    "production_unit": "천 M/H",
    "capacity": null,
    "production": null,
@@ -132,7 +132,7 @@
    "cumulative": null,
    "source_rcept_no": "20260320000859",
    "dart_url": "https://dart.fss.or.kr/dsaf001/main.do?rcpNo=20260320000859",
-   "note": "생산능력 (*2) 표기, 가동가능시간 3,751천 M/H, 실제가동시간 1,850천 M/H"
+   "note": "생산능력 산출 불가((*2)), 가동률은 M/H 기준(당기 가동가능시간 3,751천 M/H, 실제가동시간 1,850천 M/H)"
   },
   {
    "company": "HD현대중공업",
@@ -149,14 +149,14 @@
    "unit": "천 BHP",
    "capacity_unit": "천 BHP",
    "production_unit": "천 M/H",
-   "capacity": 16000,
+   "capacity": 16000.0,
    "production": null,
    "utilization_pct": 112.2,
    "basis": "quantity",
    "cumulative": null,
    "source_rcept_no": "20260320000859",
    "dart_url": "https://dart.fss.or.kr/dsaf001/main.do?rcpNo=20260320000859",
-   "note": "가동가능시간 3,036천 M/H, 실제가동시간 3,406천 M/H"
+   "note": "가동률은 M/H 기준(당기 가동가능시간 3,036천 M/H, 실제가동시간 3,406천 M/H). 대형엔진 및 중형엔진 생산능력 합산"
   },
   {
    "company": "HD현대중공업",
@@ -173,14 +173,14 @@
    "unit": "천 BHP",
    "capacity_unit": "천 BHP",
    "production_unit": "천 BHP",
-   "capacity": 16000,
+   "capacity": 16000.0,
    "production": null,
    "utilization_pct": null,
    "basis": "quantity",
    "cumulative": null,
    "source_rcept_no": "20260320000859",
    "dart_url": "https://dart.fss.or.kr/dsaf001/main.do?rcpNo=20260320000859",
-   "note": ""
+   "note": "대형엔진 및 중형엔진 생산능력 합산"
   },
   {
    "company": "HD현대중공업",
@@ -197,14 +197,14 @@
    "unit": "천 BHP",
    "capacity_unit": "천 BHP",
    "production_unit": "천 BHP",
-   "capacity": 16000,
+   "capacity": 16000.0,
    "production": null,
    "utilization_pct": null,
    "basis": "quantity",
    "cumulative": null,
    "source_rcept_no": "20260320000859",
    "dart_url": "https://dart.fss.or.kr/dsaf001/main.do?rcpNo=20260320000859",
-   "note": ""
+   "note": "대형엔진 및 중형엔진 생산능력 합산"
   },
   {
    "company": "HD현대중공업",
@@ -221,14 +221,14 @@
    "unit": "천 BHP",
    "capacity_unit": "천 BHP",
    "production_unit": "천 M/H",
-   "capacity": 982,
+   "capacity": 982.0,
    "production": null,
    "utilization_pct": 98.9,
    "basis": "quantity",
    "cumulative": null,
    "source_rcept_no": "20260320000859",
    "dart_url": "https://dart.fss.or.kr/dsaf001/main.do?rcpNo=20260320000859",
-   "note": "가동가능시간 176천 M/H, 실제가동시간 174천 M/H. 경영계획 바탕 추정치"
+   "note": "가동률은 M/H 기준(당기 가동가능시간 176천 M/H, 실제가동시간 174천 M/H). 대형엔진 및 중형엔진 생산능력 합산"
   },
   {
    "company": "HD현대중공업",
@@ -245,14 +245,14 @@
    "unit": "천 BHP",
    "capacity_unit": "천 BHP",
    "production_unit": "천 BHP",
-   "capacity": 982,
+   "capacity": 982.0,
    "production": null,
    "utilization_pct": null,
    "basis": "quantity",
    "cumulative": null,
    "source_rcept_no": "20260320000859",
    "dart_url": "https://dart.fss.or.kr/dsaf001/main.do?rcpNo=20260320000859",
-   "note": ""
+   "note": "대형엔진 및 중형엔진 생산능력 합산"
   },
   {
    "company": "HD현대중공업",
@@ -269,14 +269,14 @@
    "unit": "천 BHP",
    "capacity_unit": "천 BHP",
    "production_unit": "천 BHP",
-   "capacity": 454,
+   "capacity": 454.0,
    "production": null,
    "utilization_pct": null,
    "basis": "quantity",
    "cumulative": null,
    "source_rcept_no": "20260320000859",
    "dart_url": "https://dart.fss.or.kr/dsaf001/main.do?rcpNo=20260320000859",
-   "note": ""
+   "note": "대형엔진 및 중형엔진 생산능력 합산"
   },
   {
    "company": "HD현대중공업",
@@ -294,7 +294,7 @@
    "capacity_unit": "백만원",
    "production_unit": "백만원",
    "capacity": null,
-   "production": 12463099,
+   "production": 12463099.0,
    "utilization_pct": null,
    "basis": "amount",
    "cumulative": null,
@@ -318,7 +318,7 @@
    "capacity_unit": "백만원",
    "production_unit": "백만원",
    "capacity": null,
-   "production": 10623294,
+   "production": 10623294.0,
    "utilization_pct": null,
    "basis": "amount",
    "cumulative": null,
@@ -342,7 +342,7 @@
    "capacity_unit": "백만원",
    "production_unit": "백만원",
    "capacity": null,
-   "production": 7901471,
+   "production": 7901471.0,
    "utilization_pct": null,
    "basis": "amount",
    "cumulative": null,
@@ -366,7 +366,7 @@
    "capacity_unit": "백만원",
    "production_unit": "백만원",
    "capacity": null,
-   "production": 1239028,
+   "production": 1239028.0,
    "utilization_pct": null,
    "basis": "amount",
    "cumulative": null,
@@ -390,7 +390,7 @@
    "capacity_unit": "백만원",
    "production_unit": "백만원",
    "capacity": null,
-   "production": 649152,
+   "production": 649152.0,
    "utilization_pct": null,
    "basis": "amount",
    "cumulative": null,
@@ -414,7 +414,7 @@
    "capacity_unit": "백만원",
    "production_unit": "백만원",
    "capacity": null,
-   "production": 1269740,
+   "production": 1269740.0,
    "utilization_pct": null,
    "basis": "amount",
    "cumulative": null,
@@ -438,7 +438,7 @@
    "capacity_unit": "백만원",
    "production_unit": "백만원",
    "capacity": null,
-   "production": 3790789,
+   "production": 3790789.0,
    "utilization_pct": null,
    "basis": "amount",
    "cumulative": null,
@@ -462,7 +462,7 @@
    "capacity_unit": "백만원",
    "production_unit": "백만원",
    "capacity": null,
-   "production": 3134343,
+   "production": 3134343.0,
    "utilization_pct": null,
    "basis": "amount",
    "cumulative": null,
@@ -486,7 +486,7 @@
    "capacity_unit": "백만원",
    "production_unit": "백만원",
    "capacity": null,
-   "production": 2709815,
+   "production": 2709815.0,
    "utilization_pct": null,
    "basis": "amount",
    "cumulative": null,
@@ -510,7 +510,7 @@
    "capacity_unit": "백만원",
    "production_unit": "백만원",
    "capacity": null,
-   "production": 87717,
+   "production": 87717.0,
    "utilization_pct": null,
    "basis": "amount",
    "cumulative": null,
@@ -534,7 +534,7 @@
    "capacity_unit": "백만원",
    "production_unit": "백만원",
    "capacity": null,
-   "production": 79665,
+   "production": 79665.0,
    "utilization_pct": null,
    "basis": "amount",
    "cumulative": null,
@@ -558,7 +558,7 @@
    "capacity_unit": "백만원",
    "production_unit": "백만원",
    "capacity": null,
-   "production": 82900,
+   "production": 82900.0,
    "utilization_pct": null,
    "basis": "amount",
    "cumulative": null,
@@ -582,13 +582,13 @@
    "capacity_unit": "백만원",
    "production_unit": "백만원",
    "capacity": null,
-   "production": 17580633,
+   "production": 17580633.0,
    "utilization_pct": null,
    "basis": "amount",
    "cumulative": null,
    "source_rcept_no": "20260320000859",
    "dart_url": "https://dart.fss.or.kr/dsaf001/main.do?rcpNo=20260320000859",
-   "note": "생산실적 합계 행"
+   "note": "내부매출액 차감 수치, 금액 기준 생산실적 합계"
   },
   {
    "company": "HD현대중공업",
@@ -606,13 +606,13 @@
    "capacity_unit": "백만원",
    "production_unit": "백만원",
    "capacity": null,
-   "production": 14486454,
+   "production": 14486454.0,
    "utilization_pct": null,
    "basis": "amount",
    "cumulative": null,
    "source_rcept_no": "20260320000859",
    "dart_url": "https://dart.fss.or.kr/dsaf001/main.do?rcpNo=20260320000859",
-   "note": "생산실적 합계 행"
+   "note": "내부매출액 차감 수치, 금액 기준 생산실적 합계"
   },
   {
    "company": "HD현대중공업",
@@ -630,15 +630,15 @@
    "capacity_unit": "백만원",
    "production_unit": "백만원",
    "capacity": null,
-   "production": 11963926,
+   "production": 11963926.0,
    "utilization_pct": null,
    "basis": "amount",
    "cumulative": null,
    "source_rcept_no": "20260320000859",
    "dart_url": "https://dart.fss.or.kr/dsaf001/main.do?rcpNo=20260320000859",
-   "note": "생산실적 합계 행"
+   "note": "내부매출액 차감 수치, 금액 기준 생산실적 합계"
   }
  ],
  "model": "gemini-flash-lite-latest",
- "normalized_at": "2026-10-19T23:58:20"
+ "normalized_at": "2026-10-20T00:19:20"
 }
