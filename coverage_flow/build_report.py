@@ -281,6 +281,10 @@ def render(d):
     except Exception:
         asof = d.get("asof", "")
     prov = any(r.get("flow", {}).get("has_today") for r in rows)
+    est_times = sorted({r["flow"]["today_src"].split(" ", 1)[1] for r in rows
+                        if str(r.get("flow", {}).get("today_src", "")).startswith("estimate ")})
+    est_line = (f"<b>오늘(장중)은 한투 종목별 외인·기관 추정가집계 {' · '.join(est_times)} 기준</b> — 추정 순매수 수량 × 현재가 근사, "
+                "개인은 −(외인+기관)로 둔 값(확정치는 장 마감 뒤 일별 집계로 대체)." if est_times else "")
     errs = d.get("errors", [])
     err_html = (f"<details class='errs'><summary>수집 오류 {len(errs)}건</summary><ul>{''.join(f'<li>{esc(e)}</li>' for e in errs)}</ul></details>" if errs else "")
     return f"""<!doctype html><html lang="ko"><head><meta charset="utf-8">
@@ -339,7 +343,7 @@ table.flow{{font-size:12px}}table.flow td,table.flow th{{padding:6px 5px}}th.c{{
 
 <h2 id="flow2">①-2 투자자별 순매수 <small style="font:400 12px Inter;color:#6b7280">억원 · 오늘 · 5일 · 1개월 · 3개월 · YTD · 시총 순</small></h2>
 <div class="wrap">{flow_table(rows)}</div>
-<p class="note">구간은 오늘 잠정 행을 포함한 최근 거래일 수(5·21·63일, YTD 는 올해 1월부터). 최근 30거래일은 한투 금액(정확), 그 이전은 네이버 순매수 수량 × 종가 <b>근사</b> — 3개월·YTD 합계는 체결 평균가 대신 종가를 써서 몇 % 어긋날 수 있다. 이력이 모자라는 구간은 '–'. 연속일수 배지는 2일 이상만.</p>
+<p class="note">구간은 오늘 잠정 행을 포함한 최근 거래일 수(5·21·63일, YTD 는 올해 1월부터). 최근 30거래일은 한투 금액(정확), 그 이전은 네이버 순매수 수량 × 종가 <b>근사</b> — 3개월·YTD 합계는 체결 평균가 대신 종가를 써서 몇 % 어긋날 수 있다. 이력이 모자라는 구간은 '–'. 연속일수 배지는 2일 이상만. {est_line}</p>
 </div>
 <div id="cap-2">
 <h2 id="tech">② 과매수 · 과매도 <small style="font:400 12px Inter;color:#6b7280">RSI(14, Wilder) · 1년 백분위 · 52주 위치</small></h2>
