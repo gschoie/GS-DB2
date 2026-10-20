@@ -40,8 +40,11 @@ def compose(d):
     except Exception:
         head_dt = d.get("asof", "")
     prov = any(r.get("flow", {}).get("has_today") for r in rows)
+    est_times = sorted({r["flow"]["today_src"].split(" ", 1)[1] for r in rows
+                        if str(r.get("flow", {}).get("today_src", "")).startswith("estimate ")})
+    today_lbl = (f" · 오늘 잠정(가집계 {'·'.join(est_times)}) 포함" if est_times else (" · 오늘 잠정 포함" if prov else ""))
     L = [f"[GS🎴 조선·방산·건기] 수급 브리핑 {head_dt}", ""]
-    L.append(f"외국인·기관 순매수 · {len(rows)}종목 · 5일 합산 억원{' · 오늘 잠정 포함' if prov else ''}")
+    L.append(f"외국인·기관 순매수 · {len(rows)}종목 · 5일 합산 억원{today_lbl}")
     buy, sell = metrics.rank_flow(rows)
     L.append("📈 사는 쪽 · 시총 대비 5일")
     for r in buy or []:

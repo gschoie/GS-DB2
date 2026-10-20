@@ -171,6 +171,34 @@ def spark_points(ohlc, today, price_now=None, n=SPARK_DAYS):
 FLOW_WINDOWS = {"d5": 5, "m1": 21, "m3": 63}
 
 
+def apply_estimate(inv, today, est, price):
+    """장중 '오늘' 보정 — 한투 일별 투자자 API 는 장중엔 당일 행을 0 으로 내준다(10/19~20 실측:
+    11:00·13:35 전 종목 0, 15:35 에야 절반 채워짐). 추정가집계(est)가 있으면 오늘 행의
+    외국인·기관을 수량×현재가/1e8(억원, 근사)로 채우고 개인은 −(외국인+기관) 으로 둔다.
+    당일 행이 이미 0 이 아니면(마감 뒤 확정치 도착) 손대지 않는다. 반환 (inv, 적용 여부)."""
+    if inv is None or est is None or not price:
+        return inv, False
+    fq, oq = est.get("frgn_qty"), est.get("inst_qty")
+    if fq is None and oq is None:
+        return inv, False
+    scale = 1.0 / 100 if est.get("unit") == "amt" else price / 1e8   # 금액이면 백만원→억, 수량이면 ×현재가
+    frgn = round((fq or 0.0) * scale, 1)
+    inst = round((oq or 0.0) * scale, 1)
+    t = pd.Timestamp(today)
+    mask = inv["date"] == t
+    if mask.any():
+        row = inv.loc[mask].iloc[-1]
+        if any(abs(float(row[c])) > 0 for c in ("외국인", "기관", "개인")):
+            return inv, False                      # 확정(또는 소스 잠정)치가 이미 있다
+        inv = inv.copy()
+        inv.loc[mask, ["외국인", "기관", "개인"]] = [frgn, inst, round(-(frgn + inst), 1)]
+    else:
+        inv = pd.concat([inv, pd.DataFrame([{"date": t, "개인": round(-(frgn + inst), 1),
+                                              "외국인": frgn, "기관": inst}])], ignore_index=True)
+        inv = inv.sort_values("date").reset_index(drop=True)
+    return inv, True
+
+
 def flow_windows(inv, today):
     """투자자별 구간 합산(억원) {"frgn":{today,d5,m1,m3,ytd}, "inst":…, "indiv":…, "rows": n}.
     창은 오늘 잠정 행 포함 최근 n행. 행이 모자라면 그 칸은 None(합산이 '작게' 나오는 것보다
