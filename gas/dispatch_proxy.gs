@@ -44,6 +44,7 @@ const WF = {
   congpt:    'construction-gpt.yml',   // ChatGPT 건설기계 브리핑 붙여넣기 발행 (content 입력 필요)
   research:  'research-digest.yml',    // 커버리지 리서치요약 아침 모음
   covflow:   'coverage-flow.yml',      // 커버리지 종목 수급·기술지표 (장 마감 후 1회)
+  dartcap:   'dart-capacity.yml',      // DART 생산능력·가동률 (보고서 시즌 + 버튼, stage=full)
   defweekly: 'defense-weekly.yml',     // 방산 주간정리 (토) — 스케줄러 정시 발사용
   conweekly: 'construction-weekly.yml',// 건설기계 주간정리 (토) — 스케줄러 정시 발사용
   // 다른 저장소의 워크플로는 {repo:'owner/name', file:'...'} 형태로 적는다.
@@ -77,6 +78,8 @@ function buildInputs(key, body) {
     only:   String(body.only || ''),
     lookup: String(body.lookup || ''),
   };
+  // DART 생산능력·가동률: 버튼은 수집→추출→정규화까지 한 번에(stage=full).
+  if (key === 'dartcap') return { stage: 'full' };
   return {};
 }
 
