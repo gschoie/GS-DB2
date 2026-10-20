@@ -258,6 +258,7 @@ def build_period(con, snap, base, ref1, ref3, sectors, umeta):
                    "pwow3": pw(pref3, code)}
             for gk in gps:
                 row[gk] = growth(d["curr"], gmaps[gk].get(code))
+                row[gk + "_v"] = gmaps[gk].get(code)     # 분모 원값(섹터 합산 행용)
             rows.append(row)
         if base:
             rows.sort(key=lambda r: (r["wow"] is None, -abs(r["wow"]) if r["wow"] is not None else 0))
@@ -471,6 +472,8 @@ border-radius:8px;padding:6px 10px;margin-left:6px}
 overflow:hidden;vertical-align:middle}
 .modetog button{border:0;background:var(--card);color:var(--ink);font-size:12px;font-weight:600;
 padding:6px 13px;cursor:pointer}.modetog button.on{background:var(--accent);color:#fff}
+tr.agg td{font-weight:600;background:rgba(37,99,235,.09);border-bottom:2px solid var(--line)}
+tr.agg td.sec{color:var(--ink)}
 td.sec .secpick{cursor:pointer}td.sec .secpick:hover{color:var(--accent);text-decoration:underline}
 .clrfil{margin-left:8px;border:1px solid var(--line);background:var(--card);color:var(--down);
 font-size:12px;font-weight:600;padding:6px 11px;border-radius:8px;cursor:pointer}
@@ -535,6 +538,24 @@ function grw(v){if(v==null)return'<span class="tiny">-</span>';   // QoQ/YoY: % 
  if(typeof v==='string'){var c=v==='흑전'?'pos':(v==='적전'?'neg':'tiny');
   return'<span class="'+c+'">'+v+'</span>'}
  return pct(v)}
+function growthJS(c,b){if(c==null||b==null||b===0)return null;   // build_static.growth 와 동일 규칙
+ if(b>0)return c<0?'적전':(c-b)/b*100;return c<0?'적지':'흑전'}
+function aggRow(rows,label,rev,bK,cK,pK,gcols){   // 필터 합산 행: 컨센은 합계, 증감률은 합계끼리, 주가는 단순 평균
+ var sc=0,nc=0,pc=0,pb=0,np=0,ps=0,nps=0;
+ rows.forEach(function(d){if(d.curr!=null){sc+=d.curr;nc++}
+  if(rev&&d.curr!=null&&d[bK]!=null){pc+=d.curr;pb+=d[bK];np++}
+  if(rev&&d[pK]!=null){ps+=d[pK];nps++}});
+ if(!nc)return'';
+ var g=gcols.map(function(c){var vc=0,vb=0,n=0;
+  rows.forEach(function(d){var v=d[c[0]+'_v'];if(d.curr!=null&&v!=null){vc+=d.curr;vb+=v;n++}});
+  return'<td>'+grw(n?growthJS(vc,vb):null)+(n&&n<nc?' <span class="tiny">'+n+'종목</span>':'')+'</td>'}).join('');
+ var out='<tr class="agg"><td>Σ</td><td class="mktc"></td><td class="l sec">'+label+'</td>'+
+  '<td class="l">합산 <span class="tiny">'+nc+'종목</span></td>';
+ if(rev){out+='<td>'+fmt(np?pb:null)+(np&&np<nc?' <span class="tiny">'+np+'종목</span>':'')+'</td><td>'+fmt(sc)+'</td>'+g+
+  '<td>'+grw(np?growthJS(pc,pb):null)+'</td>'+
+  '<td>'+pct(nps?ps/nps:null)+(nps?' <span class="tiny">평균</span>':'')+'</td>'}
+ else out+='<td>'+fmt(sc)+'</td>'+g;
+ return out+'</tr>'}
 function mmdd(s){return s?s.slice(5).replace('-','/'):''}   // 'YYYY-MM-DD' → 'MM/DD'
 function qq(p){if(!p)return'-';var m=p.slice(5,7),y=p.slice(2,4);   // '2026.06' → '2Q26'
  return ({'03':'1Q','06':'2Q','09':'3Q','12':'4Q'}[m]||m)+y}
@@ -617,7 +638,7 @@ function renderTop(){
   $('cards').innerHTML=ch+'</div>';
   var bd=refDate(p), pbd=refPDate(p);
   $('foot').innerHTML='컨센 변화 = '+MX().lab+'('+(bd||'')+') 대비 영업이익 컨센 변화율 · 주가 변동 = 종가 '+
-   (pbd||'')+' → '+(p.price_date_snap||'')+' · QoQ/YoY = 직전·전년 분기(연간은 전년) 영업이익 대비, 같은 스냅샷 내 비교 — 실적(A) 우선, 실적 수집 전엔 당시 컨센 · 상위 30 기본(전체 보기·열 정렬) · 섹터/종목명 클릭 활용';
+   (pbd||'')+' → '+(p.price_date_snap||'')+' · QoQ/YoY = 직전·전년 분기(연간은 전년) 영업이익 대비, 같은 스냅샷 내 비교 — 실적(A) 우선, 실적 수집 전엔 당시 컨센 · 상위 30 기본(전체 보기·열 정렬) · 섹터/종목명 클릭 활용 · 섹터·그룹 필터 시 맨 위 Σ 행 = 합산(컨센 합계·합계 기준 증감률·주가 변동은 단순 평균)';
  }else{
   $('cards').innerHTML='<div class="note">첫 스냅샷이라 전주 대비 변동은 다음 스냅샷부터 표시됩니다. 아래는 현재 컨센 레벨이며, 전체 종목은 엑셀에서 확인하세요.</div>';
   $('foot').innerHTML='';
@@ -669,6 +690,7 @@ function draw(){
  cols.forEach(function(c){out+='<th class="sortable '+(c[3]||'')+'" data-k="'+c[0]+'">'+c[1]+
   (c[2]?'<br><span class="tiny">'+c[2]+'</span>':'')+arrow(c[0])+'</th>'});
  out+='</tr>';
+ if(secFilter||grpFilter)out+=aggRow(all,[secFilter,grpFilter].filter(Boolean).join(' · '),rev,bK,cK,pK,gcols);
  shown.forEach(function(d,i){
   var g=gcols.map(function(c){return'<td>'+grw(d[c[0]])+'</td>'}).join('');
   out+='<tr><td>'+(i+1)+'</td>'+
