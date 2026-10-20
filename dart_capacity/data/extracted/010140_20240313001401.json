@@ -1,0 +1,288 @@
+{
+ "meta": {
+  "company": "삼성중공업",
+  "sector": "조선",
+  "stock_code": "010140",
+  "corp_code": "00126478",
+  "rcept_no": "20240313001401",
+  "rcept_dt": "20240313",
+  "report_nm": "사업보고서 (2023.12)",
+  "report_type": "annual",
+  "period": "2023-12",
+  "period_label": "2023.12 사업보고서",
+  "corrected": false,
+  "dart_url": "https://dart.fss.or.kr/dsaf001/main.do?rcpNo=20240313001401"
+ },
+ "tables": [
+  {
+   "section": [
+    "1. 사업의 개요",
+    "2. 주요 제품 및 서비스",
+    "3. 원재료 및 생산설비"
+   ],
+   "headings": [
+    "(산출기준)",
+    "ㆍ후 판 : 포스코 유통가, SS275(JIS SS400), Base 가격 (스틸데일리 공시)",
+    "ㆍ형 강 : 한국특수형강 Angle 유통가, SS400 가격 (스틸데일리 공시)",
+    "ㆍ후 판 : 철광석, 유연탄 등 후판 제조 원재료 가격ㆍ형 강 : 스크랩 가격",
+    "다. 생산능력, 생산실적 및 가동률",
+    "(1) 생산능력"
+   ],
+   "context": [
+    "※ 실제 당사에서 적용 중인 주요 원재료의 가격은 Buying Power 및 물량 등에 따라 결정되므로 시중 유통 가격과는 다를 수 있습니다.",
+    "(산출기준)",
+    "ㆍ후 판 : 포스코 유통가, SS275(JIS SS400), Base 가격 (스틸데일리 공시)",
+    "ㆍ형 강 : 한국특수형강 Angle 유통가, SS400 가격 (스틸데일리 공시)",
+    "(주요 가격변동원인)",
+    "ㆍ후 판 : 철광석, 유연탄 등 후판 제조 원재료 가격ㆍ형 강 : 스크랩 가격",
+    "다. 생산능력, 생산실적 및 가동률",
+    "(1) 생산능력",
+    "(단위 : 천CGRT(조선), 천TON(해양))"
+   ],
+   "unit": "(단위 : 천CGRT(조선), 천TON(해양))",
+   "keywords": [
+    "생산능력"
+   ],
+   "keyword_in": "heading",
+   "rows": [
+    [
+     "사업부문",
+     "품 목",
+     "사업소",
+     "제50기",
+     "제49기",
+     "제48기"
+    ],
+    [
+     "조 선",
+     "선박 등",
+     "거제",
+     "4,188",
+     "3,202",
+     "3,008"
+    ],
+    [
+     "해 양",
+     "플랫폼 등",
+     "거제",
+     "0.2",
+     "6",
+     "26"
+    ]
+   ],
+   "html": "<table aclass=\"NORMAL\" afixtable=\"N\" border=\"1\" width=\"600\">\n<colgroup>\n<col width=\"75\"/>\n<col width=\"95\"/>\n<col width=\"94\"/>\n<col width=\"94\"/>\n<col width=\"94\"/>\n<col width=\"94\"/>\n</colgroup>\n<thead align=\"LEFT\" valign=\"TOP\">\n<tr acopy=\"Y\" adelete=\"Y\">\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"30\" valign=\"MIDDLE\" width=\"84\">사업부문</th>\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"30\" valign=\"MIDDLE\" width=\"104\">품 목</th>\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"30\" valign=\"MIDDLE\" width=\"103\">사업소</th>\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"30\" valign=\"MIDDLE\" width=\"103\">제50기</th>\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"30\" valign=\"MIDDLE\" width=\"103\">제49기</th>\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"30\" valign=\"MIDDLE\" width=\"103\">제48기</th>\n</tr>\n</thead>\n<tbody>\n<tr acopy=\"Y\" adelete=\"Y\">\n<td align=\"CENTER\" height=\"30\" width=\"84\">조 선</td>\n<td align=\"CENTER\" height=\"30\" width=\"104\">선박 등</td>\n<td align=\"CENTER\" height=\"30\" width=\"103\">거제</td>\n<td align=\"RIGHT\" height=\"30\" width=\"103\">4,188</td>\n<td align=\"RIGHT\" height=\"30\" width=\"103\">3,202</td>\n<td align=\"RIGHT\" height=\"30\" width=\"103\">3,008</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\">\n<td align=\"CENTER\" height=\"30\" width=\"84\">해 양</td>\n<td align=\"CENTER\" height=\"30\" width=\"104\">플랫폼 등</td>\n<td align=\"CENTER\" height=\"30\" width=\"103\">거제</td>\n<td align=\"RIGHT\" height=\"30\" width=\"103\">0.2</td>\n<td align=\"RIGHT\" height=\"30\" width=\"103\">6</td>\n<td align=\"RIGHT\" height=\"30\" width=\"103\">26</td>\n</tr>\n</tbody>\n</table>",
+   "footnotes": [],
+   "digest": "bc4b4c64c9ac",
+   "file": "20240313001401.xml"
+  },
+  {
+   "section": [
+    "1. 사업의 개요",
+    "2. 주요 제품 및 서비스",
+    "3. 원재료 및 생산설비"
+   ],
+   "headings": [
+    "(3) 가동률"
+   ],
+   "context": [
+    "※ 해양부문은 제품의 성격, 기능, 옵션 사양이 각각 달라 제품별로 생산실적을 구분 산출하는 것이 큰 의미가 없습니다.",
+    "(3) 가동률",
+    "(기준일 : 2023년 12월 31일) (단위 : 천M/H,%)"
+   ],
+   "unit": "(기준일 : 2023년 12월 31일) (단위 : 천M/H,%)",
+   "keywords": [
+    "가동률"
+   ],
+   "keyword_in": "table",
+   "rows": [
+    [
+     "사업소(사업부문)",
+     "가동가능시간",
+     "실제가동시간",
+     "가동률(실적/목표)"
+    ],
+    [
+     "조 선",
+     "22,453",
+     "21,884",
+     "97"
+    ],
+    [
+     "해 양",
+     "11",
+     "-",
+     "-"
+    ],
+    [
+     "합 계",
+     "22,464",
+     "21,884",
+     "97"
+    ]
+   ],
+   "html": "<table aclass=\"NORMAL\" afixtable=\"N\" border=\"1\" width=\"600\">\n<colgroup>\n<col width=\"141\"/>\n<col width=\"141\"/>\n<col width=\"141\"/>\n<col width=\"141\"/>\n</colgroup>\n<thead align=\"LEFT\" valign=\"TOP\">\n<tr acopy=\"Y\" adelete=\"Y\">\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"30\" valign=\"MIDDLE\" width=\"150\">사업소(사업부문)</th>\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"30\" valign=\"MIDDLE\" width=\"150\">가동가능시간</th>\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"30\" valign=\"MIDDLE\" width=\"150\">실제가동시간</th>\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"30\" valign=\"MIDDLE\" width=\"150\">가동률(실적/목표)</th>\n</tr>\n</thead>\n<tbody>\n<tr acopy=\"Y\" adelete=\"Y\">\n<td align=\"CENTER\" height=\"30\" valign=\"MIDDLE\" width=\"150\">조 선</td>\n<td align=\"RIGHT\" height=\"30\" width=\"150\">22,453</td>\n<td align=\"RIGHT\" height=\"30\" width=\"150\">21,884</td>\n<td align=\"RIGHT\" height=\"30\" width=\"150\">97</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\">\n<td align=\"CENTER\" height=\"30\" valign=\"MIDDLE\" width=\"150\">해 양</td>\n<td align=\"RIGHT\" height=\"30\" valign=\"MIDDLE\" width=\"150\">11</td>\n<td align=\"RIGHT\" height=\"30\" valign=\"MIDDLE\" width=\"150\">-</td>\n<td align=\"RIGHT\" height=\"30\" valign=\"MIDDLE\" width=\"150\">-</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\">\n<td align=\"CENTER\" height=\"30\" width=\"150\">합 계</td>\n<td align=\"RIGHT\" height=\"30\" width=\"150\">22,464</td>\n<td align=\"RIGHT\" height=\"30\" width=\"150\">21,884</td>\n<td align=\"RIGHT\" height=\"30\" width=\"150\">97</td>\n</tr>\n</tbody>\n</table>",
+   "footnotes": [],
+   "digest": "bafa306861ee",
+   "file": "20240313001401.xml"
+  }
+ ],
+ "rejected": [
+  {
+   "section": [
+    "1. 사업의 개요",
+    "2. 주요 제품 및 서비스",
+    "3. 원재료 및 생산설비"
+   ],
+   "headings": [],
+   "context": [
+    "※ 해양부문은 제품의 성격, 기능, 옵션 사양이 각각 달라 제품별로 생산능력을 구분 산출하는 것이 큰 의미가 없습니다.(생산능력의 산출근거)- 산출기준",
+    "ㆍ생산능력 = 총조업시간 / 생산단위당 소요시간 ×생산 직접률",
+    "ㆍ총조업시간 = 종업원수×조업일수×조업시간 ㆍ생산단위당 소요시간 = 선박 CGRT당(해양 : TON당) 작업시간- 산출내역 [조선] ㆍ총 조업시간 26,145천시간 ㆍ생산단위당 소요시간(CGRT당) 5.4MH [해양] ㆍ총 조업시간 12천시간 ㆍ생산단위당 소요시간(TON당) 53.1MH (2) 생산실적",
+    "(단위 : 천CGRT(조선), 천TON(해양))"
+   ],
+   "unit": "(단위 : 천CGRT(조선), 천TON(해양))",
+   "keywords": [
+    "생산능력",
+    "생산실적"
+   ],
+   "keyword_in": "",
+   "rows": [
+    [
+     "사업부문",
+     "품 목",
+     "사업소",
+     "제50기",
+     "제49기",
+     "제48기"
+    ],
+    [
+     "조 선",
+     "선박 등",
+     "거제",
+     "3,623",
+     "2,759",
+     "2,809"
+    ],
+    [
+     "해 양",
+     "플랫폼 등",
+     "거제",
+     "-",
+     "5",
+     "22"
+    ]
+   ],
+   "html": "",
+   "footnotes": [],
+   "digest": "83364361fd13",
+   "why": "셀 전체가 지표명이 아니거나 멀리 있는 문장에만 키워드",
+   "file": "20240313001401.xml"
+  },
+  {
+   "section": [
+    "1. 사업의 개요",
+    "2. 주요 제품 및 서비스",
+    "3. 원재료 및 생산설비"
+   ],
+   "headings": [
+    "라. 설비에 관한 사항",
+    "(1) 생산설비의 현황"
+   ],
+   "context": [
+    "※ 가동률 산출근거 : 당사기준ㆍ가동시간 = 총조업시간 × 생산직접률ㆍ가동률 = 실제가동시간 / 가동가능시간(목표)",
+    "라. 설비에 관한 사항",
+    "(1) 생산설비의 현황",
+    "[자산항목 : 토지] (단위 : 백만원)"
+   ],
+   "unit": "[자산항목 : 토지] (단위 : 백만원)",
+   "keywords": [
+    "가동률"
+   ],
+   "keyword_in": "",
+   "rows": [
+    [
+     "사업소",
+     "소유형태",
+     "소재지",
+     "구분(천㎡)",
+     "기초장부가액",
+     "당기증감",
+     "당기상각",
+     "당기말장부가액",
+     "비고"
+    ],
+    [
+     "증가",
+     "감소"
+    ],
+    [
+     "조선 외",
+     "자가보유외(등기)",
+     "거제 외",
+     "4,274",
+     "2,055,887",
+     "-",
+     "42",
+     "-",
+     "2,055,845",
+     "-"
+    ]
+   ],
+   "html": "",
+   "footnotes": [],
+   "digest": "7f4b96071132",
+   "why": "셀 전체가 지표명이 아니거나 멀리 있는 문장에만 키워드",
+   "file": "20240313001401.xml"
+  },
+  {
+   "section": [
+    "1. 사업의 개요",
+    "2. 주요 제품 및 서비스",
+    "3. 원재료 및 생산설비"
+   ],
+   "headings": [
+    "(2) 향후 투자계획"
+   ],
+   "context": [
+    "(2) 향후 투자계획",
+    "(기준일 : 2023년 12월 31일) (단위 : 억원)"
+   ],
+   "unit": "(기준일 : 2023년 12월 31일) (단위 : 억원)",
+   "keywords": [
+    "생산능력"
+   ],
+   "keyword_in": "",
+   "rows": [
+    [
+     "사업부문",
+     "계획명칭",
+     "예상투자총액",
+     "연도별 예상투자액",
+     "투자효과",
+     "비고"
+    ],
+    [
+     "자산형태",
+     "금 액",
+     "제51기",
+     "제52기 이후"
+    ],
+    [
+     "조선해양",
+     "조선해양사업",
+     "유형자산등",
+     "2,300",
+     "2,300",
+     "-",
+     "생산능력증가 등",
+     "-"
+    ]
+   ],
+   "html": "",
+   "footnotes": [],
+   "digest": "010f9f4b61aa",
+   "why": "셀 전체가 지표명이 아니거나 멀리 있는 문장에만 키워드",
+   "file": "20240313001401.xml"
+  }
+ ]
+}

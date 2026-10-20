@@ -1,0 +1,413 @@
+{
+ "meta": {
+  "company": "한국항공우주",
+  "sector": "방산",
+  "stock_code": "047810",
+  "corp_code": "00309503",
+  "rcept_no": "20241114002482",
+  "rcept_dt": "20241114",
+  "report_nm": "분기보고서 (2024.09)",
+  "report_type": "quarter",
+  "period": "2024-09",
+  "period_label": "2024.09 3Q",
+  "corrected": false,
+  "dart_url": "https://dart.fss.or.kr/dsaf001/main.do?rcpNo=20241114002482"
+ },
+ "tables": [
+  {
+   "section": [
+    "1. 사업의 개요",
+    "2. 주요 제품 및 서비스",
+    "3. 원재료 및 생산설비"
+   ],
+   "headings": [
+    "나. 생산 및 생산 설비에 관한 사항",
+    "[ 지배회사의 내용 ]",
+    "1) 생산능력 및 생산능력의 산출근거",
+    "(1) 생산능력"
+   ],
+   "context": [
+    "나. 생산 및 생산 설비에 관한 사항",
+    "[ 지배회사의 내용 ]",
+    "1) 생산능력 및 생산능력의 산출근거",
+    "(1) 생산능력",
+    "(단위 : 댓수, 명)"
+   ],
+   "unit": "(단위 : 댓수, 명)",
+   "keywords": [
+    "생산능력"
+   ],
+   "keyword_in": "table",
+   "rows": [
+    [
+     "사업부문",
+     "품 목",
+     "사업소",
+     "단위",
+     "연간생산능력",
+     "비고"
+    ],
+    [
+     "고정익부문",
+     "T-50계열",
+     "본사",
+     "댓수",
+     "36",
+     "-"
+    ],
+    [
+     "명",
+     "257",
+     "-"
+    ],
+    [
+     "KT-1계열",
+     "본사",
+     "댓수",
+     "21",
+     "-"
+    ],
+    [
+     "명",
+     "67",
+     "-"
+    ],
+    [
+     "회전익부문",
+     "KUH계열LAH/LCH",
+     "본사",
+     "댓수",
+     "72",
+     "-"
+    ],
+    [
+     "명",
+     "170",
+     "-"
+    ],
+    [
+     "기체사업",
+     "A-10부분품,F-15 전방동체 등",
+     "본사 등",
+     "-",
+     "-",
+     "-"
+    ],
+    [
+     "명",
+     "142",
+     "-"
+    ],
+    [
+     "기타",
+     "완제기 부품, 추진체 탱크 등",
+     "본사 등",
+     "-",
+     "-",
+     "-"
+    ],
+    [
+     "명",
+     "359",
+     "-"
+    ]
+   ],
+   "html": "<table aclass=\"NORMAL\" afixtable=\"N\" border=\"1\" width=\"565\">\n<colgroup width=\"565\">\n<col width=\"106\"/>\n<col width=\"132\"/>\n<col width=\"59\"/>\n<col width=\"60\"/>\n<col width=\"129\"/>\n<col width=\"79\"/>\n</colgroup>\n<tbody>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"30\">\n<td align=\"CENTER\" height=\"23\" usermark=\" BC0XD7D7D7\" valign=\"MIDDLE\" width=\"97\">사업부문</td>\n<td align=\"CENTER\" height=\"23\" usermark=\" BC0XD7D7D7\" valign=\"MIDDLE\" width=\"123\">품 목</td>\n<td align=\"CENTER\" height=\"23\" usermark=\" BC0XD7D7D7\" valign=\"MIDDLE\" width=\"50\">사업소</td>\n<td align=\"CENTER\" height=\"23\" usermark=\" BC0XD7D7D7\" valign=\"MIDDLE\" width=\"51\">단위</td>\n<td align=\"CENTER\" height=\"23\" usermark=\" BC0XD7D7D7\" valign=\"MIDDLE\" width=\"120\">연간생산능력</td>\n<td align=\"CENTER\" height=\"23\" usermark=\" BC0XD7D7D7\" valign=\"MIDDLE\" width=\"70\">비고</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"30\">\n<td align=\"CENTER\" height=\"113\" rowspan=\"4\" valign=\"MIDDLE\" width=\"97\">고정익부문</td>\n<td align=\"CENTER\" height=\"53\" rowspan=\"2\" valign=\"MIDDLE\" width=\"123\">T-50계열</td>\n<td align=\"CENTER\" height=\"53\" rowspan=\"2\" valign=\"MIDDLE\" width=\"50\">본사</td>\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"51\">댓수</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"120\">36</td>\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"70\">-</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"30\">\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"51\">명</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"120\">257</td>\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"70\">-</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"30\">\n<td align=\"CENTER\" height=\"53\" rowspan=\"2\" valign=\"MIDDLE\" width=\"123\">KT-1계열</td>\n<td align=\"CENTER\" height=\"53\" rowspan=\"2\" valign=\"MIDDLE\" width=\"50\">본사</td>\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"51\">댓수</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"120\">21</td>\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"70\">-</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"30\">\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"51\">명</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"120\">67</td>\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"70\">-</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"30\">\n<td align=\"CENTER\" height=\"53\" rowspan=\"2\" valign=\"MIDDLE\" width=\"97\">회전익부문</td>\n<td align=\"CENTER\" height=\"53\" rowspan=\"2\" valign=\"MIDDLE\" width=\"123\">KUH계열LAH/LCH</td>\n<td align=\"CENTER\" height=\"53\" rowspan=\"2\" valign=\"MIDDLE\" width=\"50\">본사</td>\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"51\">댓수</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"120\">72</td>\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"70\">-</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"30\">\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"51\">명</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"120\">170</td>\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"70\">-</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"30\">\n<td align=\"CENTER\" height=\"53\" rowspan=\"2\" valign=\"MIDDLE\" width=\"97\">기체사업</td>\n<td align=\"CENTER\" height=\"53\" rowspan=\"2\" valign=\"MIDDLE\" width=\"123\">A-10부분품,F-15 전방동체 등</td>\n<td align=\"CENTER\" height=\"53\" rowspan=\"2\" valign=\"MIDDLE\" width=\"50\">본사 등</td>\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"51\">-</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"120\">-</td>\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"70\">-</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"30\">\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"51\">명</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"120\">142</td>\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"70\">-</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"30\">\n<td align=\"CENTER\" height=\"53\" rowspan=\"2\" valign=\"MIDDLE\" width=\"97\">기타</td>\n<td align=\"CENTER\" height=\"53\" rowspan=\"2\" valign=\"MIDDLE\" width=\"123\">완제기 부품, 추진체 탱크 등</td>\n<td align=\"CENTER\" height=\"53\" rowspan=\"2\" valign=\"MIDDLE\" width=\"50\">본사 등</td>\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"51\">-</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"120\">-</td>\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"70\">-</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"30\">\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"51\">명</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"120\"> 359</td>\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"70\">-</td>\n</tr>\n</tbody>\n</table>",
+   "footnotes": [
+    "※ 완제기를 제외한 품목은 상이한 개별 프로젝트들의 합계이므로 댓수를 일괄적으로 산정할 수 없어서 기재를 생략하였고, 외주 제작품 및 간접인력(설계 및 생산간접)은 제외하였습니다. / ※ 고정익부문의 체계개발사업(KF-21 등)은 생산능력을 산출할 수 없어 기재를 생략하였습니다."
+   ],
+   "digest": "fbee2162870c",
+   "file": "20241114002482.xml"
+  },
+  {
+   "section": [
+    "1. 사업의 개요",
+    "2. 주요 제품 및 서비스",
+    "3. 원재료 및 생산설비"
+   ],
+   "headings": [
+    "(2) 생산능력의 산출근거",
+    "(가) 산출방법 등",
+    "② 산출방법",
+    "(나) 평균가동시간",
+    "① 산출기준",
+    "-",
+    "총 근무일(M-DAY)은 177일",
+    "- 가동률은 정규 8시간중 실제 가동한시간으로 적용합니다.(정규율)",
+    "- 가동 가능시간 = 정시공수 (총근무일[177일] × 8HR × 생산인력)",
+    "- 실제 가동시간 = 2024년 3분기말 정규실동공수(시간)",
+    "2) 생산실적 및 가동률",
+    "(1) 생산실적(당기제품제조원가)"
+   ],
+   "context": [
+    "(2) 생산능력의 산출근거",
+    "(가) 산출방법 등",
+    "① 산출기준ㄱ. 완제기 기준 : 당사에서 수행 중인 고정익과 회전익의 최종조립 및 비행/납품을 실시하고 있는 대상으로 합니다.",
+    "ㄴ. 기체부품 등 기준 : 완제기사업을 제외한 모든 조립과 부품을 포함합니다.",
+    "ㄷ. 댓수 기준 : 해당년도의 생산가능한 최대 Capa를 표현합니다.",
+    "ㄹ. 명 기준 : 현 생산시설에서 당사의 최대 생산가능한 작업자의 수를 표현합니다.",
+    "② 산출방법",
+    "ㄱ. 고정익/회전익 완제기는 최종조립장에서 최종조립 후 납품을 하는 대상을 선정하였습니다.",
+    "ㄴ. 완제기의 댓수 및 인력은 해당년도의 최대 생산가능한 댓수 및 생산성 공수를 기준으로 인력을 산정합니다.",
+    "ㄷ. 기체사업 등의 인력은 조립의 경우 생산성과 최대 생산가능 댓수를 기준으로 산정하였으며(완제기와 동일한 방식), 부품의 경우 작업장의 현재 운영인력에 추가 생산가능한 인력을 계산하여 최대 인력 규모를 산정합니다.",
+    "(나) 평균가동시간",
+    "① 산출기준",
+    "ㄱ. 당사의 작업자 인당 가동시간에 대한 정의는 2024년 3분기말을 기준으로 아래와 같이 적용되었습니다.",
+    "-",
+    "총 근무일(M-DAY)은 177일",
+    "이며, 매년 공휴일 등으로 근무일수가 변경됩니다.",
+    "- 1일당 정규시간은 법정근로 시간인 8시간을 적용합니다.",
+    "② 적용기준 ㄱ. 산출기준을 기준으로 평균가동시간을 적용하였습니다.",
+    "- 가동률은 정규 8시간중 실제 가동한시간으로 적용합니다.(정규율)",
+    "- 가동 가능시간 = 정시공수 (총근무일[177일] × 8HR × 생산인력)",
+    "- 실제 가동시간 = 2024년 3분기말 정규실동공수(시간)",
+    "2) 생산실적 및 가동률",
+    "(1) 생산실적(당기제품제조원가)",
+    "(단위 : 백만원)"
+   ],
+   "unit": "(단위 : 백만원)",
+   "keywords": [
+    "생산실적"
+   ],
+   "keyword_in": "heading",
+   "rows": [
+    [
+     "구 분",
+     "2024년 3분기(제26기)",
+     "2023년(제25기)",
+     "2022년(제24기)"
+    ],
+    [
+     "내 수",
+     "1,231,532",
+     "1,832,570",
+     "1,710,526"
+    ],
+    [
+     "수 출",
+     "923,014",
+     "1,504,933",
+     "644,308"
+    ],
+    [
+     "합 계",
+     "2,154,546",
+     "3,337,503",
+     "2,354,834"
+    ]
+   ],
+   "html": "<table aclass=\"NORMAL\" afixtable=\"N\" border=\"1\" width=\"607\">\n<colgroup width=\"607\">\n<col width=\"91\"/>\n<col width=\"172\"/>\n<col width=\"172\"/>\n<col width=\"172\"/>\n</colgroup>\n<thead>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"53\">\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"46\" valign=\"MIDDLE\" width=\"82\">구 분</th>\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"46\" valign=\"MIDDLE\" width=\"163\">2024년 3분기(제26기)</th>\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"46\" usermark=\" BC0XD7D7D7\" valign=\"MIDDLE\" width=\"163\">2023년(제25기)</th>\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"46\" usermark=\" BC0XD7D7D7\" valign=\"MIDDLE\" width=\"163\">2022년(제24기)</th>\n</tr>\n</thead>\n<tbody>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"30\">\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"82\">내 수</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"163\">1,231,532</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"163\">1,832,570</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"163\">1,710,526</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"30\">\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"82\">수 출</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"163\">923,014</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"163\">1,504,933</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"163\">644,308</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"30\">\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"82\">합 계</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"163\">2,154,546</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"163\">3,337,503</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"163\">2,354,834</td>\n</tr>\n</tbody>\n</table>",
+   "footnotes": [],
+   "digest": "5c1970160d64",
+   "file": "20241114002482.xml"
+  },
+  {
+   "section": [
+    "1. 사업의 개요",
+    "2. 주요 제품 및 서비스",
+    "3. 원재료 및 생산설비"
+   ],
+   "headings": [
+    "(2) 당해 사업연도의 가동률"
+   ],
+   "context": [
+    "(2) 당해 사업연도의 가동률",
+    "(단위 : 시간, %)"
+   ],
+   "unit": "(단위 : 시간, %)",
+   "keywords": [
+    "가동률"
+   ],
+   "keyword_in": "table",
+   "rows": [
+    [
+     "사업소(사업부문)",
+     "2024년 3분기가동가능시간",
+     "2024년 3분기실제가동시간",
+     "평균가동률"
+    ],
+    [
+     "전체 사업부문",
+     "759,223",
+     "526,190",
+     "69.3%"
+    ]
+   ],
+   "html": "<table aclass=\"NORMAL\" afixtable=\"N\" border=\"1\" width=\"641\">\n<colgroup width=\"641\">\n<col width=\"158\"/>\n<col width=\"198\"/>\n<col width=\"195\"/>\n<col width=\"90\"/>\n</colgroup>\n<thead>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"53\">\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"46\" valign=\"MIDDLE\" width=\"149\">사업소(사업부문)</th>\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"46\" valign=\"MIDDLE\" width=\"189\">2024년 3분기가동가능시간</th>\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"46\" valign=\"MIDDLE\" width=\"186\">2024년 3분기실제가동시간</th>\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"46\" valign=\"MIDDLE\" width=\"81\">평균가동률</th>\n</tr>\n</thead>\n<tbody>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"30\">\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"149\">전체 사업부문</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"189\">759,223</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"186\">526,190</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"81\">69.3%</td>\n</tr>\n</tbody>\n</table>",
+   "footnotes": [],
+   "digest": "94d28ca4c791",
+   "file": "20241114002482.xml"
+  }
+ ],
+ "rejected": [
+  {
+   "section": [
+    "1. 사업의 개요",
+    "2. 주요 제품 및 서비스",
+    "3. 원재료 및 생산설비"
+   ],
+   "headings": [],
+   "context": [],
+   "unit": "",
+   "keywords": [
+    "가동률"
+   ],
+   "keyword_in": "",
+   "rows": [
+    [
+     "※",
+     "2024년 3분기말 가동가능시간 : 2024년 3분기말 M-day(177일) ×정규시간 8시간×생산인력"
+    ],
+    [
+     "※",
+     "2024년 3분기 실제가동시간 : 생산 정규실제가동시간"
+    ],
+    [
+     "※",
+     "평균가동률 : 실제가동시간 ÷ 가동가능시간 × 100"
+    ]
+   ],
+   "html": "",
+   "footnotes": [],
+   "digest": "85e1a4bdb059",
+   "why": "셀 전체가 지표명이 아니거나 멀리 있는 문장에만 키워드",
+   "file": "20241114002482.xml"
+  },
+  {
+   "section": [
+    "1. 사업의 개요",
+    "2. 주요 제품 및 서비스",
+    "3. 원재료 및 생산설비"
+   ],
+   "headings": [
+    "4) 제품별 생산 공정도",
+    "[종속회사의 내용]",
+    "Korea Aerospace F.W. Inc",
+    "한국항공서비스(주)",
+    "1) 생산능력 및 생산능력의 산출근거",
+    "2) 생산실적 및 가동률",
+    "3) 생산설비에 관한 사항",
+    "(1) 현황"
+   ],
+   "context": [
+    "4) 제품별 생산 공정도",
+    "T-50, KUH, KT-1의 생산은 부품제작, 구조조립, 최종조립 공정을 거쳐 생산됩니다. 다만 부품 수출은 별도의 조립 없이 고객사가 원하는 형태로 부품제작 단계에서 생산 종료됩니다.",
+    "[종속회사의 내용]",
+    "Korea Aerospace F.W. Inc",
+    "해당사항 없음",
+    "한국항공서비스(주)",
+    "1) 생산능력 및 생산능력의 산출근거",
+    "한국항공서비스(주)는 B737급 항공기 10대를 동시에 정비가능한 군수동 및 민수동 행가를 보유하고 있습니다. 이는 연간 민항기 및 회전익 항공기 약 200여대의 정비 수행이 가능한 규모입니다.",
+    "2) 생산실적 및 가동률",
+    "한국항공서비스(주)는 2024년 3분기말 기준 군/민수 항공기 120대를 납품하였고, 가동률은 약 88.13%입니다.",
+    "3) 생산설비에 관한 사항",
+    "(1) 현황"
+   ],
+   "unit": "",
+   "keywords": [
+    "가동률",
+    "생산능력",
+    "생산실적"
+   ],
+   "keyword_in": "",
+   "rows": [
+    [
+     "기초 : 2024.01.01",
+     "기말 : 2024.09.30",
+     "(단위 : 백만원 )"
+    ]
+   ],
+   "html": "",
+   "footnotes": [],
+   "digest": "e9fa5963c3fd",
+   "why": "셀 전체가 지표명이 아니거나 멀리 있는 문장에만 키워드",
+   "file": "20241114002482.xml"
+  },
+  {
+   "section": [
+    "1. 사업의 개요",
+    "2. 주요 제품 및 서비스",
+    "3. 원재료 및 생산설비"
+   ],
+   "headings": [
+    "스",
+    "1) 생산능력 및 생산능력의 산출근거",
+    "2) 생산실적 및 가동률",
+    "3) 생산설비에 관한 사항",
+    "(1) 현황"
+   ],
+   "context": [
+    "(주)에비오시스테크놀러지",
+    "스",
+    "1) 생산능력 및 생산능력의 산출근거",
+    "(주)에비오시스테크놀로지스의 생산능력은 수리온 LRU LRU 19종(제작 필요공수 : 570 M/H) 기준 월 3.0대 양산가능하며, 그 근거는 생산인원 10명(월 제작 가동공수 : 1,720 M/H)과 시험장비 13종 및 환경시험장비인 진동기 1대, 온도 챔버 3대를 가동하고 있습니다.",
+    "2) 생산실적 및 가동률",
+    "(주)에비오시스테크놀로지스의 2024년 3분기말 생산누적실적은 LAH 1차(LRU 19종) 9대, 수리온 파생형(LRU 7종) 4대, RTD온도센서 520개, 현존전력극대화DAU/IVI 15대, 상륙공격체계개발품(RDC 1대, CWP 5대, WCP 4대 ) 일부를 납품하였으며, 3분기 생산 가동률은 약86%로 LAH LRU 19종 기준 월 3.0대 양산능력 대비 월 2.6대 납품을 진행하였습니다.",
+    "3) 생산설비에 관한 사항",
+    "(1) 현황"
+   ],
+   "unit": "",
+   "keywords": [
+    "가동률",
+    "생산능력",
+    "생산실적"
+   ],
+   "keyword_in": "",
+   "rows": [
+    [
+     "기초 : 2024.01.01",
+     "기말 : 2024.09.30",
+     "(단위 : 백만원 )"
+    ]
+   ],
+   "html": "",
+   "footnotes": [],
+   "digest": "e9fa5963c3fd",
+   "why": "셀 전체가 지표명이 아니거나 멀리 있는 문장에만 키워드",
+   "file": "20241114002482.xml"
+  },
+  {
+   "section": [
+    "1. 사업의 개요",
+    "2. 주요 제품 및 서비스",
+    "3. 원재료 및 생산설비"
+   ],
+   "headings": [
+    "에스앤케이항공(주)",
+    "1) 생산능력 및 생산능력의 산출근거",
+    "2) 생산실적 및 가동률",
+    "3) 생산설비에 관한 사항",
+    "(1) 현황"
+   ],
+   "context": [
+    "에스앤케이항공(주)",
+    "1) 생산능력 및 생산능력의 산출근거",
+    "에스앤케이항공(주)는 A320 Wing Top Panel을 주력기종으로 생산하고 있으며, 생산능력은 AR 장비 기준 1대당 월 7대 생산이 가능하며, 장비 4대를 보유하고 있어 월 28대 생산능력을 보유하고 있습니다.",
+    "2) 생산실적 및 가동률",
+    "에스앤케이항공(주)의 2024년 3분기말 생산실적은 A320 Wing Top Panel 기준 198대로 79%의 가동율을 보이고 있습니다.",
+    "3) 생산설비에 관한 사항",
+    "(1) 현황"
+   ],
+   "unit": "",
+   "keywords": [
+    "가동률",
+    "가동율",
+    "생산능력",
+    "생산실적"
+   ],
+   "keyword_in": "",
+   "rows": [
+    [
+     "기초 : 2024.01.01",
+     "기말 : 2024.09.30",
+     "(단위 : 백만원 )"
+    ]
+   ],
+   "html": "",
+   "footnotes": [],
+   "digest": "e9fa5963c3fd",
+   "why": "셀 전체가 지표명이 아니거나 멀리 있는 문장에만 키워드",
+   "file": "20241114002482.xml"
+  }
+ ]
+}
