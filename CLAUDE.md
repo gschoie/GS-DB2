@@ -1096,6 +1096,8 @@
       **`SHARE_DEPLOY_TOKEN`**(그 리포 Contents 쓰기 PAT)이 없으면 스텝을 건너뛴다 — **`secrets` 는 step
       `if` 에서 못 쓴다**(첫 머지 run 이 잡 0개·0초로 실패, 배포 5종 전부 멈춤) → 셸 스텝 출력(`steps.share.outputs.on`)으로 판정,
       실패해도 본 배포는 그대로(continue-on-error). 두 배포가 겹쳐도 force push 라 마지막 것이 남는다.
+      시크릿 이름은 `SHARE_DEPLOY_TOKEN` 또는 `SHARE_DEPLOY_2_GS_RESEARCH_DESK`(사용자가 등록한 실제 이름,
+      둘 중 있는 쪽 — `secrets.A || secrets.B`). 시크릿 이름은 대소문자를 가리지 않는다.
     - `static/app.js` `SHARE_SITE`/`shareUrl`/`shareLinks`: **`target=_blank` 인 같은 사이트
       링크만** 절대주소로 바꾼다(로드 때 1회 + 캡처 단계 click/auxclick 로 나중에 그려지는
       오늘의 요약 카드 링크까지). 대시보드 안 iframe(data-view)은 상대경로 그대로.
