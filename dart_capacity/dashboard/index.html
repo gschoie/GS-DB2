@@ -38,7 +38,11 @@ td a:hover{color:var(--link);border-bottom-color:var(--link)}
 #cmp td:first-child,#cmp th:first-child{white-space:normal;text-align:left;min-width:220px;max-width:380px;word-break:keep-all}   /* 줄 이름(부문/품목/법인)이 길어 nowrap 이면 숫자 열이 화면 밖으로 밀린다 */
 #cmp td.sup{white-space:normal;min-width:160px;max-width:280px}
 .grp td{background:var(--chip);color:var(--ink2);font-weight:600;text-align:left}
-.charts{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:14px;margin:8px 0 10px}
+.charts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin:8px 0 10px}
+@media(max-width:700px){.charts{grid-template-columns:minmax(0,1fr)}}
+details.fold{margin:2px 0 6px}
+details.fold>summary{cursor:pointer;font-size:12px;color:var(--ink3);padding:4px 0;user-select:none}
+details.fold>summary:hover{color:var(--ink)}
 .chart{position:relative}
 .chart .cap{font-size:12px;color:var(--ink2);margin:0 0 4px;display:flex;gap:12px;align-items:center}
 .chart .cap i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:4px;vertical-align:-1px}
@@ -121,7 +125,9 @@ const lineName = r => {
   if (r.topic === "material" && r.entity && !name.includes(r.entity)) name += ` (${r.entity})`;
   return name;
 };
-const lineKey = r => `${r.stock_code}|${r.segment || ""}|${r.product || r.item || ""}|${r.spec || ""}|${r.purchase_type || ""}|${r.topic === "material" ? (r.entity || "") : ""}`;   // 단위는 기간마다 달라질 수 있어 키에 안 넣는다
+// 줄 키 = 표시 이름 + 단위. 모델이 같은 줄을 (segment '', product '기타') / ('기타', '') / ('기타','기타') 로 달리 적어
+// '대한조선 › 기타' 가 세 줄로 쪼개졌다(실측) — 화면에 같은 이름으로 보이면 같은 줄이다. 단위가 다르면(선박 GT·천MH) 따로.
+const lineKey = r => `${r.stock_code}|${lineName(r)}|${r.topic ? (r.unit || "") : `${r.capacity_unit || r.unit || ""}|${r.production_unit || ""}`}`;
 
 async function load() {
   for (const url of DATA_CANDIDATES) {
@@ -210,9 +216,9 @@ function renderSeries(rows) {
             : chart(pts, [["capacity", "생산능력", "var(--s1)"]], r0.capacity_unit || r0.unit || "") + chart(pts, [["production", "생산실적", "var(--s2)"]], r0.production_unit || "")}
           ${chart(pts, [["utilization_pct", "가동률", "var(--s3)"]], "%")}
         </div>
-        <div class="tscroll"><table><thead><tr><th>보고 기간</th><th>보고서</th><th>생산능력${r0.capacity_unit ? " (" + esc(r0.capacity_unit) + ")" : ""}</th><th>생산실적${r0.production_unit ? " (" + esc(r0.production_unit) + ")" : ""}</th><th>가동률</th><th style="text-align:left">비고</th></tr></thead><tbody>
+        <details class="fold"><summary>보고 기간별 ${pts.length}행 — 펼치기</summary><div class="tscroll"><table><thead><tr><th>보고 기간</th><th>보고서</th><th>생산능력${r0.capacity_unit ? " (" + esc(r0.capacity_unit) + ")" : ""}</th><th>생산실적${r0.production_unit ? " (" + esc(r0.production_unit) + ")" : ""}</th><th>가동률</th><th style="text-align:left">비고</th></tr></thead><tbody>
         ${pts.map(r => `<tr><td>${esc(periodLabel(r))}</td><td class="lbl">${link(r, esc(r.report_label || r.report_type || "원문"))}</td><td>${link(r, fmt(r.capacity))}</td><td>${link(r, fmt(r.production))}</td><td>${link(r, fmt(r.utilization_pct, "utilization_pct"))}</td><td class="lbl" style="white-space:normal;min-width:200px">${esc(r.note || "")}</td></tr>`).join("")}
-        </tbody></table></div>`;
+        </tbody></table></div></details>`;
     }
     html += `</div>`;
   }
@@ -224,7 +230,7 @@ function renderSeries(rows) {
 function chart(pts, seriesDefs, unit) {
   const W = 520, H = 170, L = 46, R = 10, T = 12, B = 26;
   const defs = seriesDefs.filter(([key]) => pts.some(p => p[key] !== null && p[key] !== undefined && p[key] !== ""));
-  if (!defs.length) return `<div class="chart"><div class="cap">${seriesDefs.map(d => d[1]).join(" · ")}</div><div class="empty" style="padding:16px 0">값 없음</div></div>`;
+  if (!defs.length) return "";                       // 값이 하나도 없는 차트('가동률 값 없음')는 자리를 안 차지한다
   const vals = defs.flatMap(([key]) => pts.map(p => +p[key]).filter(v => !Number.isNaN(v)));
   let lo = Math.min(0, ...vals), hi = Math.max(...vals); if (hi === lo) hi = lo + 1;
   // 눈금은 1·2·5×10^k 의 '둥근' 간격으로 — 90.6/68/45.3 같은 눈금은 읽는 사람이 환산해야 한다
@@ -318,9 +324,9 @@ function renderSeriesTopic(rows, cfg) {
       const r0 = pts[pts.length - 1];
       html += `<h4 style="margin:12px 0 4px;font-size:14px">${esc(lineName(r0))} <span class="pill">${esc(r0.unit || "단위 미기재")}</span></h4>
         <div class="charts">${pts.length > 1 ? chart(pts, [[vk, cfg.valueLabel, cfg.color]], r0.unit || "") : ""}</div>
-        <div class="tscroll"><table><thead><tr><th>보고 기간</th><th>보고서</th><th>${cfg.valueLabel}${r0.unit ? " (" + esc(r0.unit) + ")" : ""}</th>${state.topic === "material" ? "<th>비중</th><th style=\"text-align:left\">주요 매입처</th>" : ""}<th style="text-align:left">비고</th></tr></thead><tbody>
+        <details class="fold"><summary>보고 기간별 ${pts.length}행 — 펼치기</summary><div class="tscroll"><table><thead><tr><th>보고 기간</th><th>보고서</th><th>${cfg.valueLabel}${r0.unit ? " (" + esc(r0.unit) + ")" : ""}</th>${state.topic === "material" ? "<th>비중</th><th style=\"text-align:left\">주요 매입처</th>" : ""}<th style="text-align:left">비고</th></tr></thead><tbody>
         ${pts.map(r => `<tr><td>${esc(periodLabel(r))}</td><td class="lbl">${link(r, esc(r.report_label || "원문"))}</td><td>${link(r, fmt(r[vk]))}</td>${state.topic === "material" ? `<td>${r.share_pct != null ? fmt(r.share_pct) + "%" : "–"}</td><td class="lbl" style="white-space:normal;min-width:160px">${esc(r.suppliers || "")}</td>` : ""}<td class="lbl" style="white-space:normal;min-width:200px">${esc(r.note || "")}</td></tr>`).join("")}
-        </tbody></table></div>`;
+        </tbody></table></div></details>`;
     }
     html += `</div>`;
   }
