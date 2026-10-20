@@ -292,18 +292,14 @@ class Outputs(unittest.TestCase):
         self.assertIn("오늘(잠정): 한화에어로스페이스 기관 -165", txt)
         self.assertIn("패시브 순매도 큼 · ADV -37.5%", txt)
         self.assertIn("TIME 코스피액티브 → 한화오션 증가 +20%", txt)
-        self.assertIn("한화에어로스페이스 RSI 20 · 1년 최저권 (하위 1%)", txt)
-        self.assertIn("한화오션 RSI 69 · 1년 최고권", txt)
-        self.assertIn("검증 전", txt); self.assertLess(len(txt), 4000)
-        self.assertNotIn("github.io", txt)                                  # 대시보드 주소 비노출
+        self.assertNotIn("RSI", txt); self.assertNotIn("검증 전", txt)       # RSI 섹션·각주는 텔레에서 뺌(10/20)
+        self.assertLess(len(txt), 4000)
+        self.assertNotIn("github.io", txt)                                  # 링크는 main 이 맨 밑에 붙인다
 
     def test_pctl_zero_is_lowest_not_missing(self):
         d = fake_payload()
         d["rows"][1]["tech"].update(rsi_pctl=0.0, extreme="1년 최저권 (하위 0%)")
         d["rows"][0]["tech"].update(rsi_pctl=3.0, extreme="1년 최저권 (하위 3%)")
-        txt = notify.compose(d)
-        i0, i1 = txt.index("한화에어로스페이스 RSI"), txt.index("한화오션 RSI")
-        self.assertLess(i0, i1)                       # 0% 가 3% 보다 먼저
         self.assertEqual(metrics.pctl_or(0.0, 50), 0.0); self.assertEqual(metrics.pctl_or(None, 50), 50)
         h = build_report.render(d)
         self.assertIn("RSI 1년 최저권", h)
@@ -332,9 +328,9 @@ class Outputs(unittest.TestCase):
         first = h.split("\n")[0]
         self.assertTrue(first.startswith("<b>[GS🎴 조선·방산·건기] 수급 브리핑") and first.endswith("</b>"), first)
         self.assertIn("LIG D&amp;A", h); self.assertNotIn("D&A", h)
-        for head in ("<b>📈 사는 쪽 · 시총 대비 5일</b>", "<b>📉 파는 쪽 · 시총 대비 5일</b>", "<b>⚙️ 기계적 수급 (ETF/패시브)</b>", "<b>🌡️ RSI 1년 극단"):
+        for head in ("<b>📈 사는 쪽 · 시총 대비 5일</b>", "<b>📉 파는 쪽 · 시총 대비 5일</b>", "<b>⚙️ 기계적 수급 (ETF/패시브)</b>"):
             self.assertIn(head, h)
-        self.assertEqual(h.count("<b>"), 5)                                    # 머리글 + 섹션 제목 4개만 볼드
+        self.assertEqual(h.count("<b>"), 4)                                    # 머리글 + 섹션 제목 3개만 볼드
         sent = []
         with tempfile.TemporaryDirectory() as tmp:
             latest, status = os.path.join(tmp, "l.json"), os.path.join(tmp, "s.json")
@@ -403,7 +399,7 @@ class Outputs(unittest.TestCase):
 
     def test_compose_empty(self):
         txt = notify.compose({"asof": "2026-10-16 10:01", "rows": [], "etfs": [], "active": []})
-        self.assertIn("순매수 종목 없음", txt); self.assertIn("첫 수집", txt); self.assertIn("극단권 종목 없음", txt)
+        self.assertIn("순매수 종목 없음", txt); self.assertIn("첫 수집", txt); self.assertNotIn("극단권", txt)
 
     def test_render(self):
         h = build_report.render(fake_payload())

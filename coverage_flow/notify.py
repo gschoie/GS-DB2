@@ -107,33 +107,12 @@ def compose(d):
             pct = f" {h['pct']:+.0f}%" if h.get("pct") is not None else ""
             L.append(f"· {h['etf']} → {h['stock']} {h['kind']}{pct}")
 
-    # 기술 지표
-    L.append("")
-    L.append("🌡️ RSI 1년 극단" + (" (잠정)" if prov else ""))
-    ex = [r for r in rows if r.get("tech", {}).get("extreme")]
-    # 주의: pctl 0.0 은 '최저' 이지 '없음' 이 아니다 — `or 50` 으로 쓰면 1년 최저가 중간으로 간다
-    ex.sort(key=lambda r: metrics.pctl_or(r["tech"].get("rsi_pctl"), 50))
-    lo = [r for r in ex if metrics.pctl_or(r["tech"].get("rsi_pctl"), 50) <= 50]
-    hi = [r for r in ex if metrics.pctl_or(r["tech"].get("rsi_pctl"), 50) > 50][::-1]
-    for r in lo + hi:
-        t = r["tech"]
-        L.append(f"· {r['name']} RSI {t['rsi']:.0f} · {t['extreme']}")
-    if not ex:
-        band = [r for r in rows if r.get("tech", {}).get("rsi") is not None
-                and (r["tech"]["rsi"] <= metrics.RSI_LO or r["tech"]["rsi"] >= metrics.RSI_HI)]
-        if band:
-            for r in band:
-                L.append(f"· {r['name']} RSI {r['tech']['rsi']:.0f} ({'과매도' if r['tech']['rsi'] <= 30 else '과매수'} 구간)")
-        else:
-            L.append("· 1년 극단권 종목 없음")
-
-    L.append("")
-    L.append("기계적 수급은 섹터 ETF 7개 Top10 비중 기준 하한값 · 규칙 기반 상태값이며 검증 전입니다.")
-    # 대시보드 주소는 적지 않는다(반비공개 주소) — 화면은 캡쳐 사진으로 따로 보낸다(send_photo).
+    # RSI 1년 극단 섹션과 각주는 10/20 저녁 사용자 요청("rsi 이하는 빼자")으로 텔레 본문에서 뺐다 —
+    # 화면 ② 과매수·과매도 표에는 그대로 있다. 본문은 맨 밑 공유 링크(main 에서 붙임)로 끝난다.
     return "\n".join(L)
 
 
-SECTION_HEADS = ("📈 사는 쪽", "📉 파는 쪽", "⚙️ 기계적 수급", "🌡️ RSI 1년 극단")   # HTML 모드에서 볼드로 찍는 섹션 제목
+SECTION_HEADS = ("📈 사는 쪽", "📉 파는 쪽", "⚙️ 기계적 수급")   # HTML 모드에서 볼드로 찍는 섹션 제목
 
 
 def compose_html(d):
