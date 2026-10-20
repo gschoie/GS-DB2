@@ -318,7 +318,7 @@ th.r,td.r{{text-align:right;font-variant-numeric:tabular-nums}}
 .mini.b{{background:#fde2e2;color:#b91c1c}}.mini.s{{background:#dbe6fd;color:#1d4ed8}}
 .rsi-lo{{color:#1d4ed8;font-weight:700}}.rsi-hi{{color:#b91c1c;font-weight:700}}
 td.empty{{color:var(--muted);text-align:center;padding:18px}}
-tr.sub td{{font-weight:700;border-top:2px solid #cbd5e1;background:#fafafa}}tr.sub td small{{font-weight:400}}
+tr.sub td{{font-weight:800;color:var(--ink);border-top:2px solid #94a3b8;border-bottom:2px solid #94a3b8;background:#f1f5f9}}tr.sub td .pos,tr.sub td .neg{{font-weight:800}}tr.sub td small{{font-weight:400;font-size:11px}}
 tr.gh td{{background:#eef2f7;color:#1f2937;font:700 12px Georgia,"Noto Serif KR",serif;letter-spacing:.06em;padding:6px 8px}}
 table.compact{{font-size:12px}}
 table.flow{{font-size:12px}}table.flow td,table.flow th{{padding:6px 5px}}th.c{{text-align:center}}td.grp,th.grp{{border-left:2px solid #e5e7eb}}
