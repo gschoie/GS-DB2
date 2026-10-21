@@ -2,6 +2,23 @@
  "_doc": "건기 전략 레이더 데이터 — 건설기계 브리핑에서 잡힌 신제품(product)·CAPEX(capex)·딜러망(dealer — 특히 HD현대건설기계·두산밥캣 중점)·M&A/제휴(ma) 이벤트 누적. 세션 루틴 [7.7]이 매일 추가하고 construction_briefing/strategy_tracker_publish.py 가 페이지를 굽는다. date=보도일(KST), ref=근거 브리핑 페이지(static 루트 기준 상대경로), url=원 기사(선택).",
  "events": [
   {
+   "date": "2026-10-22",
+   "cat": "product",
+   "company": "HD현대건설기계",
+   "title": "2.7톤급 전기 굴착기 출시 임박 보도(전자신문)",
+   "note": "기존 1.7톤 DX20ZE·미니 HX20E 윗급 신규 톤수 — 소형 전동 양산 축. 공식 보도자료 미확인(기사 기준), 출시 확정 시 note 갱신",
+   "ref": "construction_daily/2026-10-22.html"
+  },
+  {
+   "date": "2026-10-22",
+   "cat": "product",
+   "company": "Caterpillar",
+   "title": "Equip Expo(10/21~23 루이빌) 컴팩트 신제품 5종 — 첫 컴팩트 유틸리티 로더 TUL100 포함",
+   "note": "253 컴팩트 트랙로더·301 CR 마이크로·302.4/302.6 미니 굴착기 — 두산밥캣 안방(북미 소형·컴팩트) 정면 공세",
+   "ref": "chatgpt_construction/2026-10-22.html",
+   "url": "https://www.constructionequipmentguide.com/caterpillar-launches-5-new-equipment-models/72455"
+  },
+  {
    "date": "2026-08-20",
    "cat": "ma",
    "company": "Komatsu × AIM",
