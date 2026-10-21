@@ -28,7 +28,7 @@ on:
         type: boolean
         default: false
   schedule:
-    - cron: "5 4 * * 1-5"     # 04:05 UTC = 13:05 KST (GAS 13:00 의 안전망)
+    - cron: "35 2 * * 1-5"    # 02:35 UTC = 11:35 KST (GAS 11:30 의 안전망)
     - cron: "5 7 * * 1-5"     # 07:05 UTC = 16:05 KST (GAS 16:00 의 안전망)
 
 permissions:
@@ -40,7 +40,7 @@ concurrency:
 
 jobs:
   # 24번 교훈: "이 슬롯이 이미 처리됐나"를 묻는다 — 이벤트를 가리지 않고 현재 슬롯 창
-  # (13:00 슬롯은 12:30 KST~, 16:00 슬롯은 15:30 KST~; 경계 14:30 = metrics.SLOT_BOUNDARY)
+  # (11:30 슬롯은 11:00 KST~, 16:00 슬롯은 15:30 KST~; 경계 13:45 = metrics.SLOT_BOUNDARY)
   # 안의 성공·진행중 run 을 세되 자기 자신만 뺀다. GAS 가 정시에 쐈으면 밀린 크론은 스킵해
   # 텔레가 두 번 가지 않는다. fail-open.
   guard:
@@ -56,10 +56,10 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           hm=$(TZ=Asia/Seoul date +%H%M)
-          # 현재 시각으로 슬롯을 정한다(경계 14:30). 슬롯 정시 전에 도착한 밀린 크론은 버린다 —
-          # 정시는 GAS 시계가 쏜다. 13:05 크론이 몇 시간 밀려 14:30 을 넘기면 16:00 슬롯으로
+          # 현재 시각으로 슬롯을 정한다(경계 13:45). 슬롯 정시 전에 도착한 밀린 크론은 버린다 —
+          # 정시는 GAS 시계가 쏜다. 11:35 크론이 몇 시간 밀려 13:45 를 넘기면 16:00 슬롯으로
           # 읽혀 '정시 전' 으로 버려지고, 16:05 크론이 그 슬롯을 맡는다.
-          if [ "$hm" -lt 1430 ]; then slot=1300; from="12:30"; else slot=1600; from="15:30"; fi
+          if [ "$hm" -lt 1345 ]; then slot=1130; from="11:00"; else slot=1600; from="15:30"; fi
           if [ "$hm" -lt "$slot" ]; then
             echo "::notice::정시(${slot}) 전 도착한 지연 크론 — 건너뜁니다"
             echo "skip=true" >> "$GITHUB_OUTPUT"
