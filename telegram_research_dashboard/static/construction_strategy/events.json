@@ -2,6 +2,14 @@
  "_doc": "건기 전략 레이더 데이터 — 건설기계 브리핑에서 잡힌 신제품(product)·CAPEX(capex)·딜러망(dealer — 특히 HD현대건설기계·두산밥캣 중점)·M&A/제휴(ma) 이벤트 누적. 세션 루틴 [7.7]이 매일 추가하고 construction_briefing/strategy_tracker_publish.py 가 페이지를 굽는다. date=보도일(KST), ref=근거 브리핑 페이지(static 루트 기준 상대경로), url=원 기사(선택).",
  "events": [
   {
+   "date": "2026-10-23",
+   "cat": "product",
+   "company": "Kubota",
+   "title": "Agtonomy 협업 자율주행 M5L 트랙터 공개(특수작물용)",
+   "note": "자율·전동 라인업 확장 — 농기계 축이지만 유니버스 기업의 자율화 신제품",
+   "ref": "construction_daily/2026-10-23.html"
+  },
+  {
    "date": "2026-10-22",
    "cat": "product",
    "company": "HD현대건설기계",
