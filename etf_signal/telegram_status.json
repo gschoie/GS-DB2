@@ -1,5 +1,5 @@
 {
-  "when_utc": "2026-10-22 00:21:05Z",
+  "when_utc": "2026-10-23 00:17:28Z",
   "ok": true,
   "note": "alert_sent",
   "chat_id_tail": "5171",
@@ -7,7 +7,7 @@
   "response": {
     "ok": true,
     "result": {
-      "message_id": 695,
+      "message_id": 701,
       "from": {
         "id": 8875725998,
         "is_bot": true,
@@ -21,8 +21,8 @@
         "username": "gschoie",
         "type": "private"
       },
-      "date": 1792628465,
-      "text": "📡 ETF/섹터 신호 · 2026-10-21 (전일 확정)\n\n⚡ 추세 강도 3개 (강력 3)\n\n⚡ KODEX 반도체 · 반도체/AI\n   ADX 25 상향돌파 · 하락추세 강화(강력)\n   RSI 37.5 · ADX 25.4 · %K 10.8/12.2 · 수급 중립\n   [B] 상대강도 하위 14% · ADX 하락추세\n\n⚡ KODEX AI반도체TOP2플러스 · 반도체/AI\n   ADX 25 상향돌파 · 하락추세 강화(강력)\n   RSI 33.1 · ADX 25.3 · %K 10.0/9.3 · 수급 중립\n   [B] 상대강도 하위 0% · ADX 하락추세\n\n⚡ KODEX 인버스 · 인버스/숏\n   ADX 25 상향돌파 · 상승추세 강화(강력)\n   RSI 64.4 · ADX 26.1 · %K 83.5/85.0 · 수급 중립\n   [A] 거래대금 1.58배 · 상대강도 상위 2% · ADX 상승추세\n\n전체 신호판 › 대시보드\n🎴 GS Research Desk · ETF/섹터 신호",
+      "date": 1792714647,
+      "text": "📡 ETF/섹터 신호 · 2026-10-22 (전일 확정)\n\n◆ RSI 매수(30 이하) 3개\n   1주 단기 반등용 — 백테스트 D+5 승률 66%(초과 +0.92%p), D+20엔 효과 소멸\n\n🟩 KODEX 은행 · 금융\n   RSI 31.4→29.6 · 30 이하 진입(과매도)\n   RSI 29.6 · ADX 29.8 · %K 13.6/17.3 · 개인몰림 주의\n\n🟩 TIGER 지주회사 · 금융\n   RSI 32.0→29.4 · 30 이하 진입(과매도)\n   RSI 29.4 · ADX 32.3 · %K 10.8/14.2 · 외인·기관 쌍끌이\n\n🟩 SOL 조선기자재 · 조선\n   RSI 30.9→29.2 · 30 이하 진입(과매도)\n   RSI 29.2 · ADX 29.7 · %K 4.6/10.1 · 수급 중립\n\n⚡ 추세 강도 1개\n\n🔺 KODEX 코스닥150선물인버스 · 인버스/숏\n   ADX 20 상향돌파 · 상승추세 확립(확인)\n   RSI 59.9 · ADX 20.4 · %K 75.7/68.4 · 수급 중립\n   [B] 상대강도 상위 4% · ADX 상승추세 · 외인·기관 연속 순매수 6일\n\n전체 신호판 › 대시보드\n🎴 GS Research Desk · ETF/섹터 신호",
       "entities": [
         {
           "offset": 0,
@@ -30,27 +30,42 @@
           "type": "bold"
         },
         {
-          "offset": 43,
+          "offset": 51,
           "length": 1,
           "type": "bold"
         },
         {
-          "offset": 56,
+          "offset": 57,
+          "length": 52,
+          "type": "italic"
+        },
+        {
+          "offset": 114,
+          "length": 8,
+          "type": "bold"
+        },
+        {
+          "offset": 213,
+          "length": 10,
+          "type": "bold"
+        },
+        {
+          "offset": 316,
           "length": 9,
           "type": "bold"
         },
         {
-          "offset": 183,
-          "length": 18,
+          "offset": 418,
+          "length": 1,
           "type": "bold"
         },
         {
-          "offset": 317,
-          "length": 9,
+          "offset": 425,
+          "length": 17,
           "type": "bold"
         },
         {
-          "offset": 462,
+          "offset": 583,
           "length": 4,
           "type": "text_link",
           "url": "https://gschoie.github.io/GS-DB2/etf_signal_report.html"
