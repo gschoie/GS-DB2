@@ -1,5 +1,5 @@
 {
-  "when_utc": "2026-10-22 04:39:44Z",
+  "when_utc": "2026-10-23 04:45:34Z",
   "ok": true,
   "note": "change_sent",
   "chat_id_tail": "5171",
@@ -7,7 +7,7 @@
   "response": {
     "ok": true,
     "result": {
-      "message_id": 696,
+      "message_id": 702,
       "from": {
         "id": 8875725998,
         "is_bot": true,
@@ -21,8 +21,8 @@
         "username": "gschoie",
         "type": "private"
       },
-      "date": 1792643984,
-      "text": "🧩 액티브 ETF 구성 변화 · 감지 2026-10-22 13:39 (직전 거래일 매매)\n\n변화 ETF 5개 · 진입 5·이탈 5·실매매 2\n\n🟢 TIME K바이오액티브 · TIME(구 TIMEFOLIO)\n   ⊕ 진입: 지투지바이오\n   ⊖ 이탈: 한올바이오파마\n   ▲ 삼성바이오로직스 계약수 +28% · 비중 +2.0%p\n   ▲ 셀트리온 계약수 +0% · 비중 −1.4%p\n🟢 TIME 코스피액티브 · TIME(구 TIMEFOLIO)\n   ⊕ 진입: 삼성전자우\n   ⊖ 이탈: LG에너지솔루션\n🟢 TIME K컬처액티브 · TIME(구 TIMEFOLIO)\n   ⊕ 진입: 제일기획\n   ⊖ 이탈: 크래프톤\n🟢 KoAct 코스닥액티브 · KoAct\n   ⊕ 진입: 티에프이\n   ⊖ 이탈: 선익시스템\n🟢 KoAct 바이오헬스케어액티브 · KoAct\n   ⊕ 진입: 알지노믹스\n   ⊖ 이탈: 녹십자\n\n전체 상세 › 대시보드\n🎴 GS Research Desk · 액티브 ETF 트래커",
+      "date": 1792730734,
+      "text": "🧩 액티브 ETF 구성 변화 · 감지 2026-10-23 13:45 (직전 거래일 매매)\n\n변화 ETF 11개 · 진입 13·이탈 13·실매매 3\n\n🟢 TIME 코스닥액티브 · TIME(구 TIMEFOLIO)\n   ⊕ 진입: 지엔씨에너지, 심텍, 알멕\n   ⊖ 이탈: 티에스이, 에코프로, 로보티즈\n   ▽ 이오테크닉스 계약수 −35% · 비중 −1.2%p\n   ▽ 테스 계약수 −31% · 비중 −0.8%p\n🟢 KoAct 배당성장액티브 · KoAct\n   ⊕ 진입: SK텔레콤\n   ⊖ 이탈: LX인터내셔널\n   ▲ 삼성전기 계약수 +47% · 비중 +0.9%p\n🟢 TIME 코스피액티브 · TIME(구 TIMEFOLIO)\n   ⊕ 진입: LG에너지솔루션\n   ⊖ 이탈: 에이피알\n🟢 TIME 미국S&P500액티브 · TIME(구 TIMEFOLIO)\n   ⊕ 진입: WALMART INC\n   ⊖ 이탈: NEXTERA ENERGY INC\n🟢 TIME 미국나스닥100액티브 · TIME(구 TIMEFOLIO)\n   ⊕ 진입: MICROSOFT CORP\n   ⊖ 이탈: APPLIED OPTOELECTRONICS INC\n🟢 TIME Korea플러스배당액티브 · TIME(구 TIMEFOLIO)\n   ⊕ 진입: SK\n   ⊖ 이탈: GS\n🟢 TIME K컬처액티브 · TIME(구 TIMEFOLIO)\n   ⊕ 진입: 이노션\n   ⊖ 이탈: 휴젤\n🟢 TIME 글로벌AI인공지능액티브 · TIME(구 TIMEFOLIO)\n   ⊕ 진입: ALIBABA GROUP HOLDING-SP ADR\n   ⊖ 이탈: APPLIED OPTOELECTRONICS INC\n🟢 KoAct 코스닥액티브 · KoAct\n   ⊕ 진입: 알테오젠\n   ⊖ 이탈: 한양디지텍\n🟢 TIGER 코리아테크액티브 · TIGER\n   ⊕ 진입: SK스퀘어\n   ⊖ 이탈: 심텍\n🟢 TIGER AI코리아그로스액티브 · TIGER\n   ⊕ 진입: 삼성화재\n   ⊖ 이탈: LG에너지솔루션\n\n전체 상세 › 대시보드\n🎴 GS Research Desk · 액티브 ETF 트래커",
       "entities": [
         {
           "offset": 0,
@@ -36,36 +36,66 @@
         },
         {
           "offset": 59,
-          "length": 1,
+          "length": 2,
           "type": "bold"
         },
         {
-          "offset": 84,
-          "length": 12,
-          "type": "bold"
-        },
-        {
-          "offset": 218,
+          "offset": 87,
           "length": 11,
           "type": "bold"
         },
         {
-          "offset": 286,
+          "offset": 234,
+          "length": 13,
+          "type": "bold"
+        },
+        {
+          "offset": 322,
           "length": 11,
           "type": "bold"
         },
         {
-          "offset": 349,
-          "length": 12,
-          "type": "bold"
-        },
-        {
-          "offset": 402,
+          "offset": 389,
           "length": 16,
           "type": "bold"
         },
         {
-          "offset": 464,
+          "offset": 478,
+          "length": 16,
+          "type": "bold"
+        },
+        {
+          "offset": 579,
+          "length": 18,
+          "type": "bold"
+        },
+        {
+          "offset": 645,
+          "length": 11,
+          "type": "bold"
+        },
+        {
+          "offset": 705,
+          "length": 17,
+          "type": "bold"
+        },
+        {
+          "offset": 821,
+          "length": 12,
+          "type": "bold"
+        },
+        {
+          "offset": 874,
+          "length": 14,
+          "type": "bold"
+        },
+        {
+          "offset": 927,
+          "length": 17,
+          "type": "bold"
+        },
+        {
+          "offset": 994,
           "length": 4,
           "type": "text_link",
           "url": "https://gschoie.github.io/GS-DB2/etf_holdings_report.html"
