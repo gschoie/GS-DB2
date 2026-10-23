@@ -1,0 +1,75 @@
+{
+ "source": "DC인사이드",
+ "galleries": [
+  {
+   "id": "krstock",
+   "name": "국내주식갤러리",
+   "posts": 0,
+   "capped": false,
+   "burst": 0.0,
+   "base_daily": 1772.9
+  },
+  {
+   "id": "stockus",
+   "name": "해외주식갤러리",
+   "posts": 96,
+   "capped": true,
+   "burst": 0.0,
+   "base_daily": 4617.3
+  }
+ ],
+ "posts_sampled": 1,
+ "keywords": [],
+ "top_recommended": [
+  {
+   "gallery": "해외주식갤러리",
+   "title": "AI 버블이 맞는 이유",
+   "views": 9938,
+   "recommend": 220,
+   "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=18074441&exception_mode=recommend&page=1",
+   "time_kst": "10-22 18:04"
+  },
+  {
+   "gallery": "해외주식갤러리",
+   "title": "한국 국민을 구한 구국의 영웅 서울대 학석박 이주완",
+   "views": 9813,
+   "recommend": 201,
+   "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=18069838&exception_mode=recommend&page=1",
+   "time_kst": "10-22 10:55"
+  },
+  {
+   "gallery": "해외주식갤러리",
+   "title": "코스피 이 시발새끼 2천 보내야되면 개추",
+   "views": 9694,
+   "recommend": 195,
+   "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=18069780&exception_mode=recommend&page=1",
+   "time_kst": "10-22 10:48"
+  },
+  {
+   "gallery": "해외주식갤러리",
+   "title": "하이닉스 VS 삼성전자 VS 더본코리아 최근 3개월 수익률 비교 ㄷㄷ",
+   "views": 8544,
+   "recommend": 194,
+   "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=18080986&exception_mode=recommend&page=1",
+   "time_kst": "10-23 01:14"
+  },
+  {
+   "gallery": "해외주식갤러리",
+   "title": "반도체 = 코로나 끝난 마스크 생산공장",
+   "views": 9096,
+   "recommend": 184,
+   "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=18072160&exception_mode=recommend&page=1",
+   "time_kst": "10-22 14:56"
+  }
+ ],
+ "top_viewed": [
+  {
+   "gallery": "해외주식갤러리",
+   "title": "모더나, 흑색종 백신 임상 결과 유출 찌라시로 인한 주가 폭락",
+   "views": 3132,
+   "recommend": 24,
+   "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=18081487&page=13",
+   "time_kst": "10-23 01:52"
+  }
+ ]
+}
