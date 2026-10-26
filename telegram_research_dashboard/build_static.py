@@ -12,6 +12,7 @@ from urllib.request import Request, urlopen
 
 from db import connect, initialize
 from gate import apply_to_tree
+from theme import apply_to_tree as apply_theme
 from parser import APPROVED_COMPANIES
 from tone_market import attach_tone_market
 
@@ -405,6 +406,10 @@ def build() -> Path:
     # (정적 호스팅이라 서버에서 못 막는다 — gate.py 머리말 참고)
     gated, owner_only = apply_to_tree(OUTPUT.parent)
     print(f"비밀번호 잠금 적용: {gated}개 페이지 (주인 전용 {owner_only}개)")
+    # 라이트/다크 테마 변수 + ☀/🌙 토글: 색을 var(--gs-*) 로 적은 페이지(브리핑류)에만.
+    # 가림막 뒤에 넣는다 — 가림막은 <head> 맨 앞이어야 그려지기 전에 가린다.
+    themed = apply_theme(OUTPUT.parent)
+    print(f"브리핑 테마 적용: {themed}개 페이지")
     print(f"생성 완료: {OUTPUT} ({OUTPUT.stat().st_size / 1024 / 1024:.1f} MB)")
     return OUTPUT
 

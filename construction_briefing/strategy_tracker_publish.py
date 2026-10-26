@@ -35,10 +35,10 @@ DATA = DASH_STATIC / "construction_strategy" / "events.json"
 PAGE = DASH_STATIC / "construction_tracker.html"
 
 CATS = {
-    "product": ("🆕 신제품", "#6aa8ff"),
-    "capex":   ("🏭 CAPEX", "#ffc46b"),
-    "dealer":  ("🏪 딜러망", "#d9a7ff"),
-    "ma":      ("🤝 M&A·제휴", "#7ee29b"),
+    "product": ("🆕 신제품", "var(--gs-link,#89b9ff)"),
+    "capex":   ("🏭 CAPEX", "var(--gs-accent2,#e8b756)"),
+    "dealer":  ("🏪 딜러망", "var(--gs-violet,#d9a7ff)"),
+    "ma":      ("🤝 M&A·제휴", "var(--gs-mint,#7fd9b6)"),
 }
 
 
@@ -106,30 +106,29 @@ def build(events: list[dict]) -> str:
     return f"""<!DOCTYPE html><html lang="ko"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>건기 전략 레이더</title><style>
-:root{{color-scheme:dark}}
-body{{margin:0;padding:28px 24px 60px;background:#0d1117;color:#d8dee9;
-  font-family:'Pretendard','Malgun Gothic','Apple SD Gothic Neo',sans-serif;line-height:1.65;font-size:14.5px}}
+body{{margin:0;padding:28px 24px 60px;background:var(--gs-bg,#161a21);color:var(--gs-ink,#c9d1dc);
+  font-family:'Pretendard','Malgun Gothic','Apple SD Gothic Neo',sans-serif;line-height:1.75;font-size:15.5px}}
 .wrap{{max-width:980px;margin:0 auto}}
-h1{{font-size:20px;color:#e8edf5;margin:0 0 4px}}
-.meta{{color:#8b96a8;font-size:12.5px;margin-bottom:16px}}
+h1{{font-size:22px;color:var(--gs-ink-strong,#e6ebf2);margin:0 0 4px}}
+.meta{{color:var(--gs-muted,#8e98a8);font-size:12.5px;margin-bottom:16px}}
 .tabs{{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0 10px}}
-.tab{{background:#161d29;color:#d8dee9;border:1px solid #2c3a52;border-radius:999px;
+.tab{{background:var(--gs-panel,#1c222c);color:var(--gs-ink,#c9d1dc);border:1px solid var(--gs-line-strong,#2e3a4e);border-radius:999px;
   padding:6px 14px;font-size:13px;cursor:pointer}}
-.tab span{{color:#8b96a8;font-size:12px;margin-left:2px}}
-.tab.active{{border-color:#6aa8ff;background:#17243a}}
+.tab span{{color:var(--gs-muted,#8e98a8);font-size:12px;margin-left:2px}}
+.tab.active{{border-color:var(--gs-link,#89b9ff);background:var(--gs-hover,#1e2531)}}
 table{{border-collapse:collapse;width:100%;margin:10px 0;font-size:13.5px}}
-td{{border-bottom:1px solid #1d2838;padding:8px 9px;text-align:left;vertical-align:top}}
-tr.ev:hover td{{background:#131a26}}
-tr.mon td{{color:#ffc46b;font-size:12.5px;font-weight:700;border-bottom:1px solid #3a3046;
+td{{border-bottom:1px solid var(--gs-line-soft,#1f2834);padding:8px 9px;text-align:left;vertical-align:top}}
+tr.ev:hover td{{background:var(--gs-hover,#1e2531)}}
+tr.mon td{{color:var(--gs-accent2,#e8b756);font-size:12.5px;font-weight:700;border-bottom:1px solid var(--gs-line,#232e3f);
   padding-top:18px;background:transparent}}
-td.d{{white-space:nowrap;color:#8b96a8;width:64px}}
-td.co{{white-space:nowrap;font-weight:600;color:#f0f4fa;max-width:190px;overflow-wrap:break-word;white-space:normal}}
+td.d{{white-space:nowrap;color:var(--gs-muted,#8e98a8);width:64px}}
+td.co{{white-space:nowrap;font-weight:600;color:var(--gs-ink-strong,#e6ebf2);max-width:190px;overflow-wrap:break-word;white-space:normal}}
 td.tt{{min-width:280px}}
 td.lk{{white-space:nowrap;font-size:12.5px}}
 .badge{{display:inline-block;border:1px solid;border-radius:999px;padding:1px 9px;font-size:11.5px;white-space:nowrap}}
-.note{{color:#8b96a8;font-size:12.5px;margin-top:3px}}
-a{{color:#6aa8ff;text-decoration:none}}a:hover{{text-decoration:underline}}
-.foot{{color:#8b96a8;font-size:12px;margin-top:22px;border-top:1px solid #1d2838;padding-top:10px}}
+.note{{color:var(--gs-muted,#8e98a8);font-size:12.5px;margin-top:3px}}
+a{{color:var(--gs-link,#89b9ff);text-decoration:none}}a:hover{{text-decoration:underline}}
+.foot{{color:var(--gs-muted,#8e98a8);font-size:12px;margin-top:22px;border-top:1px solid var(--gs-line-soft,#1f2834);padding-top:10px}}
 @media(max-width:640px){{td.lk{{display:none}}body{{padding:18px 12px 50px}}}}
 </style></head><body><div class="wrap">
 <h1>🧭 건기 전략 레이더 — 신제품 · CAPEX · M&amp;A</h1>
