@@ -3,8 +3,10 @@ name: 커버리지 수급·기술지표
 # 조선·방산·건설기계 커버리지 종목의 외인·기관 순매수 / ETF 패시브·액티브 수급 / RSI 극단을
 # 평일 장 마감 후 1회(KST 16:00) 수집해 페이지를 굽고 텔레그램(수주공시 봇 채널)으로 보낸다.
 # (10/19 사용자 요청: 장중 3회는 너무 많다 → 하루 1회로.)
-# 정시성은 GAS 시계(gas/dispatch_proxy.gs SCHEDULE covflow 슬롯)가 담당, 아래 크론은 안전망
-# — 무료 러너 크론은 몇 시간씩 밀린다(CLAUDE.md 17번).
+# 정시성은 Claude 예약 작업(평일 11:32/16:02 KST, via=scheduler 로 dispatch — CLAUDE.md 46번)이
+# 담당, 아래 크론은 안전망 — 무료 러너 크론은 몇 시간씩 밀린다(CLAUDE.md 17번).
+# GAS 시계(gas/dispatch_proxy.gs)에 옛 covflow 슬롯이 남아 있으면 같은 슬롯에 두 번 쏘므로
+# guard 는 schedule 뿐 아니라 via=scheduler dispatch 에도 건다(10/26 실측: 16:04 중복 발사).
 on:
   workflow_dispatch:
     inputs:
@@ -41,8 +43,9 @@ concurrency:
 jobs:
   # 24번 교훈: "이 슬롯이 이미 처리됐나"를 묻는다 — 이벤트를 가리지 않고 현재 슬롯 창
   # (11:30 슬롯은 11:00 KST~, 16:00 슬롯은 15:30 KST~; 경계 13:45 = metrics.SLOT_BOUNDARY)
-  # 안의 성공·진행중 run 을 세되 자기 자신만 뺀다. GAS 가 정시에 쐈으면 밀린 크론은 스킵해
-  # 텔레가 두 번 가지 않는다. fail-open.
+  # 안의 성공·진행중 run 을 세되 자기 자신만 뺀다. 정시 발사가 이미 됐으면 밀린 크론도,
+  # 다른 시계(GAS 잔존 슬롯)의 via=scheduler dispatch 도 스킵해 텔레가 두 번 가지 않는다.
+  # 화면 버튼(via 없음)·force_telegram 수동 실행은 가드 대상이 아니다. fail-open.
   guard:
     runs-on: ubuntu-latest
     permissions: {actions: read}
@@ -51,13 +54,13 @@ jobs:
     steps:
       - name: 슬롯 안의 선행 실행 확인
         id: check
-        if: github.event_name == 'schedule'
+        if: github.event_name == 'schedule' || inputs.via == 'scheduler'
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
           hm=$(TZ=Asia/Seoul date +%H%M)
           # 현재 시각으로 슬롯을 정한다(경계 13:45). 슬롯 정시 전에 도착한 밀린 크론은 버린다 —
-          # 정시는 GAS 시계가 쏜다. 11:35 크론이 몇 시간 밀려 13:45 를 넘기면 16:00 슬롯으로
+          # 정시는 Claude 예약 작업이 쏜다. 11:35 크론이 몇 시간 밀려 13:45 를 넘기면 16:00 슬롯으로
           # 읽혀 '정시 전' 으로 버려지고, 16:05 크론이 그 슬롯을 맡는다.
           if [ "$hm" -lt 1345 ]; then slot=1130; from="11:00"; else slot=1600; from="15:30"; fi
           if [ "$hm" -lt "$slot" ]; then
