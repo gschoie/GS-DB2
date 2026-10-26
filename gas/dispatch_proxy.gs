@@ -210,12 +210,10 @@ const SCHEDULE = [
   { wf: 'macro',     hours: [21],     minute: 0,  days: 'daily',   label: '매크로 데스크',
                      inputs: { via: 'scheduler' } },
   { wf: 'consensus', hours: [17],     minute: 0,  days: 'fri,sat', label: '코스피200 컨센' },
-  // 커버리지 수급 — 11:30(장중) + 16:00(장 마감 후) 하루 2회(10/21; 10/20 의 13:00 에서 변경).
-  // 분이 달라 두 줄(FIRED 키가 wf@HH:MM 이라 따로 센다). 텔레는 via=scheduler 일 때만(화면 버튼은 페이지만 갱신)
-  { wf: 'covflow',   hours: [11],     minute: 30, days: 'weekday', label: '커버리지 수급(11:30)',
-                     inputs: { via: 'scheduler' } },
-  { wf: 'covflow',   hours: [16],     minute: 0,  days: 'weekday', label: '커버리지 수급(16:00)',
-                     inputs: { via: 'scheduler' } },
+  // 커버리지 수급(covflow) 11:30·16:00 은 10/26 부터 **Claude 예약 작업**(클라우드 세션 트리거 2개,
+  // `gh workflow run coverage-flow.yml -f via=scheduler`)이 정시에 쏜다 — 이 스케줄러가 10/20 09:19 이후
+  // 멈춰 있어 옮겼다. 여기에 다시 넣으면 두 번 발송된다(dispatch 끼리는 워크플로 guard 가 안 막는다).
+  // 버튼(화면 🔄 지금 수집)용 WF 매핑은 그대로 둔다.
   // 스크립트 자체에 '오늘 이미 발송' 가드가 있어 GitHub 크론 안전망과 겹쳐도 한 통만 간다
   { wf: 'research',  hours: [8],      minute: 50, days: 'weekday', label: '커버리지 리서치요약 모음' },   // 채널 아침 목록(~08:40) 뒤
   // 주간정리 2종 — GitHub 토요일 크론이 매주 +4.5시간대로 밀려(실측 16:30~17:00 실행)

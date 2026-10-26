@@ -640,7 +640,7 @@ function finTable(title, rows, scale){
   for(const [k,l] of FIN_ROWS){
     h+=`<tr><td>${l}${k==='opm'||k==='npm'?' (%)':''}</td>`+rows.map(r=>{
       const v=r[k];
-      const s=v==null?'':(k==='opm'||k==='npm'?v.toFixed(1):scale(v));
+      const s=v==null?'':(k==='opm'||k==='npm'?v.toFixed(1):scale(v,r));
       return `<td class="${r.kind==='E'?'est':''}${v!=null&&v<0?' neg':''}">${s}</td>`;
     }).join('')+'</tr>';
   }
@@ -653,10 +653,17 @@ function finDetail(c, span){
     body='재무 상세가 아직 수집되지 않았습니다 — <b>▶ 수집 실행</b> 후(배포까지 3~5분) 새로고침하면 보입니다.';
   }else{
     const ccy=f.currency||'';
-    const kr=ccy==='KRW', jp=ccy==='JPY';
-    const div=(kr||jp)?1e8:1e6;
-    const unit=kr?'억원':(jp?'억엔':'백만 '+(ccy||'?'));
-    const scale=v=>Math.round(v/div).toLocaleString();
+    const fx=f.usd_rate;
+    let unit, scale;
+    if(fx){            /* 전 종목 백만달러 통일 — 확정(A)은 그 기간 평균 환율, E는 수집 시점 환율 */
+      unit='백만달러'+(ccy&&ccy!=='USD'?' (확정은 기간 평균 환율 · 컨센은 수집 시점 환율로 환산)':'');
+      scale=(v,r)=>Math.round(v*((r&&r.fx)||fx)/1e6).toLocaleString();
+    }else{             /* 환율을 못 구했거나 옛 스냅샷 — 재무통화 그대로(지어내지 않는다) */
+      const kr=ccy==='KRW', jp=ccy==='JPY';
+      const div=(kr||jp)?1e8:1e6;
+      unit=(kr?'억원':(jp?'억엔':'백만 '+(ccy||'?')))+' — 달러 환산 환율 미수집';
+      scale=v=>Math.round(v/div).toLocaleString();
+    }
     const hasN=[...(f.annual||[]),...(f.quarterly||[])].some(r=>r.src==='naver');
     body=`<div class="fwrap"><div>${finTable('연간',f.annual,scale)}</div>`+
          `<div>${finTable('분기',f.quarterly,scale)}</div></div>`+
