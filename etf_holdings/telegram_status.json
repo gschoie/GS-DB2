@@ -1,5 +1,5 @@
 {
-  "when_utc": "2026-10-23 04:45:34Z",
+  "when_utc": "2026-10-26 04:42:44Z",
   "ok": true,
   "note": "change_sent",
   "chat_id_tail": "5171",
@@ -7,7 +7,7 @@
   "response": {
     "ok": true,
     "result": {
-      "message_id": 702,
+      "message_id": 714,
       "from": {
         "id": 8875725998,
         "is_bot": true,
@@ -21,8 +21,8 @@
         "username": "gschoie",
         "type": "private"
       },
-      "date": 1792730734,
-      "text": "🧩 액티브 ETF 구성 변화 · 감지 2026-10-23 13:45 (직전 거래일 매매)\n\n변화 ETF 11개 · 진입 13·이탈 13·실매매 3\n\n🟢 TIME 코스닥액티브 · TIME(구 TIMEFOLIO)\n   ⊕ 진입: 지엔씨에너지, 심텍, 알멕\n   ⊖ 이탈: 티에스이, 에코프로, 로보티즈\n   ▽ 이오테크닉스 계약수 −35% · 비중 −1.2%p\n   ▽ 테스 계약수 −31% · 비중 −0.8%p\n🟢 KoAct 배당성장액티브 · KoAct\n   ⊕ 진입: SK텔레콤\n   ⊖ 이탈: LX인터내셔널\n   ▲ 삼성전기 계약수 +47% · 비중 +0.9%p\n🟢 TIME 코스피액티브 · TIME(구 TIMEFOLIO)\n   ⊕ 진입: LG에너지솔루션\n   ⊖ 이탈: 에이피알\n🟢 TIME 미국S&P500액티브 · TIME(구 TIMEFOLIO)\n   ⊕ 진입: WALMART INC\n   ⊖ 이탈: NEXTERA ENERGY INC\n🟢 TIME 미국나스닥100액티브 · TIME(구 TIMEFOLIO)\n   ⊕ 진입: MICROSOFT CORP\n   ⊖ 이탈: APPLIED OPTOELECTRONICS INC\n🟢 TIME Korea플러스배당액티브 · TIME(구 TIMEFOLIO)\n   ⊕ 진입: SK\n   ⊖ 이탈: GS\n🟢 TIME K컬처액티브 · TIME(구 TIMEFOLIO)\n   ⊕ 진입: 이노션\n   ⊖ 이탈: 휴젤\n🟢 TIME 글로벌AI인공지능액티브 · TIME(구 TIMEFOLIO)\n   ⊕ 진입: ALIBABA GROUP HOLDING-SP ADR\n   ⊖ 이탈: APPLIED OPTOELECTRONICS INC\n🟢 KoAct 코스닥액티브 · KoAct\n   ⊕ 진입: 알테오젠\n   ⊖ 이탈: 한양디지텍\n🟢 TIGER 코리아테크액티브 · TIGER\n   ⊕ 진입: SK스퀘어\n   ⊖ 이탈: 심텍\n🟢 TIGER AI코리아그로스액티브 · TIGER\n   ⊕ 진입: 삼성화재\n   ⊖ 이탈: LG에너지솔루션\n\n전체 상세 › 대시보드\n🎴 GS Research Desk · 액티브 ETF 트래커",
+      "date": 1792989764,
+      "text": "🧩 액티브 ETF 구성 변화 · 감지 2026-10-26 13:42 (직전 거래일 매매)\n\n변화 ETF 7개 · 진입 10·이탈 10·실매매 3\n\n🟢 TIME 코스닥액티브 · TIME(구 TIMEFOLIO)\n   ⊕ 진입: 엘리스, 파인엠텍\n   ⊖ 이탈: HPSP, 테스\n   ▽ 주성엔지니어링 계약수 −32% · 비중 −1.9%p\n   ▲ 알멕 계약수 +53% · 비중 +1.7%p\n🟢 KoAct 코스닥액티브 · KoAct\n   ⊕ 진입: 한양디지텍, 선익시스템\n   ⊖ 이탈: 티에스이, 알테오젠\n🟢 TIGER 코리아테크액티브 · TIGER\n   ⊕ 진입: 테스, 심텍\n   ⊖ 이탈: 이오테크닉스, HPSP\n🟢 KoAct 배당성장액티브 · KoAct\n   ⊕ 진입: LX인터내셔널\n   ⊖ 이탈: SK텔레콤\n   ▲ 한화에어로스페이스 계약수 +40% · 비중 +0.9%p\n🟢 TIME K컬처액티브 · TIME(구 TIMEFOLIO)\n   ⊕ 진입: 휴젤\n   ⊖ 이탈: 이노션\n🟢 KoAct 바이오헬스케어액티브 · KoAct\n   ⊕ 진입: 녹십자\n   ⊖ 이탈: 알지노믹스\n🟢 TIGER AI코리아그로스액티브 · TIGER\n   ⊕ 진입: 삼성생명\n   ⊖ 이탈: 현대차\n\n전체 상세 › 대시보드\n🎴 GS Research Desk · 액티브 ETF 트래커",
       "entities": [
         {
           "offset": 0,
@@ -36,66 +36,46 @@
         },
         {
           "offset": 59,
-          "length": 2,
+          "length": 1,
           "type": "bold"
         },
         {
-          "offset": 87,
+          "offset": 86,
           "length": 11,
           "type": "bold"
         },
         {
-          "offset": 234,
-          "length": 13,
-          "type": "bold"
-        },
-        {
-          "offset": 322,
-          "length": 11,
-          "type": "bold"
-        },
-        {
-          "offset": 389,
-          "length": 16,
-          "type": "bold"
-        },
-        {
-          "offset": 478,
-          "length": 16,
-          "type": "bold"
-        },
-        {
-          "offset": 579,
-          "length": 18,
-          "type": "bold"
-        },
-        {
-          "offset": 645,
-          "length": 11,
-          "type": "bold"
-        },
-        {
-          "offset": 705,
-          "length": 17,
-          "type": "bold"
-        },
-        {
-          "offset": 821,
+          "offset": 221,
           "length": 12,
           "type": "bold"
         },
         {
-          "offset": 874,
+          "offset": 287,
           "length": 14,
           "type": "bold"
         },
         {
-          "offset": 927,
+          "offset": 351,
+          "length": 13,
+          "type": "bold"
+        },
+        {
+          "offset": 444,
+          "length": 11,
+          "type": "bold"
+        },
+        {
+          "offset": 504,
+          "length": 16,
+          "type": "bold"
+        },
+        {
+          "offset": 560,
           "length": 17,
           "type": "bold"
         },
         {
-          "offset": 994,
+          "offset": 622,
           "length": 4,
           "type": "text_link",
           "url": "https://gschoie.github.io/GS-DB2/etf_holdings_report.html"

@@ -1076,13 +1076,30 @@
     - **정시 발사를 GAS → Claude 예약 작업으로 이관** (10/26, PR #433): 사용자 "자동 발송 되게끔 바꿔야 함".
       GAS `tick` 이 10/20 09:19 이후 죽어 있는 동안 10/22·23 은 11:35 크론이 16:53 에 도착해 **11:30 분이
       통째로 빠졌다**(늦은 크론은 13:45 경계 때문에 16:00 슬롯으로 읽혀 그 슬롯만 처리, 16:05 크론은 guard 가
-      스킵). → 이 클라우드 환경의 예약 작업 2개(평일 KST 11:32 / 16:02, `trig_01HWPKEzqi72EfM1hEfemBuk` /
-      `trig_01QnvkAKoFRzbRYCWEJZeVPB`)가 새 세션을 열어 `gh workflow run coverage-flow.yml --ref main
+      스킵). → 이 클라우드 환경의 예약 작업 2개(평일 KST 11:32 / 16:02, `trig_01Ht8rHrhduJmpdmmJHeLz1w` /
+      `trig_01Q6FbKD8DAFgby2siphnX2N`)가 **리포가 붙은 전용 세션 `session_01BBSTxgbzr2p9BsTdDR6dxj`
+      (제목 '커버리지 수급 발송 스케줄러')에 묶여** `gh workflow run coverage-flow.yml --ref main
       -f via=scheduler` 로 쏘고 완료를 확인한다. 예약 세션엔 MCP 커넥터가 없어 **GitHub MCP 가 아니라 `gh`
       CLI**(환경 프록시 인증, dispatch 권한 실측)를 쓴다. 분을 :32/:02 로 둔 건 정각·반각 혼잡 회피.
-      **GAS SCHEDULE 에서 covflow 두 줄 제거** — GAS 가 살아나도 두 번 안 가게(dispatch 끼리는 guard 가
-      안 막는다; guard 는 schedule 이벤트만 본다). 크론 안전망(11:35/16:05)은 그대로. 다른 GAS 슬롯(시장
-      수급·holdings·trend 등)은 여전히 GAS 복구 대기 — 같은 방식으로 옮길 수 있다.
+      **첫 판(새 세션을 매번 여는 방식)은 10/26 11:32 첫 발사에서 실패** — 예약으로 열린 새 세션에는
+      리포가 안 붙고 `add_repo` 도구도 없어 `gh` 가 403(테스트 발사 2회 실측). 리서치톤 예약과 같은
+      `persistent_session_id` 방식만 된다(세션은 create_session 의 source_url 로 리포를 붙여 생성;
+      예약의 세션 묶기는 사후 변경 불가라 예약을 새로 만든다). **전용 세션은 sonnet** — 리포가 붙으면
+      이 CLAUDE.md(약 9만 토큰)가 매번 적재돼 fable 로는 한 번 깨우는 데 $1.9 가 들었다(실측), sonnet 은
+      약 1/5. **fire_trigger(수동 발사)는 세션 묶기를 무시하고 새 세션을 연다**(리포 없음 → 403) — 묶인
+      세션으로 가는 건 정시 발사뿐이라 검증은 정시 발사 결과로만 한다. 발사 메시지에 'TEST MODE' 가
+      붙으면 `-f probe_estimate=true` 로 텔레 없는 프로브만 돈다.
+      **GAS SCHEDULE 에서 covflow 두 줄 제거**(정본만 — Apps Script 재붙여넣기 전엔 옛 슬롯이 산다).
+      크론 안전망(11:35/16:05)은 그대로.
+      **첫 정시 발사 성공 + GAS 부활 중복** (10/26 16:00): 예약이 묶인 세션으로 들어가(발사 07:04Z,
+      예약 07:02 에서 2분 지연) run 40283583968 이 두 방 모두 발송 성공. 그런데 **GAS tick 이 같은 날
+      14:54 KST 부터 되살아나**(holdings :54/:19·market-flow 15:44 dispatch — 15:40 슬롯이 있는
+      옛 SCHEDULE 이 돌고 있다는 뜻) 16:04:51 에 covflow 를 한 번 더 쐈고, 그 run 은 커밋 단계
+      rebase 충돌로 죽어 텔레 중복을 **운 좋게** 면했다. → guard 를 `schedule || inputs.via ==
+      'scheduler'` 로 넓혀 다른 시계의 정시 dispatch 도 같은 슬롯에 선행 성공 run 이 있으면 스킵
+      (화면 버튼·force 는 그대로). 사용자가 GAS 를 재붙여넣으면 covflow 슬롯은 사라지지만, 가드가
+      있으니 안 해도 두 번 안 간다. 다른 GAS 슬롯(시장수급 등)은 되살아난 옛 코드로 돌고 있다 —
+      10/20 이후 바뀐 슬롯(수급 11:00/16:00 등)을 쓰려면 재붙여넣기 필요.
     - 2판 후보(미구현): 수급 × 컨센 변화 교차(kospi_consensus), 외국인 보유비율 1년 백분위,
       섹터 ETF 대비 상대강도, 수주 공시·실적일 이벤트 뱃지, 공매도(소스 확인 필요).
 
