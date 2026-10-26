@@ -59,7 +59,7 @@ const WF = {
 function buildInputs(key, body) {
   if (key === 'dart') return {
     dart_url: String(body.dart_url || ''),
-    target:   String(body.target || '비공개(바담)'), // required + choice — 기본 바담 방(10/17), 공개채널은 Actions 에서만
+    target:   String(body.target || '바담+공개채널'), // required + choice — 기본 바담 방 + 공개채널 동시(10/26; 폼이 명시해 보내므로 재붙여넣기 없이도 동작)
     comment:  String(body.comment || ''),
   };
   if (key === 'recipe') return { yt_url: String(body.yt_url || '') };

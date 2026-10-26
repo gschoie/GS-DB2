@@ -13,8 +13,9 @@ on:
         description: "보낼 채널"
         required: true
         type: choice
-        default: "비공개(바담)"
+        default: "바담+공개채널"
         options:
+          - "바담+공개채널"
           - "비공개(바담)"
           - "공개채널"
           - "비공개(미리보기)"
@@ -56,10 +57,11 @@ jobs:
         working-directory: dart_shiporder_bot
         env:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
-          # 대상별 chat_id. 기본(대시보드 폼)은 비공개 바담 방 — 커버리지 수급과 같은 방
-          # (BADAM_TELEGRAM_CHAT_ID 가 있으면 그것, 없으면 COVFLOW_TELEGRAM_CHAT_ID 재사용).
-          # 공개채널은 Actions 에서 직접 고를 때만(10/17 사용자 요청: 폼은 공개채널로 보내지 않음).
-          TELEGRAM_CHAT_ID: ${{ inputs.target == '공개채널' && secrets.TELEGRAM_CHAT_ID || inputs.target == '비공개(미리보기)' && secrets.TELEGRAM_CHAT_ID_PRIVATE || secrets.BADAM_TELEGRAM_CHAT_ID || secrets.COVFLOW_TELEGRAM_CHAT_ID }}
+          # 대상별 chat_id — 쉼표로 여러 방(봇이 차례로 보낸다).
+          # 기본(대시보드 폼) = 비공개 바담 방 + 공개채널(DAOL 조선/기계/방산 | 최광식, TELEGRAM_CHAT_ID)
+          # 동시 발송(10/26 사용자 요청; 10/17 '폼은 바담만' 규칙 폐기).
+          # 바담 방은 BADAM_TELEGRAM_CHAT_ID 가 있으면 그것, 없으면 COVFLOW_TELEGRAM_CHAT_ID 재사용.
+          TELEGRAM_CHAT_ID: ${{ inputs.target == '바담+공개채널' && format('{0},{1}', secrets.BADAM_TELEGRAM_CHAT_ID || secrets.COVFLOW_TELEGRAM_CHAT_ID, secrets.TELEGRAM_CHAT_ID) || inputs.target == '공개채널' && secrets.TELEGRAM_CHAT_ID || inputs.target == '비공개(미리보기)' && secrets.TELEGRAM_CHAT_ID_PRIVATE || secrets.BADAM_TELEGRAM_CHAT_ID || secrets.COVFLOW_TELEGRAM_CHAT_ID }}
           DART_COMMENT: ${{ inputs.comment }}
           DART_TARGET: ${{ inputs.target }}   # 로그에 실제 발송 대상을 찍기 위해
         run: python dart_shiporder_bot.py --url "${{ inputs.dart_url }}"

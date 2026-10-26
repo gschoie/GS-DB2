@@ -22,6 +22,7 @@ import os
 import re
 import sys
 import urllib.parse
+import urllib.error
 import urllib.request
 import uuid
 from pathlib import Path
@@ -305,19 +306,47 @@ def _multipart(fields: dict, file_field: str, file_path: Path) -> tuple[bytes, s
     return bytes(body), f"multipart/form-data; boundary={boundary}"
 
 
-def send_photo(image: Path, caption: str) -> None:
-    token = os.environ["TELEGRAM_BOT_TOKEN"]
-    chat_id = os.environ["TELEGRAM_CHAT_ID"]
+def chat_ids(raw: str) -> list[str]:
+    """TELEGRAM_CHAT_ID 는 쉼표로 여러 방을 받는다(바담 + 공개채널 동시 발송, 10/26).
+    빈 칸·중복은 걸러 순서를 지킨다."""
+    out: list[str] = []
+    for part in (raw or "").split(","):
+        cid = part.strip()
+        if cid and cid not in out:
+            out.append(cid)
+    return out
+
+
+def _send_one(token: str, chat_id: str, image: Path, caption: str) -> dict:
     body, content_type = _multipart(
         {"chat_id": chat_id, "caption": caption, "parse_mode": "HTML"}, "photo", image)
     request = urllib.request.Request(
         f"https://api.telegram.org/bot{token}/sendPhoto",
         data=body, headers={"Content-Type": content_type},
     )
-    with urllib.request.urlopen(request, timeout=60) as response:
-        result = json.loads(response.read().decode("utf-8"))
-    if not result.get("ok"):
-        raise SystemExit(f"텔레그램 전송 실패: {result}")
+    try:
+        with urllib.request.urlopen(request, timeout=60) as response:
+            return json.loads(response.read().decode("utf-8"))
+    except urllib.error.HTTPError as e:  # 400/403 은 본문에 사유가 있다
+        return {"ok": False, "error": f"HTTP {e.code}: {e.read().decode('utf-8', 'replace')[:300]}"}
+
+
+def send_photo(image: Path, caption: str) -> None:
+    token = os.environ["TELEGRAM_BOT_TOKEN"]
+    targets = chat_ids(os.environ["TELEGRAM_CHAT_ID"])
+    if not targets:
+        raise SystemExit("텔레그램 전송 실패: TELEGRAM_CHAT_ID 가 비어 있음")
+    failed = []
+    for cid in targets:
+        result = _send_one(token, cid, image, caption)
+        if result.get("ok"):
+            print(f"  ✓ 전송 {cid}", flush=True)
+        else:
+            # 한 방이 실패해도 나머지 방에는 보낸다 — 마지막에 실패로 종료.
+            print(f"  ✗ 전송 실패 {cid}: {result}", flush=True)
+            failed.append(cid)
+    if failed:
+        raise SystemExit(f"텔레그램 전송 실패: {', '.join(failed)}")
 
 
 def run(url_or_rcp: str, comment: str = "", dry: bool = False) -> None:
