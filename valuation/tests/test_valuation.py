@@ -386,6 +386,33 @@ class CurrencyHandling(unittest.TestCase):
         self.assertTrue(any("구하지 못해" in w for w in record["warnings"]))
 
 
+class UsdPanelRate(unittest.TestCase):
+    """재무 상세 패널 달러 통일 — financials 에 재무통화→USD 환율을 싣는다(화면이 환산)."""
+
+    def test_usd_rate_from_fx_series(self):
+        # KRW 재무 + 환율 0.5 픽스처 → usd_rate 0.5, 통화는 실통화 KRW 그대로.
+        record = run(FakeTicker(), fx=FX_HISTORY)
+        self.assertEqual(record["financials"]["usd_rate"], 0.5)
+        self.assertEqual(record["financials"]["currency"], "KRW")
+
+    def test_usd_statements_need_no_fx(self):
+        ticker = FakeTicker(info={"currency": "USD", "financialCurrency": "USD", "payoutRatio": 0.2})
+        record = run(ticker)                      # 환율 픽스처 없이도 1.0
+        self.assertEqual(record["financials"]["usd_rate"], 1.0)
+
+    def test_missing_fx_leaves_rate_none(self):
+        # 환율을 못 구하면 None — 화면은 재무통화 그대로 폴백(달러로 지어내지 않는다).
+        self.assertIsNone(run(FakeTicker())["financials"]["usd_rate"])
+
+    def test_mislabeled_currency_uses_actual_statement_currency(self):
+        # 두산밥캣형: 야후 라벨 USD·실제 KRW → 패널 통화도 KRW 로 바로잡고 KRW→USD 환율을 싣는다.
+        cheap_fx = pd.DataFrame({"Close": [0.001] * 5}, index=HISTORY.index)
+        ticker = FakeTicker(info={"currency": "KRW", "financialCurrency": "USD", "payoutRatio": 0.2})
+        record = run(ticker, fx=cheap_fx)
+        self.assertEqual(record["financials"]["currency"], "KRW")
+        self.assertEqual(record["financials"]["usd_rate"], 0.001)
+
+
 class TermResolution(unittest.TestCase):
     """회사명으로도 조회되게 — 'SK하이닉스' 처럼 티커를 모르고 넣는 게 자연스럽다."""
 
