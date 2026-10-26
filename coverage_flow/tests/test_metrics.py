@@ -18,10 +18,13 @@ def ohlc(closes, start="2025-01-01"):
 
 
 class Slot(unittest.TestCase):
-    def test_single_daily_slot(self):
-        # 10/19부터 하루 1회(16:00) — 수동 수집도 같은 슬롯에 붙는다.
+    def test_two_daily_slots(self):
+        # 10/21부터 하루 2회(11:30·16:00) — 경계 13:45. 수동 수집도 시각으로 슬롯에 붙는다.
         mk = lambda h, m: datetime(2026, 10, 17, h, m, tzinfo=KST)
-        self.assertEqual(metrics.decide_slot(mk(10, 5)), "16:00")
+        self.assertEqual(metrics.decide_slot(mk(10, 5)), "11:30")
+        self.assertEqual(metrics.decide_slot(mk(11, 35)), "11:30")
+        self.assertEqual(metrics.decide_slot(mk(13, 44)), "11:30")
+        self.assertEqual(metrics.decide_slot(mk(13, 45)), "16:00")
         self.assertEqual(metrics.decide_slot(mk(16, 5)), "16:00")
         self.assertEqual(metrics.decide_slot(mk(23, 0)), "16:00")
 
@@ -289,18 +292,14 @@ class Outputs(unittest.TestCase):
         self.assertIn("오늘(잠정): 한화에어로스페이스 기관 -165", txt)
         self.assertIn("패시브 순매도 큼 · ADV -37.5%", txt)
         self.assertIn("TIME 코스피액티브 → 한화오션 증가 +20%", txt)
-        self.assertIn("한화에어로스페이스 RSI 20 · 1년 최저권 (하위 1%)", txt)
-        self.assertIn("한화오션 RSI 69 · 1년 최고권", txt)
-        self.assertIn("검증 전", txt); self.assertLess(len(txt), 4000)
-        self.assertNotIn("github.io", txt)                                  # 대시보드 주소 비노출
+        self.assertNotIn("RSI", txt); self.assertNotIn("검증 전", txt)       # RSI 섹션·각주는 텔레에서 뺌(10/20)
+        self.assertLess(len(txt), 4000)
+        self.assertNotIn("github.io", txt)                                  # 링크는 main 이 맨 밑에 붙인다
 
     def test_pctl_zero_is_lowest_not_missing(self):
         d = fake_payload()
         d["rows"][1]["tech"].update(rsi_pctl=0.0, extreme="1년 최저권 (하위 0%)")
         d["rows"][0]["tech"].update(rsi_pctl=3.0, extreme="1년 최저권 (하위 3%)")
-        txt = notify.compose(d)
-        i0, i1 = txt.index("한화에어로스페이스 RSI"), txt.index("한화오션 RSI")
-        self.assertLess(i0, i1)                       # 0% 가 3% 보다 먼저
         self.assertEqual(metrics.pctl_or(0.0, 50), 0.0); self.assertEqual(metrics.pctl_or(None, 50), 50)
         h = build_report.render(d)
         self.assertIn("RSI 1년 최저권", h)
@@ -338,9 +337,44 @@ class Outputs(unittest.TestCase):
             with open(latest, "w", encoding="utf-8") as f:
                 json.dump(d, f, ensure_ascii=False)
             with unittest.mock.patch.object(notify, "LATEST", latest), unittest.mock.patch.object(notify, "STATUS", status), \
-                 unittest.mock.patch.object(notify, "send", lambda text, parse_mode=None: sent.append((text[:3], parse_mode)) or {"ok": True}):
+                 unittest.mock.patch.object(notify, "send", lambda text, parse_mode=None, chat=None: sent.append((text[:3], parse_mode)) or {"ok": True}):
                 notify.main([])
         self.assertEqual(sent, [("<b>", "HTML")])
+
+    def test_extra_chats_get_the_same_album(self):
+        """COVFLOW_TELEGRAM_CHAT_ID_EXTRA 의 방들에도 같은 앨범+캡션이 간다(10/20: 바담 + DAOL 조선).
+        기본 방이 먼저, 기본 방과 같은 ID·중복은 한 번만, 추가 방 실패는 종료코드를 바꾸지 않는다."""
+        d = fake_payload(); d["errors"] = []
+        calls = []
+        env = {"COVFLOW_TELEGRAM_BOT_TOKEN": "t", "COVFLOW_TELEGRAM_CHAT_ID": "-100111",
+               "COVFLOW_TELEGRAM_CHAT_ID_EXTRA": "-100222, @HI_GS -100111 -100222"}
+        with tempfile.TemporaryDirectory() as tmp, unittest.mock.patch.dict(os.environ, env, clear=True):
+            self.assertEqual(notify.targets(), ["-100111", "-100222", "@HI_GS"])
+            latest, status = os.path.join(tmp, "l.json"), os.path.join(tmp, "s.json")
+            for i in range(3):
+                open(os.path.join(tmp, f"capture_{i}.png"), "wb").write(b"x")
+            with open(latest, "w", encoding="utf-8") as f:
+                json.dump(d, f, ensure_ascii=False)
+            fail = {"@HI_GS"}
+            with unittest.mock.patch.object(notify, "LATEST", latest), unittest.mock.patch.object(notify, "STATUS", status), \
+                 unittest.mock.patch.object(notify, "send", lambda text, parse_mode=None, chat=None: calls.append(("text", chat)) or {"ok": chat not in fail, "description": "x"}), \
+                 unittest.mock.patch.object(notify, "send_photos", lambda paths, caption="", parse_mode=None, chat=None: calls.append(("album", chat, len(paths), caption)) or {"ok": chat not in fail, "description": "chat not found"}):
+                rc = notify.main(["--photos", os.path.join(tmp, "capture_*.png")])
+            self.assertEqual(rc, 0)                                                   # 기본 방 성공이면 0
+            # 그림·본문·맨 밑 공유 링크까지 세 방 전부 같다
+            self.assertEqual([c[:3] for c in calls[:3]], [("album", "-100111", 3), ("album", "-100222", 3), ("album", "@HI_GS", 3)])
+            body = notify.compose_html(d) + "\n\n" + notify.SHARE_URL
+            self.assertEqual(calls[0][3], body); self.assertEqual(calls[1][3], body); self.assertEqual(calls[2][3], body)
+            self.assertTrue(notify.visible_len(calls[1][3]) <= notify.CAPTION_MAX)
+            self.assertEqual(notify.visible_len("<b>a&amp;b</b>"), 3)                 # 태그·이스케이프 제외
+            self.assertEqual(calls[3], ("text", "@HI_GS"))                            # 실패 방만 본문 따로 폴백
+            with open(status, encoding="utf-8") as f:
+                st = json.load(f)
+            self.assertTrue(st["ok"]); self.assertEqual([e["chat"] for e in st["extra"]], ["-100222", "@HI_GS"])
+            self.assertTrue(st["extra"][0]["ok"]); self.assertFalse(st["extra"][1]["ok"])
+            # 추가 방 미설정이면 기본 방 한 곳뿐
+            with unittest.mock.patch.dict(os.environ, {"COVFLOW_TELEGRAM_CHAT_ID_EXTRA": ""}):
+                self.assertEqual(notify.targets(), ["-100111"])
 
     def test_text_rides_as_album_caption(self):
         """캡쳐가 있으면 본문이 앨범 캡션(사진 밑)으로 간다 — 1024자 이내면 send() 미호출, 넘치면 옛 방식."""
@@ -353,10 +387,10 @@ class Outputs(unittest.TestCase):
             with open(latest, "w", encoding="utf-8") as f:
                 json.dump(d, f, ensure_ascii=False)
             with unittest.mock.patch.object(notify, "LATEST", latest), unittest.mock.patch.object(notify, "STATUS", status), \
-                 unittest.mock.patch.object(notify, "send", lambda text, parse_mode=None: calls.append(("text", parse_mode)) or {"ok": True}), \
-                 unittest.mock.patch.object(notify, "send_photos", lambda paths, caption="", parse_mode=None: calls.append(("album", parse_mode, len(paths), caption[:3], len(caption))) or {"ok": True}):
+                 unittest.mock.patch.object(notify, "send", lambda text, parse_mode=None, chat=None: calls.append(("text", parse_mode)) or {"ok": True}), \
+                 unittest.mock.patch.object(notify, "send_photos", lambda paths, caption="", parse_mode=None, chat=None: calls.append(("album", parse_mode, len(paths), caption[:3], len(caption))) or {"ok": True}):
                 notify.main(["--photos", os.path.join(tmp, "capture_*.png")])
-                self.assertEqual(calls, [("album", "HTML", 3, "<b>", len(notify.compose_html(d)))])
+                self.assertEqual(calls, [("album", "HTML", 3, "<b>", len(notify.compose_html(d) + "\n\n" + notify.SHARE_URL))])   # 본문 + 맨 밑 링크
                 # 긴 본문: 캡션 한도 초과 → 본문 따로(HTML) + 사진은 짧은 캡션
                 calls.clear()
                 with unittest.mock.patch.object(notify, "compose_html", lambda dd: "<b>x</b>" + "y" * 1100):
@@ -365,12 +399,12 @@ class Outputs(unittest.TestCase):
 
     def test_compose_empty(self):
         txt = notify.compose({"asof": "2026-10-16 10:01", "rows": [], "etfs": [], "active": []})
-        self.assertIn("순매수 종목 없음", txt); self.assertIn("첫 수집", txt); self.assertIn("극단권 종목 없음", txt)
+        self.assertIn("순매수 종목 없음", txt); self.assertIn("첫 수집", txt); self.assertNotIn("극단권", txt)
 
     def test_render(self):
         h = build_report.render(fake_payload())
         for s in ("한화오션", "13일째 매수", "1년 최저권", "SOL 조선TOP3플러스", "수집 오류 1건", "커버예정", "직전 값 없음", "TIME 코스피액티브",
-                  "① 등락률", "①-2 투자자별 순매수", "+42.0", "+300", "② 과매수", "③ 기계적 수급", '<details id="cap-3"', "3개월 차트", "📅 수집 시각 <b>10/16(금) 13:31</b>"):
+                  "① 등락률", "①-2 투자자별 순매수", "+42.0", "+300", "② 과매수", "③ 기계적 수급", '<details id="cap-3"', '<div id="cap-1a">', '<div id="cap-1b">', "3개월 차트", "📅 수집 시각 <b>10/16(금) 13:31</b>"):
             self.assertIn(s, h)
         self.assertNotIn("chr(", h)
         self.assertNotIn("5일 외인+기관", h)                                  # 시총 대비 열 제거
@@ -438,6 +472,24 @@ class Outputs(unittest.TestCase):
         self.assertIn("<tr class='gh'><td colspan='16'>방산</td></tr>", h)
         self.assertIn("<tr class='gh'><td colspan='8'>기계</td></tr>", h)
         self.assertLess(h.index(">조선</td>"), h.index(">방산</td>")); self.assertLess(h.index(">방산</td>"), h.index(">기계</td>"))
+
+    def test_group_summary_rows(self):
+        """묶음 끝에 요약 행 — 등락률은 단순평균, 수급은 합계, None 은 빼고 센다."""
+        self.assertAlmostEqual(build_report.agg([1, None, 3], "mean"), 2.0)
+        self.assertEqual(build_report.agg([1, None, 3], "sum"), 4)
+        self.assertIsNone(build_report.agg([None, None], "sum"))
+        d = fake_payload()
+        base = d["rows"][0]
+        def mk(name, d1, frgn5):
+            r = json.loads(json.dumps(base)); r.update(name=name, industry="조선", code=name)
+            r["tech"]["ret"]["d1"] = d1; r["flow"]["win"]["frgn"]["d5"] = frgn5; return r
+        d["rows"] = [mk("A", 2.0, 100), mk("B", -1.0, -40), mk("C", None, None)]
+        h = build_report.render(d)
+        self.assertIn("조선 평균<small>3종목 · 단순평균</small>", h)
+        i = h.index("조선 평균"); seg = h[i:i + 400]
+        self.assertIn("+0.5", seg)                                               # (2 − 1) / 2, None 제외
+        j = h.index("조선 합계"); seg2 = h[j:j + 600]
+        self.assertIn("+60", seg2)                                               # 100 − 40
 
     def test_tables_sorted_by_mcap(self):
         """세 표 모두 묶음 안은 시총 내림차순, 성광벤드·태광은 여전히 조선 맨 밑."""
@@ -513,6 +565,42 @@ class KisToken(unittest.TestCase):
         self.assertEqual(naps, [1, 1])           # 마지막 시도는 기다리지 않고 올린다
 
 
+class Estimate(unittest.TestCase):
+    def test_parse_estimate_picks_latest_slot(self):
+        j = {"output2": [
+            {"bsop_hour_gb": "1", "frgn_fake_ntby_qty": "1000", "orgn_fake_ntby_qty": "-200", "sum_fake_ntby_qty": "800"},
+            {"bsop_hour_gb": "3", "frgn_fake_ntby_qty": "2500", "orgn_fake_ntby_qty": "-700", "sum_fake_ntby_qty": "1800"},
+        ]}
+        e = kis.parse_estimate(j)
+        self.assertEqual((e["time"], e["frgn_qty"], e["inst_qty"], e["unit"]), ("11:20", 2500.0, -700.0, "qty"))
+        self.assertIsNone(kis.parse_estimate({"output2": []})); self.assertIsNone(kis.parse_estimate({}))
+
+    def test_apply_estimate_fills_zero_today_only(self):
+        today = "2026-10-20"
+        inv = pd.DataFrame({"date": pd.to_datetime(["2026-10-17", "2026-10-20"]),
+                            "개인": [10.0, 0.0], "외국인": [-5.0, 0.0], "기관": [-5.0, 0.0]})
+        est = {"time": "11:20", "frgn_qty": 2000.0, "inst_qty": -500.0, "unit": "qty"}
+        out, ok = metrics.apply_estimate(inv, today, est, 50000)          # 2000×50000/1e8 = 1.0억
+        self.assertTrue(ok)
+        row = out[out["date"] == pd.Timestamp(today)].iloc[0]
+        self.assertAlmostEqual(row["외국인"], 1.0); self.assertAlmostEqual(row["기관"], -0.2); self.assertAlmostEqual(row["개인"], -0.8)
+        # 오늘 행이 없으면 추가
+        out2, ok2 = metrics.apply_estimate(inv.iloc[:1], today, est, 50000)
+        self.assertTrue(ok2); self.assertEqual(len(out2), 2)
+        # 확정치가 이미 있으면 손대지 않는다
+        inv3 = inv.copy(); inv3.loc[1, "외국인"] = 12.0
+        _, ok3 = metrics.apply_estimate(inv3, today, est, 50000)
+        self.assertFalse(ok3)
+        # 추정값이 없으면 그대로
+        self.assertFalse(metrics.apply_estimate(inv, today, None, 50000)[1])
+
+    def test_estimate_labels(self):
+        d = fake_payload(); d["errors"] = []
+        d["rows"][0]["flow"]["today_src"] = "estimate 11:20"
+        self.assertIn("추정가집계 11:20 기준", build_report.render(d))
+        self.assertIn("오늘 잠정(가집계 11:20) 포함", notify.compose(d))
+
+
 class CollectGuard(unittest.TestCase):
     def test_enough_blocks_partial_runs(self):
         """21종목 중 2종목(10/19 토큰 403 사고)은 부족, 15종목(71%)은 통과, 유니버스 0은 실패."""
@@ -556,7 +644,7 @@ class CollectGuard(unittest.TestCase):
                 json.dump(payload, f, ensure_ascii=False)
             sent = []
             with unittest.mock.patch.object(notify, "LATEST", latest), unittest.mock.patch.object(notify, "STATUS", status), \
-                 unittest.mock.patch.object(notify, "send", lambda text, parse_mode=None: sent.append(text) or {"ok": True}), \
+                 unittest.mock.patch.object(notify, "send", lambda text, parse_mode=None, chat=None: sent.append(text) or {"ok": True}), \
                  unittest.mock.patch.object(notify, "send_photos", lambda *a, **k: sent.append("photo") or {"ok": True}):
                 rc = notify.main(["--photos", os.path.join(d, "none_*.png")])
             self.assertEqual(rc, 0); self.assertEqual(sent, [])
@@ -568,7 +656,7 @@ class CollectGuard(unittest.TestCase):
             with open(latest, "w", encoding="utf-8") as f:
                 json.dump(payload, f, ensure_ascii=False)
             with unittest.mock.patch.object(notify, "LATEST", latest), unittest.mock.patch.object(notify, "STATUS", status), \
-                 unittest.mock.patch.object(notify, "send", lambda text, parse_mode=None: sent.append(text) or {"ok": True}):
+                 unittest.mock.patch.object(notify, "send", lambda text, parse_mode=None, chat=None: sent.append(text) or {"ok": True}):
                 notify.main([])
             self.assertEqual(len(sent), 1)
 

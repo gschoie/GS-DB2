@@ -15,7 +15,7 @@ import metrics  # noqa: E402
 
 LATEST = os.path.join(HERE, "data", "latest.json")
 OUT = os.path.join(ROOT, "telegram_research_dashboard", "static", "coverage_flow_report.html")
-SCHEDULE_TIME = "평일 16:00 (장 마감 후)"
+SCHEDULE_TIME = "평일 11:30 (장중) · 16:00 (장 마감 후)"
 WD = "월화수목금토일"
 
 
@@ -114,6 +114,14 @@ def group_row(g, ncol):
     return f"<tr class='gh'><td colspan='{ncol}'>{esc(g)}</td></tr>"
 
 
+def agg(vals, how):
+    """묶음 요약 — how='mean' 단순평균 / 'sum' 합계. None 은 빼고, 값이 하나도 없으면 None."""
+    xs = [v for v in vals if v is not None]
+    if not xs:
+        return None
+    return sum(xs) / len(xs) if how == "mean" else sum(xs)
+
+
 def frgn_cell(px):
     """외인 보유비율 칸. 직전 수집값으로 채운 경우(frgn_pct_asof) 기준일을 작게 병기."""
     v = px.get("frgn_pct")
@@ -140,6 +148,12 @@ def returns_table(rows):
                       + f"<td class='c'>{spark_svg(r['tech'].get('spark'))}</td>"
                       + frgn_cell(px)
                       + f"<td class='r'>{n(px.get('mcap'), 0, sign=False)}</td></tr>")
+        # 묶음 요약: 등락률 단순평균(10/20 사용자 요청) + 시총 합계
+        avg = {k: agg([(r["tech"].get("ret") or {}).get(k) for r in grs], "mean") for k in ret_keys}
+        mcap_sum = agg([(r.get("px") or {}).get("mcap") for r in grs], "sum")
+        tr.append(f"<tr class='sub'><td>{esc(g)} 평균<small>{len(grs)}종목 · 단순평균</small></td>"
+                  + "".join(f"<td class='r'{shade(avg[k], caps[k])}>{_pct(avg[k])}</td>" for k in ret_keys)
+                  + f"<td class='c'></td><td class='r'></td><td class='r'>{n(mcap_sum, 0, sign=False)}</td></tr>")
     return ("<table><thead><tr><th>종목</th><th class='r'>오늘</th><th class='r'>1주</th><th class='r'>1개월</th>"
             "<th class='r'>3개월</th><th class='r'>YTD</th><th class='c'>3개월 차트</th><th class='r'>외인 보유</th><th class='r'>시총(억)</th></tr></thead>"
             f"<tbody>{''.join(tr)}</tbody></table>")
@@ -167,6 +181,14 @@ def flow_table(rows):
                     cls = "r grp" if k == "today" else "r"
                     cells.append(f"<td class='{cls}'{shade(v, caps[(who, k)])}>{n(v)}{(' ' + badge) if badge else ''}</td>")
             tr.append(f"<tr><td>{esc(r['name'])}</td>{''.join(cells)}</tr>")
+        # 묶음 요약: 투자자별 순매수 합계(10/20 사용자 요청)
+        cells = []
+        for who in ("frgn", "inst", "indiv"):
+            for k in keys:
+                tot = agg([((r["flow"].get("win") or {}).get(who) or {}).get(k) for r in grs], "sum")
+                cls = "r grp" if k == "today" else "r"
+                cells.append(f"<td class='{cls}'{shade(tot, caps[(who, k)])}>{n(tot)}</td>")
+        tr.append(f"<tr class='sub'><td>{esc(g)} 합계<small>{len(grs)}종목</small></td>{''.join(cells)}</tr>")
     sub = "".join(f"<th class='r{' grp' if k == 'today' else ''}'>{lbl}</th>" for _ in range(3) for k, lbl in zip(keys, ("오늘", "5일", "1개월", "3개월", "YTD")))
     return ("<table class='flow'><thead><tr><th rowspan='2'>종목</th><th colspan='5' class='grp c'>외국인</th><th colspan='5' class='grp c'>기관</th><th colspan='5' class='grp c'>개인</th></tr>"
             f"<tr>{sub}</tr></thead><tbody>{''.join(tr)}</tbody></table>")
@@ -259,6 +281,10 @@ def render(d):
     except Exception:
         asof = d.get("asof", "")
     prov = any(r.get("flow", {}).get("has_today") for r in rows)
+    est_times = sorted({r["flow"]["today_src"].split(" ", 1)[1] for r in rows
+                        if str(r.get("flow", {}).get("today_src", "")).startswith("estimate ")})
+    est_line = (f"<b>오늘(장중)은 한투 종목별 외인·기관 추정가집계 {' · '.join(est_times)} 기준</b> — 추정 순매수 수량 × 현재가 근사, "
+                "개인은 −(외인+기관)로 둔 값(확정치는 장 마감 뒤 일별 집계로 대체)." if est_times else "")
     errs = d.get("errors", [])
     err_html = (f"<details class='errs'><summary>수집 오류 {len(errs)}건</summary><ul>{''.join(f'<li>{esc(e)}</li>' for e in errs)}</ul></details>" if errs else "")
     return f"""<!doctype html><html lang="ko"><head><meta charset="utf-8">
@@ -292,15 +318,17 @@ th.r,td.r{{text-align:right;font-variant-numeric:tabular-nums}}
 .mini.b{{background:#fde2e2;color:#b91c1c}}.mini.s{{background:#dbe6fd;color:#1d4ed8}}
 .rsi-lo{{color:#1d4ed8;font-weight:700}}.rsi-hi{{color:#b91c1c;font-weight:700}}
 td.empty{{color:var(--muted);text-align:center;padding:18px}}
+tr.sub td{{font-weight:800;color:var(--ink);border-top:2px solid #94a3b8;border-bottom:2px solid #94a3b8;background:#f1f5f9}}tr.sub td .pos,tr.sub td .neg{{font-weight:800}}tr.sub td small{{font-weight:400;font-size:11px}}
 tr.gh td{{background:#eef2f7;color:#1f2937;font:700 12px Georgia,"Noto Serif KR",serif;letter-spacing:.06em;padding:6px 8px}}
 table.compact{{font-size:12px}}
 table.flow{{font-size:12px}}table.flow td,table.flow th{{padding:6px 5px}}th.c{{text-align:center}}td.grp,th.grp{{border-left:2px solid #e5e7eb}}
 .note{{font-size:12px;color:var(--muted);line-height:1.6;margin:8px 0 0}}
 .errs{{margin:16px 0;font-size:12px;color:#b45309}}.errs ul{{margin:6px 0 0 18px}}
 .wrap{{overflow-x:auto}}
-#cap-1,#cap-2,#cap-3{{padding:6px 0 4px;background:#fff}}
+#cap-1,#cap-2,#cap-3,#cap-1a,#cap-1b{{padding:6px 0 4px;background:#fff}}
 </style></head><body>
 <div id="cap-1">
+<div id="cap-1a">
 <p class="eyebrow">COVERAGE · FLOW &amp; TECHNICALS</p>
 <h1>커버리지 기업 수급 / 기술적 지표</h1>
 <p class="sub">조선·방산·건설기계 커버리지 + 커버예정 <b>{len(rows)}종목</b>. 외인·기관 순매수(시총 대비) · 섹터 ETF 패시브 추정 + 액티브 ETF 계약수 · RSI 1년 극단.
@@ -314,9 +342,12 @@ table.flow{{font-size:12px}}table.flow td,table.flow th{{padding:6px 5px}}th.c{{
 <div class="wrap">{returns_table(rows)}</div>
 <p class="note">오늘은 전일 종가 대비(장중 현재가). 1주·1개월·3개월은 거래일 5·21·63일 전 종가 대비, YTD 는 전년 마지막 종가 대비. 외인 보유 옆의 작은 날짜는 장 시작 전·휴장이라 그 날짜의 직전 수집값으로 채운 것 — 장중 첫 수집부터 당일 값으로 바뀐다.</p>
 
+</div>
+<div id="cap-1b">
 <h2 id="flow2">①-2 투자자별 순매수 <small style="font:400 12px Inter;color:#6b7280">억원 · 오늘 · 5일 · 1개월 · 3개월 · YTD · 시총 순</small></h2>
 <div class="wrap">{flow_table(rows)}</div>
-<p class="note">구간은 오늘 잠정 행을 포함한 최근 거래일 수(5·21·63일, YTD 는 올해 1월부터). 최근 30거래일은 한투 금액(정확), 그 이전은 네이버 순매수 수량 × 종가 <b>근사</b> — 3개월·YTD 합계는 체결 평균가 대신 종가를 써서 몇 % 어긋날 수 있다. 이력이 모자라는 구간은 '–'. 연속일수 배지는 2일 이상만.</p>
+<p class="note">구간은 오늘 잠정 행을 포함한 최근 거래일 수(5·21·63일, YTD 는 올해 1월부터). 최근 30거래일은 한투 금액(정확), 그 이전은 네이버 순매수 수량 × 종가 <b>근사</b> — 3개월·YTD 합계는 체결 평균가 대신 종가를 써서 몇 % 어긋날 수 있다. 이력이 모자라는 구간은 '–'. 연속일수 배지는 2일 이상만. {est_line}</p>
+</div>
 </div>
 <div id="cap-2">
 <h2 id="tech">② 과매수 · 과매도 <small style="font:400 12px Inter;color:#6b7280">RSI(14, Wilder) · 1년 백분위 · 52주 위치</small></h2>

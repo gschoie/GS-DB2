@@ -4,7 +4,7 @@
 흐름: 거래일 게이트 → 종목별 KIS(현재가·일봉·투자자) → 섹터 ETF(KIS 상장주수 + 네이버
 구성 비중) → 패시브 추정 → 액티브 ETF(etf_holdings/changes.json) → 저장.
 
-평일 16:00(장 마감 후) 하루 1회 돈다 — '오늘' 숫자는 당일 잠정 집계다 — 저장 데이터에
+평일 11:30(장중)·16:00(장 마감 후) 하루 2회 돈다 — '오늘' 숫자는 당일 잠정 집계다 — 저장 데이터에
 provisional 플래그를 남기고 화면·텔레가 그대로 적는다.
 """
 from __future__ import annotations
@@ -117,6 +117,17 @@ def collect_stock(u, today, live=True):
         inv = kis.merge_investor(inv, kis.naver_trend_frame(naver_investor_history(code, until)))
     except Exception as ex:
         print(f"  {u['name']} 네이버 수급 이력 실패(한투 30행만 사용): {type(ex).__name__}: {ex}")
+    est_note = None
+    if live:
+        # 장중엔 일별 투자자 API 의 오늘 행이 0 이라 추정가집계로 채운다(실패하면 그대로 0/없음).
+        try:
+            est = kis.fetch_estimate(code)
+            time.sleep(0.12)
+            inv, applied = metrics.apply_estimate(inv, today, est, px.get("price"))
+            if applied:
+                est_note = est["time"]
+        except Exception as ex:
+            print(f"  {u['name']} 추정가집계 실패(오늘 값 미보정): {type(ex).__name__}: {ex}")
     if not live:
         # 장 시작 전·휴장일: 소스가 미리 내주는 '오늘 0' 행을 버리고 KIS 전일대비(0.00)도 안 쓴다.
         # 외국인 보유비율도 장 전엔 0.00 으로 와서(10/19 05:57 실측) 0 은 '모름' 으로 읽는다.
@@ -128,6 +139,7 @@ def collect_stock(u, today, live=True):
                                   px.get("chg_pct") if live else None)
     tech["spark"] = metrics.spark_points(ohlc, today, px.get("price") if live else None)
     flow = metrics.flow_summary(inv, today, px.get("mcap"))
+    flow["today_src"] = f"estimate {est_note}" if est_note else "daily"
     return {**u, "px": px, "tech": tech, "flow": flow}
 
 
@@ -195,6 +207,14 @@ def probe_flow(code):
                 print("   body:", body[:300].replace("\n", " "))
         except Exception as ex:
             print(url, "실패:", ex)
+    return 0
+
+
+def probe_estimate(code):
+    """러너 프로브: 종목별 외인기관 추정가집계(HHPTJ04160200) 원본 응답 — 키 이름·시각 구분 확인용."""
+    j = kis.fetch_estimate_raw(code)
+    print(json.dumps(j, ensure_ascii=False, indent=1)[:4000])
+    print("== parse_estimate →", kis.parse_estimate(j))
     return 0
 
 
@@ -287,6 +307,7 @@ def main(argv=None):
     ap.add_argument("--limit", type=int, default=0, help="종목 수 제한(프로브용)")
     ap.add_argument("--probe-etf", action="store_true", help="ETF 상장주수 소스 탐색 — 응답 키만 찍고 끝(저장 없음)")
     ap.add_argument("--probe-flow", action="store_true", help="종목별 수급 이력 길이 탐색(KIS 행수·네이버 trend) — 저장 없음")
+    ap.add_argument("--probe-estimate", action="store_true", help="종목별 외인기관 추정가집계 원본 응답 출력 — 저장 없음")
     a = ap.parse_args(argv)
 
     now = datetime.now(KST)
@@ -295,6 +316,8 @@ def main(argv=None):
         return probe_etf(load_csv("etf_universe.csv")[0]["code"])
     if a.probe_flow:
         return probe_flow(load_csv("universe.csv")[0]["code"])
+    if a.probe_estimate:
+        return probe_estimate(load_csv("universe.csv")[0]["code"])
     mday, mstatus = market_day()
     if mday and mday != today and not a.force:
         print(f"휴장일로 판단(마지막 거래일 {mday}) — 수집 생략")

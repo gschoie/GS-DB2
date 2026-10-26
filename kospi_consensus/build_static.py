@@ -258,6 +258,7 @@ def build_period(con, snap, base, ref1, ref3, sectors, umeta):
                    "pwow3": pw(pref3, code)}
             for gk in gps:
                 row[gk] = growth(d["curr"], gmaps[gk].get(code))
+                row[gk + "_v"] = gmaps[gk].get(code)     # 분모 원값(섹터 합산 행용)
             rows.append(row)
         if base:
             rows.sort(key=lambda r: (r["wow"] is None, -abs(r["wow"]) if r["wow"] is not None else 0))
@@ -471,6 +472,8 @@ border-radius:8px;padding:6px 10px;margin-left:6px}
 overflow:hidden;vertical-align:middle}
 .modetog button{border:0;background:var(--card);color:var(--ink);font-size:12px;font-weight:600;
 padding:6px 13px;cursor:pointer}.modetog button.on{background:var(--accent);color:#fff}
+tr.agg td{font-weight:600;background:rgba(37,99,235,.09);border-bottom:2px solid var(--line)}
+tr.agg td.sec{color:var(--ink)}
 td.sec .secpick{cursor:pointer}td.sec .secpick:hover{color:var(--accent);text-decoration:underline}
 .clrfil{margin-left:8px;border:1px solid var(--line);background:var(--card);color:var(--down);
 font-size:12px;font-weight:600;padding:6px 11px;border-radius:8px;cursor:pointer}
@@ -535,6 +538,36 @@ function grw(v){if(v==null)return'<span class="tiny">-</span>';   // QoQ/YoY: % 
  if(typeof v==='string'){var c=v==='흑전'?'pos':(v==='적전'?'neg':'tiny');
   return'<span class="'+c+'">'+v+'</span>'}
  return pct(v)}
+function growthJS(c,b){if(c==null||b==null||b===0)return null;   // build_static.growth 와 동일 규칙
+ if(b>0)return c<0?'적전':(c-b)/b*100;return c<0?'적지':'흑전'}
+var AGG='__agg__';   // 섹터 셀렉트의 'Σ 섹터별 합산' 모드 값
+function aggCalc(rows,rev,bK,cK,pK,gcols){   // 합산: 컨센은 합계, 증감률은 합계끼리, 주가는 단순 평균
+ var a={n:0,np:0,nps:0,curr:0,_pc:0,_pb:0,_ps:0};
+ rows.forEach(function(d){if(d.curr!=null){a.curr+=d.curr;a.n++}
+  if(rev&&d.curr!=null&&d[bK]!=null){a._pc+=d.curr;a._pb+=d[bK];a.np++}
+  if(rev&&d[pK]!=null){a._ps+=d[pK];a.nps++}});
+ if(!a.n)return null;
+ a.gn={};
+ gcols.forEach(function(c){var vc=0,vb=0,n=0;
+  rows.forEach(function(d){var v=d[c[0]+'_v'];if(d.curr!=null&&v!=null){vc+=d.curr;vb+=v;n++}});
+  a[c[0]]=n?growthJS(vc,vb):null;a.gn[c[0]]=n});
+ if(rev){a[bK]=a.np?a._pb:null;a[cK]=a.np?growthJS(a._pc,a._pb):null;a[pK]=a.nps?a._ps/a.nps:null}
+ return a}
+function aggCells(a,rev,bK,cK,pK,gcols){   // 합산 값 칸들(섹터·종목 칸 제외)
+ var g=gcols.map(function(c){var n=a.gn[c[0]];
+  return'<td>'+grw(a[c[0]])+(n&&n<a.n?' <span class="tiny">'+n+'종목</span>':'')+'</td>'}).join('');
+ if(rev)return'<td>'+fmt(a[bK])+(a.np&&a.np<a.n?' <span class="tiny">'+a.np+'종목</span>':'')+'</td><td>'+fmt(a.curr)+'</td>'+g+
+  '<td>'+grw(a[cK])+'</td><td>'+pct(a[pK])+(a.nps?' <span class="tiny">평균</span>':'')+'</td>';
+ return'<td>'+fmt(a.curr)+'</td>'+g}
+function aggRow(rows,label,rev,bK,cK,pK,gcols){   // 필터 합산 행(종목 표 맨 위 Σ)
+ var a=aggCalc(rows,rev,bK,cK,pK,gcols);if(!a)return'';
+ return'<tr class="agg"><td>Σ</td><td class="mktc"></td><td class="l sec">'+label+'</td>'+
+  '<td class="l">합산 <span class="tiny">'+a.n+'종목</span></td>'+aggCells(a,rev,bK,cK,pK,gcols)+'</tr>'}
+function sectorAggs(rows,rev,bK,cK,pK,gcols){   // Σ 모드: 섹터마다 합산 객체 하나(정렬 키는 종목 행과 동일)
+ var by={};rows.forEach(function(d){(by[d.sec]=by[d.sec]||[]).push(d)});
+ var out=[];Object.keys(by).forEach(function(sec){var a=aggCalc(by[sec],rev,bK,cK,pK,gcols);
+  if(a){a.sec=sec;a.name=sec;out.push(a)}});
+ return out}
 function mmdd(s){return s?s.slice(5).replace('-','/'):''}   // 'YYYY-MM-DD' → 'MM/DD'
 function qq(p){if(!p)return'-';var m=p.slice(5,7),y=p.slice(2,4);   // '2026.06' → '2Q26'
  return ({'03':'1Q','06':'2Q','09':'3Q','12':'4Q'}[m]||m)+y}
@@ -562,9 +595,10 @@ function mktBadge(m){return m?'<span class="'+(m==='코스닥'?'mkt-kq':'mkt-kp'
 function sortRows(rows){
  if(sortKey==null){var kk=chgField();   // 기본: 선택 기준(주간/1개월/3개월) 변화 큰 순
   return rows.slice().sort(function(a,b){var x=a[kk],y=b[kk];
-   x=x==null?-1:Math.abs(x);y=y==null?-1:Math.abs(y);return y-x});}
+   x=typeof x==='number'?Math.abs(x):-1;y=typeof y==='number'?Math.abs(y):-1;return y-x});}
  return rows.slice().sort(function(a,b){var x=a[sortKey],y=b[sortKey];
   if(x==null&&y==null)return 0;if(x==null)return 1;if(y==null)return -1;   // 값 없는 종목은 뒤로
+  if(typeof x!==typeof y)return typeof x==='number'?-1:1;   // 숫자·문자(흑전 등) 혼재 시 숫자 먼저
   return typeof x==='string'?sortDir*x.localeCompare(y,'ko'):sortDir*(x-y)});
 }
 function arrow(k){return sortKey===k?(sortDir<0?' ▼':' ▲'):''}
@@ -617,7 +651,7 @@ function renderTop(){
   $('cards').innerHTML=ch+'</div>';
   var bd=refDate(p), pbd=refPDate(p);
   $('foot').innerHTML='컨센 변화 = '+MX().lab+'('+(bd||'')+') 대비 영업이익 컨센 변화율 · 주가 변동 = 종가 '+
-   (pbd||'')+' → '+(p.price_date_snap||'')+' · QoQ/YoY = 직전·전년 분기(연간은 전년) 영업이익 대비, 같은 스냅샷 내 비교 — 실적(A) 우선, 실적 수집 전엔 당시 컨센 · 상위 30 기본(전체 보기·열 정렬) · 섹터/종목명 클릭 활용';
+   (pbd||'')+' → '+(p.price_date_snap||'')+' · QoQ/YoY = 직전·전년 분기(연간은 전년) 영업이익 대비, 같은 스냅샷 내 비교 — 실적(A) 우선, 실적 수집 전엔 당시 컨센 · 상위 30 기본(전체 보기·열 정렬) · 섹터/종목명 클릭 활용 · 섹터·그룹 필터 시 맨 위 Σ 행 = 합산(컨센 합계·합계 기준 증감률·주가 변동은 단순 평균), 섹터 셀렉트의 Σ 섹터별 합산 = 섹터 한 줄씩';
  }else{
   $('cards').innerHTML='<div class="note">첫 스냅샷이라 전주 대비 변동은 다음 스냅샷부터 표시됩니다. 아래는 현재 컨센 레벨이며, 전체 종목은 엑셀에서 확인하세요.</div>';
   $('foot').innerHTML='';
@@ -626,7 +660,7 @@ function renderTop(){
 function renderCtl(){   // 그룹/섹터 필터 + 기준(주간/1개월/3개월) 토글
  var gopts='<option value="">전체 그룹</option>';
  (D.groups||[]).forEach(function(g){gopts+='<option value="'+g+'"'+(g===grpFilter?' selected':'')+'>'+g+'</option>'});
- var opts='<option value="">전체 섹터</option>';
+ var opts='<option value="">전체 섹터</option><option value="'+AGG+'"'+(secFilter===AGG?' selected':'')+'>Σ 섹터별 합산</option>';
  D.sectors.forEach(function(s){opts+='<option value="'+s+'"'+(s===secFilter?' selected':'')+'>'+s+'</option>'});
  var clr=(secFilter||grpFilter)?'<button class="clrfil" id="clrfil">✕ 필터 해제</button>':'';
  var tog='';
@@ -645,10 +679,8 @@ function draw(){
  if(h.stub||!h.rows.length){
   tbl.innerHTML='<div class="note">'+(h.period?dlab(h)+' 컨센은 아직 수집 전입니다. 다음 주간 스냅샷부터 쌓입니다.':'데이터가 없습니다.')+'</div>';
   return}
- var all=(h.rows||[]).filter(function(d){return (!secFilter||d.sec===secFilter)&&(!grpFilter||(d.grp||'').indexOf(grpFilter)>=0)});
- var rows=sortRows(all), shown=showAll?rows:rows.slice(0,TOP);
- var toggle=all.length>TOP?'<button class="lim" id="limtog">'+
-  (showAll?'상위 '+TOP+'만 보기':'전체 '+all.length+'개 보기')+'</button>':'';
+ var AGGMODE=secFilter===AGG;
+ var all=(h.rows||[]).filter(function(d){return (AGGMODE||!secFilter||d.sec===secFilter)&&(!grpFilter||(d.grp||'').indexOf(grpFilter)>=0)});
  var bK='base'+x, cK='wow'+x, pK='pwow'+x;
  var bLab=x?MX().lab+' 컨센':'컨센 전주', bDate=refDate(p), pbDate=refPDate(p);
  // QoQ/YoY 칼럼 (분기: 직전·전년동기 / 연간: 전년) — 같은 스냅샷 내 비교
@@ -665,11 +697,23 @@ function draw(){
     [pK,'주가 변동',mmdd(pbDate)+'-'+mmdd(p.price_date_snap),'']]):
   [['mkt','시장','','mktc'],['sec','섹터','','l'],['name','종목','','l'],
    ['curr','영업이익',mmdd(p.snapshot_date),'']].concat(gcols));
+ var stockRows=AGGMODE?[]:all, aggs=AGGMODE?sectorAggs(all,rev,bK,cK,pK,gcols):[];
+ var rows=sortRows(AGGMODE?aggs:stockRows), shown=(showAll||AGGMODE)?rows:rows.slice(0,TOP);
+ var toggle=(!AGGMODE&&all.length>TOP)?'<button class="lim" id="limtog">'+
+  (showAll?'상위 '+TOP+'만 보기':'전체 '+all.length+'개 보기')+'</button>':'';
+ if(AGGMODE)cols[2]=['name','섹터 <span class="tiny">(클릭=종목 보기)</span>','','l'];
  var out=toggle+'<table><tr><th>#</th>';
  cols.forEach(function(c){out+='<th class="sortable '+(c[3]||'')+'" data-k="'+c[0]+'">'+c[1]+
   (c[2]?'<br><span class="tiny">'+c[2]+'</span>':'')+arrow(c[0])+'</th>'});
  out+='</tr>';
- shown.forEach(function(d,i){
+ if(AGGMODE){   // 섹터 한 줄씩 합산 — 맨 위 Σ 는 전체(그룹 필터 반영) 합산
+  out+=aggRow(all,grpFilter||'전체',rev,bK,cK,pK,gcols);
+  shown.forEach(function(a,i){out+='<tr><td>'+(i+1)+'</td><td class="mktc"></td>'+
+   '<td class="l sec"><span class="secpick" data-s="'+a.sec+'">'+a.sec+'</span></td>'+
+   '<td class="l"><span class="secpick" data-s="'+a.sec+'">'+a.sec+'</span> <span class="tiny">'+a.n+'종목</span></td>'+
+   aggCells(a,rev,bK,cK,pK,gcols)+'</tr>'})}
+ else if(secFilter||grpFilter)out+=aggRow(all,[secFilter,grpFilter].filter(Boolean).join(' · '),rev,bK,cK,pK,gcols);
+ (AGGMODE?[]:shown).forEach(function(d,i){
   var g=gcols.map(function(c){return'<td>'+grw(d[c[0]])+'</td>'}).join('');
   out+='<tr><td>'+(i+1)+'</td>'+
   '<td class="mktc">'+mktBadge(d.mkt)+'</td>'+
@@ -677,7 +721,7 @@ function draw(){
   '<td class="l">'+nameCell(d)+'</td>'+
   (rev?'<td>'+fmt(d[bK])+'</td><td>'+fmt(d.curr)+'</td>'+g+'<td>'+pct(d[cK])+'</td><td>'+pct(d[pK])+'</td>'
       :'<td>'+fmt(d.curr)+'</td>'+g)+'</tr>'});
- if(!shown.length)out+='<tr><td colspan="'+(cols.length+1)+'" style="text-align:center;padding:18px" class="tiny">해당 섹터 종목이 없습니다</td></tr>';
+ if(!shown.length&&!AGGMODE)out+='<tr><td colspan="'+(cols.length+1)+'" style="text-align:center;padding:18px" class="tiny">해당 섹터 종목이 없습니다</td></tr>';
  tbl.innerHTML=out+'</table>';
  var lt=$('limtog');if(lt)lt.onclick=function(){showAll=!showAll;draw()};
  tbl.querySelectorAll('.secpick').forEach(function(el){el.onclick=function(){

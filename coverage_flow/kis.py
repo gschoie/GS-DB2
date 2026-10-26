@@ -163,6 +163,57 @@ def merge_investor(kis_df, naver_df):
     return pd.concat([kis_df, extra], ignore_index=True).sort_values("date").reset_index(drop=True)
 
 
+EST_HOURS = {"1": "09:30", "2": "10:00", "3": "11:20", "4": "13:20", "5": "14:30"}
+
+
+def fetch_estimate_raw(code):
+    """한투 '종목별 외인기관 추정가집계'(HHPTJ04160200) 원본 JSON. 장중 KRX 잠정 집계 시각
+    (09:30·10:00·11:20·13:20·14:30)별 외국인·기관 추정 순매수 **수량**."""
+    return get("/uapi/domestic-stock/v1/quotations/investor-trend-estimate", "HHPTJ04160200",
+               {"MKSC_SHRN_ISCD": code})
+
+
+def parse_estimate(j):
+    """추정가집계 응답 → {"time": "11:20", "frgn_qty", "inst_qty"} (가장 늦은 집계 시각 행) 또는 None.
+    키 이름은 문서와 실측이 어긋날 수 있어 'frgn/orgn' + 'ntby' 가 들어간 수량 키를 느슨하게 찾는다."""
+    rows = None
+    for k in ("output2", "output", "output1"):
+        v = (j or {}).get(k)
+        if isinstance(v, list) and v:
+            rows = v
+            break
+        if isinstance(v, dict) and v and rows is None:
+            rows = [v]
+    if not rows:
+        return None
+
+    def pick(r, who):
+        for k, v in r.items():
+            kl = k.lower()
+            if who in kl and "ntby" in kl and ("qty" in kl or "cnt" in kl or "pbmn" in kl):
+                f = _f(v)
+                if f is not None:
+                    return f, ("amt" if "pbmn" in kl else "qty")
+        return None, None
+
+    best = None
+    for r in rows:
+        gb = str(r.get("bsop_hour_gb") or r.get("bsop_hour") or "").strip()
+        fq, fu = pick(r, "frgn")
+        oq, ou = pick(r, "orgn")
+        if fq is None and oq is None:
+            continue
+        rec = {"time": EST_HOURS.get(gb, gb or "?"), "gb": gb, "frgn_qty": fq, "inst_qty": oq,
+               "unit": fu or ou}
+        if best is None or (rec["gb"] or "0") >= (best["gb"] or "0"):
+            best = rec
+    return best
+
+
+def fetch_estimate(code):
+    return parse_estimate(fetch_estimate_raw(code))
+
+
 def fetch_price(code):
     """현재가 스냅: price·chg_pct·mcap(억)·listed(주)·frgn_pct·amt_today(억)."""
     j = get("/uapi/domestic-stock/v1/quotations/inquire-price", "FHKST01010100",

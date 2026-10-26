@@ -1,14 +1,12 @@
 name: 시장 수급 동향
 
-# 하루 4회(평일, KST): 10:00 / 13:00 / 15:40(마감 잠정) / 16:40(확정)
+# 하루 2회(평일, KST): 11:00 / 16:00(마감) — 10/20 4회에서 축소
 # NAVER 증권에서 KOSPI 투자자별·프로그램 수급을 수집 → 리포트 → 텔레그램(gs_macro_get)
 on:
   workflow_dispatch:
   schedule:
-    - cron: "0 1 * * 1-5"    # 01:00 UTC = KST 10:00
-    - cron: "0 4 * * 1-5"    # 04:00 UTC = KST 13:00
-    - cron: "40 6 * * 1-5"   # 06:40 UTC = KST 15:40
-    - cron: "40 7 * * 1-5"   # 07:40 UTC = KST 16:40
+    - cron: "0 2 * * 1-5"    # 02:00 UTC = KST 11:00
+    - cron: "0 7 * * 1-5"    # 07:00 UTC = KST 16:00
 
 permissions:
   contents: write   # history.json·리포트 HTML 커밋 → deploy-pages(workflow_run) 재배포
@@ -21,7 +19,7 @@ jobs:
   # GAS 시계(gas/dispatch_proxy.gs의 tick)가 정시에 workflow_dispatch로 쏘고,
   # GitHub 크론은 안전망으로 남긴다. 크론이 뒤늦게 돌 때 같은 일을 두 번 하지
   # 않도록, **같은 슬롯 안에서** 이미 실행이 있었으면 이 예약 실행은 건너뛴다.
-  # 슬롯 경계는 scrape.decide_slot과 같다(11:30 / 14:30 / 16:10 KST) — 단순 분 단위
+  # 슬롯 경계는 scrape.decide_slot과 같다(13:30 KST) — 단순 분 단위
   # 창으로 하면 몇 시간 늦은 크론이 다음 슬롯을 덮어써 수급 메시지가 두 번 간다.
   #
   # **dispatch만 세면 안 된다** — 무료 러너 크론은 몇 시간씩 밀려(9/16 실측 +4.5~5.3h)
@@ -44,18 +42,37 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           hm=$(TZ=Asia/Seoul date +%H%M)
-          if   [ "$hm" -lt 1130 ]; then slot=1000; from="00:00"
-          elif [ "$hm" -lt 1430 ]; then slot=1300; from="11:30"
-          elif [ "$hm" -lt 1610 ]; then slot=1540; from="14:30"
-          else                          slot=1640; from="16:10"
+          if [ "$hm" -lt 1330 ]; then slot=1100; from="00:00"; nominal=1100
+          else                        slot=1600; from="13:30"; nominal=1600
           fi
-          since=$(TZ=Asia/Seoul date -u -d "today $from" +%Y-%m-%dT%H:%M)
+          # 슬롯 정시 전에 도착한 밀린 크론은 그냥 버린다 — 정시는 GAS 시계가 쏜다.
+          # (10/19 사고: 10:00 크론이 14:39에 떨어져 15:40 잠정 메시지를 1시간 일찍 발송)
+          if [ "$hm" -lt "$nominal" ]; then
+            echo "::notice::슬롯 ${slot} 정시(${nominal}) 전 도착한 지연 크론 — 건너뜁니다"
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          # '이 슬롯이 이미 처리됐나'는 run 개수가 아니라 **수집 결과(run_meta.json)**로 묻는다.
+          # 가드가 스킵한 run도 conclusion=success라, run을 세면 '스킵된 선행 실행'이
+          # 진짜 늦은 크론까지 막는다(10/20 실측: 11:00 크론이 15:49 도착→정시 전 스킵,
+          # 그 success가 밤의 16:00 크론을 막아 그날 수급 0건). 교훈 24의 완성형.
+          d=$(TZ=Asia/Seoul date +%F)
+          meta=$(curl -sS -m 10 "https://raw.githubusercontent.com/${{ github.repository }}/main/market_flow/data/run_meta.json" || echo '{}')
+          done_today=$(echo "$meta" | jq -r --arg d "$d" --arg s "$slot" \
+            'if ((.when_kst // "")[:10]) == $d and ((.slot // "") == $s or .ran == false) then "yes" else "no" end' 2>/dev/null || echo no)
+          if [ "$done_today" = "yes" ]; then
+            echo "::notice::오늘 슬롯 ${slot}은 이미 수집됨(또는 휴장) — 예약 실행은 건너뜁니다"
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          # 지금 다른 run이 돌고 있으면 그 쪽에 맡긴다 (완료된 run은 위 run_meta가 판정)
+          since=$(date -u -d "TZ=\"Asia/Seoul\" $d $from" +%Y-%m-%dT%H:%M)
           n=$(gh api "repos/${{ github.repository }}/actions/workflows/market-flow.yml/runs?created=%3E${since}" \
                 --jq "[.workflow_runs[] | select(.id != ${{ github.run_id }}) \
-                       | select(.conclusion==\"success\" or .status==\"in_progress\" or .status==\"queued\")] | length" || echo 0)
-          echo "슬롯 ${slot}(${from} KST~) 안의 선행 실행 ${n:-0}건"
+                       | select(.status==\"in_progress\" or .status==\"queued\")] | length" || echo 0)
+          echo "슬롯 ${slot}(${from} KST~) 진행 중 run ${n:-0}건"
           if [ "${n:-0}" -gt 0 ]; then
-            echo "::notice::이 슬롯은 이미 처리됐습니다 — 예약 실행은 건너뜁니다"
+            echo "::notice::같은 슬롯 run이 진행 중 — 예약 실행은 건너뜁니다"
             echo "skip=true" >> "$GITHUB_OUTPUT"
           fi
 
