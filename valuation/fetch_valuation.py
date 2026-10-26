@@ -516,7 +516,8 @@ def collect(company):
             ni_q = (eps_q * latest_shares) if (eps_q is not None and latest_shares) else None
             q_end = last_q_end + pd.DateOffset(months=3 * step)
             q_no = (q_end.month - 1) // 3 + 1
-            row = fin_row(f"{q_no}Q{q_end.year % 100}E", "E", rev_q, None, ni_q)
+            row = fin_row(f"{q_no}Q{q_end.year % 100}E", "E", rev_q, None, ni_q,
+                          end=q_end.date().isoformat())
             if row:
                 fin_quarterly.append(row)
 
@@ -556,8 +557,10 @@ def collect(company):
         naver_q = []
         for q in fin_naver["quarterly"]:
             q_no = q["month"] // 3
+            q_end = pd.Timestamp(q["year"], q["month"], 1) + pd.offsets.MonthEnd(0)
             row = fin_row(f"{q_no}Q{q['year'] % 100}" + ("E" if q["est"] else ""),
-                          "E" if q["est"] else "A", q["sales"], q["op"], q["ni"])
+                          "E" if q["est"] else "A", q["sales"], q["op"], q["ni"],
+                          end=q_end.date().isoformat())
             if row:
                 row["src"] = "naver"
                 row["_key"] = (q["year"], q_no)
@@ -592,13 +595,31 @@ def collect(company):
     # 통화는 재무제표의 '실' 통화 기준: 야후 라벨이 틀렸다고 판정한 종목(두산밥캣형)은 주가통화.
     # 환율을 못 구한 날은 usd_rate=None — 화면이 재무통화 그대로 폴백한다(지어내지 않는다).
     fin_ccy_eff = (normalized_quote if statements_in_quote else (fin_ccy or normalized_quote)) or None
-    fin_usd = None
+    fin_usd, fin_fx = None, None
     if fin_ccy_eff == "USD":
         fin_usd = 1.0
     elif fin_ccy_eff:
         fin_fx = fx_history(fin_ccy_eff, "USD")
         if fin_fx is not None:
             fin_usd = fx_at(fin_fx, closes.index[-1])
+
+    def _row_fx(row, months):
+        """확정(A) 줄은 그 기간 평균 환율(손익 관행), E·기말 미상·미래 기간은 수집 시점 환율."""
+        if fin_usd is None or fin_ccy_eff == "USD":
+            return fin_usd
+        if row.get("kind") == "A" and row.get("end") and fin_fx is not None:
+            end_ts = pd.Timestamp(row["end"])
+            window = fin_fx.loc[(fin_fx.index > end_ts - pd.DateOffset(months=months))
+                                & (fin_fx.index <= end_ts)]
+            rate = num(window.mean()) if not window.empty else None
+            if rate:
+                return rate
+        return fin_usd
+
+    for row in fin_annual + fin_forward:
+        row["fx"] = _row_fx(row, 12)
+    for row in fin_quarterly:
+        row["fx"] = _row_fx(row, 3)
     record["financials"] = {
         "currency": fin_ccy_eff,
         "usd_rate": fin_usd,
