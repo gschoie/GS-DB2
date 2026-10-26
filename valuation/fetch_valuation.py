@@ -306,6 +306,7 @@ def collect(company):
     # 실제 재무제표는 원화다(매출 8.6조·EPS 6,426원). 그대로 믿고 환산하면
     # PER이 0.01배로 찍힌다 — 공란보다 나쁜, 조용히 틀린 숫자다.
     # → 최근 확정연도 EPS와 현재 주가로 환산 전/후 PER을 만들어 상식적인 쪽을 고른다.
+    statements_in_quote = False   # 야후 라벨이 틀려 재무제표가 실은 주가통화인 종목(두산밥캣형)
     if fx_to_fin is not None and periods and current_price:
         last = periods[-1]
         probe_ni = at(net_income, last)
@@ -317,6 +318,7 @@ def collect(company):
             record["warnings"] = [w for w in record["warnings"] if "환산했습니다" not in w]
             if sane_multiple(plain) and not sane_multiple(converted):
                 fx_to_fin = None
+                statements_in_quote = True
                 record["warnings"].append(
                     f"야후는 재무통화를 {fin_ccy}로 표기했지만 실제 재무제표가 "
                     f"{normalized_quote} 기준이라 환산하지 않았습니다"
@@ -586,8 +588,20 @@ def collect(company):
                         merged["src"] = "naver"
                         row.update(merged)
 
+    # 재무 상세 패널은 전 종목 '백만달러'로 통일 표시한다(사용자 요청 10/26) — 환율을 함께 싣는다.
+    # 통화는 재무제표의 '실' 통화 기준: 야후 라벨이 틀렸다고 판정한 종목(두산밥캣형)은 주가통화.
+    # 환율을 못 구한 날은 usd_rate=None — 화면이 재무통화 그대로 폴백한다(지어내지 않는다).
+    fin_ccy_eff = (normalized_quote if statements_in_quote else (fin_ccy or normalized_quote)) or None
+    fin_usd = None
+    if fin_ccy_eff == "USD":
+        fin_usd = 1.0
+    elif fin_ccy_eff:
+        fin_fx = fx_history(fin_ccy_eff, "USD")
+        if fin_fx is not None:
+            fin_usd = fx_at(fin_fx, closes.index[-1])
     record["financials"] = {
-        "currency": fin_ccy or normalized_quote or None,
+        "currency": fin_ccy_eff,
+        "usd_rate": fin_usd,
         "annual": fin_annual + fin_forward,
         "quarterly": fin_quarterly,
     }

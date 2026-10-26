@@ -653,10 +653,17 @@ function finDetail(c, span){
     body='재무 상세가 아직 수집되지 않았습니다 — <b>▶ 수집 실행</b> 후(배포까지 3~5분) 새로고침하면 보입니다.';
   }else{
     const ccy=f.currency||'';
-    const kr=ccy==='KRW', jp=ccy==='JPY';
-    const div=(kr||jp)?1e8:1e6;
-    const unit=kr?'억원':(jp?'억엔':'백만 '+(ccy||'?'));
-    const scale=v=>Math.round(v/div).toLocaleString();
+    const fx=f.usd_rate;
+    let unit, scale;
+    if(fx){            /* 전 종목 백만달러 통일(사용자 요청) — 수집 시점 야후 환율 */
+      unit='백만달러'+(ccy&&ccy!=='USD'?' (수집 시점 환율로 환산)':'');
+      scale=v=>Math.round(v*fx/1e6).toLocaleString();
+    }else{             /* 환율을 못 구했거나 옛 스냅샷 — 재무통화 그대로(지어내지 않는다) */
+      const kr=ccy==='KRW', jp=ccy==='JPY';
+      const div=(kr||jp)?1e8:1e6;
+      unit=(kr?'억원':(jp?'억엔':'백만 '+(ccy||'?')))+' — 달러 환산 환율 미수집';
+      scale=v=>Math.round(v/div).toLocaleString();
+    }
     const hasN=[...(f.annual||[]),...(f.quarterly||[])].some(r=>r.src==='naver');
     body=`<div class="fwrap"><div>${finTable('연간',f.annual,scale)}</div>`+
          `<div>${finTable('분기',f.quarterly,scale)}</div></div>`+
