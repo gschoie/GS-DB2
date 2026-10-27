@@ -483,6 +483,16 @@ function closeNavFlyout(el){if(!matchMedia('(max-width:950px)').matches)return;c
 $$('.nav').forEach(b=>b.onclick=()=>{closeOtherNavGroups(b);closeNavFlyout(b);view(b.dataset.view)});$$('[data-go]').forEach(b=>b.onclick=()=>view(b.dataset.go));
 // 서브메뉴 안의 일반 링크(외부 링크 등)를 눌러도 모바일 플라이아웃은 닫는다.
 document.addEventListener('click',e=>{const a=e.target.closest?.('.nav-submenu a');if(a)closeNavFlyout(a)});
+// data-also 가 붙은 링크는 **한 번 눌러 새 창 두 개**를 연다(ChatGPT + Claude).
+// 반드시 같은 클릭 처리 안에서 연달아 열어야 한다 — 비동기로 미루면 브라우저가
+// '사용자가 누른 것'으로 안 보고 두 번째를 팝업으로 막는다.
+// href(ChatGPT)를 **나중에** 열어 그쪽이 앞에 오게 한다(종전 동작 유지).
+document.addEventListener('click',e=>{
+  const a=e.target.closest?.('a[data-also]'); if(!a)return;
+  e.preventDefault();
+  window.open(a.dataset.also,'_blank','noopener');
+  window.open(a.href,'_blank','noopener');
+});
 // 서브그룹 머리글 안의 링크: summary 를 누른 것으로 처리되면 그룹이 접히므로,
 // 기본 동작(네비게이션+토글)을 둘 다 막고 새 창만 직접 연다.
 $$('.nav-subgroup>summary a').forEach(a=>a.addEventListener('click',e=>{

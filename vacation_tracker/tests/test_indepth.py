@@ -41,6 +41,14 @@ class CandidateTest(unittest.TestCase):
         self.assertTrue(is_strong("인뎁스 언제 나와?"))
         self.assertFalse(is_strong("자료 초안 거의 다 썼습니다"))  # 넓은 키워드는 폴백 제외
 
+    def test_commute_talk_not_strong(self):
+        # 출퇴근 조정 얘기는 '발간'이 있어도 폴백에서 컷 (10/27 실사례).
+        self.assertFalse(is_strong(
+            "팀장님 오늘 제가 저녁에 부모님이랑 상의할게 있어서 내일 아침 일찍 와서 "
+            "발간 작업해도 될까요? 7시쯤 퇴근해봐도 괜찮을까요!"))
+        self.assertFalse(is_strong("내일 오전 반차 쓰고 발간은 오후에 하겠습니다"))
+        self.assertTrue(is_strong("인뎁스 발간 다음주 금요일입니다"))  # 진짜 계획은 유지
+
 
 class PickTest(unittest.TestCase):
     def test_keyword_message_picked(self):

@@ -56,15 +56,18 @@ GEMINI_SYSTEM_PROMPT = """너는 텔레그램 대화에서 '자리 비움 보고
   상대가 전하는 경우("팀장님 내일 연차시죠")도, **계정 주인이 주니어에게 자기 일정을
   3인칭으로 알려주는 경우**("사수님 21-22 휴가시다"를 계정 주인이 보냄)도 같다.
   계정 주인이 아닌 제3의 팀원 이야기는 여전히 false.
+- **배차·차량·기사 안내문은 보고가 아니다** — "[Web발신] … NDR 배차, 차량: 카니발,
+  담당기사: …" 같은 전달 공지는 일정 확인용 문자이지 자리 비움 보고가 아니다 → false.
 - "내일", "다음주 수요일" 같은 상대 날짜는 그 메시지의 보낸 시각을 기준으로 계산한다.
 - 종료일이 없으면 end=start(하루짜리). "3일간"이면 시작일 포함 3일.
 - 날짜를 도저히 못 정하면 vacation=true라도 start=null로 두라(사람이 확인한다).
 - 일부 메시지에는 (맥락)으로 직전 대화가 붙어 있다. '나'는 계정 주인이다.
   맥락의 질문(예: "출장 언제야?")에 대한 날짜 답변이면 보낸 사람의 자리 비움 보고로
   vacation=true로 판정하고, 종류(kind)는 맥락에서 찾아라.
-- 밸류데이·NDR·기업탐방·컨퍼런스·세미나·사이트비짓처럼 **본인이 참석하러 가는 행사
+- 밸류데이·기업탐방·컨퍼런스·세미나·사이트비짓처럼 **본인이 참석하러 가는 행사
   일정도 자리 비움 보고다** — "포스코인터 밸류데이 11.24-11.27"이면 kind=출장
-  (해외 행사·현지 방문이면 해외출장, 기업탐방이면 탐방). 컨퍼런스 콜(전화)은 아니다.
+  (해외 행사·현지 방문이면 해외출장, 기업탐방이면 탐방). 컨퍼런스 콜(전화)은 아니고,
+  **NDR은 시내 일과라 자리 비움이 아니다**(NDR만 말하는 메시지는 false).
 - note에는 장소·목적 같은 부가 정보(예: "카자흐스탄 출장", "포스코인터 인니팜 밸류데이")를 짧게 담아라.
 - "(계정 주인이 대신 적음)" 표시가 있으면 who를 판정하라: 계정 주인이 자기 자신의
   일정을 말하면("나/저 휴가임", "내가 월요일 연차") who="본인" — 이 일정은 계정 주인의 것이다.
@@ -675,8 +678,13 @@ def run(dry_run: bool = False, probe: bool = False) -> None:
     from render_page import build_page
 
     build_page(store)
-    if new_entries or fresh_att or fresh_idx:
-        notify(new_entries, fresh_att, fresh_idx)
+    # 발간계획 레이더 텔레는 확신 건만 — 폴백의 needs_review("주제 미상·시점 미정")는
+    # 대시보드 확인필요 칸에만 남긴다(10/27 '퇴근' 메시지 알림 소음).
+    idx_alert = [e for e in fresh_idx if not e.get("needs_review")]
+    if fresh_idx and not idx_alert:
+        print(f"발간계획 확인필요 {len(fresh_idx)}건 — 대시보드만(텔레 생략)")
+    if new_entries or fresh_att or idx_alert:
+        notify(new_entries, fresh_att, idx_alert)
 
 
 def run_indepth_backfill(days: int = 92) -> None:
@@ -707,8 +715,10 @@ def _apply_op(op: str, body: dict) -> None:
         # 이미 지워졌거나 uid가 틀림 — 실패로 죽지 않고 페이지만 다시 굽는다(멱등).
         print(f"[경고] uid를 찾지 못했습니다: {uid} — 변경 없음")
     elif op == "delete":
-        store["entries"].pop(uid)
-        print(f"삭제: {entry.get('name')} {entry.get('start')}~{entry.get('end')} ({uid})")
+        # 지우지 않고 묘비(deleted)로 — uid를 지우면 진행 중이던 스캔의 경합 병합
+        # (reconcile 합집합)이 항목을 되살린다(10/27 NDR 배차 문자 실사례).
+        entry["deleted"] = True
+        print(f"삭제(묘비): {entry.get('name')} {entry.get('start')}~{entry.get('end')} ({uid})")
     elif op == "note":
         entry["note"] = str(body.get("note") or "").strip()
         print(f"메모 수정: {entry.get('name')} ({uid}) → {entry['note']!r}")
