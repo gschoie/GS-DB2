@@ -665,7 +665,9 @@ document.addEventListener('dblclick',ev=>{
 
 
 def build_page(store: dict) -> Path:
-    all_entries = [dict(value, uid=key) for key, value in (store.get("entries") or {}).items()]
+    # 묘비(deleted)는 화면에서 숨긴다 — 경합 병합의 부활 방지용 기록(인뎁스와 동일).
+    all_entries = [dict(value, uid=key) for key, value in (store.get("entries") or {}).items()
+                   if not value.get("deleted")]
     former = set(former_names())
     former_entries = sorted((e for e in all_entries if (e.get("name") or "") in former),
                             key=lambda e: e.get("start") or "", reverse=True)

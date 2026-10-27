@@ -173,10 +173,13 @@ class EventTripKeyword(unittest.TestCase):
         self.assertFalse(entry["needs_review"])
 
     def test_other_event_words(self):
-        self.assertEqual(detect_kind("다음주 NDR 다녀오겠습니다"), "출장")
         self.assertEqual(detect_kind("기업탐방 갑니다"), "탐방")
         self.assertEqual(detect_kind("벨류 데이 참석합니다"), "출장")
         self.assertEqual(detect_kind("컨퍼런스 참석차 이동합니다"), "출장")
+
+    def test_ndr_is_not_trip(self):
+        # NDR은 시내 일과라 자리 비움이 아니다(10/27 결정) — 키워드에서 제외.
+        self.assertIsNone(detect_kind("다음주 NDR 있습니다"))
 
     def test_conference_call_is_not_trip(self):
         for text in ("컨퍼런스 콜 예정입니다", "실적 컨퍼런스콜 참석", "컨콜 있습니다"):
