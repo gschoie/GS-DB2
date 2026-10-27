@@ -258,6 +258,10 @@ def build() -> Path:
     invest_hub = ROOT / "static" / "invest.html"
     if invest_hub.exists():
         shutil.copy2(invest_hub, OUTPUT.parent / "invest.html")
+    # 아침 브리핑 모음 — 사이드바 '아침.브리핑' 서브메뉴의 🔗 모아보기 대상. 같은 등급.
+    brief_hub = ROOT / "static" / "briefings.html"
+    if brief_hub.exists():
+        shutil.copy2(brief_hub, OUTPUT.parent / "briefings.html")
     # 장 시작 전 코멘트 — 매크로 데스크 페이지가 **열릴 때 읽는다**(페이지에 박지 않는다).
     # 매크로 페이지는 저녁 9시에 한 번 구워지는데 개장전 글은 아침 7시대에 오므로,
     # 박아두면 아침에 열었을 때 반드시 어제 글이 보인다. 이 파일만 따로 나르면
