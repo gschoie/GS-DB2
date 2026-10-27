@@ -30,11 +30,17 @@ h1{font-size:19px;margin:0 0 2px}
 .sub{color:var(--muted);font-size:12.5px;margin:0 0 16px}
 h2{font-size:13px;margin:22px 0 8px;color:var(--muted);font-weight:700}
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,240px),1fr));
-gap:10px}
+gap:10px;align-items:start}  /* start: 한 줄을 같은 높이로 늘리지 않는다 — 작은 카드가 실제로 작아진다 */
 a.item{display:block;background:var(--card);border:1px solid var(--line);
 border-radius:10px;padding:12px 14px;text-decoration:none;color:inherit;
 transition:border-color .12s,transform .12s}
 a.item:hover{border-color:var(--accent);transform:translateY(-1px)}
+/* 통합본·친환경E 는 그대로 두고, 곁가지(개별 판·트래커)는 한 단계 작게 —
+   무엇을 먼저 눌러야 하는지가 크기로 보이게. */
+a.item.sm{padding:9px 11px}
+a.item.sm .ico{font-size:14px}
+a.item.sm .name{font-size:12.5px;margin:4px 0 2px}
+a.item.sm .desc{font-size:11px}
 .ico{font-size:17px;line-height:1}
 .name{font-weight:700;font-size:14px;margin:6px 0 3px}
 .desc{color:var(--muted);font-size:12px;margin:0}
@@ -55,19 +61,19 @@ border-radius:999px;padding:0 6px;margin-left:5px;vertical-align:1px}
   <a class="item" href="defense_unified_report.html">
     <div class="ico">🛡️</div><p class="name">방산 브리핑 (통합)<span class="tag">추천</span></p>
     <p class="desc">세 판(Gemini·Claude·RSS)을 편집장 관점에서 하나로</p></a>
-  <a class="item" href="defense_briefing_report.html">
+  <a class="item sm" href="defense_briefing_report.html">
     <div class="ico">🤖</div><p class="name">└ Gemini 판</p>
     <p class="desc">RSS·확정 시세 기반 자동 생성</p></a>
-  <a class="item" href="claude_defense_report.html">
+  <a class="item sm" href="claude_defense_report.html">
     <div class="ico">🧠</div><p class="name">└ Claude 판</p>
     <p class="desc">웹서치로 찾아 쓴 판</p></a>
-  <a class="item" href="chatgpt_defense_report.html">
+  <a class="item sm" href="chatgpt_defense_report.html">
     <div class="ico">🧩</div><p class="name">└ RSS 판</p>
     <p class="desc">뉴스 목록만 근거로 쓴 판</p></a>
-  <a class="item" href="naval_tracker.html">
+  <a class="item sm" href="naval_tracker.html">
     <div class="ico">⚓</div><p class="name">수상함·잠수함 입찰</p>
     <p class="desc">각국 해군 함정 수주전을 프로그램 단위로 추적</p></a>
-  <a class="item" href="defense_tracker.html">
+  <a class="item sm" href="defense_tracker.html">
     <div class="ico">📌</div><p class="name">방산 입찰·예산 트래커</p>
     <p class="desc">지상·항공·미사일 입찰과 각국 국방예산</p></a>
 </div>
@@ -77,13 +83,13 @@ border-radius:999px;padding:0 6px;margin-left:5px;vertical-align:1px}
   <a class="item" href="construction_unified_report.html">
     <div class="ico">🏗️</div><p class="name">건기 브리핑 (통합)<span class="tag">추천</span></p>
     <p class="desc">두 판(Claude·GPT)을 하나로</p></a>
-  <a class="item" href="construction_briefing_report.html">
+  <a class="item sm" href="construction_briefing_report.html">
     <div class="ico">🧠</div><p class="name">└ Claude 판</p>
     <p class="desc">RSS·확정 시세 기반</p></a>
-  <a class="item" href="chatgpt_construction_report.html">
+  <a class="item sm" href="chatgpt_construction_report.html">
     <div class="ico">🧩</div><p class="name">└ GPT 판</p>
     <p class="desc">웹서치 기반</p></a>
-  <a class="item" href="construction_tracker.html">
+  <a class="item sm" href="construction_tracker.html">
     <div class="ico">📌</div><p class="name">건기 전략 레이더</p>
     <p class="desc">신제품 · CAPEX · 딜러망 · M&amp;A 를 계속 쌓는 판</p></a>
 </div>
@@ -93,6 +99,12 @@ border-radius:999px;padding:0 6px;margin-left:5px;vertical-align:1px}
   <a class="item" href="energy_briefing_report.html">
     <div class="ico">🌊</div><p class="name">친환경E·FDC 브리핑</p>
     <p class="desc">친환경 선박 추진 · FDC · FLNG/FSRU · LNG 액화 FID · 미국 발전원 · 데이터센터 투자</p></a>
+  <a class="item sm" href="lng_tracker.html">
+    <div class="ico">📌</div><p class="name">LNG 수출 프로젝트 모니터링</p>
+    <p class="desc">pre-FID 액화 프로젝트 트래커</p></a>
+  <a class="item sm" href="dc_tracker.html">
+    <div class="ico">📌</div><p class="name">미국 DC 투자</p>
+    <p class="desc">미국 데이터센터 투자계획 트래커</p></a>
 </div>
 
 <p class="foot">각 화면에 적힌 생성 시각이 기준입니다. 주간 정리(토요일)는 사이드바
