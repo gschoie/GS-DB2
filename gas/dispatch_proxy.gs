@@ -43,6 +43,8 @@ const WF = {
   gptbrief:  'chatgpt-brief.yml',      // ChatGPT 방산 브리핑 붙여넣기 발행 (content 입력 필요)
   congpt:    'construction-gpt.yml',   // ChatGPT 건설기계 브리핑 붙여넣기 발행 (content 입력 필요)
   research:  'research-digest.yml',    // 커버리지 리서치요약 아침 모음
+  covflow:   'coverage-flow.yml',      // 커버리지 종목 수급·기술지표 (11:30·16:00 하루 2회)
+  dartcap:   'dart-capacity.yml',      // DART 생산능력·가동률 (보고서 시즌 + 버튼, stage=full)
   defweekly: 'defense-weekly.yml',     // 방산 주간정리 (토) — 스케줄러 정시 발사용
   conweekly: 'construction-weekly.yml',// 건설기계 주간정리 (토) — 스케줄러 정시 발사용
   // 다른 저장소의 워크플로는 {repo:'owner/name', file:'...'} 형태로 적는다.
@@ -57,7 +59,7 @@ const WF = {
 function buildInputs(key, body) {
   if (key === 'dart') return {
     dart_url: String(body.dart_url || ''),
-    target:   String(body.target || '공개채널'), // required + choice
+    target:   String(body.target || '비공개(바담)'), // required + choice — 기본 바담 방(10/17), 공개채널은 Actions 에서만
     comment:  String(body.comment || ''),
   };
   if (key === 'recipe') return { yt_url: String(body.yt_url || '') };
@@ -76,6 +78,8 @@ function buildInputs(key, body) {
     only:   String(body.only || ''),
     lookup: String(body.lookup || ''),
   };
+  // DART 생산능력·가동률: 버튼은 수집→추출→정규화까지 한 번에(stage=full).
+  if (key === 'dartcap') return { stage: 'full' };
   return {};
 }
 
@@ -199,15 +203,17 @@ const SCHEDULE = [
   // 일요일은 워크플로가 스스로 '월~금 누적' 모드로 바꾼다(mode 입력 기본값 auto)
   { wf: 'etf',       hours: [7],      minute: 0,  days: 'daily',   label: 'ETF/섹터 신호',
                      inputs: { via: 'scheduler' } },
-  { wf: 'flow',      hours: [10, 13], minute: 0,  days: 'weekday', label: '시장 수급' },
-  { wf: 'flow',      hours: [15],     minute: 40, days: 'weekday', label: '시장 수급(마감 잠정)' },
-  { wf: 'flow',      hours: [16],     minute: 40, days: 'weekday', label: '시장 수급(확정)' },
+  { wf: 'flow',      hours: [11, 16], minute: 0,  days: 'weekday', label: '시장 수급' },  // 10/20 4회→2회 축소
   { wf: 'holdings',  hours: [9, 10, 11, 12, 13, 14, 15, 16],   // 장중~마감 직후까지만
                      minute: 17, days: 'weekday', label: '액티브ETF 매매동향',
                      inputs: { via: 'scheduler' } },
   { wf: 'macro',     hours: [21],     minute: 0,  days: 'daily',   label: '매크로 데스크',
                      inputs: { via: 'scheduler' } },
   { wf: 'consensus', hours: [17],     minute: 0,  days: 'fri,sat', label: '코스피200 컨센' },
+  // 커버리지 수급(covflow) 11:30·16:00 은 10/26 부터 **Claude 예약 작업**(클라우드 세션 트리거 2개,
+  // `gh workflow run coverage-flow.yml -f via=scheduler`)이 정시에 쏜다 — 이 스케줄러가 10/20 09:19 이후
+  // 멈춰 있어 옮겼다. 여기에 다시 넣으면 두 번 발송된다(dispatch 끼리는 워크플로 guard 가 안 막는다).
+  // 버튼(화면 🔄 지금 수집)용 WF 매핑은 그대로 둔다.
   // 스크립트 자체에 '오늘 이미 발송' 가드가 있어 GitHub 크론 안전망과 겹쳐도 한 통만 간다
   { wf: 'research',  hours: [8],      minute: 50, days: 'weekday', label: '커버리지 리서치요약 모음' },   // 채널 아침 목록(~08:40) 뒤
   // 주간정리 2종 — GitHub 토요일 크론이 매주 +4.5시간대로 밀려(실측 16:30~17:00 실행)

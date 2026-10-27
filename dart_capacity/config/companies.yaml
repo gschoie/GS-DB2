@@ -1,0 +1,20 @@
+# 생산능력·생산실적·가동률 수집 대상.
+# stock_code 가 비어 있으면 fetch.py 가 corpCode.xml 에서 회사명(aliases 포함)으로 찾아 채운다.
+# names 의 첫 항목이 화면 표기용 회사명, 나머지는 DART 등록명이 다를 때의 별칭.
+companies:
+  - {sector: 조선, name: HD한국조선해양, stock_code: "009540"}
+  - {sector: 조선, name: HD현대중공업,   stock_code: "329180"}
+  - {sector: 조선, name: HD현대마린엔진, stock_code: "071970", aliases: [STX중공업]}
+  - {sector: 조선, name: HD현대마린솔루션, stock_code: "443060"}
+  - {sector: 조선, name: 삼성중공업,     stock_code: "010140"}
+  - {sector: 조선, name: 한화오션,       stock_code: "042660", aliases: [대우조선해양]}
+  - {sector: 조기, name: 한화엔진,       stock_code: "082740", aliases: [HSD엔진]}
+  - {sector: 조선, name: 대한조선,       stock_code: ""}        # 2025년 상장 — corpCode 에서 이름으로 찾는다
+  - {sector: 조기, name: 한국카본,       stock_code: "017960"}
+  - {sector: 방산, name: 한화에어로스페이스, stock_code: "012450"}
+  - {sector: 방산, name: 한화시스템,     stock_code: "272210"}
+  - {sector: 방산, name: 한국항공우주,   stock_code: "047810"}
+  - {sector: 방산, name: LIG D&A,        stock_code: "079550", aliases: [LIG넥스원]}
+  - {sector: 방산, name: 현대로템,       stock_code: "064350"}
+  - {sector: 건기, name: 두산밥캣,       stock_code: "241560"}
+  - {sector: 건기, name: HD건설기계,     stock_code: "267270", aliases: [HD현대건설기계]}

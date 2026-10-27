@@ -12,6 +12,7 @@ from urllib.request import Request, urlopen
 
 from db import connect, initialize
 from gate import apply_to_tree
+from theme import apply_to_tree as apply_theme
 from parser import APPROVED_COMPANIES
 from tone_market import attach_tone_market
 
@@ -235,8 +236,8 @@ def build() -> Path:
     (OUTPUT.parent / "version.json").write_text(
         json.dumps({"updated_at": summary["updated_at"]}), encoding="utf-8"
     )
-    # 리서치 톤·챗봇 새 창 래퍼 — 주소창에 톤 사이트 주소 대신 대시보드 주소만 보이게
-    for wrapper in ("tone_full.html", "chat_full.html"):
+    # 리서치 톤·챗봇·콜라보 새 창 래퍼 — 주소창에 톤 사이트 주소 대신 대시보드 주소만 보이게
+    for wrapper in ("tone_full.html", "chat_full.html", "collab_full.html"):
         wrapper_src = ROOT / "static" / wrapper
         if wrapper_src.exists():
             shutil.copy2(wrapper_src, OUTPUT.parent / wrapper)
@@ -279,6 +280,16 @@ def build() -> Path:
     macro_dir = ROOT / "static" / "macro_desk"
     if macro_dir.is_dir():
         shutil.copytree(macro_dir, OUTPUT.parent / "macro_desk", dirs_exist_ok=True)
+    covflow_report = ROOT / "static" / "coverage_flow_report.html"
+    if covflow_report.exists():
+        shutil.copy2(covflow_report, OUTPUT.parent / "coverage_flow_report.html")
+    # DART 생산능력·가동률: 페이지(dashboard/index.html) + 정규화 JSON(런타임 fetch)
+    dartcap_page = ROOT.parent / "dart_capacity" / "dashboard" / "index.html"
+    if dartcap_page.exists():
+        shutil.copy2(dartcap_page, OUTPUT.parent / "dart_capacity_report.html")
+    dartcap_data = ROOT.parent / "dart_capacity" / "data" / "normalized"
+    if dartcap_data.is_dir():
+        shutil.copytree(dartcap_data, OUTPUT.parent / "dart_capacity" / "normalized", dirs_exist_ok=True)
     consensus_xlsx = ROOT / "static" / "consensus_full.xlsx"
     if consensus_xlsx.exists():
         shutil.copy2(consensus_xlsx, OUTPUT.parent / "consensus_full.xlsx")
@@ -323,6 +334,10 @@ def build() -> Path:
         src = ROOT / "static" / defense_tracker_file
         if src.exists():
             shutil.copy2(src, OUTPUT.parent / defense_tracker_file)
+    for naval_tracker_file in ("naval_tracker.html", "naval_tracker.json"):
+        src = ROOT / "static" / naval_tracker_file
+        if src.exists():
+            shutil.copy2(src, OUTPUT.parent / naval_tracker_file)
     construction_weekly_index = ROOT / "static" / "construction_weekly_report.html"
     if construction_weekly_index.exists():
         shutil.copy2(construction_weekly_index, OUTPUT.parent / "construction_weekly_report.html")
@@ -377,6 +392,13 @@ def build() -> Path:
     conuni_dir = ROOT / "static" / "construction_unified"
     if conuni_dir.is_dir():
         shutil.copytree(conuni_dir, OUTPUT.parent / "construction_unified", dirs_exist_ok=True)
+    # 건기 전략 레이더(신제품·CAPEX·M&A 누적) — 페이지 + 데이터(events.json)
+    constrat_index = ROOT / "static" / "construction_tracker.html"
+    if constrat_index.exists():
+        shutil.copy2(constrat_index, OUTPUT.parent / "construction_tracker.html")
+    constrat_dir = ROOT / "static" / "construction_strategy"
+    if constrat_dir.is_dir():
+        shutil.copytree(constrat_dir, OUTPUT.parent / "construction_strategy", dirs_exist_ok=True)
     unified_dir = ROOT / "static" / "defense_unified"
     if unified_dir.is_dir():
         shutil.copytree(unified_dir, OUTPUT.parent / "defense_unified", dirs_exist_ok=True)
@@ -384,6 +406,10 @@ def build() -> Path:
     # (정적 호스팅이라 서버에서 못 막는다 — gate.py 머리말 참고)
     gated, owner_only = apply_to_tree(OUTPUT.parent)
     print(f"비밀번호 잠금 적용: {gated}개 페이지 (주인 전용 {owner_only}개)")
+    # 라이트/다크 테마 변수 + ☀/🌙 토글: 색을 var(--gs-*) 로 적은 페이지(브리핑류)에만.
+    # 가림막 뒤에 넣는다 — 가림막은 <head> 맨 앞이어야 그려지기 전에 가린다.
+    themed = apply_theme(OUTPUT.parent)
+    print(f"브리핑 테마 적용: {themed}개 페이지")
     print(f"생성 완료: {OUTPUT} ({OUTPUT.stat().st_size / 1024 / 1024:.1f} MB)")
     return OUTPUT
 

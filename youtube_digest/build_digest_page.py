@@ -51,27 +51,26 @@ KINDS = {
 DATE_RE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
 
 PAGE_CSS = """
-:root{color-scheme:dark}
-body{margin:0;padding:28px 24px 60px;background:#0d1117;color:#d8dee9;
-  font-family:'Pretendard','Malgun Gothic','Apple SD Gothic Neo',sans-serif;line-height:1.75;font-size:15px}
+body{margin:0;padding:28px 24px 60px;background:var(--gs-bg,#161a21);color:var(--gs-ink,#c9d1dc);
+  font-family:'Pretendard','Malgun Gothic','Apple SD Gothic Neo',sans-serif;line-height:1.85;font-size:16.5px}
 .wrap{max-width:860px;margin:0 auto}
-h1{font-size:21px;color:#e8edf5;margin:0 0 4px}
-.meta{color:#8b96a8;font-size:12.5px;margin-bottom:22px}
-h2{font-size:16.5px;color:#7fb4ff;margin:30px 0 10px;padding-bottom:6px;border-bottom:1px solid #223046}
-a{color:#6aa8ff;text-decoration:none}a:hover{text-decoration:underline}
-ul{margin:6px 0;padding-left:22px}
+h1{font-size:23px;color:var(--gs-ink-strong,#e6ebf2);margin:0 0 4px}
+.meta{color:var(--gs-muted,#8e98a8);font-size:13.5px;margin-bottom:22px}
+h2{font-size:18px;color:var(--gs-link,#89b9ff);margin:30px 0 10px;padding-bottom:6px;border-bottom:1px solid var(--gs-line,#232e3f)}
+a{color:var(--gs-link,#89b9ff);text-decoration:none}a:hover{text-decoration:underline}
+ul{margin:10px 0;padding-left:24px}
 li{margin:4px 0}
-li .when{color:#8b96a8;font-size:12.5px;margin-left:6px}
+li .when{color:var(--gs-muted,#8e98a8);font-size:12.5px;margin-left:6px}
 .copybox{margin:26px 0 0}
-.copybox textarea{width:100%;box-sizing:border-box;height:190px;background:#161d29;color:#d8dee9;
-  border:1px solid #2c3a52;border-radius:10px;padding:12px;font-family:ui-monospace,Menlo,Consolas,monospace;
+.copybox textarea{width:100%;box-sizing:border-box;height:190px;background:var(--gs-panel,#1c222c);color:var(--gs-ink,#c9d1dc);
+  border:1px solid var(--gs-line-strong,#2e3a4e);border-radius:10px;padding:12px;font-family:ui-monospace,Menlo,Consolas,monospace;
   font-size:12.5px;line-height:1.65;resize:vertical}
 .copybox .row{display:flex;gap:10px;align-items:center;margin-bottom:8px;flex-wrap:wrap}
 .copybox h2{margin:0;border:none;padding:0;flex:1;min-width:180px}
-button{background:#161d29;color:#d8dee9;border:1px solid #2c3a52;border-radius:8px;
+button{background:var(--gs-panel,#1c222c);color:var(--gs-ink,#c9d1dc);border:1px solid var(--gs-line-strong,#2e3a4e);border-radius:8px;
   padding:7px 12px;font-size:13.5px;cursor:pointer}
-button:hover{border-color:#3d5175}
-.hint{color:#8b96a8;font-size:12.5px;margin:8px 0 0}
+button:hover{border-color:var(--gs-line-strong,#2e3a4e)}
+.hint{color:var(--gs-muted,#8e98a8);font-size:12.5px;margin:8px 0 0}
 """
 
 
@@ -226,19 +225,18 @@ def render_index(dates: list, cfg: dict) -> str:
     return f"""<!DOCTYPE html><html lang="ko"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>{cfg['title']}</title><style>
-:root{{color-scheme:dark}}
-body{{margin:0;padding:16px;background:#0d1117;color:#d8dee9;
+body{{margin:0;padding:16px;background:var(--gs-bg,#161a21);color:var(--gs-ink,#c9d1dc);
   font-family:'Pretendard','Malgun Gothic','Apple SD Gothic Neo',sans-serif}}
 .bar{{display:flex;gap:10px;align-items:center;max-width:860px;margin:0 auto 14px;flex-wrap:wrap}}
-.bar h1{{font-size:17px;margin:0;flex:1;min-width:200px;color:#e8edf5}}
-select,button{{background:#161d29;color:#d8dee9;border:1px solid #2c3a52;border-radius:8px;
+.bar h1{{font-size:17px;margin:0;flex:1;min-width:200px;color:var(--gs-ink-strong,#e6ebf2)}}
+select,button{{background:var(--gs-panel,#1c222c);color:var(--gs-ink,#c9d1dc);border:1px solid var(--gs-line-strong,#2e3a4e);border-radius:8px;
   padding:7px 12px;font-size:13.5px;cursor:pointer}}
-.bar a.bundle{{color:#7fb4ff;font-size:12.5px;text-decoration:none;border:1px solid #2c3a52;
+.bar a.bundle{{color:var(--gs-link,#89b9ff);font-size:12.5px;text-decoration:none;border:1px solid var(--gs-line-strong,#2e3a4e);
   border-radius:8px;padding:7px 12px}}
-iframe{{width:100%;height:calc(100vh - 110px);border:1px solid #223046;border-radius:10px;background:#0d1117}}
+iframe{{width:100%;height:calc(100vh - 110px);border:1px solid var(--gs-line,#232e3f);border-radius:10px;background:var(--gs-bg,#161a21)}}
 </style></head><body>
 <div class="bar">
-  <h1>📺 {cfg['title']} <small style="font-size:11px;color:#8b96a8">{cfg['sub']}</small></h1>
+  <h1>📺 {cfg['title']} <small style="font-size:11px;color:var(--gs-muted,#8e98a8)">{cfg['sub']}</small></h1>
   <a class="bundle" id="mdlink" href="{kind_dir}/{latest}.md" download title="NotebookLM 업로드용 마크다운">⬇ .md</a>
   <button id="prev" title="이전 회차">◀</button>
   <select id="dsel"></select>
@@ -254,7 +252,7 @@ sel.onchange=load;
 document.getElementById('prev').onclick=()=>{{if(sel.selectedIndex<DATES.length-1){{sel.selectedIndex++;load()}}}};
 document.getElementById('next').onclick=()=>{{if(sel.selectedIndex>0){{sel.selectedIndex--;load()}}}};
 if(DATES.length)load();
-else fr.srcdoc='<body style="background:#0d1117;color:#8b96a8;font-family:sans-serif;display:flex;align-items:center;justify-content:center;height:100vh;margin:0">아직 모음이 없습니다 — 자동 생성을 기다리는 중.</body>';
+else fr.srcdoc='<body style="background:var(--gs-bg,#161a21);color:var(--gs-muted,#8e98a8);font-family:sans-serif;display:flex;align-items:center;justify-content:center;height:100vh;margin:0">아직 모음이 없습니다 — 자동 생성을 기다리는 중.</body>';
 </script></body></html>
 """
 

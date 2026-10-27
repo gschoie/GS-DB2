@@ -558,25 +558,24 @@ def send_telegram(md_report: str, now: datetime) -> None:
 # ── 대시보드 아카이브 페이지 (defense_briefing과 동일 스타일) ──────────────
 
 PAGE_CSS = """
-:root{color-scheme:dark}
-body{margin:0;padding:28px 24px 60px;background:#0d1117;color:#d8dee9;
-  font-family:'Pretendard','Malgun Gothic','Apple SD Gothic Neo',sans-serif;line-height:1.75;font-size:15px}
+body{margin:0;padding:28px 24px 60px;background:var(--gs-bg,#161a21);color:var(--gs-ink,#c9d1dc);
+  font-family:'Pretendard','Malgun Gothic','Apple SD Gothic Neo',sans-serif;line-height:1.85;font-size:16.5px}
 .wrap{max-width:860px;margin:0 auto}
-h1{font-size:21px;color:#e8edf5;margin:0 0 4px}
-.meta{color:#8b96a8;font-size:12.5px;margin-bottom:22px}
-h2{font-size:16.5px;color:#ffc46b;margin:30px 0 10px;padding-bottom:6px;border-bottom:1px solid #3a3046}
-a{color:#6aa8ff;text-decoration:none}a:hover{text-decoration:underline}
-b,strong{color:#f0f4fa}
-ul{margin:6px 0;padding-left:22px}
-p{margin:8px 0}
-hr{border:none;border-top:1px solid #3a3046;margin:20px 0}
-table.ptab{border-collapse:collapse;width:100%;min-width:560px;margin:12px 0;font-size:13.5px}
+h1{font-size:23px;color:var(--gs-ink-strong,#e6ebf2);margin:0 0 4px}
+.meta{color:var(--gs-muted,#8e98a8);font-size:13.5px;margin-bottom:22px}
+h2{font-size:18px;color:var(--gs-accent2,#e8b756);margin:30px 0 10px;padding-bottom:6px;border-bottom:1px solid var(--gs-line,#232e3f)}
+a{color:var(--gs-link,#89b9ff);text-decoration:none}a:hover{text-decoration:underline}
+b,strong{color:var(--gs-ink-strong,#e6ebf2)}
+ul{margin:10px 0;padding-left:24px}
+p{margin:11px 0}
+hr{border:none;border-top:1px solid var(--gs-line,#232e3f);margin:20px 0}
+table.ptab{border-collapse:collapse;width:100%;min-width:560px;margin:14px 0;font-size:14.5px}
 .ptab td{white-space:nowrap}.ptab td:first-child{white-space:normal;min-width:130px}.ptab td:last-child{white-space:normal;min-width:200px}
-.ptab td{border-bottom:1px solid #1d2838;padding:7px 9px;text-align:left;vertical-align:top}
-.ptab tr:first-child td{color:#8b96a8;font-size:12.5px;border-bottom:1px solid #2c3a52}
-.ptab tr:hover td{background:#131a26}
-.up{color:#ff6b6b;font-weight:600}
-.down{color:#5b9dff;font-weight:600}
+.ptab td{border-bottom:1px solid var(--gs-line-soft,#1f2834);padding:7px 9px;text-align:left;vertical-align:top}
+.ptab tr:first-child td{color:var(--gs-muted,#8e98a8);font-size:13px;border-bottom:1px solid var(--gs-line-strong,#2e3a4e)}
+.ptab tr:hover td{background:var(--gs-hover,#1e2531)}
+.up{color:var(--gs-up,#ff7b7b);font-weight:600}
+.down{color:var(--gs-down,#6ca6ff);font-weight:600}
 """
 
 PCT_RE = re.compile(r"(?<![\w.%])([+-]\d+(?:\.\d+)?%)")
@@ -666,15 +665,20 @@ def write_index() -> None:
 {PAGE_CSS}
 .bar{{display:flex;gap:10px;align-items:center;max-width:860px;margin:0 auto 14px;flex-wrap:wrap}}
 .bar h1{{font-size:17px;margin:0;flex:1;min-width:200px}}
-select,button{{background:#161d29;color:#d8dee9;border:1px solid #2c3a52;border-radius:8px;
+select,button{{background:var(--gs-panel,#1c222c);color:var(--gs-ink,#c9d1dc);border:1px solid var(--gs-line-strong,#2e3a4e);border-radius:8px;
   padding:7px 12px;font-size:13.5px;cursor:pointer}}
-iframe{{width:100%;height:calc(100vh - 110px);border:1px solid #3a3046;border-radius:10px;background:#0d1117}}
+.bar a.trk{{margin-left:auto;flex:0 0 auto;background:var(--gs-panel,#1c222c);color:var(--gs-accent2,#e8b756);border:1px solid var(--gs-line-strong,#2e3a4e);
+  border-radius:8px;padding:6px 10px;font-size:12px;font-weight:600;text-decoration:none;white-space:nowrap}}
+.bar a.trk:hover{{border-color:var(--gs-accent2,#e8b756)}}
+iframe{{width:100%;height:calc(100vh - 110px);border:1px solid var(--gs-line,#232e3f);border-radius:10px;background:var(--gs-bg,#161a21)}}
 </style></head><body>
 <div class="bar">
   <h1>🏗️ 글로벌 건설기계 데일리 브리핑</h1>
   <button id="prev" title="이전 날짜">◀</button>
   <select id="dsel"></select>
   <button id="next" title="다음 날짜">▶</button>
+  <a class="trk" href="construction_tracker.html" target="_blank" rel="noopener"
+     title="신제품 출시 · CAPEX(공장 신설/증설) · M&A/제휴 누적">📌 신제품·CAPEX·M&A 트래커</a>
 </div>
 <iframe id="frame" title="브리핑"></iframe>
 <script>
@@ -686,7 +690,7 @@ sel.onchange=load;
 document.getElementById('prev').onclick=()=>{{if(sel.selectedIndex<DATES.length-1){{sel.selectedIndex++;load()}}}};
 document.getElementById('next').onclick=()=>{{if(sel.selectedIndex>0){{sel.selectedIndex--;load()}}}};
 if(DATES.length)load();
-else fr.srcdoc='<body style="background:#0d1117;color:#8b96a8;font-family:sans-serif;display:flex;align-items:center;justify-content:center;height:100vh;margin:0">아직 생성된 브리핑이 없습니다 — 매일 아침 6시경 자동 생성됩니다.</body>';
+else fr.srcdoc='<body style="background:var(--gs-bg,#161a21);color:var(--gs-muted,#8e98a8);font-family:sans-serif;display:flex;align-items:center;justify-content:center;height:100vh;margin:0">아직 생성된 브리핑이 없습니다 — 매일 아침 6시경 자동 생성됩니다.</body>';
 </script></body></html>"""
     INDEX_PAGE.write_text(index, encoding="utf-8")
     print(f"[인덱스] construction_briefing_report.html 갱신 (누적 {len(dates)}일)")

@@ -52,6 +52,29 @@
         </div>
       </details>
       <details class="nav-group">
+        <summary>🦿 <span>업무자동화</span></summary>
+        <div class="nav-submenu">
+          <button class="nav" data-view="consensus">📈 코스피200.컨센.추적</button>
+          <button class="nav" data-view="valuation">📊 피어그룹.Valuation</button>
+          <button class="nav" data-view="covflow">📡 커버리지 수급 등</button>
+          <button class="nav" data-view="dartcap">🏭 전자공시 - 생산능력</button>
+          <div class="nav-sep"></div>
+          <button data-fresh="peer" title="야후파이낸스에서 새로 수집한 뒤 엑셀을 내려받습니다 (1~2분)">📈 피어그룹.주가 다운로드</button>
+          <details class="nav-subgroup">
+            <summary>⇄ 수출입데이터</summary>
+            <div class="nav-submenu-2">
+              <a href="https://colab.research.google.com/drive/1Cih5yOxuL6KzSDDKWjkjWUPQA-CP7nyO?usp=sharing" target="_blank" rel="noopener">방산 · 확정</a>
+              <a href="https://colab.research.google.com/drive/1taiTQJlS2TiTkNrkfW6hauBqkj6xua3T?usp=sharing" target="_blank" rel="noopener">방산 · 잠정</a>
+              <a href="https://colab.research.google.com/drive/1Cih5yOxuL6KzSDDKWjkjWUPQA-CP7nyO?usp=sharing" target="_blank" rel="noopener">건기 · 확정</a>
+              <a href="https://colab.research.google.com/drive/1AsA6jqU-GqUfwYsNlcgrfdxsJ6upBpNo?usp=sharing" target="_blank" rel="noopener">건기 · 잠정</a>
+              <a href="https://colab.research.google.com/github/gschoie/ecos-fx-rates/blob/main/%EC%88%98%EC%B6%9C%EC%9E%85(%ED%99%95)_%EC%84%A0%EB%B0%95%EC%97%94%EC%A7%84.ipynb" target="_blank" rel="noopener">선박엔진 · 확정</a>
+              <a href="https://colab.research.google.com/github/gschoie/ecos-fx-rates/blob/main/%EC%88%98%EC%B6%9C%EC%9E%85(%EC%9E%A0%EC%A0%95)_%EC%84%A0%EB%B0%95%EC%97%94%EC%A7%84.ipynb" target="_blank" rel="noopener">선박엔진 · 잠정</a>
+            </div>
+          </details>
+          <button data-fresh="fx" title="ECOS에서 최신 환율까지 새로 받은 뒤 엑셀을 내려받습니다 (1~2분)">₩ 환율 다운로드</button>
+        </div>
+      </details>
+      <details class="nav-group">
         <summary>📌 <span>뉴스.모듬</span></summary>
         <div class="nav-submenu">
           <button class="nav" data-view="reports">🎴 GS 산출물</button>
@@ -66,6 +89,7 @@
               <button class="nav" data-view="defense">└ Gemini</button>
               <a href="claude_defense_report.html" target="_blank" rel="noopener">└ Claude</a>
               <a href="chatgpt_defense_report.html" target="_blank" rel="noopener">└ GPT</a>
+              <a href="naval_tracker.html" target="_blank" rel="noopener">⚓ ┗수상함·잠수함.입찰</a>
             </div>
           </details>
           <details class="nav-subgroup">
@@ -81,30 +105,10 @@
               <a href="construction_unified_report.html" target="_blank" rel="noopener">🏗️ 글로벌건기.브리핑(통합)</a>
               <button class="nav" data-view="construction">┗ 건기.Claude</button>
               <a href="chatgpt_construction_report.html" target="_blank" rel="noopener">┗ 건기.GPT</a>
+              <a href="construction_tracker.html" target="_blank" rel="noopener">📌 ┗건기.전략레이더</a>
             </div>
           </details>
           <button class="nav" data-view="energy">🌊 친환경E·FDC.브리핑</button>
-        </div>
-      </details>
-      <details class="nav-group">
-        <summary>🦿 <span>업무자동화</span></summary>
-        <div class="nav-submenu">
-          <button class="nav" data-view="consensus">📈 코스피200.컨센.추적</button>
-          <a href="valuation_report.html" target="_blank" rel="noopener">📊 피어그룹.Valuation</a>
-          <div class="nav-sep"></div>
-          <button data-fresh="peer" title="야후파이낸스에서 새로 수집한 뒤 엑셀을 내려받습니다 (1~2분)">📈 피어그룹.주가 다운로드</button>
-          <details class="nav-subgroup">
-            <summary>⇄ 수출입데이터</summary>
-            <div class="nav-submenu-2">
-              <a href="https://colab.research.google.com/drive/1Cih5yOxuL6KzSDDKWjkjWUPQA-CP7nyO?usp=sharing" target="_blank" rel="noopener">방산 · 확정</a>
-              <a href="https://colab.research.google.com/drive/1taiTQJlS2TiTkNrkfW6hauBqkj6xua3T?usp=sharing" target="_blank" rel="noopener">방산 · 잠정</a>
-              <a href="https://colab.research.google.com/drive/1Cih5yOxuL6KzSDDKWjkjWUPQA-CP7nyO?usp=sharing" target="_blank" rel="noopener">건기 · 확정</a>
-              <a href="https://colab.research.google.com/drive/1AsA6jqU-GqUfwYsNlcgrfdxsJ6upBpNo?usp=sharing" target="_blank" rel="noopener">건기 · 잠정</a>
-              <a href="https://colab.research.google.com/github/gschoie/ecos-fx-rates/blob/main/%EC%88%98%EC%B6%9C%EC%9E%85(%ED%99%95)_%EC%84%A0%EB%B0%95%EC%97%94%EC%A7%84.ipynb" target="_blank" rel="noopener">선박엔진 · 확정</a>
-              <a href="https://colab.research.google.com/github/gschoie/ecos-fx-rates/blob/main/%EC%88%98%EC%B6%9C%EC%9E%85(%EC%9E%A0%EC%A0%95)_%EC%84%A0%EB%B0%95%EC%97%94%EC%A7%84.ipynb" target="_blank" rel="noopener">선박엔진 · 잠정</a>
-            </div>
-          </details>
-          <button data-fresh="fx" title="ECOS에서 최신 환율까지 새로 받은 뒤 엑셀을 내려받습니다 (1~2분)">₩ 환율 다운로드</button>
         </div>
       </details>
       <details class="nav-group">
@@ -146,6 +150,7 @@
           <div class="nav-sep"></div>
           <a href="https://corpday-calendar.animsam09.workers.dev/" target="_blank" rel="noopener">📆 코퍼레잇데이.DAOL</a>
           <a href="https://daol-analyst-schedule.netlify.app/" target="_blank" rel="noopener">🗓️ 활동관리.DAOL</a>
+          <a href="https://claude.ai/artifact/B95kGMgA6prDEG3uhEkypG" target="_blank" rel="noopener">📑 2H26_NPS</a>
         </div>
       </details>
       <details class="nav-group">
@@ -286,7 +291,7 @@
     </section>
 
     <section id="tone" class="view">
-      <div class="archive-intro tone-intro"><div><p class="eyebrow" style="margin:0">DAOL RESEARCH TONE</p></div><div class="etf-actions"><span style="font-size:11px;color:#8a938d">산업의견 · AI 톤 · TP 4분류 · 투자포인트 변화 · 타사 비교</span><a class="open-new" href="tone_full.html" target="_blank" rel="noopener">🔗 새 창으로</a></div></div>
+      <div class="archive-intro tone-intro"><div><p class="eyebrow" style="margin:0">DAOL RESEARCH TONE</p></div><div class="etf-actions"><span style="font-size:11px;color:#8a938d">산업의견 · AI 톤 · TP 4분류 · 투자포인트 변화 · 타사 비교</span><a class="open-new" href="https://daol-securities-research-center.github.io/DAOL-RESEARCH-TONE/" target="_blank" rel="noopener">🔗 새 창으로</a></div></div>
       <iframe id="tone-frame" class="union-board-frame" title="DAOL 리서치 톤" loading="lazy"></iframe>
     </section>
 
@@ -296,7 +301,7 @@
     </section>
 
     <section id="collab" class="view">
-      <div class="archive-intro"><div><p class="eyebrow">CROSS-SECTOR RADAR</p><h2>섹터 콜라보 레이더</h2></div><div class="etf-actions"><span>매크로·미국공략·원자재·산업테마를 여러 섹터가 동시에 다루면 콜라보 후보, 방향이 갈리면 수혜vs피해 페어로 잡아냅니다.</span><a class="open-new" href="https://gschoie.github.io/DAOL-RESEARCH-TONE/daol_collab_radar.html" target="_blank" rel="noopener">🔗 새 창으로</a></div></div>
+      <div class="archive-intro"><div><p class="eyebrow">CROSS-SECTOR RADAR</p><h2>섹터 콜라보 레이더</h2></div><div class="etf-actions"><span>매크로·미국공략·원자재·산업테마를 여러 섹터가 동시에 다루면 콜라보 후보, 방향이 갈리면 수혜vs피해 페어로 잡아냅니다.</span><a class="open-new" href="collab_full.html" target="_blank" rel="noopener">🔗 새 창으로</a></div></div>
       <iframe id="collab-frame" class="union-board-frame" title="섹터 콜라보 레이더" loading="lazy"></iframe>
     </section>
 
@@ -333,7 +338,7 @@
     </section>
 
     <section id="dart" class="view">
-      <div class="archive-intro"><div><p class="eyebrow">DART · SHIP ORDER</p><h2>조선 수주공시 → 텔레그램</h2></div><p>DART 수주공시 링크를 붙여넣고 전송하면, 캡처·형광펜·신조선가 카드가 채널로 자동 발송됩니다. (외근·아이폰용)</p></div>
+      <div class="archive-intro"><div><p class="eyebrow">DART · SHIP ORDER</p><h2>조선 수주공시 → 텔레그램</h2></div><p>DART 수주공시 링크를 붙여넣고 전송하면, 캡처·형광펜·신조선가 카드가 바담 방(비공개)으로 자동 발송됩니다. 공개채널로 보내려면 GitHub Actions에서 대상을 '공개채널'로 골라 직접 실행합니다. (외근·아이폰용)</p></div>
       <div class="dart-form">
         <label>DART 공시 링크
           <input id="dart-url" type="url" inputmode="url" autocapitalize="off" autocomplete="off" placeholder="https://dart.fss.or.kr/dsaf001/main.do?rcpNo=...">
@@ -407,6 +412,15 @@
       <iframe id="flow-frame" class="union-board-frame" title="시장 수급 동향" loading="lazy"></iframe>
     </section>
 
+    <section id="covflow" class="view">
+      <div class="archive-intro"><div><p class="eyebrow">COVERAGE · FLOW</p><h2>커버리지 기업 수급 / 기술적 지표</h2></div><div class="etf-actions"><button id="covflow-refresh" class="refresh-btn" type="button" title="정해진 시간(평일 13:00·16:00) 외에 지금 수급·지표를 다시 수집합니다 (자동 실행, 2~3분 소요 · 텔레그램은 안 갑니다).">🔄 지금 수집</button><span id="covflow-status" class="task-sync"></span><a class="open-new" href="coverage_flow_report.html" target="_blank" rel="noopener">🔗 새 창으로</a></div></div>
+      <iframe id="covflow-frame" class="union-board-frame" title="커버리지 기업 수급 / 기술적 지표" loading="lazy"></iframe>
+    </section>
+    <section id="dartcap" class="view">
+      <div class="archive-intro"><div><p class="eyebrow">DART · CAPACITY</p><h2>전자공시 - 생산능력 · 생산실적 · 가동률</h2></div><div class="etf-actions"><button id="dartcap-refresh" class="refresh-btn" type="button" title="OpenDART에서 새 정기보고서를 받아 표를 추출·정규화합니다 (자동 실행은 3·5·8·11월 20일, 10분 안팎 소요).">🔄 지금 수집</button><span id="dartcap-status" class="task-sync"></span><a class="open-new" href="dart_capacity_report.html" target="_blank" rel="noopener">🔗 새 창으로</a></div></div>
+      <iframe id="dartcap-frame" class="union-board-frame" title="생산능력 · 생산실적 · 가동률" loading="lazy"></iframe>
+    </section>
+
     <section id="macro" class="view">
       <div class="archive-intro"><div><p class="eyebrow">INVEST · MACRO</p><h2>매크로 데스크</h2></div><div class="etf-actions"><button id="macro-refresh" class="refresh-btn" type="button" title="정해진 시간(저녁 9시) 외에 지금 금리·환율·원자재를 다시 수집합니다 (자동 실행, 1~2분 소요).">🔄 지표 갱신</button><span id="macro-status" class="task-sync"></span><a class="open-new" href="macro_desk_report.html" target="_blank" rel="noopener">🔗 새 창으로</a></div></div>
       <iframe id="macro-frame" class="union-board-frame" title="매크로 데스크" loading="lazy"></iframe>
@@ -465,6 +479,11 @@
     <section id="consensus" class="view">
       <div class="archive-intro"><div><p class="eyebrow">INVEST · CONSENSUS</p><h2>코스피200 컨센서스 추적</h2></div><div class="etf-actions"><button id="consensus-refresh" class="refresh-btn" type="button" title="KOSPI200 영업이익 컨센서스를 다시 스냅샷해 리비전 페이지를 갱신합니다 (자동 실행, 몇 분 소요).">🔄 컨센 갱신</button><span id="consensus-status" class="task-sync"></span><a class="open-new" href="consensus_revision.html" target="_blank" rel="noopener">🔗 새 창으로</a></div></div>
       <iframe id="consensus-frame" class="union-board-frame" title="코스피200 컨센서스 추적" loading="lazy"></iframe>
+    </section>
+
+    <section id="valuation" class="view">
+      <div class="archive-intro"><div><p class="eyebrow">PEER · VALUATION</p><h2>피어그룹 Valuation</h2></div><div class="etf-actions"><a class="open-new" href="valuation_report.html" target="_blank" rel="noopener">🔗 새 창으로</a></div></div>
+      <iframe id="valuation-frame" class="union-board-frame" title="피어그룹 Valuation" loading="lazy"></iframe>
     </section>
   </main>
   <script src="/app.js"></script>

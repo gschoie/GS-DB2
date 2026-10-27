@@ -636,7 +636,7 @@ a{{color:inherit}} .yt{{font-size:12px}}
 <div class="card">{quote_table(cfg, data)}</div>
 </details>
 
-<details class="sec" id="s-pre" open>
+<details class="sec" id="s-pre">
 <summary><h2>🌅 장 시작 전</h2></summary>
 <div class="card" id="pre-wrap"><p class="na" id="pre-none">불러오는 중…</p></div>
 </details>
@@ -812,8 +812,11 @@ document.querySelectorAll('tr.qrow').forEach(function(row){{
   }}).then(function(d){{
     var items=(d&&d.items)||[];
     if(!items.length) throw new Error('empty');
-    wrap.innerHTML=items.slice(0,6).map(function(it,i){{
-      return '<details class="pre"'+(i===0?' open':'')+'>'
+    // **전부 접어 둔다.** 섹션을 열면 그날의 한화·키움이 두 줄로 보이고, 읽을 것만
+    // 누른다 — 맨 위 한 건을 펼쳐 두면 긴 본문이 다른 소스를 화면 밖으로 밀어낸다
+    // (폰에서 특히). 읽은 글을 매일 다시 펼쳐 주는 셈이기도 하다.
+    wrap.innerHTML=items.slice(0,6).map(function(it){{
+      return '<details class="pre">'
         +'<summary><span class="who">'+esc(it.name)+'</span>'
         +'<span class="when">'+esc(when(it.at))+'</span>'
         +(it.title?'<span class="tit">'+esc(it.title)+'</span>':'')

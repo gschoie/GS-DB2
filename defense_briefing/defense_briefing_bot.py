@@ -171,8 +171,19 @@ NEWS_QUERIES = [
      "en-US", "US", "US:en"),
     ('(Elbit OR "Mitsubishi Heavy" OR "Kawasaki Heavy" OR IHI) defense when:1d',
      "en-US", "US", "US:en"),
+    # 글로벌 군함·잠수함 수주전 — TKMS·Fincantieri·Navantia 등 유니버스 밖 경쟁사가
+    # 낙찰돼도 잡히도록 함종·조달 축으로 따로 긁는다(기업명 쿼리만으론 못 잡는다).
+    ('(submarine OR frigate OR destroyer OR warship OR "naval shipbuilding") '
+     '(contract OR procurement OR tender OR bid OR order OR program) when:1d',
+     "en-US", "US", "US:en"),
+    # 예산 정치 축 — 10/20 중간선거發 K방산 급락을 수집이 사전에 못 잡은 교훈.
+    # '국방비가 정치 일정(선거·재정조정·세출법·셧다운)에 흔들린다'는 기사는
+    # 기업명·"defense budget" 단독 쿼리로는 빠진다.
+    ('("defense budget" OR "defense spending" OR Pentagon) '
+     '(midterm OR election OR reconciliation OR appropriations OR shutdown '
+     'OR "continuing resolution" OR Congress) when:1d', "en-US", "US", "US:en"),
     ("한화에어로스페이스 OR LIG넥스원 OR 한국항공우주 OR 한화오션 OR 현대로템 "
-     "OR 한화시스템 OR HD현대중공업 OR 방산수출 when:1d", "ko", "KR", "KR:ko"),
+     "OR 한화시스템 OR HD현대중공업 OR 방산수출 OR 방산주 when:1d", "ko", "KR", "KR:ko"),
 ]
 
 
@@ -226,6 +237,7 @@ SYSTEM_PROMPT = """당신은 글로벌 방산 섹터를 담당하는 증권사 �
 - **등락 원인을 설명할 근거 기사가 목록에 없으면 원인을 지어내지 말고 "관련 공시·뉴스 미확인 (수급 요인 추정)"이라고 쓰세요.** 그럴듯한 서사를 만드는 것보다 모른다고 쓰는 것이 훨씬 낫습니다.
 - **최종 리포트 본문만 출력하세요.** 계획, 사고 과정, 분석 메모, tool_code, 코드 블록 등을 절대 출력하지 마세요. 응답의 첫 글자는 반드시 서두 문장("글로벌 방산 업종에서...")으로 시작해야 합니다.
 - 관심 이슈: 전쟁·지정학 긴장, 국방예산, 무기 도입·수출 계약, 대형 수주·취소, 실적 발표·가이던스, 생산 차질, 공급망, M&A, 규제·수출승인, 주요 프로그램 일정·시험·양산·인도.
+- **조선 범위**: 글로벌 군함·잠수함·함정 MRO·해군 조달 수주전(각국 입찰·우선협상 선정)은 핵심 관심사로 다루되, **상선(LNG운반선·컨테이너선·탱커 등)·해양플랜트 뉴스는 제외하세요.** 한화오션·HD현대중공업 기사도 방산(특수선·함정) 부문만 — 상선 수주, 상선용 기술·소재(예: 화물창) 기사는 버립니다.
 - 수치·계약금액·수량·일정·등락률을 우선 제시하고, 사실과 해석을 구분하세요. 확인되지 않은 보도·루머는 "[미확인]" 표시.
 - **뉴스의 함의를 끝까지 해석하세요.** 특히 경쟁 수주 결과: 어떤 회사가 우선협상자·낙찰자로 선정됐다는 뉴스는 경쟁했던 다른 기업(특히 한국 기업)의 탈락을 의미할 수 있습니다. 예: "캐나다 잠수함 사업 TKMS 선정" = 경쟁하던 한화오션(Hanwha Ocean)의 탈락 → 해당 기업에 부정적 이슈로 명시. 수혜 기업과 피해 기업을 모두 짚으세요.
 - 뉴스 항목마다 출처 매체명과 원문 링크(목록의 URL 그대로)를 마크다운 링크로 붙이세요.
@@ -442,25 +454,24 @@ def send_telegram(md_report: str, now: datetime) -> None:
 # ── 대시보드 아카이브 페이지 ──────────────────────────────────────────────
 
 PAGE_CSS = """
-:root{color-scheme:dark}
-body{margin:0;padding:28px 24px 60px;background:#0d1117;color:#d8dee9;
-  font-family:'Pretendard','Malgun Gothic','Apple SD Gothic Neo',sans-serif;line-height:1.75;font-size:15px}
+body{margin:0;padding:28px 24px 60px;background:var(--gs-bg,#161a21);color:var(--gs-ink,#c9d1dc);
+  font-family:'Pretendard','Malgun Gothic','Apple SD Gothic Neo',sans-serif;line-height:1.85;font-size:16.5px}
 .wrap{max-width:860px;margin:0 auto}
-h1{font-size:21px;color:#e8edf5;margin:0 0 4px}
-.meta{color:#8b96a8;font-size:12.5px;margin-bottom:22px}
-h2{font-size:16.5px;color:#7fb4ff;margin:30px 0 10px;padding-bottom:6px;border-bottom:1px solid #223046}
-a{color:#6aa8ff;text-decoration:none}a:hover{text-decoration:underline}
-b,strong{color:#f0f4fa}
-ul{margin:6px 0;padding-left:22px}
-p{margin:8px 0}
-hr{border:none;border-top:1px solid #223046;margin:20px 0}
-table.ptab{border-collapse:collapse;width:100%;min-width:560px;margin:12px 0;font-size:13.5px}
+h1{font-size:23px;color:var(--gs-ink-strong,#e6ebf2);margin:0 0 4px}
+.meta{color:var(--gs-muted,#8e98a8);font-size:13.5px;margin-bottom:22px}
+h2{font-size:18px;color:var(--gs-link,#89b9ff);margin:30px 0 10px;padding-bottom:6px;border-bottom:1px solid var(--gs-line,#232e3f)}
+a{color:var(--gs-link,#89b9ff);text-decoration:none}a:hover{text-decoration:underline}
+b,strong{color:var(--gs-ink-strong,#e6ebf2)}
+ul{margin:10px 0;padding-left:24px}
+p{margin:11px 0}
+hr{border:none;border-top:1px solid var(--gs-line,#232e3f);margin:20px 0}
+table.ptab{border-collapse:collapse;width:100%;min-width:560px;margin:14px 0;font-size:14.5px}
 .ptab td{white-space:nowrap}.ptab td:first-child{white-space:normal;min-width:130px}.ptab td:last-child{white-space:normal;min-width:200px}
-.ptab td{border-bottom:1px solid #1d2838;padding:7px 9px;text-align:left;vertical-align:top}
-.ptab tr:first-child td{color:#8b96a8;font-size:12.5px;border-bottom:1px solid #2c3a52}
-.ptab tr:hover td{background:#131a26}
-.up{color:#ff6b6b;font-weight:600}
-.down{color:#5b9dff;font-weight:600}
+.ptab td{border-bottom:1px solid var(--gs-line-soft,#1f2834);padding:7px 9px;text-align:left;vertical-align:top}
+.ptab tr:first-child td{color:var(--gs-muted,#8e98a8);font-size:13px;border-bottom:1px solid var(--gs-line-strong,#2e3a4e)}
+.ptab tr:hover td{background:var(--gs-hover,#1e2531)}
+.up{color:var(--gs-up,#ff7b7b);font-weight:600}
+.down{color:var(--gs-down,#6ca6ff);font-weight:600}
 """
 
 PCT_RE = re.compile(r"(?<![\w.%])([+-]\d+(?:\.\d+)?%)")
@@ -549,12 +560,13 @@ def write_index() -> None:
 {PAGE_CSS}
 .bar{{display:flex;gap:10px;align-items:center;max-width:860px;margin:0 auto 14px;flex-wrap:wrap}}
 .bar h1{{font-size:17px;margin:0;flex:1;min-width:200px}}
-select,button{{background:#161d29;color:#d8dee9;border:1px solid #2c3a52;border-radius:8px;
+select,button{{background:var(--gs-panel,#1c222c);color:var(--gs-ink,#c9d1dc);border:1px solid var(--gs-line-strong,#2e3a4e);border-radius:8px;
   padding:7px 12px;font-size:13.5px;cursor:pointer}}
-.bar a.trk{{margin-left:auto;flex:0 0 auto;background:#161d29;color:#e8b756;border:1px solid #4a3f24;
+.bar a.trk{{margin-left:auto;flex:0 0 auto;background:var(--gs-panel,#1c222c);color:var(--gs-accent2,#e8b756);border:1px solid var(--gs-line-strong,#2e3a4e);
   border-radius:8px;padding:6px 10px;font-size:12px;font-weight:600;text-decoration:none;white-space:nowrap}}
-.bar a.trk:hover{{border-color:#e8b756}}
-iframe{{width:100%;height:calc(100vh - 110px);border:1px solid #223046;border-radius:10px;background:#0d1117}}
+.bar a.trk:hover{{border-color:var(--gs-accent2,#e8b756)}}
+.bar a.trk+a.trk{{margin-left:0}}
+iframe{{width:100%;height:calc(100vh - 110px);border:1px solid var(--gs-line,#232e3f);border-radius:10px;background:var(--gs-bg,#161a21)}}
 </style></head><body>
 <div class="bar">
   <h1>🌍 글로벌 방산 데일리 브리핑</h1>
@@ -563,6 +575,8 @@ iframe{{width:100%;height:calc(100vh - 110px);border:1px solid #223046;border-ra
   <button id="next" title="다음 날짜">▶</button>
   <a class="trk" href="defense_tracker.html" target="_blank" rel="noopener"
      title="입찰 중 프로젝트 · 국가별 예산·법안">📌 입찰·예산 트래커</a>
+  <a class="trk" href="naval_tracker.html" target="_blank" rel="noopener"
+     title="각국 해군 수상함·잠수함 수주전 추적">⚓ 수상함·잠수함 입찰</a>
 </div>
 <iframe id="frame" title="브리핑"></iframe>
 <script>
@@ -574,7 +588,7 @@ sel.onchange=load;
 document.getElementById('prev').onclick=()=>{{if(sel.selectedIndex<DATES.length-1){{sel.selectedIndex++;load()}}}};
 document.getElementById('next').onclick=()=>{{if(sel.selectedIndex>0){{sel.selectedIndex--;load()}}}};
 if(DATES.length)load();
-else fr.srcdoc='<body style="background:#0d1117;color:#8b96a8;font-family:sans-serif;display:flex;align-items:center;justify-content:center;height:100vh;margin:0">아직 생성된 브리핑이 없습니다 — 매일 아침 6시경 자동 생성됩니다.</body>';
+else fr.srcdoc='<body style="background:var(--gs-bg,#161a21);color:var(--gs-muted,#8e98a8);font-family:sans-serif;display:flex;align-items:center;justify-content:center;height:100vh;margin:0">아직 생성된 브리핑이 없습니다 — 매일 아침 6시경 자동 생성됩니다.</body>';
 </script></body></html>"""
     INDEX_PAGE.write_text(index, encoding="utf-8")
     print(f"[인덱스] defense_briefing_report.html 갱신 (누적 {len(dates)}일)")

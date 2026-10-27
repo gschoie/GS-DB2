@@ -5,6 +5,16 @@ const state={q:'',reportCompany:'',newsCompany:'',newsQ:'',reportType:'',weeklyF
 const fmtDate=s=>new Intl.DateTimeFormat('ko-KR',{year:'2-digit',month:'2-digit',day:'2-digit'}).format(new Date(s));
 const won=n=>n?`${Number(n).toLocaleString()}원`:'—';
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+// ── 공유용 주소 ──
+// 새 창·새 탭(target=_blank)으로 여는 같은 사이트 페이지는 전부 gs-research-desk.github.io 로 보낸다.
+// 화면 공유 때 주소창에 gschoie.github.io/GS-DB2 와 사이드바가 보이지 않게 하기 위함 —
+// 5개 배포 워크플로가 같은 _site 를 GitHub 조직 gs-research-desk 의 Pages 리포에도 push 한다('공유용 주소 배포' 스텝).
+// 대시보드 안 iframe(data-view 뷰)은 상대경로 그대로다. 바꾸는 것은 새 탭 링크뿐.
+const SHARE_SITE='https://gs-research-desk.github.io/';
+function shareUrl(href){if(!href||/^(https?:|mailto:|tel:|#|javascript:)/i.test(href))return href;return SHARE_SITE+href.replace(/^\.?\//,'')}
+function shareLinks(root=document){root.querySelectorAll('a[target="_blank"]').forEach(a=>{const h=a.getAttribute('href'),s=shareUrl(h);if(s!==h)a.setAttribute('href',s)})}
+// 나중에 그려지는 링크(오늘의 요약 카드 등)는 누르는 순간에 바꾼다 — 캡처 단계라 새 탭이 열리기 전이다.
+['click','auxclick'].forEach(ev=>document.addEventListener(ev,e=>{const a=e.target.closest?.('a[target="_blank"]');if(a){const h=a.getAttribute('href'),s=shareUrl(h);if(s!==h)a.setAttribute('href',s)}},true));
 function localData(url){
  const data=window.__DASHBOARD_DATA__;if(!data)return null;
  const [path,raw='']=url.split('?'),params=new URLSearchParams(raw),q=(params.get('q')||'').toLocaleLowerCase(),nq=(params.get('nq')||'').toLocaleLowerCase(),company=params.get('company')||'',type=params.get('type')||'',weekly=params.get('weekly')||'';
@@ -268,12 +278,17 @@ function todoLightbox(src){let ov=$('#todo-lightbox');
  ov.querySelector('img').src=src;ov.classList.add('on')}
 function fillTodoGroups(){const sel=$('#todo-group');if(!sel)return;const cur=sel.value;
  sel.innerHTML='<option value="">기본</option>'+todoGroups().map(g=>`<option value="${esc(g)}"${g===cur?' selected':''}>${esc(g)}</option>`).join('')}
+const todoNoteRows=n=>Math.min(6,Math.max(1,String(n||'').split('\n').length));
+function todoNoteSave(i,text){/* 메모는 타이핑 중 재렌더하면 포커스가 날아가므로 저장·동기화만 하고 다시 그리지 않는다 */
+ const a=todoLoad(),t=a[i];if(!t)return;const v=text.replace(/\s+$/,'');if((t.note||'')===v)return;if(v)t.note=v;else delete t.note;
+ try{localStorage.setItem(TODO_KEY,JSON.stringify(a))}catch{}taskPush('#todo-sync')}
+const todoNoteGrow=el=>{el.style.height='auto';el.style.height=Math.min(el.scrollHeight,180)+'px'};
 const todoImgs=t=>(t.imgs||[]).map((d,k)=>`<img class="todo-thumb" src="${d}" alt="첨부 ${k+1}" title="클릭하면 크게 보기">`).join('');
 function renderTodoArch(){const box=$('#todo-arch-list');if(!box)return;const a=todoArchLoad(),cnt=$('#todo-arch-count');
  if(cnt)cnt.textContent=a.length;
  if(!a.length){box.innerHTML='<p class="empty">보관한 항목이 없습니다. 체크한 뒤 <b>보관</b>을 누르면 여기로 옮겨집니다.</p>';return}
  const row=(t,i)=>{const imgs=todoImgs(t);
-  return `<div class="todo-row arch" data-i="${i}"><span class="todo-text">${esc(t.text)}${imgs?`<span class="todo-thumbs">${imgs}</span>`:''}</span><span class="todo-ts" title="등록 ${todoFmt(t.ts)}">${t.doneTs?'✔':'📦'} ${todoFmt(t.doneTs||t.archTs||t.ts)}</span><button class="todo-restore" type="button" title="진행 중 목록으로 되돌리기">↩</button><button class="todo-arch-del" type="button" title="이 항목만 완전히 삭제">✕</button></div>`};
+  return `<div class="todo-row arch" data-i="${i}"><span class="todo-text">${esc(t.text)}${imgs?`<span class="todo-thumbs">${imgs}</span>`:''}${t.note?`<small class="todo-note-ro">${esc(t.note)}</small>`:''}</span><span class="todo-ts" title="등록 ${todoFmt(t.ts)}">${t.doneTs?'✔':'📦'} ${todoFmt(t.doneTs||t.archTs||t.ts)}</span><button class="todo-restore" type="button" title="진행 중 목록으로 되돌리기">↩</button><button class="todo-arch-del" type="button" title="이 항목만 완전히 삭제">✕</button></div>`};
  const names=['기본',...todoGroups()],buckets=Object.fromEntries(names.map(n=>[n,[]]));
  a.forEach((t,i)=>{buckets[t.group&&names.includes(t.group)?t.group:'기본'].push([t,i])});
  box.innerHTML=names.filter(n=>buckets[n].length).map(n=>
@@ -281,7 +296,7 @@ function renderTodoArch(){const box=$('#todo-arch-list');if(!box)return;const a=
 function renderTodo(){renderTodoArch();const box=$('#todo-list');if(!box)return;fillTodoGroups();const a=todoLoad(),groups=todoGroups();
  if(!a.length&&!groups.length){box.innerHTML='<p class="empty">할 일을 한 줄 적고 ＋추가를 누르세요.</p>';return}
  const row=(t,i)=>{const imgs=todoImgs(t);
-  return `<div class="todo-row${t.done?' done':''}" data-i="${i}"><span class="todo-grip" draggable="true" title="드래그해서 다른 그룹으로 이동">⠿</span><input type="checkbox" ${t.done?'checked':''}><span class="todo-text">${esc(t.text)}${imgs?`<span class="todo-thumbs">${imgs}</span>`:''}</span><span class="todo-ts"${t.doneTs?` title="완료 ${todoFmt(t.doneTs)}"`:''}>${todoFmt(t.ts)}</span><button class="todo-move" type="button" data-mv="-1" title="같은 그룹 안에서 위로">▲</button><button class="todo-move" type="button" data-mv="1" title="같은 그룹 안에서 아래로">▼</button><button class="todo-edit" type="button" title="내용 수정">✎</button><button class="todo-del" type="button" title="삭제">✕</button><button class="todo-arch-one" type="button" title="이 항목만 보관함으로 이동 (삭제 아님)">📦</button></div>`};
+  return `<div class="todo-row${t.done?' done':''}" data-i="${i}"><span class="todo-grip" draggable="true" title="드래그해서 다른 그룹으로 이동">⠿</span><input type="checkbox" ${t.done?'checked':''}><span class="todo-text">${esc(t.text)}${imgs?`<span class="todo-thumbs">${imgs}</span>`:''}<textarea class="todo-note" rows="${todoNoteRows(t.note)}" placeholder="메모…" spellcheck="false" title="항목 메모 — Enter로 저장, Shift+Enter 줄바꿈">${esc(t.note||'')}</textarea></span><span class="todo-ts"${t.doneTs?` title="완료 ${todoFmt(t.doneTs)}"`:''}>${todoFmt(t.ts)}</span><button class="todo-move" type="button" data-mv="-1" title="같은 그룹 안에서 위로">▲</button><button class="todo-move" type="button" data-mv="1" title="같은 그룹 안에서 아래로">▼</button><button class="todo-edit" type="button" title="내용 수정">✎</button><button class="todo-del" type="button" title="삭제">✕</button><button class="todo-arch-one" type="button" title="이 항목만 보관함으로 이동 (삭제 아님)">📦</button></div>`};
  const names=['기본',...groups],buckets=Object.fromEntries(names.map(n=>[n,[]]));
  a.forEach((t,i)=>{buckets[t.group&&names.includes(t.group)?t.group:'기본'].push([t,i])});
  box.innerHTML=names.map(n=>{const list=buckets[n],undone=list.filter(([t])=>!t.done).length;
@@ -316,7 +331,7 @@ function fitFrame(f){
  f.addEventListener('load',()=>{adjust();
   try{new ResizeObserver(adjust).observe(f.contentDocument.body)}catch(e){setInterval(adjust,2500)}});
 }
-function view(id){$$('.view,.nav').forEach(x=>x.classList.remove('active'));$('#'+id).classList.add('active');$(`.nav[data-view="${id}"]`).classList.add('active');$('#page-title').textContent={todo:'TO-DO 체크리스트',overview:'오늘의 리서치 흐름',reports:'발간 보고서',news:'뉴스.아카이브',press:'보도기사 취합','union-board':'현중 노조게시판',tone:'DAOL 리서치 톤',chatbot:'DAOL 리서치와 챗봇',collab:'섹터 콜라보 레이더',tasklist:'수명 피드백 확인',dart:'조선 수주공시 → 텔레',recipe:'레시피 수집 → Notion',etf:'ETF/섹터.신호 포착',holdings:'액티브 ETF 구성 변화',flow:'시장 수급 동향',macro:'매크로 데스크',trend:'시장관심.내러티브',consensus:'코스피200 컨센서스 추적',defense:'글로벌 방산 데일리 브리핑',defweekly:'글로벌 방산 주간 정리',ytdigest:'방산 유튜브 3일 모음',ytweekly:'방산 유튜브 주간 모음',vacation:'휴가/출장 계획',attendance:'월별 근태 체크',indepth:'인뎁스/자료 발간 계획',construction:'글로벌 건설기계 데일리 브리핑',conweekly:'글로벌 건설기계 주간 정리',energy:'친환경 에너지·FDC 데일리 브리핑',remember:'리멤버 → Notion 기록',mzdiary:'MZ일기 · 잔고/매매노트'}[id];if(id==='overview')fetchLiveMacro();if(id==='press'){state.pressCompany='';renderPressTable()}if(id==='tone')loadToneFrame();if(id==='union-board')loadUnionBoard();if(id==='tasklist'){renderTaskList(taskWantItem);taskPull().then(ok=>{if(ok)renderTaskList(taskWantItem);taskWantItem=null})}if(id==='todo'){renderTodo();todoPull().then(ok=>{if(ok)renderTodo()})}if(id==='etf'){const f=$('#etf-frame');if(!f.getAttribute('src'))f.src='etf_signal_report.html?t='+Date.now()}if(id==='holdings'){const f=$('#holdings-frame');if(!f.getAttribute('src'))f.src='etf_holdings_report.html?t='+Date.now()}if(id==='macro'){const f=$('#macro-frame');if(!f.getAttribute('src'))f.src='macro_desk_report.html?t='+Date.now()}if(id==='flow'){const f=$('#flow-frame');if(!f.getAttribute('src'))f.src='market_flow_report.html?t='+Date.now()}if(id==='trend'){const f=$('#trend-frame');if(!f.getAttribute('src'))f.src='market_trend_report.html?t='+Date.now()}if(id==='consensus'){const f=$('#consensus-frame');if(!f.getAttribute('src'))f.src='consensus_revision.html?t='+Date.now()}if(id==='defense'){const f=$('#defense-frame');if(!f.getAttribute('src'))f.src='defense_briefing_report.html?t='+Date.now()}if(id==='defweekly'){const f=$('#defweekly-frame');if(!f.getAttribute('src'))f.src='defense_weekly_report.html?t='+Date.now()}if(id==='ytdigest'){const f=$('#ytdigest-frame');if(!f.getAttribute('src'))f.src='youtube_digest_report.html?t='+Date.now()}if(id==='ytweekly'){const f=$('#ytweekly-frame');if(!f.getAttribute('src'))f.src='youtube_weekly_report.html?t='+Date.now()}if(id==='vacation'){const f=$('#vacation-frame');fitFrame(f);if(!f.getAttribute('src'))f.src='vacation_report.html?t='+Date.now()}if(id==='attendance'){const f=$('#attendance-frame');fitFrame(f);if(!f.getAttribute('src'))f.src='attendance_report.html?t='+Date.now()}if(id==='indepth'){const f=$('#indepth-frame');fitFrame(f);if(!f.getAttribute('src'))f.src='indepth_report.html?t='+Date.now()}if(id==='construction'){const f=$('#construction-frame');if(!f.getAttribute('src'))f.src='construction_briefing_report.html?t='+Date.now()}if(id==='conweekly'){const f=$('#conweekly-frame');if(!f.getAttribute('src'))f.src='construction_weekly_report.html?t='+Date.now()}if(id==='energy'){const f=$('#energy-frame');if(!f.getAttribute('src'))f.src='energy_briefing_report.html?t='+Date.now()}if(id==='collab'){const f=$('#collab-frame');if(!f.getAttribute('src'))f.src=TONE_SITE+'daol_collab_radar.html?t='+Date.now()}if(id==='chatbot'){const f=$('#chatbot-frame');if(!f.getAttribute('src'))f.src=TONE_SITE+'chat.html?t='+Date.now()}}
+function view(id){$$('.view,.nav').forEach(x=>x.classList.remove('active'));$('#'+id).classList.add('active');$(`.nav[data-view="${id}"]`).classList.add('active');$('#page-title').textContent={todo:'TO-DO 체크리스트',overview:'오늘의 리서치 흐름',reports:'발간 보고서',news:'뉴스.아카이브',press:'보도기사 취합','union-board':'현중 노조게시판',tone:'DAOL 리서치 톤',chatbot:'DAOL 리서치와 챗봇',collab:'섹터 콜라보 레이더',tasklist:'수명 피드백 확인',dart:'조선 수주공시 → 텔레',recipe:'레시피 수집 → Notion',etf:'ETF/섹터.신호 포착',holdings:'액티브 ETF 구성 변화',flow:'시장 수급 동향',macro:'매크로 데스크',covflow:'커버리지 수급 등',dartcap:'전자공시 - 생산능력',trend:'시장관심.내러티브',consensus:'코스피200 컨센서스 추적',valuation:'피어그룹 Valuation',defense:'글로벌 방산 데일리 브리핑',defweekly:'글로벌 방산 주간 정리',ytdigest:'방산 유튜브 3일 모음',ytweekly:'방산 유튜브 주간 모음',vacation:'휴가/출장 계획',attendance:'월별 근태 체크',indepth:'인뎁스/자료 발간 계획',construction:'글로벌 건설기계 데일리 브리핑',conweekly:'글로벌 건설기계 주간 정리',energy:'친환경 에너지·FDC 데일리 브리핑',remember:'리멤버 → Notion 기록',mzdiary:'MZ일기 · 잔고/매매노트'}[id];if(id==='overview')fetchLiveMacro();if(id==='press'){state.pressCompany='';renderPressTable()}if(id==='tone')loadToneFrame();if(id==='union-board')loadUnionBoard();if(id==='tasklist'){renderTaskList(taskWantItem);taskPull().then(ok=>{if(ok)renderTaskList(taskWantItem);taskWantItem=null})}if(id==='todo'){renderTodo();todoPull().then(ok=>{if(ok)renderTodo()})}if(id==='etf'){const f=$('#etf-frame');if(!f.getAttribute('src'))f.src='etf_signal_report.html?t='+Date.now()}if(id==='holdings'){const f=$('#holdings-frame');if(!f.getAttribute('src'))f.src='etf_holdings_report.html?t='+Date.now()}if(id==='macro'){const f=$('#macro-frame');if(!f.getAttribute('src'))f.src='macro_desk_report.html?t='+Date.now()}if(id==='covflow'){const f=$('#covflow-frame');if(!f.getAttribute('src'))f.src='coverage_flow_report.html?t='+Date.now()}if(id==='dartcap'){const f=$('#dartcap-frame');if(!f.getAttribute('src'))f.src='dart_capacity_report.html?t='+Date.now()}if(id==='flow'){const f=$('#flow-frame');if(!f.getAttribute('src'))f.src='market_flow_report.html?t='+Date.now()}if(id==='trend'){const f=$('#trend-frame');if(!f.getAttribute('src'))f.src='market_trend_report.html?t='+Date.now()}if(id==='consensus'){const f=$('#consensus-frame');if(!f.getAttribute('src'))f.src='consensus_revision.html?t='+Date.now()}if(id==='valuation'){const f=$('#valuation-frame');if(!f.getAttribute('src'))f.src='valuation_report.html?t='+Date.now()}if(id==='defense'){const f=$('#defense-frame');if(!f.getAttribute('src'))f.src='defense_briefing_report.html?t='+Date.now()}if(id==='defweekly'){const f=$('#defweekly-frame');if(!f.getAttribute('src'))f.src='defense_weekly_report.html?t='+Date.now()}if(id==='ytdigest'){const f=$('#ytdigest-frame');if(!f.getAttribute('src'))f.src='youtube_digest_report.html?t='+Date.now()}if(id==='ytweekly'){const f=$('#ytweekly-frame');if(!f.getAttribute('src'))f.src='youtube_weekly_report.html?t='+Date.now()}if(id==='vacation'){const f=$('#vacation-frame');fitFrame(f);if(!f.getAttribute('src'))f.src='vacation_report.html?t='+Date.now()}if(id==='attendance'){const f=$('#attendance-frame');fitFrame(f);if(!f.getAttribute('src'))f.src='attendance_report.html?t='+Date.now()}if(id==='indepth'){const f=$('#indepth-frame');fitFrame(f);if(!f.getAttribute('src'))f.src='indepth_report.html?t='+Date.now()}if(id==='construction'){const f=$('#construction-frame');if(!f.getAttribute('src'))f.src='construction_briefing_report.html?t='+Date.now()}if(id==='conweekly'){const f=$('#conweekly-frame');if(!f.getAttribute('src'))f.src='construction_weekly_report.html?t='+Date.now()}if(id==='energy'){const f=$('#energy-frame');if(!f.getAttribute('src'))f.src='energy_briefing_report.html?t='+Date.now()}if(id==='collab'){const f=$('#collab-frame');if(!f.getAttribute('src'))f.src=TONE_SITE+'daol_collab_radar.html?t='+Date.now()}if(id==='chatbot'){const f=$('#chatbot-frame');if(!f.getAttribute('src'))f.src=TONE_SITE+'chat.html?t='+Date.now()}}
 const DISPATCH_ENDPOINT='https://script.google.com/macros/s/AKfycbx3RjIjtlO2Z6fIYo2T3LhJrFg9Wp2hS7dMS3Is52-JVF1hizoCWewbQ1uM_v5sdhR2jw/exec';/* 갱신 버튼 → GitHub Actions 디스패치 GAS 웹앱 (gas/dispatch_proxy.gs). 아래 workflow 키는 그 파일의 WF 매핑과 1:1이어야 한다 */
 async function dispatchWorkflow(payload,status,btn){
  if(status)status.textContent='요청 중…';if(btn)btn.disabled=true;
@@ -333,8 +348,8 @@ async function dispatchWorkflow(payload,status,btn){
 async function dispatchDart(){
  const url=($('#dart-url')?.value||'').trim(),comment=($('#dart-comment')?.value||'').trim(),status=$('#dart-status'),btn=$('#dart-send');
  if(!/dart\.fss\.or\.kr|rcpNo=|^\d{10,}$/.test(url)){status.textContent='⚠ DART 공시 링크를 넣어주세요';return}
- if(await dispatchWorkflow({workflow:'dart',dart_url:url,comment},status,btn)){
-   status.textContent='✅ 요청됨 — 1~2분 뒤 텔레그램 확인';$('#dart-url').value='';$('#dart-comment').value='';}}
+ if(await dispatchWorkflow({workflow:'dart',dart_url:url,comment,target:'비공개(바담)'},status,btn)){
+   status.textContent='✅ 요청됨 — 1~2분 뒤 바담 방(비공개) 확인';$('#dart-url').value='';$('#dart-comment').value='';}}
 const REMEMBER_ENDPOINT='https://script.google.com/macros/s/AKfycbyerXB4W9QaOQJ_ZADATF5FadRtDiSQlT_LAWxPblYQ39bHjmE4LegFhfSb47n4aTj1/exec';/* 리멤버→Notion GAS 웹앱 (gas/remember_notion.gs). 비면 화면의 ⚙️ 연결 설정(localStorage) 사용 */
 const REMEMBER_EP_KEY='remember_endpoint_v1';
 function rememberEndpoint(){if(REMEMBER_ENDPOINT)return REMEMBER_ENDPOINT;try{return localStorage.getItem(REMEMBER_EP_KEY)||''}catch{return''}}
@@ -517,6 +532,16 @@ async function dispatchMacro(){
  if(await dispatchWorkflow({workflow:'macro'},status,btn))
    status.textContent='✅ 지표 수집 요청됨 — 몇 분 뒤 새로고침';}
 $('#macro-refresh')?.addEventListener('click',dispatchMacro);
+async function dispatchCovflow(){
+ const btn=$('#covflow-refresh'),status=$('#covflow-status');
+ if(await dispatchWorkflow({workflow:'covflow'},status,btn))
+   status.textContent='✅ 수집 요청됨 — 2~3분 뒤 새로고침 (텔레그램은 정시 실행에만)';}
+$('#covflow-refresh')?.addEventListener('click',dispatchCovflow);
+async function dispatchDartcap(){
+ const btn=$('#dartcap-refresh'),status=$('#dartcap-status');
+ if(await dispatchWorkflow({workflow:'dartcap'},status,btn))
+   status.textContent='✅ 수집 요청됨 — 새 보고서가 있으면 10분 안팎 뒤 새로고침';}
+$('#dartcap-refresh')?.addEventListener('click',dispatchDartcap);
 $('#trend-refresh')?.addEventListener('click',dispatchTrend);
 $('#todo-add')?.addEventListener('click',todoAdd);
 $('#todo-input')?.addEventListener('keydown',e=>{if(e.key==='Enter')todoAdd()});
@@ -547,6 +572,10 @@ $('#todo-arch-list')?.addEventListener('click',e=>{
   const{archTs,doneTs,...rest}=t;todoArchStore(a);todoSave([{...rest,done:false},...todoLoad()]);return}
  const del=e.target.closest('.todo-arch-del');if(!del)return;const i=+del.closest('.todo-row').dataset.i,t=a[i];if(!t)return;
  if(!confirm(`보관함에서 완전히 삭제할까요? — ${t.text}`))return;a.splice(i,1);todoArchSave(a)});
+let todoNoteT;
+$('#todo-list')?.addEventListener('input',e=>{const el=e.target.closest('.todo-note');if(!el)return;todoNoteGrow(el);clearTimeout(todoNoteT);const i=+el.closest('.todo-row').dataset.i;todoNoteT=setTimeout(()=>todoNoteSave(i,el.value),400)});
+$('#todo-list')?.addEventListener('focusout',e=>{const el=e.target.closest('.todo-note');if(!el)return;clearTimeout(todoNoteT);todoNoteSave(+el.closest('.todo-row').dataset.i,el.value);el.value=el.value.replace(/\s+$/,'');todoNoteGrow(el)});
+$('#todo-list')?.addEventListener('keydown',e=>{const el=e.target.closest('.todo-note');if(!el)return;e.stopPropagation();if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();el.blur()}if(e.key==='Escape')el.blur()});
 $('#todo-list')?.addEventListener('change',e=>{const row=e.target.closest('.todo-row');if(!row||e.target.type!=='checkbox')return;const a=todoLoad(),t=a[+row.dataset.i];if(!t)return;t.done=e.target.checked;if(t.done)t.doneTs=Date.now();else delete t.doneTs;todoSave(a)});
 $('#todo-list')?.addEventListener('click',e=>{
  if(e.target.closest('.todo-g-grip')){e.preventDefault();return}/* 그립 클릭이 그룹 접힘 토글로 번지지 않게 */
@@ -569,7 +598,7 @@ $('#todo-list')?.addEventListener('click',e=>{
  const del=e.target.closest('.todo-del');if(!del)return;const row=del.closest('.todo-row'),a=todoLoad(),t=a[+row.dataset.i];if(!t)return;if(!confirm(`삭제할까요? — ${t.text}`))return;a.splice(+row.dataset.i,1);todoSave(a)});
 // 드래그 앤 드랍으로 할 일을 다른 그룹에 떨어뜨려 이동
 let TODO_DRAG=-1;
-$('#todo-list')?.addEventListener('dragstart',e=>{const row=e.target.closest('.todo-row');if(!row)return;TODO_DRAG=+row.dataset.i;e.dataTransfer.effectAllowed='move';row.classList.add('dragging')});
+$('#todo-list')?.addEventListener('dragstart',e=>{if(e.target.closest?.('.todo-note'))return;const row=e.target.closest('.todo-row');if(!row)return;TODO_DRAG=+row.dataset.i;e.dataTransfer.effectAllowed='move';row.classList.add('dragging')});
 $('#todo-list')?.addEventListener('dragend',()=>{TODO_DRAG=-1;$$('#todo-list .drop-hover,#todo-list .dragging,#todo-list .drop-before,#todo-list .drop-after').forEach(x=>x.classList.remove('drop-hover','dragging','drop-before','drop-after'))});
 $('#todo-list')?.addEventListener('dragover',e=>{if(TODO_DRAG<0)return;
  const rowEl=e.target.closest('.todo-row');
@@ -710,3 +739,4 @@ async function freshDownload(key,btn){
   return done('⌛ 지연',true);
  }catch(e){return done('⚠ 오류',true)}}
 $$('[data-fresh]').forEach(b=>b.onclick=()=>freshDownload(b.dataset.fresh,b));
+shareLinks();

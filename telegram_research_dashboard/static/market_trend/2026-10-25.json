@@ -1,0 +1,608 @@
+{
+ "date": "2026-10-25",
+ "meta": {
+  "window": "10-24 06:00~10-25 06:00 KST",
+  "engine": "Gemini(gemini-2.5-flash)",
+  "generated_at": "2026-10-25T08:30+09:00"
+ },
+ "stats": {
+  "channels": 43,
+  "messages": 315,
+  "groups": 303
+ },
+ "one_liner": "김정은 방중으로 북중 경제 협력 기대감이 고조되는 가운데, 중동발 지정학적 리스크와 프랑스 재정 불안이 시장의 경계심을 키우고 있다.",
+ "themes": [
+  {
+   "name": "북중 경제 협력 재개 기대 — 김정은 전격 방중",
+   "narrative": "김정은 북한 국무위원장이 최근 개통된 신압록강대교를 통해 중국 단둥을 전격 방문하여 왕후닝 중국 최고위 정치지도부 인사와 회담을 가졌다. 이는 '사망설'을 불식시키고 APEC을 앞두고 북중 밀착을 과시하며, 신압록강대교 개통을 계기로 인적 교류 및 경제·무역 협력 확대 가능성을 시사한다.",
+   "status": "new",
+   "strength": 5,
+   "keywords": [
+    "방중",
+    "단둥",
+    "전격",
+    "신압록강대교",
+    "북한",
+    "왕후닝",
+    "경제·무역 협력"
+   ],
+   "evidence": [
+    {
+     "channel": "미국 주식 인사이더 🇺🇸 (US Stocks Insider)",
+     "quote": "• 북한 김정은 국무위원장은 중국 단둥을 방문해 중국 최고위 정치지도부 인사인 왕후닝과 회담을 진행했다고 중국 관영매체가 보도. 양국은 주권과 안보, 발전 이익을 보호하기 위한 전략적 소통과 협력을 강화하기로 합의. 신압록강대교 개통을 계기로 인적 교류와 경제·무역 협력을 확대하기로 했으며, 김정은은 한국전쟁 관련 기념시…"
+    },
+    {
+     "channel": "이상헌 부장 iM 지주/ESG/중소형주",
+     "quote": "* '사망설' 김정은, 전격 방중…APEC 앞두고 북•중 밀착 과시 [차이나 워치]"
+    },
+    {
+     "channel": "이상헌 부장 iM 지주/ESG/중소형주",
+     "quote": "정부에 따르면 김 위원장은 이날 오전 평양에서 신의주까지 열차로 먼저 이동한 뒤 신의주에서 다시 신압록대교를 거쳐 단둥에 도착했다. 정부는 김 위원장의 방중 목적을 중국이 한국전쟁 참전을 기념하는 날인 10월 25일(중국인민지원군의 날)을 계기로 방문한 것 같다고 판단 중이다."
+    }
+   ]
+  },
+  {
+   "name": "중동 지정학적 리스크 고조 — 이란발 위협에 미국 대응",
+   "narrative": "중동 지역의 군사적 긴장이 고조되는 가운데, 미국 정보당국은 이란이 해외 주재 미국 정부 인력을 겨냥한 공격을 계획하고 있을 가능성을 경고했다. 이에 미국 국무부는 요르단, 레바논 등 중동 4개국 대사관의 인력을 감축하고 운영을 제한하는 등 경계 태세를 강화하고 있다.",
+   "status": "new",
+   "strength": 4,
+   "keywords": [
+    "긴장 고조",
+    "국가안보",
+    "대사관",
+    "인력 감축",
+    "공격 계획",
+    "이란"
+   ],
+   "evidence": [
+    {
+     "channel": "미국 주식 인사이더 🇺🇸 (US Stocks Insider)",
+     "quote": "• 미국 국무부는 이란의 위협이 고조됨에 따라 요르단, 레바논, 카타르, 아랍에미리트 등 중동 4개국 주재 대사관의 인력을 축소하고 운영을 제한하기로 결정."
+    },
+    {
+     "channel": "미국 주식 인사이더 🇺🇸 (US Stocks Insider)",
+     "quote": "• 트럼프 대통령은 미국이 이란을 상대로 추가 군사작전을 실시할 가능성이 있다고 밝혀. 미국 정보당국은 이란이 해외에 있는 미국 정부 관계자와 외교관을 대상으로 정교한 공격을 계획하고 있다는 정보 평가를 제시하며 경고."
+    },
+    {
+     "channel": "서화백의 AI놀이🚀",
+     "quote": "💡 요약 중동 긴장 고조로 인한 국제유가 급등과 증시 하락 압박이 지속되고 있으나, AI 및 데이터센터 관련 산업의 폭발적인 성장 기대감과 GPU 임대료 급등이 긍정적 모멘텀으로 작용하여 시장은 혼조세를 보입니다."
+    }
+   ]
+  },
+  {
+   "name": "프랑스 신용등급 전망 하향 — 유로존 재정 불안 우려",
+   "narrative": "무디스가 프랑스의 신용등급을 Aa3로 유지하되 '부정적' 등급 전망을 지속했다. 이는 프랑스의 경제성장 둔화와 재정적자 확대로 국가채무 부담이 증가하고 있으며, 국채금리 급등이 재정 건전성에 추가적인 위험 요인으로 작용할 수 있다는 우려를 반영한다.",
+   "status": "new",
+   "strength": 3,
+   "keywords": [
+    "무디스",
+    "프랑스",
+    "신용등급",
+    "재정적자",
+    "Aa"
+   ],
+   "evidence": [
+    {
+     "channel": "서화백의 AI놀이🚀",
+     "quote": "무디스가 프랑스의 신용등급을 Aa3로 유지하되 '부정적' 등급 전망을 지속하여 경제 불확실성이 커졌습니다., 프랑스 국채의 위험 프리미엄이 유로존 재정위기 수준에 근접하고 있어 시장의 우려가 깊어지고 있습니다."
+    },
+    {
+     "channel": "미국 주식 인사이더 🇺🇸 (US Stocks Insider)",
+     "quote": "• 무디스는 프랑스의 경제성장 둔화와 재정적자 확대로 국가채무 부담이 증가했다고 평가. 프랑스의 Aa3 신용등급은 2027년 재정적자 축소 예산안 채택을 전제로 유지되고 있다고 설명."
+    }
+   ]
+  },
+  {
+   "name": "AI 및 데이터센터 — 성장 기대감 지속 속 시장 혼조세",
+   "narrative": "중동발 지정학적 긴장 고조와 금융시장 불안 심화로 증시 전반의 하락 압력이 지속되고 있으나, AI 및 데이터센터 관련 산업은 폭발적인 성장 기대감과 GPU 임대료 급등에 힘입어 긍정적 모멘텀을 유지하며 시장은 혼조세를 보이고 있다.",
+   "status": "ongoing",
+   "strength": 4,
+   "keywords": [
+    "AI",
+    "데이터센터",
+    "GPU",
+    "반도체",
+    "성장 기대감"
+   ],
+   "evidence": [
+    {
+     "channel": "서화백의 AI놀이🚀",
+     "quote": "💡 요약 중동 긴장 고조로 인한 국제유가 급등과 증시 하락 압박이 지속되고 있으나, AI 및 데이터센터 관련 산업의 폭발적인 성장 기대감과 GPU 임대료 급등이 긍정적 모멘텀으로 작용하여 시장은 혼조세를 보입니다."
+    },
+    {
+     "channel": "서화백의 AI놀이🚀",
+     "quote": "📝 텔레그램 심층 분석 Report (15시 05분) 기준 🌡️ 센티먼트 관망/경계 (-30) 💡 요약 AI 관련 투자 지속성 의구심, 금융시장 불안 심화, 지정학적 리스크 고조로 전반적인 관망세와 경계심이 우세합니다."
+    },
+    {
+     "channel": "서화백의 그림놀이 🚀",
+     "quote": "💡 요약 중동발 지정학적 긴장 고조로 인한 국제유가 급등과 인플레이션 우려가 뉴욕 증시 전반의 하락을 이끌었으며, 암호화폐 시장도 동반 하락 압력을 받음."
+    }
+   ]
+  }
+ ],
+ "community_mood": {
+  "score": -70,
+  "summary": "개미 투자자들은 코스피의 폭락과 현대차 등 주요 종목의 하락에 대해 강한 공포와 비관적인 정서를 보이고 있다. 유럽 경제 상황에 대한 부정적인 시각도 엿보이며, 전반적으로 시장에 대한 회피 심리가 우세하다.",
+  "hot_stocks": [
+   {
+    "name": "현대차",
+    "score": -80,
+    "reason": "슈카의 매도 언급과 함께 주가 하락에 대한 개미들의 강한 비관론과 동정론이 형성되었다."
+   },
+   {
+    "name": "코랩",
+    "score": -70,
+    "reason": "코스피 대폭락과 함께 '지옥가는중'이라는 표현으로 시장 하락에 대한 부정적인 인식이 강하게 나타났다."
+   },
+   {
+    "name": "속슬",
+    "score": 0,
+    "reason": "해외 주식 갤러리에서 언급되었으나, 구체적인 긍정/부정 정서는 나타나지 않았다."
+   },
+   {
+    "name": "애플",
+    "score": 0,
+    "reason": "해외 주식 갤러리에서 언급되었으나, 구체적인 긍정/부정 정서는 나타나지 않았다."
+   }
+  ]
+ },
+ "signals": {
+  "spikes": [
+   {
+    "term": "방중",
+    "count": 18,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "단둥",
+    "count": 13,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "전격",
+    "count": 11,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "신압록강대교",
+    "count": 10,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "국가안보",
+    "count": 8,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "북한",
+    "count": 8,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "사망설",
+    "count": 8,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "단둥 도착",
+    "count": 8,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "왕후닝",
+    "count": 8,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "도착",
+    "count": 8,
+    "burst": 85.46006600660066,
+    "base_daily": 0.3,
+    "new": false
+   },
+   {
+    "term": "긴장 고조",
+    "count": 7,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "무디스 프랑스",
+    "count": 7,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "무디스",
+    "count": 7,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "주재",
+    "count": 7,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "대사관",
+    "count": 7,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "서열",
+    "count": 7,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "조선일보",
+    "count": 7,
+    "burst": 74.77755775577556,
+    "base_daily": 0.3,
+    "new": false
+   },
+   {
+    "term": "담당",
+    "count": 6,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "인력 감축",
+    "count": 6,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "버전",
+    "count": 6,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "루비오",
+    "count": 6,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "공격 계획",
+    "count": 6,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "AI 데이터",
+    "count": 6,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "커지",
+    "count": 6,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "Aa",
+    "count": 6,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   }
+  ],
+  "top_posts": [
+   {
+    "channels": 2,
+    "channel": "서화백의 AI놀이🚀",
+    "head": "📝 텔레그램 심층 분석 Report (11시 04분) 기준 🌡️ 센티먼트 관망 (+25) 💡 요약 중동 긴장 고조로 인한 국제유가 급등과 증시 하락 압박이 지속되고 있으나, AI 및 데이터센터 관련 산업의 폭발적인 성장 기대감과 GPU 임대료 급등이 긍정적 모멘텀으로 작용하여 시장은 혼조세를 보입니다. 🗣️ Top 키워드…",
+    "url": "https://t.me/easobi_ai/24352",
+    "time_kst": "10-24 11:04"
+   },
+   {
+    "channels": 2,
+    "channel": "서화백의 AI놀이🚀",
+    "head": "📝 텔레그램 심층 분석 Report (15시 05분) 기준 🌡️ 센티먼트 관망/경계 (-30) 💡 요약 AI 관련 투자 지속성 의구심, 금융시장 불안 심화, 지정학적 리스크 고조로 전반적인 관망세와 경계심이 우세합니다. 🗣️ Top 키워드: AI(338), 지정학적 리스크(213), Anthropic(119), IPO(1…",
+    "url": "https://t.me/easobi_ai/24356",
+    "time_kst": "10-24 15:05"
+   },
+   {
+    "channels": 2,
+    "channel": "서화백의 AI놀이🚀",
+    "head": "📝 텔레그램 심층 분석 Report (19시 05분) 기준 🌡️ 센티먼트 관망 (-30) 💡 요약 지정학적 리스크 심화와 주요 자산군의 대규모 매도세, AI 인프라 구축의 난항으로 시장 전반에 대한 관망 심리가 우세하며 하방 압력이 커지고 있습니다. 🗣️ Top 키워드: AI(12), 데이터센터(9), 반도체(6), 로봇…",
+    "url": "https://t.me/easobi_ai/24359",
+    "time_kst": "10-24 19:05"
+   },
+   {
+    "channels": 2,
+    "channel": "서화백의 그림놀이 🚀",
+    "head": "📝 텔레그램 심층 분석 Report (07시 07분) 기준 🌡️ 센티먼트 공포 (-20) 💡 요약 중동발 지정학적 긴장 고조로 인한 국제유가 급등과 인플레이션 우려가 뉴욕 증시 전반의 하락을 이끌었으며, 암호화폐 시장도 동반 하락 압력을 받음. 🗣️ Top 키워드: 국제유가(16), AI(10), 반도체(8), 블록체인(…",
+    "url": "https://t.me/easobi/17044",
+    "time_kst": "10-24 07:07"
+   },
+   {
+    "channels": 2,
+    "channel": "GS의 조선/기계/방산 「바담」",
+    "head": "⚓ Hanwha Power recibe aprobación de ABS para el diseño de un portacontenedores de 1.700 TEU totalmente eléctrico⚓ 한화파워, ABS로부터 1,700 TEU급 완전 전기추진 컨테이너선 개념설계 승인(AiP) 획득 출처: Data Por…",
+    "url": "https://t.me/c/1405984327/8358",
+    "time_kst": "10-24 15:34"
+   },
+   {
+    "channels": 2,
+    "channel": "TNBfolio",
+    "head": "속보: 닷컴 버블에 이어 터진 2001년 통신 버블 붕괴를 직접 겪은 시에나의 게리 스미스 CEO가 지금의 AI 붐은 당시의 재현이 아니라고 밝혔다. 스미스는 2001년 5월부터 25년째 광통신 장비 기업 시에나를 이끌고 있다. 시에나는 1990년대 후반 기업가치 34억 달러로 상장했고, 몇 년 뒤 시가총액이 400억 달…",
+    "url": "https://t.me/TNBfolio/71694",
+    "time_kst": "10-24 08:46"
+   },
+   {
+    "channels": 2,
+    "channel": "GS의 조선/기계/방산 「바담」",
+    "head": "⚠️ Polonya‘nın yaklaşık 30 adet K2 tankında arıza iddiası ⚠️ 폴란드, K2 전차 약 30대 결함 발생 주장 제기 출처: gdh dijital 링크: https://gdhdijital.com/haber/polonya-nin-yaklasik-30-adet-k2-tankinda-…",
+    "url": "https://t.me/c/1405984327/8359",
+    "time_kst": "10-24 17:03"
+   },
+   {
+    "channels": 2,
+    "channel": "대체투자 인사이드",
+    "head": "▶️ 강남 3구 하락에도, 도봉·강북 2021년 전고점 넘어 https://www.newsis.com/photo/graview/?id=NISI20261023_0002271589&cid=photo&page=1 #부동산, #부동산가격",
+    "url": "https://t.me/jsinside/28298",
+    "time_kst": "10-24 12:58"
+   }
+  ]
+ },
+ "community_dc": {
+  "source": "DC인사이드",
+  "galleries": [
+   {
+    "id": "krstock",
+    "name": "국내주식갤러리",
+    "posts": 938,
+    "capped": true,
+    "burst": 0.8,
+    "base_daily": 1181.0
+   },
+   {
+    "id": "stockus",
+    "name": "해외주식갤러리",
+    "posts": 2478,
+    "capped": true,
+    "burst": 0.8,
+    "base_daily": 3155.7
+   }
+  ],
+  "posts_sampled": 573,
+  "keywords": [
+   {
+    "term": "지금",
+    "count": 15,
+    "burst": 99.0,
+    "new": true
+   },
+   {
+    "term": "요즘",
+    "count": 11,
+    "burst": 99.0,
+    "new": true
+   },
+   {
+    "term": "현대차",
+    "count": 10,
+    "burst": 99.0,
+    "new": true
+   },
+   {
+    "term": "vs",
+    "count": 8,
+    "burst": 95.1,
+    "new": true
+   },
+   {
+    "term": "코랩",
+    "count": 7,
+    "burst": 83.2,
+    "new": true
+   },
+   {
+    "term": "애플",
+    "count": 7,
+    "burst": 83.2,
+    "new": true
+   },
+   {
+    "term": "전쟁",
+    "count": 7,
+    "burst": 83.2,
+    "new": true
+   },
+   {
+    "term": "속슬",
+    "count": 7,
+    "burst": 83.2,
+    "new": true
+   },
+   {
+    "term": "니들",
+    "count": 6,
+    "burst": 71.3,
+    "new": true
+   },
+   {
+    "term": "보니",
+    "count": 6,
+    "burst": 71.3,
+    "new": true
+   },
+   {
+    "term": "절대",
+    "count": 6,
+    "burst": 71.3,
+    "new": true
+   },
+   {
+    "term": "전쟁나면",
+    "count": 6,
+    "burst": 71.3,
+    "new": true
+   },
+   {
+    "term": "솔직히",
+    "count": 5,
+    "burst": 59.4,
+    "new": true
+   },
+   {
+    "term": "존나",
+    "count": 5,
+    "burst": 59.4,
+    "new": true
+   },
+   {
+    "term": "공포",
+    "count": 5,
+    "burst": 59.4,
+    "new": true
+   }
+  ],
+  "top_recommended": [
+   {
+    "gallery": "해외주식갤러리",
+    "title": "유럽 새끼들 일하는 거 보면 망해도 쌈",
+    "views": 7637,
+    "recommend": 223,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=18094987&exception_mode=recommend&page=1",
+    "time_kst": "10-24 11:20"
+   },
+   {
+    "gallery": "해외주식갤러리",
+    "title": "자신이 여기있는주식 하나도 안샀으면 개추",
+    "views": 6555,
+    "recommend": 188,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=18096871&exception_mode=recommend&page=1",
+    "time_kst": "10-24 18:10"
+   },
+   {
+    "gallery": "해외주식갤러리",
+    "title": "지금 30살 n억 떡밥 안올라오는 이유 ㅋㅋㅋㅋㅋㅋㅋㅋ",
+    "views": 9740,
+    "recommend": 168,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=18095038&exception_mode=recommend&page=1",
+    "time_kst": "10-24 11:32"
+   },
+   {
+    "gallery": "해외주식갤러리",
+    "title": "요즘 30살에 살아만 있어도 성공한거라는데",
+    "views": 12399,
+    "recommend": 162,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=18095068&exception_mode=recommend&page=1",
+    "time_kst": "10-24 11:37"
+   },
+   {
+    "gallery": "해외주식갤러리",
+    "title": "놀랍게도 올해 45월에 나왓던 말",
+    "views": 9245,
+    "recommend": 118,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=18094466&exception_mode=recommend&page=1",
+    "time_kst": "10-24 08:18"
+   }
+  ],
+  "top_viewed": [
+   {
+    "gallery": "해외주식갤러리",
+    "title": "프랑스 근황 ㅋㅋㅋ",
+    "views": 1035,
+    "recommend": 32,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=18099484&page=7",
+    "time_kst": "10-25 04:23"
+   },
+   {
+    "gallery": "국내주식갤러리",
+    "title": "실시간 코스피랩",
+    "views": 920,
+    "recommend": 1,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3743843&page=4",
+    "time_kst": "10-25 01:34"
+   },
+   {
+    "gallery": "국내주식갤러리",
+    "title": "실시간 코스피대폭락ㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋ",
+    "views": 868,
+    "recommend": 1,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3743789&page=5",
+    "time_kst": "10-25 00:39"
+   },
+   {
+    "gallery": "국내주식갤러리",
+    "title": "실시간 편의점 살1인사건 일어남 ㅠㅠㅠㅠ",
+    "views": 651,
+    "recommend": 0,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3743966&page=2",
+    "time_kst": "10-25 05:36"
+   },
+   {
+    "gallery": "국내주식갤러리",
+    "title": "슈카가 현대차 68쯤에 물량 다 날렸잖아",
+    "views": 552,
+    "recommend": 0,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3743780&page=5",
+    "time_kst": "10-25 00:26"
+   },
+   {
+    "gallery": "국내주식갤러리",
+    "title": "코랩 삼하 지옥가는중",
+    "views": 551,
+    "recommend": 2,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3743759&page=6",
+    "time_kst": "10-25 00:18"
+   },
+   {
+    "gallery": "국내주식갤러리",
+    "title": "이제 안도랠리만 남았다는 사람이 잇군",
+    "views": 499,
+    "recommend": 0,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3743748&page=6",
+    "time_kst": "10-25 00:10"
+   },
+   {
+    "gallery": "국내주식갤러리",
+    "title": "현대차 산 새끼들 개불쌍하네 와 ㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷ",
+    "views": 482,
+    "recommend": 0,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3743711&page=7",
+    "time_kst": "10-24 23:45"
+   }
+  ]
+ }
+}

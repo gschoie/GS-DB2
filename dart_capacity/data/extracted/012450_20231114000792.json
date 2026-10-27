@@ -1,0 +1,483 @@
+{
+ "meta": {
+  "company": "한화에어로스페이스",
+  "sector": "방산",
+  "stock_code": "012450",
+  "corp_code": "00126566",
+  "rcept_no": "20231114000792",
+  "rcept_dt": "20231114",
+  "report_nm": "분기보고서 (2023.09)",
+  "report_type": "quarter",
+  "period": "2023-09",
+  "period_label": "2023.09 3Q",
+  "corrected": false,
+  "dart_url": "https://dart.fss.or.kr/dsaf001/main.do?rcpNo=20231114000792"
+ },
+ "tables": [
+  {
+   "section": [
+    "II. 사업의 내용",
+    "1. 사업의 개요",
+    "2. 주요 제품 및 서비스"
+   ],
+   "headings": [
+    "나. 주요제품의 가격변동 현황"
+   ],
+   "context": [
+    "나. 주요제품의 가격변동 현황"
+   ],
+   "unit": "",
+   "topic": "product_price",
+   "keywords": [
+    "나. 주요제품의 가격변동 현황"
+   ],
+   "keyword_in": "heading",
+   "rows": [
+    [
+     "품 목",
+     "2023년 3분기",
+     "2022년",
+     "2021년",
+     "비고"
+    ],
+    [
+     "감시장비",
+     "CCTV(천원/대)",
+     "178",
+     "152",
+     "158",
+     "주요 매출 기종 기준국내 평균 판매가격"
+    ],
+    [
+     "저장장치(천원/대)",
+     "936",
+     "660",
+     "699"
+    ],
+    [
+     "모니터(천원/대)",
+     "210",
+     "215",
+     "209"
+    ],
+    [
+     "칩마운터(C/M)",
+     "고속기(백만원)",
+     "250",
+     "250",
+     "250",
+     "칩마운터 매출 기종기준 평균 판매가격"
+    ],
+    [
+     "중속기(백만원)",
+     "120",
+     "120",
+     "120"
+    ]
+   ],
+   "html": "<table aclass=\"NORMAL\" afixtable=\"N\" border=\"1\" width=\"815\">\n<colgroup>\n<col width=\"79\"/>\n<col width=\"156\"/>\n<col width=\"121\"/>\n<col width=\"120\"/>\n<col width=\"120\"/>\n<col width=\"165\"/>\n</colgroup>\n<thead>\n<tr acopy=\"Y\" adelete=\"Y\">\n<th acopycol=\"Y\" adeletecol=\"Y\" align=\"CENTER\" amovecol=\"N\" colspan=\"2\" height=\"30\" valign=\"MIDDLE\" width=\"253\">품 목</th>\n<th acopycol=\"Y\" adeletecol=\"Y\" align=\"CENTER\" amovecol=\"N\" height=\"30\" valign=\"MIDDLE\" width=\"130\">\n<p>2023년 3분기</p>\n</th>\n<th acopycol=\"Y\" adeletecol=\"Y\" align=\"CENTER\" amovecol=\"N\" height=\"30\" valign=\"MIDDLE\" width=\"129\">\n<p>2022년</p>\n</th>\n<th acopycol=\"Y\" adeletecol=\"Y\" align=\"CENTER\" amovecol=\"N\" height=\"30\" valign=\"MIDDLE\" width=\"129\">\n<p>2021년</p>\n</th>\n<th acopycol=\"Y\" adeletecol=\"Y\" align=\"CENTER\" amovecol=\"N\" height=\"30\" valign=\"MIDDLE\" width=\"174\">비고</th>\n</tr>\n</thead>\n<tbody>\n<tr acopy=\"Y\" adelete=\"Y\">\n<td align=\"CENTER\" height=\"90\" rowspan=\"3\" valign=\"MIDDLE\" width=\"88\">감시장비</td>\n<td align=\"CENTER\" height=\"30\" valign=\"MIDDLE\" width=\"165\">CCTV(천원/대)</td>\n<td align=\"RIGHT\" height=\"30\" width=\"130\">178</td>\n<td align=\"RIGHT\" height=\"30\" width=\"129\">152</td>\n<td align=\"RIGHT\" height=\"30\" width=\"129\">158</td>\n<td align=\"CENTER\" height=\"90\" rowspan=\"3\" valign=\"MIDDLE\" width=\"174\">주요 매출 기종 기준국내 평균 판매가격</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\">\n<td align=\"CENTER\" height=\"30\" valign=\"MIDDLE\" width=\"165\">저장장치(천원/대)</td>\n<td align=\"RIGHT\" height=\"30\" width=\"130\">936</td>\n<td align=\"RIGHT\" height=\"30\" width=\"129\">660</td>\n<td align=\"RIGHT\" height=\"30\" width=\"129\">699</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\">\n<td align=\"CENTER\" height=\"30\" valign=\"MIDDLE\" width=\"165\">모니터(천원/대)</td>\n<td align=\"RIGHT\" height=\"30\" width=\"130\">210</td>\n<td align=\"RIGHT\" height=\"30\" width=\"129\">215</td>\n<td align=\"RIGHT\" height=\"30\" width=\"129\">209</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\">\n<td align=\"CENTER\" height=\"60\" rowspan=\"2\" valign=\"MIDDLE\" width=\"88\">칩마운터(C/M)</td>\n<td align=\"CENTER\" height=\"30\" valign=\"MIDDLE\" width=\"165\">고속기(백만원)</td>\n<td align=\"RIGHT\" height=\"30\" width=\"130\">250</td>\n<td align=\"RIGHT\" height=\"30\" width=\"129\">250</td>\n<td align=\"RIGHT\" height=\"30\" width=\"129\">250</td>\n<td align=\"CENTER\" height=\"60\" rowspan=\"2\" valign=\"MIDDLE\" width=\"174\">칩마운터 매출 기종기준 평균 판매가격</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\">\n<td align=\"CENTER\" height=\"30\" valign=\"MIDDLE\" width=\"165\">중속기(백만원)</td>\n<td align=\"RIGHT\" height=\"30\" width=\"130\">120</td>\n<td align=\"RIGHT\" height=\"30\" width=\"129\">120</td>\n<td align=\"RIGHT\" height=\"30\" width=\"129\">120</td>\n</tr>\n</tbody>\n</table>",
+   "footnotes": [
+    "※ 주요 제품은 사업부문의 수익성에 중요한 영향을 미치는 제품 기준입니다.※ 항공 및 방산사업은 보안 관계상, 항공우주사업은 주문자의 요청에 따라 제품의 사양이 결정되어 가격 변동사항을 기재하지 않습니다."
+   ],
+   "digest": "7de6acccb622",
+   "file": "20231114000792.xml"
+  },
+  {
+   "section": [
+    "1. 사업의 개요",
+    "2. 주요 제품 및 서비스",
+    "3. 원재료 및 생산설비"
+   ],
+   "headings": [
+    "3. 원재료 및 생산설비",
+    "가. 주요원재료"
+   ],
+   "context": [
+    "※ 주요 제품은 사업부문의 수익성에 중요한 영향을 미치는 제품 기준입니다.※ 항공 및 방산사업은 보안 관계상, 항공우주사업은 주문자의 요청에 따라 제품의 사양이 결정되어 가격 변동사항을 기재하지 않습니다.",
+    "3. 원재료 및 생산설비",
+    "가. 주요원재료",
+    "(단위 : 백만원)"
+   ],
+   "unit": "(단위 : 백만원)",
+   "topic": "material",
+   "keywords": [
+    "매입액",
+    "매입처",
+    "주요 매입처"
+   ],
+   "keyword_in": "table",
+   "rows": [
+    [
+     "사업부문",
+     "해당 회사",
+     "매입유형",
+     "품 목",
+     "매입액",
+     "주요 매입처",
+     "매입처와특수한관계여부",
+     "공급시장의독과점 정도 및공급의 안정성"
+    ],
+    [
+     "항공",
+     "한화에어로스페이스㈜및 해외생산법인",
+     "원재료 등",
+     "항공기ㆍ발사체 부품, 엔진ㆍ부품 부분품 등",
+     "916,583",
+     "GE, P&W, Rolls-Royce, Boeing Distribution Services, PCC, Carlton Forge Works, Schlosser 등",
+     "해당없음",
+     "특이사항 없음"
+    ],
+    [
+     "방산",
+     "한화에어로스페이스㈜",
+     "재료 및 부품 등",
+     "1,859,934",
+     "-",
+     "해당없음",
+     "특이사항 없음"
+    ],
+    [
+     "한화시스템㈜",
+     "SAR 위성 탑재체KF-X 지형추적컴퓨터전술정보통신체계 기지국경기관총-II 도트사이트수상함 전투체계 외주정비",
+     "905,380",
+     "Thales Alenia Space Italia S.P.A,Elbit Systems Electro Optics Elop (주)쏠리드윈텍, (주)동인광학LIG넥스원(주)",
+     "해당없음",
+     "특이사항 없음"
+    ],
+    [
+     "시큐리티",
+     "한화비전㈜(舊. 한화테크윈㈜) 및 해외생산법인",
+     "CMOS, RAM, 하드디스크 등",
+     "199,588",
+     "레스타일렉트로닉스, 에스에스엠티, Western Digital",
+     "해당없음",
+     "특이사항 없음"
+    ],
+    [
+     "산업용장비",
+     "한화정밀기계㈜ 및 해외생산법인",
+     "모터, 감속기, NC 등",
+     "200,123",
+     "파나소닉, THK 등",
+     "해당없음",
+     "특이사항 없음"
+    ],
+    [
+     "항공우주",
+     "㈜쎄트렉아이",
+     "위성시스템, 전자광학카메라, 위성지상국 등",
+     "54,446",
+     "Nippon Graphite Fiber Corporation, Enpulsion GmbH 등",
+     "해당없음",
+     "특이사항 없음"
+    ]
+   ],
+   "html": "<table aclass=\"NORMAL\" afixtable=\"N\" border=\"1\" width=\"1128\">\n<colgroup>\n<col width=\"79\"/>\n<col width=\"222\"/>\n<col width=\"67\"/>\n<col width=\"201\"/>\n<col width=\"75\"/>\n<col width=\"232\"/>\n<col width=\"79\"/>\n<col width=\"101\"/>\n</colgroup>\n<thead align=\"LEFT\" valign=\"TOP\">\n<tr acopy=\"Y\" adelete=\"Y\">\n<th acopycol=\"Y\" adeletecol=\"Y\" align=\"CENTER\" amovecol=\"N\" height=\"76\" valign=\"MIDDLE\" width=\"88\">사업부문</th>\n<th acopycol=\"Y\" adeletecol=\"Y\" align=\"CENTER\" amovecol=\"N\" height=\"76\" valign=\"MIDDLE\" width=\"231\">해당 회사</th>\n<th acopycol=\"Y\" adeletecol=\"Y\" align=\"CENTER\" amovecol=\"N\" height=\"76\" valign=\"MIDDLE\" width=\"76\">매입유형</th>\n<th acopycol=\"Y\" adeletecol=\"Y\" align=\"CENTER\" amovecol=\"N\" height=\"76\" valign=\"MIDDLE\" width=\"210\">품   목</th>\n<th acopycol=\"Y\" adeletecol=\"Y\" align=\"CENTER\" amovecol=\"N\" height=\"76\" valign=\"MIDDLE\" width=\"84\">매입액</th>\n<th acopycol=\"Y\" adeletecol=\"Y\" align=\"CENTER\" amovecol=\"N\" height=\"76\" valign=\"MIDDLE\" width=\"241\">주요 매입처</th>\n<th acopycol=\"Y\" adeletecol=\"Y\" align=\"CENTER\" amovecol=\"N\" height=\"76\" valign=\"MIDDLE\" width=\"88\">매입처와특수한관계여부</th>\n<th acopycol=\"Y\" adeletecol=\"Y\" align=\"CENTER\" amovecol=\"N\" height=\"76\" valign=\"MIDDLE\" width=\"110\">공급시장의독과점 정도 및공급의 안정성</th>\n</tr>\n</thead>\n<tbody>\n<tr acopy=\"Y\" adelete=\"Y\">\n<td align=\"CENTER\" height=\"76\" valign=\"MIDDLE\" width=\"88\">항공</td>\n<td height=\"76\" valign=\"MIDDLE\" width=\"231\">한화에어로스페이스㈜및 해외생산법인</td>\n<td align=\"CENTER\" height=\"364\" rowspan=\"6\" valign=\"MIDDLE\" width=\"76\">원재료 등</td>\n<td height=\"76\" valign=\"MIDDLE\" width=\"210\">항공기ㆍ발사체 부품, 엔진ㆍ부품 부분품 등</td>\n<td align=\"RIGHT\" height=\"76\" valign=\"MIDDLE\" width=\"84\">916,583</td>\n<td height=\"76\" valign=\"MIDDLE\" width=\"241\">GE, P&amp;W, Rolls-Royce, Boeing Distribution Services, PCC, Carlton Forge Works, Schlosser 등</td>\n<td align=\"CENTER\" height=\"76\" valign=\"MIDDLE\" width=\"88\">해당없음</td>\n<td align=\"CENTER\" height=\"76\" valign=\"MIDDLE\" width=\"110\">특이사항 없음</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\">\n<td align=\"CENTER\" height=\"152\" rowspan=\"2\" valign=\"MIDDLE\" width=\"88\">방산</td>\n<td height=\"30\" valign=\"MIDDLE\" width=\"231\">한화에어로스페이스㈜</td>\n<td height=\"30\" valign=\"MIDDLE\" width=\"210\">재료 및 부품 등</td>\n<td align=\"RIGHT\" height=\"30\" valign=\"MIDDLE\" width=\"84\">1,859,934</td>\n<td align=\"CENTER\" height=\"30\" valign=\"MIDDLE\" width=\"241\">-</td>\n<td align=\"CENTER\" height=\"30\" valign=\"MIDDLE\" width=\"88\">해당없음</td>\n<td align=\"CENTER\" height=\"30\" valign=\"MIDDLE\" width=\"110\">특이사항 없음</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\">\n<td height=\"122\" valign=\"MIDDLE\" width=\"231\">한화시스템㈜</td>\n<td height=\"122\" valign=\"MIDDLE\" width=\"210\">SAR 위성 탑재체KF-X 지형추적컴퓨터전술정보통신체계 기지국경기관총-II 도트사이트수상함 전투체계 외주정비</td>\n<td align=\"RIGHT\" height=\"122\" valign=\"MIDDLE\" width=\"84\">905,380</td>\n<td height=\"122\" valign=\"MIDDLE\" width=\"241\">\n<p>Thales Alenia Space Italia S.P.A,Elbit Systems Electro Optics Elop</p>\n<p>(주)쏠리드윈텍, (주)동인광학LIG넥스원(주)</p>\n</td>\n<td align=\"CENTER\" height=\"122\" valign=\"MIDDLE\" width=\"88\">해당없음</td>\n<td align=\"CENTER\" height=\"122\" valign=\"MIDDLE\" width=\"110\">특이사항 없음</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\">\n<td align=\"CENTER\" height=\"53\" valign=\"MIDDLE\" width=\"88\">시큐리티</td>\n<td height=\"53\" valign=\"MIDDLE\" width=\"231\">한화비전㈜(舊. 한화테크윈㈜) 및 해외생산법인</td>\n<td height=\"53\" valign=\"MIDDLE\" width=\"210\">CMOS, RAM, 하드디스크 등</td>\n<td align=\"RIGHT\" height=\"53\" valign=\"MIDDLE\" width=\"84\">199,588</td>\n<td height=\"53\" valign=\"MIDDLE\" width=\"241\">레스타일렉트로닉스, 에스에스엠티, Western Digital</td>\n<td align=\"CENTER\" height=\"53\" valign=\"MIDDLE\" width=\"88\">해당없음</td>\n<td align=\"CENTER\" height=\"53\" valign=\"MIDDLE\" width=\"110\">특이사항 없음</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\">\n<td align=\"CENTER\" height=\"30\" valign=\"MIDDLE\" width=\"88\">산업용장비</td>\n<td height=\"30\" valign=\"MIDDLE\" width=\"231\">한화정밀기계㈜ 및 해외생산법인</td>\n<td height=\"30\" valign=\"MIDDLE\" width=\"210\">모터, 감속기, NC 등</td>\n<td align=\"RIGHT\" height=\"30\" valign=\"MIDDLE\" width=\"84\">200,123</td>\n<td height=\"30\" valign=\"MIDDLE\" width=\"241\">파나소닉, THK 등</td>\n<td align=\"CENTER\" height=\"30\" valign=\"MIDDLE\" width=\"88\">해당없음</td>\n<td align=\"CENTER\" height=\"30\" valign=\"MIDDLE\" width=\"110\">특이사항 없음</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\">\n<td align=\"CENTER\" height=\"53\" valign=\"MIDDLE\" width=\"88\">항공우주</td>\n<td height=\"53\" valign=\"MIDDLE\" width=\"231\">㈜쎄트렉아이</td>\n<td height=\"53\" valign=\"MIDDLE\" width=\"210\">위성시스템, 전자광학카메라, 위성지상국 등</td>\n<td align=\"RIGHT\" height=\"53\" valign=\"MIDDLE\" width=\"84\">54,446</td>\n<td height=\"53\" valign=\"MIDDLE\" width=\"241\">\n<p>Nippon Graphite Fiber Corporation, Enpulsion GmbH 등</p>\n</td>\n<td align=\"CENTER\" height=\"53\" valign=\"MIDDLE\" width=\"88\">해당없음</td>\n<td align=\"CENTER\" height=\"53\" valign=\"MIDDLE\" width=\"110\">특이사항 없음</td>\n</tr>\n</tbody>\n</table>",
+   "footnotes": [
+    "※ 항공 및 방산사업은 보안 관계상, 항공우주사업은 주문자의 요청에 따라 제품의 사양이 결정되어 표준 원자재의 가격 변동사항 기술이 불가하며, 시큐리티 및 산업용장비사업은 품목 세분화로 주요 원자재 특정이 불가하여 가격변동추이를 기재하지 않습니다.※ 공시대상기간 중 사업부문의 수익성에 중요한 영향을 미치는 원재료의 가격변동은 없습니다."
+   ],
+   "digest": "d8ea4139553c",
+   "file": "20231114000792.xml"
+  },
+  {
+   "section": [
+    "1. 사업의 개요",
+    "2. 주요 제품 및 서비스",
+    "3. 원재료 및 생산설비"
+   ],
+   "headings": [
+    "나. 생산능력, 생산실적 및 가동률"
+   ],
+   "context": [
+    "※ 항공 및 방산사업은 보안 관계상, 항공우주사업은 주문자의 요청에 따라 제품의 사양이 결정되어 표준 원자재의 가격 변동사항 기술이 불가하며, 시큐리티 및 산업용장비사업은 품목 세분화로 주요 원자재 특정이 불가하여 가격변동추이를 기재하지 않습니다.※ 공시대상기간 중 사업부문의 수익성에 중요한 영향을 미치는 원재료의 가격변동은 없습니다.",
+    "나. 생산능력, 생산실적 및 가동률",
+    "(단위 : 백만원)"
+   ],
+   "unit": "(단위 : 백만원)",
+   "topic": "capacity",
+   "keywords": [
+    "가동률",
+    "생산능력",
+    "생산실적"
+   ],
+   "keyword_in": "table",
+   "rows": [
+    [
+     "사업부문",
+     "해당 회사",
+     "사업소",
+     "품 목",
+     "구 분",
+     "2023년 3분기",
+     "2022년",
+     "2021년"
+    ],
+    [
+     "항공",
+     "한화에어로스페이스㈜ 및해외생산법인",
+     "창원1사업장아산사업장베트남 하노이미국 코네티컷",
+     "항공기ㆍ발사체ㆍ각종 엔진 등의 부품 생산 및 정비",
+     "생산능력",
+     "1,564,328",
+     "1,689,112",
+     "1,639,370"
+    ],
+    [
+     "생산실적",
+     "1,252,508",
+     "1,290,113",
+     "1,375,763"
+    ],
+    [
+     "가동률(%)",
+     "80.07",
+     "76.38",
+     "83.92"
+    ],
+    [
+     "방산",
+     "한화에어로스페이스㈜",
+     "창원2, 3사업장, 여수사업장, 대전사업장, 보은사업장, 화순공장",
+     "자주포, 장갑차, 발사대, 탄약/유도무기류 및 항법장치 등",
+     "생산능력",
+     "1,841,774",
+     "1,778,889",
+     "1,262,387"
+    ],
+    [
+     "생산실적",
+     "1,681,481",
+     "1,554,749",
+     "1,119,737"
+    ],
+    [
+     "가동률(%)",
+     "91.30",
+     "87.40",
+     "88.70"
+    ],
+    [
+     "한화시스템㈜",
+     "구미사업장",
+     "전술통신장비, 조준경, 관측장비, 함정 전투체계 등",
+     "생산능력",
+     "848,117",
+     "1,669,484",
+     "1,405,595"
+    ],
+    [
+     "생산실적",
+     "763,010",
+     "1,156,573",
+     "1,023,643"
+    ],
+    [
+     "가동률(%)",
+     "89.97",
+     "69.28",
+     "72.83"
+    ],
+    [
+     "시큐리티",
+     "한화비전㈜(舊. 한화테크윈㈜) 및해외생산법인",
+     "베트남 박닌",
+     "감시장비 등",
+     "생산능력",
+     "286,638",
+     "417,803",
+     "289,708"
+    ],
+    [
+     "생산실적",
+     "231,391",
+     "384,256",
+     "276,147"
+    ],
+    [
+     "가동률(%)",
+     "80.73",
+     "91.97",
+     "95.32"
+    ],
+    [
+     "산업용장비",
+     "한화정밀기계㈜ 및 해외생산법인",
+     "정밀기계사업장공작기계사업장중국 장가항",
+     "칩마운터, 공작기계 등",
+     "생산능력",
+     "302,862",
+     "594,134",
+     "565,556"
+    ],
+    [
+     "생산실적",
+     "236,894",
+     "395,144",
+     "507,916"
+    ],
+    [
+     "가동률(%)",
+     "78.22",
+     "66.51",
+     "89.81"
+    ],
+    [
+     "항공우주",
+     "㈜쎄트렉아이",
+     "대전사업장",
+     "위성시스템, 전자광학카메라,위성지상국 등",
+     "생산능력",
+     "84,745",
+     "78,158",
+     "65,260"
+    ],
+    [
+     "생산실적",
+     "81,116",
+     "78,090",
+     "64,548"
+    ],
+    [
+     "가동률(%)",
+     "95.72",
+     "99.91",
+     "98.91"
+    ]
+   ],
+   "html": "<table aclass=\"NORMAL\" afixtable=\"N\" border=\"1\" width=\"1128\">\n<colgroup>\n<col width=\"78\"/>\n<col width=\"227\"/>\n<col width=\"165\"/>\n<col width=\"206\"/>\n<col width=\"71\"/>\n<col width=\"103\"/>\n<col width=\"103\"/>\n<col width=\"103\"/>\n</colgroup>\n<thead align=\"LEFT\" valign=\"TOP\">\n<tr acopy=\"Y\" adelete=\"Y\">\n<th acopycol=\"Y\" adeletecol=\"Y\" align=\"CENTER\" amovecol=\"N\" height=\"30\" valign=\"MIDDLE\" width=\"87\">사업부문</th>\n<th acopycol=\"Y\" adeletecol=\"Y\" align=\"CENTER\" amovecol=\"N\" height=\"30\" valign=\"MIDDLE\" width=\"236\">해당 회사</th>\n<th acopycol=\"Y\" adeletecol=\"Y\" align=\"CENTER\" amovecol=\"N\" height=\"30\" valign=\"MIDDLE\" width=\"174\">사업소</th>\n<th acopycol=\"Y\" adeletecol=\"Y\" align=\"CENTER\" amovecol=\"N\" height=\"30\" valign=\"MIDDLE\" width=\"215\">품 목</th>\n<th acopycol=\"Y\" adeletecol=\"Y\" align=\"CENTER\" amovecol=\"N\" height=\"30\" valign=\"MIDDLE\" width=\"80\">구 분</th>\n<th acopycol=\"Y\" adeletecol=\"Y\" align=\"CENTER\" amovecol=\"N\" height=\"30\" valign=\"MIDDLE\" width=\"112\">2023년 3분기</th>\n<th acopycol=\"Y\" adeletecol=\"Y\" align=\"CENTER\" amovecol=\"N\" height=\"30\" valign=\"MIDDLE\" width=\"112\">2022년</th>\n<th acopycol=\"Y\" adeletecol=\"Y\" align=\"CENTER\" amovecol=\"N\" height=\"30\" valign=\"MIDDLE\" width=\"112\">2021년</th>\n</tr>\n</thead>\n<tbody>\n<tr acopy=\"Y\" adelete=\"Y\">\n<td align=\"CENTER\" height=\"99\" rowspan=\"3\" valign=\"MIDDLE\" width=\"87\">항공</td>\n<td height=\"99\" rowspan=\"3\" valign=\"MIDDLE\" width=\"236\">한화에어로스페이스㈜ 및해외생산법인</td>\n<td align=\"CENTER\" height=\"99\" rowspan=\"3\" valign=\"MIDDLE\" width=\"174\">창원1사업장아산사업장베트남 하노이미국 코네티컷</td>\n<td height=\"99\" rowspan=\"3\" valign=\"MIDDLE\" width=\"215\">항공기ㆍ발사체ㆍ각종 엔진 등의 부품 생산 및 정비</td>\n<td align=\"CENTER\" height=\"30\" valign=\"MIDDLE\" width=\"80\">생산능력</td>\n<td align=\"RIGHT\" height=\"30\" valign=\"MIDDLE\" width=\"112\">1,564,328</td>\n<td align=\"RIGHT\" height=\"30\" valign=\"MIDDLE\" width=\"112\">1,689,112</td>\n<td align=\"RIGHT\" height=\"30\" valign=\"MIDDLE\" width=\"112\">1,639,370</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\">\n<td align=\"CENTER\" height=\"30\" valign=\"MIDDLE\" width=\"80\">생산실적</td>\n<td align=\"RIGHT\" height=\"30\" valign=\"MIDDLE\" width=\"112\">1,252,508</td>\n<td align=\"RIGHT\" height=\"30\" valign=\"MIDDLE\" width=\"112\">1,290,113</td>\n<td align=\"RIGHT\" height=\"30\" valign=\"MIDDLE\" width=\"112\">1,375,763</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\">\n<td align=\"CENTER\" height=\"39\" valign=\"MIDDLE\" width=\"80\">가동률(%)</td>\n<td align=\"RIGHT\" height=\"39\" valign=\"MIDDLE\" width=\"112\">80.07</td>\n<td align=\"RIGHT\" height=\"39\" valign=\"MIDDLE\" width=\"112\">76.38</td>\n<td align=\"RIGHT\" height=\"39\" valign=\"MIDDLE\" width=\"112\">83.92</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\">\n<td align=\"CENTER\" height=\"180\" rowspan=\"6\" valign=\"MIDDLE\" width=\"87\">방산</td>\n<td height=\"90\" rowspan=\"3\" valign=\"MIDDLE\" width=\"236\">한화에어로스페이스㈜</td>\n<td align=\"CENTER\" height=\"90\" rowspan=\"3\" valign=\"MIDDLE\" width=\"174\">창원2, 3사업장, 여수사업장, 대전사업장, 보은사업장, 화순공장</td>\n<td height=\"90\" rowspan=\"3\" valign=\"MIDDLE\" width=\"215\">자주포, 장갑차, 발사대, 탄약/유도무기류 및 항법장치 등</td>\n<td align=\"CENTER\" height=\"30\" valign=\"MIDDLE\" width=\"80\">생산능력</td>\n<td align=\"RIGHT\" height=\"30\" valign=\"MIDDLE\" width=\"112\">1,841,774</td>\n<td align=\"RIGHT\" height=\"30\" valign=\"MIDDLE\" width=\"112\">1,778,889</td>\n<td align=\"RIGHT\" height=\"30\" valign=\"MIDDLE\" width=\"112\">1,262,387</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\">\n<td align=\"CENTER\" height=\"30\" valign=\"MIDDLE\" width=\"80\">생산실적</td>\n<td align=\"RIGHT\" height=\"30\" valign=\"MIDDLE\" width=\"112\">1,681,481</td>\n<td align=\"RIGHT\" height=\"30\" valign=\"MIDDLE\" width=\"112\">1,554,749</td>\n<td align=\"RIGHT\" height=\"30\" valign=\"MIDDLE\" width=\"112\">1,119,737</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\">\n<td align=\"CENTER\" height=\"30\" valign=\"MIDDLE\" width=\"80\">가동률(%)</td>\n<td align=\"RIGHT\" height=\"30\" valign=\"MIDDLE\" width=\"112\">91.30</td>\n<td align=\"RIGHT\" height=\"30\" valign=\"MIDDLE\" width=\"112\">87.40</td>\n<td align=\"RIGHT\" height=\"30\" valign=\"MIDDLE\" width=\"112\">88.70</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\">\n<td height=\"90\" rowspan=\"3\" valign=\"MIDDLE\" width=\"236\">한화시스템㈜</td>\n<td align=\"CENTER\" height=\"90\" rowspan=\"3\" valign=\"MIDDLE\" width=\"174\">구미사업장</td>\n<td height=\"90\" rowspan=\"3\" valign=\"MIDDLE\" width=\"215\">전술통신장비, 조준경, 관측장비, 함정 전투체계 등</td>\n<td align=\"CENTER\" height=\"30\" valign=\"MIDDLE\" width=\"80\">생산능력</td>\n<td align=\"RIGHT\" height=\"30\" valign=\"MIDDLE\" width=\"112\">848,117</td>\n<td align=\"RIGHT\" height=\"30\" valign=\"MIDDLE\" width=\"112\">1,669,484</td>\n<td align=\"RIGHT\" height=\"30\" valign=\"MIDDLE\" width=\"112\">1,405,595</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\">\n<td align=\"CENTER\" height=\"30\" valign=\"MIDDLE\" width=\"80\">생산실적</td>\n<td align=\"RIGHT\" height=\"30\" valign=\"MIDDLE\" width=\"112\">763,010</td>\n<td align=\"RIGHT\" height=\"30\" valign=\"MIDDLE\" width=\"112\">1,156,573</td>\n<td align=\"RIGHT\" height=\"30\" valign=\"MIDDLE\" width=\"112\">1,023,643</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\">\n<td align=\"CENTER\" height=\"30\" valign=\"MIDDLE\" width=\"80\">가동률(%)</td>\n<td align=\"RIGHT\" height=\"30\" valign=\"MIDDLE\" width=\"112\">89.97</td>\n<td align=\"RIGHT\" height=\"30\" valign=\"MIDDLE\" width=\"112\">69.28</td>\n<td align=\"RIGHT\" height=\"30\" valign=\"MIDDLE\" width=\"112\">72.83</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\">\n<td align=\"CENTER\" height=\"90\" rowspan=\"3\" valign=\"MIDDLE\" width=\"87\">시큐리티</td>\n<td height=\"90\" rowspan=\"3\" valign=\"MIDDLE\" width=\"236\">한화비전㈜(舊. 한화테크윈㈜) 및해외생산법인</td>\n<td align=\"CENTER\" height=\"90\" rowspan=\"3\" valign=\"MIDDLE\" width=\"174\">베트남 박닌</td>\n<td height=\"90\" rowspan=\"3\" valign=\"MIDDLE\" width=\"215\">감시장비 등</td>\n<td align=\"CENTER\" height=\"30\" valign=\"MIDDLE\" width=\"80\">생산능력</td>\n<td align=\"RIGHT\" height=\"30\" valign=\"MIDDLE\" width=\"112\">286,638</td>\n<td align=\"RIGHT\" height=\"30\" valign=\"MIDDLE\" width=\"112\">417,803</td>\n<td align=\"RIGHT\" height=\"30\" valign=\"MIDDLE\" width=\"112\">289,708</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\">\n<td align=\"CENTER\" height=\"30\" valign=\"MIDDLE\" width=\"80\">생산실적</td>\n<td align=\"RIGHT\" height=\"30\" valign=\"MIDDLE\" width=\"112\">231,391</td>\n<td align=\"RIGHT\" height=\"30\" valign=\"MIDDLE\" width=\"112\">384,256</td>\n<td align=\"RIGHT\" height=\"30\" valign=\"MIDDLE\" width=\"112\">276,147</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\">\n<td align=\"CENTER\" height=\"30\" valign=\"MIDDLE\" width=\"80\">가동률(%)</td>\n<td align=\"RIGHT\" height=\"30\" valign=\"MIDDLE\" width=\"112\">80.73</td>\n<td align=\"RIGHT\" height=\"30\" valign=\"MIDDLE\" width=\"112\">91.97</td>\n<td align=\"RIGHT\" height=\"30\" valign=\"MIDDLE\" width=\"112\">95.32</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\">\n<td align=\"CENTER\" height=\"90\" rowspan=\"3\" valign=\"MIDDLE\" width=\"87\">산업용장비</td>\n<td height=\"90\" rowspan=\"3\" valign=\"MIDDLE\" width=\"236\">한화정밀기계㈜ 및 해외생산법인</td>\n<td align=\"CENTER\" height=\"90\" rowspan=\"3\" valign=\"MIDDLE\" width=\"174\">정밀기계사업장공작기계사업장중국 장가항</td>\n<td height=\"90\" rowspan=\"3\" valign=\"MIDDLE\" width=\"215\">칩마운터, 공작기계 등</td>\n<td align=\"CENTER\" height=\"30\" valign=\"MIDDLE\" width=\"80\">생산능력</td>\n<td align=\"RIGHT\" height=\"30\" valign=\"MIDDLE\" width=\"112\">302,862</td>\n<td align=\"RIGHT\" height=\"30\" valign=\"MIDDLE\" width=\"112\">594,134</td>\n<td align=\"RIGHT\" height=\"30\" valign=\"MIDDLE\" width=\"112\">565,556</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\">\n<td align=\"CENTER\" height=\"30\" valign=\"MIDDLE\" width=\"80\">생산실적</td>\n<td align=\"RIGHT\" height=\"30\" valign=\"MIDDLE\" width=\"112\">236,894</td>\n<td align=\"RIGHT\" height=\"30\" valign=\"MIDDLE\" width=\"112\">395,144</td>\n<td align=\"RIGHT\" height=\"30\" valign=\"MIDDLE\" width=\"112\">507,916</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\">\n<td align=\"CENTER\" height=\"30\" valign=\"MIDDLE\" width=\"80\">가동률(%)</td>\n<td align=\"RIGHT\" height=\"30\" valign=\"MIDDLE\" width=\"112\">78.22</td>\n<td align=\"RIGHT\" height=\"30\" valign=\"MIDDLE\" width=\"112\">66.51</td>\n<td align=\"RIGHT\" height=\"30\" valign=\"MIDDLE\" width=\"112\">89.81</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\">\n<td align=\"CENTER\" height=\"90\" rowspan=\"3\" valign=\"MIDDLE\" width=\"87\">항공우주</td>\n<td height=\"90\" rowspan=\"3\" valign=\"MIDDLE\" width=\"236\">㈜쎄트렉아이</td>\n<td align=\"CENTER\" height=\"90\" rowspan=\"3\" valign=\"MIDDLE\" width=\"174\">대전사업장</td>\n<td height=\"90\" rowspan=\"3\" valign=\"MIDDLE\" width=\"215\">위성시스템, 전자광학카메라,위성지상국 등</td>\n<td align=\"CENTER\" height=\"30\" valign=\"MIDDLE\" width=\"80\">생산능력</td>\n<td align=\"RIGHT\" height=\"30\" valign=\"MIDDLE\" width=\"112\">84,745</td>\n<td align=\"RIGHT\" height=\"30\" valign=\"MIDDLE\" width=\"112\">78,158</td>\n<td align=\"RIGHT\" height=\"30\" valign=\"MIDDLE\" width=\"112\">65,260</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\">\n<td align=\"CENTER\" height=\"30\" valign=\"MIDDLE\" width=\"80\">생산실적</td>\n<td align=\"RIGHT\" height=\"30\" valign=\"MIDDLE\" width=\"112\">81,116</td>\n<td align=\"RIGHT\" height=\"30\" valign=\"MIDDLE\" width=\"112\">78,090</td>\n<td align=\"RIGHT\" height=\"30\" valign=\"MIDDLE\" width=\"112\">64,548</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\">\n<td align=\"CENTER\" height=\"30\" valign=\"MIDDLE\" width=\"80\">가동률(%)</td>\n<td align=\"RIGHT\" height=\"30\" valign=\"MIDDLE\" width=\"112\">95.72</td>\n<td align=\"RIGHT\" height=\"30\" valign=\"MIDDLE\" width=\"112\">99.91</td>\n<td align=\"RIGHT\" height=\"30\" valign=\"MIDDLE\" width=\"112\">98.91</td>\n</tr>\n</tbody>\n</table>",
+   "footnotes": [
+    "※ 항공 및 방산사업은 보안 관계상, 시큐리티, 산업용장비사업은 정밀기기의 다품종 생산방식, 항공우주사업은 수주에 따른 주문생산방식이어서 구체적인 생산능력 산출 및 수량 표시가 불가능하므로 생산설비의 현황(생산 라인의 수, 인력 규모, 평균가동시간, 생산방식 등)을 종합적으로 고려하여 금액기준으로 기재하였습니다.※ 항공, 방산사업은 수주에 의한 납기일정 및 사업 내용에 따라 생산방식이 유동적이고 시큐리티, 산업용장비사업은 다품종 대량 생산, 항공우주사업은 수주에 따른 주문생산방식 등 생산방식이 다양하여 가동시간에 근거한 정확한 가동률 계산이 곤란하므로 금액기준으로 생산능력과 생산실적을 대비하여 가동률을 계산하였습니다."
+   ],
+   "digest": "c1271f04692e",
+   "file": "20231114000792.xml"
+  }
+ ],
+ "rejected": [
+  {
+   "section": [
+    "1. 사업의 개요",
+    "2. 주요 제품 및 서비스",
+    "3. 원재료 및 생산설비"
+   ],
+   "headings": [
+    "- 생산능력 산출근거",
+    "[한화에어로스페이스㈜ 항공부문 및 항공엔진 해외생산법인]",
+    "[한화에어로스페이스㈜ 방산부문, 한화시스템㈜ 방산부문]",
+    "[한화비전㈜(舊. 한화테크윈㈜) 및 시큐리티 해외생산법인]",
+    "[한화정밀기계㈜ 및 산업용장비 해외생산법인]",
+    "[",
+    "㈜",
+    "쎄트렉아이]",
+    "다. 생산설비의 현황 등",
+    "(1) 주요 사업장 현황"
+   ],
+   "context": [
+    "※ 항공 및 방산사업은 보안 관계상, 시큐리티, 산업용장비사업은 정밀기기의 다품종 생산방식, 항공우주사업은 수주에 따른 주문생산방식이어서 구체적인 생산능력 산출 및 수량 표시가 불가능하므로 생산설비의 현황(생산 라인의 수, 인력 규모, 평균가동시간, 생산방식 등)을 종합적으로 고려하여 금액기준으로 기재하였습니다.※ 항공, 방산사업은 수주에 의한 납기일정 및 사업 내용에 따라 생산방식이 유동적이고 시큐리티, 산업용장비사업은 다품종 대량 생산, 항공우주사업은 수주에 따른 주문생산방식 등 생산방식이 다양하여 가동시간에 근거한 정확한 가동률 계산이 곤란하므로 금액기준으로 생산능력과 생산실적을 대비하여 가동률을 계산하였습니다.",
+    "- 생산능력 산출근거",
+    "[한화에어로스페이스㈜ 항공부문 및 항공엔진 해외생산법인]",
+    "\"제조원가(생산실적) / 효율(작업공수효율, 설비종합효율)\" 로 최대 생산 가능금액을 산출하였습니다.",
+    "[한화에어로스페이스㈜ 방산부문, 한화시스템㈜ 방산부문]",
+    "\"시간당 생산실적×일일 가동가능시간×연간가동가능일수\"로 정상가동률 기준으로 계산된 최대 생산가능금액입니다.",
+    "[한화비전㈜(舊. 한화테크윈㈜) 및 시큐리티 해외생산법인]",
+    "사업부문별 정상가동을 기준으로 \"각 사업장별 생산라인의 수 ×시간당 생산실적 × 일일 가동가능시간×연간가동가능일수\" 로 계산된 최대 생산가능금액입니다.",
+    "[한화정밀기계㈜ 및 산업용장비 해외생산법인]",
+    "\"완제품 생산 가능수량×평균판가\" 기준으로 효율대비 생산실적으로 계산된 최대 생산가능금액입니다.",
+    "[",
+    "㈜",
+    "쎄트렉아이]",
+    "항공우주사업은 수주에 따른 주문생산방식이므로, 연구기술직 인원의 최대 작업시간(연구기술직 월평균인원수×표준 총 작업시간)을 설정하여 생산능력(최대 생산 가능금액)을 산출합니다.",
+    "다. 생산설비의 현황 등",
+    "(1) 주요 사업장 현황"
+   ],
+   "unit": "",
+   "topic": "",
+   "keywords": [
+    "가동률",
+    "생산능력",
+    "생산실적"
+   ],
+   "keyword_in": "",
+   "rows": [
+    [
+     "지역",
+     "해당회사",
+     "사업장",
+     "소재지"
+    ],
+    [
+     "국내(4개 법인)",
+     "한화에어로스페이스㈜",
+     "창원1사업장",
+     "경상남도 창원시 성산구 창원대로 1204"
+    ],
+    [
+     "아산사업장",
+     "충청남도 아산시 둔포면 아산밸리남로 144"
+    ]
+   ],
+   "html": "",
+   "footnotes": [],
+   "digest": "7144353336df",
+   "why": "셀 전체가 지표명이 아니거나 멀리 있는 문장에만 키워드",
+   "file": "20231114000792.xml"
+  },
+  {
+   "section": [
+    "1. 사업의 개요",
+    "2. 주요 제품 및 서비스",
+    "3. 원재료 및 생산설비"
+   ],
+   "headings": [
+    "라. 설비 투자 현황 및 계획"
+   ],
+   "context": [
+    "(주1) 본계정대체 및 환율변동효과 등을 포함하고 있습니다.",
+    "라. 설비 투자 현황 및 계획",
+    "당분기 말 현재 진행중이거나 향후 계획한 투자 내용은 다음과 같습니다.",
+    "(단위 : 백만원)"
+   ],
+   "unit": "(단위 : 백만원)",
+   "topic": "",
+   "keywords": [
+    "생산능력"
+   ],
+   "keyword_in": "",
+   "rows": [
+    [
+     "회사",
+     "투자명",
+     "투자목적",
+     "내용",
+     "기간",
+     "총 소요자금",
+     "기 지출금액",
+     "향후 기대효과"
+    ],
+    [
+     "한화에어로스페이스㈜",
+     "PW 엔진부품 제조설비 투자",
+     "생산설비 증설",
+     "엔진 제조설비 증설",
+     "2019년 6월 ~ 2024년 12월",
+     "25,360",
+     "24,706",
+     "생산능력 향상"
+    ],
+    [
+     "GE 엔진부품 제조설비 투자",
+     "생산설비 증설",
+     "엔진 제조설비 증설",
+     "2019년 10월 ~ 2023년 12월",
+     "10,250",
+     "4,395",
+     "생산능력 향상"
+    ]
+   ],
+   "html": "",
+   "footnotes": [],
+   "digest": "7eace759a381",
+   "why": "셀 전체가 지표명이 아니거나 멀리 있는 문장에만 키워드",
+   "file": "20231114000792.xml"
+  }
+ ]
+}

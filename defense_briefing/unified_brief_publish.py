@@ -62,12 +62,13 @@ def write_index() -> None:
 {cbp.PAGE_CSS}
 .bar{{display:flex;gap:10px;align-items:center;max-width:860px;margin:0 auto 14px;flex-wrap:wrap}}
 .bar h1{{font-size:17px;margin:0;flex:1;min-width:200px}}
-select,button{{background:#161d29;color:#d8dee9;border:1px solid #2c3a52;border-radius:8px;
+select,button{{background:var(--gs-panel,#1c222c);color:var(--gs-ink,#c9d1dc);border:1px solid var(--gs-line-strong,#2e3a4e);border-radius:8px;
   padding:7px 12px;font-size:13.5px;cursor:pointer}}
-.bar a.trk{{margin-left:auto;flex:0 0 auto;background:#161d29;color:#e8b756;border:1px solid #4a3f24;
+.bar a.trk{{margin-left:auto;flex:0 0 auto;background:var(--gs-panel,#1c222c);color:var(--gs-accent2,#e8b756);border:1px solid var(--gs-line-strong,#2e3a4e);
   border-radius:8px;padding:6px 10px;font-size:12px;font-weight:600;text-decoration:none;white-space:nowrap}}
-.bar a.trk:hover{{border-color:#e8b756}}
-iframe{{width:100%;height:calc(100vh - 110px);border:1px solid #223046;border-radius:10px;background:#0d1117}}
+.bar a.trk:hover{{border-color:var(--gs-accent2,#e8b756)}}
+.bar a.trk+a.trk{{margin-left:0}}
+iframe{{width:100%;height:calc(100vh - 110px);border:1px solid var(--gs-line,#232e3f);border-radius:10px;background:var(--gs-bg,#161a21)}}
 </style></head><body>
 <div class="bar">
   <h1>🛡️ 글로벌 방산 브리핑 (통합)</h1>
@@ -76,6 +77,8 @@ iframe{{width:100%;height:calc(100vh - 110px);border:1px solid #223046;border-ra
   <button id="next" title="다음 날짜">▶</button>
   <a class="trk" href="defense_tracker.html" target="_blank" rel="noopener"
      title="입찰 중 프로젝트 · 국가별 예산·법안">📌 입찰·예산 트래커</a>
+  <a class="trk" href="naval_tracker.html" target="_blank" rel="noopener"
+     title="각국 해군 수상함·잠수함 수주전 추적">⚓ 수상함·잠수함 입찰</a>
 </div>
 <iframe id="frame" title="브리핑"></iframe>
 <script>
@@ -87,7 +90,7 @@ sel.onchange=load;
 document.getElementById('prev').onclick=()=>{{if(sel.selectedIndex<DATES.length-1){{sel.selectedIndex++;load()}}}};
 document.getElementById('next').onclick=()=>{{if(sel.selectedIndex>0){{sel.selectedIndex--;load()}}}};
 if(DATES.length)load();
-else fr.srcdoc='<body style="background:#0d1117;color:#8b96a8;font-family:sans-serif;display:flex;align-items:center;justify-content:center;height:100vh;margin:0">아직 통합본이 없습니다 — 매일 아침 3판 발행 후 자동 생성됩니다.</body>';
+else fr.srcdoc='<body style="background:var(--gs-bg,#161a21);color:var(--gs-muted,#8e98a8);font-family:sans-serif;display:flex;align-items:center;justify-content:center;height:100vh;margin:0">아직 통합본이 없습니다 — 매일 아침 3판 발행 후 자동 생성됩니다.</body>';
 </script></body></html>"""
     INDEX_PAGE.write_text(index, encoding="utf-8")
     print(f"[인덱스] defense_unified_report.html 갱신 (누적 {len(dates)}일)")
