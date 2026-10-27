@@ -678,8 +678,13 @@ def run(dry_run: bool = False, probe: bool = False) -> None:
     from render_page import build_page
 
     build_page(store)
-    if new_entries or fresh_att or fresh_idx:
-        notify(new_entries, fresh_att, fresh_idx)
+    # 발간계획 레이더 텔레는 확신 건만 — 폴백의 needs_review("주제 미상·시점 미정")는
+    # 대시보드 확인필요 칸에만 남긴다(10/27 '퇴근' 메시지 알림 소음).
+    idx_alert = [e for e in fresh_idx if not e.get("needs_review")]
+    if fresh_idx and not idx_alert:
+        print(f"발간계획 확인필요 {len(fresh_idx)}건 — 대시보드만(텔레 생략)")
+    if new_entries or fresh_att or idx_alert:
+        notify(new_entries, fresh_att, idx_alert)
 
 
 def run_indepth_backfill(days: int = 92) -> None:
