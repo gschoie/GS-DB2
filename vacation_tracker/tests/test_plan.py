@@ -67,14 +67,25 @@ class ApplyTest(unittest.TestCase):
         self.assertFalse(e_dec.get("deleted"))
         self.assertEqual(e_dec["kind"], "연차")  # 오전반차 → 연차로 갱신
 
-    def test_telegram_duplicate_skipped(self):
-        # 텔레그램으로 이미 잡힌 같은 이름·기간은 계획서가 중복 칩을 안 만든다.
+    def test_telegram_duplicate_annotated(self):
+        # 텔레그램으로 이미 잡힌 같은 이름·기간은 계획서가 중복 칩을 안 만들되,
+        # 조용히 넘기지 않고 그 항목 메모에 '연차계획서에도 있음'을 단다(10/28 요청).
         store = {"entries": {"5:1": {"name": "이다연", "kind": "연차",
                                      "start": "2026-11-24", "end": "2026-11-25",
-                                     "engine": "gemini"}}}
+                                     "engine": "gemini", "note": "구두 확인"}}}
         self._run(store, {"name": "이다연", "rows": ROWS})
         self.assertNotIn("plan:이다연:2026-11-24", store["entries"])
         self.assertIn("plan:이다연:2026-07-27", store["entries"])
+        note = store["entries"]["5:1"]["note"]
+        self.assertIn(vacation_bot.PLAN_ALSO_MARK, note)
+        self.assertIn("구두 확인", note)  # 기존 메모는 지우지 않는다
+        # 재등록해도 표시는 한 번만.
+        self._run(store, {"name": "이다연", "rows": ROWS})
+        self.assertEqual(store["entries"]["5:1"]["note"].count(vacation_bot.PLAN_ALSO_MARK), 1)
+        # 새 계획에서 그 날짜가 빠지면 표시도 걷힌다(낡은 표시 잔류 방지).
+        rows2 = [r for r in ROWS if not r["date"].startswith("2026.11")]
+        self._run(store, {"name": "이다연", "rows": rows2})
+        self.assertEqual(store["entries"]["5:1"]["note"], "구두 확인")
 
     def test_missing_name_rejected(self):
         with self.assertRaises(SystemExit):
