@@ -10,7 +10,7 @@ from datetime import timezone
 
 from article_metadata import TITLE_PLACEHOLDERS, enrich_news_item
 from db import connect, initialize
-from parser import classify, extract_companies, parse_news_items, parse_report
+from parser import classify, extract_companies, is_own_post, parse_news_items, parse_report
 
 REPORT_INSERT_SQL = """INSERT INTO reports(message_id,title,report_type,weekly_folder,company_name,securities_firm,analyst,opinion,target_price,
    previous_target_price,target_change,original_url,confidence,needs_review)
@@ -41,6 +41,25 @@ async def find_channel(client, selector: str):
         if dialog.name.strip().casefold() == selector.strip().casefold():
             return dialog.entity
     raise RuntimeError(f"공개 채널 주소 또는 대화 목록에서 채널을 찾지 못했습니다: {selector}")
+
+
+def purge_own_posts(conn) -> int:
+    """이미 아카이브에 들어온 내 수급 브리핑을 지운다.
+
+    classify 만 고치면 **수집 창 안에서 다시 읽히는 글만** 정리된다 —
+    증분 수집은 최근 며칠만 보므로 그 전에 들어온 것은 남는다. 여기서 본문을
+    보고 쓸어낸다(멱등, 매 수집마다 돈다).
+    """
+    rows = [r[0] for r in conn.execute(
+        "SELECT m.id FROM telegram_messages m JOIN news_articles n ON n.message_id=m.id "
+        "WHERE m.text IS NOT NULL GROUP BY m.id")]
+    targets = [mid for mid in rows if is_own_post(
+        conn.execute("SELECT text FROM telegram_messages WHERE id=?", (mid,)).fetchone()[0])]
+    for mid in targets:
+        conn.execute("DELETE FROM news_companies WHERE news_id IN "
+                     "(SELECT id FROM news_articles WHERE message_id=?)", (mid,))
+        conn.execute("DELETE FROM news_articles WHERE message_id=?", (mid,))
+    return len(targets)
 
 
 def store_message(conn, channel_id: str, message) -> bool:
@@ -147,8 +166,10 @@ async def sync(limit: int | None) -> None:
                 if message.message or message.media:
                     store_message(conn, channel_id, message)
                     count += 1
+            removed = purge_own_posts(conn)
             conn.commit()
-        print(f"동기화 완료: {count:,}개 메시지 확인")
+        print(f"동기화 완료: {count:,}개 메시지 확인"
+              + (f" · 내 수급 브리핑 {removed}건 아카이브에서 제외" if removed else ""))
 
 
 if __name__ == "__main__":
