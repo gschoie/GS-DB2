@@ -17,7 +17,7 @@ from urllib.parse import urlparse
 from urllib.request import Request, urlopen
 
 from db import connect, initialize
-from telegram_importer import load_dotenv, store_message
+from telegram_importer import load_dotenv, purge_own_posts, store_message
 
 
 POST_RE = re.compile(r'data-post="([^"/]+)/([0-9]+)"')
@@ -158,7 +158,13 @@ def sync(channel_value: str, pages: int, since_days: int = 14) -> None:
                 break
             before = oldest_id
             time.sleep(0.4)
-    print(f"@{channel} 공개채널 동기화 완료: {total:,}개 메시지")
+        # 내가 올린 수급 브리핑은 아카이브에서 뺀다. store_message 가 classify 로
+        # 걸러내지만 그건 **이번 창에서 다시 읽힌 글**만 정리한다 — 창 밖(옛 글)은
+        # 남으므로 DB 전체를 한 번 쓸어낸다(멱등, 매 수집마다).
+        removed = purge_own_posts(conn)
+        conn.commit()
+    print(f"@{channel} 공개채널 동기화 완료: {total:,}개 메시지"
+          + (f" · 내 수급 브리핑 {removed}건 아카이브에서 제외" if removed else ""))
 
 
 if __name__ == "__main__":
