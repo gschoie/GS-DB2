@@ -758,6 +758,90 @@ def _apply_op(op: str, body: dict) -> None:
     build_page(store)
 
 
+PLAN_KIND = {"종일": "연차", "오전": "오전반차", "오후": "오후반차"}
+
+
+def _plan_spans(rows: list[dict]) -> list[dict]:
+    """계획서 행(날짜·종일/오전/오후) → 기간 목록. 연속한 종일은 한 기간으로 묶는다."""
+    from datetime import date as _date
+
+    parsed = []
+    for row in rows:
+        raw_date = str(row.get("date") or "").strip().replace(".", "-").replace("/", "-")
+        try:
+            day = _date.fromisoformat(raw_date)
+        except ValueError:
+            continue
+        kind = PLAN_KIND.get(str(row.get("kind") or "").strip(), "연차")
+        parsed.append((day, kind))
+    parsed.sort()
+    spans: list[dict] = []
+    for day, kind in parsed:
+        last = spans[-1] if spans else None
+        if (last and kind == "연차" and last["kind"] == "연차"
+                and (day - _date.fromisoformat(last["end"])).days == 1):
+            last["end"] = day.isoformat()
+        else:
+            spans.append({"start": day.isoformat(), "end": day.isoformat(), "kind": kind})
+    return spans
+
+
+def apply_plan(raw: str) -> None:
+    """연차계획서 이미지에서 추출된 계획(이름 + 날짜·종류 행들)을 entries.json에 반영.
+
+    같은 사람 계획서를 다시 올리면 **통째로 교체**된다: uid는 `plan:이름:시작일`이라
+    같은 날짜는 덮어쓰고, 새 계획에서 빠진 날짜는 묘비(deleted)로 — 수시로 바뀌는
+    계획서의 재등록 요구. 텔레그램 수집분과는 같은 달력에 합쳐지되, 같은 이름·기간의
+    비-계획 항목이 이미 있으면 그 날짜는 건너뛴다(중복 칩 방지).
+    """
+    try:
+        body = json.loads(raw or "{}")
+    except json.JSONDecodeError as exc:
+        raise SystemExit(f"entry가 JSON이 아닙니다: {exc}")
+    name = str(body.get("name") or "").strip()
+    if not name:
+        raise SystemExit("name(신청자 이름)이 비어 있습니다 — 이미지에서 못 읽으면 폼에서 지정")
+    spans = _plan_spans(body.get("rows") or [])
+    if not spans:
+        raise SystemExit("날짜 행을 하나도 읽지 못했습니다")
+
+    store = load_json(ENTRIES_PATH, {"entries": {}})
+    entries = store["entries"]
+    prefix = f"plan:{name}:"
+    now = datetime.now(KST).isoformat(timespec="minutes")
+    today = datetime.now(KST).strftime("%Y-%m-%d")
+    desired = {f"{prefix}{span['start']}": span for span in spans}
+
+    removed = 0
+    for uid, entry in entries.items():
+        if uid.startswith(prefix) and uid not in desired and not entry.get("deleted"):
+            entry["deleted"] = True
+            removed += 1
+    added = skipped = 0
+    for uid, span in desired.items():
+        dup = any(not v.get("deleted") and not k.startswith("plan:")
+                  and v.get("name") == name and v.get("start") == span["start"]
+                  and (v.get("end") or v.get("start")) == span["end"]
+                  for k, v in entries.items())
+        if dup and uid not in entries:
+            skipped += 1
+            continue
+        entries[uid] = {
+            "name": name, "kind": span["kind"],
+            "start": span["start"], "end": span["end"],
+            "note": "연차계획서", "text": f"연차계획서 이미지 등록 ({today})",
+            "needs_review": False, "engine": "plan", "deleted": False,
+            "msg_date": now, "detected_at": now,
+        }
+        added += 1
+    save_json(ENTRIES_PATH, store)
+    print(f"연차계획서 반영: {name} — 기간 {added}건 등록/갱신, {removed}건 제거(묘비), "
+          f"{skipped}건은 기존 보고와 중복이라 생략")
+    from render_page import build_page
+
+    build_page(store)
+
+
 def add_manual(raw: str) -> None:
     """대시보드 기입 폼에서 온 항목 한 건을 entries.json에 붙이고 페이지를 다시 굽는다.
 
@@ -835,6 +919,8 @@ def main() -> None:
     parser.add_argument("--dry-run", action="store_true")
     parser.add_argument("--rebuild-page", action="store_true")
     parser.add_argument("--add", metavar="JSON", help='직접 기입 {"name","start","end","kind","note"}')
+    parser.add_argument("--plan", metavar="JSON",
+                        help='연차계획서 반영 {"name","rows":[{"date","kind":"종일|오전|오후"}]}')
     parser.add_argument("--indepth-backfill", action="store_true",
                         help="지난 석 달 대화에서 발간 계획 소급 수집 (last_id 불변)")
     args = parser.parse_args()
@@ -843,6 +929,8 @@ def main() -> None:
         check()
     elif args.add is not None:
         add_manual(args.add)
+    elif args.plan is not None:
+        apply_plan(args.plan)
     elif args.indepth_backfill:
         run_indepth_backfill()
     elif args.rebuild_page:
