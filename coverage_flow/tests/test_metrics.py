@@ -718,5 +718,61 @@ class KisToken(unittest.TestCase):
         self.assertEqual(naps, [1, 1])           # 마지막 시도는 기다리지 않고 올린다
 
 
+
+class Archive(unittest.TestCase):
+    """지난 기록: 16:00 슬롯만 보관 · 최근 31일 매일 · 그 이전 월 2개(15일 이전 마지막 날·월말)."""
+
+    def test_keep_recent_all(self):
+        ds = ["2026-10-01", "2026-10-15", "2026-10-27"]
+        self.assertEqual(build_report.archive_keep(ds, "2026-10-28"), set(ds))
+
+    def test_keep_old_two_per_month(self):
+        aug = [f"2026-08-{d:02d}" for d in (3, 4, 14, 17, 31)]
+        sep = [f"2026-09-{d:02d}" for d in (16, 18, 30)]          # 15일 이전이 없으면 그 달 첫 날
+        keep = build_report.archive_keep(aug + sep, "2026-11-30")
+        self.assertEqual(keep, {"2026-08-14", "2026-08-31", "2026-09-16", "2026-09-30"})
+
+    def test_boundary_month_moves_to_true_month_end(self):
+        octo = [f"2026-10-{d:02d}" for d in (13, 15, 26, 27, 28, 29, 30)]
+        k1 = build_report.archive_keep(octo, "2026-11-27")          # cutoff 10/27 → 10/26 이 '오래된 쪽' 마지막
+        self.assertEqual(k1, {"2026-10-15", "2026-10-26", "2026-10-27", "2026-10-28", "2026-10-29", "2026-10-30"})
+        k2 = build_report.archive_keep(sorted(k1), "2026-12-05")    # 다 오래되면 15일 이전 마지막 · 월말 두 개
+        self.assertEqual(k2, {"2026-10-15", "2026-10-30"})
+
+    def _run(self, payload, preexisting=()):
+        with tempfile.TemporaryDirectory() as tmp:
+            arch = os.path.join(tmp, "coverage_flow")
+            os.makedirs(arch)
+            for x in preexisting:
+                open(os.path.join(arch, f"{x}.html"), "w").close()
+            with unittest.mock.patch.object(build_report, "ARCH_DIR", arch):
+                path = build_report.write_archive(payload)
+                return path, sorted(os.listdir(arch)), build_report.archive_dates()
+
+    def test_write_only_1600_trading_day(self):
+        d = fake_payload()
+        d.update(date="2026-10-27", slot="11:30", market_day="2026-10-27")
+        self.assertIsNone(self._run(d)[0])                           # 장중 슬롯은 보관 안 함
+        d.update(slot="16:00", market_day="2026-10-24")
+        self.assertIsNone(self._run(d)[0])                           # 휴장일 force 수집도 안 함
+        d.update(market_day="2026-10-27")
+        path, files, dates = self._run(d, preexisting=["2026-08-03", "2026-08-14", "2026-08-31"])
+        self.assertTrue(path.endswith("2026-10-27.html"))
+        self.assertEqual(files, ["2026-08-14.html", "2026-08-31.html", "2026-10-27.html"])   # 8/3 정리
+        self.assertEqual(dates, ["2026-10-27", "2026-08-31", "2026-08-14"])
+
+    def test_archive_page_and_selector(self):
+        d = fake_payload(); d.update(date="2026-10-27", slot="16:00")
+        a = build_report.render(d, archive=True)
+        self.assertIn("🗄️ <b>지난 기록</b> · 2026-10-27(화) 16:00", a)
+        self.assertIn("../coverage_flow_report.html", a)
+        self.assertNotIn("<select", a)
+        m = build_report.render(d, dates=["2026-10-27", "2026-10-26"])
+        self.assertIn("<option value='coverage_flow/2026-10-26.html'>2026-10-26(월)</option>", m)
+        self.assertIn("날짜 고르기 (2개)", m)
+        self.assertLess(m.index("class='arch'"), m.index('<div id="cap-1">'))   # 텔레 캡쳐 영역 밖
+        self.assertNotIn("class='arch'", build_report.render(d))                # 기록 없으면 줄 자체가 없다
+
+
 if __name__ == "__main__":
     unittest.main(verbosity=1)
