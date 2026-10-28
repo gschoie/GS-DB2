@@ -361,10 +361,12 @@ class Outputs(unittest.TestCase):
                  unittest.mock.patch.object(notify, "send_photos", lambda paths, caption="", parse_mode=None, chat=None: calls.append(("album", chat, len(paths), caption)) or {"ok": chat not in fail, "description": "chat not found"}):
                 rc = notify.main(["--photos", os.path.join(tmp, "capture_*.png")])
             self.assertEqual(rc, 0)                                                   # 기본 방 성공이면 0
-            # 그림·본문·맨 밑 공유 링크까지 세 방 전부 같다
+            # 그림·본문은 세 방 전부 같고, 맨 밑 공유 링크는 기본 방만(10/28: 공개방엔 주소 안 남김)
             self.assertEqual([c[:3] for c in calls[:3]], [("album", "-100111", 3), ("album", "-100222", 3), ("album", "@HI_GS", 3)])
-            body = notify.compose_html(d) + "\n\n" + notify.SHARE_URL
-            self.assertEqual(calls[0][3], body); self.assertEqual(calls[1][3], body); self.assertEqual(calls[2][3], body)
+            body = notify.compose_html(d)
+            self.assertEqual(calls[0][3], body + "\n\n" + notify.SHARE_URL)
+            self.assertEqual(calls[1][3], body); self.assertEqual(calls[2][3], body)
+            self.assertNotIn("gs-research-desk", calls[2][3])
             self.assertTrue(notify.visible_len(calls[1][3]) <= notify.CAPTION_MAX)
             self.assertEqual(notify.visible_len("<b>a&amp;b</b>"), 3)                 # 태그·이스케이프 제외
             self.assertEqual(calls[3], ("text", "@HI_GS"))                            # 실패 방만 본문 따로 폴백
@@ -455,16 +457,20 @@ class Outputs(unittest.TestCase):
         self.assertEqual(caps["a"], 7); self.assertEqual(caps["b"], 0.0)
 
     def test_grouped_tables(self):
-        """표는 조선(조선+조기)·방산·기계 묶음, 성광벤드·태광은 조선 묶음 맨 밑. 묶음 안은 기존 정렬."""
+        """표는 조선(조선+조기)·방산·기계(건기+기계 — 피팅 3사, 10/28) 묶음. 묶음 안은 기존 정렬."""
         rows = [
-            {"name": "태광", "industry": "조기"}, {"name": "한화오션", "industry": "조선"},
-            {"name": "성광벤드", "industry": "조기"}, {"name": "HD현대중공업", "industry": "조선"},
+            {"name": "태광", "industry": "기계"}, {"name": "한화오션", "industry": "조선"},
+            {"name": "성광벤드", "industry": "기계"}, {"name": "HD현대중공업", "industry": "조선"},
             {"name": "한화시스템", "industry": "방산"}, {"name": "두산밥캣", "industry": "건기"},
+            {"name": "하이록코리아", "industry": "기계"},
         ]
-        score = {"태광": 99, "한화오션": 1, "성광벤드": 50, "HD현대중공업": 5, "한화시스템": 0, "두산밥캣": 0}
+        score = {"태광": 99, "한화오션": 1, "성광벤드": 50, "HD현대중공업": 5,
+                 "한화시스템": 0, "두산밥캣": 70, "하이록코리아": 60}
         g = build_report.grouped(rows, key=lambda r: score[r["name"]], reverse=True)
         self.assertEqual([x[0] for x in g], ["조선", "방산", "기계"])
-        self.assertEqual([r["name"] for r in g[0][1]], ["HD현대중공업", "한화오션", "성광벤드", "태광"])  # 점수 높은 태광도 맨 뒤
+        self.assertEqual([r["name"] for r in g[0][1]], ["HD현대중공업", "한화오션"])
+        # 피팅 3사는 기계 묶음에서 점수순으로 섞인다(맨 밑 고정 폐기)
+        self.assertEqual([r["name"] for r in g[2][1]], ["태광", "두산밥캣", "하이록코리아", "성광벤드"])
         d = fake_payload()
         d["rows"][2].update(industry="건기", tech=dict(d["rows"][0]["tech"]), flow=dict(d["rows"][0]["flow"]))  # 오류 행에 지표를 줘서 표에 올린다
         h = build_report.render(d)
@@ -492,7 +498,7 @@ class Outputs(unittest.TestCase):
         self.assertIn("+60", seg2)                                               # 100 − 40
 
     def test_tables_sorted_by_mcap(self):
-        """세 표 모두 묶음 안은 시총 내림차순, 성광벤드·태광은 여전히 조선 맨 밑."""
+        """세 표 모두 묶음 안은 시총 내림차순 — 성광벤드도 예외 없이 시총 순(고정 폐기)."""
         d = fake_payload()
         base = d["rows"][0]
         def mk(name, mcap, ind="조선"):
@@ -503,7 +509,7 @@ class Outputs(unittest.TestCase):
         d["rows"] = [mk("작은", 100), mk("큰", 5000), mk("성광벤드", 9999), mk("중간", 1000)]
         h = build_report.render(d)
         for tbl in h.split("<table")[1:4]:                                       # 등락률·수급·과매수 세 표
-            order = [n for n in ("큰", "중간", "작은", "성광벤드") if n in tbl]
+            order = [n for n in ("성광벤드", "큰", "중간", "작은") if n in tbl]
             idx = [tbl.index(f"<td>{n}") for n in order]
             self.assertEqual(idx, sorted(idx), order)
 
@@ -716,6 +722,62 @@ class KisToken(unittest.TestCase):
             kis.requests.post, kis.time.sleep = saved_post, saved_sleep
             kis._c.update(saved_cache)
         self.assertEqual(naps, [1, 1])           # 마지막 시도는 기다리지 않고 올린다
+
+
+
+class Archive(unittest.TestCase):
+    """지난 기록: 16:00 슬롯만 보관 · 최근 31일 매일 · 그 이전 월 2개(15일 이전 마지막 날·월말)."""
+
+    def test_keep_recent_all(self):
+        ds = ["2026-10-01", "2026-10-15", "2026-10-27"]
+        self.assertEqual(build_report.archive_keep(ds, "2026-10-28"), set(ds))
+
+    def test_keep_old_two_per_month(self):
+        aug = [f"2026-08-{d:02d}" for d in (3, 4, 14, 17, 31)]
+        sep = [f"2026-09-{d:02d}" for d in (16, 18, 30)]          # 15일 이전이 없으면 그 달 첫 날
+        keep = build_report.archive_keep(aug + sep, "2026-11-30")
+        self.assertEqual(keep, {"2026-08-14", "2026-08-31", "2026-09-16", "2026-09-30"})
+
+    def test_boundary_month_moves_to_true_month_end(self):
+        octo = [f"2026-10-{d:02d}" for d in (13, 15, 26, 27, 28, 29, 30)]
+        k1 = build_report.archive_keep(octo, "2026-11-27")          # cutoff 10/27 → 10/26 이 '오래된 쪽' 마지막
+        self.assertEqual(k1, {"2026-10-15", "2026-10-26", "2026-10-27", "2026-10-28", "2026-10-29", "2026-10-30"})
+        k2 = build_report.archive_keep(sorted(k1), "2026-12-05")    # 다 오래되면 15일 이전 마지막 · 월말 두 개
+        self.assertEqual(k2, {"2026-10-15", "2026-10-30"})
+
+    def _run(self, payload, preexisting=()):
+        with tempfile.TemporaryDirectory() as tmp:
+            arch = os.path.join(tmp, "coverage_flow")
+            os.makedirs(arch)
+            for x in preexisting:
+                open(os.path.join(arch, f"{x}.html"), "w").close()
+            with unittest.mock.patch.object(build_report, "ARCH_DIR", arch):
+                path = build_report.write_archive(payload)
+                return path, sorted(os.listdir(arch)), build_report.archive_dates()
+
+    def test_write_only_1600_trading_day(self):
+        d = fake_payload()
+        d.update(date="2026-10-27", slot="11:30", market_day="2026-10-27")
+        self.assertIsNone(self._run(d)[0])                           # 장중 슬롯은 보관 안 함
+        d.update(slot="16:00", market_day="2026-10-24")
+        self.assertIsNone(self._run(d)[0])                           # 휴장일 force 수집도 안 함
+        d.update(market_day="2026-10-27")
+        path, files, dates = self._run(d, preexisting=["2026-08-03", "2026-08-14", "2026-08-31"])
+        self.assertTrue(path.endswith("2026-10-27.html"))
+        self.assertEqual(files, ["2026-08-14.html", "2026-08-31.html", "2026-10-27.html"])   # 8/3 정리
+        self.assertEqual(dates, ["2026-10-27", "2026-08-31", "2026-08-14"])
+
+    def test_archive_page_and_selector(self):
+        d = fake_payload(); d.update(date="2026-10-27", slot="16:00")
+        a = build_report.render(d, archive=True)
+        self.assertIn("🗄️ <b>지난 기록</b> · 2026-10-27(화) 16:00", a)
+        self.assertIn("../coverage_flow_report.html", a)
+        self.assertNotIn("<select", a)
+        m = build_report.render(d, dates=["2026-10-27", "2026-10-26"])
+        self.assertIn("<option value='coverage_flow/2026-10-26.html'>2026-10-26(월)</option>", m)
+        self.assertIn("날짜 고르기 (2개)", m)
+        self.assertLess(m.index("class='arch'"), m.index('<div id="cap-1">'))   # 텔레 캡쳐 영역 밖
+        self.assertNotIn("class='arch'", build_report.render(d))                # 기록 없으면 줄 자체가 없다
 
 
 if __name__ == "__main__":

@@ -5,7 +5,7 @@ from pathlib import Path
 from article_metadata import enrich_news_item
 from backfill_comments import extract_comment, merge_reply_comments
 from enrich_report_tp import extract_tp
-from parser import classify, extract_companies, identify_companies, parse_news, parse_news_items, parse_report
+from parser import classify, extract_companies, identify_companies, is_own_post, parse_news, parse_news_items, parse_report
 from public_importer import parse_page
 
 
@@ -506,6 +506,28 @@ class ReplyCommentTest(unittest.TestCase):
             merge_reply_comments(conn)
         comment = conn.execute("SELECT comment FROM news_articles WHERE id=10").fetchone()["comment"]
         self.assertEqual(comment, "단가가 나오는 걸 보면은 계약을 하기는 하나 보다")
+
+
+class OwnPostTest(unittest.TestCase):
+    """내가 올린 수급 브리핑은 뉴스 아카이브로 들어오지 않는다."""
+
+    BRIEF = ("[GS\U0001F3B4 조선·방산·건기] 수급 브리핑 10/28 16:00\n\n"
+             "\U0001F4C8 사는 쪽\n HD현대중공업 +120억\n\n"
+             "https://gs-research-desk.github.io/coverage_flow_report.html")
+
+    def test_own_post_is_not_news(self):
+        # 맨 밑 공유 링크 때문에 'URL 있으면 뉴스' 규칙에 걸리던 것
+        self.assertTrue(is_own_post(self.BRIEF))
+        self.assertEqual(classify(self.BRIEF), "unclassified")
+
+    def test_emoji_or_spacing_change_still_caught(self):
+        for text in ("[GS 조선·방산·건기] 수급 브리핑 10/28",
+                     "[GS\U0001F6A2 조선·방산·건기] 수급브리핑 10/28"):
+            self.assertTrue(is_own_post(text), text)
+
+    def test_other_peoples_news_untouched(self):
+        self.assertFalse(is_own_post("오늘 수급 브리핑 좋네요 https://example.com/a"))
+        self.assertEqual(classify("현대重, LNG선 4척 수주\nhttps://www.yna.co.kr/view/A1"), "news")
 
 
 if __name__ == "__main__":

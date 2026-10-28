@@ -39,7 +39,7 @@ def _extra_chats():
     return out
 
 
-SHARE_URL = "https://gs-research-desk.github.io/coverage_flow_report.html"   # 공유용 주소(50번) — 본문 끝에 한 줄(두 방 모두)
+SHARE_URL = "https://gs-research-desk.github.io/coverage_flow_report.html"   # 공유용 주소(50번) — 본문 끝에 한 줄(기본 방만, 공개 추가 방엔 안 붙임)
 
 
 def targets():
@@ -233,13 +233,13 @@ def main(argv=None):
     photos = [p for p in photos if os.path.exists(p)]
     # 방마다 같은 묶음(앨범+캡션)을 보낸다 — 기본 방(바담)이 먼저, 추가 방(DAOL 조선 등)은 뒤에.
     # 추가 방 실패는 기본 방 결과(종료코드)를 바꾸지 않는다 — 늦은 크론이 재시도하면 바담 방에 두 통 간다.
-    # 두 방 모두 같은 2장(① 등락률 / ①-2 투자자별) + 같은 본문 + 맨 밑에 공유 링크 한 줄
-    # (10/20 저녁 사용자 확정 "양방 모두 밑에 링크가 가게"). 10/17 '바담에 링크 없음' 규칙은 폐기 —
-    # 공유용 주소(50번)는 애초에 드러내도 되는 주소다.
-    text, html_text = text + "\n\n" + SHARE_URL, html_text + "\n\n" + SHARE_URL
+    # 모든 방에 같은 2장(① 등락률 / ①-2 투자자별) + 같은 본문. 맨 밑 공유 링크 한 줄은 **기본 방(바담)만**
+    # — 10/28 사용자 "공개방 DAOL 최광식에는 주소 남기지 말자". 추가 방(공개채널)은 링크 없이 간다.
+    linked = (text + "\n\n" + SHARE_URL, html_text + "\n\n" + SHARE_URL)
     outs = []
     for i, chat in enumerate(targets()):
-        res, pres = _deliver(chat, d, text, html_text, photos)
+        t, h = linked if i == 0 else (text, html_text)
+        res, pres = _deliver(chat, d, t, h, photos)
         outs.append((chat, res, pres))
         tag = "기본 방" if i == 0 else f"추가 방 {chat}"
         if pres is not None:
