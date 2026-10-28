@@ -82,9 +82,10 @@ def spark_svg(vals, w=120, h=30):
     return (f'<svg class="spark" width="{w}" height="{h}" viewBox="0 0 {w} {h}" aria-label="3개월 주가">'
             f'<polyline fill="none" stroke="{color}" stroke-width="1.5" points="{coords}"/></svg>')
 
-# 표의 업종 묶음: 조선(조선+조기) · 방산 · 기계(건기). 성광벤드·태광은 사용자 지정으로 조선 묶음 맨 밑.
-GROUPS = (("조선", ("조선", "조기")), ("방산", ("방산",)), ("기계", ("건기",)))
-PIN_LAST = ("성광벤드", "태광")
+# 표의 업종 묶음: 조선(조선+조기) · 방산 · 기계(건기+기계 — 피팅 3사 포함, 10/28 사용자 지정).
+# 성광벤드·태광이 기계로 옮겨가며 '조선 맨 밑 고정'은 폐기 — PIN_LAST 는 빈 채로 장치만 남긴다.
+GROUPS = (("조선", ("조선", "조기")), ("방산", ("방산",)), ("기계", ("건기", "기계")))
+PIN_LAST = ()
 
 
 def group_of(r):

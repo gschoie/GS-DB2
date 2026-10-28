@@ -455,16 +455,20 @@ class Outputs(unittest.TestCase):
         self.assertEqual(caps["a"], 7); self.assertEqual(caps["b"], 0.0)
 
     def test_grouped_tables(self):
-        """표는 조선(조선+조기)·방산·기계 묶음, 성광벤드·태광은 조선 묶음 맨 밑. 묶음 안은 기존 정렬."""
+        """표는 조선(조선+조기)·방산·기계(건기+기계 — 피팅 3사, 10/28) 묶음. 묶음 안은 기존 정렬."""
         rows = [
-            {"name": "태광", "industry": "조기"}, {"name": "한화오션", "industry": "조선"},
-            {"name": "성광벤드", "industry": "조기"}, {"name": "HD현대중공업", "industry": "조선"},
+            {"name": "태광", "industry": "기계"}, {"name": "한화오션", "industry": "조선"},
+            {"name": "성광벤드", "industry": "기계"}, {"name": "HD현대중공업", "industry": "조선"},
             {"name": "한화시스템", "industry": "방산"}, {"name": "두산밥캣", "industry": "건기"},
+            {"name": "하이록코리아", "industry": "기계"},
         ]
-        score = {"태광": 99, "한화오션": 1, "성광벤드": 50, "HD현대중공업": 5, "한화시스템": 0, "두산밥캣": 0}
+        score = {"태광": 99, "한화오션": 1, "성광벤드": 50, "HD현대중공업": 5,
+                 "한화시스템": 0, "두산밥캣": 70, "하이록코리아": 60}
         g = build_report.grouped(rows, key=lambda r: score[r["name"]], reverse=True)
         self.assertEqual([x[0] for x in g], ["조선", "방산", "기계"])
-        self.assertEqual([r["name"] for r in g[0][1]], ["HD현대중공업", "한화오션", "성광벤드", "태광"])  # 점수 높은 태광도 맨 뒤
+        self.assertEqual([r["name"] for r in g[0][1]], ["HD현대중공업", "한화오션"])
+        # 피팅 3사는 기계 묶음에서 점수순으로 섞인다(맨 밑 고정 폐기)
+        self.assertEqual([r["name"] for r in g[2][1]], ["태광", "두산밥캣", "하이록코리아", "성광벤드"])
         d = fake_payload()
         d["rows"][2].update(industry="건기", tech=dict(d["rows"][0]["tech"]), flow=dict(d["rows"][0]["flow"]))  # 오류 행에 지표를 줘서 표에 올린다
         h = build_report.render(d)
@@ -492,7 +496,7 @@ class Outputs(unittest.TestCase):
         self.assertIn("+60", seg2)                                               # 100 − 40
 
     def test_tables_sorted_by_mcap(self):
-        """세 표 모두 묶음 안은 시총 내림차순, 성광벤드·태광은 여전히 조선 맨 밑."""
+        """세 표 모두 묶음 안은 시총 내림차순 — 성광벤드도 예외 없이 시총 순(고정 폐기)."""
         d = fake_payload()
         base = d["rows"][0]
         def mk(name, mcap, ind="조선"):
@@ -503,7 +507,7 @@ class Outputs(unittest.TestCase):
         d["rows"] = [mk("작은", 100), mk("큰", 5000), mk("성광벤드", 9999), mk("중간", 1000)]
         h = build_report.render(d)
         for tbl in h.split("<table")[1:4]:                                       # 등락률·수급·과매수 세 표
-            order = [n for n in ("큰", "중간", "작은", "성광벤드") if n in tbl]
+            order = [n for n in ("성광벤드", "큰", "중간", "작은") if n in tbl]
             idx = [tbl.index(f"<td>{n}") for n in order]
             self.assertEqual(idx, sorted(idx), order)
 
