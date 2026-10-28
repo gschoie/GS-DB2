@@ -529,6 +529,39 @@ class OwnPostTest(unittest.TestCase):
         self.assertFalse(is_own_post("오늘 수급 브리핑 좋네요 https://example.com/a"))
         self.assertEqual(classify("현대重, LNG선 4척 수주\nhttps://www.yna.co.kr/view/A1"), "news")
 
+    def test_purge_removes_rows_already_in_archive(self):
+        """classify 만으로는 **수집 창 밖**의 옛 글이 남는다 — 쓸어내는 쪽도 확인."""
+        from telegram_importer import purge_own_posts
+
+        conn = sqlite3.connect(":memory:")
+        conn.row_factory = sqlite3.Row
+        conn.executescript((Path(__file__).resolve().parent.parent / "schema.sql").read_text(encoding="utf-8"))
+        conn.execute("""INSERT INTO telegram_messages(id,channel_id,message_id,posted_at,text)
+                        VALUES(1,'HI_GS',100,'2026-10-23T07:00:00+00:00',?)""", (self.BRIEF,))
+        conn.execute("""INSERT INTO telegram_messages(id,channel_id,message_id,posted_at,text)
+                        VALUES(2,'HI_GS',101,'2026-10-23T08:00:00+00:00',
+                               '현대重, LNG선 4척 수주\nhttps://www.yna.co.kr/view/A1')""")
+        conn.execute("INSERT INTO news_articles(id,message_id,source_index,title) VALUES(10,1,0,'커버리지 수급·기술지표')")
+        conn.execute("INSERT INTO news_articles(id,message_id,source_index,title) VALUES(11,2,0,'LNG선 4척 수주')")
+        conn.execute("INSERT INTO companies(id,name) VALUES(1,'HD현대중공업')")
+        conn.execute("INSERT INTO news_companies(news_id,company_id) VALUES(10,1)")
+
+        for _ in range(2):  # 멱등
+            purge_own_posts(conn)
+        left = [r["id"] for r in conn.execute("SELECT id FROM news_articles ORDER BY id")]
+        self.assertEqual(left, [11])
+        self.assertEqual(conn.execute("SELECT COUNT(*) FROM news_companies").fetchone()[0], 0)
+        # 원문 메시지는 남긴다(아카이브에서만 빼는 것)
+        self.assertEqual(conn.execute("SELECT COUNT(*) FROM telegram_messages").fetchone()[0], 2)
+
+    def test_public_importer_also_purges(self):
+        """공개채널 수집(실제 워크플로 경로)에서도 쓸어내는지 — 고친 곳이 여기였다."""
+        import inspect
+
+        import public_importer
+
+        self.assertIn("purge_own_posts", inspect.getsource(public_importer.sync))
+
 
 if __name__ == "__main__":
     unittest.main()
