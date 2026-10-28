@@ -83,18 +83,18 @@ def write_index() -> None:
 {cbb.PAGE_CSS}
 .bar{{display:flex;gap:10px;align-items:center;max-width:860px;margin:0 auto 10px;flex-wrap:wrap}}
 .bar h1{{font-size:17px;margin:0;flex:1;min-width:200px}}
-select,button{{background:#161d29;color:#d8dee9;border:1px solid #2c3a52;border-radius:8px;
+select,button{{background:var(--gs-panel,#1c222c);color:var(--gs-ink,#c9d1dc);border:1px solid var(--gs-line-strong,#2e3a4e);border-radius:8px;
   padding:7px 12px;font-size:13.5px;cursor:pointer}}
-iframe{{width:100%;height:calc(100vh - 150px);border:1px solid #3a3046;border-radius:10px;background:#0d1117}}
-details.paste{{max-width:860px;margin:0 auto 12px;border:1px solid #3a3046;border-radius:10px;background:#111825}}
-details.paste summary{{cursor:pointer;padding:9px 14px;color:#c9a86a;font-size:13.5px}}
+iframe{{width:100%;height:calc(100vh - 150px);border:1px solid var(--gs-line,#232e3f);border-radius:10px;background:var(--gs-bg,#161a21)}}
+details.paste{{max-width:860px;margin:0 auto 12px;border:1px solid var(--gs-line,#232e3f);border-radius:10px;background:var(--gs-card,#1a2029)}}
+details.paste summary{{cursor:pointer;padding:9px 14px;color:var(--gs-accent,#d6b27a);font-size:13.5px}}
 .paste-body{{padding:0 14px 12px;display:flex;flex-direction:column;gap:8px}}
-.paste-body textarea{{width:100%;box-sizing:border-box;min-height:180px;background:#0d1117;color:#d8dee9;
-  border:1px solid #2c3a52;border-radius:8px;padding:10px;font-size:13px;font-family:inherit;line-height:1.6}}
+.paste-body textarea{{width:100%;box-sizing:border-box;min-height:180px;background:var(--gs-bg,#161a21);color:var(--gs-ink,#c9d1dc);
+  border:1px solid var(--gs-line-strong,#2e3a4e);border-radius:8px;padding:10px;font-size:13px;font-family:inherit;line-height:1.6}}
 .paste-row{{display:flex;gap:8px;align-items:center;flex-wrap:wrap}}
-.paste-row input[type=date]{{background:#161d29;color:#d8dee9;border:1px solid #2c3a52;border-radius:8px;padding:6px 10px}}
-#paste-status{{font-size:12.5px;color:#8b96a8;margin:0}}
-.hint{{font-size:11.5px;color:#66748a}}
+.paste-row input[type=date]{{background:var(--gs-panel,#1c222c);color:var(--gs-ink,#c9d1dc);border:1px solid var(--gs-line-strong,#2e3a4e);border-radius:8px;padding:6px 10px}}
+#paste-status{{font-size:12.5px;color:var(--gs-muted,#8e98a8);margin:0}}
+.hint{{font-size:11.5px;color:var(--gs-muted,#8e98a8)}}
 </style></head><body>
 <div class="bar">
   <h1>🧠 글로벌 건설기계 브리핑 (GPT)</h1>
@@ -106,7 +106,7 @@ details.paste summary{{cursor:pointer;padding:9px 14px;color:#c9a86a;font-size:1
   <summary>✍️ ChatGPT 앱 브리핑 직접 등록 (자동 생성보다 우선 적용)</summary>
   <div class="paste-body">
     <div class="paste-row">
-      <label for="p-date" style="font-size:12.5px;color:#8b96a8">브리핑 날짜</label>
+      <label for="p-date" style="font-size:12.5px;color:var(--gs-muted,#8e98a8)">브리핑 날짜</label>
       <input id="p-date" type="date">
       <button id="p-btn" onclick="submitBrief()">발행 → 대시보드</button>
     </div>
@@ -128,7 +128,7 @@ sel.onchange=load;
 document.getElementById('prev').onclick=()=>{{if(sel.selectedIndex<DATES.length-1){{sel.selectedIndex++;load()}}}};
 document.getElementById('next').onclick=()=>{{if(sel.selectedIndex>0){{sel.selectedIndex--;load()}}}};
 if(DATES.length)load();
-else fr.srcdoc='<body style="background:#0d1117;color:#8b96a8;font-family:sans-serif;display:flex;align-items:center;justify-content:center;height:100vh;margin:0">아직 브리핑이 없습니다 — 매일 아침 자동 생성되며, ✍️ 폼으로 ChatGPT 앱 브리핑을 직접 등록할 수도 있습니다.</body>';
+else fr.srcdoc='<body style="background:var(--gs-bg,#161a21);color:var(--gs-muted,#8e98a8);font-family:sans-serif;display:flex;align-items:center;justify-content:center;height:100vh;margin:0">아직 브리핑이 없습니다 — 매일 아침 자동 생성되며, ✍️ 폼으로 ChatGPT 앱 브리핑을 직접 등록할 수도 있습니다.</body>';
 document.getElementById('p-date').value=new Date().toLocaleDateString('sv');
 async function submitBrief(){{
   const btn=document.getElementById('p-btn'),st=document.getElementById('paste-status');

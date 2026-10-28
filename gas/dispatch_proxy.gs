@@ -43,6 +43,8 @@ const WF = {
   gptbrief:  'chatgpt-brief.yml',      // ChatGPT 방산 브리핑 붙여넣기 발행 (content 입력 필요)
   congpt:    'construction-gpt.yml',   // ChatGPT 건설기계 브리핑 붙여넣기 발행 (content 입력 필요)
   research:  'research-digest.yml',    // 커버리지 리서치요약 아침 모음
+  covflow:   'coverage-flow.yml',      // 커버리지 종목 수급·기술지표 (11:30·16:00 하루 2회)
+  dartcap:   'dart-capacity.yml',      // DART 생산능력·가동률 (보고서 시즌 + 버튼, stage=full)
   defweekly: 'defense-weekly.yml',     // 방산 주간정리 (토) — 스케줄러 정시 발사용
   conweekly: 'construction-weekly.yml',// 건설기계 주간정리 (토) — 스케줄러 정시 발사용
   // 다른 저장소의 워크플로는 {repo:'owner/name', file:'...'} 형태로 적는다.
@@ -57,7 +59,7 @@ const WF = {
 function buildInputs(key, body) {
   if (key === 'dart') return {
     dart_url: String(body.dart_url || ''),
-    target:   String(body.target || '공개채널'), // required + choice
+    target:   String(body.target || '비공개(바담)'), // required + choice — 기본 바담 방(10/17), 공개채널은 Actions 에서만
     comment:  String(body.comment || ''),
   };
   if (key === 'recipe') return { yt_url: String(body.yt_url || '') };
@@ -76,6 +78,8 @@ function buildInputs(key, body) {
     only:   String(body.only || ''),
     lookup: String(body.lookup || ''),
   };
+  // DART 생산능력·가동률: 버튼은 수집→추출→정규화까지 한 번에(stage=full).
+  if (key === 'dartcap') return { stage: 'full' };
   return {};
 }
 
@@ -86,6 +90,9 @@ function doPost(e) {
 
     // 발사가 아니라 "그 워크플로 지금 어떻게 됐나" 묻는 요청(대시보드 폴링용)
     if (String(body.action || '') === 'status') return json(latestRun(key));
+    // 연차계획서 이미지 → Gemini 비전 추출 → vacation-tracker mode=plan 발사.
+    // 이미지는 여기(메모리)서만 쓰고 어디에도 저장하지 않는다(공개 리포에 커밋 금지).
+    if (String(body.action || '') === 'vacplan') return json(vacationPlanImage_(body));
 
     const wf = WF[key];
 
@@ -113,6 +120,68 @@ function doPost(e) {
   } catch (err) {
     return json({ ok: false, code: 500, error: String(err) });
   }
+}
+
+/** 연차계획서 캡쳐(dataURL) → Gemini 비전으로 {이름, 날짜·종류 행} 추출 → mode=plan 발사.
+ *  스크립트 속성 GEMINI_API_KEY 필요. 추출 결과를 그대로 돌려줘 화면이 바로 보여준다. */
+function vacationPlanImage_(body) {
+  const img = String(body.image || '');
+  const m = img.match(/^data:(image\/[a-z0-9+.-]+);base64,(.+)$/i);
+  if (!m) return { ok: false, code: 400, error: '이미지(dataURL)가 없습니다' };
+  const geminiKey = PropertiesService.getScriptProperties().getProperty('GEMINI_API_KEY');
+  if (!geminiKey) {
+    return { ok: false, code: 500,
+             error: 'GEMINI_API_KEY 스크립트 속성이 없습니다 — dispatch_proxy 프로젝트에 등록하세요' };
+  }
+  const prompt = [
+    '이 이미지는 인사시스템의 미사용연차 사용계획(연차계획서) 화면이다.',
+    'JSON으로만 답하라(설명 금지):',
+    '{"name":"신청자 이름","rows":[{"date":"YYYY-MM-DD","kind":"종일|오전|오후"}]}',
+    '- 휴가일자·휴가종류 표의 행 전부를 담아라. 날짜는 YYYY-MM-DD로 정규화(2026.07.27 → 2026-07-27).',
+    '- 휴가종류는 종일/오전/오후 중 하나로. 상태·감산일수·합계는 무시한다.',
+    '- 신청자(작성자) 이름을 name에 — 신청자 칸이 우선. 못 읽으면 빈 문자열.',
+  ].join('\n');
+  const payload = JSON.stringify({
+    contents: [{ parts: [{ inline_data: { mime_type: m[1], data: m[2] } }, { text: prompt }] }],
+    generationConfig: { temperature: 0, response_mime_type: 'application/json' },
+  });
+  // 429(분당 한도)는 flash↔flash-lite 교대가 빠르다(DART 정규화와 같은 교훈).
+  const models = ['gemini-flash-latest', 'gemini-flash-lite-latest'];
+  let parsed = null, lastErr = '';
+  for (let i = 0; i < models.length && !parsed; i++) {
+    const res = UrlFetchApp.fetch(
+      'https://generativelanguage.googleapis.com/v1beta/models/' + models[i] +
+      ':generateContent?key=' + geminiKey,
+      { method: 'post', contentType: 'application/json', payload: payload,
+        muteHttpExceptions: true });
+    if (res.getResponseCode() !== 200) {
+      lastErr = models[i] + ' HTTP ' + res.getResponseCode();
+      continue;
+    }
+    try {
+      const out = JSON.parse(res.getContentText());
+      parsed = JSON.parse(out.candidates[0].content.parts[0].text);
+    } catch (err) { lastErr = models[i] + ' 응답 파싱 실패: ' + err; }
+  }
+  if (!parsed) return { ok: false, code: 502, error: 'Gemini 추출 실패 — ' + lastErr };
+
+  const name = String(body.name || '').trim() || String(parsed.name || '').trim();
+  if (!name) return { ok: false, code: 422, error: '신청자 이름을 못 읽었습니다 — 폼에서 이름을 지정하세요' };
+  const rows = [];
+  (parsed.rows || []).forEach(function (row) {
+    const d = String(row.date || '').replace(/[./]/g, '-').trim();
+    const k = String(row.kind || '').trim();
+    if (/^\d{4}-\d{2}-\d{2}$/.test(d) && ['종일', '오전', '오후'].indexOf(k) >= 0) {
+      rows.push({ date: d, kind: k });
+    }
+  });
+  if (!rows.length) return { ok: false, code: 422, error: '날짜 행을 하나도 못 읽었습니다 — 더 선명한 캡쳐로 다시 시도' };
+
+  const fired = fireWorkflow('vacation',
+    { mode: 'plan', entry: JSON.stringify({ name: name, rows: rows }) });
+  fired.name = name;
+  fired.rows = rows;
+  return fired;
 }
 
 /** 워크플로 하나를 workflow_dispatch로 발사한다. 웹앱(doPost)과 스케줄러(tick)가 같이 쓴다. */
@@ -199,15 +268,17 @@ const SCHEDULE = [
   // 일요일은 워크플로가 스스로 '월~금 누적' 모드로 바꾼다(mode 입력 기본값 auto)
   { wf: 'etf',       hours: [7],      minute: 0,  days: 'daily',   label: 'ETF/섹터 신호',
                      inputs: { via: 'scheduler' } },
-  { wf: 'flow',      hours: [10, 13], minute: 0,  days: 'weekday', label: '시장 수급' },
-  { wf: 'flow',      hours: [15],     minute: 40, days: 'weekday', label: '시장 수급(마감 잠정)' },
-  { wf: 'flow',      hours: [16],     minute: 40, days: 'weekday', label: '시장 수급(확정)' },
+  { wf: 'flow',      hours: [11, 16], minute: 0,  days: 'weekday', label: '시장 수급' },  // 10/20 4회→2회 축소
   { wf: 'holdings',  hours: [9, 10, 11, 12, 13, 14, 15, 16],   // 장중~마감 직후까지만
                      minute: 17, days: 'weekday', label: '액티브ETF 매매동향',
                      inputs: { via: 'scheduler' } },
   { wf: 'macro',     hours: [21],     minute: 0,  days: 'daily',   label: '매크로 데스크',
                      inputs: { via: 'scheduler' } },
   { wf: 'consensus', hours: [17],     minute: 0,  days: 'fri,sat', label: '코스피200 컨센' },
+  // 커버리지 수급(covflow) 11:30·16:00 은 10/26 부터 **Claude 예약 작업**(클라우드 세션 트리거 2개,
+  // `gh workflow run coverage-flow.yml -f via=scheduler`)이 정시에 쏜다 — 이 스케줄러가 10/20 09:19 이후
+  // 멈춰 있어 옮겼다. 여기에 다시 넣으면 두 번 발송된다(dispatch 끼리는 워크플로 guard 가 안 막는다).
+  // 버튼(화면 🔄 지금 수집)용 WF 매핑은 그대로 둔다.
   // 스크립트 자체에 '오늘 이미 발송' 가드가 있어 GitHub 크론 안전망과 겹쳐도 한 통만 간다
   { wf: 'research',  hours: [8],      minute: 50, days: 'weekday', label: '커버리지 리서치요약 모음' },   // 채널 아침 목록(~08:40) 뒤
   // 주간정리 2종 — GitHub 토요일 크론이 매주 +4.5시간대로 밀려(실측 16:30~17:00 실행)

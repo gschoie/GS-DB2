@@ -5,6 +5,8 @@
 - 당분기는 법정 보고서 마감(분기말+45일, 4Q는 90일) 경과 시 자동으로 다음 분기로 이동,
   화면의 ◀▶ 버튼으로 수동 이동도 가능(브라우저 저장, '자동으로' 버튼으로 복귀)
 - 비교 기준 토글: 주간(전주) / 1개월 / 3개월 — 기준일은 스냅샷에서 가장 가까운 과거 주
+- QoQ/YoY 칼럼: 분기 탭은 직전·전년동기, 연간 탭은 전년 대비 — 같은 스냅샷 내 비교,
+  확정 실적(*_actual) 우선·실적 수집 전엔 당시 컨센. 분모가 적자면 흑전/적지, 분자만 적자면 적전.
 - 전체 종목 데이터는 엑셀 다운로드 버튼으로 제공
 출력: telegram_research_dashboard/static/{consensus_revision.html, consensus_full.xlsx}
 """
@@ -45,6 +47,40 @@ def next_quarter(period):
     y, m = int(period[:4]), int(period[5:7])
     y, m = (y + 1, 3) if m == 12 else (y, m + 3)
     return f"{y}.{m:02d}"
+
+
+def prev_quarter(period):
+    y, m = int(period[:4]), int(period[5:7])
+    y, m = (y - 1, 12) if m == 3 else (y, m - 3)
+    return f"{y}.{m:02d}"
+
+
+def growth(curr, base):
+    """영업이익 증감: %(float) 또는 '흑전'/'적전'/'적지'(분모·분자 적자). 분모 없음·0이면 None."""
+    if curr is None or base is None or base == 0:
+        return None
+    if base > 0:
+        return "적전" if curr < 0 else (curr - base) / base * 100.0
+    return "적지" if curr < 0 else "흑전"
+
+
+def value_map(con, snap, kind, period):
+    """같은 스냅샷의 code→op_profit. 확정 실적(<kind>_actual)이 있으면 컨센(E)보다 우선."""
+    out = {}
+    for k in (kind, kind + "_actual"):     # 실적이 나중에 덮어쓴다
+        for r in con.execute(
+                "SELECT code, op_profit FROM consensus_snapshots "
+                "WHERE snapshot_date=? AND kind=? AND period=? AND op_profit IS NOT NULL",
+                (snap, k, period)):
+            out[r["code"]] = r["op_profit"]
+    return out
+
+
+def growth_periods(kind, period):
+    """시계별 성장률 비교 대상: 분기는 QoQ(직전)+YoY(전년동기), 연간은 YoY(전년)."""
+    if kind == "quarter":
+        return {"qoq": prev_quarter(period), "yoy": f"{int(period[:4]) - 1}{period[4:]}"}
+    return {"yoy": f"{int(period[:4]) - 1}.12"}
 
 
 def report_deadline(period):
@@ -201,6 +237,8 @@ def build_period(con, snap, base, ref1, ref3, sectors, umeta):
         sw = series(con, snap, base, kind, p)                     # 전주 대비
         s1 = series(con, snap, ref1, kind, p) if ref1 else {}     # 1개월전 대비
         s3 = series(con, snap, ref3, kind, p) if ref3 else {}     # 3개월전 대비
+        gps = growth_periods(kind, p)                             # QoQ/YoY 분모 기간
+        gmaps = {gk: value_map(con, snap, kind, gp) for gk, gp in gps.items()}
         for code, d in sw.items():
             names[code] = d["name"]
         uw = _counts([d["wow"] for d in sw.values()])
@@ -210,19 +248,24 @@ def build_period(con, snap, base, ref1, ref3, sectors, umeta):
         for code, d in sw.items():
             d1, d3 = s1.get(code), s3.get(code)
             um = umeta.get(code, {})
-            rows.append({"code": code, "name": d["name"], "sec": sectors.get(code, "기타"),
-                         "mkt": um.get("mkt"), "cov": bool(um.get("cov")),
-                         "grp": ",".join(um.get("groups", [])),
-                         "curr": d["curr"], "base": d["base"], "wow": d["wow"], "pwow": pw(pbase, code),
-                         "base1": d1["base"] if d1 else None, "wow1": d1["wow"] if d1 else None,
-                         "pwow1": pw(pref1, code),
-                         "base3": d3["base"] if d3 else None, "wow3": d3["wow"] if d3 else None,
-                         "pwow3": pw(pref3, code)})
+            row = {"code": code, "name": d["name"], "sec": sectors.get(code, "기타"),
+                   "mkt": um.get("mkt"), "cov": bool(um.get("cov")),
+                   "grp": ",".join(um.get("groups", [])),
+                   "curr": d["curr"], "base": d["base"], "wow": d["wow"], "pwow": pw(pbase, code),
+                   "base1": d1["base"] if d1 else None, "wow1": d1["wow"] if d1 else None,
+                   "pwow1": pw(pref1, code),
+                   "base3": d3["base"] if d3 else None, "wow3": d3["wow"] if d3 else None,
+                   "pwow3": pw(pref3, code)}
+            for gk in gps:
+                row[gk] = growth(d["curr"], gmaps[gk].get(code))
+                row[gk + "_v"] = gmaps[gk].get(code)     # 분모 원값(섹터 합산 행용)
+            rows.append(row)
         if base:
             rows.sort(key=lambda r: (r["wow"] is None, -abs(r["wow"]) if r["wow"] is not None else 0))
         else:
             rows.sort(key=lambda r: -(r["curr"] or 0))
         hz.append({"label": label, "period": p, "key": key,
+                   "qoqp": gps.get("qoq"), "yoyp": gps.get("yoy"),
                    "up": uw[0], "down": uw[1], "flat": uw[2],
                    "up1": u1[0], "down1": u1[1], "flat1": u1[2],
                    "up3": u3[0], "down3": u3[1], "flat3": u3[2], "rows": rows})
@@ -267,6 +310,9 @@ def build():
         return ((a - b) / b * 100.0) if (a and b) else None
 
     maps = {key: series(con, snap, base, kind, p) for key, kind, p, _ in xl_specs}
+    xl_gmaps = {key: {gk: value_map(con, snap, kind, gp)
+                      for gk, gp in growth_periods(kind, p).items()}
+                for key, kind, p, _ in xl_specs}
     names = {}
     for key in maps:
         for code, d in maps[key].items():
@@ -283,6 +329,8 @@ def build():
             row[key] = d["curr"] if d else None
             row[key + "_b"] = d["base"] if d else None
             row[key + "_w"] = d["wow"] if d else None
+            for gk, vm in xl_gmaps[key].items():
+                row[f"{key}_{gk}"] = growth(d["curr"], vm.get(code)) if d else None
         stocks.append(row)
     write_excel(stocks, snap, base, xl_specs)
 
@@ -315,9 +363,12 @@ def write_excel(stocks, snap, base, xl_specs):
     ws.title = "컨센"
     header = ["종목코드", "종목명", "시장", "섹터", "그룹"]
     cols = []
-    for key, _, per, lab in xl_specs:
+    for key, kind, per, lab in xl_specs:
         header.append(f"{lab} 영업이익" if lab.endswith(")") else f"{lab}({per}) 영업이익")
         cols.append(("v", key))
+        for gk in growth_periods(kind, per):
+            header.append(f"{lab} {gk.upper()}%")
+            cols.append(("g", f"{key}_{gk}"))
         if base:
             header += [f"{lab} 전주", f"{lab} 컨센변동%"]
             cols += [("b", key), ("w", key)]
@@ -336,6 +387,9 @@ def write_excel(stocks, snap, base, xl_specs):
         for typ, key in cols:
             if typ == "v":
                 r.append(st[key])
+            elif typ == "g":   # QoQ/YoY: % 숫자 또는 '흑전'/'적전'/'적지' 문자열
+                v = st.get(key)
+                r.append(v if isinstance(v, str) else (round(v, 1) if v is not None else None))
             elif typ == "b":
                 r.append(st[key + "_b"])
             elif typ == "w":
@@ -396,7 +450,7 @@ padding:7px 14px;border-radius:8px;cursor:pointer}
 .tab.on{background:var(--accent);color:#fff;border-color:var(--accent);font-weight:600}
 .tblwrap{overflow-x:auto}
 table{width:100%;border-collapse:collapse;font-size:13px;background:var(--card);
-border:1px solid var(--line);border-radius:12px;overflow:hidden;min-width:560px}
+border:1px solid var(--line);border-radius:12px;overflow:hidden;min-width:640px}
 th,td{padding:7px 11px;text-align:right;border-bottom:1px solid var(--line);white-space:nowrap}
 th:first-child,td:first-child{text-align:center;color:var(--muted);width:30px}
 th.l,td.l{text-align:left}td.sec{color:var(--muted);font-size:12px}
@@ -418,6 +472,8 @@ border-radius:8px;padding:6px 10px;margin-left:6px}
 overflow:hidden;vertical-align:middle}
 .modetog button{border:0;background:var(--card);color:var(--ink);font-size:12px;font-weight:600;
 padding:6px 13px;cursor:pointer}.modetog button.on{background:var(--accent);color:#fff}
+tr.agg td{font-weight:600;background:rgba(37,99,235,.09);border-bottom:2px solid var(--line)}
+tr.agg td.sec{color:var(--ink)}
 td.sec .secpick{cursor:pointer}td.sec .secpick:hover{color:var(--accent);text-decoration:underline}
 .clrfil{margin-left:8px;border:1px solid var(--line);background:var(--card);color:var(--down);
 font-size:12px;font-weight:600;padding:6px 11px;border-radius:8px;cursor:pointer}
@@ -462,7 +518,10 @@ tbody tr:hover td{background:rgba(55,53,47,.04)}
 </div>
 <script>
 var D=__DATA__;
-var pi=0, sel=0, sortKey=null, sortDir=-1, showAll=false, secFilter='', grpFilter='', MODE='wk', TOP=30;
+var DEFAULT_SEC='조선';   // 첫 화면 기본 섹터 — 데이터에 없으면 전체 섹터로
+var DEFAULT_SEL=2;       // 첫 화면 기본 시계 탭: 0 당분기 · 1 다음분기 · 2 올해E · 3 내년E
+var pi=0, sel=DEFAULT_SEL, sortKey=null, sortDir=-1, showAll=false, grpFilter='', MODE='wk', TOP=30;
+var secFilter=(D.sectors||[]).indexOf(DEFAULT_SEC)>=0?DEFAULT_SEC:'';
 var qOverride=null; try{qOverride=localStorage.getItem('kc_anchor')||null}catch(e){}
 function P(){return D.periods[pi]}
 function $(id){return document.getElementById(id)}
@@ -475,6 +534,40 @@ function chgField(){return 'wow'+MX().sfx}
 function fmt(n){return n==null?'-':Math.round(n).toLocaleString('ko-KR')}
 function pct(w){if(w==null)return'<span class="tiny">-</span>';
  var c=w>0?'pos':(w<0?'neg':'');return'<span class="'+c+'">'+(w>0?'+':'')+w.toFixed(1)+'%</span>'}
+function grw(v){if(v==null)return'<span class="tiny">-</span>';   // QoQ/YoY: % 또는 흑전/적전/적지
+ if(typeof v==='string'){var c=v==='흑전'?'pos':(v==='적전'?'neg':'tiny');
+  return'<span class="'+c+'">'+v+'</span>'}
+ return pct(v)}
+function growthJS(c,b){if(c==null||b==null||b===0)return null;   // build_static.growth 와 동일 규칙
+ if(b>0)return c<0?'적전':(c-b)/b*100;return c<0?'적지':'흑전'}
+var AGG='__agg__';   // 섹터 셀렉트의 'Σ 섹터별 합산' 모드 값
+function aggCalc(rows,rev,bK,cK,pK,gcols){   // 합산: 컨센은 합계, 증감률은 합계끼리, 주가는 단순 평균
+ var a={n:0,np:0,nps:0,curr:0,_pc:0,_pb:0,_ps:0};
+ rows.forEach(function(d){if(d.curr!=null){a.curr+=d.curr;a.n++}
+  if(rev&&d.curr!=null&&d[bK]!=null){a._pc+=d.curr;a._pb+=d[bK];a.np++}
+  if(rev&&d[pK]!=null){a._ps+=d[pK];a.nps++}});
+ if(!a.n)return null;
+ a.gn={};
+ gcols.forEach(function(c){var vc=0,vb=0,n=0;
+  rows.forEach(function(d){var v=d[c[0]+'_v'];if(d.curr!=null&&v!=null){vc+=d.curr;vb+=v;n++}});
+  a[c[0]]=n?growthJS(vc,vb):null;a.gn[c[0]]=n});
+ if(rev){a[bK]=a.np?a._pb:null;a[cK]=a.np?growthJS(a._pc,a._pb):null;a[pK]=a.nps?a._ps/a.nps:null}
+ return a}
+function aggCells(a,rev,bK,cK,pK,gcols){   // 합산 값 칸들(섹터·종목 칸 제외)
+ var g=gcols.map(function(c){var n=a.gn[c[0]];
+  return'<td>'+grw(a[c[0]])+(n&&n<a.n?' <span class="tiny">'+n+'종목</span>':'')+'</td>'}).join('');
+ if(rev)return'<td>'+fmt(a[bK])+(a.np&&a.np<a.n?' <span class="tiny">'+a.np+'종목</span>':'')+'</td><td>'+fmt(a.curr)+'</td>'+g+
+  '<td>'+grw(a[cK])+'</td><td>'+pct(a[pK])+(a.nps?' <span class="tiny">평균</span>':'')+'</td>';
+ return'<td>'+fmt(a.curr)+'</td>'+g}
+function aggRow(rows,label,rev,bK,cK,pK,gcols){   // 필터 합산 행(종목 표 맨 위 Σ)
+ var a=aggCalc(rows,rev,bK,cK,pK,gcols);if(!a)return'';
+ return'<tr class="agg"><td>Σ</td><td class="mktc"></td><td class="l sec">'+label+'</td>'+
+  '<td class="l">합산 <span class="tiny">'+a.n+'종목</span></td>'+aggCells(a,rev,bK,cK,pK,gcols)+'</tr>'}
+function sectorAggs(rows,rev,bK,cK,pK,gcols){   // Σ 모드: 섹터마다 합산 객체 하나(정렬 키는 종목 행과 동일)
+ var by={};rows.forEach(function(d){(by[d.sec]=by[d.sec]||[]).push(d)});
+ var out=[];Object.keys(by).forEach(function(sec){var a=aggCalc(by[sec],rev,bK,cK,pK,gcols);
+  if(a){a.sec=sec;a.name=sec;out.push(a)}});
+ return out}
 function mmdd(s){return s?s.slice(5).replace('-','/'):''}   // 'YYYY-MM-DD' → 'MM/DD'
 function qq(p){if(!p)return'-';var m=p.slice(5,7),y=p.slice(2,4);   // '2026.06' → '2Q26'
  return ({'03':'1Q','06':'2Q','09':'3Q','12':'4Q'}[m]||m)+y}
@@ -502,9 +595,10 @@ function mktBadge(m){return m?'<span class="'+(m==='코스닥'?'mkt-kq':'mkt-kp'
 function sortRows(rows){
  if(sortKey==null){var kk=chgField();   // 기본: 선택 기준(주간/1개월/3개월) 변화 큰 순
   return rows.slice().sort(function(a,b){var x=a[kk],y=b[kk];
-   x=x==null?-1:Math.abs(x);y=y==null?-1:Math.abs(y);return y-x});}
+   x=typeof x==='number'?Math.abs(x):-1;y=typeof y==='number'?Math.abs(y):-1;return y-x});}
  return rows.slice().sort(function(a,b){var x=a[sortKey],y=b[sortKey];
   if(x==null&&y==null)return 0;if(x==null)return 1;if(y==null)return -1;   // 값 없는 종목은 뒤로
+  if(typeof x!==typeof y)return typeof x==='number'?-1:1;   // 숫자·문자(흑전 등) 혼재 시 숫자 먼저
   return typeof x==='string'?sortDir*x.localeCompare(y,'ko'):sortDir*(x-y)});
 }
 function arrow(k){return sortKey===k?(sortDir<0?' ▼':' ▲'):''}
@@ -557,7 +651,7 @@ function renderTop(){
   $('cards').innerHTML=ch+'</div>';
   var bd=refDate(p), pbd=refPDate(p);
   $('foot').innerHTML='컨센 변화 = '+MX().lab+'('+(bd||'')+') 대비 영업이익 컨센 변화율 · 주가 변동 = 종가 '+
-   (pbd||'')+' → '+(p.price_date_snap||'')+' · 상위 30 기본(전체 보기·열 정렬) · 섹터/종목명 클릭 활용';
+   (pbd||'')+' → '+(p.price_date_snap||'')+' · QoQ/YoY = 직전·전년 분기(연간은 전년) 영업이익 대비, 같은 스냅샷 내 비교 — 실적(A) 우선, 실적 수집 전엔 당시 컨센 · 상위 30 기본(전체 보기·열 정렬) · 섹터/종목명 클릭 활용 · 섹터·그룹 필터 시 맨 위 Σ 행 = 합산(컨센 합계·합계 기준 증감률·주가 변동은 단순 평균), 섹터 셀렉트의 Σ 섹터별 합산 = 섹터 한 줄씩';
  }else{
   $('cards').innerHTML='<div class="note">첫 스냅샷이라 전주 대비 변동은 다음 스냅샷부터 표시됩니다. 아래는 현재 컨센 레벨이며, 전체 종목은 엑셀에서 확인하세요.</div>';
   $('foot').innerHTML='';
@@ -566,7 +660,7 @@ function renderTop(){
 function renderCtl(){   // 그룹/섹터 필터 + 기준(주간/1개월/3개월) 토글
  var gopts='<option value="">전체 그룹</option>';
  (D.groups||[]).forEach(function(g){gopts+='<option value="'+g+'"'+(g===grpFilter?' selected':'')+'>'+g+'</option>'});
- var opts='<option value="">전체 섹터</option>';
+ var opts='<option value="">전체 섹터</option><option value="'+AGG+'"'+(secFilter===AGG?' selected':'')+'>Σ 섹터별 합산</option>';
  D.sectors.forEach(function(s){opts+='<option value="'+s+'"'+(s===secFilter?' selected':'')+'>'+s+'</option>'});
  var clr=(secFilter||grpFilter)?'<button class="clrfil" id="clrfil">✕ 필터 해제</button>':'';
  var tog='';
@@ -585,27 +679,49 @@ function draw(){
  if(h.stub||!h.rows.length){
   tbl.innerHTML='<div class="note">'+(h.period?dlab(h)+' 컨센은 아직 수집 전입니다. 다음 주간 스냅샷부터 쌓입니다.':'데이터가 없습니다.')+'</div>';
   return}
- var all=(h.rows||[]).filter(function(d){return (!secFilter||d.sec===secFilter)&&(!grpFilter||(d.grp||'').indexOf(grpFilter)>=0)});
- var rows=sortRows(all), shown=showAll?rows:rows.slice(0,TOP);
- var toggle=all.length>TOP?'<button class="lim" id="limtog">'+
-  (showAll?'상위 '+TOP+'만 보기':'전체 '+all.length+'개 보기')+'</button>':'';
+ var AGGMODE=secFilter===AGG;
+ var all=(h.rows||[]).filter(function(d){return (AGGMODE||!secFilter||d.sec===secFilter)&&(!grpFilter||(d.grp||'').indexOf(grpFilter)>=0)});
  var bK='base'+x, cK='wow'+x, pK='pwow'+x;
  var bLab=x?MX().lab+' 컨센':'컨센 전주', bDate=refDate(p), pbDate=refPDate(p);
- var cols=rev?
+ // QoQ/YoY 칼럼 (분기: 직전·전년동기 / 연간: 전년) — 같은 스냅샷 내 비교
+ var snapY=+p.snapshot_date.slice(0,4);
+ function ylab(per){var y=+per.slice(0,4);return y+(y>=snapY?'E':'')}
+ var isQ=h.key&&h.key.slice(0,2)==='q:', gcols=[];
+ if(isQ){if(h.qoqp)gcols.push(['qoq','QoQ','vs '+qq(h.qoqp),'']);
+  if(h.yoyp)gcols.push(['yoy','YoY','vs '+qq(h.yoyp),'']);}
+ else if(h.yoyp)gcols.push(['yoy','YoY','vs '+ylab(h.yoyp),'']);
+ var cols=(rev?
   [['mkt','시장','','mktc'],['sec','섹터','','l'],['name','종목','','l'],[bK,bLab,mmdd(bDate),''],
-   ['curr','컨센 현재',mmdd(p.snapshot_date),''],[cK,'컨센 변화',mmdd(bDate)+'-'+mmdd(p.snapshot_date),''],
-   [pK,'주가 변동',mmdd(pbDate)+'-'+mmdd(p.price_date_snap),'']]:
-  [['mkt','시장','','mktc'],['sec','섹터','','l'],['name','종목','','l'],['curr','영업이익',mmdd(p.snapshot_date),'']];
+   ['curr','컨센 현재',mmdd(p.snapshot_date),'']].concat(gcols,
+   [[cK,'컨센 변화',mmdd(bDate)+'-'+mmdd(p.snapshot_date),''],
+    [pK,'주가 변동',mmdd(pbDate)+'-'+mmdd(p.price_date_snap),'']]):
+  [['mkt','시장','','mktc'],['sec','섹터','','l'],['name','종목','','l'],
+   ['curr','영업이익',mmdd(p.snapshot_date),'']].concat(gcols));
+ var stockRows=AGGMODE?[]:all, aggs=AGGMODE?sectorAggs(all,rev,bK,cK,pK,gcols):[];
+ var rows=sortRows(AGGMODE?aggs:stockRows), shown=(showAll||AGGMODE)?rows:rows.slice(0,TOP);
+ var toggle=(!AGGMODE&&all.length>TOP)?'<button class="lim" id="limtog">'+
+  (showAll?'상위 '+TOP+'만 보기':'전체 '+all.length+'개 보기')+'</button>':'';
+ if(AGGMODE)cols[2]=['name','섹터 <span class="tiny">(클릭=종목 보기)</span>','','l'];
  var out=toggle+'<table><tr><th>#</th>';
  cols.forEach(function(c){out+='<th class="sortable '+(c[3]||'')+'" data-k="'+c[0]+'">'+c[1]+
   (c[2]?'<br><span class="tiny">'+c[2]+'</span>':'')+arrow(c[0])+'</th>'});
  out+='</tr>';
- shown.forEach(function(d,i){out+='<tr><td>'+(i+1)+'</td>'+
+ if(AGGMODE){   // 섹터 한 줄씩 합산 — 맨 위 Σ 는 전체(그룹 필터 반영) 합산
+  out+=aggRow(all,grpFilter||'전체',rev,bK,cK,pK,gcols);
+  shown.forEach(function(a,i){out+='<tr><td>'+(i+1)+'</td><td class="mktc"></td>'+
+   '<td class="l sec"><span class="secpick" data-s="'+a.sec+'">'+a.sec+'</span></td>'+
+   '<td class="l"><span class="secpick" data-s="'+a.sec+'">'+a.sec+'</span> <span class="tiny">'+a.n+'종목</span></td>'+
+   aggCells(a,rev,bK,cK,pK,gcols)+'</tr>'})}
+ else if(secFilter||grpFilter)out+=aggRow(all,[secFilter,grpFilter].filter(Boolean).join(' · '),rev,bK,cK,pK,gcols);
+ (AGGMODE?[]:shown).forEach(function(d,i){
+  var g=gcols.map(function(c){return'<td>'+grw(d[c[0]])+'</td>'}).join('');
+  out+='<tr><td>'+(i+1)+'</td>'+
   '<td class="mktc">'+mktBadge(d.mkt)+'</td>'+
   '<td class="l sec"><span class="secpick" data-s="'+d.sec+'">'+d.sec+'</span></td>'+
   '<td class="l">'+nameCell(d)+'</td>'+
-  (rev?'<td>'+fmt(d[bK])+'</td><td>'+fmt(d.curr)+'</td><td>'+pct(d[cK])+'</td><td>'+pct(d[pK])+'</td>':'<td>'+fmt(d.curr)+'</td>')+'</tr>'});
- if(!shown.length)out+='<tr><td colspan="'+(cols.length+1)+'" style="text-align:center;padding:18px" class="tiny">해당 섹터 종목이 없습니다</td></tr>';
+  (rev?'<td>'+fmt(d[bK])+'</td><td>'+fmt(d.curr)+'</td>'+g+'<td>'+pct(d[cK])+'</td><td>'+pct(d[pK])+'</td>'
+      :'<td>'+fmt(d.curr)+'</td>'+g)+'</tr>'});
+ if(!shown.length&&!AGGMODE)out+='<tr><td colspan="'+(cols.length+1)+'" style="text-align:center;padding:18px" class="tiny">해당 섹터 종목이 없습니다</td></tr>';
  tbl.innerHTML=out+'</table>';
  var lt=$('limtog');if(lt)lt.onclick=function(){showAll=!showAll;draw()};
  tbl.querySelectorAll('.secpick').forEach(function(el){el.onclick=function(){

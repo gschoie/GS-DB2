@@ -1,0 +1,493 @@
+{
+ "meta": {
+  "company": "현대로템",
+  "sector": "방산",
+  "stock_code": "064350",
+  "corp_code": "00302926",
+  "rcept_no": "20260515002876",
+  "rcept_dt": "20260515",
+  "report_nm": "분기보고서 (2026.03)",
+  "report_type": "quarter",
+  "period": "2026-03",
+  "period_label": "2026.03 1Q",
+  "corrected": false,
+  "dart_url": "https://dart.fss.or.kr/dsaf001/main.do?rcpNo=20260515002876"
+ },
+ "tables": [
+  {
+   "section": [
+    "1. 사업의 개요",
+    "2. 주요 제품 및 서비스",
+    "3. 원재료 및 생산설비"
+   ],
+   "headings": [
+    "3. 원재료 및 생산설비",
+    "가. 원재료",
+    "1) 주요 원재료"
+   ],
+   "context": [
+    "* 작성기준 : 최근 수주한 제품을 단순합산하여 1량으로 환산하였습니다.* 철도차량은 기관차, 고속열차, 전동차 등 수주차종별, 발주사양별 가격편차가 크게 발생하여 상기의 수치로 가격변동 추이를 판단하기는 어렵습니다.",
+    "(2) 디펜스솔루션 부문 및 에코플랜트 부문은 산업특성상, 가격변동추이 산정이 어렵습니다.",
+    "3. 원재료 및 생산설비",
+    "가. 원재료",
+    "1) 주요 원재료",
+    "(단위: 백만원)"
+   ],
+   "unit": "(단위: 백만원)",
+   "topic": "material",
+   "keywords": [
+    "매입액",
+    "주요매입처"
+   ],
+   "keyword_in": "table",
+   "rows": [
+    [
+     "사업부문",
+     "매입유형",
+     "품 목",
+     "구체적용도",
+     "매입액 (비율%)",
+     "주요매입처"
+    ],
+    [
+     "레일솔루션부문 외",
+     "원재료",
+     "금속소재 등",
+     "차체 등",
+     "628,499(44%)",
+     "현대비앤지스틸(특수관계인) 외"
+    ]
+   ],
+   "html": "<table aclass=\"NORMAL\" afixtable=\"N\" border=\"1\" width=\"625\">\n<colgroup width=\"625\">\n<col width=\"93\"/>\n<col width=\"78\"/>\n<col width=\"98\"/>\n<col width=\"93\"/>\n<col width=\"121\"/>\n<col width=\"142\"/>\n</colgroup>\n<thead>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"30\">\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"23\" usermark=\"BC0XDCDCDC\" valign=\"MIDDLE\" width=\"84\">사업부문</th>\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"23\" usermark=\"BC0XDCDCDC\" valign=\"MIDDLE\" width=\"69\">매입유형</th>\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"23\" usermark=\"BC0XDCDCDC\" valign=\"MIDDLE\" width=\"89\">품 목</th>\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"23\" usermark=\"BC0XDCDCDC\" valign=\"MIDDLE\" width=\"84\">구체적용도</th>\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"23\" usermark=\"BC0XDCDCDC\" valign=\"MIDDLE\" width=\"112\">매입액 (비율%)</th>\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"23\" usermark=\"BC0XDCDCDC\" valign=\"MIDDLE\" width=\"133\">주요매입처</th>\n</tr>\n</thead>\n<tbody>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"53\">\n<td align=\"CENTER\" height=\"46\" valign=\"MIDDLE\" width=\"84\">레일솔루션부문 외</td>\n<td align=\"CENTER\" height=\"46\" valign=\"MIDDLE\" width=\"69\">원재료</td>\n<td align=\"CENTER\" height=\"46\" valign=\"MIDDLE\" width=\"89\">금속소재 등</td>\n<td align=\"CENTER\" height=\"46\" valign=\"MIDDLE\" width=\"84\">차체 등</td>\n<td align=\"CENTER\" height=\"46\" valign=\"MIDDLE\" width=\"112\">628,499(44%)</td>\n<td align=\"CENTER\" height=\"46\" valign=\"MIDDLE\" width=\"133\">현대비앤지스틸(특수관계인) 외</td>\n</tr>\n</tbody>\n</table>",
+   "footnotes": [],
+   "digest": "c2b63d8b0694",
+   "file": "20260515002876.xml"
+  },
+  {
+   "section": [
+    "1. 사업의 개요",
+    "2. 주요 제품 및 서비스",
+    "3. 원재료 및 생산설비"
+   ],
+   "headings": [
+    "* 작성기준 : 2026년 1월 ~ 3월 당기 원재료 매입액, 비율 : 별도손익계산서상의 매출액 대비",
+    "2) 주요 원재료 가격변동추이"
+   ],
+   "context": [
+    "* 작성기준 : 2026년 1월 ~ 3월 당기 원재료 매입액, 비율 : 별도손익계산서상의 매출액 대비",
+    "2) 주요 원재료 가격변동추이"
+   ],
+   "unit": "",
+   "topic": "material_price",
+   "keywords": [
+    "2) 주요 원재료 가격변동추이"
+   ],
+   "keyword_in": "heading",
+   "rows": [
+    [
+     "사업부문",
+     "품목",
+     "제28기 1분기",
+     "제27기",
+     "제26기"
+    ],
+    [
+     "레일솔루션부문 외",
+     "SUS LT2T",
+     "백만원 / Ton",
+     "6.1",
+     "5.8",
+     "5.4"
+    ]
+   ],
+   "html": "<table aclass=\"NORMAL\" afixtable=\"N\" border=\"1\" width=\"593\">\n<colgroup width=\"593\">\n<col width=\"98\"/>\n<col width=\"85\"/>\n<col width=\"104\"/>\n<col width=\"102\"/>\n<col width=\"102\"/>\n<col width=\"102\"/>\n</colgroup>\n<thead>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"30\">\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"23\" usermark=\"BC0XDCDCDC\" valign=\"MIDDLE\" width=\"89\">사업부문</th>\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" colspan=\"2\" height=\"23\" usermark=\"BC0XDCDCDC\" valign=\"MIDDLE\" width=\"180\">품목</th>\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"23\" usermark=\"BC0XDCDCDC\" valign=\"MIDDLE\" width=\"93\">제28기 1분기</th>\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"23\" usermark=\"BC0XDCDCDC\" valign=\"MIDDLE\" width=\"93\">제27기</th>\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"23\" usermark=\"BC0XDCDCDC\" valign=\"MIDDLE\" width=\"93\">제26기</th>\n</tr>\n</thead>\n<tbody>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"53\">\n<td align=\"CENTER\" height=\"46\" valign=\"MIDDLE\" width=\"89\">레일솔루션부문 외</td>\n<td align=\"CENTER\" height=\"46\" valign=\"MIDDLE\" width=\"76\">SUS LT2T</td>\n<td align=\"CENTER\" height=\"46\" valign=\"MIDDLE\" width=\"95\">백만원 / Ton</td>\n<td align=\"RIGHT\" height=\"46\" valign=\"MIDDLE\" width=\"93\">6.1</td>\n<td align=\"RIGHT\" height=\"46\" valign=\"MIDDLE\" width=\"93\">5.8</td>\n<td align=\"RIGHT\" height=\"46\" valign=\"MIDDLE\" width=\"93\">5.4</td>\n</tr>\n</tbody>\n</table>",
+   "footnotes": [],
+   "digest": "ba81e23e5c20",
+   "file": "20260515002876.xml"
+  },
+  {
+   "section": [
+    "1. 사업의 개요",
+    "2. 주요 제품 및 서비스",
+    "3. 원재료 및 생산설비"
+   ],
+   "headings": [
+    "나. 생산 및 설비에 관한 사항",
+    "(2) 생산실적"
+   ],
+   "context": [
+    "* 산출기준 : 2026년 3월말 / SUS LT 2T SHEET기준 정상가격* 변동원인 : 환율 상승 및 니켈 등 주요 원료가격 상승",
+    "나. 생산 및 설비에 관한 사항",
+    "1) 주요 제품에 대한 생산능력 ·생산실적 ·가동률(1) 생산능력 및 산출기준① 레일솔루션 부문 : 창원공장- 생산능력 : 552량- 생산능력 산출기준 : 철도차량 의장 연간 생산기준② 에코플랜트 부문 : 에코제철공장 (당진공장)- 생산능력 : 10,800톤- 생산능력 산출기준 : 에코제철공장(당진공장) 용접물량 기준",
+    "* 군사/방산 보안관계 법령상 방산부문 생산능력은 기재하지 않습니다.",
+    "(2) 생산실적",
+    "(단위: 백만원)"
+   ],
+   "unit": "(단위: 백만원)",
+   "topic": "capacity",
+   "keywords": [
+    "생산실적"
+   ],
+   "keyword_in": "heading",
+   "rows": [
+    [
+     "사업부문",
+     "품 목",
+     "사업소",
+     "제28기 1분기",
+     "제27기",
+     "제26기"
+    ],
+    [
+     "디펜스솔루션부문",
+     "방산물자",
+     "창원",
+     "548,025",
+     "1,756,088",
+     "1,678,439"
+    ],
+    [
+     "레일솔루션부문",
+     "전동차",
+     "창원",
+     "468,482",
+     "2,098,211",
+     "1,365,399"
+    ],
+    [
+     "에코플랜트부문",
+     "자동차/제철설비 外",
+     "당진",
+     "98,695",
+     "482,985",
+     "470,345"
+    ],
+    [
+     "합 계",
+     "1,115,202",
+     "4,337,283",
+     "3,514,183"
+    ]
+   ],
+   "html": "<table aclass=\"NORMAL\" afixtable=\"N\" border=\"1\" width=\"597\">\n<colgroup width=\"597\">\n<col width=\"102\"/>\n<col width=\"102\"/>\n<col width=\"77\"/>\n<col width=\"106\"/>\n<col width=\"105\"/>\n<col width=\"105\"/>\n</colgroup>\n<thead>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"30\">\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"23\" usermark=\"BC0XDCDCDC\" valign=\"MIDDLE\" width=\"93\">사업부문</th>\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"23\" usermark=\"BC0XDCDCDC\" valign=\"MIDDLE\" width=\"93\">품 목</th>\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"23\" usermark=\"BC0XDCDCDC\" valign=\"MIDDLE\" width=\"68\">사업소</th>\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"23\" usermark=\"BC0XDCDCDC\" valign=\"MIDDLE\" width=\"97\">제28기 1분기</th>\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"23\" usermark=\"BC0XDCDCDC\" valign=\"MIDDLE\" width=\"96\">제27기</th>\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"23\" usermark=\"BC0XDCDCDC\" valign=\"MIDDLE\" width=\"96\">제26기</th>\n</tr>\n</thead>\n<tbody>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"53\">\n<td align=\"CENTER\" height=\"46\" valign=\"MIDDLE\" width=\"93\">디펜스솔루션부문</td>\n<td align=\"CENTER\" height=\"46\" valign=\"MIDDLE\" width=\"93\">방산물자</td>\n<td align=\"CENTER\" height=\"46\" valign=\"MIDDLE\" width=\"68\">창원</td>\n<td align=\"RIGHT\" height=\"46\" valign=\"MIDDLE\" width=\"97\">548,025</td>\n<td align=\"RIGHT\" height=\"46\" valign=\"MIDDLE\" width=\"96\">1,756,088</td>\n<td align=\"RIGHT\" height=\"46\" valign=\"MIDDLE\" width=\"96\">1,678,439</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"53\">\n<td align=\"CENTER\" height=\"46\" valign=\"MIDDLE\" width=\"93\">레일솔루션부문</td>\n<td align=\"CENTER\" height=\"46\" valign=\"MIDDLE\" width=\"93\">전동차 </td>\n<td align=\"CENTER\" height=\"46\" valign=\"MIDDLE\" width=\"68\">창원</td>\n<td align=\"RIGHT\" height=\"46\" valign=\"MIDDLE\" width=\"97\">468,482</td>\n<td align=\"RIGHT\" height=\"46\" valign=\"MIDDLE\" width=\"96\">2,098,211</td>\n<td align=\"RIGHT\" height=\"46\" valign=\"MIDDLE\" width=\"96\">1,365,399</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"53\">\n<td align=\"CENTER\" height=\"46\" valign=\"MIDDLE\" width=\"93\">에코플랜트부문</td>\n<td align=\"CENTER\" height=\"46\" valign=\"MIDDLE\" width=\"93\">자동차/제철설비 外</td>\n<td align=\"CENTER\" height=\"46\" valign=\"MIDDLE\" width=\"68\">당진</td>\n<td align=\"RIGHT\" height=\"46\" valign=\"MIDDLE\" width=\"97\">98,695</td>\n<td align=\"RIGHT\" height=\"46\" valign=\"MIDDLE\" width=\"96\">482,985</td>\n<td align=\"RIGHT\" height=\"46\" valign=\"MIDDLE\" width=\"96\">470,345</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"30\">\n<td align=\"CENTER\" colspan=\"3\" height=\"23\" valign=\"MIDDLE\" width=\"272\">합 계</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"97\">1,115,202</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"96\">4,337,283</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"96\">3,514,183</td>\n</tr>\n</tbody>\n</table>",
+   "footnotes": [],
+   "digest": "79883266a496",
+   "file": "20260515002876.xml"
+  },
+  {
+   "section": [
+    "1. 사업의 개요",
+    "2. 주요 제품 및 서비스",
+    "3. 원재료 및 생산설비"
+   ],
+   "headings": [
+    "(3) 가동률"
+   ],
+   "context": [
+    "(3) 가동률",
+    "(단위 : MH, %)"
+   ],
+   "unit": "(단위 : MH, %)",
+   "topic": "capacity",
+   "keywords": [
+    "가동률"
+   ],
+   "keyword_in": "table",
+   "rows": [
+    [
+     "사업부문",
+     "가동가능시간",
+     "실제가동시간",
+     "평균가동률"
+    ],
+    [
+     "디펜스솔루션 부문",
+     "199,808",
+     "212,343",
+     "106.3%"
+    ],
+    [
+     "레일솔루션 부문",
+     "160,035",
+     "146,047",
+     "91.3%"
+    ],
+    [
+     "에코플랜트 부문",
+     "42,411",
+     "53,411",
+     "125.9%"
+    ],
+    [
+     "합계",
+     "402,254",
+     "411,801",
+     "102.4%"
+    ]
+   ],
+   "html": "<table aclass=\"NORMAL\" afixtable=\"N\" border=\"1\" width=\"578\">\n<colgroup width=\"578\">\n<col width=\"148\"/>\n<col width=\"148\"/>\n<col width=\"148\"/>\n<col width=\"134\"/>\n</colgroup>\n<thead>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"30\">\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"23\" usermark=\"BC0XDCDCDC\" valign=\"MIDDLE\" width=\"139\">사업부문</th>\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"23\" usermark=\"BC0XDCDCDC\" valign=\"MIDDLE\" width=\"139\">가동가능시간</th>\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"23\" usermark=\"BC0XDCDCDC\" valign=\"MIDDLE\" width=\"139\">실제가동시간</th>\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"23\" usermark=\"BC0XDCDCDC\" valign=\"MIDDLE\" width=\"125\">평균가동률</th>\n</tr>\n</thead>\n<tbody>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"31\">\n<td align=\"CENTER\" height=\"24\" valign=\"MIDDLE\" width=\"139\">디펜스솔루션 부문</td>\n<td align=\"RIGHT\" height=\"24\" usermark=\"F-12 \" valign=\"MIDDLE\" width=\"139\">199,808</td>\n<td align=\"RIGHT\" height=\"24\" usermark=\"F-12 \" valign=\"MIDDLE\" width=\"139\">212,343</td>\n<td align=\"RIGHT\" height=\"24\" usermark=\"F-12 \" valign=\"MIDDLE\" width=\"125\">106.3%</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"31\">\n<td align=\"CENTER\" height=\"24\" valign=\"MIDDLE\" width=\"139\">레일솔루션 부문</td>\n<td align=\"RIGHT\" height=\"24\" usermark=\"F-12 \" valign=\"MIDDLE\" width=\"139\">160,035</td>\n<td align=\"RIGHT\" height=\"24\" usermark=\"F-12 \" valign=\"MIDDLE\" width=\"139\">146,047</td>\n<td align=\"RIGHT\" height=\"24\" usermark=\"F-12 \" valign=\"MIDDLE\" width=\"125\">91.3%</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"31\">\n<td align=\"CENTER\" height=\"24\" valign=\"MIDDLE\" width=\"139\">에코플랜트 부문</td>\n<td align=\"RIGHT\" height=\"24\" usermark=\"F-12 \" valign=\"MIDDLE\" width=\"139\">42,411</td>\n<td align=\"RIGHT\" height=\"24\" usermark=\"F-12 \" valign=\"MIDDLE\" width=\"139\">53,411</td>\n<td align=\"RIGHT\" height=\"24\" usermark=\"F-12 \" valign=\"MIDDLE\" width=\"125\">125.9%</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"31\">\n<td align=\"CENTER\" height=\"24\" valign=\"MIDDLE\" width=\"139\">합계</td>\n<td align=\"RIGHT\" height=\"24\" usermark=\"F-12 \" valign=\"MIDDLE\" width=\"139\">402,254</td>\n<td align=\"RIGHT\" height=\"24\" usermark=\"F-12 \" valign=\"MIDDLE\" width=\"139\">411,801</td>\n<td align=\"RIGHT\" height=\"24\" usermark=\"F-12 \" valign=\"MIDDLE\" width=\"125\">102.4%</td>\n</tr>\n</tbody>\n</table>",
+   "footnotes": [],
+   "digest": "25ecb8ca4b1b",
+   "file": "20260515002876.xml"
+  }
+ ],
+ "rejected": [
+  {
+   "section": [
+    "II. 사업의 내용",
+    "1. 사업의 개요",
+    "2. 주요 제품 및 서비스"
+   ],
+   "headings": [
+    "2) 주요제품 가격변동추이",
+    "(1) 레일솔루션 부문"
+   ],
+   "context": [
+    "2) 주요제품 가격변동추이",
+    "(1) 레일솔루션 부문",
+    "(단위 : 억원/량당)"
+   ],
+   "unit": "(단위 : 억원/량당)",
+   "topic": "",
+   "keywords": [
+    "가격변동추이"
+   ],
+   "keyword_in": "",
+   "rows": [
+    [
+     "구 분",
+     "제28기 1분기",
+     "제27기",
+     "제26기"
+    ],
+    [
+     "내수",
+     "21",
+     "22",
+     "30"
+    ],
+    [
+     "수출",
+     "32",
+     "48",
+     "23"
+    ]
+   ],
+   "html": "",
+   "footnotes": [],
+   "digest": "99f6f2ebcdea",
+   "why": "셀 전체가 지표명이 아니거나 멀리 있는 문장에만 키워드",
+   "file": "20260515002876.xml"
+  },
+  {
+   "section": [
+    "32. 법인세 (연결)",
+    "33. 주당손익 (연결)",
+    "34. 현금흐름 (연결)"
+   ],
+   "headings": [
+    "31. 비용의 성격별 분류 (연결)",
+    "32. 법인세 (연결)",
+    "회계이익에 적용세율을 곱하여 산출한 금액에 대한 조정 당분기",
+    "공시금액 평균유효세율 0.2646",
+    "전분기",
+    "공시금액 평균유효세율 0.2245",
+    "33. 주당손익 (연결)",
+    "34. 현금흐름 (연결)"
+   ],
+   "context": [
+    "(*) 외화예금 및 외화차입금(Usance차입금 제외)에서 발생하는 외환차손익 및 외화환산손익을 금융수익 및 금융비용으로 분류하고 있습니다.",
+    "31. 비용의 성격별 분류 (연결)",
+    "비용의 성격별 분류 공시 당분기 (단위 : 천원)",
+    "공시금액 재고자산의 변동 (18,469,664) 원재료와 소모품의 사용액 603,904,453 종업원급여비용 합계 169,375,679 외주가공비 50,022,888 감가상각비 10,940,459 무형자산상각비 5,198,988 지급수수료 41,358,503 운반보관비 7,127,575 기타 비용 449,236,751 성격별 비용 합계(*) 1,318,695,632",
+    "전분기 (단위 : 천원)",
+    "공시금액 재고자산의 변동 (98,366,961) 원재료와 소모품의 사용액 499,558,954 종업원급여비용 합계 147,686,926 외주가공비 58,695,874 감가상각비 9,010,477 무형자산상각비 4,640,176 지급수수료 31,343,512 운반보관비 19,084,984 기타 비용 323,335,480 성격별 비용 합계(*) 994,989,422",
+    "(*) 상기 비용의 합계는 매출원가, 판매비와관리비 및 기타비용의 합계 금액입니다.",
+    "32. 법인세 (연결)",
+    "법인세비용은 전체 회계연도에 대해서 예상되는 최선의 가중평균 연간유효법인세율의 추정에 기초하여 인식하였습니다. 2026년 12월 31일로 종료하는 회계연도의 예상가중평균 연간유효법인세율은 아래와 같습니다.",
+    "회계이익에 적용세율을 곱하여 산출한 금액에 대한 조정 당분기",
+    "공시금액 평균유효세율 0.2646",
+    "전분기",
+    "공시금액 평균유효세율 0.2245",
+    "33. 주당손익 (연결)",
+    "기본주당손익은 보통주에 귀속되는 지배주주지분 분기순이익을 분기의 가중평균유통보통주식수로 나누어 산출하며, 그 내용은 다음과 같습니다.",
+    "주당이익 당분기 (단위 : 천원)",
+    "보통주 지배기업의 소유주에게 귀속되는 분기순이익 201,372,038 가중평균유통보통주식수 (단위: 주) 109,142,293 기본주당이익(손실) (단위: 원) 1,845",
+    "전분기 (단위 : 천원)",
+    "보통주 지배기업의 소유주에게 귀속되는 분기순이익 158,385,453 가중평균유통보통주식수 (단위: 주) 109,142,293 기본주당이익(손실) (단위: 원) 1,451",
+    "연결회사는 잠재적보통주를 발행하지 않았으므로 기본주당이익과 희석주당이익은 동일합니다.",
+    "34. 현금흐름 (연결)",
+    "영업활동현금흐름 당분기 (단위 : 천원)"
+   ],
+   "unit": "영업활동현금흐름 당분기 (단위 : 천원)",
+   "topic": "",
+   "keywords": [
+    "원재료"
+   ],
+   "keyword_in": "",
+   "rows": [
+    [
+     "",
+     "",
+     "공시금액"
+    ]
+   ],
+   "html": "",
+   "footnotes": [],
+   "digest": "5070bb21e157",
+   "why": "셀 전체가 지표명이 아니거나 멀리 있는 문장에만 키워드",
+   "file": "20260515002876.xml"
+  },
+  {
+   "section": [
+    "32. 법인세",
+    "33. 주당손익",
+    "34. 현금흐름"
+   ],
+   "headings": [
+    "31. 비용의 성격별 분류",
+    "32. 법인세",
+    "회계이익에 적용세율을 곱하여 산출한 금액에 대한 조정 당분기",
+    "공시금액 평균유효세율 0.2665",
+    "전분기",
+    "공시금액 평균유효세율 0.2158",
+    "33. 주당손익",
+    "34. 현금흐름"
+   ],
+   "context": [
+    "(*) 외화예금 및 외화차입금(Usance차입금 제외)에서 발생하는 외환차손익 및 외화환산손익을 금융수익 및 금융비용으로 분류하고 있습니다.",
+    "31. 비용의 성격별 분류",
+    "비용의 성격별 분류 공시 당분기 (단위 : 천원)",
+    "공시금액 재고자산의 변동 (26,932,514) 원재료와 소모품의 사용액 628,499,291 종업원급여비용 합계 146,805,590 외주가공비 36,428,225 감가상각비 9,986,436 무형자산상각비 5,131,112 지급수수료 31,140,588 운반보관비 6,296,602 기타 비용 441,729,477 성격별 비용 합계(*) 1,279,084,807",
+    "전분기 (단위 : 천원)",
+    "공시금액 재고자산의 변동 (96,777,734) 원재료와 소모품의 사용액 517,463,375 종업원급여비용 합계 130,106,008 외주가공비 57,249,385 감가상각비 8,325,724 무형자산상각비 4,585,066 지급수수료 16,853,732 운반보관비 18,805,251 기타 비용 309,112,711 성격별 비용 합계(*) 965,723,518",
+    "(*) 상기 비용의 합계는 매출원가, 판매비와관리비 및 기타비용의 합계 금액입니다.",
+    "32. 법인세",
+    "법인세비용은 전체 회계연도에 대해서 예상되는 최선의 가중평균 연간유효법인세율의 추정에 기초하여 인식하였습니다. 2026년 12월 31일로 종료하는 회계연도의 예상가중평균 연간유효법인세율은 아래와 같습니다.",
+    "회계이익에 적용세율을 곱하여 산출한 금액에 대한 조정 당분기",
+    "공시금액 평균유효세율 0.2665",
+    "전분기",
+    "공시금액 평균유효세율 0.2158",
+    "33. 주당손익",
+    "기본주당손익은 보통주에 귀속되는 분기순이익을 당분기의 가중평균유통보통주식수로 나누어 산출하며, 그 내용은 다음과 같습니다.",
+    "주당이익 당분기 (단위 : 천원)",
+    "보통주 분기순이익 198,903,050 가중평균유통보통주식수 (단위: 주) 109,142,293 기본주당이익(손실) (단위: 원) 1,822",
+    "전분기 (단위 : 천원)",
+    "보통주 분기순이익 157,184,478 가중평균유통보통주식수 (단위: 주) 109,142,293 기본주당이익(손실) (단위: 원) 1,440",
+    "회사는 잠재적보통주를 발행하지 않았으므로 기본주당이익과 희석주당이익은 동일합니다.",
+    "34. 현금흐름",
+    "영업활동현금흐름 당분기 (단위 : 천원)"
+   ],
+   "unit": "영업활동현금흐름 당분기 (단위 : 천원)",
+   "topic": "",
+   "keywords": [
+    "원재료"
+   ],
+   "keyword_in": "",
+   "rows": [
+    [
+     "",
+     "",
+     "공시금액"
+    ]
+   ],
+   "html": "",
+   "footnotes": [],
+   "digest": "1077a91f9197",
+   "why": "셀 전체가 지표명이 아니거나 멀리 있는 문장에만 키워드",
+   "file": "20260515002876.xml"
+  },
+  {
+   "section": [
+    "7-1. 증권의 발행을 통한 자금조달 실적",
+    "7-2. 증권의 발행을 통해 조달된 자금의 사용실적",
+    "8. 기타 재무에 관한 사항"
+   ],
+   "headings": [],
+   "context": [
+    "* 원재료내 저장품금액이 포함되어 있습니다",
+    "(2) 재고자산의 실사내역 등실사일자 : 12월말 기준으로 매년 1회 재고자산 실시실사방법 : 외부감사인이 당사의 재고실사에 입회하여 표본조사를 통해 그 실재성 및 완전성을 확인함(3) 장기체화재고 등 내역재고자산의 시가가 취득원가보다 하락한 경우에는 저가법을 사용하여재고자산의 재무상태표가액을 결정하고 있으며, 2026년 1분기말 현재 재고자산에 대한 평가내역은 다음과 같습니다.",
+    "(단위 : 백만원)"
+   ],
+   "unit": "(단위 : 백만원)",
+   "topic": "",
+   "keywords": [
+    "원재료"
+   ],
+   "keyword_in": "",
+   "rows": [
+    [
+     "구 분",
+     "평가전금액",
+     "평가충당금",
+     "평가후금액"
+    ],
+    [
+     "원재료",
+     "416,190",
+     "(3,866)",
+     "412,324"
+    ],
+    [
+     "제품",
+     "-",
+     "-",
+     "-"
+    ]
+   ],
+   "html": "",
+   "footnotes": [],
+   "digest": "a891d58f9d0e",
+   "why": "셀 전체가 지표명이 아니거나 멀리 있는 문장에만 키워드",
+   "file": "20260515002876.xml"
+  },
+  {
+   "section": [
+    "7-1. 증권의 발행을 통한 자금조달 실적",
+    "7-2. 증권의 발행을 통해 조달된 자금의 사용실적",
+    "8. 기타 재무에 관한 사항"
+   ],
+   "headings": [
+    "다. 진행률적용 수주계약 현황"
+   ],
+   "context": [
+    "* 당사는 프로젝트별 주문제작 방식으로 자재 발주, 입고, 불출을 통해 제작하며, 완성된 제품을 납기에 맞게 인도하고 있으므로 별도의 기타 제품에 대해 손실충당금을 인식하고 있지 않습니다. 다만 원재료 중 일부 잉여 자재에 대해 저가법으로 평가충당금을 계상하고있습니다.",
+    "다. 진행률적용 수주계약 현황",
+    "(단위 : 백만원)"
+   ],
+   "unit": "(단위 : 백만원)",
+   "topic": "",
+   "keywords": [
+    "원재료"
+   ],
+   "keyword_in": "",
+   "rows": [
+    [
+     "회사명",
+     "품목",
+     "발주처",
+     "계약일",
+     "공사기한",
+     "수주총액",
+     "진행률",
+     "미청구공사",
+     "공사미수금"
+    ],
+    [
+     "총액",
+     "손상차손누계액",
+     "총액",
+     "대손충당금"
+    ],
+    [
+     "합 계"
+    ]
+   ],
+   "html": "",
+   "footnotes": [],
+   "digest": "da035dd971f9",
+   "why": "셀 전체가 지표명이 아니거나 멀리 있는 문장에만 키워드",
+   "file": "20260515002876.xml"
+  }
+ ]
+}

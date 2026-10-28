@@ -45,19 +45,30 @@ GEMINI_SYSTEM_PROMPT = """너는 텔레그램 대화에서 '자리 비움 보고
 
 메시지마다 아래를 판정해 JSON 배열로만 답하라(설명 금지):
 [{"i": <메시지 번호>, "vacation": true|false, "start": "YYYY-MM-DD"|null,
-  "end": "YYYY-MM-DD"|null, "kind": "연차|반차|오전반차|오후반차|휴가|출장|해외출장|병가|휴무|기타",
-  "note": "짧은 메모(선택)", "who": "상대"|"본인"}]
+  "end": "YYYY-MM-DD"|null, "kind": "연차|반차|오전반차|오후반차|휴가|출장|해외출장|탐방|병가|휴무|기타",
+  "note": "짧은 메모(선택)", "who": "상대"|"본인"|"주인"}]
 
 판정 기준:
-- vacation=true는 '보낸 사람 본인이 자리를 비운다는 보고'만. 남 얘기, 과거 회상,
+- vacation=true는 '보낸 사람 본인이 자리를 비운다는 보고'가 기본. 과거 회상,
   질문("휴가 언제 가?"), 일반 잡담은 false.
+- 예외: **사수님·팀장님·사수·팀장 호칭은 계정 주인(팀장)을 가리킨다** — 누가 보냈든
+  그 호칭의 자리 비움 보고는 vacation=true, **who="주인"**(일정은 계정 주인의 것).
+  상대가 전하는 경우("팀장님 내일 연차시죠")도, **계정 주인이 주니어에게 자기 일정을
+  3인칭으로 알려주는 경우**("사수님 21-22 휴가시다"를 계정 주인이 보냄)도 같다.
+  계정 주인이 아닌 제3의 팀원 이야기는 여전히 false.
+- **배차·차량·기사 안내문은 보고가 아니다** — "[Web발신] … NDR 배차, 차량: 카니발,
+  담당기사: …" 같은 전달 공지는 일정 확인용 문자이지 자리 비움 보고가 아니다 → false.
 - "내일", "다음주 수요일" 같은 상대 날짜는 그 메시지의 보낸 시각을 기준으로 계산한다.
 - 종료일이 없으면 end=start(하루짜리). "3일간"이면 시작일 포함 3일.
 - 날짜를 도저히 못 정하면 vacation=true라도 start=null로 두라(사람이 확인한다).
 - 일부 메시지에는 (맥락)으로 직전 대화가 붙어 있다. '나'는 계정 주인이다.
   맥락의 질문(예: "출장 언제야?")에 대한 날짜 답변이면 보낸 사람의 자리 비움 보고로
   vacation=true로 판정하고, 종류(kind)는 맥락에서 찾아라.
-- note에는 장소·목적 같은 부가 정보(예: "카자흐스탄 출장")를 짧게 담아라.
+- 밸류데이·기업탐방·컨퍼런스·세미나·사이트비짓처럼 **본인이 참석하러 가는 행사
+  일정도 자리 비움 보고다** — "포스코인터 밸류데이 11.24-11.27"이면 kind=출장
+  (해외 행사·현지 방문이면 해외출장, 기업탐방이면 탐방). 컨퍼런스 콜(전화)은 아니고,
+  **NDR은 시내 일과라 자리 비움이 아니다**(NDR만 말하는 메시지는 false).
+- note에는 장소·목적 같은 부가 정보(예: "카자흐스탄 출장", "포스코인터 인니팜 밸류데이")를 짧게 담아라.
 - "(계정 주인이 대신 적음)" 표시가 있으면 who를 판정하라: 계정 주인이 자기 자신의
   일정을 말하면("나/저 휴가임", "내가 월요일 연차") who="본인" — 이 일정은 계정 주인의 것이다.
   상대의 일정을 적어 둔 것이면("너 9/14 휴가", "OO 출장 9/1") who="상대".
@@ -460,9 +471,17 @@ def _gemini_extract(candidates: list[dict]) -> dict[int, dict] | None:
 
 
 def resolve_entry_name(cand: dict, verdict: dict | None, owner: str) -> str:
-    """항목이 붙을 사람 이름. 내가 쓴 메시지를 Gemini가 '본인 일정'으로 판정하면
-    계정 주인(owner) 이름으로 — "나 휴가임"이 대화 상대 일정으로 붙는 오귀속 방지."""
-    if owner and cand.get("by_me") and str((verdict or {}).get("who") or "").strip() == "본인":
+    """항목이 붙을 사람 이름.
+
+    - 내가 쓴 메시지를 Gemini가 '본인 일정'으로 판정하면 계정 주인(owner) 이름으로
+      — "나 휴가임"이 대화 상대 일정으로 붙는 오귀속 방지.
+    - 상대가 계정 주인의 일정을 보고한 것(who="주인", "사수님 21-22 휴가시다")도
+      owner 로 — 10/14 실사례: 이준범의 보고가 이준범 휴가로 붙었다.
+    """
+    who = str((verdict or {}).get("who") or "").strip()
+    if owner and who == "주인":
+        return owner
+    if owner and cand.get("by_me") and who == "본인":
         return owner
     return cand["name"]
 
@@ -549,9 +568,11 @@ def notify(new_entries: list[dict], fresh_att: list[dict] | None = None,
         if not idx_token or not idx_chat:
             print("[알림] 발간계획 봇 미설정 — 발송 생략(대시보드 전용)")
             return
-        idx_lines = [f"📚 <b>발간 계획 레이더</b> — 신규 {len(fresh_idx)}건", ""]
+        idx_lines = [f"📚 <b>발간 계획 레이더</b> — 신규·변경 {len(fresh_idx)}건", ""]
         for entry in sorted(fresh_idx, key=lambda e: (e.get("target") or "9999", e["name"])):
             when = entry.get("target") or entry.get("target_text") or "시점 미정"
+            if entry.get("moved_from"):  # 일정 조정 — 기존 건을 옮긴 것(새 건 아님)
+                when = f"일정 변경 {entry['moved_from'] or '미정'} → {when}"
             topic = entry.get("topic") or "주제 미상"
             idx_lines.append(f"<b>{watcher_notify.escape(entry['name'])}</b> — "
                              f"{watcher_notify.escape(topic)} ({watcher_notify.escape(str(when))})")
@@ -659,8 +680,13 @@ def run(dry_run: bool = False, probe: bool = False) -> None:
     from render_page import build_page
 
     build_page(store)
-    if new_entries or fresh_att or fresh_idx:
-        notify(new_entries, fresh_att, fresh_idx)
+    # 발간계획 레이더 텔레는 확신 건만 — 폴백의 needs_review("주제 미상·시점 미정")는
+    # 대시보드 확인필요 칸에만 남긴다(10/27 '퇴근' 메시지 알림 소음).
+    idx_alert = [e for e in fresh_idx if not e.get("needs_review")]
+    if fresh_idx and not idx_alert:
+        print(f"발간계획 확인필요 {len(fresh_idx)}건 — 대시보드만(텔레 생략)")
+    if new_entries or fresh_att or idx_alert:
+        notify(new_entries, fresh_att, idx_alert)
 
 
 def run_indepth_backfill(days: int = 92) -> None:
@@ -691,8 +717,10 @@ def _apply_op(op: str, body: dict) -> None:
         # 이미 지워졌거나 uid가 틀림 — 실패로 죽지 않고 페이지만 다시 굽는다(멱등).
         print(f"[경고] uid를 찾지 못했습니다: {uid} — 변경 없음")
     elif op == "delete":
-        store["entries"].pop(uid)
-        print(f"삭제: {entry.get('name')} {entry.get('start')}~{entry.get('end')} ({uid})")
+        # 지우지 않고 묘비(deleted)로 — uid를 지우면 진행 중이던 스캔의 경합 병합
+        # (reconcile 합집합)이 항목을 되살린다(10/27 NDR 배차 문자 실사례).
+        entry["deleted"] = True
+        print(f"삭제(묘비): {entry.get('name')} {entry.get('start')}~{entry.get('end')} ({uid})")
     elif op == "note":
         entry["note"] = str(body.get("note") or "").strip()
         print(f"메모 수정: {entry.get('name')} ({uid}) → {entry['note']!r}")
@@ -727,6 +755,103 @@ def _apply_op(op: str, body: dict) -> None:
     else:
         raise SystemExit(f"알 수 없는 op: {op!r}")
     save_json(ENTRIES_PATH, store)
+    from render_page import build_page
+
+    build_page(store)
+
+
+PLAN_KIND = {"종일": "연차", "오전": "오전반차", "오후": "오후반차"}
+# 텔레그램 보고와 겹친 계획서 날짜에 기존 항목 메모로 남기는 표시(생략을 조용히 하지 않는다).
+PLAN_ALSO_MARK = "📷 연차계획서에도 있음"
+
+
+def _plan_spans(rows: list[dict]) -> list[dict]:
+    """계획서 행(날짜·종일/오전/오후) → 기간 목록. 연속한 종일은 한 기간으로 묶는다."""
+    from datetime import date as _date
+
+    parsed = []
+    for row in rows:
+        raw_date = str(row.get("date") or "").strip().replace(".", "-").replace("/", "-")
+        try:
+            day = _date.fromisoformat(raw_date)
+        except ValueError:
+            continue
+        kind = PLAN_KIND.get(str(row.get("kind") or "").strip(), "연차")
+        parsed.append((day, kind))
+    parsed.sort()
+    spans: list[dict] = []
+    for day, kind in parsed:
+        last = spans[-1] if spans else None
+        if (last and kind == "연차" and last["kind"] == "연차"
+                and (day - _date.fromisoformat(last["end"])).days == 1):
+            last["end"] = day.isoformat()
+        else:
+            spans.append({"start": day.isoformat(), "end": day.isoformat(), "kind": kind})
+    return spans
+
+
+def apply_plan(raw: str) -> None:
+    """연차계획서 이미지에서 추출된 계획(이름 + 날짜·종류 행들)을 entries.json에 반영.
+
+    같은 사람 계획서를 다시 올리면 **통째로 교체**된다: uid는 `plan:이름:시작일`이라
+    같은 날짜는 덮어쓰고, 새 계획에서 빠진 날짜는 묘비(deleted)로 — 수시로 바뀌는
+    계획서의 재등록 요구. 텔레그램 수집분과는 같은 달력에 합쳐지되, 같은 이름·기간의
+    비-계획 항목이 이미 있으면 그 날짜는 건너뛴다(중복 칩 방지) — 단 조용히 넘기지
+    않고 그 항목 메모에 '연차계획서에도 있음'을 표시한다(10/28 요청). 표시는 재등록
+    때마다 지웠다 다시 달아 계획에서 빠진 날짜의 낡은 표시가 남지 않는다.
+    """
+    try:
+        body = json.loads(raw or "{}")
+    except json.JSONDecodeError as exc:
+        raise SystemExit(f"entry가 JSON이 아닙니다: {exc}")
+    name = str(body.get("name") or "").strip()
+    if not name:
+        raise SystemExit("name(신청자 이름)이 비어 있습니다 — 이미지에서 못 읽으면 폼에서 지정")
+    spans = _plan_spans(body.get("rows") or [])
+    if not spans:
+        raise SystemExit("날짜 행을 하나도 읽지 못했습니다")
+
+    store = load_json(ENTRIES_PATH, {"entries": {}})
+    entries = store["entries"]
+    prefix = f"plan:{name}:"
+    now = datetime.now(KST).isoformat(timespec="minutes")
+    today = datetime.now(KST).strftime("%Y-%m-%d")
+    desired = {f"{prefix}{span['start']}": span for span in spans}
+
+    removed = 0
+    for uid, entry in entries.items():
+        if uid.startswith(prefix) and uid not in desired and not entry.get("deleted"):
+            entry["deleted"] = True
+            removed += 1
+    # 재등록 멱등성: 이 사람의 옛 '계획서에도 있음' 표시를 지우고 이번 계획 기준으로 다시 단다.
+    for k, v in entries.items():
+        if not k.startswith("plan:") and v.get("name") == name:
+            note = v.get("note") or ""
+            if PLAN_ALSO_MARK in note:
+                v["note"] = note.replace(f" · {PLAN_ALSO_MARK}", "").replace(
+                    PLAN_ALSO_MARK, "").strip(" ·")
+    added = skipped = 0
+    for uid, span in desired.items():
+        dup = next((v for k, v in entries.items()
+                    if not v.get("deleted") and not k.startswith("plan:")
+                    and v.get("name") == name and v.get("start") == span["start"]
+                    and (v.get("end") or v.get("start")) == span["end"]), None)
+        if dup is not None and uid not in entries:
+            note = (dup.get("note") or "").strip()
+            dup["note"] = f"{note} · {PLAN_ALSO_MARK}" if note else PLAN_ALSO_MARK
+            skipped += 1
+            continue
+        entries[uid] = {
+            "name": name, "kind": span["kind"],
+            "start": span["start"], "end": span["end"],
+            "note": "연차계획서", "text": f"연차계획서 이미지 등록 ({today})",
+            "needs_review": False, "engine": "plan", "deleted": False,
+            "msg_date": now, "detected_at": now,
+        }
+        added += 1
+    save_json(ENTRIES_PATH, store)
+    print(f"연차계획서 반영: {name} — 기간 {added}건 등록/갱신, {removed}건 제거(묘비), "
+          f"{skipped}건은 기존 보고와 중복 — 그 항목 메모에 표시")
     from render_page import build_page
 
     build_page(store)
@@ -809,6 +934,8 @@ def main() -> None:
     parser.add_argument("--dry-run", action="store_true")
     parser.add_argument("--rebuild-page", action="store_true")
     parser.add_argument("--add", metavar="JSON", help='직접 기입 {"name","start","end","kind","note"}')
+    parser.add_argument("--plan", metavar="JSON",
+                        help='연차계획서 반영 {"name","rows":[{"date","kind":"종일|오전|오후"}]}')
     parser.add_argument("--indepth-backfill", action="store_true",
                         help="지난 석 달 대화에서 발간 계획 소급 수집 (last_id 불변)")
     args = parser.parse_args()
@@ -817,6 +944,8 @@ def main() -> None:
         check()
     elif args.add is not None:
         add_manual(args.add)
+    elif args.plan is not None:
+        apply_plan(args.plan)
     elif args.indepth_backfill:
         run_indepth_backfill()
     elif args.rebuild_page:

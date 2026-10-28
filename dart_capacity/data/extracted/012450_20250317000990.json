@@ -1,0 +1,753 @@
+{
+ "meta": {
+  "company": "한화에어로스페이스",
+  "sector": "방산",
+  "stock_code": "012450",
+  "corp_code": "00126566",
+  "rcept_no": "20250317000990",
+  "rcept_dt": "20250317",
+  "report_nm": "사업보고서 (2024.12)",
+  "report_type": "annual",
+  "period": "2024-12",
+  "period_label": "2024.12 사업보고서",
+  "corrected": false,
+  "dart_url": "https://dart.fss.or.kr/dsaf001/main.do?rcpNo=20250317000990"
+ },
+ "tables": [
+  {
+   "section": [
+    "II. 사업의 내용",
+    "1. 사업의 개요",
+    "2. 주요 제품 및 서비스"
+   ],
+   "headings": [
+    "나. 주요제품의 가격변동 현황"
+   ],
+   "context": [
+    "※ 상기 현황에는 당사의 2024년 9월 1일 인적분할에 따라 중단사업으로 분류한 시큐리티, 산업용장비 사업과 관련된 사항이 포함되어 있으며, 본 보고서 연결재무제표에는 해당사업이 중단사업손익으로 반영되어 있습니다.※ 당사는 2024년 4분기 조선 및 해양제품 생산 사업 등을 영위하는 종속회사를 연결회사로 편입하였으며 해양사업부문을 당기 중 신규로 추가하였습니다.",
+    "나. 주요제품의 가격변동 현황"
+   ],
+   "unit": "",
+   "topic": "product_price",
+   "keywords": [
+    "나. 주요제품의 가격변동 현황"
+   ],
+   "keyword_in": "heading",
+   "rows": [
+    [
+     "사업부문",
+     "품 목",
+     "2024년",
+     "2023년",
+     "2022년",
+     "비고"
+    ],
+    [
+     "시큐리티",
+     "감시장비",
+     "CCTV(천원/대)",
+     "296",
+     "303",
+     "235",
+     "- 주요 매출 기종 기준 국내 평균 완제품 판매가격"
+    ],
+    [
+     "저장장치(천원/대)",
+     "847",
+     "839",
+     "660"
+    ],
+    [
+     "모니터(천원/대)",
+     "195",
+     "208",
+     "215"
+    ],
+    [
+     "산업용장비",
+     "칩마운터(C/M)",
+     "고속기(백만원)",
+     "250",
+     "250",
+     "250",
+     "- 칩마운터 매출 기종 기준 평균 판매가격"
+    ],
+    [
+     "중속기(백만원)",
+     "120",
+     "120",
+     "120"
+    ],
+    [
+     "해양",
+     "Tanker",
+     "VLCC (백만USD)",
+     "129",
+     "128",
+     "120",
+     "- 출처: Clarksons, \"Clarksons Shipping Intelligence Network\" ('24.12월말 기준)"
+    ],
+    [
+     "SUEZMAX (백만USD)",
+     "90",
+     "85",
+     "80"
+    ],
+    [
+     "Containership",
+     "22,000~24,000TEU (백만USD)",
+     "244",
+     "236",
+     "215"
+    ],
+    [
+     "LNGC",
+     "174,00CBM (백만USD)",
+     "260",
+     "265",
+     "248"
+    ]
+   ],
+   "html": "<table aclass=\"NORMAL\" afixtable=\"N\" border=\"1\" width=\"1127\">\n<colgroup width=\"1127\">\n<col width=\"90\"/>\n<col width=\"114\"/>\n<col width=\"222\"/>\n<col width=\"97\"/>\n<col width=\"97\"/>\n<col width=\"96\"/>\n<col width=\"411\"/>\n</colgroup>\n<thead>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"30\">\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"23\" valign=\"MIDDLE\" width=\"81\">사업부문</th>\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" colspan=\"2\" height=\"23\" valign=\"MIDDLE\" width=\"327\">품 목</th>\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"23\" valign=\"MIDDLE\" width=\"88\">\n<p>2024년</p>\n</th>\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"23\" valign=\"MIDDLE\" width=\"88\">\n<p>2023년</p>\n</th>\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"23\" valign=\"MIDDLE\" width=\"87\">\n<p>2022년</p>\n</th>\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"23\" valign=\"MIDDLE\" width=\"402\">비고</th>\n</tr>\n</thead>\n<tbody>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"30\">\n<td align=\"CENTER\" height=\"83\" rowspan=\"3\" valign=\"MIDDLE\" width=\"81\">시큐리티</td>\n<td align=\"CENTER\" height=\"83\" rowspan=\"3\" valign=\"MIDDLE\" width=\"105\">감시장비</td>\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"213\">CCTV(천원/대)</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"88\">296</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"88\">303</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"87\">235</td>\n<td height=\"83\" rowspan=\"3\" valign=\"MIDDLE\" width=\"402\">- 주요 매출 기종 기준 국내 평균 완제품 판매가격</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"30\">\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"213\">저장장치(천원/대)</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"88\">847</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"88\">839</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"87\">660</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"30\">\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"213\">모니터(천원/대)</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"88\">195</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"88\">208</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"87\">215</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"30\">\n<td align=\"CENTER\" height=\"53\" rowspan=\"2\" valign=\"MIDDLE\" width=\"81\">산업용장비</td>\n<td align=\"CENTER\" height=\"53\" rowspan=\"2\" valign=\"MIDDLE\" width=\"105\">칩마운터(C/M)</td>\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"213\">고속기(백만원)</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"88\">250</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"88\">250</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"87\">250</td>\n<td height=\"53\" rowspan=\"2\" valign=\"MIDDLE\" width=\"402\">- 칩마운터 매출 기종 기준 평균 판매가격</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"30\">\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"213\">중속기(백만원)</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"88\">120</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"88\">120</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"87\">120</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"30\">\n<td align=\"CENTER\" height=\"113\" rowspan=\"4\" valign=\"MIDDLE\" width=\"81\">해양</td>\n<td align=\"CENTER\" height=\"53\" rowspan=\"2\" valign=\"MIDDLE\" width=\"105\">Tanker</td>\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"213\">VLCC (백만USD)</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"88\">129</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"88\">128</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"87\">120</td>\n<td height=\"113\" rowspan=\"4\" valign=\"MIDDLE\" width=\"402\">- 출처: Clarksons, \"Clarksons Shipping Intelligence Network\"  ('24.12월말 기준)</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"30\">\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"213\">SUEZMAX\n<span usermark=\"0X000000\"> (백만USD)</span>\n</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"88\">90</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"88\">85</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"87\">80</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"30\">\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"105\">Containership</td>\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"213\">22,000~24,000TEU \n<span usermark=\"0X000000\">(백만USD)</span>\n</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"88\">244</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"88\">236</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"87\">215</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"30\">\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"105\">LNGC</td>\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"213\">174,00CBM \n<span usermark=\"0X000000\">(백만USD)</span>\n</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"88\">260</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"88\">265</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"87\">248</td>\n</tr>\n</tbody>\n</table>",
+   "footnotes": [
+    "※ 주요 제품은 사업부문의 수익성에 중요한 영향을 미치는 제품 기준입니다.※ 항공 및 방산사업은 보안 관계상, 항공우주사업은 주문자의 요청에 따라 제품의 사양이 결정되어 가격 변동사항을 기재하지 않습니다.※ 당사는 2024년 9월 1일을 분할기일로 하여 분할대상 사업부문(시큐리티, 칩마운터, 반도체장비 등의 생산 및 판매하는 피투자회사 지분의 관리 및 신규투자 등을 영위하는 사업부문)을 인적분할 방식으로 분할하였으며, 상기 분할대상 사업부문의 실적은 분할 이전 누계실적입니다. 분할 이후 실적에 대한 자세한 사항은 분할 신설회사인 한화인더스트리얼솔루션즈 주식회사의 정기공시를 참고하여 주시기 바랍니다.※ 당사는 2024년 12월 한화오션㈜ 및 그 종속회사를 연결회사로 편입하였으며 해양사업부문을 신규로 추가하였습니다."
+   ],
+   "digest": "c9b1e10ebce9",
+   "file": "20250317000990.xml"
+  },
+  {
+   "section": [
+    "1. 사업의 개요",
+    "2. 주요 제품 및 서비스",
+    "3. 원재료 및 생산설비"
+   ],
+   "headings": [
+    "3. 원재료 및 생산설비",
+    "가. 주요원재료"
+   ],
+   "context": [
+    "※ 주요 제품은 사업부문의 수익성에 중요한 영향을 미치는 제품 기준입니다.※ 항공 및 방산사업은 보안 관계상, 항공우주사업은 주문자의 요청에 따라 제품의 사양이 결정되어 가격 변동사항을 기재하지 않습니다.※ 당사는 2024년 9월 1일을 분할기일로 하여 분할대상 사업부문(시큐리티, 칩마운터, 반도체장비 등의 생산 및 판매하는 피투자회사 지분의 관리 및 신규투자 등을 영위하는 사업부문)을 인적분할 방식으로 분할하였으며, 상기 분할대상 사업부문의 실적은 분할 이전 누계실적입니다. 분할 이후 실적에 대한 자세한 사항은 분할 신설회사인 한화인더스트리얼솔루션즈 주식회사의 정기공시를 참고하여 주시기 바랍니다.※ 당사는 2024년 12월 한화오션㈜ 및 그 종속회사를 연결회사로 편입하였으며 해양사업부문을 신규로 추가하였습니다.",
+    "3. 원재료 및 생산설비",
+    "가. 주요원재료",
+    "(단위 : 백만원)"
+   ],
+   "unit": "(단위 : 백만원)",
+   "topic": "material",
+   "keywords": [
+    "매입액",
+    "매입처",
+    "주요 매입처"
+   ],
+   "keyword_in": "table",
+   "rows": [
+    [
+     "사업부문",
+     "해당 회사",
+     "매입유형",
+     "품 목",
+     "매입액",
+     "주요 매입처",
+     "매입처와특수한관계여부",
+     "공급시장의독과점 정도 및공급의 안정성"
+    ],
+    [
+     "항공",
+     "한화에어로스페이스㈜ 및해외생산법인",
+     "원재료 등",
+     "항공기ㆍ발사체 부품, 엔진ㆍ부품 부분품 등",
+     "1,766,209",
+     "GE, P&W, Rolls-Royce, Boeing Distribution Services, PCC, Carlton Forge Works, Schlosser 등",
+     "해당없음",
+     "특이사항 없음"
+    ],
+    [
+     "방산",
+     "한화에어로스페이스㈜",
+     "재료 및 부품 등",
+     "3,713,988",
+     "-",
+     "해당없음",
+     "특이사항 없음"
+    ],
+    [
+     "한화시스템㈜",
+     "TMMR 증폭조립체, 휴대II형TMMR 필터 회로카드조립체전술정보통신체계 무선통신장비세트TMMR 증폭기조립체울산급 Batch-III MFR 신호처리캐비닛",
+     "1,395,860",
+     "㈜ 브로던, ㈜ 쏠리드윈텍, ㈜ 키프코전자항공, 알에프코어 ㈜ , ㈜ 우리별",
+     "해당없음",
+     "특이사항 없음"
+    ],
+    [
+     "해양",
+     "한화오션 ㈜ 및 종속회사",
+     "강재, 기자재, 의장재 등",
+     "6,782,716",
+     "POSCO, 현대제철, 동국제강, HD현대중공업, 한화엔진, 두산에너빌리티 등",
+     "(주1)",
+     "(주1)"
+    ],
+    [
+     "항공우주",
+     "㈜쎄트렉아이",
+     "위성시스템, 전자광학카메라, 위성지상국 등",
+     "93,987",
+     "Texas Instruments, Teledyne e2v Asia Pacific, 에스엠테크, 한국 가네마쯔㈜ 등",
+     "해당없음",
+     "특이사항 없음"
+    ],
+    [
+     "시큐리티",
+     "한화비전㈜ 및 해외생산법인",
+     "CMOS, RAM, 하드디스크 등",
+     "228,707",
+     "레스타일렉트로닉스, 에스에스엠티, Western Digital",
+     "해당없음",
+     "특이사항 없음"
+    ],
+    [
+     "산업용장비",
+     "한화세미텍 ㈜ (구. 한화정밀기계㈜) 및 해외생산법인",
+     "모터, 감속기, NC 등",
+     "193,914",
+     "파나소닉, THK 등",
+     "해당없음",
+     "특이사항 없음"
+    ]
+   ],
+   "html": "<table aclass=\"NORMAL\" afixtable=\"N\" border=\"1\" width=\"1128\">\n<colgroup width=\"1128\">\n<col width=\"85\"/>\n<col width=\"179\"/>\n<col width=\"75\"/>\n<col width=\"305\"/>\n<col width=\"82\"/>\n<col width=\"206\"/>\n<col width=\"81\"/>\n<col width=\"115\"/>\n</colgroup>\n<thead align=\"LEFT\" valign=\"TOP\">\n<tr acopy=\"Y\" adelete=\"Y\" height=\"76\">\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"69\" valign=\"MIDDLE\" width=\"76\">사업부문</th>\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"69\" valign=\"MIDDLE\" width=\"170\">해당 회사</th>\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"69\" valign=\"MIDDLE\" width=\"66\">매입유형</th>\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"69\" valign=\"MIDDLE\" width=\"296\">품   목</th>\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"69\" valign=\"MIDDLE\" width=\"73\">매입액</th>\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"69\" valign=\"MIDDLE\" width=\"197\">주요 매입처</th>\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"69\" valign=\"MIDDLE\" width=\"72\">매입처와특수한관계여부</th>\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"69\" valign=\"MIDDLE\" width=\"106\">공급시장의독과점 정도 및공급의 안정성</th>\n</tr>\n</thead>\n<tbody>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"99\">\n<td align=\"CENTER\" height=\"92\" valign=\"MIDDLE\" width=\"76\">항공</td>\n<td height=\"92\" valign=\"MIDDLE\" width=\"170\">한화에어로스페이스㈜ 및해외생산법인</td>\n<td align=\"CENTER\" height=\"548\" rowspan=\"7\" valign=\"MIDDLE\" width=\"66\">원재료 등</td>\n<td height=\"92\" valign=\"MIDDLE\" width=\"296\">항공기ㆍ발사체 부품, 엔진ㆍ부품 부분품 등</td>\n<td align=\"RIGHT\" height=\"92\" valign=\"MIDDLE\" width=\"73\">1,766,209</td>\n<td height=\"92\" valign=\"MIDDLE\" width=\"197\">GE, P&amp;W, Rolls-Royce, Boeing Distribution Services, PCC, Carlton Forge Works, Schlosser 등</td>\n<td align=\"CENTER\" height=\"92\" valign=\"MIDDLE\" width=\"72\">해당없음</td>\n<td align=\"CENTER\" height=\"92\" valign=\"MIDDLE\" width=\"106\">특이사항 없음</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"30\">\n<td align=\"CENTER\" height=\"145\" rowspan=\"2\" valign=\"MIDDLE\" width=\"76\">방산</td>\n<td height=\"23\" valign=\"MIDDLE\" width=\"170\">한화에어로스페이스㈜</td>\n<td height=\"23\" valign=\"MIDDLE\" width=\"296\">재료 및 부품 등</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"73\">3,713,988</td>\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"197\">-</td>\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"72\">해당없음</td>\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"106\">특이사항 없음</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"122\">\n<td height=\"115\" valign=\"MIDDLE\" width=\"170\">한화시스템㈜</td>\n<td height=\"115\" valign=\"MIDDLE\" width=\"296\">TMMR 증폭조립체, 휴대II형TMMR 필터 회로카드조립체전술정보통신체계 무선통신장비세트TMMR 증폭기조립체울산급 Batch-III MFR 신호처리캐비닛</td>\n<td align=\"RIGHT\" height=\"115\" valign=\"MIDDLE\" width=\"73\">1,395,860</td>\n<td height=\"115\" valign=\"MIDDLE\" width=\"197\">\n<span usermark=\"0X000000\">㈜</span>브로던, \n<span usermark=\"0X000000\">㈜</span>쏠리드윈텍, \n<span usermark=\"0X000000\">㈜</span>키프코전자항공, 알에프코어\n<span usermark=\"0X000000\">㈜</span>, \n<span usermark=\"0X000000\">㈜</span>우리별\n</td>\n<td align=\"CENTER\" height=\"115\" valign=\"MIDDLE\" width=\"72\">해당없음</td>\n<td align=\"CENTER\" height=\"115\" valign=\"MIDDLE\" width=\"106\">특이사항 없음</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"76\">\n<td align=\"CENTER\" height=\"69\" valign=\"MIDDLE\" width=\"76\">해양</td>\n<td height=\"69\" valign=\"MIDDLE\" width=\"170\">한화오션\n<span usermark=\"0X000000\">㈜ 및 종속회사</span>\n</td>\n<td height=\"69\" valign=\"MIDDLE\" width=\"296\">강재, 기자재, 의장재 등</td>\n<td align=\"RIGHT\" height=\"69\" valign=\"MIDDLE\" width=\"73\">6,782,716</td>\n<td height=\"69\" valign=\"MIDDLE\" width=\"197\">POSCO, 현대제철, 동국제강, HD현대중공업, 한화엔진, 두산에너빌리티 등</td>\n<td align=\"CENTER\" height=\"69\" valign=\"MIDDLE\" width=\"72\">(주1)</td>\n<td align=\"CENTER\" height=\"69\" valign=\"MIDDLE\" width=\"106\">(주1)</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"99\">\n<td align=\"CENTER\" height=\"92\" valign=\"MIDDLE\" width=\"76\">항공우주</td>\n<td height=\"92\" valign=\"MIDDLE\" width=\"170\">㈜쎄트렉아이</td>\n<td height=\"92\" valign=\"MIDDLE\" width=\"296\">위성시스템, 전자광학카메라, 위성지상국 등</td>\n<td align=\"RIGHT\" height=\"92\" valign=\"MIDDLE\" width=\"73\">93,987</td>\n<td height=\"92\" valign=\"MIDDLE\" width=\"197\">Texas Instruments, Teledyne e2v Asia Pacific, 에스엠테크, 한국 가네마쯔㈜ 등</td>\n<td align=\"CENTER\" height=\"92\" valign=\"MIDDLE\" width=\"72\">해당없음</td>\n<td align=\"CENTER\" height=\"92\" valign=\"MIDDLE\" width=\"106\">특이사항 없음</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"53\">\n<td align=\"CENTER\" height=\"46\" valign=\"MIDDLE\" width=\"76\">시큐리티</td>\n<td height=\"46\" valign=\"MIDDLE\" width=\"170\">한화비전㈜ 및 해외생산법인</td>\n<td height=\"46\" valign=\"MIDDLE\" width=\"296\">CMOS, RAM, 하드디스크 등</td>\n<td align=\"RIGHT\" height=\"46\" valign=\"MIDDLE\" width=\"73\">228,707</td>\n<td height=\"46\" valign=\"MIDDLE\" width=\"197\">레스타일렉트로닉스, 에스에스엠티, Western Digital</td>\n<td align=\"CENTER\" height=\"46\" valign=\"MIDDLE\" width=\"72\">해당없음</td>\n<td align=\"CENTER\" height=\"46\" valign=\"MIDDLE\" width=\"106\">특이사항 없음</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"76\">\n<td align=\"CENTER\" height=\"69\" valign=\"MIDDLE\" width=\"76\">산업용장비</td>\n<td height=\"69\" valign=\"MIDDLE\" width=\"170\">한화세미텍\n<span usermark=\"0X000000\">㈜</span>(구. 한화정밀기계㈜) 및 해외생산법인\n</td>\n<td height=\"69\" valign=\"MIDDLE\" width=\"296\">모터, 감속기, NC 등</td>\n<td align=\"RIGHT\" height=\"69\" valign=\"MIDDLE\" width=\"73\">193,914</td>\n<td height=\"69\" valign=\"MIDDLE\" width=\"197\">파나소닉, THK 등</td>\n<td align=\"CENTER\" height=\"69\" valign=\"MIDDLE\" width=\"72\">해당없음</td>\n<td align=\"CENTER\" height=\"69\" valign=\"MIDDLE\" width=\"106\">특이사항 없음</td>\n</tr>\n</tbody>\n</table>",
+   "footnotes": [
+    "※ 당사는 2024년 9월 1일을 분할기일로 하여 분할대상 사업부문(시큐리티, 칩마운터, 반도체장비 등의 생산 및 판매하는 피투자회사 지분의 관리 및 신규투자 등을 영위하는 사업부문)을 인적분할 방식으로 분할하였으며, 상기 분할대상 사업부문의 실적은 분할 이전 누계실적입니다. 분할 이후 실적에 대한 자세한 사항은 분할 신설회사인 한화비전 주식회사(구. 한화인더스트리얼솔루션즈 주식회사)의 정기공시를 참고하여 주시기 바랍니다.※ 당사는 한화오션㈜ 및 그 종속회사를 2024년 당기 중 연결대상 종속기업으로 신규 편입하였습니다.(주1) 선박 건조 등에 필요한 철판 제품은 포스코, 현대제철 등 국내제철소와 일본 및 중국에서 매입하고 있고 선박 주요 부품인 엔진은 HD현대중공업, 한화엔진㈜ 등으로부터 매입하고 있습니다. 한화엔진㈜의 경우 2024년 4월 1일 한화 기업집단에 편입하였으며, 이를 통해 선박 엔진 수급 안정성 유지에 도움이 될 것으로 전망됩니다. 본 품목은 설비 및 기술 진입장벽이 높아 과점 시장이 형성되어 공급자 중심의 시장으로 볼 수 있으며 공급의 안정성은 양호한 수준입니다."
+   ],
+   "digest": "c2e894aaaa1b",
+   "file": "20250317000990.xml"
+  },
+  {
+   "section": [
+    "1. 사업의 개요",
+    "2. 주요 제품 및 서비스",
+    "3. 원재료 및 생산설비"
+   ],
+   "headings": [
+    "나. 주요 원재료의 가격변동 현황"
+   ],
+   "context": [
+    "※ 당사는 2024년 9월 1일을 분할기일로 하여 분할대상 사업부문(시큐리티, 칩마운터, 반도체장비 등의 생산 및 판매하는 피투자회사 지분의 관리 및 신규투자 등을 영위하는 사업부문)을 인적분할 방식으로 분할하였으며, 상기 분할대상 사업부문의 실적은 분할 이전 누계실적입니다. 분할 이후 실적에 대한 자세한 사항은 분할 신설회사인 한화비전 주식회사(구. 한화인더스트리얼솔루션즈 주식회사)의 정기공시를 참고하여 주시기 바랍니다.※ 당사는 한화오션㈜ 및 그 종속회사를 2024년 당기 중 연결대상 종속기업으로 신규 편입하였습니다.(주1) 선박 건조 등에 필요한 철판 제품은 포스코, 현대제철 등 국내제철소와 일본 및 중국에서 매입하고 있고 선박 주요 부품인 엔진은 HD현대중공업, 한화엔진㈜ 등으로부터 매입하고 있습니다. 한화엔진㈜의 경우 2024년 4월 1일 한화 기업집단에 편입하였으며, 이를 통해 선박 엔진 수급 안정성 유지에 도움이 될 것으로 전망됩니다. 본 품목은 설비 및 기술 진입장벽이 높아 과점 시장이 형성되어 공급자 중심의 시장으로 볼 수 있으며 공급의 안정성은 양호한 수준입니다.",
+    "나. 주요 원재료의 가격변동 현황"
+   ],
+   "unit": "",
+   "topic": "material_price",
+   "keywords": [
+    "나. 주요 원재료의 가격변동 현황"
+   ],
+   "keyword_in": "heading",
+   "rows": [
+    [
+     "사업부문",
+     "품목",
+     "2024년",
+     "2023년",
+     "2022년",
+     "비고"
+    ],
+    [
+     "해양",
+     "STEEL PLATE(원/TON)",
+     "959,000",
+     "1,130,193",
+     "1,220,962",
+     "- 스틸데일리 DB센터 국내 후판(Plate) 유통가 기준(평균가)"
+    ],
+    [
+     "SECTION(원/TON)",
+     "1,095,500",
+     "1,208,172",
+     "1,306,442",
+     "- 스틸데일리 DB센터 국내 H 형강 유통가 기준(평균가)"
+    ],
+    [
+     "PAINT(SHOP PRIMER)(원/L)",
+     "6,468",
+     "5,673",
+     "5,918",
+     "- $4.4/L*1,470.00원 (2024년 12월 31일 매매기준율)"
+    ]
+   ],
+   "html": "<table aclass=\"NORMAL\" afixtable=\"N\" border=\"1\" width=\"1127\">\n<colgroup width=\"1127\">\n<col width=\"90\"/>\n<col width=\"251\"/>\n<col width=\"125\"/>\n<col width=\"125\"/>\n<col width=\"125\"/>\n<col width=\"411\"/>\n</colgroup>\n<thead>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"30\">\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"23\" valign=\"MIDDLE\" width=\"81\">사업부문</th>\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"23\" valign=\"MIDDLE\" width=\"242\">품목</th>\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"23\" valign=\"MIDDLE\" width=\"116\">\n<p>2024년</p>\n</th>\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"23\" valign=\"MIDDLE\" width=\"116\">\n<p>2023년</p>\n</th>\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"23\" valign=\"MIDDLE\" width=\"116\">\n<p>2022년</p>\n</th>\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"23\" valign=\"MIDDLE\" width=\"402\">비고</th>\n</tr>\n</thead>\n<tbody>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"30\">\n<td align=\"CENTER\" height=\"85\" rowspan=\"3\" valign=\"MIDDLE\" width=\"81\">해양</td>\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"242\">STEEL PLATE(원/TON)</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"116\">959,000</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"116\">1,130,193</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"116\">1,220,962</td>\n<td height=\"23\" valign=\"MIDDLE\" width=\"402\">- \n<span usermark=\"0X000000\">스틸데일리 DB센터 국내 후판(Plate) 유통가 기준(평균가)</span>\n</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"31\">\n<td align=\"CENTER\" height=\"24\" valign=\"MIDDLE\" width=\"242\">SECTION(원/TON)</td>\n<td align=\"RIGHT\" height=\"24\" valign=\"MIDDLE\" width=\"116\">1,095,500</td>\n<td align=\"RIGHT\" height=\"24\" valign=\"MIDDLE\" width=\"116\">1,208,172</td>\n<td align=\"RIGHT\" height=\"24\" valign=\"MIDDLE\" width=\"116\">1,306,442</td>\n<td height=\"24\" width=\"402\">- \n<span usermark=\"0X000000\">스틸데일리 DB센터 국내 H 형강 유통가 기준(평균가)</span>\n</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"31\">\n<td align=\"CENTER\" height=\"24\" valign=\"MIDDLE\" width=\"242\">PAINT(SHOP PRIMER)(원/L)</td>\n<td align=\"RIGHT\" height=\"24\" valign=\"MIDDLE\" width=\"116\">6,468</td>\n<td align=\"RIGHT\" height=\"24\" valign=\"MIDDLE\" width=\"116\">5,673</td>\n<td align=\"RIGHT\" height=\"24\" valign=\"MIDDLE\" width=\"116\">5,918</td>\n<td height=\"24\" width=\"402\">- \n<span usermark=\"0X000000\">$4.4/L*1,470.00원 (2024년 12월 31일 매매기준율)</span>\n</td>\n</tr>\n</tbody>\n</table>",
+   "footnotes": [
+    "※ 항공 및 방산사업은 보안 관계상, 항공우주사업은 주문자의 요청에 따라 제품의 사양이 결정되어 표준 원자재의 가격 변동사항 기술이 불가하며, 시큐리티 및 산업용장비사업은 품목 세분화로 주요 원자재 특정이 불가하여 가격변동추이를 기재하지 않습니다.※ 공시대상기간 중 사업부문의 수익성에 중요한 영향을 미치는 원재료의 가격변동은 없습니다.※ 당사는 2024년 9월 1일을 분할기일로 하여 분할대상 사업부문(시큐리티, 칩마운터, 반도체장비 등의 생산 및 판매하는 피투자회사 지분의 관리 및 신규투자 등을 영위하는 사업부문)을 인적분할 방식으로 분할하였으며, 상기 분할대상 사업부문의 실적은 분할 이전 누계실적입니다. 분할 이후 실적에 대한 자세한 사항은 분할 신설회사인 한화비전 주식회사(구. 한화인더스트리얼솔루션즈 주식회사)의 정기공시를 참고하여 주시기 바랍니다."
+   ],
+   "digest": "94078ce27408",
+   "file": "20250317000990.xml"
+  },
+  {
+   "section": [
+    "1. 사업의 개요",
+    "2. 주요 제품 및 서비스",
+    "3. 원재료 및 생산설비"
+   ],
+   "headings": [
+    "다. 생산능력, 생산실적 및 가동률"
+   ],
+   "context": [
+    "※ 항공 및 방산사업은 보안 관계상, 항공우주사업은 주문자의 요청에 따라 제품의 사양이 결정되어 표준 원자재의 가격 변동사항 기술이 불가하며, 시큐리티 및 산업용장비사업은 품목 세분화로 주요 원자재 특정이 불가하여 가격변동추이를 기재하지 않습니다.※ 공시대상기간 중 사업부문의 수익성에 중요한 영향을 미치는 원재료의 가격변동은 없습니다.※ 당사는 2024년 9월 1일을 분할기일로 하여 분할대상 사업부문(시큐리티, 칩마운터, 반도체장비 등의 생산 및 판매하는 피투자회사 지분의 관리 및 신규투자 등을 영위하는 사업부문)을 인적분할 방식으로 분할하였으며, 상기 분할대상 사업부문의 실적은 분할 이전 누계실적입니다. 분할 이후 실적에 대한 자세한 사항은 분할 신설회사인 한화비전 주식회사(구. 한화인더스트리얼솔루션즈 주식회사)의 정기공시를 참고하여 주시기 바랍니다.",
+    "다. 생산능력, 생산실적 및 가동률",
+    "(단위 : 백만원, MH)"
+   ],
+   "unit": "(단위 : 백만원, MH)",
+   "topic": "capacity",
+   "keywords": [
+    "가동률",
+    "생산능력",
+    "생산실적"
+   ],
+   "keyword_in": "table",
+   "rows": [
+    [
+     "사업부문",
+     "해당 회사",
+     "사업소",
+     "품 목",
+     "구 분",
+     "2024년",
+     "2023년",
+     "2022년"
+    ],
+    [
+     "항공",
+     "한화에어로스페이스㈜ 및해외생산법인",
+     "창원1사업장, 아산사업장베트남 하노이, 미국 코네티컷",
+     "항공기ㆍ발사체ㆍ각종 엔진 등의 부품 생산 및 정비",
+     "생산능력",
+     "2,071,383",
+     "2,159,431",
+     "1,689,112"
+    ],
+    [
+     "생산실적",
+     "1,576,645",
+     "1,721,548",
+     "1,290,113"
+    ],
+    [
+     "가동률(%)",
+     "76.12",
+     "79.72",
+     "76.38"
+    ],
+    [
+     "방산",
+     "한화에어로스페이스㈜",
+     "창원2, 3사업장,여수사업장, 대전사업장,보은사업장, 화순공장",
+     "자주포, 장갑차, 발사대, 탄약/유도무기류 및 항법장치 등",
+     "생산능력",
+     "4,596,404",
+     "3,190,416",
+     "1,778,889"
+    ],
+    [
+     "생산실적",
+     "4,101,818",
+     "2,825,122",
+     "1,554,749"
+    ],
+    [
+     "가동률(%)",
+     "89.24",
+     "88.55",
+     "87.40"
+    ],
+    [
+     "한화시스템㈜",
+     "구미사업장",
+     "전술통신장비, 조준경, 관측장비, 함정 전투체계 등",
+     "생산능력",
+     "1,289,684",
+     "1,166,248",
+     "1,669,484"
+    ],
+    [
+     "생산실적",
+     "1,101,233",
+     "1,060,056",
+     "1,156,573"
+    ],
+    [
+     "가동률(%)",
+     "85.99",
+     "90.89",
+     "69.28"
+    ],
+    [
+     "해양",
+     "한화오션 ㈜ 및 종속회사",
+     "옥포조선소, 전남 광양 ,중국 연타이 등",
+     "LNGC, LPGC, 잠수함, 수상함 등 선박 및 특수선 건조, 해양 제품 생산 및 서비스 제공 등",
+     "목표 가동시간",
+     "38,194,802",
+     "-",
+     "-"
+    ],
+    [
+     "실제 가동시간",
+     "38,100,904",
+     "-",
+     "-"
+    ],
+    [
+     "가동률(%)",
+     "99.75",
+     "-",
+     "-"
+    ],
+    [
+     "항공우주",
+     "㈜쎄트렉아이",
+     "대전사업장",
+     "위성시스템, 전자광학카메라,위성지상국 등",
+     "생산능력",
+     "173,421",
+     "120,074",
+     "78,158"
+    ],
+    [
+     "생산실적",
+     "161,502",
+     "114,435",
+     "78,090"
+    ],
+    [
+     "가동률(%)",
+     "93.13",
+     "95.30",
+     "99.91"
+    ],
+    [
+     "시큐리티",
+     "한화비전㈜ 및 해외생산법인",
+     "베트남 박닌",
+     "감시장비 등",
+     "생산능력",
+     "279,896",
+     "381,611",
+     "417,803"
+    ],
+    [
+     "생산실적",
+     "273,414",
+     "315,543",
+     "384,256"
+    ],
+    [
+     "가동률(%)",
+     "97.68",
+     "82.69",
+     "91.97"
+    ],
+    [
+     "산업용장비",
+     "한화세미텍 ㈜ (구.한화정밀기계㈜) 및 해외생산법인",
+     "정밀기계사업장공작기계사업장중국 장가항",
+     "칩마운터, 공작기계 등",
+     "생산능력",
+     "252,455",
+     "419,584",
+     "594,134"
+    ],
+    [
+     "생산실적",
+     "216,282",
+     "311,915",
+     "395,144"
+    ],
+    [
+     "가동률(%)",
+     "85.67",
+     "74.34",
+     "66.51"
+    ]
+   ],
+   "html": "<table aclass=\"NORMAL\" afixtable=\"N\" border=\"1\" width=\"1129\">\n<colgroup width=\"1129\">\n<col width=\"87\"/>\n<col width=\"207\"/>\n<col width=\"181\"/>\n<col width=\"225\"/>\n<col width=\"113\"/>\n<col width=\"106\"/>\n<col width=\"105\"/>\n<col width=\"105\"/>\n</colgroup>\n<thead align=\"LEFT\" valign=\"TOP\">\n<tr acopy=\"Y\" adelete=\"Y\" height=\"30\">\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"23\" valign=\"MIDDLE\" width=\"78\">사업부문</th>\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"23\" valign=\"MIDDLE\" width=\"198\">해당 회사</th>\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"23\" valign=\"MIDDLE\" width=\"172\">사업소</th>\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"23\" valign=\"MIDDLE\" width=\"216\">품 목</th>\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"23\" valign=\"MIDDLE\" width=\"104\">구 분</th>\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"23\" valign=\"MIDDLE\" width=\"97\">2024년</th>\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"23\" valign=\"MIDDLE\" width=\"96\">2023년</th>\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"23\" valign=\"MIDDLE\" width=\"96\">2022년</th>\n</tr>\n</thead>\n<tbody>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"30\">\n<td align=\"CENTER\" height=\"83\" rowspan=\"3\" valign=\"MIDDLE\" width=\"78\">항공</td>\n<td height=\"83\" rowspan=\"3\" valign=\"MIDDLE\" width=\"198\">한화에어로스페이스㈜ 및해외생산법인</td>\n<td align=\"CENTER\" height=\"83\" rowspan=\"3\" valign=\"MIDDLE\" width=\"172\">창원1사업장, 아산사업장베트남 하노이, 미국 코네티컷</td>\n<td height=\"83\" rowspan=\"3\" valign=\"MIDDLE\" width=\"216\">항공기ㆍ발사체ㆍ각종 엔진 등의 부품 생산 및 정비</td>\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"104\">생산능력</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"97\">2,071,383</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"96\">2,159,431</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"96\">1,689,112</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"30\">\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"104\">생산실적</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"97\">1,576,645</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"96\">1,721,548</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"96\">1,290,113</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"30\">\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"104\">가동률(%)</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"97\">76.12</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"96\">79.72</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"96\">76.38</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"30\">\n<td align=\"CENTER\" height=\"173\" rowspan=\"6\" valign=\"MIDDLE\" width=\"78\">방산</td>\n<td height=\"83\" rowspan=\"3\" valign=\"MIDDLE\" width=\"198\">한화에어로스페이스㈜</td>\n<td align=\"CENTER\" height=\"83\" rowspan=\"3\" valign=\"MIDDLE\" width=\"172\">창원2, 3사업장,여수사업장, 대전사업장,보은사업장, 화순공장</td>\n<td height=\"83\" rowspan=\"3\" valign=\"MIDDLE\" width=\"216\">자주포, 장갑차, 발사대, 탄약/유도무기류 및 항법장치 등</td>\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"104\">생산능력</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"97\">4,596,404</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"96\">3,190,416</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"96\">1,778,889</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"30\">\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"104\">생산실적</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"97\">4,101,818</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"96\">2,825,122</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"96\">1,554,749</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"30\">\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"104\">가동률(%)</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"97\">89.24</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"96\">88.55</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"96\">87.40</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"30\">\n<td height=\"83\" rowspan=\"3\" valign=\"MIDDLE\" width=\"198\">한화시스템㈜</td>\n<td align=\"CENTER\" height=\"83\" rowspan=\"3\" valign=\"MIDDLE\" width=\"172\">구미사업장</td>\n<td height=\"83\" rowspan=\"3\" valign=\"MIDDLE\" width=\"216\">전술통신장비, 조준경, 관측장비, 함정 전투체계 등</td>\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"104\">생산능력</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"97\">1,289,684</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"96\">1,166,248</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"96\">1,669,484</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"30\">\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"104\">생산실적</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"97\">1,101,233</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"96\">1,060,056</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"96\">1,156,573</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"30\">\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"104\">가동률(%)</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"97\">85.99</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"96\">90.89</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"96\">69.28</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"30\">\n<td align=\"CENTER\" height=\"83\" rowspan=\"3\" valign=\"MIDDLE\" width=\"78\">해양</td>\n<td height=\"83\" rowspan=\"3\" valign=\"MIDDLE\" width=\"198\">한화오션\n<span usermark=\"0X000000\">㈜ 및 종속회사</span>\n</td>\n<td align=\"CENTER\" height=\"83\" rowspan=\"3\" valign=\"MIDDLE\" width=\"172\">옥포조선소, \n<span usermark=\"0X000000\">전남 광양</span>,중국 연타이 등\n</td>\n<td height=\"83\" rowspan=\"3\" valign=\"MIDDLE\" width=\"216\">LNGC, LPGC, 잠수함, 수상함 등 \n<span usermark=\"0X000000\">선박 및 특수선 건조, 해양 제품 생산 및 서비스 제공 등</span>\n</td>\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"104\">목표 가동시간</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"97\">38,194,802</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"96\">-</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"96\">-</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"30\">\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"104\">실제 가동시간</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"97\">38,100,904</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"96\">-</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"96\">-</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"30\">\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"104\">가동률(%)</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"97\">99.75</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"96\">-</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"96\">-</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"30\">\n<td align=\"CENTER\" height=\"83\" rowspan=\"3\" valign=\"MIDDLE\" width=\"78\">항공우주</td>\n<td height=\"83\" rowspan=\"3\" valign=\"MIDDLE\" width=\"198\">㈜쎄트렉아이</td>\n<td align=\"CENTER\" height=\"83\" rowspan=\"3\" valign=\"MIDDLE\" width=\"172\">대전사업장</td>\n<td height=\"83\" rowspan=\"3\" valign=\"MIDDLE\" width=\"216\">위성시스템, 전자광학카메라,위성지상국 등</td>\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"104\">생산능력</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"97\">173,421</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"96\">120,074</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"96\">78,158</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"30\">\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"104\">생산실적</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"97\">161,502</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"96\">114,435</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"96\">78,090</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"30\">\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"104\">가동률(%)</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"97\">93.13</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"96\">95.30</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"96\">99.91</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"30\">\n<td align=\"CENTER\" height=\"83\" rowspan=\"3\" valign=\"MIDDLE\" width=\"78\">시큐리티</td>\n<td height=\"83\" rowspan=\"3\" valign=\"MIDDLE\" width=\"198\">한화비전㈜ 및 해외생산법인</td>\n<td align=\"CENTER\" height=\"83\" rowspan=\"3\" valign=\"MIDDLE\" width=\"172\">베트남 박닌</td>\n<td height=\"83\" rowspan=\"3\" valign=\"MIDDLE\" width=\"216\">감시장비 등</td>\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"104\">생산능력</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"97\">279,896</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"96\">381,611</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"96\">417,803</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"30\">\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"104\">생산실적</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"97\">273,414</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"96\">315,543</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"96\">384,256</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"30\">\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"104\">가동률(%)</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"97\">97.68</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"96\">82.69</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"96\">91.97</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"30\">\n<td align=\"CENTER\" height=\"83\" rowspan=\"3\" valign=\"MIDDLE\" width=\"78\">산업용장비</td>\n<td height=\"83\" rowspan=\"3\" valign=\"MIDDLE\" width=\"198\">한화세미텍\n<span usermark=\"0X000000\">㈜</span>(구.한화정밀기계㈜) 및 해외생산법인\n</td>\n<td align=\"CENTER\" height=\"83\" rowspan=\"3\" valign=\"MIDDLE\" width=\"172\">정밀기계사업장공작기계사업장중국 장가항</td>\n<td height=\"83\" rowspan=\"3\" valign=\"MIDDLE\" width=\"216\">칩마운터, 공작기계 등</td>\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"104\">생산능력</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"97\">252,455</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"96\">419,584</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"96\">594,134</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"30\">\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"104\">생산실적</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"97\">216,282</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"96\">311,915</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"96\">395,144</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"30\">\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"104\">가동률(%)</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"97\">85.67</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"96\">74.34</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"96\">66.51</td>\n</tr>\n</tbody>\n</table>",
+   "footnotes": [
+    "※ 항공 및 방산사업은 보안 관계상, 시큐리티, 산업용장비사업은 정밀기기의 다품종 생산방식, 항공우주사업은 수주에 따른 주문생산방식이어서 구체적인 생산능력 산출 및 수량 표시가 불가능하므로 생산설비의 현황(생산 라인의 수, 인력 규모, 평균가동시간, 생산방식 등)을 종합적으로 고려하여 금액기준으로 기재하였습니다.※ 항공, 방산사업은 수주에 의한 납기일정 및 사업 내용에 따라 생산방식이 유동적이고 시큐리티, 산업용장비사업은 다품종 대량 생산, 항공우주사업은 수주에 따른 주문생산방식 등 생산방식이 다양하여 가동시간에 근거한 정확한 가동률 계산이 곤란하므로 금액기준으로 생산능력과 생산실적을 대비하여 가동률을 계산하였습니다. ※ 당사는 2024년 9월 1일을 분할기일로 하여 분할대상 사업부문(시큐리티, 칩마운터, 반도체장비 등의 생산 및 판매하는 피투자회사 지분의 관리 및 신규투자 등을 영위하는 사업부문)을 인적분할 방식으로 분할하였으며, 상기 분할대상 사업부문의 실적은 분할 이전 누계실적입니다. 분할 이후 실적에 대한 자세한 사항은 분할 신설회사인 한화비전 주식회사(구. 한화인더스트리얼솔루션즈 주식회사)의 정기공시를 참고하여 주시기 바랍니다.※ 당사는 한화오션㈜ 및 그 종속회사를 2024년 당기 중 연결대상 종속기업으로 신규 편입하였습니다. 편입 이전 시점에 대한 자세한 사항은 한화오션㈜의 정기공시를 참고하여 주시기 바랍니다."
+   ],
+   "digest": "86e4b7664cb8",
+   "file": "20250317000990.xml"
+  }
+ ],
+ "rejected": [
+  {
+   "section": [
+    "1. 사업의 개요",
+    "2. 주요 제품 및 서비스",
+    "3. 원재료 및 생산설비"
+   ],
+   "headings": [
+    "- 생산능력 산출근거",
+    "[한화에어로스페이스㈜ 항공부문 및 항공엔진 해외생산법인]",
+    "[한화에어로스페이스㈜ 방산부문, 한화시스템㈜ 방산부문]",
+    "[한화오션㈜ 및 해양사업부문 종속회사]",
+    "② 실제 가동시간 = (선박/해양)생산에 실 투입된 MH③ 평균가동률 = ② ÷ ①",
+    "[",
+    "㈜",
+    "쎄트렉아이]",
+    "[한화비전㈜ 및 시큐리티 해외생산법인]",
+    "[한화세미텍㈜(구.한화정밀기계㈜) 및 산업용장비 해외생산법인]",
+    "라. 생산설비의 현황 등",
+    "(1) 주요 사업장 현황"
+   ],
+   "context": [
+    "※ 항공 및 방산사업은 보안 관계상, 시큐리티, 산업용장비사업은 정밀기기의 다품종 생산방식, 항공우주사업은 수주에 따른 주문생산방식이어서 구체적인 생산능력 산출 및 수량 표시가 불가능하므로 생산설비의 현황(생산 라인의 수, 인력 규모, 평균가동시간, 생산방식 등)을 종합적으로 고려하여 금액기준으로 기재하였습니다.※ 항공, 방산사업은 수주에 의한 납기일정 및 사업 내용에 따라 생산방식이 유동적이고 시큐리티, 산업용장비사업은 다품종 대량 생산, 항공우주사업은 수주에 따른 주문생산방식 등 생산방식이 다양하여 가동시간에 근거한 정확한 가동률 계산이 곤란하므로 금액기준으로 생산능력과 생산실적을 대비하여 가동률을 계산하였습니다. ※ 당사는 2024년 9월 1일을 분할기일로 하여 분할대상 사업부문(시큐리티, 칩마운터, 반도체장비 등의 생산 및 판매하는 피투자회사 지분의 관리 및 신규투자 등을 영위하는 사업부문)을 인적분할 방식으로 분할하였으며, 상기 분할대상 사업부문의 실적은 분할 이전 누계실적입니다. 분할 이후 실적에 대한 자세한 사항은 분할 신설회사인 한화비전 주식회사(구. 한화인더스트리얼솔루션즈 주식회사)의 정기공시를 참고하여 주시기 바랍니다.※ 당사는 한화오션㈜ 및 그 종속회사를 2024년 당기 중 연결대상 종속기업으로 신규 편입하였습니다. 편입 이전 시점에 대한 자세한 사항은 한화오션㈜의 정기공시를 참고하여 주시기 바랍니다.",
+    "- 생산능력 산출근거",
+    "[한화에어로스페이스㈜ 항공부문 및 항공엔진 해외생산법인]",
+    "\"제조원가(생산실적) / 효율(작업공수효율, 설비종합효율)\" 로 최대 생산 가능금액을 산출하였습니다.",
+    "[한화에어로스페이스㈜ 방산부문, 한화시스템㈜ 방산부문]",
+    "\"시간당 생산실적×일일 가동가능시간×연간가동가능일수\"로 정상가동률 기준으로 계산된 최대 생산가능금액입니다.",
+    "[한화오션㈜ 및 해양사업부문 종속회사]",
+    "해양사업의 가동률은 일반제조업체의 양산체제 제품생산과는 달리 공장 생산설비의 가동률로 측정하기는 곤란하여 생산인력의 최대 투입 MH를 설정하고 이에 대해 비작업시간을 제외한 실투입 MH로 평균가동률을 계산하였습니다.① 목표 가동시간 = 평균생산인원×조업가능일수×목표출근율×목표근무시간",
+    "② 실제 가동시간 = (선박/해양)생산에 실 투입된 MH③ 평균가동률 = ② ÷ ①",
+    "[",
+    "㈜",
+    "쎄트렉아이]",
+    "항공우주사업은 수주에 따른 주문생산방식이므로, 연구기술직 인원의 최대 작업시간(연구기술직 월평균인원수×표준 총 작업시간)을 설정하여 생산능력(최대 생산 가능금액)을 산출합니다.",
+    "[한화비전㈜ 및 시큐리티 해외생산법인]",
+    "사업부문별 정상가동을 기준으로 \"각 사업장별 생산라인의 수 ×시간당 생산실적 × 일일 가동가능시간×연간가동가능일수\" 로 계산된 최대 생산가능금액입니다.",
+    "[한화세미텍㈜(구.한화정밀기계㈜) 및 산업용장비 해외생산법인]",
+    "\"완제품 생산 가능수량×평균판가\" 기준으로 효율대비 생산실적으로 계산된 최대 생산가능금액입니다.",
+    "라. 생산설비의 현황 등",
+    "(1) 주요 사업장 현황"
+   ],
+   "unit": "",
+   "topic": "",
+   "keywords": [
+    "가동률",
+    "생산능력",
+    "생산실적"
+   ],
+   "keyword_in": "",
+   "rows": [
+    [
+     "지역",
+     "해당회사",
+     "사업장",
+     "소재지"
+    ],
+    [
+     "국내(5개 법인)",
+     "한화에어로스페이스㈜",
+     "창원1사업장",
+     "경상남도 창원시 성산구 창원대로 1204"
+    ],
+    [
+     "아산사업장",
+     "충청남도 아산시 둔포면 아산밸리남로 144"
+    ]
+   ],
+   "html": "",
+   "footnotes": [],
+   "digest": "85830c5fe39e",
+   "why": "셀 전체가 지표명이 아니거나 멀리 있는 문장에만 키워드",
+   "file": "20250317000990.xml"
+  },
+  {
+   "section": [
+    "1. 사업의 개요",
+    "2. 주요 제품 및 서비스",
+    "3. 원재료 및 생산설비"
+   ],
+   "headings": [
+    "마. 설비 투자 현황 및 계획"
+   ],
+   "context": [
+    "※ (주1) 본계정대체 및 환율변동효과 등을 포함하고 있습니다.※ (주2) 당기 중 인적분할한 시큐리티사업과 산업용장비사업의 감가상각비가 포함되어 있습니다.※ (주3) 연결회사는 2024년 9월 1일 시큐리티사업과 산업용장비사업을 인적분할하여 한화인더스트리얼솔루션즈㈜ 설립하였으며, 회사가 보유하고 있는 한화비전㈜, 한화세미텍 ㈜ (구. 한화정밀기계㈜), 한화테크윈(천진)유한공사 그리고 한화상업설비(상해)유한공사의 유형자산을 승계하였습니다.※ (주4) 연결회사는 2024년 11월 26일 DYNA-MAC Holdings Ltd.및 그 종속기업과 2024년 12월 26일 한화오션㈜ 및 한화오션㈜의 종속기업, 2024년 12월 31일HANWHA PHILLY SHIPYARD INC.를 사업결합을 통하여 연결범위에 포함하였습니다.",
+    "마. 설비 투자 현황 및 계획",
+    "당기말 현재 진행중이거나 향후 계획한 투자 내용은 다음과 같습니다.",
+    "(단위 : 백만원)"
+   ],
+   "unit": "(단위 : 백만원)",
+   "topic": "",
+   "keywords": [
+    "생산능력"
+   ],
+   "keyword_in": "",
+   "rows": [
+    [
+     "회사",
+     "투자명",
+     "투자목적",
+     "내용",
+     "기간",
+     "총 소요자금",
+     "기 지출금액",
+     "향후 기대효과"
+    ],
+    [
+     "한화에어로스페이스㈜",
+     "KF-21 엔진부품 제조설비 투자",
+     "생산설비 증설",
+     "엔진 제조설비 증설",
+     "2023년 12월~2025년 10월",
+     "20,465",
+     "9,401",
+     "생산능력 향상"
+    ],
+    [
+     "PW 엔진부품 제조설비 투자",
+     "생산설비 증설",
+     "엔진 제조설비 증설",
+     "2024년 4월~2025년 2월",
+     "3,320",
+     "649",
+     "생산능력 향상"
+    ]
+   ],
+   "html": "",
+   "footnotes": [],
+   "digest": "da5ccdab1e26",
+   "why": "셀 전체가 지표명이 아니거나 멀리 있는 문장에만 키워드",
+   "file": "20250317000990.xml"
+  },
+  {
+   "section": [
+    "32. 기타수익과 기타비용",
+    "33. 금융수익과 금융비용",
+    "34. 주당이익"
+   ],
+   "headings": [
+    "매출액 내역에 대한 공시",
+    "30. 판매비와 관리비",
+    "31. 비용의 성격별 분류",
+    "32. 기타수익과 기타비용",
+    "33. 금융수익과 금융비용",
+    "34. 주당이익",
+    "주당이익",
+    "보통주 당기순손익 648,959,726,032 가중평균유통보통주식수 50,767,968 주당이익 12,783",
+    "가중평균유통보통주식수의 산정",
+    "가중평균유통보통주식수의 산정 당기"
+   ],
+   "context": [
+    "매출액 내역에 대한 공시",
+    "매출액 내역에 대한 공시 당기 (단위 : 천원)",
+    "공시금액 한 시점에 인식하는 수익 6,326,132,288 기간에 걸쳐 인식하는 수익 1,608,969,540",
+    "전기 (단위 : 천원)",
+    "공시금액 한 시점에 인식하는 수익 3,740,012,275 기간에 걸쳐 인식하는 수익 1,238,980,575",
+    "30. 판매비와 관리비",
+    "판매비와관리비에 대한 공시 당기 (단위 : 천원)",
+    "판매비와 일반관리비 급여 및 복리후생비 319,833,311 퇴직급여, 판관비 23,214,928 감가상각비, 판관비 3,629,943 무형자산상각비, 판관비 11,825,480 감가상각비, 사용권자산 8,268,663 광고선전비, 판관비 57,929,276 교육훈련비, 판관비 7,122,316 교제비, 판관비 3,837,835 대손상각비(대손충당금환입), 판관비 (21,533) 도서비, 판관비 233,394 문서발송료 8,788 물류비 69,207,310 보험료, 판관비 32,528,352 서비스비 2,600,337 세금과공과, 판관비 5,085,669 소모품비, 판관비 896,375 수선비, 판관비 925,872 여비교통비, 판관비 15,548,190 유틸리티비, 판관비 681,437 인쇄비, 판관비 102,782 전산비, 판관비 5,344,865 조사비, 판관비 351,537 지급수수료, 판관비 89,871,140 통신비, 판관비 719,543 행사비, 판관비 2,047,538 회의비, 판관비 2,874,003 기술사용료, 판관비 0 판매비와 관리비 664,667,351",
+    "전기 (단위 : 천원)",
+    "판매비와 일반관리비 급여 및 복리후생비 176,492,461 퇴직급여, 판관비 11,973,205 감가상각비, 판관비 3,772,360 무형자산상각비, 판관비 12,174,614 감가상각비, 사용권자산 6,866,186 광고선전비, 판관비 49,357,148 교육훈련비, 판관비 3,164,572 교제비, 판관비 2,348,865 대손상각비(대손충당금환입), 판관비 1,109,648 도서비, 판관비 214,550 문서발송료 18,259 물류비 21,726,077 보험료, 판관비 21,722,594 서비스비 2,571,234 세금과공과, 판관비 3,987,581 소모품비, 판관비 479,348 수선비, 판관비 1,114,802 여비교통비, 판관비 11,737,628 유틸리티비, 판관비 732,469 인쇄비, 판관비 98,788 전산비, 판관비 5,147,967 조사비, 판관비 504,339 지급수수료, 판관비 14,456,768 통신비, 판관비 581,514 행사비, 판관비 1,671,323 회의비, 판관비 1,668,757 기술사용료, 판관비 판매비와 관리비 355,693,057",
+    "31. 비용의 성격별 분류",
+    "비용의 성격별 분류 공시 당기 (단위 : 천원)",
+    "공시금액 제품과 재공품의 감소(증가) (511,057,018) 상품매입 261,043,052 원재료와 소모품의 사용액 4,022,028,691 종업원급여비용 1,196,857,527 복리후생비 112,412,622 감가상각비, 유형자산 94,327,079 무형자산상각비 27,472,372 감가상각비, 사용권자산 10,009,049 보관료 74,922,383 세금과공과 12,578,550 수선유지비 34,878,906 수도광열비 40,518,171 임차료 6,126,588 전산비 43,227,964 지급수수료 220,765,339 경상기술료 61,248,564 외주용역비 466,809,994 성격별 기타비용 261,231,580 성격별 비용 합계 6,435,401,413 비용의 성격별 분류에 대한 기술 종업원급여는 급여, 퇴직급여 등을 포함하고 있습니다. 포괄손익계산서 상 매출원가, 판매비와관리비, 연구개발비를 합한 금액입니다.",
+    "전기 (단위 : 천원)",
+    "공시금액 제품과 재공품의 감소(증가) (490,723,660) 상품매입 216,327,127 원재료와 소모품의 사용액 2,838,046,021 종업원급여비용 795,442,810 복리후생비 77,205,026 감가상각비, 유형자산 84,183,653 무형자산상각비 28,605,139 감가상각비, 사용권자산 8,021,075 보관료 27,132,187 세금과공과 10,002,178 수선유지비 29,675,975 수도광열비 29,970,338 임차료 4,454,977 전산비 40,227,350 지급수수료 149,290,597 경상기술료 19,792,582 외주용역비 351,681,464 성격별 기타비용 240,559,803 성격별 비용 합계 4,459,894,642 비용의 성격별 분류에 대한 기술 종업원급여는 급여, 퇴직급여 등을 포함하고 있습니다. 포괄손익계산서 상 매출원가, 판매비와관리비, 연구개발비를 합한 금액입니다.",
+    "32. 기타수익과 기타비용",
+    "기타수익 및 기타비용 당기 (단위 : 천원)",
+    "공시금액 수수료수익 9,658,013 외환차익 136,265,627 외화환산이익 108,986,533 유형자산처분이익 2,673,665 무형자산처분이익 (4,713) 유형자산손상차손환입 (3,299,998) 매각예정자산처분이익 646,048 투자부동산처분이익 4,602,794 사용권자산처분이익 393,195 배당금수익 28,769,553 기타대손충당금환입 0 잡이익 37,898,120 사업처분이익 0 기타수익 합계 333,198,259 외환차손 96,551,049 외화환산손실 87,978,601 유형자산처분손실 4,942,476 무형자산처분손실 442,430 사용권자산처분손실 44,744 기부금 14,333,418 기타의대손상각비 92,612,497 잡손실 2,042,300 매출채권처분손실 7,571,187 투자자산처분손실 무형자산손상차손 사업처분손실 종속기업투자자산처분손실 종속기업/관계기업/공동기업투자손상차손 173,928,632 기타비용 합계 480,447,334",
+    "전기 (단위 : 천원)",
+    "공시금액 수수료수익 6,004,168 외환차익 60,906,310 외화환산이익 11,252,301 유형자산처분이익 1,040,548 무형자산처분이익 0 유형자산손상차손환입 (480,919) 매각예정자산처분이익 0 투자부동산처분이익 0 사용권자산처분이익 489,290 배당금수익 25,034,661 기타대손충당금환입 30,850 잡이익 7,851,322 사업처분이익 3,236,072 기타수익 합계 116,326,441 외환차손 66,957,414 외화환산손실 26,332,531 유형자산처분손실 76,057 무형자산처분손실 112 사용권자산처분손실 24,221 기부금 7,982,480 기타의대손상각비 0 잡손실 148,471,792 매출채권처분손실 6,036,016 투자자산처분손실 무형자산손상차손 14,762,270 사업처분손실 362,048 종속기업투자자산처분손실 903,000 종속기업/관계기업/공동기업투자손상차손 기타비용 합계 271,907,941",
+    "33. 금융수익과 금융비용",
+    "금융수익 및 금융비용 당기 (단위 : 천원)",
+    "공시금액 이자수익(금융수익) 49,192,890 외환차익(금융수익) 103,815,119 외화환산이익(금융수익) 34,262,255 당기손익인식금융자산평가이익(금융수익) 544,659 파생상품평가이익(금융수익) 58,119,767 파생상품거래이익(금융수익) 9,105,805 금융수익 합계 255,040,495 이자비용(금융원가) 189,161,342 외환차손(금융원가) 65,155,788 외화환산손실(금융원가) 48,734,361 당기손익인식금융자산평가손실(금융원가) 1,187,593 파생상품평가손실(금융원가) 7,912,046 파생상품거래손실(금융원가) 78,252,828 금융비용 합계 390,403,958 금융수익에 대한 기술",
+    "전기 (단위 : 천원)",
+    "공시금액 이자수익(금융수익) 43,037,455 외환차익(금융수익) 162,444,554 외화환산이익(금융수익) 6,236,294 당기손익인식금융자산평가이익(금융수익) 0 파생상품평가이익(금융수익) 524,864,507 파생상품거래이익(금융수익) 27,723,514 금융수익 합계 764,306,324 이자비용(금융원가) 104,281,466 외환차손(금융원가) 139,468,448 외화환산손실(금융원가) 3,266,280 당기손익인식금융자산평가손실(금융원가) 9,999,293 파생상품평가손실(금융원가) 9,184,230 파생상품거래손실(금융원가) 22,089,906 금융비용 합계 288,289,623 금융수익에 대한 기술 ㈜쎄트렉아이의 전환사채 인수 계약과 관련하여 발생된 평가손실 5,459백만원, OVERAIR, INC의 전환사채 인수 계약과 관련하여 평가손실 2,912백만원이 전기에 포함되어 있습니다. 한화오션㈜의 신주인수계약의 선도거래에 따른 평가이익 514,360백만원이 전기에 포함되어 있습니다.",
+    "34. 주당이익",
+    "주당이익",
+    "주당이익 당기 (단위 : 원)",
+    "보통주 당기순손익 1,038,040,280,457 가중평균유통보통주식수 49,211,337 주당이익 21,094",
+    "전기 (단위 : 원)",
+    "보통주 당기순손익 648,959,726,032 가중평균유통보통주식수 50,767,968 주당이익 12,783",
+    "가중평균유통보통주식수의 산정",
+    "가중평균유통보통주식수의 산정 당기"
+   ],
+   "unit": "전기 (단위 : 원)",
+   "topic": "",
+   "keywords": [
+    "원재료"
+   ],
+   "keyword_in": "",
+   "rows": [
+    [
+     "",
+     "주식"
+    ],
+    [
+     "",
+     "보통주"
+    ],
+    [
+     "",
+     "가중평균유통보통주식수"
+    ]
+   ],
+   "html": "",
+   "footnotes": [],
+   "digest": "011639a8669a",
+   "why": "셀 전체가 지표명이 아니거나 멀리 있는 문장에만 키워드",
+   "file": "20250317000990.xml"
+  },
+  {
+   "section": [
+    "7-1. 증권의 발행을 통한 자금조달 실적",
+    "7-2. 증권의 발행을 통해 조달된 자금의 사용실적",
+    "8. 기타 재무에 관한 사항"
+   ],
+   "headings": [
+    "8. 기타 재무에 관한 사항",
+    "가. 재무제표 재작성 등 유의사항",
+    "(3) 자산양수도 및 신규 출자",
+    "㈜",
+    "한화세미텍㈜ (구. 한화정밀기계㈜)",
+    "한화세미텍㈜ (구. 한화정밀기계㈜)",
+    "(한화비전㈜ (구. 한화인더스트리얼솔루션즈㈜))를"
+   ],
+   "context": [
+    "※ 상기 운용상품의 경우 별도의 계약기간이 없어, 계약기간과 실투자지간을 기재 생략하였습니다.",
+    "8. 기타 재무에 관한 사항",
+    "가. 재무제표 재작성 등 유의사항",
+    "(1) 합병- 당사는 2022년 7월 29일 이사회 결의를 통해 당사의 자회사인 한화디펜스㈜를 흡수합병하는 결정을 진행하였고 2022년 11월 1일 흡수합병을 완료하였습니다. 자세한 사항은 관련 공시를 참고하시기 바랍니다. * 관련공시 : 2022년 11월 4일 [기재정정]주요사항보고서(회사합병결정) 2022년 11월 4일 합병등종료보고서 (합병)- 당사는 2023년 1월 9일 이사회 결의를 통해 당사의 자회사인 ㈜한화방산을 흡수합병하는 결정을 진행하였고 2023년 4월 1일 흡수합병을 완료하였습니다. 자세한 사항은 관련 공시를 참고하시기 바랍니다. * 관련공시 : 2023년 1월 11일 [첨부정정]주요사항보고서(회사합병결정) 2023년 4월 3일 합병등종료보고서 (합병)(2) 영업양수도- 당사는 2022년 7월 29일자로 파워시스템과 관련된 자산 및 영업권 등을 Hanwha Power Systems Holdings Corp.에 매각하는 계약을 체결하였습니다. 2022년 8월 31일자로 파워시스템 사업과 관련된 자산 및 영업권 등을 매각 완료하였습니다. 비교표시 된 포괄손익계산서는 계속영업으로부터 분리된 중단영업을 보여주기 위해 재작성 되었으며 재작성 내역은 당사 사업보고서(2023.12)-'Ⅲ. 재무에 관한 사항' 중 '3. 연결재무제표 주석' 및 당사 '연결감사보고서 주석'의 38. 중단영업에 상세히 기재되었습니다.- 당사는 2022년 7월 29일자로 한화정밀기계㈜ 및 한화상업설비(상해)유한공사의 지분 100%를 ㈜한화에 매각하는 계약을 체결함에 따라 산업용장비 사업부문을 중단사업으로 분류하였으나, 글로벌 경기 변화 등 외부적 요인으로 인한 급격한 경영환경 및 전망 등의 변동과 불확실성의 확대로 인하여 거래 당사자 간 상호 합의하에 2023년 9월 26일 이사회 의결 및 주식매매계약 해제합의서를 체결하였습니다. 이에 따라 당사는 중단사업으로 분류했던 산업용장비 사업부문을 계속사업으로 재분류하였습니다.- 당사는 2022년 7월 29일자로 항공우주 및 방산사업 역량 결집과 기업 정체성 제고를 위하여 ㈜한화의 방산부문을 물적분할하여 설립된 주식회사 한화방산의 주식 100%를 취득하는 계약을 체결하였고 2022년 12월 29일에 취득을 완료하였습니다.- 당사는 사업역량 집중을 통한 경영 효율성 증대를 위해 2022년 9월 26일 이사회 결의를 통하여 복합발전사업을 한화파워시스템㈜에 2022년 12월 30일자로 160억원에 양도하였습니다.",
+    "- 당사는 2024년 10월 29일 이사회 승인을 통해 한화시스템㈜ 및 한화오션㈜ 가 보유하고 있는 스마트쉽 관련 사업을 영업 양수하기로 결정하였습니다. 한화시스템㈜와는 약 30억원을 2024년 10월 31일 양수하였으며, 한화오션㈜와는 약 59억원을 2024년 11월 29일자로 양수를 완료하였습니다.",
+    "(3) 자산양수도 및 신규 출자",
+    "- 당사는 우주 위성 사업 진출에 따른 개발 기술 역량 확보와 시너지 창출을 위해 2021년 1월 15일 취득한 ㈜쎄트렉아이 전환사채 500억원에 대한 전환청구권을 2023년 12월 15일 행사하여 신규발행주식 1,865,671주를 취득하였습니다.- 당사의 자회사인 한화시스템㈜는 자가사업장 확보를 통한 운영리스크 해소 및 중장기 생산능력 확보를 위해 2022년 9월 26일 이사회 결의를 통하여 ㈜한화가 소유 중인 경상북도 구미시 소재의 토지 및 건물을 389억원에 양수하는 결정을 진행하였습니다. 2022년 9월 28일",
+    "㈜",
+    "한화와 자산양수도 계약을 체결하였으며, 2023년 3월 경상북도 구미시 소재의 토지 및 건물을 388.8억원에 취득 완료하였습니다.- 당사와 당사의 자회사인 한화시스템㈜는 미래 신성장 동력 확보 및 전략적 사업 시너지 창출을 위하여 2022년 9월 26일 한화오션㈜의 제3자 배정 유상증자에 참여하기로 결정하였으며, 공정거래위원회의 기업결합승인 등 관련 절차가 마무리됨에 따라 2023년 5월 23일 유상증자를 통한 지분 취득을 완료하였습니다. 취득금액은 15,000억원입니다.- 당사는 항공사업의 포트폴리오 다각화를 위해 2022년 12월 16일 영국의 Hanwha Phasor의 신규발행주식 인수계약 체결 후 2023년 2월 22일 신규발행주식 682억원을 취득하였습니다.- 당사는 미국 내 우수 자산 및 회사의 투자 참여를 위하여 2023년 5월 23일 Hanwha Futureproof Corp.에 유상증자에 참여하기로 결정하였습니다. 총 투자금액은 약 6,557억원으로 2024년 10월 31일 지분취득을 완료하였습니다.- 당사의 주요 종속회사인 ㈜쎄트렉아이는 2023년 7월 11일 이사회의 결정으로 종속회사인 ㈜에스아이에이의 경영상의 운영자금 지원 등을 목적으로 제3자배정 유상증자를 통해 보통주 33,000주를 약 120억원에 취득하였습니다.- 당사와 당사의 자회사인 한화시스템㈜은 신사업 투자를 통한 사업 시너지 강화 및 보유지분 가치제고를 위하여 2023년 9월 7일과 2023년 9월 15일에 각각 이사회 결의를 통하여 한화오션㈜의 주주배정 유상증자에 참여하기로 결정하였습니다. 본 유상증자를 통한 취득금액은 약 4,688억원이며, 2023년 11월 16일 지분취득을 완료하였습니다.- 당사는 2024년 2월 23일, 2024년 3월 26일 각각 이사회 승인을 통하여",
+    "한화세미텍㈜ (구. 한화정밀기계㈜)",
+    "에 현물출자 약 672억, 현금출자 약 1,700억원 규모의 유상증자에 참여하였습니다. 본 두 건의 유상증자를 통하여 당사는 출자금액에 상응하는",
+    "한화세미텍㈜ (구. 한화정밀기계㈜)",
+    "의 보통주 1,484,911주를 취득완료하였습니다.",
+    "- 당사의 자회사인 한화시스템㈜는 미국 등 글로벌 시장 진출 및 해양시스템 기술력과의 시너지 사업 확대를 목적으로 2024년 6월 20일 HS USA HOLDINGS CORP.의 64,000주를 취득하기로 결정하였습니다. 취득금액은 약 918억원이며, 2024년 12월 17일 지분취득을 완료하였으며, 한화시스템㈜는 발행회사를 통해 미국 필라델피아 소재 조선소인 Philly Shipyard Inc.의 지분을 인수했습니다.",
+    "- 당사는 2024년 8월 30일 이사회 승인을 통해 당사의 자회사인 한화에비에이션㈜에 125억원 규모의 유상증자에 참여하였습니다. 본 건 유상증자를 통해 당사는 출자금액에 상응하는 한화에비에이션㈜의 보통주 25,000주를 취득완료하였습니다.",
+    "- 당사의 자회사인 Hanwha Ocean SG Holdings Pte. Ltd.는 2024년 9월 11일 이사회의 결의를 통해 미래 신성장 동력 확보 및 전략적 사업 시너지 창출을 위하여 싱가포르 소재의 Dyna-Mac Holdings Ltd.의 지분을 공개매수 방식으로 취득하기로 결정했습니다. Hanwha Ocean SG Holdings Pte. Ltd.는 Dyna-Mac Holdings Ltd.의 지분 95.15%를 공개매수 방식으로 취득하였으며, 법적요건 충족에 따라 강제매수 절차를 진행하여 2025년 1월 8일 잔여 주식 취득을 완료하였습니다.당사와 한화오션㈜는 본 건 공개매수와 관련하여 Hanwha Ocean SG Holdings Pte. Ltd.에 대하여 약 8,705억원의 금전대여를 결정하였으며, 이후 2024년 11월 21일 이사회 결의를 통해 Hanwha Ocean SG Holdings Pte. Ltd.의 유상증자에 참여하였으며 본 대여금을 2025년 1월 8일자로 출자전환완료하였습니다.- 당사는 2024년 12월 4일 이사회 승인을 통해 당사의 자회사인 한화에비에이션㈜에 432억원 규모의 유상증자에 참여하였습니다. 본 건 유상증자를 통해 당사는 출자금액에 상응하는 한화에비에이션㈜의 보통주 86,400주를 취득완료하였습니다.- 당사는 사택 매입을 통한 임직원 주거지원을 위하여 2024년 12월 18일 이사회 승인을 통해 ㈜한화 소유의 토지 및 건물 등을 매입하였습니다. 양수가액은 약 118억원으로 양사가 선정한 외부 감정평가기관의 평가에 의거하여 최종 선정하였습니다.",
+    "(4) 분할- 당사는 상법 제530조의2 내지 제530조의11의 규정이 정하는 바에 따라 분할대상사업부분(시큐리티, 칩마운터, 반도체장비 등의 생산 및 판매하는 피투자회사 지분의 관리 및 신규투자 등을 영위하는 사업부문)을 2024년 9월 1일을 기일로 하여 인적분할할 예정입니다. 분할회사가 영위하는 분할대상사업부문을 분할하여 분할신설회사",
+    "(한화비전㈜ (구. 한화인더스트리얼솔루션즈㈜))를",
+    "설립하고, 분할 후 분할신설회사는 한국거래소의 유가증권시장상장규정에 따른 재상장 심사를 거쳐 2024년 9월 27일 한국거래소 유가증권시장에 재상장되었습니다. 기타 자세한 사항은 관련 공시를 참고하여 주시기 바랍니다. * 관련공시 : 2024년 4월 5일 주요사항보고서(회사분할결정) 2024년 7월 18일 [기재정정]주요사항보고서(회사분할결정) 2024년 7월 30일 투자설명서 2024년 9월 20일 [기재정정]증권발행실적보고서(합병등)",
+    "당기 중 인적분할로 인한 자산과 부채 변동효과는 다음과 같습니다. 동 인적분할의 결과로 이전된 자산과 부채의 장부금액 차이는 재무제표 상 기타자본잉여금으로 인식되었습니다.",
+    "(단위: 천원)"
+   ],
+   "unit": "(단위: 천원)",
+   "topic": "",
+   "keywords": [
+    "생산능력"
+   ],
+   "keyword_in": "",
+   "rows": [
+    [
+     "구분",
+     "금액"
+    ],
+    [
+     "유동자산",
+     "1,061,643,580"
+    ],
+    [
+     "비유동자산",
+     "574,789,935"
+    ]
+   ],
+   "html": "",
+   "footnotes": [],
+   "digest": "f768cb47b36f",
+   "why": "셀 전체가 지표명이 아니거나 멀리 있는 문장에만 키워드",
+   "file": "20250317000990.xml"
+  }
+ ]
+}

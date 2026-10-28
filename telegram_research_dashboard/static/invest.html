@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<!--
+  투자 공유 허브 — 대시보드 사이드바 '투자' 그룹 9개 + 아침 브리핑 3개(방산·건기·친환경E/FDC)를 모아 링크한다.
+
+  왜 있나: #press 같은 대시보드 뷰는 index.html 안에 있어 **주인 비번**으로만
+  열린다(사이드바가 팀원 메뉴까지 통째로 노출하기 때문, gate.py 참고). 그래서
+  친구에게 투자 화면만 주려면 독립 페이지 주소를 하나하나 복사해 줘야 했다.
+  이 페이지는 그 주소 모음이고, 자신은 **공유 비번으로 열린다**(OWNER_ONLY_PAGES
+  에 없으므로 gate 가 공유 등급으로 통과시킨다).
+  화면 공유용이기도 하다: 대시보드의 새 창 링크가 전부 공유용 주소
+  (https://gs-research-desk.github.io — 5개 배포 워크플로가 같은 _site 를 GitHub 조직
+  gs-research-desk 의 Pages 리포에도 push 한다)로 열리므로, 이 페이지를 그 주소로 띄워 두면 주소창·사이드바에
+  gschoie.github.io/GS-DB2 가 드러나지 않는다(static/app.js shareUrl 참고).
+
+  주의: 링크 대상이 바뀌면 여기도 같이 고쳐야 한다. 대상은 대시보드 각 화면
+  우상단 '🔗 새 창으로' 가 가리키는 것과 같은 파일이다(static/index.html).
+  외부 사이트 둘(톤·챗봇, daol-securities-research-center.github.io)은
+  **이 비밀번호 가림막 바깥**이다 — 주소를 아는
+  사람은 비번 없이 본다. 카드에 그렇게 적어 둔다(모르고 주면 안 되니까).
+-->
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>투자 모음 — GS Research Desk</title>
+<style>
+:root{--bg:#fff;--fg:#1c2430;--muted:#6b7684;--line:#e5e8ec;--card:#f7f8fa;
+--accent:#2f6f4f;--warnbg:#fff8e6;--warnline:#e8c87a}
+@media(prefers-color-scheme:dark){:root{--bg:#14181f;--fg:#e6e9ee;--muted:#8b93a1;
+--line:#2a313c;--card:#1b212b;--accent:#8fc7a5;--warnbg:#2b2718;--warnline:#5c4f27}}
+*{box-sizing:border-box}
+body{margin:0;padding:18px 16px 48px;background:var(--bg);color:var(--fg);
+font:14px/1.6 -apple-system,"Malgun Gothic","Apple SD Gothic Neo",sans-serif}
+.wrap{max-width:820px;margin:0 auto}
+h1{font-size:19px;margin:0 0 2px}
+.sub{color:var(--muted);font-size:12.5px;margin:0 0 16px}
+h2{font-size:13px;margin:22px 0 8px;color:var(--muted);font-weight:700}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,240px),1fr));
+gap:10px}
+a.item{display:block;background:var(--card);border:1px solid var(--line);
+border-radius:10px;padding:12px 14px;text-decoration:none;color:inherit;
+transition:border-color .12s,transform .12s}
+a.item:hover{border-color:var(--accent);transform:translateY(-1px)}
+.ico{font-size:17px;line-height:1}
+.name{font-weight:700;font-size:14px;margin:6px 0 3px}
+.desc{color:var(--muted);font-size:12px;margin:0}
+.tag{display:inline-block;font-size:10.5px;font-weight:700;letter-spacing:.2px;
+border:1px solid var(--warnline);background:var(--warnbg);color:var(--fg);
+border-radius:999px;padding:0 6px;margin-left:5px;vertical-align:1px}
+.note{background:var(--warnbg);border:1px solid var(--warnline);border-radius:10px;
+padding:10px 12px;font-size:12.5px;margin:18px 0 0}
+.foot{color:var(--muted);font-size:11.5px;margin:22px 0 0}
+</style>
+</head>
+<body><div class="wrap">
+
+<h1>📈 투자 모음</h1>
+<p class="sub">GS Research Desk 의 투자 화면을 모았습니다. 각 항목은 그 자리에서 바로 열립니다.</p>
+
+<h2>지표 · 시황</h2>
+<div class="grid">
+  <a class="item" href="macro_desk_report.html">
+    <div class="ico">💸</div><p class="name">매크로.데스크</p>
+    <p class="desc">금리·환율·원자재 + 발표 일정 달력. 숫자 옆에 “얼마면 무슨 뜻인가”</p></a>
+  <a class="item" href="market_flow_report.html">
+    <div class="ico">🌊</div><p class="name">시장.수급.동향</p>
+    <p class="desc">외국인·기관 수급과 선물 베이시스. 평일 하루 4회</p></a>
+  <a class="item" href="market_trend_report.html">
+    <div class="ico">🧠</div><p class="name">시장관심.내러티브</p>
+    <p class="desc">급증 키워드·전파 수로 본 그날의 테마 + 커뮤니티 온도</p></a>
+</div>
+
+<h2>신호 · 추적</h2>
+<div class="grid">
+  <a class="item" href="etf_signal_report.html">
+    <div class="ico">📡</div><p class="name">ETF/섹터.신호 포착</p>
+    <p class="desc">49개 ETF 매수·매도·추세 신호판. 매일 아침</p></a>
+  <a class="item" href="etf_holdings_report.html">
+    <div class="ico">🧩</div><p class="name">액티브ETF.매매동향</p>
+    <p class="desc">액티브 ETF 바스켓이 무엇을 담고 덜어냈나</p></a>
+  <a class="item" href="consensus_revision.html">
+    <div class="ico">📉</div><p class="name">코스피200.컨센.추적</p>
+    <p class="desc">당분기·다음분기·올해E·내년E 컨센서스가 어디로 움직였나</p></a>
+</div>
+
+<h2>리서치 톤 · 도구</h2>
+<div class="grid">
+  <a class="item" href="https://daol-securities-research-center.github.io/DAOL-RESEARCH-TONE/"
+     target="_blank" rel="noopener">
+    <div class="ico">🎯</div><p class="name">DAOL 리서치 톤<span class="tag">외부</span></p>
+    <p class="desc">커버리지 보고서의 논조 흐름</p></a>
+  <a class="item" href="https://daol-securities-research-center.github.io/DAOL-RESEARCH-TONE/chat.html"
+     target="_blank" rel="noopener">
+    <div class="ico">💬</div><p class="name">DAOL 리서치와 챗봇<span class="tag">외부</span></p>
+    <p class="desc">리서치 자료에 질문하는 챗봇</p></a>
+</div>
+
+<p class="note"><b>외부</b> 표시 둘은 <b>이 사이트 밖</b>입니다 — 여기 비밀번호가 걸리지
+않으므로 주소를 아는 사람은 바로 열 수 있습니다.</p>
+
+<p class="foot">숫자는 각 화면에 적힌 갱신 시각 기준입니다. 이 모음은 투자 화면과 브리핑만 담고
+있어, 팀원 일정 같은 다른 메뉴는 여기서 열리지 않습니다.</p>
+
+</div></body></html>

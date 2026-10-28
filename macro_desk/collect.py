@@ -30,6 +30,29 @@ KEEP_DAYS = 120
 # 변화율을 재는 구간(거래일 기준 근사). 1M=21, 3M=63, 12M=252
 SPANS = [("1D", 1), ("1W", 5), ("1M", 21), ("3M", 63), ("12M", 252)]
 
+# 화면에서 숫자를 누르면 보여줄 시계열 — 12M 구간과 같은 252 거래일.
+# 이미 400~500일을 받아오고 _changes 가 그걸 버리고 있었으므로 **추가 호출은 없다**.
+SERIES_N = 252
+
+def _series(dates: list[str], closes: list[float]) -> dict:
+    """{v: 값 배열, d: 날짜를 이어 붙인 문자열} — 마지막 SERIES_N 개.
+
+    x축은 거래일 **등간격**으로 그린다(휴장일을 빈칸으로 두지 않는 일반적인 방식)
+    지만 축 라벨에는 진짜 날짜가 필요하다. 그렇다고 `["260110", …]` 로 담으면
+    따옴표·쉼표가 날짜만큼 붙어 지표당 2KB가 넘는다 → **YYMMDD 는 고정폭 6자**라
+    통째로 이어 붙이고 화면에서 `slice(i*6, i*6+6)` 으로 꺼낸다(지표당 1.5KB).
+
+    dates 와 closes 는 **같은 길이로 정렬돼 있어야 한다**. 한쪽만 dropna 하면
+    값과 날짜가 밀려 차트가 조용히 다른 날짜를 가리킨다.
+    """
+    if len(dates) != len(closes):
+        raise ValueError(f"날짜 {len(dates)}개 ≠ 값 {len(closes)}개")
+    bad = [d for d in dates[:3] if len(d) != 6]
+    if bad:
+        raise ValueError(f"날짜는 YYMMDD 6자여야 한다: {bad[0]!r}")
+    return {"v": [round(float(c), 4) for c in closes[-SERIES_N:]],
+            "d": "".join(dates[-SERIES_N:])}
+
 
 def now_kst() -> dt.datetime:
     return dt.datetime.now(KST)
@@ -63,10 +86,15 @@ def fetch_yahoo(items: list[dict]) -> dict:
     for it in items:
         try:
             hist = yf.Ticker(it["ticker"]).history(period="400d", interval="1d")
-            closes = [float(v) for v in hist["Close"].dropna().tolist()]
+            # dropna 를 Series 에 걸어 **인덱스(날짜)와 값을 같이** 솎아낸다 —
+            # 값만 솎으면 날짜가 밀려 차트가 다른 날짜를 가리킨다.
+            s = hist["Close"].dropna()
+            closes = [float(v) for v in s.tolist()]
             if not closes:
                 raise ValueError("빈 응답")
             out[it["id"]] = _changes(closes)
+            out[it["id"]]["series"] = _series(
+                [d.strftime("%y%m%d") for d in s.index], closes)
             print(f"  OK {it['name']:<16} {closes[-1]:>12,.2f}")
         except Exception as e:
             print(f"  ERR {it['name']:<16} {str(e)[:60]}")
@@ -86,11 +114,15 @@ def fetch_fred(items: list[dict], key: str) -> dict:
                                  "series_id": it["series"], "api_key": key,
                                  "file_type": "json", "observation_start": start})
             r.raise_for_status()
-            vals = [float(o["value"]) for o in r.json().get("observations", [])
-                    if o.get("value") not in (".", "", None)]
+            obs = [o for o in r.json().get("observations", [])
+                   if o.get("value") not in (".", "", None)]
+            vals = [float(o["value"]) for o in obs]
             if not vals:
                 raise ValueError("빈 응답")
             out[it["id"]] = _changes(vals)
+            # FRED 날짜는 "2026-10-09" — 차트 눈금용으로 YYMMDD 로 줄인다
+            out[it["id"]]["series"] = _series(
+                [o["date"].replace("-", "")[2:] for o in obs], vals)
             print(f"  OK {it['name']:<22} {vals[-1]:>8.2f}")
         except Exception as e:
             print(f"  ERR {it['name']:<22} {str(e)[:60]}")

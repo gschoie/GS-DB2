@@ -4,3 +4,5 @@ __pycache__/
 *.session
 *.session-journal
 source_watcher/data/
+# 텔레그램 앨범용 캡쳐 — 같은 잡 안에서만 쓰고 버린다(커밋하면 매 run 1MB+ 씩 이력이 쌓인다)
+coverage_flow/data/capture*.png

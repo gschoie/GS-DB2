@@ -1,0 +1,627 @@
+{
+ "meta": {
+  "company": "HD건설기계",
+  "sector": "건기",
+  "stock_code": "267270",
+  "corp_code": "01205842",
+  "rcept_no": "20240320001838",
+  "rcept_dt": "20240320",
+  "report_nm": "사업보고서 (2023.12)",
+  "report_type": "annual",
+  "period": "2023-12",
+  "period_label": "2023.12 사업보고서",
+  "corrected": false,
+  "dart_url": "https://dart.fss.or.kr/dsaf001/main.do?rcpNo=20240320001838"
+ },
+ "tables": [
+  {
+   "section": [
+    "II. 사업의 내용",
+    "1. 사업의 개요",
+    "2. 주요 제품 및 서비스"
+   ],
+   "headings": [
+    "나. 주요 제품 등의 가격변동추이"
+   ],
+   "context": [
+    "※ 회사는 기준서 제1115호 '고객과의 계약에서 생기는 수익'을 적용하였습니다.",
+    "나. 주요 제품 등의 가격변동추이",
+    "(단위 : 백만원)"
+   ],
+   "unit": "(단위 : 백만원)",
+   "topic": "product_price",
+   "keywords": [
+    "나. 주요 제품 등의 가격변동추이"
+   ],
+   "keyword_in": "heading",
+   "rows": [
+    [
+     "품 목",
+     "구 분",
+     "제7기",
+     "제6기",
+     "제5기"
+    ],
+    [
+     "굴삭기",
+     "HW155A",
+     "157",
+     "151",
+     "138"
+    ],
+    [
+     "HX220A",
+     "154",
+     "148",
+     "143"
+    ],
+    [
+     "HX320A",
+     "194",
+     "187",
+     "175"
+    ]
+   ],
+   "html": "<table aclass=\"NORMAL\" afixtable=\"N\" border=\"1\" width=\"598\">\n<colgroup>\n<col width=\"107\"/>\n<col width=\"107\"/>\n<col width=\"113\"/>\n<col width=\"113\"/>\n<col width=\"113\"/>\n</colgroup>\n<tbody>\n<tr acopy=\"Y\" adelete=\"Y\">\n<td align=\"CENTER\" height=\"32\" usermark=\"F-12 BC0XD7D7D7\" valign=\"MIDDLE\" width=\"116\">품         목</td>\n<td align=\"CENTER\" height=\"32\" usermark=\"F-12 BC0XD7D7D7\" valign=\"MIDDLE\" width=\"116\">구 분</td>\n<td align=\"CENTER\" height=\"32\" usermark=\"F-12 BC0XD7D7D7\" valign=\"MIDDLE\" width=\"122\">제7기</td>\n<td align=\"CENTER\" height=\"32\" usermark=\"F-12 BC0XD7D7D7\" valign=\"MIDDLE\" width=\"122\">제6기</td>\n<td align=\"CENTER\" height=\"32\" usermark=\"F-12 BC0XD7D7D7\" valign=\"MIDDLE\" width=\"122\">제5기</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\">\n<td align=\"CENTER\" height=\"93\" rowspan=\"3\" usermark=\"F-12\" valign=\"MIDDLE\" width=\"116\">굴삭기</td>\n<td align=\"CENTER\" height=\"31\" valign=\"MIDDLE\" width=\"116\">\n<p usermark=\"F-12\">HW155A</p>\n</td>\n<td align=\"CENTER\" height=\"31\" usermark=\"F-12\" valign=\"MIDDLE\" width=\"122\">157</td>\n<td align=\"CENTER\" height=\"31\" valign=\"MIDDLE\" width=\"122\">\n<p usermark=\"F-12\">151</p>\n</td>\n<td align=\"CENTER\" height=\"31\" usermark=\"F-12\" valign=\"MIDDLE\" width=\"122\">138</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\">\n<td align=\"CENTER\" height=\"31\" valign=\"MIDDLE\" width=\"116\">\n<p usermark=\"F-12\">HX220A</p>\n</td>\n<td align=\"CENTER\" height=\"31\" usermark=\"F-12\" valign=\"MIDDLE\" width=\"122\">154</td>\n<td align=\"CENTER\" height=\"31\" valign=\"MIDDLE\" width=\"122\">\n<p usermark=\"F-12\">148</p>\n</td>\n<td align=\"CENTER\" height=\"31\" usermark=\"F-12\" valign=\"MIDDLE\" width=\"122\">143</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\">\n<td align=\"CENTER\" height=\"31\" valign=\"MIDDLE\" width=\"116\">\n<p usermark=\"F-12\">HX320A</p>\n</td>\n<td align=\"CENTER\" height=\"31\" usermark=\"F-12\" valign=\"MIDDLE\" width=\"122\">194</td>\n<td align=\"CENTER\" height=\"31\" valign=\"MIDDLE\" width=\"122\">\n<p usermark=\"F-12\">187</p>\n</td>\n<td align=\"CENTER\" height=\"31\" usermark=\"F-12\" valign=\"MIDDLE\" width=\"122\">175</td>\n</tr>\n</tbody>\n</table>",
+   "footnotes": [],
+   "digest": "060f5ed12f57",
+   "file": "20240320001838.xml"
+  },
+  {
+   "section": [
+    "1. 사업의 개요",
+    "2. 주요 제품 및 서비스",
+    "3. 원재료 및 생산설비"
+   ],
+   "headings": [
+    "1) 산출기준 : 국내 최종 소비자 가격 기준",
+    "3. 원재료 및 생산설비",
+    "가. 원재료",
+    "1) 주요 원재료 등의 현황"
+   ],
+   "context": [
+    "1) 산출기준 : 국내 최종 소비자 가격 기준",
+    "3. 원재료 및 생산설비",
+    "가. 원재료",
+    "1) 주요 원재료 등의 현황",
+    "(2023.12.31 현재) (단위 : 백만원)"
+   ],
+   "unit": "(2023.12.31 현재) (단위 : 백만원)",
+   "topic": "material",
+   "keywords": [
+    "1) 주요 원재료 등의 현황"
+   ],
+   "keyword_in": "heading",
+   "rows": [
+    [
+     "사업부문",
+     "회사명",
+     "매입유형",
+     "품 목",
+     "구체적용도",
+     "매 입 액(비 율)",
+     "비 고"
+    ],
+    [
+     "건설기계",
+     "HD현대건설기계㈜",
+     "원재료",
+     "Excavator, Wheel Loader 부품",
+     "굴삭기 제작 등",
+     "557,820(44.94%)",
+     ""
+    ],
+    [
+     "HD Hyundai Construction Equipment India Private Ltd.",
+     "원재료",
+     "Excavator 부품",
+     "굴삭기 제작 등",
+     "390,012(31.42%)"
+    ],
+    [
+     "현대강소공정기계유한공사",
+     "원재료",
+     "Excavator 부품",
+     "굴삭기 제작 등",
+     "163,845(13.20%)"
+    ],
+    [
+     "HD Hyundai Construction Equipment Brasil- Manufacturing and Trading of Construction Equipment S.A",
+     "원재료",
+     "Excavator, Wheel Loader 부품",
+     "굴삭기 제작 등",
+     "129,643(10.44%)"
+    ],
+    [
+     "합 계",
+     "-",
+     "-",
+     "1,241,320(100.00%)"
+    ]
+   ],
+   "html": "<table aclass=\"NORMAL\" afixtable=\"N\" border=\"1\" width=\"1085\">\n<colgroup>\n<col width=\"74\"/>\n<col width=\"441\"/>\n<col width=\"70\"/>\n<col width=\"150\"/>\n<col width=\"113\"/>\n<col width=\"81\"/>\n<col width=\"93\"/>\n</colgroup>\n<tbody>\n<tr acopy=\"Y\" adelete=\"Y\">\n<td align=\"CENTER\" height=\"55\" usermark=\"F-12 BC0XD7D7D7\" valign=\"MIDDLE\" width=\"83\">사업부문</td>\n<td align=\"CENTER\" height=\"55\" usermark=\"F-12 BC0XD7D7D7\" valign=\"MIDDLE\" width=\"450\">회사명</td>\n<td align=\"CENTER\" height=\"55\" usermark=\"F-12 BC0XD7D7D7\" valign=\"MIDDLE\" width=\"79\">매입유형</td>\n<td align=\"CENTER\" height=\"55\" usermark=\"F-12 BC0XD7D7D7\" valign=\"MIDDLE\" width=\"159\">품   목</td>\n<td align=\"CENTER\" height=\"55\" usermark=\"F-12 BC0XD7D7D7\" valign=\"MIDDLE\" width=\"122\">구체적용도</td>\n<td align=\"CENTER\" height=\"55\" usermark=\"F-12 BC0XD7D7D7\" valign=\"MIDDLE\" width=\"90\">매  입  액(비      율)</td>\n<td align=\"CENTER\" height=\"55\" usermark=\"F-12 BC0XD7D7D7\" valign=\"MIDDLE\" width=\"102\">비 고</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\">\n<td align=\"CENTER\" height=\"244\" rowspan=\"4\" usermark=\"F-12\" valign=\"MIDDLE\" width=\"83\">건설기계</td>\n<td align=\"CENTER\" height=\"55\" usermark=\"F-12\" valign=\"MIDDLE\" width=\"450\">HD현대건설기계㈜</td>\n<td align=\"CENTER\" height=\"55\" usermark=\"F-12\" valign=\"MIDDLE\" width=\"79\">원재료</td>\n<td align=\"CENTER\" height=\"55\" valign=\"MIDDLE\" width=\"159\">\n<p usermark=\"F-12\">Excavator,</p>\n<p usermark=\"F-12\"> Wheel Loader 부품</p>\n</td>\n<td align=\"CENTER\" height=\"55\" usermark=\"F-12\" valign=\"MIDDLE\" width=\"122\">굴삭기 제작 등</td>\n<td align=\"RIGHT\" height=\"55\" usermark=\"F-12\" width=\"90\">557,820(44.94%)</td>\n<td height=\"299\" rowspan=\"5\" usermark=\"F-12\" width=\"102\"></td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\">\n<td align=\"CENTER\" height=\"55\" valign=\"MIDDLE\" width=\"450\">\n<p usermark=\"F-12\">HD Hyundai Construction Equipment India Private Ltd.</p>\n</td>\n<td align=\"CENTER\" height=\"55\" usermark=\"F-12\" valign=\"MIDDLE\" width=\"79\">원재료</td>\n<td align=\"CENTER\" height=\"55\" usermark=\"F-12\" valign=\"MIDDLE\" width=\"159\">Excavator 부품</td>\n<td align=\"CENTER\" height=\"55\" usermark=\"F-12\" valign=\"MIDDLE\" width=\"122\">굴삭기 제작 등</td>\n<td align=\"RIGHT\" height=\"55\" usermark=\"F-12\" width=\"90\">390,012(31.42%)</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\">\n<td align=\"CENTER\" height=\"55\" usermark=\"F-12\" valign=\"MIDDLE\" width=\"450\">현대강소공정기계유한공사</td>\n<td align=\"CENTER\" height=\"55\" usermark=\"F-12\" valign=\"MIDDLE\" width=\"79\">원재료</td>\n<td align=\"CENTER\" height=\"55\" usermark=\"F-12\" valign=\"MIDDLE\" width=\"159\">Excavator 부품</td>\n<td align=\"CENTER\" height=\"55\" usermark=\"F-12\" valign=\"MIDDLE\" width=\"122\">굴삭기 제작 등</td>\n<td align=\"RIGHT\" height=\"55\" usermark=\"F-12\" width=\"90\">163,845(13.20%)</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\">\n<td align=\"CENTER\" height=\"79\" valign=\"MIDDLE\" width=\"450\">\n<span usermark=\"F-12\">HD Hyundai Construction Equipment Brasil- Manufacturing and Trading of Construction Equipment S.A</span>\n</td>\n<td align=\"CENTER\" height=\"79\" valign=\"MIDDLE\" width=\"79\">\n<p usermark=\"F-12\">원재료</p>\n</td>\n<td align=\"CENTER\" height=\"79\" valign=\"MIDDLE\" width=\"159\">\n<p usermark=\"F-12\">Excavator, Wheel Loader 부품</p>\n</td>\n<td align=\"CENTER\" height=\"79\" valign=\"MIDDLE\" width=\"122\">\n<p usermark=\"F-12\">굴삭기 제작 등</p>\n</td>\n<td align=\"RIGHT\" height=\"79\" usermark=\"F-12\" width=\"90\">129,643(10.44%)</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\">\n<td align=\"CENTER\" colspan=\"3\" height=\"55\" usermark=\"F-12\" valign=\"MIDDLE\" width=\"612\">합        계</td>\n<td align=\"CENTER\" height=\"55\" usermark=\"F-12\" valign=\"MIDDLE\" width=\"159\">-</td>\n<td align=\"CENTER\" height=\"55\" usermark=\"F-12\" valign=\"MIDDLE\" width=\"122\">-</td>\n<td align=\"RIGHT\" height=\"55\" usermark=\"F-12\" valign=\"MIDDLE\" width=\"90\">1,241,320(100.00%)</td>\n</tr>\n</tbody>\n</table>",
+   "footnotes": [],
+   "digest": "610f49eab628",
+   "file": "20240320001838.xml"
+  },
+  {
+   "section": [
+    "1. 사업의 개요",
+    "2. 주요 제품 및 서비스",
+    "3. 원재료 및 생산설비"
+   ],
+   "headings": [
+    "2) 주요 원재료 등의 가격변동추이"
+   ],
+   "context": [
+    "※ 지배기업 및 주요 종속회사를 기준으로 작성하였습니다.※ 내부 매입거래를 포함한 금액입니다.",
+    "2) 주요 원재료 등의 가격변동추이"
+   ],
+   "unit": "",
+   "topic": "material_price",
+   "keywords": [
+    "2) 주요 원재료 등의 가격변동추이"
+   ],
+   "keyword_in": "heading",
+   "rows": [
+    [
+     "품 목",
+     "제7기",
+     "제6기",
+     "제5기"
+    ],
+    [
+     "Excavator Bucket Assy(천원/개)",
+     "국내",
+     "1,921",
+     "2,102",
+     "2,016"
+    ],
+    [
+     "Wheel Loader Main Control Valve(EUR/개)",
+     "해외",
+     "1,202",
+     "1,148",
+     "1,115"
+    ]
+   ],
+   "html": "<table aclass=\"NORMAL\" afixtable=\"N\" border=\"1\" width=\"639\">\n<colgroup>\n<col width=\"288\"/>\n<col width=\"34\"/>\n<col width=\"88\"/>\n<col width=\"88\"/>\n<col width=\"96\"/>\n</colgroup>\n<tbody>\n<tr acopy=\"Y\" adelete=\"Y\">\n<td align=\"CENTER\" colspan=\"2\" height=\"31\" usermark=\"F-12 BC0XD7D7D7\" valign=\"MIDDLE\" width=\"340\">품        목</td>\n<td align=\"CENTER\" height=\"31\" usermark=\"F-12 BC0XD7D7D7\" valign=\"MIDDLE\" width=\"97\">제7기</td>\n<td align=\"CENTER\" height=\"31\" usermark=\"F-12 BC0XD7D7D7\" valign=\"MIDDLE\" width=\"97\">제6기</td>\n<td align=\"CENTER\" height=\"31\" usermark=\"F-12 BC0XD7D7D7\" valign=\"MIDDLE\" width=\"105\">제5기</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\">\n<td align=\"CENTER\" height=\"31\" usermark=\"F-12\" valign=\"MIDDLE\" width=\"297\"> Excavator Bucket Assy(천원/개)</td>\n<td align=\"CENTER\" height=\"31\" usermark=\"F-12\" valign=\"MIDDLE\" width=\"43\">국내</td>\n<td align=\"RIGHT\" height=\"31\" usermark=\"F-12\" valign=\"MIDDLE\" width=\"97\">1,921</td>\n<td align=\"RIGHT\" height=\"31\" usermark=\"F-12\" valign=\"MIDDLE\" width=\"97\">2,102</td>\n<td align=\"RIGHT\" height=\"31\" usermark=\"F-12\" valign=\"MIDDLE\" width=\"105\">2,016</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\">\n<td align=\"CENTER\" height=\"55\" usermark=\"F-12\" valign=\"MIDDLE\" width=\"297\">Wheel Loader Main Control Valve(EUR/개)</td>\n<td align=\"CENTER\" height=\"55\" usermark=\"F-12\" valign=\"MIDDLE\" width=\"43\">해외</td>\n<td align=\"RIGHT\" height=\"55\" usermark=\"F-12\" valign=\"MIDDLE\" width=\"97\">1,202</td>\n<td align=\"RIGHT\" height=\"55\" usermark=\"F-12\" valign=\"MIDDLE\" width=\"97\">1,148</td>\n<td align=\"RIGHT\" height=\"55\" usermark=\"F-12\" valign=\"MIDDLE\" width=\"105\">1,115</td>\n</tr>\n</tbody>\n</table>",
+   "footnotes": [],
+   "digest": "d26038dc1a48",
+   "file": "20240320001838.xml"
+  },
+  {
+   "section": [
+    "1. 사업의 개요",
+    "2. 주요 제품 및 서비스",
+    "3. 원재료 및 생산설비"
+   ],
+   "headings": [],
+   "context": [
+    "(1) 산출기준 : 부품별 대표 매입처 구매 계약가 기준(2) 주요 가격변동원인 : 강재 등 원재료 가격 변동 및 설계변경에 따른 변동3) 주요 원재료 매입처 현황"
+   ],
+   "unit": "",
+   "topic": "material",
+   "keywords": [
+    "주요매입처"
+   ],
+   "keyword_in": "table",
+   "rows": [
+    [
+     "품 목",
+     "주요매입처",
+     "독과점여부",
+     "공급의 안정성"
+    ],
+    [
+     "Excavator 부품",
+     "티씨테크",
+     "낮음",
+     "높음"
+    ],
+    [
+     "Wheel Loader 부품",
+     "ZF Friedrichshafen AG",
+     "높음",
+     "높음"
+    ]
+   ],
+   "html": "<table aclass=\"NORMAL\" afixtable=\"N\" border=\"1\" width=\"555\">\n<colgroup>\n<col width=\"147\"/>\n<col width=\"171\"/>\n<col width=\"90\"/>\n<col width=\"111\"/>\n</colgroup>\n<tbody>\n<tr acopy=\"Y\" adelete=\"Y\">\n<td align=\"CENTER\" height=\"31\" usermark=\"F-12 BC0XD7D7D7\" valign=\"MIDDLE\" width=\"156\">품        목</td>\n<td align=\"CENTER\" height=\"31\" usermark=\"F-12 BC0XD7D7D7\" valign=\"MIDDLE\" width=\"180\">주요매입처</td>\n<td align=\"CENTER\" height=\"31\" usermark=\"F-12 BC0XD7D7D7\" valign=\"MIDDLE\" width=\"99\">독과점여부</td>\n<td align=\"CENTER\" height=\"31\" usermark=\"F-12 BC0XD7D7D7\" valign=\"MIDDLE\" width=\"120\">공급의 안정성</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\">\n<td align=\"CENTER\" height=\"31\" usermark=\"F-12\" valign=\"MIDDLE\" width=\"156\"> Excavator 부품</td>\n<td align=\"CENTER\" height=\"31\" usermark=\"F-12\" width=\"180\">티씨테크</td>\n<td align=\"CENTER\" height=\"31\" usermark=\"F-12\" width=\"99\">낮음</td>\n<td align=\"CENTER\" height=\"31\" usermark=\"F-12\" width=\"120\">높음</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\">\n<td align=\"CENTER\" height=\"31\" usermark=\"F-12\" valign=\"MIDDLE\" width=\"156\">Wheel Loader 부품</td>\n<td align=\"CENTER\" height=\"31\" usermark=\"F-12\" width=\"180\">ZF Friedrichshafen AG</td>\n<td align=\"CENTER\" height=\"31\" usermark=\"F-12\" width=\"99\">높음</td>\n<td align=\"CENTER\" height=\"31\" usermark=\"F-12\" width=\"120\">높음</td>\n</tr>\n</tbody>\n</table>",
+   "footnotes": [],
+   "digest": "f8d96bbc9e9f",
+   "file": "20240320001838.xml"
+  },
+  {
+   "section": [
+    "1. 사업의 개요",
+    "2. 주요 제품 및 서비스",
+    "3. 원재료 및 생산설비"
+   ],
+   "headings": [
+    "나. 생산설비",
+    "1) 생산능력"
+   ],
+   "context": [
+    "나. 생산설비",
+    "1) 생산능력"
+   ],
+   "unit": "",
+   "topic": "capacity",
+   "keywords": [
+    "생산능력"
+   ],
+   "keyword_in": "heading",
+   "rows": [
+    [
+     "사업부문",
+     "품 목",
+     "사업소",
+     "제7기",
+     "제6기",
+     "제5기",
+     "비 고"
+    ],
+    [
+     "건설기계",
+     "굴삭기 외",
+     "HD현대건설기계㈜",
+     "17,640대",
+     "17,640대",
+     "17,640대",
+     ""
+    ],
+    [
+     "휠로더",
+     "〃",
+     "2,040대",
+     "2,040대",
+     "2,040대"
+    ],
+    [
+     "",
+     "소 계",
+     "19,680대",
+     "19,680대",
+     "19,680대"
+    ],
+    [
+     "굴삭기",
+     "HD Hyundai Construction Equipment India Private Ltd.",
+     "6,000대",
+     "6,000대",
+     "6,000대"
+    ],
+    [
+     "굴삭기",
+     "현대강소공정기계유한공사",
+     "12,000대",
+     "12,000대",
+     "12,000대"
+    ],
+    [
+     "굴삭기",
+     "HD Hyundai Construction Equipment Brasil- Manufacturing and Trading of Construction Equipment S.A",
+     "4,000대",
+     "4,000대",
+     "4,000대"
+    ],
+    [
+     "",
+     "합 계",
+     "41,680대",
+     "41,680대",
+     "41,680대"
+    ]
+   ],
+   "html": "<table aclass=\"NORMAL\" afixtable=\"N\" border=\"1\" width=\"846\">\n<colgroup>\n<col width=\"69\"/>\n<col width=\"74\"/>\n<col width=\"337\"/>\n<col width=\"90\"/>\n<col width=\"69\"/>\n<col width=\"69\"/>\n<col width=\"75\"/>\n</colgroup>\n<tbody>\n<tr acopy=\"Y\" adelete=\"Y\">\n<td align=\"CENTER\" height=\"31\" usermark=\"F-12 BC0XD7D7D7\" valign=\"MIDDLE\" width=\"78\">사업부문</td>\n<td align=\"CENTER\" height=\"31\" usermark=\"F-12 BC0XD7D7D7\" valign=\"MIDDLE\" width=\"83\">품   목</td>\n<td align=\"CENTER\" height=\"31\" usermark=\"F-12 BC0XD7D7D7\" valign=\"MIDDLE\" width=\"346\">사업소</td>\n<td align=\"CENTER\" height=\"31\" usermark=\"F-12 BC0XD7D7D7\" valign=\"MIDDLE\" width=\"99\">제7기</td>\n<td align=\"CENTER\" height=\"31\" usermark=\"F-12 BC0XD7D7D7\" valign=\"MIDDLE\" width=\"78\">제6기</td>\n<td align=\"CENTER\" height=\"31\" usermark=\"F-12 BC0XD7D7D7\" valign=\"MIDDLE\" width=\"78\">제5기</td>\n<td align=\"CENTER\" height=\"31\" usermark=\"F-12 BC0XD7D7D7\" valign=\"MIDDLE\" width=\"84\">비 고</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\">\n<td align=\"CENTER\" height=\"289\" rowspan=\"7\" usermark=\"F-12\" valign=\"MIDDLE\" width=\"78\">건설기계</td>\n<td align=\"CENTER\" height=\"31\" usermark=\"F-12\" valign=\"MIDDLE\" width=\"83\">굴삭기 외</td>\n<td align=\"CENTER\" height=\"31\" usermark=\"F-12\" valign=\"MIDDLE\" width=\"346\">HD현대건설기계㈜</td>\n<td align=\"RIGHT\" height=\"31\" usermark=\"F-12\" valign=\"MIDDLE\" width=\"99\">17,640대</td>\n<td align=\"RIGHT\" height=\"31\" usermark=\"F-12\" valign=\"MIDDLE\" width=\"78\">17,640대</td>\n<td align=\"RIGHT\" height=\"31\" usermark=\"F-12\" valign=\"MIDDLE\" width=\"78\">17,640대</td>\n<td align=\"CENTER\" height=\"289\" rowspan=\"7\" usermark=\"F-12\" valign=\"MIDDLE\" width=\"84\"></td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\">\n<td align=\"CENTER\" height=\"31\" usermark=\"F-12\" valign=\"MIDDLE\" width=\"83\">휠로더</td>\n<td align=\"CENTER\" height=\"31\" usermark=\"F-12\" valign=\"MIDDLE\" width=\"346\">〃</td>\n<td align=\"RIGHT\" height=\"31\" usermark=\"F-12\" valign=\"MIDDLE\" width=\"99\">2,040대</td>\n<td align=\"RIGHT\" height=\"31\" usermark=\"F-12\" valign=\"MIDDLE\" width=\"78\">2,040대</td>\n<td align=\"RIGHT\" height=\"31\" usermark=\"F-12\" valign=\"MIDDLE\" width=\"78\">2,040대</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\">\n<td align=\"CENTER\" height=\"31\" usermark=\"F-12\" valign=\"MIDDLE\" width=\"83\"></td>\n<td align=\"CENTER\" height=\"31\" usermark=\"F-12\" valign=\"MIDDLE\" width=\"346\">소     계</td>\n<td align=\"RIGHT\" height=\"31\" usermark=\"F-12\" valign=\"MIDDLE\" width=\"99\">\n<span>19,680대</span>\n</td>\n<td align=\"RIGHT\" height=\"31\" usermark=\"F-12\" valign=\"MIDDLE\" width=\"78\">19,680대</td>\n<td align=\"RIGHT\" height=\"31\" usermark=\"F-12\" valign=\"MIDDLE\" width=\"78\">19,680대</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\">\n<td align=\"CENTER\" height=\"55\" usermark=\"F-12\" valign=\"MIDDLE\" width=\"83\">굴삭기</td>\n<td align=\"CENTER\" height=\"55\" usermark=\"F-12\" valign=\"MIDDLE\" width=\"346\">HD Hyundai Construction Equipment India Private Ltd.</td>\n<td align=\"RIGHT\" height=\"55\" usermark=\"F-12\" valign=\"MIDDLE\" width=\"99\">6,000대</td>\n<td align=\"RIGHT\" height=\"55\" usermark=\"F-12\" valign=\"MIDDLE\" width=\"78\">6,000대</td>\n<td align=\"RIGHT\" height=\"55\" usermark=\"F-12\" valign=\"MIDDLE\" width=\"78\">6,000대</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\">\n<td align=\"CENTER\" height=\"31\" usermark=\"F-12\" valign=\"MIDDLE\" width=\"83\">굴삭기</td>\n<td align=\"CENTER\" height=\"31\" usermark=\"F-12\" valign=\"MIDDLE\" width=\"346\">현대강소공정기계유한공사</td>\n<td align=\"RIGHT\" height=\"31\" valign=\"MIDDLE\" width=\"99\">\n<span usermark=\"F-12\">12,000대</span>\n</td>\n<td align=\"RIGHT\" height=\"31\" usermark=\"F-12\" valign=\"MIDDLE\" width=\"78\">12,000대</td>\n<td align=\"RIGHT\" height=\"31\" usermark=\"F-12\" valign=\"MIDDLE\" width=\"78\">12,000대</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\">\n<td align=\"CENTER\" height=\"79\" usermark=\"F-12\" valign=\"MIDDLE\" width=\"83\">굴삭기</td>\n<td align=\"CENTER\" height=\"79\" valign=\"MIDDLE\" width=\"346\">\n<span usermark=\"F-12\">HD Hyundai Construction Equipment Brasil- Manufacturing and Trading of Construction Equipment S.A</span>\n</td>\n<td align=\"RIGHT\" height=\"79\" usermark=\"F-12\" valign=\"MIDDLE\" width=\"99\">4,000대</td>\n<td align=\"RIGHT\" height=\"79\" usermark=\"F-12\" valign=\"MIDDLE\" width=\"78\">4,000대</td>\n<td align=\"RIGHT\" height=\"79\" usermark=\"F-12\" valign=\"MIDDLE\" width=\"78\">4,000대</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\">\n<td align=\"CENTER\" height=\"31\" usermark=\"F-12\" valign=\"MIDDLE\" width=\"83\"></td>\n<td align=\"CENTER\" height=\"31\" usermark=\"F-12\" valign=\"MIDDLE\" width=\"346\">합     계</td>\n<td align=\"RIGHT\" height=\"31\" usermark=\"F-12\" valign=\"MIDDLE\" width=\"99\">41,680대</td>\n<td align=\"RIGHT\" height=\"31\" usermark=\"F-12\" valign=\"MIDDLE\" width=\"78\">41,680대</td>\n<td align=\"RIGHT\" height=\"31\" usermark=\"F-12\" valign=\"MIDDLE\" width=\"78\">41,680대</td>\n</tr>\n</tbody>\n</table>",
+   "footnotes": [],
+   "digest": "c62fc8086778",
+   "file": "20240320001838.xml"
+  },
+  {
+   "section": [
+    "1. 사업의 개요",
+    "2. 주요 제품 및 서비스",
+    "3. 원재료 및 생산설비"
+   ],
+   "headings": [
+    "3) 생산실적"
+   ],
+   "context": [
+    "※ HD현대건설기계㈜의 지게차 및 굴삭기 등 일부 모델은 OEM생산량이 포함되어 있습니다.※ 지배기업 및 주요 종속회사를 기준으로 작성하였습니다.",
+    "2) 생산능력의 산출근거 (1) 산출방법 등 ① 산출기준 : 적정 생산능력 기준 (주40시간 근무 기준 등) ② 산출방법 : 품목별 적정 생산능력(굴삭기/백호로더, 휠로더, 지게차/스키드로더) OEM 생산량 포함",
+    "3) 생산실적"
+   ],
+   "unit": "",
+   "topic": "capacity",
+   "keywords": [
+    "생산실적"
+   ],
+   "keyword_in": "heading",
+   "rows": [
+    [
+     "사업부문",
+     "품 목",
+     "사업소",
+     "제7기",
+     "제6기",
+     "제5기",
+     "비 고"
+    ],
+    [
+     "건설기계",
+     "건설기계",
+     "HD현대건설기계㈜",
+     "18,610대",
+     "18,216대",
+     "17,852대",
+     ""
+    ],
+    [
+     "HD Hyundai Construction Equipment India Private Ltd.",
+     "5,656대",
+     "3,999대",
+     "4,574대"
+    ],
+    [
+     "현대강소공정기계유한공사",
+     "2,143대",
+     "2,549대",
+     "7,758대"
+    ],
+    [
+     "HD Hyundai Construction Equipment Brasil- Manufacturing and Trading of Construction Equipment S.A",
+     "1,162대",
+     "2,360대",
+     "1,748대"
+    ],
+    [
+     "합 계",
+     "27,571대",
+     "27,124대",
+     "31,932대"
+    ]
+   ],
+   "html": "<table aclass=\"NORMAL\" afixtable=\"N\" border=\"1\" width=\"820\">\n<colgroup>\n<col width=\"69\"/>\n<col width=\"69\"/>\n<col width=\"337\"/>\n<col width=\"90\"/>\n<col width=\"69\"/>\n<col width=\"69\"/>\n<col width=\"54\"/>\n</colgroup>\n<tbody>\n<tr acopy=\"Y\" adelete=\"Y\">\n<td align=\"CENTER\" height=\"31\" usermark=\"F-12 BC0XD7D7D7\" valign=\"MIDDLE\" width=\"78\">사업부문</td>\n<td align=\"CENTER\" height=\"31\" usermark=\"F-12 BC0XD7D7D7\" valign=\"MIDDLE\" width=\"78\">품   목</td>\n<td align=\"CENTER\" height=\"31\" usermark=\"F-12 BC0XD7D7D7\" valign=\"MIDDLE\" width=\"346\">사업소</td>\n<td align=\"CENTER\" height=\"31\" usermark=\" BC0XD7D7D7\" valign=\"MIDDLE\" width=\"99\">\n<p usermark=\"F-12\">제7기</p>\n</td>\n<td align=\"CENTER\" height=\"31\" usermark=\" BC0XD7D7D7\" valign=\"MIDDLE\" width=\"78\">\n<p usermark=\"F-12\">제6기</p>\n</td>\n<td align=\"CENTER\" height=\"31\" usermark=\" BC0XD7D7D7\" valign=\"MIDDLE\" width=\"78\">\n<p usermark=\"F-12\">제5기</p>\n</td>\n<td align=\"CENTER\" height=\"31\" usermark=\"F-12 BC0XD7D7D7\" valign=\"MIDDLE\" width=\"63\">비   고</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\">\n<td align=\"CENTER\" height=\"196\" rowspan=\"4\" usermark=\"F-12\" valign=\"MIDDLE\" width=\"78\">건설기계</td>\n<td align=\"CENTER\" height=\"196\" rowspan=\"4\" usermark=\"F-12\" valign=\"MIDDLE\" width=\"78\">건설기계</td>\n<td align=\"CENTER\" height=\"31\" width=\"346\">\n<p usermark=\"F-12\">HD현대건설기계㈜ </p>\n</td>\n<td align=\"RIGHT\" height=\"31\" usermark=\"F-12\" valign=\"MIDDLE\" width=\"99\">18,610대</td>\n<td align=\"RIGHT\" height=\"31\" usermark=\"F-12\" valign=\"MIDDLE\" width=\"78\">18,216대</td>\n<td align=\"RIGHT\" height=\"31\" usermark=\"F-12\" valign=\"MIDDLE\" width=\"78\">17,852대</td>\n<td align=\"RIGHT\" height=\"227\" rowspan=\"5\" usermark=\"F-12\" width=\"63\"></td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\">\n<td align=\"CENTER\" height=\"55\" width=\"346\">\n<p usermark=\"F-12\">HD Hyundai Construction Equipment India Private Ltd.</p>\n</td>\n<td align=\"RIGHT\" height=\"55\" usermark=\"F-12\" valign=\"MIDDLE\" width=\"99\">5,656대</td>\n<td align=\"RIGHT\" height=\"55\" usermark=\"F-12\" valign=\"MIDDLE\" width=\"78\">3,999대</td>\n<td align=\"RIGHT\" height=\"55\" usermark=\"F-12\" valign=\"MIDDLE\" width=\"78\">4,574대</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\">\n<td align=\"CENTER\" height=\"31\" usermark=\"F-12\" width=\"346\">현대강소공정기계유한공사</td>\n<td align=\"RIGHT\" height=\"31\" usermark=\"F-12\" valign=\"MIDDLE\" width=\"99\">2,143대</td>\n<td align=\"RIGHT\" height=\"31\" usermark=\"F-12\" valign=\"MIDDLE\" width=\"78\">2,549대</td>\n<td align=\"RIGHT\" height=\"31\" usermark=\"F-12\" valign=\"MIDDLE\" width=\"78\">7,758대</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\">\n<td align=\"CENTER\" height=\"79\" width=\"346\">\n<span usermark=\"F-12\">HD Hyundai Construction Equipment Brasil- Manufacturing and Trading of Construction Equipment S.A</span>\n</td>\n<td align=\"RIGHT\" height=\"79\" usermark=\"F-12\" valign=\"MIDDLE\" width=\"99\">1,162대</td>\n<td align=\"RIGHT\" height=\"79\" usermark=\"F-12\" valign=\"MIDDLE\" width=\"78\">2,360대</td>\n<td align=\"RIGHT\" height=\"79\" usermark=\"F-12\" valign=\"MIDDLE\" width=\"78\">1,748대</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\">\n<td align=\"CENTER\" colspan=\"3\" height=\"31\" usermark=\"F-12\" valign=\"MIDDLE\" width=\"502\">합       계</td>\n<td align=\"RIGHT\" height=\"31\" usermark=\"F-12\" valign=\"MIDDLE\" width=\"99\">27,571대</td>\n<td align=\"RIGHT\" height=\"31\" usermark=\"F-12\" valign=\"MIDDLE\" width=\"78\">27,124대</td>\n<td align=\"RIGHT\" height=\"31\" usermark=\"F-12\" valign=\"MIDDLE\" width=\"78\">31,932대</td>\n</tr>\n</tbody>\n</table>",
+   "footnotes": [],
+   "digest": "29e702400f5b",
+   "file": "20240320001838.xml"
+  },
+  {
+   "section": [
+    "1. 사업의 개요",
+    "2. 주요 제품 및 서비스",
+    "3. 원재료 및 생산설비"
+   ],
+   "headings": [
+    "4) 당해 사업연도의 가동률"
+   ],
+   "context": [
+    "※ 지배기업 및 주요 종속회사를 기준으로 작성하였습니다.",
+    "4) 당해 사업연도의 가동률"
+   ],
+   "unit": "",
+   "topic": "capacity",
+   "keywords": [
+    "가동률"
+   ],
+   "keyword_in": "table",
+   "rows": [
+    [
+     "구 분",
+     "제7기생산가능량",
+     "제7기실제생산량",
+     "평균가동률"
+    ],
+    [
+     "HD현대건설기계㈜",
+     "19,680대",
+     "18,610대",
+     "94.56%"
+    ],
+    [
+     "HD Hyundai Construction Equipment India Private Ltd.",
+     "6,000대",
+     "5,656대",
+     "94.27%"
+    ],
+    [
+     "현대강소공정기계유한공사",
+     "12,000대",
+     "2,143대",
+     "17.86%"
+    ],
+    [
+     "HD Hyundai Construction Equipment Brasil- Manufacturing and Trading of Construction Equipment S.A",
+     "4,000대",
+     "1,162대",
+     "29.05%"
+    ],
+    [
+     "계",
+     "41,680대",
+     "27,571대",
+     "66.15%"
+    ]
+   ],
+   "html": "<table aclass=\"NORMAL\" afixtable=\"N\" border=\"1\" width=\"637\">\n<colgroup>\n<col width=\"337\"/>\n<col width=\"90\"/>\n<col width=\"90\"/>\n<col width=\"84\"/>\n</colgroup>\n<tbody>\n<tr acopy=\"Y\" adelete=\"Y\">\n<td align=\"CENTER\" height=\"55\" usermark=\"F-12 BC0XD7D7D7\" valign=\"MIDDLE\" width=\"346\">구     분</td>\n<td align=\"CENTER\" height=\"55\" usermark=\"F-12 BC0XD7D7D7\" valign=\"MIDDLE\" width=\"99\">제7기생산가능량</td>\n<td align=\"CENTER\" height=\"55\" usermark=\"F-12 BC0XD7D7D7\" valign=\"MIDDLE\" width=\"99\">제7기실제생산량</td>\n<td align=\"CENTER\" height=\"55\" usermark=\"F-12 BC0XD7D7D7\" valign=\"MIDDLE\" width=\"93\">평균가동률</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\">\n<td align=\"CENTER\" height=\"31\" usermark=\"F-12\" valign=\"MIDDLE\" width=\"346\">HD현대건설기계㈜</td>\n<td align=\"RIGHT\" height=\"31\" valign=\"MIDDLE\" width=\"99\">\n<span usermark=\"F-12\">19,680대</span>\n</td>\n<td align=\"RIGHT\" height=\"31\" usermark=\"F-12\" valign=\"MIDDLE\" width=\"99\">18,610대</td>\n<td align=\"RIGHT\" height=\"31\" usermark=\"F-12\" valign=\"MIDDLE\" width=\"93\">94.56%</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\">\n<td align=\"CENTER\" height=\"55\" usermark=\"F-12\" valign=\"MIDDLE\" width=\"346\">HD Hyundai Construction Equipment India Private Ltd.</td>\n<td align=\"RIGHT\" height=\"55\" usermark=\"F-12\" valign=\"MIDDLE\" width=\"99\">6,000대</td>\n<td align=\"RIGHT\" height=\"55\" usermark=\"F-12\" valign=\"MIDDLE\" width=\"99\">5,656대</td>\n<td align=\"RIGHT\" height=\"55\" usermark=\"F-12\" valign=\"MIDDLE\" width=\"93\">94.27%</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\">\n<td align=\"CENTER\" height=\"31\" usermark=\"F-12\" valign=\"MIDDLE\" width=\"346\">현대강소공정기계유한공사</td>\n<td align=\"RIGHT\" height=\"31\" valign=\"MIDDLE\" width=\"99\">\n<span usermark=\"F-12\">12,000대</span>\n</td>\n<td align=\"RIGHT\" height=\"31\" usermark=\"F-12\" valign=\"MIDDLE\" width=\"99\">2,143대</td>\n<td align=\"RIGHT\" height=\"31\" usermark=\"F-12\" valign=\"MIDDLE\" width=\"93\">17.86%</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\">\n<td align=\"CENTER\" height=\"79\" valign=\"MIDDLE\" width=\"346\">\n<span usermark=\"F-12\">HD Hyundai Construction Equipment Brasil- Manufacturing and Trading of Construction Equipment S.A</span>\n</td>\n<td align=\"RIGHT\" height=\"79\" usermark=\"F-12\" valign=\"MIDDLE\" width=\"99\">4,000대</td>\n<td align=\"RIGHT\" height=\"79\" usermark=\"F-12\" valign=\"MIDDLE\" width=\"99\">1,162대</td>\n<td align=\"RIGHT\" height=\"79\" usermark=\"F-12\" valign=\"MIDDLE\" width=\"93\">29.05%</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\">\n<td align=\"CENTER\" height=\"31\" usermark=\"F-12\" valign=\"MIDDLE\" width=\"346\">계</td>\n<td align=\"RIGHT\" height=\"31\" usermark=\"F-12\" valign=\"MIDDLE\" width=\"99\">41,680대</td>\n<td align=\"RIGHT\" height=\"31\" usermark=\"F-12\" valign=\"MIDDLE\" width=\"99\">27,571대</td>\n<td align=\"RIGHT\" height=\"31\" usermark=\"F-12\" valign=\"MIDDLE\" width=\"93\">66.15%</td>\n</tr>\n</tbody>\n</table>",
+   "footnotes": [],
+   "digest": "1cee8dbd5269",
+   "file": "20240320001838.xml"
+  }
+ ],
+ "rejected": [
+  {
+   "section": [
+    "II. 사업의 내용",
+    "1. 사업의 개요",
+    "2. 주요 제품 및 서비스"
+   ],
+   "headings": [
+    "II. 사업의 내용",
+    "1. 사업의 개요",
+    "- Manufacturing and Trading of Construction Equipment S.A",
+    "입니다. 전",
+    "2. 주요 제품 및 서비스",
+    "가. 주요 제품 등의 현황"
+   ],
+   "context": [
+    "II. 사업의 내용",
+    "1. 사업의 개요",
+    "지배기업인 HD현대건설기계㈜를 비롯하여 한국채택국제회계기준에 따라 연결대상 종속기업(9개사)에 해당되는 회사들은 굴삭기, 휠로더 등을 제작ㆍ판매하는 사업을 영위하고 있습니다. 주요 제품 품목은 건설기계, 부품 등으로 구성되어있고 건설기계는 도로, 건물 건설, 광산 개발 등에 이용됩니다. 부품은 건설기계의 A/S를 위해 사용되는 부품을 제공하고 있습니다. 제품 생산을 위한 주요 원재료는 각종 부품(Excavator Bucket Assy, Wheel Loader Main Valve 등)을 들 수 있습니다. 각 부품의 가격을 결정하는 주요 요인으로는 강재 등 원재료 가격 변동입니다. 주요 원재료 매입처는 티씨테크, ZF Fridrichshafen AG가 있습니다.",
+    "제품의 생산이 일어나는 주요 사업소는 HD현대건설기계㈜, HD Hyundai Construction Equipment India Private Ltd., 현대강소공정기계유한공사, HD Hyundai Construction Equipment Brasil",
+    "- Manufacturing and Trading of Construction Equipment S.A",
+    "입니다. 전",
+    "체 사업소의 23년 생산능력은 41,680대, 2023년 4분기까지의 생산실적은 27,571대이며 가동률은 66.15%입니다.",
+    "또한, 울산공장을 비롯하여 음성, 군산 등 국내 사업장과 미국, 유럽, 중국 등 해외사업장에서 주요 제품 생산, 마케팅, 판매 등의 사업활동을 수행하고 있습니다.",
+    "당기 연결실체는 건설기계 30,719억원, 산업차량 4,363억원 및 기타 3,168억원 등 총 38,250억원의 매출 실적을 기록하였으며 이 중 건설기계에서 발생한 매출액은 전체 매출액 중 약 80%를 차지하고 있습니다. 또한, 전체 매출에서 수출금액은 35,489억원, 국내는 2,761억원으로 수출로 발생한 매출액이 약 93%를 차지하고 있습니다.",
+    "전체 매출액에서 수출비중이 높은 만큼 외환리스크에 대비하여 당사는 시장위험과 환위험을 관리하고 있습니다. 당사는 향후 판매와 구매 예상금액과 관련하여 환위험에 노출된 채권과 채무에 대한 환위험을 회피하고 있습니다. 환위험의 회피수단으로 주로 보고기간 말부터 만기가 2년 미만인 선도거래계약을 사용하고 있으며 필요 시 선도거래계약 만기를 연장합니다. 이를 위해 위험관리조직을 별도로 구성하여 환 Position 실시간 파악, 외환/금리 Hedge거래, 파생상품검토 및 거래 실행 등의 업무를 수행하고 있습니다.",
+    "당사의 연구개발활동은 건설기계 핵심부품 과 전장품의 개발·설계 및 성능·신뢰성 개선 기술개발에 주력하고 있습니다. 이를 위해 기술연구소와 기술혁신센터를 분당과 용인에 각각 설립하여 운영하고 있으며 이와 별개로 위탁연구를 통해 다양한 기술을 확보하고자 노력하고 있습니다. 이러한 노력을 바탕으로 당기말 특허(실용신안) 134건, 디자인 21건, 상표 8건을 보유하고 있습니다.",
+    "당사는 2017년 4월 1일 한국조선해양(주)(구. 현대중공업 주식회사)에서 현대건설기계주식회사로 사업분리 되면서, 기존 구축되어 있던 환경경영시스템을 지속 / 유지하고자, 국제 ISO 인증기관인 DNV 으로 부터 ISO 14001 인증(국제표준화기구에서 제정하는 환경경영에 관한 국제 규격)을 취득하였습니다. 또한, 2021년 DNV ISO 45001 전사업장 확대 인증 완료하였고 2023년 4월 인증갱신심사를 진행, ISO 14001, 45001 인증을 갱신하였습니다. 환경경영시스템을 기본으로 온실가스 저감, 친환경설계, 사회공헌 등의 환경관련 정책을 추진하고 있으며, 공정개선을 통한 오염물질 배출의 최소화, 친환경제품의 개발 및공급, 순환형 자원관리시스템 구축 등 친환경경영통해 시장경쟁력을 확대해 나가고 있습니다.",
+    "2. 주요 제품 및 서비스",
+    "가. 주요 제품 등의 현황",
+    "(2023.12.31 현재) (단위 : 백만원)"
+   ],
+   "unit": "(2023.12.31 현재) (단위 : 백만원)",
+   "topic": "",
+   "keywords": [
+    "가동률",
+    "생산능력",
+    "생산실적",
+    "원재료"
+   ],
+   "keyword_in": "",
+   "rows": [
+    [
+     "사 업 부 문",
+     "매출유형",
+     "품 목",
+     "구 체 적 용 도",
+     "주요상표 등",
+     "매 출 액(비 율)"
+    ],
+    [
+     "건설기계",
+     "제품",
+     "건설기계",
+     "도로, 건물 건설, 광산, 농업, 산림 등",
+     "HYUNDAI",
+     "3,071,934(80.31%)"
+    ],
+    [
+     "제품",
+     "산업차량",
+     "물류, 유통, 하역 등",
+     "HYUNDAI",
+     "436,253(11.41%)"
+    ]
+   ],
+   "html": "",
+   "footnotes": [],
+   "digest": "2c1767e1c609",
+   "why": "셀 전체가 지표명이 아니거나 멀리 있는 문장에만 키워드",
+   "file": "20240320001838.xml"
+  },
+  {
+   "section": [
+    "1. 사업의 개요",
+    "2. 주요 제품 및 서비스",
+    "3. 원재료 및 생산설비"
+   ],
+   "headings": [],
+   "context": [
+    "《 가동률의 계산근거 》※ 지배기업 및 주요 종속회사를 기준으로 작성하였습니다.※ 상기 '생산가능량'은 적정생산능력 기준 대수를 의미하며, '평균 가동률'은 '생산 가능량' 대비 '실제 생산량'을 단순 역산하여 기재하였습니다.",
+    "5) 생산설비의 현황 등연결실체는 경기도 성남을 비롯하여, 울산, 군산, 음성 등 국내사업장 및 중국, 인도, 미국, 벨지움, 인도네시아 등 해외사업장에서 주요 제품에 대한 제조, 개발, 마케팅, 영업 등의 사업활동을 수행하고 있습니다."
+   ],
+   "unit": "",
+   "topic": "",
+   "keywords": [
+    "가동률",
+    "생산능력"
+   ],
+   "keyword_in": "",
+   "rows": [
+    [
+     "(단위:백만원)"
+    ],
+    [
+     "구 분",
+     "토 지",
+     "건 물",
+     "구축물",
+     "기계장치",
+     "기타자산",
+     "건설중인자산",
+     "합 계"
+    ],
+    [
+     "기초",
+     "360,498",
+     "197,716",
+     "33,755",
+     "75,146",
+     "58,367",
+     "24,673",
+     "750,155"
+    ]
+   ],
+   "html": "",
+   "footnotes": [],
+   "digest": "2a0e5965afe6",
+   "why": "셀 전체가 지표명이 아니거나 멀리 있는 문장에만 키워드",
+   "file": "20240320001838.xml"
+  },
+  {
+   "section": [
+    "7-1. 증권의 발행을 통한 자금조달 실적",
+    "7-2. 증권의 발행을 통해 조달된 자금의 사용실적",
+    "8. 기타 재무에 관한 사항"
+   ],
+   "headings": [
+    "② 현금흐름위험회피",
+    "(3) 기타 파생상품",
+    "3) 범주별 금융상품",
+    "1) 당기말"
+   ],
+   "context": [
+    "2) 파생상품파생상품은 최초 인식시 계약일의 공정가치로 측정하며, 후속적으로 매 보고기간 말의 공정가치로 측정하고 있습니다. 파생상품의 공정가치 변동으로 인한 평가손익은 각각 아래와 같이 인식하고 있습니다.(1) 위험회피회계연결실체는 이자율위험과 환율위험 및 원유 등에 대한 가격변동위험을 회피하기 위하여 통화선도, 이자율스왑 및 제품선도 등의 파생금융상품계약을 체결하고 있습니다. 회피대상 위험으로 인한 자산 또는 부채, 확정계약의 공정가치의 변동(공정가치위험회피), 발생가능성이 매우 높은 예상거래 또는 확정거래의 환율변동위험(현금흐름위험회피) 및 원유가격변동위험을 회피하기 위하여 일부 파생상품을 위험회피수단으로 지정하고 있습니다.연결실체는 위험회피관계의 개시시점에 위험회피관계, 위험관리목적과 위험회피전략을 공식적으로 지정하고 문서화를 수행하고 있습니다. 또한, 이 문서에는 위험회피수단, 위험회피대상항목 및 위험회피관계의 개시시점과 그 후속기간에 회피대상위험으로 인한 위험회피대상항목의 공정가치 또는 현금흐름의 변동을 위험회피수단이 상쇄하는 효과를 평가하는 방법 등을 포함하고 있습니다.새로운 기업회계기준서 제1109호에서는 현행 기업회계기준서 제1039호에서 정한 위험회피회계의 체계(mechanics of hedge accounting: 공정가치위험회피, 현금흐름위험회피, 해외사업장 순투자위험회피)를 유지하지만, 복잡하고 규정중심적인 기업회계기준서 제1039호의 위험회피 회계 요구사항을 기업의 위험관리활동에 중점을 둔 원칙중심적인 방식으로 변경했습니다. 위험회피대상항목과 위험회피수단을 확대하였고 높은 위험회피효과가 있는지에 대한 평가 및 계량적인 판단기준(80~125%) 을 없애는 등 위험회피회계 적용요건을 완화하였습니다.① 공정가치위험회피",
+    "위험회피수단으로 지정되고, 공정가치위험회피회계의 적용요건을 충족한 파생상품의 공정가치 변동은 당기손익으로 인식하고 있으며, 회피대상위험으로 인한 위험회피대상항목의 공정가치변동도 당기손익으로 인식하고 있습니다. 위험회피수단의 공정가치변동과 회피대상위험으로 인한 위험회피대상항목의 공정가치변동은 위험회피대상항목과 관련된 연결포괄손익계산서의 같은 항목에 인식됩니다. 공정가치위험회피회계는 연결실체가 더 이상 위험회피관계를 지정하지 않거나 위험회피수단이 소멸, 매각, 청산 또는 행사되거나 공정가치 위험회피회계의 적용요건을 더 이상 충족하지 않을 경우 중단됩니다. 회피대상위험으로 인한 위험회피대상항목의 장부금액 조정액은 위험회피회계가 중단된 날부터 상각하여 당기손익으로 인식하고 있습니다.",
+    "② 현금흐름위험회피",
+    "위험회피수단으로 지정되고 현금흐름위험회피회계의 적용요건을 충족한 파생상품의 공정가치변동분 중 위험회피에 효과적인 부분은 자본으로 처리하며, 위험회피에 비효과적인 부분은 당기손익으로 인식하고 있습니다. 현금흐름위험회피회계는 연결실체가 더 이상 위험회피관계를 지정하지 않거나 위험회피수단이 소멸, 매각, 청산, 행사되거나, 현금흐름위험회피회계의 적용요건을 더 이상 충족하지 않을 경우 중단됩니다. 현금흐름위험회피회계의 중단시점에서 자본으로 인식한 파생상품의 누적평가손익은 향후 예상거래가 발생하는 보고기간에 걸쳐 당기손익으로 인식하고 있습니다. 다만, 예상거래가 더 이상 발생하지 않을 것이라 예상되는 경우에는 자본으로 인식한 파생상품의 누적평가손익은 즉시 당기손익으로 인식합니다.(2) 내재파생상품",
+    "내재파생상품은 주계약의 경제적 특성 및 위험도와 밀접한 관련성이 없고 내재파생상품과 동일한 조건의 별도의 상품이 파생상품의 정의를 충족하는 경우, 복합금융상품이 당기손익인식항목이 아니라면 내재파생상품을 주계약과 분리하여 별도로 회계처리하고 있습니다. 주계약과 분리한 내재파생상품의 공정가치 변동은 당기손익으로인식하고 있습니다.",
+    "(3) 기타 파생상품",
+    "위험회피수단으로 지정되어 위험회피에 효과적인 파생상품을 제외한 모든 파생상품은 공정가치로 측정하며, 공정가치 변동으로 인한 평가손익은 당기손익으로 인식하고 있습니다.",
+    "3) 범주별 금융상품",
+    "(1) 공정가치① 공정가치와 장부금액연결실체의 금융자산과 부채의 장부금액과 공정가치는 다음과 같습니다.",
+    "1) 당기말"
+   ],
+   "unit": "",
+   "topic": "",
+   "keywords": [
+    "가격변동"
+   ],
+   "keyword_in": "",
+   "rows": [
+    [
+     "(단위:백만원)"
+    ],
+    [
+     "구 분",
+     "장부금액",
+     "공정가치"
+    ],
+    [
+     "공정가치- 위험회피수단",
+     "기타포괄손익-공정가치측정",
+     "상각후원가",
+     "합계"
+    ]
+   ],
+   "html": "",
+   "footnotes": [],
+   "digest": "ee77c07ee3f8",
+   "why": "셀 전체가 지표명이 아니거나 멀리 있는 문장에만 키워드",
+   "file": "20240320001838.xml"
+  }
+ ]
+}

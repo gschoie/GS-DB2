@@ -117,6 +117,7 @@ sources:
     exclude_chats:
       - "@HI_GS"
       - "GS의 조선/기계/방산 「바담」"
+      - "▩발간자료PDF.저장"
     # include_groups: true                      # 채널 말고 토론 그룹까지 포함하려면
 
   # ── 관심종목 염탐 ──────────────────────────────────────────────────────
@@ -142,6 +143,7 @@ sources:
     exclude_chats:
       - "@HI_GS"
       - "GS의 조선/기계/방산 「바담」"
+      - "▩발간자료PDF.저장"
 
   # 네이버 블로그는 rss.blog.naver.com/<블로그ID>.xml 로 RSS를 준다.
   # 본문이 iframe(PostView.naver) 안에 있어 RSS 요약분만 오므로 전문은 원문 링크로 본다.
@@ -168,6 +170,33 @@ sources:
     # 개장전 자료라 당일치만 의미가 있다. 지난 글이 뒤늦게 오는 것을 막는다.
     lookback_hours: 18
     max_per_run: 3
+    # 본문을 state/premarket.json 에 보관해 매크로 데스크 '장 시작 전'에 띄운다.
+    # 보낸 것만 적으므로 봇에 온 것과 화면이 같다.
+    premarket: true
+
+  # 키움증권 한지영 <장 시작 전 생각>. 한화와 달리 **채널 아이디를 안 쓴다** —
+  # 이 글은 여러 투자 채널로 퍼날라지므로, 구독 중인 방 전체를 훑는
+  # telegram_account 로 낱말만 걸어 둔다(ship_all 과 같은 계정 세션을 쓴다).
+  # 그래서 아이디를 몰라도 되고, 한지영이 채널을 옮겨도 계속 잡힌다.
+  # dedupe_scope 로 여러 방이 퍼나른 같은 글은 한 번만 보낸다.
+  # push 는 종류 기본값(telegram* → full)이라 한화처럼 본문 통째로 오고,
+  # route 가 없으니 한화와 같은 기본 봇으로 간다.
+  - key: kiwoom_premkt
+    name: 키움 한지영 · 장 시작 전 생각
+    type: telegram_account
+    match_any: ["장 시작 전 생각", 장시작전생각]
+    dedupe_scope: premkt
+    tags: [매크로, 개장전]
+    lookback_hours: 18
+    max_per_run: 3
+    # 내 채널은 뺀다(ship_all 과 같은 이유 — 내가 퍼나른 글이 되돌아오는 것 방지).
+    exclude_chats:
+      - "@HI_GS"
+      - "GS의 조선/기계/방산 「바담」"
+      - "▩발간자료PDF.저장"
+    # 한화와 나란히 대시보드 '🌅 장 시작 전'에도 띄운다(10/26 재요청 — 10/15 에
+    # '텔레만' 으로 껐던 것을 되돌림). 섹션·각 카드는 기본 접힌 상태다.
+    premarket: true
 
   # 계정 로그인 없이 공개 채널 몇 개만 지정해서 훑는 대안(ship_all 대신, 또는 함께).
   # channels 목록 하나가 채널 수만큼의 소스로 펼쳐지고, 목록 안 채널끼리는 자동으로

@@ -1,3 +1,4 @@
 PyYAML>=6.0
 requests>=2.31
 yfinance>=0.2.40
+google-genai>=1.0        # 텔레그램 '한 줄' 생성 (없어도 한 줄만 빠지고 나머지는 발송)

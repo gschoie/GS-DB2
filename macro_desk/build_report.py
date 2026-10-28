@@ -41,6 +41,24 @@ def esc(v) -> str:
     return html.escape(str(v if v is not None else ""), quote=True)
 
 
+def rich(v) -> str:
+    """guide.yml 본문 → HTML. `**굵게**` 와 줄바꿈만 살린다.
+
+    guide.yml 은 사람이 쓰는 글이라 강조를 별표로 적어 왔는데(38군데) 화면은
+    esc 만 하고 그대로 찍어서 **헤드라인** 처럼 별표가 보였다. 별표를 지우는 게
+    아니라 굵게로 바꾼다 — 글쓴이가 강조하려던 자리가 맞다.
+    **esc 를 먼저** 하므로 아래 치환이 만드는 <b> 외의 태그는 들어올 수 없다.
+    """
+    out = esc(v)
+    while "**" in out:
+        a = out.index("**")
+        b = out.find("**", a + 2)
+        if b < 0:                       # 짝이 안 맞는 별표는 건드리지 않는다
+            break
+        out = out[:a] + "<b>" + out[a + 2:b] + "</b>" + out[b + 2:]
+    return out.replace(chr(10), "<br>")
+
+
 def latest_payload() -> dict:
     files = sorted(DATA_DIR.glob("*.json")) if DATA_DIR.exists() else []
     if not files:
@@ -73,6 +91,36 @@ def fmt_change(ch: dict, unit: str) -> str:
     return f'<td class="r {cls}">{txt}</td>'
 
 
+def all_quote_items(cfg: dict, data: dict) -> list[tuple[dict, dict]]:
+    """(설정 항목, 수집값) 쌍 — 시세표와 차트 데이터가 **같은 목록**을 보게 한다."""
+    groups = list(cfg.get("quotes", []))
+    if data.get("has_fred"):
+        groups = groups + [{"group": "금리 파생(FRED)", "items": cfg.get("fred", [])}]
+    out = []
+    for grp in groups:
+        for it in grp["items"]:
+            q = (data.get("quotes", {}).get(it["id"])
+                 or data.get("fred", {}).get(it["id"]))
+            if q:
+                out.append((it, q))
+    return out
+
+
+def series_json(cfg: dict, data: dict) -> str:
+    """차트용 데이터를 페이지에 **박아 넣는다**(런타임 fetch 없음).
+
+    지표당 값 252개 + 날짜 문자열 1.5KB 정도라 페이지가 수십 KB 늘지만,
+    배포 경로·CORS·캐시를 신경 쓸 일이 없고 iframe 안에서도 그냥 돈다.
+    """
+    out = {}
+    for it, q in all_quote_items(cfg, data):
+        s = q.get("series") or {}
+        if s.get("v") and s.get("d"):
+            out[it["id"]] = {"n": it["name"], "u": it["unit"],
+                             "v": s["v"], "d": s["d"]}
+    return json.dumps(out, ensure_ascii=False, separators=(",", ":"))
+
+
 def quote_table(cfg: dict, data: dict) -> str:
     blocks = []
     groups = list(cfg.get("quotes", []))
@@ -96,7 +144,15 @@ def quote_table(cfg: dict, data: dict) -> str:
                 mark = f'<span class="hint">*{len(notes)}</span>'
             cells = "".join(fmt_change(q.get(lbl), it["unit"]) for lbl, _ in
                             (("1D", 0), ("1W", 0), ("1M", 0), ("3M", 0), ("12M", 0)))
-            rows += (f'<tr><th>{name}{mark}</th>'
+            # 시계열이 있는 줄만 누를 수 있게 한다 — 수집이 한 번 더 돌기 전에는
+            # series 가 없으므로, 눌러도 아무 일 없는 줄을 만들지 않는다.
+            if (q.get("series") or {}).get("v"):
+                tr = (f'<tr class="qrow" data-q="{esc(it["id"])}" tabindex="0" '
+                      f'role="button" aria-expanded="false">')
+                name += '<span class="spark">▸</span>'
+            else:
+                tr = "<tr>"
+            rows += (f'{tr}<th>{name}{mark}</th>'
                      f'<td class="r v">{fmt_value(q.get("last"), it["unit"])}</td>{cells}</tr>')
         if rows:
             foot = "".join(f'<p class="fnote">*{i + 1} {n}</p>'
@@ -119,6 +175,20 @@ def quote_table(cfg: dict, data: dict) -> str:
 
 
 # ── 2. 달력 ────────────────────────────────────────────────────────────────
+def _short_period(period: str | None) -> str:
+    """'2026년 8월' → '8월' · '2026 2분기' → '2분기'. 칩 칸이 좁아 연도를 뗀다.
+
+    직전 발표분은 거의 늘 올해라 연도가 자리만 차지한다. 모르면 빈 문자열 —
+    '직전' 뒤에 괄호만 덜렁 남기지 않는다.
+    """
+    if not period:
+        return ""
+    p = period.strip()
+    if len(p) == 10 and p[4] == "-" and p[7] == "-":   # 일별 계열의 ISO 날짜
+        return f"{int(p[5:7])}/{int(p[8:10])}"
+    return p.split("년")[-1].strip() or p
+
+
 def chip(e: dict, rel: dict, cons: dict) -> str:
     """달력 칩 한 개 — **이름 + 직전치 두 줄**.
 
@@ -128,12 +198,22 @@ def chip(e: dict, rel: dict, cons: dict) -> str:
     """
     r = rel.get(e["id"]) or {}
     c = cons.get(e["id"]) or {}
+    # **둘은 방향이 반대인 숫자다** — 컨센은 '이번에 이렇게 나올 것'(앞), 직전치는
+    # '지난번에 이렇게 나왔다'(뒤). 전에는 직전치를 아무 말 없이 찍어서, 라벨 차이가
+    # '컨센' 한 단어뿐이었다. 그래서 PPI 칩의 '전년 +5.4%' 가 이번 예상인지
+    # 지난 발표인지 분간이 안 됐다 → 직전치에는 **몇 월분인지까지** 붙인다.
     if c.get("text"):                              # 앞을 보는 숫자가 있으면 그게 먼저
         val = f'컨센 {c["text"]}'
+    elif r.get("text"):
+        val = f'직전 {_short_period(r.get("period"))} {r["text"]}'.replace("  ", " ")
     else:
-        val = r.get("text") or ""
+        val = ""
     sub = f'<span class="ev-v">{esc(val)}</span>' if val else ""
-    est = '<i class="est" aria-label="발표일 추정">~</i>' if e.get("estimated") else ""
+    # 앞에 WORD JOINER(U+2060) — 칸이 좁아 이름이 접힐 때 `~` 만 혼자 다음 줄로
+    # 떨어지던 것(실측)을 막는다. 한글과 `~`(ASCII) 사이는 줄바꿈 규칙상 끊을 수
+    # 있는 자리라 word-break:keep-all 로는 안 잡힌다. 폭이 0이라 보이지는 않는다.
+    est = ('<i class="est" aria-label="발표일 추정">⁠~</i>'
+           if e.get("estimated") else "")
     body = (f'<span class="ev-n"><i class="cc">{CC.get(e["country"], "")}</i>'
             f'{esc(e["name"])}{est}</span>{sub}')
     if not e.get("guide"):              # 누를 데가 없으면 링크로 만들지 않는다
@@ -266,7 +346,68 @@ def calendar_block(cfg: dict, today: dt.date, data: dict) -> str:
 
 
 # ── 3. 해석 카드 ───────────────────────────────────────────────────────────
-def indicator_cards(guide: dict) -> str:
+# 약어는 **쓰는 자리에서 풀어준다** — 매크로를 처음 보는 사람이 읽는 페이지다.
+# 본문에 실제로 나온 약어만 적는다(안 쓴 약어까지 늘어놓으면 그게 소음이다).
+ABBR = [("YoY", "전년동월비 — 1년 전 같은 달 대비"),
+        ("MoM", "전월비 — 바로 앞 달 대비"),
+        ("QoQ", "전분기비 — 바로 앞 분기 대비")]
+
+
+def legend(text: str) -> str:
+    used = [f"<b>{k}</b> {v}" for k, v in ABBR if k in text]
+    if not used:
+        return ""
+    # 기간 설명은 월·분기에 다 맞게 일반형으로 — '8월분의 발표는 9월' 같은 월간
+    # 예시를 분기 지표(GDP) 카드에 붙이면 그 자리에서 틀린 말이 된다.
+    return ('<p class="numtip">' + " · ".join(used)
+            + ' · 오른쪽 기간은 발표일이 아니라 <b>대상 기간</b>입니다.</p>')
+
+
+def guide_numbers(cfg: dict, rel: dict, cons: dict) -> dict:
+    """guide id → 그 지표의 실제 숫자 블록.
+
+    밴드만 있고 숫자가 없으면 "근원 3.5% 이상이면…" 을 읽고도 **지금 얼마인지**를
+    모른다. 달력 칩에서 눌러 내려온 자리이므로 직전 발표(몇 월분인지 포함)와
+    컨센을 **나란히, 각각 라벨을 달아** 둔다 — 둘은 방향이 반대인 숫자다.
+
+    config 의 `guide:` 는 여러 지표가 한 카드를 가리킬 수 있어(ISM 제조업·서비스업)
+    항목 이름을 같이 적는다. 없는 값은 줄을 통째로 빼고 '–' 로 채우지 않는다.
+    """
+    out: dict[str, list[str]] = {}
+    for e in cfg.get("calendar", []):
+        gid = e.get("guide")
+        if not gid:
+            continue
+        r = rel.get(e["id"]) or {}
+        c = cons.get(e["id"]) or {}
+        if not (r.get("text") or c.get("text")):
+            continue
+        rows = ""
+        if c.get("text"):
+            when = esc(c["for"]) if c.get("for") else "다음 발표"
+            rows += (f'<tr><th class="k cons">컨센서스</th><td class="v">{esc(c["text"])}</td>'
+                     f'<td class="w">{when}</td></tr>')
+        if r.get("text"):
+            rows += (f'<tr><th class="k prev">직전 발표</th><td class="v">{esc(r["text"])}</td>'
+                     f'<td class="w">{esc(r.get("period", ""))}</td></tr>')
+            if r.get("recent"):
+                trail = " → ".join(esc(x) for x in r["recent"])
+                # unit_note 가 빈 지표가 많다 — 그대로 붙이면 '·' 만 덜렁 남는다
+                note = (f'<span class="w"> · {esc(r["unit_note"])}</span>'
+                        if r.get("unit_note") else "")
+                rows += (f'<tr><th class="k">최근 3회</th>'
+                         f'<td class="v trend" colspan="2">{trail}{note}</td></tr>')
+        label = (f'<p class="numname">{esc(e["name"])}</p>'
+                 if len([x for x in cfg.get("calendar", []) if x.get("guide") == gid]) > 1
+                 else "")
+        out.setdefault(gid, []).append(
+            f'{label}<table class="nums">{rows}</table>'
+            + legend((r.get("text") or "") + (c.get("text") or "")))
+    return out
+
+
+def indicator_cards(guide: dict, nums: dict | None = None) -> str:
+    nums = nums or {}
     cards = []
     for gid, g in (guide.get("indicators") or {}).items():
         bands = "".join(
@@ -286,10 +427,11 @@ def indicator_cards(guide: dict) -> str:
 <details class="gcard" id="g-{esc(gid)}">
   <summary><b>{esc(g["name"])}</b>
     <span class="meta">{esc(g.get("agency", ""))} · {esc(g.get("freq", ""))}</span></summary>
-  <p class="what">{esc(g.get("what", "")).replace(chr(10), "<br>")}</p>
+  {"".join(nums.get(gid, []))}
+  <p class="what">{rich(g.get("what", ""))}</p>
   <p class="watch">👁 <b>볼 것</b> — {esc(g.get("watch", ""))}</p>
   <ul class="bands">{bands}</ul>
-  <p class="mkt">📈 <b>시장 반응</b><br>{esc(g.get("market", "")).replace(chr(10), "<br>")}</p>
+  <p class="mkt">📈 <b>시장 반응</b><br>{rich(g.get("market", ""))}</p>
   <p class="kr"><i class="cc">KR</i><b>한국엔</b> — {esc(g.get("korea", ""))}</p>
   <p class="links">{links}</p>
 </details>""")
@@ -306,7 +448,7 @@ def basics_block(guide: dict) -> str:
             yt = (f'<a class="yt" href="https://www.youtube.com/results?search_query={q}" '
                   f'target="_blank" rel="noopener">▶ 영상 찾아보기</a>')
         out.append(f'<details class="bcard"><summary><b>{esc(b["title"])}</b></summary>'
-                   f'<p>{esc(b.get("body", "")).replace(chr(10), "<br>")}</p>{yt}</details>')
+                   f'<p>{rich(b.get("body", ""))}</p>{yt}</details>')
     return "".join(out)
 
 
@@ -352,7 +494,15 @@ td.v{{font-weight:700}}
 .note.warn{{background:var(--warnbg);border:1px solid var(--warnline);
 border-radius:8px;padding:8px 10px;color:var(--fg)}}
 /* 달력 */
-.cal{{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;margin:0 0 14px}}
+/* 평일 5칸은 **똑같은 너비**, 주말 2칸은 좁게.
+   `1fr` 은 사실 `minmax(auto,1fr)` 이라 **칸 내용의 최소 너비가 제 몫보다 크면
+   그 열이 밀려 넓어진다** — 칩이 nowrap 이던 탓에 긴 칩이 든 요일만 넓어져
+   달력이 들쭉날쭉했다. `minmax(0,…)` 으로 내용이 열 너비를 밀지 못하게 막고,
+   칩은 아래에서 여러 줄로 접히게 한다.
+   주말을 좁히는 근거: 발표 규칙이 전부 영업일 기준이라(on_day 는 주말이면 다음
+   영업일로 민다) 2026~27년 18개월 196건 중 주말 일정이 **0건**이다. */
+.cal{{display:grid;grid-template-columns:repeat(5,minmax(0,1fr)) repeat(2,minmax(0,.5fr));
+gap:3px;margin:0 0 14px}}
 .cal-h{{text-align:center;font-size:11px;color:var(--muted);padding:2px 0}}
 .cal-cell{{min-height:62px;border:1px solid var(--line);border-radius:6px;padding:3px 4px;
 background:var(--bg)}}
@@ -361,15 +511,21 @@ background:var(--bg)}}
 .cal-cell.today{{border-color:var(--accent);border-width:2px}}
 .cal-d{{font-size:11px;color:var(--muted)}}
 .cal-ev{{display:block;font-size:10px;line-height:1.3;margin-top:2px;padding:2px 3px;
-border-radius:3px;background:rgba(59,111,212,.12);text-decoration:none;color:inherit;
-overflow:hidden}}
+border-radius:3px;background:rgba(59,111,212,.12);text-decoration:none;color:inherit}}
 .cal-ev:hover{{background:rgba(59,111,212,.26)}}
 .cal-ev.flat:hover{{background:rgba(59,111,212,.12)}}
 .cal-ev.kr{{background:rgba(214,69,69,.12)}}
 .cal-ev.kr:hover{{background:rgba(214,69,69,.26)}}
-.ev-n{{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}}
-.ev-v{{display:block;font-size:9.5px;color:var(--muted);font-variant-numeric:tabular-nums;
-white-space:nowrap;overflow:hidden;text-overflow:ellipsis}}
+/* 칸이 좁으니 잘라내지 말고 **접는다** — 전에는 ellipsis 로 잘라서
+   '직전 8월분 YoY +5.4% · M…' 처럼 숫자가 끊겼다(툴팁 금지 원칙과 같은 줄기:
+   화면에서 안 보이면 없는 것이다).
+   `word-break:keep-all` 은 한국어 낱말을 통째로 유지해 '생산자물' / '가' 처럼
+   갈라지는 걸 막는다. 넘칠 때만 쓰는 보조는 **`break-word` 여야 한다** —
+   `anywhere` 는 **아무 데나** 끊을 자리를 만들어서, 들어갈 자리가 있는데도
+   추정일 표시 `~` 를 혼자 다음 줄로 떨어뜨렸다(실측). */
+.ev-n,.ev-v{{display:block;white-space:normal;word-break:keep-all;
+overflow-wrap:break-word}}
+.ev-v{{font-size:9.5px;color:var(--muted);font-variant-numeric:tabular-nums}}
 .cc{{display:inline-block;font-style:normal;font-size:8.5px;font-weight:700;letter-spacing:.3px;
 border:1px solid var(--line);border-radius:3px;padding:0 2px;margin-right:3px;
 color:var(--muted);vertical-align:1px}}
@@ -387,16 +543,80 @@ details.sec{{margin:0 0 4px}}
 details.sec>summary{{list-style:none;cursor:pointer;display:flex;align-items:center;gap:6px;
 padding:4px 0;border-bottom:1px solid var(--line)}}
 details.sec>summary::-webkit-details-marker{{display:none}}
-details.sec>summary::before{{content:"▾";color:var(--muted);font-size:11px;width:10px;
-flex:none;transition:transform .12s}}
+/* 삼각형은 CSS 이스케이프(\\25BE) 대신 글자로 넣는다 — 스타일이 f-string 안이라
+   파이썬이 \\25 를 8진 이스케이프로 먹고 화면에 "BE" 두 글자가 찍힌다(실측).
+   글자는 ▾(U+25BE)가 아니라 ▼(U+25BC)다 — 25BE 는 이름 그대로 SMALL triangle 로
+   11px 회색과 겹쳐 "너무 작다"는 소리를 들었다. */
+details.sec>summary::before{{content:"▼";color:var(--muted);font-size:15px;width:17px;
+text-align:center;flex:none;transition:transform .12s}}
 details.sec:not([open])>summary::before{{transform:rotate(-90deg)}}
+details.sec>summary:hover::before{{color:var(--accent)}}
 details.sec>summary h2{{margin:0;display:inline}}
 details.sec>summary:hover h2{{color:var(--accent)}}
 details.sec[open]>summary{{margin-bottom:8px}}
 .gcard,.bcard{{border:1px solid var(--line);border-radius:10px;background:var(--card);
 padding:10px 12px;margin:0 0 8px}}
 summary{{cursor:pointer;font-size:14px}}
+/* 카드(해석·기초)는 브라우저 기본 마커를 쓰고 있었다 — 기본 마커는 CSS 로 크기를
+   못 키워서 섹션만 키우면 둘이 따로 보인다. 같은 글자 삼각형으로 통일한다. */
+.gcard>summary,.bcard>summary{{list-style:none;display:flex;align-items:center;gap:7px}}
+.gcard>summary::-webkit-details-marker,
+.bcard>summary::-webkit-details-marker{{display:none}}
+.gcard>summary::before,.bcard>summary::before{{content:"▼";color:var(--muted);
+font-size:13px;width:15px;text-align:center;flex:none;transition:transform .12s}}
+.gcard:not([open])>summary::before,
+.bcard:not([open])>summary::before{{transform:rotate(-90deg)}}
+.gcard>summary:hover::before,.bcard>summary:hover::before{{color:var(--accent)}}
 summary .meta{{color:var(--muted);font-size:11.5px;font-weight:400;margin-left:6px}}
+/* 장 시작 전 코멘트 */
+.pre{{border:1px solid var(--line);border-radius:10px;background:var(--card);margin:0 0 8px}}
+.pre>summary{{list-style:none;cursor:pointer;padding:9px 11px;display:flex;
+align-items:center;gap:7px;flex-wrap:wrap}}
+.pre>summary::-webkit-details-marker{{display:none}}
+.pre>summary::before{{content:"▼";color:var(--muted);font-size:13px;width:15px;
+text-align:center;flex:none;transition:transform .12s}}
+.pre:not([open])>summary::before{{transform:rotate(-90deg)}}
+.pre>summary:hover::before{{color:var(--accent)}}
+.pre .who{{font-weight:700;font-size:13px}}
+.pre .when{{color:var(--muted);font-size:11.5px;margin-left:auto;white-space:nowrap}}
+.pre .tit{{flex-basis:100%;font-size:12.5px;color:var(--muted);margin-left:22px}}
+.pre .body{{margin:0;padding:2px 13px 12px 26px;font-size:12.5px;line-height:1.75;
+white-space:pre-wrap;word-break:keep-all;overflow-wrap:break-word}}
+.pre .src{{display:block;padding:0 13px 11px 26px;font-size:11.5px}}
+
+/* 시세표에서 누를 수 있는 줄 + 그 밑에 펼쳐지는 시계열 */
+tr.qrow{{cursor:pointer}}
+tr.qrow:hover th,tr.qrow:focus th{{color:var(--accent)}}
+tr.qrow .spark{{color:var(--muted);font-size:10px;margin-left:5px;
+display:inline-block;transition:transform .12s}}
+tr.qrow[aria-expanded="true"] .spark{{transform:rotate(90deg);color:var(--accent)}}
+tr.chartrow>td{{padding:0 0 10px}}
+.chart{{border:1px solid var(--line);border-radius:10px;background:var(--card);padding:8px 10px}}
+.chart .chead{{display:flex;flex-wrap:wrap;align-items:baseline;gap:8px;margin-bottom:4px}}
+.chart .ctit{{font-weight:600;font-size:13px}}
+.chart .rng{{margin-left:auto;display:flex;gap:4px}}
+.chart .rng button{{font:inherit;font-size:11.5px;padding:2px 8px;cursor:pointer;
+border:1px solid var(--line);border-radius:999px;background:transparent;color:var(--muted)}}
+.chart .rng button[aria-pressed="true"]{{color:var(--accent);border-color:var(--accent)}}
+.chart svg{{width:100%;height:auto;display:block}}
+.chart .gl{{stroke:var(--line);stroke-dasharray:3 3}}
+.chart .ln{{fill:none;stroke:var(--accent);stroke-width:1.6}}
+.chart .ax{{fill:var(--muted);font-size:10px}}
+.chart .cfoot{{color:var(--muted);font-size:11px;margin:4px 0 0}}
+
+/* 해석 카드 맨 위 숫자판 — 컨센(앞을 보는 숫자)과 직전 발표(뒤를 보는 숫자)를
+   라벨을 달아 나란히. 색으로도 가른다: 컨센은 강조, 직전은 차분하게. */
+table.nums{{width:100%;border-collapse:collapse;margin:2px 0 10px;font-size:12.5px}}
+table.nums th,table.nums td{{padding:4px 6px;border-bottom:1px dashed var(--line);
+text-align:left;vertical-align:top}}
+table.nums th.k{{width:74px;font-weight:600;color:var(--muted);white-space:nowrap}}
+table.nums th.k.cons{{color:var(--accent)}}
+table.nums td.v{{font-weight:600}}
+table.nums td.w,table.nums span.w{{color:var(--muted);font-weight:400;font-size:11.5px;
+white-space:nowrap}}
+table.nums td.trend{{font-weight:400;font-family:Georgia,serif}}
+.numname{{margin:6px 0 0;font-size:12px;font-weight:600;color:var(--muted)}}
+.numtip{{margin:-6px 0 10px;font-size:11.5px;color:var(--muted)}}
 .what{{margin:8px 0}} .watch{{margin:6px 0;font-size:13px}}
 .bands{{list-style:none;padding:0;margin:8px 0}}
 .band{{display:grid;grid-template-columns:18px 170px 1fr;gap:6px;align-items:start;
@@ -416,6 +636,11 @@ a{{color:inherit}} .yt{{font-size:12px}}
 <div class="card">{quote_table(cfg, data)}</div>
 </details>
 
+<details class="sec" id="s-pre">
+<summary><h2>🌅 장 시작 전</h2></summary>
+<div class="card" id="pre-wrap"><p class="na" id="pre-none">불러오는 중…</p></div>
+</details>
+
 <details class="sec" id="s-cal" open>
 <summary><h2>🗓 발표 일정</h2></summary>
 <div class="card">{calendar_block(cfg, today, data)}</div>
@@ -424,7 +649,7 @@ a{{color:inherit}} .yt{{font-size:12px}}
 <details class="sec" id="s-read" open>
 <summary><h2>🧭 지표 해석 — 얼마면 무슨 뜻인가</h2></summary>
 <p class="note">제목을 누르면 펼쳐집니다. 밴드는 <b>대략의 기준</b>이지 매매 신호가 아닙니다.</p>
-{indicator_cards(guide)}
+{indicator_cards(guide, guide_numbers(cfg, data.get("releases") or {}, rl.load_consensus()))}
 </details>
 
 <details class="sec" id="s-basic" open>
@@ -450,6 +675,161 @@ a{{color:inherit}} .yt{{font-size:12px}}
       state[d.id]=d.open;
       try{{ localStorage.setItem(KEY,JSON.stringify(state)); }}catch(e){{}}
     }});
+  }});
+}})();
+
+// 달력 칩·발표표의 지표명을 누르면 그 지표의 해석 카드로 내려간다. 그런데 카드도
+// 섹션도 <details> 라서 **접혀 있으면 앵커로 가도 아무것도 안 보인다** — 링크를 눌렀는데
+// 아무 일도 안 일어난 것처럼 느껴진다. 눌린 대상과 그 조상 <details> 를 전부 펼친다.
+// 클릭 경로에서는 preventDefault 를 하지 않는다 — 펼치기만 해두면 브라우저가 이벤트
+// 처리 뒤에 앵커로 점프하므로 iframe 안에서도 기본 동작이 그대로 맞는다.
+// 주소에 해시를 달고 들어온 경우는 브라우저가 **펼치기 전에** 이미 점프를 끝냈으므로
+// 그때만 직접 스크롤한다.
+(function(){{
+  function expand(id){{
+    var el=document.getElementById(id);
+    if(!el) return null;
+    for(var n=el;n;n=n.parentElement){{ if(n.tagName==='DETAILS') n.open=true; }}
+    return el;
+  }}
+  document.querySelectorAll('a[href^="#g-"]').forEach(function(a){{
+    a.addEventListener('click',function(){{ expand(a.getAttribute('href').slice(1)); }});
+  }});
+  function jump(){{
+    if(location.hash.indexOf('#g-')!==0) return;
+    var el=expand(location.hash.slice(1));
+    if(el) try{{ el.scrollIntoView({{block:'start'}}); }}catch(e){{}}
+  }}
+  jump();
+  window.addEventListener('hashchange',jump);
+}})();
+
+// 시세표의 줄을 누르면 그 자리 바로 밑에 시계열을 편다. 데이터는 페이지에 박혀
+// 있어(SERIES) 네트워크를 타지 않는다. x축은 **거래일 등간격** — 휴장일을 빈칸으로
+// 두지 않는 흔한 방식이라 라벨에 실제 날짜를 찍어 그 점을 분명히 한다.
+// 날짜는 YYMMDD 고정폭을 이어 붙인 문자열이라 i 번째는 slice(i*6,i*6+6).
+(function(){{
+var SERIES={series_json(cfg, data)};
+var RANGES=[['1M',21],['3M',63],['12M',252]];
+function fmtv(v,u){{
+  if(u==='pct') return v.toFixed(2)+'%';
+  if(u==='krw') return v.toLocaleString(undefined,{{minimumFractionDigits:1,maximumFractionDigits:1}})+'원';
+  if(u==='usd') return '$'+v.toLocaleString(undefined,{{minimumFractionDigits:2,maximumFractionDigits:2}});
+  return v.toLocaleString(undefined,{{minimumFractionDigits:2,maximumFractionDigits:2}});
+}}
+function fmtd(s){{ return s ? s.slice(0,2)+'/'+s.slice(2,4)+'/'+s.slice(4,6) : ''; }}
+function draw(box,id,n){{
+  var s=SERIES[id]; if(!s) return;
+  var v=s.v.slice(-n), off=s.v.length-v.length;
+  var date=function(i){{ return s.d.slice((off+i)*6,(off+i)*6+6); }};
+  var lo=Math.min.apply(null,v), hi=Math.max.apply(null,v);
+  // 전 구간이 같은 값이면 0으로 나눈다 — 가운데 수평선으로 그린다
+  var span=(hi-lo)||1, L=52, R=812, T=12, B=128;
+  var x=function(i){{ return v.length<2 ? (L+R)/2 : L+i*(R-L)/(v.length-1); }};
+  var y=function(d){{ return (hi===lo) ? (T+B)/2 : B-(d-lo)*(B-T)/span; }};
+  var pts=v.map(function(d,i){{ return x(i).toFixed(1)+','+y(d).toFixed(1); }}).join(' ');
+  var g='';
+  [hi,lo].forEach(function(d){{
+    g+='<line class="gl" x1="'+L+'" y1="'+y(d).toFixed(1)+'" x2="'+R+'" y2="'+y(d).toFixed(1)+'"/>'
+      +'<text class="ax" x="'+(L-6)+'" y="'+(y(d)+3.5).toFixed(1)+'" text-anchor="end">'+fmtv(d,s.u)+'</text>';
+  }});
+  var mid=Math.floor((v.length-1)/2);
+  [[0,'start'],[mid,'middle'],[v.length-1,'end']].forEach(function(p){{
+    if(p[0]<0) return;
+    g+='<text class="ax" x="'+x(p[0]).toFixed(1)+'" y="144" text-anchor="'+p[1]+'">'+fmtd(date(p[0]))+'</text>';
+  }});
+  var last=v[v.length-1];
+  box.querySelector('.cbody').innerHTML=
+    '<svg viewBox="0 0 820 150" role="img" aria-label="'+s.n+' 시계열">'+g
+    +'<polyline class="ln" points="'+pts+'"/>'
+    +'<circle cx="'+x(v.length-1).toFixed(1)+'" cy="'+y(last).toFixed(1)+'" r="3" fill="var(--accent)"/>'
+    +'</svg>';
+  box.querySelector('.cfoot').textContent=
+    '거래일 '+v.length+'개 · '+fmtd(date(0))+' → '+fmtd(date(v.length-1))
+    +' · 최저 '+fmtv(lo,s.u)+' · 최고 '+fmtv(hi,s.u)
+    +' · x축은 거래일 등간격(휴장일은 건너뜁니다)';
+}}
+function panel(id){{
+  var s=SERIES[id];
+  var td=document.createElement('td'); td.colSpan=7;
+  var box=document.createElement('div'); box.className='chart';
+  box.innerHTML='<div class="chead"><span class="ctit">'+s.n+'</span>'
+    +'<span class="rng">'+RANGES.map(function(r,i){{
+        return '<button type="button" data-n="'+r[1]+'" aria-pressed="'+(i===RANGES.length-1)+'">'+r[0]+'</button>';
+      }}).join('')+'</span></div><div class="cbody"></div><p class="cfoot"></p>';
+  box.querySelector('.rng').addEventListener('click',function(ev){{
+    var b=ev.target.closest('button'); if(!b) return;
+    box.querySelectorAll('.rng button').forEach(function(o){{ o.setAttribute('aria-pressed',o===b); }});
+    draw(box,id,+b.dataset.n);
+  }});
+  td.appendChild(box);
+  var tr=document.createElement('tr'); tr.className='chartrow'; tr.appendChild(td);
+  return tr;
+}}
+document.querySelectorAll('tr.qrow').forEach(function(row){{
+  function toggle(){{
+    var open=row.getAttribute('aria-expanded')==='true';
+    if(open){{ if(row.nextSibling && row.nextSibling.classList
+                && row.nextSibling.classList.contains('chartrow')) row.nextSibling.remove();
+               row.setAttribute('aria-expanded','false'); return; }}
+    var id=row.dataset.q; if(!SERIES[id]) return;
+    var tr=panel(id);
+    row.parentNode.insertBefore(tr,row.nextSibling);
+    row.setAttribute('aria-expanded','true');
+    draw(tr.querySelector('.chart'),id,RANGES[RANGES.length-1][1]);
+  }}
+  row.addEventListener('click',toggle);
+  row.addEventListener('keydown',function(e){{
+    if(e.key==='Enter'||e.key===' '){{ e.preventDefault(); toggle(); }}
+  }});
+}});
+}})();
+
+// 장 시작 전 코멘트 — **페이지에 박지 않고 열 때 읽는다**. 이 페이지는 저녁 9시에
+// 구워지는데 개장전 글은 아침 7시대에 오므로, 박아두면 아침엔 반드시 어제 글이다.
+// (차트 데이터는 페이지와 같은 주기로 바뀌어 박는 게 맞았다 — 여기는 반대 경우다.)
+// file:// 로 열거나 아직 배포 전이면 fetch 가 실패하는데, 그때는 섹션을 통째로 접는다.
+(function(){{
+  var wrap=document.getElementById('pre-wrap'),sec=document.getElementById('s-pre');
+  if(!wrap) return;
+  function esc(s){{ var d=document.createElement('div'); d.textContent=s==null?'':s; return d.innerHTML; }}
+  // **KST 로 못 박는다.** new Date(...).getHours() 는 보는 기기의 시간대라,
+  // 해외에서 열면 07:36 글이 '10/14 22:36' 으로 보인다(실측 — 컨테이너가 UTC).
+  // 이 대시보드의 시각은 전부 KST 기준이므로 표기도 KST 하나로 고정한다.
+  function when(iso){{
+    var d=new Date(iso);
+    if(isNaN(d)) return '';
+    try{{
+      var P={{}};
+      new Intl.DateTimeFormat('en-GB',{{timeZone:'Asia/Seoul',month:'numeric',
+        day:'numeric',hour:'2-digit',minute:'2-digit',hour12:false}})
+        .formatToParts(d).forEach(function(p){{ P[p.type]=p.value; }});
+      return P.month+'/'+P.day+' '+P.hour+':'+P.minute;
+    }}catch(e){{ return ''; }}
+  }}
+  fetch('premarket.json?t='+Date.now()).then(function(r){{
+    if(!r.ok) throw new Error(r.status); return r.json();
+  }}).then(function(d){{
+    var items=(d&&d.items)||[];
+    if(!items.length) throw new Error('empty');
+    // **전부 접어 둔다.** 섹션을 열면 그날의 한화·키움이 두 줄로 보이고, 읽을 것만
+    // 누른다 — 맨 위 한 건을 펼쳐 두면 긴 본문이 다른 소스를 화면 밖으로 밀어낸다
+    // (폰에서 특히). 읽은 글을 매일 다시 펼쳐 주는 셈이기도 하다.
+    wrap.innerHTML=items.slice(0,6).map(function(it){{
+      return '<details class="pre">'
+        +'<summary><span class="who">'+esc(it.name)+'</span>'
+        +'<span class="when">'+esc(when(it.at))+'</span>'
+        +(it.title?'<span class="tit">'+esc(it.title)+'</span>':'')
+        +'</summary><p class="body">'+esc(it.body)+'</p>'
+        +(it.url?'<a class="src" href="'+esc(it.url)+'" target="_blank" rel="noopener">🔗 원문 보기</a>':'')
+        +'</details>';
+    }}).join('');
+  }}).catch(function(){{
+    // 못 읽으면 빈 칸을 남기지 않고 섹션을 접어 둔다 — '불러오는 중…' 이 영영
+    // 떠 있으면 고장으로 보인다.
+    if(sec) sec.open=false;
+    wrap.innerHTML='<p class="na">장 시작 전 코멘트가 아직 없습니다 '
+      +'(소스 감시가 그날 글을 받아 배포된 뒤에 보입니다).</p>';
   }});
 }})();
 </script>

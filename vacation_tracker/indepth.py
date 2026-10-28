@@ -49,8 +49,16 @@ def is_candidate(text: str) -> bool:
     return bool(_KEYWORD_RE.search(_compact(text or "")))
 
 
+# 폴백 전용 컷 — 출퇴근·자리 조정 이야기는 '발간' 낱말이 있어도 계획이 아니다
+# (10/27 실사례: "내일 아침 일찍 와서 발간 작업… 7시쯤 퇴근해봐도 될까요").
+_FALLBACK_NEG_RE = re.compile(r"퇴근|출근|반차|휴가|자리비움")
+
+
 def is_strong(text: str) -> bool:
-    return bool(_STRONG_RE.search(_compact(text or "")))
+    compacted = _compact(text or "")
+    if _FALLBACK_NEG_RE.search(compacted):
+        return False
+    return bool(_STRONG_RE.search(compacted))
 
 
 def pick_indepth_candidates(timeline: list[dict], hours: int = 12) -> list[dict]:
@@ -268,12 +276,67 @@ def is_known(store: dict, uid: str) -> bool:
     return f"{uid}#0" in known
 
 
+def _topic_key(topic) -> str:
+    return re.sub(r"\s+", "", str(topic or "")).lower()
+
+
+def find_reschedule(store: dict, entry: dict) -> str | None:
+    """같은 담당자·같은 주제의 활성 기존 건 — 새 보고를 '일정 조정'으로 붙일 상대.
+
+    이름이 비거나 미정이거나 주제가 비면 못 찾는다(엉뚱한 병합 방지). 주제는
+    공백 제거·소문자로 비교해 같거나 한쪽이 다른 쪽을 포함하면 같은 건으로 본다.
+    여럿이 맞으면 가장 마지막 보고(msg_date 최신)를 고른다.
+    """
+    if entry.get("needs_review") or entry.get("name") in ("", "미정"):
+        return None
+    tk = _topic_key(entry.get("topic"))
+    if not tk:
+        return None
+    found = None
+    base = str(entry.get("uid") or "").split("#", 1)[0]
+    for uid, old in sorted((store.get("entries") or {}).items(),
+                           key=lambda kv: str(kv[1].get("msg_date") or "")):
+        if old.get("deleted") or old.get("done") or old.get("name") != entry["name"]:
+            continue
+        if base and uid.split("#", 1)[0] == base:
+            continue  # 같은 메시지의 형제(uid#k) — 일정표 다건은 병합 대상이 아니다
+        ok = _topic_key(old.get("topic"))
+        if ok and (tk == ok or tk in ok or ok in tk):
+            found = uid
+    return found
+
+
 def record(store: dict, entries: list[dict]) -> list[dict]:
-    """새 항목만 저장하고 돌려준다. 아는 uid는 건드리지 않는다(수동 수정·묘비 보호)."""
+    """새 항목만 저장하고 돌려준다. 아는 uid는 건드리지 않는다(수동 수정·묘비 보호).
+
+    같은 담당자·같은 주제의 활성 건이 이미 있으면 **새 항목을 만들지 않고 그 건으로
+    병합**한다(일정 조정 보고가 두 건으로 남지 않게 — 10/28 규칙). 새 uid는
+    merged_into 묘비로 남겨 재스캔·백필의 재판정을 막고, 예정일이 실제로 움직였을
+    때만 moved_from을 달아 알림에 '일정 변경'으로 나간다. 새 보고에 시점이 없으면
+    기존 예정일을 지우지 않는다(모름으로 덮지 않는다 — 30번 교훈 부류). 주제·종류·
+    담당은 기존 건을 그대로 둔다(수동 수정 보호)."""
     known = store.setdefault("entries", {})
     fresh = []
     for entry in entries:
         if is_known(store, entry["uid"]):
+            continue
+        target_uid = find_reschedule(store, entry)
+        if target_uid:
+            old = known[target_uid]
+            known[entry["uid"]] = {"deleted": True, "merged_into": target_uid,
+                                   "name": entry["name"], "topic": entry.get("topic", ""),
+                                   "msg_date": entry["msg_date"]}
+            moved = bool(entry.get("target")) and entry.get("target") != old.get("target")
+            prev = old.get("target")
+            old.update(text=entry["text"], msg_date=entry["msg_date"],
+                       detected_at=entry["detected_at"])
+            if moved:
+                old["target"] = entry["target"]
+                if entry.get("target_text"):
+                    old["target_text"] = entry["target_text"]
+                fresh.append({**entry, "uid": target_uid, "moved_from": prev,
+                              "topic": old.get("topic") or entry.get("topic"),
+                              "kind": old.get("kind") or entry.get("kind")})
             continue
         known[entry["uid"]] = {k: v for k, v in entry.items() if k != "uid"}
         fresh.append(entry)

@@ -41,6 +41,14 @@ class CandidateTest(unittest.TestCase):
         self.assertTrue(is_strong("인뎁스 언제 나와?"))
         self.assertFalse(is_strong("자료 초안 거의 다 썼습니다"))  # 넓은 키워드는 폴백 제외
 
+    def test_commute_talk_not_strong(self):
+        # 출퇴근 조정 얘기는 '발간'이 있어도 폴백에서 컷 (10/27 실사례).
+        self.assertFalse(is_strong(
+            "팀장님 오늘 제가 저녁에 부모님이랑 상의할게 있어서 내일 아침 일찍 와서 "
+            "발간 작업해도 될까요? 7시쯤 퇴근해봐도 괜찮을까요!"))
+        self.assertFalse(is_strong("내일 오전 반차 쓰고 발간은 오후에 하겠습니다"))
+        self.assertTrue(is_strong("인뎁스 발간 다음주 금요일입니다"))  # 진짜 계획은 유지
+
 
 class PickTest(unittest.TestCase):
     def test_keyword_message_picked(self):
@@ -151,6 +159,55 @@ class RecordTest(unittest.TestCase):
         store = {"entries": {"1:100": {"deleted": True}}}
         self.assertTrue(indepth.is_known(store, "1:100"))
         self.assertEqual(record(store, [self.entry()]), [])
+
+    def test_reschedule_merges_not_duplicates(self):
+        # 일정 조정 보고는 새 건이 아니라 기존 건의 예정일을 옮긴다(10/28 규칙).
+        store = {"entries": {}}
+        record(store, [self.entry()])
+        moved = dict(self.entry(uid="1:300"), target="2026-10-02",
+                     target_text="10/2로 밀림", msg_date="2026-09-15T10:00+09:00",
+                     text="조선 인뎁스 10/2로 미뤄질 것 같습니다")
+        fresh = record(store, [moved])
+        self.assertEqual([(f["uid"], f["moved_from"]) for f in fresh],
+                         [("1:100", "2026-09-19")])
+        self.assertEqual(store["entries"]["1:100"]["target"], "2026-10-02")
+        tomb = store["entries"]["1:300"]
+        self.assertTrue(tomb["deleted"])
+        self.assertEqual(tomb["merged_into"], "1:100")
+        active = [u for u, e in store["entries"].items() if not e.get("deleted")]
+        self.assertEqual(active, ["1:100"])  # 활성 건은 여전히 하나
+
+    def test_partial_topic_wording_still_merges(self):
+        # 실사례(김연미): '전기전자(전력 부품)' ↔ '전력부품' — 포함 관계면 같은 건.
+        store = {"entries": {}}
+        record(store, [dict(self.entry(), topic="전기전자(전력 부품)")])
+        adj = dict(self.entry(uid="1:310"), topic="전력부품", target="2026-11-20")
+        fresh = record(store, [adj])
+        self.assertEqual(fresh[0]["uid"], "1:100")
+        self.assertEqual(store["entries"]["1:100"]["topic"], "전기전자(전력 부품)")
+
+    def test_restatement_merges_silently(self):
+        # 같은 예정일 재언급 — 두 건도 알림도 안 만든다.
+        store = {"entries": {}}
+        record(store, [self.entry()])
+        self.assertEqual(record(store, [dict(self.entry(uid="1:301"))]), [])
+        self.assertTrue(store["entries"]["1:301"]["deleted"])
+
+    def test_vague_followup_does_not_erase_target(self):
+        # 시점 없는 후속 보고가 기존 예정일을 '모름'으로 덮지 않는다(30번 교훈 부류).
+        store = {"entries": {}}
+        record(store, [self.entry()])
+        vague = dict(self.entry(uid="1:302"), target=None, target_text="")
+        self.assertEqual(record(store, [vague]), [])
+        self.assertEqual(store["entries"]["1:100"]["target"], "2026-09-19")
+
+    def test_done_entry_not_merged(self):
+        # 완료된 건에는 안 붙는다 — 다음 시즌 같은 주제는 새 건이 맞다.
+        store = {"entries": {}}
+        record(store, [self.entry()])
+        store["entries"]["1:100"]["done"] = True
+        fresh = record(store, [dict(self.entry(uid="1:303"), target="2026-10-02")])
+        self.assertEqual(fresh[0]["uid"], "1:303")
 
     def test_is_known_across_split_shapes(self):
         # 전에 다건(#k)으로 분해된 메시지는 원 uid도, 전에 단건이던 메시지는 #k도 안다.

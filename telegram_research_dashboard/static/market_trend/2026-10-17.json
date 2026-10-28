@@ -1,0 +1,679 @@
+{
+ "date": "2026-10-17",
+ "meta": {
+  "window": "10-16 06:00~10-17 06:00 KST",
+  "engine": "Gemini(gemini-2.5-flash)",
+  "generated_at": "2026-10-17T06:35+09:00"
+ },
+ "stats": {
+  "channels": 93,
+  "messages": 1642,
+  "groups": 1530
+ },
+ "one_liner": "AI 신용 리스크 우려와 연준 발언에 시장이 혼조세를 보이는 가운데, 테슬라 로드스터와 한화시스템 등 개별 기업 이슈가 주목받고 있습니다.",
+ "themes": [
+  {
+   "name": "AI/반도체 — 코어위브 신용 리스크 완화 및 성장 기대",
+   "narrative": "AI 인프라 기업 코어위브의 재무 건전성 우려가 확산되며 시장에 불안감을 주었으나, 엔비디아 CEO 젠슨 황의 긍정적인 발언으로 투자 심리가 일부 회복되었습니다. 전반적인 반도체 및 AI 산업은 강력한 성장 기대감과 함께 신용 리스크 관리의 중요성이 부각되고 있습니다.",
+   "status": "ongoing",
+   "strength": 5,
+   "keywords": [
+    "엔비디아 CEO",
+    "젠슨 엔비디아",
+    "코어위브",
+    "재무건전성",
+    "신용등급",
+    "반도체",
+    "AI"
+   ],
+   "evidence": [
+    {
+     "channel": "서화백의 그림놀이 🚀",
+     "quote": "젠슨 황 NVDA디아 CEO의 재무건전성 개선 발언으로 주가 급락 후 반등 성공, 도이체방크에서 주가 급락을 저가 매수 기회로 평가"
+    },
+    {
+     "channel": "[다올 매크로/투자전략] 조병현/박영찬/정현하/홍록은",
+     "quote": "코어위브, 전일 과도한 부채 부담 우려로 급락했으나 젠슨 황 엔비디아 CEO의 재무건전성 및 자금조달 여건에 대한 긍정적 평가에 +5.9% 상승"
+    },
+    {
+     "channel": "TNBfolio",
+     "quote": "속보: 앤트로픽이 지난 6월 크롤본드신용평가(KBRA)로부터 투자적격 등급 바로 한 단계 아래인 BB+ 발행사 신용등급을 받은 것으로 확인됐다."
+    }
+   ]
+  },
+  {
+   "name": "테슬라 — 차세대 로드스터 공개 기대감",
+   "narrative": "테슬라가 수년간의 지연 끝에 차세대 로드스터 전기 스포츠카를 공개할 예정이라는 소식이 전해지며 혁신 기술에 대한 기대감이 커지고 있습니다. 이는 테슬라가 전기차를 넘어 AI 및 로봇 중심 전략으로 변화하고 있음을 시사합니다.",
+   "status": "new",
+   "strength": 4,
+   "keywords": [
+    "로드스터",
+    "테슬라 로드스터",
+    "하늘"
+   ],
+   "evidence": [
+    {
+     "channel": "서화백의 AI놀이🚀",
+     "quote": "하늘 나는 '괴물' 로드스터 공개, 혁신 기술 기대감 (+3.4% 상승), 스페이스X와의 합병 및 기술 결합 기대감"
+    },
+    {
+     "channel": "다올투자증권 리서치센터",
+     "quote": "■테슬라, 수년간의 출시 지연 끝에 차세대 로드스터 전기 스포츠카 공개 예정"
+    },
+    {
+     "channel": "신한 리서치",
+     "quote": "▶ 테슬라, 9년 만에 차세대 로드스터 공개 예정…전기차에서 AI·로봇 중심 전략 변화"
+    }
+   ]
+  },
+  {
+   "name": "연준 통화정책 — 케빈 워시 발언에 따른 시장 반응",
+   "narrative": "케빈 워시 연준 의장이 IMF 연차총회에서 물가 안정을 재확인하면서도 향후 FOMC 결정에 대한 섣부른 판단을 경계하는 발언을 내놓았습니다. 이는 추가 금리 인상에 대한 시장의 우려를 일부 완화하며 아시아 시장의 상승세에 기여했습니다.",
+   "status": "new",
+   "strength": 3,
+   "keywords": [
+    "케빈",
+    "케빈 워시",
+    "워시",
+    "FOMC",
+    "Form"
+   ],
+   "evidence": [
+    {
+     "channel": "사제콩이_서상영",
+     "quote": "케빈 워시 연준 의장은 IMF 연차총회 대담에서 물가안정을 달성하겠다는 의지를 재확인했으나 10월과 12월 FOMC에서 어떤 결정을 내릴지 미리 판단하지 않겠다고 언급. 특히 9월 금리인상을 통해 통화정책의 완화 정도를 일부 축소했다고 설명하면서도 추가 인상을 서두르겠다는 신호는 제시하지 않음."
+    },
+    {
+     "channel": "서화백의 그림놀이 🚀",
+     "quote": "📝 *한국 증시 관련 수치: 강한 반발 매수세 유입 후 케빈 워시 발언 주목..."
+    },
+    {
+     "channel": "YIELD & SPREAD",
+     "quote": "• 9월 FOMC 이후 세계경제는 대체로 연준 예상대로(broadly conformed to our expectations) 움직였음"
+    }
+   ]
+  },
+  {
+   "name": "국내 기업 이슈 및 시장 구조 개선 요구",
+   "narrative": "한화시스템은 UAE 에지그룹과의 합작법인 추진 및 한화오션 지분 유동화를 통한 실탄 확보 계획으로 주목받고 있으며, 에스원은 대규모 자사주 매입 및 소각을 발표했습니다. 한편, MSCI 한국 증시 ETF 급락과 관련하여 '의무공개매수제도' 등 주주 보호법의 전면 재검토 및 수정 요구가 제기되며 국내 시장 구조에 대한 논의가 이어지고 있습니다.",
+   "status": "ongoing",
+   "strength": 3,
+   "keywords": [
+    "한화시스템",
+    "에스원",
+    "MSCI",
+    "의무공개매수제도"
+   ],
+   "evidence": [
+    {
+     "channel": "텐렙",
+     "quote": "📌 한화시스템(시가총액: 14조 9,624억) #A272210 ... '한화시스템(주), UAE 에지그룹과 합작법인 설립 추진 보도에 대한 조회공시 요구('26.09.17)' 대한 조회공시 답변…"
+    },
+    {
+     "channel": "유안타증권 리서치센터",
+     "quote": "에스원, 기존 자사주 전량소각·4500억 추가 매입"
+    },
+    {
+     "channel": "미국 주식 인사이더 🇺🇸 (US Stocks Insider)",
+     "quote": "대한민국 주식시장을 살리는 길입니다. https://news.einfomax.co.kr/news/articleView.html?idxno=4439528 1400만 개미투자자를 기만하는 ‘무늬만’ 주주 보호법인 ‘의무공개매수제도’, ‘주가 누르기 방지법’의 전면 재검토 및 수정 입…"
+    }
+   ]
+  },
+  {
+   "name": "기술적 분석 — 과매수 및 변동성 확대 경고",
+   "narrative": "다수의 종목 분석에서 주가가 저항선에 근접하거나 과매수 상태에 진입하여 조정 가능성이 제기되고 있습니다. 지지선과 저항선 간의 변동성이 존재하며, 단기적인 하락세 가능성도 언급되어 투자자들의 신중한 접근이 요구됩니다.",
+   "status": "new",
+   "strength": 2,
+   "keywords": [
+    "밴드 상단",
+    "저항선 간의",
+    "간의 변동성",
+    "과열된 상태임",
+    "하락한다면"
+   ],
+   "evidence": [
+    {
+     "channel": "키움증권 해외선물 톡톡",
+     "quote": "<b>종목 분석 결과</b> 현재 주가는 저항선에 위치하고 있으며, 지지선과의 간격이 좁아 조정 가능성이 존재합니다. 기술적 지표들은 혼합된 신호를 보여주고 있으며, 매수세가 강하지만 과매수 상태에 주의해야 합니다."
+    },
+    {
+     "channel": "키움증권 해외선물 톡톡",
+     "quote": "<b>종목 분석 결과</b> 현재 주가는 저항선에 근접해 있으며, 상승세가 지속될 가능성이 있지만 과매수 상태로 인해 조정이 필요할 수 있습니다. 투자자들은 신중한접근이 요구됩니다."
+    },
+    {
+     "channel": "키움증권 해외선물 톡톡",
+     "quote": "<b>종목 분석 결과</b> 현재 주가는 저항선에 위치하고 있으며, 지지선과 저항선 간의 변동성이 존재합니다."
+    }
+   ]
+  }
+ ],
+ "community_mood": {
+  "score": -40,
+  "summary": "개인 투자자들은 전반적인 하락장과 보유 종목에 대한 우려 속에서 공포 심리를 보이고 있으나, 일부에서는 기술적 반등 가능성을 점치며 저가 매수 기회를 모색하는 등 혼재된 심리를 나타내고 있습니다. 특히 테슬라 로드스터에 대한 높은 관심과 논쟁이 활발합니다.",
+  "hot_stocks": [
+   {
+    "name": "테슬라",
+    "score": 30,
+    "reason": "슈카월드 로드스터 특집 대본 유출 및 로드스터의 실현 가능성에 대한 논쟁이 활발하며, 오늘 주가 예상에 대한 관심이 높다."
+   },
+   {
+    "name": "삼성전자",
+    "score": -10,
+    "reason": "하락장 및 시장 전반에 대한 우려 속에서 언급되고 있다."
+   },
+   {
+    "name": "SK하이닉스",
+    "score": -30,
+    "reason": "'개쳐웃기네', '진짜 심각한게' 등 주가 하락 및 실적에 대한 부정적인 인식이 강하다."
+   }
+  ]
+ },
+ "signals": {
+  "spikes": [
+   {
+    "term": "로드스터",
+    "count": 34,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "MSCI",
+    "count": 25,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "한화시스템",
+    "count": 22,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "엔비디아 CEO",
+    "count": 21,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "케빈",
+    "count": 21,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "Form",
+    "count": 21,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "케빈 워시",
+    "count": 20,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "젠슨 엔비디아",
+    "count": 19,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "이와 관련해",
+    "count": 19,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "밴드 상단",
+    "count": 18,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "에스원",
+    "count": 17,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "저항선 간의",
+    "count": 17,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "워시",
+    "count": 31,
+    "burst": 27.868686868686872,
+    "base_daily": 0.7,
+    "new": false
+   },
+   {
+    "term": "하늘",
+    "count": 16,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "테슬라 로드스터",
+    "count": 16,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "간의 변동성",
+    "count": 16,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "과열된 상태임",
+    "count": 16,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "재무건전성",
+    "count": 15,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "신용등급",
+    "count": 15,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "개최 안내공시",
+    "count": 15,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "안내공시 개최일자",
+    "count": 15,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "안내공시",
+    "count": 15,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "상태 인해",
+    "count": 15,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "하락한다면",
+    "count": 15,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "전략 가장",
+    "count": 15,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   }
+  ],
+  "top_posts": [
+   {
+    "channels": 7,
+    "channel": "이지스스트레티지 리서치",
+    "head": "[SK증권 반도체 한동희, 손 건] 반도체 (비중확대): 매수 주가는 극단적 다운턴을 선반영. 업황은 여전히 강세 삼성전자, SK하이닉스의 12개월 선행 P/E는 3.3X, 3.0X 수준으로 2010년 이후 최저치(각각 5.5X, 3.0X)를 하회. 하지만 거시경제 우려에도, 메모리 업황은 여전히 강세 ① 실적 전망치 재…",
+    "url": "https://t.me/jeilstock/46875",
+    "time_kst": "10-16 07:53"
+   },
+   {
+    "channels": 5,
+    "channel": "TNBfolio",
+    "head": "속보: 앤트로픽의 일부 기존 투자자와 IPO 예비 투자자들이 기업가치를 약 1.5조 달러 수준으로 낮춰 논의하고 있다. 이는 11월 상장을 앞두고 투자자들이 예상했던 약 2조 달러에서 크게 물러선 수준이다. 앤트로픽은 수요일 샌프란시스코 본사에서 열린 투자자의 날 행사에서 3분기 매출이 168억 달러로 전분기 대비 45%…",
+    "url": "https://t.me/TNBfolio/71570",
+    "time_kst": "10-16 07:29"
+   },
+   {
+    "channels": 5,
+    "channel": "미국 주식 인사이더 🇺🇸 (US Stocks Insider)",
+    "head": "주변지인들께 공유하고 동의를 부탁드립니다. 대한민국 주식시장을 살리는 길입니다. https://news.einfomax.co.kr/news/articleView.html?idxno=4439528 1400만 개미투자자를 기만하는 ‘무늬만’ 주주 보호법인 ‘의무공개매수제도’, ‘주가 누르기 방지법’의 전면 재검토 및 수정 입…",
+    "url": "https://t.me/insidertracking/66444",
+    "time_kst": "10-16 16:03"
+   },
+   {
+    "channels": 4,
+    "channel": "키움증권 전략/시황 한지영",
+    "head": "[10/16, 장 시작 전 생각: 패닉 장세 탈출 방안, 키움 한지영] - 다우 +1.1%, S&P500 +0.3%, 나스닥 +0.1% - 마이크론 +1.9%, 코어위브 +6.0%, 엔비디아 -1.8% - 미 10년물 금리 5.07%, 30년물 금리 5.42%, WTI 97.6달러 1. 미국 증시는 전약후강의 패턴을 보이…",
+    "url": "https://t.me/hedgecat0301/2971",
+    "time_kst": "10-16 07:46"
+   },
+   {
+    "channels": 4,
+    "channel": "신한 리서치",
+    "head": "[신한투자증권 혁신성장 허성규, 이채윤] 파두(440110.KQ) - 약속의 3분기 ▶️ 신한생각: 3분기 실적부터 영업레버리지 본격화 - 발주 시계열에 따라 상반기 대비 하반기 실적이 대폭 증가할 예정 - 2026년 주요 고객사는 하이퍼스케일러 2개사 중심이며, 신규 고객사는 2027년부터 본격 기여 전망 - 현재 주가…",
+    "url": "https://t.me/shinhanresearch/53134",
+    "time_kst": "10-16 07:51"
+   },
+   {
+    "channels": 3,
+    "channel": "다올투자증권 리서치센터",
+    "head": "[통신서비스(Overweight) | 다올 통신/음식료 이다연] ★ 최근 통신3사 주가 차별화 이유 해석하기 ▶ 10월 초 대비 통신3사 주가수익률은 SK텔레콤 -9.7%, KT -2.9%, LG유플러스 +2.8%으로 업종 내 주가 차별화 현상 관찰. 이와 같은 주가 차별화의 배경은 1) AI DC 방향성 차이에 따른 향…",
+    "url": "https://t.me/daolresearch/15247",
+    "time_kst": "10-16 07:10"
+   },
+   {
+    "channels": 3,
+    "channel": "🗽엄브렐라(Umbrella Research) 리서치+ 네프콘 옆집부자형 since 2020",
+    "head": "[현대차증권 반도체소부장/로보틱스 윤동욱] 피에스케이홀딩스 BUY/TP 270,000원(유지/상향) 하늘을 향해 불쑥 솟아오른 2027년 ■ 투자포인트 및 결론 - 피에스케이홀딩스에 대해 목표주가 270,000원으로 28.6% 상향. 반도체 장비 업종 내 Top-pick 유지하며 BUY 의견 제시 - CoWoS에 대한 초…",
+    "url": "https://t.me/umbrellaresearch/42755",
+    "time_kst": "10-16 08:51"
+   },
+   {
+    "channels": 3,
+    "channel": "다올투자증권 리서치센터",
+    "head": "[다올투자증권 조선/기계/방산 최광식] 10/16(금) 데일리뉴스 🛳 조선 [TradeWinds] HMM commits $1.6bn to order a dozen container ships in major fleet investment Posco ties up with Hanwha Ocean to push use of…",
+    "url": "https://t.me/daolresearch/15253",
+    "time_kst": "10-16 08:43"
+   },
+   {
+    "channels": 3,
+    "channel": "여의도스토리 Ver2.0-习近平是个狗东西",
+    "head": "<오늘 개장전 꼭 알아야 할 5가지_10/16 Bloomberg> 한화 임혜윤 ① 미국 인플레 재가열 - 미국 9월 PPI가 전월 대비 1.3% 급등하고 전년 대비 6.3% 상승했으며 근원 PPI도 0.7%와 5%로 예상치를 상회 - 에너지 가격이 10.8% 오르고 운송과 창고 서비스가 3.4% 뛰었으며 9월 소매판매는…",
+    "url": "https://t.me/YeouidoStory2/118465",
+    "time_kst": "10-16 08:01"
+   },
+   {
+    "channels": 3,
+    "channel": "사제콩이_서상영",
+    "head": "10/16 아시아 시장, 워시 연준 의장 발언 후 상승 확대 케빈 워시 연준 의장은 IMF 연차총회 대담에서 물가안정을 달성하겠다는 의지를 재확인했으나 10월과 12월 FOMC에서 어떤 결정을 내릴지 미리 판단하지 않겠다고 언급. 특히 9월 금리인상을 통해 통화정책의 완화 정도를 일부 축소했다고 설명하면서도 추가 인상을…",
+    "url": "https://t.me/ehdwl/11204",
+    "time_kst": "10-16 13:30"
+   },
+   {
+    "channels": 3,
+    "channel": "텐렙",
+    "head": "📌 한화시스템(시가총액: 14조 9,624억) #A272210 📁 조회공시요구(풍문또는보도)에대한답변(미확정) 2026.10.16 15:25:00 (현재가 : 79,200원, +5.46%) 제목 : '한화시스템(주), UAE 에지그룹과 합작법인 설립 추진 보도에 대한 조회공시 요구('26.09.17)' 대한 조회공시 답변…",
+    "url": "https://t.me/Ten_level/93125",
+    "time_kst": "10-16 15:39"
+   },
+   {
+    "channels": 3,
+    "channel": "신한 리서치",
+    "head": "『삼양식품(003230.KS) – 누가 환율 소리를 내었는가 』 기업분석부 조상훈 ☎02-3772-2578 ▶ 양적 한계가 명확해진 국내 음식료 시장에서 모범 - 업종 내 최선호주 의견 유지 - 원화 강세에 따른 성장 둔화 우려는 높은 매출총이익률(26F 45.9%), 낮은 가격 민감도, 높은 브랜드 파워를 통해 최소화…",
+    "url": "https://t.me/shinhanresearch/53126",
+    "time_kst": "10-16 07:24"
+   },
+   {
+    "channels": 3,
+    "channel": "피카츄 아저씨⚡️",
+    "head": "VARA AI Fund 청산 루머 (제2의 레오폴드?) ✍️팩트 및 요약 아직 신빙성 있는 공식 자료는 없지만 소셜 미디어에서 VARA AI Fund 청산 루머가 돌고 있음. https://x.com/KawzInvests/status/2110791366913732740?s=20 22년 설립된 VARA Fund AUM은 $…",
+    "url": "https://t.me/pikachu_aje/8382",
+    "time_kst": "10-16 08:22"
+   },
+   {
+    "channels": 2,
+    "channel": "하나증권 리서치",
+    "head": "하나증권 중국/신흥국전략 김경환(T.02-3771-7616) *텔레그램 채널 : https://t.me/HANAchina ◈[김경환의 China Weekly] 다시 홍콩의 시간이 올까? ▶자료: https://bit.ly/4Ba1fSY • 홍콩 증시, 2025년 글로벌 최강에서 2026년 최약체가 된 이유 : 2026년…",
+    "url": "https://t.me/HanaResearch/20661",
+    "time_kst": "10-16 12:16"
+   },
+   {
+    "channels": 2,
+    "channel": "[신한 리서치본부] IT(반도체/전기전자/디스플레이)",
+    "head": "[신한투자증권 IT팀 오강호, 김형태, 박현우, 송혜수, 김예성] 10/16(금) 🕗Daily IT 예습하기 ✅ 반도체/장비 ▶️ TSMC, 3분기 매출 전년대비 41% 증가…2나노 비중 확대 (전자신문) https://alie.kr/8pjAW96 ▶️ 로이터 “SK하이닉스, 美 공장 투자 조건으로 中 다롄 장비 반입 요…",
+    "url": "https://t.me/c/1355104422/7424",
+    "time_kst": "10-16 07:39"
+   }
+  ]
+ },
+ "community_dc": {
+  "source": "DC인사이드",
+  "galleries": [
+   {
+    "id": "krstock",
+    "name": "국내주식갤러리",
+    "posts": 3208,
+    "capped": true,
+    "burst": 2.1,
+    "base_daily": 1516.6
+   },
+   {
+    "id": "stockus",
+    "name": "해외주식갤러리",
+    "posts": 8910,
+    "capped": true,
+    "burst": 2.8,
+    "base_daily": 3216.6
+   }
+  ],
+  "posts_sampled": 552,
+  "keywords": [
+   {
+    "term": "테슬라",
+    "count": 10,
+    "burst": 99.0,
+    "new": true
+   },
+   {
+    "term": "이주완",
+    "count": 10,
+    "burst": 99.0,
+    "new": true
+   },
+   {
+    "term": "하락장",
+    "count": 8,
+    "burst": 99.0,
+    "new": true
+   },
+   {
+    "term": "장애인증권",
+    "count": 6,
+    "burst": 83.6,
+    "new": true
+   },
+   {
+    "term": "물려",
+    "count": 5,
+    "burst": 69.7,
+    "new": true
+   },
+   {
+    "term": "트럼프",
+    "count": 5,
+    "burst": 69.7,
+    "new": true
+   },
+   {
+    "term": "그래",
+    "count": 5,
+    "burst": 69.7,
+    "new": true
+   },
+   {
+    "term": "ai",
+    "count": 5,
+    "burst": 69.7,
+    "new": true
+   },
+   {
+    "term": "황말올",
+    "count": 5,
+    "burst": 69.7,
+    "new": true
+   },
+   {
+    "term": "삼성전자",
+    "count": 14,
+    "burst": 15.0,
+    "new": false
+   },
+   {
+    "term": "미장",
+    "count": 12,
+    "burst": 9.8,
+    "new": false
+   },
+   {
+    "term": "지금",
+    "count": 25,
+    "burst": 5.7,
+    "new": false
+   },
+   {
+    "term": "속슬",
+    "count": 32,
+    "burst": 4.2,
+    "new": false
+   },
+   {
+    "term": "이유",
+    "count": 9,
+    "burst": 7.4,
+    "new": false
+   },
+   {
+    "term": "SK하이닉스",
+    "count": 23,
+    "burst": 3.6,
+    "new": false
+   }
+  ],
+  "top_recommended": [
+   {
+    "gallery": "해외주식갤러리",
+    "title": "슈카월드, 유튜브 로드스터 특집 대본 유출.txt",
+    "views": 10263,
+    "recommend": 323,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=18014194&exception_mode=recommend&page=1",
+    "time_kst": "10-16 17:55"
+   },
+   {
+    "gallery": "해외주식갤러리",
+    "title": "업계 종사자가 말하는 로드스터가 말도 안되는 이유",
+    "views": 11453,
+    "recommend": 233,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=18012353&exception_mode=recommend&page=1",
+    "time_kst": "10-16 13:54"
+   },
+   {
+    "gallery": "해외주식갤러리",
+    "title": "진짜 찐따새끼들 졸라 많네 ㅋㅋㅋㅋㅋㅋ",
+    "views": 10734,
+    "recommend": 218,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=18013657&exception_mode=recommend&page=1",
+    "time_kst": "10-16 16:34"
+   },
+   {
+    "gallery": "해외주식갤러리",
+    "title": "여기 지금 뉴욕 월가 여행왔는데 ㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷ",
+    "views": 14286,
+    "recommend": 189,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=18013433&exception_mode=recommend&page=1",
+    "time_kst": "10-16 16:05"
+   },
+   {
+    "gallery": "해외주식갤러리",
+    "title": "테슬라 오늘 주가 예상",
+    "views": 9718,
+    "recommend": 163,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=18010882&exception_mode=recommend&page=1",
+    "time_kst": "10-16 10:54"
+   }
+  ],
+  "top_viewed": [
+   {
+    "gallery": "국내주식갤러리",
+    "title": "하이닉스 개쳐웃기네 ㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋ",
+    "views": 540,
+    "recommend": 7,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3683642&page=5",
+    "time_kst": "10-17 05:01"
+   },
+   {
+    "gallery": "국내주식갤러리",
+    "title": "지금 오선 욕 존나 쳐먹고 있음 ㅋㅋㅋㅋ",
+    "views": 481,
+    "recommend": 1,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3683545&page=7",
+    "time_kst": "10-17 04:15"
+   },
+   {
+    "gallery": "국내주식갤러리",
+    "title": "지금은 저가매수할 자리가 전혀아님",
+    "views": 432,
+    "recommend": 1,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3683592&page=6",
+    "time_kst": "10-17 04:41"
+   },
+   {
+    "gallery": "국내주식갤러리",
+    "title": "근데 차트상으로 반등 한번 나오는 자리긴함",
+    "views": 421,
+    "recommend": 0,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3683563&page=6",
+    "time_kst": "10-17 04:23"
+   },
+   {
+    "gallery": "국내주식갤러리",
+    "title": "하이닉스가 지금 진짜 심각한게",
+    "views": 405,
+    "recommend": 0,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3683567&page=6",
+    "time_kst": "10-17 04:27"
+   },
+   {
+    "gallery": "국내주식갤러리",
+    "title": "다음주 코스피 예상.jpg",
+    "views": 404,
+    "recommend": 0,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3683746&page=3",
+    "time_kst": "10-17 05:46"
+   },
+   {
+    "gallery": "국내주식갤러리",
+    "title": "다음주 코스피 가격 예측 (증거 기반)",
+    "views": 362,
+    "recommend": 0,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3683737&page=3",
+    "time_kst": "10-17 05:40"
+   },
+   {
+    "gallery": "국내주식갤러리",
+    "title": "설마했는데 나선 주봉 진짜 저렇게 끝나네",
+    "views": 332,
+    "recommend": 0,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3683732&page=3",
+    "time_kst": "10-17 05:38"
+   }
+  ]
+ }
+}

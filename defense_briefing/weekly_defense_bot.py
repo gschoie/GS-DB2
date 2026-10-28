@@ -354,14 +354,14 @@ def write_index() -> None:
 {PAGE_CSS}
 .bar{{display:flex;gap:10px;align-items:center;max-width:860px;margin:0 auto 14px;flex-wrap:wrap}}
 .bar h1{{font-size:17px;margin:0;flex:1;min-width:200px}}
-select,button{{background:#161d29;color:#d8dee9;border:1px solid #2c3a52;border-radius:8px;
+select,button{{background:var(--gs-panel,#1c222c);color:var(--gs-ink,#c9d1dc);border:1px solid var(--gs-line-strong,#2e3a4e);border-radius:8px;
   padding:7px 12px;font-size:13.5px;cursor:pointer}}
-.bar a.bundle{{color:#7fb4ff;font-size:12.5px;text-decoration:none;border:1px solid #2c3a52;
+.bar a.bundle{{color:var(--gs-link,#89b9ff);font-size:12.5px;text-decoration:none;border:1px solid var(--gs-line-strong,#2e3a4e);
   border-radius:8px;padding:7px 12px}}
-iframe{{width:100%;height:calc(100vh - 110px);border:1px solid #223046;border-radius:10px;background:#0d1117}}
+iframe{{width:100%;height:calc(100vh - 110px);border:1px solid var(--gs-line,#232e3f);border-radius:10px;background:var(--gs-bg,#161a21)}}
 </style></head><body>
 <div class="bar">
-  <h1>🗓️ 글로벌 방산 주간 정리 <small style="font-size:11px;color:#8b96a8">매주 토 08:00</small></h1>
+  <h1>🗓️ 글로벌 방산 주간 정리 <small style="font-size:11px;color:var(--gs-muted,#8e98a8)">매주 토 08:00</small></h1>
   <a class="bundle" href="defense_weekly/last4weeks.html" target="_blank" rel="noopener" title="월간 세미나(NotebookLM)용 최근 4주 묶음">📦 4주 묶음</a>
   <a class="bundle" href="defense_weekly/last4weeks.md" download="{md_download_name}" title="NotebookLM 업로드용 최근 4주 묶음 마크다운 ({md_download_name})">⬇ 4주 .md</a>
   <a class="bundle" id="mdlink" href="#" title="선택한 주의 마크다운 다운로드">⬇ .md</a>
@@ -382,7 +382,7 @@ sel.onchange=load;
 document.getElementById('prev').onclick=()=>{{if(sel.selectedIndex<DATES.length-1){{sel.selectedIndex++;load()}}}};
 document.getElementById('next').onclick=()=>{{if(sel.selectedIndex>0){{sel.selectedIndex--;load()}}}};
 if(DATES.length)load();
-else fr.srcdoc='<body style="background:#0d1117;color:#8b96a8;font-family:sans-serif;display:flex;align-items:center;justify-content:center;height:100vh;margin:0">아직 주간 정리가 없습니다 — 매주 토요일 08:00에 자동 생성됩니다.</body>';
+else fr.srcdoc='<body style="background:var(--gs-bg,#161a21);color:var(--gs-muted,#8e98a8);font-family:sans-serif;display:flex;align-items:center;justify-content:center;height:100vh;margin:0">아직 주간 정리가 없습니다 — 매주 토요일 08:00에 자동 생성됩니다.</body>';
 </script></body></html>"""
     INDEX_PAGE.write_text(index, encoding="utf-8")
     print(f"[인덱스] defense_weekly_report.html 갱신 (누적 {len(dates)}주)")

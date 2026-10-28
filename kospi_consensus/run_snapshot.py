@@ -57,22 +57,33 @@ def run(limit=None, snapshot_date=None, refresh_universe=False, delay=0.3):
                 print(f"  ⚠ {name}({code}) 분기 수집 오류: {e}")
                 quarters = []
             for q in quarters:
-                db.upsert_consensus(con, snap, code, name, "quarter", q["period"],
-                                    q["sales"], q["op_profit"], q["net_profit"])
-            if quarters:
+                # 실적(A)은 'quarter_actual'로 분리 저장 — 화면 QoQ/YoY 분모용
+                db.upsert_consensus(con, snap, code, name,
+                                    "quarter" if q.get("est") else "quarter_actual",
+                                    q["period"], q["sales"], q["op_profit"], q["net_profit"])
+            if any(q.get("est") for q in quarters):
                 ok_q += 1
 
             try:
-                annual = scrape.scrape_annual(page, code)
+                annual, wq = scrape.scrape_wisereport(page, code)
             except Exception as e:
-                print(f"  ⚠ {name}({code}) 연간 수집 오류: {e}")
-                annual = []
+                print(f"  ⚠ {name}({code}) 와이즈리포트 수집 오류: {e}")
+                annual, wq = [], []
             for row in annual:
-                db.upsert_consensus(con, snap, code, name, "annual", row["period"],
-                                    row["sales"], row["op_profit"], row["net_profit"])
-            if annual:
+                db.upsert_consensus(con, snap, code, name,
+                                    "annual" if row.get("est") else "annual_actual",
+                                    row["period"], row["sales"], row["op_profit"], row["net_profit"])
+            # 분기 그리드: fwd 분기 컨센(당분기+2개, E)이 모바일 API(당분기 1개)보다 넓다.
+            # 같은 (kind, period)는 뒤에 저장되는 이 값이 모바일 값을 덮는다(둘 다 WiseFn 원천).
+            for row in wq:
+                if row["op_profit"] is None:
+                    continue
+                db.upsert_consensus(con, snap, code, name,
+                                    "quarter" if row.get("est") else "quarter_actual",
+                                    row["period"], row["sales"], row["op_profit"], row["net_profit"])
+            if any(r.get("est") for r in annual):
                 ok_a += 1
-            if not quarters and not annual:
+            if not quarters and not annual and not wq:
                 fail += 1
 
             pr = scrape.fetch_close(code, session=session)
@@ -80,8 +91,10 @@ def run(limit=None, snapshot_date=None, refresh_universe=False, delay=0.3):
                 db.upsert_price(con, snap, code, pr["price_date"], pr["close"])
 
             con.commit()
-            e_years = ",".join(r["period"][:4] for r in annual) or "-"
-            q_periods = ",".join(q["period"] for q in quarters) or "-"
+            e_years = ",".join(r["period"][:4] for r in annual if r.get("est")) or "-"
+            q_est = sorted({q["period"] for q in quarters if q.get("est")}
+                           | {r["period"] for r in wq if r.get("est") and r["op_profit"] is not None})
+            q_periods = ",".join(q_est) or "-"
             print(f"[{i}/{total}] {name}({code})  Q={q_periods}  연간E={e_years}")
             time.sleep(delay)
 

@@ -1,0 +1,687 @@
+{
+ "meta": {
+  "company": "대한조선",
+  "sector": "조선",
+  "stock_code": "439260",
+  "corp_code": "00182696",
+  "rcept_no": "20251114000487",
+  "rcept_dt": "20251114",
+  "report_nm": "분기보고서 (2025.09)",
+  "report_type": "quarter",
+  "period": "2025-09",
+  "period_label": "2025.09 3Q",
+  "corrected": false,
+  "dart_url": "https://dart.fss.or.kr/dsaf001/main.do?rcpNo=20251114000487"
+ },
+ "tables": [
+  {
+   "section": [
+    "5. 정관에 관한 사항",
+    "II. 사업의 내용",
+    "1. 사업의 개요"
+   ],
+   "headings": [
+    "나. 주요 사업의 특성",
+    "출처: 산업연구원 (KIET)",
+    "다. 주요 원재료 및 생산능력",
+    "(1) 주요 원재료 등의 현황"
+   ],
+   "context": [
+    "나. 주요 사업의 특성",
+    "조선산업은 대형 구조물인 선박의 건조 과정이 다양하고 복잡하기 때문에 자동화에 한계가 있어 다수의 기술 및 기능 인력을 필요로 하는 노동집약적 산업입니다. 동시에 넓은 공장 부지와 기반 시설이 필요한 장치산업의 특성을 가지고 있으며, 건조기간이 길어 장기간의 운영자금 조달 능력을 갖춰야 하는 자본집약적인 특징도 가지고 있습니다. 조선산업은 주문형 생산방식으로 고객의 요구에 따라 선박의 설계가 달라지며, 수십에서 수만 개의 기자재·부품을 관리하고 적시에 탑재하거나 조립해야 하므로 기술집약적인 성격도 강합니다.",
+    "또한 선박을 발주하는 해운, 에너지, 방위, 레저 및 수산업 등의 전방산업과, 소재 및 부품을 공급하는 철강, 기계, 전기·전자, 화학 등의 후방산업에 대한 연관효과가 큰 산업입니다.",
+    "출처: 산업연구원 (KIET)",
+    "상선의 경우 세계가 단일 시장이고 고객이 한정돼 있어, 자본·기술·노동·전후방산업을 모두 갖춘 한·중·일 3국이 주로 경쟁구도를 이루고 있습니다. 산업과 관련된 생태계를 갖춰야만 종합경쟁력을 보유할 수 있어서 한·중·일을 제외하면 이렇다 할 후발 국가가 없는 상태입니다.",
+    "조선업은 선박의 수주에서 인도까지 통상 2~3년이 소요되는 장기 프로젝트의 특성을 갖고 있는데 반해, 선박대금의 결제조건이 대부분 Heavy-Tail 방식으로 계약이 체결되고 있어, 선박건조를 위한 장기간의 운영자금 조달능력과 함께 철저한 프로젝트 관리 역량이 요구되는 산업입니다.",
+    "다. 주요 원재료 및 생산능력",
+    "(1) 주요 원재료 등의 현황",
+    "(기준일: 2025년 09월 30일) (단위: 백만원)"
+   ],
+   "unit": "(기준일: 2025년 09월 30일) (단위: 백만원)",
+   "topic": "material",
+   "keywords": [
+    "1) 주요 원재료 등의 현황",
+    "매입액",
+    "주요 매입처"
+   ],
+   "keyword_in": "table",
+   "rows": [
+    [
+     "매입유형",
+     "품목",
+     "구체적 용도",
+     "매입액 (비중)",
+     "주요 매입처"
+    ],
+    [
+     "원재료",
+     "강재",
+     "선박 건조",
+     "156,850 (35.62%)",
+     "TOP(HK) COMMODITIES, HOWA TRADING, 현대제철 등"
+    ],
+    [
+     "기자재",
+     "선박 건조",
+     "98,354 (22.34%)",
+     "강림중공업, SHINKO, 디에이취엠씨 등"
+    ],
+    [
+     "의장재",
+     "선박 건조",
+     "76,511 (17.38%)",
+     "신광피엔텍, 형원산업, 대보이엔지 등"
+    ],
+    [
+     "엔진",
+     "선박 건조",
+     "64,910 (14.74%)",
+     "HD현대중공업, YANMAR 등"
+    ],
+    [
+     "기타",
+     "선박 건조",
+     "43,695 (9.92%)",
+     "츄고쿠삼화페인트, 조광요턴, 네이처코퍼레이션 등"
+    ],
+    [
+     "합계",
+     "440,320(100.00%)",
+     ""
+    ]
+   ],
+   "html": "<table aclass=\"NORMAL\" afixtable=\"N\" border=\"1\" width=\"685\">\n<colgroup width=\"685\">\n<col width=\"78\"/>\n<col width=\"111\"/>\n<col width=\"111\"/>\n<col width=\"111\"/>\n<col width=\"274\"/>\n</colgroup>\n<thead>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"53\">\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"46\" valign=\"MIDDLE\" width=\"69\">매입유형</th>\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"46\" valign=\"MIDDLE\" width=\"102\">품목</th>\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"46\" valign=\"MIDDLE\" width=\"102\">구체적 용도</th>\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"46\" valign=\"MIDDLE\" width=\"102\">매입액 (비중)</th>\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"46\" valign=\"MIDDLE\" width=\"265\">주요 매입처</th>\n</tr>\n</thead>\n<tbody>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"53\">\n<td align=\"CENTER\" height=\"258\" rowspan=\"5\" valign=\"MIDDLE\" width=\"69\">원재료</td>\n<td align=\"CENTER\" height=\"46\" valign=\"MIDDLE\" width=\"102\">강재</td>\n<td align=\"CENTER\" height=\"46\" valign=\"MIDDLE\" width=\"102\">선박 건조</td>\n<td align=\"RIGHT\" height=\"46\" valign=\"MIDDLE\" width=\"102\">156,850 (35.62%)</td>\n<td align=\"CENTER\" height=\"46\" valign=\"MIDDLE\" width=\"265\">TOP(HK) COMMODITIES, HOWA TRADING, 현대제철 등</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"53\">\n<td align=\"CENTER\" height=\"46\" valign=\"MIDDLE\" width=\"102\">기자재</td>\n<td align=\"CENTER\" height=\"46\" valign=\"MIDDLE\" width=\"102\">선박 건조</td>\n<td align=\"RIGHT\" height=\"46\" valign=\"MIDDLE\" width=\"102\">98,354 (22.34%)</td>\n<td align=\"CENTER\" height=\"46\" valign=\"MIDDLE\" width=\"265\">강림중공업, SHINKO, 디에이취엠씨 등</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"53\">\n<td align=\"CENTER\" height=\"46\" valign=\"MIDDLE\" width=\"102\">의장재</td>\n<td align=\"CENTER\" height=\"46\" valign=\"MIDDLE\" width=\"102\">선박 건조</td>\n<td align=\"RIGHT\" height=\"46\" valign=\"MIDDLE\" width=\"102\">76,511 (17.38%)</td>\n<td align=\"CENTER\" height=\"46\" valign=\"MIDDLE\" width=\"265\">신광피엔텍, 형원산업, 대보이엔지 등</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"53\">\n<td align=\"CENTER\" height=\"46\" valign=\"MIDDLE\" width=\"102\">엔진</td>\n<td align=\"CENTER\" height=\"46\" valign=\"MIDDLE\" width=\"102\">선박 건조</td>\n<td align=\"RIGHT\" height=\"46\" valign=\"MIDDLE\" width=\"102\">64,910 (14.74%)</td>\n<td align=\"CENTER\" height=\"46\" valign=\"MIDDLE\" width=\"265\">HD현대중공업, YANMAR 등</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"53\">\n<td align=\"CENTER\" height=\"46\" valign=\"MIDDLE\" width=\"102\">기타</td>\n<td align=\"CENTER\" height=\"46\" valign=\"MIDDLE\" width=\"102\">선박 건조</td>\n<td align=\"RIGHT\" height=\"46\" valign=\"MIDDLE\" width=\"102\">43,695 (9.92%)</td>\n<td align=\"CENTER\" height=\"46\" valign=\"MIDDLE\" width=\"265\">츄고쿠삼화페인트, 조광요턴, 네이처코퍼레이션 등</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"53\">\n<td align=\"CENTER\" colspan=\"3\" height=\"46\" valign=\"MIDDLE\" width=\"291\">합계</td>\n<td align=\"RIGHT\" height=\"46\" valign=\"MIDDLE\" width=\"102\">440,320(100.00%)</td>\n<td align=\"CENTER\" height=\"46\" valign=\"MIDDLE\" width=\"265\"></td>\n</tr>\n</tbody>\n</table>",
+   "footnotes": [],
+   "digest": "d12833451da4",
+   "file": "20251114000487.xml"
+  },
+  {
+   "section": [
+    "5. 정관에 관한 사항",
+    "II. 사업의 내용",
+    "1. 사업의 개요"
+   ],
+   "headings": [
+    "(2) 생산능력"
+   ],
+   "context": [
+    "(2) 생산능력",
+    "(단위: GT)"
+   ],
+   "unit": "(단위: GT)",
+   "topic": "capacity",
+   "keywords": [
+    "생산능력"
+   ],
+   "keyword_in": "heading",
+   "rows": [
+    [
+     "품 목",
+     "2025년 3분기말",
+     "2024년",
+     "2023년"
+    ],
+    [
+     "선박",
+     "698,148GT",
+     "930,864GT",
+     "930,864GT"
+    ]
+   ],
+   "html": "<table aclass=\"NORMAL\" afixtable=\"N\" border=\"1\" width=\"571\">\n<colgroup width=\"571\">\n<col width=\"143\"/>\n<col width=\"143\"/>\n<col width=\"143\"/>\n<col width=\"142\"/>\n</colgroup>\n<thead>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"30\">\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"23\" valign=\"MIDDLE\" width=\"134\">품  목</th>\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"23\" valign=\"MIDDLE\" width=\"134\">2025년 3분기말</th>\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"23\" valign=\"MIDDLE\" width=\"134\">2024년</th>\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"23\" valign=\"MIDDLE\" width=\"133\">2023년</th>\n</tr>\n</thead>\n<tbody>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"30\">\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"134\">선박</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"134\">698,148GT</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"134\">930,864GT</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"133\">930,864GT</td>\n</tr>\n</tbody>\n</table>",
+   "footnotes": [],
+   "digest": "4c4f222cfbfc",
+   "file": "20251114000487.xml"
+  },
+  {
+   "section": [
+    "5. 정관에 관한 사항",
+    "II. 사업의 내용",
+    "1. 사업의 개요"
+   ],
+   "headings": [],
+   "context": [],
+   "unit": "",
+   "topic": "capacity",
+   "keywords": [
+    "생산능력"
+   ],
+   "keyword_in": "table",
+   "rows": [
+    [
+     "(주1)",
+     "당사 주력선인 원유운반선(Suezmax급)을 1년간 11척 연속 건조할 경우 생산능력 입니다."
+    ],
+    [
+     "(주2)",
+     "도크의 최대 건조 가능 용량 기준으로 최대 생산 능력은 건조중인 선박 구성, 공사기간 단축 등에 따라 증감이 가능합니다."
+    ]
+   ],
+   "html": "<table aclass=\"NORMAL\" afixtable=\"N\" border=\"0\" width=\"570\">\n<colgroup width=\"570\">\n<col width=\"60\"/>\n<col width=\"510\"/>\n</colgroup>\n<tbody>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"53\">\n<td height=\"46\" valign=\"MIDDLE\" width=\"51\">(주1)</td>\n<td height=\"46\" valign=\"MIDDLE\" width=\"501\">당사 주력선인 원유운반선(Suezmax급)을 1년간 11척 연속 건조할 경우 생산능력 입니다.</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"53\">\n<td height=\"46\" valign=\"MIDDLE\" width=\"51\">(주2)</td>\n<td height=\"46\" valign=\"MIDDLE\" width=\"501\">도크의 최대 건조 가능 용량 기준으로 최대 생산 능력은 건조중인 선박 구성, 공사기간 단축 등에 따라 증감이 가능합니다.</td>\n</tr>\n</tbody>\n</table>",
+   "footnotes": [],
+   "digest": "92c1a1911a55",
+   "file": "20251114000487.xml"
+  },
+  {
+   "section": [
+    "II. 사업의 내용",
+    "1. 사업의 개요",
+    "2. 주요 제품 및 서비스"
+   ],
+   "headings": [
+    "나. 주요 제품 등의 가격변동 추이"
+   ],
+   "context": [
+    "나. 주요 제품 등의 가격변동 추이",
+    "(단위: 백만 USD)"
+   ],
+   "unit": "(단위: 백만 USD)",
+   "topic": "product_price",
+   "keywords": [
+    "나. 주요 제품 등의 가격변동 추이"
+   ],
+   "keyword_in": "heading",
+   "rows": [
+    [
+     "품 목",
+     "제39기 3분기",
+     "제38기",
+     "제37기"
+    ],
+    [
+     "원유운반선",
+     "수에즈막스(Suezmax)",
+     "85.5",
+     "90.0",
+     "85.0"
+    ],
+    [
+     "아프라막스(Aframax)",
+     "72.0",
+     "75.0",
+     "70.0"
+    ],
+    [
+     "정유운반선",
+     "아프라막스(Aframax)",
+     "75.0",
+     "78.0",
+     "72.5"
+    ],
+    [
+     "컨테이너선(*1)",
+     "8,500 ~ 9,500 TEU",
+     "106.0",
+     "101.0",
+     "93.5"
+    ]
+   ],
+   "html": "<table aclass=\"NORMAL\" afixtable=\"N\" border=\"1\" width=\"615\">\n<colgroup width=\"615\">\n<col width=\"120\"/>\n<col width=\"177\"/>\n<col width=\"106\"/>\n<col width=\"106\"/>\n<col width=\"106\"/>\n</colgroup>\n<thead>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"53\">\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" colspan=\"2\" height=\"46\" valign=\"MIDDLE\" width=\"288\">품 목</th>\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"46\" valign=\"MIDDLE\" width=\"97\">제39기 3분기</th>\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"46\" valign=\"MIDDLE\" width=\"97\">제38기</th>\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"46\" valign=\"MIDDLE\" width=\"97\">제37기</th>\n</tr>\n</thead>\n<tbody>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"30\">\n<td align=\"CENTER\" height=\"53\" rowspan=\"2\" valign=\"MIDDLE\" width=\"111\">원유운반선</td>\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"168\">수에즈막스(Suezmax)</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"97\">85.5</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"97\">90.0</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"97\">85.0</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"30\">\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"168\">아프라막스(Aframax)</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"97\">72.0</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"97\">75.0</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"97\">70.0</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"30\">\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"111\">정유운반선</td>\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"168\">아프라막스(Aframax)</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"97\">75.0</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"97\">78.0</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"97\">72.5</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"30\">\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"111\">컨테이너선(*1)</td>\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"168\">8,500 ~ 9,500 TEU</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"97\">106.0</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"97\">101.0</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"97\">93.5</td>\n</tr>\n</tbody>\n</table>",
+   "footnotes": [],
+   "digest": "9abc43b3a50c",
+   "file": "20251114000487.xml"
+  },
+  {
+   "section": [
+    "1. 사업의 개요",
+    "2. 주요 제품 및 서비스",
+    "3. 원재료 및 생산설비"
+   ],
+   "headings": [
+    "나. 원재료의 가격 변동 원인"
+   ],
+   "context": [
+    "나. 원재료의 가격 변동 원인"
+   ],
+   "unit": "",
+   "topic": "material_price",
+   "keywords": [
+    "나. 원재료의 가격 변동 원인"
+   ],
+   "keyword_in": "heading",
+   "rows": [
+    [
+     "주요 제품명",
+     "분류",
+     "품 목",
+     "가격 변동 원인"
+    ],
+    [
+     "선박",
+     "강재",
+     "후판, 형강",
+     "철광석과 원료탄 가격 변동, 철강재 수급상황 등"
+    ],
+    [
+     "기자재",
+     "Main Engine, Diesel Generator Engine, Cargo Oil Pump",
+     "사양 변경, SLOT 현황 등"
+    ],
+    [
+     "Aux. Boiler, Deck Machinery, SOx Scrubber",
+     "사양 변경, 제조사의 원자재 수급 상황 등"
+    ],
+    [
+     "Fixed Pitch, Propeller",
+     "구리 LME 시세 등"
+    ],
+    [
+     "기타",
+     "페인트, 케이블 등",
+     "석유계 원료, 구리 LME 시세 가격 변동 등"
+    ]
+   ],
+   "html": "<table aclass=\"NORMAL\" afixtable=\"N\" border=\"1\" width=\"879\">\n<colgroup width=\"879\">\n<col width=\"98\"/>\n<col width=\"63\"/>\n<col width=\"380\"/>\n<col width=\"338\"/>\n</colgroup>\n<thead>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"30\">\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"23\" valign=\"MIDDLE\" width=\"89\">주요 제품명</th>\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"23\" valign=\"MIDDLE\" width=\"54\">분류</th>\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"23\" valign=\"MIDDLE\" width=\"371\">품 목</th>\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"23\" valign=\"MIDDLE\" width=\"329\">가격 변동 원인</th>\n</tr>\n</thead>\n<tbody>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"30\">\n<td align=\"CENTER\" height=\"143\" rowspan=\"5\" valign=\"MIDDLE\" width=\"89\">선박</td>\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"54\">강재</td>\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"371\">후판, 형강</td>\n<td height=\"23\" valign=\"MIDDLE\" width=\"329\">철광석과 원료탄 가격 변동, 철강재 수급상황 등</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"30\">\n<td align=\"CENTER\" height=\"83\" rowspan=\"3\" valign=\"MIDDLE\" width=\"54\">기자재</td>\n<td height=\"23\" valign=\"MIDDLE\" width=\"371\">Main Engine, Diesel Generator Engine, Cargo Oil Pump</td>\n<td height=\"23\" valign=\"MIDDLE\" width=\"329\">사양 변경, SLOT 현황 등</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"30\">\n<td height=\"23\" valign=\"MIDDLE\" width=\"371\">Aux. Boiler, Deck Machinery, SOx Scrubber</td>\n<td height=\"23\" valign=\"MIDDLE\" width=\"329\">사양 변경, 제조사의 원자재 수급 상황 등</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"30\">\n<td height=\"23\" valign=\"MIDDLE\" width=\"371\">Fixed Pitch, Propeller</td>\n<td height=\"23\" valign=\"MIDDLE\" width=\"329\">구리 LME 시세 등</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"30\">\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"54\">기타</td>\n<td height=\"23\" valign=\"MIDDLE\" width=\"371\">페인트, 케이블 등</td>\n<td height=\"23\" valign=\"MIDDLE\" width=\"329\">석유계 원료, 구리 LME 시세 가격 변동 등</td>\n</tr>\n</tbody>\n</table>",
+   "footnotes": [],
+   "digest": "b0c88c9681b2",
+   "file": "20251114000487.xml"
+  },
+  {
+   "section": [
+    "1. 사업의 개요",
+    "2. 주요 제품 및 서비스",
+    "3. 원재료 및 생산설비"
+   ],
+   "headings": [
+    "[주요 원재료 등의 가격변동추이]"
+   ],
+   "context": [
+    "[주요 원재료 등의 가격변동추이]"
+   ],
+   "unit": "",
+   "topic": "material_price",
+   "keywords": [
+    "[주요 원재료 등의 가격변동추이]"
+   ],
+   "keyword_in": "heading",
+   "rows": [
+    [
+     "품목",
+     "2025년 3분기",
+     "2024년",
+     "2023년"
+    ],
+    [
+     "STEEL PLATE(원/TON)",
+     "914,167",
+     "958,500",
+     "1,130,000"
+    ],
+    [
+     "형강(원/TON)",
+     "838,444",
+     "878,000",
+     "1,020,000"
+    ],
+    [
+     "PAINT($/리터): EPOXT",
+     "$4.12",
+     "$3.83",
+     "$3.92"
+    ]
+   ],
+   "html": "<table aclass=\"NORMAL\" afixtable=\"N\" border=\"1\" width=\"508\">\n<colgroup width=\"508\">\n<col width=\"178\"/>\n<col width=\"110\"/>\n<col width=\"110\"/>\n<col width=\"110\"/>\n</colgroup>\n<thead>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"30\">\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"23\" valign=\"MIDDLE\" width=\"169\">품목</th>\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"23\" valign=\"MIDDLE\" width=\"101\">2025년 3분기</th>\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"23\" valign=\"MIDDLE\" width=\"101\">2024년</th>\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"23\" valign=\"MIDDLE\" width=\"101\">2023년</th>\n</tr>\n</thead>\n<tbody>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"30\">\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"169\"> STEEL PLATE(원/TON)</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"101\">914,167 </td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"101\">958,500 </td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"101\">1,130,000 </td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"30\">\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"169\">형강(원/TON)</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"101\">838,444 </td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"101\">878,000 </td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"101\">1,020,000 </td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"30\">\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"169\"> PAINT($/리터): EPOXT</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"101\">$4.12</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"101\">$3.83 </td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"101\">$3.92 </td>\n</tr>\n</tbody>\n</table>",
+   "footnotes": [],
+   "digest": "097ff4293f50",
+   "file": "20251114000487.xml"
+  },
+  {
+   "section": [
+    "1. 사업의 개요",
+    "2. 주요 제품 및 서비스",
+    "3. 원재료 및 생산설비"
+   ],
+   "headings": [
+    "(2) 생산실적"
+   ],
+   "context": [
+    "(2) 생산실적",
+    "(단위: 백만원)"
+   ],
+   "unit": "(단위: 백만원)",
+   "topic": "capacity",
+   "keywords": [
+    "생산실적"
+   ],
+   "keyword_in": "heading",
+   "rows": [
+    [
+     "품목",
+     "주요 제품",
+     "제39기 3분기",
+     "제38기",
+     "제37기"
+    ],
+    [
+     "선박",
+     "원유운반선(*1)",
+     "761,300",
+     "486,636",
+     "374,413"
+    ],
+    [
+     "정유운반선(*2)",
+     "109,887",
+     "379,789",
+     "99,065"
+    ],
+    [
+     "컨테이너선(*3)",
+     "-",
+     "199,471",
+     "329,410"
+    ],
+    [
+     "기타",
+     "-",
+     "6,536",
+     "9,416",
+     "13,485"
+    ],
+    [
+     "합 계",
+     "877,723",
+     "1,075,312",
+     "816,373"
+    ]
+   ],
+   "html": "<table aclass=\"NORMAL\" afixtable=\"N\" border=\"1\" width=\"612\">\n<colgroup width=\"612\">\n<col width=\"48\"/>\n<col width=\"159\"/>\n<col width=\"135\"/>\n<col width=\"135\"/>\n<col width=\"135\"/>\n</colgroup>\n<thead>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"30\">\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"23\" valign=\"MIDDLE\" width=\"39\">품목</th>\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"23\" valign=\"MIDDLE\" width=\"150\">주요 제품</th>\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"23\" valign=\"MIDDLE\" width=\"126\">제39기 3분기</th>\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"23\" valign=\"MIDDLE\" width=\"126\">제38기</th>\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"23\" valign=\"MIDDLE\" width=\"126\">제37기</th>\n</tr>\n</thead>\n<tbody>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"30\">\n<td align=\"CENTER\" height=\"83\" rowspan=\"3\" valign=\"MIDDLE\" width=\"39\">선박</td>\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"150\">원유운반선(*1)</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"126\">761,300</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"126\">486,636</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"126\">374,413</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"30\">\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"150\">정유운반선(*2)</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"126\">109,887</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"126\">379,789</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"126\">99,065</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"30\">\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"150\">컨테이너선(*3)</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"126\">-</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"126\">199,471</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"126\">329,410</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"30\">\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"39\">기타</td>\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"150\">-</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"126\">6,536</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"126\">9,416</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"126\">13,485</td>\n</tr>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"30\">\n<td align=\"CENTER\" colspan=\"2\" height=\"23\" valign=\"MIDDLE\" width=\"198\">합 계</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"126\">877,723</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"126\">1,075,312</td>\n<td align=\"RIGHT\" height=\"23\" valign=\"MIDDLE\" width=\"126\">816,373</td>\n</tr>\n</tbody>\n</table>",
+   "footnotes": [],
+   "digest": "88072ef08675",
+   "file": "20251114000487.xml"
+  },
+  {
+   "section": [
+    "1. 사업의 개요",
+    "2. 주요 제품 및 서비스",
+    "3. 원재료 및 생산설비"
+   ],
+   "headings": [
+    "(3) 당해 사업연도의 가동률"
+   ],
+   "context": [
+    "(3) 당해 사업연도의 가동률",
+    "(기준일: 2025년 09월 30일) (단위: 천MH, %)"
+   ],
+   "unit": "(기준일: 2025년 09월 30일) (단위: 천MH, %)",
+   "topic": "capacity",
+   "keywords": [
+    "가동률"
+   ],
+   "keyword_in": "table",
+   "rows": [
+    [
+     "품목",
+     "당분기 가동가능시간(생산가능량)",
+     "당분기 실제가동시간 (실제 생산량)",
+     "평균가동률"
+    ],
+    [
+     "선박",
+     "2,483",
+     "2,488",
+     "100.2%"
+    ]
+   ],
+   "html": "<table aclass=\"NORMAL\" afixtable=\"N\" border=\"1\" width=\"611\">\n<colgroup width=\"611\">\n<col width=\"153\"/>\n<col width=\"153\"/>\n<col width=\"153\"/>\n<col width=\"152\"/>\n</colgroup>\n<thead>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"53\">\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"46\" usermark=\"BC0XDCDCDC\" valign=\"MIDDLE\" width=\"144\">품목</th>\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"46\" usermark=\"BC0XDCDCDC\" valign=\"MIDDLE\" width=\"144\">당분기 가동가능시간(생산가능량)</th>\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"46\" usermark=\"BC0XDCDCDC\" valign=\"MIDDLE\" width=\"144\">당분기 실제가동시간 (실제 생산량)</th>\n<th acopycol=\"Y\" adeletecol=\"Y\" amovecol=\"N\" height=\"46\" usermark=\"BC0XDCDCDC\" valign=\"MIDDLE\" width=\"143\">평균가동률</th>\n</tr>\n</thead>\n<tbody>\n<tr acopy=\"Y\" adelete=\"Y\" height=\"30\">\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"144\">선박</td>\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"144\">2,483</td>\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"144\">2,488</td>\n<td align=\"CENTER\" height=\"23\" valign=\"MIDDLE\" width=\"143\">100.2%</td>\n</tr>\n</tbody>\n</table>",
+   "footnotes": [],
+   "digest": "60cade432e76",
+   "file": "20251114000487.xml"
+  }
+ ],
+ "rejected": [
+  {
+   "section": [
+    "1. 사업의 개요",
+    "2. 주요 제품 및 서비스",
+    "3. 원재료 및 생산설비"
+   ],
+   "headings": [
+    "(가) 산출기준 및 방법"
+   ],
+   "context": [
+    "(가) 산출기준 및 방법"
+   ],
+   "unit": "",
+   "topic": "",
+   "keywords": [
+    "생산능력"
+   ],
+   "keyword_in": "",
+   "rows": [
+    [
+     "구 분",
+     "내 용"
+    ],
+    [
+     "산출기준",
+     "- 도크의 최대 건조 가능 용량 기준 - 최대 생산 능력은 Product Mix, 공기단축 등에 따라 증감 가능"
+    ],
+    [
+     "산출방법",
+     "- #1Dock(LxBxD=460x72x10m)에서 당사 주력의 원유운반선(Suezmax급) 11척 연속 건조 기준 생산능력"
+    ]
+   ],
+   "html": "",
+   "footnotes": [],
+   "digest": "ff533ab8cd0e",
+   "why": "셀 전체가 지표명이 아니거나 멀리 있는 문장에만 키워드",
+   "file": "20251114000487.xml"
+  },
+  {
+   "section": [
+    "1. 사업의 개요",
+    "2. 주요 제품 및 서비스",
+    "3. 원재료 및 생산설비"
+   ],
+   "headings": [],
+   "context": [],
+   "unit": "",
+   "topic": "",
+   "keywords": [
+    "가동률"
+   ],
+   "keyword_in": "",
+   "rows": [
+    [
+     "(주1)",
+     "당분기 가동가능시간(생산가능량) - 정상조업도에 해당하는 '25년 3분기 투입 M/H(Man Hour) 기준- 평균생산인원 X 조업가능일수 X 목표출근율 X 목표근무시간 X 월별 목표능률"
+    ],
+    [
+     "(주2)",
+     "평균가동률 = 당분기 실제가동시간 ÷ 당분기 가동가능시간"
+    ]
+   ],
+   "html": "",
+   "footnotes": [],
+   "digest": "f77ca38d4647",
+   "why": "셀 전체가 지표명이 아니거나 멀리 있는 문장에만 키워드",
+   "file": "20251114000487.xml"
+  },
+  {
+   "section": [
+    "1. 사업의 개요",
+    "2. 주요 제품 및 서비스",
+    "3. 원재료 및 생산설비"
+   ],
+   "headings": [
+    "마. 설비 등에 대한 투자현황"
+   ],
+   "context": [
+    "마. 설비 등에 대한 투자현황",
+    "(1) 진행중인 투자당 분기말 기준 진행중인 주요 투자내역은 아래와 같습니다.",
+    "(기준일: 2025년 09월 30일) (단위: 백만원)"
+   ],
+   "unit": "(기준일: 2025년 09월 30일) (단위: 백만원)",
+   "topic": "",
+   "keywords": [
+    "생산능력"
+   ],
+   "keyword_in": "",
+   "rows": [
+    [
+     "투자내용",
+     "투자 기간",
+     "투자대상 자산",
+     "투자효과",
+     "총 투자액",
+     "기 투자액 (당분기 누적분)",
+     "당해 투자 잔여액 (2025년)",
+     "향후 투자액"
+    ],
+    [
+     "R&D센터",
+     "'24.04 ~ '26.05",
+     "건물",
+     "생산능력증가",
+     "22,140",
+     "3,720",
+     "10,985",
+     "7,435"
+    ],
+    [
+     "ERP투자",
+     "'23.05 ~ '26.12",
+     "소프트웨어",
+     "생산능력증가",
+     "7,243",
+     "3,547",
+     "2,354",
+     "1,342"
+    ]
+   ],
+   "html": "",
+   "footnotes": [],
+   "digest": "e3e29e715ad8",
+   "why": "셀 전체가 지표명이 아니거나 멀리 있는 문장에만 키워드",
+   "file": "20251114000487.xml"
+  },
+  {
+   "section": [
+    "1. 사업의 개요",
+    "2. 주요 제품 및 서비스",
+    "3. 원재료 및 생산설비"
+   ],
+   "headings": [
+    "(2) 향후 투자계획"
+   ],
+   "context": [
+    "(주1) 청년문화센터 : 당사부담금(10.8억원) 외 정부지원 사업비 74.9억원 투입 예정으로 상기 표에는 기재되지 않았습니다.",
+    "(2) 향후 투자계획",
+    "(단위: 백만원)"
+   ],
+   "unit": "(단위: 백만원)",
+   "topic": "",
+   "keywords": [
+    "생산능력"
+   ],
+   "keyword_in": "",
+   "rows": [
+    [
+     "계획명칭",
+     "예상투자총액",
+     "연도별 예상투자액",
+     "투자효과"
+    ],
+    [
+     "자산형태",
+     "금 액",
+     "2026년",
+     "2027년",
+     "2028년"
+    ],
+    [
+     "생산설비 外",
+     "기계장치外",
+     "14,479",
+     "14,479",
+     "-",
+     "-",
+     "생산능력 증가外"
+    ]
+   ],
+   "html": "",
+   "footnotes": [],
+   "digest": "55830ddbf2db",
+   "why": "셀 전체가 지표명이 아니거나 멀리 있는 문장에만 키워드",
+   "file": "20251114000487.xml"
+  },
+  {
+   "section": [
+    "30. 담보제공자산 (연결)",
+    "4. 재무제표",
+    "4-1. 재무상태표"
+   ],
+   "headings": [
+    "4. 재무제표",
+    "4-1. 재무상태표"
+   ],
+   "context": [
+    "담보로 제공된 자산에 대한 추가 정보 기술 상기 이외에 한국산업은행 등과 체결된 선수금환급보증과 관련하여, 수출 목적물 및 원재료를 양도담보로 제공하고 있으며, 연결회사의 유형자산에 대하여 기업종합보험을 가입하고 있으며, 보험가입 금액에 대하여 한국산업은행에 436,677,435천원의 질권이 설정되어 있습니다(주석 10 참조).",
+    "4. 재무제표",
+    "4-1. 재무상태표",
+    "재무상태표 제 39 기 3분기말 2025.09.30 현재 제 38 기말 2024.12.31 현재 (단위 : 원)"
+   ],
+   "unit": "재무상태표 제 39 기 3분기말 2025.09.30 현재 제 38 기말 2024.12.31 현재 (단위 : 원)",
+   "topic": "",
+   "keywords": [
+    "원재료"
+   ],
+   "keyword_in": "",
+   "rows": [
+    [
+     "",
+     "제 39 기 3분기말",
+     "제 38 기말"
+    ]
+   ],
+   "html": "",
+   "footnotes": [],
+   "digest": "3cbc1a51e9ba",
+   "why": "셀 전체가 지표명이 아니거나 멀리 있는 문장에만 키워드",
+   "file": "20251114000487.xml"
+  },
+  {
+   "section": [
+    "30. 우발부채 및 약정사항",
+    "31. 담보제공자산",
+    "6. 배당에 관한 사항"
+   ],
+   "headings": [
+    "6. 배당에 관한 사항",
+    "가. 배당정책"
+   ],
+   "context": [
+    "담보로 제공된 자산에 대한 추가 정보 기술 상기 이외에 한국산업은행 등과 체결된 선수금환급보증과 관련하여, 수출 목적물 및 원재료를 양도담보로 제공하고 있으며, 당사의 유형자산에 대하여 기업종합보험을 가입하고 있으며, 보험가입 금액에 대하여 한국산업은행에 436,677,435천원의 질권이 설정되어 있습니다(주석 10 참조).",
+    "6. 배당에 관한 사항",
+    "가. 배당정책",
+    "당사의 배당은 배당가능이익 범위내에서 회사의 이익규모, 미래성장을 위한 투자계획 및 재무구조 등을 종합적으로 감안하여 결정하고 있습니다. 당사는 정관에 의거 이사회 결의 및 주주총회의 승인을 통하여 금전과 주식으로 이익 배당을 할 수 있습니다. 향후 주주가치 제고와 주주환원 확대를 위해 투자, Cash Flow, 재무구조, 배당 안정성을 종합적으로 고려하여 배당을 결정할 계획입니다. 정관상 배당에 관한 사항은 다음과 같습니다."
+   ],
+   "unit": "",
+   "topic": "",
+   "keywords": [
+    "원재료"
+   ],
+   "keyword_in": "",
+   "rows": [
+    [
+     "구분",
+     "내용"
+    ],
+    [
+     "제9조의 2 동등배당",
+     "본 회사는 배당 기준일 현재 발행(전환된 경우를 포함한다)된 동종 주식에 대하여 발행일에 관계없이 모두 동등하게 배당한다."
+    ],
+    [
+     "제59조 이익배당",
+     "① 이익의 배당은 금전, 주식 및 기타의 재산으로 할 수 있다.② 본 회사는 이사회결의로 제1항의 배당을 받을 주주를 확정하기 위한 기준일을 정할 수 있으며, 기준일을 정한 경우 그 기준일의 2주 전에 이를공고하여야 한다."
+    ]
+   ],
+   "html": "",
+   "footnotes": [],
+   "digest": "d0752a87e8bc",
+   "why": "셀 전체가 지표명이 아니거나 멀리 있는 문장에만 키워드",
+   "file": "20251114000487.xml"
+  }
+ ]
+}

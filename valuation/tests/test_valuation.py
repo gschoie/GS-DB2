@@ -18,17 +18,17 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 import fetch_valuation as fv
 import naver_consensus as nc
 
-_REAL_READ_TABLES = nc.read_tables
+_REAL_FETCH_FINANCE = nc.fetch_finance
 
 
 def setUpModule():
-    """collect() 는 .KS 종목마다 네이버 컨센을 부른다 → 테스트에서는 끊는다.
-    (빈 표를 주면 estimates() 가 조용히 {} 를 돌려주고 기존 산출값이 남는다)"""
-    nc.read_tables = lambda *a, **k: []
+    """collect() 는 .KS 종목마다 네이버 모바일 금융 API를 부른다 → 테스트에서는 끊는다.
+    (None 을 주면 estimates/financial_rows 가 조용히 비고 기존 산출값이 남는다)"""
+    nc.fetch_finance = lambda *a, **k: None
 
 
 def tearDownModule():
-    nc.read_tables = _REAL_READ_TABLES
+    nc.fetch_finance = _REAL_FETCH_FINANCE
 
 
 def frame(rows, periods):
@@ -42,6 +42,7 @@ INCOME = frame({
     "Total Revenue":  [1000.0, 1200.0, 1400.0, 1600.0],
     "Net Income":     [100.0,  120.0,  140.0,  160.0],
     "EBITDA":         [200.0,  240.0,  280.0,  320.0],
+    "Operating Income": [150.0, 180.0, 210.0, 240.0],
     "Diluted Average Shares": [100.0, 100.0, 100.0, 100.0],
 }, PERIODS)
 
@@ -60,13 +61,21 @@ HISTORY = pd.DataFrame(
 EARNINGS_EST = pd.DataFrame({"avg": [0.5, 0.6, 2.0, 2.4]}, index=["0q", "+1q", "0y", "+1y"])
 REVENUE_EST = pd.DataFrame({"avg": [400.0, 450.0, 1800.0, 2100.0]}, index=["0q", "+1q", "0y", "+1y"])
 
+QUARTER_PERIODS = [pd.Timestamp(d) for d in
+                   ("2025-06-30", "2025-09-30", "2025-12-31", "2026-03-31", "2026-06-30")]
+QUARTERLY = frame({
+    "Total Revenue":    [300.0, 310.0, 320.0, 330.0, 340.0],
+    "Operating Income": [30.0,  31.0,  32.0,  33.0,  34.0],
+    "Net Income":       [20.0,  21.0,  22.0,  23.0,  24.0],
+}, QUARTER_PERIODS)
+
 # 환율 시계열(주가통화 → 재무통화). 전 구간 0.5로 두면 환산 검산이 단순해진다.
 FX_HISTORY = pd.DataFrame({"Close": [0.5] * 5}, index=HISTORY.index)
 
 
 class FakeTicker:
     def __init__(self, info=None, history=None, income=None, balance=None,
-                 earnings=None, revenue=None):
+                 earnings=None, revenue=None, quarterly=None):
         self.info = info if info is not None else {"currency": "KRW", "financialCurrency": "KRW",
                                                    "payoutRatio": 0.2}
         self._history = HISTORY if history is None else history
@@ -74,6 +83,7 @@ class FakeTicker:
         self.balance_sheet = BALANCE if balance is None else balance
         self.earnings_estimate = EARNINGS_EST if earnings is None else earnings
         self.revenue_estimate = REVENUE_EST if revenue is None else revenue
+        self.quarterly_income_stmt = QUARTERLY if quarterly is None else quarterly
 
     def history(self, **kwargs):
         return self._history
@@ -159,6 +169,172 @@ class ForwardConsensus(unittest.TestCase):
             self.assertIsNone(far[metric])
 
 
+class FinancialDetails(unittest.TestCase):
+    """회사 행 클릭 시 펼치는 재무 상세(매출·영업이익·순이익·OPM·NPM) 조립 검산."""
+
+    def setUp(self):
+        self.fin = run(FakeTicker())["financials"]
+
+    def test_annual_covers_all_yahoo_years_plus_consensus(self):
+        labels = [r["label"] for r in self.fin["annual"]]
+        self.assertEqual(labels, ["2022", "2023", "2024", "2025", "2026E", "2027E"])
+
+    def test_annual_margins(self):
+        y = {r["label"]: r for r in self.fin["annual"]}["2025"]
+        self.assertEqual(y["revenue"], 1600)
+        self.assertEqual(y["op"], 240)
+        self.assertEqual(y["ni"], 160)
+        self.assertEqual(y["opm"], 15.0)
+        self.assertEqual(y["npm"], 10.0)
+
+    def test_consensus_year_has_no_operating_income(self):
+        # 야후에 영업이익 컨센 항목이 없다 → E 줄의 영업이익·OPM 은 공란이 정직하다.
+        e = {r["label"]: r for r in self.fin["annual"]}["2026E"]
+        self.assertIsNone(e["op"])
+        self.assertIsNone(e["opm"])
+        self.assertEqual(e["revenue"], 1800)
+        self.assertEqual(e["ni"], 200)          # EPS 2.0 × 100주
+        self.assertEqual(e["npm"], 11.11)
+
+    def test_quarterly_actuals_plus_two_estimate_quarters(self):
+        labels = [r["label"] for r in self.fin["quarterly"]]
+        # 확정 5개 분기 + 0q·+1q 컨센(마지막 확정 분기에서 3개월씩 굴린 라벨).
+        self.assertEqual(labels, ["2Q25", "3Q25", "4Q25", "1Q26", "2Q26", "3Q26E", "4Q26E"])
+        est = {r["label"]: r for r in self.fin["quarterly"]}["3Q26E"]
+        self.assertEqual(est["kind"], "E")
+        self.assertEqual(est["ni"], 50)          # EPS 0.5 × 100주
+        self.assertEqual(est["revenue"], 400)
+        self.assertEqual(est["npm"], 12.5)
+        self.assertIsNone(est["op"])
+
+    def test_quarterly_margins(self):
+        q = {r["label"]: r for r in self.fin["quarterly"]}["2Q26"]
+        self.assertEqual(q["opm"], 10.0)         # 34/340
+        self.assertEqual(q["npm"], 7.06)         # 24/340
+
+    def test_no_quarterly_statement_means_no_estimate_quarters(self):
+        # 확정 분기가 하나도 없으면 0q·+1q 라벨을 지어낼 기준이 없다 → 분기 전체 공란.
+        fin = run(FakeTicker(quarterly=pd.DataFrame()))["financials"]
+        self.assertEqual(fin["quarterly"], [])
+
+
+class NaverFinancialEnrichment(unittest.TestCase):
+    """국내 종목: 재무 상세의 분기·연간E 를 네이버(에프앤가이드) 컨센으로 교체·보강."""
+
+    @staticmethod
+    def finance_info(periods, rows):
+        keys = [f"c{i}" for i in range(len(periods))]
+        tr = [{"key": k, "title": p, "isConsensus": "Y" if est else "N"}
+              for k, (p, est) in zip(keys, periods)]
+        row_list = [{"title": t, "columns": {k: {"value": v} for k, v in zip(keys, vals)}}
+                    for t, vals in rows.items()]
+        return {"trTitleList": tr, "rowList": row_list}
+
+    @classmethod
+    def naver_annual(cls):
+        return cls.finance_info(
+            [("2025.12.", False), ("2026.12.", True)],
+            {
+                "매출액": ["1,200", "1,400"],
+                "영업이익": ["240", "280"],
+                "영업이익률": ["20.00", "20.00"],
+                "당기순이익": ["120", "140"],
+                "PER(배)": ["14.20", "9.80"],
+                "PBR(배)": ["1.42", "0.98"],
+                "ROE(지배주주지분)": ["11.20", "12.80"],
+            })
+
+    @classmethod
+    def naver_quarter(cls):
+        return cls.finance_info(
+            [("2026.03.", False), ("2026.06.", False), ("2026.09.", True)],
+            {
+                "매출액": ["300", "320", "350"],
+                "영업이익": ["60", "64", "70"],
+                "영업이익률": ["20.00", "20.00", "20.00"],
+                "당기순이익": ["30", "32", "36"],
+            })
+
+    def setUp(self):
+        self._saved = nc.fetch_finance
+        annual, quarter = self.naver_annual(), self.naver_quarter()
+        nc.fetch_finance = lambda code, period, **k: annual if period == "annual" else quarter
+        self.record = run(FakeTicker())
+        self.fin = self.record["financials"]
+
+    def tearDown(self):
+        nc.fetch_finance = self._saved
+
+    def test_quarterly_replaced_with_naver_plus_yahoo_tail(self):
+        # 네이버 분기(1Q~당분기E)가 야후 분기를 대체하고, 네이버 범위 밖 미래
+        # 분기(4Q26E)만 야후 컨센으로 꼬리에 남는다.
+        labels = [(r["label"], r.get("src")) for r in self.fin["quarterly"]]
+        self.assertEqual(labels, [("1Q26", "naver"), ("2Q26", "naver"),
+                                  ("3Q26E", "naver"), ("4Q26E", None)])
+
+    def test_naver_quarter_has_operating_income(self):
+        q = {r["label"]: r for r in self.fin["quarterly"]}["3Q26E"]
+        self.assertEqual(q["kind"], "E")
+        self.assertEqual(q["op"], 70e8)      # 야후엔 없는 분기 영업이익 컨센
+        self.assertEqual(q["opm"], 20.0)
+
+    def test_annual_estimate_row_takes_naver_values(self):
+        rows = {r["label"]: r for r in self.fin["annual"]}
+        e26 = rows["2026E"]
+        self.assertEqual(e26.get("src"), "naver")
+        self.assertEqual(e26["revenue"], 1400e8)
+        self.assertEqual(e26["op"], 280e8)
+        self.assertEqual(e26["opm"], 20.0)
+        # 네이버 표에 없는 내년E 는 야후 값 그대로(영업이익 공란 유지).
+        e27 = rows["2027E"]
+        self.assertNotIn("src", e27)
+        self.assertIsNone(e27["op"])
+
+    def test_annual_estimates_override_per_with_naver_badge(self):
+        # 연간 API 의 컨센 PER 이 야후 산출값을 덮고 ᴺ 출처가 남는다
+        # (분기 API 의 PER 행은 estimates 가 아예 보지 않는다).
+        y = {x["label"]: x for x in self.record["years"]}["2026E"]
+        self.assertEqual(y["per"], 9.8)
+        self.assertIn("per", y.get("naver", []))
+
+
+class NanTailRows(unittest.TestCase):
+    """장외 시간에 야후가 붙이는 NaN 꼬리 행 — 진짜 종가를 덮으면 안 된다.
+
+    아침(KST) 실행마다 미국·유럽 전 종목의 현재가가 비어 FWD PER·PSR이
+    통째로 공란이 되던 사고(10/3·10/10·10/17 스냅샷 실측)의 재현이다.
+    """
+
+    def test_nan_row_on_a_later_date_is_ignored(self):
+        history = pd.DataFrame(
+            {"Close": [20.0, 24.0, 28.0, 32.0, 40.0, float("nan")]},
+            index=pd.to_datetime(["2022-12-30", "2023-12-29", "2024-12-31",
+                                  "2025-12-31", "2026-08-14", "2026-08-15"]),
+        )
+        record = run(FakeTicker(history=history))
+        self.assertEqual(record["price"], 40.0)
+        self.assertEqual({y["label"]: y for y in record["years"]}["2026E"]["per"], 20.0)
+
+    def test_nan_duplicate_of_last_date_does_not_mask_the_real_close(self):
+        # 같은 날짜가 둘(정규장 종가 + NaN 라이브 바)이면 날짜 중복 정리의
+        # keep="last" 가 NaN 쪽을 남기던 것이 사고의 기전이다.
+        history = pd.DataFrame(
+            {"Close": [20.0, 24.0, 28.0, 32.0, 40.0, float("nan")]},
+            index=pd.to_datetime(["2022-12-30 00:00", "2023-12-29 00:00", "2024-12-31 00:00",
+                                  "2025-12-31 00:00", "2026-08-14 00:00", "2026-08-14 20:00"]),
+        )
+        record = run(FakeTicker(history=history))
+        self.assertEqual(record["price"], 40.0)
+        self.assertEqual({y["label"]: y for y in record["years"]}["2026E"]["per"], 20.0)
+
+    def test_all_nan_closes_bail_out_with_a_warning(self):
+        history = pd.DataFrame({"Close": [float("nan")] * 2},
+                               index=pd.to_datetime(["2026-08-13", "2026-08-14"]))
+        record = run(FakeTicker(history=history))
+        self.assertEqual(record["years"], [])
+        self.assertTrue(any("종가" in w for w in record["warnings"]))
+
+
 class CurrencyHandling(unittest.TestCase):
     def test_pence_quotes_are_scaled_to_pounds(self):
         # 야후는 영국주를 pence 로 준다. 100으로 나눠야 재무제표(GBP)와 자릿수가 맞는다.
@@ -208,6 +384,45 @@ class CurrencyHandling(unittest.TestCase):
         self.assertIsNone(year["pbr"])
         self.assertEqual(year["roe"], 21.82)
         self.assertTrue(any("구하지 못해" in w for w in record["warnings"]))
+
+
+class UsdPanelRate(unittest.TestCase):
+    """재무 상세 패널 달러 통일 — financials 에 재무통화→USD 환율을 싣는다(화면이 환산)."""
+
+    def test_usd_rate_from_fx_series(self):
+        # KRW 재무 + 환율 0.5 픽스처 → usd_rate 0.5, 통화는 실통화 KRW 그대로.
+        record = run(FakeTicker(), fx=FX_HISTORY)
+        self.assertEqual(record["financials"]["usd_rate"], 0.5)
+        self.assertEqual(record["financials"]["currency"], "KRW")
+
+    def test_usd_statements_need_no_fx(self):
+        ticker = FakeTicker(info={"currency": "USD", "financialCurrency": "USD", "payoutRatio": 0.2})
+        record = run(ticker)                      # 환율 픽스처 없이도 1.0
+        self.assertEqual(record["financials"]["usd_rate"], 1.0)
+
+    def test_missing_fx_leaves_rate_none(self):
+        # 환율을 못 구하면 None — 화면은 재무통화 그대로 폴백(달러로 지어내지 않는다).
+        self.assertIsNone(run(FakeTicker())["financials"]["usd_rate"])
+
+    def test_actual_rows_use_period_average_fx(self):
+        # 확정(A) 줄은 그 기간 평균 환율 — 2022년 실적은 2022년 환율로 환산돼야 한다.
+        vary = pd.DataFrame({"Close": [0.2, 0.3, 0.4, 0.5, 0.6]}, index=HISTORY.index)
+        record = run(FakeTicker(), fx=vary)
+        f = record["financials"]
+        ann = {r["label"]: r for r in f["annual"]}
+        self.assertEqual(ann["2022"]["fx"], 0.2)
+        self.assertEqual(ann["2023"]["fx"], 0.3)
+        self.assertEqual(f["usd_rate"], 0.6)                    # 수집 시점 환율
+        est = [r for r in f["annual"] if r["kind"] == "E"][0]
+        self.assertEqual(est["fx"], 0.6)                        # 컨센(E)은 수집 시점 환율
+
+    def test_mislabeled_currency_uses_actual_statement_currency(self):
+        # 두산밥캣형: 야후 라벨 USD·실제 KRW → 패널 통화도 KRW 로 바로잡고 KRW→USD 환율을 싣는다.
+        cheap_fx = pd.DataFrame({"Close": [0.001] * 5}, index=HISTORY.index)
+        ticker = FakeTicker(info={"currency": "KRW", "financialCurrency": "USD", "payoutRatio": 0.2})
+        record = run(ticker, fx=cheap_fx)
+        self.assertEqual(record["financials"]["currency"], "KRW")
+        self.assertEqual(record["financials"]["usd_rate"], 0.001)
 
 
 class TermResolution(unittest.TestCase):

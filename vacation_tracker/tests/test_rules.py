@@ -161,6 +161,40 @@ class KazakhDates(unittest.TestCase):
                          (date(2026, 9, 15), date(2026, 9, 18)))
 
 
+class EventTripKeyword(unittest.TestCase):
+    """행사 참석형 출장 — '출장'이란 말 없이 행사명만 말하는 보고 (10/13 이정우 실사례)."""
+
+    def test_valueday_message(self):
+        msg = "아 팀장님 저 포스코인터 인니팜사업 밸류데이 11.24-11.27(27일 오전 8시 도착) 입니다!"
+        self.assertTrue(is_candidate(msg))
+        self.assertEqual(detect_kind(msg), "출장")
+        entry = rule_extract(msg, datetime(2026, 10, 13, 9, 0, tzinfo=KST))
+        self.assertEqual((entry["start"], entry["end"]), ("2026-11-24", "2026-11-27"))
+        self.assertFalse(entry["needs_review"])
+
+    def test_other_event_words(self):
+        self.assertEqual(detect_kind("기업탐방 갑니다"), "탐방")
+        self.assertEqual(detect_kind("벨류 데이 참석합니다"), "출장")
+        self.assertEqual(detect_kind("컨퍼런스 참석차 이동합니다"), "출장")
+
+    def test_ndr_is_not_trip(self):
+        # NDR은 시내 일과라 자리 비움이 아니다(10/27 결정) — 키워드에서 제외.
+        self.assertIsNone(detect_kind("다음주 NDR 있습니다"))
+
+    def test_conference_call_is_not_trip(self):
+        for text in ("컨퍼런스 콜 예정입니다", "실적 컨퍼런스콜 참석", "컨콜 있습니다"):
+            self.assertFalse(is_candidate(text), text)
+
+    def test_dispatch_notice_is_not_trip(self):
+        # 배차 안내문 전달 (10/27 실사례) — NDR 낱말이 있어도 보고가 아니다.
+        msg = ("다올투자증권\n[Web발신]\n안녕하세요, 10.27(화) HD현대건설기계 NDR\n"
+               "08:20 포스트타워 본사 배차\n차량: 카니발 9075\n"
+               "담당기사: 박준일 주임, 010-0000-0000\n담당 애널리스트: 최광식 연구")
+        self.assertFalse(is_candidate(msg))
+        for text in ("내일 배차 08시입니다", "담당 기사님 연락처요"):
+            self.assertFalse(is_candidate(text), text)
+
+
 class TravelKeyword(unittest.TestCase):
     def test_travel_report_is_candidate(self):
         self.assertEqual(detect_kind("다음주 제주 여행 갑니다"), "여행")
