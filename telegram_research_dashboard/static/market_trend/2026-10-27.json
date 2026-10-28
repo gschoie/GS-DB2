@@ -1,0 +1,724 @@
+{
+ "date": "2026-10-27",
+ "meta": {
+  "window": "10-26 06:00~10-27 06:00 KST",
+  "engine": "Gemini(gemini-2.5-flash)",
+  "generated_at": "2026-10-27T06:35+09:00"
+ },
+ "stats": {
+  "channels": 95,
+  "messages": 1506,
+  "groups": 1378
+ },
+ "one_liner": "브라질 증시 급락과 국내 증시 신저가 속 투자심리 위축, SK하이닉스 주주환원 기대와 AI/로봇 섹터 강세가 시장의 주요 관심사로 부상했습니다.",
+ "themes": [
+  {
+   "name": "브라질 증시 급락 — 룰라 대통령 재선 여파",
+   "narrative": "브라질 대선에서 룰라 대통령이 4선에 성공하며 친시장 정책 기대가 무산, 브라질 증시와 헤알화 가치가 급락하고 미국 상장 브라질 종목들도 큰 폭으로 하락하며 신흥국 증시 전반에 부정적 영향을 미쳤습니다.",
+   "status": "new",
+   "strength": 5,
+   "keywords": [
+    "룰라",
+    "브라질",
+    "브라질 대선"
+   ],
+   "evidence": [
+    {
+     "channel": "서화백의 AI놀이🚀",
+     "quote": "룰라 대통령 재선 이후 증시 20~30% 폭락 및 헤알화 가치 10% 하락, 2000억 달러 이상 증시 가치 소멸, 모건스탠리, 추가 하락 가능성 경고 및 서킷브레이커 가능성 언급"
+    },
+    {
+     "channel": "김현석(자본주의 바이어스 있는 채널입니다)",
+     "quote": "-브라질 대선 결선에서 룰라 대통령 4선 확정, 친시장 정책 전환 기대 무산, 미국 상장 브라질 종목 급락, XP 15.71달러(-48.36%), 방코 브라데스코 2.93달러(-28.01%), 이타우 우니방코 7.70달러(-20.37%), 누홀딩스 12.59달러(-16.95%), 페트로브라스 22.50달러(-13.99%)…"
+    },
+    {
+     "channel": "신한 리서치",
+     "quote": "①브라질 대선(Lula 4선, MSCI 브라질 ETF 시외 -19.6%) 결과 따른 신흥국 증시 움직임과…"
+    }
+   ]
+  },
+  {
+   "name": "SK하이닉스 — 키옥시아 지분 매각 통한 특별배당 기대",
+   "narrative": "SK하이닉스가 일본 키옥시아 지분 매각을 통해 16조 원 규모의 차익을 실현하고, 이를 바탕으로 최대 60조 원 규모의 자사주 매입 및 특별배당 등 대규모 주주환원책을 추진할 것이라는 보도가 나오며 투자자들의 관심이 집중되고 있습니다.",
+   "status": "new",
+   "strength": 4,
+   "keywords": [
+    "특별배당",
+    "차익",
+    "키옥시아",
+    "SK하이닉스 키옥시아",
+    "키옥시아 지분"
+   ],
+   "evidence": [
+    {
+     "channel": "AWAKE - 실시간 주식 공시 정리채널",
+     "quote": "보도내용 : [동아일보] SK하이닉스, 日 키옥시아 지분 차익 16조원 특별배당 추진"
+    },
+    {
+     "channel": "이상헌 부장 iM 지주/ESG/중소형주",
+     "quote": "SK하이닉스는 최근 국내 상장사 중 최대인 40조 원의 자사주 매입·소각을 마친 데 이어 추가로 50조~60조 원의 자사주 매입 및 특별배당 등을 계획하고 있다."
+    },
+    {
+     "channel": "서화백의 AI놀이🚀",
+     "quote": "💡 요약 브라질 대선 결과, SK하이닉스 ETF 청산 및 특별배당 불확실성, 국내 증시 신저가 속출로 인한 전반적인 투자심리 위축. 다만 AI, 로봇, 반도체 일부 종목의 긍정적 소식은 존재."
+    }
+   ]
+  },
+  {
+   "name": "AI/로봇 섹터 — 루닛, 로보티즈 등 강세",
+   "narrative": "앤트로픽 IPO 추진 소식과 메타의 AI 투자 확대, 그리고 GTC에서 젠슨 황의 ‘마이크로덕’ 시연 이후 로봇 판매량 급증 소식에 힘입어 의료 AI 기업 루닛과 로봇 관련주 로보티즈, 유니트리 등이 강세를 보이며 AI/기술주 시장에 강한 낙관론이 형성되었습니다.",
+   "status": "ongoing",
+   "strength": 5,
+   "keywords": [
+    "루닛",
+    "로보티즈",
+    "유니트리",
+    "앤트로픽 IPO"
+   ],
+   "evidence": [
+    {
+     "channel": "신한 리서치",
+     "quote": "#특징업종: 1)로봇: GTC서 Jensen Huang의 ‘마이크로덕’ 시연 이후 판매량 급증(로보티즈 +9.6%, 삼현 +7.3%) 2)의료AI: 루닛(上)과 美 Summit의 항암 신약 개발 협력 소식에 수급 유입(뷰노 上) 3)사이버보안: PHP 보안 위협 따른 AI 보안 투자 확대 기대 지속(안랩 +2.3%)"
+    },
+    {
+     "channel": "서화백의 AI놀이🚀",
+     "quote": "💡 요약 앤트로픽 IPO와 META의 AI 투자 확대 소식으로 AI/기술주 시장에 강한 낙관론이 형성되었습니다. 브라질 시장의 급락 및 일부 종목의 하향 조정이 있었으나, 전반적인 시장 분위기는 AI 섹터의 긍정적 모멘텀이 지배적입니다."
+    },
+    {
+     "channel": "[메리츠 중국 최설화]",
+     "quote": "- 휴머노이드로봇 테마는 금일도 유효. 대장주 유니트리(+7.7%)는 연일 강세로 최근 5거래일 주가 +36% 상승. 촉매제로는 유니트리 CEO 왕싱싱이 휴머노이드로봇 상용화 시점이 예상보다 1~2년 더 앞당겨질 것이란 발언 때문"
+    }
+   ]
+  },
+  {
+   "name": "HD현대 그룹주 — 마린솔루션 실적 서프라이즈 및 건설기계 주식 소각",
+   "narrative": "HD현대마린솔루션이 일회성 비용과 환율 영향을 제외하면 예상치를 뛰어넘는 3분기 실적을 기록하며 긍정적인 평가를 받았고, HD건설기계는 주식 소각 결정을 공시하며 그룹 전반에 대한 관심이 높아졌습니다.",
+   "status": "new",
+   "strength": 3,
+   "keywords": [
+    "HD현대마린솔루션",
+    "HD HD현대마린솔루션",
+    "건설기계",
+    "HD 건설기계"
+   ],
+   "evidence": [
+    {
+     "channel": "▩발간자료PDF.저장",
+     "quote": "🌎 #HD현대마린솔루션 「일회성 비용, 환율 영향 빼면 서프라이즈!」"
+    },
+    {
+     "channel": "GS의 조선/기계/방산 「바담」",
+     "quote": "📌 HD현대마린솔루션(시가총액: 8조 6,753억) #A443060 📁 연결재무제표기준영업(잠정)실적(공정공시) 2026.10.26 13:06:23 (현재가 : 194,000원, -1.27%) 매출액 : 6,501억(예상치 : 5,924억+/ 10%) 영업익 : 957억(예상치 : 1,048억/ -9%) 순이익 : 326…"
+    },
+    {
+     "channel": "AWAKE - 실시간 주식 공시 정리채널",
+     "quote": "2026.10.26 16:31:40 기업명: HD건설기계(시가총액: 3조 8,520억) A267270 보고서명: 주식소각결정 소각할 주식수 - 보통주 : 318주 - 우선주 : 예정금액 : 0억 시총대비 : 0.0% 취득방법 : 기취득자기주식 예정일자 : 2026-11-05 공시링크: https://dart.fss.or.…"
+    }
+   ]
+  },
+  {
+   "name": "현대산업개발 — 외주주택 성장 긍정적 평가",
+   "narrative": "IPARK 현대산업개발이 외주주택 부문의 성장이 긍정적이라는 신한 리서치 보고서가 나오면서 주목받고 있습니다.",
+   "status": "new",
+   "strength": 2,
+   "keywords": [
+    "현대산업개발",
+    "IPARK",
+    "IPARK 현대산업개발"
+   ],
+   "evidence": [
+    {
+     "channel": "신한 리서치",
+     "quote": "- IPARK현대산업개발 (294870/매수) 외주주택의 성장이 긍정적 [김선미]"
+    },
+    {
+     "channel": "신한 리서치",
+     "quote": "『IPARK현대산업개발: 외주주택의 성장이 긍정적 』"
+    }
+   ]
+  },
+  {
+   "name": "금융지주 — 실적 부진 속 주주환원 기대 공존",
+   "narrative": "일부 금융지주가 부진한 실적을 발표했음에도 불구하고, BNK금융지주의 경우 주주환원율 50% 이상을 제시하며 주주환원에 대한 기대감이 공존하는 모습입니다.",
+   "status": "new",
+   "strength": 2,
+   "keywords": [
+    "금융지주",
+    "BNK 금융지주"
+   ],
+   "evidence": [
+    {
+     "channel": "메리츠증권 리서치",
+     "quote": "BNK금융지주 - 부진한 실적 vs. 주주환원율 50% 이상"
+    },
+    {
+     "channel": "서화백의 AI놀이🚀",
+     "quote": "⚠️ BNK금융지주(138930) 영업익 3,273억 → 2,395억 (-26.8%)"
+    },
+    {
+     "channel": "epic AI - 투자 어시스턴트",
+     "quote": "금융감독원 은행검사 1국은 지난 9월 KB금융지주와 국민은행에 대한 정기검사에 착수했으며, 올해 상반기에는 정기검사를 진행하지 못한 것으로 확인되었습니다."
+    }
+   ]
+  }
+ ],
+ "community_mood": {
+  "score": -50,
+  "summary": "전반적으로 국내외 증시 하락에 대한 공포와 손실감이 지배적이며, 특히 브라질 시장 급락과 SK하이닉스 등 대형주 투자자들의 불안감이 크다. 단기적인 반등에 대한 기대도 일부 보이지만, 시장 전반의 투자심리는 매우 위축된 상태다.",
+  "hot_stocks": [
+   {
+    "name": "SK하이닉스",
+    "score": -30,
+    "reason": "키옥시아 특별배당 등 주주환원 기대와 함께 주가 하락에 대한 불안감이 공존하고 있습니다."
+   },
+   {
+    "name": "XP",
+    "score": -80,
+    "reason": "룰라 대통령 재선으로 인한 브라질 증시 폭락에 대한 공포와 손실 우려가 큽니다."
+   },
+   {
+    "name": "방코 브라데스코",
+    "score": -80,
+    "reason": "룰라 대통령 재선으로 인한 브라질 증시 폭락에 대한 공포와 손실 우려가 큽니다."
+   },
+   {
+    "name": "이타우 우니방코",
+    "score": -80,
+    "reason": "룰라 대통령 재선으로 인한 브라질 증시 폭락에 대한 공포와 손실 우려가 큽니다."
+   },
+   {
+    "name": "누홀딩스",
+    "score": -80,
+    "reason": "룰라 대통령 재선으로 인한 브라질 증시 폭락에 대한 공포와 손실 우려가 큽니다."
+   },
+   {
+    "name": "페트로브라스",
+    "score": -80,
+    "reason": "룰라 대통령 재선으로 인한 브라질 증시 폭락에 대한 공포와 손실 우려가 큽니다."
+   },
+   {
+    "name": "메타",
+    "score": 50,
+    "reason": "AI 투자 확대 소식으로 인한 AI/기술주 시장의 강한 낙관론이 형성되었습니다."
+   },
+   {
+    "name": "구글",
+    "score": 10,
+    "reason": "AI 관련 기술주로서의 관심이 있습니다."
+   },
+   {
+    "name": "SOXS",
+    "score": 40,
+    "reason": "반도체 시장 하락에 베팅하여 수익을 얻으려는 움직임이 포착됩니다."
+   }
+  ]
+ },
+ "signals": {
+  "spikes": [
+   {
+    "term": "룰라",
+    "count": 47,
+    "burst": 78.95376321791417,
+    "base_daily": 0.4,
+    "new": false
+   },
+   {
+    "term": "브라질",
+    "count": 82,
+    "burst": 16.91655844982558,
+    "base_daily": 4.0,
+    "new": false
+   },
+   {
+    "term": "루닛",
+    "count": 30,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "네이버",
+    "count": 48,
+    "burst": 26.877876840140992,
+    "base_daily": 1.4,
+    "new": false
+   },
+   {
+    "term": "특별배당",
+    "count": 25,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "HD현대마린솔루션",
+    "count": 25,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "HD HD현대마린솔루션",
+    "count": 25,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "현대산업개발",
+    "count": 23,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "IPARK",
+    "count": 23,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "IPARK 현대산업개발",
+    "count": 23,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "금융지주",
+    "count": 21,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "차익",
+    "count": 20,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "로보티즈",
+    "count": 20,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "브라질 대선",
+    "count": 20,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "키옥시아",
+    "count": 18,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "건설기계",
+    "count": 18,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "HD 건설기계",
+    "count": 18,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "BNK 금융지주",
+    "count": 18,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "NH 투자증권",
+    "count": 16,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "키옥시아 지분",
+    "count": 14,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "JYP",
+    "count": 14,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "앤트로픽 IPO",
+    "count": 14,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "SK하이닉스 키옥시아",
+    "count": 13,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "컨센대비",
+    "count": 13,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "유니트리",
+    "count": 13,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   }
+  ],
+  "top_posts": [
+   {
+    "channels": 5,
+    "channel": "키움증권 전략/시황 한지영",
+    "head": "[10/26, Kiwoom Weekly, 키움 전략 한지영] \"또 한 번의 증시 분기점, 슈퍼위크\" ------ <Weekly Three Points> a. 금요일 미국 증시는 마이크론(+2.5%) 등 AI, 반도체주의 저가 매수세 유입에도, 중동발 유가 불안 지속, 차주 대형 이벤트를 앞둔 경계심리 여파로 혼조세(다우,…",
+    "url": "https://t.me/hedgecat0301/2979",
+    "time_kst": "10-26 07:42"
+   },
+   {
+    "channels": 5,
+    "channel": "여의도스토리 Ver2.0-习近平是个狗东西",
+    "head": "📮[메리츠증권 통신/우주/미디어 정지수] 통신장비: 알에프 삼형제 ▶️ Part1. RF그룹사 개요 - RF그룹사(RFHIC, RF머트리얼즈, RF시스템즈)는 단순한 지분 관계를 넘어 소재부터 시스템으로 이어지는 밸류체인의 수직 계열화 - 과거 통신 기지국용 부품에 치우쳤던 사업 무게 중심은 최근 방산과 AI 데이터센터향…",
+    "url": "https://t.me/YeouidoStory2/118886",
+    "time_kst": "10-26 08:20"
+   },
+   {
+    "channels": 5,
+    "channel": "AWAKE - 실시간 주식 공시 정리채널",
+    "head": "2026.10.26 09:59:04 기업명: SK하이닉스(시가총액: 939조 4,132억) A000660 보고서명: 풍문또는보도에대한해명(미확정) 보도내용 : [동아일보] SK하이닉스, 日 키옥시아 지분 차익 16조원 특별배당 추진 발생일자 : 2026-10-26 해명내용 : 본 공시는 2026년 10월 26일자 동아일보…",
+    "url": "https://t.me/darthacking/155362",
+    "time_kst": "10-26 09:59"
+   },
+   {
+    "channels": 4,
+    "channel": "[신한 리서치본부] IT(반도체/전기전자/디스플레이)",
+    "head": "[신한투자증권 반도체/소부장 송혜수, 김형태] 반도체 소재: Are You Ready? ▶️ 편안한 선택지 - 소재 업종 전반에 대해 적극적인 '비중 확대' 투자의견 제시 - Q Cycle로 이동하며 변동성 심화. 투자자들의 기준이 엄격해진 구간 → 밸류에이션 부담이 낮고(12MF PER 8.9배), 성장 가시성이 높은…",
+    "url": "https://t.me/c/1355104422/7439",
+    "time_kst": "10-26 07:49"
+   },
+   {
+    "channels": 4,
+    "channel": "▩발간자료PDF.저장",
+    "head": "🌎 #HD현대마린솔루션 「일회성 비용, 환율 영향 빼면 서프라이즈!」 ☞ https://bit.ly/HMS3Q26RE ▶️ Issue: 3Q26 영업이익 Goltens 일회성 빼면 서프라이즈. 연말~연초에 2030년의 실적을 대폭 상향 가능 ▶️ Pitch: > 3Q26 영업이익단 당사 예상에 부합, - Goltens 인…",
+    "url": "https://t.me/c/1416673238/1551",
+    "time_kst": "10-26 20:37"
+   },
+   {
+    "channels": 4,
+    "channel": "GS의 조선/기계/방산 「바담」",
+    "head": "📌 HD현대마린솔루션(시가총액: 8조 6,753억) #A443060 📁 연결재무제표기준영업(잠정)실적(공정공시) 2026.10.26 13:06:23 (현재가 : 194,000원, -1.27%) 매출액 : 6,501억(예상치 : 5,924억+/ 10%) 영업익 : 957억(예상치 : 1,048억/ -9%) 순이익 : 326…",
+    "url": "https://t.me/c/1405984327/8365",
+    "time_kst": "10-26 13:18"
+   },
+   {
+    "channels": 4,
+    "channel": "AWAKE - 실시간 주식 공시 정리채널",
+    "head": "2026.10.26 14:23:08 기업명: HD건설기계(시가총액: 4조 468억) A267270 보고서명: 연결재무제표기준영업(잠정)실적(공정공시) 매출액 : 20,915억(예상치 : 22,916억/ -9%) 영업익 : 1,577억(예상치 : 1,691억/ -7%) 순이익 : 19억(예상치 : 1,055억/ -98%)…",
+    "url": "https://t.me/darthacking/155386",
+    "time_kst": "10-26 14:23"
+   },
+   {
+    "channels": 4,
+    "channel": "AWAKE - 실시간 주식 공시 정리채널",
+    "head": "2026.10.26 16:31:40 기업명: HD건설기계(시가총액: 3조 8,520억) A267270 보고서명: 주식소각결정 소각할 주식수 - 보통주 : 318주 - 우선주 : 예정금액 : 0억 시총대비 : 0.0% 취득방법 : 기취득자기주식 예정일자 : 2026-11-05 공시링크: https://dart.fss.or.…",
+    "url": "https://t.me/darthacking/155414",
+    "time_kst": "10-26 16:31"
+   },
+   {
+    "channels": 3,
+    "channel": "메리츠증권 리서치",
+    "head": "📮[메리츠증권 엔터/레저 김민영] 안녕하세요, 메리츠증권 김민영입니다. 엔터테인먼트 Indepth 보고서 업데이트 드리겠습니다. ▶️ 엔터테인먼트 [More Players, Bigger Stage] ☑️ Part I. K-Pop 판도 변화 - K-pop 산업의 판도는 변화하고 있음. 기존 대형 엔터 4 외 다양한 제작사와…",
+    "url": "https://t.me/meritz_research/44906",
+    "time_kst": "10-26 07:49"
+   },
+   {
+    "channels": 3,
+    "channel": "메리츠증권 리서치",
+    "head": "📮[메리츠증권 전기전자/IT부품 양승수] 기가비스(420770) 수주공시 코멘트: 남은 총알은 충분, 높아질 위상은 덤 ▶ 기다렸던 대규모 수주, 눈높이는 더 높이 - 동사는 23일 국내 고객사와 469.4억원 규모의 반도체 기판 검사장비 공급계약 체결을 공시 - 이는 단일 고객사 기준 역대 최대 규모의 공급계약으로, 최…",
+    "url": "https://t.me/meritz_research/44902",
+    "time_kst": "10-26 07:44"
+   },
+   {
+    "channels": 3,
+    "channel": "여의도스토리 Ver2.0-习近平是个狗东西",
+    "head": "📮[메리츠증권 전기전자/IT부품 양승수] 타이거일렉(219130): 호랑이 앞에 차려진 진수성찬 ▶ 3Q26 Preview: 판가 인상과 믹스개선을 동시에 - 3Q26 매출액과 영업이익은 각각 348억원(+70.9% YoY), 86억원(+726.9% YoY, OPM 24.6%)을 전망 - 국내외 프로브카드 고객사향 판가…",
+    "url": "https://t.me/YeouidoStory2/118875",
+    "time_kst": "10-26 07:50"
+   },
+   {
+    "channels": 3,
+    "channel": "GS의 조선/기계/방산 「바담」",
+    "head": "[다올투자증권 조선/기계/방산 최광식] 10/26(월) 데일리뉴스 🛳 조선 [TradeWinds] Five months early: What Eastern Pacific’s newbuilding delivery says about Chinese shipyards South Korea’s shipbuilders face a…",
+    "url": "https://t.me/c/1405984327/8363",
+    "time_kst": "10-26 08:34"
+   },
+   {
+    "channels": 3,
+    "channel": "김현석(자본주의 바이어스 있는 채널입니다)",
+    "head": "DS투자증권 IT/전기전자/미드스몰캡 Analyst 조대형, 연구원 김수연 [전기전자] 로봇이라는 새 전장(戰場), 익숙한 전장(電裝) 1. 휴머노이드는 전기전자 산업의 새로운 성장 동력 - 과거 스마트폰은 카메라, 기판, 수동소자, 전기차는 전력제어, 센서, 배선 시장을 키우며 전기전자 기업의 전방을 확장 - 휴머노이드…",
+    "url": "https://t.me/kimu_nim/47235",
+    "time_kst": "10-26 07:29"
+   },
+   {
+    "channels": 3,
+    "channel": "여의도스토리 Ver2.0-习近平是个狗东西",
+    "head": "[테슬라 FSD, 국토부에 정식 승인 신청: 한국에서도 열릴 Level 2++자율주행 시장] 안녕하세요. 삼성 모빌리티 임은영입니다. 언론에 따르면, 테슬라코리아가 10월 22일 국토교통부에 감독형 FSD 승인을 정식 신청했습니다. 다만 국토부·교통안전공단에 FSD 시험·검증 실적과 향후 계획이 전무하고, 신청 대상 차종…",
+    "url": "https://t.me/YeouidoStory2/118885",
+    "time_kst": "10-26 08:10"
+   },
+   {
+    "channels": 3,
+    "channel": "이상헌 부장 iM 지주/ESG/중소형주",
+    "head": "* SK하닉, 최대 60조원 주주환원 카드 꺼낸다 - SK하이닉스(000660)가 50조~60조 원 규모의 추가 주주환원책 발표를 준비하는 것으로 알려졌다. 최근 완료한 40조 원 규모의 자사주 소각에 이어 SK하이닉스는 올해 사상 최대인 100조 원의 주주환원을 단행하게 됐다. 회사는 올해 인공지능(AI) 메모리 호황에…",
+    "url": "https://t.me/INSIGHTVALUELEE/10819",
+    "time_kst": "10-26 18:09"
+   }
+  ]
+ },
+ "community_dc": {
+  "source": "DC인사이드",
+  "galleries": [
+   {
+    "id": "krstock",
+    "name": "국내주식갤러리",
+    "posts": 1242,
+    "capped": true,
+    "burst": 1.2,
+    "base_daily": 1002.3
+   },
+   {
+    "id": "stockus",
+    "name": "해외주식갤러리",
+    "posts": 3016,
+    "capped": true,
+    "burst": 1.1,
+    "base_daily": 2808.0
+   }
+  ],
+  "posts_sampled": 527,
+  "keywords": [
+   {
+    "term": "브라질",
+    "count": 19,
+    "burst": 99.0,
+    "new": true
+   },
+   {
+    "term": "브캉",
+    "count": 13,
+    "burst": 99.0,
+    "new": true
+   },
+   {
+    "term": "크에",
+    "count": 11,
+    "burst": 99.0,
+    "new": true
+   },
+   {
+    "term": "Soxs",
+    "count": 8,
+    "burst": 99.0,
+    "new": true
+   },
+   {
+    "term": "SK하이닉스",
+    "count": 8,
+    "burst": 99.0,
+    "new": true
+   },
+   {
+    "term": "메타",
+    "count": 6,
+    "burst": 77.0,
+    "new": true
+   },
+   {
+    "term": "아이렌",
+    "count": 6,
+    "burst": 77.0,
+    "new": true
+   },
+   {
+    "term": "상한",
+    "count": 5,
+    "burst": 64.2,
+    "new": true
+   },
+   {
+    "term": "갑자기",
+    "count": 5,
+    "burst": 64.2,
+    "new": true
+   },
+   {
+    "term": "구글",
+    "count": 18,
+    "burst": 9.2,
+    "new": false
+   },
+   {
+    "term": "야선",
+    "count": 16,
+    "burst": 3.2,
+    "new": false
+   },
+   {
+    "term": "속슬",
+    "count": 10,
+    "burst": 4.1,
+    "new": false
+   },
+   {
+    "term": "존나",
+    "count": 8,
+    "burst": 3.8,
+    "new": false
+   },
+   {
+    "term": "jpg",
+    "count": 6,
+    "burst": 4.5,
+    "new": false
+   },
+   {
+    "term": "삼성전자",
+    "count": 5,
+    "burst": 4.9,
+    "new": false
+   }
+  ],
+  "top_recommended": [
+   {
+    "gallery": "해외주식갤러리",
+    "title": "이제부터 관상학 믿기로 했다;;",
+    "views": 8819,
+    "recommend": 178,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=18109197&exception_mode=recommend&page=1",
+    "time_kst": "10-26 19:20"
+   },
+   {
+    "gallery": "해외주식갤러리",
+    "title": "하이닉스 <- 에 대한 현재 미국현지 민심",
+    "views": 8701,
+    "recommend": 125,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=18108988&exception_mode=recommend&page=1",
+    "time_kst": "10-26 18:53"
+   },
+   {
+    "gallery": "해외주식갤러리",
+    "title": "한국기업들 3~4분기 죄다 실적 하락일걸?",
+    "views": 9036,
+    "recommend": 112,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=18107697&exception_mode=recommend&page=1",
+    "time_kst": "10-26 16:05"
+   },
+   {
+    "gallery": "해외주식갤러리",
+    "title": "니미 씨발",
+    "views": 14602,
+    "recommend": 100,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=18106896&exception_mode=recommend&page=1",
+    "time_kst": "10-26 13:41"
+   },
+   {
+    "gallery": "해외주식갤러리",
+    "title": "머스크는 이번에 존나 쳐맞긴 해야함",
+    "views": 8581,
+    "recommend": 98,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=18106765&exception_mode=recommend&page=1",
+    "time_kst": "10-26 13:19"
+   }
+  ],
+  "top_viewed": [
+   {
+    "gallery": "국내주식갤러리",
+    "title": "야선 상한가 ㄷㄷㄷㄷㄷ",
+    "views": 786,
+    "recommend": 0,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3753273&page=2",
+    "time_kst": "10-27 04:56"
+   },
+   {
+    "gallery": "국내주식갤러리",
+    "title": "방금 일어났는데 야선 왜 대풀롱임??",
+    "views": 607,
+    "recommend": 0,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3753248&page=2",
+    "time_kst": "10-27 03:47"
+   },
+   {
+    "gallery": "국내주식갤러리",
+    "title": "와 씨발 싸늘하다 ㅋㅋㅋㅋㅋㅋㅋ",
+    "views": 564,
+    "recommend": 0,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3753120&page=5",
+    "time_kst": "10-27 01:32"
+   },
+   {
+    "gallery": "국내주식갤러리",
+    "title": "하닉 레버 근황",
+    "views": 525,
+    "recommend": 5,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3753144&page=4",
+    "time_kst": "10-27 01:58"
+   },
+   {
+    "gallery": "국내주식갤러리",
+    "title": "50억 없어진 후기",
+    "views": 499,
+    "recommend": 3,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3753216&page=3",
+    "time_kst": "10-27 02:56"
+   },
+   {
+    "gallery": "국내주식갤러리",
+    "title": "다 아는거긴 하지만 한번 올려본다",
+    "views": 498,
+    "recommend": 4,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3753090&page=5",
+    "time_kst": "10-27 01:14"
+   },
+   {
+    "gallery": "국내주식갤러리",
+    "title": "개미들 곱버스 2억샀네",
+    "views": 464,
+    "recommend": 0,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3753230&page=3",
+    "time_kst": "10-27 03:10"
+   },
+   {
+    "gallery": "국내주식갤러리",
+    "title": "삼닉 상한가 쳐도 평단 안오는 병신들아 ㅋㅋㅋㅋ",
+    "views": 458,
+    "recommend": 0,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3753232&page=3",
+    "time_kst": "10-27 03:11"
+   }
+  ]
+ }
+}

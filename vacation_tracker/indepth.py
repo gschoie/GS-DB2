@@ -49,8 +49,16 @@ def is_candidate(text: str) -> bool:
     return bool(_KEYWORD_RE.search(_compact(text or "")))
 
 
+# 폴백 전용 컷 — 출퇴근·자리 조정 이야기는 '발간' 낱말이 있어도 계획이 아니다
+# (10/27 실사례: "내일 아침 일찍 와서 발간 작업… 7시쯤 퇴근해봐도 될까요").
+_FALLBACK_NEG_RE = re.compile(r"퇴근|출근|반차|휴가|자리비움")
+
+
 def is_strong(text: str) -> bool:
-    return bool(_STRONG_RE.search(_compact(text or "")))
+    compacted = _compact(text or "")
+    if _FALLBACK_NEG_RE.search(compacted):
+        return False
+    return bool(_STRONG_RE.search(compacted))
 
 
 def pick_indepth_candidates(timeline: list[dict], hours: int = 12) -> list[dict]:
