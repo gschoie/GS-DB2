@@ -284,6 +284,9 @@ def build() -> Path:
     macro_dir = ROOT / "static" / "macro_desk"
     if macro_dir.is_dir():
         shutil.copytree(macro_dir, OUTPUT.parent / "macro_desk", dirs_exist_ok=True)
+    mcal_report = ROOT / "static" / "market_calendar_report.html"   # 증시 법칙 달력(정적, 크론 없음)
+    if mcal_report.exists():
+        shutil.copy2(mcal_report, OUTPUT.parent / "market_calendar_report.html")
     covflow_report = ROOT / "static" / "coverage_flow_report.html"
     if covflow_report.exists():
         shutil.copy2(covflow_report, OUTPUT.parent / "coverage_flow_report.html")
