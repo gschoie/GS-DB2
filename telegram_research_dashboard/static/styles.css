@@ -603,7 +603,11 @@ main input[type=date]:focus,main input[type=number]:focus,main select:focus,main
    기본 동작을 막고 새 창을 직접 연다. */
 .nav-subgroup>summary{display:flex;align-items:center;gap:6px}
 .nav-subgroup>summary .sub-hub{margin-left:auto;flex:none;color:#1b6ec2;text-decoration:none;
-  font-size:11px;font-weight:700;padding:3px 7px;border-radius:999px;background:#e7f3fe;line-height:1.2}
+  font-size:11px;font-weight:700;padding:3px 6px;border-radius:999px;background:#e7f3fe;line-height:1.2}
+/* 사이드바 줄은 167px 뿐이다 — '🔗 모아보기' 글자(74px)가 오른쪽 절반을 덮어
+   그쪽을 누르면 메뉴가 안 펼쳐지고 모아보기만 열렸다(실측). 아이콘만 남긴다. */
+.nav-subgroup>summary{gap:4px}
+.nav-subgroup>summary .sub-hub{font-size:12px}
 .nav-subgroup>summary .sub-hub:hover{background:#d3e9fd;color:#155ca3}
 
 /* 3단 서브메뉴(아침.브리핑 > 방산/건기 > 각 판) — 2단과 같은 결에 한 칸 더 들여쓴다.
