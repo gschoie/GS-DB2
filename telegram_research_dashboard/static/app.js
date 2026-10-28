@@ -503,7 +503,13 @@ function keepSubsOpen(g){g?.querySelectorAll?.('details.nav-subgroup[data-keep-o
 // 한 메뉴 그룹을 열면 나머지 그룹의 서브메뉴는 닫는다(모바일·PC 공통, 아코디언).
 $$('details.nav-group').forEach(d=>d.addEventListener('toggle',()=>{if(!d.open)return;$$('details.nav-group').forEach(o=>{if(o!==d&&o.open){o.open=false;o.querySelectorAll('details.nav-subgroup').forEach(s=>s.open=false)}});keepSubsOpen(d)}));
 // 같은 그룹 안의 하위 그룹(2단 서브메뉴)도 하나만 열리도록(항상 펼쳐 둘 것은 건드리지 않는다).
-$$('details.nav-subgroup').forEach(d=>d.addEventListener('toggle',()=>{if(!d.open)return;$$('details.nav-subgroup').forEach(o=>{if(o!==d&&!o.hasAttribute('data-keep-open'))o.open=false})}));
+// **조상·자손은 건드리지 않는다** — 3단(아침.브리핑 > 글로벌방산)에서 안쪽을 열 때
+// 부모까지 닫아 버리면 방금 연 내용이 그대로 사라진다(실측 버그).
+$$('details.nav-subgroup').forEach(d=>d.addEventListener('toggle',()=>{if(!d.open)return;
+  $$('details.nav-subgroup').forEach(o=>{
+    if(o===d||o.hasAttribute('data-keep-open'))return;
+    if(o.contains(d)||d.contains(o))return;
+    o.open=false})}));
 let timer;$('#search').oninput=e=>{clearTimeout(timer);timer=setTimeout(()=>{state.q=e.target.value;load()},250)};
 $('#report-company').onchange=e=>{state.reportCompany=e.target.value;load()};
 $('#news-company').onchange=e=>{state.newsCompany=e.target.value;load()};
