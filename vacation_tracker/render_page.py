@@ -213,6 +213,8 @@ def _row(entry: dict, today: str) -> str:
     msg_date = str(entry.get("msg_date") or "")[:16].replace("T", " ")
     if entry.get("engine") == "manual":
         origin = f"{msg_date} · ✍️ 직접 기입"
+    elif entry.get("engine") == "plan":
+        origin = f"{msg_date} · 📷 연차계획서"
     else:
         origin = f"{msg_date} · “{html.escape(str(entry.get('text') or '')[:140])}”"
     uid = html.escape(str(entry.get("uid") or ""), quote=True)
@@ -238,7 +240,7 @@ def _chip_html(entry: dict) -> str:
     attr = lambda v: html.escape(str(v or ""), quote=True)
     engine = entry.get("engine")
     when = str(entry.get("msg_date") or "")[:16].replace("T", " ")
-    source = "✍️ 직접 기입" if engine == "manual" else "텔레그램 보고"
+    source = {"manual": "✍️ 직접 기입", "plan": "📷 연차계획서"}.get(engine, "텔레그램 보고")
     return (f'<span class="chip{" trip" if _is_trip(entry.get("kind")) else ""}"'
             f' data-name="{attr(entry.get("name"))}" data-span="{attr(_span(entry))}"'
             f' data-kind="{attr(entry.get("kind"))}" data-note="{attr(entry.get("note"))}"'
@@ -354,6 +356,28 @@ rebuild-page로 되돌립니다.</p>
   <button id="edit-cancel" onclick="cancelEdit()" hidden>취소</button>
 </div>
 <p id="add-status"></p>
+<details class="sec" id="plan-sec">
+<summary>📷 연차계획서 등록 (이미지 붙여넣기)</summary>
+<p class="form-hint">인사시스템 미사용연차 사용계획 화면을 캡쳐해 붙여넣으면
+날짜·종류(종일/오전/오후)를 읽어 달력에 넣습니다. <b>같은 사람 계획서를 다시 올리면
+통째로 교체</b>되고(바뀐 계획 반영), 텔레그램으로 잡힌 일정과 같은 달력에 합쳐집니다.
+이미지는 추출에만 쓰고 저장하지 않습니다.</p>
+<div class="addform">
+  <select id="plan-name" style="width:140px">
+    <option value="" selected>이름 자동 인식</option>
+    {name_options}
+  </select>
+  <input id="plan-file" type="file" accept="image/*" style="flex:1;min-width:160px">
+  <button id="plan-btn" onclick="submitPlan()" disabled>분석·등록</button>
+</div>
+<div id="plan-paste" tabindex="0" style="border:2px dashed #c3cedb;border-radius:10px;
+  padding:14px;margin:8px 0;color:#7c8794;font-size:13px;cursor:pointer;text-align:center">
+  여기를 클릭한 뒤 캡쳐를 붙여넣기(Ctrl+V)하거나, 위에서 이미지 파일을 선택하세요.</div>
+<img id="plan-preview" style="max-width:320px;max-height:220px;border:1px solid #dfe5ec;
+  border-radius:8px;display:none" alt="연차계획서 미리보기">
+<p id="plan-status"></p>
+<div id="plan-rows"></div>
+</details>
 <script>
 const EP={json.dumps(DISPATCH_ENDPOINT)};
 const PAGE_STAMP={json.dumps(stamp)};
@@ -660,6 +684,65 @@ document.addEventListener('dblclick',ev=>{
   }
   document.querySelector('.addform').scrollIntoView({behavior:'smooth',block:'center'});
 });
+
+// ── 연차계획서 이미지 등록 ────────────────────────────────────────────────
+let planData=null;  // dataURL
+function planSet(dataUrl){
+  planData=dataUrl;
+  const img=$id('plan-preview');img.src=dataUrl;img.style.display='block';
+  $id('plan-btn').disabled=false;
+  $id('plan-status').textContent='이미지 준비됨 — 이름을 확인하고 [분석·등록]을 누르세요';
+}
+function planLoad(file){
+  if(!file||!file.type||file.type.indexOf('image/')!==0)return;
+  const reader=new FileReader();
+  reader.onload=()=>{
+    // 캡쳐 사진은 수 MB — 긴 변 1600px로 줄여 전송·추출을 가볍게.
+    const im=new Image();
+    im.onload=()=>{
+      const scale=Math.min(1,1600/Math.max(im.width,im.height));
+      if(scale>=1){planSet(reader.result);return}
+      const c=document.createElement('canvas');
+      c.width=Math.round(im.width*scale);c.height=Math.round(im.height*scale);
+      c.getContext('2d').drawImage(im,0,0,c.width,c.height);
+      planSet(c.toDataURL('image/jpeg',0.88));
+    };
+    im.src=reader.result;
+  };
+  reader.readAsDataURL(file);
+}
+const planPaste=$id('plan-paste');
+if(planPaste){
+  planPaste.addEventListener('click',()=>planPaste.focus());
+  document.addEventListener('paste',ev=>{
+    const sec=$id('plan-sec');if(!sec||!sec.open)return;
+    const items=(ev.clipboardData||{}).items||[];
+    for(const it of items){
+      if(it.type&&it.type.indexOf('image/')===0){planLoad(it.getAsFile());ev.preventDefault();return}
+    }
+  });
+  $id('plan-file').addEventListener('change',ev=>planLoad(ev.target.files[0]));
+}
+async function submitPlan(){
+  if(!planData)return;
+  const btn=$id('plan-btn'),status=$id('plan-status');
+  btn.disabled=true;status.textContent='🔎 이미지에서 날짜를 읽는 중… (10~20초)';
+  try{
+    const r=await fetch(EP,{method:'POST',body:JSON.stringify({
+      action:'vacplan',image:planData,name:$id('plan-name').value||''})});
+    const d=await r.json();
+    if(!d||d.ok===false){
+      status.textContent='⚠ 실패: '+((d&&d.error)||'GAS 프록시 확인 필요');
+      btn.disabled=false;return;
+    }
+    const rows=(d.rows||[]).map(x=>'<tr><td>'+escText(x.date)+'</td><td>'+escText(x.kind)+'</td></tr>').join('');
+    $id('plan-rows').innerHTML='<table><thead><tr><th>휴가일자</th><th>종류</th></tr></thead><tbody>'
+      +rows+'</tbody></table>';
+    status.textContent='✅ '+(d.name||'')+' — '+(d.rows||[]).length
+      +'개 날짜 등록 요청됨. 서버 반영 후 자동 새로고침됩니다 (같은 사람 재등록 = 교체)';
+    watchDeploy();
+  }catch(e){status.textContent='실패: '+e.message;btn.disabled=false}
+}
 </script>"""
     return head + script
 
