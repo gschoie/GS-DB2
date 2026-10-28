@@ -1,0 +1,323 @@
+# 증시 법칙 달력 — 격언·계절성 규칙 정본. 근거·출처는 ADAGES.md 에 길게, 여기엔 달력이 읽는 형태로.
+#
+# conf: 3 = 긴 표본에서 여러 기관 일관 / 2 = 한 기관 또는 기간 따라 갈림 / 1 = 사례·속설
+# tone: strong(강세 기대) / weak(약세 주의) / vol(변동성, 방향 없음) / info(표시만)
+#
+# kind 별 필드
+#   month   — months:[...] 가 그 해 매년 적용. market: KR|US
+#   cycle   — phase: midterm|pre|election|post (미국 4년 주기). months:[...] 그 해만 적용.
+#             phase 는 연도로 계산: (year-2024) % 4 → 0 election · 1 post · 2 midterm · 3 pre
+#   window  — anchor 기준 거래일 창. anchor: holiday:<id> | election:<id> | yearend | cycle:<phase>
+#   pin     — rule: nth_weekday [n, wd, months] | yearend_t2 | k200_effective | msci | fomc
+#   signal  — 날짜 없음. 카드에만.
+
+rules:
+  # ── 월별 계절성 ───────────────────────────────────────────────────────
+  - id: kr_nov
+    kind: month
+    market: KR
+    months: [11]
+    tone: strong
+    conf: 3
+    name: 코스피는 11월이 가장 좋다
+    saying: "11월에 사라 — 1년 중 가장 잘 오르는 달"
+    stat: "1980~2024 평균 +2.78%(12달 중 1위) · 2000~2025 +2.30%(1위)"
+    note: "세 기간(44년·26년·10년) 모두 11월이 상위 — 달력에서 가장 튼튼한 줄"
+
+  - id: kr_aug_sep
+    kind: month
+    market: KR
+    months: [8, 9]
+    tone: weak
+    conf: 3
+    name: 코스피는 8~9월이 가장 나쁘다
+    saying: "8월에 쉬어라 — '5월에 팔아라'의 한국판"
+    stat: "1980~2024 8월 -1.37%(최하위)·9월 -0.71% · 2000~2025 9월 -0.68%·8월 -0.47%·10월 -0.34%"
+    note: "'5월에 팔고 떠나라'는 한국에선 안 맞는다(5월 +0.31%). 서머랠리는 7월 오르고 8월 뱉는다"
+
+  - id: kr_jan_q
+    kind: month
+    market: KR
+    months: [1]
+    tone: strong
+    conf: 2
+    name: 1월 효과 — 코스닥·중소형주
+    saying: "연초엔 형(코스피)보다 아우(코스닥)"
+    stat: "1월 평균 코스닥 +2.9% vs 코스피 +0.8%(2000~) · 2009~2020 코스닥 +4.87% vs +1.62%"
+    note: "초과수익은 월초·1월 상반월에 집중. 대형주 쏠림 장에선 무색했던 해도 있다"
+
+  - id: us_sep
+    kind: month
+    market: US
+    months: [9]
+    tone: weak
+    conf: 3
+    name: 미국 9월 효과
+    saying: "September is the cruelest month"
+    stat: "S&P 1950~ 평균 -0.5~-0.7%, 상승 확률 45% — 12달 중 유일하게 승률 50% 미만"
+
+  - id: us_sell_may
+    kind: month
+    market: US
+    months: [5, 6, 7, 8, 9, 10]
+    tone: weak
+    conf: 2
+    name: Sell in May (할로윈 지표)
+    saying: "5월에 팔고 10월 말(할로윈)에 돌아오라"
+    stat: "11~4월 +7.2% vs 5~10월 +2.1%(1950~2024) — 단 2017~2025 5~10월은 9년 중 8년 상승·평균 +7.4%"
+    note: "최근엔 약해졌다. 한국엔 안 맞는다"
+
+  - id: us_santa
+    kind: pin
+    rule: santa
+    tone: strong
+    conf: 3
+    name: 산타 랠리
+    saying: "12월 마지막 5거래일 + 1월 첫 2거래일"
+    stat: "승률 76~79%, 평균 +1.3%(1950~). 실패하면 다음 해 약세 경고(1994~ 랠리 성공 23회 중 18회 다음 해 상승)"
+
+  # ── 4년 주기 (짝수해 = 미국 선거해) ──────────────────────────────────
+  - id: cycle_midterm_weak
+    kind: cycle
+    phase: midterm
+    months: [6, 9]
+    tone: weak
+    conf: 3
+    name: 중간선거해(짝수해) 6·9월 약세
+    saying: "짝수해 여름~가을은 조심 — 4년 중 가장 약한 구간"
+    stat: "중간선거해 S&P 6월 -1.3%·9월 -1.5%, 2~3분기가 4년 주기 최약. 연간 +4.6%(1950~, 4개년 중 최저). 코스피도 짝수해 9월 낙폭이 홀수해보다 크다"
+
+  - id: cycle_midterm_strong
+    kind: cycle
+    phase: midterm
+    months: [10, 11]
+    tone: strong
+    conf: 3
+    name: 중간선거해 10~11월 반등
+    saying: "10월에 조심하되 10월 말부턴 사라, 11월부터 반등"
+    stat: "중간선거해 S&P 10월 +2.4%·11월 +2.2%(1950~ 두 번째로 좋은 달 둘), 10월 상승 확률 74~79%. 선거 후 6개월 상승 96%(24회 중 23회), 10/31 이후 12개월 한 번도 안 빠짐. 코스피 10월말→연말 평균 +6%(1975~)"
+    note: "2차대전 후 10월에 끝난 약세장 12번 중 8번이 중간선거해 — '10월 저점'의 근거. 반론: 선거 전 낙폭이 얕으면 반등도 작다"
+
+  - id: cycle_pre_strong
+    kind: cycle
+    phase: pre
+    months: [1,2,3,4,5,6,7,8,9,10,11,12]
+    tone: strong
+    conf: 3
+    name: 대선 전 해(3년차) 최강
+    saying: "대선 전 해는 4년 중 가장 좋은 해"
+    stat: "S&P 3년차 연평균 +17.2%(1950~, 가격) · Dow·S&P 1943~2020 +15%. 중간선거해 4분기~3년차 2분기 '스위트 스팟' 약 +20%"
+
+  - id: cycle_election
+    kind: cycle
+    phase: election
+    months: [9, 10]
+    tone: weak
+    conf: 2
+    name: 대선해 선거 전 약세·후 강세
+    saying: "선거 전엔 불확실성, 결과 나오면 안도"
+    stat: "대선해 S&P 연평균 8~12%(출처별). 코스피는 2000~2025 미국 선거 전 하락·후 반등 패턴(한경)"
+
+  # ── 연말·연초 한국 수급 ───────────────────────────────────────────────
+  - id: kr_bigholder
+    kind: window
+    anchor: yearend
+    before_td: 10
+    after_td: 0
+    tone: weak
+    market: KR
+    conf: 3
+    name: 대주주 양도세 회피 매도(코스닥)
+    saying: "12월 코스닥은 큰손이 판다 — 배당락 직전이 코스닥 바닥"
+    stat: "개인 코스닥 12월 평균 -2,800억 / 1월 +3,600억(자본시장연구원). 2012년 이후 매년 12월 순매도. 2024 마감일 하루 -3,825억"
+    note: "기준 종목당 50억(2026 유지). 판정일 12/31 보유, 결제 T+2라 마감 = 마지막 거래일 2거래일 전. 그해 세제 변경이 강도를 가른다(2020은 뒤집힘)"
+
+  - id: kr_bigholder_deadline
+    kind: pin
+    rule: yearend_t2
+    tone: info
+    conf: 3
+    name: 대주주 회피 매도 마감일
+    saying: "이날 장 마감 전 체결까지 연내 결제"
+    stat: "2026년 12/28(월) — 12/31 휴장, 마지막 거래일 12/30, T+2"
+
+  - id: kr_exdiv
+    kind: pin
+    rule: yearend_exdiv
+    tone: info
+    conf: 1
+    name: 12월 결산 배당락일
+    saying: "배당 받으려면 배당락 전날까지 매수"
+    stat: "통계 미확인. 선배당후투자로 기준일을 2~3월로 옮긴 기업이 늘어 연말 배당락 효과는 약해지는 중"
+
+  - id: kr_jan_rebound
+    kind: window
+    anchor: yearstart
+    before_td: 0
+    after_td: 10
+    tone: strong
+    market: KR
+    conf: 2
+    name: 1월 상반월 코스닥 반등
+    saying: "12월에 판 것이 1월에 돌아온다"
+    stat: "코스닥 개인 1월 +3,600억. 1월 초과수익은 월초·상반월 집중"
+
+  # ── 명절 ─────────────────────────────────────────────────────────────
+  - id: kr_chuseok
+    kind: window
+    anchor: holiday:chuseok
+    before_td: 5
+    after_td: 5
+    tone: weak_then_strong
+    market: KR
+    conf: 3
+    name: 추석 전 약세 → 후 강세
+    saying: "추석 전엔 쉬고, 연휴 끝나면 사라"
+    stat: "연휴 전 5거래일 -0.05%(대신 2004~2025) / -0.43%(하나 2000~2024) → 후 5거래일 +1.34%, 22회 중 15회 상승(68%) · KRX 16승 9패"
+    note: "2021(-2.15%)·2022(-3.83%)는 대외 악재로 예외"
+
+  - id: kr_seol
+    kind: window
+    anchor: holiday:seol
+    before_td: 5
+    after_td: 5
+    tone: info
+    market: KR
+    conf: 1
+    name: 설 연휴 — 효과 뚜렷하지 않음
+    saying: "설 끝나면 오른다? — 반반"
+    stat: "2016~2025 연휴 후 첫날·5거래일 모두 5승 5패, 평균 -0.10%. 최근 5년은 첫날 5연속 상승"
+    note: "연휴 중 해외 이벤트 노출 주의 정도. 추석과 달리 반등 구간으로 적기엔 약하다"
+
+  # ── 선거 ─────────────────────────────────────────────────────────────
+  - id: election_kr_big
+    kind: window
+    anchor: election:kr_general
+    before_td: 20
+    after_td: 20
+    tone: strong_then_weak
+    market: KR
+    conf: 2
+    name: 총선·대선 전 상승 → 후 하락
+    saying: "선거 전엔 오르고, 끝나면 빠진다"
+    stat: "대선 전 20거래일 +4.44%(2000~). 총선 후 3개월 9회 중 6회 하락(1987~)"
+
+  - id: election_kr_president
+    kind: window
+    anchor: election:kr_president
+    before_td: 20
+    after_td: 20
+    tone: strong_then_weak
+    market: KR
+    conf: 2
+    name: 대선 전 상승 → 후 하락
+    saying: "선거 전엔 오르고, 끝나면 빠진다"
+    stat: "대선 전 20거래일 +4.44%(2000~)"
+
+  - id: election_kr_local
+    kind: window
+    anchor: election:kr_local
+    before_td: 20
+    after_td: 20
+    tone: weak
+    market: KR
+    conf: 2
+    name: 지방선거는 전후 모두 약세
+    saying: "지방선거만 선거 전 상승 효과가 없다"
+    stat: "지방선거 전 20거래일 -1.74%, 후 20거래일 -3.76%(6회, 2000~). 후 3개월 6회 중 3회 하락"
+
+  - id: election_us_midterm
+    kind: window
+    anchor: election:us_midterm
+    before_td: 0
+    after_td: 0
+    tone: info
+    market: US
+    conf: 3
+    name: 미국 중간선거일
+    saying: "불확실성 해소 → 연말 랠리의 출발점"
+    stat: "선거 후 6개월 S&P 상승 96%, 11월 S&P +2.8%·나스닥100 +4.2%(2000~ 중간선거해). 신영: 본격 반등은 11월 중순 이후"
+
+  - id: election_us_president
+    kind: window
+    anchor: election:us_president
+    before_td: 0
+    after_td: 0
+    tone: info
+    market: US
+    conf: 2
+    name: 미국 대선일
+    saying: "선거 전 약세, 결과 확인 후 강세"
+    stat: "대선해 연평균 8~12%"
+
+  # ── 수급 이벤트(날짜 핀) ──────────────────────────────────────────────
+  - id: kr_quad
+    kind: pin
+    rule: {nth_weekday: [2, thu, [3, 6, 9, 12]]}
+    tone: vol
+    conf: 2
+    name: 네 마녀의 날(선물·옵션 동시만기)
+    saying: "만기일엔 장중 출렁임 — 방향은 무작위"
+    stat: "2026-06-11 장중 -4% → 종가 +0.43% / 2026-09-10 -0.25%. 장기 통계 없음(사례만)"
+    note: "코스피200 정기변경(6·12월)은 이 다음 거래일 효력 — 편입 종목은 4주 전부터 평균 +8.2%(한투, 최근 5년)"
+
+  - id: kr_opex
+    kind: pin
+    rule: {nth_weekday: [2, thu, [1, 2, 4, 5, 7, 8, 10, 11]]}
+    tone: vol
+    conf: 1
+    name: 옵션 만기일(월)
+    saying: "매월 둘째 목요일"
+    stat: "통계 없음 — 표시만"
+
+  - id: us_triple
+    kind: pin
+    rule: {nth_weekday: [3, fri, [3, 6, 9, 12]]}
+    tone: vol
+    conf: 2
+    name: 미국 트리플 위칭
+    saying: "셋째 금요일, 목·금에 약세 몰림"
+    stat: "2000년 이후 107회 중 S&P 상승 마감 절반 미만"
+
+  - id: k200_rebal
+    kind: pin
+    rule: k200_effective
+    tone: vol
+    conf: 2
+    name: 코스피200 정기변경 효력일
+    saying: "변경일 당일 인덱스 자금까지 겹쳐 수급 출렁"
+    stat: "편입 종목 변경일 4주 전부터 평균 +8.2%(한투, 최근 5년)"
+
+  - id: msci_review
+    kind: pin
+    rule: msci
+    tone: vol
+    conf: 2
+    name: MSCI 반기 리뷰(5·11월)
+    saying: "발표일에 편입·편출 확인, 반영일에 패시브 매매"
+    stat: "2025-11은 11/6 발표·11/24 반영. 2026-11은 비공식 캘린더(11/11·12/1)뿐"
+
+  - id: fomc_drift
+    kind: pin
+    rule: fomc
+    tone: info
+    conf: 2
+    name: FOMC(전날 드리프트)
+    saying: "FOMC 전 24시간에 수익이 몰린다"
+    stat: "S&P 발표 전 24시간 +49bp, 초과수익의 80%(1994~2011, Lucca·Moench). 2011년 이후 약화/소멸 보고"
+
+  - id: tom
+    kind: signal
+    tone: strong
+    conf: 2
+    name: 월말·월초 효과
+    saying: "월 첫 거래일이 좋다"
+    stat: "SPY 33년 월 첫 거래일 평균 +0.22%, 월말 전후 ~10일이 나머지보다 우수 — 월초 펀드 자금 유입 해석"
+
+  - id: jan_barometer
+    kind: signal
+    tone: info
+    conf: 2
+    name: 1월 바로미터
+    saying: "1월이 가면 1년이 간다"
+    stat: "코스피 1월 상승 → 연간 플러스 81%(1985~2024) · S&P 86%(1945~). 상관일 뿐 인과는 아니다"
