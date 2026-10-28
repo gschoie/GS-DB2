@@ -361,10 +361,12 @@ class Outputs(unittest.TestCase):
                  unittest.mock.patch.object(notify, "send_photos", lambda paths, caption="", parse_mode=None, chat=None: calls.append(("album", chat, len(paths), caption)) or {"ok": chat not in fail, "description": "chat not found"}):
                 rc = notify.main(["--photos", os.path.join(tmp, "capture_*.png")])
             self.assertEqual(rc, 0)                                                   # 기본 방 성공이면 0
-            # 그림·본문·맨 밑 공유 링크까지 세 방 전부 같다
+            # 그림·본문은 세 방 전부 같고, 맨 밑 공유 링크는 기본 방만(10/28: 공개방엔 주소 안 남김)
             self.assertEqual([c[:3] for c in calls[:3]], [("album", "-100111", 3), ("album", "-100222", 3), ("album", "@HI_GS", 3)])
-            body = notify.compose_html(d) + "\n\n" + notify.SHARE_URL
-            self.assertEqual(calls[0][3], body); self.assertEqual(calls[1][3], body); self.assertEqual(calls[2][3], body)
+            body = notify.compose_html(d)
+            self.assertEqual(calls[0][3], body + "\n\n" + notify.SHARE_URL)
+            self.assertEqual(calls[1][3], body); self.assertEqual(calls[2][3], body)
+            self.assertNotIn("gs-research-desk", calls[2][3])
             self.assertTrue(notify.visible_len(calls[1][3]) <= notify.CAPTION_MAX)
             self.assertEqual(notify.visible_len("<b>a&amp;b</b>"), 3)                 # 태그·이스케이프 제외
             self.assertEqual(calls[3], ("text", "@HI_GS"))                            # 실패 방만 본문 따로 폴백
