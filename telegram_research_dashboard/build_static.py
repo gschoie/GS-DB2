@@ -287,6 +287,9 @@ def build() -> Path:
     covflow_report = ROOT / "static" / "coverage_flow_report.html"
     if covflow_report.exists():
         shutil.copy2(covflow_report, OUTPUT.parent / "coverage_flow_report.html")
+    covflow_dir = ROOT / "static" / "coverage_flow"   # 지난 기록(16:00 장 마감 기준 날짜별 페이지)
+    if covflow_dir.is_dir():
+        shutil.copytree(covflow_dir, OUTPUT.parent / "coverage_flow", dirs_exist_ok=True)
     # DART 생산능력·가동률: 페이지(dashboard/index.html) + 정규화 JSON(런타임 fetch)
     dartcap_page = ROOT.parent / "dart_capacity" / "dashboard" / "index.html"
     if dartcap_page.exists():

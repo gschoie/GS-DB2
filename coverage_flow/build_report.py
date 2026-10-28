@@ -15,6 +15,11 @@ import metrics  # noqa: E402
 
 LATEST = os.path.join(HERE, "data", "latest.json")
 OUT = os.path.join(ROOT, "telegram_research_dashboard", "static", "coverage_flow_report.html")
+# 지난 기록: 16:00(장 마감 후) 슬롯만 날짜별 페이지로 보관 — 최근 31일은 매일, 그보다 오래된 달은
+# 월 2개(15일 이전 마지막 거래일 · 그 달 마지막 거래일)만 남긴다(10/28 사용자 요청).
+ARCH_DIR = os.path.join(ROOT, "telegram_research_dashboard", "static", "coverage_flow")
+ARCHIVE_SLOT = "16:00"
+RECENT_DAYS = 31
 SCHEDULE_TIME = "평일 11:30 (장중) · 16:00 (장 마감 후)"
 WD = "월화수목금토일"
 
@@ -273,7 +278,57 @@ def summary_tiles(rows, d):
             tile("패시브 ADV ±3% 이상", pas, "passive") + "</div>")
 
 
-def render(d):
+def archive_keep(dates, today):
+    """남길 날짜 집합. dates·today 는 'YYYY-MM-DD'.
+    최근 RECENT_DAYS 일은 전부, 그보다 오래된 날짜는 달마다 두 개 — 15일 이전 마지막 날(없으면 그 달
+    첫 날) · 그 달 마지막 날. 경계 달은 '오래된 쪽' 날짜만으로 고르므로 진짜 월말이 31일 창을 벗어나는
+    날 자연히 그 날로 옮겨 간다(중간에 남겼던 날은 그때 지워진다)."""
+    t = datetime.date.fromisoformat(today)
+    cutoff = (t - datetime.timedelta(days=RECENT_DAYS)).isoformat()
+    keep = {x for x in dates if x >= cutoff}
+    months = {}
+    for x in dates:
+        if x < cutoff:
+            months.setdefault(x[:7], []).append(x)
+    for xs in months.values():
+        xs.sort()
+        early = [x for x in xs if int(x[8:10]) <= 15]
+        keep.add(early[-1] if early else xs[0])
+        keep.add(xs[-1])
+    return keep
+
+
+def archive_dates():
+    """보관된 날짜 목록(최신순)."""
+    if not os.path.isdir(ARCH_DIR):
+        return []
+    return sorted((f[:10] for f in os.listdir(ARCH_DIR)
+                   if len(f) == 15 and f.endswith(".html") and f[4] == "-"), reverse=True)
+
+
+def _wd_label(day):
+    try:
+        t = datetime.date.fromisoformat(day)
+        return f"{day}({WD[t.weekday()]})"
+    except Exception:
+        return day
+
+
+def archive_nav(d, archive, dates):
+    """페이지 맨 위 한 줄(캡쳐 영역 밖). 최신 페이지 = 지난 기록 고르기, 지난 기록 페이지 = 최신으로 돌아가기."""
+    if archive:
+        return (f"<div class='arch'>🗄️ <b>지난 기록</b> · {esc(_wd_label(d.get('date', '')))} 16:00 장 마감 기준 "
+                f"<a href='../coverage_flow_report.html'>← 최신 보기</a></div>")
+    if not dates:
+        return ""
+    opts = "".join(f"<option value='coverage_flow/{x}.html'>{esc(_wd_label(x))}</option>" for x in dates)
+    return ("<div class='arch'>🗄️ 지난 기록(매일 16:00 장 마감 기준) "
+            "<select onchange=\"if(this.value)location.href=this.value\">"
+            f"<option value=''>날짜 고르기 ({len(dates)}개)</option>{opts}</select>"
+            "<small> 최근 한 달은 매일, 그 이전은 월 2개(월 중순·월말)</small></div>")
+
+
+def render(d, archive=False, dates=()):
     rows = d.get("rows", [])
     try:
         t = datetime.datetime.strptime(d["asof"], "%Y-%m-%d %H:%M")
@@ -326,7 +381,9 @@ table.flow{{font-size:12px}}table.flow td,table.flow th{{padding:6px 5px}}th.c{{
 .errs{{margin:16px 0;font-size:12px;color:#b45309}}.errs ul{{margin:6px 0 0 18px}}
 .wrap{{overflow-x:auto}}
 #cap-1,#cap-2,#cap-3,#cap-1a,#cap-1b{{padding:6px 0 4px;background:#fff}}
+.arch{{font-size:12px;color:#6b7280;margin:0 0 14px;padding:7px 10px;background:#f9fafb;border:1px solid var(--line);border-radius:4px}}.arch b{{color:#111827}}.arch a{{margin-left:8px;color:#1d4ed8}}.arch select{{margin:0 6px;font-size:12px;padding:2px 4px}}.arch small{{color:#9ca3af}}
 </style></head><body>
+{archive_nav(d, archive, dates)}
 <div id="cap-1">
 <div id="cap-1a">
 <p class="eyebrow">COVERAGE · FLOW &amp; TECHNICALS</p>
@@ -363,12 +420,35 @@ table.flow{{font-size:12px}}table.flow td,table.flow th{{padding:6px 5px}}th.c{{
 </body></html>"""
 
 
+def write_archive(d):
+    """16:00 슬롯 거래일 수집이면 그날 페이지를 보관하고, 보관 규칙 밖의 옛 페이지를 지운다.
+    같은 날 16:00 슬롯을 다시 돌리면(수동 수집) 그 날 페이지를 덮어쓴다."""
+    day = d.get("date", "")
+    mday = d.get("market_day", "")
+    if d.get("slot") != ARCHIVE_SLOT or not day or (mday and mday != day):
+        return None
+    os.makedirs(ARCH_DIR, exist_ok=True)
+    path = os.path.join(ARCH_DIR, f"{day}.html")
+    with open(path, "w", encoding="utf-8") as f:
+        f.write(render(d, archive=True))
+    have = archive_dates()
+    keep = archive_keep(have, day)
+    for x in have:
+        if x not in keep:
+            os.remove(os.path.join(ARCH_DIR, f"{x}.html"))
+            print("archive pruned", x)
+    return path
+
+
 def main():
     with open(LATEST, encoding="utf-8") as f:
         d = json.load(f)
+    path = write_archive(d)
+    if path:
+        print("archived", path)
     os.makedirs(os.path.dirname(OUT), exist_ok=True)
     with open(OUT, "w", encoding="utf-8") as f:
-        f.write(render(d))
+        f.write(render(d, dates=archive_dates()))
     print("wrote", OUT, os.path.getsize(OUT), "bytes")
 
 
