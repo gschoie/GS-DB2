@@ -568,9 +568,11 @@ def notify(new_entries: list[dict], fresh_att: list[dict] | None = None,
         if not idx_token or not idx_chat:
             print("[알림] 발간계획 봇 미설정 — 발송 생략(대시보드 전용)")
             return
-        idx_lines = [f"📚 <b>발간 계획 레이더</b> — 신규 {len(fresh_idx)}건", ""]
+        idx_lines = [f"📚 <b>발간 계획 레이더</b> — 신규·변경 {len(fresh_idx)}건", ""]
         for entry in sorted(fresh_idx, key=lambda e: (e.get("target") or "9999", e["name"])):
             when = entry.get("target") or entry.get("target_text") or "시점 미정"
+            if entry.get("moved_from"):  # 일정 조정 — 기존 건을 옮긴 것(새 건 아님)
+                when = f"일정 변경 {entry['moved_from'] or '미정'} → {when}"
             topic = entry.get("topic") or "주제 미상"
             idx_lines.append(f"<b>{watcher_notify.escape(entry['name'])}</b> — "
                              f"{watcher_notify.escape(topic)} ({watcher_notify.escape(str(when))})")
@@ -759,6 +761,8 @@ def _apply_op(op: str, body: dict) -> None:
 
 
 PLAN_KIND = {"종일": "연차", "오전": "오전반차", "오후": "오후반차"}
+# 텔레그램 보고와 겹친 계획서 날짜에 기존 항목 메모로 남기는 표시(생략을 조용히 하지 않는다).
+PLAN_ALSO_MARK = "📷 연차계획서에도 있음"
 
 
 def _plan_spans(rows: list[dict]) -> list[dict]:
@@ -792,7 +796,9 @@ def apply_plan(raw: str) -> None:
     같은 사람 계획서를 다시 올리면 **통째로 교체**된다: uid는 `plan:이름:시작일`이라
     같은 날짜는 덮어쓰고, 새 계획에서 빠진 날짜는 묘비(deleted)로 — 수시로 바뀌는
     계획서의 재등록 요구. 텔레그램 수집분과는 같은 달력에 합쳐지되, 같은 이름·기간의
-    비-계획 항목이 이미 있으면 그 날짜는 건너뛴다(중복 칩 방지).
+    비-계획 항목이 이미 있으면 그 날짜는 건너뛴다(중복 칩 방지) — 단 조용히 넘기지
+    않고 그 항목 메모에 '연차계획서에도 있음'을 표시한다(10/28 요청). 표시는 재등록
+    때마다 지웠다 다시 달아 계획에서 빠진 날짜의 낡은 표시가 남지 않는다.
     """
     try:
         body = json.loads(raw or "{}")
@@ -817,13 +823,22 @@ def apply_plan(raw: str) -> None:
         if uid.startswith(prefix) and uid not in desired and not entry.get("deleted"):
             entry["deleted"] = True
             removed += 1
+    # 재등록 멱등성: 이 사람의 옛 '계획서에도 있음' 표시를 지우고 이번 계획 기준으로 다시 단다.
+    for k, v in entries.items():
+        if not k.startswith("plan:") and v.get("name") == name:
+            note = v.get("note") or ""
+            if PLAN_ALSO_MARK in note:
+                v["note"] = note.replace(f" · {PLAN_ALSO_MARK}", "").replace(
+                    PLAN_ALSO_MARK, "").strip(" ·")
     added = skipped = 0
     for uid, span in desired.items():
-        dup = any(not v.get("deleted") and not k.startswith("plan:")
-                  and v.get("name") == name and v.get("start") == span["start"]
-                  and (v.get("end") or v.get("start")) == span["end"]
-                  for k, v in entries.items())
-        if dup and uid not in entries:
+        dup = next((v for k, v in entries.items()
+                    if not v.get("deleted") and not k.startswith("plan:")
+                    and v.get("name") == name and v.get("start") == span["start"]
+                    and (v.get("end") or v.get("start")) == span["end"]), None)
+        if dup is not None and uid not in entries:
+            note = (dup.get("note") or "").strip()
+            dup["note"] = f"{note} · {PLAN_ALSO_MARK}" if note else PLAN_ALSO_MARK
             skipped += 1
             continue
         entries[uid] = {
@@ -836,7 +851,7 @@ def apply_plan(raw: str) -> None:
         added += 1
     save_json(ENTRIES_PATH, store)
     print(f"연차계획서 반영: {name} — 기간 {added}건 등록/갱신, {removed}건 제거(묘비), "
-          f"{skipped}건은 기존 보고와 중복이라 생략")
+          f"{skipped}건은 기존 보고와 중복 — 그 항목 메모에 표시")
     from render_page import build_page
 
     build_page(store)
