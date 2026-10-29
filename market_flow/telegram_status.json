@@ -1,5 +1,5 @@
 {
-  "when_utc": "2026-10-29 02:05:38Z",
+  "when_utc": "2026-10-29 07:05:56Z",
   "ok": true,
   "note": "sent",
   "chat_id_tail": "5171",
@@ -7,7 +7,7 @@
   "response": {
     "ok": true,
     "result": {
-      "message_id": 738,
+      "message_id": 739,
       "from": {
         "id": 8875725998,
         "is_bot": true,
@@ -21,8 +21,8 @@
         "username": "gschoie",
         "type": "private"
       },
-      "date": 1793239537,
-      "text": "💹 시장 수급 · 10/29(목) 11:00\nKOSPI 5,876.42 🔻2.26%\n\n개인 +163억\n외국인 +4,100억\n기관 -5,285억\n\n프로그램 +740억 = 차익 +312 · 비차익 +428\n\nK200선물 925.90 (-2.10%)\n베이시스 -1.01p · 백워데이션 · 괴리율 -0.42%\n\n✅ 외국인 순매수 상위 (11:05 가집계)\n(+1.9%) SK하이닉스 +5,109억\n(-1.9%) 삼성E&A +257억\n(+0.6%) 삼성화재 +109억\n(-5.6%) LIG디펜스앤에어로스페이스 +102억\n(+0.6%) KB금융 +101억\n(-4.4%) HD현대중공업 +85억\n(-4.9%) 삼성전기 +62억\n\n❌ 외국인 순매도 상위\n(-2.4%) 삼성전자우 -759억\n(-11.9%) 두산에너빌리티 -607억\n(-5.0%) 삼성전자 -453억\n(-4.7%) 한미반도체 -180억\n(+2.7%) 한미약품 -163억\n(-5.3%) LG전자 -145억\n(-8.8%) 코리아써키트 -133억\n\n✅ 기관 순매수 상위\n(+2.9%) SK스퀘어 +228억\n(-2.6%) 삼성SDI +47억\n(-0.9%) LG씨엔에스 +45억\n(-0.5%) 삼성물산 +42억\n(-0.9%) SK +37억\n(-5.0%) 삼성전자 +34억\n(+0.9%) 디아이 +21억\n\n❌ 기관 순매도 상위\n(+1.9%) SK하이닉스 -1,410억\n(-4.9%) 삼성전기 -323억\n(-2.4%) 삼성전자우 -319억\n(-11.9%) 두산에너빌리티 -210억\n(-9.6%) LG에너지솔루션 -172억\n(-21.4%) 대우건설 -107억\n(-9.6%) 현대건설 -87억\n\n상세 차트 › 대시보드\n🎴 GS Research Desk · 시장 수급",
+      "date": 1793257556,
+      "text": "💹 시장 수급 · 10/29(목) 16:00 · 마감\nKOSPI 5,937.66 🔻1.24%\n\n개인 +320억 (+157)\n외국인 +767억 (-3,333)\n기관 -4,469억 (+816)\n\n프로그램 +1,215억 = 차익 +772 · 비차익 +443\n\nK200선물 935.00 (-1.14%)\n베이시스 -0.87p (+0.14) · 백워데이션 · 괴리율 -0.41%\n\n( ) 안은 11:00 대비 증감\n\n✅ 외국인 순매수 상위 (16:05 가집계)\n(+2.3%) SK하이닉스 +5,689억\n(-1.6%) 삼성전기 +630억\n(-5.1%) LIG디펜스앤에어로스페이스 +277억\n(-4.9%) HD현대중공업 +247억\n(-5.3%) 한화에어로스페이스 +231억\n(-2.3%) 삼성E&A +171억\n(+1.2%) KB금융 +104억\n\n❌ 외국인 순매도 상위\n(-3.7%) 삼성전자우 -2,530억\n(-4.8%) 삼성전자 -1,844억\n(+3.1%) SK스퀘어 -1,007억\n(-9.0%) 두산에너빌리티 -819억\n(-4.3%) LG전자 -347억\n(-3.8%) 한미반도체 -268억\n(+4.6%) 한미약품 -232억\n\n✅ 기관 순매수 상위\n(+3.1%) SK스퀘어 +522억\n(0.0%) 삼성SDI +187억\n(-2.1%) LG씨엔에스 +124억\n(-0.8%) 삼성물산 +106억\n(+0.8%) 신한지주 +78억\n(-1.3%) SK +69억\n(+0.7%) 피에스케이홀딩스 +52억\n\n❌ 기관 순매도 상위\n(+2.3%) SK하이닉스 -1,749억\n(-4.8%) 삼성전자 -756억\n(-8.8%) 두산에너빌리티 -481억\n(-1.6%) 삼성전기 -437억\n(-8.6%) LG에너지솔루션 -352억\n(-5.3%) 현대건설 -278억\n(-3.7%) 삼성전자우 -218억\n\n상세 차트 › 대시보드\n🎴 GS Research Desk · 시장 수급",
       "entities": [
         {
           "offset": 3,
@@ -30,207 +30,212 @@
           "type": "bold"
         },
         {
-          "offset": 32,
+          "offset": 37,
           "length": 8,
           "type": "bold"
         },
         {
-          "offset": 53,
+          "offset": 58,
           "length": 5,
           "type": "bold"
         },
         {
-          "offset": 63,
-          "length": 7,
-          "type": "bold"
-        },
-        {
-          "offset": 74,
-          "length": 7,
-          "type": "bold"
-        },
-        {
-          "offset": 88,
+          "offset": 75,
           "length": 5,
           "type": "bold"
         },
         {
-          "offset": 123,
+          "offset": 93,
+          "length": 7,
+          "type": "bold"
+        },
+        {
+          "offset": 114,
+          "length": 7,
+          "type": "bold"
+        },
+        {
+          "offset": 151,
           "length": 6,
           "type": "bold"
         },
         {
-          "offset": 144,
+          "offset": 172,
           "length": 6,
           "type": "bold"
         },
         {
-          "offset": 175,
+          "offset": 209,
+          "length": 18,
+          "type": "italic"
+        },
+        {
+          "offset": 231,
           "length": 10,
           "type": "bold"
         },
         {
-          "offset": 186,
+          "offset": 242,
           "length": 11,
           "type": "italic"
         },
         {
-          "offset": 213,
+          "offset": 269,
           "length": 7,
           "type": "bold"
         },
         {
-          "offset": 235,
+          "offset": 290,
           "length": 5,
           "type": "bold"
         },
         {
-          "offset": 254,
+          "offset": 319,
           "length": 5,
           "type": "bold"
         },
         {
-          "offset": 283,
+          "offset": 341,
           "length": 5,
           "type": "bold"
         },
         {
-          "offset": 302,
+          "offset": 365,
           "length": 5,
           "type": "bold"
         },
         {
-          "offset": 324,
-          "length": 4,
+          "offset": 385,
+          "length": 5,
           "type": "bold"
         },
         {
-          "offset": 342,
-          "length": 4,
+          "offset": 404,
+          "length": 5,
           "type": "bold"
         },
         {
-          "offset": 350,
+          "offset": 413,
           "length": 10,
           "type": "bold"
         },
         {
-          "offset": 375,
-          "length": 5,
-          "type": "bold"
-        },
-        {
-          "offset": 398,
-          "length": 5,
-          "type": "bold"
-        },
-        {
-          "offset": 417,
-          "length": 5,
-          "type": "bold"
-        },
-        {
-          "offset": 437,
-          "length": 5,
-          "type": "bold"
-        },
-        {
-          "offset": 456,
-          "length": 5,
-          "type": "bold"
-        },
-        {
-          "offset": 475,
-          "length": 5,
-          "type": "bold"
-        },
-        {
-          "offset": 496,
-          "length": 5,
-          "type": "bold"
-        },
-        {
-          "offset": 505,
-          "length": 9,
-          "type": "bold"
-        },
-        {
-          "offset": 529,
-          "length": 5,
-          "type": "bold"
-        },
-        {
-          "offset": 549,
-          "length": 4,
-          "type": "bold"
-        },
-        {
-          "offset": 569,
-          "length": 4,
-          "type": "bold"
-        },
-        {
-          "offset": 587,
-          "length": 4,
-          "type": "bold"
-        },
-        {
-          "offset": 603,
-          "length": 4,
-          "type": "bold"
-        },
-        {
-          "offset": 621,
-          "length": 4,
-          "type": "bold"
-        },
-        {
-          "offset": 638,
-          "length": 4,
-          "type": "bold"
-        },
-        {
-          "offset": 646,
-          "length": 9,
-          "type": "bold"
-        },
-        {
-          "offset": 671,
+          "offset": 438,
           "length": 7,
           "type": "bold"
         },
         {
-          "offset": 692,
+          "offset": 459,
+          "length": 7,
+          "type": "bold"
+        },
+        {
+          "offset": 481,
+          "length": 7,
+          "type": "bold"
+        },
+        {
+          "offset": 505,
           "length": 5,
           "type": "bold"
         },
         {
-          "offset": 712,
+          "offset": 524,
           "length": 5,
           "type": "bold"
         },
         {
-          "offset": 735,
+          "offset": 544,
           "length": 5,
           "type": "bold"
         },
         {
-          "offset": 758,
+          "offset": 563,
           "length": 5,
           "type": "bold"
         },
         {
-          "offset": 778,
+          "offset": 572,
+          "length": 9,
+          "type": "bold"
+        },
+        {
+          "offset": 596,
           "length": 5,
           "type": "bold"
         },
         {
-          "offset": 797,
+          "offset": 615,
+          "length": 5,
+          "type": "bold"
+        },
+        {
+          "offset": 636,
+          "length": 5,
+          "type": "bold"
+        },
+        {
+          "offset": 655,
+          "length": 5,
+          "type": "bold"
+        },
+        {
+          "offset": 674,
           "length": 4,
           "type": "bold"
         },
         {
-          "offset": 811,
+          "offset": 690,
+          "length": 4,
+          "type": "bold"
+        },
+        {
+          "offset": 712,
+          "length": 4,
+          "type": "bold"
+        },
+        {
+          "offset": 720,
+          "length": 9,
+          "type": "bold"
+        },
+        {
+          "offset": 745,
+          "length": 7,
+          "type": "bold"
+        },
+        {
+          "offset": 766,
+          "length": 5,
+          "type": "bold"
+        },
+        {
+          "offset": 788,
+          "length": 5,
+          "type": "bold"
+        },
+        {
+          "offset": 807,
+          "length": 5,
+          "type": "bold"
+        },
+        {
+          "offset": 830,
+          "length": 5,
+          "type": "bold"
+        },
+        {
+          "offset": 849,
+          "length": 5,
+          "type": "bold"
+        },
+        {
+          "offset": 869,
+          "length": 5,
+          "type": "bold"
+        },
+        {
+          "offset": 884,
           "length": 4,
           "type": "text_link",
           "url": "https://gschoie.github.io/GS-DB2/market_flow_report.html"
