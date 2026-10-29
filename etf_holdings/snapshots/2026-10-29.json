@@ -1,6 +1,6 @@
 {
   "date": "2026-10-29",
-  "fetched_at": "2026-10-29 09:20",
+  "fetched_at": "2026-10-29 10:20",
   "market_date": "2026-10-29",
   "market_status": "OPEN",
   "base_date": "",
@@ -9,7 +9,7 @@
     "385720": {
       "name": "TIME 코스피액티브",
       "nav": 22265.46,
-      "market_value": "3,429억",
+      "market_value": "3,351억",
       "holdings": [
         {
           "key": "005930",
@@ -88,7 +88,7 @@
     "0162Y0": {
       "name": "TIME 코스닥액티브",
       "nav": 6685.12,
-      "market_value": "2,188억",
+      "market_value": "2,119억",
       "holdings": [
         {
           "key": "058610",
@@ -167,7 +167,7 @@
     "426020": {
       "name": "TIME 미국S&P500액티브",
       "nav": 30401.47,
-      "market_value": "3,909억",
+      "market_value": "3,895억",
       "holdings": [
         {
           "key": "NVIDIA CORP",
@@ -246,7 +246,7 @@
     "426030": {
       "name": "TIME 미국나스닥100액티브",
       "nav": 42341.15,
-      "market_value": "2조 3,382억",
+      "market_value": "2조 3,204억",
       "holdings": [
         {
           "key": "NVIDIA CORP",
@@ -325,7 +325,7 @@
     "441800": {
       "name": "TIME Korea플러스배당액티브",
       "nav": 24697.41,
-      "market_value": "6,999억",
+      "market_value": "6,971억",
       "holdings": [
         {
           "key": "000660",
@@ -404,7 +404,7 @@
     "463050": {
       "name": "TIME K바이오액티브",
       "nav": 10292.77,
-      "market_value": "2,054억",
+      "market_value": "2,021억",
       "holdings": [
         {
           "key": "068270",
@@ -483,7 +483,7 @@
     "410870": {
       "name": "TIME K컬처액티브",
       "nav": 8270.93,
-      "market_value": "99.3억",
+      "market_value": "97.7억",
       "holdings": [
         {
           "key": "035760",
@@ -562,7 +562,7 @@
     "456600": {
       "name": "TIME 글로벌AI인공지능액티브",
       "nav": 52503.52,
-      "market_value": "1조 8,127억",
+      "market_value": "1조 8,037억",
       "holdings": [
         {
           "key": "0043Y0",
@@ -641,7 +641,7 @@
     "0163Y0": {
       "name": "KoAct 코스닥액티브",
       "nav": 9187.74,
-      "market_value": "4,538억",
+      "market_value": "4,398억",
       "holdings": [
         {
           "key": "031980",
@@ -720,77 +720,77 @@
     "462900": {
       "name": "KoAct 바이오헬스케어액티브",
       "nav": 11108.13,
-      "market_value": "2,948억",
+      "market_value": "2,908억",
       "holdings": [
         {
           "key": "068270",
           "code": "068270",
           "name": "셀트리온",
           "shares": 288.0,
-          "weight": 9.95
+          "weight": 9.84
         },
         {
           "key": "226950",
           "code": "226950",
           "name": "올릭스",
           "shares": 497.0,
-          "weight": 8.25
+          "weight": 8.7
         },
         {
           "key": "298380",
           "code": "298380",
           "name": "에이비엘바이오",
           "shares": 1033.0,
-          "weight": 7.73
+          "weight": 7.77
         },
         {
           "key": "196170",
           "code": "196170",
           "name": "알테오젠",
           "shares": 182.0,
-          "weight": 7.28
+          "weight": 7.3
         },
         {
           "key": "237690",
           "code": "237690",
           "name": "에스티팜",
           "shares": 440.0,
-          "weight": 6.48
+          "weight": 6.11
         },
         {
           "key": "009420",
           "code": "009420",
           "name": "한올바이오파마",
           "shares": 815.0,
-          "weight": 5.71
+          "weight": 5.65
         },
         {
           "key": "128940",
           "code": "128940",
           "name": "한미약품",
           "shares": 83.0,
-          "weight": 5.33
+          "weight": 5.52
         },
         {
           "key": "039200",
           "code": "039200",
           "name": "오스코텍",
           "shares": 708.0,
-          "weight": 4.65
+          "weight": 4.67
         },
         {
           "key": "006280",
           "code": "006280",
           "name": "녹십자",
           "shares": 191.0,
-          "weight": 4.52
+          "weight": 4.49
         },
         {
           "key": "347850",
           "code": "347850",
           "name": "디앤디파마텍",
           "shares": 550.0,
-          "weight": 4.11
+          "weight": 4.25
         }
       ],
       "group": "KoAct",
@@ -799,15 +799,86 @@
     "476850": {
       "name": "KoAct 배당성장액티브",
       "nav": 19148.8,
-      "market_value": "1,008억",
-      "holdings": [],
+      "market_value": "993억",
+      "holdings": [
+        {
+          "key": "005935",
+          "code": "005935",
+          "name": "삼성전자우",
+          "shares": 1237.0,
+          "weight": 24.45
+        },
+        {
+          "key": "000660",
+          "code": "000660",
+          "name": "SK하이닉스",
+          "shares": 156.0,
+          "weight": 24.12
+        },
+        {
+          "key": "009150",
+          "code": "009150",
+          "name": "삼성전기",
+          "shares": 25.0,
+          "weight": 3.39
+        },
+        {
+          "key": "012450",
+          "code": "012450",
+          "name": "한화에어로스페이스",
+          "shares": 35.0,
+          "weight": 2.86
+        },
+        {
+          "key": "096770",
+          "code": "096770",
+          "name": "SK이노베이션",
+          "shares": 193.0,
+          "weight": 2.8
+        },
+        {
+          "key": "402340",
+          "code": "402340",
+          "name": "SK스퀘어",
+          "shares": 26.0,
+          "weight": 2.49
+        },
+        {
+          "key": "272210",
+          "code": "272210",
+          "name": "한화시스템",
+          "shares": 349.0,
+          "weight": 2.4
+        },
+        {
+          "key": "105560",
+          "code": "105560",
+          "name": "KB금융",
+          "shares": 150.0,
+          "weight": 2.4
+        },
+        {
+          "key": "031210",
+          "code": "031210",
+          "name": "서울보증보험",
+          "shares": 435.0,
+          "weight": 1.96
+        },
+        {
+          "key": "001120",
+          "code": "001120",
+          "name": "LX인터내셔널",
+          "shares": 274.0,
+          "weight": 1.15
+        }
+      ],
       "group": "KoAct",
       "label": "KoAct 배당성장액티브"
     },
     "471040": {
       "name": "KoAct 글로벌AI&로봇액티브",
       "nav": 26120.73,
-      "market_value": "2,330억",
+      "market_value": "2,314억",
       "holdings": [
         {
           "key": "005930",
@@ -886,7 +957,7 @@
     "445290": {
       "name": "KODEX 로봇액티브",
       "nav": 27407.21,
-      "market_value": "9,469억",
+      "market_value": "9,183억",
       "holdings": [
         {
           "key": "005930",
@@ -965,7 +1036,7 @@
     "441640": {
       "name": "KODEX 미국배당커버드콜액티브",
       "nav": 12132.42,
-      "market_value": "1조 7,142억",
+      "market_value": "1조 7,072억",
       "holdings": [
         {
           "key": "AMPLIFY CWP ENHANCED DIVIDEND",
@@ -1044,7 +1115,7 @@
     "471780": {
       "name": "TIGER 코리아테크액티브",
       "nav": 33935.38,
-      "market_value": "2,674억",
+      "market_value": "2,594억",
       "holdings": [
         {
           "key": "005930",
@@ -1123,15 +1194,86 @@
     "472150": {
       "name": "TIGER 배당커버드콜액티브",
       "nav": 17194.11,
-      "market_value": "2조 9,121억",
-      "holdings": [],
+      "market_value": "2조 8,483억",
+      "holdings": [
+        {
+          "key": "005930",
+          "code": "005930",
+          "name": "삼성전자",
+          "shares": 177.0,
+          "weight": 24.44
+        },
+        {
+          "key": "000660",
+          "code": "000660",
+          "name": "SK하이닉스",
+          "shares": 26.0,
+          "weight": 22.06
+        },
+        {
+          "key": "102110",
+          "code": "102110",
+          "name": "TIGER 200",
+          "shares": 250.0,
+          "weight": 13.68
+        },
+        {
+          "key": "005935",
+          "code": "005935",
+          "name": "삼성전자우",
+          "shares": 43.0,
+          "weight": 4.66
+        },
+        {
+          "key": "009150",
+          "code": "009150",
+          "name": "삼성전기",
+          "shares": 3.0,
+          "weight": 2.24
+        },
+        {
+          "key": "0104N0",
+          "code": "0104N0",
+          "name": "TIGER 200타겟위클리커버드콜",
+          "shares": 160.0,
+          "weight": 1.66
+        },
+        {
+          "key": "402340",
+          "code": "402340",
+          "name": "SK스퀘어",
+          "shares": 3.0,
+          "weight": 1.58
+        },
+        {
+          "key": "105560",
+          "code": "105560",
+          "name": "KB금융",
+          "shares": 17.0,
+          "weight": 1.49
+        },
+        {
+          "key": "086790",
+          "code": "086790",
+          "name": "하나금융지주",
+          "shares": 21.0,
+          "weight": 1.38
+        },
+        {
+          "key": "012450",
+          "code": "012450",
+          "name": "한화에어로스페이스",
+          "shares": 3.0,
+          "weight": 1.35
+        }
+      ],
       "group": "TIGER",
       "label": "TIGER 배당커버드콜액티브"
     },
     "365040": {
       "name": "TIGER AI코리아그로스액티브",
       "nav": 31728.19,
-      "market_value": "669억",
+      "market_value": "655억",
       "holdings": [
         {
           "key": "005930",
@@ -1210,7 +1352,7 @@
     "387280": {
       "name": "TIGER 퓨처모빌리티액티브",
       "nav": 10661.65,
-      "market_value": "133억",
+      "market_value": "130억",
       "holdings": [
         {
           "key": "006400",
@@ -1289,7 +1431,7 @@
     "444200": {
       "name": "SOL 코리아메가테크액티브",
       "nav": 38349.31,
-      "market_value": "4,197억",
+      "market_value": "4,067억",
       "holdings": [
         {
           "key": "005930",
@@ -1368,7 +1510,7 @@
     "481180": {
       "name": "SOL 미국AI소프트웨어",
       "nav": 16520.1,
-      "market_value": "1,330억",
+      "market_value": "1,326억",
       "holdings": [
         {
           "key": "ORACLE",

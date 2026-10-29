@@ -1,177 +1,15 @@
 {
   "date": "2026-10-29",
   "prev_date": "2026-10-28",
-  "generated_at": "2026-10-29 09:20",
+  "generated_at": "2026-10-29 10:20",
   "base_date": "",
   "prev_base_date": "",
   "market_date": "2026-10-29",
   "prev_market_date": "2026-10-28",
-  "fetched_at": "2026-10-29 09:20",
+  "fetched_at": "2026-10-29 10:20",
   "prev_fetched_at": "2026-10-28 09:20",
   "first_run": false,
   "etfs": [
-    {
-      "code": "476850",
-      "label": "KoAct 배당성장액티브",
-      "group": "KoAct",
-      "flow_factor": 1.0,
-      "new": [],
-      "gone": [
-        {
-          "key": "005935",
-          "name": "삼성전자우",
-          "code": "005935",
-          "weight_prev": 23.85,
-          "shares_prev": 1253.0
-        },
-        {
-          "key": "000660",
-          "name": "SK하이닉스",
-          "code": "000660",
-          "weight_prev": 23.72,
-          "shares_prev": 159.0
-        },
-        {
-          "key": "096770",
-          "name": "SK이노베이션",
-          "code": "096770",
-          "weight_prev": 3.67,
-          "shares_prev": 238.0
-        },
-        {
-          "key": "012450",
-          "name": "한화에어로스페이스",
-          "code": "012450",
-          "weight_prev": 2.99,
-          "shares_prev": 35.0
-        },
-        {
-          "key": "009150",
-          "name": "삼성전기",
-          "code": "009150",
-          "weight_prev": 2.94,
-          "shares_prev": 22.0
-        },
-        {
-          "key": "105560",
-          "name": "KB금융",
-          "code": "105560",
-          "weight_prev": 2.74,
-          "shares_prev": 167.0
-        },
-        {
-          "key": "272210",
-          "name": "한화시스템",
-          "code": "272210",
-          "weight_prev": 2.45,
-          "shares_prev": 349.0
-        },
-        {
-          "key": "402340",
-          "name": "SK스퀘어",
-          "code": "402340",
-          "weight_prev": 2.39,
-          "shares_prev": 26.0
-        },
-        {
-          "key": "031210",
-          "name": "서울보증보험",
-          "code": "031210",
-          "weight_prev": 2.1,
-          "shares_prev": 435.0
-        },
-        {
-          "key": "001120",
-          "name": "LX인터내셔널",
-          "code": "001120",
-          "weight_prev": 1.26,
-          "shares_prev": 274.0
-        }
-      ],
-      "moves": [],
-      "has_weight": false
-    },
-    {
-      "code": "472150",
-      "label": "TIGER 배당커버드콜액티브",
-      "group": "TIGER",
-      "flow_factor": 1.0,
-      "new": [],
-      "gone": [
-        {
-          "key": "005930",
-          "name": "삼성전자",
-          "code": "005930",
-          "weight_prev": 24.09,
-          "shares_prev": 177.0
-        },
-        {
-          "key": "000660",
-          "name": "SK하이닉스",
-          "code": "000660",
-          "weight_prev": 21.37,
-          "shares_prev": 26.0
-        },
-        {
-          "key": "102110",
-          "name": "TIGER 200",
-          "code": "102110",
-          "weight_prev": 14.77,
-          "shares_prev": 270.0
-        },
-        {
-          "key": "005935",
-          "name": "삼성전자우",
-          "code": "005935",
-          "weight_prev": 4.51,
-          "shares_prev": 43.0
-        },
-        {
-          "key": "009150",
-          "name": "삼성전기",
-          "code": "009150",
-          "weight_prev": 2.21,
-          "shares_prev": 3.0
-        },
-        {
-          "key": "0104N0",
-          "name": "TIGER 200타겟위클리커버드콜",
-          "code": "0104N0",
-          "weight_prev": 2.08,
-          "shares_prev": 200.0
-        },
-        {
-          "key": "105560",
-          "name": "KB금융",
-          "code": "105560",
-          "weight_prev": 1.54,
-          "shares_prev": 17.0
-        },
-        {
-          "key": "402340",
-          "name": "SK스퀘어",
-          "code": "402340",
-          "weight_prev": 1.52,
-          "shares_prev": 3.0
-        },
-        {
-          "key": "086790",
-          "name": "하나금융지주",
-          "code": "086790",
-          "weight_prev": 1.46,
-          "shares_prev": 21.0
-        },
-        {
-          "key": "012450",
-          "name": "한화에어로스페이스",
-          "code": "012450",
-          "weight_prev": 1.41,
-          "shares_prev": 3.0
-        }
-      ],
-      "moves": [],
-      "has_weight": false
-    },
     {
       "code": "0162Y0",
       "label": "TIME 코스닥액티브",
@@ -284,18 +122,18 @@
       ],
       "gone": [
         {
-          "key": "FUJIKURA LTD",
-          "name": "FUJIKURA LTD",
-          "code": "",
-          "weight_prev": 0.0,
-          "shares_prev": 268.0
-        },
-        {
           "key": "KIOXIA HOLDINGS CORP",
           "name": "KIOXIA HOLDINGS CORP",
           "code": "",
           "weight_prev": 0.0,
           "shares_prev": 225.0
+        },
+        {
+          "key": "FUJIKURA LTD",
+          "name": "FUJIKURA LTD",
+          "code": "",
+          "weight_prev": 0.0,
+          "shares_prev": 268.0
         }
       ],
       "moves": [
@@ -437,9 +275,9 @@
     "share_pct_min": 30.0
   },
   "summary": {
-    "etfs_changed": 8,
+    "etfs_changed": 6,
     "new_total": 8,
-    "gone_total": 28,
+    "gone_total": 8,
     "moves_total": 6,
     "universe": 20
   }
