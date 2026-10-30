@@ -622,3 +622,6 @@ main input[type=date]:focus,main input[type=number]:focus,main select:focus,main
 .nav-submenu-3 button.active{background:#e7f3fe;color:#1b6ec2;font-weight:700;
   box-shadow:inset 2px 0 0 #2383e2}
 .nav-submenu-3 button.active:hover{background:#dbebfc;color:#1b6ec2}
+
+/* 링크가 아직 없는 메뉴: 흐리게 + 눌리지 않게(죽은 링크로 나가지 않는다) */
+.nav-submenu a.soon,.nav-submenu-2 a.soon{opacity:.45;pointer-events:none;cursor:default}
