@@ -1,96 +1,15 @@
 {
   "date": "2026-10-30",
   "prev_date": "2026-10-29",
-  "generated_at": "2026-10-30 09:20",
+  "generated_at": "2026-10-30 10:20",
   "base_date": "",
   "prev_base_date": "",
   "market_date": "2026-10-30",
   "prev_market_date": "2026-10-29",
-  "fetched_at": "2026-10-30 09:20",
+  "fetched_at": "2026-10-30 10:20",
   "prev_fetched_at": "2026-10-29 10:20",
   "first_run": false,
   "etfs": [
-    {
-      "code": "426030",
-      "label": "TIME 미국나스닥100액티브",
-      "group": "TIME(구 TIMEFOLIO)",
-      "flow_factor": 1.0,
-      "new": [],
-      "gone": [
-        {
-          "key": "APPLE INC",
-          "name": "APPLE INC",
-          "code": "",
-          "weight_prev": 0.0,
-          "shares_prev": 102.0
-        },
-        {
-          "key": "BLOOM ENERGY CORP- A",
-          "name": "BLOOM ENERGY CORP- A",
-          "code": "",
-          "weight_prev": 0.0,
-          "shares_prev": 95.0
-        },
-        {
-          "key": "SK HYNIX INC-ADR",
-          "name": "SK HYNIX INC-ADR",
-          "code": "",
-          "weight_prev": 0.0,
-          "shares_prev": 77.0
-        },
-        {
-          "key": "AMAZON.COM INC",
-          "name": "AMAZON.COM INC",
-          "code": "",
-          "weight_prev": 0.0,
-          "shares_prev": 110.0
-        },
-        {
-          "key": "MICROSOFT CORP",
-          "name": "MICROSOFT CORP",
-          "code": "",
-          "weight_prev": 0.0,
-          "shares_prev": 76.0
-        },
-        {
-          "key": "SPACE EXPLORATION TECHN-CL A",
-          "name": "SPACE EXPLORATION TECHN-CL A",
-          "code": "",
-          "weight_prev": 0.0,
-          "shares_prev": 112.0
-        },
-        {
-          "key": "NVIDIA CORP",
-          "name": "NVIDIA CORP",
-          "code": "",
-          "weight_prev": 0.0,
-          "shares_prev": 239.0
-        },
-        {
-          "key": "PALANTIR TECHNOLOGIES INC-A",
-          "name": "PALANTIR TECHNOLOGIES INC-A",
-          "code": "",
-          "weight_prev": 0.0,
-          "shares_prev": 107.0
-        },
-        {
-          "key": "INTEL CORP",
-          "name": "INTEL CORP",
-          "code": "",
-          "weight_prev": 0.0,
-          "shares_prev": 238.0
-        },
-        {
-          "key": "ALPHABET INC-CL A",
-          "name": "ALPHABET INC-CL A",
-          "code": "",
-          "weight_prev": 0.0,
-          "shares_prev": 117.0
-        }
-      ],
-      "moves": [],
-      "has_weight": false
-    },
     {
       "code": "0162Y0",
       "label": "TIME 코스닥액티브",
@@ -142,6 +61,32 @@
           "headline": false
         }
       ],
+      "has_weight": true
+    },
+    {
+      "code": "463050",
+      "label": "TIME K바이오액티브",
+      "group": "TIME(구 TIMEFOLIO)",
+      "flow_factor": 1.0,
+      "new": [
+        {
+          "key": "028300",
+          "name": "HLB",
+          "code": "028300",
+          "weight": 2.8,
+          "shares": 358.0
+        }
+      ],
+      "gone": [
+        {
+          "key": "491000",
+          "name": "리브스메드",
+          "code": "491000",
+          "weight_prev": 2.9,
+          "shares_prev": 342.0
+        }
+      ],
+      "moves": [],
       "has_weight": true
     },
     {
@@ -302,8 +247,8 @@
   },
   "summary": {
     "etfs_changed": 8,
-    "new_total": 6,
-    "gone_total": 16,
+    "new_total": 7,
+    "gone_total": 7,
     "moves_total": 3,
     "universe": 20
   }

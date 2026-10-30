@@ -1,6 +1,6 @@
 {
   "date": "2026-10-30",
-  "fetched_at": "2026-10-30 09:20",
+  "fetched_at": "2026-10-30 10:20",
   "market_date": "2026-10-30",
   "market_status": "OPEN",
   "base_date": "",
@@ -9,49 +9,56 @@
     "385720": {
       "name": "TIME 코스피액티브",
       "nav": 22048.24,
-      "market_value": "3,278억",
+      "market_value": "3,225억",
       "holdings": [
         {
           "key": "005930",
           "code": "005930",
           "name": "삼성전자",
           "shares": 2415.0,
-          "weight": 26.24
+          "weight": 25.4
         },
         {
           "key": "000660",
           "code": "000660",
           "name": "SK하이닉스",
           "shares": 360.0,
-          "weight": 24.04
+          "weight": 24.91
         },
         {
           "key": "006400",
           "code": "006400",
           "name": "삼성SDI",
           "shares": 213.0,
-          "weight": 5.11
+          "weight": 5.2
         },
         {
           "key": "005935",
           "code": "005935",
           "name": "삼성전자우",
           "shares": 350.0,
-          "weight": 2.99
+          "weight": 2.92
         },
         {
           "key": "105560",
           "code": "105560",
           "name": "KB금융",
           "shares": 380.0,
-          "weight": 2.63
+          "weight": 2.7
         },
         {
           "key": "138040",
           "code": "138040",
           "name": "메리츠금융지주",
           "shares": 449.0,
-          "weight": 2.49
+          "weight": 2.67
+        },
+        {
+          "key": "402340",
+          "code": "402340",
+          "name": "SK스퀘어",
+          "shares": 54.0,
+          "weight": 2.33
         },
         {
           "key": "009150",
@@ -61,25 +68,18 @@
           "weight": 2.29
         },
         {
-          "key": "402340",
-          "code": "402340",
-          "name": "SK스퀘어",
-          "shares": 54.0,
-          "weight": 2.23
-        },
-        {
           "key": "003230",
           "code": "003230",
           "name": "삼양식품",
           "shares": 40.0,
-          "weight": 2.14
+          "weight": 2.07
         },
         {
           "key": "373220",
           "code": "373220",
           "name": "LG에너지솔루션",
           "shares": 110.0,
-          "weight": 1.92
+          "weight": 1.78
         }
       ],
       "group": "TIME(구 TIMEFOLIO)",
@@ -88,7 +88,7 @@
     "0162Y0": {
       "name": "TIME 코스닥액티브",
       "nav": 6459.48,
-      "market_value": "2,064억",
+      "market_value": "2,024억",
       "holdings": [
         {
           "key": "058610",
@@ -167,7 +167,7 @@
     "426020": {
       "name": "TIME 미국S&P500액티브",
       "nav": 30456.21,
-      "market_value": "3,877억",
+      "market_value": "3,859억",
       "holdings": [
         {
           "key": "NVIDIA CORP",
@@ -246,15 +246,86 @@
     "426030": {
       "name": "TIME 미국나스닥100액티브",
       "nav": 42814.43,
-      "market_value": "2조 2,483억",
-      "holdings": [],
+      "market_value": "2조 2,264억",
+      "holdings": [
+        {
+          "key": "NVIDIA CORP",
+          "code": "",
+          "name": "NVIDIA CORP",
+          "shares": 239.0,
+          "weight": 0.0
+        },
+        {
+          "key": "INTEL CORP",
+          "code": "",
+          "name": "INTEL CORP",
+          "shares": 238.0,
+          "weight": 0.0
+        },
+        {
+          "key": "ALPHABET INC-CL A",
+          "code": "",
+          "name": "ALPHABET INC-CL A",
+          "shares": 117.0,
+          "weight": 0.0
+        },
+        {
+          "key": "SPACE EXPLORATION TECHN-CL A",
+          "code": "",
+          "name": "SPACE EXPLORATION TECHN-CL A",
+          "shares": 112.0,
+          "weight": 0.0
+        },
+        {
+          "key": "AMAZON.COM INC",
+          "code": "",
+          "name": "AMAZON.COM INC",
+          "shares": 110.0,
+          "weight": 0.0
+        },
+        {
+          "key": "PALANTIR TECHNOLOGIES INC-A",
+          "code": "",
+          "name": "PALANTIR TECHNOLOGIES INC-A",
+          "shares": 107.0,
+          "weight": 0.0
+        },
+        {
+          "key": "APPLE INC",
+          "code": "",
+          "name": "APPLE INC",
+          "shares": 102.0,
+          "weight": 0.0
+        },
+        {
+          "key": "BLOOM ENERGY CORP- A",
+          "code": "",
+          "name": "BLOOM ENERGY CORP- A",
+          "shares": 95.0,
+          "weight": 0.0
+        },
+        {
+          "key": "SK HYNIX INC-ADR",
+          "code": "",
+          "name": "SK HYNIX INC-ADR",
+          "shares": 77.0,
+          "weight": 0.0
+        },
+        {
+          "key": "MICROSOFT CORP",
+          "code": "",
+          "name": "MICROSOFT CORP",
+          "shares": 76.0,
+          "weight": 0.0
+        }
+      ],
       "group": "TIME(구 TIMEFOLIO)",
       "label": "TIME 미국나스닥100액티브"
     },
     "441800": {
       "name": "TIME Korea플러스배당액티브",
       "nav": 24956.78,
-      "market_value": "6,855억",
+      "market_value": "6,795억",
       "holdings": [
         {
           "key": "000660",
@@ -333,77 +404,77 @@
     "463050": {
       "name": "TIME K바이오액티브",
       "nav": 10167.86,
-      "market_value": "2,029억",
+      "market_value": "2,027억",
       "holdings": [
         {
           "key": "068270",
           "code": "068270",
           "name": "셀트리온",
           "shares": 603.0,
-          "weight": 22.25
+          "weight": 22.45
         },
         {
           "key": "207940",
           "code": "207940",
           "name": "삼성바이오로직스",
           "shares": 44.0,
-          "weight": 11.74
+          "weight": 11.82
         },
         {
           "key": "196170",
           "code": "196170",
           "name": "알테오젠",
           "shares": 250.0,
-          "weight": 10.84
+          "weight": 10.82
         },
         {
           "key": "226950",
           "code": "226950",
           "name": "올릭스",
           "shares": 419.0,
-          "weight": 7.93
+          "weight": 7.95
         },
         {
           "key": "128940",
           "code": "128940",
           "name": "한미약품",
           "shares": 73.0,
-          "weight": 5.24
+          "weight": 5.58
         },
         {
           "key": "141080",
           "code": "141080",
           "name": "리가켐바이오",
           "shares": 360.0,
-          "weight": 4.63
+          "weight": 4.53
+        },
+        {
+          "key": "347850",
+          "code": "347850",
+          "name": "디앤디파마텍",
+          "shares": 526.0,
+          "weight": 4.31
         },
         {
           "key": "310210",
           "code": "310210",
           "name": "보로노이",
           "shares": 175.0,
-          "weight": 4.12
-        },
-        {
-          "key": "347850",
-          "code": "347850",
-          "name": "디앤디파마텍",
-          "shares": 440.0,
-          "weight": 3.67
+          "weight": 3.96
         },
         {
           "key": "298380",
           "code": "298380",
           "name": "에이비엘바이오",
           "shares": 435.0,
-          "weight": 3.53
+          "weight": 3.51
         },
         {
-          "key": "491000",
-          "code": "491000",
-          "name": "리브스메드",
-          "shares": 342.0,
-          "weight": 2.9
+          "key": "028300",
+          "code": "028300",
+          "name": "HLB",
+          "shares": 358.0,
+          "weight": 2.8
         }
       ],
       "group": "TIME(구 TIMEFOLIO)",
@@ -412,7 +483,7 @@
     "410870": {
       "name": "TIME K컬처액티브",
       "nav": 8200.73,
-      "market_value": "97.8억",
+      "market_value": "97.7억",
       "holdings": [
         {
           "key": "035760",
@@ -491,7 +562,7 @@
     "456600": {
       "name": "TIME 글로벌AI인공지능액티브",
       "nav": 52978.95,
-      "market_value": "1조 7,294억",
+      "market_value": "1조 7,089억",
       "holdings": [
         {
           "key": "0043Y0",
@@ -570,7 +641,7 @@
     "0163Y0": {
       "name": "KoAct 코스닥액티브",
       "nav": 9039.91,
-      "market_value": "4,304억",
+      "market_value": "4,249억",
       "holdings": [
         {
           "key": "031980",
@@ -649,7 +720,7 @@
     "462900": {
       "name": "KoAct 바이오헬스케어액티브",
       "nav": 10962.53,
-      "market_value": "2,905억",
+      "market_value": "2,897억",
       "holdings": [
         {
           "key": "068270",
@@ -728,7 +799,7 @@
     "476850": {
       "name": "KoAct 배당성장액티브",
       "nav": 19021.31,
-      "market_value": "956억",
+      "market_value": "938억",
       "holdings": [
         {
           "key": "000660",
@@ -807,7 +878,7 @@
     "471040": {
       "name": "KoAct 글로벌AI&로봇액티브",
       "nav": 26283.08,
-      "market_value": "2,224억",
+      "market_value": "2,197억",
       "holdings": [
         {
           "key": "005930",
@@ -886,7 +957,7 @@
     "445290": {
       "name": "KODEX 로봇액티브",
       "nav": 26529.13,
-      "market_value": "9,034억",
+      "market_value": "8,932억",
       "holdings": [
         {
           "key": "005930",
@@ -965,7 +1036,7 @@
     "441640": {
       "name": "KODEX 미국배당커버드콜액티브",
       "nav": 12151.21,
-      "market_value": "1조 7,093억",
+      "market_value": "1조 7,037억",
       "holdings": [
         {
           "key": "AMPLIFY CWP ENHANCED DIVIDEND",
@@ -1044,7 +1115,7 @@
     "471780": {
       "name": "TIGER 코리아테크액티브",
       "nav": 33581.08,
-      "market_value": "2,495억",
+      "market_value": "2,434억",
       "holdings": [
         {
           "key": "005930",
@@ -1123,7 +1194,7 @@
     "472150": {
       "name": "TIGER 배당커버드콜액티브",
       "nav": 17025.85,
-      "market_value": "2조 7,458억",
+      "market_value": "2조 6,920억",
       "holdings": [
         {
           "key": "005930",
@@ -1202,7 +1273,7 @@
     "365040": {
       "name": "TIGER AI코리아그로스액티브",
       "nav": 31387.1,
-      "market_value": "632억",
+      "market_value": "625억",
       "holdings": [
         {
           "key": "005930",
@@ -1360,7 +1431,7 @@
     "444200": {
       "name": "SOL 코리아메가테크액티브",
       "nav": 37390.96,
-      "market_value": "3,959억",
+      "market_value": "3,886억",
       "holdings": [
         {
           "key": "005930",
@@ -1439,7 +1510,7 @@
     "481180": {
       "name": "SOL 미국AI소프트웨어",
       "nav": 16514.03,
-      "market_value": "1,279억",
+      "market_value": "1,272억",
       "holdings": [
         {
           "key": "ORACLE",
