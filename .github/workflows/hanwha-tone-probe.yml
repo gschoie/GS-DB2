@@ -1,0 +1,79 @@
+name: 한화 리서치 게시판 진단 (일회성)
+# 한화투자증권 리서치 게시판(기업/산업·투자전략)의 목록·페이지네이션·첨부 구조를 러너에서 확인한다
+# (개발 컨테이너는 service.hanwhawm.com:9090 접속이 막혀 있다).
+on:
+  workflow_dispatch:
+  push:
+    branches: ["claude/sweet-hypatia-1ozbht"]
+    paths: [".github/workflows/hanwha-tone-probe.yml"]
+permissions:
+  contents: read
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - run: python -m pip install requests beautifulsoup4 lxml
+      - name: 목록 페이지 구조 덤프
+        run: |
+          python - <<'PY'
+          import re, html, requests, json
+          from bs4 import BeautifulSoup
+          UA={'User-Agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/126 Safari/537.36'}
+          B='https://service.hanwhawm.com:9090'
+          s=requests.Session(); s.headers.update(UA)
+          def collapse(t): return re.sub(r'\s+',' ',t)
+          for dep in ('1002','1003'):
+              url=f'{B}/main/research/main/list.cmd?depth2_id={dep}&mode=depth2'
+              r=s.get(url,timeout=30)
+              print(f'\n######## depth2_id={dep} status={r.status_code} len={len(r.text)} final={r.url}')
+              txt=collapse(r.text)
+              print('--- head 3000 ---'); print(txt[:3000])
+              soup=BeautifulSoup(r.text,'lxml')
+              print('--- forms ---')
+              for f in soup.find_all('form'):
+                  print('FORM', f.get('name'), f.get('id'), f.get('action'), f.get('method'))
+                  for i in f.find_all(['input','select']):
+                      print('   ', i.name, i.get('name'), i.get('id'), i.get('value'), i.get('type'))
+              print('--- tables ---')
+              for ti,t in enumerate(soup.find_all('table')):
+                  rows=t.find_all('tr')
+                  print(f'TABLE {ti} class={t.get("class")} rows={len(rows)}')
+                  for tr in rows[:4]:
+                      print('   TR:', collapse(str(tr))[:1500])
+              print('--- list-ish containers (ul/li with links) ---')
+              for ul in soup.find_all(['ul','ol']):
+                  lis=ul.find_all('li')
+                  if 5<=len(lis)<=60 and ul.find('a'):
+                      print('UL class=',ul.get('class'),'n=',len(lis))
+                      for li in lis[:3]: print('   LI:', collapse(str(li))[:1200])
+              print('--- links with cmd/pdf/down ---')
+              seen=0
+              for a in soup.find_all('a',href=True):
+                  h=a['href']
+                  if re.search(r'cmd|pdf|down|view|seq|file',h,re.I):
+                      print('A', h[:200], '|', collapse(a.get_text())[:80], '|', a.get('onclick','')[:150]); seen+=1
+                  if seen>40: break
+              print('--- onclick handlers ---')
+              oc=set()
+              for el in soup.find_all(attrs={'onclick':True}):
+                  oc.add(el['onclick'][:160])
+              for o in list(oc)[:40]: print('ONCLICK', o)
+              print('--- scripts mentioning page/list/view ---')
+              for sc in soup.find_all('script'):
+                  st=sc.string or ''
+                  if re.search(r'page|list|view|download',st,re.I) and len(st)<6000:
+                      print('SCRIPT:', collapse(st)[:2500])
+              print('--- paging hints ---')
+              for m in re.finditer(r'(pageIndex|curPage|pageNo|page_no|currentPage|totalCount|totCnt|rowCnt)[^<]{0,120}',txt,re.I):
+                  print('HINT', m.group(0)[:200])
+              # 2페이지 추정 요청들
+              for extra in ({'pageIndex':'2'},{'curPage':'2'},{'page':'2'},{'pageNo':'2'},{'currentPage':'2'}):
+                  try:
+                      r2=s.get(url,params=extra,timeout=30)
+                      d2=re.findall(r'\d{4}[.\-/]\d{2}[.\-/]\d{2}',r2.text)
+                      print(f'PAGE2 try {extra}: status={r2.status_code} len={len(r2.text)} dates={d2[:3]}..{d2[-2:]} n={len(d2)}')
+                  except Exception as e: print('PAGE2 err',extra,e)
+          PY
