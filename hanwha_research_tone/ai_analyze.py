@@ -98,15 +98,24 @@ def gemini(user_text, model):
             'generationConfig': {'responseMimeType': 'application/json', 'responseSchema': SCHEMA, 'temperature': 0.1}}
     req = urllib.request.Request(GEMINI_URL.format(model=model) + f'?key={api_key()}',
                                  data=json.dumps(body).encode(), headers={'Content-Type': 'application/json'}, method='POST')
-    try:
-        with urllib.request.urlopen(req, timeout=90) as resp:
-            payload = json.loads(resp.read().decode())
-        return json.loads(payload['candidates'][0]['content']['parts'][0]['text'])
-    except urllib.error.HTTPError as exc:
-        detail = exc.read().decode('utf-8', errors='ignore')
-        if exc.code == 429:
-            raise QuotaExhausted(f'{model}: {detail[:300]}') from exc
-        raise RuntimeError(f'{model} HTTP {exc.code}: {detail[:300]}') from exc
+    for attempt in range(2):
+        try:
+            with urllib.request.urlopen(req, timeout=150) as resp:
+                payload = json.loads(resp.read().decode())
+            return json.loads(payload['candidates'][0]['content']['parts'][0]['text'])
+        except urllib.error.HTTPError as exc:
+            detail = exc.read().decode('utf-8', errors='ignore')
+            if exc.code == 429:
+                raise QuotaExhausted(f'{model}: {detail[:300]}') from exc
+            if exc.code in (500, 502, 503, 504) and attempt == 0:
+                time.sleep(15); continue        # 일시 과부하 — 한 번은 같은 모델로 다시
+            raise RuntimeError(f'{model} HTTP {exc.code}: {detail[:300]}') from exc
+        except (TimeoutError, urllib.error.URLError, OSError) as exc:
+            # 읽기 타임아웃(11/1 실측: PDF 입력이 길어진 뒤 연속 발생) — 한 번 더 시도하고 그래도 안 되면 다음 건으로
+            if attempt == 0:
+                time.sleep(10); continue
+            raise RuntimeError(f'{model} network: {exc}') from exc
+    raise RuntimeError('unreachable')
 
 
 def _num(x):
@@ -214,7 +223,7 @@ def run(max_reports, budget, since):
                     break
             else:
                 print('::warning::모든 모델이 429 — 이번 run 중단'); break
-            if errors >= 10:
+            if errors >= 25:          # 연속이 아니라 누적 — 일시 장애 10건에 run 이 통째로 끝나지 않게
                 break
             time.sleep(delay)
     finally:
