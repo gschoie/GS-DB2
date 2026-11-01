@@ -22,9 +22,6 @@ on:
     - cron: "10 22 * * *"   # 07:10 KST
     - cron: "35 22 * * *"   # 07:35 KST (지연 안전망)
     - cron: "0 13 * * *"    # 22:00 KST — AI 백필
-  push:
-    branches: ["claude/sweet-hypatia-1ozbht"]   # 첫 등록용(main 에 없는 워크플로는 dispatch 가 404) — 머지 뒤 제거
-    paths: [".github/workflows/hanwha-tone.yml"]
 
 permissions:
   contents: write
