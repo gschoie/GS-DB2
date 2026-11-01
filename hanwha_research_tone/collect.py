@@ -34,7 +34,7 @@ KST = timezone(timedelta(hours=9))
 # 해외주식분석(anls19 등)은 한국 애널리스트의 국내 커버리지 톤이 아니라 기본 제외.
 SKIP_DEPTH3 = set(filter(None, os.getenv('HANWHA_SKIP_DEPTH3', 'anls19').split(',')))
 # 데일리·주간 시황류는 톤 추적 대상이 아니다(목록에는 남기되 AI 분석에서 제외).
-ROUTINE_TITLE = re.compile(r'Daily|데일리|Morning|모닝|주간\s*파생시황|FI\s*Weekly|Weekly\s*Note|캘린더|일정', re.I)
+ROUTINE_TITLE = re.compile(r'Daily|데일리|Morning|모닝|주간\s*파생시황|FI\s*Weekly|Weekly\s*Note|캘린더|일정|공표\s*중단|커버리지\s*(개시|제외)\s*안내', re.I)
 
 
 def load(path, default):
@@ -82,14 +82,16 @@ def view_url(rec):
 def parse_detail(html):
     """상세 HTML → {body, related: [(이름, 코드)]}. 본문은 researchCont 블록의 텍스트."""
     m = re.search(r'<div class="researchCont">(.*?)<!-- 홈페이지 개편', html, re.S) or \
-        re.search(r'<div class="researchCont">(.*?)<div class="fileTable">', html, re.S)
+        re.search(r'<div class="researchCont">(.*?)<div class="fileTable">', html, re.S) or \
+        re.search(r'<div class="researchCont">(.*?)</div>\s*</div>\s*</div>', html, re.S)
     body = ''
     if m:
-        raw = re.sub(r'<br\s*/?>', '\n', m.group(1), flags=re.I)
+        raw = re.sub(r'<script.*?</script>', ' ', m.group(1), flags=re.S | re.I)
+        raw = re.sub(r'<br\s*/?>', '\n', raw, flags=re.I)
         raw = re.sub(r'</(p|tr|td|div|li)>', '\n', raw, flags=re.I)
         raw = re.sub(r'<[^>]+>', ' ', raw)
         raw = _html.unescape(raw).replace('\xa0', ' ')
-        body = '\n'.join(P.clean(x) for x in raw.split('\n') if P.clean(x))
+        body = P.clean_body('\n'.join(P.clean(x) for x in raw.split('\n') if P.clean(x)))
     names = re.search(r'var spJname\s*=\s*"([^"]*)"', html)
     codes = re.search(r'var spJcode\s*=\s*"([^"]*)"', html)
     related = []
@@ -108,6 +110,8 @@ def enrich(rec):
     rec['opinion'] = t['opinion']; rec['subject'] = t['subject']
     rec['overseas'] = t['is_overseas']
     rec['sector'] = P.sector_from_record(rec)
+    # 대괄호가 시리즈 이름('9월의 기분'·'플레이북')이거나 비어 있으면 섹터 미상 — build 가 담당자의 주 섹터로 채운다
+    rec['sector_guess'] = rec['board'] == '1002' and P.canon_sector(rec.get('title_sector')) is None
     rec['routine'] = bool(ROUTINE_TITLE.search(rec['title']))
     rec['scope'] = '기업' if rec['code'] else ('전략' if rec['board'] == '1003' else '산업')
     return rec
@@ -156,10 +160,9 @@ def fetch_detail(s, rec):
     r = s.get(view_url(rec), timeout=60)
     if r.status_code != 200:
         raise RuntimeError(f'HTTP {r.status_code}')
-    d = parse_detail(r.text)
-    if not d['body']:
-        raise RuntimeError('본문 없음')
-    return d
+    if 'researchDetail' not in r.text and 'researchCont' not in r.text:
+        raise RuntimeError('상세 템플릿 아님')
+    return parse_detail(r.text)   # 본문이 비어 있어도(로그인 전용 글) 저장해 재요청을 막는다 — 분석은 요약으로
 
 
 def wanted(rec, since):

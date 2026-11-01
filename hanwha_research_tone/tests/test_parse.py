@@ -66,5 +66,30 @@ class CoverTests(unittest.TestCase):
         self.assertEqual((c['opinion'], c['tp']), ('Buy', 56000))
 
 
+class KoreanUnitTests(unittest.TestCase):
+    def test_man_won(self):
+        self.assertEqual(p.extract_cover('동사에 대한 목표주가 30만 원을 유지합니다.')['tp'], 300000)
+        c = p.extract_cover('투자의견 BUY, 목표주가 5.1만원 유지'); self.assertEqual((c['tp'], c['tp_change'], c['opinion']), (51000, '유지', 'Buy'))
+        c = p.extract_cover('목표주가 1만 2천 원으로 상향하고 투자의견 BUY 유지'); self.assertEqual((c['tp'], c['tp_change'], c['opinion_change']), (12000, '상향', '유지'))
+
+    def test_particle_and_parenthesis(self):
+        self.assertEqual(p.extract_cover('목표주가를 8,300원으로 하향합니다.')['tp_change'], '하향')
+        c = p.extract_cover('목표주가는 800,000원(-10,000원)으로 하향.'); self.assertEqual((c['tp'], c['tp_change']), (800000, '하향'))
+
+
+class BodyAndSectorTests(unittest.TestCase):
+    def test_clean_body_cuts_footer(self):
+        body = '에이피알의 2026년 3분기 매출액은 7,731억원으로 컨센서스를 하회했다. 환손실 영향을 제외하면 양호하다.\n$(function(){\n보다 자세한 내용은 로그인 후 첨부파일을 통해 확인하세요.\nvar x=1;'
+        self.assertEqual(p.clean_body(body), '에이피알의 2026년 3분기 매출액은 7,731억원으로 컨센서스를 하회했다. 환손실 영향을 제외하면 양호하다.')
+
+    def test_clean_body_empty_when_only_disclaimer(self):
+        self.assertEqual(p.clean_body('이 자료는 당사 리서치센터나 해당 부서가 신뢰할 만한 자료로 작성한 것이지만'), '')
+
+    def test_canon_sector(self):
+        self.assertEqual(p.canon_sector('철강/비철금속'), '철강/비철'); self.assertEqual(p.canon_sector('ESG & Transition'), 'ESG')
+        self.assertEqual(p.canon_sector('은행'), '은행'); self.assertEqual(p.canon_sector('조선'), '조선')
+        self.assertIsNone(p.canon_sector('9월의 기분')); self.assertIsNone(p.canon_sector('한화 업종별 월간 플레이북')); self.assertIsNone(p.canon_sector('기업분석'))
+
+
 if __name__ == '__main__':
     unittest.main()

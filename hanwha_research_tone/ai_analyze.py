@@ -18,7 +18,7 @@ DATA = C.DATA
 AI_CACHE = DATA / 'ai_analysis.json'
 AI_STATUS = DATA / 'ai_run_status.json'
 GEMINI_URL = 'https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent'
-SCHEMA_VERSION = 1
+SCHEMA_VERSION = 2   # 2: 본문 정리(푸터 JS 제거) 뒤 재분석
 
 TP_REASONS = ['실적추정', '멀티플', '방법론', '시점롤포워드', '기타']
 TONE_LABELS = ['강한 확신', '긍정', '중립·건조', '신중', '부정적']
@@ -146,8 +146,10 @@ def normalize(raw):
 def build_input(rec, body):
     parts = [f"[발간일] {rec['date']}  [애널리스트] {rec.get('analyst')}  [구분] {rec.get('kind')} / {rec.get('sector')}",
              f"[제목] {rec['title']}", f"[요약] {rec.get('summary') or ''}"]
-    if body:
+    if body and len(body) > 80:
         parts.append(f"[본문]\n{body[:14000]}")
+    else:
+        parts.append('[본문] (게시판 본문 없음 — 제목·요약만으로 판단하고, 없는 숫자는 null/없음으로)')
     return '\n\n'.join(parts)
 
 
@@ -160,7 +162,7 @@ def pending_reports(reports, bodies, cache, since):
         if ent and ent.get('v') == SCHEMA_VERSION:
             continue
         if r['id'] not in bodies:
-            continue   # 본문이 아직 없으면 다음 run 에(요약만으로 분석하면 톤이 얕다)
+            continue   # 상세를 아직 못 받았으면 다음 run 에(로그인 전용 글은 본문이 '' 로 저장돼 요약으로 분석)
         out.append(r)
     return sorted(out, key=lambda r: (r['date'], r['id']), reverse=True)
 

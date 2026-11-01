@@ -31,7 +31,7 @@ class ListTests(unittest.TestCase):
         s = C.enrich({**items[2], 'board': '1003'})
         self.assertEqual(s['sector'], '전략·경제'); self.assertTrue(s['routine']); self.assertEqual(s['scope'], '전략')
         i = C.enrich({**items[0], 'board': '1002'})
-        self.assertEqual(i['scope'], '산업'); self.assertEqual(i['sector'], '인터넷/게임')
+        self.assertEqual(i['scope'], '산업'); self.assertEqual(i['sector'], '인터넷/SW')
 
 
 class DetailTests(unittest.TestCase):

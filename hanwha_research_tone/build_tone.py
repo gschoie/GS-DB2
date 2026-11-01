@@ -102,25 +102,29 @@ def company_key(rec):
 
 
 def fill_tp_priors(timeline):
-    last = None
+    """직전 TP 가 본문에 없으면 같은 종목 타임라인의 직전 값으로 채운다.
+    본문이 '유지'라 해도 직전 기록과 다르면(그 사이 자료를 못 받았거나 본문에 숫자가 없던 경우) 비교로
+    방향을 매기되 inferred 표식을 남긴다 — '유지'로 두면 TP 가 바뀐 사실이 화면에서 사라진다."""
+    last, last_date = None, None
     for rec in timeline:                      # 시간순
         tp = rec.get('tp_event')
         if not tp or not tp.get('value'):
             continue
         if tp.get('prior') is None and last and last != tp['value']:
             if tp['direction'] in ('상향', '하향'):
-                ok = (tp['direction'] == '상향') == (tp['value'] > last)
-                if ok:
+                if (tp['direction'] == '상향') == (tp['value'] > last):
                     tp['prior'] = last; tp['display'] = f'{fmt_won(last)} → {fmt_won(tp["value"])}'
-            elif tp['direction'] in ('', '유지', '신규'):
+            else:
                 tp['direction'] = '상향' if tp['value'] > last else '하향'
                 tp['prior'] = last; tp['display'] = f'{fmt_won(last)} → {fmt_won(tp["value"])}'
                 tp['reasons'] = tp['reasons'] or ['기타']
+                tp['inferred'] = True
+                tp['evidence'] = (tp.get('evidence') or '') + f' [직전 기록 {last_date} {fmt_won(last)} 대비 — 본문엔 변경 언급 없음]'
         elif tp['direction'] == '' and last == tp['value']:
             tp['direction'] = '유지'
         elif tp['direction'] == '':
             tp['direction'] = '신규'
-        last = tp['value']
+        last, last_date = tp['value'], rec['date']
 
 
 def attach_point_diffs(timeline):
@@ -181,8 +185,17 @@ def build(write_site=True):
     reports, bodies, cache = C.load(C.REPORTS, {}), C.load(C.BODIES, {}), C.load(AI_CACHE, {})
     status = C.load(C.STATUS, {})
     since = status.get('since') or '2025-01-01'
-    records = [merge_report(r, cache.get(r['id']), bodies.get(r['id'])) for r in reports.values()
-               if C.wanted(r, since)]
+    wanted = [r for r in reports.values() if C.wanted(r, since)]
+    # 섹터 미상(시리즈 제목) 글은 그 담당자가 가장 많이 쓴 섹터로 — 담당자별 최빈값
+    mode = defaultdict(lambda: defaultdict(int))
+    for r in wanted:
+        if r['board'] == '1002' and not r.get('sector_guess') and r.get('sector') not in ('기업분석', '산업분석', '기타'):
+            mode[r.get('analyst')][r['sector']] += 1
+    for r in wanted:
+        if r.get('sector_guess') or r.get('sector') in ('기업분석', '산업분석', '기타'):
+            if mode.get(r.get('analyst')):
+                r['sector'] = max(mode[r['analyst']].items(), key=lambda kv: kv[1])[0]
+    records = [merge_report(r, cache.get(r['id']), bodies.get(r['id'])) for r in wanted]
     by_key = defaultdict(list)
     names = {}
     for rec in records:
