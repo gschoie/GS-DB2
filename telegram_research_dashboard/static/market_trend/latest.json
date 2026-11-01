@@ -1,366 +1,331 @@
 {
- "date": "2026-10-30",
+ "date": "2026-11-01",
  "meta": {
-  "window": "10-29 06:00~10-30 06:00 KST",
+  "window": "10-31 06:00~11-01 06:00 KST",
   "engine": "Gemini(gemini-2.5-flash)",
-  "generated_at": "2026-10-30T06:35+09:00"
+  "generated_at": "2026-11-01T06:35+09:00"
  },
  "stats": {
-  "channels": 102,
-  "messages": 2112,
-  "groups": 1974
+  "channels": 39,
+  "messages": 520,
+  "groups": 502
  },
- "one_liner": "체코 원전 계약 결렬 소식과 국내외 기업 실적 발표, 빅테크 AI 투자 및 주주환원 이슈가 시장을 주도한 가운데, 미국 금리 동결에도 투자심리는 혼조세를 보임.",
+ "one_liner": "AI 투자 수익성 우려와 증권사들의 광범위한 목표주가 조정 속 이란발 지정학적 긴장과 종전 기대감이 교차하는 시장.",
  "themes": [
   {
-   "name": "원전 — 체코 두코바니 시공계약 최종 결렬",
-   "narrative": "한국수력원자력(한수원)과 대우건설·두산에너빌리티 컨소시엄 간 체코 두코바니 원전 시공계약 협상이 공사비 및 주요 계약조건 이견으로 최종 결렬되었다. 이 소식에 관련 기업들의 주가가 하락하는 등 시장에 부정적인 영향을 미쳤다.",
+   "name": "AI 투자 수익성 및 자금 조달 우려 심화",
+   "narrative": "오픈AI의 자금 조달 목표 하향 조정 및 앤트로픽의 숨겨진 부채와 신용 등급 우려가 부각되며, AI 관련 대규모 투자에 대한 시장의 회의적인 시각과 수익성 불확실성이 커지고 있습니다. 샘 올트먼의 삼성 경영진 회동에도 불구하고, AI 인프라 투자 비용 증가에 대한 경계심이 확산되고 있습니다.",
+   "status": "ongoing",
+   "strength": 5,
+   "keywords": [
+    "올트먼",
+    "블랙스톤",
+    "BB",
+    "전망치 하향",
+    "조정 목표주",
+    "조정하여",
+    "하향 조정하여"
+   ],
+   "evidence": [
+    {
+     "channel": "미국 주식 인사이더 🇺🇸 (US Stocks Insider)",
+     "quote": "파이낸셜타임스(FT)에 따르면 오픈AI가 자금 조달 목표를 기존 300억 달러에서 200억 달러로 하향 조정하고, 목표 기업가치도 1조 4,000억 달러에서 1조 2,500억 달러로 낮춘 것으로 보도."
+    },
+    {
+     "channel": "하나 중국/신흥국 전략 김경환",
+     "quote": ">>Anthropic IPO 서류에서 약 9,000억 달러 규모의 ‘숨겨진 부채’ 드러나 (블룸버그) •Anthropic은 IPO 서류에서 인프라 확장에 따라 서버, 건물, 전력 등에 향후 약 9,000억 달러를 지출할 계획."
+    },
+    {
+     "channel": "미국 주식 인사이더 🇺🇸 (US Stocks Insider)",
+     "quote": "반도체 공급난 심화 속 오픈AI 올트먼, 삼성 경영진과 회동 샘 올트먼 오픈AI 최고경영자(CEO)는 글로벌 공급 부족이 심화되는 가운데, 메모리 반도체 및 AI 인프라 분야의 협력을 강화하기 위해 토요일 한국에서 삼성그룹 최고 경영진과 만났다."
+    }
+   ]
+  },
+  {
+   "name": "증권사 리서치센터의 광범위한 기업 실적 및 목표주가 재평가",
+   "narrative": "삼성증권, 신한투자증권, 미래에셋증권 등 주요 증권사 리서치센터에서 애널리스트 뷰 변경, 목표주가 및 실적 전망치 조정이 급증하고 있습니다. 이는 기업들의 3분기 실적 발표와 함께 시장 전반에 걸친 기업 가치 재평가가 활발하게 이루어지고 있음을 시사합니다.",
    "status": "new",
    "strength": 5,
    "keywords": [
-    "체코",
-    "한수원",
-    "시공계약",
-    "결렬",
-    "두코바니",
-    "두산에너빌리티"
+    "Securities",
+    "Samsung",
+    "Samsung Securities",
+    "삼성증권 뉘앙스",
+    "Securities 뉘앙스",
+    "Report 리서치센터",
+    "신한투자증권 뉘앙스",
+    "변경 현재주",
+    "Kim",
+    "Asset",
+    "Asset Securities",
+    "Mirae Asset",
+    "Mirae",
+    "Co. Ltd.",
+    "Shift Samsung"
    ],
    "evidence": [
     {
-     "channel": "서화백의 그림놀이 🚀",
-     "quote": "보도내용 : [파이낸셜뉴스] 체코 두코바니 원전 시공계약 협상 종료"
+     "channel": "서화백의 AI놀이🚀",
+     "quote": "🚨 [애널리스트 뷰 변경 포착] 하향 🔻 (긍정→부정 전환)"
     },
     {
-     "channel": "여의도스토리 Ver2.0-习近平是个狗东西",
-     "quote": "• 한수원과 대우건설·두산에너빌리티 컨소시엄 간 시공비, 계약방식, 역무범위 등에 대한 이견으로 약 15개월간 협상했으나 최종 합의에 실패"
+     "channel": "서화백의 AI놀이🚀",
+     "quote": "📄 Report: [26.10.30] [리서치센터] AWS 너마저.pdf"
     },
     {
-     "channel": "epic AI - 투자 어시스턴트",
-     "quote": "한국수력원자력은 10월 29일 공사비와 주요 계약조건 이견으로 대우건설·두산에너빌리티 컨소시엄과의 체코 두코바니 원전 시공계약 협상 종료를 발표했으며, 협상 결렬 소식에 대우건설 주가는 18.57% 하락한 11,620원에 마감했습니다."
+     "channel": "서화백의 AI놀이🚀",
+     "quote": "🕵️ Youngsoo Han (Samsung Securities)"
     }
    ]
   },
   {
-   "name": "국내 주요 기업 3분기 실적 발표",
-   "narrative": "한화에어로스페이스, 삼성SDI, 삼성중공업 등 국내 주요 기업들의 3분기 잠정 실적이 발표되었다. 일부 기업은 예상치를 상회하는 호실적을 기록했으나, 다른 기업들은 예상치를 하회하는 등 희비가 엇갈렸다.",
+   "name": "이란발 지정학적 긴장과 '종전' 기대감 교차",
+   "narrative": "미국과 이란 간의 협상 중재안 초안 공개 및 카타르의 중재 노력 등 지정학적 긴장 완화에 대한 기대감이 형성되고 있으나, 동시에 이란의 호르무즈 해협 봉쇄 유지 예고 등 불확실성도 상존하며 시장의 관심이 집중되고 있습니다.",
    "status": "ongoing",
    "strength": 4,
    "keywords": [
-    "영업실적",
-    "컨센대비 당기순이익",
-    "QoQ 컨센대비",
-    "컨센대비 상기"
+    "이란",
+    "중간선거"
    ],
    "evidence": [
     {
-     "channel": "AWAKE - 실시간 주식 공시 정리채널",
-     "quote": "기업명: 한화에어로스페이스(시가총액: 39조 3,429억) A012450 보고서명: 연결재무제표기준영업(잠정)실적(공정공시) 매출액 : 60,943억(예상치 : 74,272억/ -18%) 영업익 : 4,520억(예상치 : 11,521억/ -61%) 순이익 : -1,371억(예상치 : 8…"
+     "channel": "이상헌 부장 iM 지주/ESG/중소형주",
+     "quote": "* 이란-카타르 12시간 마라톤협상…美선거 D-3 '긍정적 진전' - 미국이 사흘 앞으로 다가온 중간선거 후 대이란 공격을 재개할 수 있다는 우려가 커지는 가운데 카타르 중재단이 이란을 찾아가 12시간 넘게 마라톤 협상을 벌였다고 미국 인터넷매체 악시오스가 31일 보도했다."
     },
     {
-     "channel": "AWAKE - 실시간 주식 공시 정리채널",
-     "quote": "기업명: 삼성SDI(시가총액: 43조 327억) A006400 보고서명: 연결재무제표기준영업(잠정)실적(공정공시) 매출액 : 46,856억(예상치 : 40,145억+/ 17%) 영업익 : 4,078억(예상치 : 1,901억/ +115%) 순이익 : 2,946억(예상치 : 7,825억/…"
-    },
-    {
-     "channel": "[시그널랩] Signal Lab 리서치",
-     "quote": "[시그널랩 실적속보] 삼성전자 (005930)"
+     "channel": "텐렙",
+     "quote": "미국-이란 협상 중재안 초안 공개 — 중국의 보증인 역할 가능성 및 1주일 내 호르무즈 해협 개방 논의"
     }
    ]
   },
   {
-   "name": "글로벌 빅테크 실적 및 AI 클라우드 성장",
-   "narrative": "마이크로소프트(MS)와 알파벳(Google) 등 글로벌 빅테크 기업들의 3분기 실적이 발표되었으며, 클라우드(Azure, Google Cloud) 및 AI 관련 사업이 매출 성장을 견인했다. 다만, 일부 대형 기술주의 실망스러운 실적과 AI 투자 수익률에 대한 우려도 제기되었다.",
-   "status": "ongoing",
-   "strength": 4,
-   "keywords": [
-    "Azure",
-    "GOOG",
-    "파운드리",
-    "실망"
-   ],
-   "evidence": [
-    {
-     "channel": "서화백의 AI놀이🚀",
-     "quote": "매출 예상치 상회 및 성장, 클라우드(Azure) 매출 48% 성장, AI 및 클라우드 사업이 실적 견인"
-    },
-    {
-     "channel": "[ IT는 SK ]",
-     "quote": "Google Cloud +103% YoY — AI Infra·AI Solution이 성장 견인:"
-    },
-    {
-     "channel": "서화백의 AI놀이🚀",
-     "quote": "💡 요약 대형 기술주들의 실망스러운 실적 및 AI 투자 우려로 인한 폭락과 ECB의 매파적 금리 동결, 금융 여건 긴축 경고로 시장 불안감이 고조되고 있습니다."
-    }
-   ]
-  },
-  {
-   "name": "반도체 주주환원 및 후공정 투자 기대",
-   "narrative": "SK하이닉스의 대규모 주주환원 발표 이후 삼성전자의 주주환원 정책에 대한 시장의 기대와 실망이 교차했다. 한편, 후공정 투자가 예상보다 큰 규모와 강도로 진행될 것이라는 전망에 따라 테스터 업체들의 강한 주가 상승이 기대되고 있다.",
+   "name": "불확실성 속 일부 기업의 구조적 성장 동력에 대한 확신",
+   "narrative": "전반적인 시장의 공포 심리에도 불구하고, 일부 애널리스트들은 삼성중공업의 실적 개선과 FLNG 경쟁력, HBM 중심의 메모리 수요 강세, ESS/LFP 등 신규 성장 동력을 보유한 기업들에 대해 강한 매수 확신을 보이며 긍정적인 장기 전망을 제시하고 있습니다.",
    "status": "ongoing",
    "strength": 3,
    "keywords": [
-    "파운드리",
-    "실망"
+    "확신",
+    "동력 확보"
    ],
    "evidence": [
     {
-     "channel": "재야의 고수들",
-     "quote": "[한 줄이면 됐다] 어제 SK하이닉스가 100조 원 주주환원을 내놨다. 시가총액 대비 10%가 넘는 규모였다. 시장은 즉각 반응했다. 그리고 오늘, 삼성전자 컨콜이 있었다. 1년 중 삼성에 가장 많은 눈이 쏠리는 날이었다. 비교가 불가피한 자리였다. 그런데 자사주 이야기는 나오지 않았다."
-    },
-    {
-     "channel": "[신한 리서치본부] IT(반도체/전기전자/디스플레이)",
-     "quote": "▶️ 자 바빠질 준비 됐니? - 후공정 투자가 예상보다 큰 규모와 강도로 진행 → 테스터 업체들의 강한 주가 상승 - 디아이 본사는 27년 베트남 투자를 반영하지 않더라도 올해 대비 30% 성장 가능"
-    }
-   ]
-  },
-  {
-   "name": "미국 연준 기준금리 동결과 시장 불안감",
-   "narrative": "미국 연방준비제도(Fed)가 FOMC 정례회의에서 기준금리를 동결했으나, 일부 위원들의 인상 주장과 유럽중앙은행(ECB)의 매파적 금리 동결 및 금융 여건 긴축 경고로 시장 불안감이 고조되었다.",
-   "status": "new",
-   "strength": 3,
-   "keywords": [
-    "연준 기준금리",
-    "실망"
-   ],
-   "evidence": [
-    {
-     "channel": "키움증권 리서치센터",
-     "quote": "-美 연준, 28일(현지시간) FOMC에서 기준금리를 3.75-4.00%로 동결했으나 Cook 이사와 Hammack 클리블랜드 연은 총재가 0.25%p 인상을 주장하며 10대2로 결정"
+     "channel": "서화백의 AI놀이🚀",
+     "quote": "애널리스트는 삼성중공업의 3분기 실적이 환율 방어에 성공하며 컨센서스를 크게 상회했음을 강조합니다. 특히 2026년 순이익 추정치를 컨센서스 대비 100% 이상 상향 조정하며 강력한 매수 의견을 제시하고 있습니다."
     },
     {
      "channel": "서화백의 AI놀이🚀",
-     "quote": "💡 요약 대형 기술주들의 실망스러운 실적 및 AI 투자 우려로 인한 폭락과 ECB의 매파적 금리 동결, 금융 여건 긴축 경고로 시장 불안감이 고조되고 있습니다."
+     "quote": "애널리스트는 최근 주가 하락에도 불구하고 '매수' 의견과 높은 목표주가를 유지하며 강력한 확신을 보여줍니다. 2027년 영업이익 전망치를 14% 상향 조정하는 등 컨센서스를 상회하는 실적 개선을 예상하며, HBM을 중심으로 한 메모리 수요 강세와 2030년까지 지속될 공급 부족을 강조하며 장기적인 긍정적 전망을 제시합니다…"
     }
    ]
   },
   {
-   "name": "반도체 M&A 동향: 마벨-루멘텀 인수 보도",
-   "narrative": "마벨 테크놀로지가 광통신 부품 기업 루멘텀 홀딩스 인수를 추진 중이라는 보도가 나오면서 반도체 및 관련 산업 내 M&A 동향에 대한 관심이 높아지고 있다. 이는 AI 관련 초대형 거래로 주목받고 있다.",
-   "status": "new",
+   "name": "코스닥 시장의 구조적 부진과 투자 심리 위축",
+   "narrative": "코스닥 시장이 4월 고점 대비 40% 이상 급락하며 코스피와의 수익률 격차가 확대되고 있습니다. 우량 기업 이탈, 실적 양극화, 대형주 자금 쏠림 현상 등 구조적인 문제들이 복합적으로 작용하며 투자 심리를 위축시키고 있습니다.",
+   "status": "ongoing",
    "strength": 2,
-   "keywords": [
-    "루멘텀",
-    "마벨"
-   ],
+   "keywords": [],
    "evidence": [
     {
-     "channel": "서화백의 AI놀이🚀",
-     "quote": "📝 **블룸버그 독점) 마벨(Marvell), AI 관련 초대형 거래로 루멘..."
-    },
-    {
-     "channel": "빠르고 정확한 주식정보방",
-     "quote": "[마벨-루멘텀 인수 보도]"
-    },
-    {
-     "channel": "사제콩이_서상영",
-     "quote": "마벨테크(-13.24%)는 루멘텀 인…"
+     "channel": "김현석(자본주의 바이어스 있는 채널입니다)",
+     "quote": "📌700선 위기 코스닥…왜 상승세를 지키지 못했나 ✅ 4월 1200선 돌파 후 40.9% 급락 - 코스피와 수익률 격차 57.7%p - 우량기업 이탈·실적 양극화·대형주 자금 쏠림"
     }
    ]
   }
  ],
  "community_mood": {
-  "score": -20,
-  "summary": "미국 주식, 특히 구글과 반도체 관련 종목에 대한 관심이 높으며, 인텔의 어닝쇼크와 일부 빅테크 실적에 대한 실망감으로 불안감이 감돌지만, 장기 투자에 대한 지지 의견도 혼재되어 있다.",
+  "score": -40,
+  "summary": "개미 투자자들은 AI 투자 수익성에 대한 강한 회의감과 인텔 등 특정 종목에 대한 부정적 시각을 드러내고 있습니다. 동시에 이란발 지정학적 이슈와 '종전' 가능성에 대한 높은 관심과 함께 불안감 및 기대감이 교차하는 모습을 보입니다.",
   "hot_stocks": [
    {
-    "name": "구글",
-    "score": 30,
-    "reason": "국내 주식보다 구글에 대한 장기 투자와 미래 성장 가능성에 대한 기대감이 높음."
-   },
-   {
-    "name": "아마존",
-    "score": 10,
-    "reason": "커뮤니티에서 높은 언급 빈도를 보이며 주목받고 있음."
-   },
-   {
     "name": "인텔",
-    "score": -20,
-    "reason": "실적 발표 후 어닝쇼크로 인해 부정적인 시각이 지배적임."
+    "score": -50,
+    "reason": "토스 종토방에서 조롱글이 확산되는 등 부정적인 투자 심리가 강합니다."
    },
    {
-    "name": "삼성전자",
-    "score": -10,
-    "reason": "주주환원 정책에 대한 실망감과 일부 투자자들의 매도 움직임이 포착됨."
+    "name": "AI 관련주",
+    "score": -40,
+    "reason": "2000조 투자 대비 20조 매출이라는 비판과 함께 AI 혁신에 대한 회의적인 시각이 지배적입니다."
    },
    {
-    "name": "SOXL",
-    "score": -10,
-    "reason": "반도체 관련 레버리지 ETF로, 일부 투자자들이 매도 움직임을 보이며 불안감을 나타냄."
+    "name": "현대차",
+    "score": -30,
+    "reason": "커뮤니티 내에서 '좃댄거같은데?'라는 언급이 나오며 부정적인 우려가 표출되고 있습니다."
    }
   ]
  },
  "signals": {
   "spikes": [
    {
-    "term": "체코",
-    "count": 43,
-    "burst": 99.0,
-    "base_daily": 0.0,
-    "new": true
-   },
-   {
-    "term": "한수원",
-    "count": 30,
-    "burst": 99.0,
-    "base_daily": 0.0,
-    "new": true
-   },
-   {
-    "term": "시공계약",
-    "count": 30,
-    "burst": 99.0,
-    "base_daily": 0.0,
-    "new": true
-   },
-   {
-    "term": "결렬",
-    "count": 28,
-    "burst": 99.0,
-    "base_daily": 0.0,
-    "new": true
-   },
-   {
-    "term": "시공계약 협상",
-    "count": 28,
-    "burst": 99.0,
-    "base_daily": 0.0,
-    "new": true
-   },
-   {
-    "term": "영업실적",
-    "count": 27,
-    "burst": 99.0,
-    "base_daily": 0.0,
-    "new": true
-   },
-   {
-    "term": "파운드리",
-    "count": 27,
-    "burst": 99.0,
-    "base_daily": 0.0,
-    "new": true
-   },
-   {
-    "term": "현금성자산",
-    "count": 26,
-    "burst": 99.0,
-    "base_daily": 0.0,
-    "new": true
-   },
-   {
-    "term": "컨센대비 당기순이익",
-    "count": 26,
-    "burst": 99.0,
-    "base_daily": 0.0,
-    "new": true
-   },
-   {
-    "term": "QoQ 컨센대비",
-    "count": 26,
-    "burst": 99.0,
-    "base_daily": 0.0,
-    "new": true
-   },
-   {
-    "term": "두코바니",
-    "count": 25,
-    "burst": 99.0,
-    "base_daily": 0.0,
-    "new": true
-   },
-   {
-    "term": "실망",
-    "count": 24,
-    "burst": 99.0,
-    "base_daily": 0.0,
-    "new": true
-   },
-   {
-    "term": "컨소시엄",
-    "count": 24,
-    "burst": 99.0,
-    "base_daily": 0.0,
-    "new": true
-   },
-   {
-    "term": "현금 현금성자산",
-    "count": 24,
-    "burst": 99.0,
-    "base_daily": 0.0,
-    "new": true
-   },
-   {
-    "term": "체코 두코바니",
-    "count": 24,
-    "burst": 99.0,
-    "base_daily": 0.0,
-    "new": true
-   },
-   {
-    "term": "Azure",
-    "count": 23,
-    "burst": 99.0,
-    "base_daily": 0.0,
-    "new": true
-   },
-   {
-    "term": "GOOG",
-    "count": 23,
-    "burst": 99.0,
-    "base_daily": 0.0,
-    "new": true
-   },
-   {
-    "term": "체코 원전",
-    "count": 23,
-    "burst": 99.0,
-    "base_daily": 0.0,
-    "new": true
-   },
-   {
-    "term": "두산에너빌리티",
-    "count": 46,
-    "burst": 24.662733178377735,
-    "base_daily": 1.1,
+    "term": "Securities",
+    "count": 47,
+    "burst": 27.888875268158138,
+    "base_daily": 4.6,
     "new": false
    },
    {
-    "term": "연준 기준금리",
-    "count": 22,
+    "term": "Samsung",
+    "count": 26,
+    "burst": 52.779618368630736,
+    "base_daily": 1.3,
+    "new": false
+   },
+   {
+    "term": "Samsung Securities",
+    "count": 18,
     "burst": 99.0,
     "base_daily": 0.0,
     "new": true
    },
    {
-    "term": "루멘텀",
-    "count": 22,
+    "term": "삼성증권 뉘앙스",
+    "count": 14,
     "burst": 99.0,
     "base_daily": 0.0,
     "new": true
    },
    {
-    "term": "마벨",
-    "count": 22,
+    "term": "Securities 뉘앙스",
+    "count": 23,
+    "burst": 28.616244698624858,
+    "base_daily": 2.1,
+    "new": false
+   },
+   {
+    "term": "Report 리서치센터",
+    "count": 11,
     "burst": 99.0,
     "base_daily": 0.0,
     "new": true
    },
    {
-    "term": "컨센대비 상기",
-    "count": 22,
+    "term": "신한투자증권 뉘앙스",
+    "count": 11,
     "burst": 99.0,
     "base_daily": 0.0,
     "new": true
    },
    {
-    "term": "두코바니 원전",
-    "count": 22,
+    "term": "변경 현재주",
+    "count": 48,
+    "burst": 7.3175755476119235,
+    "base_daily": 18.0,
+    "new": false
+   },
+   {
+    "term": "Kim",
+    "count": 12,
+    "burst": 66.11952191235059,
+    "base_daily": 0.4,
+    "new": false
+   },
+   {
+    "term": "Asset",
+    "count": 10,
     "burst": 99.0,
     "base_daily": 0.0,
     "new": true
    },
    {
-    "term": "조정 영업이익률",
-    "count": 21,
+    "term": "Asset Securities",
+    "count": 10,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "Mirae Asset",
+    "count": 10,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "Mirae",
+    "count": 10,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "올트먼",
+    "count": 10,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "전망치 하향",
+    "count": 9,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "조정 목표주",
+    "count": 9,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "확신",
+    "count": 47,
+    "burst": 5.904810724528596,
+    "base_daily": 21.9,
+    "new": false
+   },
+   {
+    "term": "동력 확보",
+    "count": 8,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "Co. Ltd.",
+    "count": 8,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "조정하여",
+    "count": 8,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "하향 조정하여",
+    "count": 8,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "Shift Samsung",
+    "count": 8,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "인정하면서",
+    "count": 8,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "블랙스톤",
+    "count": 8,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "BB",
+    "count": 8,
     "burst": 99.0,
     "base_daily": 0.0,
     "new": true
@@ -368,109 +333,95 @@
   ],
   "top_posts": [
    {
-    "channels": 6,
-    "channel": "AWAKE - 실시간 주식 공시 정리채널",
-    "head": "2026.10.29 15:22:45 기업명: 한화에어로스페이스(시가총액: 39조 3,429억) A012450 보고서명: 연결재무제표기준영업(잠정)실적(공정공시) 매출액 : 60,943억(예상치 : 74,272억/ -18%) 영업익 : 4,520억(예상치 : 11,521억/ -61%) 순이익 : -1,371억(예상치 : 8…",
-    "url": "https://t.me/darthacking/155748",
-    "time_kst": "10-29 15:22"
-   },
-   {
-    "channels": 6,
-    "channel": "AWAKE - 실시간 주식 공시 정리채널",
-    "head": "2026.10.29 08:55:07 기업명: 삼성SDI(시가총액: 43조 327억) A006400 보고서명: 연결재무제표기준영업(잠정)실적(공정공시) 매출액 : 46,856억(예상치 : 40,145억+/ 17%) 영업익 : 4,078억(예상치 : 1,901억/ +115%) 순이익 : 2,946억(예상치 : 7,825억/…",
-    "url": "https://t.me/darthacking/155682",
-    "time_kst": "10-29 08:55"
-   },
-   {
-    "channels": 4,
-    "channel": "재야의 고수들",
-    "head": "[한 줄이면 됐다] 어제 SK하이닉스가 100조 원 주주환원을 내놨다. 시가총액 대비 10%가 넘는 규모였다. 시장은 즉각 반응했다. 그리고 오늘, 삼성전자 컨콜이 있었다. 1년 중 삼성에 가장 많은 눈이 쏠리는 날이었다. 비교가 불가피한 자리였다. 그런데 자사주 이야기는 나오지 않았다. 왜 그랬을까. 삼성의 과거를 보면…",
-    "url": "https://t.me/gaoshoukorea/65398",
-    "time_kst": "10-29 11:12"
-   },
-   {
-    "channels": 4,
-    "channel": "서화백의 그림놀이 🚀",
-    "head": "📌 두산에너빌리티(시가총액: 35조 5,511억) #A034020 📁 풍문또는보도에대한해명 2026.10.29 13:33:24 (현재가 : 55,500원, -9.61%) 보도내용 : [파이낸셜뉴스] 체코 두코바니 원전 시공계약 협상 종료 발생일자 : 2026-10-29 해명내용 : - 본 공시는 2026년 10월 29일자…",
-    "url": "https://t.me/easobi/17090",
-    "time_kst": "10-29 13:45"
-   },
-   {
-    "channels": 4,
-    "channel": "메리츠증권 리서치",
-    "head": "📮 [메리츠 투자전략 황수욱] 2026.10.29 심리→펀더로 초점 이동과 저점 통과 조건 (자료) https://tinyurl.com/3yhhb57z 한국시장은 어제 반등 이후 장중 변동성이 커지고 있습니다. 우려가 커질 수 있는 오늘 분위기지만, 시장은 저점 통과 이후 턴어라운드할 조건은 마련되고 있다고 생각합니다.…",
-    "url": "https://t.me/meritz_research/44944",
-    "time_kst": "10-29 11:10"
-   },
-   {
-    "channels": 4,
-    "channel": "▩발간자료PDF.저장",
-    "head": "🦽 #두산밥캣 「실적은 미국 경제, 주가는 북미 주택」 ☞ https://bit.ly/Bobcat3Q26RE ▶️ Issue: 3Q26 컨센서스 부합. 환율 하락으로 원화 실적을 내리면서 적정주가 하향 ▶️ Pitch: > 주가 트리거는 북미 주택 시장이지만, 실제 판매는 미국의 경제성장에 달려있음을 입증하는 견조한 실적…",
-    "url": "https://t.me/c/1416673238/1562",
-    "time_kst": "10-29 20:05"
-   },
-   {
-    "channels": 4,
-    "channel": "AWAKE - 실시간 주식 공시 정리채널",
-    "head": "2026.10.29 13:30:30 기업명: 삼성중공업(시가총액: 14조 8억) A010140 보고서명: 연결재무제표기준영업(잠정)실적(공정공시) 매출액 : 31,504억(예상치 : 32,025억/ -2%) 영업익 : 3,384억(예상치 : 3,518억/ -4%) 순이익 : 4,706억(예상치 : 2,286억+/ 106%…",
-    "url": "https://t.me/darthacking/155719",
-    "time_kst": "10-29 13:30"
-   },
-   {
     "channels": 3,
     "channel": "미국 주식 인사이더 🇺🇸 (US Stocks Insider)",
-    "head": "💡💡💡💡💡💡 Eli Lilly 2026년 3분기 실적 요약 📍실적 • 매출 $243.97억, YoY +39% • 매출총이익 $204.64억, YoY +40% • 매출총이익률 83.9%, YoY +100bps • 조정 매출총이익률 84.4%, YoY +80bps • 영업이익 $86.08억, YoY +17% • 순이익 $64…",
-    "url": "https://t.me/insidertracking/67774",
-    "time_kst": "10-29 19:48"
+    "head": "파이낸셜타임스(FT)에 따르면 오픈AI가 자금 조달 목표를 기존 300억 달러에서 200억 달러로 하향 조정하고, 목표 기업가치도 1조 4,000억 달러에서 1조 2,500억 달러로 낮춘 것으로 보도. 인공지능(AI) 관련 주식 매도세가 이어지는 가운데 일부 투자자들이 투자 약정 규모를 축소한 것으로 알려짐. 1차 자금…",
+    "url": "https://t.me/insidertracking/67930",
+    "time_kst": "10-31 09:58"
    },
    {
-    "channels": 3,
-    "channel": "키움증권 전략/시황 한지영",
-    "head": "[10/29, 장 시작 전 생각: 이익 vs 현금 흐름, 키움 한지영] - 다우 +0.2%, S&P500 +0.3%, 나스닥 +0.3% - 마이크론 +5.9%, MS +0.2%(시간외 +3%대), 알파벳 +1.3%(시간외 -10%대) - 미 10년물 금리 5.02%, 30년물 금리 5.33%, WTI 101.9달러 1.…",
-    "url": "https://t.me/hedgecat0301/2985",
-    "time_kst": "10-29 07:48"
+    "channels": 2,
+    "channel": "텐렙",
+    "head": "11월 시장 코멘트 DS투자증권 투자전략 양형모 30일 나스닥은 2.9% 빠진 25,437로 10월 6일 고점보다 8% 낮습니다. 인텔은 1974년 이후 최대인 29% 급락, 필라델피아 반도체는 7.4% 하락, 메모리·스토리지는 5~13% 빠졌습니다. 그런데 S&P500은 503종목 중 226개가 올랐고 지수 -1.8%…",
+    "url": "https://t.me/Ten_level/93703",
+    "time_kst": "10-31 10:57"
    },
    {
-    "channels": 3,
-    "channel": "다올투자증권 리서치센터",
-    "head": "[다올투자증권 조선/기계/방산 최광식] 10/29(목) 데일리뉴스 🛳 조선 [TradeWinds] Offshore drives HD Hyundai profit rebound Wallenius Wilhelmsen orders up to 12 giant car carriers for delivery through to 203…",
-    "url": "https://t.me/daolresearch/15352",
-    "time_kst": "10-29 09:10"
+    "channels": 2,
+    "channel": "서화백의 AI놀이🚀",
+    "head": "📝 텔레그램 심층 분석 Report (15시 07분) 기준 🌡️ 센티먼트 공포/관망 (-45) 💡 요약 AI 투자 열풍 속 빅테크 실적 부진 및 자금 조달 우려, 가상자산 해킹 이슈로 전반적인 시장 심리가 위축된 가운데, 반도체 업황 개선 기대감과 일부 종목의 긍정적 소식이 혼재되어 있습니다. 🗣️ Top 키워드: AI(…",
+    "url": "https://t.me/easobi_ai/25891",
+    "time_kst": "10-31 15:07"
    },
    {
-    "channels": 3,
+    "channels": 2,
+    "channel": "서화백의 AI놀이🚀",
+    "head": "📝 텔레그램 심층 분석 Report (11시 07분) 기준 🌡️ 센티먼트 공포 (-75) 💡 요약 AI 투자 수익성 우려와 반도체 주식 급락, 대규모 가상자산 해킹, 중국 PMI 지표 부진, 그리고 지정학적 긴장 고조로 시장 전반에 공포 심리가 확산되고 있습니다. 🗣️ Top 키워드: AI(204), 인텔(172), 나스…",
+    "url": "https://t.me/easobi_ai/25795",
+    "time_kst": "10-31 11:07"
+   },
+   {
+    "channels": 2,
+    "channel": "서화백의 AI놀이🚀",
+    "head": "📝 텔레그램 심층 분석 Report (07시 05분) 기준 🌡️ 센티먼트 공포 (-65) 💡 요약 AI 기술주 전반의 조정 심화와 빅테크(인텔, AMZN)의 실적 부진 및 투자 수익성 우려로 나스닥이 급락하고, 바이낸스 대규모 해킹 사태로 암호화폐 시장의 불안정성이 커지는 등 시장 전반의 투자 심리가 크게 위축되고 있습니…",
+    "url": "https://t.me/easobi_ai/25793",
+    "time_kst": "10-31 07:05"
+   },
+   {
+    "channels": 2,
+    "channel": "서화백의 AI놀이🚀",
+    "head": "📝 텔레그램 심층 분석 Report (19시 06분) 기준 🌡️ 센티먼트 관망 (+5) 💡 요약 AI 기술 혁신 및 주요 기업들의 협력 기대감으로 긍정적 모멘텀이 형성되고 지정학적 긴장 완화 기대감이 더해졌으나, 일부 대형 기술주의 실적 부진과 암호화폐 해킹 이슈로 시장 전반의 변동성이 확대되며 경계심이 공존합니다. 🗣️…",
+    "url": "https://t.me/easobi_ai/25896",
+    "time_kst": "10-31 19:06"
+   },
+   {
+    "channels": 2,
+    "channel": "서화백의 AI놀이🚀",
+    "head": "📝 텔레그램 심층 분석 Report (23시 06분) 기준 🌡️ 센티먼트 공포 (-50) 💡 요약 주요 기술주 실적 부진(인텔), AI 거품 우려 확산, 암호화폐 시장 불안정, 중동 지정학적 리스크 심화로 전반적인 시장 심리 위축. 🗣️ Top 키워드: AI(190), 이란(158), 암호화폐(156), 인텔(118),…",
+    "url": "https://t.me/easobi_ai/25902",
+    "time_kst": "10-31 23:06"
+   },
+   {
+    "channels": 2,
+    "channel": "이상헌 부장 iM 지주/ESG/중소형주",
+    "head": "* 이란-카타르 12시간 마라톤협상…美선거 D-3 \"긍정적 진전\" - 미국이 사흘 앞으로 다가온 중간선거 후 대이란 공격을 재개할 수 있다는 우려가 커지는 가운데 카타르 중재단이 이란을 찾아가 12시간 넘게 마라톤 협상을 벌였다고 미국 인터넷매체 악시오스가 31일 보도했다. 악시오스에 따르면 전날 카타르 중재단은 미국과…",
+    "url": "https://t.me/INSIGHTVALUELEE/10948",
+    "time_kst": "10-31 17:24"
+   },
+   {
+    "channels": 2,
+    "channel": "텐렙",
+    "head": "미국-이란 협상 중재안 초안 공개 — 중국의 보증인 역할 가능성 및 1주일 내 호르무즈 해협 개방 논의 1. 미국-이란 협상 중재안 초안의 주요 내용 알아라비야가 입수한 미국-이란 협상 프레임워크 초기 초안에는 다음과 같은 핵심 사항들이 포함되어 있습니다. 고농축 우라늄 처리: 양측이 합의한 기술적 절차와 검증 조치를 조…",
+    "url": "https://t.me/Ten_level/93701",
+    "time_kst": "10-31 09:21"
+   },
+   {
+    "channels": 2,
     "channel": "김현석(자본주의 바이어스 있는 채널입니다)",
-    "head": "[유안타증권 반도체 백길현] ■삼성전자 (005930) : 4Q26 예상 영업이익 137.3조원 ▶️3Q26 전사 영업이익 107.5조원 기록 - 동사 3Q26 매출액과 영업이익은 각각 195.3조원(YoY +126.9%, QoQ +13.9%), 107.5조원(OPM 55.0%, YoY +783.6%, QoQ +20.1%…",
-    "url": "https://t.me/kimu_nim/47593",
-    "time_kst": "10-29 17:51"
+    "head": "📌700선 위기 코스닥…왜 상승세를 지키지 못했나 ✅ 4월 1200선 돌파 후 40.9% 급락 - 코스피와 수익률 격차 57.7%p - 우량기업 이탈·실적 양극화·대형주 자금 쏠림 ✅ 출범 30년, 시장은 커졌지만 지수는 뒷걸음 - 출범 당시 기준지수를 현행 기준으로 환산하면 1000이지만, 30년이 지난 올해 10월 말…",
+    "url": "https://t.me/kimu_nim/47740",
+    "time_kst": "10-31 16:03"
    },
    {
-    "channels": 3,
-    "channel": "가치투자클럽",
-    "head": "▣ 자동차/로보틱스 In-depth: 지능, 언어에서 행동으로: 왜 현대차그룹인가 1. 결론: Top-pick 현대모비스·현대차. 휴머노이드의 승부처는 로봇이 현장에서 만드는 '배치 데이터'이고, 이를 가장 빨리 쌓을 수 있는 기업은 보스턴다이내믹스인데 현대차그룹 주가에 충분히 반영되어 있지 못한 상황 2. 데이터가 병목…",
-    "url": "https://t.me/corevalue/47469",
-    "time_kst": "10-29 08:54"
+    "channels": 2,
+    "channel": "하나 중국/신흥국 전략 김경환",
+    "head": ">>Anthropic IPO 서류에서 약 9,000억 달러 규모의 ‘숨겨진 부채’ 드러나 (블룸버그) •Anthropic은 IPO 서류에서 인프라 확장에 따라 서버, 건물, 전력 등에 향후 약 9,000억 달러를 지출할 계획. 이는 재무상태표에 기재돼 투자자들이 직접 확인할 수 있는 부채 규모를 크게 상회 •투자자들은 A…",
+    "url": "https://t.me/HANAchina/71282",
+    "time_kst": "10-31 10:00"
    },
    {
-    "channels": 3,
-    "channel": "[신한 리서치본부] IT(반도체/전기전자/디스플레이)",
-    "head": "[신한투자증권 반도체/소부장 송혜수, 김형태] 디아이(003160.KS); 어디까지 올라가는 거예요? ▶️ 자 바빠질 준비 됐니? - 후공정 투자가 예상보다 큰 규모와 강도로 진행 → 테스터 업체들의 강한 주가 상승 - 디아이 본사는 27년 베트남 투자를 반영하지 않더라도 올해 대비 30% 성장 가능 - 고객사 내 과점적…",
-    "url": "https://t.me/c/1355104422/7449",
-    "time_kst": "10-29 07:45"
+    "channels": 2,
+    "channel": "미국 주식 인사이더 🇺🇸 (US Stocks Insider)",
+    "head": "반도체 공급난 심화 속 오픈AI 올트먼, 삼성 경영진과 회동 샘 올트먼 오픈AI 최고경영자(CEO)는 글로벌 공급 부족이 심화되는 가운데, 메모리 반도체 및 AI 인프라 분야의 협력을 강화하기 위해 토요일 한국에서 삼성그룹 최고 경영진과 만났다. ​삼성은 성명을 통해 서울 남쪽 용인에서 전자, 금융, 바이오 계열사 임원…",
+    "url": "https://t.me/insidertracking/67950",
+    "time_kst": "10-31 16:43"
    },
    {
-    "channels": 3,
-    "channel": "메리츠증권 리서치",
-    "head": "📮 [메리츠증권 채권전략 윤여삼] Policy Watcher: 미국 FOMC (10월): Tighten FCI, 최종금리 4.25% 전망 유지 2026.10.29(목) - 워시 의장 말을 아끼며 연준 정책방향 신호 최대한 통제. 물가목표 달성을 위한 추가 조치로 12월 4.25% 인상은 인정하나 2027년 추가인상 신중할…",
-    "url": "https://t.me/meritz_research/44942",
-    "time_kst": "10-29 07:53"
-   },
-   {
-    "channels": 3,
-    "channel": "▩발간자료PDF.저장",
-    "head": "🚢 #삼성중공업 「실적 차별화 지속, FLNG 지속, FDC 속속」 ☞ https://bit.ly/SHI3Q26RE ▶️ Issue: 3Q26 EPS 서프라이즈, 선호주 견지 배경 1) FDC, 2) 2026-2027 이익 증가가 상대적으로 큼 ▶️ Pitch: > 환헤지와 빈티지 효과로 조선업종에서 3Q에 나홀로 증익,…",
-    "url": "https://t.me/c/1416673238/1563",
-    "time_kst": "10-29 21:07"
+    "channels": 2,
+    "channel": "하나 중국/신흥국 전략 김경환",
+    "head": ">>투자 수요 약화 속 OpenAI, 조달 목표액 300억 달러에서 200억 달러로 축소 •일부 투자자들이 투자 약정 규모를 줄이면서 금요일 기준 1차 투자 유치액은 200억 달러에 미치지 못할 것으로 예상. 이후 OpenAI는 기업가치 1조 2,500억 달러를 기준으로 고액 자산가를 대상으로 추가 자금 조달에 나설 예정…",
+    "url": "https://t.me/HANAchina/71293",
+    "time_kst": "10-31 13:12"
    }
   ]
  },
@@ -480,219 +431,219 @@
    {
     "id": "krstock",
     "name": "국내주식갤러리",
-    "posts": 2627,
+    "posts": 1221,
     "capped": true,
-    "burst": 2.1,
-    "base_daily": 1252.3
+    "burst": 0.7,
+    "base_daily": 1827.0
    },
    {
     "id": "stockus",
     "name": "해외주식갤러리",
-    "posts": 17823,
+    "posts": 2339,
     "capped": true,
-    "burst": 3.0,
-    "base_daily": 5863.3
+    "burst": 0.3,
+    "base_daily": 9125.4
    }
   ],
-  "posts_sampled": 534,
+  "posts_sampled": 571,
   "keywords": [
    {
-    "term": "아마존",
-    "count": 36,
-    "burst": 99.0,
-    "new": true
-   },
-   {
-    "term": "트럼프",
-    "count": 9,
-    "burst": 99.0,
-    "new": true
-   },
-   {
-    "term": "미장",
-    "count": 9,
-    "burst": 99.0,
-    "new": true
-   },
-   {
-    "term": "버블",
-    "count": 9,
-    "burst": 99.0,
-    "new": true
-   },
-   {
-    "term": "오선",
-    "count": 9,
-    "burst": 99.0,
-    "new": true
-   },
-   {
-    "term": "샌버지",
-    "count": 9,
-    "burst": 99.0,
-    "new": true
-   },
-   {
-    "term": "해킹",
-    "count": 6,
-    "burst": 73.7,
-    "new": true
-   },
-   {
-    "term": "하회",
-    "count": 5,
-    "burst": 61.4,
-    "new": true
-   },
-   {
-    "term": "이미",
-    "count": 5,
-    "burst": 61.4,
-    "new": true
-   },
-   {
-    "term": "아니",
-    "count": 5,
-    "burst": 61.4,
-    "new": true
-   },
-   {
-    "term": "시즌종료",
-    "count": 5,
-    "burst": 61.4,
-    "new": true
-   },
-   {
-    "term": "실시간",
-    "count": 5,
-    "burst": 61.4,
-    "new": true
-   },
-   {
-    "term": "레딧",
-    "count": 5,
-    "burst": 61.4,
-    "new": true
-   },
-   {
-    "term": "AI",
-    "count": 23,
-    "burst": 10.5,
+    "term": "종전",
+    "count": 50,
+    "burst": 43.8,
     "new": false
    },
    {
-    "term": "구글",
-    "count": 26,
-    "burst": 8.6,
+    "term": "Ai",
+    "count": 9,
+    "burst": 99.0,
+    "new": true
+   },
+   {
+    "term": "종전떡밥",
+    "count": 8,
+    "burst": 99.0,
+    "new": true
+   },
+   {
+    "term": "나는",
+    "count": 7,
+    "burst": 92.0,
+    "new": true
+   },
+   {
+    "term": "민주당",
+    "count": 5,
+    "burst": 65.7,
+    "new": true
+   },
+   {
+    "term": "중간선거",
+    "count": 5,
+    "burst": 65.7,
+    "new": true
+   },
+   {
+    "term": "여기",
+    "count": 5,
+    "burst": 65.7,
+    "new": true
+   },
+   {
+    "term": "유럽",
+    "count": 5,
+    "burst": 65.7,
+    "new": true
+   },
+   {
+    "term": "이란",
+    "count": 18,
+    "burst": 21.5,
+    "new": false
+   },
+   {
+    "term": "이유",
+    "count": 18,
+    "burst": 15.8,
+    "new": false
+   },
+   {
+    "term": "내가",
+    "count": 8,
+    "burst": 9.6,
+    "new": false
+   },
+   {
+    "term": "트럼프",
+    "count": 10,
+    "burst": 6.9,
+    "new": false
+   },
+   {
+    "term": "속보",
+    "count": 8,
+    "burst": 6.2,
+    "new": false
+   },
+   {
+    "term": "ai",
+    "count": 15,
+    "burst": 4.2,
+    "new": false
+   },
+   {
+    "term": "AI",
+    "count": 18,
+    "burst": 3.2,
     "new": false
    }
   ],
   "top_recommended": [
    {
     "gallery": "해외주식갤러리",
-    "title": "AI 발전을 막는 3대 오물",
-    "views": 10784,
-    "recommend": 178,
-    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=18138052&exception_mode=recommend&page=1",
-    "time_kst": "10-29 12:13"
+    "title": "여자들처럼 그냥 돈 펑펑 쓰는게 낫지",
+    "views": 8995,
+    "recommend": 185,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=18175272&exception_mode=recommend&page=1",
+    "time_kst": "10-31 18:37"
    },
    {
     "gallery": "해외주식갤러리",
-    "title": "그래도 국장살바에 구글<< 살거면 개추 ㅋㅋ",
-    "views": 7200,
-    "recommend": 176,
-    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=18139145&exception_mode=recommend&page=1",
-    "time_kst": "10-29 14:32"
+    "title": "토스 인텔 종토방 조롱글 ㅋㅋㅋㅋㅋㅋㅋㅋ",
+    "views": 8429,
+    "recommend": 170,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=18171445&exception_mode=recommend&page=2",
+    "time_kst": "10-31 09:22"
    },
    {
     "gallery": "해외주식갤러리",
-    "title": "구글 주주들은 걱정말고 장기투자해라",
-    "views": 12370,
-    "recommend": 162,
-    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=18137549&exception_mode=recommend&page=1",
-    "time_kst": "10-29 11:25"
+    "title": "프랑스 진짜 멸망 직전",
+    "views": 11905,
+    "recommend": 163,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=18175622&exception_mode=recommend&page=1",
+    "time_kst": "10-31 19:39"
    },
    {
     "gallery": "해외주식갤러리",
-    "title": "이거 올해 주갤 퓰리처상 급이노ㅋㅋㅋㅋㅋ",
-    "views": 10218,
-    "recommend": 158,
-    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=18139774&exception_mode=recommend&page=1",
-    "time_kst": "10-29 16:10"
+    "title": "AI << 2000조 투자하고 20조 매출로 혁신 ㅇㅈㄹㅋㅋ",
+    "views": 7969,
+    "recommend": 163,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=18170294&exception_mode=recommend&page=2",
+    "time_kst": "10-31 06:05"
    },
    {
     "gallery": "해외주식갤러리",
-    "title": "구글 미래",
-    "views": 9531,
-    "recommend": 138,
-    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=18133858&exception_mode=recommend&page=1",
-    "time_kst": "10-29 06:46"
+    "title": "미붕이 여친이랑 카톡하다 좆됐다;;",
+    "views": 10411,
+    "recommend": 150,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=18175452&exception_mode=recommend&page=1",
+    "time_kst": "10-31 19:04"
    }
   ],
   "top_viewed": [
    {
     "gallery": "국내주식갤러리",
-    "title": "오선 빡쳤내 ㅋㅋㅋㅋㅋㅋㅋ",
-    "views": 586,
+    "title": "[속보] 이란 승리",
+    "views": 684,
     "recommend": 0,
-    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3779719&page=4",
-    "time_kst": "10-30 05:44"
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3793300&page=2",
+    "time_kst": "11-01 02:40"
    },
    {
     "gallery": "국내주식갤러리",
-    "title": "어제 삼전, 속슬 싹다 팔았는데",
-    "views": 377,
+    "title": "속보) 이란, 호르무즈 봉쇄 유지 예고",
+    "views": 647,
     "recommend": 1,
-    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3779737&page=3",
-    "time_kst": "10-30 05:52"
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3793357&page=1",
+    "time_kst": "11-01 04:04"
    },
    {
     "gallery": "국내주식갤러리",
-    "title": "오늘 반도체는 촉이 안좋네...",
-    "views": 342,
+    "title": "현대차 좃댄거같은데?",
+    "views": 596,
     "recommend": 0,
-    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3779715&page=4",
-    "time_kst": "10-30 05:41"
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3793337&page=2",
+    "time_kst": "11-01 03:27"
    },
    {
     "gallery": "국내주식갤러리",
-    "title": "인텔 실적발표 결과 (어닝쇼크)",
-    "views": 327,
+    "title": "긴급 속보) 트럼프 종전 선언",
+    "views": 469,
+    "recommend": 2,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3793317&page=2",
+    "time_kst": "11-01 02:59"
+   },
+   {
+    "gallery": "국내주식갤러리",
+    "title": "전업한다는 사람이 보여서 충고하나",
+    "views": 417,
+    "recommend": 2,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3793356&page=1",
+    "time_kst": "11-01 04:03"
+   },
+   {
+    "gallery": "국내주식갤러리",
+    "title": "미안하다 종전 기대를 깨고싶진 않다만",
+    "views": 411,
+    "recommend": 0,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3793316&page=2",
+    "time_kst": "11-01 02:58"
+   },
+   {
+    "gallery": "국내주식갤러리",
+    "title": "ㅋㅋ 도대체 전쟁해서 미국이 얻은게 뭐임",
+    "views": 406,
     "recommend": 1,
-    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3779627&page=5",
-    "time_kst": "10-30 05:17"
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3793326&page=2",
+    "time_kst": "11-01 03:10"
    },
    {
     "gallery": "국내주식갤러리",
-    "title": "미국주식 잘못하면 이렇게된자의",
-    "views": 307,
+    "title": "종전 떡밥 뭐임? 진짜임?",
+    "views": 401,
     "recommend": 0,
-    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3779488&page=8",
-    "time_kst": "10-30 03:56"
-   },
-   {
-    "gallery": "국내주식갤러리",
-    "title": "오선 ㄹㅇ 개빡침 눈 붉게지고 난리도 아니네...",
-    "views": 289,
-    "recommend": 0,
-    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3779725&page=4",
-    "time_kst": "10-30 05:47"
-   },
-   {
-    "gallery": "해외주식갤러리",
-    "title": "오선 화난 거 처음 봄 ㄷㄷ",
-    "views": 289,
-    "recommend": 0,
-    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=18148209&page=14",
-    "time_kst": "10-30 05:48"
-   },
-   {
-    "gallery": "국내주식갤러리",
-    "title": "결국은 반등이네",
-    "views": 281,
-    "recommend": 0,
-    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3779509&page=8",
-    "time_kst": "10-30 04:35"
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3793151&page=5",
+    "time_kst": "11-01 01:01"
    }
   ]
  }
