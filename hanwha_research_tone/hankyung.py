@@ -120,7 +120,11 @@ def match_score(rec, row):
         score += 60
     bt, ht = _toks(rec.get('subject') or rec.get('title')), _toks(row['subject'])
     if bt and ht:
-        score += int(50 * len(bt & ht) / max(len(bt), len(ht)))
+        inter = len(bt & ht)
+        cover = inter / max(len(bt), len(ht))
+        # 한경 제목이 시리즈 이름뿐일 때('FI Weekly' vs 게시판 '[FI Weekly] FOMC 프리뷰…')는 포함 관계로도 본다
+        contain = inter / min(len(bt), len(ht)) if min(len(bt), len(ht)) >= 2 else 0
+        score += int(50 * max(cover, 0.8 * contain))
     if an_ok:
         score += 20
     if dd == 0:
