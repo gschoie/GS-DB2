@@ -1371,7 +1371,7 @@
       투자포인트 diff·이벤트·섹터×애널 보드 → `data/tone_v2.json` + 대시보드 `static/hanwha_tone/`).
       TP·투자의견은 제목 `[코드/Buy]` 와 본문 정규식(`parse.extract_cover`)이 AI 값보다 우선.
     - 화면 `static/hanwha_tone_report.html`(런타임 fetch, 다올 보드와 같은 배치: 이벤트 2열 → 섹터×애널
-      → 최근 발간 표 → 기업 모달에 TP 추이·문구·포인트). 사이드바 `🔥 불꽃 리서치 톤(한화)`(DAOL 톤 밑),
+      → 최근 발간 표 → 기업 모달에 TP 추이·문구·포인트). 사이드바 `🔥 리서치톤`(DAOL 리서치 톤 바로 밑, 사용자 지정 라벨),
       색은 한국식(상향 빨강·하향 파랑). 워크플로 `hanwha-tone.yml` 크론 07:10/07:35 KST(아침, 지연 안전망)
       + 22:00 AI 백필, 데이터 커밋백 → deploy-pages workflow_run. 시크릿은 기존 `GEMINI_API_KEY`
       (`HANWHA_GEMINI_API_KEY` 있으면 우선). 테스트 23개(제목·표지 파서·목록/상세 HTML·병합/이벤트).
