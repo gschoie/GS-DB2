@@ -40,7 +40,7 @@ def same_point(a, b):
     return bool(x) and (x == y or (len(x) >= 4 and (x in y or y in x)))
 
 
-def merge_report(r, ai_entry, body):
+def merge_report(r, ai_entry, body, pdf_ok=False):
     ai = (ai_entry or {}).get('result') if (ai_entry or {}).get('v') == SCHEMA_VERSION else None
     company, code, scope = r.get('company') or '', r.get('code') or '', r.get('scope') or '산업'
     if ai and ai['report_scope'] == '기업' and ai['company'] and not code and r['board'] == '1002':
@@ -53,8 +53,14 @@ def merge_report(r, ai_entry, body):
            'company': company, 'code': code, 'title': r['title'], 'subject': r.get('subject') or r['title'],
            'summary': (r.get('summary') or '')[:400], 'url': C.view_url(r), 'opinion': opinion,
            'routine': bool(r.get('routine')), 'related': [x[0] for x in (r.get('related') or [])][:12],
-           'body_chars': len(body or ''), 'ai': bool(ai)}
-    cov = r.get('body_tp') or {}
+           'body_chars': len(body or ''), 'ai': bool(ai), 'ai_src': (ai_entry or {}).get('src', '') if ai else ''}
+    # 표지 정규식은 PDF(한경) > 게시판 본문 순 — PDF 표지에 투자의견·목표주가·직전가가 정형으로 찍힌다
+    cov = r.get('pdf_tp') if (r.get('pdf_tp') or {}).get('tp') else (r.get('body_tp') or {})
+    hk = r.get('hk') or {}
+    rec['pdf_url'] = hk.get('pdf_url', '') if hk.get('idx') else ''
+    rec['pdf'] = bool(pdf_ok)
+    if not rec['opinion'] and (r.get('pdf_tp') or {}).get('opinion'):
+        rec['opinion'] = r['pdf_tp']['opinion']
     if ai:
         tp = ai['tp']
         if tp.get('prior') and tp['prior'] % 100:          # 비율 역산 흔적(라운드 숫자가 아님)은 버린다
@@ -195,7 +201,10 @@ def build(write_site=True):
         if r.get('sector_guess') or r.get('sector') in ('기업분석', '산업분석', '기타'):
             if mode.get(r.get('analyst')):
                 r['sector'] = max(mode[r['analyst']].items(), key=lambda kv: kv[1])[0]
-    records = [merge_report(r, cache.get(r['id']), bodies.get(r['id'])) for r in wanted]
+    import hankyung as H
+    shards = H.load_shards()
+    pdf_ok_ids = {seq for sh in shards.values() for seq, ent in sh.items() if ent.get('ok')}
+    records = [merge_report(r, cache.get(r['id']), bodies.get(r['id']), r['id'] in pdf_ok_ids) for r in wanted]
     by_key = defaultdict(list)
     names = {}
     for rec in records:
@@ -247,7 +256,10 @@ def build(write_site=True):
     sectors.sort(key=lambda s: s['last_date'], reverse=True)
 
     ai_n = sum(1 for r in records if r['ai'])
-    v2 = {'generated_at': datetime.now(timezone.utc).isoformat(), 'source': 'hanwhawm.com research board (1002·1003)',
+    pdf_n = sum(1 for r in records if r['pdf'])
+    v2 = {'pdf_count': pdf_n, 'pdf_matched': sum(1 for r in records if r['pdf_url']),
+          'ai_pdf': sum(1 for r in records if r['ai_src'] == 'pdf'), 'hk_status': C.load(C.DATA / 'hankyung_status.json', {}),
+'generated_at': datetime.now(timezone.utc).isoformat(), 'source': 'hanwhawm.com research board (1002·1003)',
           'since': since, 'report_count': len(records), 'ai_analyzed': ai_n, 'bodies': len(bodies),
           'collect_status': status, 'ai_status': C.load(C.DATA / 'ai_run_status.json', {}),
           'sectors': sectors, 'companies': companies, 'events': events[:400], 'steady': steady[:200]}

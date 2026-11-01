@@ -13,6 +13,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import collect as C
+import hankyung as H
 
 DATA = C.DATA
 AI_CACHE = DATA / 'ai_analysis.json'
@@ -97,15 +98,24 @@ def gemini(user_text, model):
             'generationConfig': {'responseMimeType': 'application/json', 'responseSchema': SCHEMA, 'temperature': 0.1}}
     req = urllib.request.Request(GEMINI_URL.format(model=model) + f'?key={api_key()}',
                                  data=json.dumps(body).encode(), headers={'Content-Type': 'application/json'}, method='POST')
-    try:
-        with urllib.request.urlopen(req, timeout=90) as resp:
-            payload = json.loads(resp.read().decode())
-        return json.loads(payload['candidates'][0]['content']['parts'][0]['text'])
-    except urllib.error.HTTPError as exc:
-        detail = exc.read().decode('utf-8', errors='ignore')
-        if exc.code == 429:
-            raise QuotaExhausted(f'{model}: {detail[:300]}') from exc
-        raise RuntimeError(f'{model} HTTP {exc.code}: {detail[:300]}') from exc
+    for attempt in range(2):
+        try:
+            with urllib.request.urlopen(req, timeout=150) as resp:
+                payload = json.loads(resp.read().decode())
+            return json.loads(payload['candidates'][0]['content']['parts'][0]['text'])
+        except urllib.error.HTTPError as exc:
+            detail = exc.read().decode('utf-8', errors='ignore')
+            if exc.code == 429:
+                raise QuotaExhausted(f'{model}: {detail[:300]}') from exc
+            if exc.code in (500, 502, 503, 504) and attempt == 0:
+                time.sleep(15); continue        # 일시 과부하 — 한 번은 같은 모델로 다시
+            raise RuntimeError(f'{model} HTTP {exc.code}: {detail[:300]}') from exc
+        except (TimeoutError, urllib.error.URLError, OSError) as exc:
+            # 읽기 타임아웃(11/1 실측: PDF 입력이 길어진 뒤 연속 발생) — 한 번 더 시도하고 그래도 안 되면 다음 건으로
+            if attempt == 0:
+                time.sleep(10); continue
+            raise RuntimeError(f'{model} network: {exc}') from exc
+    raise RuntimeError('unreachable')
 
 
 def _num(x):
@@ -143,33 +153,45 @@ def normalize(raw):
     }
 
 
-def build_input(rec, body):
+def build_input(rec, body, pdf_text=''):
+    """입력 우선순위: 한경 PDF 원문(앞 몇 쪽) > 게시판 본문 > 요약만. 반환 (텍스트, src)."""
     parts = [f"[발간일] {rec['date']}  [애널리스트] {rec.get('analyst')}  [구분] {rec.get('kind')} / {rec.get('sector')}",
              f"[제목] {rec['title']}", f"[요약] {rec.get('summary') or ''}"]
+    if pdf_text and len(pdf_text) > 200:
+        parts.append(f"[PDF 원문 발췌]\n{pdf_text[:14000]}")
+        if body and len(body) > 80:
+            parts.append(f"[게시판 본문]\n{body[:4000]}")
+        return '\n\n'.join(parts), 'pdf'
     if body and len(body) > 80:
         parts.append(f"[본문]\n{body[:14000]}")
-    else:
-        parts.append('[본문] (게시판 본문 없음 — 제목·요약만으로 판단하고, 없는 숫자는 null/없음으로)')
-    return '\n\n'.join(parts)
+        return '\n\n'.join(parts), 'body'
+    parts.append('[본문] (게시판 본문 없음 — 제목·요약만으로 판단하고, 없는 숫자는 null/없음으로)')
+    return '\n\n'.join(parts), 'summary'
 
 
-def pending_reports(reports, bodies, cache, since):
-    out = []
+def pending_reports(reports, bodies, cache, since, shards=None):
+    """미분석(최신순) + 업그레이드 후보(요약·본문으로 분석했는데 이제 PDF 가 있는 것, 최신순) 순.
+    업그레이드는 미분석이 다 끝난 뒤에만 차례가 온다 — 무료 쿼터는 새 글에 먼저."""
+    shards = shards if shards is not None else H.load_shards()
+    fresh, upgrade = [], []
     for r in reports.values():
         if not C.wanted(r, since) or r.get('routine'):
             continue
-        ent = cache.get(r['id'])
-        if ent and ent.get('v') == SCHEMA_VERSION:
-            continue
         if r['id'] not in bodies:
             continue   # 상세를 아직 못 받았으면 다음 run 에(로그인 전용 글은 본문이 '' 로 저장돼 요약으로 분석)
-        out.append(r)
-    return sorted(out, key=lambda r: (r['date'], r['id']), reverse=True)
+        ent = cache.get(r['id'])
+        if not ent or ent.get('v') != SCHEMA_VERSION:
+            fresh.append(r)
+        elif ent.get('src') != 'pdf' and H.pdf_text_for(r['id'], r['date'][:7], shards):
+            upgrade.append(r)
+    key = lambda r: (r['date'], r['id'])
+    return sorted(fresh, key=key, reverse=True) + sorted(upgrade, key=key, reverse=True)
 
 
 def run(max_reports, budget, since):
     reports, bodies, cache = C.load(C.REPORTS, {}), C.load(C.BODIES, {}), C.load(AI_CACHE, {})
-    pend = pending_reports(reports, bodies, cache, since)
+    shards = H.load_shards()
+    pend = pending_reports(reports, bodies, cache, since, shards)
     status = {'ran_at': datetime.now(timezone.utc).isoformat(), 'pending_before': len(pend), 'analyzed': 0, 'errors': 0, 'last_error': ''}
     if not api_key():
         status['last_error'] = 'GEMINI_API_KEY 없음 — AI 분석 건너뜀'
@@ -180,12 +202,12 @@ def run(max_reports, budget, since):
         for r in pend[:max_reports]:
             if time.monotonic() - started > budget:
                 break
-            text = build_input(r, bodies.get(r['id'], ''))
+            text, src = build_input(r, bodies.get(r['id'], ''), H.pdf_text_for(r['id'], r['date'][:7], shards))
             for _ in range(len(MODELS)):
                 try:
                     raw = gemini(text, MODELS[mi])
                     cache[r['id']] = {'v': SCHEMA_VERSION, 'analyzed_at': datetime.now(timezone.utc).isoformat(),
-                                      'model': MODELS[mi], 'result': normalize(raw)}
+                                      'model': MODELS[mi], 'src': src, 'result': normalize(raw)}
                     done += 1
                     break
                 except QuotaExhausted as exc:
@@ -201,7 +223,7 @@ def run(max_reports, budget, since):
                     break
             else:
                 print('::warning::모든 모델이 429 — 이번 run 중단'); break
-            if errors >= 10:
+            if errors >= 25:          # 연속이 아니라 누적 — 일시 장애 10건에 run 이 통째로 끝나지 않게
                 break
             time.sleep(delay)
     finally:
@@ -221,7 +243,9 @@ def main():
     a = ap.parse_args()
     if a.dry_run:
         reports, bodies, cache = C.load(C.REPORTS, {}), C.load(C.BODIES, {}), C.load(AI_CACHE, {})
-        print(json.dumps({'cached': len(cache), 'pending': len(pending_reports(reports, bodies, cache, a.since))}))
+        pend = pending_reports(reports, bodies, cache, a.since)
+        print(json.dumps({'cached': len(cache), 'pending': len(pend),
+                          'fresh': sum(1 for r in pend if (cache.get(r['id']) or {}).get('v') != SCHEMA_VERSION)}))
         return
     run(a.max, a.budget, a.since)
 
