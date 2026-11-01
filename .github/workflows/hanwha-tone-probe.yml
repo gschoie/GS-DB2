@@ -15,65 +15,80 @@ jobs:
       - uses: actions/setup-python@v6
         with:
           python-version: "3.12"
-      - run: python -m pip install requests beautifulsoup4 lxml
-      - name: 목록 페이지 구조 덤프
+      - run: python -m pip install requests beautifulsoup4 lxml pypdf
+      - name: 페이징 + 상세 페이지 + PDF 구조 덤프
         run: |
           python - <<'PY'
-          import re, html, requests, json
+          import re, html, requests, json, io
           from bs4 import BeautifulSoup
           UA={'User-Agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/126 Safari/537.36'}
           B='https://service.hanwhawm.com:9090'
           s=requests.Session(); s.headers.update(UA)
           def collapse(t): return re.sub(r'\s+',' ',t)
+          def items(text):
+              soup=BeautifulSoup(text,'lxml'); out=[]
+              for li in soup.select('ul.researchList > li'):
+                  a=li.select_one('div.tit a[href^="javascript:view"]')
+                  if not a: continue
+                  m=re.search(r"view\('(\d+)',\s*'([^']*)',\s*'([^']*)'\)",a['href'])
+                  info=li.select_one('p.info'); date=li.select_one('span.date'); gub=li.select_one('span.gubun')
+                  name=collapse(info.get_text()).replace(gub.get_text(),'').replace(date.get_text(),'').strip() if info else ''
+                  out.append((m.group(1),m.group(2),m.group(3),collapse(a.get_text()),name,date.get_text() if date else ''))
+              return out
           for dep in ('1002','1003'):
               url=f'{B}/main/research/main/list.cmd?depth2_id={dep}&mode=depth2'
-              r=s.get(url,timeout=30)
-              print(f'\n######## depth2_id={dep} status={r.status_code} len={len(r.text)} final={r.url}')
-              txt=collapse(r.text)
-              print('--- head 3000 ---'); print(txt[:3000])
+              for p in (1,2,3):
+                  r=s.get(url+f'&p={p}',timeout=30)
+                  it=items(r.text)
+                  print(f'GET dep={dep} p={p} status={r.status_code} n={len(it)} first={it[:2]} last={it[-1:]}')
+              r=s.post(url, data={'depth3_nm':'','gubun':'','srchTxt':'','p':'2'},timeout=30)
+              print(f'POST dep={dep} p=2 n={len(items(r.text))} first={items(r.text)[:1]}')
+              # gubun select 옵션
+              soup=BeautifulSoup(r.text,'lxml'); sel=soup.select_one('select#gubun')
+              print('GUBUN options:', [(o.get('value'),collapse(o.get_text())) for o in sel.find_all('option')] if sel else None)
+              # 날짜로 먼 페이지 — 2025-01-01 부근 페이지 수 가늠(p=100, p=400)
+              for p in (100,300):
+                  r=s.get(url+f'&p={p}',timeout=30); it=items(r.text)
+                  print(f'GET dep={dep} p={p} n={len(it)} first_date={it[0][5] if it else None} last_date={it[-1][5] if it else None}')
+          # 상세 페이지
+          r=s.get(f'{B}/main/research/main/list.cmd?depth2_id=1002&mode=depth2',timeout=30)
+          first=[x for x in items(r.text) if x[1] in ('anls1','anls2')][:2]
+          for seq,d3,d3nm,title,name,date in first:
+              vurl=f'{B}/main/research/main/view.cmd?depth3_id={d3}&depth2_id=1002&mode=depth2&seq={seq}&p=&depth3_nm={d3nm}&templet=default'
+              r=s.get(vurl,timeout=30)
+              print(f'\n######## VIEW seq={seq} status={r.status_code} len={len(r.text)} final={r.url}')
               soup=BeautifulSoup(r.text,'lxml')
-              print('--- forms ---')
-              for f in soup.find_all('form'):
-                  print('FORM', f.get('name'), f.get('id'), f.get('action'), f.get('method'))
-                  for i in f.find_all(['input','select']):
-                      print('   ', i.name, i.get('name'), i.get('id'), i.get('value'), i.get('type'))
-              print('--- tables ---')
-              for ti,t in enumerate(soup.find_all('table')):
-                  rows=t.find_all('tr')
-                  print(f'TABLE {ti} class={t.get("class")} rows={len(rows)}')
-                  for tr in rows[:4]:
-                      print('   TR:', collapse(str(tr))[:1500])
-              print('--- list-ish containers (ul/li with links) ---')
-              for ul in soup.find_all(['ul','ol']):
-                  lis=ul.find_all('li')
-                  if 5<=len(lis)<=60 and ul.find('a'):
-                      print('UL class=',ul.get('class'),'n=',len(lis))
-                      for li in lis[:3]: print('   LI:', collapse(str(li))[:1200])
-              print('--- links with cmd/pdf/down ---')
-              seen=0
+              print('--- links with down/pdf/file/attach ---')
               for a in soup.find_all('a',href=True):
-                  h=a['href']
-                  if re.search(r'cmd|pdf|down|view|seq|file',h,re.I):
-                      print('A', h[:200], '|', collapse(a.get_text())[:80], '|', a.get('onclick','')[:150]); seen+=1
-                  if seen>40: break
-              print('--- onclick handlers ---')
-              oc=set()
+                  if re.search(r'down|pdf|file|attach|fileDown',a['href']+a.get('onclick',''),re.I):
+                      print('A', a['href'][:250], '|', collapse(a.get_text())[:80], '|', a.get('onclick','')[:200])
+              print('--- onclicks mentioning down/file ---')
               for el in soup.find_all(attrs={'onclick':True}):
-                  oc.add(el['onclick'][:160])
-              for o in list(oc)[:40]: print('ONCLICK', o)
-              print('--- scripts mentioning page/list/view ---')
+                  if re.search(r'down|file|pdf',el['onclick'],re.I): print('ONCLICK', el['onclick'][:300])
+              print('--- scripts mentioning download/file ---')
               for sc in soup.find_all('script'):
                   st=sc.string or ''
-                  if re.search(r'page|list|view|download',st,re.I) and len(st)<6000:
-                      print('SCRIPT:', collapse(st)[:2500])
-              print('--- paging hints ---')
-              for m in re.finditer(r'(pageIndex|curPage|pageNo|page_no|currentPage|totalCount|totCnt|rowCnt)[^<]{0,120}',txt,re.I):
-                  print('HINT', m.group(0)[:200])
-              # 2페이지 추정 요청들
-              for extra in ({'pageIndex':'2'},{'curPage':'2'},{'page':'2'},{'pageNo':'2'},{'currentPage':'2'}):
-                  try:
-                      r2=s.get(url,params=extra,timeout=30)
-                      d2=re.findall(r'\d{4}[.\-/]\d{2}[.\-/]\d{2}',r2.text)
-                      print(f'PAGE2 try {extra}: status={r2.status_code} len={len(r2.text)} dates={d2[:3]}..{d2[-2:]} n={len(d2)}')
-                  except Exception as e: print('PAGE2 err',extra,e)
+                  if re.search(r'fileDown|download|attach',st,re.I) and len(st)<8000: print('SCRIPT:', collapse(st)[:3000])
+              print('--- content region ---')
+              body=soup.select_one('#content') or soup.body
+              txt=collapse(body.get_text(' '))
+              i=txt.find(title[:15]); print(txt[max(0,i-300):i+3000])
+              print('--- raw html around title ---')
+              raw=collapse(r.text); i=raw.find(html.escape(title[:12],quote=False)); i=raw.find(title[:12]) if i<0 else i
+              print(raw[max(0,i-1500):i+4000])
+              # PDF 후보 URL 찾기
+              cands=set(re.findall(r'(?:href|src)=["\']([^"\']*(?:\.pdf|fileDown|download|attach)[^"\']*)["\']',r.text,re.I))
+              cands|=set(re.findall(r"(?:fileDown|download|fn_down)\w*\(([^)]*)\)",r.text))
+              print('PDF CANDS', list(cands)[:10])
+              for c in list(cands)[:3]:
+                  if c.startswith('/') or c.startswith('http'):
+                      u=c if c.startswith('http') else B+c
+                      try:
+                          rr=s.get(u,timeout=60)
+                          print('FETCH',u,rr.status_code,rr.headers.get('content-type'),len(rr.content))
+                          if rr.content[:4]==b'%PDF':
+                              from pypdf import PdfReader
+                              rd=PdfReader(io.BytesIO(rr.content)); t=rd.pages[0].extract_text() or ''
+                              print('PDF pages',len(rd.pages),'page1 text:',collapse(t)[:800])
+                      except Exception as e: print('FETCH err',u,e)
           PY
