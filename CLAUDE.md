@@ -1356,4 +1356,26 @@
       이 컨테이너의 Chromium 은 `/opt/pw-browsers/chromium-1243/chrome-linux64/chrome`
       (번호·경로가 36번 때와 다르다 — glob 으로 찾을 것).
 
+53. **불꽃 리서치 톤 신설 — 한화투자증권 리서치 게시판 톤 추적** (11/1): 다올 리서치톤(별도 리포
+    `gschoie/DAOL-RESEARCH-TONE`)과 같은 골격을 이 리포 안에 `hanwha_research_tone/` 모듈로. 소스는
+    공식 텔레그램이 없어 게시판 2개 — 기업·산업분석(`depth2_id=1002`) + 투자전략(`1003`). 2025-01-01 부터 백필.
+    - **게시판 구조(러너 프로브 2회로 실측 — 컨테이너는 `service.hanwhawm.com:9090` 접속 불가)**: 목록은
+      GET `list.cmd?depth2_id=…&mode=depth2&p=N`(10건/페이지, 1002 는 19,235건·1003 은 4,584건, 2025-01 은
+      1002 p≈250·1003 p≈85), 행은 `ul.researchList li` 의 `view('seq','depth3','구분')` + 작성자·날짜·요약.
+      상세 `view.cmd?…&seq=` 의 `div.researchCont` 에 본문 요약(몇 문단)과 `spJname`(관련 종목). **첨부 PDF 는
+      로그인 전용** → 본문 요약이 분석 입력. 페이지가 메뉴 때문에 ~520KB 라 상세는 예산(초)으로 끊고 다음 run 이
+      이어 받는다(4 스레드). 해외주식분석(anls19)·데일리/주간시황류(routine)는 톤 분석 제외.
+    - 파이프라인: `collect.py`(목록 증분·백필 + 상세, `data/reports.json`·`bodies.json`) → `ai_analyze.py`
+      (Gemini 구조화, 다올과 **같은 스키마** — 확신도·톤 라벨·문구 인용·TP 방향/사유·실적추정·투자포인트,
+      `data/ai_analysis.json` 캐시, 429 는 모델 교대) → `build_tone.py`(기업/산업 타임라인·직전 TP 채움·
+      투자포인트 diff·이벤트·섹터×애널 보드 → `data/tone_v2.json` + 대시보드 `static/hanwha_tone/`).
+      TP·투자의견은 제목 `[코드/Buy]` 와 본문 정규식(`parse.extract_cover`)이 AI 값보다 우선.
+    - 화면 `static/hanwha_tone_report.html`(런타임 fetch, 다올 보드와 같은 배치: 이벤트 2열 → 섹터×애널
+      → 최근 발간 표 → 기업 모달에 TP 추이·문구·포인트). 사이드바 `🔥 불꽃 리서치 톤(한화)`(DAOL 톤 밑),
+      색은 한국식(상향 빨강·하향 파랑). 워크플로 `hanwha-tone.yml` 크론 07:10/07:35 KST(아침, 지연 안전망)
+      + 22:00 AI 백필, 데이터 커밋백 → deploy-pages workflow_run. 시크릿은 기존 `GEMINI_API_KEY`
+      (`HANWHA_GEMINI_API_KEY` 있으면 우선). 테스트 23개(제목·표지 파서·목록/상세 HTML·병합/이벤트).
+    - 첫 백필은 상세 ~2,500건·AI 무료 쿼터 때문에 며칠에 걸쳐 채워진다 — 화면 머리글의 '본문 미수집 n건 ·
+      AI 대기 n건' 이 0 이 되면 끝. GAS 라우트·텔레그램은 아직 없다(필요 시 dispatch_proxy 에 `hwtone` 추가).
+
 이후 작업은 git log와 이 파일을 갱신하며 이어간다.
