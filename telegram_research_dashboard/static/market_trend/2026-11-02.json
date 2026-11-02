@@ -1,0 +1,586 @@
+{
+ "date": "2026-11-02",
+ "meta": {
+  "window": "11-01 06:00~11-02 06:00 KST",
+  "engine": "Gemini(gemini-flash-lite-latest)",
+  "generated_at": "2026-11-02T06:35+09:00"
+ },
+ "stats": {
+  "channels": 52,
+  "messages": 426,
+  "groups": 410
+ },
+ "one_liner": "10월 수출 급증과 반도체 호조에도 불구하고 미국 중간선거 및 AI 거품 우려, 중동 지정학적 리스크가 맞물린 하루",
+ "themes": [
+  {
+   "name": "한국 10월 수출 급증 및 메모리 호조",
+   "narrative": "10월 수출이 전년 대비 93.7% 급증한 1,152억 8천만 달러를 기록하며 2개월 연속 1,100억 달러를 돌파했습니다. 특히 메모리 반도체(DRAM 등)의 수출 호조가 실적을 견인하며 연간 1조 달러 달성을 눈앞에 두고 있습니다.",
+   "status": "new",
+   "strength": 5,
+   "keywords": [
+    "한국 수출",
+    "반도체 수출",
+    "DRAM",
+    "수출액"
+   ],
+   "evidence": [
+    {
+     "channel": "이상헌 부장 iM 지주/ESG/중소형주",
+     "quote": "우리나라 월간 수출이 2개월 연속 1천100억달러를 넘겼다. 1일 산업통상부가 발표한 '2026년 10월 수출입 동향'에 따르면 지난달 수출은 전년 동월 대비 93.7% 급증한 1천152억8천만달러를 기록했다."
+    },
+    {
+     "channel": "Macro Trader",
+     "quote": "10월 DRAM 수출은 337억 7,200만 달러로 전년 동월 대비 595%, 전월 대비 2% 증가했다. 전체 메모리 수출은 501억 3,900만 달러로 전년 대비 359% 늘었다."
+    }
+   ]
+  },
+  {
+   "name": "한화, 필리조선소 인수 후 미 해군 함정 첫 수주",
+   "narrative": "한화디펜스USA가 미 해군 및 해병대 중형상륙함 건조 계약을 수주하며 필리조선소 인수 2년 만에 가시적인 성과를 거두었습니다. 국내 조선 및 방산 섹터의 미국 시장 진출 기대감이 재점화되고 있습니다.",
+   "status": "new",
+   "strength": 4,
+   "keywords": [
+    "해군 함정",
+    "필리조선소",
+    "한화디펜스USA"
+   ],
+   "evidence": [
+    {
+     "channel": "GS의 조선/기계/방산 「바담」",
+     "quote": "[한화, 美 해군 함정 건조 첫 수주…필리조선소 인수 2년만] • 한화디펜스USA, 미 해군·해병대 중형상륙함(LSM) 1척 건조 계약 수주"
+    },
+    {
+     "channel": "서화백의 AI놀이🚀",
+     "quote": "美 해군 함정 건조 첫 수주 (필리조선소 인수 2년만), KF-21 미사일 사업 수주 기대"
+    }
+   ]
+  },
+  {
+   "name": "바이낸스 해킹 사건과 북한 배후 지목",
+   "narrative": "바이낸스에서 63억 달러 규모의 가상자산 탈취 해킹 사건이 발생한 가운데, 미국 FBI가 북한을 배후로 공식 지목했습니다. 바이낸스가 피해액의 대부분을 보전하고 출금 서비스를 재개했으나 가상자산 시장의 잠재적 불안 요인으로 작용하고 있습니다.",
+   "status": "new",
+   "strength": 4,
+   "keywords": [
+    "FBI",
+    "배후",
+    "출금",
+    "바이낸스"
+   ],
+   "evidence": [
+    {
+     "channel": "미국 주식 인사이더 🇺🇸 (US Stocks Insider)",
+     "quote": "미국 연방수사국(FBI)은 글로벌 가상자산 거래소 바이낸스에서 발생한 63억 달러 규모의 가상자산 탈취 사건의 배후로 북한을 지목. 바이낸스는 피해 자산의 약 90%를 복구"
+    },
+    {
+     "channel": "하나증권 리서치",
+     "quote": "Binance는 10월 29일 발생한 해킹 사고로 약 63억달러 상당의 자산이 유출되었다고 밝혔다. 미국 FBI는 10월 31일 북한이 이번 탈취의 핵심 배후라고 공식 발표"
+    }
+   ]
+  },
+  {
+   "name": "미국-이란 지정학적 긴장과 중동 리스크",
+   "narrative": "미국이 이란을 향해 항공모함을 추가 배치하는 등 군사적 긴장감이 고조되고 있습니다. 이란 외무장관이 미국의 대화 제기에 입장을 밝히는 등 협상과 충돌 가능성이 혼재되어 유가와 시장에 경계감을 형성하고 있습니다.",
+   "status": "new",
+   "strength": 3,
+   "keywords": [
+    "회피",
+    "이란 외무장관",
+    "아라그치"
+   ],
+   "evidence": [
+    {
+     "channel": "미국 주식 인사이더 🇺🇸 (US Stocks Insider)",
+     "quote": "트럼프 대통령이 이란을 향해 세 번째 항공모함을 추가 배치하고 있다고 데일리메일이 보도. 이번 주 이란에 대한 군사작전 재개 가능성에 대해서는 직접적인 답변을 회피."
+    },
+    {
+     "channel": "미국 주식 인사이더 🇺🇸 (US Stocks Insider)",
+     "quote": "이란 외무장관 아라그치는 미국 밴스 부통령이 전달한 메시지를 최고위급에서 검토했으며, 미국이 포괄적인 대화 재개를 시도하는 것은 긍정적인 조치라고 평가."
+    }
+   ]
+  }
+ ],
+ "community_mood": {
+  "score": -20,
+  "summary": "개미 커뮤니티에서는 전쟁 공포와 관련된 키워드가 급증한 동시에 AI 수익성에 대한 회의론과 숏 포지션에 대한 조롱이 교차하며 혼란스러운 장세 인식을 보이고 있습니다.",
+  "hot_stocks": [
+   {
+    "name": "SK하이닉스",
+    "score": -10,
+    "reason": "국내 주식 커뮤니티에서 실적 기대와 변동성 확대에 따른 우려가 교차하며 주목받음"
+   }
+  ]
+ },
+ "signals": {
+  "spikes": [
+   {
+    "term": "FBI",
+    "count": 13,
+    "burst": 89.50522648083623,
+    "base_daily": 0.4,
+    "new": false
+   },
+   {
+    "term": "배후",
+    "count": 12,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "반도체 수출",
+    "count": 9,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "월간",
+    "count": 11,
+    "burst": 48.19512195121951,
+    "base_daily": 0.7,
+    "new": false
+   },
+   {
+    "term": "출금",
+    "count": 7,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "맥도날드",
+    "count": 7,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "한국 수출",
+    "count": 7,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "수출액",
+    "count": 7,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "MoM",
+    "count": 7,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "해군 함정",
+    "count": 7,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "아파트",
+    "count": 7,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "회피",
+    "count": 6,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "만날",
+    "count": 6,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "이란 외무장관",
+    "count": 6,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "아라그치",
+    "count": 6,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "시제품",
+    "count": 6,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "순위",
+    "count": 6,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "현실",
+    "count": 6,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "선전",
+    "count": 6,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "조달러",
+    "count": 6,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "열풍",
+    "count": 6,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "수출 억달러",
+    "count": 6,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "미칠 영향",
+    "count": 6,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "상업용부동산",
+    "count": 6,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "섹터 전반",
+    "count": 6,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   }
+  ],
+  "top_posts": [
+   {
+    "channels": 4,
+    "channel": "▩다올 선박 + 방산 외신",
+    "head": "🛳 중국의 컨테이너 수주 랠리, 그래도 한국은 VLGC 선별수주, 미국 진출 중 ☞ https://bit.ly/DOS846 ⚓️ 주시 뉴스 💲 선가, 실적, 캐파 ▽ 2007년의 재림? 신조 붐 속 선주들의 계약 리스크 수용 경고 ▲ Bureau Veritas 수장, \"조선업 슈퍼사이클 쉽게 끝나지 않는다\"… 2030년…",
+    "url": "https://t.me/c/1454748589/744",
+    "time_kst": "11-01 16:21"
+   },
+   {
+    "channels": 3,
+    "channel": "GS의 조선/기계/방산 「바담」",
+    "head": "[한화, 美 해군 함정 건조 첫 수주…필리조선소 인수 2년만] • 한화디펜스USA, 미 해군·해병대 중형상륙함(LSM) 1척 건조 계약 수주 • 계약 규모는 2억6900만 달러(약 3600억원)이며 향후 3척 추가 건조 옵션 포함 • 2024년 필리조선소 인수 이후 미 해군 함정 신규 건조 첫 수주 사례 • 내년 4분기부…",
+    "url": "https://t.me/c/1405984327/8445",
+    "time_kst": "11-01 22:47"
+   },
+   {
+    "channels": 3,
+    "channel": "GS의 조선/기계/방산 「바담」",
+    "head": "[LIG 집행정지 기각 땐 한화와 협상…KF-21 미사일 사업 변수] • LIG D&A의 방사청 2년 입찰참가 제한 집행정지 심리 11월 5일 예정 • 기각 시 ADD는 7,533억원 규모 KF-21 장거리 공대공유도탄 체계완성품 분야 차순위 한화에어로스페이스와 협상 검토 • LIG D&A 추가 법적 대응 시 협상 보류…",
+    "url": "https://t.me/c/1405984327/8444",
+    "time_kst": "11-01 22:07"
+   },
+   {
+    "channels": 2,
+    "channel": "서화백의 AI놀이🚀",
+    "head": "📝 텔레그램 심층 분석 Report (15시 04분) 기준 🌡️ 센티먼트 관망 (-15) 💡 요약 핵심 산업(수출, 반도체)의 긍정적 지표에도 불구하고, 미국 중간선거의 불확실성, AI 섹터의 투자 거품 우려, 그리고 지정학적 리스크(트럼프-이란)가 시장 전반에 관망세를 형성하고 있습니다. 🗣️ Top 키워드: 미국 중간…",
+    "url": "https://t.me/easobi_ai/25912",
+    "time_kst": "11-01 15:04"
+   },
+   {
+    "channels": 2,
+    "channel": "Macro Trader",
+    "head": "South Korea Tech: Another record-high DRAM exports at US$34bn (+595% yoy) DRAM 수출의 신고점은 메모리 호황의 지속을 확인하지만, 기술 수출 전체가 매달 가속하고 있다는 뜻은 아니다. 10월 DRAM 수출은 337억 7,200만 달러로 전년 동월 대비 595%,…",
+    "url": "https://t.me/MacroAllocation/7741",
+    "time_kst": "11-01 20:45"
+   },
+   {
+    "channels": 2,
+    "channel": "서화백의 AI놀이🚀",
+    "head": "📝 텔레그램 심층 분석 Report (23시 05분) 기준 🌡️ 센티먼트 관망 (+25) 💡 요약 메모리 반도체 및 AI 인프라 투자 확대 등 긍정적 요인이 존재하나, AI 관련 부채 급증, 대규모 암호화폐 해킹, 금리 인상 가능성 등 위험 요인에 대한 관망 심리가 강함. 🗣️ Top 키워드: AI(20), 메모리(15)…",
+    "url": "https://t.me/easobi_ai/25929",
+    "time_kst": "11-01 23:05"
+   },
+   {
+    "channels": 2,
+    "channel": "서화백의 AI놀이🚀",
+    "head": "📝 텔레그램 심층 분석 Report (11시 06분) 기준 🌡️ 센티먼트 환호 (+75) 💡 요약 한국 수출 실적(특히 반도체)이 예상치를 크게 웃돌며 1조 달러 달성을 눈앞에 두고 있고, AI 서버 수요가 강력하게 증가하며 관련 산업의 성장을 견인하고 있습니다. 다만, 가상화폐 시장의 해킹 문제와 기업 대출 연체율 증가…",
+    "url": "https://t.me/easobi_ai/25909",
+    "time_kst": "11-01 11:06"
+   },
+   {
+    "channels": 2,
+    "channel": "하나증권/에너지화학/윤재성",
+    "head": "[하나/에너지화학/윤재성] Weekly Monitor: 러시아/한국 디젤 수출 확대 vs. OSP 추가 인하 ▶ 보고서: https://bit.ly/4BDPvZ9 [총평] ▶ WTI 104.1$(+0.8%), Dubai 118.7$ (+1.5%). 정제마진 32.9$(WoW -3.7$). 석유화학 강세 ▶ Top Pick…",
+    "url": "https://t.me/energy_youn/3357",
+    "time_kst": "11-01 16:31"
+   },
+   {
+    "channels": 2,
+    "channel": "이상헌 부장 iM 지주/ESG/중소형주",
+    "head": "* 10월 수출 1천153억달러…2개월 연속 1천100억달러 넘겨(상보) - 우리나라 월간 수출이 2개월 연속 1천100억달러를 넘겼다. 1일 산업통상부가 발표한 '2026년 10월 수출입 동향'에 따르면 지난달 수출은 전년 동월 대비 93.7% 급증한 1천152억8천만달러를 기록했다. 이는 전문가들의 전망치를 상회한 결…",
+    "url": "https://t.me/INSIGHTVALUELEE/10955",
+    "time_kst": "11-01 09:21"
+   },
+   {
+    "channels": 2,
+    "channel": "main news",
+    "head": "[한국경제] 속보 한국 수출 첫 9000억달러 돌파…10월 1153억달러 https://www.hankyung.com/article/2026110180397",
+    "url": "https://t.me/mainnews/202253",
+    "time_kst": "11-01 09:26"
+   }
+  ]
+ },
+ "community_dc": {
+  "source": "DC인사이드",
+  "galleries": [
+   {
+    "id": "krstock",
+    "name": "국내주식갤러리",
+    "posts": 1109,
+    "capped": true,
+    "burst": 0.6,
+    "base_daily": 1867.4
+   },
+   {
+    "id": "stockus",
+    "name": "해외주식갤러리",
+    "posts": 3097,
+    "capped": true,
+    "burst": 0.3,
+    "base_daily": 9105.6
+   }
+  ],
+  "posts_sampled": 564,
+  "keywords": [
+   {
+    "term": "전쟁",
+    "count": 16,
+    "burst": 99.0,
+    "new": true
+   },
+   {
+    "term": "전쟁나면",
+    "count": 15,
+    "burst": 99.0,
+    "new": true
+   },
+   {
+    "term": "도로롱증권",
+    "count": 15,
+    "burst": 99.0,
+    "new": true
+   },
+   {
+    "term": "비상식량",
+    "count": 13,
+    "burst": 99.0,
+    "new": true
+   },
+   {
+    "term": "북한",
+    "count": 9,
+    "burst": 99.0,
+    "new": true
+   },
+   {
+    "term": "스타링크",
+    "count": 9,
+    "burst": 99.0,
+    "new": true
+   },
+   {
+    "term": "선거",
+    "count": 6,
+    "burst": 79.8,
+    "new": true
+   },
+   {
+    "term": "생각",
+    "count": 6,
+    "burst": 79.8,
+    "new": true
+   },
+   {
+    "term": "아님",
+    "count": 5,
+    "burst": 66.5,
+    "new": true
+   },
+   {
+    "term": "일본",
+    "count": 5,
+    "burst": 66.5,
+    "new": true
+   },
+   {
+    "term": "한번",
+    "count": 5,
+    "burst": 66.5,
+    "new": true
+   },
+   {
+    "term": "있냐",
+    "count": 5,
+    "burst": 66.5,
+    "new": true
+   },
+   {
+    "term": "없음",
+    "count": 5,
+    "burst": 66.5,
+    "new": true
+   },
+   {
+    "term": "지금",
+    "count": 17,
+    "burst": 4.6,
+    "new": false
+   },
+   {
+    "term": "중간선거",
+    "count": 6,
+    "burst": 7.3,
+    "new": false
+   }
+  ],
+  "top_recommended": [
+   {
+    "gallery": "해외주식갤러리",
+    "title": "쿠팡 알바하면서 에센피 적립했는데 1600 모았다",
+    "views": 7797,
+    "recommend": 230,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=18181427&exception_mode=recommend&page=1",
+    "time_kst": "11-01 19:21"
+   },
+   {
+    "gallery": "해외주식갤러리",
+    "title": "AI가 돈이 안되는 이유 설명해줌",
+    "views": 9340,
+    "recommend": 205,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=18179498&exception_mode=recommend&page=1",
+    "time_kst": "11-01 13:15"
+   },
+   {
+    "gallery": "해외주식갤러리",
+    "title": "AI가 없는 세상을 상상해보았다..",
+    "views": 6855,
+    "recommend": 199,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=18181609&exception_mode=recommend&page=1",
+    "time_kst": "11-01 19:53"
+   },
+   {
+    "gallery": "해외주식갤러리",
+    "title": "인생 좆망한애들 특) ai에 집착함ㅋㅋㅋㅋㅋㅋㅋㅋ",
+    "views": 8813,
+    "recommend": 176,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=18181638&exception_mode=recommend&page=1",
+    "time_kst": "11-01 19:57"
+   },
+   {
+    "gallery": "해외주식갤러리",
+    "title": "요즘 왜케 가난 코스프레들이 많을까",
+    "views": 7949,
+    "recommend": 166,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=18181401&exception_mode=recommend&page=1",
+    "time_kst": "11-01 19:14"
+   }
+  ],
+  "top_viewed": [
+   {
+    "gallery": "국내주식갤러리",
+    "title": "하닉 개 ㅈ됫네 코스피랩",
+    "views": 864,
+    "recommend": 0,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3795946&page=5",
+    "time_kst": "11-02 00:48"
+   },
+   {
+    "gallery": "국내주식갤러리",
+    "title": "속보) 이란, 48시간 호르무즈 재개방안 제시",
+    "views": 859,
+    "recommend": 0,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3796091&page=2",
+    "time_kst": "11-02 03:44"
+   },
+   {
+    "gallery": "해외주식갤러리",
+    "title": "4시간뒤 하이닉스 상황",
+    "views": 858,
+    "recommend": 20,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=18184312&page=5",
+    "time_kst": "11-02 05:20"
+   },
+   {
+    "gallery": "국내주식갤러리",
+    "title": "8시간 뒤 근황.jpg",
+    "views": 834,
+    "recommend": 0,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3795942&page=5",
+    "time_kst": "11-02 00:47"
+   },
+   {
+    "gallery": "국내주식갤러리",
+    "title": "[실시간] 노머고 개좆됨",
+    "views": 788,
+    "recommend": 0,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3795920&page=5",
+    "time_kst": "11-02 00:33"
+   },
+   {
+    "gallery": "국내주식갤러리",
+    "title": "드디어 종전이구나 시발 ㅋㅋㅋㅋㅋㅋㅋ",
+    "views": 721,
+    "recommend": 10,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3796144&page=1",
+    "time_kst": "11-02 05:50"
+   },
+   {
+    "gallery": "국내주식갤러리",
+    "title": "속보 - 숏충이 명망 ㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋ",
+    "views": 703,
+    "recommend": 1,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3795900&page=6",
+    "time_kst": "11-02 00:24"
+   },
+   {
+    "gallery": "국내주식갤러리",
+    "title": "코스피랩 왜저럼?",
+    "views": 680,
+    "recommend": 0,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3795875&page=6",
+    "time_kst": "11-02 00:08"
+   }
+  ]
+ }
+}
