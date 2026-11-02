@@ -1397,4 +1397,19 @@
     - AI 백필은 무료 쿼터 때문에 며칠에 걸쳐 채워진다 — 화면 머리글의 '본문 미수집 n건 ·
       AI 대기 n건' 이 0 이 되면 끝. GAS 라우트·텔레그램은 아직 없다(필요 시 dispatch_proxy 에 `hwtone` 추가).
 
+54. **매매제한 컴플 체크 — GEMS → 대시보드 내장 도구** (11/2): 사이드바 `👥 DAOL.관리 > ⏳ 컴플(24H 매매제한).쳌`
+    이 제미나이 Gem·ChatGPT 프로젝트 두 창을 열던 것을 `static/compliance/index.html`(새 창)로 교체.
+    매매제한 지시(자료 A)·파워베이스 캡처(자료 B)·혼합 이미지를 Ctrl+V/드래그/사진 선택으로 올리면
+    **판독은 AI, 대조·판정·집계는 고정 규칙**(`static/compliance/matcher.js`) — GEMS 처럼 AI 가 건수까지
+    세면 판독 못 한 종목을 '일치'로 넘기거나 집계가 틀릴 수 있어서다(집계 합계 ≠ 행 수면 예외).
+    - AI 는 브라우저에서 직접 호출: 기본 **Gemini**(`generateContent` + `responseJsonSchema`, 스키마 400 이면
+      JSON 모드 재시도, 기본 모델 `gemini-pro-latest`, '모델 목록 불러오기'), 선택 Claude(`vendor/` 에 묶은
+      공식 JS SDK — CDN 없이 동작). **키는 보는 사람 브라우저에만 저장**, 리포·서버 미경유(리포 공개).
+    - 판정 규칙(지침): 코드 문자열·앞자리 0 보존(A 접두만 제거), 코드 우선, 이름 같고 코드 다르면 ❓,
+      우선주는 별개, 같은 캡처 안 중복 ❓/캡처 간 겹침 1건, 적용 증거 없음·기간 상이 ❓, 판독불가·캡처 잘림이면
+      '전체 일치' 선언 금지. 테스트 `compliance_check/matcher.test.js` 12개(`node --test compliance_check/`).
+    - 원본 개발은 DAOL-Securities-Research-Center/DAOL-RESEARCH-TONE 브랜치(조직 권한 문제로 미푸시) —
+      정본은 이제 이 리포. 같은 파일을 claude.ai 아티팩트로도 띄웠다(그쪽은 CSP 로 Gemini 불가, claude.ai 계정 판독).
+    - 공유 비번으로 열린다(하위 폴더 index.html 은 주인 전용 아님). 빌드는 `build_static` copytree 한 줄.
+
 이후 작업은 git log와 이 파일을 갱신하며 이어간다.
