@@ -81,7 +81,8 @@ SCHEMA = _g('OBJECT', properties={
              'strong_phrases', 'hedge_phrases', 'negative_phrases', 'investment_points', 'one_line', 'estimates'])
 
 # 무료 티어 한도 버킷이 모델마다 따로다 — 429 면 기다리지 말고 다음 모델로(CLAUDE.md 49번 교훈).
-MODELS = [m for m in os.getenv('HANWHA_GEMINI_MODELS', 'gemini-flash-lite-latest,gemini-flash-latest,gemini-2.5-flash-lite,gemini-2.5-flash').split(',') if m]
+MODELS = [m for m in os.getenv('HANWHA_GEMINI_MODELS', 'gemini-flash-lite-latest,gemini-flash-latest,gemini-3.5-flash-lite,gemini-3.5-flash,gemini-2.5-flash').split(',') if m]
+# 11/2 실측: gemini-2.5-flash-lite 는 404('no longer available to new users') — 404 모델은 그 run 에서 제외한다
 
 
 class QuotaExhausted(RuntimeError):
@@ -216,10 +217,14 @@ def run(max_reports, budget, since):
                     print(f'::warning::429 — 모델 교대 → {MODELS[mi]}')
                     time.sleep(3)
                 except Exception as exc:
-                    errors += 1; status['last_error'] = str(exc)[:300]
+                    status['last_error'] = str(exc)[:300]
+                    if 'HTTP 404' in str(exc) and len(MODELS) > 1:
+                        # 폐기된 모델 — 오류로 세지 않고 목록에서 빼고 같은 건을 다음 모델로 다시
+                        print(f'::warning::모델 폐기(404) → {MODELS[mi]} 제외')
+                        MODELS.pop(mi); mi %= len(MODELS)
+                        continue
+                    errors += 1
                     print(f"::warning::{r['id']} 분석 실패: {str(exc)[:200]}")
-                    if '404' in str(exc):
-                        mi = (mi + 1) % len(MODELS)
                     break
             else:
                 print('::warning::모든 모델이 429 — 이번 run 중단'); break
