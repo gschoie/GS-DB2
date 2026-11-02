@@ -26,9 +26,11 @@ jobs:
               ds=re.findall(r'<td[^>]*>\s*(\d{4}-\d{2}-\d{2})\s*</td>',r.text)
               brokers=re.findall(r'<td[^>]*>\s*([^<]*증권[^<]*)\s*</td>',r.text)
               return ds, len(set(brokers))
-          for y in range(2000,2026):
-              ds,_=rows(f'{y}-01-01',f'{y}-12-31'); time.sleep(0.4)
-              ds_all,nb=rows(f'{y}-01-01',f'{y}-12-31',broker=False); time.sleep(0.4)
-              print(f'{y}: 한화 rows(page1)={len(ds)} range={min(ds) if ds else "-"}~{max(ds) if ds else "-"} | 전체 rows(page1)={len(ds_all)} range={min(ds_all) if ds_all else "-"}~{max(ds_all) if ds_all else "-"} brokers_on_page={nb}')
-          # 한화 가장 오래된 해: 월별로 좁혀 최초 날짜
+          for m in range(1,13):
+              sd=f'2016-{m:02d}-01'; ed=f'2016-{m:02d}-31' if m!=2 else '2016-02-29'
+              ds,_=rows(sd,ed); time.sleep(0.4); print(f'2016-{m:02d}: 한화 rows={len(ds)} first={min(ds) if ds else "-"}')
+          for name in ('한화증권','한화'):
+              q=quote(name); r=s.get(f'{B}?sdate=2005-01-01&edate=2015-12-31&search_value=&search_text={q}&order_type=&pagenum=80&now_page=1',timeout=40)
+              ds=re.findall(r'<td[^>]*>\s*(\d{4}-\d{2}-\d{2})\s*</td>',r.text); br=set(re.findall(r'<td[^>]*>\s*([^<]*증권[^<]*)\s*</td>',r.text))
+              print(f'{name} 2005~2015: rows={len(ds)} range={min(ds) if ds else "-"}~{max(ds) if ds else "-"} brokers={sorted(br)[:8]}')
           PY
