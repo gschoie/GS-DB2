@@ -1,0 +1,612 @@
+{
+ "date": "2026-11-04",
+ "meta": {
+  "window": "11-03 06:00~11-04 06:00 KST",
+  "engine": "Gemini(gemini-flash-lite-latest)",
+  "generated_at": "2026-11-04T06:36+09:00"
+ },
+ "stats": {
+  "channels": 102,
+  "messages": 1691,
+  "groups": 1542
+ },
+ "one_liner": "미-이란 협상 기대에 따른 유가 급락과 미국 중간선거 앞둔 AI·기술주 매도세로 국내외 증시 변동성 확대",
+ "themes": [
+  {
+   "name": "중동 긴장 완화 및 미·이란 협상 진전으로 유가 급락",
+   "narrative": "미·이란 간 대화와 외교적 해결 기대감, 그리고 이란 최고지도자의 대화 권한 위임 소식이 전해지며 WTI 등 국제유가가 큰 폭으로 하락했습니다. 이로 인해 정유 및 관련 에너지 업종에 단기 충격이 발생한 반면, 물가 부담 완화와 호르무즈 해협 개방 가능성이 부각되었습니다.",
+   "status": "new",
+   "strength": 5,
+   "keywords": [
+    "협상 진전",
+    "해결",
+    "케슘섬",
+    "유로화",
+    "MRVL"
+   ],
+   "evidence": [
+    {
+     "channel": "사제콩이_서상영",
+     "quote": "국제유가는 주말에 트럼프 대통령이 네타냐후 이스라엘 총리의 중간선거 직후 군사공격 재개 요구에도 외교적 해결에 시간을 더 주려 한다는 보도가 유입되며 하락."
+    },
+    {
+     "channel": "신한 리서치",
+     "quote": "이란 대통령이 최고지도자로부터 대화 권한을 위임 받았다는 소식과 중간선거 후 대이란 공격 서두를 필요 없다는 Trump 입장 등에 간밤 WTI 7%대 하락했지만 관련 업종 영향에 그쳤습니다."
+    }
+   ]
+  },
+  {
+   "name": "미국 중간선거 경계감 속 AI 및 기술주 매도세 지속",
+   "narrative": "미국 중간선거를 하루 앞둔 정치적 불확실성과 AI·반도체 중심의 대규모 매도세로 인해 뉴욕증시 3대 지수가 혼조 마감했습니다. 국내 반도체 및 관련 기술주 역시 글로벌 업황과 주가 간의 괴리 및 경계감 속에서 변동성을 겪고 있습니다.",
+   "status": "new",
+   "strength": 4,
+   "keywords": [
+    "혼조",
+    "경계감",
+    "MRVL"
+   ],
+   "evidence": [
+    {
+     "channel": "미국 주식 인사이더 🇺🇸 (US Stocks Insider)",
+     "quote": "미국 증시는 중간선거를 앞둔 정치적 불확실성과 AI·반도체 중심의 대규모 매도세로 혼조 마감."
+    },
+    {
+     "channel": "한투 반도체/소부장 고영민",
+     "quote": "27년을 앞두고 최근 저희 업종은 그 어느 때보다 업황과 주가의 괴리가 크게 나타나고 있습니다."
+    }
+   ]
+  },
+  {
+   "name": "주 주요 기업 3분기 실적 호조 및 보상금 유입",
+   "narrative": "주요 상장사들의 3분기 실적 발표가 이어지는 가운데, 일부 기업은 고객사 보상금이나 환급 효과 등으로 시장 컨센서스를 상회하는 실적을 기록했습니다. 개별 종목별로 실적 체력과 일회성 이익에 따른 주가 차별화가 나타나는 모습입니다.",
+   "status": "new",
+   "strength": 4,
+   "keywords": [
+    "보상금",
+    "환급",
+    "심텍",
+    "제주항공",
+    "현대그린푸드"
+   ],
+   "evidence": [
+    {
+     "channel": "NH투자증권 리서치",
+     "quote": "- 3Q26 매출액 8,348억원(-5% y-y, +23% q-q), 영업이익 821억원(OPM 10%)으로 컨센서스(7,720억원/194억원) 상회. 국내 고객사 2곳으로부터 일회성 보상금 약 600억원 이상 수령한 영향"
+    },
+    {
+     "channel": "AWAKE - 실시간 주식 공시 정리채널",
+     "quote": "기업명: 한국항공우주(시가총액: 9조 4,843억) A047810 보고서명: 연결재무제표기준영업(잠정)실적(공정공시)"
+    }
+   ]
+  }
+ ],
+ "community_mood": {
+  "score": -45,
+  "summary": "미국 증시 하락세와 반도체주 약세 우려로 인해 개미 투자자들 사이에 불안감과 자조 섞인 정서가 지배적입니다.",
+  "hot_stocks": [
+   {
+    "name": "삼성전자",
+    "score": -50,
+    "reason": "주가 부진과 추가 하락 우려에 대한 불안감이 커지고 있습니다."
+   },
+   {
+    "name": "SK하이닉스",
+    "score": -40,
+    "reason": "중국 공장 증설 승인 보류 등 악재성 카더라 통신으로 우려가 제기되고 있습니다."
+   },
+   {
+    "name": "AMD",
+    "score": -30,
+    "reason": "미국 주식 및 반도체 섹터 하락과 연계되어 언급되고 있습니다."
+   }
+  ]
+ },
+ "signals": {
+  "spikes": [
+   {
+    "term": "상업",
+    "count": 24,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "심텍",
+    "count": 22,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "제주항공",
+    "count": 18,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "협상 진전",
+    "count": 17,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "보상금",
+    "count": 17,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "해결",
+    "count": 16,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "혼조",
+    "count": 16,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "케슘섬",
+    "count": 15,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "환급",
+    "count": 15,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "현대그린푸드",
+    "count": 15,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "풍산",
+    "count": 15,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "유로화",
+    "count": 14,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "ORCL",
+    "count": 14,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "netpark datatooza.com",
+    "count": 13,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "netpark",
+    "count": 13,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "박노중 데이터투자",
+    "count": 13,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "기자 netpark",
+    "count": 13,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "박노중",
+    "count": 13,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "데이터투자 기자",
+    "count": 13,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "datatooza.com",
+    "count": 13,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "임시",
+    "count": 12,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "초안",
+    "count": 12,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "경계감",
+    "count": 12,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "MRVL",
+    "count": 12,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "JP",
+    "count": 12,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   }
+  ],
+  "top_posts": [
+   {
+    "channels": 5,
+    "channel": "한투 반도체/소부장 고영민",
+    "head": "안녕하세요, 한투 반도체 담당 고영민 입니다. 금일 27년 연간전망을 시작으로 반도체 업종 커버리지를 재개합니다. 27년을 앞두고 최근 저희 업종은 그 어느 때보다 업황과 주가의 괴리가 크게 나타나고 있습니다. 모두가 인지할 수 있는 좋은 업황과 반대로 주가는 계속해서 낮은 수준에 머물러 있는데, 이에 대한 배경에는 과거…",
+    "url": "https://t.me/Semi_Ko/937",
+    "time_kst": "11-03 07:47"
+   },
+   {
+    "channels": 5,
+    "channel": "AWAKE - 실시간 주식 공시 정리채널",
+    "head": "2026.11.03 15:39:33 기업명: 한국항공우주(시가총액: 9조 4,843억) A047810 보고서명: 연결재무제표기준영업(잠정)실적(공정공시) 매출액 : 10,643억(예상치 : 11,786억/ -10%) 영업익 : 794억(예상치 : 753억/ +5%) 순이익 : 204억(예상치 : 476억/ -57%) **…",
+    "url": "https://t.me/darthacking/156161",
+    "time_kst": "11-03 15:39"
+   },
+   {
+    "channels": 5,
+    "channel": "AWAKE - 실시간 주식 공시 정리채널",
+    "head": "2026.11.03 11:28:02 기업명: 알테오젠(시가총액: 15조 1,848억) A196170 보고서명: 연결재무제표기준영업(잠정)실적(공정공시) 매출액 : 1,198억(예상치 : 1,149억+/ 4%) 영업익 : 789억(예상치 : 755억/ +5%) 순이익 : 430억(예상치 : 598억/ -28%) **최근 실…",
+    "url": "https://t.me/darthacking/156127",
+    "time_kst": "11-03 11:28"
+   },
+   {
+    "channels": 5,
+    "channel": "AWAKE - 실시간 주식 공시 정리채널",
+    "head": "2026.11.03 08:31:50 기업명: 삼성바이오로직스(시가총액: 65조 8,257억) A207940 보고서명: 단일판매ㆍ공급계약체결 계약상대 : 글로벌 제약사 계약내용 : ( 기타 판매ㆍ공급계약 ) 의약품 위탁생산계약 공급지역 : - 계약금액 : 4,343억 계약시작 : 2026-11-02 계약종료 : 2031-1…",
+    "url": "https://t.me/darthacking/156113",
+    "time_kst": "11-03 08:31"
+   },
+   {
+    "channels": 4,
+    "channel": "텐렙",
+    "head": "[현대차증권 반도체소부장/로보틱스 윤동욱] 디아이 BUY/TP 60,000원(유지/상향) 3Q26 Review: 사상 최대 실적, 달라진 이익 체력 ■ 투자포인트 및 결론 - 디아이에 대해 목표주가 60,000원으로 5.3% 상향하며 BUY 의견 유지 - 1) 범용 메모리 투자 확대와 패키징 공장 신설에 따라 메모리 패키…",
+    "url": "https://t.me/Ten_level/93795",
+    "time_kst": "11-03 07:59"
+   },
+   {
+    "channels": 4,
+    "channel": "신한 리서치",
+    "head": "# 팬오션; 시황도 좋고, 체급도 올라왔다 [신한 운송 최민기] ▶️ 신한생각: 운임 변동성에도 탱커 증익 동력 유효 - 주요 선종 전반의 시황 강세로 뚜렷한 이익 개선 흐름 지속 - 현재의 초호황이 장기간 이어지지 않더라도 VLCC 선대 확장은 확실한 성장 동력으로 작용 ▶️ 3Q26 Review: 탱커·LNG 일회성…",
+    "url": "https://t.me/shinhanresearch/53426",
+    "time_kst": "11-03 07:59"
+   },
+   {
+    "channels": 4,
+    "channel": "▩발간자료PDF.저장",
+    "head": "🛫 #한국항공우주 「2026-2028, 양산 40대에서 80대까지」 ☞ https://bit.ly/KAI3Q26RE ▶️ Issue: 3Q26 나홀로 증익, 양산 증가로 2026-2028 가파른 성장. 선호주 추천 ▶️ Pitch: > 비록 적정주가를 내리지만, 선호주로 상향. > 수주를 알 수 없는 방위산업 투자에서 미…",
+    "url": "https://t.me/c/1416673238/1569",
+    "time_kst": "11-03 20:04"
+   },
+   {
+    "channels": 4,
+    "channel": "AWAKE - 실시간 주식 공시 정리채널",
+    "head": "2026.11.03 15:47:38 기업명: LG생활건강(시가총액: 3조 9,236억) A051900 보고서명: 연결재무제표기준영업(잠정)실적(공정공시) 매출액 : 15,774억(예상치 : 16,401억/ -4%) 영업익 : 704억(예상치 : 1,016억/ -31%) 순이익 : 84억(예상치 : 918억/ -91%) *…",
+    "url": "https://t.me/darthacking/156166",
+    "time_kst": "11-03 15:47"
+   },
+   {
+    "channels": 3,
+    "channel": "사제콩이_서상영",
+    "head": "*한국 증시 관련 수치: 하락 출발 후 업종 차별화 전망 MSCI 한국 증시 ETF는 0.83% 하락 전환. MSCI 신흥지수 ETF는 0.11% 상승. 필라델피아 반도체 지수는 3.37% 하락. 러셀2000지수는 0.21% 하락. 다우 운송지수는 1.54% 상승. KOSPI 야간 선물은 3.84% 하락. 전일 서울 환시…",
+    "url": "https://t.me/ehdwl/11258",
+    "time_kst": "11-03 06:34"
+   },
+   {
+    "channels": 3,
+    "channel": "키움증권 전략/시황 한지영",
+    "head": "[11/3, 장 시작 전 생각: 피로감은 크더라도, 키움 한지영] - 다우 +0.4%, S&P500 -0.5%, 나스닥 -1.1% - 마이크론 -5.8%, 오라클 -8.8%, 팔란티어 -3.1%(시간외 -3%) - WTI 96.2달러, 미 10년물 금리 4.91%, 30년물 금리 5.28% 1. 미국 증시는 AI주를 중심…",
+    "url": "https://t.me/hedgecat0301/2988",
+    "time_kst": "11-03 07:44"
+   },
+   {
+    "channels": 3,
+    "channel": "AWAKE - 실시간 주식 공시 정리채널",
+    "head": "2026.11.03 10:50:12 기업명: LG화학(시가총액: 16조 6,245억) A051910 보고서명: 기타경영사항(자율공시) (희귀비만 치료제 후보물질 비바멜라곤 기술수출 계약 개정 체결) 제목 : 희귀비만 치료제 후보물질 '비바멜라곤' 기술수출 계약 개정 체결 * 주요 내용 ※ 투자유의사항 동 계약은 조건부 계…",
+    "url": "https://t.me/darthacking/156125",
+    "time_kst": "11-03 10:50"
+   },
+   {
+    "channels": 3,
+    "channel": "여의도스토리 Ver2.0-习近平是个狗东西",
+    "head": "<한화 임혜윤 오늘 개장전 꼭 알아야 할 5가지_11/3 Bloomberg> ① 미·이란 협상 기대와 유가 급락 - 이란 최고지도자가 평화협상 권한을 부여하고 미·이란 대화가 진행 중이라는 발언에 브렌트유 선물이 장중 12% 넘게 급락해 104달러 하회 - 이란은 미국이 조건을 수용하면 호르무즈 해협 재개방과 협상 재개에…",
+    "url": "https://t.me/YeouidoStory2/119222",
+    "time_kst": "11-03 07:47"
+   },
+   {
+    "channels": 3,
+    "channel": "메리츠증권 리서치",
+    "head": "📮 [메리츠증권 신흥국 투자전략 최설화] 2026.11.3(화) [2027 Outlook 4] 신흥국 투자전략: isolation \"고립의 시대, 선택과 집중\" 신흥국이라는 이름이 더 이상 하나의 방향을 가리키지 않는 것 같습니다. 2026년 신흥국 시장은 고유가와 AI라는 두 갈래 길에서 명암이 뚜렷하게 갈렸습니다. A…",
+    "url": "https://t.me/meritz_research/45009",
+    "time_kst": "11-03 07:42"
+   },
+   {
+    "channels": 3,
+    "channel": "하나증권/에너지화학/윤재성",
+    "head": "[하나/에너지화학/윤재성] 에너지/화학: 유가 하락, 업종 내 단기 로테이션의 촉매 ▶ 보고서: https://bit.ly/4iCm01f ▶ 유가 하락의 시작인가 - 11/2일 Dubai 102$/bbl로 DoD -13.4$(-11%) 급락. 그리고 Oman-Dubai 원유 스프레드 대폭 축소. 호르무즈 밖에서 선적되는…",
+    "url": "https://t.me/energy_youn/3369",
+    "time_kst": "11-03 18:52"
+   },
+   {
+    "channels": 3,
+    "channel": "다올투자증권 리서치센터",
+    "head": "[다올투자증권 조선/기계/방산 최광식] 11/3(화) 데일리뉴스 🛳 조선 [TradeWinds] Newbuilding orderbook hits all-time high of $700bn, Clarksons says JP Morgan adds VLCC brace to growing orderbook Schoeller an…",
+    "url": "https://t.me/daolresearch/15401",
+    "time_kst": "11-03 08:22"
+   }
+  ]
+ },
+ "community_dc": {
+  "source": "DC인사이드",
+  "galleries": [
+   {
+    "id": "krstock",
+    "name": "국내주식갤러리",
+    "posts": 1197,
+    "capped": true,
+    "burst": 0.6,
+    "base_daily": 2119.1
+   },
+   {
+    "id": "stockus",
+    "name": "해외주식갤러리",
+    "posts": 6065,
+    "capped": true,
+    "burst": 0.6,
+    "base_daily": 10981.9
+   }
+  ],
+  "posts_sampled": 533,
+  "keywords": [
+   {
+    "term": "암드",
+    "count": 26,
+    "burst": 99.0,
+    "new": true
+   },
+   {
+    "term": "amd",
+    "count": 8,
+    "burst": 99.0,
+    "new": true
+   },
+   {
+    "term": "미민당",
+    "count": 7,
+    "burst": 99.0,
+    "new": true
+   },
+   {
+    "term": "미주갤",
+    "count": 6,
+    "burst": 86.2,
+    "new": true
+   },
+   {
+    "term": "존나",
+    "count": 5,
+    "burst": 71.8,
+    "new": true
+   },
+   {
+    "term": "삼성전자",
+    "count": 5,
+    "burst": 71.8,
+    "new": true
+   },
+   {
+    "term": "사람",
+    "count": 5,
+    "burst": 71.8,
+    "new": true
+   },
+   {
+    "term": "soxl",
+    "count": 5,
+    "burst": 71.8,
+    "new": true
+   },
+   {
+    "term": "번지대",
+    "count": 5,
+    "burst": 71.8,
+    "new": true
+   },
+   {
+    "term": "반도체",
+    "count": 16,
+    "burst": 7.9,
+    "new": false
+   },
+   {
+    "term": "야선",
+    "count": 18,
+    "burst": 5.3,
+    "new": false
+   },
+   {
+    "term": "지금",
+    "count": 12,
+    "burst": 4.9,
+    "new": false
+   },
+   {
+    "term": "씨발",
+    "count": 6,
+    "burst": 5.7,
+    "new": false
+   },
+   {
+    "term": "속슬",
+    "count": 23,
+    "burst": 2.2,
+    "new": false
+   },
+   {
+    "term": "내가",
+    "count": 6,
+    "burst": 5.1,
+    "new": false
+   }
+  ],
+  "top_recommended": [
+   {
+    "gallery": "해외주식갤러리",
+    "title": "트황상... 당신이 정말 밉습니다...",
+    "views": 9342,
+    "recommend": 248,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=18202702&exception_mode=recommend&page=1",
+    "time_kst": "11-03 16:50"
+   },
+   {
+    "gallery": "해외주식갤러리",
+    "title": "아빠....나 왜 사라져?",
+    "views": 11215,
+    "recommend": 214,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=18198418&exception_mode=recommend&page=2",
+    "time_kst": "11-03 08:43"
+   },
+   {
+    "gallery": "해외주식갤러리",
+    "title": "디씨가 이거 미붕이들 조롱하는거 아님?",
+    "views": 9566,
+    "recommend": 197,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=18200348&exception_mode=recommend&page=1",
+    "time_kst": "11-03 12:22"
+   },
+   {
+    "gallery": "해외주식갤러리",
+    "title": "최태원은 ㄹㅇ 구속시키면안되냐??",
+    "views": 9428,
+    "recommend": 183,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=18201307&exception_mode=recommend&page=2",
+    "time_kst": "11-03 14:12"
+   },
+   {
+    "gallery": "해외주식갤러리",
+    "title": "여자 집에 방문한 샘알트만",
+    "views": 11404,
+    "recommend": 178,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=18200651&exception_mode=recommend&page=2",
+    "time_kst": "11-03 13:06"
+   }
+  ],
+  "top_viewed": [
+   {
+    "gallery": "국내주식갤러리",
+    "title": "7,10월 폭락장 겪고 버틴 분들은   꼭...",
+    "views": 2196,
+    "recommend": 32,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3811259&page=7",
+    "time_kst": "11-04 00:23"
+   },
+   {
+    "gallery": "국내주식갤러리",
+    "title": "중국, 대만 침공 포기",
+    "views": 822,
+    "recommend": 1,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3811448&page=4",
+    "time_kst": "11-04 03:04"
+   },
+   {
+    "gallery": "국내주식갤러리",
+    "title": "고딩들우유통 ㅈ되누 ㅋㅋ",
+    "views": 759,
+    "recommend": 1,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3811405&page=4",
+    "time_kst": "11-04 01:53"
+   },
+   {
+    "gallery": "국내주식갤러리",
+    "title": "롱친 사람들 축하한다...",
+    "views": 653,
+    "recommend": 0,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3811334&page=6",
+    "time_kst": "11-04 01:04"
+   },
+   {
+    "gallery": "국내주식갤러리",
+    "title": "나만 진짜 삼전 5만원 갈거같냐?",
+    "views": 646,
+    "recommend": 2,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3811419&page=4",
+    "time_kst": "11-04 02:19"
+   },
+   {
+    "gallery": "국내주식갤러리",
+    "title": "내일부터 코스피랑 반도체주 박살 확정이네",
+    "views": 606,
+    "recommend": 0,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3811437&page=4",
+    "time_kst": "11-04 02:55"
+   },
+   {
+    "gallery": "국내주식갤러리",
+    "title": "[실시간 소식] 이란, 미국과의 모유(MOU) 합의 부인",
+    "views": 551,
+    "recommend": 1,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3811245&page=7",
+    "time_kst": "11-04 00:18"
+   },
+   {
+    "gallery": "국내주식갤러리",
+    "title": "[카더라] 미국, 하이닉스 중국공장 증설승인 보류",
+    "views": 530,
+    "recommend": 0,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3811470&page=3",
+    "time_kst": "11-04 03:54"
+   }
+  ]
+ }
+}
