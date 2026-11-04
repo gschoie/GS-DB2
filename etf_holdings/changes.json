@@ -1,15 +1,41 @@
 {
   "date": "2026-11-04",
   "prev_date": "2026-11-03",
-  "generated_at": "2026-11-04 09:20",
+  "generated_at": "2026-11-04 10:20",
   "base_date": "",
   "prev_base_date": "",
   "market_date": "2026-11-04",
   "prev_market_date": "2026-11-03",
-  "fetched_at": "2026-11-04 09:20",
+  "fetched_at": "2026-11-04 10:20",
   "prev_fetched_at": "2026-11-03 09:20",
   "first_run": false,
   "etfs": [
+    {
+      "code": "0162Y0",
+      "label": "TIME 코스닥액티브",
+      "group": "TIME(구 TIMEFOLIO)",
+      "flow_factor": 1.0,
+      "new": [
+        {
+          "key": "425420",
+          "name": "티에프이",
+          "code": "425420",
+          "weight": 2.72,
+          "shares": 100.0
+        }
+      ],
+      "gone": [
+        {
+          "key": "089890",
+          "name": "코세스",
+          "code": "089890",
+          "weight_prev": 2.72,
+          "shares_prev": 248.0
+        }
+      ],
+      "moves": [],
+      "has_weight": true
+    },
     {
       "code": "410870",
       "label": "TIME K컬처액티브",
@@ -69,9 +95,9 @@
     "share_pct_min": 30.0
   },
   "summary": {
-    "etfs_changed": 2,
-    "new_total": 2,
-    "gone_total": 2,
+    "etfs_changed": 3,
+    "new_total": 3,
+    "gone_total": 3,
     "moves_total": 0,
     "universe": 20
   }
