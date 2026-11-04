@@ -1,0 +1,655 @@
+{
+ "date": "2026-11-05",
+ "meta": {
+  "window": "11-04 06:00~11-05 06:00 KST",
+  "engine": "Gemini(gemini-2.5-flash)",
+  "generated_at": "2026-11-05T06:35+09:00"
+ },
+ "stats": {
+  "channels": 98,
+  "messages": 2125,
+  "groups": 1961
+ },
+ "one_liner": "미국 중간선거 민주당 압승이 AI 데이터센터 규제 우려를 키우며 시장에 불확실성을 주었으나, 빅테크의 장기 성장 기대감은 여전하다.",
+ "themes": [
+  {
+   "name": "미국 중간선거 — 민주당 압승과 AI 투자 불확실성",
+   "narrative": "미국 중간선거에서 민주당이 연방 상하원 및 텍사스 주지사까지 압승할 가능성이 대두되면서, 시장은 민주당발 규제 강화, 특히 텍사스 내 빅테크 데이터센터 인프라의 환경 규제 및 법인세 부담 우려를 선반영하여 아시아 증시가 급락했다.",
+   "status": "new",
+   "strength": 5,
+   "keywords": [
+    "승리",
+    "주지사",
+    "민주",
+    "중간선거 민주당",
+    "상원",
+    "장악",
+    "다수당",
+    "하원",
+    "텍사스",
+    "공화",
+    "압승"
+   ],
+   "evidence": [
+    {
+     "channel": "텐렙",
+     "quote": "민주당이 연방 상원(52~54석)과 하원(약 250석), 그리고 텍사스 주지사까지 승리했지만, 미국 AI 투자가 정체될 가능성은 낮음"
+    },
+    {
+     "channel": "[한투증권 투자전략 김대준]",
+     "quote": "미국 중간선거 결과가 민주당의 상·하원 승리 가능성 확대로 기울면서, 주식시장은 민주당발 규제 강화 우려를 선반영"
+    },
+    {
+     "channel": "[시장을 이기는 유안타 주식전략] 김용구",
+     "quote": ":부각된 우려는 민주당의 의회 장악과 주요 주지사 선거 결과에 따른 AI 데이터센터 규제 강화 가능성. 특히 텍사스 등 주요 데이터센터 건설 지역의 인허가 제한과 전력망 비용 부담 확대가 AI 설비투자 지연, 나아가 메모리 수요 둔화 및 ASP 하락으로 이어질 수 있다는 시각."
+    }
+   ]
+  },
+  {
+   "name": "AI/기술주 — 규제 우려 속 성장 기대 지속",
+   "narrative": "미국 중간선거 결과로 민주당의 AI 데이터센터 규제 강화 우려가 부각되었으나, 한편으로는 중국과의 기술 패권 경쟁 우위 확보를 위한 AI 산업 규제는 현실적으로 어려울 것이며, 주요 기술 기업들의 실적 및 AI 반도체 성장 기대감은 여전히 긍정적이라는 시각도 존재한다.",
+   "status": "ongoing",
+   "strength": 3,
+   "keywords": [
+    "AI 기술",
+    "생성형",
+    "생성형 AI"
+   ],
+   "evidence": [
+    {
+     "channel": "[한투증권 투자전략 김대준]",
+     "quote": "민주당 입장에서도 중국과의 기술 패권 경쟁 우위 확보가 필수. AI 산업의 과도한 규제는 현실적으로 어려움. 규제 이슈는 일부 전력 관련 환경세 부과 수준에 그칠 것"
+    },
+    {
+     "channel": "서화백의 AI놀이🚀",
+     "quote": "주요 기술 기업들의 강력한 실적 및 긍정적인 전망, 신재생에너지 및 데이터센터 관련 정책 수혜 기대감, AI 반도체 기업들의 성장 기대, 자율주행 기술 상업화 기대, 그리고 긍정적인 미국 고용 지표가 전반적인 시장 분위기를 견인했습니다."
+    },
+    {
+     "channel": "신한 리서치",
+     "quote": ": 현대차그룹이 자율주행·로보틱스 등 국가핵심기술을 다루는 일부 연구개발 조직의 외부 생성형 AI 이용을 일시 중단. 소스코드·설계정보·실험결과 등이 외부 시스템에 전송되는 위험을 재검토하기 위한 조치"
+    }
+   ]
+  },
+  {
+   "name": "개별 기업 실적 발표 — 3분기 실적 시즌 지속",
+   "narrative": "SK텔레콤, 심텍, 고영, 세아제강, 에스엠, AMD 등 여러 기업들이 3분기 잠정 실적을 발표했으며, 일부 기업은 시장 예상치를 상회하는 실적을 기록하며 주목받았다.",
+   "status": "ongoing",
+   "strength": 2,
+   "keywords": [],
+   "evidence": [
+    {
+     "channel": "AWAKE - 실시간 주식 공시 정리채널",
+     "quote": "2026.11.04 09:44:03 기업명: SK텔레콤(시가총액: 16조 1,522억) A017670 보고서명: 연결재무제표기준영업(잠정)실적(공정공시) 매출액 : 44,973억(예상치 : 44,854억/ 0%) 영업익 : 5,523억(예상치 : 5,372억/ +3%) 순이익 : 4,133억(예상치 : 3,586억+/ 1…"
+    },
+    {
+     "channel": "메리츠증권 리서치",
+     "quote": "📮[메리츠증권 전기전자/IT부품 양승수] 심텍(222800): 모든 화살표가 위를 향한다 ▶ 3Q26 Review: 업황을 증명하는 숫자"
+    },
+    {
+     "channel": "유진투자증권 코스닥벤처팀",
+     "quote": "[고영(098460,KQ) / 유진투자증권 코스닥벤처팀 박종선] ★ 3Q26P Review: 분기 첫 1,000억원대 매출 달성"
+    }
+   ]
+  },
+  {
+   "name": "한진칼 — 최대주주 호반건설로 변경",
+   "narrative": "한진칼의 최대주주가 조원태 외 18인에서 호반건설 외 3인으로 변경되었으며, 이는 호반건설의 장내매수에 따른 지분율 변화 때문이다.",
+   "status": "new",
+   "strength": 2,
+   "keywords": [],
+   "evidence": [
+    {
+     "channel": "AWAKE - 실시간 주식 공시 정리채널",
+     "quote": "2026.11.04 17:59:38 기업명: 한진칼(시가총액: 11조 4,831억) A180640 보고서명: 최대주주변경 * 변경전 최대주주 주주명 : 조원태 외 18인 지분율 : 20.58% * 변경후 최대주주 주주명 : 호반건설 외 3인 지분율 : 20.69% 변경사유 : 장내매수에 따른 최대주주 변경 인수목적 : 단…"
+    }
+   ]
+  },
+  {
+   "name": "에스케이바이오팜 — 뇌전증 치료제 FDA 허가 신청",
+   "narrative": "에스케이바이오팜이 뇌전증 치료제 세노바메이트의 일차성 전신강직간대발작 적응증에 대한 미국 FDA 허가를 신청하며 신약 개발 기대감을 높였다.",
+   "status": "new",
+   "strength": 2,
+   "keywords": [],
+   "evidence": [
+    {
+     "channel": "텐렙",
+     "quote": "📌 에스케이바이오팜(시가총액: 6조 2,416억) #A326030 📁 투자판단관련주요경영사항 (뇌전증 치료제 세노바메이트의 일차성 전신강직간대발작 적응증 미국 FDA 허가 신청) 2026.11.04 09:58:29 (현재가 : 80,800원, +1.89%) 제목 : 뇌전증 치료제 세노바메이트(미국 제품명 XCOPRI®)의…"
+    }
+   ]
+  }
+ ],
+ "community_mood": {
+  "score": -40,
+  "summary": "미국 중간선거 결과와 그에 따른 데이터센터 및 빅테크 규제 우려에 대한 불만과 회의적인 시각이 강하지만, 한편으로는 빅테크의 지속적인 성장에 대한 기대감도 혼재되어 있다.",
+  "hot_stocks": [
+   {
+    "name": "삼성전자",
+    "score": -10,
+    "reason": "미국 중간선거 결과에 따른 빅테크 규제 우려와 데이터센터 투자 불확실성에 대한 우려가 존재하지만, 빅테크의 성장세는 지속될 것이라는 기대감도 혼재."
+   },
+   {
+    "name": "SK하이닉스",
+    "score": -10,
+    "reason": "미국 중간선거 결과에 따른 빅테크 규제 우려와 데이터센터 투자 불확실성에 대한 우려가 존재하지만, 빅테크의 성장세는 지속될 것이라는 기대감도 혼재."
+   },
+   {
+    "name": "퀄컴",
+    "score": -10,
+    "reason": "미국 중간선거 결과에 따른 빅테크 규제 우려와 데이터센터 투자 불확실성에 대한 우려가 존재하지만, 빅테크의 성장세는 지속될 것이라는 기대감도 혼재."
+   },
+   {
+    "name": "마이크론",
+    "score": -10,
+    "reason": "미국 중간선거 결과에 따른 빅테크 규제 우려와 데이터센터 투자 불확실성에 대한 우려가 존재하지만, 빅테크의 성장세는 지속될 것이라는 기대감도 혼재."
+   }
+  ]
+ },
+ "signals": {
+  "spikes": [
+   {
+    "term": "박노중 기자",
+    "count": 149,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "데이터투자 박노중",
+    "count": 149,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "박노중",
+    "count": 149,
+    "burst": 56.209530285001975,
+    "base_daily": 1.9,
+    "new": false
+   },
+   {
+    "term": "승리",
+    "count": 70,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "주지사",
+    "count": 58,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "민주",
+    "count": 57,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "중간선거 민주당",
+    "count": 52,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "상원",
+    "count": 114,
+    "burst": 15.906310031923885,
+    "base_daily": 5.1,
+    "new": false
+   },
+   {
+    "term": "장악",
+    "count": 41,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "다수당",
+    "count": 40,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "하원",
+    "count": 121,
+    "burst": 12.705772880447068,
+    "base_daily": 6.9,
+    "new": false
+   },
+   {
+    "term": "텍사스",
+    "count": 78,
+    "burst": 24.07510082981781,
+    "base_daily": 2.3,
+    "new": false
+   },
+   {
+    "term": "공화",
+    "count": 37,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "압승",
+    "count": 35,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "아니며",
+    "count": 187,
+    "burst": 6.204269908160265,
+    "base_daily": 21.9,
+    "new": false
+   },
+   {
+    "term": "AI 기술",
+    "count": 188,
+    "burst": 6.117880132226988,
+    "base_daily": 22.3,
+    "new": false
+   },
+   {
+    "term": "생성형",
+    "count": 184,
+    "burst": 6.226425259334429,
+    "base_daily": 21.4,
+    "new": false
+   },
+   {
+    "term": "생성형 AI",
+    "count": 183,
+    "burst": 6.192585991620656,
+    "base_daily": 21.4,
+    "new": false
+   },
+   {
+    "term": "지지선",
+    "count": 180,
+    "burst": 6.2149543211263705,
+    "base_daily": 21.0,
+    "new": false
+   },
+   {
+    "term": "RSI",
+    "count": 186,
+    "burst": 5.938950602581052,
+    "base_daily": 22.7,
+    "new": false
+   },
+   {
+    "term": "있으므",
+    "count": 179,
+    "burst": 6.180426797120114,
+    "base_daily": 21.0,
+    "new": false
+   },
+   {
+    "term": "데이터 기반",
+    "count": 179,
+    "burst": 6.180426797120114,
+    "base_daily": 21.0,
+    "new": false
+   },
+   {
+    "term": "밴드",
+    "count": 180,
+    "burst": 6.131811119505951,
+    "base_daily": 21.3,
+    "new": false
+   },
+   {
+    "term": "생성된",
+    "count": 178,
+    "burst": 6.145899273113856,
+    "base_daily": 21.0,
+    "new": false
+   },
+   {
+    "term": "eMoney",
+    "count": 177,
+    "burst": 6.111371749107598,
+    "base_daily": 21.0,
+    "new": false
+   }
+  ],
+  "top_posts": [
+   {
+    "channels": 5,
+    "channel": "AWAKE - 실시간 주식 공시 정리채널",
+    "head": "2026.11.04 17:59:38 기업명: 한진칼(시가총액: 11조 4,831억) A180640 보고서명: 최대주주변경 * 변경전 최대주주 주주명 : 조원태 외 18인 지분율 : 20.58% * 변경후 최대주주 주주명 : 호반건설 외 3인 지분율 : 20.69% 변경사유 : 장내매수에 따른 최대주주 변경 인수목적 : 단…",
+    "url": "https://t.me/darthacking/156330",
+    "time_kst": "11-04 17:59"
+   },
+   {
+    "channels": 3,
+    "channel": "텐렙",
+    "head": "📌 에스케이바이오팜(시가총액: 6조 2,416억) #A326030 📁 투자판단관련주요경영사항 (뇌전증 치료제 세노바메이트의 일차성 전신강직간대발작 적응증 미국 FDA 허가 신청) 2026.11.04 09:58:29 (현재가 : 80,800원, +1.89%) 제목 : 뇌전증 치료제 세노바메이트(미국 제품명 XCOPRI®)의…",
+    "url": "https://t.me/Ten_level/93857",
+    "time_kst": "11-04 10:00"
+   },
+   {
+    "channels": 3,
+    "channel": "키움증권 전략/시황 한지영",
+    "head": "[11/4, 장 시작 전 생각: 중간선거 그 이후, 키움 한지영] - 다우 -0.4%, S&P500 +0.4%, 나스닥 +0.8% - 엔비디아 +2.3%, AMD +3.6%(시간외 +7%), 슈퍼마이크로 +3.4%(시간외 +8%) - 미 10년물 금리 4.96%, 30년물 금리 5.33%, WTI 96.7달러 1. 미국…",
+    "url": "https://t.me/hedgecat0301/2989",
+    "time_kst": "11-04 07:36"
+   },
+   {
+    "channels": 3,
+    "channel": "메리츠증권 리서치",
+    "head": "📮[메리츠증권 전기전자/IT부품 양승수] 심텍(222800): 모든 화살표가 위를 향한다 ▶ 3Q26 Review: 업황을 증명하는 숫자 - 3Q26 연결 매출액(5,359억원)은 당사 추정치를 3.0% 하회했지만 영업이익(1,018억원)은 19.6% 상회(표1) - 부정적인 환율 영향에도 불구하고 판가와 판매량의 동반…",
+    "url": "https://t.me/meritz_research/45019",
+    "time_kst": "11-04 07:57"
+   },
+   {
+    "channels": 3,
+    "channel": "텐렙",
+    "head": "민주당 블루웨이브와 AI 투자 1. 민주당이 연방 상원(52~54석)과 하원(약 250석), 그리고 텍사스 주지사까지 승리했지만, 미국 AI 투자가 정체될 가능성은 낮음 2. 미국의 AI 주도권 유지에는 양당의 공감대가 있으며, 상원 60석 미달과 트럼프 대통령의 거부권 유지로 연방 차원의 데이터센터 건설 중단이나 신규…",
+    "url": "https://t.me/Ten_level/93886",
+    "time_kst": "11-04 15:16"
+   },
+   {
+    "channels": 3,
+    "channel": "유진투자증권 코스닥벤처팀",
+    "head": "[고영(098460,KQ) / 유진투자증권 코스닥벤처팀 박종선 ☎02)368-6076] ★ 3Q26P Review: 분기 첫 1,000억원대 매출 달성 ☞ 3Q26P Review: 분기 최초 1,000억원대 매출 달성, 어닝서프라이즈 시현 - 3Q26P 매출액 1,066억원(+76.8% YoY), 영업이익 194억원(+3…",
+    "url": "https://t.me/SmallCap/9171",
+    "time_kst": "11-04 08:00"
+   },
+   {
+    "channels": 3,
+    "channel": "다올투자증권 리서치센터",
+    "head": "[다올투자증권 조선/기계/방산 최광식] 11/4(수) 데일리뉴스 🛳 조선 [TradeWinds] Harry Vafias adds VLCCs and product tankers to $2bn orderbook Veritas Tankers heads to China for up to six new chemical carrie…",
+    "url": "https://t.me/daolresearch/15415",
+    "time_kst": "11-04 09:32"
+   },
+   {
+    "channels": 3,
+    "channel": "키움증권 전략/시황 한지영",
+    "head": "[11/4, 알려진 재료에도 증시가 급락하는 이유, 키움 한지영] 1. 아침에 +2~3%대를 보였던 국장이었으나 지금은 코스피가 -3%대, 코스닥이 -2%대로 흘러내리고 있네요. 오늘은 국장만 빠지는게 아니라, 미국 나스닥 선물도 -2%대, 일본 닛케이는 우리보다 더한 -4%대 급락 중입니다. 이렇게 빠지는 이유는 미국…",
+    "url": "https://t.me/hedgecat0301/2990",
+    "time_kst": "11-04 13:47"
+   },
+   {
+    "channels": 3,
+    "channel": "[한투증권 투자전략 김대준]",
+    "head": "[한투 전략/시황 김대준] * 코스피 하락 코멘트 -​ 코스피 -3.6%, 코스닥 -2.4%(13시 기준) ​미국 중간선거 결과가 민주당의 상·하원 승리 가능성 확대로 기울면서, 주식시장은 민주당발 규제 강화 우려를 선반영 ​ - 한국, 일본 등 아시아 증시에서 삼성전자, SK하이닉스, 키옥시아, 소프트뱅크 등 글로벌 A…",
+    "url": "https://t.me/strategy_kis/14457",
+    "time_kst": "11-04 13:37"
+   },
+   {
+    "channels": 3,
+    "channel": "연수르 해외주식",
+    "head": "📍 Daily Comments 전일 미 증시는 이란 전쟁 종전 기대감으로 장 초반 강한 모습을 보이기도 했으나, 중간선거 경계감으로 변동성이 이어졌음. 나스닥 100 지수는 200MA를 지지했고, SOX 역시 7월 말 저점을 지지하며 마감했으나, 아직 이를 뚜렷한 반전 신호로 해석하기에는 무리가 있는 상황. 거래가 확연히…",
+    "url": "https://t.me/yeonsour/5930",
+    "time_kst": "11-04 07:21"
+   },
+   {
+    "channels": 3,
+    "channel": "AWAKE - 실시간 주식 공시 정리채널",
+    "head": "2026.11.04 09:44:03 기업명: SK텔레콤(시가총액: 16조 1,522억) A017670 보고서명: 연결재무제표기준영업(잠정)실적(공정공시) 매출액 : 44,973억(예상치 : 44,854억/ 0%) 영업익 : 5,523억(예상치 : 5,372억/ +3%) 순이익 : 4,133억(예상치 : 3,586억+/ 1…",
+    "url": "https://t.me/darthacking/156229",
+    "time_kst": "11-04 09:44"
+   },
+   {
+    "channels": 3,
+    "channel": "AWAKE - 실시간 주식 공시 정리채널",
+    "head": "2026.11.04 14:11:46 기업명: 세아제강(시가총액: 3,489억) A306200 보고서명: 연결재무제표기준영업(잠정)실적(공정공시) 매출액 : 4,772억(예상치 : 4,539억+/ 5%) 영업익 : 202억(예상치 : 229억/ -12%) 순이익 : -26억(예상치 : 170억/ -115%) **최근 실적…",
+    "url": "https://t.me/darthacking/156259",
+    "time_kst": "11-04 14:11"
+   },
+   {
+    "channels": 3,
+    "channel": "AWAKE - 실시간 주식 공시 정리채널",
+    "head": "2026.11.04 13:49:39 기업명: 에스엠(시가총액: 1조 6,919억) A041510 보고서명: 연결재무제표기준영업(잠정)실적(공정공시) 매출액 : 2,911억(예상치 : 2,863억+/ 2%) 영업익 : 355억(예상치 : 372억/ -5%) 순이익 : 68억(예상치 : 229억/ -70%) **최근 실적 추…",
+    "url": "https://t.me/darthacking/156255",
+    "time_kst": "11-04 13:49"
+   },
+   {
+    "channels": 2,
+    "channel": "[ IT는 SK ]",
+    "head": "[SK증권 반도체 한동희, 손 건/해외주식 박제민] AMD FY3Q26 컨퍼런스콜 ▶️ 주요 코멘트 FY3Q26 Revenue $13.4B — +45% YoY, 사상 최대: Revenue $13.4B(+45% YoY, +16% QoQ), Non-GAAP GPM 56%, Operating Income $3.9B(+75% Y…",
+    "url": "https://t.me/skitteam/4908",
+    "time_kst": "11-04 08:19"
+   },
+   {
+    "channels": 2,
+    "channel": "서화백의 AI놀이🚀",
+    "head": "📝 텔레그램 심층 분석 Report (23시 07분) 기준 🌡️ 센티먼트 낙관 (+70) 💡 요약 주요 기술 기업들의 강력한 실적 및 긍정적인 전망, 신재생에너지 및 데이터센터 관련 정책 수혜 기대감, AI 반도체 기업들의 성장 기대, 자율주행 기술 상업화 기대, 그리고 긍정적인 미국 고용 지표가 전반적인 시장 분위기를…",
+    "url": "https://t.me/easobi_ai/26818",
+    "time_kst": "11-04 23:07"
+   }
+  ]
+ },
+ "community_dc": {
+  "source": "DC인사이드",
+  "galleries": [
+   {
+    "id": "krstock",
+    "name": "국내주식갤러리",
+    "posts": 1599,
+    "capped": true,
+    "burst": 0.8,
+    "base_daily": 2109.9
+   },
+   {
+    "id": "stockus",
+    "name": "해외주식갤러리",
+    "posts": 10902,
+    "capped": true,
+    "burst": 1.0,
+    "base_daily": 10889.6
+   }
+  ],
+  "posts_sampled": 565,
+  "keywords": [
+   {
+    "term": "데센",
+    "count": 20,
+    "burst": 99.0,
+    "new": true
+   },
+   {
+    "term": "삼닉",
+    "count": 19,
+    "burst": 99.0,
+    "new": true
+   },
+   {
+    "term": "SK하이닉스",
+    "count": 12,
+    "burst": 99.0,
+    "new": true
+   },
+   {
+    "term": "빅테크",
+    "count": 11,
+    "burst": 99.0,
+    "new": true
+   },
+   {
+    "term": "데이터센터",
+    "count": 8,
+    "burst": 99.0,
+    "new": true
+   },
+   {
+    "term": "퀄컴",
+    "count": 8,
+    "burst": 99.0,
+    "new": true
+   },
+   {
+    "term": "마이크론",
+    "count": 6,
+    "burst": 81.2,
+    "new": true
+   },
+   {
+    "term": "빅테크들",
+    "count": 6,
+    "burst": 81.2,
+    "new": true
+   },
+   {
+    "term": "모더나",
+    "count": 6,
+    "burst": 81.2,
+    "new": true
+   },
+   {
+    "term": "버크셔",
+    "count": 6,
+    "burst": 81.2,
+    "new": true
+   },
+   {
+    "term": "중국",
+    "count": 5,
+    "burst": 67.7,
+    "new": true
+   },
+   {
+    "term": "한국",
+    "count": 5,
+    "burst": 67.7,
+    "new": true
+   },
+   {
+    "term": "국장",
+    "count": 18,
+    "burst": 16.2,
+    "new": false
+   },
+   {
+    "term": "존나",
+    "count": 11,
+    "burst": 13.5,
+    "new": false
+   },
+   {
+    "term": "반도치",
+    "count": 10,
+    "burst": 12.3,
+    "new": false
+   }
+  ],
+  "top_recommended": [
+   {
+    "gallery": "해외주식갤러리",
+    "title": "데이터센터 이 씨발련들 잘들어라",
+    "views": 12238,
+    "recommend": 246,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=18221495&exception_mode=recommend&page=2",
+    "time_kst": "11-04 15:52"
+   },
+   {
+    "gallery": "해외주식갤러리",
+    "title": "일본 야후 댓글 1위 ㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋ",
+    "views": 12449,
+    "recommend": 224,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=18220933&exception_mode=recommend&page=2",
+    "time_kst": "11-04 15:16"
+   },
+   {
+    "gallery": "해외주식갤러리",
+    "title": "트럼프는 사실 별 생각이 없음",
+    "views": 11301,
+    "recommend": 217,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=18222456&exception_mode=recommend&page=1",
+    "time_kst": "11-04 16:57"
+   },
+   {
+    "gallery": "해외주식갤러리",
+    "title": "트럼프를 쓰러트린 남자",
+    "views": 8553,
+    "recommend": 212,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=18221862&exception_mode=recommend&page=2",
+    "time_kst": "11-04 16:17"
+   },
+   {
+    "gallery": "해외주식갤러리",
+    "title": "에효 미국도 중국에 먹혔네 ㅉㅉ",
+    "views": 6813,
+    "recommend": 211,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=18221708&exception_mode=recommend&page=2",
+    "time_kst": "11-04 16:08"
+   }
+  ],
+  "top_viewed": [
+   {
+    "gallery": "국내주식갤러리",
+    "title": "미국 빅테크들 논리개사기네",
+    "views": 1702,
+    "recommend": 14,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3822428&page=6",
+    "time_kst": "11-05 02:15"
+   },
+   {
+    "gallery": "국내주식갤러리",
+    "title": "실시간 트럼프 표정 ㅋ",
+    "views": 618,
+    "recommend": 0,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3822489&page=5",
+    "time_kst": "11-05 03:09"
+   },
+   {
+    "gallery": "국내주식갤러리",
+    "title": "속보 - 중동 전쟁 끝 ㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷ",
+    "views": 606,
+    "recommend": 3,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3822396&page=7",
+    "time_kst": "11-05 02:02"
+   },
+   {
+    "gallery": "국내주식갤러리",
+    "title": "토스 종토방보다가 섬뜩한 글 봄",
+    "views": 587,
+    "recommend": 4,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3822438&page=6",
+    "time_kst": "11-05 02:22"
+   },
+   {
+    "gallery": "국내주식갤러리",
+    "title": "와 이게 말이 되냐",
+    "views": 492,
+    "recommend": 0,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3822528&page=5",
+    "time_kst": "11-05 03:59"
+   },
+   {
+    "gallery": "국내주식갤러리",
+    "title": "생각해보니까 코스피 4천안갈듯",
+    "views": 484,
+    "recommend": 3,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3822409&page=7",
+    "time_kst": "11-05 02:06"
+   },
+   {
+    "gallery": "국내주식갤러리",
+    "title": "돈의 흐름은 절대 구라 안침 ㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋ",
+    "views": 482,
+    "recommend": 3,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3822503&page=5",
+    "time_kst": "11-05 03:26"
+   },
+   {
+    "gallery": "국내주식갤러리",
+    "title": "빅테크는 멈출 생각이 없다",
+    "views": 477,
+    "recommend": 2,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3822456&page=6",
+    "time_kst": "11-05 02:38"
+   }
+  ]
+ }
+}
