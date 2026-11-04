@@ -36,6 +36,18 @@ class DetectTest(unittest.TestCase):
         # '등록해 주세요'는 부탁이라 여전히 컷.
         self.assertIsNone(detect_attendance("근태 소명사유 등록해 주세요", SEP))
 
+    def test_mention_without_affirm_word(self):
+        # 11/4 완화 — 근태 스캔은 체크 기간에만 도니, '근태' 언급은 긍정 낱말
+        # 목록에 없어도 보고다("근태라는 단어가 있는데" 규칙).
+        self.assertIsNotNone(detect_attendance("근태 반영해뒀어요", SEP))
+        self.assertIsNotNone(detect_attendance("근태 소명사유 넣었습니다", SEP))
+
+    def test_not_yet_is_cut(self):
+        # '하겠다'는 했다는 말이 아니다.
+        for text in ("근태 아직 못 했어요", "근태 내일 할게요",
+                     "근태 등록 예정입니다", "근태 진행중입니다"):
+            self.assertIsNone(detect_attendance(text, SEP), text)
+
     def test_spaced_and_dotted(self):
         self.assertIsNotNone(detect_attendance("근 태 완벽합니다", SEP))
         self.assertIsNotNone(detect_attendance("근.태. 이상없음", SEP))
