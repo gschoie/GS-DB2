@@ -1,5 +1,5 @@
 {
-  "when_utc": "2026-11-02 22:08:41Z",
+  "when_utc": "2026-11-03 22:09:25Z",
   "ok": true,
   "note": "alert_sent",
   "chat_id_tail": "5171",
@@ -7,7 +7,7 @@
   "response": {
     "ok": true,
     "result": {
-      "message_id": 763,
+      "message_id": 769,
       "from": {
         "id": 8875725998,
         "is_bot": true,
@@ -21,8 +21,8 @@
         "username": "gschoie",
         "type": "private"
       },
-      "date": 1793657320,
-      "text": "📡 ETF/섹터 신호 · 2026-11-02 (전일 확정)\n\n⚡ 추세 강도 1개 (강력 1)\n\n⚡ KODEX 코스닥150선물인버스 · 인버스/숏\n   ADX 25 상향돌파 · 상승추세 강화(강력)\n   RSI 59.1 · ADX 25.6 · %K 84.9/82.2 · 수급 중립\n   [B] 상대강도 상위 2% · ADX 상승추세 · 외인·기관 연속 순매수 11일\n\n전체 신호판 › 대시보드\n🎴 GS Research Desk · ETF/섹터 신호",
+      "date": 1793743765,
+      "text": "📡 ETF/섹터 신호 · 2026-11-03 (전일 확정)\n\n⚡ 추세 강도 1개 (강력 1)\n\n⚡ TIGER 미국필라델피아반도체나스닥 · 반도체/AI\n   ADX 25 상향돌파 · 하락추세 강화(강력)\n   RSI 34.0 · ADX 25.3 · %K 18.7/29.6 · 수급 중립\n   [B] 상대강도 하위 25% · ADX 하락추세\n\n전체 신호판 › 대시보드\n🎴 GS Research Desk · ETF/섹터 신호",
       "entities": [
         {
           "offset": 0,
@@ -36,11 +36,11 @@
         },
         {
           "offset": 56,
-          "length": 17,
+          "length": 19,
           "type": "bold"
         },
         {
-          "offset": 215,
+          "offset": 200,
           "length": 4,
           "type": "text_link",
           "url": "https://gschoie.github.io/GS-DB2/etf_signal_report.html"
