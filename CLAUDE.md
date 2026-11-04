@@ -1412,4 +1412,14 @@
       정본은 이제 이 리포. 같은 파일을 claude.ai 아티팩트로도 띄웠다(그쪽은 CSP 로 Gemini 불가, claude.ai 계정 판독).
     - 공유 비번으로 열린다(하위 폴더 index.html 은 주인 전용 아님). 빌드는 `build_static` copytree 한 줄.
 
+52. **매크로 데스크 — 발표 결과 해석 자동 선택** (11/4): 사용자 "발표된 지표는 눌러서 내려가면 결과와
+    간단한 해석". 해석 카드 맨 위에 **📌 이번 결과 해석** — 발표 숫자가 든 `guide.yml` read 밴드를
+    규칙으로 골라(`metric`·`ge`·`gt`·`le`·`lt`, quote_reads 와 같은 어휘) 뜻과 **고른 숫자**를
+    적고 밴드 목록엔 `◀ 지금`. 숫자는 `releases.summarize` 가 새로 남기는 `vals`(화면 자릿수로
+    반올림, 보조 계열은 config `also.key` → `core_yoy`·`unemp_level`). 조건 없는 밴드(FOMC 성명서·
+    점도표·근원 MoM)는 고르지 않고 이유 한 줄, GDP 밴드는 `ids: [us_gdp]`(한국 GDP 제외).
+    **YAML 함정: 키를 `on:` 으로 썼다가 PyYAML 이 True 로 읽어 조건 20개가 전부 사라졌다** —
+    `metric:` 으로. 덤: `tests/test_releases.py` 의 실패 판정이 파일 중간에 있어 그 뒤 검사는
+    실패해도 통과로 나왔다 → 맨 끝으로. 다음 수집부터 보인다(옛 payload 엔 vals 없음).
+
 이후 작업은 git log와 이 파일을 갱신하며 이어간다.
