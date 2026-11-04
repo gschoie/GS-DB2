@@ -5,6 +5,16 @@
 #
 # links 는 **기관 원문**만 적는다(주소가 안 바뀌는 곳).
 # youtube 는 영상 ID를 적지 않고 **검색 링크**로 건다 — 영상은 내려가도 검색은 남는다.
+#
+# read 밴드의 `metric`·`ge`·`gt`·`le`·`lt` 는 **발표 결과로 그 밴드를 자동으로 고르는 조건**이다
+# (해석 카드 맨 위 '📌 이번 결과 해석'). metric 은 releases.summarize 가 남기는 숫자 이름 —
+# level·diff·yoy·mom, 보조 계열은 config 의 also.key 를 붙여 core_yoy·unemp_level.
+# 조건이 없는 밴드(성명서 문구·점도표·근원 MoM 처럼 숫자가 없는 것)는 **고르지 않는다** —
+# 맞는지 모르는 밴드를 '지금 여기'라고 표시하면 틀린 해석이 사실처럼 보인다.
+# 범위가 겹치는 밴드(PCE '2.0% 근처'와 '2.0~2.8%')는 둘 다 고른다 — 적힌 말 그대로다.
+# ids 가 있으면 그 지표에만 적용(GDP 카드는 한국 GDP 도 쓰는데 밴드는 '미국 연율' 기준).
+# 키 이름이 `on` 이 아닌 이유: YAML 1.1 에서 `on:` 은 True 로 읽힌다(첫 판에서 실측).
+# '근처' 처럼 말이 흐린 밴드의 경계(±0.2%p)는 사람이 정한 값이다 — 출처가 아니라 판단.
 
 indicators:
   us_cpi:
@@ -17,9 +27,9 @@ indicators:
       연준은 근원을 본다 — 유가는 통화정책으로 어쩔 수 없기 때문이다.
     watch: 근원 CPI 전년비(core YoY)와 전월비(core MoM)
     read:
-      - {band: "근원 YoY 3.5% 이상", tone: hot,  mean: "물가가 안 잡힌다. 금리 인하 기대가 뒤로 밀리고 장기금리가 튄다"}
-      - {band: "근원 YoY 2.5~3.5%", tone: warm, mean: "둔화 중이지만 목표(2%)보다 높다. 연준이 '서두르지 않겠다'고 말하는 구간"}
-      - {band: "근원 YoY 2.5% 미만", tone: cool, mean: "목표에 근접. 인하 여지가 커지고 금리·달러가 눌린다"}
+      - {band: "근원 YoY 3.5% 이상", metric: core_yoy, ge: 3.5, tone: hot,  mean: "물가가 안 잡힌다. 금리 인하 기대가 뒤로 밀리고 장기금리가 튄다"}
+      - {band: "근원 YoY 2.5~3.5%", metric: core_yoy, ge: 2.5, lt: 3.5, tone: warm, mean: "둔화 중이지만 목표(2%)보다 높다. 연준이 '서두르지 않겠다'고 말하는 구간"}
+      - {band: "근원 YoY 2.5% 미만", metric: core_yoy, lt: 2.5, tone: cool, mean: "목표에 근접. 인하 여지가 커지고 금리·달러가 눌린다"}
       - {band: "근원 MoM 0.2% 이하", tone: cool, mean: "연율로 환산하면 2%대 — 추세가 목표에 닿았다는 신호"}
       - {band: "근원 MoM 0.4% 이상", tone: hot,  mean: "한 달치만으로도 연율 5% — 시장이 가장 싫어하는 숫자"}
     market: |
@@ -44,11 +54,11 @@ indicators:
       **PPI가 튀면 월말 PCE 예상치가 같이 올라간다.**
     watch: 최종수요 PPI 전년비(YoY)와 전월비(MoM). 근원은 식품·에너지·무역서비스를 뺀 것
     read:
-      - {band: "YoY 3.0% 이상", tone: hot,  mean: "원가 압력이 되살아났다. 몇 달 뒤 CPI 반등 걱정 + 월말 PCE 예상치 상향"}
-      - {band: "YoY 1.5~3.0%", tone: warm, mean: "정상 구간. CPI를 밀어올리지도, 끌어내리지도 않는다"}
-      - {band: "YoY 1.5% 미만", tone: cool, mean: "원가가 식었다. 기업이 가격을 올릴 힘이 줄어 물가 둔화를 예고"}
-      - {band: "MoM 0.4% 이상", tone: hot,  mean: "한 달치만으로 연율 5% — CPI가 좋게 나온 달에도 분위기를 뒤집는다"}
-      - {band: "MoM 마이너스", tone: cool, mean: "유가·원자재가 빠진 달에 자주 나온다. 헤드라인만 내려갔는지 근원도 같이인지 볼 것"}
+      - {band: "YoY 3.0% 이상", metric: yoy, ge: 3.0, tone: hot,  mean: "원가 압력이 되살아났다. 몇 달 뒤 CPI 반등 걱정 + 월말 PCE 예상치 상향"}
+      - {band: "YoY 1.5~3.0%", metric: yoy, ge: 1.5, lt: 3.0, tone: warm, mean: "정상 구간. CPI를 밀어올리지도, 끌어내리지도 않는다"}
+      - {band: "YoY 1.5% 미만", metric: yoy, lt: 1.5, tone: cool, mean: "원가가 식었다. 기업이 가격을 올릴 힘이 줄어 물가 둔화를 예고"}
+      - {band: "MoM 0.4% 이상", metric: mom, ge: 0.4, tone: hot,  mean: "한 달치만으로 연율 5% — CPI가 좋게 나온 달에도 분위기를 뒤집는다"}
+      - {band: "MoM 마이너스", metric: mom, lt: 0, tone: cool, mean: "유가·원자재가 빠진 달에 자주 나온다. 헤드라인만 내려갔는지 근원도 같이인지 볼 것"}
     market: |
       **CPI보다 반응은 작지만, CPI와 방향이 엇갈릴 때 영향이 커진다.**
       CPI가 좋았는데 PPI가 튀면 '아직 끝나지 않았다'로 읽혀 금리 하락분을 되돌린다.
@@ -71,9 +81,9 @@ indicators:
       그래서 보통 CPI보다 조금 낮게 나온다. 근원 PCE가 진짜 주인공이다.
     watch: 근원 PCE 전년비
     read:
-      - {band: "근원 PCE YoY 2.0% 근처", tone: cool, mean: "연준 목표 달성. 금리를 낮출 명분이 생긴다"}
-      - {band: "2.0~2.8%", tone: warm, mean: "목표 위지만 방향은 맞다 — 연준이 참으며 지켜보는 구간"}
-      - {band: "2.8% 이상", tone: hot,  mean: "목표에서 멀다. 긴축 유지 또는 재강화 얘기가 나온다"}
+      - {band: "근원 PCE YoY 2.0% 근처", metric: core_yoy, ge: 1.8, lt: 2.2, tone: cool, mean: "연준 목표 달성. 금리를 낮출 명분이 생긴다"}
+      - {band: "근원 PCE YoY 2.0~2.8%", metric: core_yoy, ge: 2.0, lt: 2.8, tone: warm, mean: "목표 위지만 방향은 맞다 — 연준이 참으며 지켜보는 구간"}
+      - {band: "근원 PCE YoY 2.8% 이상", metric: core_yoy, ge: 2.8, tone: hot,  mean: "목표에서 멀다. 긴축 유지 또는 재강화 얘기가 나온다"}
     market: CPI와 방향은 같지만 **연준의 공식 잣대**라 FOMC 직전 발표면 영향이 더 크다.
     korea: CPI와 동일 경로(미 금리 → 원달러 → 외국인 수급).
     links:
@@ -91,9 +101,9 @@ indicators:
       임금이 오르면 물가가 따라 오른다고 보기 때문이다.
     watch: 비농업고용 증감(천 명), 실업률(%), 시간당임금 전년비
     read:
-      - {band: "신규고용 25만 이상", tone: hot,  mean: "경기가 뜨겁다 → 금리 인하가 멀어진다. 주식엔 '좋은 뉴스가 나쁜 뉴스'가 되는 구간"}
-      - {band: "10만~25만", tone: cool, mean: "과열도 침체도 아닌 연착륙 구간. 시장이 가장 편안해한다"}
-      - {band: "10만 미만 / 실업률 급등", tone: hot, mean: "경기 둔화 신호. 금리는 내려가지만 침체 공포로 주식이 같이 빠질 수 있다"}
+      - {band: "신규고용 25만 이상", metric: diff, ge: 25, tone: hot,  mean: "경기가 뜨겁다 → 금리 인하가 멀어진다. 주식엔 '좋은 뉴스가 나쁜 뉴스'가 되는 구간"}
+      - {band: "신규고용 10만~25만", metric: diff, ge: 10, lt: 25, tone: cool, mean: "과열도 침체도 아닌 연착륙 구간. 시장이 가장 편안해한다"}
+      - {band: "신규고용 10만 미만 / 실업률 급등", metric: diff, lt: 10, tone: hot, mean: "경기 둔화 신호. 금리는 내려가지만 침체 공포로 주식이 같이 빠질 수 있다"}
       - {band: "시간당임금 YoY 4% 이상", tone: hot, mean: "임금발 물가 압력 — 연준이 가장 경계하는 숫자"}
     market: |
       고용이 '적당히 식는' 숫자를 시장은 가장 좋아한다. 너무 뜨거우면 금리 공포,
@@ -157,9 +167,9 @@ indicators:
       자동차·휘발유를 뺀 **근원 소매판매(control group)**가 GDP에 직접 들어가서 더 중요하다.
     watch: 전월비(MoM), control group
     read:
-      - {band: "MoM +0.4% 이상", tone: warm, mean: "소비가 강하다 — 경기는 좋지만 물가 압력도 남는다"}
-      - {band: "MoM -0.2% ~ +0.3%", tone: cool, mean: "완만한 소비. 연착륙 그림에 부합"}
-      - {band: "MoM -0.3% 이하", tone: hot,  mean: "소비가 꺾인다 — 침체 논쟁이 다시 붙는다"}
+      - {band: "MoM +0.4% 이상", metric: mom, ge: 0.4, tone: warm, mean: "소비가 강하다 — 경기는 좋지만 물가 압력도 남는다"}
+      - {band: "MoM -0.2% ~ +0.3%", metric: mom, ge: -0.2, le: 0.3, tone: cool, mean: "완만한 소비. 연착륙 그림에 부합"}
+      - {band: "MoM -0.3% 이하", metric: mom, le: -0.3, tone: hot,  mean: "소비가 꺾인다 — 침체 논쟁이 다시 붙는다"}
     market: 소비가 식으면 금리 인하 기대는 커지지만 기업 이익 전망은 나빠진다 — 주식 방향은 둘의 힘겨루기.
     korea: 미국 소비는 한국 수출(IT·자동차·소비재)의 최종 수요. 둔화는 수출 기업 실적에 시차를 두고 반영.
     links:
@@ -175,9 +185,9 @@ indicators:
       분기 성장률에 대략 4를 곱한 숫자가 나온다 — 한국식(전기비)과 단위가 달라 헷갈리기 쉽다.
     watch: 전기비 연율(미국) / 전기비(한국), 소비·설비투자 기여도
     read:
-      - {band: "미국 연율 3% 이상", tone: warm, mean: "강한 성장. 금리를 높게 유지할 체력이 있다는 뜻"}
-      - {band: "미국 연율 1.5~3%", tone: cool, mean: "추세 성장 근처 — 가장 무난한 구간"}
-      - {band: "미국 연율 1% 미만", tone: hot, mean: "둔화. 2개 분기 연속 마이너스면 기술적 침체"}
+      - {band: "미국 연율 3% 이상", metric: level, ge: 3, ids: [us_gdp], tone: warm, mean: "강한 성장. 금리를 높게 유지할 체력이 있다는 뜻"}
+      - {band: "미국 연율 1.5~3%", metric: level, ge: 1.5, lt: 3, ids: [us_gdp], tone: cool, mean: "추세 성장 근처 — 가장 무난한 구간"}
+      - {band: "미국 연율 1% 미만", metric: level, lt: 1, ids: [us_gdp], tone: hot, mean: "둔화. 2개 분기 연속 마이너스면 기술적 침체"}
     market: 속보치가 가장 크게 움직이고 잠정·확정은 거의 안 움직인다(이미 알려진 정보라서).
     korea: 한국 GDP는 수출 기여도를 같이 봐야 한다 — 내수가 약해도 수출이 끌면 숫자는 버틴다.
     links:
