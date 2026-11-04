@@ -26,6 +26,16 @@ class DetectTest(unittest.TestCase):
                      "근태 입력 완료했습니다", "이번달 근태 깨끗합니다", "근태 확인했습니다"):
             self.assertIsNotNone(detect_attendance(text, SEP), text)
 
+    def test_hr_registration_report(self):
+        # 11/3 김연미 실사례 — HR에 소명사유를 '등록했다'는 처리 보고도 근태 보고다.
+        nov = datetime(2026, 11, 3, 13, 18, tzinfo=KST)
+        hit = detect_attendance("10월 근태 소명사유 등록했습니다", nov)
+        self.assertIsNotNone(hit)
+        self.assertEqual(hit["month"], "2026-10")
+        self.assertIsNotNone(detect_attendance("근태 자료 제출했습니다", SEP))
+        # '등록해 주세요'는 부탁이라 여전히 컷.
+        self.assertIsNone(detect_attendance("근태 소명사유 등록해 주세요", SEP))
+
     def test_spaced_and_dotted(self):
         self.assertIsNotNone(detect_attendance("근 태 완벽합니다", SEP))
         self.assertIsNotNone(detect_attendance("근.태. 이상없음", SEP))
