@@ -32,6 +32,7 @@ DATA = os.path.join(HERE, "data")
 HIST = os.path.join(DATA, "history")
 LATEST = os.path.join(DATA, "latest.json")
 SHARES = os.path.join(DATA, "etf_shares.json")
+SERIES = os.path.join(DATA, "series.json")   # 종목별 1년 차트 — history 에는 안 복사(스냅샷마다 부풀지 않게)
 CHANGES = os.path.join(ROOT, "etf_holdings", "changes.json")
 
 NAVER_ETF = "https://m.stock.naver.com/api/stock/{code}/etfAnalysis"
@@ -140,7 +141,8 @@ def collect_stock(u, today, live=True):
     tech["spark"] = metrics.spark_points(ohlc, today, px.get("price") if live else None)
     flow = metrics.flow_summary(inv, today, px.get("mcap"))
     flow["today_src"] = f"estimate {est_note}" if est_note else "daily"
-    return {**u, "px": px, "tech": tech, "flow": flow}
+    series = metrics.build_series(ohlc, inv, px.get("listed"), today)
+    return {**u, "px": px, "tech": tech, "flow": flow, "series": series}
 
 
 def collect_etfs(etf_rows):
@@ -336,6 +338,7 @@ def main(argv=None):
             errors.append(f"{u['code']} {u['name']}: {type(ex).__name__}: {ex}")
             print(f"  {u['name']} 실패: {ex}")
 
+    series_map = {r["code"]: r.pop("series", None) for r in rows}
     if not enough(len(rows), len(uni)):
         print(f"수집 부족 — {len(rows)}/{len(uni)}종목(기준 {MIN_OK_RATIO:.0%}). 저장·발송하지 않고 실패로 끝낸다.")
         for e in errors:
@@ -371,6 +374,12 @@ def main(argv=None):
         json.dump(payload, f, ensure_ascii=False, indent=1)
     with open(os.path.join(HIST, f"{today}_{slot.replace(':', '')}.json"), "w", encoding="utf-8") as f:
         json.dump(payload, f, ensure_ascii=False)
+    series_map = {c: v for c, v in series_map.items() if v}
+    if series_map:   # 이번에 못 만든 종목은 직전 값을 유지(차트가 갑자기 사라지지 않게)
+        old = load_json(SERIES, {})
+        old.update(series_map)
+        with open(SERIES, "w", encoding="utf-8") as f:
+            json.dump(old, f, ensure_ascii=False, separators=(",", ":"))
     with open(SHARES, "w", encoding="utf-8") as f:
         json.dump(store, f, ensure_ascii=False, indent=1)
     # 30일 지난 히스토리 정리

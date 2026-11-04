@@ -12,8 +12,10 @@
     그 아래 '한 줄'만 Gemini 가 그 밴드들을 종합한다 — 밴드가 근거고 한 줄은 요약이다.
     **Gemini 가 실패하면 한 줄만 빠지고 나머지는 그대로 간다**(쿼터 사고 교훈).
   · 값을 못 구한 항목은 **줄에서 아예 빠진다** — '–' 원칙과 같은 줄기로, 지어내지 않는다.
-  · 본문은 **평문**이다. HTML parse_mode 는 400 → 평문 재시도 분기를 달아야 하는데,
-    여기 본문엔 서식이 필요한 데가 없고 텔레그램은 맨 URL 을 알아서 링크로 만든다.
+  · 본문은 평문으로 조립하고(`build_message` — 테스트·dry-run 이 읽는 정본), 보낼 때만
+    `to_html` 이 **제목·〈묶음〉·🗓🧭💬 머리줄을 볼드**로 감싸 HTML 로 보낸다(10/28 요청).
+    나머지는 전부 escape — Gemini 한 줄에 `<`·`&` 가 섞여도 안전하다. 텔레그램이
+    parse 오류(400)를 돌려주면 **평문으로 한 번 더** 보낸다(서식이 빠질 뿐 내용은 같다).
 
 시크릿 (없으면 발송만 조용히 생략 — 수집·빌드는 영향 없음)
   MACRO_TELEGRAM_BOT_TOKEN / _CHAT_ID  → 없으면 CONGPT_TELEGRAM_*  (매크로_공부 방)
@@ -23,6 +25,7 @@ from __future__ import annotations
 
 import argparse
 import datetime as dt
+import html
 import json
 import os
 import sys
@@ -259,6 +262,21 @@ def build_message(cfg: dict, guide: dict, data: dict, now: dt.datetime) -> str:
     return "\n\n".join(p for p in parts if p)
 
 
+# 볼드로 감쌀 머리줄 — 줄 첫 글자로 가른다(build_message 가 만드는 머리줄 모양 그대로).
+HEAD_PREFIXES = ("〈", "🗓", "🧭", "💬")
+
+
+def to_html(text: str) -> str:
+    """평문 본문 → 텔레그램 HTML. 첫 줄(제목)과 머리줄만 <b>, 나머지는 escape 만."""
+    out = []
+    for i, line in enumerate(text.split("\n")):
+        e = html.escape(line, quote=False)
+        if line and (i == 0 or line.startswith(HEAD_PREFIXES)):
+            e = f"<b>{e}</b>"
+        out.append(e)
+    return "\n".join(out)
+
+
 def send(text: str) -> None:
     import requests
     token = (os.environ.get("MACRO_TELEGRAM_BOT_TOKEN")
@@ -268,14 +286,20 @@ def send(text: str) -> None:
     if not token or not chat:
         print("[텔레그램] 시크릿 미설정 — 발송 생략")
         return
+    body = {"chat_id": chat, "text": to_html(text), "parse_mode": "HTML",
+            "disable_web_page_preview": True}
     for attempt in range(3):
         r = requests.post(f"https://api.telegram.org/bot{token}/sendMessage",
-                          json={"chat_id": chat, "text": text,
-                                "disable_web_page_preview": True}, timeout=30)
+                          json=body, timeout=30)
         if r.ok:
-            print("[텔레그램] 1개 메시지 전송 완료")
+            print("[텔레그램] 1개 메시지 전송 완료"
+                  + ("" if body.get("parse_mode") else " (평문 폴백)"))
             return
         print(f"[텔레그램] 실패 {r.status_code} {r.text[:200]}", file=sys.stderr)
+        if r.status_code == 400 and body.get("parse_mode"):
+            # 서식 해석 실패 — 볼드만 포기하고 같은 내용을 평문으로 바로 다시 보낸다.
+            body = {"chat_id": chat, "text": text, "disable_web_page_preview": True}
+            continue
         time.sleep(5)
     raise RuntimeError("텔레그램 전송 실패")
 

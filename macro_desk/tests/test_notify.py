@@ -220,5 +220,42 @@ class TestBuildMessage(unittest.TestCase):
         self.assertNotIn("오늘 수집 전", nt.build_message(CFG, GUIDE, DATA, now))
 
 
+class TestToHtml(unittest.TestCase):
+    """볼드는 제목·〈묶음〉·🗓🧭💬 머리줄만, 나머지는 escape 만(10/28 요청)."""
+    SAMPLE = ("📊 GS의 매크로 데스크 · 10/28(수) 21:05\n"
+              "숫자는 직전 미국 장 종가 기준입니다\n\n"
+              "〈미국 금리·채권〉\n미국 10년물 4.99% (+0.01%p)\n\n"
+              "🗓 앞으로 1주\n10/28(수) FOMC 금리 결정 ★확정일\n\n"
+              "🧭 지금 구간\n· VIX 17.46 → 15~20 — 보통\n\n"
+              "💬 한 줄\nS&P <5,000> 은 아직\n\n"
+              "🔗 https://example.com/a?x=1&y=2")
+
+    def setUp(self):
+        self.lines = nt.to_html(self.SAMPLE).split("\n")
+
+    def bold(self, starts):
+        return [l for l in self.lines if l.startswith("<b>")
+                and l[3:].startswith(starts)]
+
+    def test_title_and_heads_are_bold(self):
+        self.assertEqual(self.lines[0], "<b>📊 GS의 매크로 데스크 · 10/28(수) 21:05</b>")
+        for h in ("〈미국 금리·채권〉", "🗓 앞으로 1주", "🧭 지금 구간", "💬 한 줄"):
+            self.assertIn(f"<b>{h}</b>", self.lines)
+
+    def test_body_lines_are_not_bold(self):
+        bolded = [l for l in self.lines if l.startswith("<b>")]
+        self.assertEqual(len(bolded), 5)                 # 제목 + 머리줄 4개뿐
+        self.assertIn("숫자는 직전 미국 장 종가 기준입니다", self.lines)
+        self.assertIn("· VIX 17.46 → 15~20 — 보통", self.lines)
+
+    def test_escapes_angle_brackets_and_ampersand(self):
+        # Gemini 한 줄·URL 의 < > & 가 태그로 읽히면 텔레그램이 400 을 준다
+        self.assertIn("S&amp;P &lt;5,000&gt; 은 아직", self.lines)
+        self.assertIn("🔗 https://example.com/a?x=1&amp;y=2", self.lines)
+
+    def test_blank_lines_survive(self):
+        self.assertEqual(nt.to_html(self.SAMPLE).count("\n"), self.SAMPLE.count("\n"))
+
+
 if __name__ == "__main__":
     unittest.main(verbosity=2)

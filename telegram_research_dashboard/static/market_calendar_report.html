@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>증시 법칙 달력</title>
+<style>
+:root{--bg:#fff;--fg:#1c2430;--muted:#6b7684;--line:#e5e8ec;--card:#f7f8fa;
+--up:#d64545;--dn:#3b6fd4;--vol:#b8860b;--accent:#2f6f4f;--warnbg:#fff8e6;--warnline:#e8c87a;
+--upbg:rgba(214,69,69,.12);--dnbg:rgba(59,111,212,.12);--volbg:rgba(184,134,11,.14);--infobg:rgba(107,118,132,.12);--closedbg:rgba(107,118,132,.22)}
+@media(prefers-color-scheme:dark){:root{--bg:#14181f;--fg:#e6e9ee;--muted:#8b93a1;--line:#2a313c;--card:#1b212b;
+--accent:#8fc7a5;--warnbg:#2b2718;--warnline:#5c4f27;--upbg:rgba(214,69,69,.22);--dnbg:rgba(59,111,212,.22);--volbg:rgba(184,134,11,.24)}}
+*{box-sizing:border-box}
+body{margin:0;padding:18px 16px 48px;background:var(--bg);color:var(--fg);font:14px/1.6 -apple-system,"Malgun Gothic","Apple SD Gothic Neo",sans-serif}
+.wrap{max-width:860px;margin:0 auto}
+h1{font-size:19px;margin:0 0 2px} h2{font-size:15px;margin:0}
+.sub{color:var(--muted);font-size:12.5px;margin:0 0 14px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px 14px;margin:0 0 10px}
+.ctitle{font-weight:700;font-size:13px;margin:4px 0 6px;color:var(--muted)}
+.note{color:var(--muted);font-size:12px;margin:6px 0 0}
+.note.warn{background:var(--warnbg);border:1px solid var(--warnline);border-radius:8px;padding:8px 10px;color:var(--fg)}
+details.sec{margin:0 0 4px}
+details.sec>summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:6px;padding:4px 0;border-bottom:1px solid var(--line)}
+details.sec>summary::-webkit-details-marker{display:none}
+details.sec>summary::before{content:"▼";color:var(--muted);font-size:11px;width:12px;flex:none;transition:transform .12s}
+details.sec:not([open])>summary::before{transform:rotate(-90deg)}
+details.sec[open]>summary{margin-bottom:8px}
+.badge{display:inline-block;font-size:10.5px;padding:0 6px;border-radius:9px;margin-right:4px;vertical-align:1px;font-weight:700}
+.b-strong{background:var(--upbg);color:var(--up)} .b-weak{background:var(--dnbg);color:var(--dn)}
+.b-vol{background:var(--volbg);color:var(--vol)} .b-info{background:var(--infobg);color:var(--muted)}
+.b-closed{background:var(--closedbg);color:var(--muted)}
+.stars{color:#c99a2e;font-size:11px;letter-spacing:1px}
+.tent{color:var(--muted);font-weight:400}
+/* 지금 */
+.now{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media(max-width:640px){.now{grid-template-columns:1fr}}
+.now h3{font-size:13px;margin:0 0 6px;color:var(--muted)}
+.now ul{margin:0;padding-left:0;list-style:none} .now li{padding:5px 0;border-top:1px dashed var(--line);font-size:13px}
+.now li:first-child{border-top:none}
+.now .when{color:var(--muted);font-size:11.5px;margin-left:4px}
+.say{color:var(--muted);font-size:12px;display:block}
+/* 12개월 띠 */
+.strip{display:grid;grid-template-columns:72px repeat(12,minmax(0,1fr));gap:2px;font-size:11px;margin:4px 0}
+.strip .lab{color:var(--muted);font-size:11px;padding:4px 2px;white-space:nowrap}
+.strip .m{border-radius:4px;padding:3px 2px;text-align:center;min-height:36px;line-height:1.25;background:var(--card);border:1px solid var(--line);overflow:hidden}
+.strip .m.strong{background:var(--upbg);border-color:transparent} .strip .m.weak{background:var(--dnbg);border-color:transparent}
+.strip .m.cur{outline:2px solid var(--accent)}
+.strip .m small{display:block;color:var(--muted);font-size:9.5px}
+.strip .m .v{font-weight:700}
+.ysel{display:flex;gap:6px;align-items:center;margin:0 0 6px}
+.ysel button,.calnav button{border:1px solid var(--line);background:var(--bg);color:var(--fg);border-radius:6px;padding:2px 10px;cursor:pointer;font-size:12.5px}
+.ysel button.on,.calnav button.on{background:var(--accent);color:#fff;border-color:var(--accent)}
+/* 달력 */
+.calnav{display:flex;gap:6px;align-items:center;margin:0 0 6px} .calnav b{font-size:14px;margin:0 6px}
+.cal{display:grid;grid-template-columns:repeat(5,minmax(0,1fr)) repeat(2,minmax(0,.55fr));gap:3px;margin:0 0 10px}
+.cal-h{text-align:center;font-size:11px;color:var(--muted);padding:2px 0}
+.cal-cell{min-height:64px;border:1px solid var(--line);border-radius:6px;padding:2px 3px 3px;background:var(--bg);position:relative}
+.cal-cell.empty{border:none;background:none} .cal-cell.wknd{background:var(--card)}
+.cal-cell.today{border-color:var(--accent);border-width:2px}
+.cal-cell.hol{background:var(--closedbg)}
+.cal-d{font-size:11px;color:var(--muted)}
+.band{display:block;height:4px;border-radius:2px;margin:2px 0 0}
+.band.strong{background:var(--up)} .band.weak{background:var(--dn)} .band.info{background:var(--muted)} .band.closed{background:transparent}
+.band.vol{background:var(--vol)}
+.bandlab{display:block;font-size:9.5px;line-height:1.2;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.chip{display:block;font-size:10px;line-height:1.25;margin-top:2px;padding:1px 3px;border-radius:3px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;cursor:pointer;color:inherit;text-decoration:none}
+.chip.vol{background:var(--volbg)} .chip.info{background:var(--infobg)} .chip.strong{background:var(--upbg)} .chip.weak{background:var(--dnbg)}
+.legend{font-size:11.5px;color:var(--muted)} .legend i{display:inline-block;width:14px;height:4px;border-radius:2px;vertical-align:middle;margin:0 3px 0 8px}
+/* 카드 */
+.gcard{border:1px solid var(--line);border-radius:10px;background:var(--card);padding:10px 12px;margin:0 0 8px}
+.gcard summary{cursor:pointer;font-size:14px} .gcard summary .meta{color:var(--muted);font-size:11.5px;font-weight:400;margin-left:6px}
+.gcard p{margin:6px 0 0;font-size:13px} .gcard .q{font-style:italic;color:var(--muted)}
+.cat{font-weight:700;font-size:13px;color:var(--muted);margin:14px 0 6px}
+a{color:inherit}
+</style></head><body><div class="wrap">
+<h1>📅 증시 법칙 달력</h1>
+<p class="sub">격언과 계절성을 날짜 위에 올렸다. <b>통계는 평균이지 예언이 아니다</b> — 방향과 반복 여부만 보고, 크기는 믿지 말 것.
+<span id="today-line"></span></p>
+
+<details class="sec" id="s-now" open><summary><h2>🔭 지금 어디쯤인가</h2></summary>
+<div class="card"><div id="now" class="now"></div></div>
+</details>
+
+<details class="sec" id="s-year" open><summary><h2>📊 1년 띠 — 월별 계절성 + 올해의 주기</h2></summary>
+<div class="card">
+<div class="ysel" id="ysel"></div>
+<div id="strip"></div>
+<p class="note">위 두 줄은 매년 같은 평균(코스피 1980~2024 / S&amp;P 1950~), 셋째 줄은 <b>그 해의 4년 주기 위치</b>에서만 켜진다.
+짝수해 = 미국 선거해. 강세 <span class="badge b-strong">빨강</span> 약세 <span class="badge b-weak">파랑</span>. 칸을 누르면 그 달 달력으로.</p>
+</div></details>
+
+<details class="sec" id="s-cal" open><summary><h2>🗓 달력 — 구간과 날짜</h2></summary>
+<div class="card">
+<div class="calnav"><button id="cprev">◀</button><b id="ctitle"></b><button id="cnext">▶</button><button id="ctoday">오늘</button></div>
+<div id="cal"></div>
+<p class="legend">띠: <i style="background:var(--up)"></i>강세 기대 <i style="background:var(--dn)"></i>약세 주의 <i style="background:var(--muted)"></i>표시만 · 칩: <span class="badge b-vol">변동성</span><span class="badge b-info">일정</span> · 회색 칸 = 휴장 · ~ = 미확정 날짜 · 창 끝은 거래일 셈이라 ≈</p>
+<p class="note" id="calnote"></p>
+</div></details>
+
+<details class="sec" id="s-rules" open><summary><h2>📜 격언과 근거</h2></summary>
+<p class="note">★★★ 긴 표본에서 여러 기관 일관 · ★★ 한 기관이거나 기간 따라 갈림 · ★ 사례·속설. 숫자는 출처마다 표본이 달라 어긋난다 — 상세와 출처 링크는 <code>market_calendar/ADAGES.md</code>.</p>
+<div id="cards"></div>
+</details>
+
+<p class="note">빌드 <span id="built"></span> · 규칙 <code>market_calendar/rules.yml</code> · 날짜 <code>dates.yml</code>(명절·선거·휴장) · FOMC 는 매크로 데스크 확정일을 그대로 읽는다.</p>
+</div>
+<script id="data" type="application/json">{"years": [2026, 2027, 2028], "phases": {"2026": "midterm", "2027": "pre", "2028": "election"}, "phase_ko": {"election": "미국 대선해(4년차)", "post": "대선 다음 해(1년차)", "midterm": "미국 중간선거해(2년차)", "pre": "대선 전 해(3년차)"}, "holidays": ["2026-01-01", "2026-02-16", "2026-02-17", "2026-02-18", "2026-03-02", "2026-05-01", "2026-05-05", "2026-05-25", "2026-06-03", "2026-08-17", "2026-09-24", "2026-09-25", "2026-10-05", "2026-10-09", "2026-12-25", "2026-12-31", "2027-01-01", "2027-02-08", "2027-02-09", "2027-03-01", "2027-05-05", "2027-05-13", "2027-08-16", "2027-09-14", "2027-09-15", "2027-09-16", "2027-10-04", "2027-10-11", "2027-12-27", "2027-12-31", "2028-01-01", "2028-04-12", "2028-12-29"], "months": [{"id": "kr_nov", "year": 2026, "month": 11, "market": "KR", "tone": "strong", "label": "코스피는 11월이 가장 좋다", "conf": 3, "cycle": false}, {"id": "kr_aug_sep", "year": 2026, "month": 8, "market": "KR", "tone": "weak", "label": "코스피는 8~9월이 가장 나쁘다", "conf": 3, "cycle": false}, {"id": "kr_aug_sep", "year": 2026, "month": 9, "market": "KR", "tone": "weak", "label": "코스피는 8~9월이 가장 나쁘다", "conf": 3, "cycle": false}, {"id": "kr_jan_q", "year": 2026, "month": 1, "market": "KR", "tone": "strong", "label": "1월 효과 — 코스닥·중소형주", "conf": 2, "cycle": false}, {"id": "us_sep", "year": 2026, "month": 9, "market": "US", "tone": "weak", "label": "미국 9월 효과", "conf": 3, "cycle": false}, {"id": "us_sell_may", "year": 2026, "month": 5, "market": "US", "tone": "weak", "label": "Sell in May (할로윈 지표)", "conf": 2, "cycle": false}, {"id": "us_sell_may", "year": 2026, "month": 6, "market": "US", "tone": "weak", "label": "Sell in May (할로윈 지표)", "conf": 2, "cycle": false}, {"id": "us_sell_may", "year": 2026, "month": 7, "market": "US", "tone": "weak", "label": "Sell in May (할로윈 지표)", "conf": 2, "cycle": false}, {"id": "us_sell_may", "year": 2026, "month": 8, "market": "US", "tone": "weak", "label": "Sell in May (할로윈 지표)", "conf": 2, "cycle": false}, {"id": "us_sell_may", "year": 2026, "month": 9, "market": "US", "tone": "weak", "label": "Sell in May (할로윈 지표)", "conf": 2, "cycle": false}, {"id": "us_sell_may", "year": 2026, "month": 10, "market": "US", "tone": "weak", "label": "Sell in May (할로윈 지표)", "conf": 2, "cycle": false}, {"id": "cycle_midterm_weak", "year": 2026, "month": 6, "market": "CYCLE", "tone": "weak", "label": "중간선거해(짝수해) 6·9월 약세", "conf": 3, "cycle": true}, {"id": "cycle_midterm_weak", "year": 2026, "month": 9, "market": "CYCLE", "tone": "weak", "label": "중간선거해(짝수해) 6·9월 약세", "conf": 3, "cycle": true}, {"id": "cycle_midterm_strong", "year": 2026, "month": 10, "market": "CYCLE", "tone": "strong", "label": "중간선거해 10~11월 반등", "conf": 3, "cycle": true}, {"id": "cycle_midterm_strong", "year": 2026, "month": 11, "market": "CYCLE", "tone": "strong", "label": "중간선거해 10~11월 반등", "conf": 3, "cycle": true}, {"id": "kr_nov", "year": 2027, "month": 11, "market": "KR", "tone": "strong", "label": "코스피는 11월이 가장 좋다", "conf": 3, "cycle": false}, {"id": "kr_aug_sep", "year": 2027, "month": 8, "market": "KR", "tone": "weak", "label": "코스피는 8~9월이 가장 나쁘다", "conf": 3, "cycle": false}, {"id": "kr_aug_sep", "year": 2027, "month": 9, "market": "KR", "tone": "weak", "label": "코스피는 8~9월이 가장 나쁘다", "conf": 3, "cycle": false}, {"id": "kr_jan_q", "year": 2027, "month": 1, "market": "KR", "tone": "strong", "label": "1월 효과 — 코스닥·중소형주", "conf": 2, "cycle": false}, {"id": "us_sep", "year": 2027, "month": 9, "market": "US", "tone": "weak", "label": "미국 9월 효과", "conf": 3, "cycle": false}, {"id": "us_sell_may", "year": 2027, "month": 5, "market": "US", "tone": "weak", "label": "Sell in May (할로윈 지표)", "conf": 2, "cycle": false}, {"id": "us_sell_may", "year": 2027, "month": 6, "market": "US", "tone": "weak", "label": "Sell in May (할로윈 지표)", "conf": 2, "cycle": false}, {"id": "us_sell_may", "year": 2027, "month": 7, "market": "US", "tone": "weak", "label": "Sell in May (할로윈 지표)", "conf": 2, "cycle": false}, {"id": "us_sell_may", "year": 2027, "month": 8, "market": "US", "tone": "weak", "label": "Sell in May (할로윈 지표)", "conf": 2, "cycle": false}, {"id": "us_sell_may", "year": 2027, "month": 9, "market": "US", "tone": "weak", "label": "Sell in May (할로윈 지표)", "conf": 2, "cycle": false}, {"id": "us_sell_may", "year": 2027, "month": 10, "market": "US", "tone": "weak", "label": "Sell in May (할로윈 지표)", "conf": 2, "cycle": false}, {"id": "cycle_pre_strong", "year": 2027, "month": 1, "market": "CYCLE", "tone": "strong", "label": "대선 전 해(3년차) 최강", "conf": 3, "cycle": true}, {"id": "cycle_pre_strong", "year": 2027, "month": 2, "market": "CYCLE", "tone": "strong", "label": "대선 전 해(3년차) 최강", "conf": 3, "cycle": true}, {"id": "cycle_pre_strong", "year": 2027, "month": 3, "market": "CYCLE", "tone": "strong", "label": "대선 전 해(3년차) 최강", "conf": 3, "cycle": true}, {"id": "cycle_pre_strong", "year": 2027, "month": 4, "market": "CYCLE", "tone": "strong", "label": "대선 전 해(3년차) 최강", "conf": 3, "cycle": true}, {"id": "cycle_pre_strong", "year": 2027, "month": 5, "market": "CYCLE", "tone": "strong", "label": "대선 전 해(3년차) 최강", "conf": 3, "cycle": true}, {"id": "cycle_pre_strong", "year": 2027, "month": 6, "market": "CYCLE", "tone": "strong", "label": "대선 전 해(3년차) 최강", "conf": 3, "cycle": true}, {"id": "cycle_pre_strong", "year": 2027, "month": 7, "market": "CYCLE", "tone": "strong", "label": "대선 전 해(3년차) 최강", "conf": 3, "cycle": true}, {"id": "cycle_pre_strong", "year": 2027, "month": 8, "market": "CYCLE", "tone": "strong", "label": "대선 전 해(3년차) 최강", "conf": 3, "cycle": true}, {"id": "cycle_pre_strong", "year": 2027, "month": 9, "market": "CYCLE", "tone": "strong", "label": "대선 전 해(3년차) 최강", "conf": 3, "cycle": true}, {"id": "cycle_pre_strong", "year": 2027, "month": 10, "market": "CYCLE", "tone": "strong", "label": "대선 전 해(3년차) 최강", "conf": 3, "cycle": true}, {"id": "cycle_pre_strong", "year": 2027, "month": 11, "market": "CYCLE", "tone": "strong", "label": "대선 전 해(3년차) 최강", "conf": 3, "cycle": true}, {"id": "cycle_pre_strong", "year": 2027, "month": 12, "market": "CYCLE", "tone": "strong", "label": "대선 전 해(3년차) 최강", "conf": 3, "cycle": true}, {"id": "kr_nov", "year": 2028, "month": 11, "market": "KR", "tone": "strong", "label": "코스피는 11월이 가장 좋다", "conf": 3, "cycle": false}, {"id": "kr_aug_sep", "year": 2028, "month": 8, "market": "KR", "tone": "weak", "label": "코스피는 8~9월이 가장 나쁘다", "conf": 3, "cycle": false}, {"id": "kr_aug_sep", "year": 2028, "month": 9, "market": "KR", "tone": "weak", "label": "코스피는 8~9월이 가장 나쁘다", "conf": 3, "cycle": false}, {"id": "kr_jan_q", "year": 2028, "month": 1, "market": "KR", "tone": "strong", "label": "1월 효과 — 코스닥·중소형주", "conf": 2, "cycle": false}, {"id": "us_sep", "year": 2028, "month": 9, "market": "US", "tone": "weak", "label": "미국 9월 효과", "conf": 3, "cycle": false}, {"id": "us_sell_may", "year": 2028, "month": 5, "market": "US", "tone": "weak", "label": "Sell in May (할로윈 지표)", "conf": 2, "cycle": false}, {"id": "us_sell_may", "year": 2028, "month": 6, "market": "US", "tone": "weak", "label": "Sell in May (할로윈 지표)", "conf": 2, "cycle": false}, {"id": "us_sell_may", "year": 2028, "month": 7, "market": "US", "tone": "weak", "label": "Sell in May (할로윈 지표)", "conf": 2, "cycle": false}, {"id": "us_sell_may", "year": 2028, "month": 8, "market": "US", "tone": "weak", "label": "Sell in May (할로윈 지표)", "conf": 2, "cycle": false}, {"id": "us_sell_may", "year": 2028, "month": 9, "market": "US", "tone": "weak", "label": "Sell in May (할로윈 지표)", "conf": 2, "cycle": false}, {"id": "us_sell_may", "year": 2028, "month": 10, "market": "US", "tone": "weak", "label": "Sell in May (할로윈 지표)", "conf": 2, "cycle": false}, {"id": "cycle_election", "year": 2028, "month": 9, "market": "CYCLE", "tone": "weak", "label": "대선해 선거 전 약세·후 강세", "conf": 2, "cycle": true}, {"id": "cycle_election", "year": 2028, "month": 10, "market": "CYCLE", "tone": "weak", "label": "대선해 선거 전 약세·후 강세", "conf": 2, "cycle": true}], "windows": [{"id": "kr_jan_rebound", "start": "2026-01-02", "end": "2026-01-15", "tone": "strong", "label": "1월 상반월 코스닥 반등", "conf": 2, "market": "KR", "tentative": false, "approx": true}, {"id": "kr_seol", "start": "2026-02-09", "end": "2026-02-13", "tone": "info", "label": "설 전 5거래일", "conf": 1, "market": "KR", "tentative": false, "approx": true}, {"id": "kr_seol", "start": "2026-02-16", "end": "2026-02-18", "tone": "closed", "label": "설 연휴", "conf": 1, "market": "KR", "tentative": false, "approx": false}, {"id": "kr_seol", "start": "2026-02-19", "end": "2026-02-25", "tone": "info", "label": "설 후 5거래일", "conf": 1, "market": "KR", "tentative": false, "approx": true}, {"id": "kr_chuseok", "start": "2026-09-17", "end": "2026-09-23", "tone": "weak", "label": "추석 전 5거래일", "conf": 3, "market": "KR", "tentative": false, "approx": true}, {"id": "kr_chuseok", "start": "2026-09-24", "end": "2026-09-26", "tone": "closed", "label": "추석 연휴", "conf": 3, "market": "KR", "tentative": false, "approx": false}, {"id": "kr_chuseok", "start": "2026-09-28", "end": "2026-10-02", "tone": "strong", "label": "추석 후 5거래일", "conf": 3, "market": "KR", "tentative": false, "approx": true}, {"id": "kr_bigholder", "start": "2026-12-11", "end": "2026-12-28", "tone": "weak", "label": "대주주 양도세 회피 매도(코스닥)", "conf": 3, "market": "KR", "tentative": false, "approx": true}, {"id": "us_santa", "start": "2026-12-23", "end": "2027-01-05", "tone": "strong", "label": "산타 랠리 구간", "conf": 3, "market": "", "tentative": false, "approx": false}, {"id": "kr_jan_rebound", "start": "2027-01-04", "end": "2027-01-15", "tone": "strong", "label": "1월 상반월 코스닥 반등", "conf": 2, "market": "KR", "tentative": false, "approx": true}, {"id": "kr_seol", "start": "2027-02-01", "end": "2027-02-05", "tone": "info", "label": "설 전 5거래일", "conf": 1, "market": "KR", "tentative": false, "approx": true}, {"id": "kr_seol", "start": "2027-02-06", "end": "2027-02-09", "tone": "closed", "label": "설 연휴", "conf": 1, "market": "KR", "tentative": false, "approx": false}, {"id": "kr_seol", "start": "2027-02-10", "end": "2027-02-16", "tone": "info", "label": "설 후 5거래일", "conf": 1, "market": "KR", "tentative": false, "approx": true}, {"id": "kr_chuseok", "start": "2027-09-07", "end": "2027-09-13", "tone": "weak", "label": "추석 전 5거래일", "conf": 3, "market": "KR", "tentative": false, "approx": true}, {"id": "kr_chuseok", "start": "2027-09-14", "end": "2027-09-16", "tone": "closed", "label": "추석 연휴", "conf": 3, "market": "KR", "tentative": false, "approx": false}, {"id": "kr_chuseok", "start": "2027-09-17", "end": "2027-09-23", "tone": "strong", "label": "추석 후 5거래일", "conf": 3, "market": "KR", "tentative": false, "approx": true}, {"id": "kr_bigholder", "start": "2027-12-13", "end": "2027-12-28", "tone": "weak", "label": "대주주 양도세 회피 매도(코스닥)", "conf": 3, "market": "KR", "tentative": false, "approx": true}, {"id": "us_santa", "start": "2027-12-23", "end": "2028-01-04", "tone": "strong", "label": "산타 랠리 구간", "conf": 3, "market": "", "tentative": false, "approx": false}, {"id": "kr_jan_rebound", "start": "2028-01-03", "end": "2028-01-14", "tone": "strong", "label": "1월 상반월 코스닥 반등", "conf": 2, "market": "KR", "tentative": false, "approx": true}, {"id": "kr_seol", "start": "2028-01-19", "end": "2028-01-25", "tone": "info", "label": "설 전 5거래일", "conf": 1, "market": "KR", "tentative": true, "approx": true}, {"id": "kr_seol", "start": "2028-01-26", "end": "2028-01-28", "tone": "closed", "label": "설 연휴", "conf": 1, "market": "KR", "tentative": true, "approx": false}, {"id": "kr_seol", "start": "2028-01-31", "end": "2028-02-04", "tone": "info", "label": "설 후 5거래일", "conf": 1, "market": "KR", "tentative": true, "approx": true}, {"id": "election_kr_big", "start": "2028-03-15", "end": "2028-04-11", "tone": "strong", "label": "한국 총선(23대) 전 20거래일", "conf": 2, "market": "KR", "tentative": false, "approx": true}, {"id": "election_kr_big", "start": "2028-04-13", "end": "2028-05-10", "tone": "weak", "label": "한국 총선(23대) 후 20거래일", "conf": 2, "market": "KR", "tentative": false, "approx": true}, {"id": "kr_chuseok", "start": "2028-09-25", "end": "2028-09-29", "tone": "weak", "label": "추석 전 5거래일", "conf": 3, "market": "KR", "tentative": true, "approx": true}, {"id": "kr_chuseok", "start": "2028-10-02", "end": "2028-10-04", "tone": "closed", "label": "추석 연휴", "conf": 3, "market": "KR", "tentative": true, "approx": false}, {"id": "kr_chuseok", "start": "2028-10-05", "end": "2028-10-11", "tone": "strong", "label": "추석 후 5거래일", "conf": 3, "market": "KR", "tentative": true, "approx": true}, {"id": "kr_bigholder", "start": "2028-12-12", "end": "2028-12-26", "tone": "weak", "label": "대주주 양도세 회피 매도(코스닥)", "conf": 3, "market": "KR", "tentative": false, "approx": true}, {"id": "us_santa", "start": "2028-12-22", "end": "2029-01-02", "tone": "strong", "label": "산타 랠리 구간", "conf": 3, "market": "", "tentative": false, "approx": false}], "pins": [{"id": "kr_opex", "date": "2026-01-08", "tone": "vol", "label": "옵션 만기일(월)", "conf": 1, "tentative": false}, {"id": "kr_opex", "date": "2026-02-12", "tone": "vol", "label": "옵션 만기일(월)", "conf": 1, "tentative": false}, {"id": "kr_quad", "date": "2026-03-12", "tone": "vol", "label": "네 마녀의 날(선물·옵션 동시만기)", "conf": 2, "tentative": false}, {"id": "us_triple", "date": "2026-03-20", "tone": "vol", "label": "미국 트리플 위칭", "conf": 2, "tentative": false}, {"id": "kr_opex", "date": "2026-04-09", "tone": "vol", "label": "옵션 만기일(월)", "conf": 1, "tentative": false}, {"id": "kr_opex", "date": "2026-05-14", "tone": "vol", "label": "옵션 만기일(월)", "conf": 1, "tentative": false}, {"id": "kr_quad", "date": "2026-06-11", "tone": "vol", "label": "네 마녀의 날(선물·옵션 동시만기)", "conf": 2, "tentative": false}, {"id": "k200_rebal", "date": "2026-06-12", "tone": "vol", "label": "코스피200 정기변경 효력일", "conf": 2, "tentative": false}, {"id": "us_triple", "date": "2026-06-19", "tone": "vol", "label": "미국 트리플 위칭", "conf": 2, "tentative": false}, {"id": "kr_opex", "date": "2026-07-09", "tone": "vol", "label": "옵션 만기일(월)", "conf": 1, "tentative": false}, {"id": "kr_opex", "date": "2026-08-13", "tone": "vol", "label": "옵션 만기일(월)", "conf": 1, "tentative": false}, {"id": "kr_quad", "date": "2026-09-10", "tone": "vol", "label": "네 마녀의 날(선물·옵션 동시만기)", "conf": 2, "tentative": false}, {"id": "us_triple", "date": "2026-09-18", "tone": "vol", "label": "미국 트리플 위칭", "conf": 2, "tentative": false}, {"id": "kr_opex", "date": "2026-10-08", "tone": "vol", "label": "옵션 만기일(월)", "conf": 1, "tentative": false}, {"id": "fomc_drift", "date": "2026-10-27", "tone": "info", "label": "FOMC 전날", "conf": 2, "tentative": false}, {"id": "fomc_drift", "date": "2026-10-28", "tone": "info", "label": "FOMC", "conf": 2, "tentative": false}, {"id": "election_us_midterm", "date": "2026-11-03", "tone": "info", "label": "미국 중간선거", "conf": 3, "tentative": false}, {"id": "msci_review", "date": "2026-11-11", "tone": "vol", "label": "MSCI 리뷰 발표", "conf": 2, "tentative": true}, {"id": "kr_opex", "date": "2026-11-12", "tone": "vol", "label": "옵션 만기일(월)", "conf": 1, "tentative": false}, {"id": "msci_review", "date": "2026-12-01", "tone": "vol", "label": "MSCI 반영", "conf": 2, "tentative": true}, {"id": "fomc_drift", "date": "2026-12-08", "tone": "info", "label": "FOMC 전날", "conf": 2, "tentative": false}, {"id": "fomc_drift", "date": "2026-12-09", "tone": "info", "label": "FOMC", "conf": 2, "tentative": false}, {"id": "kr_quad", "date": "2026-12-10", "tone": "vol", "label": "네 마녀의 날(선물·옵션 동시만기)", "conf": 2, "tentative": false}, {"id": "k200_rebal", "date": "2026-12-11", "tone": "vol", "label": "코스피200 정기변경 효력일", "conf": 2, "tentative": false}, {"id": "us_triple", "date": "2026-12-18", "tone": "vol", "label": "미국 트리플 위칭", "conf": 2, "tentative": false}, {"id": "kr_bigholder_deadline", "date": "2026-12-28", "tone": "info", "label": "대주주 회피 매도 마감일", "conf": 3, "tentative": false}, {"id": "kr_exdiv", "date": "2026-12-29", "tone": "info", "label": "12월 결산 배당락일", "conf": 1, "tentative": false}, {"id": "kr_opex", "date": "2027-01-14", "tone": "vol", "label": "옵션 만기일(월)", "conf": 1, "tentative": false}, {"id": "kr_opex", "date": "2027-02-11", "tone": "vol", "label": "옵션 만기일(월)", "conf": 1, "tentative": false}, {"id": "kr_quad", "date": "2027-03-11", "tone": "vol", "label": "네 마녀의 날(선물·옵션 동시만기)", "conf": 2, "tentative": false}, {"id": "us_triple", "date": "2027-03-19", "tone": "vol", "label": "미국 트리플 위칭", "conf": 2, "tentative": false}, {"id": "kr_opex", "date": "2027-04-08", "tone": "vol", "label": "옵션 만기일(월)", "conf": 1, "tentative": false}, {"id": "kr_opex", "date": "2027-05-12", "tone": "vol", "label": "옵션 만기일(월)", "conf": 1, "tentative": false}, {"id": "kr_quad", "date": "2027-06-10", "tone": "vol", "label": "네 마녀의 날(선물·옵션 동시만기)", "conf": 2, "tentative": false}, {"id": "k200_rebal", "date": "2027-06-11", "tone": "vol", "label": "코스피200 정기변경 효력일", "conf": 2, "tentative": false}, {"id": "us_triple", "date": "2027-06-18", "tone": "vol", "label": "미국 트리플 위칭", "conf": 2, "tentative": false}, {"id": "kr_opex", "date": "2027-07-08", "tone": "vol", "label": "옵션 만기일(월)", "conf": 1, "tentative": false}, {"id": "kr_opex", "date": "2027-08-12", "tone": "vol", "label": "옵션 만기일(월)", "conf": 1, "tentative": false}, {"id": "kr_quad", "date": "2027-09-09", "tone": "vol", "label": "네 마녀의 날(선물·옵션 동시만기)", "conf": 2, "tentative": false}, {"id": "us_triple", "date": "2027-09-17", "tone": "vol", "label": "미국 트리플 위칭", "conf": 2, "tentative": false}, {"id": "kr_opex", "date": "2027-10-14", "tone": "vol", "label": "옵션 만기일(월)", "conf": 1, "tentative": false}, {"id": "kr_opex", "date": "2027-11-11", "tone": "vol", "label": "옵션 만기일(월)", "conf": 1, "tentative": false}, {"id": "kr_quad", "date": "2027-12-09", "tone": "vol", "label": "네 마녀의 날(선물·옵션 동시만기)", "conf": 2, "tentative": false}, {"id": "k200_rebal", "date": "2027-12-10", "tone": "vol", "label": "코스피200 정기변경 효력일", "conf": 2, "tentative": false}, {"id": "us_triple", "date": "2027-12-17", "tone": "vol", "label": "미국 트리플 위칭", "conf": 2, "tentative": false}, {"id": "kr_bigholder_deadline", "date": "2027-12-28", "tone": "info", "label": "대주주 회피 매도 마감일", "conf": 3, "tentative": false}, {"id": "kr_exdiv", "date": "2027-12-29", "tone": "info", "label": "12월 결산 배당락일", "conf": 1, "tentative": false}, {"id": "kr_opex", "date": "2028-01-13", "tone": "vol", "label": "옵션 만기일(월)", "conf": 1, "tentative": false}, {"id": "kr_opex", "date": "2028-02-10", "tone": "vol", "label": "옵션 만기일(월)", "conf": 1, "tentative": false}, {"id": "kr_quad", "date": "2028-03-09", "tone": "vol", "label": "네 마녀의 날(선물·옵션 동시만기)", "conf": 2, "tentative": false}, {"id": "us_triple", "date": "2028-03-17", "tone": "vol", "label": "미국 트리플 위칭", "conf": 2, "tentative": false}, {"id": "election_kr_big", "date": "2028-04-12", "tone": "strong_then_weak", "label": "한국 총선(23대)", "conf": 2, "tentative": false}, {"id": "kr_opex", "date": "2028-04-13", "tone": "vol", "label": "옵션 만기일(월)", "conf": 1, "tentative": false}, {"id": "kr_opex", "date": "2028-05-11", "tone": "vol", "label": "옵션 만기일(월)", "conf": 1, "tentative": false}, {"id": "kr_quad", "date": "2028-06-08", "tone": "vol", "label": "네 마녀의 날(선물·옵션 동시만기)", "conf": 2, "tentative": false}, {"id": "k200_rebal", "date": "2028-06-09", "tone": "vol", "label": "코스피200 정기변경 효력일", "conf": 2, "tentative": false}, {"id": "us_triple", "date": "2028-06-16", "tone": "vol", "label": "미국 트리플 위칭", "conf": 2, "tentative": false}, {"id": "kr_opex", "date": "2028-07-13", "tone": "vol", "label": "옵션 만기일(월)", "conf": 1, "tentative": false}, {"id": "kr_opex", "date": "2028-08-10", "tone": "vol", "label": "옵션 만기일(월)", "conf": 1, "tentative": false}, {"id": "kr_quad", "date": "2028-09-14", "tone": "vol", "label": "네 마녀의 날(선물·옵션 동시만기)", "conf": 2, "tentative": false}, {"id": "us_triple", "date": "2028-09-15", "tone": "vol", "label": "미국 트리플 위칭", "conf": 2, "tentative": false}, {"id": "kr_opex", "date": "2028-10-12", "tone": "vol", "label": "옵션 만기일(월)", "conf": 1, "tentative": false}, {"id": "election_us_president", "date": "2028-11-07", "tone": "info", "label": "미국 대선", "conf": 2, "tentative": false}, {"id": "kr_opex", "date": "2028-11-09", "tone": "vol", "label": "옵션 만기일(월)", "conf": 1, "tentative": false}, {"id": "kr_quad", "date": "2028-12-14", "tone": "vol", "label": "네 마녀의 날(선물·옵션 동시만기)", "conf": 2, "tentative": false}, {"id": "us_triple", "date": "2028-12-15", "tone": "vol", "label": "미국 트리플 위칭", "conf": 2, "tentative": false}, {"id": "k200_rebal", "date": "2028-12-15", "tone": "vol", "label": "코스피200 정기변경 효력일", "conf": 2, "tentative": false}, {"id": "kr_bigholder_deadline", "date": "2028-12-26", "tone": "info", "label": "대주주 회피 매도 마감일", "conf": 3, "tentative": false}, {"id": "kr_exdiv", "date": "2028-12-27", "tone": "info", "label": "12월 결산 배당락일", "conf": 1, "tentative": false}], "cards": [{"id": "kr_nov", "kind": "month", "name": "코스피는 11월이 가장 좋다", "saying": "11월에 사라 — 1년 중 가장 잘 오르는 달", "stat": "1980~2024 평균 +2.78%(12달 중 1위) · 2000~2025 +2.30%(1위)", "note": "세 기간(44년·26년·10년) 모두 11월이 상위 — 달력에서 가장 튼튼한 줄", "tone": "strong", "conf": 3, "market": "KR", "category": "월별 계절성"}, {"id": "kr_aug_sep", "kind": "month", "name": "코스피는 8~9월이 가장 나쁘다", "saying": "8월에 쉬어라 — '5월에 팔아라'의 한국판", "stat": "1980~2024 8월 -1.37%(최하위)·9월 -0.71% · 2000~2025 9월 -0.68%·8월 -0.47%·10월 -0.34%", "note": "'5월에 팔고 떠나라'는 한국에선 안 맞는다(5월 +0.31%). 서머랠리는 7월 오르고 8월 뱉는다", "tone": "weak", "conf": 3, "market": "KR", "category": "월별 계절성"}, {"id": "kr_jan_q", "kind": "month", "name": "1월 효과 — 코스닥·중소형주", "saying": "연초엔 형(코스피)보다 아우(코스닥)", "stat": "1월 평균 코스닥 +2.9% vs 코스피 +0.8%(2000~) · 2009~2020 코스닥 +4.87% vs +1.62%", "note": "초과수익은 월초·1월 상반월에 집중. 대형주 쏠림 장에선 무색했던 해도 있다", "tone": "strong", "conf": 2, "market": "KR", "category": "월별 계절성"}, {"id": "us_sep", "kind": "month", "name": "미국 9월 효과", "saying": "September is the cruelest month", "stat": "S&P 1950~ 평균 -0.5~-0.7%, 상승 확률 45% — 12달 중 유일하게 승률 50% 미만", "note": "", "tone": "weak", "conf": 3, "market": "US", "category": "월별 계절성"}, {"id": "us_sell_may", "kind": "month", "name": "Sell in May (할로윈 지표)", "saying": "5월에 팔고 10월 말(할로윈)에 돌아오라", "stat": "11~4월 +7.2% vs 5~10월 +2.1%(1950~2024) — 단 2017~2025 5~10월은 9년 중 8년 상승·평균 +7.4%", "note": "최근엔 약해졌다. 한국엔 안 맞는다", "tone": "weak", "conf": 2, "market": "US", "category": "월별 계절성"}, {"id": "us_santa", "kind": "pin", "name": "산타 랠리", "saying": "12월 마지막 5거래일 + 1월 첫 2거래일", "stat": "승률 76~79%, 평균 +1.3%(1950~). 실패하면 다음 해 약세 경고(1994~ 랠리 성공 23회 중 18회 다음 해 상승)", "note": "", "tone": "strong", "conf": 3, "market": "", "category": "날짜 이벤트"}, {"id": "cycle_midterm_weak", "kind": "cycle", "name": "중간선거해(짝수해) 6·9월 약세", "saying": "짝수해 여름~가을은 조심 — 4년 중 가장 약한 구간", "stat": "중간선거해 S&P 6월 -1.3%·9월 -1.5%, 2~3분기가 4년 주기 최약. 연간 +4.6%(1950~, 4개년 중 최저). 코스피도 짝수해 9월 낙폭이 홀수해보다 크다", "note": "", "tone": "weak", "conf": 3, "market": "", "category": "4년 주기(짝수해)"}, {"id": "cycle_midterm_strong", "kind": "cycle", "name": "중간선거해 10~11월 반등", "saying": "10월에 조심하되 10월 말부턴 사라, 11월부터 반등", "stat": "중간선거해 S&P 10월 +2.4%·11월 +2.2%(1950~ 두 번째로 좋은 달 둘), 10월 상승 확률 74~79%. 선거 후 6개월 상승 96%(24회 중 23회), 10/31 이후 12개월 한 번도 안 빠짐. 코스피 10월말→연말 평균 +6%(1975~)", "note": "2차대전 후 10월에 끝난 약세장 12번 중 8번이 중간선거해 — '10월 저점'의 근거. 반론: 선거 전 낙폭이 얕으면 반등도 작다", "tone": "strong", "conf": 3, "market": "", "category": "4년 주기(짝수해)"}, {"id": "cycle_pre_strong", "kind": "cycle", "name": "대선 전 해(3년차) 최강", "saying": "대선 전 해는 4년 중 가장 좋은 해", "stat": "S&P 3년차 연평균 +17.2%(1950~, 가격) · Dow·S&P 1943~2020 +15%. 중간선거해 4분기~3년차 2분기 '스위트 스팟' 약 +20%", "note": "", "tone": "strong", "conf": 3, "market": "", "category": "4년 주기(짝수해)"}, {"id": "cycle_election", "kind": "cycle", "name": "대선해 선거 전 약세·후 강세", "saying": "선거 전엔 불확실성, 결과 나오면 안도", "stat": "대선해 S&P 연평균 8~12%(출처별). 코스피는 2000~2025 미국 선거 전 하락·후 반등 패턴(한경)", "note": "", "tone": "weak", "conf": 2, "market": "", "category": "4년 주기(짝수해)"}, {"id": "kr_bigholder", "kind": "window", "name": "대주주 양도세 회피 매도(코스닥)", "saying": "12월 코스닥은 큰손이 판다 — 배당락 직전이 코스닥 바닥", "stat": "개인 코스닥 12월 평균 -2,800억 / 1월 +3,600억(자본시장연구원). 2012년 이후 매년 12월 순매도. 2024 마감일 하루 -3,825억", "note": "기준 종목당 50억(2026 유지). 판정일 12/31 보유, 결제 T+2라 마감 = 마지막 거래일 2거래일 전. 그해 세제 변경이 강도를 가른다(2020은 뒤집힘)", "tone": "weak", "conf": 3, "market": "KR", "category": "구간"}, {"id": "kr_bigholder_deadline", "kind": "pin", "name": "대주주 회피 매도 마감일", "saying": "이날 장 마감 전 체결까지 연내 결제", "stat": "2026년 12/28(월) — 12/31 휴장, 마지막 거래일 12/30, T+2", "note": "", "tone": "info", "conf": 3, "market": "", "category": "날짜 이벤트"}, {"id": "kr_exdiv", "kind": "pin", "name": "12월 결산 배당락일", "saying": "배당 받으려면 배당락 전날까지 매수", "stat": "통계 미확인. 선배당후투자로 기준일을 2~3월로 옮긴 기업이 늘어 연말 배당락 효과는 약해지는 중", "note": "", "tone": "info", "conf": 1, "market": "", "category": "날짜 이벤트"}, {"id": "kr_jan_rebound", "kind": "window", "name": "1월 상반월 코스닥 반등", "saying": "12월에 판 것이 1월에 돌아온다", "stat": "코스닥 개인 1월 +3,600억. 1월 초과수익은 월초·상반월 집중", "note": "", "tone": "strong", "conf": 2, "market": "KR", "category": "구간"}, {"id": "kr_chuseok", "kind": "window", "name": "추석 전 약세 → 후 강세", "saying": "추석 전엔 쉬고, 연휴 끝나면 사라", "stat": "연휴 전 5거래일 -0.05%(대신 2004~2025) / -0.43%(하나 2000~2024) → 후 5거래일 +1.34%, 22회 중 15회 상승(68%) · KRX 16승 9패", "note": "2021(-2.15%)·2022(-3.83%)는 대외 악재로 예외", "tone": "weak_then_strong", "conf": 3, "market": "KR", "category": "구간"}, {"id": "kr_seol", "kind": "window", "name": "설 연휴 — 효과 뚜렷하지 않음", "saying": "설 끝나면 오른다? — 반반", "stat": "2016~2025 연휴 후 첫날·5거래일 모두 5승 5패, 평균 -0.10%. 최근 5년은 첫날 5연속 상승", "note": "연휴 중 해외 이벤트 노출 주의 정도. 추석과 달리 반등 구간으로 적기엔 약하다", "tone": "info", "conf": 1, "market": "KR", "category": "구간"}, {"id": "election_kr_big", "kind": "window", "name": "총선·대선 전 상승 → 후 하락", "saying": "선거 전엔 오르고, 끝나면 빠진다", "stat": "대선 전 20거래일 +4.44%(2000~). 총선 후 3개월 9회 중 6회 하락(1987~)", "note": "", "tone": "strong_then_weak", "conf": 2, "market": "KR", "category": "구간"}, {"id": "election_kr_president", "kind": "window", "name": "대선 전 상승 → 후 하락", "saying": "선거 전엔 오르고, 끝나면 빠진다", "stat": "대선 전 20거래일 +4.44%(2000~)", "note": "", "tone": "strong_then_weak", "conf": 2, "market": "KR", "category": "구간"}, {"id": "election_kr_local", "kind": "window", "name": "지방선거는 전후 모두 약세", "saying": "지방선거만 선거 전 상승 효과가 없다", "stat": "지방선거 전 20거래일 -1.74%, 후 20거래일 -3.76%(6회, 2000~). 후 3개월 6회 중 3회 하락", "note": "", "tone": "weak", "conf": 2, "market": "KR", "category": "구간"}, {"id": "election_us_midterm", "kind": "window", "name": "미국 중간선거일", "saying": "불확실성 해소 → 연말 랠리의 출발점", "stat": "선거 후 6개월 S&P 상승 96%, 11월 S&P +2.8%·나스닥100 +4.2%(2000~ 중간선거해). 신영: 본격 반등은 11월 중순 이후", "note": "", "tone": "info", "conf": 3, "market": "US", "category": "구간"}, {"id": "election_us_president", "kind": "window", "name": "미국 대선일", "saying": "선거 전 약세, 결과 확인 후 강세", "stat": "대선해 연평균 8~12%", "note": "", "tone": "info", "conf": 2, "market": "US", "category": "구간"}, {"id": "kr_quad", "kind": "pin", "name": "네 마녀의 날(선물·옵션 동시만기)", "saying": "만기일엔 장중 출렁임 — 방향은 무작위", "stat": "2026-06-11 장중 -4% → 종가 +0.43% / 2026-09-10 -0.25%. 장기 통계 없음(사례만)", "note": "코스피200 정기변경(6·12월)은 이 다음 거래일 효력 — 편입 종목은 4주 전부터 평균 +8.2%(한투, 최근 5년)", "tone": "vol", "conf": 2, "market": "", "category": "날짜 이벤트"}, {"id": "kr_opex", "kind": "pin", "name": "옵션 만기일(월)", "saying": "매월 둘째 목요일", "stat": "통계 없음 — 표시만", "note": "", "tone": "vol", "conf": 1, "market": "", "category": "날짜 이벤트"}, {"id": "us_triple", "kind": "pin", "name": "미국 트리플 위칭", "saying": "셋째 금요일, 목·금에 약세 몰림", "stat": "2000년 이후 107회 중 S&P 상승 마감 절반 미만", "note": "", "tone": "vol", "conf": 2, "market": "", "category": "날짜 이벤트"}, {"id": "k200_rebal", "kind": "pin", "name": "코스피200 정기변경 효력일", "saying": "변경일 당일 인덱스 자금까지 겹쳐 수급 출렁", "stat": "편입 종목 변경일 4주 전부터 평균 +8.2%(한투, 최근 5년)", "note": "", "tone": "vol", "conf": 2, "market": "", "category": "날짜 이벤트"}, {"id": "msci_review", "kind": "pin", "name": "MSCI 반기 리뷰(5·11월)", "saying": "발표일에 편입·편출 확인, 반영일에 패시브 매매", "stat": "2025-11은 11/6 발표·11/24 반영. 2026-11은 비공식 캘린더(11/11·12/1)뿐", "note": "", "tone": "vol", "conf": 2, "market": "", "category": "날짜 이벤트"}, {"id": "fomc_drift", "kind": "pin", "name": "FOMC(전날 드리프트)", "saying": "FOMC 전 24시간에 수익이 몰린다", "stat": "S&P 발표 전 24시간 +49bp, 초과수익의 80%(1994~2011, Lucca·Moench). 2011년 이후 약화/소멸 보고", "note": "", "tone": "info", "conf": 2, "market": "", "category": "날짜 이벤트"}, {"id": "tom", "kind": "signal", "name": "월말·월초 효과", "saying": "월 첫 거래일이 좋다", "stat": "SPY 33년 월 첫 거래일 평균 +0.22%, 월말 전후 ~10일이 나머지보다 우수 — 월초 펀드 자금 유입 해석", "note": "", "tone": "strong", "conf": 2, "market": "", "category": "달력 밖 신호"}, {"id": "jan_barometer", "kind": "signal", "name": "1월 바로미터", "saying": "1월이 가면 1년이 간다", "stat": "코스피 1월 상승 → 연간 플러스 81%(1985~2024) · S&P 86%(1945~). 상관일 뿐 인과는 아니다", "note": "", "tone": "info", "conf": 2, "market": "", "category": "달력 밖 신호"}], "built": "2026-10-29 00:06", "holidays_note": "거래일 창은 dates.yml 의 KRX 휴장일 기준 — 빠진 휴일이 있으면 하루 어긋날 수 있어 ≈ 로 적는다"}</script>
+<script>
+(function(){
+const D=JSON.parse(document.getElementById('data').textContent);
+const $=s=>document.querySelector(s);
+const esc=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const pad=n=>String(n).padStart(2,'0');
+const iso=d=>d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());
+const WD='월화수목금토일';
+// 오늘은 KST 로 고정 — 보는 기기의 시간대로 하면 새벽에 날짜가 하루 어긋난다
+const kst=new Date(new Date().toLocaleString('en-US',{timeZone:'Asia/Seoul'}));
+const today=new Date(kst.getFullYear(),kst.getMonth(),kst.getDate());
+const T=iso(today);
+const stars=n=>'<span class="stars">'+'★'.repeat(n)+'</span>';
+const tone=t=>({strong:'강세',weak:'약세',vol:'변동성',info:'일정',closed:'휴장'}[t]||t);
+const badge=t=>'<span class="badge b-'+t+'">'+tone(t)+'</span>';
+const tent=p=>p.tentative?'<span class="tent">~</span>':'';
+const fmt=s=>{const [y,m,d]=s.split('-').map(Number);const dd=new Date(y,m-1,d);return m+'/'+d+'('+WD[(dd.getDay()+6)%7]+')'};
+const cardOf={};D.cards.forEach(c=>cardOf[c.id]=c);
+const sayOf=id=>cardOf[id]?'<span class="say">“'+esc(cardOf[id].saying)+'”</span>':'';
+
+let selYear=D.years.includes(today.getFullYear())?today.getFullYear():D.years[0];
+let calY=selYear, calM=today.getMonth()+1;
+$('#today-line').innerHTML='오늘 <b>'+T+'</b> · '+selYear+'년은 <b>'+(selYear%2?'홀수해':'짝수해')+' — '+esc(D.phase_ko[D.phases[selYear]])+'</b>';
+$('#built').textContent=D.built;
+
+// ── 지금 ──
+function renderNow(){
+  const y=today.getFullYear(),m=today.getMonth()+1;
+  const ms=D.months.filter(x=>x.year===y&&x.month===m);
+  const act=D.windows.filter(w=>w.start<=T&&T<=w.end&&w.tone!=='closed');
+  const lim=new Date(today);lim.setDate(lim.getDate()+45);const L=iso(lim);
+  const up=D.pins.filter(p=>p.date>=T&&p.date<=L);
+  const upw=D.windows.filter(w=>w.start>T&&w.start<=L&&w.tone!=='closed');
+  const li=(t,b,s)=>'<li>'+badge(t)+b+(s?' '+s:'')+'</li>';
+  let a='<div><h3>이번 달('+m+'월)의 계절성</h3><ul>';
+  a+=ms.length?ms.map(x=>li(x.tone,(x.cycle?'<b>올해 주기</b> · ':x.market==='KR'?'코스피 · ':'미국 · ')+esc(x.label)+' '+stars(x.conf),sayOf(x.id))).join(''):'<li>이 달에 걸린 월별 격언 없음</li>';
+  a+='</ul><h3 style="margin-top:10px">지금 지나는 구간</h3><ul>';
+  a+=act.length?act.map(w=>li(w.tone,esc(w.label)+tent(w)+' <span class="when">'+fmt(w.start)+'~'+fmt(w.end)+(w.approx?'≈':'')+'</span> '+stars(w.conf),sayOf(w.id))).join(''):'<li>없음</li>';
+  a+='</ul></div>';
+  let b='<div><h3>앞으로 45일</h3><ul>';
+  const items=[...upw.map(w=>({d:w.start,h:li(w.tone,esc(w.label)+tent(w)+' <span class="when">'+fmt(w.start)+'~'+fmt(w.end)+(w.approx?'≈':'')+'</span> '+stars(w.conf),sayOf(w.id))})),
+               ...up.map(p=>({d:p.date,h:li(p.tone,esc(p.label)+tent(p)+' <span class="when">'+fmt(p.date)+'</span> '+stars(p.conf))}))].sort((x,y)=>x.d<y.d?-1:1);
+  b+=items.length?items.map(x=>x.h).join(''):'<li>없음</li>';
+  b+='</ul></div>';
+  $('#now').innerHTML=a+b;
+}
+
+// ── 1년 띠 ──
+function renderStrip(){
+  $('#ysel').innerHTML='연도 '+D.years.map(y=>'<button data-y="'+y+'" class="'+(y===selYear?'on':'')+'">'+y+'</button>').join('')+' <span class="note" style="margin:0 0 0 8px">'+esc(D.phase_ko[D.phases[selYear]])+'</span>';
+  $('#ysel').querySelectorAll('button').forEach(b=>b.onclick=()=>{selYear=+b.dataset.y;calY=selYear;calM=(selYear===today.getFullYear())?today.getMonth()+1:1;renderStrip();renderCal()});
+  const rows=[['코스피','KR'],['미국','US'],['올해 주기','CYCLE']];
+  let h='<div class="strip"><div class="lab"></div>'+Array.from({length:12},(_,i)=>'<div class="lab" style="text-align:center">'+(i+1)+'월</div>').join('')+'</div>';
+  for(const [lab,mk] of rows){
+    h+='<div class="strip"><div class="lab">'+lab+'</div>';
+    for(let m=1;m<=12;m++){
+      const xs=D.months.filter(x=>x.year===selYear&&x.month===m&&x.market===mk);
+      const t=xs.find(x=>x.tone==='strong')?'strong':xs.find(x=>x.tone==='weak')?'weak':'';
+      const cur=(selYear===today.getFullYear()&&m===today.getMonth()+1)?' cur':'';
+      const txt=xs.length?xs.map(x=>'<span class="v">'+tone(x.tone)+'</span><small>'+esc(x.label.replace(/^(코스피는|미국|중간선거해|대선 전 해|대선해)\s*/,''))+'</small>').join(''):'';
+      h+='<div class="m '+t+cur+'" data-m="'+m+'" title="'+esc(xs.map(x=>x.label).join(' / '))+'">'+txt+'</div>';
+    }
+    h+='</div>';
+  }
+  $('#strip').innerHTML=h;
+  $('#strip').querySelectorAll('.m').forEach(c=>c.onclick=()=>{calY=selYear;calM=+c.dataset.m;renderCal();document.getElementById('s-cal').open=true;document.getElementById('s-cal').scrollIntoView({behavior:'smooth'})});
+}
+
+// ── 달력 ──
+function renderCal(){
+  const y=calY,m=calM;
+  $('#ctitle').textContent=y+'년 '+m+'월';
+  const first=new Date(y,m-1,1),lead=(first.getDay()+6)%7,last=new Date(y,m,0).getDate();
+  const closedSet=new Set(D.holidays);D.windows.filter(w=>w.tone==='closed').forEach(w=>{for(let d=new Date(w.start+'T00:00');iso(d)<=w.end;d.setDate(d.getDate()+1))closedSet.add(iso(d))});
+  let h='<div class="cal">'+'월화수목금토일'.split('').map(w=>'<div class="cal-h">'+w+'</div>').join('');
+  for(let i=0;i<lead;i++)h+='<div class="cal-cell empty"></div>';
+  const mlist=D.months.filter(x=>x.year===y&&x.month===m);
+  for(let d=1;d<=last;d++){
+    const dd=new Date(y,m-1,d),s=iso(dd),wk=(dd.getDay()+6)%7;
+    const trading=wk<5&&!closedSet.has(s);
+    let k='cal-cell';if(s===T)k+=' today';if(wk>=5)k+=' wknd';if(closedSet.has(s))k+=' hol';
+    let inner='<span class="cal-d">'+d+'</span>';
+    for(const w of D.windows){
+      if(!trading||w.tone==='closed'||s<w.start||s>w.end)continue;   // 창은 거래일 창 — 주말·휴장엔 안 그린다
+      const lab=(s===w.start||wk===0)?'<span class="bandlab" title="'+esc(w.label)+'">'+esc(w.label)+(w.tentative?'~':'')+'</span>':'';
+      inner+='<span class="band '+w.tone+'" title="'+esc(w.label)+' '+w.start+'~'+w.end+'"></span>'+lab;
+    }
+    for(const p of D.pins){ if(p.date!==s)continue;
+      inner+='<a class="chip '+p.tone+'" href="#g-'+esc(p.id)+'" title="'+esc(p.label)+'">'+esc(p.label)+(p.tentative?'~':'')+'</a>';
+    }
+    h+='<div class="'+k+'">'+inner+'</div>';
+  }
+  h+='</div>';
+  $('#cal').innerHTML=h;
+  const t=mlist.length?'이 달의 월별 격언: '+mlist.map(x=>badge(x.tone)+(x.cycle?'올해 주기 · ':x.market==='KR'?'코스피 · ':'미국 · ')+esc(x.label)+' '+stars(x.conf)).join(' &nbsp; '):'이 달에 걸린 월별 격언 없음';
+  $('#calnote').innerHTML=t;
+  $('#cal').querySelectorAll('a.chip').forEach(a=>a.onclick=()=>{const el=document.getElementById(a.getAttribute('href').slice(1));if(el){el.open=true;document.getElementById('s-rules').open=true}});
+}
+function step(n){let y=calY,m=calM+n;if(m<1){m=12;y--}if(m>12){m=1;y++}if(!D.years.includes(y))return;calY=y;calM=m;renderCal()}
+$('#cprev').onclick=()=>step(-1);$('#cnext').onclick=()=>step(1);
+$('#ctoday').onclick=()=>{calY=today.getFullYear();calM=today.getMonth()+1;if(!D.years.includes(calY)){calY=D.years[0];calM=1}renderCal()};
+
+// ── 카드 ──
+function renderCards(){
+  const cats=[...new Set(D.cards.map(c=>c.category))];
+  let h='';
+  for(const cat of cats){
+    h+='<div class="cat">'+esc(cat)+'</div>';
+    for(const c of D.cards.filter(x=>x.category===cat)){
+      h+='<details class="gcard" id="g-'+esc(c.id)+'"><summary>'+badge(c.tone==='weak_then_strong'?'weak':c.tone==='strong_then_weak'?'strong':c.tone)+'<b>'+esc(c.name)+'</b><span class="meta">'+stars(c.conf)+(c.market?' · '+esc(c.market):'')+'</span></summary>';
+      h+='<p class="q">“'+esc(c.saying)+'”</p><p><b>근거</b> — '+esc(c.stat)+'</p>'+(c.note?'<p class="note">'+esc(c.note)+'</p>':'')+'</details>';
+    }
+  }
+  $('#cards').innerHTML=h;
+}
+renderNow();renderStrip();renderCal();renderCards();
+// 섹션 접은 상태 기억(매크로 데스크와 같은 방식)
+try{const K='mcalSections',st=JSON.parse(localStorage.getItem(K)||'{}')||{};
+  document.querySelectorAll('details.sec').forEach(d=>{if(st[d.id]===false)d.open=false;d.addEventListener('toggle',()=>{st[d.id]=d.open;try{localStorage.setItem(K,JSON.stringify(st))}catch(e){}})})}catch(e){}
+})();
+</script>
+</body></html>

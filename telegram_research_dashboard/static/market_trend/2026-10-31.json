@@ -1,0 +1,697 @@
+{
+ "date": "2026-10-31",
+ "meta": {
+  "window": "10-30 06:00~10-31 06:00 KST",
+  "engine": "Gemini(gemini-2.5-flash)",
+  "generated_at": "2026-10-31T06:35+09:00"
+ },
+ "stats": {
+  "channels": 93,
+  "messages": 2062,
+  "groups": 1907
+ },
+ "one_liner": "AI 투자 불확실성 및 빅테크 실적 쇼크가 시장 전반에 하방 압력을 가하는 가운데, 자동차 기업들의 실적 부진과 방산·조선 섹터의 개별 이슈가 부각되었습니다.",
+ "themes": [
+  {
+   "name": "AI 투자 불확실성 및 빅테크 실적 쇼크",
+   "narrative": "네이버의 엔비디아 투자 납입일 확정 소식 등 AI 관련 투자는 이어지지만, 알파벳의 실적 쇼크와 마이크로소프트의 대규모 회사채 발행을 통한 AI 투자 재원 마련 소식은 AI 투자 수익률에 대한 시장의 우려를 재점화하며 기술주 전반에 하방 압력을 가했습니다.",
+   "status": "ongoing",
+   "strength": 5,
+   "keywords": [
+    "그림",
+    "연합인포",
+    "저작권자",
+    "학습 활용",
+    "AI 학습",
+    "yna.co.kr",
+    "yna.co.kr 저작권자",
+    "학습",
+    "천억원",
+    "쇼크",
+    "일제히"
+   ],
+   "evidence": [
+    {
+     "channel": "키움증권 해외선물 톡톡",
+     "quote": "네이버, 엔비디아 10억달러 투자 납입일 11월 6일로 확정 AI 팩토리 투자 선결조건 충족…엔비디아 3대 주주로 부상 예상"
+    },
+    {
+     "channel": "신한 리서치",
+     "quote": "시장이 믿음을 지닌 AI 실적에서 균열이 나며 쇼크가 발생했습니다. Alphabet(-12.6%) 실적 미스+FCF 적자 확대 여파 이어졌고 9년 만에 회사채를 발행(250억$)…"
+    },
+    {
+     "channel": "김현석(자본주의 바이어스 있는 채널입니다)",
+     "quote": "-알파벳 3분기 실적 쇼크로 상장(2004년) 이후 최대 일일 하락률 기록, 검색 매출 성장 둔화와 2분기 연속 마이너스 잉여현금흐름(-90.7억 달러)이 AI 투자 회수 우려 재점화"
+    }
+   ]
+  },
+  {
+   "name": "자동차/모빌리티 기업 실적 부진",
+   "narrative": "기아와 에이피알이 시장 기대치를 하회하는 3분기 실적을 발표했으며, 현대모비스 역시 지배주주 순이익이 컨센서스를 크게 밑도는 등 자동차 및 모빌리티 섹터 전반의 실적 부진이 확인되었습니다.",
+   "status": "new",
+   "strength": 4,
+   "keywords": [
+    "기아",
+    "에이피알",
+    "현대모비스"
+   ],
+   "evidence": [
+    {
+     "channel": "AWAKE - 실시간 주식 공시 정리채널",
+     "quote": "기업명: 에이피알(시가총액: 10조 8,758억) A278470 보고서명: 연결재무제표기준영업(잠정)실적(공정공시) 매출액 : 7,731억(예상치 : 7,853억/ -2%) 영업익 : 1,606억(예상치 : 1,812억/ -11%) 순이익 : 1,102억(예상치 : 1,299억/ -15…"
+    },
+    {
+     "channel": "epic AI - 투자 어시스턴트",
+     "quote": "기아의 3분기 연결 매출은 전년 동기 대비 10.1% 증가한 31조5974억원으로 역대 3분기 최대를 기록했으며, 영업이익은 24.3% 증가한 1조8183억원이지만 연합인포맥스 집계 전망치를 22% 밑돌았고"
+    },
+    {
+     "channel": "메리츠증권 리서치",
+     "quote": "현대모비스 업데이트 드리겠습니다. ▶ 3Q26 지배주주 순이익, 컨센서스 -41% 하회"
+    }
+   ]
+  },
+  {
+   "name": "방산: 한화에어로스페이스 실적 및 지상방산 이연",
+   "narrative": "한화에어로스페이스의 3분기 실적이 시장 기대치를 크게 하회하며 적정주가가 하향 조정되었으나, 지상방산 부문의 폴란드향 수출 이연 물량이 4분기에 반영될 예정이어서 실적 회복에 대한 기대감은 남아있습니다.",
+   "status": "ongoing",
+   "strength": 3,
+   "keywords": [
+    "지상방산"
+   ],
+   "evidence": [
+    {
+     "channel": "다올투자증권 리서치센터",
+     "quote": "[한화에어로스페이스(012450)/BUY(유지)/TP 1,400,000원(하향)/다올투자증권 조선/기계/방산 최광식 ☎️2184-2308] ★ 한화에어로스페이스(012450) : 주가는 반등할 수 있겠지만, 2 스트라이크 ▶ Issue: 3Q26 쇼크 리뷰. 적정주가 하향. 선호주 제외"
+    },
+    {
+     "channel": "다올투자증권 리서치센터",
+     "quote": "1Q24 지상방산 적자 이후 회복했듯이 4Q26 실적은 수출 이연물량으로 아주 좋을 예정"
+    },
+    {
+     "channel": "신한 리서치",
+     "quote": "한화에어로스페이스 (012450/매수) 지상방산의 쉼표, 수주는 그대로 [이동헌]"
+    }
+   ]
+  },
+  {
+   "name": "조선: FLNG 수주 기대감 지속",
+   "narrative": "올해 수주 목표를 초과 달성한 조선사들이 델핀 FLNG 2호기 등 해양 부문 수주를 연내 확정할 것으로 예상되며, 고부가가치 선박 중심의 수주잔고 질 개선과 실적 안정성 강화에 대한 기대감이 이어지고 있습니다.",
+   "status": "ongoing",
+   "strength": 3,
+   "keywords": [
+    "FLNG"
+   ],
+   "evidence": [
+    {
+     "channel": "키움증권 리서치센터",
+     "quote": "- 해양 부문은 하반기 올해 수주 목표인 Delfin FLNG 2호기의 FID가 완료되며 연내 본 계약 체결 유력"
+    },
+    {
+     "channel": "SK증권 조선/방산 한승한",
+     "quote": "- 동사는 올해 상선 수주 80.5억불로, 수주목표(57억불)의 141%를 달성한 상황이며, 해양 수주는 44억불로, 연내 미국 델핀 FLNG 2호기(25억불) 수주 예상되기 때문에 올해 수주 목표(139억불)는 무난하게 초과 달성할 전망"
+    },
+    {
+     "channel": "김현석(자본주의 바이어스 있는 채널입니다)",
+     "quote": "- 누적 수주 124억 달러로 연간 목표(139억 달러)의 약 90% 달성. LNG운반선 19척(조선 3사 중 최다), FLNG 2기 수주를 통해 수주잔고의 질과 실적 안정성 강화"
+    }
+   ]
+  },
+  {
+   "name": "건설: 현대건설 실적 및 AI 데이터센터 투자, GS건설 개인정보 유출",
+   "narrative": "현대건설은 3분기 매출은 시장 예상치를 하회했으나 영업이익은 상회하는 등 혼조세를 보였으며, 현대차그룹의 새만금 AI 데이터센터 투자에 참여하며 신사업 기대감을 높였습니다. 한편, GS건설은 아파트 커뮤니티 시스템에서 개인정보 유출 소식이 전해졌습니다.",
+   "status": "new",
+   "strength": 3,
+   "keywords": [
+    "현대건설",
+    "GS 건설"
+   ],
+   "evidence": [
+    {
+     "channel": "AWAKE - 실시간 주식 공시 정리채널",
+     "quote": "기업명: 현대건설(시가총액: 9조 6,323억) A000720 보고서명: 연결재무제표기준영업(잠정)실적(공정공시) 매출액 : 62,406억(예상치 : 66,891억/ -7%) 영업익 : 2,217억(예상치 : 2,114억/ +5%) 순이익 : 378억(예상치 : 1,292억/ -71%)…"
+    },
+    {
+     "channel": "epic AI - 투자 어시스턴트",
+     "quote": "현대차그룹은 30일 기아·현대차·현대모비스·현대건설·현대오토에버의 새만금 AI 데이터센터 투자 참여를 최종 확정했으며, 약 9조원 규모 AI 밸리 투자 중 데이터센터에 5조8000억원을 배정하고 건축·인프라와 GPU 서비스를 각각 담당할 특수목적법인 2곳을 11월 설립해 2027년 3월 착공, 2030년 초 정식 서비스를…"
+    },
+    {
+     "channel": "서화백의 AI놀이🚀",
+     "quote": "📝 ✅ [속보]GS건설 아파트 커뮤니티 예약 시스템서 개인정보 유출 ht..."
+    }
+   ]
+  },
+  {
+   "name": "반도체 부품: 대덕전자 시장 주목",
+   "narrative": "대덕전자가 급증 키워드로 새롭게 부상하며 시장의 주목을 받았으며, 일부 채널에서는 거래량 증가와 함께 순매도 종목으로 언급되는 등 활발한 거래가 이루어졌습니다.",
+   "status": "new",
+   "strength": 2,
+   "keywords": [
+    "대덕전자"
+   ],
+   "evidence": [
+    {
+     "channel": "서화백의 AI놀이🚀",
+     "quote": "📈 대덕전자 (+75)"
+    },
+    {
+     "channel": "AWAKE - 52주 신고가 모니터링",
+     "quote": "✅ 순매도 : 대덕전자, 삼성전기, 인텔리빅스, RF머트리얼즈, SK하이닉스, 삼성전자우, 디아이"
+    }
+   ]
+  }
+ ],
+ "community_mood": {
+  "score": -30,
+  "summary": "커뮤니티는 AI 버블 붕괴에 대한 우려와 기술주 하락에 대한 불안감을 강하게 표출하고 있으며, 폴란드 쿠데타나 종전 선언 같은 미확인된 지정학적 루머에도 민감하게 반응하는 모습을 보였습니다.",
+  "hot_stocks": [
+   {
+    "name": "인텔",
+    "score": -50,
+    "reason": "기술주 급락 및 AI 투자 우려와 함께 언급되며 부정적인 시각이 지배적입니다."
+   },
+   {
+    "name": "SOXL",
+    "score": -60,
+    "reason": "AI 버블에 대한 회의적인 시각과 함께 추매를 비판하는 글이 높은 추천을 받았습니다."
+   },
+   {
+    "name": "SOOP",
+    "score": -40,
+    "reason": "삼성증권 리포트와 관련하여 부정적인 내용이 공유되며 주목을 받았습니다."
+   },
+   {
+    "name": "삼성전자",
+    "score": 40,
+    "reason": "긍정적인 평가와 함께 '대단하다'는 반응이 나타났습니다."
+   }
+  ]
+ },
+ "signals": {
+  "spikes": [
+   {
+    "term": "그림",
+    "count": 149,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "연합인포",
+    "count": 184,
+    "burst": 14.398892501310959,
+    "base_daily": 8.9,
+    "new": false
+   },
+   {
+    "term": "저작권자",
+    "count": 179,
+    "burst": 14.007618248557945,
+    "base_daily": 8.9,
+    "new": false
+   },
+   {
+    "term": "학습 활용",
+    "count": 175,
+    "burst": 13.478935872397178,
+    "base_daily": 9.0,
+    "new": false
+   },
+   {
+    "term": "AI 학습",
+    "count": 176,
+    "burst": 12.566472351191731,
+    "base_daily": 9.7,
+    "new": false
+   },
+   {
+    "term": "yna.co.kr",
+    "count": 151,
+    "burst": 14.067240991834595,
+    "base_daily": 7.4,
+    "new": false
+   },
+   {
+    "term": "yna.co.kr 저작권자",
+    "count": 150,
+    "burst": 13.974080455464831,
+    "base_daily": 7.4,
+    "new": false
+   },
+   {
+    "term": "학습",
+    "count": 178,
+    "burst": 7.346710652957459,
+    "base_daily": 16.9,
+    "new": false
+   },
+   {
+    "term": "천억원",
+    "count": 34,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "이라며",
+    "count": 33,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "바이낸스",
+    "count": 32,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "거래소",
+    "count": 26,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "현대건설",
+    "count": 26,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "대덕전자",
+    "count": 25,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "에이피알",
+    "count": 25,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "현대모비스",
+    "count": 24,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "화면번호",
+    "count": 22,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "GS 건설",
+    "count": 22,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "기아",
+    "count": 43,
+    "burst": 24.742342453499493,
+    "base_daily": 1.1,
+    "new": false
+   },
+   {
+    "term": "Valuation",
+    "count": 21,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "지상방산",
+    "count": 20,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "FLNG",
+    "count": 20,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "쇼크",
+    "count": 47,
+    "burst": 18.389889879391713,
+    "base_daily": 1.7,
+    "new": false
+   },
+   {
+    "term": "일제히",
+    "count": 19,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "현대제철",
+    "count": 19,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   }
+  ],
+  "top_posts": [
+   {
+    "channels": 6,
+    "channel": "AWAKE - 실시간 주식 공시 정리채널",
+    "head": "2026.10.30 07:49:29 기업명: 한미사이언스(시가총액: 2조 9,169억) A008930 보고서명: 투자판단관련주요경영사항(자회사의 주요경영사항) (파브리병 치료제(LAGLA) 기술이전 계약 체결) 종속회사 : 한미약품 제목 : 파브리병 치료제(LA-GLA) 기술이전 계약 체결 * 주요내용 ※ 투자유의사항 동…",
+    "url": "https://t.me/darthacking/155830",
+    "time_kst": "10-30 07:49"
+   },
+   {
+    "channels": 6,
+    "channel": "AWAKE - 실시간 주식 공시 정리채널",
+    "head": "2026.10.30 09:38:31 기업명: 에이피알(시가총액: 10조 8,758억) A278470 보고서명: 연결재무제표기준영업(잠정)실적(공정공시) 매출액 : 7,731억(예상치 : 7,853억/ -2%) 영업익 : 1,606억(예상치 : 1,812억/ -11%) 순이익 : 1,102억(예상치 : 1,299억/ -15…",
+    "url": "https://t.me/darthacking/155840",
+    "time_kst": "10-30 09:38"
+   },
+   {
+    "channels": 5,
+    "channel": "키움증권 전략/시황 한지영",
+    "head": "[10/30, 장 시작 전 생각: 가드는 올리고 가야하지만, 키움 한지영] - 다우 -0.3%, S&P500 -0.3%, 나스닥 -1.4% - 아마존 -4.3%(시간외 -6%), 인텔 -3.6%(시간와 -21%), 샌디스크 -5.3%(시간외 -3%) - 미 10년물 금리 4.92%, 30년물 금리 5.29%, WTI 10…",
+    "url": "https://t.me/hedgecat0301/2986",
+    "time_kst": "10-30 07:40"
+   },
+   {
+    "channels": 5,
+    "channel": "AWAKE - 실시간 주식 공시 정리채널",
+    "head": "2026.10.30 16:16:46 기업명: 올릭스(시가총액: 2조 1,479억) A226950 보고서명: [기재정정]투자판단관련주요경영사항(임상시험계획승인신청등결정) * 임상명칭 : 양측성 지도 모양 위축(GA)을 동반한 노인성 황반변성(AMD) 환자를 대상으로 유리체강 내 주사로 투여하는 OLX10212의 유효성 및…",
+    "url": "https://t.me/darthacking/155935",
+    "time_kst": "10-30 16:16"
+   },
+   {
+    "channels": 5,
+    "channel": "AWAKE - 실시간 주식 공시 정리채널",
+    "head": "2026.10.30 13:40:17 기업명: 앱클론(시가총액: 3,713억) A174900 보고서명: 투자판단관련주요경영사항 (TIGIT 표적 항체신약 후보물질 도출 공동연구개발 및 기술이전의 건) 제목 : TIGIT 표적 항체신약 후보물질 도출 공동연구개발 및 기술이전의 건 * 주요내용 1) 계약상대방 : 유한양행 2)…",
+    "url": "https://t.me/darthacking/155874",
+    "time_kst": "10-30 13:40"
+   },
+   {
+    "channels": 3,
+    "channel": "메리츠증권 리서치",
+    "head": "📮[메리츠증권 모빌리티 김준성] 안녕하세요 메리츠증권 김준성입니다. 현대모비스 업데이트 드리겠습니다. (URL: https://han.gl/zYDSn) ▶ 휴머노이드 수주 확인 필요 ▶ 3Q26 지배주주 순이익, 컨센서스 -41% 하회 - 매출 15.7조원 (+5% YoY)으로 컨센서스 부합. 현대차 · 기아 합산 전세계…",
+    "url": "https://t.me/meritz_research/44960",
+    "time_kst": "10-30 16:51"
+   },
+   {
+    "channels": 3,
+    "channel": "이지스스트레티지 리서치",
+    "head": "[NH/한승연] 바이오산업 [Spot/바이오산업] Eli Lilly와 MSD, 그리고 BioMarine(feat. 한미) ▶ 빅파마 핵심 메시지: 1)릴리(비만), 2)MSD(키트루다SC, MASH), 3)바이오마린(파브리병) 전일 밤(10/29) 글로벌 제약사들 실적발표 및 기술도입 발표. 관련된 국내 기업 영향 분석(…",
+    "url": "https://t.me/jeilstock/47038",
+    "time_kst": "10-30 07:38"
+   },
+   {
+    "channels": 3,
+    "channel": "메리츠증권 리서치",
+    "head": "📮 [메리츠증권 철강/금속 장재혁] 안녕하세요, 메리츠증권 장재혁입니다. 대한전선 3Q26 Review 업데이트 드립니다. ▶️ 3Q26 Review: 환율 부담으로 컨센서스 하회 - 연결 영업이익 309억원(-49.3% QoQ, +4.5% YoY), 컨센서스(483억원) 36.0% 하회 - 구리 가격 상승에도 환율 하락…",
+    "url": "https://t.me/meritz_research/44959",
+    "time_kst": "10-30 09:09"
+   },
+   {
+    "channels": 3,
+    "channel": "허재환 유진증권 전략",
+    "head": "[Web발신] 안녕하십니까 유진투자증권 허재환입니다 =미국 중간선거= * 미국 선거는 주별로 투표 시간이 다릅니다 (저녁7시~새벽 1시). 우리 시간으로 11/4일 오전 9시~15시 정도 마무리될 예정입니다. * 이번 선거 분위기는 좋지 않습니다. Pew Research에 따르면 설문조사 응답자 2/3가 경제가 악화되었다…",
+    "url": "https://t.me/huhjae/4540",
+    "time_kst": "10-30 10:14"
+   },
+   {
+    "channels": 3,
+    "channel": "신한 리서치",
+    "head": "[신한투자증권 정유/화학/2차전지 이진명, 김명주] ** 삼성SDI(006400) 삼성SDI; ESS가 이끌고, 신사업이 더한다 신한생각: 수주와 케파가 그리는 성장 경로 - 3Q 충당금은 사업 확대 대비 선제적 비용, 제외 시 사업부 모두 견조 - ESS 올해 120GWh+ 수주 목표(10월 60GWh+ 확보), 4Q…",
+    "url": "https://t.me/shinhanresearch/53350",
+    "time_kst": "10-30 07:34"
+   },
+   {
+    "channels": 3,
+    "channel": "키움증권 리서치센터",
+    "head": "★ KT&G(033780): 배당성향 상향과 해외담배 성장 전략에 주목 [키움 음식료/유통 박상준] 1) 26년 배당성향은 글로벌 Peer 수준에 근접할 전망 - KT&G는 11/5(목)에 3분기 경영실적과 함께 중장기 성장 전략 및 주주환원 계획을 밝힐 예정 - 동사의 과거 주주환원 규모와 올해 자사주 매입 규모를 감안…",
+    "url": "https://t.me/KiwoomResearch/24452",
+    "time_kst": "10-30 07:49"
+   },
+   {
+    "channels": 3,
+    "channel": "[ IT는 SK ]",
+    "head": "[SK증권 반도체 소부장 이동주] 한화비전 (매수 유지, TP 8만원 유지) 시큐리티, 세미텍 모두 좋았다 ▶️ 3Q26 Review - 매출액 5,734억원(QoQ +5.7%, YoY +35.6%), 영업이익 1,026억원(QoQ +56.4%, YoY +183.3%)으로 컨센서스 크게 상회 - IEEPA 관세 위헌 판결…",
+    "url": "https://t.me/skitteam/4870",
+    "time_kst": "10-30 07:47"
+   },
+   {
+    "channels": 3,
+    "channel": "AWAKE - 실시간 주식 공시 정리채널",
+    "head": "2026.10.30 16:01:27 기업명: 효성중공업(시가총액: 16조 8,681억) A298040 보고서명: 연결재무제표기준영업(잠정)실적(공정공시) 매출액 : 17,406억(예상치 : 18,928억/ -8%) 영업익 : 2,435억(예상치 : 3,058억/ -20%) 순이익 : 2,196억(예상치 : 2,235억/…",
+    "url": "https://t.me/darthacking/155928",
+    "time_kst": "10-30 16:01"
+   },
+   {
+    "channels": 3,
+    "channel": "AWAKE - 실시간 주식 공시 정리채널",
+    "head": "2026.10.30 13:04:09 기업명: 현대건설(시가총액: 9조 6,323억) A000720 보고서명: 연결재무제표기준영업(잠정)실적(공정공시) 매출액 : 62,406억(예상치 : 66,891억/ -7%) 영업익 : 2,217억(예상치 : 2,114억/ +5%) 순이익 : 378억(예상치 : 1,292억/ -71%)…",
+    "url": "https://t.me/darthacking/155863",
+    "time_kst": "10-30 13:04"
+   },
+   {
+    "channels": 3,
+    "channel": "다올투자증권 리서치센터",
+    "head": "[한화에어로스페이스(012450)/BUY(유지)/TP 1,400,000원(하향)/다올투자증권 조선/기계/방산 최광식 ☎️2184-2308] ★ 한화에어로스페이스(012450) : 주가는 반등할 수 있겠지만, 2 스트라이크 ▶ Issue: 3Q26 쇼크 리뷰. 적정주가 하향. 선호주 제외 ▶ Pitch: > 대전사업장 화재…",
+    "url": "https://t.me/daolresearch/15362",
+    "time_kst": "10-30 07:40"
+   }
+  ]
+ },
+ "community_dc": {
+  "source": "DC인사이드",
+  "galleries": [
+   {
+    "id": "krstock",
+    "name": "국내주식갤러리",
+    "posts": 2598,
+    "capped": true,
+    "burst": 1.6,
+    "base_daily": 1627.6
+   },
+   {
+    "id": "stockus",
+    "name": "해외주식갤러리",
+    "posts": 8172,
+    "capped": true,
+    "burst": 1.0,
+    "base_daily": 8395.7
+   }
+  ],
+  "posts_sampled": 537,
+  "keywords": [
+   {
+    "term": "인텔",
+    "count": 24,
+    "burst": 99.0,
+    "new": true
+   },
+   {
+    "term": "폴란드",
+    "count": 22,
+    "burst": 99.0,
+    "new": true
+   },
+   {
+    "term": "쿠데타",
+    "count": 9,
+    "burst": 99.0,
+    "new": true
+   },
+   {
+    "term": "애들",
+    "count": 9,
+    "burst": 99.0,
+    "new": true
+   },
+   {
+    "term": "속보",
+    "count": 8,
+    "burst": 99.0,
+    "new": true
+   },
+   {
+    "term": "종전",
+    "count": 7,
+    "burst": 99.0,
+    "new": true
+   },
+   {
+    "term": "뭐냐",
+    "count": 7,
+    "burst": 99.0,
+    "new": true
+   },
+   {
+    "term": "나선",
+    "count": 6,
+    "burst": 85.2,
+    "new": true
+   },
+   {
+    "term": "슬슬",
+    "count": 6,
+    "burst": 85.2,
+    "new": true
+   },
+   {
+    "term": "이란",
+    "count": 5,
+    "burst": 71.0,
+    "new": true
+   },
+   {
+    "term": "계좌",
+    "count": 5,
+    "burst": 71.0,
+    "new": true
+   },
+   {
+    "term": "양닉",
+    "count": 5,
+    "burst": 71.0,
+    "new": true
+   },
+   {
+    "term": "아니냐",
+    "count": 5,
+    "burst": 71.0,
+    "new": true
+   },
+   {
+    "term": "속슬",
+    "count": 31,
+    "burst": 8.6,
+    "new": false
+   },
+   {
+    "term": "메모리",
+    "count": 9,
+    "burst": 11.6,
+    "new": false
+   }
+  ],
+  "top_recommended": [
+   {
+    "gallery": "해외주식갤러리",
+    "title": "진짜 인류역사상 명언이노ㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋ",
+    "views": 15359,
+    "recommend": 219,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=18160470&exception_mode=recommend&page=1",
+    "time_kst": "10-30 21:36"
+   },
+   {
+    "gallery": "해외주식갤러리",
+    "title": "AI 버블이 터져야 하는 이유 ㄹㅇ",
+    "views": 9665,
+    "recommend": 206,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=18154010&exception_mode=recommend&page=2",
+    "time_kst": "10-30 12:28"
+   },
+   {
+    "gallery": "해외주식갤러리",
+    "title": "개씨발 SOOP 삼성증권 리포트 근황 ㅋㅋㅋㅋㅋㅋㅋㅋ",
+    "views": 10432,
+    "recommend": 203,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=18159124&exception_mode=recommend&page=1",
+    "time_kst": "10-30 20:07"
+   },
+   {
+    "gallery": "해외주식갤러리",
+    "title": "미주갤에서 아직도 SOXL 추매하는 새끼들 특징 ㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋ",
+    "views": 12672,
+    "recommend": 181,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=18161096&exception_mode=recommend&page=1",
+    "time_kst": "10-30 22:18"
+   },
+   {
+    "gallery": "해외주식갤러리",
+    "title": "삼하 대단하면 개추 ㅋㅋ",
+    "views": 8847,
+    "recommend": 181,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=18149586&exception_mode=recommend&page=2",
+    "time_kst": "10-30 07:32"
+   }
+  ],
+  "top_viewed": [
+   {
+    "gallery": "국내주식갤러리",
+    "title": "오!!! 종전 진짜구나!!",
+    "views": 607,
+    "recommend": 1,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3790269&page=1",
+    "time_kst": "10-31 05:42"
+   },
+   {
+    "gallery": "국내주식갤러리",
+    "title": "속보) 폴란드 쿠데타 발생.news",
+    "views": 503,
+    "recommend": 5,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3790230&page=2",
+    "time_kst": "10-31 05:14"
+   },
+   {
+    "gallery": "국내주식갤러리",
+    "title": "종전선언 하니까 나스닥 바로 양전하네 ㅋㅋ",
+    "views": 469,
+    "recommend": 0,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3790250&page=2",
+    "time_kst": "10-31 05:29"
+   },
+   {
+    "gallery": "해외주식갤러리",
+    "title": "[속보]폴란드 쿠데타 시작",
+    "views": 467,
+    "recommend": 2,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=18170079&page=7",
+    "time_kst": "10-31 05:21"
+   },
+   {
+    "gallery": "국내주식갤러리",
+    "title": "진짜 뒤지는줄알았네 ㅅㅂ",
+    "views": 444,
+    "recommend": 0,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3790256&page=2",
+    "time_kst": "10-31 05:32"
+   },
+   {
+    "gallery": "국내주식갤러리",
+    "title": "트럼프 타코 떴다 ㅋㅋㅋㅋㅋㅋ",
+    "views": 397,
+    "recommend": 2,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3790226&page=2",
+    "time_kst": "10-31 05:11"
+   },
+   {
+    "gallery": "해외주식갤러리",
+    "title": "와 버핏 이거 진짜였냐?",
+    "views": 369,
+    "recommend": 0,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=18170118&page=7",
+    "time_kst": "10-31 05:26"
+   },
+   {
+    "gallery": "해외주식갤러리",
+    "title": "이 새끼는 대체 몇절까지 하는거냐?",
+    "views": 368,
+    "recommend": 12,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=18170149&page=6",
+    "time_kst": "10-31 05:33"
+   }
+  ]
+ }
+}
