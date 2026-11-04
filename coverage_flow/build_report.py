@@ -14,6 +14,7 @@ sys.path.insert(0, HERE)
 import metrics  # noqa: E402
 
 LATEST = os.path.join(HERE, "data", "latest.json")
+SERIES = os.path.join(HERE, "data", "series.json")
 OUT = os.path.join(ROOT, "telegram_research_dashboard", "static", "coverage_flow_report.html")
 # 지난 기록: 16:00(장 마감 후) 슬롯만 날짜별 페이지로 보관 — 최근 31일은 매일, 그보다 오래된 달은
 # 월 2개(15일 이전 마지막 거래일 · 그 달 마지막 거래일)만 남긴다(10/28 사용자 요청).
@@ -138,7 +139,7 @@ def frgn_cell(px):
     return f"<td class='r'>{n(v, 1, sign=False)}%{tag}</td>"
 
 
-def returns_table(rows):
+def returns_table(rows, series=None):
     """등락률 표: 오늘 · 1W · 1M · 3M · YTD (+ 외인 보유 · 시총)."""
     rs = [r for r in rows if r.get("tech")]
     key = mcap_key
@@ -149,7 +150,8 @@ def returns_table(rows):
         tr.append(group_row(g, 9))
         for r in grs:
             ret, px = r["tech"].get("ret") or {}, r.get("px", {})
-            tr.append(f"<tr><td>{esc(r['name'])}<small>{esc(r['industry'])}{' · ' + esc(r['status']) if r['status'] != '커버리지' else ''}</small></td>"
+            has = bool(series and series.get(r["code"]))
+            tr.append(f"<tr{(' class=\'clk\' data-code=\'' + esc(r['code']) + '\' title=\'클릭: 1년 시총·수급 차트\'') if has else ''}><td>{'<span class=\'car\'>▸</span> ' if has else ''}{esc(r['name'])}<small>{esc(r['industry'])}{' · ' + esc(r['status']) if r['status'] != '커버리지' else ''}</small></td>"
                       + "".join(f"<td class='r'{shade(ret.get(k), caps[k])}>{_pct(ret.get(k))}</td>" for k in ret_keys)
                       + f"<td class='c'>{spark_svg(r['tech'].get('spark'))}</td>"
                       + frgn_cell(px)
@@ -328,8 +330,56 @@ def archive_nav(d, archive, dates):
             f"<option value=''>날짜 고르기 ({len(dates)}개)</option>{opts}</select>"
             "<small> 최근 한 달은 매일, 그 이전은 월 2개(월 중순·월말)</small></div>")
 
+CHART_JS = r"""
+<script>
+const SERIES=__SERIES__;
+(function(){
+  const C={mc:"#111827",fr:"#2b6cb0",inn:"#b08a63"};
+  function nice(lo,hi,k){const sp=(hi-lo)||1,st=Math.pow(10,Math.floor(Math.log10(sp/k))),m=sp/k/st,s=(m<1.5?1:m<3?2:m<7?5:10)*st;
+    const a=Math.floor(lo/s)*s,b=Math.ceil(hi/s)*s,t=[];for(let v=a;v<=b+s/2;v+=s)t.push(+v.toFixed(6));return {t,a,b,s}}
+  function fmt(v,s){return Math.abs(v)>=1e4?(v/1e4).toFixed(s<1e4?1:0)+"조":Math.round(v).toLocaleString()}
+  function draw(code,months){
+    const s=SERIES[code];const N=s.mc.length,from=Math.max(0,N-Math.round(months*21)),
+      d=i=>"20"+s.d.slice(i*6,i*6+2)+"."+s.d.slice(i*6+2,i*6+4)+"."+s.d.slice(i*6+4,i*6+6);
+    const mc=s.mc.slice(from),fr=s.fr.slice(from),inn=s["in"].slice(from),n=mc.length;
+    const b0=fr[0],c0=inn[0],fr2=fr.map(x=>x-b0),in2=inn.map(x=>x-c0);   // 보는 구간 시작을 0 으로
+    const W=720,H=300,L=52,R=56,T=14,B=26,pw=W-L-R,ph=H-T-B;
+    const lv=nice(Math.min(...mc),Math.max(...mc),5),rv=nice(Math.min(0,...fr2,...in2),Math.max(0,...fr2,...in2),5);
+    const x=i=>L+pw*i/Math.max(1,n-1),yl=v=>T+ph*(1-(v-lv.a)/(lv.b-lv.a)),yr=v=>T+ph*(1-(v-rv.a)/(rv.b-rv.a));
+    const pl=(a,y)=>a.map((v,i)=>(i?"L":"M")+x(i).toFixed(1)+" "+y(v).toFixed(1)).join("");
+    let g="";lv.t.forEach(v=>{g+=`<line x1="${L}" x2="${W-R}" y1="${yl(v)}" y2="${yl(v)}" stroke="#eef0f3"/><text x="${L-6}" y="${yl(v)+4}" text-anchor="end" font-size="10" fill="#6b7280">${fmt(v,lv.s)}</text>`});
+    rv.t.forEach(v=>{g+=`<text x="${W-R+6}" y="${yr(v)+4}" font-size="10" fill="#6b7280">${fmt(v,rv.s)}</text>`});
+    g+=`<line x1="${L}" x2="${W-R}" y1="${yr(0)}" y2="${yr(0)}" stroke="#9ca3af" stroke-width="1.5"/>`;
+    [0,.25,.5,.75,1].forEach(f=>{const i=Math.round((n-1)*f);g+=`<text x="${x(i)}" y="${H-8}" text-anchor="${f==0?"start":f==1?"end":"middle"}" font-size="10" fill="#6b7280">${d(from+i).slice(2)}</text>`});
+    g+=`<path d="${pl(mc,yl)}" fill="none" stroke="${C.mc}" stroke-width="2.4"/><path d="${pl(in2,yr)}" fill="none" stroke="${C.inn}" stroke-width="2"/><path d="${pl(fr2,yr)}" fill="none" stroke="${C.fr}" stroke-width="2"/>`;
+    const lst=a=>Math.round(a[a.length-1]).toLocaleString();
+    return `<div class="hd"><b>${d(from)} ~ ${d(N-1)}</b><span class="lg"><i style="background:${C.mc}"></i>시가총액(억, 좌)</span><span class="lg"><i style="background:${C.fr}"></i>외국인 누적 순매수(억, 우) ${lst(fr2)}</span><span class="lg"><i style="background:${C.inn}"></i>기관 누적 순매수(억, 우) ${lst(in2)}</span>
+      <span style="margin-left:auto">${[3,6,12].map(m=>`<button data-m="${m}" style="font:11px Inter;padding:2px 8px;margin-left:4px;border:1px solid ${m==months?"#111827":"#d1d5db"};background:${m==months?"#111827":"#fff"};color:${m==months?"#fff":"#374151"};border-radius:3px;cursor:pointer">${m}개월</button>`).join("")}</span></div>
+      <svg viewBox="0 0 ${W} ${H}" role="img" aria-label="시총·외인·기관 누적 순매수">${g}</svg>`;
+  }
+  document.addEventListener("click",e=>{
+    const b=e.target.closest(".chbox button");
+    if(b){const box=b.closest(".chbox");box.innerHTML=draw(box.dataset.code,+b.dataset.m);return}
+    const tr=e.target.closest("tr.clk");if(!tr)return;
+    const nx=tr.nextElementSibling;
+    if(nx&&nx.classList.contains("chart")){nx.remove();tr.querySelector(".car").textContent="▸";return}
+    const code=tr.dataset.code;if(!SERIES[code])return;
+    const row=document.createElement("tr");row.className="chart";
+    row.innerHTML=`<td colspan="${tr.children.length}"><div class="chbox" data-code="${code}">${draw(code,12)}</div><p class="note">시총 = 종가 × <b>현재 상장주수</b>(증자·소각이 있었던 종목은 과거 시총이 다소 어긋남). 누적 순매수는 보는 구간 시작일을 0 으로 둔 합계 — 최근 30거래일은 한투 금액, 그 이전은 네이버 수량 × 종가 <b>근사</b>. x축은 거래일 등간격.</p></td>`;
+    tr.after(row);tr.querySelector(".car").textContent="▾";
+  });
+})();
+</script>"""
 
-def render(d, archive=False, dates=()):
+
+def chart_js(series):
+    """종목 클릭 차트 스크립트. 시계열이 없으면 빈 문자열(클릭 가능한 행도 안 생긴다)."""
+    if not series:
+        return ""
+    return CHART_JS.replace("__SERIES__", json.dumps(series, ensure_ascii=False, separators=(",", ":")).replace("</", "<\\/"))
+
+
+def render(d, archive=False, dates=(), series=None):
     rows = d.get("rows", [])
     try:
         t = datetime.datetime.strptime(d["asof"], "%Y-%m-%d %H:%M")
@@ -381,6 +431,10 @@ table.flow{{font-size:12px}}table.flow td,table.flow th{{padding:6px 5px}}th.c{{
 .note{{font-size:12px;color:var(--muted);line-height:1.6;margin:8px 0 0}}
 .errs{{margin:16px 0;font-size:12px;color:#b45309}}.errs ul{{margin:6px 0 0 18px}}
 .wrap{{overflow-x:auto}}
+tr.clk{{cursor:pointer}}tr.clk:hover td{{background:#f8fafc}}.car{{color:#9ca3af;font-size:11px}}
+tr.chart td{{padding:10px 8px 16px;background:#fcfcfd}}.chbox{{max-width:760px}}.chbox .hd{{display:flex;gap:14px;flex-wrap:wrap;align-items:baseline;font-size:12px;margin-bottom:4px}}
+.chbox .hd b{{font-size:13px}}.lg{{display:inline-flex;align-items:center;gap:5px;color:var(--muted)}}.lg i{{display:inline-block;width:14px;height:3px;border-radius:2px}}
+.chbox svg{{display:block;width:100%;height:auto}}
 #cap-1,#cap-2,#cap-3,#cap-1a,#cap-1b{{padding:6px 0 4px;background:#fff}}
 .arch{{font-size:12px;color:#6b7280;margin:0 0 14px;padding:7px 10px;background:#f9fafb;border:1px solid var(--line);border-radius:4px}}.arch b{{color:#111827}}.arch a{{margin-left:8px;color:#1d4ed8}}.arch select{{margin:0 6px;font-size:12px;padding:2px 4px}}.arch small{{color:#9ca3af}}
 </style></head><body>
@@ -397,7 +451,7 @@ table.flow{{font-size:12px}}table.flow td,table.flow th{{padding:6px 5px}}th.c{{
 
 <p class="asof">📅 수집 시각 <b>{esc(asof)}</b> · {'장중 잠정(오늘 현재가·오늘 수급 포함)' if prov else '직전 거래일 종가 기준(장 시작 전 또는 휴장일 수집)'}</p>
 <h2 id="flow" style="margin-top:6px">① 등락률 <small style="font:400 12px Inter;color:#6b7280">오늘 · 1주 · 1개월 · 3개월 · YTD</small></h2>
-<div class="wrap">{returns_table(rows)}</div>
+<div class="wrap">{returns_table(rows, series)}</div>
 <p class="note">오늘은 전일 종가 대비(장중 현재가). 1주·1개월·3개월은 거래일 5·21·63일 전 종가 대비, YTD 는 전년 마지막 종가 대비. 외인 보유 옆의 작은 날짜는 장 시작 전·휴장이라 그 날짜의 직전 수집값으로 채운 것 — 장중 첫 수집부터 당일 값으로 바뀐다.</p>
 
 </div>
@@ -418,7 +472,7 @@ table.flow{{font-size:12px}}table.flow td,table.flow th{{padding:6px 5px}}th.c{{
 <p class="note">패시브 추정 = Σ(섹터 ETF 상장주수 변동 × 가격 × 종목 비중). 비중은 네이버 Top10 구성종목만 있어 비중 밖 종목의 몫은 잡히지 않는다 → 하한값. ADV 대비 = 추정 매매 / 20일 평균 거래대금.</p>
 </details>
 <p class="note" style="margin-top:28px">출처: 한국투자증권 OpenAPI(일봉·투자자별·현재가·상장주수) · 네이버 증권(ETF 구성 비중) · 액티브ETF.매매동향(etf_holdings). 유니버스는 <code>coverage_flow/universe.csv</code>, 섹터 ETF 는 <code>etf_universe.csv</code>.</p>
-</body></html>"""
+{chart_js(series)}</body></html>"""
 
 
 def write_archive(d):
@@ -444,12 +498,16 @@ def write_archive(d):
 def main():
     with open(LATEST, encoding="utf-8") as f:
         d = json.load(f)
+    series = None
+    if os.path.exists(SERIES):
+        with open(SERIES, encoding="utf-8") as f:
+            series = json.load(f)
     path = write_archive(d)
     if path:
         print("archived", path)
     os.makedirs(os.path.dirname(OUT), exist_ok=True)
     with open(OUT, "w", encoding="utf-8") as f:
-        f.write(render(d, dates=archive_dates()))
+        f.write(render(d, dates=archive_dates(), series=series))
     print("wrote", OUT, os.path.getsize(OUT), "bytes")
 
 
