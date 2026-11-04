@@ -780,5 +780,54 @@ class Archive(unittest.TestCase):
         self.assertNotIn("class='arch'", build_report.render(d))                # 기록 없으면 줄 자체가 없다
 
 
+class Series(unittest.TestCase):
+    def inv(self, n, start="2026-01-02", fr=10.0, org=-4.0):
+        d = pd.bdate_range(start, periods=n)
+        return pd.DataFrame({"date": d, "개인": 0.0, "외국인": fr, "기관": org})
+
+    def test_cumulative_and_mcap(self):
+        oh = ohlc([100.0] * 120, "2026-01-02")
+        s = metrics.build_series(oh, self.inv(120), 5e8, "2027-01-01")
+        self.assertEqual(len(s["mc"]), 120)
+        self.assertEqual(len(s["d"]), 120 * 6)
+        self.assertEqual(s["mc"][0], 500)                     # 100원 × 5억주 / 1e8 = 500억
+        self.assertEqual(s["fr"][0], 10)
+        self.assertEqual(s["fr"][-1], 1200)                   # 10억 × 120일 누적
+        self.assertEqual(s["in"][-1], -480)
+
+    def test_window_shrinks_to_flow_range(self):
+        # 가격은 300일, 수급은 뒤 100일뿐 — 없는 날을 0 으로 채워 누적선을 꾸미지 않는다
+        oh = ohlc([100.0] * 300, "2025-01-01")
+        inv = self.inv(100, str(oh["date"].iloc[-100].date()))
+        s = metrics.build_series(oh, inv, 1e8, "2027-01-01")
+        self.assertEqual(len(s["mc"]), 100)
+        self.assertEqual(s["d"][:6], oh["date"].iloc[-100].strftime("%y%m%d"))
+
+    def test_gives_none_when_unknown(self):
+        oh = ohlc([100.0] * 120, "2026-01-02")
+        self.assertIsNone(metrics.build_series(oh, self.inv(120), None, "2027-01-01"))   # 상장주수 모름
+        tail5 = self.inv(5, str(oh["date"].iloc[-5].date()))
+        self.assertIsNone(metrics.build_series(oh, tail5, 1e8, "2027-01-01"))              # 수급 이력 부족(5일)
+        self.assertIsNone(metrics.build_series(oh, pd.DataFrame(columns=["date", "외국인", "기관"]), 1e8, "2027-01-01"))
+
+    def test_today_row_excluded(self):
+        oh = ohlc([100.0] * 60, "2026-01-02")
+        today = str(oh["date"].iloc[-1].date())
+        s = metrics.build_series(oh, self.inv(60), 1e8, today)
+        self.assertEqual(len(s["mc"]), 59)                    # 오늘(잠정) 행은 차트에 안 넣는다
+
+    def test_render_click_rows_only_with_series(self):
+        path = os.path.join(os.path.dirname(HERE), "data", "latest.json")
+        if not os.path.exists(path):
+            self.skipTest("latest.json 없음")
+        d = json.load(open(path, encoding="utf-8"))
+        code = d["rows"][0]["code"]
+        html = build_report.render(d, series={code: {"d": "260102", "mc": [1], "fr": [1], "in": [1]}})
+        self.assertEqual(html.count("class='clk'"), 1)
+        self.assertIn('const SERIES={"' + code + '"', html)
+        self.assertNotIn("class='clk'", build_report.render(d))
+        self.assertNotIn("const SERIES", build_report.render(d))
+
+
 if __name__ == "__main__":
     unittest.main(verbosity=1)
