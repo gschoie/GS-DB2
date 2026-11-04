@@ -1,5 +1,5 @@
 {
-  "when_utc": "2026-11-03 22:09:25Z",
+  "when_utc": "2026-11-04 22:08:45Z",
   "ok": true,
   "note": "alert_sent",
   "chat_id_tail": "5171",
@@ -7,7 +7,7 @@
   "response": {
     "ok": true,
     "result": {
-      "message_id": 769,
+      "message_id": 777,
       "from": {
         "id": 8875725998,
         "is_bot": true,
@@ -21,8 +21,8 @@
         "username": "gschoie",
         "type": "private"
       },
-      "date": 1793743765,
-      "text": "📡 ETF/섹터 신호 · 2026-11-03 (전일 확정)\n\n⚡ 추세 강도 1개 (강력 1)\n\n⚡ TIGER 미국필라델피아반도체나스닥 · 반도체/AI\n   ADX 25 상향돌파 · 하락추세 강화(강력)\n   RSI 34.0 · ADX 25.3 · %K 18.7/29.6 · 수급 중립\n   [B] 상대강도 하위 25% · ADX 하락추세\n\n전체 신호판 › 대시보드\n🎴 GS Research Desk · ETF/섹터 신호",
+      "date": 1793830124,
+      "text": "📡 ETF/섹터 신호 · 2026-11-04 (전일 확정)\n\n◆ RSI 매수(30 이하) 2개\n   1주 단기 반등용 — 백테스트 D+5 승률 66%(초과 +0.92%p), D+20엔 효과 소멸\n\n🟩 SOL 화장품TOP3플러스 · 화장품\n   RSI 30.8→29.5 · 30 이하 진입(과매도)\n   RSI 29.5 · ADX 28.7 · %K 20.1/18.7 · 수급 중립\n\n🟩 TIGER 화장품 · 화장품\n   RSI 32.3→29.9 · 30 이하 진입(과매도)\n   RSI 29.9 · ADX 31.9 · %K 21.5/19.1 · 수급 중립\n\n★ 매수 신호(골든크로스) 1개\n\n🟢 KODEX 보험 · 금융\n   ＋DI가 −DI 상향돌파·추세전환 · 외인·기관 동반 순매수\n   RSI 43.1 · ADX 14.3 · %K 48.3/52.3 · 외인·기관 쌍끌이\n   [B] 상대강도 상위 25% · 외인·기관 연속 순매수 4일\n\n전체 신호판 › 대시보드\n🎴 GS Research Desk · ETF/섹터 신호",
       "entities": [
         {
           "offset": 0,
@@ -30,17 +30,37 @@
           "type": "bold"
         },
         {
-          "offset": 43,
+          "offset": 51,
           "length": 1,
           "type": "bold"
         },
         {
-          "offset": 56,
-          "length": 19,
+          "offset": 57,
+          "length": 52,
+          "type": "italic"
+        },
+        {
+          "offset": 114,
+          "length": 14,
           "type": "bold"
         },
         {
-          "offset": 200,
+          "offset": 218,
+          "length": 9,
+          "type": "bold"
+        },
+        {
+          "offset": 329,
+          "length": 1,
+          "type": "bold"
+        },
+        {
+          "offset": 336,
+          "length": 8,
+          "type": "bold"
+        },
+        {
+          "offset": 484,
           "length": 4,
           "type": "text_link",
           "url": "https://gschoie.github.io/GS-DB2/etf_signal_report.html"
