@@ -48,6 +48,23 @@ class DetectTest(unittest.TestCase):
                      "근태 등록 예정입니다", "근태 진행중입니다"):
             self.assertIsNone(detect_attendance(text, SEP), text)
 
+    def test_normal_commute_report_without_keyword(self):
+        # 11/4 실사례 — "이준범 10월 정상출근입니다 !" 엔 '근태' 낱말이 없다.
+        # 사용자 규칙: 정상출근·출근도 근태 보고다.
+        nov = datetime(2026, 11, 4, 9, 35, tzinfo=KST)
+        hit = detect_attendance("이준범 10월 정상출근입니다 !", nov)
+        self.assertIsNotNone(hit)
+        self.assertEqual(hit["month"], "2026-10")
+        self.assertTrue(hit["explicit"])
+        self.assertIsNotNone(detect_attendance("10월 출근 이상 없습니다", nov))
+
+    def test_commute_chatter_cut(self):
+        # '출근'만 있는 출퇴근 잡담·질문은 보고가 아니다.
+        nov = datetime(2026, 11, 4, 9, 0, tzinfo=KST)
+        for text in ("지금 출근했어요", "출근길입니다", "출근 중이에요",
+                     "내일 일찍 출근하겠습니다", "출근하셨어요?", "저 먼저 퇴근합니다 출근은 내일요"):
+            self.assertIsNone(detect_attendance(text, nov), text)
+
     def test_spaced_and_dotted(self):
         self.assertIsNotNone(detect_attendance("근 태 완벽합니다", SEP))
         self.assertIsNotNone(detect_attendance("근.태. 이상없음", SEP))
