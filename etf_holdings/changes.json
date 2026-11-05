@@ -1,95 +1,54 @@
 {
   "date": "2026-11-05",
   "prev_date": "2026-11-04",
-  "generated_at": "2026-11-05 09:20",
+  "generated_at": "2026-11-05 10:20",
   "base_date": "",
   "prev_base_date": "",
   "market_date": "2026-11-05",
   "prev_market_date": "2026-11-04",
-  "fetched_at": "2026-11-05 09:20",
+  "fetched_at": "2026-11-05 10:20",
   "prev_fetched_at": "2026-11-04 10:20",
   "first_run": false,
   "etfs": [
     {
-      "code": "471780",
-      "label": "TIGER 코리아테크액티브",
-      "group": "TIGER",
+      "code": "410870",
+      "label": "TIME K컬처액티브",
+      "group": "TIME(구 TIMEFOLIO)",
       "flow_factor": 1.0,
-      "new": [],
+      "new": [
+        {
+          "key": "214450",
+          "name": "파마리서치",
+          "code": "214450",
+          "weight": 4.98,
+          "shares": 180.0
+        },
+        {
+          "key": "122870",
+          "name": "와이지엔터테인먼트",
+          "code": "122870",
+          "weight": 4.77,
+          "shares": 983.0
+        }
+      ],
       "gone": [
         {
-          "key": "000660",
-          "name": "SK하이닉스",
-          "code": "000660",
-          "weight_prev": 23.95,
-          "shares_prev": 52.0
+          "key": "419530",
+          "name": "SAMG엔터",
+          "code": "419530",
+          "weight_prev": 5.54,
+          "shares_prev": 3047.0
         },
         {
-          "key": "005930",
-          "name": "삼성전자",
-          "code": "005930",
-          "weight_prev": 21.63,
-          "shares_prev": 299.0
-        },
-        {
-          "key": "402340",
-          "name": "SK스퀘어",
-          "code": "402340",
-          "weight_prev": 9.18,
-          "shares_prev": 31.0
-        },
-        {
-          "key": "009150",
-          "name": "삼성전기",
-          "code": "009150",
-          "weight_prev": 8.74,
-          "shares_prev": 24.0
-        },
-        {
-          "key": "031980",
-          "name": "피에스케이홀딩스",
-          "code": "031980",
-          "weight_prev": 4.69,
-          "shares_prev": 86.0
-        },
-        {
-          "key": "001820",
-          "name": "삼화콘덴서",
-          "code": "001820",
-          "weight_prev": 3.58,
-          "shares_prev": 111.0
-        },
-        {
-          "key": "006400",
-          "name": "삼성SDI",
-          "code": "006400",
-          "weight_prev": 2.9,
-          "shares_prev": 18.0
-        },
-        {
-          "key": "425420",
-          "name": "티에프이",
-          "code": "425420",
-          "weight_prev": 2.86,
-          "shares_prev": 112.0
-        },
-        {
-          "key": "319660",
-          "name": "피에스케이",
-          "code": "319660",
-          "weight_prev": 2.82,
-          "shares_prev": 81.0
-        },
-        {
-          "key": "007660",
-          "name": "이수페타시스",
-          "code": "007660",
-          "weight_prev": 2.66,
-          "shares_prev": 101.0
+          "key": "352820",
+          "name": "하이브",
+          "code": "352820",
+          "weight_prev": 5.0,
+          "shares_prev": 260.0
         }
       ],
       "moves": [],
-      "has_weight": false
+      "has_weight": true
     },
     {
       "code": "0162Y0",
@@ -277,8 +236,8 @@
   },
   "summary": {
     "etfs_changed": 7,
-    "new_total": 5,
-    "gone_total": 15,
+    "new_total": 7,
+    "gone_total": 7,
     "moves_total": 3,
     "universe": 20
   }
