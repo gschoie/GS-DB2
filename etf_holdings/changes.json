@@ -1,96 +1,15 @@
 {
   "date": "2026-11-06",
   "prev_date": "2026-11-05",
-  "generated_at": "2026-11-06 09:20",
+  "generated_at": "2026-11-06 10:20",
   "base_date": "",
   "prev_base_date": "",
   "market_date": "2026-11-06",
   "prev_market_date": "2026-11-05",
-  "fetched_at": "2026-11-06 09:20",
+  "fetched_at": "2026-11-06 10:20",
   "prev_fetched_at": "2026-11-05 10:20",
   "first_run": false,
   "etfs": [
-    {
-      "code": "0162Y0",
-      "label": "TIME 코스닥액티브",
-      "group": "TIME(구 TIMEFOLIO)",
-      "flow_factor": 1.0,
-      "new": [],
-      "gone": [
-        {
-          "key": "196170",
-          "name": "알테오젠",
-          "code": "196170",
-          "weight_prev": 5.96,
-          "shares_prev": 85.0
-        },
-        {
-          "key": "058610",
-          "name": "에스피지",
-          "code": "058610",
-          "weight_prev": 5.35,
-          "shares_prev": 199.0
-        },
-        {
-          "key": "030530",
-          "name": "원익홀딩스",
-          "code": "030530",
-          "weight_prev": 5.15,
-          "shares_prev": 498.0
-        },
-        {
-          "key": "108490",
-          "name": "로보티즈",
-          "code": "108490",
-          "weight_prev": 4.75,
-          "shares_prev": 60.0
-        },
-        {
-          "key": "086520",
-          "name": "에코프로",
-          "code": "086520",
-          "weight_prev": 4.2,
-          "shares_prev": 159.0
-        },
-        {
-          "key": "222800",
-          "name": "심텍",
-          "code": "222800",
-          "weight_prev": 4.18,
-          "shares_prev": 99.0
-        },
-        {
-          "key": "064290",
-          "name": "인텍플러스",
-          "code": "064290",
-          "weight_prev": 3.45,
-          "shares_prev": 199.0
-        },
-        {
-          "key": "059090",
-          "name": "미코",
-          "code": "059090",
-          "weight_prev": 3.12,
-          "shares_prev": 399.0
-        },
-        {
-          "key": "425420",
-          "name": "티에프이",
-          "code": "425420",
-          "weight_prev": 2.74,
-          "shares_prev": 99.0
-        },
-        {
-          "key": "126340",
-          "name": "비나텍",
-          "code": "126340",
-          "weight_prev": 2.61,
-          "shares_prev": 79.0
-        }
-      ],
-      "moves": [],
-      "has_weight": false
-    },
     {
       "code": "365040",
       "label": "TIGER AI코리아그로스액티브",
@@ -203,6 +122,32 @@
           "code": "009150",
           "weight_prev": 1.85,
           "shares_prev": 35.0
+        }
+      ],
+      "moves": [],
+      "has_weight": true
+    },
+    {
+      "code": "0162Y0",
+      "label": "TIME 코스닥액티브",
+      "group": "TIME(구 TIMEFOLIO)",
+      "flow_factor": 1.0,
+      "new": [
+        {
+          "key": "226950",
+          "name": "올릭스",
+          "code": "226950",
+          "weight": 2.58,
+          "shares": 78.0
+        }
+      ],
+      "gone": [
+        {
+          "key": "126340",
+          "name": "비나텍",
+          "code": "126340",
+          "weight_prev": 2.61,
+          "shares_prev": 79.0
         }
       ],
       "moves": [],
@@ -372,8 +317,8 @@
   },
   "summary": {
     "etfs_changed": 9,
-    "new_total": 10,
-    "gone_total": 20,
+    "new_total": 11,
+    "gone_total": 11,
     "moves_total": 3,
     "universe": 20
   }
