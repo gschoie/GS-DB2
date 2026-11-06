@@ -1,5 +1,5 @@
 {
-  "when_utc": "2026-11-05 01:20:42Z",
+  "when_utc": "2026-11-06 00:21:11Z",
   "ok": true,
   "note": "change_sent",
   "chat_id_tail": "5171",
@@ -7,7 +7,7 @@
   "response": {
     "ok": true,
     "result": {
-      "message_id": 780,
+      "message_id": 787,
       "from": {
         "id": 8875725998,
         "is_bot": true,
@@ -21,8 +21,8 @@
         "username": "gschoie",
         "type": "private"
       },
-      "date": 1793841642,
-      "text": "🧩 액티브 ETF 구성 변화 · 감지 2026-11-05 10:20 (직전 거래일 매매)\n\n변화 ETF 7개 · 진입 7·이탈 7·실매매 3\n\n🟢 TIME K컬처액티브 · TIME(구 TIMEFOLIO)\n   ⊕ 진입: 파마리서치, 와이지엔터테인먼트\n   ⊖ 이탈: SAMG엔터, 하이브\n🟢 TIME 코스닥액티브 · TIME(구 TIMEFOLIO)\n   ⊕ 진입: 비나텍\n   ⊖ 이탈: 피에스케이홀딩스\n   ▲ 알테오젠 계약수 +44% · 비중 +1.6%p\n🟢 TIME Korea플러스배당액티브 · TIME(구 TIMEFOLIO)\n   ⊕ 진입: 하나금융지주\n   ⊖ 이탈: 한국금융지주\n🟢 TIME K바이오액티브 · TIME(구 TIMEFOLIO)\n   ⊕ 진입: 리브스메드\n   ⊖ 이탈: HLB\n🟢 KoAct 코스닥액티브 · KoAct\n   ⊕ 진입: 동진쎄미켐\n   ⊖ 이탈: 파크시스템스\n🟢 KoAct 배당성장액티브 · KoAct\n   ⊕ 진입: 에코프로에이치엔\n   ⊖ 이탈: 한화에어로스페이스\n🟢 TIGER 퓨처모빌리티액티브 · TIGER\n   ▲ 현대글로비스 계약수 +18% · 비중 +1.2%p\n   ▽ 삼성SDI 계약수 −10% · 비중 −1.1%p\n\n전체 상세 › 대시보드\n🎴 GS Research Desk · 액티브 ETF 트래커",
+      "date": 1793924471,
+      "text": "🧩 액티브 ETF 구성 변화 · 감지 2026-11-06 09:20 (직전 거래일 매매)\n\n변화 ETF 9개 · 진입 10·이탈 20·실매매 3\n\n🟢 TIME 코스닥액티브 · TIME(구 TIMEFOLIO)\n   ⊖ 이탈: 알테오젠, 에스피지, 원익홀딩스, 로보티즈, 에코프로, 심텍, 인텍플러스, 미코, 티에프이, 비나텍\n🟢 TIGER AI코리아그로스액티브 · TIGER\n   ⊕ 진입: LG에너지솔루션, 삼성바이오로직스, 현대모비스\n   ⊖ 이탈: 삼성화재, 삼성생명, HD현대중공업\n   ▽ SK하이닉스 계약수 −13% · 비중 −1.3%p\n   ▽ SK스퀘어 계약수 −37% · 비중 −0.9%p\n   ▽ 삼성전자 계약수 −3% · 비중 +1.2%p\n🟢 TIME 코스피액티브 · TIME(구 TIMEFOLIO)\n   ⊕ 진입: 셀트리온\n   ⊖ 이탈: 삼성전기\n🟢 TIME Korea플러스배당액티브 · TIME(구 TIMEFOLIO)\n   ⊕ 진입: 한국금융지주\n   ⊖ 이탈: SK\n🟢 TIME K바이오액티브 · TIME(구 TIMEFOLIO)\n   ⊕ 진입: 한올바이오파마\n   ⊖ 이탈: 에이비엘바이오\n🟢 KoAct 코스닥액티브 · KoAct\n   ⊕ 진입: 파크시스템스\n   ⊖ 이탈: 동진쎄미켐\n🟢 KoAct 배당성장액티브 · KoAct\n   ⊕ 진입: 한화에어로스페이스\n   ⊖ 이탈: SK이노베이션\n🟢 TIGER 코리아테크액티브 · TIGER\n   ⊕ 진입: 테스\n   ⊖ 이탈: 삼성SDI\n🟢 TIGER 퓨처모빌리티액티브 · TIGER\n   ⊕ 진입: NAVER\n   ⊖ 이탈: 포스코퓨처엠\n\n전체 상세 › 대시보드\n🎴 GS Research Desk · 액티브 ETF 트래커",
       "entities": [
         {
           "offset": 0,
@@ -40,42 +40,52 @@
           "type": "bold"
         },
         {
-          "offset": 84,
+          "offset": 86,
           "length": 11,
           "type": "bold"
         },
         {
-          "offset": 166,
+          "offset": 186,
+          "length": 17,
+          "type": "bold"
+        },
+        {
+          "offset": 374,
           "length": 11,
           "type": "bold"
         },
         {
-          "offset": 263,
+          "offset": 437,
           "length": 18,
           "type": "bold"
         },
         {
-          "offset": 337,
+          "offset": 507,
           "length": 12,
           "type": "bold"
         },
         {
-          "offset": 401,
+          "offset": 577,
           "length": 12,
           "type": "bold"
         },
         {
-          "offset": 456,
+          "offset": 632,
           "length": 13,
           "type": "bold"
         },
         {
-          "offset": 518,
+          "offset": 693,
+          "length": 14,
+          "type": "bold"
+        },
+        {
+          "offset": 746,
           "length": 15,
           "type": "bold"
         },
         {
-          "offset": 616,
+          "offset": 810,
           "length": 4,
           "type": "text_link",
           "url": "https://gschoie.github.io/GS-DB2/etf_holdings_report.html"
