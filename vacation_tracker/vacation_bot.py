@@ -33,7 +33,7 @@ sys.path.insert(0, str(HERE))
 # 로그인(cloud_login.py)·소스 감시와 같은 기기 정보를 써야 세션이 안정된다.
 sys.path.insert(0, str(ROOT / "source_watcher"))
 
-from rules import KST, detect_kind, pick_candidates, rule_extract  # noqa: E402
+from rules import KST, detect_kind, pick_candidates, rule_extract_all  # noqa: E402
 
 CONFIG_PATH = HERE / "config.yml"
 STATE_PATH = HERE / "state" / "state.json"
@@ -60,6 +60,9 @@ GEMINI_SYSTEM_PROMPT = """너는 텔레그램 대화에서 '자리 비움 보고
   담당기사: …" 같은 전달 공지는 일정 확인용 문자이지 자리 비움 보고가 아니다 → false.
 - "내일", "다음주 수요일" 같은 상대 날짜는 그 메시지의 보낸 시각을 기준으로 계산한다.
 - 종료일이 없으면 end=start(하루짜리). "3일간"이면 시작일 포함 3일.
+- **한 메시지에 떨어진 기간이 여러 개면**("11/13, 11/20 휴가 쓰겠습니다") "periods" 배열에
+  건마다 {"start","end","kind"}로 전부 담아라(start/end 최상위 칸에는 첫 건을 적는다).
+  연속한 날짜(9/14,15,16)는 한 구간이다. 기간이 하나면 periods는 생략해도 된다.
 - 날짜를 도저히 못 정하면 vacation=true라도 start=null로 두라(사람이 확인한다).
 - 일부 메시지에는 (맥락)으로 직전 대화가 붙어 있다. '나'는 계정 주인이다.
   맥락의 질문(예: "출장 언제야?")에 대한 날짜 답변이면 보낸 사람의 자리 비움 보고로
@@ -496,29 +499,41 @@ def extract(candidates: list[dict], owner: str = "") -> list[dict]:
         if verdict is not None:
             if not verdict.get("vacation"):
                 continue
-            start = verdict.get("start")
-            entry = {
-                "kind": str(verdict.get("kind") or "휴가"),
-                "start": start,
-                "end": verdict.get("end") or start,
-                "note": str(verdict.get("note") or ""),
-                "needs_review": not start,
-                "engine": "gemini",
-            }
+            # 떨어진 기간 여러 개("11/13, 11/20 휴가")는 periods 배열로 — 건마다 항목 하나.
+            periods = [p for p in (verdict.get("periods") or []) if isinstance(p, dict)]
+            if not periods:
+                periods = [{"start": verdict.get("start"), "end": verdict.get("end"),
+                            "kind": verdict.get("kind")}]
+            made = []
+            for p in periods:
+                start = p.get("start")
+                made.append({
+                    "kind": str(p.get("kind") or verdict.get("kind") or "휴가"),
+                    "start": start,
+                    "end": p.get("end") or start,
+                    "note": str(verdict.get("note") or ""),
+                    "needs_review": not start,
+                    "engine": "gemini",
+                })
         else:  # Gemini 불가·실패 — 규칙 파서로라도 잡아둔다
-            entry = rule_extract(cand["text"], msg_dt)
-            entry["note"] = ""
-            # 맥락 후보는 키워드가 상대 질문 쪽에 있다 — 종류를 맥락에서 가져온다.
-            if cand.get("kind_hint") and detect_kind(cand["text"]) is None:
-                entry["kind"] = cand["kind_hint"]
+            made = rule_extract_all(cand["text"], msg_dt)
+            for entry in made:
+                entry["note"] = ""
+                # 맥락 후보는 키워드가 상대 질문 쪽에 있다 — 종류를 맥락에서 가져온다.
+                if cand.get("kind_hint") and detect_kind(cand["text"]) is None:
+                    entry["kind"] = cand["kind_hint"]
         display_text = cand["text"]
         if cand.get("trigger") == "context" and cand.get("context"):
             display_text = f"{cand['context'].splitlines()[-1]} → {cand['text']}"
-        entry.update(uid=cand["uid"], name=resolve_entry_name(cand, verdict, owner),
-                     text=display_text,
-                     msg_date=cand["msg_date"],
-                     detected_at=datetime.now(KST).isoformat(timespec="minutes"))
-        entries.append(entry)
+        for k, entry in enumerate(made):
+            # 다건이면 uid#k 로 가른다(인뎁스 일정표와 같은 방식 — 재스캔 중복 차단은
+            # last_id 증분이라 원래 없고, span 중복은 아래 record 의 seen_spans 가 거른다).
+            entry.update(uid=cand["uid"] if len(made) == 1 else f"{cand['uid']}#{k}",
+                         name=resolve_entry_name(cand, verdict, owner),
+                         text=display_text,
+                         msg_date=cand["msg_date"],
+                         detected_at=datetime.now(KST).isoformat(timespec="minutes"))
+            entries.append(entry)
     return entries
 
 
