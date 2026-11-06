@@ -348,8 +348,13 @@ async function dispatchWorkflow(payload,status,btn){
 async function dispatchDart(){
  const url=($('#dart-url')?.value||'').trim(),comment=($('#dart-comment')?.value||'').trim(),status=$('#dart-status'),btn=$('#dart-send');
  if(!/dart\.fss\.or\.kr|rcpNo=|^\d{10,}$/.test(url)){status.textContent='⚠ DART 공시 링크를 넣어주세요';return}
- if(await dispatchWorkflow({workflow:'dart',dart_url:url,comment,target:'비공개(바담)'},status,btn)){
-   status.textContent='✅ 요청됨 — 1~2분 뒤 바담 방(비공개) 확인';$('#dart-url').value='';$('#dart-comment').value='';}}
+ // 보낼 방 체크박스 → 워크플로 target(choice). 문자열은 dart-shiporder-bot.yml 의 options 와 같아야 한다.
+ const badam=$('#dart-room-badam')?.checked!==false,daol=$('#dart-room-daol')?.checked!==false;
+ if(!badam&&!daol){status.textContent='⚠ 보낼 방을 하나 이상 고르세요';return}
+ const target=badam&&daol?'둘 다(바담+DAOL)':badam?'비공개(바담)':'공개채널';
+ const where=badam&&daol?'바담 + DAOL 조선':badam?'바담 방(비공개)':'DAOL 조선(공개채널)';
+ if(await dispatchWorkflow({workflow:'dart',dart_url:url,comment,target},status,btn)){
+   status.textContent='✅ 요청됨 — 1~2분 뒤 '+where+' 확인';$('#dart-url').value='';$('#dart-comment').value='';}}
 const REMEMBER_ENDPOINT='https://script.google.com/macros/s/AKfycbyerXB4W9QaOQJ_ZADATF5FadRtDiSQlT_LAWxPblYQ39bHjmE4LegFhfSb47n4aTj1/exec';/* 리멤버→Notion GAS 웹앱 (gas/remember_notion.gs). 비면 화면의 ⚙️ 연결 설정(localStorage) 사용 */
 const REMEMBER_EP_KEY='remember_endpoint_v1';
 function rememberEndpoint(){if(REMEMBER_ENDPOINT)return REMEMBER_ENDPOINT;try{return localStorage.getItem(REMEMBER_EP_KEY)||''}catch{return''}}
