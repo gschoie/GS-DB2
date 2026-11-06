@@ -9,7 +9,9 @@
 import os, json, glob, html, argparse, datetime, urllib.request, urllib.error
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-DASH_URL = "https://gschoie.github.io/GS-DB2/etf_signal_report.html"
+# 공유용 주소(조직 Pages, 50번) — 원본 gschoie.github.io/GS-DB2 대신 텔레그램에는
+# 공유용 주소만 적는다. 두 주소 모두 같은 _site 배포본이다.
+DASH_URL = "https://gs-research-desk.github.io/etf_signal_report.html"
 SIGNATURE = "🎴 GS Research Desk · ETF/섹터 신호"
 STATUS_PATH = os.path.join(HERE, "telegram_status.json")
 
