@@ -263,3 +263,48 @@ class OwnMessages(unittest.TestCase):
         self.assertEqual(pick_candidates(msgs), [])  # 기본은 제외
         picked = pick_candidates(msgs, allow_own=True)
         self.assertEqual([p["trigger"] for p in picked], ["keyword"])
+
+
+class MultiPeriod(unittest.TestCase):
+    """떨어진 날짜 나열은 건마다 따로 — 11/6 실사례 '11/13, 11/20 휴가 쓰겠습니다~'가
+    폴백에서 11/11~11/13 구간으로 오독됐다."""
+
+    def test_comma_separated_days_split(self):
+        from rules import rule_extract_all
+        entries = rule_extract_all("11/13, 11/20 휴가 쓰겠습니다~",
+                                   datetime(2026, 11, 6, 12, 35, tzinfo=KST))
+        self.assertEqual([(e["start"], e["end"]) for e in entries],
+                         [("2026-11-13", "2026-11-13"), ("2026-11-20", "2026-11-20")])
+        self.assertTrue(all(not e["needs_review"] for e in entries))
+
+    def test_consecutive_listing_stays_one_span(self):
+        from rules import rule_extract_all
+        entries = rule_extract_all("9/14,15,16 휴가입니다",
+                                   datetime(2026, 9, 1, 9, 0, tzinfo=KST))
+        self.assertEqual([(e["start"], e["end"]) for e in entries],
+                         [("2026-09-14", "2026-09-16")])
+
+    def test_mixed_run_and_lone_day(self):
+        from rules import rule_extract_all
+        entries = rule_extract_all("12/22, 12/23 그리고 12/28 연차요",
+                                   datetime(2026, 11, 6, 9, 0, tzinfo=KST))
+        self.assertEqual([(e["start"], e["end"]) for e in entries],
+                         [("2026-12-22", "2026-12-23"), ("2026-12-28", "2026-12-28")])
+
+    def test_dash_range_untouched(self):
+        from rules import rule_extract_all
+        entries = rule_extract_all("9/15화-9/18금 입니당 출장",
+                                   datetime(2026, 9, 1, 9, 0, tzinfo=KST))
+        self.assertEqual([(e["start"], e["end"]) for e in entries],
+                         [("2026-09-15", "2026-09-18")])
+
+    def test_fallback_extract_makes_one_entry_per_period(self):
+        # Gemini 불가 폴백 경로 — 메시지 하나가 uid#k 항목 여러 개가 된다.
+        import vacation_bot
+        cands = [{"uid": "5:100", "name": "이준범", "by_me": False,
+                  "text": "11/13, 11/20 휴가 쓰겠습니다~",
+                  "msg_date": "2026-11-06T12:35+09:00"}]
+        entries = vacation_bot.extract(cands, owner="최광식")
+        self.assertEqual([(e["uid"], e["start"]) for e in entries],
+                         [("5:100#0", "2026-11-13"), ("5:100#1", "2026-11-20")])
+        self.assertEqual({e["name"] for e in entries}, {"이준범"})
