@@ -625,3 +625,9 @@ main input[type=date]:focus,main input[type=number]:focus,main select:focus,main
 
 /* 링크가 아직 없는 메뉴: 흐리게 + 눌리지 않게(죽은 링크로 나가지 않는다) */
 .nav-submenu a.soon,.nav-submenu-2 a.soon{opacity:.45;pointer-events:none;cursor:default}
+
+/* 수주공시 '보낼 방' 체크박스 — .dart-form label 은 display:grid 라 가로로 다시 눕힌다 */
+.dart-rooms{display:flex;flex-wrap:wrap;align-items:center;gap:14px;font-size:12px;color:#5c6661}
+.dart-rooms b{font-weight:700}
+.dart-rooms label{display:flex!important;align-items:center;gap:6px;font-weight:400}
+.dart-rooms input{width:16px;height:16px;padding:0}
