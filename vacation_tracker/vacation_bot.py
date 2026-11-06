@@ -821,11 +821,18 @@ def apply_plan(raw: str) -> None:
     removed = 0
     for uid, entry in entries.items():
         if uid.startswith(prefix) and uid not in desired and not entry.get("deleted"):
+            # 지난 일정은 새 계획서에서 빠져도 지우지 않는다(11/5 사용자 규칙 "과거는
+            # 굳이 지우지 말고") — HR 화면이 스크롤로 잘려 과거 행이 캡쳐에 안 담기는
+            # 게 보통이라, 교체는 오늘 이후 일정에만 적용한다.
+            if (entry.get("end") or entry.get("start") or "") < today:
+                continue
             entry["deleted"] = True
             removed += 1
-    # 재등록 멱등성: 이 사람의 옛 '계획서에도 있음' 표시를 지우고 이번 계획 기준으로 다시 단다.
+    # 재등록 멱등성: 이 사람의 옛 '계획서에도 있음' 표시를 지우고 이번 계획 기준으로
+    # 다시 단다 — 지난 항목의 표시는 보존(위와 같은 이유).
     for k, v in entries.items():
-        if not k.startswith("plan:") and v.get("name") == name:
+        if not k.startswith("plan:") and v.get("name") == name \
+                and (v.get("end") or v.get("start") or "") >= today:
             note = v.get("note") or ""
             if PLAN_ALSO_MARK in note:
                 v["note"] = note.replace(f" · {PLAN_ALSO_MARK}", "").replace(

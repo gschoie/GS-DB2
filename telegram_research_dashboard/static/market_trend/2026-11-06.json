@@ -1,0 +1,690 @@
+{
+ "date": "2026-11-06",
+ "meta": {
+  "window": "11-05 06:00~11-06 06:00 KST",
+  "engine": "Gemini(gemini-2.5-flash)",
+  "generated_at": "2026-11-06T06:36+09:00"
+ },
+ "stats": {
+  "channels": 95,
+  "messages": 1724,
+  "groups": 1574
+ },
+ "one_liner": "미국 중간선거 결과가 데이터센터 규제 우려, 유가 급락, 친환경 산업 기대 등 시장 전반에 복합적인 영향을 미치며 투자자들의 불안감이 고조되고 있다.",
+ "themes": [
+  {
+   "name": "미국 중간선거 영향 — 데이터센터 규제 및 AI 섹터 불확실성",
+   "narrative": "미국 중간선거에서 민주당이 승리하고 텍사스 주지사 선거에서 데이터센터 신규 건설 중단을 공약으로 내세운 후보가 당선되면서 AI 인프라 투자에 대한 불확실성이 커졌다. 이는 신규 데이터센터 프로젝트의 속도 조절 및 투자 비용 확대 우려로 이어지며 아이렌 등 관련 기업들의 주가에 부정적인 영향을 미치고 있다.",
+   "status": "new",
+   "strength": 5,
+   "keywords": [
+    "신규 데이터센터",
+    "텍사스 주지사",
+    "유예",
+    "건설 규제",
+    "공약",
+    "아이렌",
+    "신규 건설",
+    "조절"
+   ],
+   "evidence": [
+    {
+     "channel": "키움증권 전략/시황 한지영",
+     "quote": "알려진대로 민주당 일부에서 데이터센터 신규 건설 중단을 추진하고 있으며, 신규 데이터센터 건설의 높은 비중을 차지하고 있는 텍사스에서 데이터센터 규제를 공약으로 내세운 민주당 주지사가 당선됐습니다."
+    },
+    {
+     "channel": "한투증권 미국/중국전략 정정영",
+     "quote": "• 물리적으로 2027년 약 50GW의 데이터센터 생산능력은 정책 충격으로부터 거의 보호. 2028년 62.2GW에 달하는 신규 생산능력 중 90% 이상은 미착공 & 승인 연기 위험 노출"
+    },
+    {
+     "channel": "이상헌 부장 iM 지주/ESG/중소형주",
+     "quote": "이러한 규제 움직임은 AI 관련 기업들의 주가에도 차별적으로 반영됐다. 이날 뉴욕 증시에서 데이터센터 운영업체인 아이렌과 헛8, 어플라이드디지털, 코어사이언티픽은 급락했다."
+    }
+   ]
+  },
+  {
+   "name": "미국 중간선거 영향 — 중동 정세 및 유가 급락",
+   "narrative": "미국 중간선거에서 민주당이 상·하원을 모두 장악하면서 이란 전쟁 조기 종식에 대한 기대감이 확산되었다. 이에 따라 국제유가가 8%대 급락하며 약 2개월 만의 최저 수준을 기록했고, 인플레이션 우려 완화로 미 국채금리도 하락하는 모습을 보였다.",
+   "status": "new",
+   "strength": 4,
+   "keywords": [
+    "종식",
+    "이란 전쟁 조기 종식",
+    "전쟁 종식",
+    "국제유가 8%대 급락",
+    "유가 급락",
+    "미 국채금리 하락"
+   ],
+   "evidence": [
+    {
+     "channel": "대신 전략. 돌직구",
+     "quote": "미국 중간선거에서 민주당이 상·하원을 모두 장악하면서 이란 전쟁 조기 종식 기대가 확산, 국제유가 8%대 급락."
+    },
+    {
+     "channel": "여의도스토리 Ver2.0-习近平是个狗东西",
+     "quote": "① 유가 급락과 이란전 종식 기대 확대"
+    },
+    {
+     "channel": "[다올 매크로/투자전략] 조병현/박영찬/정현하/홍록은",
+     "quote": "-미 국채금리, 민주당의 상하원 장악에 따른 중동 전쟁 종식 기대와 이에 따른 국제유가 급락 영향으로 인플레이션 우려 완화되며 하락"
+    }
+   ]
+  },
+  {
+   "name": "미국 중간선거 영향 — 친환경 산업 훈풍 기대",
+   "narrative": "미국 중간선거에서 민주당이 상·하원을 압도적으로 장악하면서 트럼프 정부의 반그린산업 정책에 대한 견제가 강화될 것으로 전망된다. 이는 그린산업 전반에 훈풍으로 작용할 수 있으며, 한국 ESS 산업의 성장세는 미국 정책 변화와 무관하게 확고할 것이라는 분석이 나왔다.",
+   "status": "new",
+   "strength": 3,
+   "keywords": [
+    "견제",
+    "민주당의 상·하원 압도적 장악",
+    "트럼프 정부의 반그린산업 정책에 대한 견제 강화"
+   ],
+   "evidence": [
+    {
+     "channel": "유진투자증권 코스닥벤처팀",
+     "quote": "★ 美 블루 쓰나미, 그린산업 전체에 훈풍 ☞ 트럼프 반그린정책 피크아웃, 2028년 대선 기대감 형성 - 민주당의 상·하원 압도적 장악으로 트럼프 정부의 반그린산업 정책에 대한 견제 강화 전망"
+    },
+    {
+     "channel": "하나증권 리서치",
+     "quote": "-미국 민주당 승리로 데이터센터 신규 건설이 일부 중단된다 하더라도 한국 ESS 산업에 미치는 타격은 미미할 것으로 판단한다."
+    }
+   ]
+  },
+  {
+   "name": "주요 국내 기업 실적 발표 및 기업 가치 제고 노력",
+   "narrative": "BGF리테일은 주식 소각 결정을 발표하고, KT&G는 기업가치 제고 계획을 공개하는 등 기업가치 향상을 위한 노력을 보였다. SK바이오팜과 고영은 예상치를 상회하는 호실적을 기록한 반면, 카카오, 넷마블, 넥센타이어는 실적 부진을 겪었으며 카카오게임즈는 신작 기대감으로 실적 부진을 상쇄했다.",
+   "status": "ongoing",
+   "strength": 4,
+   "keywords": [
+    "BGF",
+    "BGF리테일",
+    "주식소각결정",
+    "카카오",
+    "카카오게임즈",
+    "신작",
+    "KT&G",
+    "기업가치 제고계획",
+    "넥센타이어",
+    "넷마블",
+    "지누스",
+    "대웅제약",
+    "에스엠"
+   ],
+   "evidence": [
+    {
+     "channel": "AWAKE - 실시간 주식 공시 정리채널",
+     "quote": "기업명: BGF리테일(시가총액: 2조 6,237억) A282330... BGF/ 주식소각결정/ 상세보기"
+    },
+    {
+     "channel": "AWAKE - 실시간 주식 공시 정리채널",
+     "quote": "기업명: 케이티앤지(시가총액: 20조 1,600억) A033780 보고서명: 기업가치제고계획(자율공시) 계획서 명칭 : 2026년 KT&G 기업가치 제고계획"
+    },
+    {
+     "channel": "AWAKE - 실시간 주식 공시 정리채널",
+     "quote": "기업명: 에스케이바이오팜(시가총액: 7조 208억) A326030 보고서명: 연결재무제표기준영업(잠정)실적(공정공시) 매출액 : 2,584억(예상치 : 2,556억+/ 1%) 영업익 : 1,163억(예상치 : 953억/ +22%)"
+    },
+    {
+     "channel": "신한 리서치",
+     "quote": "고영(098460.KQ) - 환율 노이즈를 넘어선 사상 최대 실적 ▶️ 신한생각: 서버 및 신사업 고성장에 사상 최대 실적 달성"
+    },
+    {
+     "channel": "신한 리서치",
+     "quote": "▶ 넥센타이어, 3분기 영업익 전년比 61%↓… 원재료·운임 증가 영향"
+    }
+   ]
+  },
+  {
+   "name": "공급망 및 운영상의 어려움 지속",
+   "narrative": "일부 기업들은 기상 악화로 인한 선적 지연과 원자재 가격 상승, 원-달러 환율 하락 등의 복합적인 요인으로 인해 매출 인식에 어려움을 겪고 수익성이 악화되는 모습을 보였다. 이는 전반적인 영업이익 감소로 이어지며 기업들의 실적에 부담을 주고 있다.",
+   "status": "ongoing",
+   "strength": 2,
+   "keywords": [
+    "선적",
+    "선적 지연",
+    "기상 악화",
+    "원-달러 환율 하락 및 원자재 가격 상승",
+    "영업이익 전년 대비 감소"
+   ],
+   "evidence": [
+    {
+     "channel": "NH투자증권 리서치",
+     "quote": "실적 하회 배경은 1) 선적 지연으로 매출 인식 대기물량(780억원)과 2) 원-달러 환율 하락 및 원자재 가격 상승 때문. 선적 지연은 기상 악화 때문에 발생한 것으로 대부…"
+    },
+    {
+     "channel": "신한 리서치",
+     "quote": "▶ 넥센타이어, 3분기 영업익 전년比 61%↓… 원재료·운임 증가 영향"
+    }
+   ]
+  }
+ ],
+ "community_mood": {
+  "score": -80,
+  "summary": "개미 투자자들은 미국 중간선거 결과와 맞물려 나스닥 및 선물 시장의 급락에 대한 극심한 공포와 패닉에 휩싸여 있다. 트럼프 전 대통령의 부재를 아쉬워하며 현 시장 상황에 대한 좌절감을 강하게 표출하고 있다.",
+  "hot_stocks": [
+   {
+    "name": "SOXL",
+    "score": -70,
+    "reason": "레버리지 반도체 ETF로, 나스닥 폭락 우려 속에서 높은 변동성과 하락 위험에 대한 관심이 집중되고 있다."
+   },
+   {
+    "name": "아이렌",
+    "score": -60,
+    "reason": "미국 데이터센터 건설 규제 우려가 확산되면서 관련 기업인 아이렌의 주가 하락에 대한 관심이 높다."
+   },
+   {
+    "name": "삼성전자",
+    "score": -30,
+    "reason": "국내 대표 기술주로서 시장 전반의 하락세 속에서 일부 투자자들은 저점 매수를 시도하지만, 전반적인 시장 공포 분위기에 영향을 받고 있다."
+   }
+  ]
+ },
+ "signals": {
+  "spikes": [
+   {
+    "term": "감지",
+    "count": 28,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "BGF",
+    "count": 24,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "신규 데이터센터",
+    "count": 23,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "종식",
+    "count": 22,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "견제",
+    "count": 22,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "카카오",
+    "count": 31,
+    "burst": 44.21756317944374,
+    "base_daily": 0.6,
+    "new": false
+   },
+   {
+    "term": "카카오게임즈",
+    "count": 21,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "KT&G",
+    "count": 21,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "넥센타이어",
+    "count": 20,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "유예",
+    "count": 20,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "넷마블",
+    "count": 20,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "지누스",
+    "count": 20,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "선적",
+    "count": 19,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "전쟁 종식",
+    "count": 18,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "텍사스 주지사",
+    "count": 18,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "대웅제약",
+    "count": 18,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "조절",
+    "count": 17,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "건설 규제",
+    "count": 17,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "에스엠",
+    "count": 17,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "신작",
+    "count": 17,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "공약",
+    "count": 16,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "아이렌",
+    "count": 16,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "부합 구분",
+    "count": 16,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "신규 건설",
+    "count": 15,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "산일전기",
+    "count": 15,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   }
+  ],
+  "top_posts": [
+   {
+    "channels": 5,
+    "channel": "AWAKE - 실시간 주식 공시 정리채널",
+    "head": "2026.11.05 09:50:04 기업명: 에스케이바이오팜(시가총액: 7조 208억) A326030 보고서명: 연결재무제표기준영업(잠정)실적(공정공시) 매출액 : 2,584억(예상치 : 2,556억+/ 1%) 영업익 : 1,163억(예상치 : 953억/ +22%) 순이익 : 543억(예상치 : 852억/ -36%) **…",
+    "url": "https://t.me/darthacking/156349",
+    "time_kst": "11-05 09:50"
+   },
+   {
+    "channels": 4,
+    "channel": "키움증권 전략/시황 한지영",
+    "head": "[11/5, 장 시작 전 생각: 블루웨이브발 AI 재평가?, 키움 한지영] - 다우 +3.1%, S&P500 +1.6%, 나스닥 +1.4% - 아마존 +6.1%, 마이크론 -7.0%, 엔비디아 -3.2% - WTI 88.0달러, 미 10년물 금리 4.88%, 30년물 금리 5.27% 1. 미국 증시는 중간선거 결과를 긍정…",
+    "url": "https://t.me/hedgecat0301/2991",
+    "time_kst": "11-05 07:44"
+   },
+   {
+    "channels": 4,
+    "channel": "엄브렐라리서치 Jay의 주식투자교실",
+    "head": "헤지펀드 포지셔닝 정리 (JPM) 1. 10월 디리스킹 개요 • Pivotal Path 잠정 데이터 기준, TMT 에쿼티 섹터와 멀티스트래티지 펀드가 디레버리징과 강제 기술주 청산의 중심 • 에쿼티 롱숏, 에쿼티 퀀트, 멀티스트래티지의 10월 손실이 7월보다 더 큼 • AI 포지션에 대한 스톱로스와 강제 청산이 7월보다…",
+    "url": "https://t.me/Jstockclass/15411",
+    "time_kst": "11-05 07:29"
+   },
+   {
+    "channels": 3,
+    "channel": "하나증권 리서치",
+    "head": "[2차전지 산업 보고서 - 하나증권 2차전지 김현수/김희제] '미국 중간선거 배터리 수혜 논리 정교히 해야' 자료링크 : https://vo.la/ySGeqKm ▶ 선거와 무관하게 한국 ESS 성장세 확고 -미국 민주당 승리로 데이터센터 신규 건설이 일부 중단된다 하더라도 한국 ESS 산업에 미치는 타격은 미미할 것으로…",
+    "url": "https://t.me/HanaResearch/20885",
+    "time_kst": "11-05 20:05"
+   },
+   {
+    "channels": 3,
+    "channel": "메리츠증권 리서치",
+    "head": "📮[메리츠증권 모빌리티 김준성] 안녕하세요 메리츠증권 김준성입니다. 업종 2027년 연간 전망 업데이트 드리겠습니다. (요약본 Url: https://han.gl/MJ5nh) ▶ 허니문이 끝나고, 현실이 왔다 ▶ 피지컬 AI, 기술과 시장의 위치 점검 - 2027년이 가질 세 가지 의미 - 1) 피지컬 데이터 디바이스 (…",
+    "url": "https://t.me/meritz_research/45033",
+    "time_kst": "11-05 07:53"
+   },
+   {
+    "channels": 3,
+    "channel": "다올투자증권 리서치센터",
+    "head": "[다올투자증권 조선/기계/방산 최광식] 11/5(목) 데일리뉴스 🛳 조선 [TradeWinds] Will US ‘blue tsunami’ dampen tanker market boom? South Korea’s shipbuilding boom masks a deeper dilemma Orkim orders product…",
+    "url": "https://t.me/daolresearch/15428",
+    "time_kst": "11-05 08:46"
+   },
+   {
+    "channels": 3,
+    "channel": "유진투자증권 코스닥벤처팀",
+    "head": "[그린산업 / 유진투자증권 코스닥벤처팀 / 그린산업&ESG 한병화 ☎02)368-6171] ★ 美 블루 쓰나미, 그린산업 전체에 훈풍 ☞ 트럼프 반그린정책 피크아웃, 2028년 대선 기대감 형성 - 민주당의 상·하원 압도적 장악으로 트럼프 정부의 반그린산업 정책에 대한 견제 강화 전망 - 민주당은 의회 조사권, 인사청문회…",
+    "url": "https://t.me/SmallCap/9177",
+    "time_kst": "11-05 08:08"
+   },
+   {
+    "channels": 3,
+    "channel": "유진투자증권 산업분석실 테크/인프라팀",
+    "head": "안녕하세요, 유진 양승윤입니다. 방산 관련해서 짧게 코멘트 드립니다. - 오늘 방산주 주요 변수는 2가지가 있습니다. (1) LIG D&A 입찰제한 집행정지 법원 심리, (2) 미국 방산주 하락·라인메탈 가이던스 하향 영향 반영 여부 ① LIG D&A 집행정지 심리(시간 미확인) * 집행정지 인용 여부 중요. * 본안(처…",
+    "url": "https://t.me/eugene2team/7369",
+    "time_kst": "11-05 07:39"
+   },
+   {
+    "channels": 3,
+    "channel": "신한 리서치",
+    "head": "[신한투자증권 디스플레이/IT소부장 박현우, 김예성] 이녹스첨단소재: 성장통의 끝자락 ▶️ 긍정과 부정의 혼재 - 신사업 고정비 부담과 본업 부진이 맞물리며 실적 둔화 지속 - 리튬 공급 물량 확대, 가동률 상승에 따른 고정비 부담 완화 필요. 고부가 OCA∙디지타이저 신규 채택 긍정적 ▶️ 바닥을 지나는 중 - 3Q26…",
+    "url": "https://t.me/shinhanresearch/53466",
+    "time_kst": "11-05 07:45"
+   },
+   {
+    "channels": 3,
+    "channel": "AWAKE - 실시간 주식 공시 정리채널",
+    "head": "2026.11.05 15:53:52 기업명: 케이티앤지(시가총액: 20조 1,600억) A033780 보고서명: 기업가치제고계획(자율공시) 계획서 명칭 : 2026년 KT&G 기업가치 제고계획 * 주요 내용 [KT&G 기업가치 제고계획] 1. 주요 성과 -(실적)'26년 연결매출 약 7조원, 영업이익 '23년 대비 약 2…",
+    "url": "https://t.me/darthacking/156421",
+    "time_kst": "11-05 15:53"
+   },
+   {
+    "channels": 3,
+    "channel": "신한 리서치",
+    "head": "[신한투자증권 혁신성장 최승환, 이병화] 고영(098460.KQ) - 환율 노이즈를 넘어선 사상 최대 실적 ▶️ 신한생각: 서버 및 신사업 고성장에 사상 최대 실적 달성 - 2개 분기 연속 최대실적 경신, AI 인프라 투자 최선호주 관점 유지 ▶️ 3Q26 Review: 서버와 신사업의 고성장 지속 - 3Q26 매출액 1…",
+    "url": "https://t.me/shinhanresearch/53477",
+    "time_kst": "11-05 08:06"
+   },
+   {
+    "channels": 3,
+    "channel": "메리츠증권 리서치",
+    "head": "📮[MERITZ Strategy Daily 전략공감2.0] 2026.11.5(목) [투자전략 황수욱] 2027 Outlook #1 (해설판): Transition - 실물시장의 자본수요 확대에서 비롯된 높은 자본 가격(금리), 저금리 시대보다 높은 투자 난이도 - AI 투자는 충분히 유지 가능. 다만 올해 하반기 주식시장…",
+    "url": "https://t.me/meritz_research/45030",
+    "time_kst": "11-05 07:43"
+   },
+   {
+    "channels": 3,
+    "channel": "한투증권 미국/중국전략 정정영",
+    "head": "SemiAnalysis, 미국 중간선거 데이터센터 코멘트: 2027년 이미 결정됐으나 2028년은 변수 가득. 텍사스가 최대 변수 • 물리적으로 2027년 약 50GW의 데이터센터 생산능력은 정책 충격으로부터 거의 보호. 2028년 62.2GW에 달하는 신규 생산능력 중 90% 이상은 미착공 & 승인 연기 위험 노출 •…",
+    "url": "https://t.me/G2strategy/34235",
+    "time_kst": "11-05 13:24"
+   },
+   {
+    "channels": 3,
+    "channel": "GS의 조선/기계/방산 「바담」",
+    "head": "[한화오션, ABB와 부유식 데이터센터 전력기술 MOU] • 한화오션이 ABB와 부유식 데이터센터(FDC) 전력·제어 시스템 기술 협력 MOU 체결 • 2027년 5월까지 FDC 전력 시스템 설계 검토 및 LNG 엔진 출력조절·통합제어 기술 개발 추진 • 육상 데이터센터의 부지·전력 제약 해소 대안으로 해양플랜트 역량을…",
+    "url": "https://t.me/c/1405984327/8478",
+    "time_kst": "11-05 22:05"
+   },
+   {
+    "channels": 3,
+    "channel": "AWAKE - 실시간 주식 공시 정리채널",
+    "head": "2026.11.05 08:02:43 기업명: 카카오(시가총액: 12조 8,913억) A035720 보고서명: 연결재무제표기준영업(잠정)실적(공정공시) 매출액 : 20,867억(예상치 : 20,481억+/ 2%) 영업익 : 2,403억(예상치 : 2,490억/ -3%) 순이익 : 1,589억(예상치 : 2,262억/ -30…",
+    "url": "https://t.me/darthacking/156339",
+    "time_kst": "11-05 08:02"
+   }
+  ]
+ },
+ "community_dc": {
+  "source": "DC인사이드",
+  "galleries": [
+   {
+    "id": "krstock",
+    "name": "국내주식갤러리",
+    "posts": 7613,
+    "capped": true,
+    "burst": 4.0,
+    "base_daily": 1902.7
+   },
+   {
+    "id": "stockus",
+    "name": "해외주식갤러리",
+    "posts": 24480,
+    "capped": true,
+    "burst": 2.7,
+    "base_daily": 9029.0
+   }
+  ],
+  "posts_sampled": 513,
+  "keywords": [
+   {
+    "term": "주석",
+    "count": 8,
+    "burst": 99.0,
+    "new": true
+   },
+   {
+    "term": "그래",
+    "count": 7,
+    "burst": 99.0,
+    "new": true
+   },
+   {
+    "term": "아이렌",
+    "count": 6,
+    "burst": 90.2,
+    "new": true
+   },
+   {
+    "term": "텍사스",
+    "count": 6,
+    "burst": 90.2,
+    "new": true
+   },
+   {
+    "term": "SOXL",
+    "count": 5,
+    "burst": 75.1,
+    "new": true
+   },
+   {
+    "term": "시작",
+    "count": 5,
+    "burst": 75.1,
+    "new": true
+   },
+   {
+    "term": "진지하게",
+    "count": 5,
+    "burst": 75.1,
+    "new": true
+   },
+   {
+    "term": "이게",
+    "count": 5,
+    "burst": 75.1,
+    "new": true
+   },
+   {
+    "term": "연설",
+    "count": 5,
+    "burst": 75.1,
+    "new": true
+   },
+   {
+    "term": "시발",
+    "count": 17,
+    "burst": 8.8,
+    "new": false
+   },
+   {
+    "term": "삼성전자",
+    "count": 8,
+    "burst": 10.9,
+    "new": false
+   },
+   {
+    "term": "입갤",
+    "count": 8,
+    "burst": 8.0,
+    "new": false
+   },
+   {
+    "term": "속슬",
+    "count": 35,
+    "burst": 2.7,
+    "new": false
+   },
+   {
+    "term": "트럼프",
+    "count": 19,
+    "burst": 3.9,
+    "new": false
+   },
+   {
+    "term": "민주당",
+    "count": 5,
+    "burst": 6.8,
+    "new": false
+   }
+  ],
+  "top_recommended": [
+   {
+    "gallery": "해외주식갤러리",
+    "title": "이분 <- 도대체 무슨 싸움을 하고 계셨던거임...?",
+    "views": 14768,
+    "recommend": 439,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=18254765&exception_mode=recommend&page=2",
+    "time_kst": "11-06 00:31"
+   },
+   {
+    "gallery": "해외주식갤러리",
+    "title": "이분 솔직히 그리우면 개추 ㅋㅋㅋㅋㅋㅋㅋㅋ",
+    "views": 12484,
+    "recommend": 317,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=18257776&exception_mode=recommend&page=2",
+    "time_kst": "11-06 01:02"
+   },
+   {
+    "gallery": "해외주식갤러리",
+    "title": "트럼프 <- 한짤 요약 ㅋㅋㅋㅋㅋ..jpg",
+    "views": 14411,
+    "recommend": 302,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=18255722&exception_mode=recommend&page=2",
+    "time_kst": "11-06 00:42"
+   },
+   {
+    "gallery": "해외주식갤러리",
+    "title": "트버지 이제야 깨달아요",
+    "views": 12675,
+    "recommend": 266,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=18255293&exception_mode=recommend&page=2",
+    "time_kst": "11-06 00:36"
+   },
+   {
+    "gallery": "해외주식갤러리",
+    "title": "근데 진짜 신기하고 기괴하지 않냐?",
+    "views": 8558,
+    "recommend": 242,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=18260676&exception_mode=recommend&page=2",
+    "time_kst": "11-06 01:53"
+   }
+  ],
+  "top_viewed": [
+   {
+    "gallery": "국내주식갤러리",
+    "title": "이거 나스닥 폭락 길겠다",
+    "views": 489,
+    "recommend": 1,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3838593&page=13",
+    "time_kst": "11-06 05:15"
+   },
+   {
+    "gallery": "국내주식갤러리",
+    "title": "야선 마6.7은 인생에서 처음보네",
+    "views": 422,
+    "recommend": 0,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3838680&page=11",
+    "time_kst": "11-06 05:34"
+   },
+   {
+    "gallery": "국내주식갤러리",
+    "title": "역대급폭락은 코로나 패닉셀때임",
+    "views": 407,
+    "recommend": 0,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3838704&page=11",
+    "time_kst": "11-06 05:39"
+   },
+   {
+    "gallery": "국내주식갤러리",
+    "title": "어제 삼전 물탔는데",
+    "views": 381,
+    "recommend": 2,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3838631&page=12",
+    "time_kst": "11-06 05:25"
+   },
+   {
+    "gallery": "국내주식갤러리",
+    "title": "현재 상황을 마누라 사진으로 표현해줌",
+    "views": 339,
+    "recommend": 1,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3838588&page=13",
+    "time_kst": "11-06 05:14"
+   },
+   {
+    "gallery": "해외주식갤러리",
+    "title": "트럼프는 더이상 증시방어 안해도 된다고 ㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋ",
+    "views": 327,
+    "recommend": 13,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=18266520&page=21",
+    "time_kst": "11-06 05:58"
+   },
+   {
+    "gallery": "국내주식갤러리",
+    "title": "완전히 나락가는 야선 근황.jpg",
+    "views": 324,
+    "recommend": 0,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3838692&page=11",
+    "time_kst": "11-06 05:37"
+   },
+   {
+    "gallery": "국내주식갤러리",
+    "title": "왠지 연기금 필사방어할거같네",
+    "views": 312,
+    "recommend": 0,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3838617&page=13",
+    "time_kst": "11-06 05:21"
+   }
+  ]
+ }
+}

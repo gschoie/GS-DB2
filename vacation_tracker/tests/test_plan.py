@@ -41,12 +41,20 @@ class SpanTest(unittest.TestCase):
         self.assertEqual(_plan_spans([{"date": "날짜아님", "kind": "종일"}]), [])
 
 
+class _FrozenDT(vacation_bot.datetime):
+    """apply_plan의 '오늘'을 2026-11-05로 고정 — ROWS의 7~10월은 과거, 11~12월은 미래."""
+    @classmethod
+    def now(cls, tz=None):
+        return cls(2026, 11, 5, 9, 0, tzinfo=tz)
+
+
 class ApplyTest(unittest.TestCase):
     def _run(self, store, payload):
         saved = {}
         with mock.patch.object(vacation_bot, "load_json", return_value=store), \
              mock.patch.object(vacation_bot, "save_json",
                                side_effect=lambda p, d: saved.update(d)), \
+             mock.patch.object(vacation_bot, "datetime", _FrozenDT), \
              mock.patch.dict(sys.modules, {"render_page": mock.MagicMock()}):
             vacation_bot.apply_plan(json.dumps(payload, ensure_ascii=False))
         return saved
@@ -66,6 +74,21 @@ class ApplyTest(unittest.TestCase):
         e_dec = store["entries"]["plan:이다연:2026-12-28"]
         self.assertFalse(e_dec.get("deleted"))
         self.assertEqual(e_dec["kind"], "연차")  # 오전반차 → 연차로 갱신
+
+    def test_past_dates_survive_partial_capture(self):
+        # HR 화면이 스크롤로 잘려 과거 행이 캡쳐에 없어도 지난 일정은 안 지운다
+        # (11/5 규칙 "과거는 굳이 지우지 말고"). 미래 행만 교체 대상이다.
+        store = {"entries": {}}
+        self._run(store, {"name": "이다연", "rows": ROWS})
+        future_only = [r for r in ROWS if r["date"] >= "2026.11"]
+        self._run(store, {"name": "이다연", "rows": future_only})
+        self.assertFalse(store["entries"]["plan:이다연:2026-07-27"].get("deleted"))
+        self.assertFalse(store["entries"]["plan:이다연:2026-10-26"].get("deleted"))
+        self.assertFalse(store["entries"]["plan:이다연:2026-11-24"].get("deleted"))
+        # 미래 날짜가 빠지면 여전히 교체(삭제)된다.
+        self._run(store, {"name": "이다연", "rows": [{"date": "2026.12.28", "kind": "오전"}]})
+        self.assertTrue(store["entries"]["plan:이다연:2026-11-24"].get("deleted"))
+        self.assertFalse(store["entries"]["plan:이다연:2026-07-27"].get("deleted"))
 
     def test_telegram_duplicate_annotated(self):
         # 텔레그램으로 이미 잡힌 같은 이름·기간은 계획서가 중복 칩을 안 만들되,

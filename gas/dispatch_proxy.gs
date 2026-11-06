@@ -125,28 +125,39 @@ function doPost(e) {
 /** 연차계획서 캡쳐(dataURL) → Gemini 비전으로 {이름, 날짜·종류 행} 추출 → mode=plan 발사.
  *  스크립트 속성 GEMINI_API_KEY 필요. 추출 결과를 그대로 돌려줘 화면이 바로 보여준다. */
 function vacationPlanImage_(body) {
-  const img = String(body.image || '');
-  const m = img.match(/^data:(image\/[a-z0-9+.-]+);base64,(.+)$/i);
-  if (!m) return { ok: false, code: 400, error: '이미지(dataURL)가 없습니다' };
+  // 여러 장(긴 표를 스크롤로 나눠 찍은 캡쳐)을 한 제출로 받는다 — 전부 한 번의
+  // Gemini 호출에 넣어 행을 합산(11/5: 3장을 넣어 실패한 실사례). 옛 단일 image 호환.
+  const imgs = (Array.isArray(body.images) ? body.images : [body.image])
+    .map(function (s) { return String(s || '').match(/^data:(image\/[a-z0-9+.-]+);base64,(.+)$/i); })
+    .filter(Boolean);
+  if (!imgs.length) return { ok: false, code: 400, error: '이미지(dataURL)가 없습니다' };
+  if (imgs.length > 4) return { ok: false, code: 400, error: '캡쳐는 최대 4장까지입니다' };
   const geminiKey = PropertiesService.getScriptProperties().getProperty('GEMINI_API_KEY');
   if (!geminiKey) {
     return { ok: false, code: 500,
              error: 'GEMINI_API_KEY 스크립트 속성이 없습니다 — dispatch_proxy 프로젝트에 등록하세요' };
   }
   const prompt = [
-    '이 이미지는 인사시스템의 미사용연차 사용계획(연차계획서) 화면이다.',
+    '이 이미지들은 인사시스템의 미사용연차 사용계획(연차계획서) 화면이다.',
+    '여러 장이면 같은 표를 스크롤로 나눠 찍은 것 — 행을 전부 합쳐 하나의 계획으로 읽어라(겹친 행은 한 번만).',
     'JSON으로만 답하라(설명 금지):',
     '{"name":"신청자 이름","rows":[{"date":"YYYY-MM-DD","kind":"종일|오전|오후"}]}',
     '- 휴가일자·휴가종류 표의 행 전부를 담아라. 날짜는 YYYY-MM-DD로 정규화(2026.07.27 → 2026-07-27).',
     '- 휴가종류는 종일/오전/오후 중 하나로. 상태·감산일수·합계는 무시한다.',
     '- 신청자(작성자) 이름을 name에 — 신청자 칸이 우선. 못 읽으면 빈 문자열.',
   ].join('\n');
+  const parts = imgs.map(function (mm) {
+    return { inline_data: { mime_type: mm[1], data: mm[2] } };
+  });
+  parts.push({ text: prompt });
   const payload = JSON.stringify({
-    contents: [{ parts: [{ inline_data: { mime_type: m[1], data: m[2] } }, { text: prompt }] }],
+    contents: [{ parts: parts }],
     generationConfig: { temperature: 0, response_mime_type: 'application/json' },
   });
-  // 429(분당 한도)는 flash↔flash-lite 교대가 빠르다(DART 정규화와 같은 교훈).
-  const models = ['gemini-flash-latest', 'gemini-flash-lite-latest'];
+  // 429(분당 한도)·503(과부하)은 flash↔flash-lite 교대 + 짧은 대기 재시도
+  // (11/5 실사례: lite 503 한 번에 포기 → 두 바퀴·10초 간격으로).
+  const models = ['gemini-flash-latest', 'gemini-flash-lite-latest',
+                  'gemini-flash-latest', 'gemini-flash-lite-latest'];
   let parsed = null, lastErr = '';
   for (let i = 0; i < models.length && !parsed; i++) {
     const res = UrlFetchApp.fetch(
@@ -154,8 +165,10 @@ function vacationPlanImage_(body) {
       ':generateContent?key=' + geminiKey,
       { method: 'post', contentType: 'application/json', payload: payload,
         muteHttpExceptions: true });
-    if (res.getResponseCode() !== 200) {
-      lastErr = models[i] + ' HTTP ' + res.getResponseCode();
+    const code = res.getResponseCode();
+    if (code !== 200) {
+      lastErr = models[i] + ' HTTP ' + code;
+      if ((code === 429 || code >= 500) && i < models.length - 1) Utilities.sleep(10000);
       continue;
     }
     try {
