@@ -9,6 +9,7 @@ DART 단일판매·공급계약체결 공시 URL(또는 rcpNo)을 받아서:
 납기      = 계약기간 종료일의 연·월  (예: 2029-05-15 → 2029년 5월 납기)
 
 필수 환경변수: TELEGRAM_BOT_TOKEN, TELEGRAM_CHAT_ID
+선택:          TELEGRAM_CHAT_ID_EXTRA (쉼표로 여러 개 — 같은 카드를 추가 방에도)
 입력:          --url <DART URL 또는 rcpNo>  (또는 env DART_URL)
 """
 
@@ -305,9 +306,22 @@ def _multipart(fields: dict, file_field: str, file_path: Path) -> tuple[bytes, s
     return bytes(body), f"multipart/form-data; boundary={boundary}"
 
 
-def send_photo(image: Path, caption: str) -> None:
-    token = os.environ["TELEGRAM_BOT_TOKEN"]
-    chat_id = os.environ["TELEGRAM_CHAT_ID"]
+def targets() -> list[str]:
+    """보낼 방 목록 = 기본 방 + 추가 방(TELEGRAM_CHAT_ID_EXTRA, 쉼표로 여러 개).
+
+    커버리지 수급(coverage_flow.notify.targets)과 같은 방식. 기본 방과 같은 ID·빈 칸은
+    걸러 두 번 가지 않게 한다 — 공개채널을 직접 고른 run 은 추가 방과 같아져 1회만 간다.
+    """
+    chat_id = os.environ["TELEGRAM_CHAT_ID"].strip()
+    rooms = [chat_id]
+    for extra in os.environ.get("TELEGRAM_CHAT_ID_EXTRA", "").split(","):
+        extra = extra.strip()
+        if extra and extra not in rooms:
+            rooms.append(extra)
+    return rooms
+
+
+def _post_photo(token: str, chat_id: str, image: Path, caption: str) -> None:
     body, content_type = _multipart(
         {"chat_id": chat_id, "caption": caption, "parse_mode": "HTML"}, "photo", image)
     request = urllib.request.Request(
@@ -317,7 +331,24 @@ def send_photo(image: Path, caption: str) -> None:
     with urllib.request.urlopen(request, timeout=60) as response:
         result = json.loads(response.read().decode("utf-8"))
     if not result.get("ok"):
-        raise SystemExit(f"텔레그램 전송 실패: {result}")
+        raise RuntimeError(f"텔레그램 전송 실패: {result}")
+
+
+def send_photo(image: Path, caption: str) -> None:
+    """기본 방은 실패하면 run 을 실패시키고, 추가 방 실패는 경고만 남긴다.
+
+    추가 방 때문에 종료코드가 바뀌면 재실행 때 기본 방에 두 번 간다(커버리지 수급 10/20 교훈).
+    """
+    token = os.environ["TELEGRAM_BOT_TOKEN"]
+    rooms = targets()
+    for index, chat_id in enumerate(rooms):
+        try:
+            _post_photo(token, chat_id, image, caption)
+            print(f"  → {chat_id} 전송 완료", flush=True)
+        except Exception as error:  # noqa: BLE001 — 추가 방은 실패해도 계속
+            if index == 0:
+                raise SystemExit(str(error))
+            print(f"  ⚠️ 추가 방 {chat_id} 전송 실패: {error}", flush=True)
 
 
 def run(url_or_rcp: str, comment: str = "", dry: bool = False) -> None:
