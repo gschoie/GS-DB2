@@ -756,11 +756,17 @@ async function submitPlan(){
   const btn=$id('plan-btn'),status=$id('plan-status');
   btn.disabled=true;status.textContent='🔎 이미지 '+planImgs.length+'장에서 날짜를 읽는 중… (10~30초)';
   try{
-    const r=await fetch(EP,{method:'POST',body:JSON.stringify({
-      action:'vacplan',images:planImgs,name:$id('plan-name').value||''})});
+    // image(단수)는 옛 GAS 호환 — 재붙여넣기 전의 배포본은 images[]를 모른다.
+    // 여러 장일 땐 일부러 안 보낸다: 첫 장만 처리되면 빠진 날짜가 조용히 지워진다.
+    const payload={action:'vacplan',images:planImgs,name:$id('plan-name').value||''};
+    if(planImgs.length===1)payload.image=planImgs[0];
+    const r=await fetch(EP,{method:'POST',body:JSON.stringify(payload)});
     const d=await r.json();
     if(!d||d.ok===false){
-      status.textContent='⚠ 실패: '+((d&&d.error)||'GAS 프록시 확인 필요');
+      let msg=(d&&d.error)||'GAS 프록시 확인 필요';
+      if(planImgs.length>1&&/이미지\(dataURL\)/.test(msg))
+        msg+=' — GAS가 옛 버전입니다. 여러 장 등록은 dispatch_proxy.gs 재붙여넣기(배포 관리→새 버전) 후 가능해요. 그때까진 한 장씩 올려주세요.';
+      status.textContent='⚠ 실패: '+msg;
       btn.disabled=false;return;
     }
     const rows=(d.rows||[]).map(x=>'<tr><td>'+escText(x.date)+'</td><td>'+escText(x.kind)+'</td></tr>').join('');
