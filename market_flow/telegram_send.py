@@ -12,7 +12,9 @@ if hasattr(sys.stdout, "reconfigure"):
     sys.stdout.reconfigure(encoding="utf-8")  # Windows cp949 콘솔에서 이모지 출력 보호
 
 HERE = Path(__file__).resolve().parent
-DASH_URL = "https://gschoie.github.io/GS-DB2/market_flow_report.html"
+# 공유용 주소(조직 Pages, 50번) — 원본 gschoie.github.io/GS-DB2 는 주소창에 사이드바 쪽
+# 주인 주소가 드러나므로 텔레그램에는 공유용만 적는다. 두 주소 모두 같은 _site 배포본이다.
+DASH_URL = "https://gs-research-desk.github.io/market_flow_report.html"
 SIGNATURE = "🎴 GS Research Desk · 시장 수급"
 STATUS_PATH = HERE / "telegram_status.json"
 SLOT_LABEL = {"1100": "11:00", "1600": "16:00 · 마감",
