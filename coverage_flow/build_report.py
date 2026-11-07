@@ -382,9 +382,10 @@ WEEKLY_GROUPS = [
     {"title": "조선 수급", "sum": "조선 합산", "cols": 4,   # 합산 칸은 2×2 크기 → 4열이면 8장이 둘레를 꼭 채운다
      "codes": ["009540", "010140", "329180", "042660",     # HD한국조선해양 · 삼성중공업 · HD현대중공업 · 한화오션
                "439260", "443060", "071970", "082740"]},   # 대한조선 · HD현대마린솔루션 · HD현대마린엔진 · 한화엔진
-    # 조선기자재(11/7): 유니버스 9 + chart_universe.csv 차트 전용 13 = 22사. 6열 = 합산 2×2 + 20칸 둘레 → 가로형.
-    {"title": "조선기자재 수급", "sum": "조선기자재 합산", "cols": 6,
-     "codes": ["017960", "033500", "075580", "460930", "082740", "071970", "014620", "023160", "013030",   # 한국카본·동성화인텍·세진중공업·현대힘스·한화엔진·HD현대마린엔진·성광벤드·태광·하이록코리아
+    # 조선기자재(11/7): 유니버스 7 + chart_universe.csv 차트 전용 14 = 21사(한화엔진·HD현대마린엔진은 조선 묶음에만 — 사용자 지정).
+    # 5열 = 합산 2×2(4칸) + 21칸 = 25칸 → 5×5 꽉 찬 정사각.
+    {"title": "조선기자재 수급", "sum": "조선기자재 합산", "cols": 5,
+     "codes": ["017960", "033500", "075580", "460930", "014620", "023160", "013030",   # 한국카본·동성화인텍·세진중공업·현대힘스·성광벤드·태광·하이록코리아
                "014940", "077970", "073010", "054540", "108380", "092460", "101930", "382900", "086670",   # 오리엔탈정공·STX엔진·케이에스피·삼영엠텍·대양전기공업·한라IMS·인화정공·범한퓨얼셀·비엠티
                "064820", "333430", "085310", "096350", "0008Z0"]},                                         # 케이프·일승·엔케이·대창솔루션·에스엔시스
 ]
@@ -397,7 +398,7 @@ WEEKLY_JS = r"""
 <script>
 (function(){
   const W=__W__,H=__H__,SC=__SC__,FONT='"Malgun Gothic","Apple SD Gothic Neo","Noto Sans KR",sans-serif';
-  const C={mc:"#111111",inn:"#a0825f",fr:"#2f80d1",zero:"#c9c9c9",ax:"#555",title:"#2f6db5"};
+  const C={mc:"#111111",inn:"#9a7b55",fr:"#2a78cc",zero:"#b5b5b5",ax:"#333",title:"#2f6db5"};
   function nice(lo,hi,k){const sp=(hi-lo)||1,st=Math.pow(10,Math.floor(Math.log10(sp/k))),m=sp/k/st,s=(m<1.5?1:m<3?2:m<7?5:10)*st;
     const a=Math.floor(lo/s)*s,b=Math.ceil(hi/s)*s,t=[];for(let v=a;v<=b+s/2;v+=s)t.push(Math.round(v));return {t,a,b}}
   const n0=v=>Math.round(v).toLocaleString("en-US");
@@ -414,22 +415,29 @@ WEEKLY_JS = r"""
   function svg(s,name,W,H){
     if(!s)return "";W=W||__W__;H=H||__H__;
     const n=s.mc.length,mc=s.mc.map(v=>v/10),fr=s.fr.map(v=>v-s.fr[0]),inn=s["in"].map(v=>v-s["in"][0]);
-    const big=W>__W__,L=58,R=58,T=big?60:54,B=30,pw=W-L-R,ph=H-T-B;
-    const lv=nice(Math.min(...mc),Math.max(...mc),6),rv=nice(Math.min(0,...fr,...inn),Math.max(0,...fr,...inn),8);
+    const big=W>__W__;
+    // PPT 세미나용(11/7): 글자·선을 종전의 1.5배 안팎으로 — 3×3 한 장을 슬라이드 폭에 맞춰도 읽히게
+    const Z=big?{t:32,sub:18,lg:18,ax:20,lw:[4.8,4.2,3.6],zero:5,L:100,R:100,T:88,B:48,lgLine:42,lgX:180,lgGap:25,lgY:24,ty:38,tick:6}
+                :{t:23,sub:14,lg:15,ax:16,lw:[4,3.5,3],zero:4,L:82,R:82,T:72,B:42,lgLine:34,lgX:122,lgGap:19,lgY:19,ty:29,tick:5};
+    const L=Z.L,R=Z.R,T=Z.T,B=Z.B,pw=W-L-R,ph=H-T-B;
+    const lv=nice(Math.min(...mc),Math.max(...mc),5),rv=nice(Math.min(0,...fr,...inn),Math.max(0,...fr,...inn),6);
     const x=i=>L+pw*i/Math.max(1,n-1),yl=v=>T+ph*(1-(v-lv.a)/(lv.b-lv.a)),yr=v=>T+ph*(1-(v-rv.a)/(rv.b-rv.a));
     const pl=(a,y)=>a.map((v,i)=>(i?"L":"M")+x(i).toFixed(1)+" "+y(v).toFixed(1)).join("");
-    const tx=(X,Y,t,o)=>`<text x="${X}" y="${Y}" font-family='${FONT}' font-size="${o&&o.fs||11}" fill="${o&&o.c||C.ax}" text-anchor="${o&&o.a||"start"}"${o&&o.b?' font-weight="700"':''}>${t}</text>`;
+    const tx=(X,Y,t,o)=>`<text x="${X}" y="${Y}" font-family='${FONT}' font-size="${o&&o.fs||Z.ax}" fill="${o&&o.c||C.ax}" text-anchor="${o&&o.a||"start"}"${o&&o.b?' font-weight="700"':''}>${t}</text>`;
     let g=`<rect width="${W}" height="${H}" fill="#fff"/>`;
-    g+=tx(8,big?28:22,name,{fs:big?21:15,c:C.title,b:1})+tx(W-6,big?28:22,"(1년 누적 매수, 억원)",{a:"end",c:C.title,fs:big?13:11});
-    const lg=[["시가총액(십억원)",C.mc,2.4],["기관매수(누적)",C.inn,2],["외인매수(누적)",C.fr,1.6]];
-    lg.forEach((e,i)=>{const X=W/2-(big?90:70),Y=(big?16:14)+i*(big?15:13);g+=`<line x1="${X}" x2="${X+26}" y1="${Y}" y2="${Y}" stroke="${e[1]}" stroke-width="${e[2]}"/>`+tx(X+32,Y+4,e[0],{fs:big?12:10.5,c:"#222"})});
-    g+=`<rect x="${L}" y="${T}" width="${pw}" height="${ph}" fill="none" stroke="#bbb"/>`;
-    lv.t.forEach(v=>{g+=`<line x1="${L-4}" x2="${L}" y1="${yl(v)}" y2="${yl(v)}" stroke="#999"/>`+tx(L-6,yl(v)+4,n0(v),{a:"end"})});
-    rv.t.forEach(v=>{g+=`<line x1="${W-R}" x2="${W-R+4}" y1="${yr(v)}" y2="${yr(v)}" stroke="#999"/>`+tx(W-R+6,yr(v)+4,n0(v))});
-    g+=`<line x1="${L}" x2="${W-R}" y1="${yr(0)}" y2="${yr(0)}" stroke="${C.zero}" stroke-width="3"/>`;
+    g+=tx(8,Z.ty,name,{fs:Z.t,c:C.title,b:1})+tx(W-6,Z.ty,"(1년 누적 매수, 억원)",{a:"end",c:C.title,fs:Z.sub});
+    const lg=[["시가총액(십억원)",C.mc,Z.lw[0]],["기관매수(누적)",C.inn,Z.lw[1]],["외인매수(누적)",C.fr,Z.lw[2]]];
+    // 범례는 제목 오른쪽에서 시작(긴 회사명이 범례와 겹치지 않게) — 한글 1자 ≈ 글자크기, 영숫자 ≈ 0.62배
+    const tw=[...name].reduce((a,ch)=>a+(/[\u3131-\uD79D]/.test(ch)?1.05:0.66),0)*Z.t;
+    const lgX0=Math.max(W/2-Z.lgX,8+tw+26);
+    lg.forEach((e,i)=>{const X=lgX0,Y=Z.lgY+i*Z.lgGap;g+=`<line x1="${X}" x2="${X+Z.lgLine}" y1="${Y}" y2="${Y}" stroke="${e[1]}" stroke-width="${e[2]}"/>`+tx(X+Z.lgLine+8,Y+Z.lg*0.36,e[0],{fs:Z.lg,c:"#222"})});
+    g+=`<rect x="${L}" y="${T}" width="${pw}" height="${ph}" fill="none" stroke="#999" stroke-width="1.5"/>`;
+    lv.t.forEach(v=>{g+=`<line x1="${L-Z.tick}" x2="${L}" y1="${yl(v)}" y2="${yl(v)}" stroke="#777" stroke-width="1.5"/>`+tx(L-Z.tick-4,yl(v)+Z.ax*0.36,n0(v),{a:"end"})});
+    rv.t.forEach(v=>{g+=`<line x1="${W-R}" x2="${W-R+Z.tick}" y1="${yr(v)}" y2="${yr(v)}" stroke="#777" stroke-width="1.5"/>`+tx(W-R+Z.tick+4,yr(v)+Z.ax*0.36,n0(v))});
+    g+=`<line x1="${L}" x2="${W-R}" y1="${yr(0)}" y2="${yr(0)}" stroke="${C.zero}" stroke-width="${Z.zero}"/>`;
     let pm="";for(let i=0;i<n;i++){const yy=s.d.slice(i*6,i*6+2),mm=+s.d.slice(i*6+2,i*6+4),k=yy+"."+mm;
-      if(k!==pm&&(i===0?false:true)&&mm%2===0){g+=`<line x1="${x(i)}" x2="${x(i)}" y1="${T+ph}" y2="${T+ph+4}" stroke="#999"/>`+tx(x(i),H-10,k,{a:"middle"})}pm=k}
-    g+=`<path d="${pl(fr,yr)}" fill="none" stroke="${C.fr}" stroke-width="1.6"/><path d="${pl(inn,yr)}" fill="none" stroke="${C.inn}" stroke-width="2"/><path d="${pl(mc,yl)}" fill="none" stroke="${C.mc}" stroke-width="2.4"/>`;
+      if(k!==pm&&(i===0?false:true)&&mm%2===0){g+=`<line x1="${x(i)}" x2="${x(i)}" y1="${T+ph}" y2="${T+ph+Z.tick}" stroke="#777" stroke-width="1.5"/>`+tx(x(i),H-Z.ax*0.7,k,{a:"middle"})}pm=k}
+    g+=`<path d="${pl(fr,yr)}" fill="none" stroke="${C.fr}" stroke-width="${Z.lw[2]}" stroke-linejoin="round"/><path d="${pl(inn,yr)}" fill="none" stroke="${C.inn}" stroke-width="${Z.lw[1]}" stroke-linejoin="round"/><path d="${pl(mc,yl)}" fill="none" stroke="${C.mc}" stroke-width="${Z.lw[0]}" stroke-linejoin="round"/>`;
     return `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}">${g}</svg>`;
   }
   const CRC=(()=>{const t=new Uint32Array(256);for(let n=0;n<256;n++){let c=n;for(let k=0;k<8;k++)c=c&1?0xEDB88320^(c>>>1):c>>>1;t[n]=c}
