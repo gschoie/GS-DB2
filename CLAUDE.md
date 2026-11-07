@@ -1526,5 +1526,10 @@
     (분기 주간 13점·연간 월말 13점)를 이어 붙인다 — 트래커 DB 는 분기 fwd 컨센이 10/15 부터라 6개월이 안 된다.
     (참고: comp.fnguide.com 은 wcomp.fnguide.com 으로 이전, 옛 SVD_*.asp 는 404.) 갱신은 ecos-fx-rates Actions
     '커버리지 컨센서스 추이 이미지'.
+    **갤러리 페이지로 교체** (같은 날 저녁, 사용자 "누르면 github가 뜬다 — html 에서 보고 다운받고/복사"):
+    `static/consensus_chart.html`(peer_price.html 과 같은 틀) — raw.githubusercontent 로 분기·연간 PNG 를 띄우고
+    그림마다 **📋 복사**(ClipboardItem image/png — 클립보드는 PNG 만 표준, blob Promise 를 그대로 넘겨야 사파리도
+    제스처로 인정) · ⬇ PNG/SVG/CSV. 생성기는 SVG 도 함께 굽는다(`svg.fonttype=path` — 한글 폰트 없는 PC 에서도
+    모양 유지). build_static 복사 한 줄, 공유 등급.
 
 이후 작업은 git log와 이 파일을 갱신하며 이어간다.
