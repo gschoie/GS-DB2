@@ -380,6 +380,9 @@ WEEKLY_GROUPS = [
     ("조선 수급", ["009540", "010140", "329180", "042660"]),   # HD한국조선해양 · 삼성중공업 · HD현대중공업 · 한화오션
 ]
 WEEKLY_W, WEEKLY_H, WEEKLY_SCALE = 600, 410, 2   # 한 장 viewBox · PNG 배율(1200×820)
+# PNG 에 인쇄 해상도(pHYs)를 심는다 — 캔버스 PNG 는 해상도 정보가 없어 워드·한글이 1px=1pt 로 읽어
+# 4개 한 장(2432px)이 가로 86cm 로 붙는다(11/7 실측). 384dpi 면 4개 한 장 ≈ 16.1cm, 낱장 ≈ 7.9cm.
+WEEKLY_DPI = 384
 
 WEEKLY_JS = r"""
 <script>
@@ -410,11 +413,19 @@ WEEKLY_JS = r"""
     g+=`<path d="${pl(fr,yr)}" fill="none" stroke="${C.fr}" stroke-width="1.6"/><path d="${pl(inn,yr)}" fill="none" stroke="${C.inn}" stroke-width="2"/><path d="${pl(mc,yl)}" fill="none" stroke="${C.mc}" stroke-width="2.4"/>`;
     return `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}">${g}</svg>`;
   }
+  const CRC=(()=>{const t=new Uint32Array(256);for(let n=0;n<256;n++){let c=n;for(let k=0;k<8;k++)c=c&1?0xEDB88320^(c>>>1):c>>>1;t[n]=c}
+    return b=>{let c=0xFFFFFFFF;for(let i=0;i<b.length;i++)c=t[(c^b[i])&255]^(c>>>8);return (c^0xFFFFFFFF)>>>0}})();
+  function withDpi(buf,dpi){   // IHDR 뒤에 pHYs(픽셀/미터) 청크를 끼워 넣는다
+    const src=new Uint8Array(buf),ppm=Math.round(dpi/0.0254),ch=new Uint8Array(21),dv=new DataView(ch.buffer);
+    dv.setUint32(0,9);ch.set([0x70,0x48,0x59,0x73],4);dv.setUint32(8,ppm);dv.setUint32(12,ppm);ch[16]=1;dv.setUint32(17,CRC(ch.subarray(4,17)));
+    const at=8+8+13+4,out=new Uint8Array(src.length+21);out.set(src.subarray(0,at));out.set(ch,at);out.set(src.subarray(at),at+21);return out;
+  }
   function toPng(svgText,w,h,file){
     const img=new Image(),url=URL.createObjectURL(new Blob([svgText],{type:"image/svg+xml;charset=utf-8"}));
     img.onload=()=>{const c=document.createElement("canvas");c.width=w*SC;c.height=h*SC;const x=c.getContext("2d");
       x.fillStyle="#fff";x.fillRect(0,0,c.width,c.height);x.drawImage(img,0,0,c.width,c.height);URL.revokeObjectURL(url);
-      c.toBlob(b=>{const a=document.createElement("a");a.href=URL.createObjectURL(b);a.download=file;document.body.appendChild(a);a.click();a.remove()},"image/png")};
+      c.toBlob(b=>b.arrayBuffer().then(buf=>{const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([withDpi(buf,__DPI__)],{type:"image/png"}));
+        a.download=file;document.body.appendChild(a);a.click();a.remove()}),"image/png")};
     img.src=url;
   }
   const stamp=()=>(document.querySelector("[data-wk-asof]")||{}).dataset?.wkAsof||"";
@@ -454,13 +465,14 @@ def weekly_section(rows, series, asof_date=""):
     if not blocks:
         return ""
     js = (WEEKLY_JS.replace("__W__", str(WEEKLY_W)).replace("__H__", str(WEEKLY_H))
-          .replace("__SC__", str(WEEKLY_SCALE)))
+          .replace("__SC__", str(WEEKLY_SCALE)).replace("__DPI__", str(WEEKLY_DPI)))
     return (f"<details id='weekly' class='sec' open data-wk-asof='{esc(asof_date.replace('-', '')[2:])}'>"
             "<summary><h2>④ 위클리용 차트 <small style=\"font:400 12px Inter;color:#6b7280\">"
             "시가총액 · 기관/외인 1년 누적 순매수 — 리포트에 붙일 PNG</small></h2></summary>"
             + "".join(blocks) +
             f"<p class='note'>PNG 는 한 장 {WEEKLY_W * WEEKLY_SCALE}×{WEEKLY_H * WEEKLY_SCALE}px(가로:세로 ≈ {WEEKLY_W / WEEKLY_H:.2f}:1), "
-            "4개 한 장은 2×2 로 붙인 것. 시가총액 = 종가 × 현재 상장주수(십억원), 누적 순매수는 1년 창 시작일을 0 으로 둔 합계"
+            f"4개 한 장은 2×2 로 붙인 것. {WEEKLY_DPI}dpi 로 저장되어 워드에 붙이면 4개 한 장 가로 약 "
+            f"{2 * WEEKLY_W * WEEKLY_SCALE * 2.54 / WEEKLY_DPI + 0.1:.0f}cm · 낱장 약 {WEEKLY_W * WEEKLY_SCALE * 2.54 / WEEKLY_DPI:.0f}cm 로 들어간다. 시가총액 = 종가 × 현재 상장주수(십억원), 누적 순매수는 1년 창 시작일을 0 으로 둔 합계"
             "(최근 30거래일 한투 금액, 그 이전 네이버 수량 × 종가 근사). 매 수집마다 다시 그려진다.</p>"
             "</details>" + js)
 
