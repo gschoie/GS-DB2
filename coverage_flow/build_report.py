@@ -21,7 +21,7 @@ OUT = os.path.join(ROOT, "telegram_research_dashboard", "static", "coverage_flow
 ARCH_DIR = os.path.join(ROOT, "telegram_research_dashboard", "static", "coverage_flow")
 ARCHIVE_SLOT = "16:00"
 RECENT_DAYS = 31
-SCHEDULE_TIME = "평일 11:30 (장중) · 16:00 (장 마감 후)"
+SCHEDULE_TIME = "평일 16:40 안팎 (장 마감 후, 하루 1회)"
 WD = "월화수목금토일"
 
 
