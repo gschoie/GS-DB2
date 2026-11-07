@@ -829,5 +829,26 @@ class Series(unittest.TestCase):
         self.assertNotIn("const SERIES", build_report.render(d))
 
 
+
+class Weekly(unittest.TestCase):
+    """위클리용 차트 섹션: 시계열 있는 종목만 칸, 없으면 섹션 없음, 지난 기록 페이지엔 없음."""
+
+    def test_section(self):
+        d = fake_payload()
+        d["rows"] += [{"code": c, "name": n, "sector": "조선"} for c, n in
+                      (("009540", "HD한국조선해양"), ("010140", "삼성중공업"), ("329180", "HD현대중공업"))]
+        ser = {"d": "251112251113", "mc": [100, 110], "fr": [0, 5], "in": [0, -3]}
+        series = {"009540": ser, "010140": ser, "329180": ser}           # 한화오션은 시계열 없음
+        h = build_report.render(d, series=series)
+        self.assertIn("④ 위클리용 차트", h)
+        self.assertEqual(h.count("class='wk-cell'"), 3)
+        self.assertIn("data-name='HD한국조선해양'", h)
+        self.assertIn("⬇ 3개 한 장 PNG", h)
+        self.assertLess(h.index("WEEKLY") if "WEEKLY" in h else h.index("wk-grid"), h.index("const SERIES="))
+        self.assertNotIn("④ 위클리용", build_report.render(d))                     # 시계열 없으면 섹션 없음
+        self.assertNotIn("④ 위클리용", build_report.render(d, series={"999999": ser}))  # 대상 종목 시계열 없음
+        self.assertNotIn("④ 위클리용", build_report.render(d, archive=True))
+
+
 if __name__ == "__main__":
     unittest.main(verbosity=1)
