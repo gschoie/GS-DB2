@@ -290,6 +290,9 @@ def build() -> Path:
     compliance_dir = ROOT / "static" / "compliance"   # 매매제한 컴플 체크(정적, 브라우저에서 Gemini 판독)
     if compliance_dir.is_dir():
         shutil.copytree(compliance_dir, OUTPUT.parent / "compliance", dirs_exist_ok=True)
+    anacal_dir = ROOT / "static" / "analyst_calendar"   # 애널리스트 집계 따라 만들기(뼈대, 정적 + 샘플 data.json)
+    if anacal_dir.is_dir():
+        shutil.copytree(anacal_dir, OUTPUT.parent / "analyst_calendar", dirs_exist_ok=True)
     covflow_report = ROOT / "static" / "coverage_flow_report.html"
     if covflow_report.exists():
         shutil.copy2(covflow_report, OUTPUT.parent / "coverage_flow_report.html")

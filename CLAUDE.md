@@ -1497,4 +1497,20 @@
     `metric:` 으로. 덤: `tests/test_releases.py` 의 실패 판정이 파일 중간에 있어 그 뒤 검사는
     실패해도 통과로 나왔다 → 맨 끝으로. 다음 수집부터 보인다(옛 payload 엔 vals 없음).
 
+55. **애널리스트 집계(animsam09) 따라 만들기 — 뼈대** (11/7): 사용자 "이거 따라서 일단 뼈대를 만들자"
+    (https://analyst-calendar.animsam09.workers.dev/ — Cloudflare Worker, 비번 가림막). 세션 네트워크에
+    그 호스트를 허용하는 개인 환경 'GS-DB2'를 만들어 로그인 후 두 화면·탭 전부를 Playwright 로 떠서 구조를
+    `analyst_calendar/README.md` 에 적고, 정적 뼈대를 `telegram_research_dashboard/static/analyst_calendar/`
+    (index.html·style.css·app.js·data.json)에 만들었다. 사이드바 👥 DAOL.관리 › `🧩 애널리스트.집계(뼈대)`
+    (새 창, 공유 비번으로 열림), build_static copytree 한 줄.
+    - 원본 구조: **업무 집계**(탭 15개 — 업데이트·요약·발간/세미나/콜/리퀘/사내지원/NDR/콥데이 실적·커버리지·
+      드랍 경고·발간 vs 계획·인뎁스 달력·기관별 집계·누락 후보; 요약 = 카드 6장 + DAOL 리서치본부 활동표)
+      + **일정**(월/주/목록, 장부만/전체, 애널리스트 사이드 필터·미니달력, 확인 필요 모달, 설정 모달 —
+      구글 캘린더 ICS 2종·기관명 분류 xlsx·애널리스트 규칙). 데이터는 Worker API(state/master/events/op).
+    - 뼈대는 **data.json 명단 + 결정적 난수 일정**(xorshift)으로 돌아간다 — 숫자는 전부 가짜, 화면에
+      '뼈대/샘플' 표식. 실데이터 연결 지점은 `loadData()`/`genEvents()` 둘뿐. 본문 미구현 탭(커버리지 전체
+      목록·드랍 경고 목록·인뎁스 달력)은 점선 상자에 원본 구성을 적어 뒀다. 다음 단계 후보: GAS 가 구글
+      캘린더 ICS 를 읽어 data.json 을 굽기(youtube_digest 와 같은 workflow_dispatch 경로), 인뎁스 달력은
+      vacation_tracker/indepth.py 의 state 재사용.
+
 이후 작업은 git log와 이 파일을 갱신하며 이어간다.
