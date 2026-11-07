@@ -864,13 +864,16 @@ class Weekly(unittest.TestCase):
         """chart_universe 수집: 한투 종목명이 CSV 이름과 다르면 담지 않고 오류로, 맞으면 시계열 + 이름."""
         import pandas as pd
         calls = []
-        def price(code): calls.append(code); return {"name": {"014940": "오리엔탈정공", "077970": "엉뚱한회사"}[code], "listed": 1000, "price": 100}
+        def price(code): calls.append(code); return {"name": "", "listed": 1000, "price": 100}   # 주식 inquire-price 는 이름이 비어 온다
         dates = pd.bdate_range("2025-01-01", periods=60)
-        ohlc = pd.DataFrame({"date": dates, "c": [100.0] * 60, "o": 100.0, "h": 100.0, "l": 100.0, "v": 1, "amt": 1.0})
+        def ohlc_of(code):
+            df = pd.DataFrame({"date": dates, "c": [100.0] * 60, "o": 100.0, "h": 100.0, "l": 100.0, "v": 1, "amt": 1.0})
+            df.attrs["name"] = {"014940": "오리엔탈정공", "077970": "엉뚱한회사"}[code]   # 이름은 일봉 output1 에서
+            return df
         inv = pd.DataFrame({"date": dates, "외국인": 1.0, "기관": -1.0, "개인": 0.0})
         with unittest.mock.patch.object(collect, "load_csv", lambda n: [{"code": "014940", "name": "오리엔탈정공"}, {"code": "077970", "name": "STX엔진"}]), \
              unittest.mock.patch.object(collect.kis, "fetch_price", price), \
-             unittest.mock.patch.object(collect.kis, "fetch_ohlc", lambda c: ohlc), \
+             unittest.mock.patch.object(collect.kis, "fetch_ohlc", ohlc_of), \
              unittest.mock.patch.object(collect.kis, "fetch_investor", lambda c: inv), \
              unittest.mock.patch.object(collect, "naver_investor_history", lambda c, u: (_ for _ in ()).throw(RuntimeError("off"))), \
              unittest.mock.patch.object(collect.time, "sleep", lambda s: None):
