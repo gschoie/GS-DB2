@@ -372,6 +372,99 @@ const SERIES=__SERIES__;
 </script>"""
 
 
+# 위클리 리포트용 차트(11/7 사용자 요청): 리포트 '조선 수급' 꼭지와 같은 2×2 모양 —
+# 회사명(파랑) · 시가총액(십억원, 좌축 검정) · 기관/외인 1년 누적 순매수(억원, 우축 갈색/파랑) · 0 선(회색 굵게).
+# 데이터는 종목 클릭 차트와 같은 SERIES(1년 일별)를 쓰고, 그림은 화면에서 SVG 로 그려 PNG 로 받는다
+# (리포에 이미지 파일을 쌓지 않는다). 묶음을 늘리려면 이 표에 한 줄 더하면 된다.
+WEEKLY_GROUPS = [
+    ("조선 수급", ["009540", "010140", "329180", "042660"]),   # HD한국조선해양 · 삼성중공업 · HD현대중공업 · 한화오션
+]
+WEEKLY_W, WEEKLY_H, WEEKLY_SCALE = 600, 410, 2   # 한 장 viewBox · PNG 배율(1200×820)
+
+WEEKLY_JS = r"""
+<script>
+(function(){
+  const W=__W__,H=__H__,SC=__SC__,FONT='"Malgun Gothic","Apple SD Gothic Neo","Noto Sans KR",sans-serif';
+  const C={mc:"#111111",inn:"#a0825f",fr:"#2f80d1",zero:"#c9c9c9",ax:"#555",title:"#2f6db5"};
+  function nice(lo,hi,k){const sp=(hi-lo)||1,st=Math.pow(10,Math.floor(Math.log10(sp/k))),m=sp/k/st,s=(m<1.5?1:m<3?2:m<7?5:10)*st;
+    const a=Math.floor(lo/s)*s,b=Math.ceil(hi/s)*s,t=[];for(let v=a;v<=b+s/2;v+=s)t.push(Math.round(v));return {t,a,b}}
+  const n0=v=>Math.round(v).toLocaleString("en-US");
+  function svg(code,name){
+    const s=SERIES[code];if(!s)return "";
+    const n=s.mc.length,mc=s.mc.map(v=>v/10),fr=s.fr.map(v=>v-s.fr[0]),inn=s["in"].map(v=>v-s["in"][0]);
+    const L=58,R=58,T=54,B=30,pw=W-L-R,ph=H-T-B;
+    const lv=nice(Math.min(...mc),Math.max(...mc),6),rv=nice(Math.min(0,...fr,...inn),Math.max(0,...fr,...inn),8);
+    const x=i=>L+pw*i/Math.max(1,n-1),yl=v=>T+ph*(1-(v-lv.a)/(lv.b-lv.a)),yr=v=>T+ph*(1-(v-rv.a)/(rv.b-rv.a));
+    const pl=(a,y)=>a.map((v,i)=>(i?"L":"M")+x(i).toFixed(1)+" "+y(v).toFixed(1)).join("");
+    const tx=(X,Y,t,o)=>`<text x="${X}" y="${Y}" font-family='${FONT}' font-size="${o&&o.fs||11}" fill="${o&&o.c||C.ax}" text-anchor="${o&&o.a||"start"}"${o&&o.b?' font-weight="700"':''}>${t}</text>`;
+    let g=`<rect width="${W}" height="${H}" fill="#fff"/>`;
+    g+=tx(8,22,name,{fs:15,c:C.title,b:1})+tx(W-6,22,"(1년 누적 매수, 억원)",{a:"end",c:C.title,fs:11});
+    const lg=[["시가총액(십억원)",C.mc,2.4],["기관매수(누적)",C.inn,2],["외인매수(누적)",C.fr,1.6]];
+    lg.forEach((e,i)=>{const X=W/2-70,Y=14+i*13;g+=`<line x1="${X}" x2="${X+26}" y1="${Y}" y2="${Y}" stroke="${e[1]}" stroke-width="${e[2]}"/>`+tx(X+32,Y+4,e[0],{fs:10.5,c:"#222"})});
+    g+=`<rect x="${L}" y="${T}" width="${pw}" height="${ph}" fill="none" stroke="#bbb"/>`;
+    lv.t.forEach(v=>{g+=`<line x1="${L-4}" x2="${L}" y1="${yl(v)}" y2="${yl(v)}" stroke="#999"/>`+tx(L-6,yl(v)+4,n0(v),{a:"end"})});
+    rv.t.forEach(v=>{g+=`<line x1="${W-R}" x2="${W-R+4}" y1="${yr(v)}" y2="${yr(v)}" stroke="#999"/>`+tx(W-R+6,yr(v)+4,n0(v))});
+    g+=`<line x1="${L}" x2="${W-R}" y1="${yr(0)}" y2="${yr(0)}" stroke="${C.zero}" stroke-width="3"/>`;
+    let pm="";for(let i=0;i<n;i++){const yy=s.d.slice(i*6,i*6+2),mm=+s.d.slice(i*6+2,i*6+4),k=yy+"."+mm;
+      if(k!==pm&&(i===0?false:true)&&mm%2===0){g+=`<line x1="${x(i)}" x2="${x(i)}" y1="${T+ph}" y2="${T+ph+4}" stroke="#999"/>`+tx(x(i),H-10,k,{a:"middle"})}pm=k}
+    g+=`<path d="${pl(fr,yr)}" fill="none" stroke="${C.fr}" stroke-width="1.6"/><path d="${pl(inn,yr)}" fill="none" stroke="${C.inn}" stroke-width="2"/><path d="${pl(mc,yl)}" fill="none" stroke="${C.mc}" stroke-width="2.4"/>`;
+    return `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}">${g}</svg>`;
+  }
+  function toPng(svgText,w,h,file){
+    const img=new Image(),url=URL.createObjectURL(new Blob([svgText],{type:"image/svg+xml;charset=utf-8"}));
+    img.onload=()=>{const c=document.createElement("canvas");c.width=w*SC;c.height=h*SC;const x=c.getContext("2d");
+      x.fillStyle="#fff";x.fillRect(0,0,c.width,c.height);x.drawImage(img,0,0,c.width,c.height);URL.revokeObjectURL(url);
+      c.toBlob(b=>{const a=document.createElement("a");a.href=URL.createObjectURL(b);a.download=file;document.body.appendChild(a);a.click();a.remove()},"image/png")};
+    img.src=url;
+  }
+  const stamp=()=>(document.querySelector("[data-wk-asof]")||{}).dataset?.wkAsof||"";
+  // SERIES 는 페이지 끝의 종목 클릭 차트 스크립트가 정의한다 — 그 뒤에 그린다.
+  window.addEventListener("DOMContentLoaded",()=>document.querySelectorAll(".wk-cell").forEach(cell=>{
+    cell.querySelector(".wk-svg").innerHTML=svg(cell.dataset.code,cell.dataset.name)}));
+  document.addEventListener("click",e=>{
+    const one=e.target.closest(".wk-one");
+    if(one){const cell=one.closest(".wk-cell");toPng(svg(cell.dataset.code,cell.dataset.name),W,H,`${cell.dataset.name}_수급_${stamp()}.png`);return}
+    const all=e.target.closest(".wk-all");if(!all)return;
+    const grid=document.getElementById(all.dataset.grid),cells=[...grid.querySelectorAll(".wk-cell")],G=16;
+    const cols=2,rows=Math.ceil(cells.length/cols),TW=W*cols+G*(cols-1),TH=H*rows+G*(rows-1);
+    let body=`<rect width="${TW}" height="${TH}" fill="#fff"/>`;
+    cells.forEach((c,i)=>{body+=`<g transform="translate(${(i%cols)*(W+G)},${Math.floor(i/cols)*(H+G)})">${svg(c.dataset.code,c.dataset.name).replace(/^<svg[^>]*>|<\/svg>$/g,"")}</g>`});
+    toPng(`<svg xmlns="http://www.w3.org/2000/svg" width="${TW}" height="${TH}" viewBox="0 0 ${TW} ${TH}">${body}</svg>`,TW,TH,`${all.dataset.title}_${stamp()}.png`);
+  });
+})();
+</script>"""
+
+
+def weekly_section(rows, series, asof_date=""):
+    """위클리용 차트 섹션. 시계열이 있는 종목만 칸을 만들고, 한 칸도 없으면 섹션 자체를 안 만든다."""
+    if not series:
+        return ""
+    names = {r["code"]: r["name"] for r in rows}
+    blocks = []
+    for gi, (title, codes) in enumerate(WEEKLY_GROUPS):
+        cells = [c for c in codes if series.get(c)]
+        if not cells:
+            continue
+        gid = f"wk-{gi}"
+        cell_html = "".join(
+            f"<div class='wk-cell' data-code='{c}' data-name='{esc(names.get(c, c))}'><div class='wk-svg'></div>"
+            f"<button class='wk-one'>⬇ PNG</button></div>" for c in cells)
+        blocks.append(f"<h3>{esc(title)} <button class='wk-all' data-grid='{gid}' data-title='{esc(title)}'>⬇ {len(cells)}개 한 장 PNG</button></h3>"
+                      f"<div class='wk-grid' id='{gid}'>{cell_html}</div>")
+    if not blocks:
+        return ""
+    js = (WEEKLY_JS.replace("__W__", str(WEEKLY_W)).replace("__H__", str(WEEKLY_H))
+          .replace("__SC__", str(WEEKLY_SCALE)))
+    return (f"<details id='weekly' class='sec' open data-wk-asof='{esc(asof_date.replace('-', '')[2:])}'>"
+            "<summary><h2>④ 위클리용 차트 <small style=\"font:400 12px Inter;color:#6b7280\">"
+            "시가총액 · 기관/외인 1년 누적 순매수 — 리포트에 붙일 PNG</small></h2></summary>"
+            + "".join(blocks) +
+            f"<p class='note'>PNG 는 한 장 {WEEKLY_W * WEEKLY_SCALE}×{WEEKLY_H * WEEKLY_SCALE}px(가로:세로 ≈ {WEEKLY_W / WEEKLY_H:.2f}:1), "
+            "4개 한 장은 2×2 로 붙인 것. 시가총액 = 종가 × 현재 상장주수(십억원), 누적 순매수는 1년 창 시작일을 0 으로 둔 합계"
+            "(최근 30거래일 한투 금액, 그 이전 네이버 수량 × 종가 근사). 매 수집마다 다시 그려진다.</p>"
+            "</details>" + js)
+
+
 def chart_js(series):
     """종목 클릭 차트 스크립트. 시계열이 없으면 빈 문자열(클릭 가능한 행도 안 생긴다)."""
     if not series:
@@ -431,6 +524,7 @@ table.flow{{font-size:12px}}table.flow td,table.flow th{{padding:6px 5px}}th.c{{
 .note{{font-size:12px;color:var(--muted);line-height:1.6;margin:8px 0 0}}
 .errs{{margin:16px 0;font-size:12px;color:#b45309}}.errs ul{{margin:6px 0 0 18px}}
 .wrap{{overflow-x:auto}}
+.wk-grid{{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}}@media(max-width:900px){{.wk-grid{{grid-template-columns:1fr}}}}.wk-cell{{border:1px solid var(--line);padding:6px;position:relative}}.wk-svg svg{{width:100%;height:auto;display:block}}.wk-one,.wk-all{{font:11px Inter;padding:2px 8px;border:1px solid #d1d5db;background:#fff;border-radius:3px;cursor:pointer;color:#374151}}.wk-one{{position:absolute;right:8px;bottom:8px}}.wk-all{{margin-left:8px;vertical-align:middle}}
 tr.clk{{cursor:pointer}}tr.clk:hover td{{background:#f8fafc}}.car{{color:#9ca3af;font-size:11px}}
 tr.chart td{{padding:10px 8px 16px;background:#fcfcfd}}.chbox{{max-width:760px}}.chbox .hd{{display:flex;gap:14px;flex-wrap:wrap;align-items:baseline;font-size:12px;margin-bottom:4px}}
 .chbox .hd b{{font-size:13px}}.lg{{display:inline-flex;align-items:center;gap:5px;color:var(--muted)}}.lg i{{display:inline-block;width:14px;height:3px;border-radius:2px}}
@@ -471,6 +565,7 @@ tr.chart td{{padding:10px 8px 16px;background:#fcfcfd}}.chbox{{max-width:760px}}
 <div class="wrap">{passive_table(rows, d.get('etfs', []), d.get('active', []), d.get('active_date', ''))}</div>
 <p class="note">패시브 추정 = Σ(섹터 ETF 상장주수 변동 × 가격 × 종목 비중). 비중은 네이버 Top10 구성종목만 있어 비중 밖 종목의 몫은 잡히지 않는다 → 하한값. ADV 대비 = 추정 매매 / 20일 평균 거래대금.</p>
 </details>
+{weekly_section(rows, series, d.get('date', ''))}
 <p class="note" style="margin-top:28px">출처: 한국투자증권 OpenAPI(일봉·투자자별·현재가·상장주수) · 네이버 증권(ETF 구성 비중) · 액티브ETF.매매동향(etf_holdings). 유니버스는 <code>coverage_flow/universe.csv</code>, 섹터 ETF 는 <code>etf_universe.csv</code>.</p>
 {chart_js(series)}</body></html>"""
 
