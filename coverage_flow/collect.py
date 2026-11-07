@@ -164,11 +164,13 @@ def collect_chart_only(today):
         try:
             px = kis.fetch_price(code)
             time.sleep(0.12)
-            if not _name_match(px.get("name"), u["name"]):
-                errors.append(f"{code} {u['name']}: 이름 불일치 — 한투 종목명 {px.get('name')!r}(코드 확인)")
-                continue
             ohlc = kis.fetch_ohlc(code)
             time.sleep(0.12)
+            # 종목명은 일봉 응답(output1)에서 — 주식용 inquire-price 엔 이름이 없다(11/7 실측 14종목 전부 '').
+            got = ohlc.attrs.get("name") or px.get("name") or ""
+            if not _name_match(got, u["name"]):
+                errors.append(f"{code} {u['name']}: 이름 불일치 — 한투 종목명 {got!r}(코드 확인)")
+                continue
             inv = kis.fetch_investor(code)
             time.sleep(0.12)
             try:
