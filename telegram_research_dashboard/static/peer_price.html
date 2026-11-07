@@ -39,7 +39,7 @@ button:disabled{opacity:.5;cursor:wait}
 </head>
 <body>
 <div class="wrap">
-  <h1>📈 글로벌 피어그룹 주가흐름표 · 조선주 INDEX</h1>
+  <h1>📈 글로벌 피어그룹 주가흐름표</h1>
   <p class="sub">조선사 · 엔진/기자재 · 오일/해양 · 해운 — 1W/1M/3M/YTD/1Y 등락률 + 3개월 주가 스파크라인. <span id="stamp"></span></p>
   <p class="note">엑셀·PPT 에는 <b>SVG</b> 를 내려받아 <b>삽입 → 그림 → 이 디바이스</b> 로 넣으면 확대해도 선명하다(화면에서 복사·붙여넣기는 비트맵이 되어 흐려짐).
     갱신은 <a href="https://github.com/gschoie/ecos-fx-rates/actions/workflows/peer-price-image.yml" target="_blank" rel="noopener">ecos-fx-rates Actions › 피어그룹 주가 흐름 이미지 › Run workflow</a>
@@ -51,10 +51,6 @@ button:disabled{opacity:.5;cursor:wait}
 (function(){
   const RAW="https://raw.githubusercontent.com/gschoie/ecos-fx-rates/main/output/peer_price/";
   const FILES=[
-    ["조선주 INDEX 3종","KOSPI vs 조선주 · 한국 조선 7사 · 한/중/일/싱 (12주전=100, 시총가중)","조선주_INDEX_3종"],
-    ["① 한국 주식시장 vs 조선주","","IDX1_한국시장_vs_조선주"],
-    ["② 한국 조선 7사 Performance","조선 4사 + 대한조선 + 한화엔진 + HD현대마린엔진","IDX2_한국조선_Performance"],
-    ["③ 한/중/일/싱 조선주 비교","국가별 시총가중 지수","IDX3_한중일싱_조선주"],
     ["전체 1페이지","좌 지수·조선사·엔진/기자재 / 우 오일·해양·해운","글로벌_피어그룹_주가흐름"],
     ["p1 조선 · 기자재","2페이지 분할본 1","글로벌_피어그룹_주가흐름_p1_조선"],
     ["p2 오일 · 해운","2페이지 분할본 2","글로벌_피어그룹_주가흐름_p2_오일해운"],
