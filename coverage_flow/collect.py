@@ -8,7 +8,7 @@
 provisional 플래그를 남기고 화면·텔레가 그대로 적는다.
 """
 from __future__ import annotations
-import os, sys, csv, json, time, argparse
+import os, re, sys, csv, json, time, argparse
 import requests
 from datetime import datetime, timezone, timedelta
 
@@ -143,6 +143,47 @@ def collect_stock(u, today, live=True):
     flow["today_src"] = f"estimate {est_note}" if est_note else "daily"
     series = metrics.build_series(ohlc, inv, px.get("listed"), today)
     return {**u, "px": px, "tech": tech, "flow": flow, "series": series}
+
+
+CHART_UNIVERSE = "chart_universe.csv"   # 위클리 차트 전용 종목(표·텔레 없음) — 11/7 조선기자재
+
+
+def _name_match(a, b):
+    a, b = re.sub(r"\s", "", a or ""), re.sub(r"\s", "", b or "")
+    return bool(a and b) and (a in b or b in a)
+
+
+def collect_chart_only(today):
+    """chart_universe.csv 종목의 1년 시계열만 모은다(위클리 차트용 — 등락률·수급 표·텔레에는 안 실린다).
+    코드가 틀려 엉뚱한 종목이 오면 조용히 섞이지 않게 **한투가 돌려준 종목명이 CSV 이름과 맞아야** 담고,
+    아니면 오류 목록에만 남긴다(ETF 수집과 같은 원칙). 오류는 chart_errors 로 따로 — 본 수집의
+    성공률·텔레그램 생략 판정(오류 1건이면 미발송)에 섞이지 않는다."""
+    out, errors = {}, []
+    for u in load_csv(CHART_UNIVERSE):
+        code = u["code"]
+        try:
+            px = kis.fetch_price(code)
+            time.sleep(0.12)
+            if not _name_match(px.get("name"), u["name"]):
+                errors.append(f"{code} {u['name']}: 이름 불일치 — 한투 종목명 {px.get('name')!r}(코드 확인)")
+                continue
+            ohlc = kis.fetch_ohlc(code)
+            time.sleep(0.12)
+            inv = kis.fetch_investor(code)
+            time.sleep(0.12)
+            try:
+                inv = kis.merge_investor(inv, kis.naver_trend_frame(naver_investor_history(code, f"{int(today[:4]) - 1}1231")))
+            except Exception as ex:
+                print(f"  {u['name']} 네이버 수급 이력 실패(한투 30행만 사용): {type(ex).__name__}: {ex}")
+            ser = metrics.build_series(ohlc, inv, px.get("listed"), today)
+            if not ser:
+                errors.append(f"{code} {u['name']}: 시계열 부족(상장 초기이거나 수급 이력 없음)")
+                continue
+            ser["name"] = u["name"]
+            out[code] = ser
+        except Exception as ex:
+            errors.append(f"{code} {u['name']}: {type(ex).__name__}: {ex}")
+    return out, errors
 
 
 def collect_etfs(etf_rows):
@@ -345,6 +386,11 @@ def main(argv=None):
             print("  " + e)
         return 2
 
+    chart_series, chart_errors = ({}, []) if a.limit else collect_chart_only(today)
+    series_map.update(chart_series)
+    print(f"차트 전용 종목 {len(chart_series)}개 · 오류 {len(chart_errors)}")
+    for e in chart_errors:
+        print("  !", e)
     etfs, etf_err = collect_etfs(load_csv("etf_universe.csv"))
     errors += etf_err
     backfill_frgn(rows, load_json(LATEST, {}))   # LATEST 를 덮어쓰기 전에 읽어야 한다
@@ -366,7 +412,7 @@ def main(argv=None):
         "universe": len(uni), "rows": rows,
         "etfs": per_etf, "etf_weights_source": "naver_top10",
         "active": active, "active_date": changes.get("date", ""),
-        "errors": errors,
+        "errors": errors, "chart_errors": chart_errors,
         "note": "규칙 기반 상태값이며 검증 전. 패시브는 섹터 ETF 7개 Top10 비중 기준 하한값. 장중 숫자는 잠정치.",
     }
     os.makedirs(HIST, exist_ok=True)

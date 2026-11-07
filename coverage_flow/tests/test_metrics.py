@@ -841,13 +841,43 @@ class Weekly(unittest.TestCase):
         series = {"009540": ser, "010140": ser, "329180": ser}           # 한화오션은 시계열 없음
         h = build_report.render(d, series=series)
         self.assertIn("④ 위클리용 차트", h)
-        self.assertEqual(h.count("class='wk-cell'"), 3)
+        self.assertEqual(h.count("class='wk-cell"), 4)                            # 합산 1 + 개별 3
+        self.assertIn("data-codes='009540,010140,329180' data-name='조선 합산(3사)'", h)
         self.assertIn("data-name='HD한국조선해양'", h)
-        self.assertIn("⬇ 3개 한 장 PNG", h)
+        self.assertIn("⬇ 4개 한 장 PNG", h); self.assertIn("data-cols='4'", h); self.assertIn("class='wk-cell wk-big'", h)
+        self.assertLess(h.index("조선 합산"), h.index("data-name='HD한국조선해양'"))   # 합산이 맨 앞
+        one = build_report.render(d, series={"009540": ser})
+        self.assertEqual(one.count("class='wk-cell"), 1); self.assertNotIn("data-codes=", one)   # 1종목이면 합산 칸 없음
         self.assertLess(h.index("WEEKLY") if "WEEKLY" in h else h.index("wk-grid"), h.index("const SERIES="))
         self.assertNotIn("④ 위클리용", build_report.render(d))                     # 시계열 없으면 섹션 없음
         self.assertNotIn("④ 위클리용", build_report.render(d, series={"999999": ser}))  # 대상 종목 시계열 없음
         self.assertNotIn("④ 위클리용", build_report.render(d, archive=True))
+        # 차트 전용 종목: 이름은 series 에서, 수집 오류는 섹션 안에 접힌 목록으로
+        d["chart_errors"] = ["014940 오리엔탈정공: 이름 불일치 — 한투 종목명 '엉뚱'(코드 확인)"]
+        h2 = build_report.render(d, series={**series, "077970": {**ser, "name": "STX엔진"}, "014940": {**ser, "name": "오리엔탈정공"}})
+        self.assertIn("data-name='STX엔진'", h2); self.assertIn("차트 전용 종목 수집 오류 1건", h2)
+        self.assertIn("data-codes='014940,077970' data-name='조선기자재 합산(2사)'", h2); self.assertIn("data-cols='6'", h2)
+        h3 = build_report.render(d, series={**series, "077970": {**ser, "name": "STX엔진"}})
+        self.assertIn("data-name='STX엔진'", h3); self.assertNotIn("조선기자재 합산", h3)   # 1종목이면 합산 칸 없음
+
+    def test_chart_only_name_guard(self):
+        """chart_universe 수집: 한투 종목명이 CSV 이름과 다르면 담지 않고 오류로, 맞으면 시계열 + 이름."""
+        import pandas as pd
+        calls = []
+        def price(code): calls.append(code); return {"name": {"014940": "오리엔탈정공", "077970": "엉뚱한회사"}[code], "listed": 1000, "price": 100}
+        dates = pd.bdate_range("2025-01-01", periods=60)
+        ohlc = pd.DataFrame({"date": dates, "c": [100.0] * 60, "o": 100.0, "h": 100.0, "l": 100.0, "v": 1, "amt": 1.0})
+        inv = pd.DataFrame({"date": dates, "외국인": 1.0, "기관": -1.0, "개인": 0.0})
+        with unittest.mock.patch.object(collect, "load_csv", lambda n: [{"code": "014940", "name": "오리엔탈정공"}, {"code": "077970", "name": "STX엔진"}]), \
+             unittest.mock.patch.object(collect.kis, "fetch_price", price), \
+             unittest.mock.patch.object(collect.kis, "fetch_ohlc", lambda c: ohlc), \
+             unittest.mock.patch.object(collect.kis, "fetch_investor", lambda c: inv), \
+             unittest.mock.patch.object(collect, "naver_investor_history", lambda c, u: (_ for _ in ()).throw(RuntimeError("off"))), \
+             unittest.mock.patch.object(collect.time, "sleep", lambda s: None):
+            out, errs = collect.collect_chart_only("2025-03-28")
+        self.assertEqual(list(out), ["014940"]); self.assertEqual(out["014940"]["name"], "오리엔탈정공")
+        self.assertEqual(len(errs), 1); self.assertIn("이름 불일치", errs[0]); self.assertIn("엉뚱한회사", errs[0])
+        self.assertEqual(calls, ["014940", "077970"])
 
 
 if __name__ == "__main__":
