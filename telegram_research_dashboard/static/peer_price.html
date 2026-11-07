@@ -41,7 +41,7 @@ button:disabled{opacity:.5;cursor:wait}
 <div class="wrap">
   <h1>📈 글로벌 피어그룹 주가흐름표</h1>
   <p class="sub">조선사 · 엔진/기자재 · 오일/해양 · 해운 — 1W/1M/3M/YTD/1Y 등락률 + 3개월 주가 스파크라인. <span id="stamp"></span></p>
-  <p class="note">엑셀·PPT 에는 <b>SVG</b> 를 내려받아 <b>삽입 → 그림 → 이 디바이스</b> 로 넣으면 확대해도 선명하다(화면에서 복사·붙여넣기는 비트맵이 되어 흐려짐). 매일 07:10 KST 자동 갱신 + 아래 <b>🔄 지금 갱신</b>(야후 수집 → 엑셀·그림 전부, 2~3분 뒤 자동 새로고침). 기준일·계산 기준은 그림 하단 각주.</p>
+  <p class="note"><b>📋 복사</b> 후 위클리(워드·PPT)에 바로 <b>Ctrl+V</b>(비트맵). 엑셀·PPT 에 확대해도 선명하게 넣으려면 <b>SVG</b> 를 내려받아 <b>삽입 → 그림 → 이 디바이스</b> 로 넣으면 확대해도 선명하다(화면에서 복사·붙여넣기는 비트맵이 되어 흐려짐). 매일 07:10 KST 자동 갱신 + 아래 <b>🔄 지금 갱신</b>(야후 수집 → 엑셀·그림 전부, 2~3분 뒤 자동 새로고침). 기준일·계산 기준은 그림 하단 각주.</p>
 <div class="bar" style="display:flex;gap:10px;align-items:center;margin:0 0 14px"><button class="p" id="refresh">🔄 지금 갱신</button><span id="rstatus" class="note" style="margin:0"></span></div>
   <div class="jump" id="jump"></div>
   <div id="cards"></div>
@@ -62,11 +62,12 @@ button:disabled{opacity:.5;cursor:wait}
   const bust="?t="+Math.floor(Date.now()/600000);   // 10분 단위 캐시 버스트
   const url=(f,ext)=>RAW+encodeURIComponent(f)+"."+ext+bust;
   const cards=document.getElementById("cards"),jump=document.getElementById("jump");
+  const canCopy=!!(navigator.clipboard&&window.ClipboardItem);   // 클립보드는 PNG 만 표준 — 복사 = PNG, 벡터는 SVG 내려받기
   FILES.forEach(([title,desc,f],i)=>{
     const j=document.createElement("a");j.href="#img"+i;j.textContent=title;jump.appendChild(j);
     const c=document.createElement("section");c.className="card";c.id="img"+i;
     c.innerHTML=`<div class="hd"><h2>${title}${desc?`<small>${desc}</small>`:""}</h2>
-        <button class="p" data-f="${f}" data-ext="svg">⬇ SVG</button><button data-f="${f}" data-ext="png">⬇ PNG</button>
+        ${canCopy?`<button class="p" data-f="${f}" data-act="copy">📋 복사</button>`:""}<button class="p" data-f="${f}" data-ext="svg">⬇ SVG</button><button data-f="${f}" data-ext="png">⬇ PNG</button>
         <a class="btn" href="${url(f,"svg")}" target="_blank" rel="noopener">새 창</a></div>
       <div class="im"><img src="${url(f,"png")}" alt="${title}" loading="lazy"></div><div class="err"></div>`;
     c.querySelector("img").onerror=function(){c.querySelector(".err").textContent="그림을 불러오지 못했습니다 — Actions 가 아직 한 번도 돌지 않았거나 파일명이 바뀌었을 수 있습니다."};
@@ -74,11 +75,15 @@ button:disabled{opacity:.5;cursor:wait}
   });
   document.addEventListener("click",async e=>{
     const b=e.target.closest("button[data-f]");if(!b)return;
-    const f=b.dataset.f,ext=b.dataset.ext,err=b.closest(".card").querySelector(".err");b.disabled=true;err.textContent="";
-    try{const r=await fetch(url(f,ext),{cache:"no-store"});if(!r.ok)throw new Error("HTTP "+r.status);
-      const blob=await r.blob(),a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=f+"."+ext;
-      document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),5000);
-    }catch(x){err.textContent="다운로드 실패: "+x.message+" — '새 창' 에서 우클릭 저장으로 받으세요."}
+    const f=b.dataset.f,copy=b.dataset.act==="copy",ext=copy?"png":b.dataset.ext,err=b.closest(".card").querySelector(".err");b.disabled=true;err.textContent="";
+    const getBlob=async()=>{const r=await fetch(url(f,ext),{cache:"no-store"});if(!r.ok)throw new Error("HTTP "+r.status);return r.blob()};
+    try{
+      if(copy){   // blob Promise 를 그대로 넘겨야 사파리가 사용자 제스처로 인정한다
+        await navigator.clipboard.write([new ClipboardItem({"image/png":getBlob().then(x=>new Blob([x],{type:"image/png"}))})]);
+        err.style.color="#15803d";err.textContent="✓ 복사됨 — 워드·PPT·카톡에 Ctrl+V";setTimeout(()=>{err.textContent="";err.style.color=""},4000);
+      }else{const blob=await getBlob(),a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=f+"."+ext;
+        document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),5000)}
+    }catch(x){err.style.color="";err.textContent=(copy?"복사 실패: ":"다운로드 실패: ")+x.message+" — '새 창' 에서 우클릭으로 복사·저장하세요."}
     finally{b.disabled=false}
   });
   const EP="https://script.google.com/macros/s/AKfycbx3RjIjtlO2Z6fIYo2T3LhJrFg9Wp2hS7dMS3Is52-JVF1hizoCWewbQ1uM_v5sdhR2jw/exec";  // app.js DISPATCH_ENDPOINT 와 같은 GAS
