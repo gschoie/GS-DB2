@@ -262,6 +262,9 @@ def build() -> Path:
     peer_price = ROOT / "static" / "peer_price.html"
     if peer_price.exists():
         shutil.copy2(peer_price, OUTPUT.parent / "peer_price.html")
+    cns_chart = ROOT / "static" / "consensus_chart.html"   # 커버리지 컨센서스 추이 갤러리(같은 틀)
+    if cns_chart.exists():
+        shutil.copy2(cns_chart, OUTPUT.parent / "consensus_chart.html")
     ship_index = ROOT / "static" / "ship_index.html"   # 조선주 INDEX 갤러리(같은 틀)
     if ship_index.exists():
         shutil.copy2(ship_index, OUTPUT.parent / "ship_index.html")
