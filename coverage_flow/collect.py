@@ -188,6 +188,41 @@ def collect_chart_only(today):
     return out, errors
 
 
+def charts_only(today):
+    """'🔄 차트만 지금 수집'(11/7): ④ 위클리용 차트에 쓰는 종목(WEEKLY_GROUPS 의 유니버스 종목 + chart_universe.csv)
+    의 1년 시계열만 다시 모아 series.json 을 갱신한다. 등락률·수급 표(latest.json)·히스토리·ETF·텔레그램은
+    건드리지 않는다 — 전체 수집(21종목+ETF 7, 2~3분)보다 가볍고 휴장일에도 돈다(차트는 직전 거래일까지 그리면 된다).
+    이번에 못 만든 종목은 직전 값을 유지(본 수집과 같은 원칙)."""
+    from build_report import WEEKLY_GROUPS   # 순환 아님: build_report 는 metrics 만 import
+    want = {c for g in WEEKLY_GROUPS for c in g["codes"]}
+    series_map, errors = {}, []
+    for u in load_csv("universe.csv"):
+        if u["code"] not in want:
+            continue
+        try:
+            row = collect_stock(u, today, live=False)
+            if row.get("series"):
+                series_map[u["code"]] = row["series"]
+        except Exception as ex:
+            errors.append(f"{u['code']} {u['name']}: {type(ex).__name__}: {ex}")
+    chart_series, chart_errors = collect_chart_only(today)
+    series_map.update({c: v for c, v in chart_series.items() if c in want})
+    errors += chart_errors
+    if not series_map:
+        print("차트 시계열을 하나도 못 만들었다 — series.json 을 손대지 않고 실패로 끝낸다")
+        for e in errors:
+            print("  !", e)
+        return 2
+    old = load_json(SERIES, {})
+    old.update(series_map)
+    with open(SERIES, "w", encoding="utf-8") as f:
+        json.dump(old, f, ensure_ascii=False, separators=(",", ":"))
+    print(f"차트 시계열 갱신: {len(series_map)}/{len(want)}종목 · 오류 {len(errors)}")
+    for e in errors:
+        print("  !", e)
+    return 0
+
+
 def collect_etfs(etf_rows):
     out, errors = [], []
     for e in etf_rows:
@@ -353,7 +388,11 @@ def main(argv=None):
     ap.add_argument("--probe-etf", action="store_true", help="ETF 상장주수 소스 탐색 — 응답 키만 찍고 끝(저장 없음)")
     ap.add_argument("--probe-flow", action="store_true", help="종목별 수급 이력 길이 탐색(KIS 행수·네이버 trend) — 저장 없음")
     ap.add_argument("--probe-estimate", action="store_true", help="종목별 외인기관 추정가집계 원본 응답 출력 — 저장 없음")
+    ap.add_argument("--charts-only", action="store_true",
+                    help="④ 위클리용 차트 시계열(series.json)만 갱신 — 표·텔레·latest.json 은 손대지 않음, 휴장일 무관")
     a = ap.parse_args(argv)
+    if a.charts_only:
+        return charts_only(datetime.now(KST).date().isoformat())
 
     now = datetime.now(KST)
     today = now.date().isoformat()

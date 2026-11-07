@@ -456,6 +456,25 @@ WEEKLY_JS = r"""
     img.src=url;
   }
   const stamp=()=>(document.querySelector("[data-wk-asof]")||{}).dataset?.wkAsof||"";
+  // '🔄 차트만 지금 수집' — app.js DISPATCH_ENDPOINT 와 같은 GAS 웹앱. 요청 뒤 배포본의 이 페이지가 바뀌면 새로고침
+  // (근태 페이지 watchDeploy 와 같은 방식: Pages CDN 캐시 최대 10분이라 12분 감시).
+  const EP="https://script.google.com/macros/s/AKfycbx3RjIjtlO2Z6fIYo2T3LhJrFg9Wp2hS7dMS3Is52-JVF1hizoCWewbQ1uM_v5sdhR2jw/exec";
+  document.addEventListener("click",async e=>{
+    const b=e.target.closest("#wk-refresh");if(!b)return;
+    const st=document.getElementById("wk-status");b.disabled=true;st.textContent="요청 중…";
+    try{const r=await fetch(EP,{method:"POST",body:JSON.stringify({workflow:"covflow",charts_only:true})});
+      let d=null;try{d=await r.json()}catch{}
+      if(d&&d.ok===false){st.textContent=`⚠ 거절 ${d.code||"?"} — ${d.error||"GAS 프록시 확인"}`;b.disabled=false;return}
+      const t0=Date.now(),mine=document.documentElement.outerHTML.length;
+      st.textContent="✅ 요청됨 — 수집·배포를 기다리는 중(1~3분)…";
+      const tick=async()=>{const m=Math.round((Date.now()-t0)/60000);
+        try{const h=await fetch(location.pathname+"?t="+Date.now(),{cache:"no-store"});const txt=await h.text();
+          if(h.ok&&txt.length!==mine&&/data-wk-asof/.test(txt)){st.textContent="갱신됨 — 새로고침";location.reload();return}}catch{}
+        if(Date.now()-t0>12*60000){st.textContent="12분 안에 배포가 안 보입니다 — Actions 를 확인하세요";b.disabled=false;return}
+        st.textContent=`✅ 요청됨 — 수집·배포 대기 중 ${m}분 경과`;setTimeout(tick,20000)};
+      setTimeout(tick,45000);
+    }catch(x){st.textContent="실패: "+x.message;b.disabled=false}
+  });
   // SERIES 는 페이지 끝의 종목 클릭 차트 스크립트가 정의한다 — 그 뒤에 그린다.
   window.addEventListener("DOMContentLoaded",()=>document.querySelectorAll(".wk-cell").forEach(cell=>{
     const s=seriesOf(cell);if(!s){cell.remove();return}
@@ -516,6 +535,12 @@ def weekly_section(rows, series, asof_date="", chart_errors=()):
     return (f"<details id='weekly' class='sec' open data-wk-asof='{esc(asof_date.replace('-', '')[2:])}'>"
             "<summary><h2>④ 위클리용 차트 <small style=\"font:400 12px Inter;color:#6b7280\">"
             "시가총액 · 기관/외인 1년 누적 순매수 — 리포트에 붙일 PNG</small></h2></summary>"
+            # 차트만 갱신 버튼(11/7): 상단 '🔄 지금 수집'(전체 2~3분)과 달리 시계열만 다시 모은다.
+            # GAS dispatch_proxy 가 charts_only 를 넘겨야 동작 — 안 넘기면 전체 수집이 돈다(무해, 느릴 뿐).
+            "<div class='wk-bar'><button id='wk-refresh' class='wk-all'>🔄 차트만 지금 수집</button>"
+            "<span id='wk-status' class='note' style='margin:0'></span>"
+            "<span class='note' style='margin:0'>표·텔레그램은 건드리지 않고 ④ 시계열만 다시 모읍니다(1~2분, 휴장일도 됨). "
+            "끝나면 자동 새로고침.</span></div>"
             + "".join(blocks) +
             f"<p class='note'>PNG 는 낱장 {WEEKLY_W * WEEKLY_SCALE}×{WEEKLY_H * WEEKLY_SCALE}px(가로:세로 ≈ {WEEKLY_W / WEEKLY_H:.2f}:1), "
             f"합산은 2×2 크기. '한 장' 은 위 격자 그대로(4열 가로형, PPT 삽입용). {WEEKLY_DPI}dpi 로 저장되어 붙이면 낱장 가로 약 "
@@ -582,6 +607,7 @@ tr.gh td{{background:#eef2f7;color:#1f2937;font:700 12px Georgia,"Noto Serif KR"
 table.compact{{font-size:12px}}
 table.flow{{font-size:12px}}table.flow td,table.flow th{{padding:6px 5px}}th.c{{text-align:center}}td.grp,th.grp{{border-left:2px solid #e5e7eb}}
 .note{{font-size:12px;color:var(--muted);line-height:1.6;margin:8px 0 0}}
+.wk-bar{{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:4px 0 10px}}
 .errs{{margin:16px 0;font-size:12px;color:#b45309}}.errs ul{{margin:6px 0 0 18px}}
 .wrap{{overflow-x:auto}}
 .wk-grid{{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}}@media(max-width:900px){{.wk-grid{{grid-template-columns:1fr}}}}.wk-cell{{border:1px solid var(--line);padding:6px;position:relative}}.wk-svg svg{{width:100%;height:auto;display:block}}.wk-one,.wk-all{{font:11px Inter;padding:2px 8px;border:1px solid #d1d5db;background:#fff;border-radius:3px;cursor:pointer;color:#374151}}.wk-one{{position:absolute;right:8px;bottom:8px}}.wk-big{{grid-column:span 2;grid-row:span 2}}.wk-all{{margin-left:8px;vertical-align:middle}}
