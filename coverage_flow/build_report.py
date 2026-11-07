@@ -376,8 +376,12 @@ const SERIES=__SERIES__;
 # 회사명(파랑) · 시가총액(십억원, 좌축 검정) · 기관/외인 1년 누적 순매수(억원, 우축 갈색/파랑) · 0 선(회색 굵게).
 # 데이터는 종목 클릭 차트와 같은 SERIES(1년 일별)를 쓰고, 그림은 화면에서 SVG 로 그려 PNG 로 받는다
 # (리포에 이미지 파일을 쌓지 않는다). 묶음을 늘리려면 이 표에 한 줄 더하면 된다.
+# 11/7 2차: 8사 + 합산(시총 합·외인/기관 누적 순매수 합) 9장을 3×3 가로 한 장으로(PPT 삽입용). 합산은 공통
+# 날짜 구간에서 화면이 계산한다(상장이 늦은 종목이 있으면 그 종목 첫날부터).
 WEEKLY_GROUPS = [
-    ("조선 수급", ["009540", "010140", "329180", "042660"]),   # HD한국조선해양 · 삼성중공업 · HD현대중공업 · 한화오션
+    {"title": "조선 수급", "sum": "조선 합산", "cols": 3,
+     "codes": ["009540", "010140", "329180", "042660",     # HD한국조선해양 · 삼성중공업 · HD현대중공업 · 한화오션
+               "439260", "443060", "071970", "082740"]},   # 대한조선 · HD현대마린솔루션 · HD현대마린엔진 · 한화엔진
 ]
 WEEKLY_W, WEEKLY_H, WEEKLY_SCALE = 600, 410, 2   # 한 장 viewBox · PNG 배율(1200×820)
 # PNG 에 인쇄 해상도(pHYs)를 심는다 — 캔버스 PNG 는 해상도 정보가 없어 워드·한글이 1px=1pt 로 읽어
@@ -392,8 +396,17 @@ WEEKLY_JS = r"""
   function nice(lo,hi,k){const sp=(hi-lo)||1,st=Math.pow(10,Math.floor(Math.log10(sp/k))),m=sp/k/st,s=(m<1.5?1:m<3?2:m<7?5:10)*st;
     const a=Math.floor(lo/s)*s,b=Math.ceil(hi/s)*s,t=[];for(let v=a;v<=b+s/2;v+=s)t.push(Math.round(v));return {t,a,b}}
   const n0=v=>Math.round(v).toLocaleString("en-US");
-  function svg(code,name){
-    const s=SERIES[code];if(!s)return "";
+  function agg(codes){   // 공통 날짜 구간의 시총 합 + 구간 시작을 0 으로 둔 누적 순매수 합
+    const ss=codes.map(c=>SERIES[c]).filter(Boolean);if(ss.length<2)return null;
+    const days=s=>{const o=[];for(let i=0;i<s.mc.length;i++)o.push(s.d.slice(i*6,i*6+6));return o};
+    const idx=ss.map(s=>{const m={};days(s).forEach((k,i)=>m[k]=i);return m});
+    const common=days(ss[0]).filter(k=>idx.every(m=>k in m));if(common.length<20)return null;
+    const sum=(key,zero)=>common.map(k=>ss.reduce((t,s,j)=>t+s[key][idx[j][k]]-(zero?s[key][idx[j][common[0]]]:0),0));
+    return {d:common.join(""),mc:sum("mc",false),fr:sum("fr",true),"in":sum("in",true)};
+  }
+  const seriesOf=cell=>cell.dataset.codes?agg(cell.dataset.codes.split(",")):SERIES[cell.dataset.code];
+  function svg(s,name){
+    if(!s)return "";
     const n=s.mc.length,mc=s.mc.map(v=>v/10),fr=s.fr.map(v=>v-s.fr[0]),inn=s["in"].map(v=>v-s["in"][0]);
     const L=58,R=58,T=54,B=30,pw=W-L-R,ph=H-T-B;
     const lv=nice(Math.min(...mc),Math.max(...mc),6),rv=nice(Math.min(0,...fr,...inn),Math.max(0,...fr,...inn),8);
@@ -431,15 +444,16 @@ WEEKLY_JS = r"""
   const stamp=()=>(document.querySelector("[data-wk-asof]")||{}).dataset?.wkAsof||"";
   // SERIES 는 페이지 끝의 종목 클릭 차트 스크립트가 정의한다 — 그 뒤에 그린다.
   window.addEventListener("DOMContentLoaded",()=>document.querySelectorAll(".wk-cell").forEach(cell=>{
-    cell.querySelector(".wk-svg").innerHTML=svg(cell.dataset.code,cell.dataset.name)}));
+    const s=seriesOf(cell);if(!s){cell.remove();return}
+    cell.querySelector(".wk-svg").innerHTML=svg(s,cell.dataset.name)}));
   document.addEventListener("click",e=>{
     const one=e.target.closest(".wk-one");
-    if(one){const cell=one.closest(".wk-cell");toPng(svg(cell.dataset.code,cell.dataset.name),W,H,`${cell.dataset.name}_수급_${stamp()}.png`);return}
+    if(one){const cell=one.closest(".wk-cell");toPng(svg(seriesOf(cell),cell.dataset.name),W,H,`${cell.dataset.name}_수급_${stamp()}.png`);return}
     const all=e.target.closest(".wk-all");if(!all)return;
     const grid=document.getElementById(all.dataset.grid),cells=[...grid.querySelectorAll(".wk-cell")],G=16;
-    const cols=2,rows=Math.ceil(cells.length/cols),TW=W*cols+G*(cols-1),TH=H*rows+G*(rows-1);
+    const cols=+grid.dataset.cols||2,rows=Math.ceil(cells.length/cols),TW=W*cols+G*(cols-1),TH=H*rows+G*(rows-1);
     let body=`<rect width="${TW}" height="${TH}" fill="#fff"/>`;
-    cells.forEach((c,i)=>{body+=`<g transform="translate(${(i%cols)*(W+G)},${Math.floor(i/cols)*(H+G)})">${svg(c.dataset.code,c.dataset.name).replace(/^<svg[^>]*>|<\/svg>$/g,"")}</g>`});
+    cells.forEach((c,i)=>{body+=`<g transform="translate(${(i%cols)*(W+G)},${Math.floor(i/cols)*(H+G)})">${svg(seriesOf(c),c.dataset.name).replace(/^<svg[^>]*>|<\/svg>$/g,"")}</g>`});
     toPng(`<svg xmlns="http://www.w3.org/2000/svg" width="${TW}" height="${TH}" viewBox="0 0 ${TW} ${TH}">${body}</svg>`,TW,TH,`${all.dataset.title}_${stamp()}.png`);
   });
 })();
@@ -452,16 +466,22 @@ def weekly_section(rows, series, asof_date=""):
         return ""
     names = {r["code"]: r["name"] for r in rows}
     blocks = []
-    for gi, (title, codes) in enumerate(WEEKLY_GROUPS):
+    for gi, g in enumerate(WEEKLY_GROUPS):
+        title, codes, cols = g["title"], g["codes"], g.get("cols", 2)
         cells = [c for c in codes if series.get(c)]
         if not cells:
             continue
         gid = f"wk-{gi}"
-        cell_html = "".join(
-            f"<div class='wk-cell' data-code='{c}' data-name='{esc(names.get(c, c))}'><div class='wk-svg'></div>"
-            f"<button class='wk-one'>⬇ PNG</button></div>" for c in cells)
-        blocks.append(f"<h3>{esc(title)} <button class='wk-all' data-grid='{gid}' data-title='{esc(title)}'>⬇ {len(cells)}개 한 장 PNG</button></h3>"
-                      f"<div class='wk-grid' id='{gid}'>{cell_html}</div>")
+        btn = "<button class='wk-one'>⬇ PNG</button></div>"
+        cell_html = ""
+        if g.get("sum") and len(cells) >= 2:   # 합산 칸(맨 앞) — 공통 구간이 짧으면 화면이 칸을 지운다
+            cell_html += (f"<div class='wk-cell' data-codes='{','.join(cells)}' data-name='{esc(g['sum'])}({len(cells)}사)'>"
+                          f"<div class='wk-svg'></div>{btn}")
+        cell_html += "".join(
+            f"<div class='wk-cell' data-code='{c}' data-name='{esc(names.get(c, c))}'><div class='wk-svg'></div>{btn}" for c in cells)
+        n = len(cells) + (1 if g.get("sum") and len(cells) >= 2 else 0)
+        blocks.append(f"<h3>{esc(title)} <button class='wk-all' data-grid='{gid}' data-title='{esc(title)}'>⬇ {n}개 한 장 PNG</button></h3>"
+                      f"<div class='wk-grid' id='{gid}' data-cols='{cols}' style='grid-template-columns:repeat({cols},minmax(0,1fr))'>{cell_html}</div>")
     if not blocks:
         return ""
     js = (WEEKLY_JS.replace("__W__", str(WEEKLY_W)).replace("__H__", str(WEEKLY_H))
@@ -470,9 +490,10 @@ def weekly_section(rows, series, asof_date=""):
             "<summary><h2>④ 위클리용 차트 <small style=\"font:400 12px Inter;color:#6b7280\">"
             "시가총액 · 기관/외인 1년 누적 순매수 — 리포트에 붙일 PNG</small></h2></summary>"
             + "".join(blocks) +
-            f"<p class='note'>PNG 는 한 장 {WEEKLY_W * WEEKLY_SCALE}×{WEEKLY_H * WEEKLY_SCALE}px(가로:세로 ≈ {WEEKLY_W / WEEKLY_H:.2f}:1), "
-            f"4개 한 장은 2×2 로 붙인 것. {WEEKLY_DPI}dpi 로 저장되어 워드에 붙이면 4개 한 장 가로 약 "
-            f"{2 * WEEKLY_W * WEEKLY_SCALE * 2.54 / WEEKLY_DPI + 0.1:.0f}cm · 낱장 약 {WEEKLY_W * WEEKLY_SCALE * 2.54 / WEEKLY_DPI:.0f}cm 로 들어간다. 시가총액 = 종가 × 현재 상장주수(십억원), 누적 순매수는 1년 창 시작일을 0 으로 둔 합계"
+            f"<p class='note'>PNG 는 낱장 {WEEKLY_W * WEEKLY_SCALE}×{WEEKLY_H * WEEKLY_SCALE}px(가로:세로 ≈ {WEEKLY_W / WEEKLY_H:.2f}:1), "
+            f"'한 장' 은 위 격자 그대로(3열이면 3×3 가로형, PPT 삽입용). {WEEKLY_DPI}dpi 로 저장되어 붙이면 낱장 가로 약 "
+            f"{WEEKLY_W * WEEKLY_SCALE * 2.54 / WEEKLY_DPI:.0f}cm, 3열 한 장 약 {3 * WEEKLY_W * WEEKLY_SCALE * 2.54 / WEEKLY_DPI + 0.2:.0f}cm. "
+            "합산 = 종목별 시총 합 · 외인/기관 누적 순매수 합(공통 날짜 구간, 구간 시작 0). 시가총액 = 종가 × 현재 상장주수(십억원), 누적 순매수는 1년 창 시작일을 0 으로 둔 합계"
             "(최근 30거래일 한투 금액, 그 이전 네이버 수량 × 종가 근사). 매 수집마다 다시 그려진다.</p>"
             "</details>" + js)
 

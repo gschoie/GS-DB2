@@ -841,9 +841,13 @@ class Weekly(unittest.TestCase):
         series = {"009540": ser, "010140": ser, "329180": ser}           # 한화오션은 시계열 없음
         h = build_report.render(d, series=series)
         self.assertIn("④ 위클리용 차트", h)
-        self.assertEqual(h.count("class='wk-cell'"), 3)
+        self.assertEqual(h.count("class='wk-cell'"), 4)                           # 합산 1 + 개별 3
+        self.assertIn("data-codes='009540,010140,329180' data-name='조선 합산(3사)'", h)
         self.assertIn("data-name='HD한국조선해양'", h)
-        self.assertIn("⬇ 3개 한 장 PNG", h)
+        self.assertIn("⬇ 4개 한 장 PNG", h); self.assertIn("data-cols='3'", h)
+        self.assertLess(h.index("조선 합산"), h.index("data-name='HD한국조선해양'"))   # 합산이 맨 앞
+        one = build_report.render(d, series={"009540": ser})
+        self.assertEqual(one.count("class='wk-cell'"), 1); self.assertNotIn("data-codes=", one)   # 1종목이면 합산 칸 없음
         self.assertLess(h.index("WEEKLY") if "WEEKLY" in h else h.index("wk-grid"), h.index("const SERIES="))
         self.assertNotIn("④ 위클리용", build_report.render(d))                     # 시계열 없으면 섹션 없음
         self.assertNotIn("④ 위클리용", build_report.render(d, series={"999999": ser}))  # 대상 종목 시계열 없음
