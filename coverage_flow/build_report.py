@@ -478,6 +478,10 @@ WEEKLY_JS = r"""
       setTimeout(tick,45000);
     }catch(x){st.textContent="실패: "+x.message;b.disabled=false}
   });
+  // 공유용 주소(gs-research-desk.github.io — 텔레그램 공개방 캡션에도 실린다)에서는 ④ 를 숨긴다(11/7 사용자).
+  // 본인용 진입은 #weekly 해시(사이드바 '수급.그림-조선')로만 보이고, 원본 주소·로컬 파일은 항상 보인다.
+  const SHARE_HOST="gs-research-desk.github.io";
+  if(location.hostname===SHARE_HOST&&!/weekly/.test(location.hash)){const w=document.getElementById("weekly");if(w)w.remove();}
   // SERIES 는 페이지 끝의 종목 클릭 차트 스크립트가 정의한다 — 그 뒤에 그린다.
   window.addEventListener("DOMContentLoaded",()=>document.querySelectorAll(".wk-cell").forEach(cell=>{
     const s=seriesOf(cell);if(!s){cell.remove();return}
