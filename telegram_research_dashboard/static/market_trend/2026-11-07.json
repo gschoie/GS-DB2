@@ -1,0 +1,626 @@
+{
+ "date": "2026-11-07",
+ "meta": {
+  "window": "11-06 06:00~11-07 06:00 KST",
+  "engine": "Gemini(gemini-2.5-flash)",
+  "generated_at": "2026-11-07T10:02+09:00"
+ },
+ "stats": {
+  "channels": 97,
+  "messages": 1618,
+  "groups": 1445
+ },
+ "one_liner": "미국 중간선거 결과로 인한 AI 데이터센터 규제 우려가 기술주 투매와 서킷브레이커 발동으로 이어지며 시장 전반에 극심한 공포가 확산된 하루.",
+ "themes": [
+  {
+   "name": "AI/반도체 — 데이터센터 규제 우려에 기술주 투매",
+   "narrative": "미국 중간선거 이후 민주당의 AI 규제 강화 우려와 텍사스 주지사 당선인의 데이터센터 건설 중단 발언이 확산되며 AI 및 반도체 관련 기술주에 대규모 투매가 발생했다. MS의 네오클라우드 계약 재검토 소식까지 겹치며 마이크론, AMD, 엔비디아, 네비우스 등 관련 종목들이 급락했다.",
+   "status": "new",
+   "strength": 5,
+   "keywords": [
+    "투매",
+    "재검토",
+    "주지사 당선인",
+    "네비우스",
+    "네오클라우드 계약",
+    "전력 공급",
+    "하락했고"
+   ],
+   "evidence": [
+    {
+     "channel": "키움증권 전략/시황 한지영",
+     "quote": "AI 투자 축소 불안감이 확대, 그 여파로 AI, 반도체 업종 중심의 투매가 나타나면서 급락을 맞았습니다."
+    },
+    {
+     "channel": "하나 중국/신흥국 전략 김경환",
+     "quote": ">>텍사스 주지사 당선인 : 텍사스 주민의 안전을 보호할 방안을 찾을 때까지 현재 진행 중인 데이터센터 건설을 중단해야 함"
+    },
+    {
+     "channel": "사제콩이_서상영",
+     "quote": "아이렌(-16.95%), 네비우스(-14.94%) 등은 MS가 데이터센터 건설 현장 점검과 계약 심사를 강화하고 고위험 사업에서는 철수를 검토하고 있다는 언론 보도가 유입되자 급락."
+    }
+   ]
+  },
+  {
+   "name": "시장 전반 — 서킷브레이커 발동 및 안전자산 선호 심리 강화",
+   "narrative": "AI/반도체 섹터의 급락 여파와 외국인 매도세가 시장 전반으로 확산되며 코스피 5000선이 붕괴되고 서킷브레이커가 발동되는 등 극심한 공포 심리가 조성되었다. 이에 따라 달러, 금, 국채 등 안전자산 선호 심리가 급격히 강화되었다.",
+   "status": "new",
+   "strength": 5,
+   "keywords": [
+    "투매",
+    "서킷브레이커",
+    "발동",
+    "하락했고",
+    "안전자산 선호"
+   ],
+   "evidence": [
+    {
+     "channel": "서화백의 AI놀이🚀",
+     "quote": "💡 요약 미국 중간선거 결과로 인한 AI 데이터센터 정책 불확실성 증폭 및 기술주/반도체 대규모 투매, 코스피 5000 붕괴 및 서킷브레이커 발동으로 투자자들의 극심한 공포 심리가 확산되었습니다."
+    },
+    {
+     "channel": "epic AI - 투자 어시스턴트",
+     "quote": "오전 9시 3분에는 코스피가 전 거래일 대비 8.52% 하락한 4924.61을 기록하면서 유가증권시장에 1단계 서킷브레이커가 발동돼 시장 전체 매매거래가 20분간 중단됐습니다."
+    },
+    {
+     "channel": "김현석(자본주의 바이어스 있는 채널입니다)",
+     "quote": "VIX 28.18(+69.66%)로 2년여 만의 최대 급등, 국채금리 하락·금 상승의 안전자산 선호"
+    }
+   ]
+  },
+  {
+   "name": "개별 기업 — 3분기 실적 부진 및 목표가 하향 조정",
+   "narrative": "LIG디펜스앤에어로스페이스, 한화엔진, 씨어스, 한국콜마 등 여러 기업이 3분기 잠정 실적이 시장 예상치를 크게 하회하며 주가에 부정적인 영향을 미쳤다. 특히 한국금융지주는 실적 쇼크로 급락하며 목표주가 하향 리포트가 다수 발행되었고, 고려아연, 금호석유화학 등도 실적 부진으로 약세를 보였다.",
+   "status": "new",
+   "strength": 4,
+   "keywords": [
+    "한화엔진",
+    "씨어스",
+    "금호석유화학",
+    "고려아연",
+    "한국금융지주",
+    "하향 한국금융지주",
+    "한국콜마"
+   ],
+   "evidence": [
+    {
+     "channel": "AWAKE - 실시간 주식 공시 정리채널",
+     "quote": "기업명: LIG디펜스앤에어로스페이스(시가총액: 7조 1,720억) A079550 보고서명: 연결재무제표기준영업(잠정)실적(공정공시) 매출액 : 10,713억(예상치 : 12,448억/ -14%) 영업익 : 676억(예상치 : 1,041억/ -35%)"
+    },
+    {
+     "channel": "대신 전략. 돌직구",
+     "quote": "금융 업종에서 한국금융지주(-16.4%)가 3분기 실적 쇼크로 급락했고, KB금융(-3.0%), 미래에셋증권(-7.1%), 키움증권(-5.8%) 등 약세"
+    },
+    {
+     "channel": "여의도스토리 Ver2.0-习近平是个狗东西",
+     "quote": "[특징주] 고려아연 6% 급락?3분기 실적 쇼크에 목표가 줄하향"
+    }
+   ]
+  },
+  {
+   "name": "제약/바이오 — 한미약품 MASH 임상 2b상 성공",
+   "narrative": "한미약품의 MSD와의 GLP-1/GCG 이중작용제 '에피노페그듀타이드'가 MASH 임상 2b상에서 1차 목표를 충족하고 간 섬유화 개선에 강점을 보이며 긍정적인 평가를 받았다.",
+   "status": "new",
+   "strength": 3,
+   "keywords": [
+    "MASH"
+   ],
+   "evidence": [
+    {
+     "channel": "허혜민의 제약/바이오 소식통",
+     "quote": "★ [단독] MSD·한미 ‘에피노페그듀타이드’, 2b상 성공…“MASH 해소율 63%·섬유화 개선율 52%” (+9.80%)"
+    },
+    {
+     "channel": "NH투자증권 리서치",
+     "quote": "[Spot Comment/한미약품] AASLD 2026: 기대치를 상회하는 MASH 데이터"
+    }
+   ]
+  },
+  {
+   "name": "음식료 — 삼양식품 가격 인상 가능성 부각",
+   "narrative": "삼양식품이 컨퍼런스콜에서 가격 인상 가능성을 시사하며 실적 개선에 대한 기대감이 부각되었다.",
+   "status": "new",
+   "strength": 2,
+   "keywords": [
+    "삼양식품"
+   ],
+   "evidence": [
+    {
+     "channel": "서화백의 그림놀이 🚀",
+     "quote": "📝 삼양식품은 금번 컨콜에서 **가격인상 가능성을 열어둔 점이 의미있었던 것..."
+    }
+   ]
+  },
+  {
+   "name": "유통 — 롯데쇼핑 실적 개선 기대감",
+   "narrative": "롯데쇼핑에 대한 긍정적인 신호가 포착되며 실적 개선에 대한 기대감이 형성되고 있다.",
+   "status": "new",
+   "strength": 1,
+   "keywords": [
+    "롯데쇼핑"
+   ],
+   "evidence": [
+    {
+     "channel": "서화백의 AI놀이🚀",
+     "quote": "📈 롯데쇼핑 (+70)"
+    }
+   ]
+  }
+ ],
+ "community_mood": {
+  "score": -80,
+  "summary": "미국 중간선거 결과와 AI/반도체 기술주 급락으로 시장 전반에 극심한 공포와 혼란이 확산되었으며, 개미 투자자들은 급락의 원인을 분석하고 향후 시장 방향에 대한 불안감을 표출하고 있다.",
+  "hot_stocks": [
+   {
+    "name": "삼성전자",
+    "score": 20,
+    "reason": "커뮤니티에서 '삼닉'으로 언급되며 월요일 급등 가능성에 대한 기대감이 표출됨."
+   },
+   {
+    "name": "SK하이닉스",
+    "score": 20,
+    "reason": "커뮤니티에서 '삼닉'으로 언급되며 월요일 급등 가능성에 대한 기대감이 표출됨."
+   }
+  ]
+ },
+ "signals": {
+  "spikes": [
+   {
+    "term": "투매",
+    "count": 34,
+    "burst": 65.23025210084033,
+    "base_daily": 0.4,
+    "new": false
+   },
+   {
+    "term": "서킷브레이커",
+    "count": 24,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "발동",
+    "count": 20,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "재검토",
+    "count": 18,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "주지사 당선인",
+    "count": 18,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "한화엔진",
+    "count": 18,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "씨어스",
+    "count": 18,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "안전자산 선호",
+    "count": 16,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "MASH",
+    "count": 16,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "금호석유화학",
+    "count": 16,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "삼양식품",
+    "count": 16,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "고려아연",
+    "count": 15,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "일이",
+    "count": 15,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "공장 가동",
+    "count": 15,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "네비우스",
+    "count": 14,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "하락했고",
+    "count": 14,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "TV",
+    "count": 14,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "롯데쇼핑",
+    "count": 14,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "석유화학",
+    "count": 14,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "한국콜마",
+    "count": 14,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "한국금융지주",
+    "count": 33,
+    "burst": 17.72728027681661,
+    "base_daily": 1.7,
+    "new": false
+   },
+   {
+    "term": "전력 공급",
+    "count": 13,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "네오클라우드 계약",
+    "count": 13,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "하향 한국금융지주",
+    "count": 13,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "해지",
+    "count": 13,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   }
+  ],
+  "top_posts": [
+   {
+    "channels": 5,
+    "channel": "AWAKE - 실시간 주식 공시 정리채널",
+    "head": "2026.11.06 15:28:17 기업명: LIG디펜스앤에어로스페이스(시가총액: 7조 1,720억) A079550 보고서명: 연결재무제표기준영업(잠정)실적(공정공시) 매출액 : 10,713억(예상치 : 12,448억/ -14%) 영업익 : 676억(예상치 : 1,041억/ -35%) 순이익 : -46억(예상치 : 871…",
+    "url": "https://t.me/darthacking/156531",
+    "time_kst": "11-06 15:28"
+   },
+   {
+    "channels": 5,
+    "channel": "AWAKE - 실시간 주식 공시 정리채널",
+    "head": "2026.11.06 14:12:14 기업명: 한화엔진(시가총액: 2조 1,863억) A082740 보고서명: 연결재무제표기준영업(잠정)실적(공정공시) 매출액 : 4,136억(예상치 : 4,195억/ -1%) 영업익 : 409억(예상치 : 555억/ -26%) 순이익 : 116억(예상치 : 433억/ -73%) **최근 실…",
+    "url": "https://t.me/darthacking/156515",
+    "time_kst": "11-06 14:12"
+   },
+   {
+    "channels": 4,
+    "channel": "한투 반도체/소부장 고영민",
+    "head": "[한국투자증권 반도체/소부장 고영민, 김연준] 반도체 - 험난한 8부 능선 ☑️ 험난하지만 8부 능선, 거의 다 왔다 ☑️ 주정부 모라토리엄 명분 축소 ☑️ 깨지지 않을 지지선, 삼성전자 17.5만원, SK하이닉스 100만원 ▶️ 데이터센터 모라토리엄? 민주당도 미국이다 - 현재의 산업 구조 하에서 데이터센터는 국가 경쟁…",
+    "url": "https://t.me/Semi_Ko/940",
+    "time_kst": "11-06 08:01"
+   },
+   {
+    "channels": 4,
+    "channel": "AWAKE - 실시간 주식 공시 정리채널",
+    "head": "2026.11.06 09:13:36 기업명: 한국콜마(시가총액: 2조 7,547억) A161890 보고서명: 연결재무제표기준영업(잠정)실적(공정공시) 매출액 : 8,282억(예상치 : 8,445억/ -2%) 영업익 : 819억(예상치 : 925억/ -11%) 순이익 : 406억(예상치 : 677억/ -40%) **최근 실…",
+    "url": "https://t.me/darthacking/156479",
+    "time_kst": "11-06 09:13"
+   },
+   {
+    "channels": 4,
+    "channel": "AWAKE - 실시간 주식 공시 정리채널",
+    "head": "2026.11.06 07:40:58 기업명: 씨어스(시가총액: 7,957억) A458870 보고서명: 연결재무제표기준영업(잠정)실적(공정공시) 매출액 : 98억(예상치 : 331억/ -70%) 영업익 : -19억(예상치 : 146억/ -113%) 순이익 : -18억(예상치 : 122억/ -115%) **최근 실적 추이**…",
+    "url": "https://t.me/darthacking/156474",
+    "time_kst": "11-06 07:41"
+   },
+   {
+    "channels": 4,
+    "channel": "하나 중국/신흥국 전략 김경환",
+    "head": ">>텍사스 주지사 당선인 : 텍사스 주민의 안전을 보호할 방안을 찾을 때까지 현재 진행 중인 데이터센터 건설을 중단해야 함 •텍사스 주지사 당선인 Gina Hinojosa는 데이터센터를 증오하는 것이 아니라 데이터센터가 텍사스 주민을 이용하는 방식을 증오한다고 밝힘. 또한 텍사스의 조건에 따라 Elon Musk 및 그의…",
+    "url": "https://t.me/HANAchina/71628",
+    "time_kst": "11-06 08:54"
+   },
+   {
+    "channels": 3,
+    "channel": "키움증권 전략/시황 한지영",
+    "head": "[11/6, 장 시작 전 생각: AI 패닉, 키움 한지영] - 다우 -3.4%, S&P500 -4.4%, 나스닥 -5.5% - 마이크론 -17.5%, 엔비디아 -9.3%, AMD -17.3% - 미 10년물 금리 4.83%, 30년물 금리 5.25%, WTI 91.2달러 1. 미국 증시도 어제 분위기가 무척이나 살벌했습니…",
+    "url": "https://t.me/hedgecat0301/2992",
+    "time_kst": "11-06 07:40"
+   },
+   {
+    "channels": 3,
+    "channel": "하나증권 리서치",
+    "head": "[AI/인터넷 x 유틸리티 x 건설 x 미래산업 콜라보 인뎁스, 하나증권 AI/디지털자산/인터넷/게임 이준호] '데크크2 (한국데센 정상영업합니다)' 리포트: https://tinyurl.com/5yxkrc8b ✅AI/인터넷: 기대치를 높이자 국내 AI DC는 대규모 개발 계획 발표 이후 자금조달, 인허가, 시공 및 컴퓨…",
+    "url": "https://t.me/HanaResearch/20899",
+    "time_kst": "11-06 19:17"
+   },
+   {
+    "channels": 3,
+    "channel": "메리츠증권 리서치",
+    "head": "📮[메리츠증권 전기전자/IT부품 양승수] 티엘비(356860) : 여기도 SoCAMM, 기대 이상 ▶ 3Q26 Review: 기대 이상의 수익성 달성 - 3Q26 매출액은 940억원(+36.4% YoY)으로 컨센서스를 4.2% 하회했으나, 영업이익은 166억원(+212.4% YoY, Opm:17.7%)을 기록하며 최근 상…",
+    "url": "https://t.me/meritz_research/45055",
+    "time_kst": "11-06 07:48"
+   },
+   {
+    "channels": 3,
+    "channel": "메리츠증권 리서치",
+    "head": "📮[메리츠증권 유틸리티/건설 문경원] 2026.11.6(금) ▶[2027 Outlook 9] 유틸리티/건설 The Payer‘s Market Part1. 에너지: 정부 재원 믿고 가는 원전 - Top Pick: 두산에너빌리티, SK가스 - 지금 투자 심리 최악인 원전에 대한 비중 늘릴 때. 1)자금 조달 리스크 측면에서,…",
+    "url": "https://t.me/meritz_research/45056",
+    "time_kst": "11-06 07:50"
+   },
+   {
+    "channels": 3,
+    "channel": "다올투자증권 리서치센터",
+    "head": "[다올투자증권 조선/기계/방산 최광식] 11/6(금) 데일리뉴스 🛳 조선 [TradeWinds] South Korea’s shipbuilding boom masks a deeper dilemma Foresight kicks off $1.2bn newbuilding drive with VLAC quartet TMV Logi…",
+    "url": "https://t.me/daolresearch/15442",
+    "time_kst": "11-06 08:47"
+   },
+   {
+    "channels": 3,
+    "channel": "텐렙",
+    "head": "『SK바이오팜(326030.KS) - 환율 변동에서 강한 실적, 남은 건 탑라인』 기업분석부 윤석현, 엄민용 ☎️ 02-3772-3735 ▶️ 신한생각: 지속 가능한 신약 기업까지 단 한 걸음 원화 강세에도 3Q26 영업이익 1,163억원(누적 3,031억원)으로 분기 최대 실적 경신하며 1.0~1.5년 현금 축적으로 오…",
+    "url": "https://t.me/Ten_level/93957",
+    "time_kst": "11-06 07:52"
+   },
+   {
+    "channels": 3,
+    "channel": "허재환 유진증권 전략",
+    "head": "[Web발신] 안녕하십니까 유진투자증권 허재환입니다 =AI 너머 세상= * 주식시장이 벼랑 끝으로 밀렸습니다. 6~7월에는 AI 논란 보다, 국내 및 해외 증시에서 반도체 레버리지 ETF를 비롯한 수급 영향이 컸습니다. * 10월 이후에는 금리와 유가와 함께 AI의 자금병목 문제에 정치까지 가세했습니다. 이제 민주당은 데…",
+    "url": "https://t.me/huhjae/4587",
+    "time_kst": "11-06 12:33"
+   },
+   {
+    "channels": 3,
+    "channel": "메리츠증권 리서치",
+    "head": "📮[메리츠증권 반도체/디스플레이 김선우] ▶ 반도체: 삼성전자, SK하이닉스: 미주 채널체크와 역사적 저점 밸류에이션 - 삼성전자, SK하이닉스, 마이크론 등 메모리 업체 미주 영업 마케팅 채널체크 결과, 당장 수요 변화의 이상징후는 감지되지 않는 상황 - 2027년 확정적 (Locked in) 수요 속, 만약 2028년…",
+    "url": "https://t.me/meritz_research/45061",
+    "time_kst": "11-06 11:17"
+   },
+   {
+    "channels": 3,
+    "channel": "우주방산AI로봇 아카이브",
+    "head": "📌 MLCC 주문 폭증·BB비율 사상 최고…태양유전 실적 전망 상향, 증설 앞당긴다 일본 태양유전이 AI 서버용 MLCC 수요 급증에 힘입어 실적 전망을 재차 상향하고, 설비투자 일정을 2년 앞당기기로 결정했습니다. 특히 MLCC 수주 급증과 사상 최고 BB비율이 주목됩니다. 📈 MLCC 수주 급증 3분기 MLCC 신규…",
+    "url": "https://t.me/defence_24/6528",
+    "time_kst": "11-06 12:21"
+   }
+  ]
+ },
+ "community_dc": {
+  "source": "DC인사이드",
+  "galleries": [
+   {
+    "id": "krstock",
+    "name": "국내주식갤러리",
+    "posts": 940,
+    "capped": true,
+    "burst": 0.4,
+    "base_daily": 2615.0
+   },
+   {
+    "id": "stockus",
+    "name": "해외주식갤러리",
+    "posts": 0,
+    "capped": false,
+    "burst": 0.0,
+    "base_daily": 9980.0
+   }
+  ],
+  "posts_sampled": 292,
+  "keywords": [
+   {
+    "term": "지표",
+    "count": 6,
+    "burst": 99.0,
+    "new": true
+   },
+   {
+    "term": "고용",
+    "count": 5,
+    "burst": 99.0,
+    "new": true
+   },
+   {
+    "term": "반도체",
+    "count": 11,
+    "burst": 8.8,
+    "new": false
+   },
+   {
+    "term": "속보",
+    "count": 11,
+    "burst": 8.8,
+    "new": false
+   },
+   {
+    "term": "야선",
+    "count": 14,
+    "burst": 4.3,
+    "new": false
+   },
+   {
+    "term": "내가",
+    "count": 5,
+    "burst": 4.5,
+    "new": false
+   },
+   {
+    "term": "삼닉",
+    "count": 6,
+    "burst": 4.0,
+    "new": false
+   }
+  ],
+  "top_recommended": [
+   {
+    "gallery": "해외주식갤러리",
+    "title": "념글 꼬라지보니 이새기 슬슬 입갤하겠노 ㅋㅋㅋㅋ",
+    "views": 10135,
+    "recommend": 268,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=18280107&exception_mode=recommend&page=2",
+    "time_kst": "11-06 14:29"
+   },
+   {
+    "gallery": "해외주식갤러리",
+    "title": "그니깐 지금 이게 미국인들의 뜻이라는 거임?",
+    "views": 10020,
+    "recommend": 248,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=18279131&exception_mode=recommend&page=2",
+    "time_kst": "11-06 13:30"
+   },
+   {
+    "gallery": "해외주식갤러리",
+    "title": "현재 시장 상황……jpg",
+    "views": 16230,
+    "recommend": 245,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=18282155&exception_mode=recommend&page=2",
+    "time_kst": "11-06 16:37"
+   },
+   {
+    "gallery": "해외주식갤러리",
+    "title": "AI가 거품이라는 씹새끼들아 잘봐라",
+    "views": 14800,
+    "recommend": 224,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=18285706&exception_mode=recommend&page=1",
+    "time_kst": "11-06 20:25"
+   },
+   {
+    "gallery": "해외주식갤러리",
+    "title": "미민당 근황",
+    "views": 12252,
+    "recommend": 218,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=18285368&exception_mode=recommend&page=1",
+    "time_kst": "11-06 19:50"
+   }
+  ],
+  "top_viewed": [
+   {
+    "gallery": "국내주식갤러리",
+    "title": "월요일 진짜 삼닉 30퍼씩 오를 예정임??",
+    "views": 1714,
+    "recommend": 0,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3853181&page=11",
+    "time_kst": "11-06 23:48"
+   },
+   {
+    "gallery": "국내주식갤러리",
+    "title": "야선 3에서 갑자기 쳐박은 이유 머임?",
+    "views": 1635,
+    "recommend": 0,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3853187&page=11",
+    "time_kst": "11-06 23:58"
+   },
+   {
+    "gallery": "국내주식갤러리",
+    "title": "내용 정리해보자면",
+    "views": 1451,
+    "recommend": 0,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3853259&page=10",
+    "time_kst": "11-07 02:16"
+   },
+   {
+    "gallery": "국내주식갤러리",
+    "title": "크아아아악 정의선",
+    "views": 1326,
+    "recommend": 0,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3853189&page=11",
+    "time_kst": "11-07 00:03"
+   },
+   {
+    "gallery": "국내주식갤러리",
+    "title": "와... 몸매... gif",
+    "views": 1229,
+    "recommend": 0,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3853208&page=10",
+    "time_kst": "11-07 00:54"
+   },
+   {
+    "gallery": "국내주식갤러리",
+    "title": "와 마크롱 음전은 예상못했네",
+    "views": 909,
+    "recommend": 0,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3853253&page=10",
+    "time_kst": "11-07 01:55"
+   },
+   {
+    "gallery": "국내주식갤러리",
+    "title": "야선 근황",
+    "views": 898,
+    "recommend": 1,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3853160&page=11",
+    "time_kst": "11-06 22:52"
+   },
+   {
+    "gallery": "국내주식갤러리",
+    "title": "와 미장 끝났네이거",
+    "views": 893,
+    "recommend": 0,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3853376&page=8",
+    "time_kst": "11-07 05:56"
+   }
+  ]
+ }
+}
