@@ -262,12 +262,12 @@ def build() -> Path:
     peer_price = ROOT / "static" / "peer_price.html"
     if peer_price.exists():
         shutil.copy2(peer_price, OUTPUT.parent / "peer_price.html")
+    cns_chart = ROOT / "static" / "consensus_chart.html"   # 커버리지 컨센서스 추이 갤러리(같은 틀)
+    if cns_chart.exists():
+        shutil.copy2(cns_chart, OUTPUT.parent / "consensus_chart.html")
     ship_index = ROOT / "static" / "ship_index.html"   # 조선주 INDEX 갤러리(같은 틀)
     if ship_index.exists():
         shutil.copy2(ship_index, OUTPUT.parent / "ship_index.html")
-    cons_weekly = ROOT / "static" / "consensus_weekly.html"   # 컨센서스 추이(조방기) 갤러리(같은 틀)
-    if cons_weekly.exists():
-        shutil.copy2(cons_weekly, OUTPUT.parent / "consensus_weekly.html")
     # 아침 브리핑 모음 — 사이드바 '아침.브리핑' 서브메뉴의 🔗 모아보기 대상. 같은 등급.
     brief_hub = ROOT / "static" / "briefings.html"
     if brief_hub.exists():

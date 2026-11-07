@@ -41,9 +41,8 @@ button:disabled{opacity:.5;cursor:wait}
 <div class="wrap">
   <h1>📈 글로벌 피어그룹 주가흐름표</h1>
   <p class="sub">조선사 · 엔진/기자재 · 오일/해양 · 해운 — 1W/1M/3M/YTD/1Y 등락률 + 3개월 주가 스파크라인. <span id="stamp"></span></p>
-  <p class="note">엑셀·PPT 에는 <b>SVG</b> 를 내려받아 <b>삽입 → 그림 → 이 디바이스</b> 로 넣으면 확대해도 선명하다(화면에서 복사·붙여넣기는 비트맵이 되어 흐려짐).
-    갱신은 <a href="https://github.com/gschoie/ecos-fx-rates/actions/workflows/peergroup-price.yml" target="_blank" rel="noopener">ecos-fx-rates Actions › 피어그룹 주가 흐름 이미지 › Run workflow</a>
-    → 약 2분 뒤 이 페이지 새로고침. 기준일·계산 기준은 그림 하단 각주.</p>
+  <p class="note">엑셀·PPT 에는 <b>SVG</b> 를 내려받아 <b>삽입 → 그림 → 이 디바이스</b> 로 넣으면 확대해도 선명하다(화면에서 복사·붙여넣기는 비트맵이 되어 흐려짐). 매일 07:10 KST 자동 갱신 + 아래 <b>🔄 지금 갱신</b>(야후 수집 → 엑셀·그림 전부, 2~3분 뒤 자동 새로고침). 기준일·계산 기준은 그림 하단 각주.</p>
+<div class="bar" style="display:flex;gap:10px;align-items:center;margin:0 0 14px"><button class="p" id="refresh">🔄 지금 갱신</button><span id="rstatus" class="note" style="margin:0"></span></div>
   <div class="jump" id="jump"></div>
   <div id="cards"></div>
 </div>
@@ -82,6 +81,21 @@ button:disabled{opacity:.5;cursor:wait}
     }catch(x){err.textContent="다운로드 실패: "+x.message+" — '새 창' 에서 우클릭 저장으로 받으세요."}
     finally{b.disabled=false}
   });
+  const EP="https://script.google.com/macros/s/AKfycbx3RjIjtlO2Z6fIYo2T3LhJrFg9Wp2hS7dMS3Is52-JVF1hizoCWewbQ1uM_v5sdhR2jw/exec";  // app.js DISPATCH_ENDPOINT 와 같은 GAS
+  const lastMod=async()=>{try{const r=await fetch(RAW+encodeURIComponent(FILES[0][2])+".png?x="+Date.now(),{method:"HEAD",cache:"no-store"});return r.headers.get("last-modified")||""}catch{return ""}};
+  document.getElementById("refresh").onclick=async function(){
+    const b=this,st=document.getElementById("rstatus");b.disabled=true;st.textContent="요청 중…";
+    const before=await lastMod();
+    try{const r=await fetch(EP,{method:"POST",body:JSON.stringify({workflow:"peer"})});let d=null;try{d=await r.json()}catch{}
+      if(d&&d.ok===false){st.textContent=`⚠ 거절 ${d.code||"?"} — ${d.error||"GAS 프록시 확인"}`;b.disabled=false;return}
+    }catch(x){st.textContent="실패: "+x.message;b.disabled=false;return}
+    const t0=Date.now();
+    const tick=async()=>{const m=Math.round((Date.now()-t0)/60000);const now=await lastMod();
+      if(now&&now!==before){st.textContent="갱신됨 — 새로고침";location.reload();return}
+      if(Date.now()-t0>12*60000){st.textContent="12분 안에 새 파일이 안 보입니다 — ecos-fx-rates Actions 를 확인하세요";b.disabled=false;return}
+      st.textContent=`✅ 요청됨 — 수집·커밋 대기 중 ${m}분 경과`;setTimeout(tick,30000)};
+    setTimeout(tick,60000);
+  };
   // 파일 갱신 시각(raw 의 Last-Modified) — 못 읽으면 조용히 생략
   fetch(url(FILES[0][2],"png"),{method:"HEAD",cache:"no-store"}).then(r=>{const lm=r.headers.get("last-modified");
     if(lm)document.getElementById("stamp").textContent="파일 갱신: "+new Date(lm).toLocaleString("ko-KR",{timeZone:"Asia/Seoul"})}).catch(()=>{});
