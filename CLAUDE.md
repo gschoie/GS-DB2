@@ -1204,6 +1204,12 @@
       처럼 긴 이름이 범례와 겹치던 것. 검증은 Playwright 로 ⬇ 버튼을 눌러 PNG 를 받아 슬라이드 폭(1600px)으로
       줄여 봤다. 조선기자재 묶음에서 **한화엔진·HD현대마린엔진 제외**(조선 묶음에만) → 21사, 열 수 6→**5**
       (합산 2×2 + 21 = 25 = 5×5 꽉 참).
+    - **피어그룹 주가흐름표 갤러리 페이지** (11/7 저녁, 별도 리포 ecos-fx-rates 의 산출물): 사이드바 📰 주보 >
+      `📈 피어그룹.주가흐름표` 가 GitHub 파일 페이지로 나가던 것(사용자 "github로만 가는데")을
+      `static/peer_price.html` 로 교체 — ecos-fx-rates `output/peer_price/` 의 PNG/SVG 8장(전체·p1·p2·섹션 5)을
+      raw.githubusercontent 로 한 창에 띄우고 그림마다 ⬇ SVG/PNG(fetch→blob, raw 가 CORS * 라 가능). 리포엔
+      그림 파일을 안 둔다. 갱신은 그 리포 Actions '피어그룹 주가 흐름 이미지' 수동 실행(페이지에 링크).
+      build_static 복사 한 줄, 공유 등급(OWNER_ONLY 아님).
     - 2판 후보(미구현): 수급 × 컨센 변화 교차(kospi_consensus), 외국인 보유비율 1년 백분위,
       섹터 ETF 대비 상대강도, 수주 공시·실적일 이벤트 뱃지, 공매도(소스 확인 필요).
 
