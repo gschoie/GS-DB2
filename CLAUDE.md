@@ -1497,4 +1497,12 @@
     `metric:` 으로. 덤: `tests/test_releases.py` 의 실패 판정이 파일 중간에 있어 그 뒤 검사는
     실패해도 통과로 나왔다 → 맨 끝으로. 다음 수집부터 보인다(옛 payload 엔 vals 없음).
 
+55. **주보 메뉴에 '📊 컨센서스' 추가** (11/7): 사이드바 `✍️ 보고서.발간 > 📰 주보` 맨 아래(수급.그림-조선 밑).
+    링크는 ecos-fx-rates `output/consensus/`(GitHub 폴더) — 커버리지 16종목 영업이익 컨센서스 최근 6개월 추이
+    PNG(분기 4Q26·1Q27 / 연간 올해E·내년E). 생성기 `consensus/weekly_consensus_chart.py` 는 kospi_consensus DB 가
+    아니라 FnGuide `wcomp.fnguide.com/CompanyInfo/getCnsTrendChart`(월말, 1년) + 네이버 WiseReport `cF5002`
+    (분기 주간 13점·연간 월말 13점)를 이어 붙인다 — 트래커 DB 는 분기 fwd 컨센이 10/15 부터라 6개월이 안 된다.
+    (참고: comp.fnguide.com 은 wcomp.fnguide.com 으로 이전, 옛 SVD_*.asp 는 404.) 갱신은 ecos-fx-rates Actions
+    '커버리지 컨센서스 추이 이미지'.
+
 이후 작업은 git log와 이 파일을 갱신하며 이어간다.
