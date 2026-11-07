@@ -1234,6 +1234,10 @@
       **비활성**, 16:02(`trig_01Q6FbKD8DAFgby2siphnX2N`) → **16:42 KST 평일**(정각·반각 혼잡 회피). 크론 안전망은 17:05 KST
       하나(11:35 삭제). `metrics.SLOTS`·13:45 경계는 그대로(수동 수집을 오전에 누르면 11:30 슬롯으로 붙는다),
       SCHEDULE_TIME 표기·버튼 툴팁만 갱신. 아카이브(16:00 슬롯)는 영향 없음.
+    - **④ 는 공유용 주소에서 숨김** (11/7 밤, 사용자 "gs-research-desk.github.io/coverage_flow_report.html 에는 ④ 없어야").
+      텔레 캡션 링크가 그 주소라서. WEEKLY_JS 가 `location.hostname === gs-research-desk.github.io` 이고 해시에
+      `weekly` 가 없으면 `#weekly` 를 DOM 에서 제거. 본인용은 `#weekly` 해시(사이드바 🚢 수급.그림-조선)로 진입,
+      원본 주소(gschoie.github.io/GS-DB2)·로컬은 항상 보인다. 캡쳐(capture.py)는 로컬 파일이라 영향 없음.
     - 2판 후보(미구현): 수급 × 컨센 변화 교차(kospi_consensus), 외국인 보유비율 1년 백분위,
       섹터 ETF 대비 상대강도, 수주 공시·실적일 이벤트 뱃지, 공매도(소스 확인 필요).
 
