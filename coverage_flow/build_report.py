@@ -537,7 +537,7 @@ def weekly_section(rows, series, asof_date="", chart_errors=()):
           .replace("__SC__", str(WEEKLY_SCALE)).replace("__DPI__", str(WEEKLY_DPI)))
     return (f"<details id='weekly' class='sec' open data-wk-asof='{esc(asof_date.replace('-', '')[2:])}'>"
             "<summary><h2>④ 위클리용 차트 <small style=\"font:400 12px Inter;color:#6b7280\">"
-            "시가총액 · 기관/외인 1년 누적 순매수 — 리포트에 붙일 PNG</small></h2></summary>"
+            "시가총액 · 기관/외인 1년 누적 순매수 — 리포트에 붙일 PNG · 주인 전용</small></h2></summary>"
             # 차트만 갱신 버튼(11/7): 상단 '🔄 지금 수집'(전체 2~3분)과 달리 시계열만 다시 모은다.
             # GAS dispatch_proxy 가 charts_only 를 넘겨야 동작 — 안 넘기면 전체 수집이 돈다(무해, 느릴 뿐).
             "<div class='wk-bar'><button id='wk-refresh' class='wk-all'>🔄 차트만 지금 수집</button>"
@@ -610,6 +610,9 @@ tr.gh td{{background:#eef2f7;color:#1f2937;font:700 12px Georgia,"Noto Serif KR"
 table.compact{{font-size:12px}}
 table.flow{{font-size:12px}}table.flow td,table.flow th{{padding:6px 5px}}th.c{{text-align:center}}td.grp,th.grp{{border-left:2px solid #e5e7eb}}
 .note{{font-size:12px;color:var(--muted);line-height:1.6;margin:8px 0 0}}
+/* 위클리 차트 섹션(#weekly)은 주인 전용 — 가림막(gate.py)이 <html data-gs=owner|guest|none> 을 남긴다.
+   공유 비번(guest)·미인증·가림막 없는 원본 파일에서는 섹션이 아예 안 보인다. */
+html:not([data-gs="owner"]) #weekly{{display:none}}
 .wk-bar{{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:4px 0 10px}}
 .errs{{margin:16px 0;font-size:12px;color:#b45309}}.errs ul{{margin:6px 0 0 18px}}
 .wrap{{overflow-x:auto}}

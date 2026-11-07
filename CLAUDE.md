@@ -1527,4 +1527,14 @@
     (참고: comp.fnguide.com 은 wcomp.fnguide.com 으로 이전, 옛 SVD_*.asp 는 404.) 갱신은 ecos-fx-rates Actions
     '커버리지 컨센서스 추이 이미지'.
 
+51. **커버리지 ④ 위클리용 차트 — 주인 전용** (11/7): 사용자 요청 "④는 gs.choie에만 보이게".
+    가림막(`gate.py`)이 등급 판정 직후 `<html data-gs="owner|guest|none">` 을 남기고,
+    `coverage_flow/build_report.py` 가 `html:not([data-gs="owner"]) #weekly{display:none}` 로 가린다
+    (요약 꼬리에 '주인 전용' 표기). 공유 비번·미인증·가림막 없는 원본 파일에서는 섹션이 아예 안 보인다.
+    **같은 방식으로 다른 페이지의 블록도 주인 전용으로 만들 수 있다** — CSS 한 줄.
+    검증: 스크래치에 gate.inject 한 페이지를 localhost 로 띄워 Playwright 로 none/guest/owner 세 등급
+    실측(①~③ 는 셋 다 보이고 #weekly 는 owner 만). test_metrics 의 "시계열 없으면 ④ 없음" 검사가
+    CSS 주석의 '④ 위클리용' 글자에 걸려 실패 → 주석 문구에서 그 낱말을 뺐다(렌더 전체를 문자열로
+    검사하는 테스트라 주석도 본문이다).
+
 이후 작업은 git log와 이 파일을 갱신하며 이어간다.

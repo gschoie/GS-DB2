@@ -54,6 +54,9 @@ SNIPPET = """<!--gs-gate--><script>
    var b=await crypto.subtle.digest("SHA-256",new TextEncoder().encode(s));
    return [].map.call(new Uint8Array(b),function(x){return x.toString(16).padStart(2,"0")}).join("")}
  var lv=level();
+ // 등급을 문서에 남긴다 — 페이지가 "주인에게만 보이는 블록"을 CSS 로 가를 수 있게
+ // (coverage_flow ④ 위클리용 차트: html:not([data-gs=owner]) #weekly{display:none}).
+ try{document.documentElement.setAttribute("data-gs",lv||"none")}catch(e){}
  if(lv==="owner")return;                 // 주인은 전부 통과
  if(lv==="guest"&&!OWNER)return;         // 친구는 공유 페이지만 통과
  // crypto.subtle 은 https/localhost 에서만 있다. 없으면(평문 http·file://) 대조가
