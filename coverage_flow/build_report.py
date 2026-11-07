@@ -376,15 +376,17 @@ const SERIES=__SERIES__;
 # 회사명(파랑) · 시가총액(십억원, 좌축 검정) · 기관/외인 1년 누적 순매수(억원, 우축 갈색/파랑) · 0 선(회색 굵게).
 # 데이터는 종목 클릭 차트와 같은 SERIES(1년 일별)를 쓰고, 그림은 화면에서 SVG 로 그려 PNG 로 받는다
 # (리포에 이미지 파일을 쌓지 않는다). 묶음을 늘리려면 이 표에 한 줄 더하면 된다.
-# 11/7 2차: 8사 + 합산(시총 합·외인/기관 누적 순매수 합) 9장을 3×3 가로 한 장으로(PPT 삽입용). 합산은 공통
+# 11/7 2차: 8사 + 합산(시총 합·외인/기관 누적 순매수 합)을 가로 한 장으로(PPT 삽입용). 합산은 공통
 # 날짜 구간에서 화면이 계산한다(상장이 늦은 종목이 있으면 그 종목 첫날부터).
+# 11/7 3차: 합산 칸은 **가로 2칸(세로 1칸, 개별의 2배)** — 2×2(4배)는 "4개 모은 정도"라 너무 컸고 페이지도 많이 쌓였다(사용자).
+# 한 장 = cols 열 격자(합산 2칸 + 개별 n칸을 행 우선으로 채움). 조선 5열 = 2+8 = 10칸 → 2행 꽉 참, 기자재 6열 = 2+21 = 23칸 → 4행(빈 칸 1).
 WEEKLY_GROUPS = [
-    {"title": "조선 수급", "sum": "조선 합산", "cols": 4,   # 합산 칸은 2×2 크기 → 4열이면 8장이 둘레를 꼭 채운다
+    {"title": "조선 수급", "sum": "조선 합산", "cols": 5,   # 합산 2칸 + 8 = 10칸 → 5열 2행
      "codes": ["009540", "010140", "329180", "042660",     # HD한국조선해양 · 삼성중공업 · HD현대중공업 · 한화오션
                "439260", "443060", "071970", "082740"]},   # 대한조선 · HD현대마린솔루션 · HD현대마린엔진 · 한화엔진
     # 조선기자재(11/7): 유니버스 7 + chart_universe.csv 차트 전용 14 = 21사(한화엔진·HD현대마린엔진은 조선 묶음에만 — 사용자 지정).
-    # 5열 = 합산 2×2(4칸) + 21칸 = 25칸 → 5×5 꽉 찬 정사각.
-    {"title": "조선기자재 수급", "sum": "조선기자재 합산", "cols": 5,
+    # 6열 = 합산 2칸 + 21칸 = 23칸 → 4행(마지막 행 빈 칸 1).
+    {"title": "조선기자재 수급", "sum": "조선기자재 합산", "cols": 6,
      "codes": ["017960", "033500", "075580", "460930", "014620", "023160", "013030",   # 한국카본·동성화인텍·세진중공업·현대힘스·성광벤드·태광·하이록코리아
                "014940", "077970", "073010", "054540", "108380", "092460", "101930", "382900", "086670",   # 오리엔탈정공·STX엔진·케이에스피·삼영엠텍·대양전기공업·한라IMS·인화정공·범한퓨얼셀·비엠티
                "064820", "333430", "085310", "096350", "0008Z0"]},                                         # 케이프·일승·엔케이·대창솔루션·에스엔시스
@@ -411,13 +413,14 @@ WEEKLY_JS = r"""
     return {d:common.join(""),mc:sum("mc",false),fr:sum("fr",true),"in":sum("in",true)};
   }
   const seriesOf=cell=>cell.dataset.codes?agg(cell.dataset.codes.split(",")):SERIES[cell.dataset.code];
-  const G=16,dims=cell=>cell.classList.contains("wk-big")?[2*W+G,2*H+G]:[W,H];
+  const G=16,dims=cell=>cell.classList.contains("wk-big")?[2*W+G,H]:[W,H];   // 합산 = 가로 2칸, 세로 1칸
   function svg(s,name,W,H){
     if(!s)return "";W=W||__W__;H=H||__H__;
     const n=s.mc.length,mc=s.mc.map(v=>v/10),fr=s.fr.map(v=>v-s.fr[0]),inn=s["in"].map(v=>v-s["in"][0]);
     const big=W>__W__;
-    // PPT 세미나용(11/7): 글자·선을 종전의 1.5배 안팎으로 — 3×3 한 장을 슬라이드 폭에 맞춰도 읽히게
-    const Z=big?{t:32,sub:18,lg:18,ax:20,lw:[4.8,4.2,3.6],zero:5,L:100,R:100,T:88,B:48,lgLine:42,lgX:180,lgGap:25,lgY:24,ty:38,tick:6}
+    // PPT 세미나용(11/7): 글자·선을 종전의 1.5배 안팎으로 — 한 장을 슬라이드 폭에 맞춰도 읽히게.
+    // 합산(big)은 가로만 2배(세로는 개별과 같다)라 글자는 개별보다 조금만 크게.
+    const Z=big?{t:27,sub:15,lg:16,ax:17,lw:[4.4,3.9,3.3],zero:4.5,L:88,R:88,T:76,B:44,lgLine:36,lgX:150,lgGap:21,lgY:20,ty:31,tick:5}
                 :{t:23,sub:14,lg:15,ax:16,lw:[4,3.5,3],zero:4,L:82,R:82,T:72,B:42,lgLine:34,lgX:122,lgGap:19,lgY:19,ty:29,tick:5};
     const L=Z.L,R=Z.R,T=Z.T,B=Z.B,pw=W-L-R,ph=H-T-B;
     const lv=nice(Math.min(...mc),Math.max(...mc),5),rv=nice(Math.min(0,...fr,...inn),Math.max(0,...fr,...inn),6);
@@ -482,15 +485,15 @@ WEEKLY_JS = r"""
   document.addEventListener("click",e=>{
     const one=e.target.closest(".wk-one");
     if(one){const cell=one.closest(".wk-cell"),[w,h]=dims(cell);toPng(svg(seriesOf(cell),cell.dataset.name,w,h),w,h,`${cell.dataset.name}_수급_${stamp()}.png`);return}
-    const all=e.target.closest(".wk-all");if(!all)return;
+    const all=e.target.closest(".wk-all[data-grid]");if(!all)return;   // 🔄 수집 버튼도 .wk-all 모양을 빌려 쓴다 — data-grid 있는 것만
     const grid=document.getElementById(all.dataset.grid),cells=[...grid.querySelectorAll(".wk-cell")];
-    // 격자 채우기: 큰 칸(2×2)이 있으면 먼저 놓고, 나머지는 빈 칸을 행 우선으로 채운다
+    // 격자 채우기: 큰 칸(가로 2칸)이 있으면 먼저 놓고, 나머지는 빈 칸을 행 우선으로 채운다
     const cols=+grid.dataset.cols||2,used=new Set(),place=[];let rows=0;
     const free=(r,c)=>!used.has(r+","+c);
-    cells.forEach(cell=>{const span=cell.classList.contains("wk-big")?2:1;
-      for(let r=0;;r++){let done=false;for(let c=0;c+span<=cols;c++){let ok=true;
-        for(let dr=0;dr<span;dr++)for(let dc=0;dc<span;dc++)if(!free(r+dr,c+dc))ok=false;
-        if(ok){for(let dr=0;dr<span;dr++)for(let dc=0;dc<span;dc++)used.add((r+dr)+","+(c+dc));place.push([cell,r,c]);rows=Math.max(rows,r+span);done=true;break}}
+    cells.forEach(cell=>{const [sc,sr]=cell.classList.contains("wk-big")?[2,1]:[1,1];   // (열 span, 행 span)
+      for(let r=0;;r++){let done=false;for(let c=0;c+sc<=cols;c++){let ok=true;
+        for(let dr=0;dr<sr;dr++)for(let dc=0;dc<sc;dc++)if(!free(r+dr,c+dc))ok=false;
+        if(ok){for(let dr=0;dr<sr;dr++)for(let dc=0;dc<sc;dc++)used.add((r+dr)+","+(c+dc));place.push([cell,r,c]);rows=Math.max(rows,r+sr);done=true;break}}
         if(done)break}});
     const TW=W*cols+G*(cols-1),TH=H*rows+G*(rows-1);
     let body=`<rect width="${TW}" height="${TH}" fill="#fff"/>`;
@@ -543,8 +546,8 @@ def weekly_section(rows, series, asof_date="", chart_errors=()):
             "끝나면 자동 새로고침.</span></div>"
             + "".join(blocks) +
             f"<p class='note'>PNG 는 낱장 {WEEKLY_W * WEEKLY_SCALE}×{WEEKLY_H * WEEKLY_SCALE}px(가로:세로 ≈ {WEEKLY_W / WEEKLY_H:.2f}:1), "
-            f"합산은 2×2 크기. '한 장' 은 위 격자 그대로(4열 가로형, PPT 삽입용). {WEEKLY_DPI}dpi 로 저장되어 붙이면 낱장 가로 약 "
-            f"{WEEKLY_W * WEEKLY_SCALE * 2.54 / WEEKLY_DPI:.0f}cm, 4열 한 장 약 {4 * WEEKLY_W * WEEKLY_SCALE * 2.54 / WEEKLY_DPI + 0.3:.0f}cm. "
+            f"합산은 가로 2칸(개별의 2배). '한 장' 은 위 격자 그대로(가로형, PPT 삽입용). {WEEKLY_DPI}dpi 로 저장되어 붙이면 낱장 가로 약 "
+            f"{WEEKLY_W * WEEKLY_SCALE * 2.54 / WEEKLY_DPI:.0f}cm, 5열 한 장 약 {5 * WEEKLY_W * WEEKLY_SCALE * 2.54 / WEEKLY_DPI + 0.4:.0f}cm. "
             "합산 = 종목별 시총 합 · 외인/기관 누적 순매수 합(공통 날짜 구간, 구간 시작 0). 시가총액 = 종가 × 현재 상장주수(십억원), 누적 순매수는 1년 창 시작일을 0 으로 둔 합계"
             "(최근 30거래일 한투 금액, 그 이전 네이버 수량 × 종가 근사). 매 수집마다 다시 그려진다.</p>"
             "</details>" + js)
@@ -610,7 +613,7 @@ table.flow{{font-size:12px}}table.flow td,table.flow th{{padding:6px 5px}}th.c{{
 .wk-bar{{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:4px 0 10px}}
 .errs{{margin:16px 0;font-size:12px;color:#b45309}}.errs ul{{margin:6px 0 0 18px}}
 .wrap{{overflow-x:auto}}
-.wk-grid{{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}}@media(max-width:900px){{.wk-grid{{grid-template-columns:1fr}}}}.wk-cell{{border:1px solid var(--line);padding:6px;position:relative}}.wk-svg svg{{width:100%;height:auto;display:block}}.wk-one,.wk-all{{font:11px Inter;padding:2px 8px;border:1px solid #d1d5db;background:#fff;border-radius:3px;cursor:pointer;color:#374151}}.wk-one{{position:absolute;right:8px;bottom:8px}}.wk-big{{grid-column:span 2;grid-row:span 2}}.wk-all{{margin-left:8px;vertical-align:middle}}
+.wk-grid{{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}}@media(max-width:900px){{.wk-grid{{grid-template-columns:1fr}}}}.wk-cell{{border:1px solid var(--line);padding:6px;position:relative}}.wk-svg svg{{width:100%;height:auto;display:block}}.wk-one,.wk-all{{font:11px Inter;padding:2px 8px;border:1px solid #d1d5db;background:#fff;border-radius:3px;cursor:pointer;color:#374151}}.wk-one{{position:absolute;right:8px;bottom:8px}}.wk-big{{grid-column:span 2}}.wk-all{{margin-left:8px;vertical-align:middle}}
 tr.clk{{cursor:pointer}}tr.clk:hover td{{background:#f8fafc}}.car{{color:#9ca3af;font-size:11px}}
 tr.chart td{{padding:10px 8px 16px;background:#fcfcfd}}.chbox{{max-width:760px}}.chbox .hd{{display:flex;gap:14px;flex-wrap:wrap;align-items:baseline;font-size:12px;margin-bottom:4px}}
 .chbox .hd b{{font-size:13px}}.lg{{display:inline-flex;align-items:center;gap:5px;color:var(--muted)}}.lg i{{display:inline-block;width:14px;height:3px;border-radius:2px}}

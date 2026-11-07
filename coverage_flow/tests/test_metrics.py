@@ -844,7 +844,7 @@ class Weekly(unittest.TestCase):
         self.assertEqual(h.count("class='wk-cell"), 4)                            # 합산 1 + 개별 3
         self.assertIn("data-codes='009540,010140,329180' data-name='조선 합산(3사)'", h)
         self.assertIn("data-name='HD한국조선해양'", h)
-        self.assertIn("⬇ 4개 한 장 PNG", h); self.assertIn("data-cols='4'", h); self.assertIn("class='wk-cell wk-big'", h)
+        self.assertIn("⬇ 4개 한 장 PNG", h); self.assertIn("data-cols='5'", h); self.assertIn("class='wk-cell wk-big'", h)
         self.assertLess(h.index("조선 합산"), h.index("data-name='HD한국조선해양'"))   # 합산이 맨 앞
         one = build_report.render(d, series={"009540": ser})
         self.assertEqual(one.count("class='wk-cell"), 1); self.assertNotIn("data-codes=", one)   # 1종목이면 합산 칸 없음
@@ -856,7 +856,7 @@ class Weekly(unittest.TestCase):
         d["chart_errors"] = ["014940 오리엔탈정공: 이름 불일치 — 한투 종목명 '엉뚱'(코드 확인)"]
         h2 = build_report.render(d, series={**series, "077970": {**ser, "name": "STX엔진"}, "014940": {**ser, "name": "오리엔탈정공"}})
         self.assertIn("data-name='STX엔진'", h2); self.assertIn("차트 전용 종목 수집 오류 1건", h2)
-        self.assertIn("data-codes='014940,077970' data-name='조선기자재 합산(2사)'", h2); self.assertIn("data-cols='5'", h2)
+        self.assertIn("data-codes='014940,077970' data-name='조선기자재 합산(2사)'", h2); self.assertIn("data-cols='6'", h2)
         h3 = build_report.render(d, series={**series, "077970": {**ser, "name": "STX엔진"}})
         self.assertIn("data-name='STX엔진'", h3); self.assertNotIn("조선기자재 합산", h3)   # 1종목이면 합산 칸 없음
 
