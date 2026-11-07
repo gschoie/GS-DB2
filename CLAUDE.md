@@ -1210,6 +1210,9 @@
       raw.githubusercontent 로 한 창에 띄우고 그림마다 ⬇ SVG/PNG(fetch→blob, raw 가 CORS * 라 가능). 리포엔
       그림 파일을 안 둔다. 갱신은 그 리포 Actions '피어그룹 주가 흐름 이미지' 수동 실행(페이지에 링크).
       build_static 복사 한 줄, 공유 등급(OWNER_ONLY 아님).
+      **조선주 INDEX 는 별도 페이지** `static/ship_index.html`(같은 틀, 파일 4장 — 2×2 묶음 + ①②③) + 사이드바
+      `📉 조선주.INDEX`(피어그룹.주가흐름표 바로 밑, 사용자 "주보 밑에 별도로 버튼"). 원본 ecos-fx-rates
+      `peergroup/weekly_peer_index_image.py`(KOSPI vs 조선주 · 한국 조선 7사 · 한/중/일/싱, 12주전=100, 시총가중).
     - **'🔄 차트만 지금 수집' 버튼** (11/7 밤): 사용자 "지금 수집 버튼은 ④ 바로 주변에 있고 이것만 돌리게 해야" →
       ④ 머리 밑에 버튼. `collect.py --charts-only` = WEEKLY_GROUPS 의 유니버스 종목(collect_stock, live=False)
       + chart_universe 만 다시 모아 **series.json 만** 갱신(latest·히스토리·ETF·텔레 불변, 휴장일 무관, 전부 실패면

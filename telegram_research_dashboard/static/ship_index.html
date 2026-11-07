@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<!--
+  조선주 상대 INDEX — peer_price.html 과 같은 틀(파일 목록만 다름). 원본:
+  ecos-fx-rates peergroup/weekly_peer_index_image.py (같은 Actions 가 굽는다).
+  피어그룹 주가흐름표 — ecos-fx-rates 리포의 Actions('피어그룹 주가 흐름 이미지')가 굽는
+  PNG/SVG 를 대시보드 안에서 한 창에 모아 보고 그림마다 내려받는 갤러리. 파일 자체는 그 리포
+  output/peer_price/ 에 있고(raw.githubusercontent — Content-Type image/svg+xml, CORS * 실측 11/7),
+  여기는 미리보기 + 다운로드 버튼만 둔다 — GitHub 파일 페이지로 나가지 않게(사용자 "github로만 가는데",
+  "html 로 여러 이미지들이 뜨는 창을 하나 만들자").
+  SVG 는 벡터라 엑셀·PPT '삽입 → 그림' 으로 넣으면 확대해도 선명하다(복사·붙여넣기는 비트맵).
+-->
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>조선주 INDEX — GS Research Desk</title>
+<style>
+:root{--bg:#fff;--fg:#1c2430;--muted:#6b7684;--line:#e5e8ec;--card:#f7f8fa;--accent:#a68a64;--btn:#1f2937}
+@media(prefers-color-scheme:dark){:root{--bg:#14181f;--fg:#e6e9ee;--muted:#8b93a1;--line:#2a313c;--card:#1b212b;--btn:#e6e9ee}}
+*{box-sizing:border-box}
+body{margin:0;padding:18px 16px 48px;background:var(--bg);color:var(--fg);font:14px/1.6 -apple-system,"Malgun Gothic","Apple SD Gothic Neo",sans-serif}
+.wrap{max-width:1180px;margin:0 auto}
+h1{font-size:19px;margin:0 0 2px}
+.sub{color:var(--muted);font-size:12.5px;margin:0 0 10px}
+.note{font-size:12px;color:var(--muted);margin:0 0 18px;line-height:1.7}
+.note a{color:inherit}
+.jump{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 18px}
+.jump a{font-size:12px;padding:4px 10px;border:1px solid var(--line);border-radius:999px;color:var(--fg);text-decoration:none;background:var(--card)}
+.card{border:1px solid var(--line);border-radius:8px;margin:0 0 18px;background:var(--card);overflow:hidden}
+.card .hd{display:flex;flex-wrap:wrap;gap:8px;align-items:center;padding:9px 12px;border-bottom:1px solid var(--line)}
+.card .hd h2{font-size:14px;margin:0 auto 0 0}
+.card .hd small{color:var(--muted);font-size:11.5px;margin-left:8px;font-weight:400}
+button,a.btn{font:600 12.5px inherit;padding:6px 12px;border-radius:6px;border:1px solid var(--line);background:var(--bg);color:var(--fg);cursor:pointer;text-decoration:none}
+button.p{background:var(--btn);color:var(--bg);border-color:var(--btn)}
+button:disabled{opacity:.5;cursor:wait}
+.card .im{background:#fff;padding:6px}
+.card img{display:block;width:100%;height:auto}
+.err{color:#b45309;font-size:12px;padding:0 12px 8px}
+#stamp{color:var(--muted);font-size:12px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>📉 조선주 상대 INDEX</h1>
+  <p class="sub">KOSPI vs 조선주 · 한국 조선 7사 Performance · 한/중/일/싱 조선주 비교 — 12주(60거래일) 전 = 100, 국가 지수는 기준일 USD 시총 가중. <span id="stamp"></span></p>
+  <p class="note">엑셀·PPT 에는 <b>SVG</b> 를 내려받아 <b>삽입 → 그림 → 이 디바이스</b> 로 넣으면 확대해도 선명하다(화면에서 복사·붙여넣기는 비트맵이 되어 흐려짐).
+    갱신은 <a href="https://github.com/gschoie/ecos-fx-rates/actions/workflows/peer-price-image.yml" target="_blank" rel="noopener">ecos-fx-rates Actions › 피어그룹 주가 흐름 이미지 › Run workflow</a>
+    → 약 2분 뒤 이 페이지 새로고침. 기준일·계산 기준은 그림 하단 각주.</p>
+  <div class="jump" id="jump"></div>
+  <div id="cards"></div>
+</div>
+<script>
+(function(){
+  const RAW="https://raw.githubusercontent.com/gschoie/ecos-fx-rates/main/output/peer_price/";
+  const FILES=[
+    ["조선주 INDEX 3종 (2×2 묶음)","PPT 한 장용 — ①②③ + 각주","조선주_INDEX_3종"],
+    ["① 한국 주식시장 vs 조선주","KOSPI vs 한국 조선주(시총가중)","IDX1_한국시장_vs_조선주"],
+    ["② 한국 조선 7사 Performance","HD현대중공업·HD한국조선해양·삼성중공업·한화오션·대한조선·한화엔진·HD현대마린엔진","IDX2_한국조선_Performance"],
+    ["③ 한/중/일/싱 조선주 비교","국가별 시총가중 지수 (한국 7·중국 3·일본 6·싱가포르 1)","IDX3_한중일싱_조선주"],
+  ];
+  const bust="?t="+Math.floor(Date.now()/600000);   // 10분 단위 캐시 버스트
+  const url=(f,ext)=>RAW+encodeURIComponent(f)+"."+ext+bust;
+  const cards=document.getElementById("cards"),jump=document.getElementById("jump");
+  FILES.forEach(([title,desc,f],i)=>{
+    const j=document.createElement("a");j.href="#img"+i;j.textContent=title;jump.appendChild(j);
+    const c=document.createElement("section");c.className="card";c.id="img"+i;
+    c.innerHTML=`<div class="hd"><h2>${title}${desc?`<small>${desc}</small>`:""}</h2>
+        <button class="p" data-f="${f}" data-ext="svg">⬇ SVG</button><button data-f="${f}" data-ext="png">⬇ PNG</button>
+        <a class="btn" href="${url(f,"svg")}" target="_blank" rel="noopener">새 창</a></div>
+      <div class="im"><img src="${url(f,"png")}" alt="${title}" loading="lazy"></div><div class="err"></div>`;
+    c.querySelector("img").onerror=function(){c.querySelector(".err").textContent="그림을 불러오지 못했습니다 — Actions 가 아직 한 번도 돌지 않았거나 파일명이 바뀌었을 수 있습니다."};
+    cards.appendChild(c);
+  });
+  document.addEventListener("click",async e=>{
+    const b=e.target.closest("button[data-f]");if(!b)return;
+    const f=b.dataset.f,ext=b.dataset.ext,err=b.closest(".card").querySelector(".err");b.disabled=true;err.textContent="";
+    try{const r=await fetch(url(f,ext),{cache:"no-store"});if(!r.ok)throw new Error("HTTP "+r.status);
+      const blob=await r.blob(),a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=f+"."+ext;
+      document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),5000);
+    }catch(x){err.textContent="다운로드 실패: "+x.message+" — '새 창' 에서 우클릭 저장으로 받으세요."}
+    finally{b.disabled=false}
+  });
+  // 파일 갱신 시각(raw 의 Last-Modified) — 못 읽으면 조용히 생략
+  fetch(url(FILES[0][2],"png"),{method:"HEAD",cache:"no-store"}).then(r=>{const lm=r.headers.get("last-modified");
+    if(lm)document.getElementById("stamp").textContent="파일 갱신: "+new Date(lm).toLocaleString("ko-KR",{timeZone:"Asia/Seoul"})}).catch(()=>{});
+})();
+</script>
+</body>
+</html>
