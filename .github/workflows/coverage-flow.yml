@@ -33,6 +33,9 @@ on:
         description: "휴장일에도 수집·페이지 갱신(텔레그램 없음 — 위클리 차트 전용 종목을 당장 채울 때)"
         type: boolean
         default: false
+      charts_only:
+        description: "④ 위클리용 차트 시계열만 갱신('true') — 표·텔레·latest 는 그대로, 휴장일 무관. 화면 '🔄 차트만 지금 수집' 버튼이 보낸다"
+        default: ""
   schedule:
     - cron: "35 2 * * 1-5"    # 02:35 UTC = 11:35 KST (GAS 11:30 의 안전망)
     - cron: "5 7 * * 1-5"     # 07:05 UTC = 16:05 KST (GAS 16:00 의 안전망)
@@ -123,6 +126,9 @@ jobs:
           fi
           if [ "${{ inputs.probe_estimate }}" = "true" ]; then
             python collect.py --probe-estimate; echo "skipped=true" >> "$GITHUB_OUTPUT"; exit 0
+          fi
+          if [ "${{ inputs.charts_only }}" = "true" ]; then
+            python collect.py --charts-only | tee collect.log; exit ${PIPESTATUS[0]}
           fi
           python collect.py ${{ (inputs.force_telegram || inputs.collect_now) && '--force' || '' }} | tee collect.log
           if grep -q "휴장일로 판단" collect.log; then echo "skipped=true" >> "$GITHUB_OUTPUT"; fi

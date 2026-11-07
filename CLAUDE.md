@@ -1210,6 +1210,13 @@
       raw.githubusercontent 로 한 창에 띄우고 그림마다 ⬇ SVG/PNG(fetch→blob, raw 가 CORS * 라 가능). 리포엔
       그림 파일을 안 둔다. 갱신은 그 리포 Actions '피어그룹 주가 흐름 이미지' 수동 실행(페이지에 링크).
       build_static 복사 한 줄, 공유 등급(OWNER_ONLY 아님).
+    - **'🔄 차트만 지금 수집' 버튼** (11/7 밤): 사용자 "지금 수집 버튼은 ④ 바로 주변에 있고 이것만 돌리게 해야" →
+      ④ 머리 밑에 버튼. `collect.py --charts-only` = WEEKLY_GROUPS 의 유니버스 종목(collect_stock, live=False)
+      + chart_universe 만 다시 모아 **series.json 만** 갱신(latest·히스토리·ETF·텔레 불변, 휴장일 무관, 전부 실패면
+      종료 2). 워크플로 입력 `charts_only`(문자열 'true' — boolean 입력에 GAS 가 문자열을 넘기는 혼선을 피함),
+      GAS `buildInputs` 에 covflow 분기(**재붙여넣기 + '배포 관리 → 새 버전' 필요** — 그 전엔 버튼이 전체 수집을
+      돌린다, 무해). 페이지 JS 는 GAS 에 POST 한 뒤 배포본의 자기 페이지 길이가 바뀌면 새로고침(12분 감시).
+      상단 '🔄 지금 수집'(전체)은 그대로.
     - 2판 후보(미구현): 수급 × 컨센 변화 교차(kospi_consensus), 외국인 보유비율 1년 백분위,
       섹터 ETF 대비 상대강도, 수주 공시·실적일 이벤트 뱃지, 공매도(소스 확인 필요).
 
