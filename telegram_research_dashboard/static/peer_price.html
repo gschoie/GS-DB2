@@ -39,8 +39,9 @@ button:disabled{opacity:.5;cursor:wait}
 </head>
 <body>
 <div class="wrap">
-  <h1>📈 글로벌 피어그룹 주가흐름표</h1>
-  <p class="sub">조선사 · 엔진/기자재 · 오일/해양 · 해운 — 1W/1M/3M/YTD/1Y 등락률 + 3개월 주가 스파크라인. <span id="stamp"></span></p>
+  <h1 id="h1">📈 글로벌 피어그룹 주가흐름표</h1>
+  <p class="sub"><span id="subtxt">조선사 · 엔진/기자재 · 오일/해양 · 해운 — 1W/1M/3M/YTD/1Y 등락률 + 3개월 주가 스파크라인.</span> <span id="stamp"></span></p>
+  <div class="jump" id="utabs" style="margin:0 0 10px"></div>
   <p class="note"><b>📋 복사</b> 후 위클리(워드·PPT)에 바로 <b>Ctrl+V</b>(비트맵). 엑셀·PPT 에 확대해도 선명하게 넣으려면 <b>SVG</b> 를 내려받아 <b>삽입 → 그림 → 이 디바이스</b> 로 넣으면 확대해도 선명하다(화면에서 복사·붙여넣기는 비트맵이 되어 흐려짐). 매일 07:10 KST 자동 갱신 + 아래 <b>🔄 지금 갱신</b>(야후 수집 → 엑셀·그림 전부, 2~3분 뒤 자동 새로고침). 기준일·계산 기준은 그림 하단 각주.</p>
 <div class="bar" style="display:flex;gap:10px;align-items:center;margin:0 0 14px"><button class="p" id="refresh">🔄 지금 갱신</button><span id="rstatus" class="note" style="margin:0"></span></div>
   <div class="jump" id="jump"></div>
@@ -48,17 +49,47 @@ button:disabled{opacity:.5;cursor:wait}
 </div>
 <script>
 (function(){
-  const RAW="https://raw.githubusercontent.com/gschoie/ecos-fx-rates/main/output/peer_price/";
-  const FILES=[
-    ["전체 1페이지","좌 지수·조선사·엔진/기자재 / 우 오일·해양·해운","글로벌_피어그룹_주가흐름"],
-    ["p1 조선 · 기자재","2페이지 분할본 1","글로벌_피어그룹_주가흐름_p1_조선"],
-    ["p2 오일 · 해운","2페이지 분할본 2","글로벌_피어그룹_주가흐름_p2_오일해운"],
-    ["지수 / 원자재","유가·천연가스·BDRY·원달러","01_지수_원자재"],
-    ["조선사","한국·싱가포르·중국·일본·대만·함정","02_조선사"],
-    ["엔진 / 기자재","","03_엔진_기자재"],
-    ["오일 / 해양","RIG·IOC/NOC·FPSO·ENG/EPC·OSV","04_오일_해양"],
-    ["해운","컨테이너·컨선 선주·탱커·벌크·LNG·LPG","05_해운"],
-  ];
+  // 유니버스 3종 — 생성기는 ecos-fx-rates peergroup/weekly_peer_price_image.py(--universe), 같은 워크플로가 세 판을 함께 굽는다.
+  // ?u=ship|defense|construction 으로 고른다(대시보드 사이드바가 각각 띄움). 파일명은 생성기의 page_file/split/file 과 일치해야 한다.
+  const UNIVERSES={
+    ship:{tab:"🚢 조선·해운",h1:"📈 글로벌 피어그룹 주가흐름표 — 조선·해운",sub:"조선사 · 엔진/기자재 · 오일/해양 · 해운 — 1W/1M/3M/YTD/1Y 등락률 + 3개월 주가 스파크라인.",
+      dir:"peer_price",files:[
+      ["전체 1페이지","좌 지수·조선사·엔진/기자재 / 우 오일·해양·해운","글로벌_피어그룹_주가흐름"],
+      ["p1 조선 · 기자재","2페이지 분할본 1","글로벌_피어그룹_주가흐름_p1_조선"],
+      ["p2 오일 · 해운","2페이지 분할본 2","글로벌_피어그룹_주가흐름_p2_오일해운"],
+      ["지수 / 원자재","유가·천연가스·BDRY·원달러","01_지수_원자재"],
+      ["조선사","한국·싱가포르·중국·일본·대만·함정","02_조선사"],
+      ["엔진 / 기자재","","03_엔진_기자재"],
+      ["오일 / 해양","RIG·IOC/NOC·FPSO·ENG/EPC·OSV","04_오일_해양"],
+      ["해운","컨테이너·컨선 선주·탱커·벌크·LNG·LPG","05_해운"]]},
+    defense:{tab:"🛡️ 방산·항공우주",h1:"📈 글로벌 피어그룹 주가흐름표 — 방산·항공우주",sub:"한국 체계·탄약/기동·부체계·항공부품·우주 · 기타(중동·인도·일본·중국·남미) · 지수/ETF · 미국 · 유럽 — 1W/1M/3M/YTD/1Y 등락률 + 3개월 스파크라인.",
+      dir:"peer_price_defense",files:[
+      ["전체 1페이지","좌 한국·기타 / 우 지수·미국·유럽","글로벌_방산_주가흐름"],
+      ["p1 한국 · 기타","2페이지 분할본 1","글로벌_방산_주가흐름_p1_한국기타"],
+      ["p2 미국 · 유럽","2페이지 분할본 2 (지수/ETF 포함)","글로벌_방산_주가흐름_p2_미국유럽"],
+      ["지수 / ETF","PLUS K방산·ITA·SHLD·EUAD","01_지수_ETF"],
+      ["한국 방산 · 항공우주","체계·탄약/기동·부체계·항공부품·우주","02_한국방산"],
+      ["기타","이스라엘·튀르키예·인도·일본·중국·남미","03_기타"],
+      ["미국","프라임·드론/신흥·엔진/부품","04_미국"],
+      ["유럽","체계·항공·엔진/부품","05_유럽"]]},
+    construction:{tab:"🏗️ 건설기계",h1:"📈 글로벌 피어그룹 주가흐름표 — 건설기계",sub:"지수/원자재 · OEM(한국·미국/유럽·일본·중국·인도) · 농기계/광산/렌탈·딜러 · 부품 — 1W/1M/3M/YTD/1Y 등락률 + 3개월 스파크라인.",
+      dir:"peer_price_construction",files:[
+      ["전체 1페이지","좌 지수·OEM / 우 농기계·광산·렌탈·딜러·부품","글로벌_건설기계_주가흐름"],
+      ["p1 OEM","2페이지 분할본 1 (지수/원자재 포함)","글로벌_건설기계_주가흐름_p1_OEM"],
+      ["p2 농기계 · 광산 · 렌탈 · 부품","2페이지 분할본 2","글로벌_건설기계_주가흐름_p2_수요부품"],
+      ["지수 / 원자재","PAVE·구리·WTI·원달러","01_지수_원자재"],
+      ["건설기계 OEM","한국·미국/유럽·일본·중국·인도","02_건설기계OEM"],
+      ["농기계 / 광산 / 렌탈 · 딜러","Deere·CNH·AGCO·대동 / Sandvik·Epiroc·Metso·Weir / URI·Ashtead·Herc / Finning·Toromont","03_농기계_광산_렌탈딜러"],
+      ["부품","디와이파워·진성티이씨·대창단조·동일금속·흥국·우림피티에스 / KYB·Hengli","04_부품"]]},
+  };
+  const uname=(new URLSearchParams(location.search).get("u")||"ship").toLowerCase();
+  const U=UNIVERSES[uname]||UNIVERSES.ship;
+  const RAW="https://raw.githubusercontent.com/gschoie/ecos-fx-rates/main/output/"+U.dir+"/";
+  const FILES=U.files;
+  document.getElementById("h1").textContent=U.h1;document.title=U.h1.replace(/^📈 /,"");
+  document.getElementById("subtxt").textContent=U.sub;
+  {const t=document.getElementById("utabs");Object.entries(UNIVERSES).forEach(([k,v])=>{const a=document.createElement("a");
+    a.href="?u="+k;a.textContent=v.tab;if(v===U){a.style.fontWeight="700";a.style.textDecoration="underline"}t.appendChild(a)})}
   const bust="?t="+Math.floor(Date.now()/600000);   // 10분 단위 캐시 버스트
   const url=(f,ext)=>RAW+encodeURIComponent(f)+"."+ext+bust;
   const cards=document.getElementById("cards"),jump=document.getElementById("jump");
@@ -70,7 +101,7 @@ button:disabled{opacity:.5;cursor:wait}
         ${canCopy?`<button class="p" data-f="${f}" data-act="copy">📋 복사</button>`:""}<button class="p" data-f="${f}" data-ext="svg">⬇ SVG</button><button data-f="${f}" data-ext="png">⬇ PNG</button>
         <a class="btn" href="${url(f,"svg")}" target="_blank" rel="noopener">새 창</a></div>
       <div class="im"><img src="${url(f,"png")}" alt="${title}" loading="lazy"></div><div class="err"></div>`;
-    c.querySelector("img").onerror=function(){c.querySelector(".err").textContent="그림을 불러오지 못했습니다 — Actions 가 아직 한 번도 돌지 않았거나 파일명이 바뀌었을 수 있습니다."};
+    c.querySelector("img").onerror=function(){c.querySelector(".err").textContent="그림을 불러오지 못했습니다 — ecos-fx-rates Actions 가 이 판을 아직 한 번도 만들지 않았거나(방산·건기는 생성기 패치 적용 뒤 첫 실행부터) 파일명이 바뀌었을 수 있습니다."};
     cards.appendChild(c);
   });
   document.addEventListener("click",async e=>{

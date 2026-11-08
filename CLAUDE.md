@@ -1548,4 +1548,28 @@
     제스처로 인정) · ⬇ PNG/SVG/CSV. 생성기는 SVG 도 함께 굽는다(`svg.fonttype=path` — 한글 폰트 없는 PC 에서도
     모양 유지). build_static 복사 한 줄, 공유 등급.
 
+56. **피어그룹 주가흐름표 — 방산·건설기계판 신설** (11/8): 사용자 "방산, 건설기계도 조선처럼". 생성기는
+    ecos-fx-rates `peergroup/weekly_peer_price_image.py` 에 `--universe ship|defense|construction`
+    (SHIP/DEFENSE/CONSTRUCTION_SECTIONS, 출력 `output/peer_price_defense/`·`peer_price_construction/`,
+    전체·분할 p1/p2·섹션별 `01_…`, 같은 워크플로가 세 판 생성). **이 세션은 ecos-fx-rates push 권한이
+    거절돼** 변경을 `peergroup/patches/0001-*.patch` 로 떨궈 뒀다 — 사용자가 `git am` 으로 적용하거나
+    push 권한을 준 세션에서 적용(README 참고). 적용 전엔 방산·건기 페이지가 "불러오지 못했습니다".
+    - 대시보드: `static/peer_price.html` 하나가 `?u=` 로 세 유니버스(UNIVERSES 표 — 파일명은 생성기와
+      일치해야 함, 상단 탭으로 전환). 사이드바 주보 `📈 피어그룹.주가흐름표` 밑 `🛡️ ┗피어주가.방산`·
+      `🏗️ ┗피어주가.건기`(view peerdef/peercon). 🔄 지금 갱신은 GAS `peer` 그대로(세 판 동시).
+    - 유니버스 결정(세션 추천, 사용자 가지치기 전): 방산 = 한국 체계 5(한화에어로·KAI·LIG D&A·한화시스템·
+      현대로템) + 탄약/기동(풍산·SNT다이내믹스 신규) + 부체계(엠앤씨솔루션·아이쓰리시스템·퍼스텍·휴니드) +
+      항공부품(켄코아·아스트) + 우주(쎄트렉아이·인텔리안·컨텍·제노코) / 기타(Elbit·Aselsan·HAL·BEL·MHI·KHI·
+      IHI·AVIC 2·Embraer) / 지수·ETF(PLUS K방산·ITA·SHLD·EUAD) / 미국(프라임 7 + Kratos·AeroVironment +
+      GE·Howmet·TransDigm·Curtiss-Wright) / 유럽(Rheinmetall·BAE·Thales·Leonardo·Saab·Hensoldt·Renk·
+      Kongsberg + Airbus·Dassault + RR·Safran·MTU). **뺀 것**: Spirit Aero(보잉 인수 완료·상폐)·Triumph
+      (사모 인수·상폐)·Subaru(FHI, 항공 비중 미미)·Bombardier(비즈젯)·하이즈항공·오르비텍(초소형).
+      건기 = 지수(PAVE·구리·WTI·원달러) / OEM 한국 3(HD현대인프라코어 신규)·미국/유럽(CAT·Volvo·Terex·
+      Oshkosh·Manitowoc·Wacker Neuson·Manitou)·일본(Komatsu·Hitachi CM·Kubota·SHI·Takeuchi·Tadano)·
+      중국(SANY·XCMG·Zoomlion·LiuGong·Lonking)·인도(Escorts Kubota·ACE·BEML) / 농기계(Deere·CNH·AGCO·대동)·
+      광산(Sandvik·Epiroc·Metso·Weir)·렌탈(URI·Ashtead·Herc)·CAT딜러(Finning·Toromont) / 부품 한국 6
+      (디와이파워·진성티이씨·대창단조·동일금속·흥국·우림피티에스) + KYB·Hengli. 옛 표의 '소형' 묶음
+      (Deere·Sandvik·URI 혼재)은 농기계/광산/렌탈로 분해, Kubota 는 부품 → 일본 OEM.
+
+
 이후 작업은 git log와 이 파일을 갱신하며 이어간다.
