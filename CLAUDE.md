@@ -1551,9 +1551,9 @@
 56. **피어그룹 주가흐름표 — 방산·건설기계판 신설** (11/8): 사용자 "방산, 건설기계도 조선처럼". 생성기는
     ecos-fx-rates `peergroup/weekly_peer_price_image.py` 에 `--universe ship|defense|construction`
     (SHIP/DEFENSE/CONSTRUCTION_SECTIONS, 출력 `output/peer_price_defense/`·`peer_price_construction/`,
-    전체·분할 p1/p2·섹션별 `01_…`, 같은 워크플로가 세 판 생성). **이 세션은 ecos-fx-rates push 권한이
-    거절돼** 변경을 `peergroup/patches/0001-*.patch` 로 떨궈 뒀다 — 사용자가 `git am` 으로 적용하거나
-    push 권한을 준 세션에서 적용(README 참고). 적용 전엔 방산·건기 페이지가 "불러오지 못했습니다".
+    전체·분할 p1/p2·섹션별 `01_…`, 같은 워크플로가 세 판 생성). 처음엔 세션의 ecos-fx-rates push 가
+    자동 분류기에 막혀 패치로 떨궜다가, 사용자가 권한을 줘 main 에 직접 push(576d3fc) — 패치 파일은 삭제.
+    참고: 별도 리포 작업은 `add_repo`(push) 승인이 필요하고, 거절되면 패치 → 승인 뒤 `git am` 이 통한다.
     - 대시보드: `static/peer_price.html` 하나가 `?u=` 로 세 유니버스(UNIVERSES 표 — 파일명은 생성기와
       일치해야 함, 상단 탭으로 전환). 사이드바 주보 `📈 피어그룹.주가흐름표` 밑 `🛡️ ┗피어주가.방산`·
       `🏗️ ┗피어주가.건기`(view peerdef/peercon). 🔄 지금 갱신은 GAS `peer` 그대로(세 판 동시).
