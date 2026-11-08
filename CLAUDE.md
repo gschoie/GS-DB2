@@ -1501,7 +1501,7 @@
     (https://analyst-calendar.animsam09.workers.dev/ — Cloudflare Worker, 비번 가림막). 세션 네트워크에
     그 호스트를 허용하는 개인 환경 'GS-DB2'를 만들어 로그인 후 두 화면·탭 전부를 Playwright 로 떠서 구조를
     `analyst_calendar/README.md` 에 적고, 정적 뼈대를 `telegram_research_dashboard/static/analyst_calendar/`
-    (index.html·style.css·app.js·data.json)에 만들었다. 사이드바 👥 DAOL.관리 › `🧩 애널리스트.집계(뼈대)`
+    (index.html·style.css·app.js·data.json)에 만들었다. 사이드바 👥 DAOL.관리 › 활동관리.DAOL 바로 밑 `활동관리🔥`
     (새 창, 공유 비번으로 열림), build_static copytree 한 줄.
     - 원본 구조: **업무 집계**(탭 15개 — 업데이트·요약·발간/세미나/콜/리퀘/사내지원/NDR/콥데이 실적·커버리지·
       드랍 경고·발간 vs 계획·인뎁스 달력·기관별 집계·누락 후보; 요약 = 카드 6장 + DAOL 리서치본부 활동표)

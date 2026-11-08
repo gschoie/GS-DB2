@@ -3,7 +3,7 @@
 원본: https://analyst-calendar.animsam09.workers.dev/ (Cloudflare Worker, 비번 가림막, 제목 "애널리스트 집계").
 이 모듈은 그 화면 구조를 **정적 페이지 + 샘플 데이터** 로 재현한 뼈대다. 산출물은
 `telegram_research_dashboard/static/analyst_calendar/` (index.html · style.css · app.js · data.json) 이고
-`build_static` 이 폴더째 복사해 `…/analyst_calendar/index.html` 로 배포된다(사이드바 👥 DAOL.관리 › 🗓️ 애널리스트.집계(뼈대)).
+`build_static` 이 폴더째 복사해 `…/analyst_calendar/index.html` 로 배포된다(사이드바 👥 DAOL.관리 › 활동관리.DAOL 밑 `활동관리🔥`).
 
 ## 원본 구조 (2026-11-07 실측)
 
