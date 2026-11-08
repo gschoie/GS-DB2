@@ -1204,6 +1204,54 @@
       처럼 긴 이름이 범례와 겹치던 것. 검증은 Playwright 로 ⬇ 버튼을 눌러 PNG 를 받아 슬라이드 폭(1600px)으로
       줄여 봤다. 조선기자재 묶음에서 **한화엔진·HD현대마린엔진 제외**(조선 묶음에만) → 21사, 열 수 6→**5**
       (합산 2×2 + 21 = 25 = 5×5 꽉 참).
+    - **피어그룹 주가흐름표 갤러리 페이지** (11/7 저녁, 별도 리포 ecos-fx-rates 의 산출물): 사이드바 📰 주보 >
+      `📈 피어그룹.주가흐름표` 가 GitHub 파일 페이지로 나가던 것(사용자 "github로만 가는데")을
+      `static/peer_price.html` 로 교체 — ecos-fx-rates `output/peer_price/` 의 PNG/SVG 8장(전체·p1·p2·섹션 5)을
+      raw.githubusercontent 로 한 창에 띄우고 그림마다 ⬇ SVG/PNG(fetch→blob, raw 가 CORS * 라 가능). 리포엔
+      그림 파일을 안 둔다. 갱신은 그 리포 Actions '피어그룹 주가 흐름 이미지' 수동 실행(페이지에 링크).
+      build_static 복사 한 줄, 공유 등급(OWNER_ONLY 아님).
+      **조선주 INDEX 는 별도 페이지** `static/ship_index.html`(같은 틀, 파일 4장 — 2×2 묶음 + ①②③) + 사이드바
+      `📉 조선주.INDEX`(피어그룹.주가흐름표 바로 밑, 사용자 "주보 밑에 별도로 버튼"). 원본 ecos-fx-rates
+      `peergroup/weekly_peer_index_image.py`(KOSPI vs 조선주 · 한국 조선 7사 · 한/중/일/싱, 12주전=100, 시총가중).
+      **매일 1회 + 수동** (11/7 밤, 사용자 "1·2·3 모두 매일 한 번 + 수동"): ecos-fx-rates 의 `peergroup-price.yml`
+      (엑셀)에 이미지 2종 생성 스텝을 합치고 `cron 10 22 * * *`(07:10 KST). 두 갤러리 페이지의 **🔄 지금 갱신**
+      버튼은 GAS 기존 키 `peer`(= 그 워크플로)를 쏘므로 **GAS 변경 0**; 끝났는지는 raw PNG 의 Last-Modified 가
+      바뀌는지로 보고 자동 새로고침(12분 감시). 3번(수급)은 평일 11:32·16:02 예약 발사 그대로.
+    - **'🔄 차트만 지금 수집' 버튼** (11/7 밤): 사용자 "지금 수집 버튼은 ④ 바로 주변에 있고 이것만 돌리게 해야" →
+      ④ 머리 밑에 버튼. `collect.py --charts-only` = WEEKLY_GROUPS 의 유니버스 종목(collect_stock, live=False)
+      + chart_universe 만 다시 모아 **series.json 만** 갱신(latest·히스토리·ETF·텔레 불변, 휴장일 무관, 전부 실패면
+      종료 2). 워크플로 입력 `charts_only`(문자열 'true' — boolean 입력에 GAS 가 문자열을 넘기는 혼선을 피함),
+      GAS `buildInputs` 에 covflow 분기(**재붙여넣기 + '배포 관리 → 새 버전' 필요** — 그 전엔 버튼이 전체 수집을
+      돌린다, 무해). 페이지 JS 는 GAS 에 POST 한 뒤 배포본의 자기 페이지 길이가 바뀌면 새로고침(12분 감시).
+      상단 '🔄 지금 수집'(전체)은 그대로.
+    - **합산 칸 2×2 → 가로 2칸** (11/7 밤): 사용자 "합산 그림이 다른 그림 4개 모은 정도인데 1.5~2배 정도가 적당,
+      지금 쌓인 게 많다". 합산은 열 span 2·행 span 1(개별의 정확히 2배 면적), `dims` 는 [2W+G, H], Z 큰 글자판은
+      세로가 개별과 같아 조금만 키운 값(t 27·ax 17·선 4.4~3.3). 열 수를 다시 짰다 — 조선 5열(합산 2 + 8 = 10칸 → 2행
+      꽉 참, 6128×1672), 기자재 6열(2 + 21 = 23칸 → 4행, 빈 칸 1, 7360×3376). 배치기는 (열 span, 행 span) 일반형.
+      덤: `🔄 차트만 지금 수집` 버튼이 `.wk-all` 모양을 빌려 써서 '한 장' 핸들러까지 받아 콘솔 오류(data-grid 없음)가
+      나던 것 → 핸들러는 `.wk-all[data-grid]` 만.
+    - **하루 1회 16:40 으로** (11/7 밤, 사용자 "장 끝나고 매일 4시반~5시"): 예약 작업 11:32(`trig_01Ht8rHrhduJmpdmmJHeLz1w`)
+      **비활성**, 16:02(`trig_01Q6FbKD8DAFgby2siphnX2N`) → **16:42 KST 평일**(정각·반각 혼잡 회피). 크론 안전망은 17:05 KST
+      하나(11:35 삭제). `metrics.SLOTS`·13:45 경계는 그대로(수동 수집을 오전에 누르면 11:30 슬롯으로 붙는다),
+      SCHEDULE_TIME 표기·버튼 툴팁만 갱신. 아카이브(16:00 슬롯)는 영향 없음.
+    - **합산 칸 = 개별과 같은 비율로 1.5배** (11/7 밤, PR #532, 사용자 "가로로만 너무 길다 … 1.5~2배 크기로 같은 비율로"):
+      가로 2칸 span 폐기. `WEEKLY_BIG`(1.5) 배로 개별 그림을 그대로 확대(글자·선도 같이 — 그리기는 개별 좌표계 W×H,
+      바깥 크기만 키움). 한 장 PNG = 맨 위 띠(합산 왼쪽 + 오른쪽 빈 자리에 제목·축 설명·기준일·출처) + 아래 개별
+      격자 — 조선 4열(8칸 2행, 4896×2934)·기자재 7열(21칸 3행). 화면도 같은 비율(`--bw` 너비, 모바일 100%).
+    - **합산 2×2 + 두 묶음 모두 4열** (11/8 새벽, 사용자 "보고서에 두 묶음을 붙이면 차트 크기가 너무 다르다 — 여러 행으로
+      가더라도 같은 크기로, 대표 차트 옆으로 작은 차트, 모음 너비를 더 키워"): 11/7 의 '맨 위 1.5배 띠' 폐기. 합산은
+      왼쪽 위 2×2 칸(`WEEKLY_BIG`=2, 간격 포함 1216×836 → PNG 2432×1672, 개별 좌표계로 그려 scale), 개별은 그 오른쪽부터
+      행 우선. 조선·기자재 **둘 다 4열**(조선 12칸 3행 4896×2524, 기자재 25칸 7행 4896×5932) — 같은 폭으로 붙이면 개별 칸
+      크기가 같다. 화면은 `grid-column/row: span 2`(모바일은 auto). 한 장 PNG 에서 합산은 svg 태그를 벗기면 W×H 로
+      돌아가므로 `<g scale>` 로 칸 크기에 맞춘다(첫 렌더에서 합산이 개별 크기로 찍힌 원인).
+    - **방산 5사·건설기계 2사 묶음 추가** (11/8, 사용자 "방산도 건설기계도 같은 거"): WEEKLY_GROUPS 에 방산 수급(한화에어로·
+      KAI·한화시스템·LIG D&A·현대로템, 9칸 3행)·건설기계 수급(두산밥캣·HD건설기계, 6칸 2행) — 같은 4열. 덤으로 잡은
+      버그: SVG `<text>` 에 이름을 그대로 넣어 **'LIG D&A' 의 & 가 XML 을 깨뜨려** PNG 변환(이미지 로드)이 조용히 실패,
+      방산 '한 장'·LIG 낱장 다운로드가 안 됐다 → `xml()` 이스케이프.
+    - **④ 는 공유용 주소에서 숨김** (11/7 밤, 사용자 "gs-research-desk.github.io/coverage_flow_report.html 에는 ④ 없어야").
+      텔레 캡션 링크가 그 주소라서. WEEKLY_JS 가 `location.hostname === gs-research-desk.github.io` 이고 해시에
+      `weekly` 가 없으면 `#weekly` 를 DOM 에서 제거. 본인용은 `#weekly` 해시(사이드바 🚢 수급.그림-조선)로 진입,
+      원본 주소(gschoie.github.io/GS-DB2)·로컬은 항상 보인다. 캡쳐(capture.py)는 로컬 파일이라 영향 없음.
     - 2판 후보(미구현): 수급 × 컨센 변화 교차(kospi_consensus), 외국인 보유비율 1년 백분위,
       섹터 ETF 대비 상대강도, 수주 공시·실적일 이벤트 뱃지, 공매도(소스 확인 필요).
 
@@ -1497,7 +1545,20 @@
     `metric:` 으로. 덤: `tests/test_releases.py` 의 실패 판정이 파일 중간에 있어 그 뒤 검사는
     실패해도 통과로 나왔다 → 맨 끝으로. 다음 수집부터 보인다(옛 payload 엔 vals 없음).
 
-55. **애널리스트 집계(animsam09) 따라 만들기 — 뼈대** (11/7): 사용자 "이거 따라서 일단 뼈대를 만들자"
+55. **주보 메뉴에 '📊 컨센서스' 추가** (11/7): 사이드바 `✍️ 보고서.발간 > 📰 주보` 맨 아래(수급.그림-조선 밑).
+    링크는 ecos-fx-rates `output/consensus/`(GitHub 폴더) — 커버리지 16종목 영업이익 컨센서스 최근 6개월 추이
+    PNG(분기 4Q26·1Q27 / 연간 올해E·내년E). 생성기 `consensus/weekly_consensus_chart.py` 는 kospi_consensus DB 가
+    아니라 FnGuide `wcomp.fnguide.com/CompanyInfo/getCnsTrendChart`(월말, 1년) + 네이버 WiseReport `cF5002`
+    (분기 주간 13점·연간 월말 13점)를 이어 붙인다 — 트래커 DB 는 분기 fwd 컨센이 10/15 부터라 6개월이 안 된다.
+    (참고: comp.fnguide.com 은 wcomp.fnguide.com 으로 이전, 옛 SVD_*.asp 는 404.) 갱신은 ecos-fx-rates Actions
+    '커버리지 컨센서스 추이 이미지'.
+    **갤러리 페이지로 교체** (같은 날 저녁, 사용자 "누르면 github가 뜬다 — html 에서 보고 다운받고/복사"):
+    `static/consensus_chart.html`(peer_price.html 과 같은 틀) — raw.githubusercontent 로 분기·연간 PNG 를 띄우고
+    그림마다 **📋 복사**(ClipboardItem image/png — 클립보드는 PNG 만 표준, blob Promise 를 그대로 넘겨야 사파리도
+    제스처로 인정) · ⬇ PNG/SVG/CSV. 생성기는 SVG 도 함께 굽는다(`svg.fonttype=path` — 한글 폰트 없는 PC 에서도
+    모양 유지). build_static 복사 한 줄, 공유 등급.
+
+56. **애널리스트 집계(animsam09) 따라 만들기 — 뼈대** (11/7): 사용자 "이거 따라서 일단 뼈대를 만들자"
     (https://analyst-calendar.animsam09.workers.dev/ — Cloudflare Worker, 비번 가림막). 세션 네트워크에
     그 호스트를 허용하는 개인 환경 'GS-DB2'를 만들어 로그인 후 두 화면·탭 전부를 Playwright 로 떠서 구조를
     `analyst_calendar/README.md` 에 적고, 정적 뼈대를 `telegram_research_dashboard/static/analyst_calendar/`
