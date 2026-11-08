@@ -1560,7 +1560,7 @@
     - 유니버스 결정(세션 추천, 사용자 가지치기 전): 방산 = 한국 체계 5(한화에어로·KAI·LIG D&A·한화시스템·
       현대로템) + 탄약/기동(풍산·SNT다이내믹스 신규) + 부체계(엠앤씨솔루션·아이쓰리시스템·퍼스텍·휴니드) +
       항공부품(켄코아·아스트) + 우주(쎄트렉아이·인텔리안·컨텍·제노코) / 기타(Elbit·Aselsan·HAL·BEL·MHI·KHI·
-      IHI·AVIC 2·Embraer EMBR3.SA) / 지수·ETF(PLUS K방산·ITA·SHLD·EUAD) / 미국(프라임 7 + Kratos·AeroVironment +
+      IHI·AVIC 2·Embraer EMBJ — 2025-11 ERJ→EMBJ 티커 변경) / 지수·ETF(PLUS K방산·ITA·SHLD·EUAD) / 미국(프라임 7 + Kratos·AeroVironment +
       GE·Howmet·TransDigm·Curtiss-Wright) / 유럽(Rheinmetall·BAE·Thales·Leonardo·Saab·Hensoldt·Renk·
       Kongsberg + Airbus·Dassault + RR·Safran·MTU). **뺀 것**: Spirit Aero(보잉 인수 완료·상폐)·Triumph
       (사모 인수·상폐)·Subaru(FHI, 항공 비중 미미)·Bombardier(비즈젯)·하이즈항공·오르비텍(초소형).
@@ -1570,7 +1570,7 @@
       광산(Sandvik·Epiroc·Metso·Weir)·렌탈(URI·**Sunbelt SUNB** = 舊Ashtead 2026-03 NYSE 1차 상장·Herc)·CAT딜러(Finning·Toromont) / 부품 한국 6
       (디와이파워·진성티이씨·대창단조·동일금속·흥국·우림피티에스) + KYB·Hengli. 옛 표의 '소형' 묶음
       (Deere·Sandvik·URI 혼재)은 농기계/광산/렌탈로 분해, Kubota 는 부품 → 일본 OEM.
-    - **첫 실행(11/8) 실측 교정**: ERJ(야후 무응답→EMBR3.SA)·302132.SZ AVIC Chengdu(전 구간 0.0% 고정값→
+    - **첫 실행(11/8) 실측 교정**: ERJ·EMBR3(둘 다 옛 티커→EMBJ)·302132.SZ AVIC Chengdu(전 구간 0.0% 고정값→
       AVIC Xi'an 000768.SZ)·AHT.L(→SUNB)·042670.KS(합병 상폐). 기준일은 **시총 있는 주식 섹션의 최신
       날짜**로 — 선물·환율(CL=F·KRW=X)은 일요일 봉이 있어 max 를 쓰면 일요일 날짜가 찍힌다.
 
