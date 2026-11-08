@@ -1248,6 +1248,10 @@
       KAI·한화시스템·LIG D&A·현대로템, 9칸 3행)·건설기계 수급(두산밥캣·HD건설기계, 6칸 2행) — 같은 4열. 덤으로 잡은
       버그: SVG `<text>` 에 이름을 그대로 넣어 **'LIG D&A' 의 & 가 XML 을 깨뜨려** PNG 변환(이미지 로드)이 조용히 실패,
       방산 '한 장'·LIG 낱장 다운로드가 안 됐다 → `xml()` 이스케이프.
+      **2차(같은 날)**: 빈 칸을 채우자는 사용자 요청 — 네이버 모바일 API(`m.stock.naver.com/api/stock/{code}/integration`
+      의 totalInfos marketValue, 이 컨테이너에서 호출 가능)로 방산 부품사 시총 순위를 뽑아 보여주고 사용자 선택 **풍산·
+      SNT다이내믹스**(방산 11칸 3행), 건기는 **진성티이씨·디와이파워**(8칸 2행 꽉 참). 넷 다 유니버스 밖이라
+      chart_universe.csv 차트 전용(group 열 방산/건설기계). 참고로 '삼영컴텍'은 삼양컴텍(484590, 2,007억)이고 뺐다.
     - **④ 는 공유용 주소에서 숨김** (11/7 밤, 사용자 "gs-research-desk.github.io/coverage_flow_report.html 에는 ④ 없어야").
       텔레 캡션 링크가 그 주소라서. WEEKLY_JS 가 `location.hostname === gs-research-desk.github.io` 이고 해시에
       `weekly` 가 없으면 `#weekly` 를 DOM 에서 제거. 본인용은 `#weekly` 해시(사이드바 🚢 수급.그림-조선)로 진입,
