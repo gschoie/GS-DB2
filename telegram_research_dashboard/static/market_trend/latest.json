@@ -1,333 +1,350 @@
 {
- "date": "2026-11-08",
+ "date": "2026-11-09",
  "meta": {
-  "window": "11-07 06:00~11-08 06:00 KST",
+  "window": "11-08 06:00~11-09 06:00 KST",
   "engine": "Gemini(gemini-2.5-flash)",
-  "generated_at": "2026-11-08T06:35+09:00"
+  "generated_at": "2026-11-09T06:35+09:00"
  },
  "stats": {
-  "channels": 47,
-  "messages": 342,
-  "groups": 326
+  "channels": 44,
+  "messages": 318,
+  "groups": 298
  },
- "one_liner": "AI/반도체 시장은 엔비디아 CEO 리스크와 TSMC의 3D DRAM 진출 검토로 불확실성이 커진 가운데, 거시 경제 지표와 AI 스타트업 IPO가 시장의 주요 관심사로 부상하고 있습니다.",
+ "one_liner": "AI 데이터센터 전력난과 젠슨 황 논란, 중동 지정학적 리스크가 시장 불확실성을 키우는 가운데, 정부의 증시 안정화 조치와 인플레이션 지표 발표에 관심이 집중되고 있다.",
  "themes": [
   {
-   "name": "AI/반도체 - 엔비디아 CEO 리스크 및 TSMC의 3D DRAM 진출 검토",
-   "narrative": "엔비디아 젠슨 황 CEO의 중국 스파이 의혹 연루 보도로 AI 증시 전반에 불확실성이 커졌습니다. 한편 엔비디아의 요청으로 TSMC가 3D DRAM 생산 및 첨단 메모리 시장 진출을 검토하면서 기존 메모리 업체들과의 경쟁 심화 가능성이 제기되고 있습니다.",
+   "name": "AI 데이터센터 전력 및 규제 리스크",
+   "narrative": "AI 데이터센터 산업은 전력 확보 문제와 규제 압력으로 투자 심리가 위축되고 있으며, 특히 텍사스 지역의 대기 배출 허가 중단과 CoreWeave와 같은 주요 기업의 자금 조달 우려가 커지고 있습니다. 엔비디아 CEO 젠슨 황 관련 논란도 불확실성을 더하고 있습니다.",
    "status": "ongoing",
    "strength": 5,
    "keywords": [
+    "발전기",
+    "전력 확보",
+    "CoreWeave",
+    "코어위브 텍사스",
+    "의존하",
+    "젠슨 황이",
     "젠슨",
-    "엔비디아 요청",
-    "DRAM 생산",
-    "첨단 메모리",
-    "TSMC 엔비디아",
-    "TSMC",
-    "알려짐",
-    "임원",
-    "구형"
+    "건물",
+    "적은"
    ],
    "evidence": [
+    {
+     "channel": "서화백의 그림놀이 🚀",
+     "quote": "데이터센터 전력 확보를 위해 34억 달러(1.7GW) 규모 가스발전 설비 구매 계약 체결"
+    },
+    {
+     "channel": "미국 주식 인사이더 🇺🇸 (US Stocks Insider)",
+     "quote": "텍사스 환경품질위원회(TCEQ)가 데이터센터 현장 내 천연가스 발전시설과 비상 발전기 운영에 필요한 일부 대기오염물질 배출 허가를 중단한 것으로 알려짐."
+    },
     {
      "channel": "서화백의 AI놀이🚀",
-     "quote": "미국 정보당국이 젠슨 황 CEO를 중국 스파이 의혹 인물과 연인 관계였다고 판단 (FT 보도), AI 증시 급락과 함께 주가 하락 및 투자 심리 악화, TSMC의 3D DRAM 생산 검토 (NVDA 요청)는 새로운 경쟁 가능성을 시사"
-    },
-    {
-     "channel": "미국 주식 인사이더 🇺🇸 (US Stocks Insider)",
-     "quote": "• TSMC는 AI 수요 확대에 대응해 첨단 메모리 반도체 생산 진출을 검토 중이며, 엔비디아 요청에 따라 3D DRAM 생산 계획도 검토 중인 것으로 전해져."
-    },
-    {
-     "channel": "김현석(자본주의 바이어스 있는 채널입니다)",
-     "quote": "11/6 Microsoft의 Oracle AI 컴퓨팅 용량 임차 계약 미갱신과 최근 수개월간 사용량 축소가 보도됨. 기존 용량이 Microsoft의 변화한 요구 사양에 덜 적합해졌으며 구형 Nvidia 칩이 관련됐다는 설명임."
+     "quote": "CEO 젠슨 황의 中 스파이 연루 의혹으로 美 의회 조사 예고"
     }
    ]
   },
   {
-   "name": "미국 정치 - 백악관 비서실장 교체",
-   "narrative": "트럼프 대통령이 중간선거 패배 후 백악관 비서실장을 수지 와일스에서 강경파 스티븐 밀러로 전격 교체했습니다. 이는 집권 2기 국정 운영의 안정판 역할을 해온 정무형 비서실장을 내보내고 이념적 색채가 뚜렷한 인물로 교체하는 전략적 전환으로 해석됩니다.",
+   "name": "중동 지정학적 리스크 고조",
+   "narrative": "사우디 아람코 시설에 대한 공격 시도가 발생하고, 이스라엘에서는 가디 아이젠코트 야샤르당 대표가 새 연립정부 구성 권한을 부여받는 등 중동 지역의 지정학적 긴장이 고조되고 있습니다. 이는 국제 유가 및 안보 관련 산업에 영향을 미칠 수 있습니다.",
    "status": "new",
-   "strength": 3,
-   "keywords": [
-    "비서실장",
-    "백악관 비서실장",
-    "밀러",
-    "스티븐",
-    "스티븐 밀러",
-    "와일스"
-   ],
-   "evidence": [
-    {
-     "channel": "미국 주식 인사이더 🇺🇸 (US Stocks Insider)",
-     "quote": "• 트럼프 대통령은 스티븐 밀러를 11월 9일부터 신임 백악관 비서실장으로 임명한다고 발표."
-    },
-    {
-     "channel": "이상헌 부장 iM 지주/ESG/중소형주",
-     "quote": "- 도널드 트럼프 미국 대통령이 중간선거에서 공화당이 참패한 지 사흘 만인 6일(현지시각) 백악관 비서실장을 수지 와일스에서 강경파 최측근 스티븐 밀러(41) 백악관 정책담당 부비서실장 겸 국토안보보좌관으로 전격 교체했다."
-    }
-   ]
-  },
-  {
-   "name": "AI 스타트업 IPO - 앤스로픽 상장 추진",
-   "narrative": "AI 스타트업 앤스로픽이 시장 혼란 속에서도 추수감사절 이전에 IPO를 추진하며, 예상보다 낮은 기업 가치로 800억~1000억 달러 조달을 목표하고 있습니다. 이는 AI 시장의 버블 우려 속에서 AI 투자 심리의 중요한 시험대가 될 것으로 보입니다.",
-   "status": "ongoing",
    "strength": 4,
    "keywords": [
-    "기업공개 IPO",
-    "사람들",
-    "추수감사절",
-    "연기"
+    "아람코",
+    "정부 구성",
+    "가디 아이젠코트",
+    "아이젠코트",
+    "가디",
+    "건물"
    ],
    "evidence": [
     {
-     "channel": "이상헌 부장 iM 지주/ESG/중소형주",
-     "quote": "- 인공지능 스타트업 앤스로픽(Anthropic)은 급격한 기술주 폭락으로 시장이 혼란에 빠진 가운데서도 위험 부담이 큰 기업공개(IPO)를 강행하고 있습니다."
-    },
-    {
-     "channel": "TNBfolio",
-     "quote": "속보: 기술주가 S&P 500 지수의 50% 이상을 차지하게 된 가운데, 앤트로픽의 기업공개(IPO)가 AI 트레이드의 진짜 시험대로 떠오르고 있다."
+     "channel": "미국 주식 인사이더 🇺🇸 (US Stocks Insider)",
+     "quote": "사우디 에너지부는 리야드의 아람코 건물을 겨냥한 공격 시도가 발생해 잔해가 건물에 떨어졌다고 밝혀."
     },
     {
      "channel": "미국 주식 인사이더 🇺🇸 (US Stocks Insider)",
-     "quote": "• 앤트로픽 (ANT) — 투자자들이 IPO 기업가치로 약 1조2,000억~1조3,000억 달러를 논의 중이라는 보도가 나온 가운데, 이후 보도에서는 추수감사절 이전 상장을 목표로 최대 1조7,500억 달러 가치에서 800억~1,000억 달러를 조달하는 방안도 거론됨."
+     "quote": "이스라엘 대통령은 네타냐후 총리의 정적인 가디 아이젠코트에게 새 정부 구성을 맡겨."
+    },
+    {
+     "channel": "이상헌 부장 iM 지주/ESG/중소형주",
+     "quote": "이스라엘 야권 리더 아이젠코트에 연정구성권…네탄냐후 실각 위기"
     }
    ]
   },
   {
-   "name": "거시 경제 - 인플레이션 및 금리 인상 우려",
-   "narrative": "예상치를 상회한 고용 보고서로 연준의 추가 금리 인상 우려가 커진 가운데, 다음 주 발표될 미국 CPI와 PPI가 금리 방향을 결정할 주요 변수로 주목받고 있습니다. 시장은 여전히 높은 물가 수준을 우려하며 연준의 향후 정책 결정에 촉각을 곤두세우고 있습니다.",
+   "name": "글로벌 인플레이션 지표 발표 임박",
+   "narrative": "이번 주 미국 시장은 10월 소비자물가지수(CPI)와 생산자물가지수(PPI) 발표에 집중하고 있습니다. 이들 인플레이션 데이터는 연방준비제도(Fed)의 향후 통화정책 방향을 가늠하는 중요한 지표가 될 것으로 예상됩니다.",
    "status": "ongoing",
    "strength": 3,
    "keywords": [
     "CPI",
-    "사람들",
-    "않았음"
-   ],
-   "evidence": [
-    {
-     "channel": "사제콩이_서상영",
-     "quote": "10일 미국 소비자물가지수(CPI)와 13일 생산자물가지수(PPI)가 금리 방향을 결정할 주요 변수. 지난주 10월 비농업 고용이 16.5만 명 증가하고 실업률이 4.1%로 하락하면서 연준의 추가 금리 인상 우려가 확대됐기 때문."
-    },
-    {
-     "channel": "YIELD & SPREAD",
-     "quote": "• 지금의 인플레이션은 에너지 충격과 AI 설비 구축 등에 기인. 사람들은 현재 물가 수준을 여전히 우려하고 기업들도 물가가 최대 관심사라고 응답. 기대인플레이션은 고정되어 있음"
-    }
-   ]
-  },
-  {
-   "name": "테슬라 - 사이버트럭 생산 축소 및 로보택시 전환",
-   "narrative": "테슬라의 사이버트럭이 판매 부진으로 생산 중단 및 단종 수순을 밟고 있으며, 일론 머스크는 2027년 중반부터 사이버트럭 생산 능력을 자율주행 로보택시인 '사이버캡' 생산으로 전환하겠다고 발표했습니다. 이는 테슬라의 전략적 전환으로 투자 심리에 긍정적인 영향을 주었습니다.",
-   "status": "new",
-   "strength": 3,
-   "keywords": [
-    "사이버트럭"
+    "PPI"
    ],
    "evidence": [
     {
      "channel": "서화백의 AI놀이🚀",
-     "quote": "사이버트럭 판매 부진으로 생산 중단 및 단종 수순 발표, 로보택시 '사이버캡'으로 사업 전환 계획"
+     "quote": "이번 주 미국 시장은 10월 인플레이션 데이터(소비자물가지수 CPI와 생산자물가지수 PPI) 발표에 집중할 예정입니다."
     },
     {
-     "channel": "사제콩이_서상영",
-     "quote": "테슬라(+4.23%)는 전일 급락에 따른 반발 매수와 로보택시 사업 확대 기대에 약 상승. 특히 일론 머스크는 2027년 중반부터 텍사스 공장의 사이버트럭 생산을 단계적으로 축소하고 해당 생산능력을 자율주행 로보택시인 사이버캡 생산에 활용하겠다고 발표한 점이 영향."
+     "channel": "[ Rena & Eric Tech. Signal_Daol ]",
+     "quote": "• 촉매: 미 10월 CPI 뒤 미 10년 하락, AMAT 메모리 장비 수요 유지 발언"
+    }
+   ]
+  },
+  {
+   "name": "국내 증시 안정화 위한 정부 조치",
+   "narrative": "정부가 증시 급락에 대응하여 신용융자 담보비율 유지 의무를 한시적으로 면제하는 조치를 발표했습니다. 이는 반대매매로 인한 주가 하락의 악순환을 완화하고 시장 안정화를 도모하기 위한 노력으로 풀이됩니다.",
+   "status": "new",
+   "strength": 3,
+   "keywords": [
+    "담보비율 유지의무",
+    "유지의무"
+   ],
+   "evidence": [
+    {
+     "channel": "TNBfolio",
+     "quote": "정부 증시 급락 대응해 신용융자 담보비율 유지의무 면제 발표"
+    },
+    {
+     "channel": "텐렙",
+     "quote": "관계당국은 6일 긴급회의를 열고 9일부터 3개월간 증권사의 신용융자 담보비율 유지 의무(140%)를 면제하기로 했다."
+    }
+   ]
+  },
+  {
+   "name": "부동산 종부세 개편 논의",
+   "narrative": "여당이 정부에 종합부동산세(종부세) 공제 기준을 14억 원으로 상향하고 실거주 여부와 관계없이 적용할 것을 강력히 요구하고 있습니다. 이는 총선을 앞두고 부동산 세제 개편에 대한 정치권의 압박이 커지고 있음을 시사합니다.",
+   "status": "new",
+   "strength": 2,
+   "keywords": [
+    "종부세"
+   ],
+   "evidence": [
+    {
+     "channel": "main news",
+     "quote": "[속보] 여당, 정부에 \"종부세 14억 기준, 실거주 구분 없이 적용\" 강력하게 요구"
+    },
+    {
+     "channel": "main news",
+     "quote": "與 “총선 직결” 비거주 1주택 종부세 공제 14억 요구...靑 “불가”"
+    }
+   ]
+  },
+  {
+   "name": "조선/방산 산업 호재와 외국인 매도세",
+   "narrative": "한국 조선업은 탱커 및 VLAC 수주와 같은 긍정적인 소식이 이어지고 있으며, 미국 함정 MRO 관련 기대감도 존재합니다. 그러나 시장 전반적으로는 외국인 투자자의 대규모 순매도가 지속되며 극심한 공포 분위기가 지배적입니다.",
+   "status": "ongoing",
+   "strength": 4,
+   "keywords": [
+    "외국",
+    "defence",
+    "우승"
+   ],
+   "evidence": [
+    {
+     "channel": "GS의 조선/기계/방산 「바담」",
+     "quote": "🛳 한국 조선 호재 만발: 탱커와 VLAC 수주, YPF FLNG, 필리 LSM 수주"
+    },
+    {
+     "channel": "[DAOL퀀트 김경훈] 탑다운 전략",
+     "quote": "# 역대 외국인 패대기 🆘 ▪︎ 외국인의 국내 주식 직접투자가 본격화된 2000년대 초 이후, 기존 순매수에서 추세적 순매도로 전환된 국면을 도표화한 차트 ▪︎ 총 다섯 차례의 추세적 순매도 국면 가운데, 2025년 10월부터 시작된 이번 외국인의 누적 순매도 규모는 무려 230조원으로 역대 최대."
+    },
+    {
+     "channel": "SK증권 조선/방산 한승한",
+     "quote": "레임덕 회기에 FY27 NDAA 타협안에 상원안 예외가 반영되면 CONSOL 탱커·Ro-Ro 초도 2척의 한국 조선소 건조로 이어질 전망."
     }
    ]
   }
  ],
  "community_mood": {
-  "score": -20,
-  "summary": "개미 투자자들은 코스피 대폭락과 반도체 시장의 불확실성에 대한 공포와 함께, 엔비디아 젠슨 황 CEO 관련 이슈에 주목하고 있습니다. 하지만 미국 반도체 지수 반등 소식과 함께 단기적인 저가 매수 및 상승에 대한 기대감도 혼재되어 있습니다.",
+  "score": -70,
+  "summary": "개인 투자자들은 하락장과 반도체 산업에 대한 회의적인 시각을 보이며 전반적으로 지쳐있고, 엔비디아 CEO 젠슨 황 관련 루머에도 민감하게 반응하는 등 시장에 대한 불안감과 불신이 높은 상태입니다.",
   "hot_stocks": [
    {
-    "name": "NVIDIA",
-    "score": -50,
-    "reason": "젠슨 황 CEO의 스파이 의혹 연루 보도로 투자 심리가 위축되고 반도체 시장의 불확실성이 커졌습니다."
-   },
-   {
-    "name": "삼성전자",
-    "score": 40,
-    "reason": "국내 증시 방어에 대한 기여와 반도체 업황 개선에 대한 기대감이 있습니다."
+    "name": "엔비디아",
+    "score": -60,
+    "reason": "젠슨 황 CEO의 중국 스파이 연루 의혹과 불륜 루머로 인해 부정적인 관심이 집중되고 있습니다."
    },
    {
     "name": "SK하이닉스",
-    "score": 40,
-    "reason": "국내 증시 방어에 대한 기여와 반도체 업황 개선에 대한 기대감이 있습니다."
+    "score": -50,
+    "reason": "반도체 산업 전반에 대한 투자 심리 악화와 직원들의 현타를 언급하며 부정적인 시각이 나타나고 있습니다."
    }
   ]
  },
  "signals": {
   "spikes": [
    {
-    "term": "젠슨",
-    "count": 13,
-    "burst": 99.0,
-    "base_daily": 0.4,
-    "new": false
-   },
-   {
-    "term": "사람들",
-    "count": 11,
+    "term": "발전기",
+    "count": 8,
     "burst": 99.0,
     "base_daily": 0.0,
     "new": true
    },
    {
-    "term": "엔비디아 요청",
-    "count": 11,
+    "term": "아람코",
+    "count": 7,
     "burst": 99.0,
     "base_daily": 0.0,
     "new": true
    },
    {
-    "term": "비서실장",
-    "count": 11,
-    "burst": 99.0,
-    "base_daily": 0.0,
-    "new": true
-   },
-   {
-    "term": "DRAM 생산",
-    "count": 10,
+    "term": "종부세",
+    "count": 7,
     "burst": 99.0,
     "base_daily": 0.0,
     "new": true
    },
    {
     "term": "CPI",
-    "count": 9,
-    "burst": 99.0,
-    "base_daily": 0.0,
-    "new": true
-   },
-   {
-    "term": "첨단 메모리",
-    "count": 9,
-    "burst": 99.0,
-    "base_daily": 0.0,
-    "new": true
-   },
-   {
-    "term": "TSMC 엔비디아",
-    "count": 9,
-    "burst": 99.0,
-    "base_daily": 0.0,
-    "new": true
-   },
-   {
-    "term": "사이버트럭",
-    "count": 8,
-    "burst": 99.0,
-    "base_daily": 0.0,
-    "new": true
-   },
-   {
-    "term": "알려짐",
-    "count": 8,
-    "burst": 99.0,
-    "base_daily": 0.0,
-    "new": true
-   },
-   {
-    "term": "기업공개 IPO",
-    "count": 8,
-    "burst": 99.0,
-    "base_daily": 0.0,
-    "new": true
-   },
-   {
-    "term": "요청 따라",
-    "count": 8,
-    "burst": 99.0,
-    "base_daily": 0.0,
-    "new": true
-   },
-   {
-    "term": "백악관 비서실장",
-    "count": 8,
-    "burst": 99.0,
-    "base_daily": 0.0,
-    "new": true
-   },
-   {
-    "term": "밀러",
-    "count": 8,
-    "burst": 99.0,
-    "base_daily": 0.0,
-    "new": true
-   },
-   {
-    "term": "달간",
-    "count": 8,
-    "burst": 99.0,
-    "base_daily": 0.0,
-    "new": true
-   },
-   {
-    "term": "임원",
-    "count": 8,
-    "burst": 99.0,
-    "base_daily": 0.0,
-    "new": true
-   },
-   {
-    "term": "TSMC",
-    "count": 25,
-    "burst": 11.910346960870237,
-    "base_daily": 8.4,
+    "count": 11,
+    "burst": 35.22253620628753,
+    "base_daily": 1.3,
     "new": false
    },
    {
-    "term": "구형",
-    "count": 7,
+    "term": "PPI",
+    "count": 9,
+    "burst": 49.77730323367908,
+    "base_daily": 0.7,
+    "new": false
+   },
+   {
+    "term": "젠슨 황이",
+    "count": 6,
     "burst": 99.0,
     "base_daily": 0.0,
     "new": true
    },
    {
-    "term": "연기",
-    "count": 7,
+    "term": "전력 확보",
+    "count": 6,
     "burst": 99.0,
     "base_daily": 0.0,
     "new": true
    },
    {
-    "term": "스티븐",
-    "count": 7,
+    "term": "CoreWeave",
+    "count": 6,
     "burst": 99.0,
     "base_daily": 0.0,
     "new": true
    },
    {
-    "term": "스티븐 밀러",
-    "count": 7,
+    "term": "정부 구성",
+    "count": 6,
     "burst": 99.0,
     "base_daily": 0.0,
     "new": true
    },
    {
-    "term": "와일스",
-    "count": 7,
+    "term": "외국",
+    "count": 6,
     "burst": 99.0,
     "base_daily": 0.0,
     "new": true
    },
    {
-    "term": "임대 계약",
-    "count": 7,
+    "term": "우승",
+    "count": 6,
     "burst": 99.0,
     "base_daily": 0.0,
     "new": true
    },
    {
-    "term": "추수감사절",
-    "count": 7,
+    "term": "극도",
+    "count": 6,
     "burst": 99.0,
     "base_daily": 0.0,
     "new": true
    },
    {
-    "term": "않았음",
-    "count": 7,
+    "term": "젠슨",
+    "count": 12,
+    "burst": 22.123245881635142,
+    "base_daily": 2.3,
+    "new": false
+   },
+   {
+    "term": "건물",
+    "count": 8,
+    "burst": 37.439339184305624,
+    "base_daily": 0.9,
+    "new": false
+   },
+   {
+    "term": "defence",
+    "count": 5,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "담보비율 유지의무",
+    "count": 5,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "유지의무",
+    "count": 5,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "권고",
+    "count": 5,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "의존하",
+    "count": 5,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "코어위브 텍사스",
+    "count": 5,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "에게",
+    "count": 5,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "가디 아이젠코트",
+    "count": 5,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "아이젠코트",
+    "count": 5,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "가디",
+    "count": 5,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "적은",
+    "count": 5,
     "burst": 99.0,
     "base_daily": 0.0,
     "new": true
@@ -336,80 +353,94 @@
   "top_posts": [
    {
     "channels": 3,
-    "channel": "YIELD & SPREAD",
-    "head": "• 중간선거 전후 금리 하락에는 기존 AI 기업들 우려에 '민주당 승리 -> AI 투자 제동 -> 성장 둔화'가 얹어진 이유가 크다고 생각함. 그래서 진짜 민주당은 AI 모멘텀을 누그러뜨릴 수 있을까 해서 한번 찾아봄 [민주당·공화당 하원 지역구별 데이터센터 현황] • 데이터센터 수: 민주당 지역구 214곳에 994곳(5…",
-    "url": "https://t.me/yieldnspread/6757",
-    "time_kst": "11-07 12:21"
+    "channel": "GS의 조선/기계/방산 「바담」",
+    "head": "🛳 한국 조선 호재 만발: 탱커와 VLAC 수주, YPF FLNG, 필리 LSM 수주 ☞ https://bit.ly/DOS847 ⚓️ 주시 뉴스 💲 선가 △ 신조선가지수 187p 보합, 중고선가지수 3p 오른 233p 기록 △ 일본 조선업, 2035년까지 건조량 2배 확대 추진…기술 혁신·생산성 개선이 관건 🌏 그린쉽 ▲…",
+    "url": "https://t.me/c/1405984327/8495",
+    "time_kst": "11-08 16:48"
    },
    {
     "channels": 2,
     "channel": "서화백의 AI놀이🚀",
-    "head": "📝 텔레그램 심층 분석 Report (15시 07분) 기준 🌡️ 센티먼트 공포 (-65) 💡 요약 AI/반도체 섹터의 급락과 블루웨이브 쇼크로 인한 세계 시총 증발, 그리고 핵심 기업(NVDA)의 부정적 이슈 및 데이터센터 규제 우려가 시장 전반의 공포를 키우고 있습니다. 🗣️ Top 키워드: AI(58), 반도체(30)…",
-    "url": "https://t.me/easobi_ai/27299",
-    "time_kst": "11-07 15:07"
+    "head": "📝 텔레그램 심층 분석 Report (19시 06분) 기준 🌡️ 센티먼트 공포 (-40) 💡 요약 미국 AI 데이터센터 규제 압력 심화, 기술주 전반의 폭락 및 TSLA의 대규모 재산 증발 등 부정적 소식이 지배적입니다. 국내 시장 또한 코스닥의 급락과 반도체 쏠림 현상의 구조적 한계 노출로 투자 심리가 크게 위축된 상태…",
+    "url": "https://t.me/easobi_ai/27320",
+    "time_kst": "11-08 19:06"
    },
    {
     "channels": 2,
     "channel": "서화백의 그림놀이 🚀",
-    "head": "📝 텔레그램 심층 분석 Report (19시 04분) 기준 🌡️ 센티먼트 공포 속 관망 (-20) 💡 요약 증시 급락과 AI 규제 우려로 공포 심리가 확산되었으나, 극단적인 비관 속에서 일부 기업의 실적 호조 및 반등 가능성에 대한 기대감도 혼재합니다. 🗣️ Top 키워드: AI(10), 데이터센터(9), 규제(7), 반…",
-    "url": "https://t.me/easobi/17173",
-    "time_kst": "11-07 19:04"
+    "head": "📝 텔레그램 심층 분석 Report (23시 05분) 기준 🌡️ 센티먼트 공포 (-40) 💡 요약 주요 종목들의 심각한 낙폭과 외국인 투자자의 대규모 매도가 지속되며 시장 전반에 극심한 공포 분위기가 지배적입니다. AI 산업은 데이터센터 관련 규제 및 님비 현상으로 투자 위축 우려가 커지고 있습니다. 🗣️ Top 키워드:…",
+    "url": "https://t.me/easobi/17182",
+    "time_kst": "11-08 23:05"
    },
    {
     "channels": 2,
     "channel": "서화백의 AI놀이🚀",
-    "head": "📝 텔레그램 심층 분석 Report (07시 07분) 기준 🌡️ 센티먼트 관망과 기대 (+35) 💡 요약 기술주와 AI 관련주의 저가 매수세 유입으로 단기 반등 기대감이 있으나, 금리 인상 및 규제 불확실성이 여전해 전반적으로 관망하는 분위기입니다. 기업 실적 발표는 긍정적인 요인으로 작용하고 있습니다. 🗣️ Top 키워…",
-    "url": "https://t.me/easobi_ai/27291",
-    "time_kst": "11-07 07:07"
+    "head": "📝 텔레그램 심층 분석 Report (11시 08분) 기준 🌡️ 센티먼트 관망/혼조 (-20) 💡 요약 AI 및 반도체 섹터의 성장 기대감과 빅테크 저점 매수 의견에도 불구하고, 데이터센터 규제 강화, 지정학적 리스크, 국내 증시의 유출, 기업 실적 악화 등 복합적인 부정 요인들이 시장 전반의 불확실성을 가중시키고 있습니…",
+    "url": "https://t.me/easobi_ai/27309",
+    "time_kst": "11-08 11:08"
    },
    {
     "channels": 2,
     "channel": "서화백의 AI놀이🚀",
-    "head": "📝 텔레그램 심층 분석 Report (11시 07분) 기준 🌡️ 센티먼트 관망 (-5) 💡 요약 AI 시장 버블 우려와 일부 IPO 기업가치 하향 조정, 중동 지정학적 리스크 및 국내 증시 부진이 투자 심리를 압박하고 있지만, 미국 AI/반도체 및 데이터센터에 대한 꾸준한 투자 확대는 긍정적인 요소로 작용하며 시장의 방향…",
-    "url": "https://t.me/easobi_ai/27295",
-    "time_kst": "11-07 11:07"
+    "head": "📝 텔레그램 심층 분석 Report (07시 07분) 기준 🌡️ 센티먼트 공포 (-60) 💡 요약 중동 지정학적 위험 고조와 NVDA, 삼성전자 등 주요 기술주 관련 부정적 이슈 심화로 시장에 공포 확산. 🗣️ Top 키워드: 지정학적 위험(116), 비트코인(16), NVDA(20), 삼성전자(15), AI/반도체(30…",
+    "url": "https://t.me/easobi_ai/27308",
+    "time_kst": "11-08 07:07"
    },
    {
     "channels": 2,
-    "channel": "서화백의 AI놀이🚀",
-    "head": "📝 텔레그램 심층 분석 Report (23시 07분) 기준 🌡️ 센티먼트 경계 (-20) 💡 요약 NVIDIA 젠슨 황 관련 불확실성 증대 및 미국 증시 하락세 지속으로 경계심이 짙으나, AI 인프라 대규모 투자는 긍정적으로 논의 중입니다. 🗣️ Top 키워드: AI(182), NVIDIA(159), 데이터센터(67),…",
-    "url": "https://t.me/easobi_ai/27304",
-    "time_kst": "11-07 23:08"
+    "channel": "하나증권/에너지화학/윤재성",
+    "head": "[하나/에너지화학/윤재성] Weekly Monitor: 태양광, 세액공제 조기종료 회복 기대 ▶ 보고서: https://bit.ly/4iIsVWO [총평] ▶ WTI 90.8$(-13%), Dubai 96.3$ (-19%). 정제마진 36.9$(WoW +4.0$). 석유화학 약세 ▶ Top Picks: OCI홀딩스, 한화…",
+    "url": "https://t.me/energy_youn/3388",
+    "time_kst": "11-08 18:04"
    },
    {
     "channels": 2,
-    "channel": "GLP-1 뉴스 by 알렉스빡",
-    "head": "[다올 의료기기/화장품 박종현] - GLP-1 데일리 브리프 by ChatGPT 2026.11.07 오늘은 Lilly가 Hims & Hers와 직접판매 계약을 체결해 Zepbound·Foundayo의 현금결제 유통망을 확대한 점이 핵심. 고용주 보험 축소 가능성에 대응해 제조사가 텔레헬스 채널과 자가부담 가격을 직접 통제…",
-    "url": "https://t.me/GLP1newsrun/55",
-    "time_kst": "11-07 13:33"
+    "channel": "다올투자증권 리서치센터",
+    "head": "[삼양식품(003230) | BUY(유지) | TP 190만원(유지) | 다올 음식료/통신 이다연] ★ 3Q26 Review: 수요가 CAPA를 부른다 ▶ 3Q26 연결 매출액 7,918억원(YoY +25.3%, QoQ +2.8%), 영업이익 1,961억원(OPM +24.8%, YoY +49.8%, QoQ +11.3%)으…",
+    "url": "https://t.me/daolresearch/15443",
+    "time_kst": "11-08 12:57"
    },
    {
     "channels": 2,
-    "channel": "이상헌 부장 iM 지주/ESG/중소형주",
-    "head": "* 젠슨 황 ‘中스파이 의심 여성과 연인 의혹’ 속…장녀 방한 전격 취소 - 젠슨 황 엔비디아 최고경영자(CEO) 장녀인 매디슨 황 엔비디아 옴니버스•로보틱스 제품 마케팅 수석이사의 방한 일정이 전격 취소됐다. 7일 정부와 정보기술(IT) 업계에 따르면 황 수석이사는 오는 9∼10일 서울 코엑스에서 열리는 ‘엔비디아 AI…",
-    "url": "https://t.me/INSIGHTVALUELEE/11138",
-    "time_kst": "11-07 22:25"
+    "channel": "허혜민의 제약/바이오 소식통",
+    "head": "[키움 허혜민] 노바티스 Lp(a) 치료제 임상 실패, 심혈관질환 치료 전략에 의문 제기 Novartis, Lp(a) 저해제 pelacarsen의 임상 3상 HORIZON 세부 결과를 미국심장협회(AHA) 학술대회에서 발표하고 NEJM에 동시 게재. Lp(a)를 크게 낮췄음에도 주요 심혈관 사건 감소에는 실패 Lp(a)는…",
+    "url": "https://t.me/huhpharm/11989",
+    "time_kst": "11-08 16:37"
    },
    {
     "channels": 2,
-    "channel": "미국 주식 인사이더 🇺🇸 (US Stocks Insider)",
-    "head": "✅ 비상계엄 직후보다 더 밀렸다...코스닥 ‘충격’ 7일 한국거래소에 따르면 코스닥 지수는 전날 34.14포인트(5.03%) 내린 644.27에 장을 마쳤다. 12.3 비상계엄과 탄핵정국 혼란이 한창이던 지난 2024년 12월 9일(627.01) 이후 가장 낮은 수준이다. 약 1년 11개월 만에 지수가 당시 충격에 버금가…",
-    "url": "https://t.me/insidertracking/68615",
-    "time_kst": "11-07 13:09"
+    "channel": "텐렙",
+    "head": "📌서울엔 첫눈, 코스닥엔 눈물…'대책 발표' 다음이 필요하다 1. 코스닥 이틀 연속 5%대 급락 지난 6일 코스닥지수는 34.14포인트(5.03%) 떨어진 644.27에 마감했다. 전날 700선을 내준 데 이어 이틀 연속 5% 넘게 하락했고, 장중에는 629.17까지 밀렸다. 2. 반대매매 완충 조치, 계좌에서 작동하는지…",
+    "url": "https://t.me/Ten_level/94022",
+    "time_kst": "11-08 17:19"
    },
    {
     "channels": 2,
-    "channel": "대체투자 인사이드",
-    "head": "▶️ 강남·서초 낙폭 커져도 서울 집값 91주 상승 https://www.newsis.com/photo/graview/?id=NISI20261105_0002283830&cid=photo&page=1 #부동산, #부동산가격",
-    "url": "https://t.me/jsinside/28382",
-    "time_kst": "11-07 11:31"
+    "channel": "한투증권 미국/중국전략 정정영",
+    "head": "2017년 이후 처음으로 기술주가 S&P500보다 저렴해짐 ======================= ~ Tech stocks in the S&P 500 (XLK) traded at about 17 times expected earnings this week, below the broader index's 18 times…",
+    "url": "https://t.me/G2strategy/34294",
+    "time_kst": "11-08 15:42"
    },
    {
     "channels": 2,
-    "channel": "가치투자클럽",
-    "head": "AI주 투매 하루 만에 반등한 나스닥…AI 반도체·데이터센터주 저가 매수 https://naver.me/G6RME6T6",
-    "url": "https://t.me/corevalue/47577",
-    "time_kst": "11-07 08:14"
+    "channel": "GS의 조선/기계/방산 「바담」",
+    "head": "🏹 #LIG디펜스앤에어로스페이스 「환과 한화 때문. 2026-2028은 성장 유지」 ☞ https://bit.ly/LIG3Q26RE ▶️ Issue: 3Q26 리뷰. 적정주가 하향. 당분간 선호주에서 제외, 그러나 Buy & Forget ▶️ Pitch: > 적정주가 하향은 ‘파이프라인 기대이익’을 낮추는 방식일 뿐, >…",
+    "url": "https://t.me/c/1405984327/8496",
+    "time_kst": "11-08 20:21"
+   },
+   {
+    "channels": 2,
+    "channel": "[DAOL퀀트 김경훈] 탑다운 전략",
+    "head": "# 역대 외국인 패대기 🆘 ▪︎ 외국인의 국내 주식 직접투자가 본격화된 2000년대 초 이후, 기존 순매수에서 추세적 순매도로 전환된 국면을 도표화한 차트 ▪︎ 총 다섯 차례의 추세적 순매도 국면 가운데, 2025년 10월부터 시작된 이번 외국인의 누적 순매도 규모는 무려 230조원으로 역대 최대. 이번에 발생한 KOSP…",
+    "url": "https://t.me/toptownquant/13887",
+    "time_kst": "11-08 21:49"
+   },
+   {
+    "channels": 2,
+    "channel": "main news",
+    "head": "[중앙일보] “1만피” 외치더니 이젠 “5천피” 증권사 ‘믿거나 말거나’ 전망 https://www.joongang.co.kr/article/25476713",
+    "url": "https://t.me/mainnews/202693",
+    "time_kst": "11-08 16:14"
    }
   ]
  },
@@ -419,219 +450,219 @@
    {
     "id": "krstock",
     "name": "국내주식갤러리",
-    "posts": 1280,
+    "posts": 1361,
     "capped": true,
-    "burst": 0.5,
-    "base_daily": 2378.1
+    "burst": 0.6,
+    "base_daily": 2386.6
    },
    {
     "id": "stockus",
     "name": "해외주식갤러리",
-    "posts": 2893,
+    "posts": 2670,
     "capped": true,
     "burst": 0.3,
-    "base_daily": 8812.6
+    "base_daily": 8891.7
    }
   ],
-  "posts_sampled": 576,
+  "posts_sampled": 560,
   "keywords": [
    {
-    "term": "차트",
-    "count": 12,
+    "term": "근황",
+    "count": 35,
     "burst": 99.0,
     "new": true
    },
    {
-    "term": "요즘",
+    "term": "엔비디아",
+    "count": 11,
+    "burst": 99.0,
+    "new": true
+   },
+   {
+    "term": "jpg",
+    "count": 11,
+    "burst": 99.0,
+    "new": true
+   },
+   {
+    "term": "ai",
     "count": 10,
     "burst": 99.0,
     "new": true
    },
    {
-    "term": "많이",
+    "term": "코랩",
+    "count": 10,
+    "burst": 99.0,
+    "new": true
+   },
+   {
+    "term": "불륜",
+    "count": 9,
+    "burst": 99.0,
+    "new": true
+   },
+   {
+    "term": "젠슨",
     "count": 8,
     "burst": 99.0,
     "new": true
    },
    {
-    "term": "젠슨황",
-    "count": 8,
-    "burst": 99.0,
-    "new": true
-   },
-   {
-    "term": "사람들",
+    "term": "종전",
     "count": 7,
-    "burst": 87.2,
+    "burst": 89.9,
     "new": true
    },
    {
-    "term": "뭐냐",
+    "term": "이라크",
     "count": 6,
-    "burst": 74.8,
+    "burst": 77.0,
     "new": true
    },
    {
-    "term": "인간",
-    "count": 5,
-    "burst": 62.3,
+    "term": "이란",
+    "count": 6,
+    "burst": 77.0,
     "new": true
    },
    {
-    "term": "미장",
-    "count": 5,
-    "burst": 62.3,
+    "term": "실베",
+    "count": 6,
+    "burst": 77.0,
     "new": true
    },
    {
-    "term": "애들",
-    "count": 5,
-    "burst": 62.3,
+    "term": "이유",
+    "count": 6,
+    "burst": 77.0,
     "new": true
    },
    {
-    "term": "하락장",
-    "count": 5,
-    "burst": 62.3,
+    "term": "AI",
+    "count": 6,
+    "burst": 77.0,
     "new": true
    },
    {
-    "term": "바닥",
+    "term": "인정",
     "count": 5,
-    "burst": 62.3,
+    "burst": 64.2,
     "new": true
    },
    {
-    "term": "우리",
+    "term": "무조건",
     "count": 5,
-    "burst": 62.3,
-    "new": true
-   },
-   {
-    "term": "보면",
-    "count": 5,
-    "burst": 62.3,
-    "new": true
-   },
-   {
-    "term": "여자",
-    "count": 5,
-    "burst": 62.3,
-    "new": true
-   },
-   {
-    "term": "자체",
-    "count": 5,
-    "burst": 62.3,
+    "burst": 64.2,
     "new": true
    }
   ],
   "top_recommended": [
    {
     "gallery": "해외주식갤러리",
-    "title": "결국 제대로된 인간은 이새끼뿐이었네..",
-    "views": 14725,
-    "recommend": 250,
-    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=18293080&exception_mode=recommend&page=1",
-    "time_kst": "11-07 15:53"
+    "title": "램혁수는 왤케 하락장에도 재미가없냐",
+    "views": 8077,
+    "recommend": 220,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=18300492&exception_mode=recommend&page=1",
+    "time_kst": "11-08 14:52"
    },
    {
     "gallery": "해외주식갤러리",
-    "title": "저커버그 ㄹㅇ소름돋는 점..",
-    "views": 12461,
-    "recommend": 250,
-    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=18294280&exception_mode=recommend&page=1",
-    "time_kst": "11-07 18:17"
+    "title": "프랑스 씨발ㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋ",
+    "views": 13217,
+    "recommend": 200,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=18300005&exception_mode=recommend&page=1",
+    "time_kst": "11-08 13:38"
    },
    {
     "gallery": "해외주식갤러리",
-    "title": "유퀴즈 가면 나락간다는게 진짠가보네 ㅋㅋ",
-    "views": 13184,
-    "recommend": 244,
-    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=18293027&exception_mode=recommend&page=1",
-    "time_kst": "11-07 15:48"
+    "title": "나라 빚 근황 ㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋ",
+    "views": 15340,
+    "recommend": 192,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=18300169&exception_mode=recommend&page=1",
+    "time_kst": "11-08 14:00"
    },
    {
     "gallery": "해외주식갤러리",
-    "title": "계곡백숙 마인드 때문에 점점 파이 뺏기지 ㅋㅋㅋ",
-    "views": 11897,
-    "recommend": 241,
-    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=18289354&exception_mode=recommend&page=2",
-    "time_kst": "11-07 08:42"
+    "title": "팩트 AI 경쟁 오늘 당장 멈출 때 좆되는 사람",
+    "views": 10093,
+    "recommend": 192,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=18299394&exception_mode=recommend&page=1",
+    "time_kst": "11-08 12:09"
    },
    {
     "gallery": "해외주식갤러리",
-    "title": "M7중 유일하게 여성문제 없는 곳",
-    "views": 13232,
-    "recommend": 240,
-    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=18293604&exception_mode=recommend&page=1",
-    "time_kst": "11-07 16:51"
+    "title": "유튜브 댓글로 알 수 있는 데센징들의 능지.jpg",
+    "views": 11890,
+    "recommend": 154,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=18298945&exception_mode=recommend&page=1",
+    "time_kst": "11-08 11:02"
    }
   ],
   "top_viewed": [
    {
-    "gallery": "국내주식갤러리",
-    "title": "실시간 코스피대폭락ㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋ",
-    "views": 697,
-    "recommend": 1,
-    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3856465&page=4",
-    "time_kst": "11-08 01:38"
+    "gallery": "해외주식갤러리",
+    "title": "현재 내 계좌 근황",
+    "views": 2037,
+    "recommend": 18,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=18304828&page=10",
+    "time_kst": "11-09 03:39"
    },
    {
     "gallery": "해외주식갤러리",
-    "title": "반도치 멸망각) 새 텍사스주지사와 CNN의 인터뷰",
-    "views": 668,
-    "recommend": 15,
-    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=18297828&page=2",
-    "time_kst": "11-08 05:50"
+    "title": "쿠루미 근황",
+    "views": 2007,
+    "recommend": 30,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=18304834&page=10",
+    "time_kst": "11-09 03:44"
    },
    {
     "gallery": "해외주식갤러리",
-    "title": "사실 삼닉 아니였으면 달러 지금 2천원이어도 안이상함",
-    "views": 485,
-    "recommend": 17,
-    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=18297820&page=2",
-    "time_kst": "11-08 05:48"
+    "title": "반도체는 걍 사기가싫어",
+    "views": 1930,
+    "recommend": 16,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=18304850&page=10",
+    "time_kst": "11-09 03:51"
+   },
+   {
+    "gallery": "해외주식갤러리",
+    "title": "[속보] 젠슨 황 불륜 인정",
+    "views": 1504,
+    "recommend": 32,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=18305084&page=6",
+    "time_kst": "11-09 05:51"
    },
    {
     "gallery": "국내주식갤러리",
-    "title": "속보 - 기분 좋은 소식 떴다 ㅅㅅㅅㅅㅅㅅㅅㅅㅅㅅㅅㅅㅅㅅㅅㅅㅅㅅㅅㅅㅅㅅㅅ",
-    "views": 441,
+    "title": "또 대풀롱이구나",
+    "views": 594,
+    "recommend": 3,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3859316&page=6",
+    "time_kst": "11-09 01:37"
+   },
+   {
+    "gallery": "국내주식갤러리",
+    "title": "또 대풀롱이구나",
+    "views": 594,
+    "recommend": 3,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3859316&page=7",
+    "time_kst": "11-09 01:37"
+   },
+   {
+    "gallery": "국내주식갤러리",
+    "title": "블라에 하이닉스 29살 직원썰 현타오네",
+    "views": 590,
     "recommend": 0,
-    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3856503&page=4",
-    "time_kst": "11-08 02:08"
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3859346&page=6",
+    "time_kst": "11-09 02:09"
    },
    {
     "gallery": "국내주식갤러리",
-    "title": "11월말까지는 반도체주 오를듯",
-    "views": 441,
-    "recommend": 0,
-    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3856461&page=5",
-    "time_kst": "11-08 01:37"
-   },
-   {
-    "gallery": "국내주식갤러리",
-    "title": "11월 19일 시장붕괴설",
-    "views": 413,
-    "recommend": 1,
-    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3856567&page=3",
-    "time_kst": "11-08 03:08"
-   },
-   {
-    "gallery": "국내주식갤러리",
-    "title": "월요일에는 오를수밖에 없다",
-    "views": 358,
-    "recommend": 0,
-    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3856549&page=3",
-    "time_kst": "11-08 02:49"
-   },
-   {
-    "gallery": "국내주식갤러리",
-    "title": "미국 반도체지수 4퍼센트 상승마감했네",
-    "views": 354,
+    "title": "와... 몸매.gif",
+    "views": 561,
     "recommend": 2,
-    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3856452&page=5",
-    "time_kst": "11-08 01:28"
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3859272&page=7",
+    "time_kst": "11-09 01:03"
    }
   ]
  }
