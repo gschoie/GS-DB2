@@ -392,6 +392,11 @@ WEEKLY_GROUPS = [
      "codes": ["017960", "033500", "075580", "460930", "014620", "023160", "013030",   # 한국카본·동성화인텍·세진중공업·현대힘스·성광벤드·태광·하이록코리아
                "014940", "077970", "073010", "054540", "108380", "092460", "101930", "382900", "086670",   # 오리엔탈정공·STX엔진·케이에스피·삼영엠텍·대양전기공업·한라IMS·인화정공·범한퓨얼셀·비엠티
                "064820", "333430", "085310", "096350", "0008Z0"]},                                         # 케이프·일승·엔케이·대창솔루션·에스엔시스
+    # 방산 5사·건설기계 2사(11/8 사용자 "방산도 건설기계도 같은 거") — 같은 4열이라 칸 크기가 조선과 같다.
+    {"title": "방산 수급", "sum": "방산 합산", "cols": 4,   # 합산 2×2 + 5 = 9칸 → 3행(빈 칸 3)
+     "codes": ["012450", "047810", "272210", "079550", "064350"]},   # 한화에어로스페이스·한국항공우주·한화시스템·LIG D&A·현대로템
+    {"title": "건설기계 수급", "sum": "건설기계 합산", "cols": 4,   # 합산 2×2 + 2 = 6칸 → 2행(빈 칸 2)
+     "codes": ["241560", "267270"]},                                 # 두산밥캣·HD건설기계
 ]
 WEEKLY_W, WEEKLY_H, WEEKLY_SCALE = 600, 410, 2   # 한 장 viewBox · PNG 배율(1200×820)
 WEEKLY_BIG = 2     # 합산 칸 span(열·행) — 개별 그림을 그대로 확대한 모양(글자·선도 같이 커진다), 크기 = span 칸 + 간격
@@ -417,6 +422,8 @@ WEEKLY_JS = r"""
   }
   const seriesOf=cell=>cell.dataset.codes?agg(cell.dataset.codes.split(",")):SERIES[cell.dataset.code];
   const G=16,BIG=__BIG__,isBig=cell=>cell.classList.contains("wk-big");
+  // SVG 글자는 XML — 'LIG D&A' 의 & 가 그대로 들어가면 파싱이 깨져 PNG 변환(이미지 로드)이 조용히 실패한다(11/8 실측)
+  const xml=t=>String(t).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
   // 합산 = BIG×BIG 칸(간격 포함) — 개별 좌표계(W×H)로 그리고 바깥 크기만 키운다(비율 차이 1% 미만은 늘려 맞춤).
   const dims=cell=>isBig(cell)?[W*BIG+G*(BIG-1),H*BIG+G*(BIG-1)]:[W,H];
   const scaleSvg=(txt,w,h)=>txt.replace(/^<svg([^>]*) width="\d+" height="\d+"/,`<svg$1 width="${w}" height="${h}" preserveAspectRatio="none"`);
@@ -430,7 +437,7 @@ WEEKLY_JS = r"""
     const lv=nice(Math.min(...mc),Math.max(...mc),5),rv=nice(Math.min(0,...fr,...inn),Math.max(0,...fr,...inn),6);
     const x=i=>L+pw*i/Math.max(1,n-1),yl=v=>T+ph*(1-(v-lv.a)/(lv.b-lv.a)),yr=v=>T+ph*(1-(v-rv.a)/(rv.b-rv.a));
     const pl=(a,y)=>a.map((v,i)=>(i?"L":"M")+x(i).toFixed(1)+" "+y(v).toFixed(1)).join("");
-    const tx=(X,Y,t,o)=>`<text x="${X}" y="${Y}" font-family='${FONT}' font-size="${o&&o.fs||Z.ax}" fill="${o&&o.c||C.ax}" text-anchor="${o&&o.a||"start"}"${o&&o.b?' font-weight="700"':''}>${t}</text>`;
+    const tx=(X,Y,t,o)=>`<text x="${X}" y="${Y}" font-family='${FONT}' font-size="${o&&o.fs||Z.ax}" fill="${o&&o.c||C.ax}" text-anchor="${o&&o.a||"start"}"${o&&o.b?' font-weight="700"':''}>${xml(t)}</text>`;
     let g=`<rect width="${W}" height="${H}" fill="#fff"/>`;
     g+=tx(8,Z.ty,name,{fs:Z.t,c:C.title,b:1})+tx(W-6,Z.ty,"(1년 누적 매수, 억원)",{a:"end",c:C.title,fs:Z.sub});
     const lg=[["시가총액(십억원)",C.mc,Z.lw[0]],["기관매수(누적)",C.inn,Z.lw[1]],["외인매수(누적)",C.fr,Z.lw[2]]];
