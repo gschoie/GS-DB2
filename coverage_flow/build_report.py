@@ -383,21 +383,21 @@ const SERIES=__SERIES__;
 # **두 묶음 모두 4열** — 보고서에 나란히 붙일 때 개별 칸 크기가 같아야 한다(11/8 사용자 "차트 크기가 너무 다르다,
 # 여러 행으로 가더라도 같은 크기로"). 조선 4 + 8 = 12칸 → 3행 꽉 참, 기자재 4 + 21 = 25칸 → 7행(빈 칸 3).
 WEEKLY_GROUPS = [
-    {"title": "조선 수급", "sum": "조선 합산", "cols": 4,   # 합산 2×2 + 8 = 12칸 → 3행
+    {"title": "조선 수급", "key": "ship", "sum": "조선 합산", "cols": 4,   # 합산 2×2 + 8 = 12칸 → 3행
      "codes": ["009540", "010140", "329180", "042660",     # HD한국조선해양 · 삼성중공업 · HD현대중공업 · 한화오션
                "439260", "443060", "071970", "082740"]},   # 대한조선 · HD현대마린솔루션 · HD현대마린엔진 · 한화엔진
     # 조선기자재(11/7): 유니버스 7 + chart_universe.csv 차트 전용 14 = 21사(한화엔진·HD현대마린엔진은 조선 묶음에만 — 사용자 지정).
     # 4열 = 합산 2×2 + 21 = 25칸 → 7행(빈 칸 3) — 조선 묶음과 같은 칸 크기.
-    {"title": "조선기자재 수급", "sum": "조선기자재 합산", "cols": 4,
+    {"title": "조선기자재 수급", "key": "parts", "sum": "조선기자재 합산", "cols": 4,
      "codes": ["017960", "033500", "075580", "460930", "014620", "023160", "013030",   # 한국카본·동성화인텍·세진중공업·현대힘스·성광벤드·태광·하이록코리아
                "014940", "077970", "073010", "054540", "108380", "092460", "101930", "382900", "086670",   # 오리엔탈정공·STX엔진·케이에스피·삼영엠텍·대양전기공업·한라IMS·인화정공·범한퓨얼셀·비엠티
                "064820", "333430", "085310", "096350", "0008Z0"]},                                         # 케이프·일승·엔케이·대창솔루션·에스엔시스
     # 방산 5사·건설기계 2사(11/8 사용자 "방산도 건설기계도 같은 거") — 같은 4열이라 칸 크기가 조선과 같다.
     # 11/8 2차: 방산에 풍산·SNT다이내믹스, 건기에 진성티이씨·디와이파워(차트 전용, chart_universe.csv) — 사용자 지정.
-    {"title": "방산 수급", "sum": "방산 합산", "cols": 4,   # 합산 2×2 + 7 = 11칸 → 3행(빈 칸 1)
+    {"title": "방산 수급", "key": "defense", "sum": "방산 합산", "cols": 4,   # 합산 2×2 + 7 = 11칸 → 3행(빈 칸 1)
      "codes": ["012450", "047810", "272210", "079550", "064350",     # 한화에어로스페이스·한국항공우주·한화시스템·LIG D&A·현대로템
                "103140", "003570"]},                                # 풍산·SNT다이내믹스
-    {"title": "건설기계 수급", "sum": "건설기계 합산", "cols": 4,   # 합산 2×2 + 4 = 8칸 → 2행 꽉 참
+    {"title": "건설기계 수급", "key": "construction", "sum": "건설기계 합산", "cols": 4,   # 합산 2×2 + 4 = 8칸 → 2행 꽉 참
      "codes": ["241560", "267270", "036890", "210540"]},             # 두산밥캣·HD건설기계·진성티이씨·디와이파워
 ]
 WEEKLY_W, WEEKLY_H, WEEKLY_SCALE = 600, 410, 2   # 한 장 viewBox · PNG 배율(1200×820)
@@ -495,6 +495,17 @@ WEEKLY_JS = r"""
   // 본인용 진입은 #weekly 해시(사이드바 '수급.그림-조선')로만 보이고, 원본 주소·로컬 파일은 항상 보인다.
   const SHARE_HOST="gs-research-desk.github.io";
   if(location.hostname===SHARE_HOST&&!/weekly/.test(location.hash)){const w=document.getElementById("weekly");if(w)w.remove();}
+  // #weekly-ship,parts 처럼 묶음 키를 달고 들어오면 그 묶음만 남기고 ④ 로 내려간다(대시보드 💰 수급.그림 서브메뉴).
+  // 키가 하나도 안 맞으면(묶음 이름이 바뀐 경우) 전부 보여준다 — 빈 화면이 고장으로 보이지 않게.
+  const wkKeys=(location.hash.match(/^#weekly-([\w,]+)/)||[])[1];
+  if(wkKeys){const want=new Set(wkKeys.split(",")),groups=[...document.querySelectorAll("#weekly .wk-group")];
+    if(groups.some(g=>want.has(g.dataset.key))){groups.forEach(g=>{if(!want.has(g.dataset.key))g.remove()});
+      // 그림만 보이게(사용자 "①~③은 빼고 그림만"): ④ 의 조상 사슬 바깥 형제(머리글·타일·①②③·지난 기록 바)를 전부 감추고
+      // ④ 제목·설명 각주도 뺀다. 🔄 차트만 지금 수집 바와 묶음 제목(한 장 PNG 버튼)은 남긴다. 📡 커버리지 수급 등 뷰(해시 없음)는 종전 그대로.
+      const w=document.getElementById("weekly");if(w){w.open=true;window.addEventListener("DOMContentLoaded",()=>{
+        let el=w;while(el.parentElement&&el!==document.body){[...el.parentElement.children].forEach(sb=>{if(sb!==el&&sb.tagName!=="SCRIPT"&&sb.tagName!=="STYLE")sb.style.display="none"});el=el.parentElement}
+        w.querySelectorAll(":scope > summary, :scope > p.note").forEach(x=>x.style.display="none");
+        document.documentElement.classList.add("wk-only");window.scrollTo(0,0)})}}}
   // SERIES 는 페이지 끝의 종목 클릭 차트 스크립트가 정의한다 — 그 뒤에 그린다.
   window.addEventListener("DOMContentLoaded",()=>document.querySelectorAll(".wk-cell").forEach(cell=>{
     const s=seriesOf(cell);if(!s){cell.remove();return}
@@ -545,8 +556,11 @@ def weekly_section(rows, series, asof_date="", chart_errors=()):
         cell_html += "".join(
             f"<div class='wk-cell' data-code='{c}' data-name='{esc(names.get(c, c))}'><div class='wk-svg'></div>{btn}" for c in cells)
         n = len(cells) + (1 if g.get("sum") and len(cells) >= 2 else 0)
-        blocks.append(f"<h3>{esc(title)} <button class='wk-all' data-grid='{gid}' data-title='{esc(title)}'>⬇ {n}개 한 장 PNG</button></h3>"
-                      f"<div class='wk-grid' id='{gid}' data-cols='{cols}' style='grid-template-columns:repeat({cols},minmax(0,1fr))'>{cell_html}</div>")
+        # 묶음마다 <section data-key> — 사이드바 💰 수급.그림 > 조선/방산/건설기계 가 `#weekly-<key>[,<key>]` 해시로
+        # 들어오면 WEEKLY_JS 가 해당 묶음만 남긴다(11/8 사용자 "3개 서브 메뉴 넣고 수급 3가지 그림 쪼개서").
+        blocks.append(f"<section class='wk-group' data-key='{esc(g.get('key', f'g{gi}'))}'>"
+                      f"<h3>{esc(title)} <button class='wk-all' data-grid='{gid}' data-title='{esc(title)}'>⬇ {n}개 한 장 PNG</button></h3>"
+                      f"<div class='wk-grid' id='{gid}' data-cols='{cols}' style='grid-template-columns:repeat({cols},minmax(0,1fr))'>{cell_html}</div></section>")
     if not blocks:
         return ""
     if chart_errors:

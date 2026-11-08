@@ -34,11 +34,22 @@
             <summary>📰 주보</summary>
             <div class="nav-submenu-2">
               <a href="https://notebooklm.google.com/notebook/8236d5a4-937a-41cb-9527-e49d44cd1968" target="_blank" rel="noopener">🗓️ SIN.W공부</a>
-              <button class="nav" data-view="peerprice" title="글로벌 피어그룹 주가흐름표(조선·해운) — 전체·분할·섹션별 그림을 한 창에, 그림마다 📋 복사·SVG/PNG 다운로드">📈 피어그룹.주가흐름표</button>
-              <button class="nav" data-view="peerdef" title="글로벌 피어그룹 주가흐름표 — 방산·항공우주(한국 체계·부체계·우주 / 기타 / 지수·ETF / 미국 / 유럽), 같은 틀">🛡️ ┗피어주가.방산</button>
-              <button class="nav" data-view="peercon" title="글로벌 피어그룹 주가흐름표 — 건설기계(지수·원자재 / OEM 지역별 / 농기계·광산·렌탈·딜러 / 부품), 같은 틀">🏗️ ┗피어주가.건기</button>
+              <details class="nav-subgroup">
+                <summary>📈 피어그룹.주가변동표</summary>
+                <div class="nav-submenu-3">
+                  <button class="nav" data-view="peerprice" title="글로벌 피어그룹 주가변동표 — 조선사·엔진/기자재·오일/해양·해운, 전체·분할·섹션별 그림을 한 창에, 그림마다 📋 복사·SVG/PNG 다운로드">🚢 조선/해운/에너지</button>
+                  <button class="nav" data-view="peerdefcon" title="글로벌 피어그룹 주가변동표 — 방산·항공우주 + 건설기계 두 판을 한 창에, 같은 틀">🛡️ 방산/기계</button>
+                </div>
+              </details>
               <button class="nav" data-view="shipindex" title="주가 상대 INDEX 비교 — KOSPI vs 조선주 · 한국 조선 7사 · 한/중/일/싱 (12주전=100, 시총가중). 그림마다 SVG/PNG 다운로드">⚔️ 주가.INDEX.비교</button>
-              <button class="nav" data-view="covweekly" title="커버리지 수급 페이지의 ④ 위클리용 차트 — 조선·조선기자재 시총·기관/외인 누적 순매수, PNG 다운로드">🚢 수급.그림-조선</button>
+              <details class="nav-subgroup">
+                <summary>💰 수급.그림</summary>
+                <div class="nav-submenu-3">
+                  <button class="nav" data-view="covweekly-ship" title="커버리지 수급 페이지의 ④ 위클리용 차트 — 조선 8사 + 조선기자재 21사 시총·기관/외인 1년 누적 순매수, PNG 다운로드">🚢 조선</button>
+                  <button class="nav" data-view="covweekly-def" title="커버리지 수급 페이지의 ④ 위클리용 차트 — 방산 7사 시총·기관/외인 1년 누적 순매수, PNG 다운로드">🛡️ 방산</button>
+                  <button class="nav" data-view="covweekly-con" title="커버리지 수급 페이지의 ④ 위클리용 차트 — 건설기계 4사 시총·기관/외인 1년 누적 순매수, PNG 다운로드">🏗️ 건설기계</button>
+                </div>
+              </details>
               <button class="nav" data-view="conschart" title="커버리지 16종목 영업이익 컨센서스 추이(최근 6개월) — 분기·연간 그림 한 창에, 그림마다 📋 복사·PNG/SVG/CSV 다운로드">📊 컨센서스(조방기)</button>
             </div>
           </details>
@@ -463,21 +474,25 @@
       <div class="archive-intro"><div><p class="eyebrow">COVERAGE · FLOW</p><h2>커버리지 기업 수급 / 기술적 지표</h2></div><div class="etf-actions"><button id="covflow-refresh" class="refresh-btn" type="button" title="정해진 시간(평일 16:40 장 마감 후) 외에 지금 수급·지표를 다시 수집합니다 (자동 실행, 2~3분 소요 · 텔레그램은 안 갑니다).">🔄 지금 수집</button><span id="covflow-status" class="task-sync"></span><a class="open-new" href="coverage_flow_report.html" target="_blank" rel="noopener">🔗 새 창으로</a></div></div>
       <iframe id="covflow-frame" class="union-board-frame" title="커버리지 기업 수급 / 기술적 지표" loading="lazy"></iframe>
     </section>
-    <section id="covweekly" class="view">
-      <div class="archive-intro"><div><p class="eyebrow">주보 · 수급 그림</p><h2>수급 그림 — 조선 · 조선기자재 (위클리용 차트)</h2></div><div class="etf-actions"><a class="open-new" href="coverage_flow_report.html#weekly" target="_blank" rel="noopener">🔗 새 창으로</a></div></div>
-      <iframe id="covweekly-frame" class="union-board-frame" title="수급 그림 — 조선 (위클리용 차트)" loading="lazy"></iframe>
+    <section id="covweekly-ship" class="view">
+      <div class="archive-intro"><div><p class="eyebrow">주보 · 수급 그림</p><h2>수급 그림 — 조선 · 조선기자재 (위클리용 차트)</h2></div><div class="etf-actions"><a class="open-new" href="coverage_flow_report.html#weekly-ship,parts" target="_blank" rel="noopener">🔗 새 창으로</a></div></div>
+      <iframe id="covweekly-ship-frame" class="union-board-frame" title="수급 그림 — 조선 · 조선기자재" loading="lazy"></iframe>
+    </section>
+    <section id="covweekly-def" class="view">
+      <div class="archive-intro"><div><p class="eyebrow">주보 · 수급 그림</p><h2>수급 그림 — 방산 (위클리용 차트)</h2></div><div class="etf-actions"><a class="open-new" href="coverage_flow_report.html#weekly-defense" target="_blank" rel="noopener">🔗 새 창으로</a></div></div>
+      <iframe id="covweekly-def-frame" class="union-board-frame" title="수급 그림 — 방산" loading="lazy"></iframe>
+    </section>
+    <section id="covweekly-con" class="view">
+      <div class="archive-intro"><div><p class="eyebrow">주보 · 수급 그림</p><h2>수급 그림 — 건설기계 (위클리용 차트)</h2></div><div class="etf-actions"><a class="open-new" href="coverage_flow_report.html#weekly-construction" target="_blank" rel="noopener">🔗 새 창으로</a></div></div>
+      <iframe id="covweekly-con-frame" class="union-board-frame" title="수급 그림 — 건설기계" loading="lazy"></iframe>
     </section>
     <section id="peerprice" class="view">
-      <div class="archive-intro"><div><p class="eyebrow">주보 · 피어그룹</p><h2>글로벌 피어그룹 주가흐름표</h2></div><div class="etf-actions"><a class="open-new" href="peer_price.html" target="_blank" rel="noopener">🔗 새 창으로</a></div></div>
-      <iframe id="peerprice-frame" class="union-board-frame" title="글로벌 피어그룹 주가흐름표" loading="lazy"></iframe>
+      <div class="archive-intro"><div><p class="eyebrow">주보 · 피어그룹</p><h2>글로벌 피어그룹 주가변동표 — 조선 · 해운 · 에너지</h2></div><div class="etf-actions"><a class="open-new" href="peer_price.html" target="_blank" rel="noopener">🔗 새 창으로</a></div></div>
+      <iframe id="peerprice-frame" class="union-board-frame" title="글로벌 피어그룹 주가변동표 — 조선·해운·에너지" loading="lazy"></iframe>
     </section>
-    <section id="peerdef" class="view">
-      <div class="archive-intro"><div><p class="eyebrow">주보 · 피어그룹</p><h2>글로벌 피어그룹 주가흐름표 — 방산 · 항공우주</h2></div><div class="etf-actions"><a class="open-new" href="peer_price.html?u=defense" target="_blank" rel="noopener">🔗 새 창으로</a></div></div>
-      <iframe id="peerdef-frame" class="union-board-frame" title="글로벌 피어그룹 주가흐름표 — 방산" loading="lazy"></iframe>
-    </section>
-    <section id="peercon" class="view">
-      <div class="archive-intro"><div><p class="eyebrow">주보 · 피어그룹</p><h2>글로벌 피어그룹 주가흐름표 — 건설기계</h2></div><div class="etf-actions"><a class="open-new" href="peer_price.html?u=construction" target="_blank" rel="noopener">🔗 새 창으로</a></div></div>
-      <iframe id="peercon-frame" class="union-board-frame" title="글로벌 피어그룹 주가흐름표 — 건설기계" loading="lazy"></iframe>
+    <section id="peerdefcon" class="view">
+      <div class="archive-intro"><div><p class="eyebrow">주보 · 피어그룹</p><h2>글로벌 피어그룹 주가변동표 — 방산 · 기계</h2></div><div class="etf-actions"><a class="open-new" href="peer_price.html?u=defense,construction" target="_blank" rel="noopener">🔗 새 창으로</a></div></div>
+      <iframe id="peerdefcon-frame" class="union-board-frame" title="글로벌 피어그룹 주가변동표 — 방산·기계" loading="lazy"></iframe>
     </section>
     <section id="shipindex" class="view">
       <div class="archive-intro"><div><p class="eyebrow">주보 · INDEX</p><h2>주가 INDEX 비교 — KOSPI vs 조선주 · 조선 7사 · 한/중/일/싱</h2></div><div class="etf-actions"><a class="open-new" href="ship_index.html" target="_blank" rel="noopener">🔗 새 창으로</a></div></div>
