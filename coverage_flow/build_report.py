@@ -378,23 +378,23 @@ const SERIES=__SERIES__;
 # (리포에 이미지 파일을 쌓지 않는다). 묶음을 늘리려면 이 표에 한 줄 더하면 된다.
 # 11/7 2차: 8사 + 합산(시총 합·외인/기관 누적 순매수 합)을 가로 한 장으로(PPT 삽입용). 합산은 공통
 # 날짜 구간에서 화면이 계산한다(상장이 늦은 종목이 있으면 그 종목 첫날부터).
-# 11/7 3차: 합산 칸은 **가로 2칸(세로 1칸, 개별의 2배)** — 2×2(4배)는 "4개 모은 정도"라 너무 컸고 페이지도 많이 쌓였다(사용자).
-# 한 장 = 맨 위 합산 띠(개별과 같은 비율, WEEKLY_BIG 배 — 11/7 사용자 "가로로만 길지 않게, 1.5~2배, 같은 비율")
-# + 그 아래 cols 열 격자에 개별 n칸을 행 우선으로. 조선 4열 = 8칸 → 2행, 기자재 7열 = 21칸 → 3행(빈 칸 0).
-# 합산 띠의 오른쪽 빈 자리엔 제목·축 설명·기준일·자료 출처를 적는다(INDEX 2×2 묶음의 각주 칸과 같은 발상).
+# 한 장 = cols 열 격자. 합산은 왼쪽 위 2×2 칸(개별과 같은 비율로 2배 — 11/8 사용자 "대표 차트 옆으로 작은 차트 배치,
+# 모음 너비를 더 키워"; 11/7 의 가로 2칸·맨 위 1.5배 띠는 폐기), 개별 칸은 그 오른쪽부터 행 우선으로 채운다.
+# **두 묶음 모두 4열** — 보고서에 나란히 붙일 때 개별 칸 크기가 같아야 한다(11/8 사용자 "차트 크기가 너무 다르다,
+# 여러 행으로 가더라도 같은 크기로"). 조선 4 + 8 = 12칸 → 3행 꽉 참, 기자재 4 + 21 = 25칸 → 7행(빈 칸 3).
 WEEKLY_GROUPS = [
-    {"title": "조선 수급", "sum": "조선 합산", "cols": 4,   # 개별 8칸 → 4열 2행
+    {"title": "조선 수급", "sum": "조선 합산", "cols": 4,   # 합산 2×2 + 8 = 12칸 → 3행
      "codes": ["009540", "010140", "329180", "042660",     # HD한국조선해양 · 삼성중공업 · HD현대중공업 · 한화오션
                "439260", "443060", "071970", "082740"]},   # 대한조선 · HD현대마린솔루션 · HD현대마린엔진 · 한화엔진
     # 조선기자재(11/7): 유니버스 7 + chart_universe.csv 차트 전용 14 = 21사(한화엔진·HD현대마린엔진은 조선 묶음에만 — 사용자 지정).
-    # 7열 = 21칸 → 3행 꽉 참.
-    {"title": "조선기자재 수급", "sum": "조선기자재 합산", "cols": 7,
+    # 4열 = 합산 2×2 + 21 = 25칸 → 7행(빈 칸 3) — 조선 묶음과 같은 칸 크기.
+    {"title": "조선기자재 수급", "sum": "조선기자재 합산", "cols": 4,
      "codes": ["017960", "033500", "075580", "460930", "014620", "023160", "013030",   # 한국카본·동성화인텍·세진중공업·현대힘스·성광벤드·태광·하이록코리아
                "014940", "077970", "073010", "054540", "108380", "092460", "101930", "382900", "086670",   # 오리엔탈정공·STX엔진·케이에스피·삼영엠텍·대양전기공업·한라IMS·인화정공·범한퓨얼셀·비엠티
                "064820", "333430", "085310", "096350", "0008Z0"]},                                         # 케이프·일승·엔케이·대창솔루션·에스엔시스
 ]
 WEEKLY_W, WEEKLY_H, WEEKLY_SCALE = 600, 410, 2   # 한 장 viewBox · PNG 배율(1200×820)
-WEEKLY_BIG = 1.5   # 합산 칸 배율(가로·세로 모두) — 개별 그림을 그대로 1.5배 확대한 모양(글자·선도 같이 커진다)
+WEEKLY_BIG = 2     # 합산 칸 span(열·행) — 개별 그림을 그대로 확대한 모양(글자·선도 같이 커진다), 크기 = span 칸 + 간격
 # PNG 에 인쇄 해상도(pHYs)를 심는다 — 캔버스 PNG 는 해상도 정보가 없어 워드·한글이 1px=1pt 로 읽어
 # 4개 한 장(2432px)이 가로 86cm 로 붙는다(11/7 실측). 384dpi 면 4개 한 장 ≈ 16.1cm, 낱장 ≈ 7.9cm.
 WEEKLY_DPI = 384
@@ -417,9 +417,9 @@ WEEKLY_JS = r"""
   }
   const seriesOf=cell=>cell.dataset.codes?agg(cell.dataset.codes.split(",")):SERIES[cell.dataset.code];
   const G=16,BIG=__BIG__,isBig=cell=>cell.classList.contains("wk-big");
-  // 합산 = 개별과 같은 비율로 BIG 배(11/7 사용자 "가로로만 길지 않게"). 그림은 개별 좌표계(W×H)로 그리고 바깥 크기만 키운다.
-  const dims=cell=>isBig(cell)?[Math.round(W*BIG),Math.round(H*BIG)]:[W,H];
-  const scaleSvg=(txt,w,h)=>txt.replace(/^<svg([^>]*) width="\d+" height="\d+"/,`<svg$1 width="${w}" height="${h}"`);
+  // 합산 = BIG×BIG 칸(간격 포함) — 개별 좌표계(W×H)로 그리고 바깥 크기만 키운다(비율 차이 1% 미만은 늘려 맞춤).
+  const dims=cell=>isBig(cell)?[W*BIG+G*(BIG-1),H*BIG+G*(BIG-1)]:[W,H];
+  const scaleSvg=(txt,w,h)=>txt.replace(/^<svg([^>]*) width="\d+" height="\d+"/,`<svg$1 width="${w}" height="${h}" preserveAspectRatio="none"`);
   const draw=cell=>{const [w,h]=dims(cell),t=svg(seriesOf(cell),cell.dataset.name,W,H);return t&&scaleSvg(t,w,h)};
   function svg(s,name,W,H){
     if(!s)return "";W=W||__W__;H=H||__H__;
@@ -495,17 +495,19 @@ WEEKLY_JS = r"""
     if(one){const cell=one.closest(".wk-cell"),[w,h]=dims(cell);toPng(draw(cell),w,h,`${cell.dataset.name}_수급_${stamp()}.png`);return}
     const all=e.target.closest(".wk-all[data-grid]");if(!all)return;   // 🔄 수집 버튼도 .wk-all 모양을 빌려 쓴다 — data-grid 있는 것만
     const grid=document.getElementById(all.dataset.grid),cells=[...grid.querySelectorAll(".wk-cell")];
-    // 배치: 맨 위 띠 = 합산(BIG 배, 왼쪽) + 오른쪽 빈 자리에 제목·각주, 그 아래 cols 열 격자에 개별 칸을 행 우선으로.
-    const cols=+grid.dataset.cols||2,big=cells.find(isBig),small=cells.filter(c=>!isBig(c));
-    const rows=Math.ceil(small.length/cols),TW=Math.max(W*cols+G*(cols-1),big?dims(big)[0]:0);
-    const y0=big?dims(big)[1]+G:0,TH=y0+H*rows+G*Math.max(0,rows-1);
+    // 배치: 합산(BIG×BIG 칸)을 왼쪽 위에, 개별 칸은 빈 칸을 행 우선으로(합산 오른쪽부터) 채운다
+    const cols=+grid.dataset.cols||2,used=new Set(),place=[];let rows=0;
+    const free=(r,c)=>!used.has(r+","+c);
+    cells.forEach(cell=>{const sp=isBig(cell)?BIG:1;
+      for(let r=0;;r++){let done=false;for(let c=0;c+sp<=cols;c++){let ok=true;
+        for(let dr=0;dr<sp;dr++)for(let dc=0;dc<sp;dc++)if(!free(r+dr,c+dc))ok=false;
+        if(ok){for(let dr=0;dr<sp;dr++)for(let dc=0;dc<sp;dc++)used.add((r+dr)+","+(c+dc));place.push([cell,r,c]);rows=Math.max(rows,r+sp);done=true;break}}
+        if(done)break}});
+    const TW=W*cols+G*(cols-1),TH=H*rows+G*(rows-1);
     let body=`<rect width="${TW}" height="${TH}" fill="#fff"/>`;
-    const put=(c,x,y)=>{const t=draw(c);if(t)body+=`<g transform="translate(${x},${y})">${t.replace(/^<svg[^>]*>|<\/svg>$/g,"")}</g>`};
-    if(big){put(big,0,0);const [bw,bh]=dims(big),x=bw+G*2;
-      if(TW-x>=360){const asof=stamp(),lines=[[all.dataset.title,{fs:38,b:1,c:"#2f6db5"}],["검정 = 시가총액(십억원, 왼쪽 축)",{fs:23}],["갈색 = 기관 · 파랑 = 외국인 1년 누적 순매수(억원, 오른쪽 축, 구간 시작 = 0)",{fs:23}],
-          [asof?`기준일 20${asof.slice(0,2)}.${asof.slice(2,4)}.${asof.slice(4,6)}`:"",{fs:23}],["자료: 한국투자증권 OpenAPI · 네이버증권(30거래일 이전 순매수는 수량×종가 근사)",{fs:20,c:"#666"}]].filter(l=>l[0]);
-        lines.forEach((l,i)=>{body+=`<text x="${x}" y="${Math.round(bh*0.2)+i*42}" font-family='${FONT}' font-size="${l[1].fs}" fill="${l[1].c||"#333"}"${l[1].b?' font-weight="700"':''}>${l[0]}</text>`})}}
-    small.forEach((c,i)=>put(c,(i%cols)*(W+G),y0+Math.floor(i/cols)*(H+G)));
+    // 합산은 svg 태그를 벗기면 개별 좌표계(W×H)로 돌아가므로 scale 로 칸 크기에 맞춘다
+    place.forEach(([c,r,col])=>{const t=draw(c);if(!t)return;const [w,h]=dims(c);
+      body+=`<g transform="translate(${col*(W+G)},${r*(H+G)}) scale(${(w/W).toFixed(4)},${(h/H).toFixed(4)})">${t.replace(/^<svg[^>]*>|<\/svg>$/g,"")}</g>`});
     toPng(`<svg xmlns="http://www.w3.org/2000/svg" width="${TW}" height="${TH}" viewBox="0 0 ${TW} ${TH}">${body}</svg>`,TW,TH,`${all.dataset.title}_${stamp()}.png`);
   });
 })();
@@ -529,8 +531,7 @@ def weekly_section(rows, series, asof_date="", chart_errors=()):
         btn = "<button class='wk-one'>⬇ PNG</button></div>"
         cell_html = ""
         if g.get("sum") and len(cells) >= 2:   # 합산 칸(맨 앞) — 공통 구간이 짧으면 화면이 칸을 지운다
-            pct = min(100.0, 100.0 * WEEKLY_BIG * WEEKLY_W / (cols * WEEKLY_W + (cols - 1) * 16))
-            cell_html += (f"<div class='wk-cell wk-big' style='--bw:{pct:.1f}%' data-codes='{','.join(cells)}' "
+            cell_html += (f"<div class='wk-cell wk-big' data-codes='{','.join(cells)}' "
                           f"data-name='{esc(g['sum'])}({len(cells)}사)'><div class='wk-svg'></div>{btn}")
         cell_html += "".join(
             f"<div class='wk-cell' data-code='{c}' data-name='{esc(names.get(c, c))}'><div class='wk-svg'></div>{btn}" for c in cells)
@@ -622,7 +623,7 @@ table.flow{{font-size:12px}}table.flow td,table.flow th{{padding:6px 5px}}th.c{{
 .wk-bar{{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:4px 0 10px}}
 .errs{{margin:16px 0;font-size:12px;color:#b45309}}.errs ul{{margin:6px 0 0 18px}}
 .wrap{{overflow-x:auto}}
-.wk-grid{{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}}@media(max-width:900px){{.wk-grid{{grid-template-columns:1fr}}}}.wk-cell{{border:1px solid var(--line);padding:6px;position:relative}}.wk-svg svg{{width:100%;height:auto;display:block}}.wk-one,.wk-all{{font:11px Inter;padding:2px 8px;border:1px solid #d1d5db;background:#fff;border-radius:3px;cursor:pointer;color:#374151}}.wk-one{{position:absolute;right:8px;bottom:8px}}.wk-big{{grid-column:1/-1;width:var(--bw,100%)}}@media(max-width:900px){{.wk-big{{width:100%}}}}.wk-all{{margin-left:8px;vertical-align:middle}}
+.wk-grid{{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}}@media(max-width:900px){{.wk-grid{{grid-template-columns:1fr}}}}.wk-cell{{border:1px solid var(--line);padding:6px;position:relative}}.wk-svg svg{{width:100%;height:auto;display:block}}.wk-one,.wk-all{{font:11px Inter;padding:2px 8px;border:1px solid #d1d5db;background:#fff;border-radius:3px;cursor:pointer;color:#374151}}.wk-one{{position:absolute;right:8px;bottom:8px}}.wk-big{{grid-column:span 2;grid-row:span 2}}@media(max-width:900px){{.wk-big{{grid-column:auto;grid-row:auto}}}}.wk-all{{margin-left:8px;vertical-align:middle}}
 tr.clk{{cursor:pointer}}tr.clk:hover td{{background:#f8fafc}}.car{{color:#9ca3af;font-size:11px}}
 tr.chart td{{padding:10px 8px 16px;background:#fcfcfd}}.chbox{{max-width:760px}}.chbox .hd{{display:flex;gap:14px;flex-wrap:wrap;align-items:baseline;font-size:12px;margin-bottom:4px}}
 .chbox .hd b{{font-size:13px}}.lg{{display:inline-flex;align-items:center;gap:5px;color:var(--muted)}}.lg i{{display:inline-block;width:14px;height:3px;border-radius:2px}}
