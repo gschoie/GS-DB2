@@ -1256,6 +1256,14 @@
       텔레 캡션 링크가 그 주소라서. WEEKLY_JS 가 `location.hostname === gs-research-desk.github.io` 이고 해시에
       `weekly` 가 없으면 `#weekly` 를 DOM 에서 제거. 본인용은 `#weekly` 해시(사이드바 🚢 수급.그림-조선)로 진입,
       원본 주소(gschoie.github.io/GS-DB2)·로컬은 항상 보인다. 캡쳐(capture.py)는 로컬 파일이라 영향 없음.
+    - **💰 수급.그림 서브메뉴 — 묶음별 그림만** (11/8, 사용자 "조선/방산/건설기계 3개 서브 메뉴 … ①~③은 빼고 그림만"):
+      사이드바 📰 주보 > `💰 수급.그림`(구 🚢 수급.그림-조선) 밑 🚢 조선(ship+parts) · 🛡️ 방산 · 🏗️ 건설기계 = 뷰 3개
+      (`covweekly-ship/def/con`, iframe `coverage_flow_report.html#weekly-<key>[,<key>]`). WEEKLY_GROUPS 에 `key`
+      (ship/parts/defense/construction) 를 두고 묶음마다 `<section class='wk-group' data-key>` 로 감싼다. WEEKLY_JS 는
+      그 해시가 오면 **해당 묶음만 남기고 ④ 바깥(머리글·타일·①②③·지난 기록 바)과 ④ 제목·각주를 전부 감춘다**
+      (`html.wk-only`) — 🔄 차트만 지금 수집 바와 묶음 제목(한 장 PNG)은 남김. 키가 하나도 안 맞으면 전부 보여준다(빈 화면 금지).
+      📡 커버리지 수급 등 뷰(해시 없음)·`#weekly`·공유 주소 동작은 종전 그대로. **페이지는 빌드 산출물이라 coverage-flow 가
+      다시 돌아야(charts_only 로 충분) 새 마크업이 배포된다.**
     - 2판 후보(미구현): 수급 × 컨센 변화 교차(kospi_consensus), 외국인 보유비율 1년 백분위,
       섹터 ETF 대비 상대강도, 수주 공시·실적일 이벤트 뱃지, 공매도(소스 확인 필요).
 
@@ -1603,5 +1611,9 @@
     - **첫 실행(11/8) 실측 교정**: ERJ·EMBR3(둘 다 옛 티커→EMBJ)·302132.SZ AVIC Chengdu(전 구간 0.0% 고정값→
       AVIC Xi'an 000768.SZ)·AHT.L(→SUNB)·042670.KS(합병 상폐). 기준일은 **시총 있는 주식 섹션의 최신
       날짜**로 — 선물·환율(CL=F·KRW=X)은 일요일 봉이 있어 max 를 쓰면 일요일 날짜가 찍힌다.
+    - **메뉴명 '주가변동표' + 2단 서브메뉴** (11/8, 사용자): 📰 주보 > `📈 피어그룹.주가변동표`(구 주가흐름표) 서브그룹 밑
+      `🚢 조선/해운/에너지`(`peerprice`, ship) · `🛡️ 방산/기계`(`peerdefcon`, **두 판을 한 페이지에**). peer_price.html 의
+      `?u=` 가 쉼표 목록(`defense,construction`)을 받아 유니버스별 카드를 이어 붙인다(카드 머리에 판 이름, 파일은 각자 dir —
+      `url(f,ext,dir)`). 상단 탭도 두 개(조선·해운·에너지 / 방산·기계). 11/8 첫 판의 peerdef·peercon 뷰 2개는 이것으로 대체.
 
 이후 작업은 git log와 이 파일을 갱신하며 이어간다.
