@@ -1,0 +1,638 @@
+{
+ "date": "2026-11-08",
+ "meta": {
+  "window": "11-07 06:00~11-08 06:00 KST",
+  "engine": "Gemini(gemini-2.5-flash)",
+  "generated_at": "2026-11-08T06:35+09:00"
+ },
+ "stats": {
+  "channels": 47,
+  "messages": 342,
+  "groups": 326
+ },
+ "one_liner": "AI/반도체 시장은 엔비디아 CEO 리스크와 TSMC의 3D DRAM 진출 검토로 불확실성이 커진 가운데, 거시 경제 지표와 AI 스타트업 IPO가 시장의 주요 관심사로 부상하고 있습니다.",
+ "themes": [
+  {
+   "name": "AI/반도체 - 엔비디아 CEO 리스크 및 TSMC의 3D DRAM 진출 검토",
+   "narrative": "엔비디아 젠슨 황 CEO의 중국 스파이 의혹 연루 보도로 AI 증시 전반에 불확실성이 커졌습니다. 한편 엔비디아의 요청으로 TSMC가 3D DRAM 생산 및 첨단 메모리 시장 진출을 검토하면서 기존 메모리 업체들과의 경쟁 심화 가능성이 제기되고 있습니다.",
+   "status": "ongoing",
+   "strength": 5,
+   "keywords": [
+    "젠슨",
+    "엔비디아 요청",
+    "DRAM 생산",
+    "첨단 메모리",
+    "TSMC 엔비디아",
+    "TSMC",
+    "알려짐",
+    "임원",
+    "구형"
+   ],
+   "evidence": [
+    {
+     "channel": "서화백의 AI놀이🚀",
+     "quote": "미국 정보당국이 젠슨 황 CEO를 중국 스파이 의혹 인물과 연인 관계였다고 판단 (FT 보도), AI 증시 급락과 함께 주가 하락 및 투자 심리 악화, TSMC의 3D DRAM 생산 검토 (NVDA 요청)는 새로운 경쟁 가능성을 시사"
+    },
+    {
+     "channel": "미국 주식 인사이더 🇺🇸 (US Stocks Insider)",
+     "quote": "• TSMC는 AI 수요 확대에 대응해 첨단 메모리 반도체 생산 진출을 검토 중이며, 엔비디아 요청에 따라 3D DRAM 생산 계획도 검토 중인 것으로 전해져."
+    },
+    {
+     "channel": "김현석(자본주의 바이어스 있는 채널입니다)",
+     "quote": "11/6 Microsoft의 Oracle AI 컴퓨팅 용량 임차 계약 미갱신과 최근 수개월간 사용량 축소가 보도됨. 기존 용량이 Microsoft의 변화한 요구 사양에 덜 적합해졌으며 구형 Nvidia 칩이 관련됐다는 설명임."
+    }
+   ]
+  },
+  {
+   "name": "미국 정치 - 백악관 비서실장 교체",
+   "narrative": "트럼프 대통령이 중간선거 패배 후 백악관 비서실장을 수지 와일스에서 강경파 스티븐 밀러로 전격 교체했습니다. 이는 집권 2기 국정 운영의 안정판 역할을 해온 정무형 비서실장을 내보내고 이념적 색채가 뚜렷한 인물로 교체하는 전략적 전환으로 해석됩니다.",
+   "status": "new",
+   "strength": 3,
+   "keywords": [
+    "비서실장",
+    "백악관 비서실장",
+    "밀러",
+    "스티븐",
+    "스티븐 밀러",
+    "와일스"
+   ],
+   "evidence": [
+    {
+     "channel": "미국 주식 인사이더 🇺🇸 (US Stocks Insider)",
+     "quote": "• 트럼프 대통령은 스티븐 밀러를 11월 9일부터 신임 백악관 비서실장으로 임명한다고 발표."
+    },
+    {
+     "channel": "이상헌 부장 iM 지주/ESG/중소형주",
+     "quote": "- 도널드 트럼프 미국 대통령이 중간선거에서 공화당이 참패한 지 사흘 만인 6일(현지시각) 백악관 비서실장을 수지 와일스에서 강경파 최측근 스티븐 밀러(41) 백악관 정책담당 부비서실장 겸 국토안보보좌관으로 전격 교체했다."
+    }
+   ]
+  },
+  {
+   "name": "AI 스타트업 IPO - 앤스로픽 상장 추진",
+   "narrative": "AI 스타트업 앤스로픽이 시장 혼란 속에서도 추수감사절 이전에 IPO를 추진하며, 예상보다 낮은 기업 가치로 800억~1000억 달러 조달을 목표하고 있습니다. 이는 AI 시장의 버블 우려 속에서 AI 투자 심리의 중요한 시험대가 될 것으로 보입니다.",
+   "status": "ongoing",
+   "strength": 4,
+   "keywords": [
+    "기업공개 IPO",
+    "사람들",
+    "추수감사절",
+    "연기"
+   ],
+   "evidence": [
+    {
+     "channel": "이상헌 부장 iM 지주/ESG/중소형주",
+     "quote": "- 인공지능 스타트업 앤스로픽(Anthropic)은 급격한 기술주 폭락으로 시장이 혼란에 빠진 가운데서도 위험 부담이 큰 기업공개(IPO)를 강행하고 있습니다."
+    },
+    {
+     "channel": "TNBfolio",
+     "quote": "속보: 기술주가 S&P 500 지수의 50% 이상을 차지하게 된 가운데, 앤트로픽의 기업공개(IPO)가 AI 트레이드의 진짜 시험대로 떠오르고 있다."
+    },
+    {
+     "channel": "미국 주식 인사이더 🇺🇸 (US Stocks Insider)",
+     "quote": "• 앤트로픽 (ANT) — 투자자들이 IPO 기업가치로 약 1조2,000억~1조3,000억 달러를 논의 중이라는 보도가 나온 가운데, 이후 보도에서는 추수감사절 이전 상장을 목표로 최대 1조7,500억 달러 가치에서 800억~1,000억 달러를 조달하는 방안도 거론됨."
+    }
+   ]
+  },
+  {
+   "name": "거시 경제 - 인플레이션 및 금리 인상 우려",
+   "narrative": "예상치를 상회한 고용 보고서로 연준의 추가 금리 인상 우려가 커진 가운데, 다음 주 발표될 미국 CPI와 PPI가 금리 방향을 결정할 주요 변수로 주목받고 있습니다. 시장은 여전히 높은 물가 수준을 우려하며 연준의 향후 정책 결정에 촉각을 곤두세우고 있습니다.",
+   "status": "ongoing",
+   "strength": 3,
+   "keywords": [
+    "CPI",
+    "사람들",
+    "않았음"
+   ],
+   "evidence": [
+    {
+     "channel": "사제콩이_서상영",
+     "quote": "10일 미국 소비자물가지수(CPI)와 13일 생산자물가지수(PPI)가 금리 방향을 결정할 주요 변수. 지난주 10월 비농업 고용이 16.5만 명 증가하고 실업률이 4.1%로 하락하면서 연준의 추가 금리 인상 우려가 확대됐기 때문."
+    },
+    {
+     "channel": "YIELD & SPREAD",
+     "quote": "• 지금의 인플레이션은 에너지 충격과 AI 설비 구축 등에 기인. 사람들은 현재 물가 수준을 여전히 우려하고 기업들도 물가가 최대 관심사라고 응답. 기대인플레이션은 고정되어 있음"
+    }
+   ]
+  },
+  {
+   "name": "테슬라 - 사이버트럭 생산 축소 및 로보택시 전환",
+   "narrative": "테슬라의 사이버트럭이 판매 부진으로 생산 중단 및 단종 수순을 밟고 있으며, 일론 머스크는 2027년 중반부터 사이버트럭 생산 능력을 자율주행 로보택시인 '사이버캡' 생산으로 전환하겠다고 발표했습니다. 이는 테슬라의 전략적 전환으로 투자 심리에 긍정적인 영향을 주었습니다.",
+   "status": "new",
+   "strength": 3,
+   "keywords": [
+    "사이버트럭"
+   ],
+   "evidence": [
+    {
+     "channel": "서화백의 AI놀이🚀",
+     "quote": "사이버트럭 판매 부진으로 생산 중단 및 단종 수순 발표, 로보택시 '사이버캡'으로 사업 전환 계획"
+    },
+    {
+     "channel": "사제콩이_서상영",
+     "quote": "테슬라(+4.23%)는 전일 급락에 따른 반발 매수와 로보택시 사업 확대 기대에 약 상승. 특히 일론 머스크는 2027년 중반부터 텍사스 공장의 사이버트럭 생산을 단계적으로 축소하고 해당 생산능력을 자율주행 로보택시인 사이버캡 생산에 활용하겠다고 발표한 점이 영향."
+    }
+   ]
+  }
+ ],
+ "community_mood": {
+  "score": -20,
+  "summary": "개미 투자자들은 코스피 대폭락과 반도체 시장의 불확실성에 대한 공포와 함께, 엔비디아 젠슨 황 CEO 관련 이슈에 주목하고 있습니다. 하지만 미국 반도체 지수 반등 소식과 함께 단기적인 저가 매수 및 상승에 대한 기대감도 혼재되어 있습니다.",
+  "hot_stocks": [
+   {
+    "name": "NVIDIA",
+    "score": -50,
+    "reason": "젠슨 황 CEO의 스파이 의혹 연루 보도로 투자 심리가 위축되고 반도체 시장의 불확실성이 커졌습니다."
+   },
+   {
+    "name": "삼성전자",
+    "score": 40,
+    "reason": "국내 증시 방어에 대한 기여와 반도체 업황 개선에 대한 기대감이 있습니다."
+   },
+   {
+    "name": "SK하이닉스",
+    "score": 40,
+    "reason": "국내 증시 방어에 대한 기여와 반도체 업황 개선에 대한 기대감이 있습니다."
+   }
+  ]
+ },
+ "signals": {
+  "spikes": [
+   {
+    "term": "젠슨",
+    "count": 13,
+    "burst": 99.0,
+    "base_daily": 0.4,
+    "new": false
+   },
+   {
+    "term": "사람들",
+    "count": 11,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "엔비디아 요청",
+    "count": 11,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "비서실장",
+    "count": 11,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "DRAM 생산",
+    "count": 10,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "CPI",
+    "count": 9,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "첨단 메모리",
+    "count": 9,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "TSMC 엔비디아",
+    "count": 9,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "사이버트럭",
+    "count": 8,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "알려짐",
+    "count": 8,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "기업공개 IPO",
+    "count": 8,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "요청 따라",
+    "count": 8,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "백악관 비서실장",
+    "count": 8,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "밀러",
+    "count": 8,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "달간",
+    "count": 8,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "임원",
+    "count": 8,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "TSMC",
+    "count": 25,
+    "burst": 11.910346960870237,
+    "base_daily": 8.4,
+    "new": false
+   },
+   {
+    "term": "구형",
+    "count": 7,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "연기",
+    "count": 7,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "스티븐",
+    "count": 7,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "스티븐 밀러",
+    "count": 7,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "와일스",
+    "count": 7,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "임대 계약",
+    "count": 7,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "추수감사절",
+    "count": 7,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "않았음",
+    "count": 7,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   }
+  ],
+  "top_posts": [
+   {
+    "channels": 3,
+    "channel": "YIELD & SPREAD",
+    "head": "• 중간선거 전후 금리 하락에는 기존 AI 기업들 우려에 '민주당 승리 -> AI 투자 제동 -> 성장 둔화'가 얹어진 이유가 크다고 생각함. 그래서 진짜 민주당은 AI 모멘텀을 누그러뜨릴 수 있을까 해서 한번 찾아봄 [민주당·공화당 하원 지역구별 데이터센터 현황] • 데이터센터 수: 민주당 지역구 214곳에 994곳(5…",
+    "url": "https://t.me/yieldnspread/6757",
+    "time_kst": "11-07 12:21"
+   },
+   {
+    "channels": 2,
+    "channel": "서화백의 AI놀이🚀",
+    "head": "📝 텔레그램 심층 분석 Report (15시 07분) 기준 🌡️ 센티먼트 공포 (-65) 💡 요약 AI/반도체 섹터의 급락과 블루웨이브 쇼크로 인한 세계 시총 증발, 그리고 핵심 기업(NVDA)의 부정적 이슈 및 데이터센터 규제 우려가 시장 전반의 공포를 키우고 있습니다. 🗣️ Top 키워드: AI(58), 반도체(30)…",
+    "url": "https://t.me/easobi_ai/27299",
+    "time_kst": "11-07 15:07"
+   },
+   {
+    "channels": 2,
+    "channel": "서화백의 그림놀이 🚀",
+    "head": "📝 텔레그램 심층 분석 Report (19시 04분) 기준 🌡️ 센티먼트 공포 속 관망 (-20) 💡 요약 증시 급락과 AI 규제 우려로 공포 심리가 확산되었으나, 극단적인 비관 속에서 일부 기업의 실적 호조 및 반등 가능성에 대한 기대감도 혼재합니다. 🗣️ Top 키워드: AI(10), 데이터센터(9), 규제(7), 반…",
+    "url": "https://t.me/easobi/17173",
+    "time_kst": "11-07 19:04"
+   },
+   {
+    "channels": 2,
+    "channel": "서화백의 AI놀이🚀",
+    "head": "📝 텔레그램 심층 분석 Report (07시 07분) 기준 🌡️ 센티먼트 관망과 기대 (+35) 💡 요약 기술주와 AI 관련주의 저가 매수세 유입으로 단기 반등 기대감이 있으나, 금리 인상 및 규제 불확실성이 여전해 전반적으로 관망하는 분위기입니다. 기업 실적 발표는 긍정적인 요인으로 작용하고 있습니다. 🗣️ Top 키워…",
+    "url": "https://t.me/easobi_ai/27291",
+    "time_kst": "11-07 07:07"
+   },
+   {
+    "channels": 2,
+    "channel": "서화백의 AI놀이🚀",
+    "head": "📝 텔레그램 심층 분석 Report (11시 07분) 기준 🌡️ 센티먼트 관망 (-5) 💡 요약 AI 시장 버블 우려와 일부 IPO 기업가치 하향 조정, 중동 지정학적 리스크 및 국내 증시 부진이 투자 심리를 압박하고 있지만, 미국 AI/반도체 및 데이터센터에 대한 꾸준한 투자 확대는 긍정적인 요소로 작용하며 시장의 방향…",
+    "url": "https://t.me/easobi_ai/27295",
+    "time_kst": "11-07 11:07"
+   },
+   {
+    "channels": 2,
+    "channel": "서화백의 AI놀이🚀",
+    "head": "📝 텔레그램 심층 분석 Report (23시 07분) 기준 🌡️ 센티먼트 경계 (-20) 💡 요약 NVIDIA 젠슨 황 관련 불확실성 증대 및 미국 증시 하락세 지속으로 경계심이 짙으나, AI 인프라 대규모 투자는 긍정적으로 논의 중입니다. 🗣️ Top 키워드: AI(182), NVIDIA(159), 데이터센터(67),…",
+    "url": "https://t.me/easobi_ai/27304",
+    "time_kst": "11-07 23:08"
+   },
+   {
+    "channels": 2,
+    "channel": "GLP-1 뉴스 by 알렉스빡",
+    "head": "[다올 의료기기/화장품 박종현] - GLP-1 데일리 브리프 by ChatGPT 2026.11.07 오늘은 Lilly가 Hims & Hers와 직접판매 계약을 체결해 Zepbound·Foundayo의 현금결제 유통망을 확대한 점이 핵심. 고용주 보험 축소 가능성에 대응해 제조사가 텔레헬스 채널과 자가부담 가격을 직접 통제…",
+    "url": "https://t.me/GLP1newsrun/55",
+    "time_kst": "11-07 13:33"
+   },
+   {
+    "channels": 2,
+    "channel": "이상헌 부장 iM 지주/ESG/중소형주",
+    "head": "* 젠슨 황 ‘中스파이 의심 여성과 연인 의혹’ 속…장녀 방한 전격 취소 - 젠슨 황 엔비디아 최고경영자(CEO) 장녀인 매디슨 황 엔비디아 옴니버스•로보틱스 제품 마케팅 수석이사의 방한 일정이 전격 취소됐다. 7일 정부와 정보기술(IT) 업계에 따르면 황 수석이사는 오는 9∼10일 서울 코엑스에서 열리는 ‘엔비디아 AI…",
+    "url": "https://t.me/INSIGHTVALUELEE/11138",
+    "time_kst": "11-07 22:25"
+   },
+   {
+    "channels": 2,
+    "channel": "미국 주식 인사이더 🇺🇸 (US Stocks Insider)",
+    "head": "✅ 비상계엄 직후보다 더 밀렸다...코스닥 ‘충격’ 7일 한국거래소에 따르면 코스닥 지수는 전날 34.14포인트(5.03%) 내린 644.27에 장을 마쳤다. 12.3 비상계엄과 탄핵정국 혼란이 한창이던 지난 2024년 12월 9일(627.01) 이후 가장 낮은 수준이다. 약 1년 11개월 만에 지수가 당시 충격에 버금가…",
+    "url": "https://t.me/insidertracking/68615",
+    "time_kst": "11-07 13:09"
+   },
+   {
+    "channels": 2,
+    "channel": "대체투자 인사이드",
+    "head": "▶️ 강남·서초 낙폭 커져도 서울 집값 91주 상승 https://www.newsis.com/photo/graview/?id=NISI20261105_0002283830&cid=photo&page=1 #부동산, #부동산가격",
+    "url": "https://t.me/jsinside/28382",
+    "time_kst": "11-07 11:31"
+   },
+   {
+    "channels": 2,
+    "channel": "가치투자클럽",
+    "head": "AI주 투매 하루 만에 반등한 나스닥…AI 반도체·데이터센터주 저가 매수 https://naver.me/G6RME6T6",
+    "url": "https://t.me/corevalue/47577",
+    "time_kst": "11-07 08:14"
+   }
+  ]
+ },
+ "community_dc": {
+  "source": "DC인사이드",
+  "galleries": [
+   {
+    "id": "krstock",
+    "name": "국내주식갤러리",
+    "posts": 1280,
+    "capped": true,
+    "burst": 0.5,
+    "base_daily": 2378.1
+   },
+   {
+    "id": "stockus",
+    "name": "해외주식갤러리",
+    "posts": 2893,
+    "capped": true,
+    "burst": 0.3,
+    "base_daily": 8812.6
+   }
+  ],
+  "posts_sampled": 576,
+  "keywords": [
+   {
+    "term": "차트",
+    "count": 12,
+    "burst": 99.0,
+    "new": true
+   },
+   {
+    "term": "요즘",
+    "count": 10,
+    "burst": 99.0,
+    "new": true
+   },
+   {
+    "term": "많이",
+    "count": 8,
+    "burst": 99.0,
+    "new": true
+   },
+   {
+    "term": "젠슨황",
+    "count": 8,
+    "burst": 99.0,
+    "new": true
+   },
+   {
+    "term": "사람들",
+    "count": 7,
+    "burst": 87.2,
+    "new": true
+   },
+   {
+    "term": "뭐냐",
+    "count": 6,
+    "burst": 74.8,
+    "new": true
+   },
+   {
+    "term": "인간",
+    "count": 5,
+    "burst": 62.3,
+    "new": true
+   },
+   {
+    "term": "미장",
+    "count": 5,
+    "burst": 62.3,
+    "new": true
+   },
+   {
+    "term": "애들",
+    "count": 5,
+    "burst": 62.3,
+    "new": true
+   },
+   {
+    "term": "하락장",
+    "count": 5,
+    "burst": 62.3,
+    "new": true
+   },
+   {
+    "term": "바닥",
+    "count": 5,
+    "burst": 62.3,
+    "new": true
+   },
+   {
+    "term": "우리",
+    "count": 5,
+    "burst": 62.3,
+    "new": true
+   },
+   {
+    "term": "보면",
+    "count": 5,
+    "burst": 62.3,
+    "new": true
+   },
+   {
+    "term": "여자",
+    "count": 5,
+    "burst": 62.3,
+    "new": true
+   },
+   {
+    "term": "자체",
+    "count": 5,
+    "burst": 62.3,
+    "new": true
+   }
+  ],
+  "top_recommended": [
+   {
+    "gallery": "해외주식갤러리",
+    "title": "결국 제대로된 인간은 이새끼뿐이었네..",
+    "views": 14725,
+    "recommend": 250,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=18293080&exception_mode=recommend&page=1",
+    "time_kst": "11-07 15:53"
+   },
+   {
+    "gallery": "해외주식갤러리",
+    "title": "저커버그 ㄹㅇ소름돋는 점..",
+    "views": 12461,
+    "recommend": 250,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=18294280&exception_mode=recommend&page=1",
+    "time_kst": "11-07 18:17"
+   },
+   {
+    "gallery": "해외주식갤러리",
+    "title": "유퀴즈 가면 나락간다는게 진짠가보네 ㅋㅋ",
+    "views": 13184,
+    "recommend": 244,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=18293027&exception_mode=recommend&page=1",
+    "time_kst": "11-07 15:48"
+   },
+   {
+    "gallery": "해외주식갤러리",
+    "title": "계곡백숙 마인드 때문에 점점 파이 뺏기지 ㅋㅋㅋ",
+    "views": 11897,
+    "recommend": 241,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=18289354&exception_mode=recommend&page=2",
+    "time_kst": "11-07 08:42"
+   },
+   {
+    "gallery": "해외주식갤러리",
+    "title": "M7중 유일하게 여성문제 없는 곳",
+    "views": 13232,
+    "recommend": 240,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=18293604&exception_mode=recommend&page=1",
+    "time_kst": "11-07 16:51"
+   }
+  ],
+  "top_viewed": [
+   {
+    "gallery": "국내주식갤러리",
+    "title": "실시간 코스피대폭락ㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋ",
+    "views": 697,
+    "recommend": 1,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3856465&page=4",
+    "time_kst": "11-08 01:38"
+   },
+   {
+    "gallery": "해외주식갤러리",
+    "title": "반도치 멸망각) 새 텍사스주지사와 CNN의 인터뷰",
+    "views": 668,
+    "recommend": 15,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=18297828&page=2",
+    "time_kst": "11-08 05:50"
+   },
+   {
+    "gallery": "해외주식갤러리",
+    "title": "사실 삼닉 아니였으면 달러 지금 2천원이어도 안이상함",
+    "views": 485,
+    "recommend": 17,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=18297820&page=2",
+    "time_kst": "11-08 05:48"
+   },
+   {
+    "gallery": "국내주식갤러리",
+    "title": "속보 - 기분 좋은 소식 떴다 ㅅㅅㅅㅅㅅㅅㅅㅅㅅㅅㅅㅅㅅㅅㅅㅅㅅㅅㅅㅅㅅㅅㅅ",
+    "views": 441,
+    "recommend": 0,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3856503&page=4",
+    "time_kst": "11-08 02:08"
+   },
+   {
+    "gallery": "국내주식갤러리",
+    "title": "11월말까지는 반도체주 오를듯",
+    "views": 441,
+    "recommend": 0,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3856461&page=5",
+    "time_kst": "11-08 01:37"
+   },
+   {
+    "gallery": "국내주식갤러리",
+    "title": "11월 19일 시장붕괴설",
+    "views": 413,
+    "recommend": 1,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3856567&page=3",
+    "time_kst": "11-08 03:08"
+   },
+   {
+    "gallery": "국내주식갤러리",
+    "title": "월요일에는 오를수밖에 없다",
+    "views": 358,
+    "recommend": 0,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3856549&page=3",
+    "time_kst": "11-08 02:49"
+   },
+   {
+    "gallery": "국내주식갤러리",
+    "title": "미국 반도체지수 4퍼센트 상승마감했네",
+    "views": 354,
+    "recommend": 2,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3856452&page=5",
+    "time_kst": "11-08 01:28"
+   }
+  ]
+ }
+}

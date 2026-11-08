@@ -1238,6 +1238,20 @@
       가로 2칸 span 폐기. `WEEKLY_BIG`(1.5) 배로 개별 그림을 그대로 확대(글자·선도 같이 — 그리기는 개별 좌표계 W×H,
       바깥 크기만 키움). 한 장 PNG = 맨 위 띠(합산 왼쪽 + 오른쪽 빈 자리에 제목·축 설명·기준일·출처) + 아래 개별
       격자 — 조선 4열(8칸 2행, 4896×2934)·기자재 7열(21칸 3행). 화면도 같은 비율(`--bw` 너비, 모바일 100%).
+    - **합산 2×2 + 두 묶음 모두 4열** (11/8 새벽, 사용자 "보고서에 두 묶음을 붙이면 차트 크기가 너무 다르다 — 여러 행으로
+      가더라도 같은 크기로, 대표 차트 옆으로 작은 차트, 모음 너비를 더 키워"): 11/7 의 '맨 위 1.5배 띠' 폐기. 합산은
+      왼쪽 위 2×2 칸(`WEEKLY_BIG`=2, 간격 포함 1216×836 → PNG 2432×1672, 개별 좌표계로 그려 scale), 개별은 그 오른쪽부터
+      행 우선. 조선·기자재 **둘 다 4열**(조선 12칸 3행 4896×2524, 기자재 25칸 7행 4896×5932) — 같은 폭으로 붙이면 개별 칸
+      크기가 같다. 화면은 `grid-column/row: span 2`(모바일은 auto). 한 장 PNG 에서 합산은 svg 태그를 벗기면 W×H 로
+      돌아가므로 `<g scale>` 로 칸 크기에 맞춘다(첫 렌더에서 합산이 개별 크기로 찍힌 원인).
+    - **방산 5사·건설기계 2사 묶음 추가** (11/8, 사용자 "방산도 건설기계도 같은 거"): WEEKLY_GROUPS 에 방산 수급(한화에어로·
+      KAI·한화시스템·LIG D&A·현대로템, 9칸 3행)·건설기계 수급(두산밥캣·HD건설기계, 6칸 2행) — 같은 4열. 덤으로 잡은
+      버그: SVG `<text>` 에 이름을 그대로 넣어 **'LIG D&A' 의 & 가 XML 을 깨뜨려** PNG 변환(이미지 로드)이 조용히 실패,
+      방산 '한 장'·LIG 낱장 다운로드가 안 됐다 → `xml()` 이스케이프.
+      **2차(같은 날)**: 빈 칸을 채우자는 사용자 요청 — 네이버 모바일 API(`m.stock.naver.com/api/stock/{code}/integration`
+      의 totalInfos marketValue, 이 컨테이너에서 호출 가능)로 방산 부품사 시총 순위를 뽑아 보여주고 사용자 선택 **풍산·
+      SNT다이내믹스**(방산 11칸 3행), 건기는 **진성티이씨·디와이파워**(8칸 2행 꽉 참). 넷 다 유니버스 밖이라
+      chart_universe.csv 차트 전용(group 열 방산/건설기계). 참고로 '삼영컴텍'은 삼양컴텍(484590, 2,007억)이고 뺐다.
     - **④ 는 공유용 주소에서 숨김** (11/7 밤, 사용자 "gs-research-desk.github.io/coverage_flow_report.html 에는 ④ 없어야").
       텔레 캡션 링크가 그 주소라서. WEEKLY_JS 가 `location.hostname === gs-research-desk.github.io` 이고 해시에
       `weekly` 가 없으면 `#weekly` 를 DOM 에서 제거. 본인용은 `#weekly` 해시(사이드바 🚢 수급.그림-조선)로 진입,
@@ -1547,5 +1561,21 @@
     그림마다 **📋 복사**(ClipboardItem image/png — 클립보드는 PNG 만 표준, blob Promise 를 그대로 넘겨야 사파리도
     제스처로 인정) · ⬇ PNG/SVG/CSV. 생성기는 SVG 도 함께 굽는다(`svg.fonttype=path` — 한글 폰트 없는 PC 에서도
     모양 유지). build_static 복사 한 줄, 공유 등급.
+
+56. **애널리스트 집계(animsam09) 따라 만들기 — 뼈대** (11/7): 사용자 "이거 따라서 일단 뼈대를 만들자"
+    (https://analyst-calendar.animsam09.workers.dev/ — Cloudflare Worker, 비번 가림막). 세션 네트워크에
+    그 호스트를 허용하는 개인 환경 'GS-DB2'를 만들어 로그인 후 두 화면·탭 전부를 Playwright 로 떠서 구조를
+    `analyst_calendar/README.md` 에 적고, 정적 뼈대를 `telegram_research_dashboard/static/analyst_calendar/`
+    (index.html·style.css·app.js·data.json)에 만들었다. 사이드바 👥 DAOL.관리 › 활동관리.DAOL 바로 밑 `활동관리🔥`
+    (새 창, 공유 비번으로 열림), build_static copytree 한 줄.
+    - 원본 구조: **업무 집계**(탭 15개 — 업데이트·요약·발간/세미나/콜/리퀘/사내지원/NDR/콥데이 실적·커버리지·
+      드랍 경고·발간 vs 계획·인뎁스 달력·기관별 집계·누락 후보; 요약 = 카드 6장 + DAOL 리서치본부 활동표)
+      + **일정**(월/주/목록, 장부만/전체, 애널리스트 사이드 필터·미니달력, 확인 필요 모달, 설정 모달 —
+      구글 캘린더 ICS 2종·기관명 분류 xlsx·애널리스트 규칙). 데이터는 Worker API(state/master/events/op).
+    - 뼈대는 **data.json 명단 + 결정적 난수 일정**(xorshift)으로 돌아간다 — 숫자는 전부 가짜, 화면에
+      '뼈대/샘플' 표식. 실데이터 연결 지점은 `loadData()`/`genEvents()` 둘뿐. 본문 미구현 탭(커버리지 전체
+      목록·드랍 경고 목록·인뎁스 달력)은 점선 상자에 원본 구성을 적어 뒀다. 다음 단계 후보: GAS 가 구글
+      캘린더 ICS 를 읽어 data.json 을 굽기(youtube_digest 와 같은 workflow_dispatch 경로), 인뎁스 달력은
+      vacation_tracker/indepth.py 의 state 재사용.
 
 이후 작업은 git log와 이 파일을 갱신하며 이어간다.
