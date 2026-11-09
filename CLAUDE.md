@@ -1626,4 +1626,22 @@
       `?u=` 가 쉼표 목록(`defense,construction`)을 받아 유니버스별 카드를 이어 붙인다(카드 머리에 판 이름, 파일은 각자 dir —
       `url(f,ext,dir)`). 상단 탭도 두 개(조선·해운·에너지 / 방산·기계). 11/8 첫 판의 peerdef·peercon 뷰 2개는 이것으로 대체.
 
+58. **주가 INDEX 갤러리 — 조선 ④ 추가 · 방산판 신설 · 묶음 메인/낱장 접힘** (11/8~9, PR #542·#546): 사용자 요청 순서대로.
+    - **조선 ④ 조선 5사 vs 엔진 vs 조선기자재** (ecos-fx-rates `peergroup/weekly_peer_index_image.py` `CHAIN`): 2×2 오른쪽 아래
+      각주 자리에 밸류체인 3단 시총가중 지수(조선 4사+대한조선 / 한화엔진·HD현대마린엔진·STX엔진 / 기자재 20사 = coverage_flow
+      위클리 조선기자재 묶음에서 엔진 제외, HD현대마린솔루션은 어디에도 안 넣음), **각주는 그림 맨 아래 띠**(`NOTE_IN`, tight_layout
+      rect). 묶음 파일명 `조선주_INDEX_3종` → **`4종`** — 옛 파일을 지우자 배포본 갤러리의 묶음 카드가 깨져 사용자가 바로 봤다.
+      **생성기 파일명을 바꾸면 GS-DB2 페이지 머지·배포까지 한 흐름으로 끝낼 것**(그 사이 카드가 "그림을 불러오지 못했습니다").
+    - **방산판** `peergroup/weekly_defense_index_image.py`(조선판을 import — 산식·그리기·저장 재사용, 같은 워크플로 ③-2 스텝,
+      출력 `output/peer_price_defense/방산_INDEX_4종` + `DIDX1~4`): ① 체계 5사 ② 부체계 11사(풍산·SNT다이내믹스·엠앤씨솔루션·
+      아이쓰리시스템·퍼스텍·휴니드·빅텍·코츠테크놀로지·한일단조·삼영컴텍·웨이브일렉트로닉스 — 세션 추천, 사용자 가지치기 전)
+      ③ 한국 체계·부체계 vs 미국 프라임 7 vs 유럽 체계 8 ④ 드론(Kratos·AeroVironment) vs 엔진/부품 7 vs 항공(Airbus·Dassault·
+      Embraer) — 글로벌 테마, 주가흐름표 DEFENSE_SECTIONS 와 같은 티커. 데모 실측 교정: 11개 범례는 3열, 긴 제목 축약, **각주는
+      한 줄에 다 적으면 오른쪽으로 넘쳐 6줄**(`NOTE_LINES`).
+    - 대시보드: `ship_index.html` 이 `?u=ship|defense`(peer_price.html 과 같은 UNIVERSES 방식, 상단 탭), 사이드바 📰 주보 >
+      `⚔️ 주가.INDEX.비교` 서브그룹 `🚢 조선`(shipindex) / `🛡️ 방산`(defindex). **4종 묶음 카드가 메인(펼침·강조), 낱장 ①~④는
+      `<details>` 접힘**(점프 링크·해시로 오면 펼침; 버튼은 summary 밖 — summary 안 버튼은 클릭마다 접힘이 토글된다).
+    - 운영 주의: 수동 실행을 장중(09:11 KST)에 돌리면 야후가 그날 장중 봉을 마지막 값으로 줘 기준일이 당일로 찍힌다 —
+      07:10 자동 실행은 전일 종가 기준. `.claude/settings.json`(프로젝트 권한 허용 목록) 도 같은 PR 에서 신설.
+
 이후 작업은 git log와 이 파일을 갱신하며 이어간다.
