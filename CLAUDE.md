@@ -1661,4 +1661,17 @@
     - 운영 주의: 수동 실행을 장중(09:11 KST)에 돌리면 야후가 그날 장중 봉을 마지막 값으로 줘 기준일이 당일로 찍힌다 —
       07:10 자동 실행은 전일 종가 기준. `.claude/settings.json`(프로젝트 권한 허용 목록) 도 같은 PR 에서 신설.
 
+59. **주가 INDEX — 브랜드 색 지정 · 방산 ④ 우주 · '미국 체계' · 건설기계판** (11/9~10, PR #550·#552): 58번의 후속.
+    - **선 색은 사용자 지정 브랜드 색**: 조선 ②(`SHIP_STYLE`) 한화 주황 `#F37321`(한화오션·한화엔진 점선) · 현대 초록 `#00A651`
+      (HD현중, HD한국조선해양 옅은 초록, HD현대마린엔진 점선) · 삼성 파랑 `#1428A0` · 대한조선 검정. 방산 ①(`PRIME_COLORS`)
+      한화에어로 주황·한화시스템 옅은 주황·KAI 하늘·LIG D&A 남색·로템 초록. 건기 HD건기 초록·두산밥캣 남색·한국 묶음 골드·중국 빨강.
+    - 방산 ③ '미국 프라임' → **'미국 체계'**, ④ 에 **우주(15)** 추가 — 주가변동표 '글로벌 우주·위성' 묶음과 같은 티커(각주 7줄).
+    - **건설기계판** `weekly_construction_index_image.py`(조선판 import, 워크플로 ③-3, `output/peer_price_construction/건설기계_INDEX_4종`
+      + `CIDX1~4`): ① HD건기·두산밥캣·한국 부품사 6(시총가중 점선) ② 한국 2사 vs 미국(CAT·Terex·Oshkosh·Manitowoc)·중국 5·일본 6
+      ③ 대형 OEM 8 — HD건기·CAT·Komatsu·Hitachi CM·SANY·XCMG·Zoomlion·LiuGong, **중국은 SANY 만 실선** ④ 두산밥캣·Deere·
+      **Kobelco = 모회사 Kobe Steel(5406.T)**(건설기계 자회사 비상장 — 각주에 명시)·대동. 갤러리 `?u=construction`, 사이드바
+      `⚔️ 주가.INDEX.비교 › 🏗️ 기계`(conindex).
+    - 운영 메모: GitHub Pages deploy 가 'syncing_files' 에서 10분 멈춰 타임아웃하는 날이 있다(11/10 새벽 2회) — 같은 run 재시도는
+      'Deployment cancelled' 로 또 죽고, 다음 커밋의 새 run 은 정상. 코드 문제가 아니므로 기다리거나 새 run 으로.
+
 이후 작업은 git log와 이 파일을 갱신하며 이어간다.
