@@ -1606,7 +1606,7 @@
       GE·Howmet·TransDigm·Curtiss-Wright) / 유럽(Rheinmetall·BAE·Thales·Leonardo·Saab·Hensoldt·Renk·
       Kongsberg + Airbus·Dassault + RR·Safran·MTU) / **글로벌 우주·위성**(11/9 사용자 "글로벌 우주/위성은 없네?" —
       발사체 Rocket Lab·Firefly·Intuitive Machines / 위성통신 AST SpaceMobile·Iridium·EchoStar·Eutelsat·SES / 관측 Planet·
-      MDA Space / 부품 Redwire·Karman·OHB / 일본 ispace·QPS + ETF UFO; 단 배치 좌 지수·한국·우주 / 우 미국·유럽·기타). **뺀 것**: Spirit Aero(보잉 인수 완료·상폐)·Triumph
+      MDA Space / 부품 Redwire·Karman·OHB / 일본 ispace·Astroscale(QPS 5595.T 는 야후 무응답) + ETF UFO; 단 배치 좌 지수·한국·우주 / 우 미국·유럽·기타). **뺀 것**: Spirit Aero(보잉 인수 완료·상폐)·Triumph
       (사모 인수·상폐)·Subaru(FHI, 항공 비중 미미)·Bombardier(비즈젯)·하이즈항공·오르비텍(초소형).
       건기 = 지수(PAVE·구리·WTI·원달러) / OEM 한국 2(**HD건설기계** = 2026-01 인프라코어 흡수합병 후 사명, 042670 상폐)·미국/유럽(CAT·Volvo·Terex·
       Oshkosh·Manitowoc·Wacker Neuson·Manitou)·일본(Komatsu·Hitachi CM·Kubota·SHI·Takeuchi·Tadano)·
