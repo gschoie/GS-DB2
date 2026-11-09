@@ -13,7 +13,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>조선주 INDEX — GS Research Desk</title>
+<title>주가 INDEX 비교 — GS Research Desk</title>
 <style>
 :root{--bg:#fff;--fg:#1c2430;--muted:#6b7684;--line:#e5e8ec;--card:#f7f8fa;--accent:#a68a64;--btn:#1f2937}
 @media(prefers-color-scheme:dark){:root{--bg:#14181f;--fg:#e6e9ee;--muted:#8b93a1;--line:#2a313c;--card:#1b212b;--btn:#e6e9ee}}
@@ -48,8 +48,9 @@ details.card:not([open])>summary .tog::before{content:"▼ 펼치기"}
 </head>
 <body>
 <div class="wrap">
-  <h1>📉 조선주 상대 INDEX</h1>
-  <p class="sub">KOSPI vs 조선주 · 한국 조선 7사 Performance · 한/중/일/싱 조선주 비교 · 조선 5사 vs 엔진 vs 조선기자재 — 12주(60거래일) 전 = 100, 국가·밸류체인 지수는 기준일 USD 시총 가중. <span id="stamp"></span></p>
+  <h1 id="h1">📉 조선주 상대 INDEX</h1>
+  <p class="sub"><span id="subtxt"></span> <span id="stamp"></span></p>
+  <div class="jump" id="utabs" style="margin-bottom:10px"></div>
   <p class="note"><b>📋 복사</b> 후 위클리(워드·PPT)에 바로 <b>Ctrl+V</b>(비트맵). 엑셀·PPT 에 확대해도 선명하게 넣으려면 <b>SVG</b> 를 내려받아 <b>삽입 → 그림 → 이 디바이스</b> 로 넣으면 확대해도 선명하다(화면에서 복사·붙여넣기는 비트맵이 되어 흐려짐). 매일 07:10 KST 자동 갱신 + 아래 <b>🔄 지금 갱신</b>(야후 수집 → 엑셀·그림 전부, 2~3분 뒤 자동 새로고침). 기준일·계산 기준은 그림 하단 각주.</p>
 <div class="bar" style="display:flex;gap:10px;align-items:center;margin:0 0 14px"><button class="p" id="refresh">🔄 지금 갱신</button><span id="rstatus" class="note" style="margin:0"></span></div>
   <div class="jump" id="jump"></div>
@@ -57,14 +58,34 @@ details.card:not([open])>summary .tog::before{content:"▼ 펼치기"}
 </div>
 <script>
 (function(){
-  const RAW="https://raw.githubusercontent.com/gschoie/ecos-fx-rates/main/output/peer_price/";
-  const FILES=[
-    ["조선주 INDEX 4종 (2×2 묶음)","PPT 한 장용 — ①②③④ + 각주(맨 아래)","조선주_INDEX_4종"],
-    ["① 한국 주식시장 vs 조선주","KOSPI vs 한국 조선주(시총가중)","IDX1_한국시장_vs_조선주"],
-    ["② 한국 조선 7사 Performance","HD현대중공업·HD한국조선해양·삼성중공업·한화오션·대한조선·한화엔진·HD현대마린엔진","IDX2_한국조선_Performance"],
-    ["③ 한/중/일/싱 조선주 비교","국가별 시총가중 지수 (한국 7·중국 3·일본 6·싱가포르 1)","IDX3_한중일싱_조선주"],
-    ["④ 조선 5사 vs 엔진 vs 조선기자재","국내 밸류체인 3단 시총가중 지수 — 조선 4사+대한조선 · 엔진 3사(한화엔진·HD현대마린엔진·STX엔진) · 기자재 20사","IDX4_조선_엔진_기자재"],
-  ];
+  // 유니버스 2종 — 생성기는 ecos-fx-rates peergroup/weekly_peer_index_image.py(조선)·weekly_defense_index_image.py(방산),
+  // 같은 워크플로가 둘 다 굽는다. ?u=ship|defense 로 고른다(peer_price.html 과 같은 방식). 파일명은 생성기 OUT_ALL/OUT_ONE 과 일치해야 한다.
+  const UNIVERSES={
+    ship:{tab:"🚢 조선",h1:"📉 조선주 상대 INDEX",dir:"peer_price",
+      sub:"KOSPI vs 조선주 · 한국 조선 7사 Performance · 한/중/일/싱 조선주 비교 · 조선 5사 vs 엔진 vs 조선기자재 — 12주(60거래일) 전 = 100, 국가·밸류체인 지수는 기준일 USD 시총 가중.",
+      files:[
+      ["조선주 INDEX 4종 (2×2 묶음)","PPT 한 장용 — ①②③④ + 각주(맨 아래)","조선주_INDEX_4종"],
+      ["① 한국 주식시장 vs 조선주","KOSPI vs 한국 조선주(시총가중)","IDX1_한국시장_vs_조선주"],
+      ["② 한국 조선 7사 Performance","HD현대중공업·HD한국조선해양·삼성중공업·한화오션·대한조선·한화엔진·HD현대마린엔진","IDX2_한국조선_Performance"],
+      ["③ 한/중/일/싱 조선주 비교","국가별 시총가중 지수 (한국 7·중국 3·일본 6·싱가포르 1)","IDX3_한중일싱_조선주"],
+      ["④ 조선 5사 vs 엔진 vs 조선기자재","국내 밸류체인 3단 시총가중 지수 — 조선 4사+대한조선 · 엔진 3사(한화엔진·HD현대마린엔진·STX엔진) · 기자재 20사","IDX4_조선_엔진_기자재"]]},
+    defense:{tab:"🛡️ 방산",h1:"📉 방산 상대 INDEX",dir:"peer_price_defense",
+      sub:"한국 방산 체계 5사 · 부체계(부품) 11사 Performance · 한국 체계/부체계 vs 미국 프라임 vs 유럽 체계 · 드론 vs 엔진/부품 vs 항공(글로벌) — 12주(60거래일) 전 = 100, 묶음 지수는 기준일 USD 시총 가중.",
+      files:[
+      ["방산 INDEX 4종 (2×2 묶음)","PPT 한 장용 — ①②③④ + 각주(맨 아래)","방산_INDEX_4종"],
+      ["① 한국 방산 체계 5사 Performance","한화에어로스페이스·한국항공우주·LIG D&A·한화시스템·현대로템","DIDX1_한국체계5사"],
+      ["② 한국 방산 부체계(부품) Performance","풍산·SNT다이내믹스·엠앤씨솔루션·아이쓰리시스템·퍼스텍·휴니드·빅텍·코츠테크놀로지·한일단조·삼영컴텍·웨이브일렉트로닉스","DIDX2_한국부체계"],
+      ["③ 한국 체계·부체계 vs 미국 프라임 vs 유럽 체계","시총가중 — 미국 프라임 7(LMT·RTX·NOC·GD·LHX·BA·HII) · 유럽 체계 8(Rheinmetall·BAE·Thales·Leonardo·Saab·Hensoldt·Renk·Kongsberg)","DIDX3_한국vs미국유럽"],
+      ["④ 드론 vs 엔진/부품 vs 항공 (글로벌)","시총가중 — 드론(Kratos·AeroVironment) · 엔진/부품(GE·Howmet·TransDigm·Curtiss-Wright·RR·Safran·MTU) · 항공(Airbus·Dassault·Embraer)","DIDX4_드론_엔진_항공"]]},
+  };
+  const uname=(new URLSearchParams(location.search).get("u")||"ship").toLowerCase();
+  const U=UNIVERSES[uname]||UNIVERSES.ship;
+  const RAW="https://raw.githubusercontent.com/gschoie/ecos-fx-rates/main/output/"+U.dir+"/";
+  const FILES=U.files;
+  document.getElementById("h1").textContent=U.h1;document.title=U.h1.replace(/^📉 /,"")+" — GS Research Desk";
+  document.getElementById("subtxt").textContent=U.sub;
+  {const t=document.getElementById("utabs");Object.entries(UNIVERSES).forEach(([k,u])=>{const a=document.createElement("a");a.href="?u="+k;a.textContent=u.tab;
+    if(u===U){a.style.fontWeight="700";a.style.textDecoration="underline"}t.appendChild(a)})}
   const bust="?t="+Math.floor(Date.now()/600000);   // 10분 단위 캐시 버스트
   const url=(f,ext)=>RAW+encodeURIComponent(f)+"."+ext+bust;
   const cards=document.getElementById("cards"),jump=document.getElementById("jump");
