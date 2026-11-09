@@ -1178,6 +1178,113 @@
       성광벤드·태광을 조기→기계로 재분류하고 하이록코리아(013030, 코스닥) 신규 추가(22종목).
       GROUPS 기계 = 건기+기계, '조선 묶음 맨 밑 고정'(PIN_LAST)은 폐기(장치만 잔존) —
       기계 묶음 안에서도 시총 내림차순. 하이록코리아 YTD·3개월 수급·스파크는 첫 수집부터.
+    - **④ 위클리용 차트** (11/7): 사용자 요청 "위클리 '조선 수급' 꼭지처럼 4개 이미지". 리포트와 같은 모양
+      (회사명 파랑 · 시가총액 십억원 좌축 검정 · 기관/외인 1년 누적 순매수 억원 우축 갈색/파랑 · 0 선 회색)을
+      `build_report.WEEKLY_GROUPS`(지금은 조선 4사 — HD한국조선해양·삼성중공업·HD현대중공업·한화오션) 단위로
+      2×2 섹션에 그린다. 데이터는 종목 클릭 차트와 같은 `series.json`, 그림은 화면에서 SVG → 캔버스 → PNG
+      다운로드(장당 1200×820, 4개 한 장 2432×1672 — **리포에 이미지 파일을 쌓지 않는다**, 46번 PNG 교훈).
+      SERIES 상수는 페이지 끝 스크립트가 정의하므로 그리기는 DOMContentLoaded 뒤(첫 판이 이 순서 때문에 빈 칸).
+      묶음 추가 = WEEKLY_GROUPS 한 줄. 지난 기록 페이지엔 시계열이 없어 섹션도 없다.
+      **용도 = DataGuide·Bloomberg 로 손으로 뽑던 리포트 차트의 대체**(사용자). PNG 에 `WEEKLY_DPI`(384)를
+      pHYs 청크로 심는다 — 캔버스 PNG 는 해상도 정보가 없어 워드가 1px=1pt 로 읽어 4개 한 장이 가로 86cm 로
+      붙었다(11/7 실측) → 384dpi 면 낱장 7.9cm. **2차(같은 날)**: 조선 8사(4사 + 대한조선·HD현대마린솔루션·
+      HD현대마린엔진·한화엔진) + 맨 앞 **합산 칸**(시총 합 · 외인/기관 누적 순매수 합 — 화면이 공통 날짜 구간에서
+      계산, 2종목 미만이면 칸 없음) = 9장을 **3×3 가로 한 장**(3664×2524, 24×17cm — PPT 16:9 용, 리포트의
+      주가 INDEX 그림은 요청대로 제외). 열 수는 WEEKLY_GROUPS 의 cols. **합산 칸은 2×2 크기**(사용자 "합산이
+      개별보다 컸으면") — 4열이면 둘레 8칸, 6열이면 20칸이 꼭 맞는다('한 장' 은 빈 칸을 행 우선으로 채우는
+      배치기). **조선기자재 그룹**(같은 날): 유니버스 9(한국카본·동성화인텍·세진중공업·현대힘스·한화엔진·
+      HD현대마린엔진·성광벤드·태광·하이록코리아) + `chart_universe.csv` **차트 전용 13**(오리엔탈정공·STX엔진·
+      케이에스피·삼영엠텍·대양전기공업·한라IMS·인화정공·범한퓨얼셀·비엠티·케이프·일승·엔케이·대창솔루션 —
+      세션이 추린 후보, 사용자 가지치기 전) = 22사, 6열. 차트 전용 종목은 `collect.collect_chart_only` 가
+      시계열만 모은다(표·텔레 없음, 한투 종목명이 CSV 이름과 맞아야 담음 — 코드 오타가 엉뚱한 회사로 섞이지
+      않게, 오류는 `chart_errors` 로 분리해 텔레 생략 판정에 안 섞임). 첫 수집(다음 거래일 11:32)부터 차트가
+      생긴다. **에스엔시스(0008Z0, 2025-08-19 코스닥 상장, 삼성중공업 기전 분사)** 도 차트 전용 14번째로 —
+      이름은 '에스앤시스'가 아니라 '에스엔시스'(사용자 정정), 코드는 KRX 신형 영숫자(KODEX K조선 0115D0 과
+      같은 부류, 한투가 그대로 받는다). 23사. **첫 강제 수집(11/7 토, `collect_now` 입력 신설 — 휴장일
+      강제 수집·텔레 없음)에서 14종목 전부 '이름 불일치 ('')'** — 주식용 inquire-price 는 `hts_kor_isnm` 을
+      안 준다(ETF 의 이름 키워드 검사도 실은 `px.name or CSV 이름` 이라 늘 통과하고 있었다). 종목명은 일봉
+      `inquire-daily-itemchartprice` 의 output1 에 있어 `fetch_ohlc` 가 `df.attrs["name"]` 으로 싣고 거기서
+      검증한다. 숫자 차이 주의: 누적 순매수의 30거래일
+      이전 구간은 네이버 수량 × 종가 근사라 DataGuide 금액과 몇 % 어긋날 수 있고, 시총은 현재 상장주수 기준.
+    - **PPT 세미나용 글자·선 확대 + 조선기자재 묶음 정리** (11/7 저녁): 사용자 "ppt에 붙이면 글자가 너무 작고
+      선이 얇다". `WEEKLY_JS` 의 `svg()` 에 크기표 `Z`(낱장/합산 2벌) — 제목 15→23px(합산 32), 축 11→16(20),
+      범례 10.5→15(18), 선 1.6~2.4→3~4(합산 3.6~4.8), 0선 3→4(5), 여백·눈금도 같이. 눈금 수는 좌 6→5·우 8→6.
+      **범례는 제목 폭을 재서 그 오른쪽에서 시작**(한글 1.05·영숫자 0.66 × 글자크기 + 26px) — 'HD현대마린솔루션'
+      처럼 긴 이름이 범례와 겹치던 것. 검증은 Playwright 로 ⬇ 버튼을 눌러 PNG 를 받아 슬라이드 폭(1600px)으로
+      줄여 봤다. 조선기자재 묶음에서 **한화엔진·HD현대마린엔진 제외**(조선 묶음에만) → 21사, 열 수 6→**5**
+      (합산 2×2 + 21 = 25 = 5×5 꽉 참).
+    - **피어그룹 주가흐름표 갤러리 페이지** (11/7 저녁, 별도 리포 ecos-fx-rates 의 산출물): 사이드바 📰 주보 >
+      `📈 피어그룹.주가흐름표` 가 GitHub 파일 페이지로 나가던 것(사용자 "github로만 가는데")을
+      `static/peer_price.html` 로 교체 — ecos-fx-rates `output/peer_price/` 의 PNG/SVG 8장(전체·p1·p2·섹션 5)을
+      raw.githubusercontent 로 한 창에 띄우고 그림마다 ⬇ SVG/PNG(fetch→blob, raw 가 CORS * 라 가능). 리포엔
+      그림 파일을 안 둔다. 갱신은 그 리포 Actions '피어그룹 주가 흐름 이미지' 수동 실행(페이지에 링크).
+      build_static 복사 한 줄, 공유 등급(OWNER_ONLY 아님).
+      **조선주 INDEX 는 별도 페이지** `static/ship_index.html`(같은 틀, 파일 4장 — 2×2 묶음 + ①②③) + 사이드바
+      `📉 조선주.INDEX`(피어그룹.주가흐름표 바로 밑, 사용자 "주보 밑에 별도로 버튼"). 원본 ecos-fx-rates
+      `peergroup/weekly_peer_index_image.py`(KOSPI vs 조선주 · 한국 조선 7사 · 한/중/일/싱, 12주전=100, 시총가중).
+      **매일 1회 + 수동** (11/7 밤, 사용자 "1·2·3 모두 매일 한 번 + 수동"): ecos-fx-rates 의 `peergroup-price.yml`
+      (엑셀)에 이미지 2종 생성 스텝을 합치고 `cron 10 22 * * *`(07:10 KST). 두 갤러리 페이지의 **🔄 지금 갱신**
+      버튼은 GAS 기존 키 `peer`(= 그 워크플로)를 쏘므로 **GAS 변경 0**; 끝났는지는 raw PNG 의 Last-Modified 가
+      바뀌는지로 보고 자동 새로고침(12분 감시). 3번(수급)은 평일 11:32·16:02 예약 발사 그대로.
+    - **'🔄 차트만 지금 수집' 버튼** (11/7 밤): 사용자 "지금 수집 버튼은 ④ 바로 주변에 있고 이것만 돌리게 해야" →
+      ④ 머리 밑에 버튼. `collect.py --charts-only` = WEEKLY_GROUPS 의 유니버스 종목(collect_stock, live=False)
+      + chart_universe 만 다시 모아 **series.json 만** 갱신(latest·히스토리·ETF·텔레 불변, 휴장일 무관, 전부 실패면
+      종료 2). 워크플로 입력 `charts_only`(문자열 'true' — boolean 입력에 GAS 가 문자열을 넘기는 혼선을 피함),
+      GAS `buildInputs` 에 covflow 분기(**재붙여넣기 + '배포 관리 → 새 버전' 필요** — 그 전엔 버튼이 전체 수집을
+      돌린다, 무해). 페이지 JS 는 GAS 에 POST 한 뒤 배포본의 자기 페이지 길이가 바뀌면 새로고침(12분 감시).
+      상단 '🔄 지금 수집'(전체)은 그대로.
+    - **합산 칸 2×2 → 가로 2칸** (11/7 밤): 사용자 "합산 그림이 다른 그림 4개 모은 정도인데 1.5~2배 정도가 적당,
+      지금 쌓인 게 많다". 합산은 열 span 2·행 span 1(개별의 정확히 2배 면적), `dims` 는 [2W+G, H], Z 큰 글자판은
+      세로가 개별과 같아 조금만 키운 값(t 27·ax 17·선 4.4~3.3). 열 수를 다시 짰다 — 조선 5열(합산 2 + 8 = 10칸 → 2행
+      꽉 참, 6128×1672), 기자재 6열(2 + 21 = 23칸 → 4행, 빈 칸 1, 7360×3376). 배치기는 (열 span, 행 span) 일반형.
+      덤: `🔄 차트만 지금 수집` 버튼이 `.wk-all` 모양을 빌려 써서 '한 장' 핸들러까지 받아 콘솔 오류(data-grid 없음)가
+      나던 것 → 핸들러는 `.wk-all[data-grid]` 만.
+    - **하루 1회 16:40 으로** (11/7 밤, 사용자 "장 끝나고 매일 4시반~5시"): 예약 작업 11:32(`trig_01Ht8rHrhduJmpdmmJHeLz1w`)
+      **비활성**, 16:02(`trig_01Q6FbKD8DAFgby2siphnX2N`) → **16:42 KST 평일**(정각·반각 혼잡 회피). 크론 안전망은 17:05 KST
+      하나(11:35 삭제). `metrics.SLOTS`·13:45 경계는 그대로(수동 수집을 오전에 누르면 11:30 슬롯으로 붙는다),
+      SCHEDULE_TIME 표기·버튼 툴팁만 갱신. 아카이브(16:00 슬롯)는 영향 없음.
+      **→ 오독이었다 — 11/9 2회 복구** (사용자 "11:30분에 텔레 안왔다 … 이거는 그림 얘기한거야"): '4시반~5시 한 번' 은
+      ④ 위클리 차트 수집 얘기였지 텔레그램 발송 일정이 아니었다. 예약 11:32 재활성, 16:42 → **16:02** 원복, 크론 안전망
+      11:35/16:05 원복, SCHEDULE_TIME·툴팁 원복. 차트 시계열은 전체 수집 때마다 같이 모이므로 16:02 run 이 장 마감 후
+      차트도 갱신한다(별도 16:40 차트 작업은 두지 않음). 교훈: 발송 일정을 바꾸는 요청은 **무엇의** 일정인지 되물을 것.
+      **→ 2차 정정 — '4시반~5시 한 번' 의 대상은 주보 데이터 4종** (11/9 오후, 사용자 "여기 4개 데이터 모으는거를 매일
+      1번 하라는 얘기임 … 수급.그림이랑 업무.자동화의 📡 커버리지 수급 등은 다른거임"): 📰 주보 밑 피어그룹.주가변동표·
+      주가.INDEX.비교(둘 다 ecos-fx-rates `peergroup-price.yml`)·수급.그림(coverage-flow `charts_only`)·컨센서스
+      (ecos-fx-rates `consensus-chart.yml`)를 **장 마감 후 매일 한 번**. 정시 = 새 예약 작업 `trig_01VEqTcdRitLg6oWSSxQc8uQ`
+      (평일 16:42 KST, 커버리지 수급 전용 세션에 묶음 — coverage-flow charts_only dispatch + ecos 두 워크플로 dispatch,
+      ecos 쪽이 403 이면 조용히 크론에 맡김), 안전망 = ecos-fx-rates 크론 **16:40**(peergroup, 07:10 에서 이동 — 한국 종가
+      당일·미국 전일, 토요일 run 이 금요일 미국 종가를 담는다)·**16:50**(consensus, 신설). 텔레 발송(11:32/16:02)과는 별개.
+      위 '별도 16:40 차트 작업은 두지 않음' 은 이 정정으로 폐기.
+    - **합산 칸 = 개별과 같은 비율로 1.5배** (11/7 밤, PR #532, 사용자 "가로로만 너무 길다 … 1.5~2배 크기로 같은 비율로"):
+      가로 2칸 span 폐기. `WEEKLY_BIG`(1.5) 배로 개별 그림을 그대로 확대(글자·선도 같이 — 그리기는 개별 좌표계 W×H,
+      바깥 크기만 키움). 한 장 PNG = 맨 위 띠(합산 왼쪽 + 오른쪽 빈 자리에 제목·축 설명·기준일·출처) + 아래 개별
+      격자 — 조선 4열(8칸 2행, 4896×2934)·기자재 7열(21칸 3행). 화면도 같은 비율(`--bw` 너비, 모바일 100%).
+    - **합산 2×2 + 두 묶음 모두 4열** (11/8 새벽, 사용자 "보고서에 두 묶음을 붙이면 차트 크기가 너무 다르다 — 여러 행으로
+      가더라도 같은 크기로, 대표 차트 옆으로 작은 차트, 모음 너비를 더 키워"): 11/7 의 '맨 위 1.5배 띠' 폐기. 합산은
+      왼쪽 위 2×2 칸(`WEEKLY_BIG`=2, 간격 포함 1216×836 → PNG 2432×1672, 개별 좌표계로 그려 scale), 개별은 그 오른쪽부터
+      행 우선. 조선·기자재 **둘 다 4열**(조선 12칸 3행 4896×2524, 기자재 25칸 7행 4896×5932) — 같은 폭으로 붙이면 개별 칸
+      크기가 같다. 화면은 `grid-column/row: span 2`(모바일은 auto). 한 장 PNG 에서 합산은 svg 태그를 벗기면 W×H 로
+      돌아가므로 `<g scale>` 로 칸 크기에 맞춘다(첫 렌더에서 합산이 개별 크기로 찍힌 원인).
+    - **방산 5사·건설기계 2사 묶음 추가** (11/8, 사용자 "방산도 건설기계도 같은 거"): WEEKLY_GROUPS 에 방산 수급(한화에어로·
+      KAI·한화시스템·LIG D&A·현대로템, 9칸 3행)·건설기계 수급(두산밥캣·HD건설기계, 6칸 2행) — 같은 4열. 덤으로 잡은
+      버그: SVG `<text>` 에 이름을 그대로 넣어 **'LIG D&A' 의 & 가 XML 을 깨뜨려** PNG 변환(이미지 로드)이 조용히 실패,
+      방산 '한 장'·LIG 낱장 다운로드가 안 됐다 → `xml()` 이스케이프.
+      **2차(같은 날)**: 빈 칸을 채우자는 사용자 요청 — 네이버 모바일 API(`m.stock.naver.com/api/stock/{code}/integration`
+      의 totalInfos marketValue, 이 컨테이너에서 호출 가능)로 방산 부품사 시총 순위를 뽑아 보여주고 사용자 선택 **풍산·
+      SNT다이내믹스**(방산 11칸 3행), 건기는 **진성티이씨·디와이파워**(8칸 2행 꽉 참). 넷 다 유니버스 밖이라
+      chart_universe.csv 차트 전용(group 열 방산/건설기계). 참고로 '삼영컴텍'은 삼양컴텍(484590, 2,007억)이고 뺐다.
+    - **④ 는 공유용 주소에서 숨김** (11/7 밤, 사용자 "gs-research-desk.github.io/coverage_flow_report.html 에는 ④ 없어야").
+      텔레 캡션 링크가 그 주소라서. WEEKLY_JS 가 `location.hostname === gs-research-desk.github.io` 이고 해시에
+      `weekly` 가 없으면 `#weekly` 를 DOM 에서 제거. 본인용은 `#weekly` 해시(사이드바 🚢 수급.그림-조선)로 진입,
+      원본 주소(gschoie.github.io/GS-DB2)·로컬은 항상 보인다. 캡쳐(capture.py)는 로컬 파일이라 영향 없음.
+    - **💰 수급.그림 서브메뉴 — 묶음별 그림만** (11/8, 사용자 "조선/방산/건설기계 3개 서브 메뉴 … ①~③은 빼고 그림만"):
+      사이드바 📰 주보 > `💰 수급.그림`(구 🚢 수급.그림-조선) 밑 🚢 조선(ship+parts) · 🛡️ 방산 · 🏗️ 건설기계 = 뷰 3개
+      (`covweekly-ship/def/con`, iframe `coverage_flow_report.html#weekly-<key>[,<key>]`). WEEKLY_GROUPS 에 `key`
+      (ship/parts/defense/construction) 를 두고 묶음마다 `<section class='wk-group' data-key>` 로 감싼다. WEEKLY_JS 는
+      그 해시가 오면 **해당 묶음만 남기고 ④ 바깥(머리글·타일·①②③·지난 기록 바)과 ④ 제목·각주를 전부 감춘다**
+      (`html.wk-only`) — 🔄 차트만 지금 수집 바와 묶음 제목(한 장 PNG)은 남김. 키가 하나도 안 맞으면 전부 보여준다(빈 화면 금지).
+      📡 커버리지 수급 등 뷰(해시 없음)·`#weekly`·공유 주소 동작은 종전 그대로. **페이지는 빌드 산출물이라 coverage-flow 가
+      다시 돌아야(charts_only 로 충분) 새 마크업이 배포된다.**
     - 2판 후보(미구현): 수급 × 컨센 변화 교차(kospi_consensus), 외국인 보유비율 1년 백분위,
       섹터 ETF 대비 상대강도, 수주 공시·실적일 이벤트 뱃지, 공매도(소스 확인 필요).
 
@@ -1241,6 +1348,11 @@
       수집 시점 환율 하나로 환산했다 → 확정(A) 줄은 **그 기간 평균 환율**(연간 12개월·분기
       3개월 창, 손익 관행)을 행별 `fx` 로 싣고, 컨센(E)·창이 비는 기간만 수집 시점 환율
       폴백. 옛 스냅샷(행 fx 없음)은 usd_rate 폴백이라 깨지지 않는다. 테스트 70개.
+      **국내 기업은 원화 십억원** (11/7): KRW 재무는 환산 없이 `/1e9` 십억원으로(사용자 요청
+      — 달러 통일에서 국내만 예외), 해외만 백만달러 유지. 저장값이 전부 원 단위라 JS 분기
+      하나로 끝(환율 미수집 폴백의 KRW 경로는 제거). 참고: 야후 컨센 출처는 S&P Global
+      Market Intelligence(EPS·매출 추정/애널리스트 추천·목표가, 야후 공식 데이터 제공자
+      문서 SLN2310 — 옛 Refinitiv/톰슨로이터 I/B/E/S 에서 교체됨).
     - 화면·엑셀은 valuation.yml 이 다시 돌아야 반영(빌드 산출물 커밋 구조).
 
 50. **화면 공유용 주소 — 새 창 링크를 gs-research-desk.github.io 로** (10/19): 사람들 앞에서 화면을
@@ -1432,8 +1544,14 @@
       놓치고 있었다(본문 문장으로만 잡히던 것) → `parse._TP_PAT` 에 콜론 슬롯. AI 입력 우선순위 PDF > 게시판 본문 >
       요약(캐시 `src` 기록), 요약/본문으로 분석한 건은 **미분석이 다 끝난 뒤** PDF 로 재분석(업그레이드 후보).
       화면: 제목 옆 `PDF` 배지(한경 링크), 머리글 'PDF n건'. 워크플로에 `pypdf` + 보강 스텝(실패해도 계속).
-    - AI 백필은 무료 쿼터 때문에 며칠에 걸쳐 채워진다 — 화면 머리글의 '본문 미수집 n건 ·
-      AI 대기 n건' 이 0 이 되면 끝. GAS 라우트·텔레그램은 아직 없다(필요 시 dispatch_proxy 에 `hwtone` 추가).
+    - AI 백필은 11/7 완료(2,531건, 대기 0 — 11/2 `gemini-2.5-flash-lite` 폐기 404 로 run 이 끊겨 폐기 모델은
+      회전에서 빼도록 고침). 이후는 하루 신규분만. GAS 라우트·텔레그램은 아직 없다.
+    - **아침 정시 발사 = Claude 예약 작업** (11/7, 사용자 "예약 작업으로 아침 8시 반 전에"): 07:10 크론이
+      10:50~11:40 에 도착하던 문제. 커버리지 수급(46번)과 같은 방식 — 리포가 붙은 전용 세션
+      `session_015Pd8bgJztQzb7FNiUY6hTL`('리서치톤(한화) 아침 수집 스케줄러', sonnet)에 예약 2개
+      `trig_01UJtFdMbttR2dr6mxnLtJzr`(평일 07:38 KST)·`trig_01U2VuTAA8jYi7TM1T6nY2QW`(08:08, 그 사이 올라온
+      글 보강)가 묶여 `gh workflow run hanwha-tone.yml --ref main -f ai_max=150` 을 쏜다. 크론 안전망은 그대로
+      (텔레가 없어 중복 run 은 무해). fire_trigger 수동 발사는 세션 묶기를 무시하므로 검증은 정시 결과로.
 
 54. **매매제한 컴플 체크 — GEMS → 대시보드 내장 도구** (11/2): 사이드바 `👥 DAOL.관리 > ⏳ 컴플(24H 매매제한).쳌`
     이 제미나이 Gem·ChatGPT 프로젝트 두 창을 열던 것을 `static/compliance/index.html`(새 창)로 교체.
@@ -1459,5 +1577,88 @@
     **YAML 함정: 키를 `on:` 으로 썼다가 PyYAML 이 True 로 읽어 조건 20개가 전부 사라졌다** —
     `metric:` 으로. 덤: `tests/test_releases.py` 의 실패 판정이 파일 중간에 있어 그 뒤 검사는
     실패해도 통과로 나왔다 → 맨 끝으로. 다음 수집부터 보인다(옛 payload 엔 vals 없음).
+
+55. **주보 메뉴에 '📊 컨센서스' 추가** (11/7): 사이드바 `✍️ 보고서.발간 > 📰 주보` 맨 아래(수급.그림-조선 밑).
+    링크는 ecos-fx-rates `output/consensus/`(GitHub 폴더) — 커버리지 16종목 영업이익 컨센서스 최근 6개월 추이
+    PNG(분기 4Q26·1Q27 / 연간 올해E·내년E). 생성기 `consensus/weekly_consensus_chart.py` 는 kospi_consensus DB 가
+    아니라 FnGuide `wcomp.fnguide.com/CompanyInfo/getCnsTrendChart`(월말, 1년) + 네이버 WiseReport `cF5002`
+    (분기 주간 13점·연간 월말 13점)를 이어 붙인다 — 트래커 DB 는 분기 fwd 컨센이 10/15 부터라 6개월이 안 된다.
+    (참고: comp.fnguide.com 은 wcomp.fnguide.com 으로 이전, 옛 SVD_*.asp 는 404.) 갱신은 ecos-fx-rates Actions
+    '커버리지 컨센서스 추이 이미지'.
+    **갤러리 페이지로 교체** (같은 날 저녁, 사용자 "누르면 github가 뜬다 — html 에서 보고 다운받고/복사"):
+    `static/consensus_chart.html`(peer_price.html 과 같은 틀) — raw.githubusercontent 로 분기·연간 PNG 를 띄우고
+    그림마다 **📋 복사**(ClipboardItem image/png — 클립보드는 PNG 만 표준, blob Promise 를 그대로 넘겨야 사파리도
+    제스처로 인정) · ⬇ PNG/SVG/CSV. 생성기는 SVG 도 함께 굽는다(`svg.fonttype=path` — 한글 폰트 없는 PC 에서도
+    모양 유지). build_static 복사 한 줄, 공유 등급.
+
+56. **애널리스트 집계(animsam09) 따라 만들기 — 뼈대** (11/7): 사용자 "이거 따라서 일단 뼈대를 만들자"
+    (https://analyst-calendar.animsam09.workers.dev/ — Cloudflare Worker, 비번 가림막). 세션 네트워크에
+    그 호스트를 허용하는 개인 환경 'GS-DB2'를 만들어 로그인 후 두 화면·탭 전부를 Playwright 로 떠서 구조를
+    `analyst_calendar/README.md` 에 적고, 정적 뼈대를 `telegram_research_dashboard/static/analyst_calendar/`
+    (index.html·style.css·app.js·data.json)에 만들었다. 사이드바 👥 DAOL.관리 › 활동관리.DAOL 바로 밑 `활동관리🔥`
+    (새 창, 공유 비번으로 열림), build_static copytree 한 줄.
+    - 원본 구조: **업무 집계**(탭 15개 — 업데이트·요약·발간/세미나/콜/리퀘/사내지원/NDR/콥데이 실적·커버리지·
+      드랍 경고·발간 vs 계획·인뎁스 달력·기관별 집계·누락 후보; 요약 = 카드 6장 + DAOL 리서치본부 활동표)
+      + **일정**(월/주/목록, 장부만/전체, 애널리스트 사이드 필터·미니달력, 확인 필요 모달, 설정 모달 —
+      구글 캘린더 ICS 2종·기관명 분류 xlsx·애널리스트 규칙). 데이터는 Worker API(state/master/events/op).
+    - 뼈대는 **data.json 명단 + 결정적 난수 일정**(xorshift)으로 돌아간다 — 숫자는 전부 가짜, 화면에
+      '뼈대/샘플' 표식. 실데이터 연결 지점은 `loadData()`/`genEvents()` 둘뿐. 본문 미구현 탭(커버리지 전체
+      목록·드랍 경고 목록·인뎁스 달력)은 점선 상자에 원본 구성을 적어 뒀다. 다음 단계 후보: GAS 가 구글
+      캘린더 ICS 를 읽어 data.json 을 굽기(youtube_digest 와 같은 workflow_dispatch 경로), 인뎁스 달력은
+      vacation_tracker/indepth.py 의 state 재사용.
+
+57. **피어그룹 주가흐름표 — 방산·건설기계판 신설** (11/8): 사용자 "방산, 건설기계도 조선처럼". 생성기는
+    ecos-fx-rates `peergroup/weekly_peer_price_image.py` 에 `--universe ship|defense|construction`
+    (SHIP/DEFENSE/CONSTRUCTION_SECTIONS, 출력 `output/peer_price_defense/`·`peer_price_construction/`,
+    전체·분할 p1/p2·섹션별 `01_…`, 같은 워크플로가 세 판 생성). 처음엔 세션의 ecos-fx-rates push 가
+    자동 분류기에 막혀 패치로 떨궜다가, 사용자가 권한을 줘 main 에 직접 push(576d3fc) — 패치 파일은 삭제.
+    참고: 별도 리포 작업은 `add_repo`(push) 승인이 필요하고, 거절되면 패치 → 승인 뒤 `git am` 이 통한다.
+    - 대시보드: `static/peer_price.html` 하나가 `?u=` 로 세 유니버스(UNIVERSES 표 — 파일명은 생성기와
+      일치해야 함, 상단 탭으로 전환). 사이드바 주보 `📈 피어그룹.주가흐름표` 밑 `🛡️ ┗피어주가.방산`·
+      `🏗️ ┗피어주가.건기`(view peerdef/peercon). 🔄 지금 갱신은 GAS `peer` 그대로(세 판 동시).
+    - 유니버스 결정(세션 추천, 사용자 가지치기 전): 방산 = 한국 체계 5(한화에어로·KAI·LIG D&A·한화시스템·
+      현대로템) + 탄약/기동(풍산·SNT다이내믹스 신규) + 부체계(엠앤씨솔루션·아이쓰리시스템·퍼스텍·휴니드) +
+      항공부품(켄코아·아스트) + 우주(쎄트렉아이·인텔리안·컨텍·제노코) / 기타(Elbit·Aselsan·HAL·BEL·MHI·KHI·
+      IHI·AVIC 2·Embraer EMBJ — 2025-11 ERJ→EMBJ 티커 변경) / 지수·ETF(PLUS K방산·ITA·SHLD·EUAD) / 미국(프라임 7 + Kratos·AeroVironment +
+      GE·Howmet·TransDigm·Curtiss-Wright) / 유럽(Rheinmetall·BAE·Thales·Leonardo·Saab·Hensoldt·Renk·
+      Kongsberg + Airbus·Dassault + RR·Safran·MTU) / **글로벌 우주·위성**(11/9 사용자 "글로벌 우주/위성은 없네?" —
+      발사체 Rocket Lab·Firefly·Intuitive Machines / 위성통신 AST SpaceMobile·Iridium·Viasat(EchoStar SATS 는 야후 이력 부족)·Eutelsat·SES / 관측 Planet·
+      MDA Space / 부품 Redwire·Karman·OHB / 일본 ispace·Astroscale(QPS 5595.T 는 야후 무응답) + ETF UFO; 단 배치 좌 지수·한국·우주 / 우 미국·유럽·기타). **뺀 것**: Spirit Aero(보잉 인수 완료·상폐)·Triumph
+      (사모 인수·상폐)·Subaru(FHI, 항공 비중 미미)·Bombardier(비즈젯)·하이즈항공·오르비텍(초소형).
+      건기 = 지수(PAVE·구리·WTI·원달러) / OEM 한국 2(**HD건설기계** = 2026-01 인프라코어 흡수합병 후 사명, 042670 상폐)·미국/유럽(CAT·Volvo·Terex·
+      Oshkosh·Manitowoc·Wacker Neuson·Manitou)·일본(Komatsu·Hitachi CM·Kubota·SHI·Takeuchi·Tadano)·
+      중국(SANY·XCMG·Zoomlion·LiuGong·Lonking)·인도(Escorts Kubota·ACE·BEML) / 농기계(Deere·CNH·AGCO·대동)·
+      광산(Sandvik·Epiroc·Metso·Weir)·렌탈(URI·**Sunbelt SUNB** = 舊Ashtead 2026-03 NYSE 1차 상장·Herc)·CAT딜러(Finning·Toromont) / 부품 한국 6
+      (디와이파워·진성티이씨·대창단조·동일금속·흥국·우림피티에스) + KYB·Hengli. 옛 표의 '소형' 묶음
+      (Deere·Sandvik·URI 혼재)은 농기계/광산/렌탈로 분해, Kubota 는 부품 → 일본 OEM.
+    - **첫 실행(11/8) 실측 교정**: ERJ·EMBR3(둘 다 옛 티커→EMBJ)·302132.SZ AVIC Chengdu(전 구간 0.0% 고정값→
+      AVIC Xi'an 000768.SZ)·AHT.L(→SUNB)·042670.KS(합병 상폐). 기준일은 **시총 있는 주식 섹션의 최신
+      날짜**로 — 선물·환율(CL=F·KRW=X)은 일요일 봉이 있어 max 를 쓰면 일요일 날짜가 찍힌다.
+    - **개별 섹션 카드는 접힌 채 시작** (11/9, 사용자 "개별은 다 접어두고 모아둔거만 펼쳐두기"): 카드를
+      `<details class="card">` 로 — 모음 3장(전체·p1·p2)만 `open`, 파일명이 `01_…` 숫자 접두인 개별 섹션은 접힘.
+      머리글(summary)의 복사·다운로드 버튼은 `preventDefault` 로 카드를 안 접고, 상단 점프 링크는 대상 카드를
+      펼친 뒤 이동(접힌 채 앵커로 가면 그림이 안 보인다). `?u=defense,construction` 합본도 유니버스마다 같은 규칙.
+    - **메뉴명 '주가변동표' + 2단 서브메뉴** (11/8, 사용자): 📰 주보 > `📈 피어그룹.주가변동표`(구 주가흐름표) 서브그룹 밑
+      `🚢 조선/해운/에너지`(`peerprice`, ship) · `🛡️ 방산/기계`(`peerdefcon`, **두 판을 한 페이지에**). peer_price.html 의
+      `?u=` 가 쉼표 목록(`defense,construction`)을 받아 유니버스별 카드를 이어 붙인다(카드 머리에 판 이름, 파일은 각자 dir —
+      `url(f,ext,dir)`). 상단 탭도 두 개(조선·해운·에너지 / 방산·기계). 11/8 첫 판의 peerdef·peercon 뷰 2개는 이것으로 대체.
+
+58. **주가 INDEX 갤러리 — 조선 ④ 추가 · 방산판 신설 · 묶음 메인/낱장 접힘** (11/8~9, PR #542·#546): 사용자 요청 순서대로.
+    - **조선 ④ 조선 5사 vs 엔진 vs 조선기자재** (ecos-fx-rates `peergroup/weekly_peer_index_image.py` `CHAIN`): 2×2 오른쪽 아래
+      각주 자리에 밸류체인 3단 시총가중 지수(조선 4사+대한조선 / 한화엔진·HD현대마린엔진·STX엔진 / 기자재 20사 = coverage_flow
+      위클리 조선기자재 묶음에서 엔진 제외, HD현대마린솔루션은 어디에도 안 넣음), **각주는 그림 맨 아래 띠**(`NOTE_IN`, tight_layout
+      rect). 묶음 파일명 `조선주_INDEX_3종` → **`4종`** — 옛 파일을 지우자 배포본 갤러리의 묶음 카드가 깨져 사용자가 바로 봤다.
+      **생성기 파일명을 바꾸면 GS-DB2 페이지 머지·배포까지 한 흐름으로 끝낼 것**(그 사이 카드가 "그림을 불러오지 못했습니다").
+    - **방산판** `peergroup/weekly_defense_index_image.py`(조선판을 import — 산식·그리기·저장 재사용, 같은 워크플로 ③-2 스텝,
+      출력 `output/peer_price_defense/방산_INDEX_4종` + `DIDX1~4`): ① 체계 5사 ② 부체계 11사(풍산·SNT다이내믹스·엠앤씨솔루션·
+      아이쓰리시스템·퍼스텍·휴니드·빅텍·코츠테크놀로지·한일단조·삼영컴텍·웨이브일렉트로닉스 — 세션 추천, 사용자 가지치기 전)
+      ③ 한국 체계·부체계 vs 미국 프라임 7 vs 유럽 체계 8 ④ 드론(Kratos·AeroVironment) vs 엔진/부품 7 vs 항공(Airbus·Dassault·
+      Embraer) — 글로벌 테마, 주가흐름표 DEFENSE_SECTIONS 와 같은 티커. 데모 실측 교정: 11개 범례는 3열, 긴 제목 축약, **각주는
+      한 줄에 다 적으면 오른쪽으로 넘쳐 6줄**(`NOTE_LINES`).
+    - 대시보드: `ship_index.html` 이 `?u=ship|defense`(peer_price.html 과 같은 UNIVERSES 방식, 상단 탭), 사이드바 📰 주보 >
+      `⚔️ 주가.INDEX.비교` 서브그룹 `🚢 조선`(shipindex) / `🛡️ 방산`(defindex). **4종 묶음 카드가 메인(펼침·강조), 낱장 ①~④는
+      `<details>` 접힘**(점프 링크·해시로 오면 펼침; 버튼은 summary 밖 — summary 안 버튼은 클릭마다 접힘이 토글된다).
+    - 운영 주의: 수동 실행을 장중(09:11 KST)에 돌리면 야후가 그날 장중 봉을 마지막 값으로 줘 기준일이 당일로 찍힌다 —
+      07:10 자동 실행은 전일 종가 기준. `.claude/settings.json`(프로젝트 권한 허용 목록) 도 같은 PR 에서 신설.
 
 이후 작업은 git log와 이 파일을 갱신하며 이어간다.

@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex">
+<title>애널리스트 집계 (뼈대)</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="gtop">
+  <button class="roundbtn" id="sideBtn" title="사이드바 열기/닫기" aria-label="사이드바">☰</button>
+  <div class="glogo"><i>애</i><span><b>애널리스트</b> 집계</span><small class="skel">뼈대</small></div>
+  <div class="vtog pagetog" role="tablist" aria-label="화면"><button id="pgDash" role="tab">업무 집계</button><button id="pgCal" role="tab">일정</button></div>
+  <button class="todaybtn calonly" id="todayBtn">오늘</button>
+  <button class="roundbtn calonly" id="prevBtn" title="이전 (←)" aria-label="이전">‹</button>
+  <button class="roundbtn calonly" id="nextBtn" title="다음 (→)" aria-label="다음">›</button>
+  <div class="calhead calonly" id="calHead"></div>
+  <div class="gsp"></div>
+  <label class="gsearch calonly"><input type="search" id="evSearch" placeholder="일정 검색 (기관·매니저·제목)" aria-label="일정 검색"></label>
+  <div class="vtog modetog calonly" title="장부에 들어가는 일정만 볼지, 빠진 일정까지 볼지"><button id="mLedger">장부만</button><button id="mAll">전체</button></div>
+  <div class="vtog calonly"><button id="vMonth">월</button><button id="vWeek">주</button><button id="vList">목록</button></div>
+  <button class="adminbtn calonly" id="xlsBtn" title="기간을 정해 지원업무 장부 엑셀로 내려받습니다 (뼈대: 미구현)">⬇ 엑셀</button>
+  <button class="lockbtn" id="lockBtn">🔒 편집 잠금</button>
+  <button class="adminbtn" id="setBtn" title="구글 캘린더 연결·기관명 분류·애널리스트 설정">⚙ 설정</button>
+</div>
+<div class="scrim" id="scrim"></div>
+
+<!-- ───── 일정 화면 ───── -->
+<div class="glayout" id="calPage">
+<aside class="side" id="side">
+  <button class="create" id="ckBtn"><b>!</b><span id="ckLbl">확인 필요</span></button>
+  <div class="mini" id="mini"></div>
+  <input type="search" class="sidesearch" id="sideSearch" placeholder="애널리스트 검색">
+  <div class="sidehd"><span>애널리스트 <small id="sideCnt"></small></span><button id="selAll">모두</button><button id="selNone">해제</button></div>
+  <div id="sideList"></div>
+  <div class="sideinfo" id="sideInfo"></div>
+</aside>
+<main class="mainc">
+  <div class="robanner" id="roBanner"></div>
+  <div class="viewbar" id="viewBar"></div>
+  <div id="viewBox"></div>
+</main>
+</div>
+
+<!-- ───── 업무 집계 화면 ───── -->
+<main class="dashbox" id="dashBox">
+  <div class="dashhead">
+    <h1>업무 집계</h1>
+    <span class="pill">최종 업데이트 <b id="dashUpdated">—</b></span>
+    <select id="dashAn" aria-label="애널리스트 선택"><option value="">애널리스트 전체</option></select>
+    <label class="chk"><input type="checkbox" id="showRetired"> 퇴사자 보기</label>
+    <span class="hint2">엑셀에서 새로고침한 값</span>
+    <div class="gsp"></div>
+    <button class="adminbtn" id="pdfBtn" title="뼈대: 브라우저 인쇄">⬇ PDF</button>
+    <button class="adminbtn" id="upBtn" title="뼈대: 미구현">⬆ 자료 올리기</button>
+    <button class="adminbtn" id="clrBtn" disabled>지우기</button>
+  </div>
+  <div class="updbar" id="updBar"></div>
+  <div class="tabbar">
+    <div class="tabs" id="dashTabs"></div>
+    <span class="tabhint">← → 로 넘기기</span>
+  </div>
+  <div id="dashBody"></div>
+</main>
+
+<div class="overlay" id="overlay" role="dialog" aria-modal="true"><div class="modal" id="modal"></div></div>
+<div class="toast" id="toast"></div>
+
+<script src="app.js"></script>
+</body>
+</html>

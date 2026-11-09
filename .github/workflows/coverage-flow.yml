@@ -1,8 +1,9 @@
 name: 커버리지 수급·기술지표
 
 # 조선·방산·건설기계 커버리지 종목의 외인·기관 순매수 / ETF 패시브·액티브 수급 / RSI 극단을
-# 평일 장 마감 후 1회(KST 16:00) 수집해 페이지를 굽고 텔레그램(수주공시 봇 채널)으로 보낸다.
-# (10/19 사용자 요청: 장중 3회는 너무 많다 → 하루 1회로.)
+# 평일 2회(KST 11:30 장중 · 16:00 장 마감 후) 수집해 페이지를 굽고 텔레그램(수주공시 봇 채널)으로 보낸다.
+# (10/19 사용자: 장중 3회는 많다 → 10/21 '11시30분 16시로 하자'. 11/7 밤의 '하루 1회 16:40' 은 ④ 차트 수집
+#  얘기를 발송 일정으로 오독한 것 — 11/9 사용자 정정으로 2회 복구.)
 # 정시성은 Claude 예약 작업(평일 11:32/16:02 KST, via=scheduler 로 dispatch — CLAUDE.md 46번)이
 # 담당, 아래 크론은 안전망 — 무료 러너 크론은 몇 시간씩 밀린다(CLAUDE.md 17번).
 # GAS 시계(gas/dispatch_proxy.gs)에 옛 covflow 슬롯이 남아 있으면 같은 슬롯에 두 번 쏘므로
@@ -29,9 +30,16 @@ on:
         description: "종목별 외인기관 추정가집계 원본 응답 출력만(저장·발송 없음)"
         type: boolean
         default: false
+      collect_now:
+        description: "휴장일에도 수집·페이지 갱신(텔레그램 없음 — 위클리 차트 전용 종목을 당장 채울 때)"
+        type: boolean
+        default: false
+      charts_only:
+        description: "④ 위클리용 차트 시계열만 갱신('true') — 표·텔레·latest 는 그대로, 휴장일 무관. 화면 '🔄 차트만 지금 수집' 버튼이 보낸다"
+        default: ""
   schedule:
-    - cron: "35 2 * * 1-5"    # 02:35 UTC = 11:35 KST (GAS 11:30 의 안전망)
-    - cron: "5 7 * * 1-5"     # 07:05 UTC = 16:05 KST (GAS 16:00 의 안전망)
+    - cron: "35 2 * * 1-5"    # 02:35 UTC = 11:35 KST (예약 11:32 의 안전망)
+    - cron: "5 7 * * 1-5"     # 07:05 UTC = 16:05 KST (예약 16:02 의 안전망)
 
 permissions:
   contents: write
@@ -120,7 +128,10 @@ jobs:
           if [ "${{ inputs.probe_estimate }}" = "true" ]; then
             python collect.py --probe-estimate; echo "skipped=true" >> "$GITHUB_OUTPUT"; exit 0
           fi
-          python collect.py ${{ inputs.force_telegram && '--force' || '' }} | tee collect.log
+          if [ "${{ inputs.charts_only }}" = "true" ]; then
+            python collect.py --charts-only | tee collect.log; exit ${PIPESTATUS[0]}
+          fi
+          python collect.py ${{ (inputs.force_telegram || inputs.collect_now) && '--force' || '' }} | tee collect.log
           if grep -q "휴장일로 판단" collect.log; then echo "skipped=true" >> "$GITHUB_OUTPUT"; fi
 
       - name: 리포트 생성

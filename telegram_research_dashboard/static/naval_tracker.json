@@ -1,7 +1,7 @@
 {
  "meta": {
   "_doc": "글로벌 수상함·잠수함 입찰 트래커 데이터 — 각국 해군 함정(수상함·잠수함) 조달 수주전을 프로그램 단위로 추적한다. 세션 아침 루틴 [6.7]이 그날 방산 브리핑 3판에서 관련 보도를 골라 해당 프로그램 log에 추가하고, 새 수주전은 programs에 직접 신설한다(구조화 필드는 확인된 것만 — 모르는 값은 '미정'/'—'). landscape는 특정 입찰에 안 붙는 판 구도 메모. 페이지(naval_tracker.html)가 이 파일을 런타임 fetch 하므로 렌더 스크립트는 없다. 초기값은 2026-10-17 브리핑 아카이브(8/13~10/17) 일괄 백필. 2026-10-17 방산 입찰·예산 트래커의 함정 항목 5건을 이쪽으로 이관·병합(중복 제거).",
-  "updated": "2026-11-05"
+  "updated": "2026-11-08"
  },
  "programs": [
   {
@@ -159,6 +159,11 @@
      "date": "2026-11-05",
      "text": "캐나다 잠수함(CPSP) 후속지원에 Gastops·Anschütz 협력 발표 — TKMS 선정 이후 후속 유지보수 생태계 구성 단계.",
      "link": "defense_unified/2026-11-05.html"
+    },
+    {
+     "date": "2026-11-07",
+     "text": "캐나다가 TKMS Type 212CD를 '초도 8척 + 4척 옵션'으로 발주하는 안을 검토한다는 보도(Defence Industry Europe, 단일 보도). 7월 우선협상자 선정 뒤 2027년 말까지 계약 협상 단계로, 계약 구조는 미확정.",
+     "link": "defense_unified/2026-11-08.html"
     }
    ]
   },
@@ -248,7 +253,13 @@
    "stage": "종료 — 프랑스 선정",
    "timeline": "2026 결정",
    "note": "방산 입찰·예산 트래커에서 이관(10/17)",
-   "log": []
+   "log": [
+    {
+     "date": "2026-11-06",
+     "text": "Saab, Naval Group과 FDI 프리깃 4척용 무장통제·센서(Ceros·EOS 500·RBS15·경어뢰·Trackfire·Sea Giraffe 1X) SEK 약 20억 계약 — 인도 2027~2034. 플랫폼은 프랑스, 전투체계 핵심은 스웨덴 몫.",
+     "link": "defense_unified/2026-11-07.html"
+    }
+   ]
   },
   {
    "id": "au-frigate",
@@ -420,6 +431,16 @@
    "date": "2026-10-19",
    "text": "MHI, 휴면 조선 라인 재가동 — 일본 최대 보급함 건조(Nikkei). 일본 함정 체인의 설비 가동률 상승 신호.",
    "link": "chatgpt_defense/2026-10-19.html"
+  },
+  {
+   "date": "2026-11-06",
+   "text": "HD현대중공업, 필리핀 해군 Miguel Malvar급 3번함 건조 착수 — 필리핀 해군 누적 수주 12척(Manila Times).",
+   "link": "defense_unified/2026-11-07.html"
+  },
+  {
+   "date": "2026-11-07",
+   "text": "프랑스, FDI 프리깃 방공 강화 — Aster 미사일 탑재량을 두 배(32셀)로(Naval News, Euronaval 2026).",
+   "link": "defense_unified/2026-11-08.html"
   }
  ]
 }

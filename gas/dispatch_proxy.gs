@@ -80,6 +80,9 @@ function buildInputs(key, body) {
   };
   // DART 생산능력·가동률: 버튼은 수집→추출→정규화까지 한 번에(stage=full).
   if (key === 'dartcap') return { stage: 'full' };
+  // 커버리지 수급: 화면 '🔄 차트만 지금 수집'(④ 위클리용 차트 옆)은 charts_only 만 넘긴다 — 표·텔레 그대로,
+  // 시계열(series.json)만 갱신. 상단 '🔄 지금 수집'(전체)은 입력 없음.
+  if (key === 'covflow') return body.charts_only ? { charts_only: 'true' } : {};
   return {};
 }
 
