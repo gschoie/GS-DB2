@@ -118,7 +118,8 @@ function doPost(e) {
 
     return json(fireWorkflow(key, buildInputs(key, body)));
   } catch (err) {
-    return json({ ok: false, code: 500, error: String(err) });
+    // 예외 문구에 요청 URL이 통째로 실릴 수 있다 — key= 값은 지우고 돌려준다.
+    return json({ ok: false, code: 500, error: String(err).replace(/key=[^&\s]+/g, 'key=***') });
   }
 }
 
@@ -160,11 +161,21 @@ function vacationPlanImage_(body) {
                   'gemini-flash-latest', 'gemini-flash-lite-latest'];
   let parsed = null, lastErr = '';
   for (let i = 0; i < models.length && !parsed; i++) {
-    const res = UrlFetchApp.fetch(
-      'https://generativelanguage.googleapis.com/v1beta/models/' + models[i] +
-      ':generateContent?key=' + geminiKey,
-      { method: 'post', contentType: 'application/json', payload: payload,
-        muteHttpExceptions: true });
+    let res;
+    try {
+      // 키는 URL(?key=)이 아니라 헤더로 — UrlFetchApp이 '시간 초과: <URL>' 예외를
+      // 던지면 URL이 오류 문구째 화면에 노출된다(11/9 실사례: 키 유출).
+      res = UrlFetchApp.fetch(
+        'https://generativelanguage.googleapis.com/v1beta/models/' + models[i] + ':generateContent',
+        { method: 'post', contentType: 'application/json', payload: payload,
+          headers: { 'x-goog-api-key': geminiKey },
+          muteHttpExceptions: true });
+    } catch (err) {
+      // 시간 초과 등 전송 자체의 예외도 재시도 대상 — 밖으로 던지면 한 번에 끝난다.
+      lastErr = models[i] + ' ' + String(err);
+      if (i < models.length - 1) Utilities.sleep(10000);
+      continue;
+    }
     const code = res.getResponseCode();
     if (code !== 200) {
       lastErr = models[i] + ' HTTP ' + code;
