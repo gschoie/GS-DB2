@@ -26,6 +26,12 @@ h1{font-size:19px;margin:0 0 2px}
 .jump a{font-size:12px;padding:4px 10px;border:1px solid var(--line);border-radius:999px;color:var(--fg);text-decoration:none;background:var(--card)}
 .card{border:1px solid var(--line);border-radius:8px;margin:0 0 18px;background:var(--card);overflow:hidden}
 .card .hd{display:flex;flex-wrap:wrap;gap:8px;align-items:center;padding:9px 12px;border-bottom:1px solid var(--line)}
+/* 개별 섹션 카드는 접힌 채 시작(모음 3장만 펼침) — 머리글(summary)을 누르면 펼친다 */
+details.card>summary.hd{cursor:pointer;list-style:none}
+details.card>summary.hd::-webkit-details-marker{display:none}
+details.card>summary.hd::before{content:"▶";font-size:11px;color:var(--muted);width:14px;flex:none}
+details.card[open]>summary.hd::before{content:"▼"}
+details.card:not([open])>summary.hd{border-bottom:0}
 .card .hd h2{font-size:14px;margin:0 auto 0 0}
 .card .hd small{color:var(--muted);font-size:11.5px;margin-left:8px;font-weight:400}
 button,a.btn{font:600 12.5px inherit;padding:6px 12px;border-radius:6px;border:1px solid var(--line);background:var(--bg);color:var(--fg);cursor:pointer;text-decoration:none}
@@ -102,16 +108,21 @@ button:disabled{opacity:.5;cursor:wait}
   const canCopy=!!(navigator.clipboard&&window.ClipboardItem);   // 클립보드는 PNG 만 표준 — 복사 = PNG, 벡터는 SVG 내려받기
   FILES.forEach(([title,desc,f,dir,ulab],i)=>{
     const j=document.createElement("a");j.href="#img"+i;j.textContent=(ulab?ulab+" · ":"")+title;jump.appendChild(j);
-    const c=document.createElement("section");c.className="card";c.id="img"+i;
-    c.innerHTML=`<div class="hd"><h2>${ulab?`<span style="color:var(--accent)">${ulab}</span> · `:""}${title}${desc?`<small>${desc}</small>`:""}</h2>
+    // 모음(전체 1페이지·p1·p2)은 펼친 채, 개별 섹션(파일명 01_… 숫자 접두)은 접은 채 시작 — 사용자 요청(11/9)
+    const single=/^\d\d_/.test(f);
+    const c=document.createElement("details");c.className="card";c.id="img"+i;if(!single)c.open=true;
+    c.innerHTML=`<summary class="hd"><h2>${ulab?`<span style="color:var(--accent)">${ulab}</span> · `:""}${title}${desc?`<small>${desc}</small>`:""}</h2>
         ${canCopy?`<button class="p" data-f="${f}" data-dir="${dir}" data-act="copy">📋 복사</button>`:""}<button class="p" data-f="${f}" data-dir="${dir}" data-ext="svg">⬇ SVG</button><button data-f="${f}" data-dir="${dir}" data-ext="png">⬇ PNG</button>
-        <a class="btn" href="${url(f,"svg",dir)}" target="_blank" rel="noopener">새 창</a></div>
+        <a class="btn" href="${url(f,"svg",dir)}" target="_blank" rel="noopener">새 창</a></summary>
       <div class="im"><img src="${url(f,"png",dir)}" alt="${title}" loading="lazy"></div><div class="err"></div>`;
     c.querySelector("img").onerror=function(){c.querySelector(".err").textContent="그림을 불러오지 못했습니다 — ecos-fx-rates Actions 가 이 판을 아직 한 번도 만들지 않았거나(방산·건기는 생성기 패치 적용 뒤 첫 실행부터) 파일명이 바뀌었을 수 있습니다."};
     cards.appendChild(c);
   });
+  // 위 점프 링크로 가면 접힌 카드를 펼친다(접힌 채로는 앵커로 가도 그림이 안 보인다)
+  jump.addEventListener("click",e=>{const a=e.target.closest("a[href^='#img']");if(!a)return;const d=document.getElementById(a.getAttribute("href").slice(1));if(d&&!d.open)d.open=true});
   document.addEventListener("click",async e=>{
     const b=e.target.closest("button[data-f]");if(!b)return;
+    e.preventDefault();   // summary 안의 버튼 — 카드가 접히거나 펼쳐지지 않게
     const f=b.dataset.f,dir=b.dataset.dir,copy=b.dataset.act==="copy",ext=copy?"png":b.dataset.ext,err=b.closest(".card").querySelector(".err");b.disabled=true;err.textContent="";
     const getBlob=async()=>{const r=await fetch(url(f,ext,dir),{cache:"no-store"});if(!r.ok)throw new Error("HTTP "+r.status);return r.blob()};
     try{
