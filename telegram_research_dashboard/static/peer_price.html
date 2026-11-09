@@ -26,6 +26,12 @@ h1{font-size:19px;margin:0 0 2px}
 .jump a{font-size:12px;padding:4px 10px;border:1px solid var(--line);border-radius:999px;color:var(--fg);text-decoration:none;background:var(--card)}
 .card{border:1px solid var(--line);border-radius:8px;margin:0 0 18px;background:var(--card);overflow:hidden}
 .card .hd{display:flex;flex-wrap:wrap;gap:8px;align-items:center;padding:9px 12px;border-bottom:1px solid var(--line)}
+/* 개별 섹션 카드는 접힌 채 시작(모음 3장만 펼침) — 머리글(summary)을 누르면 펼친다 */
+details.card>summary.hd{cursor:pointer;list-style:none}
+details.card>summary.hd::-webkit-details-marker{display:none}
+details.card>summary.hd::before{content:"▶";font-size:11px;color:var(--muted);width:14px;flex:none}
+details.card[open]>summary.hd::before{content:"▼"}
+details.card:not([open])>summary.hd{border-bottom:0}
 .card .hd h2{font-size:14px;margin:0 auto 0 0}
 .card .hd small{color:var(--muted);font-size:11.5px;margin-left:8px;font-weight:400}
 button,a.btn{font:600 12.5px inherit;padding:6px 12px;border-radius:6px;border:1px solid var(--line);background:var(--bg);color:var(--fg);cursor:pointer;text-decoration:none}
@@ -62,16 +68,17 @@ button:disabled{opacity:.5;cursor:wait}
       ["엔진 / 기자재","","03_엔진_기자재"],
       ["오일 / 해양","RIG·IOC/NOC·FPSO·ENG/EPC·OSV","04_오일_해양"],
       ["해운","컨테이너·컨선 선주·탱커·벌크·LNG·LPG","05_해운"]]},
-    defense:{tab:"🛡️ 방산·항공우주",h1:"📈 글로벌 피어그룹 주가변동표 — 방산·항공우주",sub:"한국 체계·탄약/기동·부체계·항공부품·우주 · 기타(중동·인도·일본·중국·남미) · 지수/ETF · 미국 · 유럽 — 1W/1M/3M/YTD/1Y 등락률 + 3개월 스파크라인.",
+    defense:{tab:"🛡️ 방산·항공우주",h1:"📈 글로벌 피어그룹 주가변동표 — 방산·항공우주",sub:"지수/ETF · 한국 체계·탄약/기동·부체계·항공부품·우주 · 글로벌 우주/위성 · 미국 · 유럽 · 기타(중동·인도·일본·중국·남미) — 1W/1M/3M/YTD/1Y 등락률 + 3개월 스파크라인.",
       dir:"peer_price_defense",files:[
-      ["전체 1페이지","좌 한국·기타 / 우 지수·미국·유럽","글로벌_방산_주가흐름"],
-      ["p1 한국 · 기타","2페이지 분할본 1","글로벌_방산_주가흐름_p1_한국기타"],
-      ["p2 미국 · 유럽","2페이지 분할본 2 (지수/ETF 포함)","글로벌_방산_주가흐름_p2_미국유럽"],
-      ["지수 / ETF","PLUS K방산·ITA·SHLD·EUAD","01_지수_ETF"],
+      ["전체 1페이지","좌 지수·한국·글로벌 우주/위성 / 우 미국·유럽·기타","글로벌_방산_주가흐름"],
+      ["p1 한국 · 우주","2페이지 분할본 1 (지수/ETF 포함)","글로벌_방산_주가흐름_p1_한국기타"],
+      ["p2 미국 · 유럽 · 기타","2페이지 분할본 2","글로벌_방산_주가흐름_p2_미국유럽"],
+      ["지수 / ETF","PLUS K방산·ITA·SHLD·EUAD·UFO","01_지수_ETF"],
       ["한국 방산 · 항공우주","체계·탄약/기동·부체계·항공부품·우주","02_한국방산"],
-      ["기타","이스라엘·튀르키예·인도·일본·중국·남미","03_기타"],
+      ["글로벌 우주 · 위성","Rocket Lab·Firefly·Intuitive Machines / AST·Iridium·Viasat·Eutelsat·SES / Planet·MDA / Redwire·Karman·OHB / ispace·Astroscale","06_우주위성"],
       ["미국","프라임·드론/신흥·엔진/부품","04_미국"],
-      ["유럽","체계·항공·엔진/부품","05_유럽"]]},
+      ["유럽","체계·항공·엔진/부품","05_유럽"],
+      ["기타","이스라엘·튀르키예·인도·일본·중국·남미","03_기타"]]},
     construction:{tab:"🏗️ 건설기계",h1:"📈 글로벌 피어그룹 주가변동표 — 건설기계",sub:"지수/원자재 · OEM(한국·미국/유럽·일본·중국·인도) · 농기계/광산/렌탈·딜러 · 부품 — 1W/1M/3M/YTD/1Y 등락률 + 3개월 스파크라인.",
       dir:"peer_price_construction",files:[
       ["전체 1페이지","좌 지수·OEM / 우 농기계·광산·렌탈·딜러·부품","글로벌_건설기계_주가흐름"],
@@ -102,16 +109,21 @@ button:disabled{opacity:.5;cursor:wait}
   const canCopy=!!(navigator.clipboard&&window.ClipboardItem);   // 클립보드는 PNG 만 표준 — 복사 = PNG, 벡터는 SVG 내려받기
   FILES.forEach(([title,desc,f,dir,ulab],i)=>{
     const j=document.createElement("a");j.href="#img"+i;j.textContent=(ulab?ulab+" · ":"")+title;jump.appendChild(j);
-    const c=document.createElement("section");c.className="card";c.id="img"+i;
-    c.innerHTML=`<div class="hd"><h2>${ulab?`<span style="color:var(--accent)">${ulab}</span> · `:""}${title}${desc?`<small>${desc}</small>`:""}</h2>
+    // 모음(전체 1페이지·p1·p2)은 펼친 채, 개별 섹션(파일명 01_… 숫자 접두)은 접은 채 시작 — 사용자 요청(11/9)
+    const single=/^\d\d_/.test(f);
+    const c=document.createElement("details");c.className="card";c.id="img"+i;if(!single)c.open=true;
+    c.innerHTML=`<summary class="hd"><h2>${ulab?`<span style="color:var(--accent)">${ulab}</span> · `:""}${title}${desc?`<small>${desc}</small>`:""}</h2>
         ${canCopy?`<button class="p" data-f="${f}" data-dir="${dir}" data-act="copy">📋 복사</button>`:""}<button class="p" data-f="${f}" data-dir="${dir}" data-ext="svg">⬇ SVG</button><button data-f="${f}" data-dir="${dir}" data-ext="png">⬇ PNG</button>
-        <a class="btn" href="${url(f,"svg",dir)}" target="_blank" rel="noopener">새 창</a></div>
+        <a class="btn" href="${url(f,"svg",dir)}" target="_blank" rel="noopener">새 창</a></summary>
       <div class="im"><img src="${url(f,"png",dir)}" alt="${title}" loading="lazy"></div><div class="err"></div>`;
     c.querySelector("img").onerror=function(){c.querySelector(".err").textContent="그림을 불러오지 못했습니다 — ecos-fx-rates Actions 가 이 판을 아직 한 번도 만들지 않았거나(방산·건기는 생성기 패치 적용 뒤 첫 실행부터) 파일명이 바뀌었을 수 있습니다."};
     cards.appendChild(c);
   });
+  // 위 점프 링크로 가면 접힌 카드를 펼친다(접힌 채로는 앵커로 가도 그림이 안 보인다)
+  jump.addEventListener("click",e=>{const a=e.target.closest("a[href^='#img']");if(!a)return;const d=document.getElementById(a.getAttribute("href").slice(1));if(d&&!d.open)d.open=true});
   document.addEventListener("click",async e=>{
     const b=e.target.closest("button[data-f]");if(!b)return;
+    e.preventDefault();   // summary 안의 버튼 — 카드가 접히거나 펼쳐지지 않게
     const f=b.dataset.f,dir=b.dataset.dir,copy=b.dataset.act==="copy",ext=copy?"png":b.dataset.ext,err=b.closest(".card").querySelector(".err");b.disabled=true;err.textContent="";
     const getBlob=async()=>{const r=await fetch(url(f,ext,dir),{cache:"no-store"});if(!r.ok)throw new Error("HTTP "+r.status);return r.blob()};
     try{

@@ -303,6 +303,15 @@
         ③ Gemini 503/429 는 flash↔lite 두 바퀴·10초 간격 재시도. ④ 섹션을 페이지 맨
         위(🔄 수집 버튼 바로 밑)로 이동(_plan_form 분리 — 스크립트는 뒤에 있어도 무관).
         **GAS 재붙여넣기 + '배포 관리 → 새 버전' 필요**(vacplan 이 바뀜).
+      - **옛 GAS 호환 + 키 유출 수선** (11/6~9): 재붙여넣기 전의 옛 GAS 는 images[] 를
+        몰라 전부 400 — 페이지가 한 장일 땐 옛 image 키를 병행(여러 장은 일부러 안 보냄:
+        첫 장만 처리되면 빠진 날짜가 조용히 지워진다, 안내문으로 대체). 그리고 GAS
+        UrlFetchApp 이 '시간 초과: <URL>' 예외를 던지면 **?key= 가 오류 문구째 화면에
+        노출**됐다(11/9 실사례) → 키를 x-goog-api-key 헤더로 이동, fetch 를 try/catch 로
+        감싸 시간 초과도 모델 교대 재시도 대상에 포함, doPost 는 오류 문구의 key= 값을
+        지우고 돌려준다. **키는 한 번 노출됐으니 AI Studio 에서 재발급 권장**(GAS 스크립트
+        속성 + 같은 키면 GitHub 시크릿도 교체). 다른 GAS 3종(youtube·mz_diary·remember)도
+        ?key= 패턴이 남아 있다 — 화면에 오류를 돌려주지 않아 급하지 않지만 같은 부류.
 
 20. **월별 근태 체크 신설** (9/9): `vacation_tracker/attendance.py` — 팀원이 텔레그램 1:1로
     보내는 "근태 완벽합니다"류 보고를 휴가 추적과 **같은 스캔**에서 규칙만으로 잡아
@@ -1234,6 +1243,18 @@
       **비활성**, 16:02(`trig_01Q6FbKD8DAFgby2siphnX2N`) → **16:42 KST 평일**(정각·반각 혼잡 회피). 크론 안전망은 17:05 KST
       하나(11:35 삭제). `metrics.SLOTS`·13:45 경계는 그대로(수동 수집을 오전에 누르면 11:30 슬롯으로 붙는다),
       SCHEDULE_TIME 표기·버튼 툴팁만 갱신. 아카이브(16:00 슬롯)는 영향 없음.
+      **→ 오독이었다 — 11/9 2회 복구** (사용자 "11:30분에 텔레 안왔다 … 이거는 그림 얘기한거야"): '4시반~5시 한 번' 은
+      ④ 위클리 차트 수집 얘기였지 텔레그램 발송 일정이 아니었다. 예약 11:32 재활성, 16:42 → **16:02** 원복, 크론 안전망
+      11:35/16:05 원복, SCHEDULE_TIME·툴팁 원복. 차트 시계열은 전체 수집 때마다 같이 모이므로 16:02 run 이 장 마감 후
+      차트도 갱신한다(별도 16:40 차트 작업은 두지 않음). 교훈: 발송 일정을 바꾸는 요청은 **무엇의** 일정인지 되물을 것.
+      **→ 2차 정정 — '4시반~5시 한 번' 의 대상은 주보 데이터 4종** (11/9 오후, 사용자 "여기 4개 데이터 모으는거를 매일
+      1번 하라는 얘기임 … 수급.그림이랑 업무.자동화의 📡 커버리지 수급 등은 다른거임"): 📰 주보 밑 피어그룹.주가변동표·
+      주가.INDEX.비교(둘 다 ecos-fx-rates `peergroup-price.yml`)·수급.그림(coverage-flow `charts_only`)·컨센서스
+      (ecos-fx-rates `consensus-chart.yml`)를 **장 마감 후 매일 한 번**. 정시 = 새 예약 작업 `trig_01VEqTcdRitLg6oWSSxQc8uQ`
+      (평일 16:42 KST, 커버리지 수급 전용 세션에 묶음 — coverage-flow charts_only dispatch + ecos 두 워크플로 dispatch,
+      ecos 쪽이 403 이면 조용히 크론에 맡김), 안전망 = ecos-fx-rates 크론 **16:40**(peergroup, 07:10 에서 이동 — 한국 종가
+      당일·미국 전일, 토요일 run 이 금요일 미국 종가를 담는다)·**16:50**(consensus, 신설). 텔레 발송(11:32/16:02)과는 별개.
+      위 '별도 16:40 차트 작업은 두지 않음' 은 이 정정으로 폐기.
     - **합산 칸 = 개별과 같은 비율로 1.5배** (11/7 밤, PR #532, 사용자 "가로로만 너무 길다 … 1.5~2배 크기로 같은 비율로"):
       가로 2칸 span 폐기. `WEEKLY_BIG`(1.5) 배로 개별 그림을 그대로 확대(글자·선도 같이 — 그리기는 개별 좌표계 W×H,
       바깥 크기만 키움). 한 장 PNG = 맨 위 띠(합산 왼쪽 + 오른쪽 빈 자리에 제목·축 설명·기준일·출처) + 아래 개별
@@ -1600,7 +1621,9 @@
       항공부품(켄코아·아스트) + 우주(쎄트렉아이·인텔리안·컨텍·제노코) / 기타(Elbit·Aselsan·HAL·BEL·MHI·KHI·
       IHI·AVIC 2·Embraer EMBJ — 2025-11 ERJ→EMBJ 티커 변경) / 지수·ETF(PLUS K방산·ITA·SHLD·EUAD) / 미국(프라임 7 + Kratos·AeroVironment +
       GE·Howmet·TransDigm·Curtiss-Wright) / 유럽(Rheinmetall·BAE·Thales·Leonardo·Saab·Hensoldt·Renk·
-      Kongsberg + Airbus·Dassault + RR·Safran·MTU). **뺀 것**: Spirit Aero(보잉 인수 완료·상폐)·Triumph
+      Kongsberg + Airbus·Dassault + RR·Safran·MTU) / **글로벌 우주·위성**(11/9 사용자 "글로벌 우주/위성은 없네?" —
+      발사체 Rocket Lab·Firefly·Intuitive Machines / 위성통신 AST SpaceMobile·Iridium·Viasat(EchoStar SATS 는 야후 이력 부족)·Eutelsat·SES / 관측 Planet·
+      MDA Space / 부품 Redwire·Karman·OHB / 일본 ispace·Astroscale(QPS 5595.T 는 야후 무응답) + ETF UFO; 단 배치 좌 지수·한국·우주 / 우 미국·유럽·기타). **뺀 것**: Spirit Aero(보잉 인수 완료·상폐)·Triumph
       (사모 인수·상폐)·Subaru(FHI, 항공 비중 미미)·Bombardier(비즈젯)·하이즈항공·오르비텍(초소형).
       건기 = 지수(PAVE·구리·WTI·원달러) / OEM 한국 2(**HD건설기계** = 2026-01 인프라코어 흡수합병 후 사명, 042670 상폐)·미국/유럽(CAT·Volvo·Terex·
       Oshkosh·Manitowoc·Wacker Neuson·Manitou)·일본(Komatsu·Hitachi CM·Kubota·SHI·Takeuchi·Tadano)·
@@ -1611,9 +1634,31 @@
     - **첫 실행(11/8) 실측 교정**: ERJ·EMBR3(둘 다 옛 티커→EMBJ)·302132.SZ AVIC Chengdu(전 구간 0.0% 고정값→
       AVIC Xi'an 000768.SZ)·AHT.L(→SUNB)·042670.KS(합병 상폐). 기준일은 **시총 있는 주식 섹션의 최신
       날짜**로 — 선물·환율(CL=F·KRW=X)은 일요일 봉이 있어 max 를 쓰면 일요일 날짜가 찍힌다.
+    - **개별 섹션 카드는 접힌 채 시작** (11/9, 사용자 "개별은 다 접어두고 모아둔거만 펼쳐두기"): 카드를
+      `<details class="card">` 로 — 모음 3장(전체·p1·p2)만 `open`, 파일명이 `01_…` 숫자 접두인 개별 섹션은 접힘.
+      머리글(summary)의 복사·다운로드 버튼은 `preventDefault` 로 카드를 안 접고, 상단 점프 링크는 대상 카드를
+      펼친 뒤 이동(접힌 채 앵커로 가면 그림이 안 보인다). `?u=defense,construction` 합본도 유니버스마다 같은 규칙.
     - **메뉴명 '주가변동표' + 2단 서브메뉴** (11/8, 사용자): 📰 주보 > `📈 피어그룹.주가변동표`(구 주가흐름표) 서브그룹 밑
       `🚢 조선/해운/에너지`(`peerprice`, ship) · `🛡️ 방산/기계`(`peerdefcon`, **두 판을 한 페이지에**). peer_price.html 의
       `?u=` 가 쉼표 목록(`defense,construction`)을 받아 유니버스별 카드를 이어 붙인다(카드 머리에 판 이름, 파일은 각자 dir —
       `url(f,ext,dir)`). 상단 탭도 두 개(조선·해운·에너지 / 방산·기계). 11/8 첫 판의 peerdef·peercon 뷰 2개는 이것으로 대체.
+
+58. **주가 INDEX 갤러리 — 조선 ④ 추가 · 방산판 신설 · 묶음 메인/낱장 접힘** (11/8~9, PR #542·#546): 사용자 요청 순서대로.
+    - **조선 ④ 조선 5사 vs 엔진 vs 조선기자재** (ecos-fx-rates `peergroup/weekly_peer_index_image.py` `CHAIN`): 2×2 오른쪽 아래
+      각주 자리에 밸류체인 3단 시총가중 지수(조선 4사+대한조선 / 한화엔진·HD현대마린엔진·STX엔진 / 기자재 20사 = coverage_flow
+      위클리 조선기자재 묶음에서 엔진 제외, HD현대마린솔루션은 어디에도 안 넣음), **각주는 그림 맨 아래 띠**(`NOTE_IN`, tight_layout
+      rect). 묶음 파일명 `조선주_INDEX_3종` → **`4종`** — 옛 파일을 지우자 배포본 갤러리의 묶음 카드가 깨져 사용자가 바로 봤다.
+      **생성기 파일명을 바꾸면 GS-DB2 페이지 머지·배포까지 한 흐름으로 끝낼 것**(그 사이 카드가 "그림을 불러오지 못했습니다").
+    - **방산판** `peergroup/weekly_defense_index_image.py`(조선판을 import — 산식·그리기·저장 재사용, 같은 워크플로 ③-2 스텝,
+      출력 `output/peer_price_defense/방산_INDEX_4종` + `DIDX1~4`): ① 체계 5사 ② 부체계 11사(풍산·SNT다이내믹스·엠앤씨솔루션·
+      아이쓰리시스템·퍼스텍·휴니드·빅텍·코츠테크놀로지·한일단조·삼영컴텍·웨이브일렉트로닉스 — 세션 추천, 사용자 가지치기 전)
+      ③ 한국 체계·부체계 vs 미국 프라임 7 vs 유럽 체계 8 ④ 드론(Kratos·AeroVironment) vs 엔진/부품 7 vs 항공(Airbus·Dassault·
+      Embraer) — 글로벌 테마, 주가흐름표 DEFENSE_SECTIONS 와 같은 티커. 데모 실측 교정: 11개 범례는 3열, 긴 제목 축약, **각주는
+      한 줄에 다 적으면 오른쪽으로 넘쳐 6줄**(`NOTE_LINES`).
+    - 대시보드: `ship_index.html` 이 `?u=ship|defense`(peer_price.html 과 같은 UNIVERSES 방식, 상단 탭), 사이드바 📰 주보 >
+      `⚔️ 주가.INDEX.비교` 서브그룹 `🚢 조선`(shipindex) / `🛡️ 방산`(defindex). **4종 묶음 카드가 메인(펼침·강조), 낱장 ①~④는
+      `<details>` 접힘**(점프 링크·해시로 오면 펼침; 버튼은 summary 밖 — summary 안 버튼은 클릭마다 접힘이 토글된다).
+    - 운영 주의: 수동 실행을 장중(09:11 KST)에 돌리면 야후가 그날 장중 봉을 마지막 값으로 줘 기준일이 당일로 찍힌다 —
+      07:10 자동 실행은 전일 종가 기준. `.claude/settings.json`(프로젝트 권한 허용 목록) 도 같은 PR 에서 신설.
 
 이후 작업은 git log와 이 파일을 갱신하며 이어간다.
