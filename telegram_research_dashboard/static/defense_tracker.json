@@ -2,7 +2,7 @@
  "meta": {
   "title": "방산 입찰·예산 트래커",
   "created": "2026-09-20",
-  "updated": "2026-11-09",
+  "updated": "2026-11-10",
   "howto": [
    "매일 방산 브리핑 생성 후 defense_tracker_update.py가 브리핑 본문에서 입찰/예산/법안 이벤트를 추출해 log에 자동 누적한다.",
    "구조화 필드(stage, status, amount 등)는 자동으로 바꾸지 않는다 — 로그를 보고 수동(또는 Claude 세션)으로 갱신.",
@@ -266,6 +266,12 @@
     "country": "NATO",
     "name": "대드론 시스템 가속 조달",
     "text": "NATO가 드론 위협 대응을 위해 16개 대드론 시스템의 가속 조달을 결정했습니다."
+   },
+   {
+    "date": "2026-11-10",
+    "country": "독일",
+    "name": "벨기에 Skyranger 30 방공 시스템 도입 사업",
+    "text": "벨기메가 라인메탈의 Skyranger 30 방공 시스템 20대를 주문하며 계약을 체결했습니다."
    }
   ],
   "seen": [
@@ -360,7 +366,8 @@
    "02672ef44a5c101b",
    "8e01780ff7ed27d6",
    "94cae84524304bbb",
-   "aadce79699f77d2a"
+   "aadce79699f77d2a",
+   "e7d1e66691f42fff"
   ]
  },
  "tenders": [
