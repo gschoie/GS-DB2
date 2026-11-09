@@ -34,6 +34,13 @@ button,a.btn{font:600 12.5px inherit;padding:6px 12px;border-radius:6px;border:1
 button.p{background:var(--btn);color:var(--bg);border-color:var(--btn)}
 button:disabled{opacity:.5;cursor:wait}
 .card .im{background:#fff;padding:6px}
+.card.main{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent) inset}
+details.card>summary{list-style:none;cursor:pointer;user-select:none}
+details.card>summary::-webkit-details-marker{display:none}
+details.card>summary .tog{font-size:12px;color:var(--muted);white-space:nowrap}
+details.card[open]>summary .tog::before{content:"▲ 접기"}
+details.card:not([open])>summary .tog::before{content:"▼ 펼치기"}
+.card .hd.tools{border-bottom:0;padding-top:6px;justify-content:flex-end}
 .card img{display:block;width:100%;height:auto}
 .err{color:#b45309;font-size:12px;padding:0 12px 8px}
 #stamp{color:var(--muted);font-size:12px}
@@ -64,15 +71,21 @@ button:disabled{opacity:.5;cursor:wait}
   const canCopy=!!(navigator.clipboard&&window.ClipboardItem);   // 클립보드는 PNG 만 표준 — 복사 = PNG, 벡터는 SVG 내려받기
   FILES.forEach(([title,desc,f],i)=>{
     const j=document.createElement("a");j.href="#img"+i;j.textContent=title;jump.appendChild(j);
-    const c=document.createElement("section");c.className="card";c.id="img"+i;
-    c.innerHTML=`<div class="hd"><h2>${title}${desc?`<small>${desc}</small>`:""}</h2>
-        ${canCopy?`<button class="p" data-f="${f}" data-act="copy">📋 복사</button>`:""}<button class="p" data-f="${f}" data-ext="svg">⬇ SVG</button><button data-f="${f}" data-ext="png">⬇ PNG</button>
-        <a class="btn" href="${url(f,"svg")}" target="_blank" rel="noopener">새 창</a></div>
-      <div class="im"><img src="${url(f,"png")}" alt="${title}" loading="lazy"></div><div class="err"></div>`;
+    const tools=`${canCopy?`<button class="p" data-f="${f}" data-act="copy">📋 복사</button>`:""}<button class="p" data-f="${f}" data-ext="svg">⬇ SVG</button><button data-f="${f}" data-ext="png">⬇ PNG</button>
+        <a class="btn" href="${url(f,"svg")}" target="_blank" rel="noopener">새 창</a>`;
+    const body=`<div class="im"><img src="${url(f,"png")}" alt="${title}" loading="lazy"></div><div class="err"></div>`;
+    const h2=`<h2>${title}${desc?`<small>${desc}</small>`:""}</h2>`;
+    const main=i===0;   // 묶음이 메인(펼침), 낱장은 접힘 — 버튼은 summary 밖(summary 안 버튼은 클릭마다 접힘이 토글된다)
+    const c=document.createElement(main?"section":"details");c.className="card"+(main?" main":"");c.id="img"+i;
+    c.innerHTML=main?`<div class="hd">${h2}${tools}</div>${body}`
+      :`<summary class="hd">${h2}<span class="tog"></span></summary><div class="hd tools">${tools}</div>${body}`;
     c.querySelector("img").onerror=function(){c.querySelector(".err").textContent="그림을 불러오지 못했습니다 — Actions 가 아직 한 번도 돌지 않았거나 파일명이 바뀌었을 수 있습니다."};
     cards.appendChild(c);
   });
+  const openHash=()=>{const d=location.hash&&document.querySelector(location.hash);if(d&&d.tagName==="DETAILS")d.open=true};
+  window.addEventListener("hashchange",openHash);openHash();
   document.addEventListener("click",async e=>{
+    const j=e.target.closest(".jump a");if(j){const d=document.querySelector(j.getAttribute("href"));if(d&&d.tagName==="DETAILS")d.open=true;return}
     const b=e.target.closest("button[data-f]");if(!b)return;
     const f=b.dataset.f,copy=b.dataset.act==="copy",ext=copy?"png":b.dataset.ext,err=b.closest(".card").querySelector(".err");b.disabled=true;err.textContent="";
     const getBlob=async()=>{const r=await fetch(url(f,ext),{cache:"no-store"});if(!r.ok)throw new Error("HTTP "+r.status);return r.blob()};
