@@ -23,6 +23,8 @@ TARGET_COMPANIES = [
     {"industry": "조선", "sub": "조선사", "region": "중국", "name": "중국선박(CSSC)", "ticker": "600150.SS"},
     {"industry": "조선", "sub": "조선사", "region": "중국", "name": "양즈장(Yangzijiang)", "ticker": "BS6.SI"},
     {"industry": "조선", "sub": "조선사", "region": "중국", "name": "CSSC 해양방위(H)", "ticker": "0317.HK"},
+    # Seatrium = 옛 셈코프마린 + 케펠 O&M(2023 합병). 2024-05 20:1 병합으로 SGX 코드 S51 → 5E2.
+    {"industry": "조선", "sub": "조선사", "region": "싱가포르", "name": "Seatrium", "ticker": "5E2.SI"},
     # 미쓰비시·가와사키·IHI는 조선 비중이 작은 복합 중공업 — 배수 비교 시 감안.
     # 이마바리·JMU 등 일본 전업 조선사는 비상장이라 넣을 수 없다.
     {"industry": "조선", "sub": "조선사", "region": "일본", "name": "미쓰비시중공업", "ticker": "7011.T"},
