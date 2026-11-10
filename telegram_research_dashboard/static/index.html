@@ -58,6 +58,14 @@
                 </div>
               </details>
               <button class="nav" data-view="conschart" title="커버리지 16종목 영업이익 컨센서스 추이(최근 6개월) — 분기·연간 그림 한 창에, 그림마다 📋 복사·PNG/SVG/CSV 다운로드">📊 컨센서스(조방기)</button>
+              <details class="nav-subgroup">
+                <summary>📐 ER</summary>
+                <div class="nav-submenu-3">
+                  <button class="nav" data-view="er-ship" title="Earnings Revision — 한국 조선·조기 9사 + Yangzijiang·CSSC·Seatrium. ER=(상향−하향)/애널리스트 수, EPS 1M·3M 변화율, 일별 추이(야후, 11/10부터 적재)">🚢 조선</button>
+                  <button class="nav" data-view="er-def" title="Earnings Revision — 한국 방산 5사 + 미국 체계 7 · 유럽 체계 8">🛡️ 방산</button>
+                  <button class="nav" data-view="er-con" title="Earnings Revision — 두산밥캣·HD건설기계 + 미국·일본·스웨덴·중국 피어 12">🏗️ 건설기계</button>
+                </div>
+              </details>
             </div>
           </details>
           <details class="nav-subgroup">
@@ -516,6 +524,18 @@
     <section id="conschart" class="view">
       <div class="archive-intro"><div><p class="eyebrow">주보 · 컨센서스</p><h2>커버리지 영업이익 컨센서스 추이 (조선·방산·건기)</h2></div><div class="etf-actions"><a class="open-new" href="consensus_chart.html" target="_blank" rel="noopener">🔗 새 창으로</a></div></div>
       <iframe id="conschart-frame" class="union-board-frame" title="커버리지 영업이익 컨센서스 추이" loading="lazy"></iframe>
+    </section>
+    <section id="er-ship" class="view">
+      <div class="archive-intro"><div><p class="eyebrow">주보 · ER</p><h2>Earnings Revision — 조선</h2></div><div class="etf-actions"><a class="open-new" href="er_report.html?s=조선" target="_blank" rel="noopener">🔗 새 창으로</a></div></div>
+      <iframe id="er-ship-frame" class="union-board-frame" title="Earnings Revision — 조선" loading="lazy"></iframe>
+    </section>
+    <section id="er-def" class="view">
+      <div class="archive-intro"><div><p class="eyebrow">주보 · ER</p><h2>Earnings Revision — 방산</h2></div><div class="etf-actions"><a class="open-new" href="er_report.html?s=방산" target="_blank" rel="noopener">🔗 새 창으로</a></div></div>
+      <iframe id="er-def-frame" class="union-board-frame" title="Earnings Revision — 방산" loading="lazy"></iframe>
+    </section>
+    <section id="er-con" class="view">
+      <div class="archive-intro"><div><p class="eyebrow">주보 · ER</p><h2>Earnings Revision — 건설기계</h2></div><div class="etf-actions"><a class="open-new" href="er_report.html?s=건설기계" target="_blank" rel="noopener">🔗 새 창으로</a></div></div>
+      <iframe id="er-con-frame" class="union-board-frame" title="Earnings Revision — 건설기계" loading="lazy"></iframe>
     </section>
     <section id="dartcap" class="view">
       <div class="archive-intro"><div><p class="eyebrow">DART · CAPACITY</p><h2>전자공시 - 생산능력 · 생산실적 · 가동률</h2></div><div class="etf-actions"><button id="dartcap-refresh" class="refresh-btn" type="button" title="OpenDART에서 새 정기보고서를 받아 표를 추출·정규화합니다 (자동 실행은 3·5·8·11월 20일, 10분 안팎 소요).">🔄 지금 수집</button><span id="dartcap-status" class="task-sync"></span><a class="open-new" href="dart_capacity_report.html" target="_blank" rel="noopener">🔗 새 창으로</a></div></div>
