@@ -463,13 +463,45 @@ WEEKLY_JS = r"""
     dv.setUint32(0,9);ch.set([0x70,0x48,0x59,0x73],4);dv.setUint32(8,ppm);dv.setUint32(12,ppm);ch[16]=1;dv.setUint32(17,CRC(ch.subarray(4,17)));
     const at=8+8+13+4,out=new Uint8Array(src.length+21);out.set(src.subarray(0,at));out.set(ch,at);out.set(src.subarray(at),at+21);return out;
   }
+  // SVG → PNG Blob(pHYs 384dpi 포함). 다운로드·클립보드 복사가 같이 쓴다.
+  function pngBlob(svgText,w,h){
+    return new Promise((res,rej)=>{
+      const img=new Image(),url=URL.createObjectURL(new Blob([svgText],{type:"image/svg+xml;charset=utf-8"}));
+      img.onerror=()=>{URL.revokeObjectURL(url);rej(new Error("SVG 변환 실패"))};
+      img.onload=()=>{const c=document.createElement("canvas");c.width=w*SC;c.height=h*SC;const x=c.getContext("2d");
+        x.fillStyle="#fff";x.fillRect(0,0,c.width,c.height);x.drawImage(img,0,0,c.width,c.height);URL.revokeObjectURL(url);
+        c.toBlob(b=>b?b.arrayBuffer().then(buf=>res(new Blob([withDpi(buf,__DPI__)],{type:"image/png"}))):rej(new Error("PNG 생성 실패")),"image/png")};
+      img.src=url;
+    });
+  }
   function toPng(svgText,w,h,file){
-    const img=new Image(),url=URL.createObjectURL(new Blob([svgText],{type:"image/svg+xml;charset=utf-8"}));
-    img.onload=()=>{const c=document.createElement("canvas");c.width=w*SC;c.height=h*SC;const x=c.getContext("2d");
-      x.fillStyle="#fff";x.fillRect(0,0,c.width,c.height);x.drawImage(img,0,0,c.width,c.height);URL.revokeObjectURL(url);
-      c.toBlob(b=>b.arrayBuffer().then(buf=>{const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([withDpi(buf,__DPI__)],{type:"image/png"}));
-        a.download=file;document.body.appendChild(a);a.click();a.remove()}),"image/png")};
-    img.src=url;
+    pngBlob(svgText,w,h).then(b=>{const a=document.createElement("a");a.href=URL.createObjectURL(b);a.download=file;document.body.appendChild(a);a.click();a.remove()})
+      .catch(e=>alert(e.message));
+  }
+  // 📋 복사(11/10): 갤러리 페이지들과 같은 방식 — blob Promise 를 그대로 넘겨야 사파리가 사용자 제스처로 인정한다
+  const canCopy=!!(navigator.clipboard&&window.ClipboardItem);
+  function copyPng(btn,svgText,w,h){
+    const old=btn.textContent;btn.disabled=true;
+    navigator.clipboard.write([new ClipboardItem({"image/png":pngBlob(svgText,w,h)})])
+      .then(()=>{btn.textContent="✓ 복사됨"},e=>{btn.textContent="복사 실패";console.warn(e)})
+      .finally(()=>{btn.disabled=false;setTimeout(()=>{btn.textContent=old},2500)});
+  }
+  // 한 장 = cols 열 격자에 합산(BIG×BIG 칸)을 왼쪽 위에, 개별 칸은 빈 칸을 행 우선으로(합산 오른쪽부터) 채운다
+  function composite(grid){
+    const cells=[...grid.querySelectorAll(".wk-cell")];
+    const cols=+grid.dataset.cols||2,used=new Set(),place=[];let rows=0;
+    const free=(r,c)=>!used.has(r+","+c);
+    cells.forEach(cell=>{const sp=isBig(cell)?BIG:1;
+      for(let r=0;;r++){let done=false;for(let c=0;c+sp<=cols;c++){let ok=true;
+        for(let dr=0;dr<sp;dr++)for(let dc=0;dc<sp;dc++)if(!free(r+dr,c+dc))ok=false;
+        if(ok){for(let dr=0;dr<sp;dr++)for(let dc=0;dc<sp;dc++)used.add((r+dr)+","+(c+dc));place.push([cell,r,c]);rows=Math.max(rows,r+sp);done=true;break}}
+        if(done)break}});
+    const TW=W*cols+G*(cols-1),TH=H*rows+G*(rows-1);
+    let body=`<rect width="${TW}" height="${TH}" fill="#fff"/>`;
+    // 합산은 svg 태그를 벗기면 개별 좌표계(W×H)로 돌아가므로 scale 로 칸 크기에 맞춘다
+    place.forEach(([c,r,col])=>{const t=draw(c);if(!t)return;const [w,h]=dims(c);
+      body+=`<g transform="translate(${col*(W+G)},${r*(H+G)}) scale(${(w/W).toFixed(4)},${(h/H).toFixed(4)})">${t.replace(/^<svg[^>]*>|<\/svg>$/g,"")}</g>`});
+    return {svg:`<svg xmlns="http://www.w3.org/2000/svg" width="${TW}" height="${TH}" viewBox="0 0 ${TW} ${TH}">${body}</svg>`,TW,TH};
   }
   const stamp=()=>(document.querySelector("[data-wk-asof]")||{}).dataset?.wkAsof||"";
   // '🔄 차트만 지금 수집' — app.js DISPATCH_ENDPOINT 와 같은 GAS 웹앱. 요청 뒤 배포본의 이 페이지가 바뀌면 새로고침
@@ -510,25 +542,14 @@ WEEKLY_JS = r"""
   window.addEventListener("DOMContentLoaded",()=>document.querySelectorAll(".wk-cell").forEach(cell=>{
     const s=seriesOf(cell);if(!s){cell.remove();return}
     cell.querySelector(".wk-svg").innerHTML=draw(cell)}));
+  if(!canCopy)document.querySelectorAll(".wk-copy,.wk-all[data-act=copy]").forEach(b=>b.remove());
   document.addEventListener("click",e=>{
-    const one=e.target.closest(".wk-one");
-    if(one){const cell=one.closest(".wk-cell"),[w,h]=dims(cell);toPng(draw(cell),w,h,`${cell.dataset.name}_수급_${stamp()}.png`);return}
+    const one=e.target.closest(".wk-one,.wk-copy");
+    if(one){const cell=one.closest(".wk-cell"),[w,h]=dims(cell),t=draw(cell);
+      if(one.classList.contains("wk-copy"))copyPng(one,t,w,h);else toPng(t,w,h,`${cell.dataset.name}_수급_${stamp()}.png`);return}
     const all=e.target.closest(".wk-all[data-grid]");if(!all)return;   // 🔄 수집 버튼도 .wk-all 모양을 빌려 쓴다 — data-grid 있는 것만
-    const grid=document.getElementById(all.dataset.grid),cells=[...grid.querySelectorAll(".wk-cell")];
-    // 배치: 합산(BIG×BIG 칸)을 왼쪽 위에, 개별 칸은 빈 칸을 행 우선으로(합산 오른쪽부터) 채운다
-    const cols=+grid.dataset.cols||2,used=new Set(),place=[];let rows=0;
-    const free=(r,c)=>!used.has(r+","+c);
-    cells.forEach(cell=>{const sp=isBig(cell)?BIG:1;
-      for(let r=0;;r++){let done=false;for(let c=0;c+sp<=cols;c++){let ok=true;
-        for(let dr=0;dr<sp;dr++)for(let dc=0;dc<sp;dc++)if(!free(r+dr,c+dc))ok=false;
-        if(ok){for(let dr=0;dr<sp;dr++)for(let dc=0;dc<sp;dc++)used.add((r+dr)+","+(c+dc));place.push([cell,r,c]);rows=Math.max(rows,r+sp);done=true;break}}
-        if(done)break}});
-    const TW=W*cols+G*(cols-1),TH=H*rows+G*(rows-1);
-    let body=`<rect width="${TW}" height="${TH}" fill="#fff"/>`;
-    // 합산은 svg 태그를 벗기면 개별 좌표계(W×H)로 돌아가므로 scale 로 칸 크기에 맞춘다
-    place.forEach(([c,r,col])=>{const t=draw(c);if(!t)return;const [w,h]=dims(c);
-      body+=`<g transform="translate(${col*(W+G)},${r*(H+G)}) scale(${(w/W).toFixed(4)},${(h/H).toFixed(4)})">${t.replace(/^<svg[^>]*>|<\/svg>$/g,"")}</g>`});
-    toPng(`<svg xmlns="http://www.w3.org/2000/svg" width="${TW}" height="${TH}" viewBox="0 0 ${TW} ${TH}">${body}</svg>`,TW,TH,`${all.dataset.title}_${stamp()}.png`);
+    const {svg:big,TW,TH}=composite(document.getElementById(all.dataset.grid));
+    if(all.dataset.act==="copy")copyPng(all,big,TW,TH);else toPng(big,TW,TH,`${all.dataset.title}_${stamp()}.png`);
   });
 })();
 </script>"""
@@ -548,7 +569,7 @@ def weekly_section(rows, series, asof_date="", chart_errors=()):
         if not cells:
             continue
         gid = f"wk-{gi}"
-        btn = "<button class='wk-one'>⬇ PNG</button></div>"
+        btn = "<button class='wk-copy'>📋 복사</button><button class='wk-one'>⬇ PNG</button></div>"
         cell_html = ""
         if g.get("sum") and len(cells) >= 2:   # 합산 칸(맨 앞) — 공통 구간이 짧으면 화면이 칸을 지운다
             cell_html += (f"<div class='wk-cell wk-big' data-codes='{','.join(cells)}' "
@@ -559,7 +580,8 @@ def weekly_section(rows, series, asof_date="", chart_errors=()):
         # 묶음마다 <section data-key> — 사이드바 💰 수급.그림 > 조선/방산/건설기계 가 `#weekly-<key>[,<key>]` 해시로
         # 들어오면 WEEKLY_JS 가 해당 묶음만 남긴다(11/8 사용자 "3개 서브 메뉴 넣고 수급 3가지 그림 쪼개서").
         blocks.append(f"<section class='wk-group' data-key='{esc(g.get('key', f'g{gi}'))}'>"
-                      f"<h3>{esc(title)} <button class='wk-all' data-grid='{gid}' data-title='{esc(title)}'>⬇ {n}개 한 장 PNG</button></h3>"
+                      f"<h3>{esc(title)} <button class='wk-all' data-grid='{gid}' data-act='copy' data-title='{esc(title)}'>📋 {n}개 한 장 복사</button>"
+                      f"<button class='wk-all' data-grid='{gid}' data-title='{esc(title)}'>⬇ {n}개 한 장 PNG</button></h3>"
                       f"<div class='wk-grid' id='{gid}' data-cols='{cols}' style='grid-template-columns:repeat({cols},minmax(0,1fr))'>{cell_html}</div></section>")
     if not blocks:
         return ""
@@ -646,7 +668,7 @@ table.flow{{font-size:12px}}table.flow td,table.flow th{{padding:6px 5px}}th.c{{
 .wk-bar{{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:4px 0 10px}}
 .errs{{margin:16px 0;font-size:12px;color:#b45309}}.errs ul{{margin:6px 0 0 18px}}
 .wrap{{overflow-x:auto}}
-.wk-grid{{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}}@media(max-width:900px){{.wk-grid{{grid-template-columns:1fr}}}}.wk-cell{{border:1px solid var(--line);padding:6px;position:relative}}.wk-svg svg{{width:100%;height:auto;display:block}}.wk-one,.wk-all{{font:11px Inter;padding:2px 8px;border:1px solid #d1d5db;background:#fff;border-radius:3px;cursor:pointer;color:#374151}}.wk-one{{position:absolute;right:8px;bottom:8px}}.wk-big{{grid-column:span 2;grid-row:span 2}}@media(max-width:900px){{.wk-big{{grid-column:auto;grid-row:auto}}}}.wk-all{{margin-left:8px;vertical-align:middle}}
+.wk-grid{{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}}@media(max-width:900px){{.wk-grid{{grid-template-columns:1fr}}}}.wk-cell{{border:1px solid var(--line);padding:6px;position:relative}}.wk-svg svg{{width:100%;height:auto;display:block}}.wk-one,.wk-all{{font:11px Inter;padding:2px 8px;border:1px solid #d1d5db;background:#fff;border-radius:3px;cursor:pointer;color:#374151}}.wk-one{{position:absolute;right:8px;bottom:8px}}.wk-copy{{position:absolute;right:74px;bottom:8px;font:11px Inter;padding:2px 8px;border:1px solid #d1d5db;background:#fff;border-radius:3px;cursor:pointer;color:#374151}}.wk-big{{grid-column:span 2;grid-row:span 2}}@media(max-width:900px){{.wk-big{{grid-column:auto;grid-row:auto}}}}.wk-all{{margin-left:8px;vertical-align:middle}}
 tr.clk{{cursor:pointer}}tr.clk:hover td{{background:#f8fafc}}.car{{color:#9ca3af;font-size:11px}}
 tr.chart td{{padding:10px 8px 16px;background:#fcfcfd}}.chbox{{max-width:760px}}.chbox .hd{{display:flex;gap:14px;flex-wrap:wrap;align-items:baseline;font-size:12px;margin-bottom:4px}}
 .chbox .hd b{{font-size:13px}}.lg{{display:inline-flex;align-items:center;gap:5px;color:var(--muted)}}.lg i{{display:inline-block;width:14px;height:3px;border-radius:2px}}
