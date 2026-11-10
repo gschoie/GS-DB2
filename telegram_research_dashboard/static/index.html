@@ -45,7 +45,8 @@
                 <summary>⚔️ 주가.INDEX.비교</summary>
                 <div class="nav-submenu-3">
                   <button class="nav" data-view="shipindex" title="조선주 상대 INDEX — KOSPI vs 조선주 · 한국 조선 7사 · 한/중/일/싱 · 조선5사/엔진/기자재 (12주전=100, 시총가중). 그림마다 복사·SVG/PNG 다운로드">🚢 조선</button>
-                  <button class="nav" data-view="defindex" title="방산 상대 INDEX — 한국 체계 5사 · 부체계 11사 · 한국 vs 미국 프라임/유럽 체계 · 드론/엔진·부품/항공 (12주전=100, 시총가중)">🛡️ 방산</button>
+                  <button class="nav" data-view="defindex" title="방산 상대 INDEX — 한국 체계 5사 · 부체계 11사 · 한국 vs 미국 체계/유럽 체계 · 드론/엔진·부품/항공/우주 (12주전=100, 시총가중)">🛡️ 방산</button>
+                  <button class="nav" data-view="conindex" title="건설기계 상대 INDEX — HD건설기계·두산밥캣·부품사 · 한국 2사 vs 미국/중국/일본 · 대형 OEM 8 · 소형/농기계 (12주전=100, 시총가중)">🏗️ 기계</button>
                 </div>
               </details>
               <details class="nav-subgroup">
@@ -57,6 +58,14 @@
                 </div>
               </details>
               <button class="nav" data-view="conschart" title="커버리지 16종목 영업이익 컨센서스 추이(최근 6개월) — 분기·연간 그림 한 창에, 그림마다 📋 복사·PNG/SVG/CSV 다운로드">📊 컨센서스(조방기)</button>
+              <details class="nav-subgroup">
+                <summary>📐 ER</summary>
+                <div class="nav-submenu-3">
+                  <button class="nav" data-view="er-ship" title="Earnings Revision — 한국 조선·조기 9사 + Yangzijiang·CSSC·Seatrium. ER=(상향−하향)/애널리스트 수, EPS 1M·3M 변화율, 일별 추이(야후, 11/10부터 적재)">🚢 조선</button>
+                  <button class="nav" data-view="er-def" title="Earnings Revision — 한국 방산 5사 + 미국 체계 7 · 유럽 체계 8">🛡️ 방산</button>
+                  <button class="nav" data-view="er-con" title="Earnings Revision — 두산밥캣·HD건설기계 + 미국·일본·스웨덴·중국 피어 12">🏗️ 건설기계</button>
+                </div>
+              </details>
             </div>
           </details>
           <details class="nav-subgroup">
@@ -64,7 +73,7 @@
             <div class="nav-submenu-2">
               <a href="https://notebooklm.google.com/notebook/2137cd2a-f9c6-4122-aa97-b0d46b39d795" target="_blank" rel="noopener">🔮 다올선박.학습</a>
               <button class="nav" data-view="defweekly">⚔️ 방산.주간정리(토)</button>
-              <button class="nav" data-view="press">🛡️ GS채널기사.W취합</button>
+              <button class="nav" data-view="press">🛡️ GS채널.W기사</button>
               <button class="nav" data-view="conweekly">🚜 건기.주간정리(토)</button>
             </div>
           </details>
@@ -85,6 +94,7 @@
               <a href="https://gemini.google.com/gem/faaa023705b8" target="_blank" rel="noopener">🔍 재무제표.점검</a>
             </div>
           </details>
+          <a href="https://chatgpt.com/g/g-p-6af2e36f2de0819182567d37e169e147-caeneol-gs-daol-seutail/project" target="_blank" rel="noopener" title="채널 GS·DAOL 스타일로 텔레그램 메시지 전환 (ChatGPT 프로젝트)">💬 텔레.메시지 전환</a>
         </div>
       </details>
       <details class="nav-group">
@@ -505,12 +515,28 @@
       <iframe id="shipindex-frame" class="union-board-frame" title="주가 INDEX 비교" loading="lazy"></iframe>
     </section>
     <section id="defindex" class="view">
-      <div class="archive-intro"><div><p class="eyebrow">주보 · INDEX</p><h2>방산 INDEX 비교 — 체계 5사 · 부체계 · 한국 vs 미국·유럽 · 드론/엔진/항공</h2></div><div class="etf-actions"><a class="open-new" href="ship_index.html?u=defense" target="_blank" rel="noopener">🔗 새 창으로</a></div></div>
+      <div class="archive-intro"><div><p class="eyebrow">주보 · INDEX</p><h2>방산 INDEX 비교 — 체계 5사 · 부체계 · 한국 vs 미국·유럽 · 드론/엔진/항공/우주</h2></div><div class="etf-actions"><a class="open-new" href="ship_index.html?u=defense" target="_blank" rel="noopener">🔗 새 창으로</a></div></div>
       <iframe id="defindex-frame" class="union-board-frame" title="방산 INDEX 비교" loading="lazy"></iframe>
+    </section>
+    <section id="conindex" class="view">
+      <div class="archive-intro"><div><p class="eyebrow">주보 · INDEX</p><h2>건설기계 INDEX 비교 — 한국 2사·부품사 · 한국 vs 미·중·일 · 대형 OEM · 소형/농기계</h2></div><div class="etf-actions"><a class="open-new" href="ship_index.html?u=construction" target="_blank" rel="noopener">🔗 새 창으로</a></div></div>
+      <iframe id="conindex-frame" class="union-board-frame" title="건설기계 INDEX 비교" loading="lazy"></iframe>
     </section>
     <section id="conschart" class="view">
       <div class="archive-intro"><div><p class="eyebrow">주보 · 컨센서스</p><h2>커버리지 영업이익 컨센서스 추이 (조선·방산·건기)</h2></div><div class="etf-actions"><a class="open-new" href="consensus_chart.html" target="_blank" rel="noopener">🔗 새 창으로</a></div></div>
       <iframe id="conschart-frame" class="union-board-frame" title="커버리지 영업이익 컨센서스 추이" loading="lazy"></iframe>
+    </section>
+    <section id="er-ship" class="view">
+      <div class="archive-intro"><div><p class="eyebrow">주보 · ER</p><h2>Earnings Revision — 조선</h2></div><div class="etf-actions"><a class="open-new" href="er_report.html?s=조선" target="_blank" rel="noopener">🔗 새 창으로</a></div></div>
+      <iframe id="er-ship-frame" class="union-board-frame" title="Earnings Revision — 조선" loading="lazy"></iframe>
+    </section>
+    <section id="er-def" class="view">
+      <div class="archive-intro"><div><p class="eyebrow">주보 · ER</p><h2>Earnings Revision — 방산</h2></div><div class="etf-actions"><a class="open-new" href="er_report.html?s=방산" target="_blank" rel="noopener">🔗 새 창으로</a></div></div>
+      <iframe id="er-def-frame" class="union-board-frame" title="Earnings Revision — 방산" loading="lazy"></iframe>
+    </section>
+    <section id="er-con" class="view">
+      <div class="archive-intro"><div><p class="eyebrow">주보 · ER</p><h2>Earnings Revision — 건설기계</h2></div><div class="etf-actions"><a class="open-new" href="er_report.html?s=건설기계" target="_blank" rel="noopener">🔗 새 창으로</a></div></div>
+      <iframe id="er-con-frame" class="union-board-frame" title="Earnings Revision — 건설기계" loading="lazy"></iframe>
     </section>
     <section id="dartcap" class="view">
       <div class="archive-intro"><div><p class="eyebrow">DART · CAPACITY</p><h2>전자공시 - 생산능력 · 생산실적 · 가동률</h2></div><div class="etf-actions"><button id="dartcap-refresh" class="refresh-btn" type="button" title="OpenDART에서 새 정기보고서를 받아 표를 추출·정규화합니다 (자동 실행은 3·5·8·11월 20일, 10분 안팎 소요).">🔄 지금 수집</button><span id="dartcap-status" class="task-sync"></span><a class="open-new" href="dart_capacity_report.html" target="_blank" rel="noopener">🔗 새 창으로</a></div></div>
