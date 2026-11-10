@@ -21,11 +21,14 @@ PRICE_API = ("https://api.finance.naver.com/siseJson.naver?symbol={code}"
              "&requestType=1&startTime={s}&endTime={e}&timeframe=day")
 CONSENSUS_URL = "https://navercomp.wisereport.co.kr/company/c1050001.aspx?cmp_cd={code}&cn="
 
-# 그리드 값이 채워질 때까지 대기: 재무연월 테이블에 콤마숫자가 등장하면 준비 완료
+# 그리드 값이 채워질 때까지 대기: 재무연월 테이블에 '2026.12(E)' 같은 기간 행 + 숫자가 등장하면 준비 완료.
+# 종전 판정은 '만 단위 콤마숫자(12,345)' 존재였는데, 매출·영업이익이 전부 1만억 미만인 종목(한화엔진·
+# 세진중공업·한미반도체 등 46개)은 분기 그리드에 그런 숫자가 하나도 없어 타임아웃 → 조용히 빠졌다(11/9 실측).
+_GRID_LOADED_RE = "/20\\d\\d\\.(03|06|09|12)\\((A|E)\\)[\\s\\S]*\\d/"
 _GRID_READY_JS = (
     "() => { for (const t of document.querySelectorAll('table')) {"
     " const x = t.innerText;"
-    " if (x.includes('재무연월') && /\\d{2,},\\d{3}/.test(x)) return true;"
+    " if (x.includes('재무연월') && " + _GRID_LOADED_RE + ".test(x)) return true;"
     " } return false; }"
 )
 
@@ -107,7 +110,7 @@ def _parse_grid(page):
     grid_html = None
     for t in page.query_selector_all("table"):
         tx = t.inner_text()
-        if "재무연월" in tx and re.search(r"\d{2,},\d{3}", tx):
+        if "재무연월" in tx and re.search(r"20\d\d\.(03|06|09|12)\((A|E)\)", tx):
             grid_html = t.evaluate("el => el.outerHTML")
             break
     if not grid_html:
@@ -146,7 +149,7 @@ def _parse_grid(page):
 _GRID_MODE_JS = (
     "(wantQuarter) => { for (const t of document.querySelectorAll('table')) {"
     " const x = t.innerText;"
-    " if (!x.includes('재무연월') || !/\\d{2,},\\d{3}/.test(x)) continue;"
+    " if (!x.includes('재무연월') || !" + _GRID_LOADED_RE + ".test(x)) continue;"
     " const hasQ = /20\\d\\d\\.(03|06|09)\\(/.test(x);"
     " return wantQuarter ? hasQ : !hasQ;"
     " } return false; }"
