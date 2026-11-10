@@ -1273,6 +1273,10 @@
       의 totalInfos marketValue, 이 컨테이너에서 호출 가능)로 방산 부품사 시총 순위를 뽑아 보여주고 사용자 선택 **풍산·
       SNT다이내믹스**(방산 11칸 3행), 건기는 **진성티이씨·디와이파워**(8칸 2행 꽉 참). 넷 다 유니버스 밖이라
       chart_universe.csv 차트 전용(group 열 방산/건설기계). 참고로 '삼영컴텍'은 삼양컴텍(484590, 2,007억)이고 뺐다.
+    - **④ 에 📋 복사** (11/10, 사용자 "index 등은 복사가 있는데 수급에는 왜 없니"): 칸마다 `📋 복사`(⬇ PNG 왼쪽), 묶음마다
+      `📋 n개 한 장 복사`. `pngBlob()`(SVG→canvas→PNG+pHYs, Promise) 하나를 다운로드(`toPng`)와 클립보드(`copyPng`,
+      ClipboardItem 에 Promise 그대로 — 사파리 제스처)가 같이 쓰고, 한 장 조립은 `composite(grid)` 로 분리. 클립보드
+      미지원 브라우저는 복사 버튼을 지운다. Playwright 로 낱장(1200×820)·방산 한 장(4896×2524) 클립보드 확인.
     - **④ 는 공유용 주소에서 숨김** (11/7 밤, 사용자 "gs-research-desk.github.io/coverage_flow_report.html 에는 ④ 없어야").
       텔레 캡션 링크가 그 주소라서. WEEKLY_JS 가 `location.hostname === gs-research-desk.github.io` 이고 해시에
       `weekly` 가 없으면 `#weekly` 를 DOM 에서 제거. 본인용은 `#weekly` 해시(사이드바 🚢 수급.그림-조선)로 진입,
