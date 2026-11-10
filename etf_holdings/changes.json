@@ -1,96 +1,15 @@
 {
   "date": "2026-11-10",
   "prev_date": "2026-11-09",
-  "generated_at": "2026-11-10 09:20",
+  "generated_at": "2026-11-10 10:20",
   "base_date": "",
   "prev_base_date": "",
   "market_date": "2026-11-10",
   "prev_market_date": "2026-11-09",
-  "fetched_at": "2026-11-10 09:20",
+  "fetched_at": "2026-11-10 10:20",
   "prev_fetched_at": "2026-11-09 09:20",
   "first_run": false,
   "etfs": [
-    {
-      "code": "462900",
-      "label": "KoAct 바이오헬스케어액티브",
-      "group": "KoAct",
-      "flow_factor": 1.0,
-      "new": [],
-      "gone": [
-        {
-          "key": "068270",
-          "name": "셀트리온",
-          "code": "068270",
-          "weight_prev": 10.84,
-          "shares_prev": 272.0
-        },
-        {
-          "key": "128940",
-          "name": "한미약품",
-          "code": "128940",
-          "weight_prev": 10.49,
-          "shares_prev": 119.0
-        },
-        {
-          "key": "226950",
-          "name": "올릭스",
-          "code": "226950",
-          "weight_prev": 7.02,
-          "shares_prev": 497.0
-        },
-        {
-          "key": "196170",
-          "name": "알테오젠",
-          "code": "196170",
-          "weight_prev": 6.89,
-          "shares_prev": 182.0
-        },
-        {
-          "key": "298380",
-          "name": "에이비엘바이오",
-          "code": "298380",
-          "weight_prev": 6.38,
-          "shares_prev": 938.0
-        },
-        {
-          "key": "009420",
-          "name": "한올바이오파마",
-          "code": "009420",
-          "weight_prev": 5.49,
-          "shares_prev": 815.0
-        },
-        {
-          "key": "006280",
-          "name": "녹십자",
-          "code": "006280",
-          "weight_prev": 5.05,
-          "shares_prev": 191.0
-        },
-        {
-          "key": "039200",
-          "name": "오스코텍",
-          "code": "039200",
-          "weight_prev": 4.85,
-          "shares_prev": 708.0
-        },
-        {
-          "key": "237690",
-          "name": "에스티팜",
-          "code": "237690",
-          "weight_prev": 4.84,
-          "shares_prev": 353.0
-        },
-        {
-          "key": "347850",
-          "name": "디앤디파마텍",
-          "code": "347850",
-          "weight_prev": 4.21,
-          "shares_prev": 591.0
-        }
-      ],
-      "moves": [],
-      "has_weight": false
-    },
     {
       "code": "476850",
       "label": "KoAct 배당성장액티브",
@@ -152,34 +71,34 @@
       "flow_factor": 1.0,
       "new": [
         {
-          "key": "NEXTERA ENERGY INC",
-          "name": "NEXTERA ENERGY INC",
-          "code": "",
-          "weight": 0.0,
-          "shares": 123.0
-        },
-        {
           "key": "XCEL ENERGY INC",
           "name": "XCEL ENERGY INC",
           "code": "",
           "weight": 0.0,
           "shares": 135.0
+        },
+        {
+          "key": "NEXTERA ENERGY INC",
+          "name": "NEXTERA ENERGY INC",
+          "code": "",
+          "weight": 0.0,
+          "shares": 123.0
         }
       ],
       "gone": [
-        {
-          "key": "MICROSOFT CORP",
-          "name": "MICROSOFT CORP",
-          "code": "",
-          "weight_prev": 0.0,
-          "shares_prev": 80.0
-        },
         {
           "key": "BLOOM ENERGY CORP- A",
           "name": "BLOOM ENERGY CORP- A",
           "code": "",
           "weight_prev": 0.0,
           "shares_prev": 94.0
+        },
+        {
+          "key": "MICROSOFT CORP",
+          "name": "MICROSOFT CORP",
+          "code": "",
+          "weight_prev": 0.0,
+          "shares_prev": 80.0
         }
       ],
       "moves": [],
@@ -296,9 +215,9 @@
     "share_pct_min": 30.0
   },
   "summary": {
-    "etfs_changed": 7,
+    "etfs_changed": 6,
     "new_total": 9,
-    "gone_total": 19,
+    "gone_total": 9,
     "moves_total": 0,
     "universe": 20
   }
