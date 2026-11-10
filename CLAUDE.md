@@ -1671,6 +1671,7 @@
       ③ 대형 OEM 8 — HD건기·CAT·Komatsu·Hitachi CM·SANY·XCMG·Zoomlion·LiuGong, **중국은 SANY 만 실선** ④ 두산밥캣·Deere·
       **Kobelco = 모회사 Kobe Steel(5406.T)**(건설기계 자회사 비상장 — 각주에 명시)·대동. 갤러리 `?u=construction`, 사이드바
       `⚔️ 주가.INDEX.비교 › 🏗️ 기계`(conindex).
+      ④ 범례 5열이 그림 폭을 넘쳐(11/10 사용자 지적) 3열·2줄로(`ncol=3` — matplotlib 범례는 열 우선 채움).
     - 운영 메모: GitHub Pages deploy 가 'syncing_files' 에서 10분 멈춰 타임아웃하는 날이 있다(11/10 새벽 2회) — 같은 run 재시도는
       'Deployment cancelled' 로 또 죽고, 다음 커밋의 새 run 은 정상. 코드 문제가 아니므로 기다리거나 새 run 으로.
 
