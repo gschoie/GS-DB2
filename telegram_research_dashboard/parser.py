@@ -21,6 +21,10 @@ PREVIOUS_PRICE_RE = re.compile(r"(?:기존|종전)\s*(?:목표주가|적정주�
 OPINION_RE = re.compile(r"(?:투자의견|의견)\s*[:：]?\s*([A-Za-z가-힣 ]{2,16})", re.I)
 REPORT_WORDS = ("목표주가", "투자의견", "리포트", "보고서", "기업분석", "산업분석")
 REPORT_MARKERS = ("컴플라이언스 승인을 득한 보고서", "컴플 보고서")
+# 내가 이 방에 직접 올리는 정기물 — 뉴스 아카이브로 긁어오지 않는다.
+# 수급 브리핑은 10/20 에 본문 맨 밑 공유 링크가 붙으면서 classify 의
+# "URL 이 있으면 뉴스" 규칙에 걸려 아카이브로 들어오기 시작했다.
+OWN_POST_RE = re.compile(r"\[GS.{0,3}\s*조선·방산·건기\]\s*수급\s*브리핑")
 DAILY_NEWS_RE = re.compile(r"\d{1,2}/\d{1,2}\([^)]*\)\s*데일리뉴스")
 WEEKLY_RE = re.compile(r"주시\s*뉴스")
 INDUSTRIES = ("조선", "방산", "기계", "해양", "LNG", "가스선", "컨테이너", "탱커")
@@ -371,7 +375,14 @@ def split_company_sections(text: str) -> list[dict]:
     return sections if len(sections) >= 2 else []
 
 
+def is_own_post(text: str) -> bool:
+    """내가 올린 정기물(수급 브리핑)인가 — 아카이브 대상이 아니다."""
+    return bool(OWN_POST_RE.search(text or ""))
+
+
 def classify(text: str) -> str:
+    if is_own_post(text):
+        return "unclassified"
     if any(marker in text for marker in REPORT_MARKERS):
         return "report"
     if DAILY_NEWS_RE.search(text):

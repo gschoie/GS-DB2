@@ -52,6 +52,7 @@ calendar:
 #         / diff(전월 대비 증감, scale 로 단위 환산)
 #   freq: m(월) 기본 / q(분기) — 분기면 '전기'로 적고 라벨도 'n분기'가 된다
 #   also: 한 줄에 같이 적을 보조 계열(고용보고서의 실업률)
+#         key: 보조 계열 숫자를 `<key>_yoy` 처럼 붙일 이름(guide.yml 밴드 `metric:` 이 이걸 본다)
 # release 가 없는 지표는 화면에 '–' 로 남는다 — ISM 은 무료 경로가 아예 없다.
 # 계열 ID 는 러너 실측으로 확인한 것만 적는다(macro_desk/tests/probe_release_sources.py).
   - {id: us_payrolls, name: 미국 고용보고서, country: US, rule: {nth_weekday: [1, fri]},
@@ -59,11 +60,11 @@ calendar:
      release: {series: CES0000000001, kind: diff, scale: 10, unit: 만명,
                unit_note: "비농업 취업자 전월 대비 증감",
                also: {series: LNS14000000, kind: level, unit: "%", digits: 1,
-                      label: 실업률}}}
+                      label: 실업률, key: unemp}}}
   - {id: us_cpi,  name: 미국 소비자물가 CPI, country: US, rule: {around: 12},
      time: "밤 9:30 / 10:30", guide: us_cpi,
      release: {series: CUSR0000SA0, kind: yoy_mom,
-               also: {series: CUSR0000SA0L1E, kind: yoy, label: 코어}}}
+               also: {series: CUSR0000SA0L1E, kind: yoy, label: 코어, key: core}}}
   - {id: us_ppi,  name: 미국 생산자물가 PPI, country: US, rule: {around: 14}, guide: us_ppi,
      release: {series: WPSFD4, kind: yoy_mom}}
   - {id: us_retail, name: 미국 소매판매, country: US, rule: {around: 16}, guide: us_retail,
@@ -71,7 +72,7 @@ calendar:
   - {id: us_pce,  name: 미국 PCE 물가, country: US, rule: {nth_weekday: [-1, fri]},
      time: "밤 9:30 / 10:30", guide: us_pce,
      release: {src: fred, series: PCEPI, kind: yoy_mom,
-               also: {src: fred, series: PCEPILFE, kind: yoy, label: 코어}}}
+               also: {src: fred, series: PCEPILFE, kind: yoy, label: 코어, key: core}}}
   # ISM 은 2022년에 재배포를 막았다 — 유료 외엔 경로가 없어 직전치를 비운다
   - {id: us_ism_mfg, name: 미국 ISM 제조업, country: US, rule: {nth_bizday: 1}, guide: us_ism}
   - {id: us_ism_svc, name: 미국 ISM 서비스업, country: US, rule: {nth_bizday: 3}, guide: us_ism}

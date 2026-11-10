@@ -361,10 +361,12 @@ class Outputs(unittest.TestCase):
                  unittest.mock.patch.object(notify, "send_photos", lambda paths, caption="", parse_mode=None, chat=None: calls.append(("album", chat, len(paths), caption)) or {"ok": chat not in fail, "description": "chat not found"}):
                 rc = notify.main(["--photos", os.path.join(tmp, "capture_*.png")])
             self.assertEqual(rc, 0)                                                   # 기본 방 성공이면 0
-            # 그림·본문·맨 밑 공유 링크까지 세 방 전부 같다
+            # 그림·본문은 세 방 전부 같고, 맨 밑 공유 링크는 기본 방만(10/28: 공개방엔 주소 안 남김)
             self.assertEqual([c[:3] for c in calls[:3]], [("album", "-100111", 3), ("album", "-100222", 3), ("album", "@HI_GS", 3)])
-            body = notify.compose_html(d) + "\n\n" + notify.SHARE_URL
-            self.assertEqual(calls[0][3], body); self.assertEqual(calls[1][3], body); self.assertEqual(calls[2][3], body)
+            body = notify.compose_html(d)
+            self.assertEqual(calls[0][3], body + "\n\n" + notify.SHARE_URL)
+            self.assertEqual(calls[1][3], body); self.assertEqual(calls[2][3], body)
+            self.assertNotIn("gs-research-desk", calls[2][3])
             self.assertTrue(notify.visible_len(calls[1][3]) <= notify.CAPTION_MAX)
             self.assertEqual(notify.visible_len("<b>a&amp;b</b>"), 3)                 # 태그·이스케이프 제외
             self.assertEqual(calls[3], ("text", "@HI_GS"))                            # 실패 방만 본문 따로 폴백
@@ -776,6 +778,109 @@ class Archive(unittest.TestCase):
         self.assertIn("날짜 고르기 (2개)", m)
         self.assertLess(m.index("class='arch'"), m.index('<div id="cap-1">'))   # 텔레 캡쳐 영역 밖
         self.assertNotIn("class='arch'", build_report.render(d))                # 기록 없으면 줄 자체가 없다
+
+
+class Series(unittest.TestCase):
+    def inv(self, n, start="2026-01-02", fr=10.0, org=-4.0):
+        d = pd.bdate_range(start, periods=n)
+        return pd.DataFrame({"date": d, "개인": 0.0, "외국인": fr, "기관": org})
+
+    def test_cumulative_and_mcap(self):
+        oh = ohlc([100.0] * 120, "2026-01-02")
+        s = metrics.build_series(oh, self.inv(120), 5e8, "2027-01-01")
+        self.assertEqual(len(s["mc"]), 120)
+        self.assertEqual(len(s["d"]), 120 * 6)
+        self.assertEqual(s["mc"][0], 500)                     # 100원 × 5억주 / 1e8 = 500억
+        self.assertEqual(s["fr"][0], 10)
+        self.assertEqual(s["fr"][-1], 1200)                   # 10억 × 120일 누적
+        self.assertEqual(s["in"][-1], -480)
+
+    def test_window_shrinks_to_flow_range(self):
+        # 가격은 300일, 수급은 뒤 100일뿐 — 없는 날을 0 으로 채워 누적선을 꾸미지 않는다
+        oh = ohlc([100.0] * 300, "2025-01-01")
+        inv = self.inv(100, str(oh["date"].iloc[-100].date()))
+        s = metrics.build_series(oh, inv, 1e8, "2027-01-01")
+        self.assertEqual(len(s["mc"]), 100)
+        self.assertEqual(s["d"][:6], oh["date"].iloc[-100].strftime("%y%m%d"))
+
+    def test_gives_none_when_unknown(self):
+        oh = ohlc([100.0] * 120, "2026-01-02")
+        self.assertIsNone(metrics.build_series(oh, self.inv(120), None, "2027-01-01"))   # 상장주수 모름
+        tail5 = self.inv(5, str(oh["date"].iloc[-5].date()))
+        self.assertIsNone(metrics.build_series(oh, tail5, 1e8, "2027-01-01"))              # 수급 이력 부족(5일)
+        self.assertIsNone(metrics.build_series(oh, pd.DataFrame(columns=["date", "외국인", "기관"]), 1e8, "2027-01-01"))
+
+    def test_today_row_excluded(self):
+        oh = ohlc([100.0] * 60, "2026-01-02")
+        today = str(oh["date"].iloc[-1].date())
+        s = metrics.build_series(oh, self.inv(60), 1e8, today)
+        self.assertEqual(len(s["mc"]), 59)                    # 오늘(잠정) 행은 차트에 안 넣는다
+
+    def test_render_click_rows_only_with_series(self):
+        path = os.path.join(os.path.dirname(HERE), "data", "latest.json")
+        if not os.path.exists(path):
+            self.skipTest("latest.json 없음")
+        d = json.load(open(path, encoding="utf-8"))
+        code = d["rows"][0]["code"]
+        html = build_report.render(d, series={code: {"d": "260102", "mc": [1], "fr": [1], "in": [1]}})
+        self.assertEqual(html.count("class='clk'"), 1)
+        self.assertIn('const SERIES={"' + code + '"', html)
+        self.assertNotIn("class='clk'", build_report.render(d))
+        self.assertNotIn("const SERIES", build_report.render(d))
+
+
+
+class Weekly(unittest.TestCase):
+    """위클리용 차트 섹션: 시계열 있는 종목만 칸, 없으면 섹션 없음, 지난 기록 페이지엔 없음."""
+
+    def test_section(self):
+        d = fake_payload()
+        d["rows"] += [{"code": c, "name": n, "sector": "조선"} for c, n in
+                      (("009540", "HD한국조선해양"), ("010140", "삼성중공업"), ("329180", "HD현대중공업"))]
+        ser = {"d": "251112251113", "mc": [100, 110], "fr": [0, 5], "in": [0, -3]}
+        series = {"009540": ser, "010140": ser, "329180": ser}           # 한화오션은 시계열 없음
+        h = build_report.render(d, series=series)
+        self.assertIn("④ 위클리용 차트", h)
+        self.assertEqual(h.count("class='wk-cell"), 4)                            # 합산 1 + 개별 3
+        self.assertIn("data-codes='009540,010140,329180' data-name='조선 합산(3사)'", h)
+        self.assertIn("data-name='HD한국조선해양'", h)
+        self.assertIn("⬇ 4개 한 장 PNG", h); self.assertIn("data-cols='4'", h); self.assertIn("class='wk-cell wk-big'", h)
+        self.assertLess(h.index("조선 합산"), h.index("data-name='HD한국조선해양'"))   # 합산이 맨 앞
+        one = build_report.render(d, series={"009540": ser})
+        self.assertEqual(one.count("class='wk-cell"), 1); self.assertNotIn("data-codes=", one)   # 1종목이면 합산 칸 없음
+        self.assertLess(h.index("WEEKLY") if "WEEKLY" in h else h.index("wk-grid"), h.index("const SERIES="))
+        self.assertNotIn("④ 위클리용", build_report.render(d))                     # 시계열 없으면 섹션 없음
+        self.assertNotIn("④ 위클리용", build_report.render(d, series={"999999": ser}))  # 대상 종목 시계열 없음
+        self.assertNotIn("④ 위클리용", build_report.render(d, archive=True))
+        # 차트 전용 종목: 이름은 series 에서, 수집 오류는 섹션 안에 접힌 목록으로
+        d["chart_errors"] = ["014940 오리엔탈정공: 이름 불일치 — 한투 종목명 '엉뚱'(코드 확인)"]
+        h2 = build_report.render(d, series={**series, "077970": {**ser, "name": "STX엔진"}, "014940": {**ser, "name": "오리엔탈정공"}})
+        self.assertIn("data-name='STX엔진'", h2); self.assertIn("차트 전용 종목 수집 오류 1건", h2)
+        self.assertIn("data-codes='014940,077970' data-name='조선기자재 합산(2사)'", h2); self.assertIn("data-cols='4'", h2)
+        h3 = build_report.render(d, series={**series, "077970": {**ser, "name": "STX엔진"}})
+        self.assertIn("data-name='STX엔진'", h3); self.assertNotIn("조선기자재 합산", h3)   # 1종목이면 합산 칸 없음
+
+    def test_chart_only_name_guard(self):
+        """chart_universe 수집: 한투 종목명이 CSV 이름과 다르면 담지 않고 오류로, 맞으면 시계열 + 이름."""
+        import pandas as pd
+        calls = []
+        def price(code): calls.append(code); return {"name": "", "listed": 1000, "price": 100}   # 주식 inquire-price 는 이름이 비어 온다
+        dates = pd.bdate_range("2025-01-01", periods=60)
+        def ohlc_of(code):
+            df = pd.DataFrame({"date": dates, "c": [100.0] * 60, "o": 100.0, "h": 100.0, "l": 100.0, "v": 1, "amt": 1.0})
+            df.attrs["name"] = {"014940": "오리엔탈정공", "077970": "엉뚱한회사"}[code]   # 이름은 일봉 output1 에서
+            return df
+        inv = pd.DataFrame({"date": dates, "외국인": 1.0, "기관": -1.0, "개인": 0.0})
+        with unittest.mock.patch.object(collect, "load_csv", lambda n: [{"code": "014940", "name": "오리엔탈정공"}, {"code": "077970", "name": "STX엔진"}]), \
+             unittest.mock.patch.object(collect.kis, "fetch_price", price), \
+             unittest.mock.patch.object(collect.kis, "fetch_ohlc", ohlc_of), \
+             unittest.mock.patch.object(collect.kis, "fetch_investor", lambda c: inv), \
+             unittest.mock.patch.object(collect, "naver_investor_history", lambda c, u: (_ for _ in ()).throw(RuntimeError("off"))), \
+             unittest.mock.patch.object(collect.time, "sleep", lambda s: None):
+            out, errs = collect.collect_chart_only("2025-03-28")
+        self.assertEqual(list(out), ["014940"]); self.assertEqual(out["014940"]["name"], "오리엔탈정공")
+        self.assertEqual(len(errs), 1); self.assertIn("이름 불일치", errs[0]); self.assertIn("엉뚱한회사", errs[0])
+        self.assertEqual(calls, ["014940", "077970"])
 
 
 if __name__ == "__main__":

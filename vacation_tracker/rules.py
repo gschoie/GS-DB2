@@ -129,69 +129,103 @@ def _resolve_weekday(prefix: str | None, weekday_char: str, base: date) -> date:
     return base + timedelta(days=delta)
 
 
-def extract_dates(text: str, base: datetime) -> tuple[date | None, date | None]:
-    """본문에서 휴가 시작·종료일을 추정한다. 실패하면 (None, None) — needs_review 행이 된다.
+def _group_spans(dates: list[date]) -> list[tuple[date, date]]:
+    """날짜 목록을 연속 구간으로 묶는다 — 14,15,16은 한 구간, 13과 20은 두 구간."""
+    spans: list[list[date]] = []
+    for d in sorted(set(dates)):
+        if spans and (d - spans[-1][1]).days == 1:
+            spans[-1][1] = d
+        else:
+            spans.append([d, d])
+    return [(a, b) for a, b in spans]
 
-    날짜 토큰을 등장 순서대로 모아 첫 두 개를 쓴다. 두 개면 구간, 한 개면 하루.
-    "8/31부터 3일간"처럼 기간 표현이 붙으면 종료일을 늘린다.
+
+# 두 날짜 토큰 '사이' 글에 이게 있으면 구간, 쉼표·나열이면 떨어진 날짜들이다.
+_RANGE_SEP = re.compile(r"[-~〜∼–—]|부터|에서|까지")
+_LIST_SEP = re.compile(r"[,，]|이랑|랑|하고|및|그리고")
+
+
+def extract_periods(text: str, base: datetime) -> list[tuple[date, date]]:
+    """본문에서 자리 비움 기간들을 추정한다. 실패하면 [] — needs_review 행이 된다.
+
+    "9/15-9/18"·"8/31부터 3일간"은 한 구간, "11/13, 11/20 휴가"처럼 쉼표로 나열된
+    떨어진 날짜는 **건마다 따로**(11/6 실사례: 폴백이 11/11~11/13 구간으로 오독).
+    연속 날짜 나열("9/14,15,16")은 한 구간으로 묶는다.
     """
     base_date = base.astimezone(KST).date() if base.tzinfo else base.date()
 
-    # "9/14,15,16"·"9월 14, 15, 16일" 같은 나열은 같은 달의 연속 날짜 목록으로 읽는다.
-    listing = _DATE_LIST.search(text)
-    if listing:
-        month = int(listing.group(2))
-        days = [int(listing.group(3))] + [int(d) for d in re.findall(r"\d{1,2}", listing.group(4))]
-        resolved = [_resolve_md(listing.group(1), month, day, base_date) for day in days]
-        resolved = [d for d in resolved if d]
-        if len(resolved) >= 2:
-            return min(resolved), max(resolved)
-
-    found: list[tuple[int, date, str]] = []
+    found: list[tuple[int, int, date, str]] = []  # (start, end, date, 종류)
 
     for match in _DATE_TOKEN.finditer(text):
         resolved = _resolve_md(match.group(1), int(match.group(2)), int(match.group(3)), base_date)
         if resolved:
-            found.append((match.start(), resolved, "md"))
+            found.append((match.start(), match.end(), resolved, "md"))
     for match in _REL_TOKEN.finditer(text):
-        found.append((match.start(), base_date + timedelta(days=_REL_DAYS[match.group(0)]), "rel"))
+        found.append((match.start(), match.end(),
+                      base_date + timedelta(days=_REL_DAYS[match.group(0)]), "rel"))
     for match in _WEEKDAY_TOKEN.finditer(text):
-        found.append((match.start(), _resolve_weekday(match.group(1), match.group(2), base_date),
-                      "weekday"))
+        found.append((match.start(), match.end(),
+                      _resolve_weekday(match.group(1), match.group(2), base_date), "weekday"))
+
+    # "9/14,15,16"·"9월 14, 15, 16일" 같은 같은 달 나열 — 완전한 날짜 토큰이 하나뿐일 때만
+    # 쓴다("11/13, 11/20"도 나열 정규식에 걸리지만 '11'은 날이 아니라 다음 날짜의 월이다).
+    if len(found) < 2:
+        listing = _DATE_LIST.search(text)
+        if listing:
+            month = int(listing.group(2))
+            days = [int(listing.group(3))] + \
+                [int(d) for d in re.findall(r"\d{1,2}", listing.group(4))]
+            resolved = [_resolve_md(listing.group(1), month, day, base_date) for day in days]
+            resolved = [d for d in resolved if d]
+            if len(resolved) >= 2:
+                return _group_spans(resolved)
 
     if not found:
-        return None, None
+        return []
     found.sort(key=lambda item: item[0])
-    picked = found[:2]
 
-    if len(picked) >= 2:
-        start, end = picked[0][1], picked[1][1]
+    if len(found) >= 2:
+        # 토큰 사이 글로 구간/나열을 가른다 — 쉼표류가 있고 구간 표지가 없으면 떨어진 날짜들.
+        seps = [text[found[k][1]:found[k + 1][0]] for k in range(len(found) - 1)]
+        if any(_LIST_SEP.search(s) for s in seps) and not any(_RANGE_SEP.search(s) for s in seps):
+            return _group_spans([f[2] for f in found])
+        start, end = found[0][2], found[1][2]
         if end < start:
-            if picked[1][2] == "weekday":
+            if found[1][3] == "weekday":
                 # "다음주 수요일부터 금요일까지" — 뒤쪽 맨요일은 시작일과 같은 주다.
                 while end < start:
                     end += timedelta(days=7)
             else:
                 start, end = end, start
-    else:
-        start = end = picked[0][1]
-        duration = _DURATION.search(text)
-        if duration:
-            end = start + timedelta(days=int(duration.group(1)) - 1)
-    return start, end
+        return [(start, end)]
+
+    start = end = found[0][2]
+    duration = _DURATION.search(text)
+    if duration:
+        end = start + timedelta(days=int(duration.group(1)) - 1)
+    return [(start, end)]
+
+
+def extract_dates(text: str, base: datetime) -> tuple[date | None, date | None]:
+    """기존 단건 호환 — 첫 기간만 돌려준다. 다건은 extract_periods/rule_extract_all."""
+    periods = extract_periods(text, base)
+    return periods[0] if periods else (None, None)
+
+
+def rule_extract_all(text: str, msg_dt: datetime) -> list[dict]:
+    """규칙만으로 만든 항목들. 떨어진 날짜 나열이면 여러 건, 못 읽으면 needs_review 한 건."""
+    kind = detect_kind(text) or "휴가"
+    periods = extract_periods(text, msg_dt)
+    if not periods:
+        return [{"kind": kind, "start": None, "end": None,
+                 "needs_review": True, "engine": "rule"}]
+    return [{"kind": kind, "start": s.isoformat(), "end": e.isoformat(),
+             "needs_review": False, "engine": "rule"} for s, e in periods]
 
 
 def rule_extract(text: str, msg_dt: datetime) -> dict:
-    """규칙만으로 만든 항목 한 건. Gemini 결과가 없을 때의 폴백."""
-    kind = detect_kind(text) or "휴가"
-    start, end = extract_dates(text, msg_dt)
-    return {
-        "kind": kind,
-        "start": start.isoformat() if start else None,
-        "end": end.isoformat() if end else None,
-        "needs_review": start is None,
-        "engine": "rule",
-    }
+    """단건 호환 폴백 — 첫 건만. 다건 소비는 rule_extract_all."""
+    return rule_extract_all(text, msg_dt)[0]
 
 
 # ── 대화 맥락 후보 선별 ────────────────────────────────────────────────────

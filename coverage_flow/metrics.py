@@ -168,6 +168,31 @@ def spark_points(ohlc, today, price_now=None, n=SPARK_DAYS):
     return [round(x, 2) for x in closes[-n:]]
 
 
+SERIES_DAYS = 252      # 차트 창 = 최근 1년 거래일
+
+
+def build_series(ohlc, inv, listed, today, n=SERIES_DAYS):
+    """종목 클릭 패널의 1년 차트 데이터. 시총(억원) = 종가 × 상장주수(현재값) / 1e8,
+    외인·기관 누적 순매수(억원) = 창 시작일을 0 으로 둔 일별 순매수 누적합.
+    수급 이력이 창보다 짧으면(네이버가 덜 줌) 창을 수급이 있는 구간으로 줄인다 —
+    없는 날을 0 으로 채워 누적선을 거짓으로 그리지 않는다(30번 교훈). 부족하면 None.
+    날짜는 YYMMDD 고정폭 문자열 하나(36번: 날짜 수만큼 따옴표·쉼표가 붙는 걸 피한다)."""
+    if ohlc is None or ohlc.empty or inv is None or inv.empty or not listed:
+        return None
+    px = ohlc[(ohlc["date"] < pd.Timestamp(today)) & ohlc["c"].notna()].tail(n)
+    if px.empty:
+        return None
+    px = px[px["date"] >= inv["date"].min()]
+    if len(px) < 20:
+        return None
+    flow = inv.set_index("date").reindex(px["date"])
+    flow = flow[["외국인", "기관"]].fillna(0.0)
+    fr, org = flow["외국인"].cumsum(), flow["기관"].cumsum()
+    return {"d": "".join(d.strftime("%y%m%d") for d in px["date"]),
+            "mc": [round(float(c) * float(listed) / 1e8) for c in px["c"]],
+            "fr": [round(float(x)) for x in fr], "in": [round(float(x)) for x in org]}
+
+
 FLOW_WINDOWS = {"d5": 5, "m1": 21, "m3": 63}
 
 

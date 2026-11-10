@@ -1,0 +1,735 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>매매제한 컴플 체크</title>
+<style>
+  :root {
+    --bg: #f6f7f9; --card: #fff; --ink: #1b1f24; --muted: #667085; --line: #e3e6ea;
+    --accent: #1d4ed8; --ok: #0f7b3e; --bad: #c2271b; --warn: #a15c00; --chk: #6d28d9;
+    --okbg: #e8f6ee; --badbg: #fdecea; --warnbg: #fff4e0; --chkbg: #f1ebff; --unbg: #eef1f5;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #111418; --card: #1a1e24; --ink: #e8eaed; --muted: #98a2b3; --line: #2b313a;
+      --accent: #7aa2ff; --ok: #5fd08f; --bad: #ff8a80; --warn: #ffbf5c; --chk: #b9a0ff;
+      --okbg: #12301f; --badbg: #3a1714; --warnbg: #3a2a0f; --chkbg: #261c40; --unbg: #222831;
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #111418; --card: #1a1e24; --ink: #e8eaed; --muted: #98a2b3; --line: #2b313a;
+    --accent: #7aa2ff; --ok: #5fd08f; --bad: #ff8a80; --warn: #ffbf5c; --chk: #b9a0ff;
+    --okbg: #12301f; --badbg: #3a1714; --warnbg: #3a2a0f; --chkbg: #261c40; --unbg: #222831;
+    color-scheme: dark;
+  }
+  * { box-sizing: border-box; }
+  [hidden] { display: none !important; }
+  body { margin: 0; background: var(--bg); color: var(--ink);
+    font: 14px/1.55 -apple-system, "Apple SD Gothic Neo", "Malgun Gothic", "Noto Sans KR", sans-serif; }
+  main { max-width: 1080px; margin: 0 auto; padding: 20px 16px 60px; }
+  h1 { font-size: 20px; margin: 0 0 4px; }
+  .sub { color: var(--muted); margin: 0 0 18px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 16px; margin-bottom: 14px; }
+  .card h2 { font-size: 15px; margin: 0 0 10px; }
+  .row { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
+  label.f { display: flex; flex-direction: column; gap: 4px; font-size: 12px; color: var(--muted); }
+  input[type=text], input[type=password], input[type=date], select, textarea {
+    font: inherit; color: var(--ink); background: var(--bg); border: 1px solid var(--line); border-radius: 6px; padding: 7px 9px; }
+  input[type=password] { width: 320px; max-width: 100%; }
+  textarea { width: 100%; min-height: 70px; resize: vertical; }
+  .zones { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+  @media (max-width: 820px) { .zones { grid-template-columns: 1fr; } }
+  .zone { border: 2px dashed var(--line); border-radius: 10px; padding: 12px; cursor: pointer; min-height: 150px; }
+  .zone.active { border-color: var(--accent); }
+  .zone.drag { background: var(--chkbg); }
+  .zone h3 { margin: 0 0 2px; font-size: 14px; }
+  .zone p { margin: 0 0 8px; color: var(--muted); font-size: 12px; }
+  .pick { font: inherit; font-size: 12px; margin-bottom: 8px; padding: 5px 10px; border-radius: 6px; border: 1px solid var(--accent); background: transparent; color: var(--accent); cursor: pointer; }
+  .thumbs { display: flex; flex-wrap: wrap; gap: 6px; }
+  .thumb { position: relative; width: 84px; height: 64px; border: 1px solid var(--line); border-radius: 6px; overflow: hidden;
+    background: var(--unbg); display: flex; align-items: center; justify-content: center; font-size: 11px; color: var(--muted); }
+  .thumb img { width: 100%; height: 100%; object-fit: cover; }
+  .thumb button { position: absolute; top: 2px; right: 2px; border: 0; border-radius: 50%; width: 18px; height: 18px;
+    background: rgba(0,0,0,.6); color: #fff; font-size: 11px; line-height: 18px; padding: 0; cursor: pointer; }
+  .thumb .idx { position: absolute; left: 3px; bottom: 2px; background: rgba(0,0,0,.6); color: #fff; padding: 0 4px; border-radius: 3px; font-size: 10px; }
+  .btn { font: inherit; font-weight: 600; border: 0; border-radius: 8px; padding: 10px 18px; cursor: pointer; background: var(--accent); color: #fff; }
+  .btn.ghost { background: transparent; color: var(--accent); border: 1px solid var(--accent); padding: 7px 12px; font-weight: 500; }
+  .btn:disabled { opacity: .5; cursor: wait; }
+  .hint { color: var(--muted); font-size: 12px; }
+  #status { margin-left: 8px; color: var(--muted); }
+  #status.err { color: var(--bad); }
+  .verdict { font-size: 18px; font-weight: 700; padding: 12px 14px; border-radius: 8px; margin-bottom: 12px; }
+  .v-ok { background: var(--okbg); color: var(--ok); }
+  .v-bad { background: var(--badbg); color: var(--bad); }
+  .v-inc { background: var(--warnbg); color: var(--warn); }
+  .tiles { display: grid; grid-template-columns: repeat(6, 1fr); gap: 8px; margin-bottom: 14px; }
+  @media (max-width: 700px) { .tiles { grid-template-columns: repeat(3, 1fr); } }
+  .tile { border: 1px solid var(--line); border-radius: 8px; padding: 8px 10px; }
+  .tile b { display: block; font-size: 20px; }
+  .tile span { color: var(--muted); font-size: 12px; }
+  .tile.hot { border-color: var(--bad); }
+  ul.issues { margin: 0 0 14px; padding-left: 18px; }
+  ul.issues li { margin: 2px 0; }
+  .tablewrap { overflow-x: auto; }
+  table { border-collapse: collapse; width: 100%; font-size: 13px; }
+  th, td { border-bottom: 1px solid var(--line); padding: 6px 8px; text-align: left; vertical-align: top; }
+  th { color: var(--muted); font-weight: 600; white-space: nowrap; }
+  td.c { text-align: center; white-space: nowrap; }
+  td.nm, td.st { white-space: nowrap; }
+  table { min-width: 560px; }
+  @media (max-width: 600px) {
+    th.ab, td.ab { display: none; }   /* 상태 칸이 같은 정보를 담음 */
+    table { min-width: 0; }
+    td.note { min-width: 120px; }
+  }
+  td.code { font-family: ui-monospace, Menlo, Consolas, monospace; white-space: nowrap; }
+  tr.s-miss td { background: var(--badbg); }
+  tr.s-extra td { background: var(--warnbg); }
+  tr.s-check td { background: var(--chkbg); }
+  tr.s-unread td { background: var(--unbg); }
+  .note { color: var(--muted); font-size: 12px; }
+  details { margin-top: 12px; }
+  summary { cursor: pointer; color: var(--accent); }
+  #jsonEdit { min-height: 260px; font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 12px; }
+  .foot { color: var(--muted); font-size: 12px; margin-top: 12px; }
+  .hidden { display: none; }
+</style>
+</head>
+<body>
+<main>
+  <h1>⏳ 매매제한 컴플 체크 (24H)</h1>
+  <p class="sub">매매제한 지시(자료 A)와 파워베이스 반영 캡처(자료 B)를 올리면 누락·초과·코드 불일치를 대조합니다.
+    종목 판독은 AI(Gemini 또는 Claude), 대조·판정·집계는 고정 규칙(matcher.js)으로 수행합니다.</p>
+
+  <section class="card">
+    <h2>설정</h2>
+    <div class="row">
+      <label class="f">AI
+        <select id="provider">
+          <option value="gemini" selected>Google Gemini</option>
+          <option value="claude">Anthropic Claude</option>
+        </select>
+      </label>
+      <label class="f" id="keyField"><span id="keyLabel">API 키</span>
+        <input id="apiKey" type="password" autocomplete="off">
+      </label>
+      <label class="f" id="saveKeyField" style="flex-direction:row;align-items:center;gap:6px;margin-top:16px">
+        <input id="saveKey" type="checkbox"> 이 브라우저에 저장
+      </label>
+      <label class="f" id="modelField">모델
+        <input id="model" type="text" list="modelList" style="width:220px">
+        <datalist id="modelList"></datalist>
+      </label>
+      <button id="listModelsBtn" class="btn ghost" style="margin-top:16px" title="이 키로 쓸 수 있는 모델 목록을 불러옴">모델 목록 불러오기</button>
+      <label class="f">점검일
+        <input id="checkDate" type="date">
+      </label>
+    </div>
+    <p class="hint" id="claudeaiHint" hidden>claude.ai 로그인 계정으로 Claude가 판독합니다. API 키가 필요 없고, 첫 실행 때 허용 여부를 한 번 묻습니다. 사용량은 본인 claude.ai 사용량에서 차감됩니다.</p>
+    <p class="hint" id="keyHint">API 키와 첨부 자료는 이 브라우저에서 선택한 AI 회사(Google/Anthropic) API로만 바로 전송되며, 이 사이트·저장소에는 남지 않습니다. 공용 PC에서는 저장하지 마세요.</p>
+  </section>
+
+  <section class="card">
+    <h2>자료 첨부 <span class="hint" id="attachHint">— 영역을 클릭해 선택한 뒤 Ctrl+V 로 캡처 붙여넣기, 또는 파일 끌어놓기</span></h2>
+    <div class="zones">
+      <div class="zone active" data-zone="A">
+        <h3>자료 A · 매매제한 지시</h3>
+        <p>김민경/대체 담당자 메시지 캡처·파일</p>
+        <button type="button" class="pick">＋ 사진·파일 선택</button>
+        <div class="thumbs"></div>
+      </div>
+      <div class="zone" data-zone="B">
+        <h3>자료 B · 파워베이스 반영 화면</h3>
+        <p>RA 당번 캡처 (여러 장 가능)</p>
+        <button type="button" class="pick">＋ 사진·파일 선택</button>
+        <div class="thumbs"></div>
+      </div>
+      <div class="zone" data-zone="AB">
+        <h3>A+B 혼합</h3>
+        <p>지시 문구와 파워베이스 캡처가 한 장에 같이 있는 경우 (엑셀 정리 시트 등)</p>
+        <button type="button" class="pick">＋ 사진·파일 선택</button>
+        <div class="thumbs"></div>
+      </div>
+    </div>
+    <input id="filePick" type="file" accept="image/*,application/pdf" multiple class="hidden">
+    <div style="margin-top:12px">
+      <label class="f">자료 A 텍스트 (메시지를 그대로 붙여넣어도 됨)
+        <textarea id="aText" placeholder="예) 이준범 주니어 다리: 기아, 현대모비스, HL만도 ... 매매제한 상승여력 확인하였습니다."></textarea>
+      </label>
+    </div>
+    <div class="row" style="margin-top:12px">
+      <button id="runBtn" class="btn">대조 검증 실행</button>
+      <button id="clearBtn" class="btn ghost">첨부 비우기</button>
+      <span id="status"></span>
+    </div>
+  </section>
+
+  <section id="result" class="card hidden">
+    <div class="row" style="justify-content:space-between;margin-bottom:10px">
+      <h2 style="margin:0">[아침 컴플라이언스 매매제한 점검] <span id="rDate" class="hint"></span></h2>
+      <button id="copyBtn" class="btn ghost">결과 텍스트 복사</button>
+    </div>
+    <p id="exampleNote" class="hint" hidden><b>예시 결과입니다.</b> 자료를 올리고 실행하면 이 자리에 실제 점검 결과가 나옵니다.</p>
+    <div id="verdict" class="verdict"></div>
+    <div id="tiles" class="tiles"></div>
+    <div id="issuesBox"></div>
+    <div id="warnBox"></div>
+    <div class="tablewrap"><table id="tbl"></table></div>
+    <p id="closing" style="margin-top:12px"></p>
+    <p class="foot">※ 캡처 기준 대조 결과임 (파워베이스 실시스템 조회 아님). 종목 판독은 AI, 판정·집계는 고정 규칙.
+      판독 결과가 틀렸으면 아래에서 고친 뒤 재대조하세요.</p>
+    <details>
+      <summary>AI 판독 결과 보기 · 수정 후 재대조</summary>
+      <p class="hint">instructions = 자료 A 지시 종목, reflected = 자료 B 반영 종목. legible:false 는 판독불가.</p>
+      <textarea id="jsonEdit"></textarea>
+      <div class="row" style="margin-top:8px"><button id="rematchBtn" class="btn ghost">수정 내용으로 재대조</button></div>
+    </details>
+  </section>
+</main>
+
+<script src="matcher.js"></script>
+<!-- Anthropic 공식 SDK(@anthropic-ai/sdk 1.3.0)를 한 파일로 묶은 것 — CDN 없이 파일 더블클릭으로도 동작 -->
+<script src="vendor/anthropic-sdk-1.3.0.js"></script>
+<script>
+"use strict";
+(() => {
+const Anthropic = window.Anthropic;
+const M = window.ComplianceMatcher;
+const $ = (s) => document.querySelector(s);
+const files = []; // {zone, name, mediaType, data(base64), preview}
+let activeZone = "A";
+let lastExtract = null;
+
+// ---------- 설정 ----------
+const PROVIDERS = {
+  // claude.ai 대시보드(아티팩트)에서 열었을 때만 생김 — 뷰어의 claude.ai 계정으로 판독, 키 불필요
+  claudeai: { keyLabel: null, defaultModel: "", models: [] },
+  gemini: {
+    keyLabel: "Gemini API 키", placeholder: "AIza...",
+    // -latest 별칭은 Google이 최신 안정판으로 자동 연결 (2.x 모델은 2026-10 종료)
+    defaultModel: "gemini-pro-latest",
+    models: ["gemini-pro-latest", "gemini-flash-latest"],
+  },
+  claude: {
+    keyLabel: "Claude API 키", placeholder: "sk-ant-...",
+    defaultModel: "claude-opus-5-5",
+    models: ["claude-opus-5-5", "claude-sonnet-5-5"],
+  },
+};
+const store = {
+  get(k) { try { return localStorage.getItem("compliance." + k); } catch (_) { return null; } },
+  set(k, v) { try { v == null ? localStorage.removeItem("compliance." + k) : localStorage.setItem("compliance." + k, v); } catch (_) {} },
+};
+// 이전 버전(Claude 전용)에서 저장한 키 이전
+if (store.get("apiKey") && !store.get("key.claude")) { store.set("key.claude", store.get("apiKey")); store.set("apiKey", null); }
+
+const prov = () => $("#provider").value;
+function fillModels(list) {
+  $("#modelList").innerHTML = list.map((m) => `<option value="${m}">`).join("");
+}
+function loadProvider() {
+  const isAi = prov() === "claudeai";
+  ["#keyField", "#saveKeyField", "#modelField", "#listModelsBtn", "#keyHint"].forEach((s) => ($(s).hidden = isAi));
+  $("#claudeaiHint").hidden = !isAi;
+  if (isAi) return;
+  const p = PROVIDERS[prov()];
+  $("#keyLabel").textContent = p.keyLabel;
+  $("#apiKey").placeholder = p.placeholder;
+  const k = store.get("key." + prov());
+  $("#apiKey").value = k || "";
+  $("#saveKey").checked = !!k;
+  $("#model").value = store.get("model." + prov()) || p.defaultModel;
+  fillModels(p.models);
+}
+$("#provider").value = store.get("provider") || "gemini";
+if (!$("#provider").value) $("#provider").value = "gemini";
+loadProvider();
+
+// claude.ai 뷰어 안이면 sample 기능을 켜고 기본으로 선택. 직접 API 호출(Gemini/Claude 키)은 뷰어 보안정책상 막힘
+let sampleFn = null;
+(window.claude?.use ? window.claude.use("sample") : Promise.resolve(null))
+  .then((s) => {
+    if (!s) return;
+    sampleFn = s;
+    const opt = document.createElement("option");
+    opt.value = "claudeai";
+    opt.textContent = "Claude (claude.ai 계정 · 키 불필요)";
+    $("#provider").prepend(opt);
+    for (const o of $("#provider").options) {
+      if (o.value !== "claudeai") { o.disabled = true; o.textContent += " — 다운로드판 전용"; }
+    }
+    $("#provider").value = "claudeai";
+    loadProvider();
+  })
+  .catch(() => {});
+$("#provider").addEventListener("change", () => { store.set("provider", prov()); loadProvider(); });
+$("#model").addEventListener("change", () => store.set("model." + prov(), $("#model").value.trim() || null));
+$("#checkDate").value = new Date(Date.now() + 9 * 3600e3).toISOString().slice(0, 10); // KST
+
+function persistKey() {
+  store.set("key." + prov(), $("#saveKey").checked ? $("#apiKey").value.trim() : null);
+}
+$("#saveKey").addEventListener("change", persistKey);
+$("#apiKey").addEventListener("change", persistKey);
+
+$("#listModelsBtn").addEventListener("click", async () => {
+  const key = $("#apiKey").value.trim();
+  if (!key) return setStatus("API 키를 먼저 입력하세요.", true);
+  try {
+    let ids;
+    if (prov() === "gemini") {
+      ids = [];
+      let page = "";
+      do {
+        const r = await fetch(`${GEMINI_BASE}/models?pageSize=1000${page ? "&pageToken=" + page : ""}`, { headers: { "x-goog-api-key": key } });
+        const j = await r.json();
+        if (!r.ok) throw new Error(j.error?.message || r.status);
+        for (const m of j.models || []) {
+          if ((m.supportedGenerationMethods || []).includes("generateContent")) ids.push(m.name.replace(/^models\//, ""));
+        }
+        page = j.nextPageToken || "";
+      } while (page);
+      ids = ids.filter((id) => id.startsWith("gemini") && !/embedding|image|tts|live|audio/.test(id));
+    } else {
+      const client = new Anthropic({ apiKey: key, dangerouslyAllowBrowser: true });
+      ids = [];
+      for await (const m of client.models.list()) ids.push(m.id);
+    }
+    fillModels([...new Set([...PROVIDERS[prov()].models, ...ids])]);
+    setStatus(`모델 ${ids.length}개 불러옴 — 모델 칸을 클릭해 선택`);
+  } catch (e) {
+    setStatus("모델 목록 실패: " + (e.message || e), true);
+  }
+});
+
+// ---------- 첨부 ----------
+const zoneEls = [...document.querySelectorAll(".zone")];
+const isTouch = matchMedia("(pointer: coarse)").matches;
+if (isTouch) $("#attachHint").textContent = "— 영역을 눌러 사진(캡처)을 고르세요. 여러 장 가능";
+function setActive(z) {
+  activeZone = z;
+  zoneEls.forEach((el) => el.classList.toggle("active", el.dataset.zone === z));
+}
+zoneEls.forEach((el) => {
+  el.querySelector(".pick").addEventListener("click", (e) => {
+    e.stopPropagation();
+    setActive(el.dataset.zone);
+    $("#filePick").click();
+  });
+  el.addEventListener("click", (e) => {
+    if (e.target.tagName === "BUTTON") return;
+    // 휴대폰(터치)은 붙여넣기가 없으니 탭 한 번에 바로 사진 선택
+    if (el.dataset.zone === activeZone || isTouch) $("#filePick").click();
+    setActive(el.dataset.zone);
+  });
+  el.addEventListener("dragover", (e) => { e.preventDefault(); el.classList.add("drag"); });
+  el.addEventListener("dragleave", () => el.classList.remove("drag"));
+  el.addEventListener("drop", (e) => {
+    e.preventDefault(); el.classList.remove("drag");
+    setActive(el.dataset.zone);
+    addFiles([...e.dataTransfer.files], el.dataset.zone);
+  });
+});
+$("#filePick").addEventListener("change", (e) => { addFiles([...e.target.files], activeZone); e.target.value = ""; });
+window.addEventListener("paste", (e) => {
+  if (document.activeElement && ["TEXTAREA", "INPUT"].includes(document.activeElement.tagName)) return;
+  const fs = [...(e.clipboardData?.items || [])].filter((i) => i.kind === "file").map((i) => i.getAsFile());
+  if (fs.length) { e.preventDefault(); addFiles(fs, activeZone); }
+});
+$("#clearBtn").addEventListener("click", () => { files.length = 0; renderThumbs(); });
+
+function readAsDataURL(f) {
+  return new Promise((res, rej) => { const r = new FileReader(); r.onload = () => res(r.result); r.onerror = rej; r.readAsDataURL(f); });
+}
+function loadImage(src) {
+  return new Promise((res, rej) => { const i = new Image(); i.onload = () => res(i); i.onerror = rej; i.src = src; });
+}
+// API 이미지 한도(약 5MB, 8000px)를 넘을 때만 다시 인코딩 — 글자 판독을 위해 해상도는 최대한 유지
+async function fitImage(dataUrl, mediaType) {
+  const bytes = Math.ceil((dataUrl.length - dataUrl.indexOf(",") - 1) * 3 / 4);
+  const img = await loadImage(dataUrl);
+  const maxSide = 7900;
+  if (bytes <= 4.5e6 && img.width <= maxSide && img.height <= maxSide && /png|jpeg|gif|webp/.test(mediaType)) {
+    return { dataUrl, mediaType };
+  }
+  let scale = Math.min(1, maxSide / Math.max(img.width, img.height));
+  for (let q = 0.92; ; ) {
+    const c = document.createElement("canvas");
+    c.width = Math.round(img.width * scale); c.height = Math.round(img.height * scale);
+    const ctx = c.getContext("2d"); ctx.fillStyle = "#fff"; ctx.fillRect(0, 0, c.width, c.height);
+    ctx.drawImage(img, 0, 0, c.width, c.height);
+    const out = c.toDataURL("image/jpeg", q);
+    if (out.length * 0.75 <= 4.5e6 || scale < 0.3) return { dataUrl: out, mediaType: "image/jpeg" };
+    if (q > 0.8) q -= 0.06; else scale *= 0.85;
+  }
+}
+async function addFiles(list, zone) {
+  for (const f of list) {
+    if (!f) continue;
+    const isPdf = f.type === "application/pdf";
+    if (!isPdf && !f.type.startsWith("image/")) { setStatus(`지원하지 않는 형식: ${f.name}`, true); continue; }
+    let dataUrl = await readAsDataURL(f);
+    let mediaType = f.type;
+    if (!isPdf) ({ dataUrl, mediaType } = await fitImage(dataUrl, mediaType));
+    files.push({ zone, name: f.name || "붙여넣기", mediaType, data: dataUrl.split(",")[1], preview: isPdf ? null : dataUrl });
+  }
+  renderThumbs();
+}
+function renderThumbs() {
+  zoneEls.forEach((el) => (el.querySelector(".thumbs").innerHTML = ""));
+  files.forEach((f, i) => {
+    const t = document.createElement("div");
+    t.className = "thumb";
+    t.title = f.name;
+    t.innerHTML = (f.preview ? `<img src="${f.preview}" alt="">` : "PDF") +
+      `<span class="idx">파일 ${i + 1}</span><button title="삭제">×</button>`;
+    t.querySelector("button").addEventListener("click", (e) => { e.stopPropagation(); files.splice(i, 1); renderThumbs(); });
+    document.querySelector(`.zone[data-zone="${f.zone}"] .thumbs`).appendChild(t);
+  });
+}
+
+// ---------- AI 판독 ----------
+const SYSTEM = `너는 증권사 리서치센터의 매매제한 종목 컴플라이언스 대조 검증 담당자의 "판독" 단계를 맡는다.
+첨부 자료에서 종목을 빠짐없이, 보이는 그대로 읽어 JSON으로만 돌려준다. 대조·판정은 하지 않는다(프로그램이 한다).
+
+[자료 A: 매매제한 지시] 김민경 또는 대체 담당자가 전달한 매매제한 종목 목록(메시지·텍스트·이미지·파일).
+ - 예: "이준범 주니어 다리: 기아, 현대모비스, HL만도 … 매매제한 상승여력 확인하였습니다." → 나열된 종목 각각이 지시 종목(action "지정").
+ - 해제 지시는 "해제", 기간·내용 변경은 "변경".
+ - 취소·정정이 있으면 최종 유효 지시만 지정/해제/변경으로 남기고, 취소된 원 지시는 action "취소"로 따로 넣는다.
+[자료 B: 반영 결과] RA 당번이 캡처한 파워베이스(PowerBase) 매매제한 등록 화면.
+ - 매매제한 등록 목록의 각 행을 하나씩 reflected에 넣는다. 화면 메뉴·검색창·헤더 등 목록 밖 글자는 넣지 않는다.
+ - status: 행에 매매제한이 적용(등록·설정·제한중 등)된 증거가 보이면 "적용", 해제 표시면 "해제", 판단할 증거가 없으면 "불명".
+ - registered_at: 등록일시가 보이면 "YYYY.MM.DD HH:MM:SS" 형태로, 없으면 null.
+[A+B 혼합] 한 장에 지시 문구와 파워베이스 캡처가 같이 있을 수 있다. 각각 instructions / reflected로 나눠 넣는다.
+
+규칙
+1. 종목코드는 화면·자료에 실제로 보이는 것만 문자열 그대로 적는다(앞자리 0 보존). 보이지 않으면 null. 외부 지식으로 추정해 채우지 않는다.
+2. 종목명은 보이는 표기 그대로. 우선주(…우, …우B), 종류주식, ETF, ETN 표기를 절대 빼거나 합치지 않는다.
+3. 흐림·잘림·해상도 부족으로 종목명/코드를 확실히 읽을 수 없으면 추측하지 말고 legible:false, name은 읽힌 부분까지(없으면 null), note에 위치를 적는다.
+4. 같은 화면 안에 같은 종목이 두 번 있으면 두 번 다 넣는다(중복 등록 점검용). file_index에 파일 번호를 넣는다.
+5. source에는 "파일 2, 3번째 행"처럼 위치를 적는다. 텍스트 입력이면 "텍스트".
+6. 기간이 보이면 period에 "YYYY.MM.DD~YYYY.MM.DD"(시각 포함 가능)로 적고, 없으면 null.
+7. capture_issues: 목록이 잘려 아래·옆에 행이 더 있을 가능성, 스크롤바, 판독이 어려운 영역, 같은 캡처의 중복 첨부 등 검증 완전성을 해치는 사항을 문장으로. 없으면 빈 배열.
+8. check_date: 자료에 점검/지시 날짜가 보이면 "YYYY.MM.DD", 없으면 null.`;
+
+const nullableStr = { type: ["string", "null"] };
+const SCHEMA = {
+  type: "object",
+  additionalProperties: false,
+  required: ["check_date", "instructions", "reflected", "capture_issues"],
+  properties: {
+    check_date: nullableStr,
+    instructions: {
+      type: "array",
+      items: {
+        type: "object", additionalProperties: false,
+        required: ["name", "code", "action", "period", "legible", "source", "note"],
+        properties: {
+          name: nullableStr, code: nullableStr,
+          action: { type: "string", enum: ["지정", "해제", "변경", "취소"] },
+          period: nullableStr, legible: { type: "boolean" }, source: { type: "string" }, note: nullableStr,
+        },
+      },
+    },
+    reflected: {
+      type: "array",
+      items: {
+        type: "object", additionalProperties: false,
+        required: ["name", "code", "status", "period", "registered_at", "legible", "source", "file_index", "note"],
+        properties: {
+          name: nullableStr, code: nullableStr,
+          status: { type: "string", enum: ["적용", "해제", "불명"] },
+          period: nullableStr, registered_at: nullableStr, legible: { type: "boolean" },
+          source: { type: "string" }, file_index: { type: ["integer", "null"] }, note: nullableStr,
+        },
+      },
+    },
+    capture_issues: { type: "array", items: { type: "string" } },
+  },
+};
+
+const ZONE_LABEL = {
+  A: "자료 A · 매매제한 지시",
+  B: "자료 B · 파워베이스 반영 화면",
+  AB: "A+B 혼합 · 지시 문구와 파워베이스 캡처가 함께 있을 수 있음",
+};
+
+const GEMINI_BASE = "https://generativelanguage.googleapis.com/v1beta";
+
+async function extract() {
+  if (prov() === "claudeai") return extractClaudeAi();
+  return prov() === "gemini" ? extractGemini() : extractClaude();
+}
+
+// 뷰어가 이미지를 약 1.2MP로 줄여 보내므로, 세로로 긴 캡처는 겹치게 잘라 글자 크기를 지킨다
+const TILE_PX = 1.15e6, TILE_OVERLAP = 80;
+async function tileImage(f) {
+  const img = await loadImage(`data:${f.mediaType};base64,${f.data}`);
+  const toBlob = (sx, sy, sw, sh) => new Promise((res) => {
+    const c = document.createElement("canvas");
+    c.width = sw; c.height = sh;
+    c.getContext("2d").drawImage(img, sx, sy, sw, sh, 0, 0, sw, sh);
+    c.toBlob(res, "image/png");
+  });
+  const w = img.width, h = img.height;
+  if (w * h <= TILE_PX * 1.4 || h < w) return [await toBlob(0, 0, w, h)];
+  const stripH = Math.max(400, Math.floor(TILE_PX / w));
+  const out = [];
+  for (let y = 0; y < h; y += stripH - TILE_OVERLAP) {
+    out.push(await toBlob(0, y, w, Math.min(stripH, h - y)));
+    if (y + stripH >= h) break;
+  }
+  return out;
+}
+
+async function extractClaudeAi() {
+  if (!sampleFn) throw new Error("claude.ai 안에서 열었을 때만 쓸 수 있습니다.");
+  if (files.some((f) => f.mediaType === "application/pdf")) {
+    throw new Error("이 모드는 PDF를 못 읽습니다. PDF는 화면 캡처(이미지)로 올려 주세요.");
+  }
+  const lim = await sampleFn.limits().catch(() => null);
+  if (files.length && !lim?.images) throw new Error("이 화면에서는 이미지를 보낼 수 없습니다.");
+  const maxCount = lim?.images?.maxCount ?? 20;
+
+  let pieces = [];
+  for (let i = 0; i < files.length; i++) {
+    const blobs = await tileImage(files[i]);
+    blobs.forEach((b, k) => pieces.push({ file: i + 1, zone: files[i].zone, part: k + 1, parts: blobs.length, blob: b }));
+  }
+  if (pieces.length > maxCount) {
+    // 조각이 너무 많으면 자르지 않고 원본 그대로
+    pieces = [];
+    for (let i = 0; i < files.length; i++) {
+      const bin = atob(files[i].data), u8 = new Uint8Array(bin.length);
+      for (let j = 0; j < bin.length; j++) u8[j] = bin.charCodeAt(j);
+      const b = new Blob([u8], { type: files[i].mediaType });
+      pieces.push({ file: i + 1, zone: files[i].zone, part: 1, parts: 1, blob: b });
+    }
+    if (pieces.length > maxCount) throw new Error(`이미지는 한 번에 ${maxCount}장까지입니다.`);
+  }
+
+  const order = pieces.map((p, n) =>
+    `${n + 1}번째 이미지 = 파일 ${p.file} · ${ZONE_LABEL[p.zone]}` +
+    (p.parts > 1 ? ` (위에서부터 ${p.part}/${p.parts} 조각, 이웃 조각과 경계 몇 줄 겹침)` : "")).join("\n");
+  const aText = $("#aText").value.trim();
+  const prompt = [
+    SYSTEM,
+    "추가 규칙: 한 파일을 여러 조각으로 나눠 보냈으면 조각 경계에서 겹쳐 보이는 같은 행은 한 번만 넣는다(실제로 두 번 등록된 행만 두 번). file_index는 조각이 아닌 파일 번호.",
+    "첨부 이미지 순서:\n" + (order || "(이미지 없음)"),
+    aText ? `[텍스트 · 자료 A · 매매제한 지시]\n${aText}` : "",
+    "답은 아래 JSON 스키마를 따르는 JSON 객체 하나만 쓴다:\n" + JSON.stringify(SCHEMA),
+  ].filter(Boolean).join("\n\n");
+
+  try {
+    return await sampleFn.json(prompt, {
+      images: pieces.map((p) => p.blob),
+      modelTier: "complex",
+      onText: () => setStatus("판독 결과 받는 중…"),
+    });
+  } catch (e) {
+    const msg = {
+      not_granted: "Claude 사용을 허용하지 않아 실행할 수 없습니다.",
+      rate_limited: "사용량 한도에 걸렸습니다. 잠시 뒤 다시 실행하세요.",
+      image_rejected: "이미지 형식이나 크기를 받을 수 없습니다. 다른 캡처로 바꿔 주세요.",
+      invalid_json: "판독 결과 형식이 깨졌습니다. 다시 실행하세요.",
+      refused: "Claude가 이 요청을 거절했습니다.",
+      session_expired: "claude.ai에 다시 로그인하세요.",
+    }[e?.code];
+    throw new Error(msg || e?.message || "판독에 실패했습니다. 다시 실행하세요.");
+  }
+}
+
+// Gemini REST generateContent — 같은 JSON 스키마(responseJsonSchema)로 구조화 출력
+async function extractGemini() {
+  const parts = [];
+  files.forEach((f, i) => {
+    parts.push({ text: `[파일 ${i + 1} · ${ZONE_LABEL[f.zone]}]` });
+    parts.push({ inlineData: { mimeType: f.mediaType, data: f.data } });
+  });
+  const aText = $("#aText").value.trim();
+  if (aText) parts.push({ text: `[텍스트 · 자료 A · 매매제한 지시]\n${aText}` });
+  parts.push({ text: "위 자료의 종목을 규칙대로 전부 판독해 JSON으로 돌려줘." });
+
+  const model = $("#model").value.trim() || PROVIDERS.gemini.defaultModel;
+  const call = async (generationConfig) => {
+    const r = await fetch(`${GEMINI_BASE}/models/${encodeURIComponent(model)}:generateContent`, {
+      method: "POST",
+      headers: { "content-type": "application/json", "x-goog-api-key": $("#apiKey").value.trim() },
+      body: JSON.stringify({
+        systemInstruction: { parts: [{ text: SYSTEM }] },
+        contents: [{ role: "user", parts }],
+        generationConfig,
+      }),
+    });
+    const j = await r.json().catch(() => ({}));
+    if (!r.ok) {
+      const err = new Error(j.error?.message || `HTTP ${r.status}`);
+      err.status = r.status;
+      throw err;
+    }
+    return j;
+  };
+
+  let j;
+  try {
+    j = await call({ responseMimeType: "application/json", responseJsonSchema: SCHEMA });
+  } catch (e) {
+    // 모델이 스키마 일부를 지원하지 않으면, 스키마를 프롬프트에 넣고 JSON 모드로만 재시도
+    if (e.status !== 400 || !/schema/i.test(e.message)) throw e;
+    parts.push({ text: "출력 JSON 스키마:\n" + JSON.stringify(SCHEMA) });
+    j = await call({ responseMimeType: "application/json" });
+  }
+  if (j.promptFeedback?.blockReason) throw new Error(`Gemini가 요청을 차단했습니다 (${j.promptFeedback.blockReason}).`);
+  const cand = j.candidates?.[0];
+  if (!cand) throw new Error("Gemini 응답이 비어 있습니다.");
+  if (cand.finishReason === "MAX_TOKENS") throw new Error("응답이 길이 한도에서 잘렸습니다. 자료를 나눠서 실행하세요.");
+  if (cand.finishReason && !["STOP", "FINISH_REASON_UNSPECIFIED"].includes(cand.finishReason)) {
+    throw new Error(`Gemini가 응답을 중단했습니다 (${cand.finishReason}).`);
+  }
+  const text = (cand.content?.parts || []).filter((p) => p.text && !p.thought).map((p) => p.text).join("");
+  return parseJson(text);
+}
+
+function parseJson(text) {
+  if (!text) throw new Error("판독 결과가 비어 있습니다.");
+  try { return JSON.parse(text); }
+  catch (_) {
+    const m = text.match(/\{[\s\S]*\}/); // 코드블록 등으로 감싸 온 경우
+    if (m) return JSON.parse(m[0]);
+    throw new Error("판독 결과 JSON을 해석하지 못했습니다.");
+  }
+}
+
+async function extractClaude() {
+  const content = [];
+  files.forEach((f, i) => {
+    content.push({ type: "text", text: `[파일 ${i + 1} · ${ZONE_LABEL[f.zone]}]` });
+    if (f.mediaType === "application/pdf") {
+      content.push({ type: "document", source: { type: "base64", media_type: "application/pdf", data: f.data } });
+    } else {
+      content.push({ type: "image", source: { type: "base64", media_type: f.mediaType, data: f.data } });
+    }
+  });
+  const aText = $("#aText").value.trim();
+  if (aText) content.push({ type: "text", text: `[텍스트 · 자료 A · 매매제한 지시]\n${aText}` });
+  content.push({ type: "text", text: "위 자료의 종목을 규칙대로 전부 판독해 JSON으로 돌려줘." });
+
+  const client = new Anthropic({ apiKey: $("#apiKey").value.trim(), dangerouslyAllowBrowser: true });
+  const params = {
+    model: $("#model").value.trim() || PROVIDERS.claude.defaultModel,
+    max_tokens: 32000,
+    system: SYSTEM,
+    output_config: { effort: "high", format: { type: "json_schema", schema: SCHEMA } },
+    messages: [{ role: "user", content }],
+    // 안전 분류기가 요청을 거절하면 서버가 권장 모델로 자동 재시도
+    betas: ["server-side-fallback-2026-07-01"],
+    fallbacks: "default",
+  };
+  const msg = await client.beta.messages.stream(params).finalMessage();
+  if (msg.stop_reason === "refusal") throw new Error("모델이 요청을 거절했습니다. 자료를 확인해 다시 시도하세요.");
+  if (msg.stop_reason === "max_tokens") throw new Error("응답이 길이 한도에서 잘렸습니다. 자료를 나눠서 실행하세요.");
+  return parseJson(msg.content.find((b) => b.type === "text")?.text);
+}
+
+// ---------- 실행 ----------
+function setStatus(t, err = false) { const s = $("#status"); s.textContent = t; s.classList.toggle("err", err); }
+function zoneOpts() {
+  const hasA = files.some((f) => f.zone === "A" || f.zone === "AB") || $("#aText").value.trim().length > 0;
+  const hasB = files.some((f) => f.zone === "B" || f.zone === "AB");
+  return { noA: !hasA, noB: !hasB, checkDate: $("#checkDate").value.replaceAll("-", ".") };
+}
+
+$("#runBtn").addEventListener("click", async () => {
+  if (prov() !== "claudeai" && !$("#apiKey").value.trim()) return setStatus("API 키를 입력하세요.", true);
+  if (!files.length && !$("#aText").value.trim()) return setStatus("자료를 첨부하세요.", true);
+  persistKey();
+  const btn = $("#runBtn");
+  btn.disabled = true;
+  const t0 = Date.now();
+  const timer = setInterval(() => setStatus(`판독 중… ${Math.round((Date.now() - t0) / 1000)}초`), 1000);
+  try {
+    lastExtract = await extract();
+    $("#jsonEdit").value = JSON.stringify(lastExtract, null, 2);
+    show(M.compare(lastExtract, zoneOpts()));
+    setStatus(`완료 (${Math.round((Date.now() - t0) / 1000)}초)`);
+  } catch (e) {
+    console.error(e);
+    setStatus("오류: " + (e?.error?.error?.message || e.message || e), true);
+  } finally {
+    clearInterval(timer);
+    btn.disabled = false;
+  }
+});
+
+$("#rematchBtn").addEventListener("click", () => {
+  try {
+    lastExtract = JSON.parse($("#jsonEdit").value);
+    show(M.compare(lastExtract, zoneOpts()));
+    setStatus("수정 내용으로 재대조 완료");
+  } catch (e) {
+    setStatus("JSON 형식 오류: " + e.message, true);
+  }
+});
+
+// ---------- 출력 ----------
+const esc = (s) => String(s ?? "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);
+const ROWCLASS = { [M.STATUS.MISSING]: "s-miss", [M.STATUS.EXTRA]: "s-extra", [M.STATUS.CHECK]: "s-check", [M.STATUS.UNREAD]: "s-unread" };
+let lastText = "";
+
+function show(res, example = false) {
+  lastText = M.renderText(res);
+  $("#result").classList.remove("hidden");
+  $("#exampleNote").hidden = !example;
+  $("#rDate").textContent = "점검일 " + (res.checkDate || "미상");
+  const v = $("#verdict");
+  v.textContent = "검증 결과: " + res.verdict;
+  v.className = "verdict " + (res.verdict.startsWith("✅") ? "v-ok" : res.verdict.startsWith("🚨") ? "v-bad" : "v-inc");
+
+  const c = res.counts;
+  const tiles = [["지시 종목", c.instructed], ["일치", c.match], ["누락", c.missing], ["초과", c.extra], ["확인필요", c.check], ["판독불가", c.unread]];
+  $("#tiles").innerHTML = tiles.map(([k, n], i) =>
+    `<div class="tile${i >= 2 && n ? " hot" : ""}"><b>${n}</b><span>${k}</span></div>`).join("");
+
+  const issueLines = lastText.split("\n").filter((l) => /^- (❌|⚠️|❓|🔎) \[/.test(l));
+  $("#issuesBox").innerHTML = res.issues.length
+    ? `<h3>🚨 확인이 필요한 종목</h3><ul class="issues">${issueLines.map((l) => `<li>${esc(l.slice(2))}</li>`).join("")}</ul>`
+    : res.warnings.length ? "" : `<p><b>✅ 전체 일치 — 이상 없음</b></p>`;
+  $("#warnBox").innerHTML = res.warnings.length
+    ? `<h3>🔎 자료 확인사항</h3><ul class="issues">${res.warnings.map((w) => `<li>${esc(w)}</li>`).join("")}</ul>` : "";
+
+  $("#tbl").innerHTML =
+    `<thead><tr><th>No</th><th>종목명</th><th>종목코드</th><th class="ab">지시(A)</th><th class="ab">반영(B)</th><th>상태</th><th>비고</th></tr></thead><tbody>` +
+    res.rows.map((r) => `<tr class="${ROWCLASS[r.status] || ""}"><td class="c">${r.no}</td><td class="nm">${esc(r.name)}</td>` +
+      `<td class="code">${esc(r.code)}</td><td class="c ab">${esc(r.inA)}</td><td class="c ab">${esc(r.inB)}</td>` +
+      `<td class="c st">${esc(r.status)}</td><td class="note">${esc(r.notes.join("; "))}` +
+      `${r.registered_at ? `<br>등록 ${esc(r.registered_at)}` : ""}</td></tr>`).join("") + "</tbody>";
+
+  $("#closing").innerHTML = `<b>검증 집계</b> — 총 지시 ${c.instructed}건 · 전체 비교 대상(중복 제거) ${c.total}건 · 일치 ${c.match} · 누락 ${c.missing} · 초과 ${c.extra} · 확인필요 ${c.check} · 판독불가 ${c.unread}<br>` +
+    esc(M.closingSentence(res)) +
+    (res.cancelled.length ? `<br><span class="note">취소·정정으로 제외한 지시: ${esc(res.cancelled.map((x) => x.name).join(", "))}</span>` : "");
+  if (!example) $("#result").scrollIntoView({ behavior: "smooth" });
+}
+
+// 첫 화면 예시 (실제 자료로 실행하면 바뀜) — 지시 11종목 중 1종목 미반영 + 지시 없는 1종목 등록 상황
+(() => {
+  const names = ["기아", "현대모비스", "HL만도", "현대건설", "현대제철", "GS건설", "키움증권", "에이피알", "효성중공업", "대덕전자", "DL이앤씨"];
+  const shown = names.filter((n) => n !== "대덕전자").concat(["현대차"]);
+  const ex = {
+    check_date: "2026.10.31", capture_issues: [],
+    instructions: names.map((n) => ({ name: n, code: null, action: "지정", period: null, legible: true, source: "예시", note: null })),
+    reflected: shown.map((n, i) => ({ name: n, code: null, status: "적용", period: null, registered_at: "2026.10.30 21:12:02", legible: true, source: `예시 ${i + 1}행`, file_index: 1, note: null })),
+  };
+  $("#jsonEdit").value = JSON.stringify(ex, null, 2);
+  show(M.compare(ex, {}), true);
+})();
+
+$("#copyBtn").addEventListener("click", async () => {
+  try { await navigator.clipboard.writeText(lastText); setStatus("결과 텍스트를 복사했습니다."); }
+  catch { setStatus("복사 실패 — 브라우저 권한을 확인하세요.", true); }
+});
+})();
+</script>
+</body>
+</html>

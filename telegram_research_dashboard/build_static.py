@@ -258,6 +258,16 @@ def build() -> Path:
     invest_hub = ROOT / "static" / "invest.html"
     if invest_hub.exists():
         shutil.copy2(invest_hub, OUTPUT.parent / "invest.html")
+    # 피어그룹 주가흐름표 갤러리 — ecos-fx-rates 의 PNG/SVG 를 모아 보고 내려받는 페이지. 같은 등급.
+    peer_price = ROOT / "static" / "peer_price.html"
+    if peer_price.exists():
+        shutil.copy2(peer_price, OUTPUT.parent / "peer_price.html")
+    cns_chart = ROOT / "static" / "consensus_chart.html"   # 커버리지 컨센서스 추이 갤러리(같은 틀)
+    if cns_chart.exists():
+        shutil.copy2(cns_chart, OUTPUT.parent / "consensus_chart.html")
+    ship_index = ROOT / "static" / "ship_index.html"   # 조선주 INDEX 갤러리(같은 틀)
+    if ship_index.exists():
+        shutil.copy2(ship_index, OUTPUT.parent / "ship_index.html")
     # 아침 브리핑 모음 — 사이드바 '아침.브리핑' 서브메뉴의 🔗 모아보기 대상. 같은 등급.
     brief_hub = ROOT / "static" / "briefings.html"
     if brief_hub.exists():
@@ -284,6 +294,15 @@ def build() -> Path:
     macro_dir = ROOT / "static" / "macro_desk"
     if macro_dir.is_dir():
         shutil.copytree(macro_dir, OUTPUT.parent / "macro_desk", dirs_exist_ok=True)
+    mcal_report = ROOT / "static" / "market_calendar_report.html"   # 증시 법칙 달력(정적, 크론 없음)
+    if mcal_report.exists():
+        shutil.copy2(mcal_report, OUTPUT.parent / "market_calendar_report.html")
+    compliance_dir = ROOT / "static" / "compliance"   # 매매제한 컴플 체크(정적, 브라우저에서 Gemini 판독)
+    if compliance_dir.is_dir():
+        shutil.copytree(compliance_dir, OUTPUT.parent / "compliance", dirs_exist_ok=True)
+    anacal_dir = ROOT / "static" / "analyst_calendar"   # 애널리스트 집계 따라 만들기(뼈대, 정적 + 샘플 data.json)
+    if anacal_dir.is_dir():
+        shutil.copytree(anacal_dir, OUTPUT.parent / "analyst_calendar", dirs_exist_ok=True)
     covflow_report = ROOT / "static" / "coverage_flow_report.html"
     if covflow_report.exists():
         shutil.copy2(covflow_report, OUTPUT.parent / "coverage_flow_report.html")
@@ -291,6 +310,12 @@ def build() -> Path:
     if covflow_dir.is_dir():
         shutil.copytree(covflow_dir, OUTPUT.parent / "coverage_flow", dirs_exist_ok=True)
     # DART 생산능력·가동률: 페이지(dashboard/index.html) + 정규화 JSON(런타임 fetch)
+    hanwha_page = ROOT / "static" / "hanwha_tone_report.html"   # 불꽃 리서치 톤(한화투자증권) — 런타임 fetch 페이지
+    if hanwha_page.exists():
+        shutil.copy2(hanwha_page, OUTPUT.parent / "hanwha_tone_report.html")
+    hanwha_data = ROOT / "static" / "hanwha_tone"
+    if hanwha_data.exists():
+        shutil.copytree(hanwha_data, OUTPUT.parent / "hanwha_tone", dirs_exist_ok=True)
     dartcap_page = ROOT.parent / "dart_capacity" / "dashboard" / "index.html"
     if dartcap_page.exists():
         shutil.copy2(dartcap_page, OUTPUT.parent / "dart_capacity_report.html")

@@ -1,0 +1,90 @@
+name: 불꽃 리서치 톤 (한화투자증권)
+
+# 한화투자증권 리서치 게시판(기업/산업·투자전략) 수집 → 상세 본문 → Gemini 톤 분석(증분) → 톤 보드 빌드.
+# 데이터는 hanwha_research_tone/data/ 에 커밋백(다올 리서치톤과 같은 방식 — 캐시 계보 꼬임 방지),
+# 화면 데이터는 telegram_research_dashboard/static/hanwha_tone/ 에 같이 커밋돼 deploy-pages(workflow_run)가 배포한다.
+# 목표: 매일 아침 8시(KST) 전 반영. 무료 러너 크론은 몇 시간씩 밀리므로(CLAUDE.md 17번) 07:10·07:35 두 번 잡고
+# 뒤 run 은 새 글이 없으면 수 분 안에 끝난다. 저녁 run 은 AI 백필 몫(2025년부터 ~2,500건은 무료 쿼터로 며칠 걸린다).
+on:
+  workflow_dispatch:
+    inputs:
+      backfill:
+        description: "게시판·한경 목록을 2025-01-01 까지 끝까지 넘긴다(첫 실행·누락 복구용)"
+        type: boolean
+        default: false
+      detail_budget:
+        description: "상세 본문·PDF 다운로드 예산(초, 각각)"
+        default: "900"
+      ai_max:
+        description: "이번 run 의 AI 분석 상한(건)"
+        default: "150"
+  schedule:
+    - cron: "10 22 * * *"   # 07:10 KST
+    - cron: "35 22 * * *"   # 07:35 KST (지연 안전망)
+    - cron: "0 13 * * *"    # 22:00 KST — AI 백필
+
+permissions:
+  contents: write
+
+concurrency:
+  group: hanwha-tone
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 110
+    env:
+      EVENING: ${{ github.event.schedule == '0 13 * * *' }}
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - run: python -m pip install -q requests pypdf
+
+      - name: 테스트
+        working-directory: hanwha_research_tone
+        run: python -m unittest discover -s tests -p "test_*.py"
+
+      - name: 게시판 수집 (목록 + 상세 본문)
+        working-directory: hanwha_research_tone
+        env:
+          HANWHA_DETAIL_BUDGET: ${{ inputs.detail_budget || (env.EVENING == 'true' && '2400' || '900') }}
+        run: python collect.py ${{ inputs.backfill == true && '--backfill' || '' }}
+
+      # 한경컨센서스에서 같은 리포트의 PDF(공개)를 받아 원문으로 보강 — 실패해도 파이프라인은 계속
+      - name: 한경 PDF 보강 (목록·매칭·원문 추출)
+        working-directory: hanwha_research_tone
+        env:
+          HANWHA_PDF_BUDGET: ${{ inputs.detail_budget || (env.EVENING == 'true' && '2400' || '900') }}
+        run: python hankyung.py ${{ inputs.backfill == true && '--backfill' || '' }} || echo "::warning::한경 PDF 보강 실패"
+
+      - name: AI 톤 분석 (증분)
+        working-directory: hanwha_research_tone
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          HANWHA_GEMINI_API_KEY: ${{ secrets.HANWHA_GEMINI_API_KEY }}
+          AI_MAX_REPORTS: ${{ inputs.ai_max || (env.EVENING == 'true' && '600' || '150') }}
+          AI_BUDGET_SECONDS: ${{ env.EVENING == 'true' && '3600' || '1500' }}
+        run: python ai_analyze.py || echo "::warning::AI 분석 실패 — 정규식 데이터로 계속"
+
+      - name: 톤 보드 빌드
+        working-directory: hanwha_research_tone
+        run: python build_tone.py
+
+      - name: 데이터 커밋백
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add hanwha_research_tone/data telegram_research_dashboard/static/hanwha_tone
+          git diff --cached --quiet && { echo "변경 없음"; exit 0; }
+          git commit -m "chore(hanwha): 불꽃 리서치 톤 데이터 갱신 $(TZ=Asia/Seoul date +%F)"
+          for i in 1 2 3; do
+            git pull --rebase --autostash origin "${GITHUB_REF_NAME}" && git push origin HEAD:"${GITHUB_REF_NAME}" && exit 0
+            # 충돌(다른 run 과 겹침): 이 run 의 산출물로 해결 — 캐시는 누적형이라 다음 run 이 빠진 건 다시 채운다
+            git checkout --theirs -- hanwha_research_tone/data telegram_research_dashboard/static/hanwha_tone 2>/dev/null || true
+            git add -A && GIT_EDITOR=true git rebase --continue || git rebase --abort
+            sleep 5
+          done
+          exit 1

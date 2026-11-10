@@ -80,6 +80,9 @@ function buildInputs(key, body) {
   };
   // DART 생산능력·가동률: 버튼은 수집→추출→정규화까지 한 번에(stage=full).
   if (key === 'dartcap') return { stage: 'full' };
+  // 커버리지 수급: 화면 '🔄 차트만 지금 수집'(④ 위클리용 차트 옆)은 charts_only 만 넘긴다 — 표·텔레 그대로,
+  // 시계열(series.json)만 갱신. 상단 '🔄 지금 수집'(전체)은 입력 없음.
+  if (key === 'covflow') return body.charts_only ? { charts_only: 'true' } : {};
   return {};
 }
 
@@ -90,6 +93,9 @@ function doPost(e) {
 
     // 발사가 아니라 "그 워크플로 지금 어떻게 됐나" 묻는 요청(대시보드 폴링용)
     if (String(body.action || '') === 'status') return json(latestRun(key));
+    // 연차계획서 이미지 → Gemini 비전 추출 → vacation-tracker mode=plan 발사.
+    // 이미지는 여기(메모리)서만 쓰고 어디에도 저장하지 않는다(공개 리포에 커밋 금지).
+    if (String(body.action || '') === 'vacplan') return json(vacationPlanImage_(body));
 
     const wf = WF[key];
 
@@ -115,8 +121,94 @@ function doPost(e) {
 
     return json(fireWorkflow(key, buildInputs(key, body)));
   } catch (err) {
-    return json({ ok: false, code: 500, error: String(err) });
+    // 예외 문구에 요청 URL이 통째로 실릴 수 있다 — key= 값은 지우고 돌려준다.
+    return json({ ok: false, code: 500, error: String(err).replace(/key=[^&\s]+/g, 'key=***') });
   }
+}
+
+/** 연차계획서 캡쳐(dataURL) → Gemini 비전으로 {이름, 날짜·종류 행} 추출 → mode=plan 발사.
+ *  스크립트 속성 GEMINI_API_KEY 필요. 추출 결과를 그대로 돌려줘 화면이 바로 보여준다. */
+function vacationPlanImage_(body) {
+  // 여러 장(긴 표를 스크롤로 나눠 찍은 캡쳐)을 한 제출로 받는다 — 전부 한 번의
+  // Gemini 호출에 넣어 행을 합산(11/5: 3장을 넣어 실패한 실사례). 옛 단일 image 호환.
+  const imgs = (Array.isArray(body.images) ? body.images : [body.image])
+    .map(function (s) { return String(s || '').match(/^data:(image\/[a-z0-9+.-]+);base64,(.+)$/i); })
+    .filter(Boolean);
+  if (!imgs.length) return { ok: false, code: 400, error: '이미지(dataURL)가 없습니다' };
+  if (imgs.length > 4) return { ok: false, code: 400, error: '캡쳐는 최대 4장까지입니다' };
+  const geminiKey = PropertiesService.getScriptProperties().getProperty('GEMINI_API_KEY');
+  if (!geminiKey) {
+    return { ok: false, code: 500,
+             error: 'GEMINI_API_KEY 스크립트 속성이 없습니다 — dispatch_proxy 프로젝트에 등록하세요' };
+  }
+  const prompt = [
+    '이 이미지들은 인사시스템의 미사용연차 사용계획(연차계획서) 화면이다.',
+    '여러 장이면 같은 표를 스크롤로 나눠 찍은 것 — 행을 전부 합쳐 하나의 계획으로 읽어라(겹친 행은 한 번만).',
+    'JSON으로만 답하라(설명 금지):',
+    '{"name":"신청자 이름","rows":[{"date":"YYYY-MM-DD","kind":"종일|오전|오후"}]}',
+    '- 휴가일자·휴가종류 표의 행 전부를 담아라. 날짜는 YYYY-MM-DD로 정규화(2026.07.27 → 2026-07-27).',
+    '- 휴가종류는 종일/오전/오후 중 하나로. 상태·감산일수·합계는 무시한다.',
+    '- 신청자(작성자) 이름을 name에 — 신청자 칸이 우선. 못 읽으면 빈 문자열.',
+  ].join('\n');
+  const parts = imgs.map(function (mm) {
+    return { inline_data: { mime_type: mm[1], data: mm[2] } };
+  });
+  parts.push({ text: prompt });
+  const payload = JSON.stringify({
+    contents: [{ parts: parts }],
+    generationConfig: { temperature: 0, response_mime_type: 'application/json' },
+  });
+  // 429(분당 한도)·503(과부하)은 flash↔flash-lite 교대 + 짧은 대기 재시도
+  // (11/5 실사례: lite 503 한 번에 포기 → 두 바퀴·10초 간격으로).
+  const models = ['gemini-flash-latest', 'gemini-flash-lite-latest',
+                  'gemini-flash-latest', 'gemini-flash-lite-latest'];
+  let parsed = null, lastErr = '';
+  for (let i = 0; i < models.length && !parsed; i++) {
+    let res;
+    try {
+      // 키는 URL(?key=)이 아니라 헤더로 — UrlFetchApp이 '시간 초과: <URL>' 예외를
+      // 던지면 URL이 오류 문구째 화면에 노출된다(11/9 실사례: 키 유출).
+      res = UrlFetchApp.fetch(
+        'https://generativelanguage.googleapis.com/v1beta/models/' + models[i] + ':generateContent',
+        { method: 'post', contentType: 'application/json', payload: payload,
+          headers: { 'x-goog-api-key': geminiKey },
+          muteHttpExceptions: true });
+    } catch (err) {
+      // 시간 초과 등 전송 자체의 예외도 재시도 대상 — 밖으로 던지면 한 번에 끝난다.
+      lastErr = models[i] + ' ' + String(err);
+      if (i < models.length - 1) Utilities.sleep(10000);
+      continue;
+    }
+    const code = res.getResponseCode();
+    if (code !== 200) {
+      lastErr = models[i] + ' HTTP ' + code;
+      if ((code === 429 || code >= 500) && i < models.length - 1) Utilities.sleep(10000);
+      continue;
+    }
+    try {
+      const out = JSON.parse(res.getContentText());
+      parsed = JSON.parse(out.candidates[0].content.parts[0].text);
+    } catch (err) { lastErr = models[i] + ' 응답 파싱 실패: ' + err; }
+  }
+  if (!parsed) return { ok: false, code: 502, error: 'Gemini 추출 실패 — ' + lastErr };
+
+  const name = String(body.name || '').trim() || String(parsed.name || '').trim();
+  if (!name) return { ok: false, code: 422, error: '신청자 이름을 못 읽었습니다 — 폼에서 이름을 지정하세요' };
+  const rows = [];
+  (parsed.rows || []).forEach(function (row) {
+    const d = String(row.date || '').replace(/[./]/g, '-').trim();
+    const k = String(row.kind || '').trim();
+    if (/^\d{4}-\d{2}-\d{2}$/.test(d) && ['종일', '오전', '오후'].indexOf(k) >= 0) {
+      rows.push({ date: d, kind: k });
+    }
+  });
+  if (!rows.length) return { ok: false, code: 422, error: '날짜 행을 하나도 못 읽었습니다 — 더 선명한 캡쳐로 다시 시도' };
+
+  const fired = fireWorkflow('vacation',
+    { mode: 'plan', entry: JSON.stringify({ name: name, rows: rows }) });
+  fired.name = name;
+  fired.rows = rows;
+  return fired;
 }
 
 /** 워크플로 하나를 workflow_dispatch로 발사한다. 웹앱(doPost)과 스케줄러(tick)가 같이 쓴다. */

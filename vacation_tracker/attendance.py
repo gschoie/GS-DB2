@@ -26,14 +26,22 @@ HERE = Path(__file__).resolve().parent
 ATT_PATH = HERE / "state" / "attendance.json"
 OUT_PATH = HERE.parent / "telegram_research_dashboard" / "static" / "attendance_report.html"
 
-# "근태 …(긍정)" — 완벽·이상무·문제없음·완료류. 공백/점 낀 표기는 _compact가 붙인다.
-_AFFIRM = r"(?:완벽|이상없|이상무|문제없|누락없|완료|끝냈|다했|깨끗|클리어|이슈없|올렸|확인했|정상)"
-_AFFIRM_RE = re.compile(rf"근태.{{0,20}}?{_AFFIRM}|{_AFFIRM}.{{0,10}}?근태")
+# 긍정 낱말 목록 — 이제 '근태' 낱말 없는 **답 문맥 전용**이다. '근태'가 든 메시지는
+# detect_attendance가 목록 없이 보고로 보므로(11/4 완화) 여기 낱말을 늘릴 일은
+# 답 문맥("정상 출근입니다"류)에서 빠지는 표현이 나올 때뿐이다.
+_AFFIRM = r"(?:완벽|이상없|이상무|문제없|누락없|완료|끝냈|다했|깨끗|클리어|이슈없|올렸|확인했|정상|등록했|제출했)"
 # 내가 '근태 체크'를 물은 직후의 답 전용 — "9월 정상 출근입니다"처럼 '근태' 낱말이
 # 없어도 보고로 인정한다(문맥이 있으니 낱말 요구를 푼다).
 _REPLY_OK_RE = re.compile(rf"{_AFFIRM}|정상출근|출근정상")
 # 부탁·독촉·질문은 보고가 아니다 ("근태 체크해 주세요", "근태 언제까지야?").
 _NEGATIVE_RE = re.compile(r"근태[^?]{0,20}[?？]|해줘|해주세요|하세요|해야|부탁|요망|까지야|언제")
+# '아직'류 — 하겠다는 말이지 했다는 말이 아니다 ("근태 아직 못 했어요", "내일 할게요").
+_NOTYET_RE = re.compile(r"아직|못했|못함|안했|할게|하겠|해볼게|진행중|예정")
+# 보고 앵커 — '근태'뿐 아니라 '출근'도("이준범 10월 정상출근입니다!" 11/4 실사례 탈락,
+# 사용자 규칙 "정상출근 출근도 근태로 분류해야지"). 단 출퇴근 잡담("출근길", "지금
+# 출근했어요")은 보고가 아니라서 '출근'만 있는 메시지는 _COMMUTE_RE·물음표로 거른다.
+_ANCHOR_RE = re.compile(r"근태|출근")
+_COMMUTE_RE = re.compile(r"출근길|출근중|지금출근|방금출근|이제출근|늦게출근|일찍출근|퇴근")
 _MONTH_RE = re.compile(r"(\d{1,2})\s*월")
 
 
@@ -42,11 +50,20 @@ def detect_attendance(text: str, msg_dt: datetime) -> dict | None:
 
     explicit=False의 month는 '보낸 달'일 뿐 — 기록 시(record_hits) 열린 체크 기간의
     대상 월로 바뀐다(10월 초에 9월 체크를 돌리는 경우).
+
+    근태 스캔은 체크 기간이 열려 있을 때만 도니(ATT_SCAN + record_hits 게이트),
+    '근태'가 들어간 팀원 메시지는 기본적으로 보고다 — 긍정 낱말 목록을 요구하지
+    않는다(11/4 "근태라는 단어가 있는데" 규칙: '소명사유 등록했습니다'가 목록에
+    없어 탈락한 실사례). 질문·부탁(_NEGATIVE_RE)과 '아직 안 했다'류(_NOTYET_RE)만 컷.
+    '출근'도 '근태' 없이 앵커다(_ANCHOR_RE — "10월 정상출근입니다!"). 단 '근태' 없이
+    '출근'만 있으면 출퇴근 잡담·질문을 추가로 거른다(_COMMUTE_RE, 물음표).
     """
     compact = _compact(text or "")
-    if "근태" not in compact:
+    if not _ANCHOR_RE.search(compact):
         return None
-    if _NEGATIVE_RE.search(compact) or not _AFFIRM_RE.search(compact):
+    if "근태" not in compact and (_COMMUTE_RE.search(compact) or "?" in text or "？" in text):
+        return None
+    if _NEGATIVE_RE.search(compact) or _NOTYET_RE.search(compact):
         return None
     return _month_of(text, msg_dt)
 
@@ -58,7 +75,7 @@ def detect_attendance_reply(text: str, msg_dt: datetime) -> dict | None:
     질문·부탁은 여전히 컷, '근태'가 들어 있으면 일반 판정으로 넘긴다.
     """
     compact = _compact(text or "")
-    if "근태" in compact:
+    if _ANCHOR_RE.search(compact):
         return detect_attendance(text, msg_dt)
     if _NEGATIVE_RE.search(compact) or not _REPLY_OK_RE.search(compact):
         return None

@@ -42,6 +42,20 @@
    "text": "팀장님 내일 발간할 은행 프리뷰 자료입니다",
    "topic": "은행"
   },
+  "1099013995:1234859": {
+   "detected_at": "2026-11-03T13:02+09:00",
+   "done": false,
+   "engine": "rule",
+   "kind": "기타",
+   "msg_date": "2026-11-03T09:10+09:00",
+   "name": "김지원",
+   "needs_review": true,
+   "note": "",
+   "target": null,
+   "target_text": "",
+   "text": "엇 어제 진영 통해 말씀드렸는데 다시 보고 드리겠습니다\n\n11월말 발간 예정이나, 12월로 넣겠습니다..!\n금융 연간전망입니다",
+   "topic": ""
+  },
   "1439577877:1213316": {
    "detected_at": "2026-10-05T22:39+09:00",
    "done": false,
@@ -72,6 +86,7 @@
    "topic": "여행"
   },
   "1439577877:1231236": {
+   "deleted": true,
    "detected_at": "2026-10-27T01:20+09:00",
    "done": false,
    "engine": "gemini",
@@ -85,7 +100,36 @@
    "text": "나: 드랍 커버리지 규칙만 지키자 → 자료 쓰겠습니다!",
    "topic": "SOOP"
   },
+  "1439577877:1232559": {
+   "detected_at": "2026-10-28T19:54+09:00",
+   "done": false,
+   "engine": "gemini",
+   "kind": "기타",
+   "msg_date": "2026-10-28T16:50+09:00",
+   "name": "김혜영",
+   "needs_review": false,
+   "note": "",
+   "target": "2026-10-29",
+   "target_text": "내일",
+   "text": "팀장님 SOOP 내일 발간하려고 하는데 홈페이지 공시만 하고 메일 발송은 안 해도 될까요..? \n\nHOLD이기도 하고 실적 직전이라서 뜬금 없는 타이밍에 내는 거여서요ㅜ",
+   "topic": "SOOP"
+  },
+  "1439577877:1234881": {
+   "detected_at": "2026-11-03T13:02+09:00",
+   "done": false,
+   "engine": "rule",
+   "kind": "기타",
+   "msg_date": "2026-11-03T09:29+09:00",
+   "name": "김혜영",
+   "needs_review": true,
+   "note": "",
+   "target": null,
+   "target_text": "",
+   "text": "팀장님 11/19 연간전망 발간 목표인데 반영이 안 되어 있는 것 같습니다!",
+   "topic": ""
+  },
   "1705032027:1179243": {
+   "deleted": true,
    "detected_at": "2026-09-12T19:17+09:00",
    "done": false,
    "engine": "gemini",
@@ -170,6 +214,34 @@
    "text": "인뎁스는 11월 중순",
    "topic": ""
   },
+  "1705032027:1236843": {
+   "detected_at": "2026-11-07T01:55+09:00",
+   "done": false,
+   "engine": "rule",
+   "kind": "기타",
+   "msg_date": "2026-11-06T16:44+09:00",
+   "name": "이다연",
+   "needs_review": true,
+   "note": "",
+   "target": null,
+   "target_text": "",
+   "text": "팀장님 혹시 토욜발간도 되나요?",
+   "topic": ""
+  },
+  "1705032027:1236940": {
+   "detected_at": "2026-11-07T01:55+09:00",
+   "done": false,
+   "engine": "rule",
+   "kind": "기타",
+   "msg_date": "2026-11-06T21:37+09:00",
+   "name": "이다연",
+   "needs_review": true,
+   "note": "",
+   "target": null,
+   "target_text": "",
+   "text": "팀장님 삼양식품 오늘 저녁발간 해도 될까요.. 될 거 같아서",
+   "topic": ""
+  },
   "1956522804:1188291": {
    "detected_at": "2026-10-05T22:39+09:00",
    "done": false,
@@ -214,6 +286,7 @@
    "topic": "인뎁스"
   },
   "242573091:1180585": {
+   "deleted": true,
    "detected_at": "2026-10-05T22:39+09:00",
    "done": false,
    "engine": "gemini",
@@ -256,6 +329,7 @@
    "topic": "EV6/기아"
   },
   "242573091:1198744": {
+   "deleted": true,
    "detected_at": "2026-10-05T22:39+09:00",
    "done": false,
    "engine": "rule",
@@ -312,6 +386,7 @@
    "topic": "에스티팜"
   },
   "242573091:1205943": {
+   "deleted": true,
    "detected_at": "2026-10-05T22:39+09:00",
    "done": false,
    "engine": "rule",
@@ -453,6 +528,7 @@
    "topic": "섹션 1 종목들"
   },
   "4154724064:1209099": {
+   "deleted": true,
    "detected_at": "2026-10-05T22:39+09:00",
    "done": false,
    "engine": "gemini",
@@ -467,6 +543,7 @@
    "topic": ""
   },
   "4154724064:1215019": {
+   "deleted": true,
    "detected_at": "2026-10-06T03:45+09:00",
    "done": false,
    "engine": "gemini",
@@ -492,6 +569,20 @@
    "target": null,
    "target_text": "",
    "text": "콜라보 자료 발간 시 매매제한 걸때, 적정주가 및 괴리율 체크 한번 더 하신 후 발간 부탁드립니다.\n\n발간자료 상 투자의견 및 추천 들어가면 당연히 문제 생기니, 발간 시 참고 부탁드립니다.\n\n사례: 9/4일 발간 자료\n\n코스메카코리아 괴리율 15% 미만인데, 매수로 매매제한. 발간자료에는 투자의견 기재는 없엇음",
+   "topic": ""
+  },
+  "4154724064:1234863": {
+   "detected_at": "2026-11-03T13:02+09:00",
+   "done": false,
+   "engine": "rule",
+   "kind": "기타",
+   "msg_date": "2026-11-03T09:20+09:00",
+   "name": "미정",
+   "needs_review": true,
+   "note": "",
+   "target": null,
+   "target_text": "",
+   "text": "개별로 → 연미랑 저랑 같이 23일에 발간할께요",
    "topic": ""
   },
   "488744909:1188289": {
@@ -595,6 +686,7 @@
    "topic": ""
   },
   "5161870927:1221285": {
+   "deleted": true,
    "detected_at": "2026-10-02T11:30+09:00",
    "done": false,
    "engine": "gemini",
@@ -609,6 +701,7 @@
    "topic": "인뎁스"
   },
   "5161870927:1221865": {
+   "deleted": true,
    "detected_at": "2026-10-03T23:23+09:00",
    "done": false,
    "engine": "gemini",
@@ -635,6 +728,20 @@
    "target_text": "화욜",
    "text": "야.. 화욜 발간인데\n대표차트도 아직 비었고",
    "topic": "전력기기"
+  },
+  "5161870927:1234854": {
+   "detected_at": "2026-11-03T13:02+09:00",
+   "done": false,
+   "engine": "rule",
+   "kind": "기타",
+   "msg_date": "2026-11-03T09:08+09:00",
+   "name": "이정우",
+   "needs_review": true,
+   "note": "",
+   "target": null,
+   "target_text": "",
+   "text": "12월 초 강관 인뎁스 작성하겠습니다",
+   "topic": ""
   },
   "5415366498:1183923": {
    "detected_at": "2026-09-12T19:17+09:00",
@@ -735,6 +842,7 @@
    "topic": "현대건설기계"
   },
   "5415366498:1201929": {
+   "deleted": true,
    "detected_at": "2026-10-05T22:39+09:00",
    "done": false,
    "engine": "rule",
@@ -854,6 +962,7 @@
    "topic": "의료기기/AI"
   },
   "5415366498:1222940": {
+   "deleted": true,
    "detected_at": "2026-10-07T08:28+09:00",
    "done": false,
    "engine": "gemini",
@@ -868,6 +977,7 @@
    "topic": ""
   },
   "5415366498:1226700": {
+   "deleted": true,
    "detected_at": "2026-10-15T10:41+09:00",
    "done": false,
    "engine": "gemini",
@@ -882,6 +992,7 @@
    "topic": ""
   },
   "5415366498:1228036": {
+   "deleted": true,
    "detected_at": "2026-10-19T10:32+09:00",
    "done": false,
    "engine": "gemini",
@@ -908,6 +1019,34 @@
    "target": null,
    "target_text": "",
    "text": "팀장님 오늘 제가 저녁에 부모님이랑 상의할게 있어서 내일 아침 일찍 와서 발간 작업해도 될까요? 7시쯤 퇴근해봐도 괜찮을까요!",
+   "topic": ""
+  },
+  "5415366498:1236836": {
+   "detected_at": "2026-11-07T01:55+09:00",
+   "done": false,
+   "engine": "rule",
+   "kind": "기타",
+   "msg_date": "2026-11-06T16:27+09:00",
+   "name": "이준범",
+   "needs_review": true,
+   "note": "",
+   "target": null,
+   "target_text": "",
+   "text": "헉시 오늘 발간하실계획이실까요?",
+   "topic": ""
+  },
+  "5415366498:1236845": {
+   "detected_at": "2026-11-07T01:55+09:00",
+   "done": false,
+   "engine": "rule",
+   "kind": "기타",
+   "msg_date": "2026-11-06T16:44+09:00",
+   "name": "이준범",
+   "needs_review": true,
+   "note": "",
+   "target": null,
+   "target_text": "",
+   "text": "주말에 발간 가능 → 넵 시키시는 작업하다가 발간만 일욜에 하겠습니다..죄송합니다",
    "topic": ""
   },
   "5460814526:1188290": {
@@ -953,17 +1092,17 @@
    "topic": "심텍"
   },
   "5460814526:1213203": {
-   "detected_at": "2026-09-14T10:25+09:00",
+   "detected_at": "2026-10-28T19:54+09:00",
    "done": false,
    "engine": "gemini",
    "kind": "인뎁스",
-   "msg_date": "2026-09-14T09:36+09:00",
+   "msg_date": "2026-10-28T18:50+09:00",
    "name": "김연미",
    "needs_review": false,
    "note": "",
-   "target": "2026-11-06",
-   "target_text": "9월마지막주~ 10월첫째주쯤",
-   "text": "팀장님~~ 전기전자 인뎁스 9월마지막주~ 10월첫째주쯤 내고싶은데 괜찮을까요 ...ㅎㅎ..\n\n이번에는 기판은 아니고 전력 부품 위주로..! 그리고 가능하면 해외밸류체인 위주로 쓰게될것 같아서용 괜찮을까요.??!",
+   "target": "2026-11-11",
+   "target_text": "11월 둘째주",
+   "text": "김연미: 아아아아 넵넵넵 → 전기전자 인뎁스 11월 둘째주로 발간 계획 변경하겠습니다",
    "topic": "전기전자(전력 부품)"
   },
   "5460814526:1214529": {
@@ -982,18 +1121,60 @@
    "topic": "연미 자료"
   },
   "5460814526:1223291": {
-   "detected_at": "2026-10-08T01:51+09:00",
-   "done": false,
-   "engine": "gemini",
-   "kind": "인뎁스",
+   "deleted": true,
+   "merged_into": "5460814526:1213203",
    "msg_date": "2026-10-07T13:56+09:00",
    "name": "김연미",
-   "needs_review": false,
-   "note": "",
-   "target": "2026-11-06",
-   "target_text": "11월 첫째주",
-   "text": "전기전자 인뎁스 (주제: 전력부품) 10월 말로 미루려고 했는데, 10월말이 대형주 실적시즌이라,,, 11월 첫째주 괜찮을까요? 더 안 밀리게 신경 잘 쓰겠습니다..ㅠ",
    "topic": "전력부품"
+  },
+  "5460814526:1232647": {
+   "deleted": true,
+   "merged_into": "5460814526:1213203",
+   "msg_date": "2026-10-28T18:50+09:00",
+   "name": "김연미",
+   "topic": "전기전자"
+  },
+  "5460814526:1234864": {
+   "detected_at": "2026-11-03T13:02+09:00",
+   "done": false,
+   "engine": "rule",
+   "kind": "기타",
+   "msg_date": "2026-11-03T09:20+09:00",
+   "name": "김연미",
+   "needs_review": true,
+   "note": "",
+   "target": null,
+   "target_text": "",
+   "text": "연미랑 저랑 같이 23일에 발간할께요",
+   "topic": ""
+  },
+  "5460814526:1234866": {
+   "detected_at": "2026-11-03T13:02+09:00",
+   "done": false,
+   "engine": "rule",
+   "kind": "기타",
+   "msg_date": "2026-11-03T09:20+09:00",
+   "name": "김연미",
+   "needs_review": true,
+   "note": "",
+   "target": null,
+   "target_text": "",
+   "text": "팀장님~~ 테크팀 27년 업종 전망으로 인뎁스 같이 합치자는 의견주셔서",
+   "topic": ""
+  },
+  "5460814526:1234869": {
+   "detected_at": "2026-11-03T13:02+09:00",
+   "done": false,
+   "engine": "rule",
+   "kind": "기타",
+   "msg_date": "2026-11-03T09:21+09:00",
+   "name": "김연미",
+   "needs_review": true,
+   "note": "",
+   "target": null,
+   "target_text": "",
+   "text": "11/23일 발간하겠습니닷",
+   "topic": ""
   },
   "5527897300:1227365": {
    "detected_at": "2026-10-16T09:50+09:00",

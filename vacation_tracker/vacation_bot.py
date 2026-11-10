@@ -33,7 +33,7 @@ sys.path.insert(0, str(HERE))
 # 로그인(cloud_login.py)·소스 감시와 같은 기기 정보를 써야 세션이 안정된다.
 sys.path.insert(0, str(ROOT / "source_watcher"))
 
-from rules import KST, detect_kind, pick_candidates, rule_extract  # noqa: E402
+from rules import KST, detect_kind, pick_candidates, rule_extract_all  # noqa: E402
 
 CONFIG_PATH = HERE / "config.yml"
 STATE_PATH = HERE / "state" / "state.json"
@@ -60,6 +60,9 @@ GEMINI_SYSTEM_PROMPT = """너는 텔레그램 대화에서 '자리 비움 보고
   담당기사: …" 같은 전달 공지는 일정 확인용 문자이지 자리 비움 보고가 아니다 → false.
 - "내일", "다음주 수요일" 같은 상대 날짜는 그 메시지의 보낸 시각을 기준으로 계산한다.
 - 종료일이 없으면 end=start(하루짜리). "3일간"이면 시작일 포함 3일.
+- **한 메시지에 떨어진 기간이 여러 개면**("11/13, 11/20 휴가 쓰겠습니다") "periods" 배열에
+  건마다 {"start","end","kind"}로 전부 담아라(start/end 최상위 칸에는 첫 건을 적는다).
+  연속한 날짜(9/14,15,16)는 한 구간이다. 기간이 하나면 periods는 생략해도 된다.
 - 날짜를 도저히 못 정하면 vacation=true라도 start=null로 두라(사람이 확인한다).
 - 일부 메시지에는 (맥락)으로 직전 대화가 붙어 있다. '나'는 계정 주인이다.
   맥락의 질문(예: "출장 언제야?")에 대한 날짜 답변이면 보낸 사람의 자리 비움 보고로
@@ -496,29 +499,41 @@ def extract(candidates: list[dict], owner: str = "") -> list[dict]:
         if verdict is not None:
             if not verdict.get("vacation"):
                 continue
-            start = verdict.get("start")
-            entry = {
-                "kind": str(verdict.get("kind") or "휴가"),
-                "start": start,
-                "end": verdict.get("end") or start,
-                "note": str(verdict.get("note") or ""),
-                "needs_review": not start,
-                "engine": "gemini",
-            }
+            # 떨어진 기간 여러 개("11/13, 11/20 휴가")는 periods 배열로 — 건마다 항목 하나.
+            periods = [p for p in (verdict.get("periods") or []) if isinstance(p, dict)]
+            if not periods:
+                periods = [{"start": verdict.get("start"), "end": verdict.get("end"),
+                            "kind": verdict.get("kind")}]
+            made = []
+            for p in periods:
+                start = p.get("start")
+                made.append({
+                    "kind": str(p.get("kind") or verdict.get("kind") or "휴가"),
+                    "start": start,
+                    "end": p.get("end") or start,
+                    "note": str(verdict.get("note") or ""),
+                    "needs_review": not start,
+                    "engine": "gemini",
+                })
         else:  # Gemini 불가·실패 — 규칙 파서로라도 잡아둔다
-            entry = rule_extract(cand["text"], msg_dt)
-            entry["note"] = ""
-            # 맥락 후보는 키워드가 상대 질문 쪽에 있다 — 종류를 맥락에서 가져온다.
-            if cand.get("kind_hint") and detect_kind(cand["text"]) is None:
-                entry["kind"] = cand["kind_hint"]
+            made = rule_extract_all(cand["text"], msg_dt)
+            for entry in made:
+                entry["note"] = ""
+                # 맥락 후보는 키워드가 상대 질문 쪽에 있다 — 종류를 맥락에서 가져온다.
+                if cand.get("kind_hint") and detect_kind(cand["text"]) is None:
+                    entry["kind"] = cand["kind_hint"]
         display_text = cand["text"]
         if cand.get("trigger") == "context" and cand.get("context"):
             display_text = f"{cand['context'].splitlines()[-1]} → {cand['text']}"
-        entry.update(uid=cand["uid"], name=resolve_entry_name(cand, verdict, owner),
-                     text=display_text,
-                     msg_date=cand["msg_date"],
-                     detected_at=datetime.now(KST).isoformat(timespec="minutes"))
-        entries.append(entry)
+        for k, entry in enumerate(made):
+            # 다건이면 uid#k 로 가른다(인뎁스 일정표와 같은 방식 — 재스캔 중복 차단은
+            # last_id 증분이라 원래 없고, span 중복은 아래 record 의 seen_spans 가 거른다).
+            entry.update(uid=cand["uid"] if len(made) == 1 else f"{cand['uid']}#{k}",
+                         name=resolve_entry_name(cand, verdict, owner),
+                         text=display_text,
+                         msg_date=cand["msg_date"],
+                         detected_at=datetime.now(KST).isoformat(timespec="minutes"))
+            entries.append(entry)
     return entries
 
 
@@ -568,9 +583,11 @@ def notify(new_entries: list[dict], fresh_att: list[dict] | None = None,
         if not idx_token or not idx_chat:
             print("[알림] 발간계획 봇 미설정 — 발송 생략(대시보드 전용)")
             return
-        idx_lines = [f"📚 <b>발간 계획 레이더</b> — 신규 {len(fresh_idx)}건", ""]
+        idx_lines = [f"📚 <b>발간 계획 레이더</b> — 신규·변경 {len(fresh_idx)}건", ""]
         for entry in sorted(fresh_idx, key=lambda e: (e.get("target") or "9999", e["name"])):
             when = entry.get("target") or entry.get("target_text") or "시점 미정"
+            if entry.get("moved_from"):  # 일정 조정 — 기존 건을 옮긴 것(새 건 아님)
+                when = f"일정 변경 {entry['moved_from'] or '미정'} → {when}"
             topic = entry.get("topic") or "주제 미상"
             idx_lines.append(f"<b>{watcher_notify.escape(entry['name'])}</b> — "
                              f"{watcher_notify.escape(topic)} ({watcher_notify.escape(str(when))})")
@@ -758,6 +775,110 @@ def _apply_op(op: str, body: dict) -> None:
     build_page(store)
 
 
+PLAN_KIND = {"종일": "연차", "오전": "오전반차", "오후": "오후반차"}
+# 텔레그램 보고와 겹친 계획서 날짜에 기존 항목 메모로 남기는 표시(생략을 조용히 하지 않는다).
+PLAN_ALSO_MARK = "📷 연차계획서에도 있음"
+
+
+def _plan_spans(rows: list[dict]) -> list[dict]:
+    """계획서 행(날짜·종일/오전/오후) → 기간 목록. 연속한 종일은 한 기간으로 묶는다."""
+    from datetime import date as _date
+
+    parsed = []
+    for row in rows:
+        raw_date = str(row.get("date") or "").strip().replace(".", "-").replace("/", "-")
+        try:
+            day = _date.fromisoformat(raw_date)
+        except ValueError:
+            continue
+        kind = PLAN_KIND.get(str(row.get("kind") or "").strip(), "연차")
+        parsed.append((day, kind))
+    parsed.sort()
+    spans: list[dict] = []
+    for day, kind in parsed:
+        last = spans[-1] if spans else None
+        if (last and kind == "연차" and last["kind"] == "연차"
+                and (day - _date.fromisoformat(last["end"])).days == 1):
+            last["end"] = day.isoformat()
+        else:
+            spans.append({"start": day.isoformat(), "end": day.isoformat(), "kind": kind})
+    return spans
+
+
+def apply_plan(raw: str) -> None:
+    """연차계획서 이미지에서 추출된 계획(이름 + 날짜·종류 행들)을 entries.json에 반영.
+
+    같은 사람 계획서를 다시 올리면 **통째로 교체**된다: uid는 `plan:이름:시작일`이라
+    같은 날짜는 덮어쓰고, 새 계획에서 빠진 날짜는 묘비(deleted)로 — 수시로 바뀌는
+    계획서의 재등록 요구. 텔레그램 수집분과는 같은 달력에 합쳐지되, 같은 이름·기간의
+    비-계획 항목이 이미 있으면 그 날짜는 건너뛴다(중복 칩 방지) — 단 조용히 넘기지
+    않고 그 항목 메모에 '연차계획서에도 있음'을 표시한다(10/28 요청). 표시는 재등록
+    때마다 지웠다 다시 달아 계획에서 빠진 날짜의 낡은 표시가 남지 않는다.
+    """
+    try:
+        body = json.loads(raw or "{}")
+    except json.JSONDecodeError as exc:
+        raise SystemExit(f"entry가 JSON이 아닙니다: {exc}")
+    name = str(body.get("name") or "").strip()
+    if not name:
+        raise SystemExit("name(신청자 이름)이 비어 있습니다 — 이미지에서 못 읽으면 폼에서 지정")
+    spans = _plan_spans(body.get("rows") or [])
+    if not spans:
+        raise SystemExit("날짜 행을 하나도 읽지 못했습니다")
+
+    store = load_json(ENTRIES_PATH, {"entries": {}})
+    entries = store["entries"]
+    prefix = f"plan:{name}:"
+    now = datetime.now(KST).isoformat(timespec="minutes")
+    today = datetime.now(KST).strftime("%Y-%m-%d")
+    desired = {f"{prefix}{span['start']}": span for span in spans}
+
+    removed = 0
+    for uid, entry in entries.items():
+        if uid.startswith(prefix) and uid not in desired and not entry.get("deleted"):
+            # 지난 일정은 새 계획서에서 빠져도 지우지 않는다(11/5 사용자 규칙 "과거는
+            # 굳이 지우지 말고") — HR 화면이 스크롤로 잘려 과거 행이 캡쳐에 안 담기는
+            # 게 보통이라, 교체는 오늘 이후 일정에만 적용한다.
+            if (entry.get("end") or entry.get("start") or "") < today:
+                continue
+            entry["deleted"] = True
+            removed += 1
+    # 재등록 멱등성: 이 사람의 옛 '계획서에도 있음' 표시를 지우고 이번 계획 기준으로
+    # 다시 단다 — 지난 항목의 표시는 보존(위와 같은 이유).
+    for k, v in entries.items():
+        if not k.startswith("plan:") and v.get("name") == name \
+                and (v.get("end") or v.get("start") or "") >= today:
+            note = v.get("note") or ""
+            if PLAN_ALSO_MARK in note:
+                v["note"] = note.replace(f" · {PLAN_ALSO_MARK}", "").replace(
+                    PLAN_ALSO_MARK, "").strip(" ·")
+    added = skipped = 0
+    for uid, span in desired.items():
+        dup = next((v for k, v in entries.items()
+                    if not v.get("deleted") and not k.startswith("plan:")
+                    and v.get("name") == name and v.get("start") == span["start"]
+                    and (v.get("end") or v.get("start")) == span["end"]), None)
+        if dup is not None and uid not in entries:
+            note = (dup.get("note") or "").strip()
+            dup["note"] = f"{note} · {PLAN_ALSO_MARK}" if note else PLAN_ALSO_MARK
+            skipped += 1
+            continue
+        entries[uid] = {
+            "name": name, "kind": span["kind"],
+            "start": span["start"], "end": span["end"],
+            "note": "연차계획서", "text": f"연차계획서 이미지 등록 ({today})",
+            "needs_review": False, "engine": "plan", "deleted": False,
+            "msg_date": now, "detected_at": now,
+        }
+        added += 1
+    save_json(ENTRIES_PATH, store)
+    print(f"연차계획서 반영: {name} — 기간 {added}건 등록/갱신, {removed}건 제거(묘비), "
+          f"{skipped}건은 기존 보고와 중복 — 그 항목 메모에 표시")
+    from render_page import build_page
+
+    build_page(store)
+
+
 def add_manual(raw: str) -> None:
     """대시보드 기입 폼에서 온 항목 한 건을 entries.json에 붙이고 페이지를 다시 굽는다.
 
@@ -835,6 +956,8 @@ def main() -> None:
     parser.add_argument("--dry-run", action="store_true")
     parser.add_argument("--rebuild-page", action="store_true")
     parser.add_argument("--add", metavar="JSON", help='직접 기입 {"name","start","end","kind","note"}')
+    parser.add_argument("--plan", metavar="JSON",
+                        help='연차계획서 반영 {"name","rows":[{"date","kind":"종일|오전|오후"}]}')
     parser.add_argument("--indepth-backfill", action="store_true",
                         help="지난 석 달 대화에서 발간 계획 소급 수집 (last_id 불변)")
     args = parser.parse_args()
@@ -843,6 +966,8 @@ def main() -> None:
         check()
     elif args.add is not None:
         add_manual(args.add)
+    elif args.plan is not None:
+        apply_plan(args.plan)
     elif args.indepth_backfill:
         run_indepth_backfill()
     elif args.rebuild_page:

@@ -13,8 +13,9 @@ on:
         description: "보낼 채널"
         required: true
         type: choice
-        default: "비공개(바담)"
+        default: "둘 다(바담+DAOL)"
         options:
+          - "둘 다(바담+DAOL)"
           - "비공개(바담)"
           - "공개채널"
           - "비공개(미리보기)"
@@ -60,6 +61,9 @@ jobs:
           # (BADAM_TELEGRAM_CHAT_ID 가 있으면 그것, 없으면 COVFLOW_TELEGRAM_CHAT_ID 재사용).
           # 공개채널은 Actions 에서 직접 고를 때만(10/17 사용자 요청: 폼은 공개채널로 보내지 않음).
           TELEGRAM_CHAT_ID: ${{ inputs.target == '공개채널' && secrets.TELEGRAM_CHAT_ID || inputs.target == '비공개(미리보기)' && secrets.TELEGRAM_CHAT_ID_PRIVATE || secrets.BADAM_TELEGRAM_CHAT_ID || secrets.COVFLOW_TELEGRAM_CHAT_ID }}
+          # '둘 다'면 바담(위)에 더해 DAOL 공개채널로도 한 번 더 보낸다. 같은 ID 면 봇이 걸러 1회만 간다.
+          # 미리보기는 테스트용이라 추가 방으로 안 나간다.
+          TELEGRAM_CHAT_ID_EXTRA: ${{ inputs.target == '둘 다(바담+DAOL)' && (secrets.TELEGRAM_CHAT_ID || '@HI_GS') || '' }}
           DART_COMMENT: ${{ inputs.comment }}
           DART_TARGET: ${{ inputs.target }}   # 로그에 실제 발송 대상을 찍기 위해
         run: python dart_shiporder_bot.py --url "${{ inputs.dart_url }}"

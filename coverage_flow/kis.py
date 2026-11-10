@@ -76,12 +76,14 @@ def fetch_ohlc(code, days=430):
     잘라내는 건 호출부 몫이다 — 장중 잠정 RSI 에 오늘 현재가가 필요하다."""
     start = (datetime.now(KST) - timedelta(days=days)).strftime("%Y%m%d")
     cur = datetime.now(KST).strftime("%Y%m%d")
-    rows = []
+    rows, name = [], ""
     for _ in range(8):
         p = {"FID_COND_MRKT_DIV_CODE": "J", "FID_INPUT_ISCD": code,
              "FID_INPUT_DATE_1": start, "FID_INPUT_DATE_2": cur,
              "FID_PERIOD_DIV_CODE": "D", "FID_ORG_ADJ_PRC": "0"}
         j = get("/uapi/domestic-stock/v1/quotations/inquire-daily-itemchartprice", "FHKST03010100", p)
+        # output1 에 종목명(hts_kor_isnm)이 온다 — 주식용 inquire-price 는 이름을 안 준다(11/7 실측: 전부 '').
+        name = name or (j.get("output1") or {}).get("hts_kor_isnm", "")
         d = [x for x in j.get("output2", []) if x.get("stck_bsop_date")]
         if not d:
             break
@@ -91,7 +93,9 @@ def fetch_ohlc(code, days=430):
             break
         cur = (datetime.strptime(old, "%Y%m%d") - timedelta(days=1)).strftime("%Y%m%d")
         time.sleep(0.12)
-    return ohlc_frame(rows)
+    df = ohlc_frame(rows)
+    df.attrs["name"] = name
+    return df
 
 
 def ohlc_frame(rows):

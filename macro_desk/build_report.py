@@ -363,7 +363,92 @@ def legend(text: str) -> str:
             + ' · 오른쪽 기간은 발표일이 아니라 <b>대상 기간</b>입니다.</p>')
 
 
-def guide_numbers(cfg: dict, rel: dict, cons: dict) -> dict:
+def band_hit(band: dict, vals: dict, ind_id: str) -> bool:
+    """발표 숫자가 이 밴드에 드는가. guide.yml read 밴드의 metric·ge·gt·le·lt 로 판정.
+
+    조건이 없는 밴드·숫자가 없는 밴드는 **언제나 False** — 성명서 문구나 근원 MoM 처럼
+    모으지 않는 값을 '지금 여기'로 표시하면 틀린 해석이 사실처럼 보인다(30번 부류).
+    """
+    m = band.get("metric")
+    if not m or (band.get("ids") and ind_id not in band["ids"]):
+        return False
+    v = (vals or {}).get(m)
+    if v is None:
+        return False
+    return (("ge" not in band or v >= band["ge"]) and ("gt" not in band or v > band["gt"])
+            and ("le" not in band or v <= band["le"]) and ("lt" not in band or v < band["lt"]))
+
+
+def card_hits(cfg: dict, rel: dict, guide: dict) -> dict[str, list[tuple[str, list[int]]]]:
+    """guide id → [(지표 id, 걸린 밴드 번호들)]. 한 카드를 여러 지표가 쓰면 지표마다 따로."""
+    out: dict[str, list[tuple[str, list[int]]]] = {}
+    inds = (guide or {}).get("indicators") or {}
+    for e in cfg.get("calendar", []):
+        gid = e.get("guide")
+        vals = (rel.get(e["id"]) or {}).get("vals")
+        if not gid or gid not in inds or not vals:
+            continue
+        idx = [i for i, b in enumerate(inds[gid].get("read", []))
+               if band_hit(b, vals, e["id"])]
+        out.setdefault(gid, []).append((e["id"], idx))
+    return out
+
+
+def metric_text(metric: str, v: float, spec: dict) -> str:
+    """밴드를 고른 숫자를 사람이 읽는 꼴로 — '코어 YoY +3.1%', '+2.9만명', '3.4%'.
+
+    단위는 config 의 release spec 에서 읽는다(payload 엔 숫자만 있다). 보조 계열
+    (core_yoy·unemp_level)은 also 의 label 을 앞에 붙인다.
+    """
+    also = spec.get("also") or {}
+    if also.get("key") and metric.startswith(also["key"] + "_"):
+        spec, metric, head = also, metric[len(also["key"]) + 1:], also.get("label", "")
+    else:
+        head = ""
+    if metric in ("yoy", "mom"):
+        name = "YoY" if metric == "yoy" else ("QoQ" if spec.get("freq") == "q" else "MoM")
+        body = f"{name} {v:+.1f}%"
+    elif metric == "diff":
+        body = f"{v:+,.1f}{spec.get('unit', '')}"
+    else:
+        body = f"{v:,.{spec.get('digits', 1)}f}{spec.get('unit', '')}"
+    return f"{head} {body}".strip()
+
+
+def verdict(g: dict, idx: list[int], period: str, entry: dict | None = None,
+            vals: dict | None = None) -> str:
+    """'📌 이번 결과 해석' — 걸린 밴드의 뜻을 그대로 옮긴다(규칙, 생성형 아님).
+
+    밴드 이름 옆에 **그 밴드를 고른 실제 숫자**를 붙인다 — '2.8% 이상' 만으로는
+    지금 몇인지 다시 표를 올려다봐야 한다.
+    """
+    bands = g.get("read", [])
+    spec = (entry or {}).get("release") or {}
+    vals = vals or {}
+
+    def now(b: dict) -> str:
+        m = b.get("metric")
+        if m not in vals:
+            return ""
+        return f' <span class="vnow">지금 {esc(metric_text(m, vals[m], spec))}</span>'
+    when = f'<span class="w">{esc(period)} · 위 직전 발표 숫자 기준</span>' if period else ""
+    if not idx:
+        # 발표는 났는데 숫자로 고를 밴드가 없다(FOMC 성명서·점도표 등) — 빈 칸으로
+        # 두면 '해석이 빠졌다'로 보이므로 이유를 한 줄 적는다.
+        return (f'<div class="verdict"><p class="vh">📌 이번 결과 해석 {when}</p>'
+                '<p class="vnone">이 지표는 숫자 하나로 고를 수 있는 밴드가 없습니다 — '
+                '아래 밴드를 발표 내용과 맞춰 보세요.</p></div>')
+    lis = "".join(
+        f'<li class="{TONE.get(bands[i].get("tone"), ("", "•"))[0]}">'
+        f'<span class="bmark">{TONE.get(bands[i].get("tone"), ("", "•"))[1]}</span>'
+        f'<b>{esc(bands[i]["band"])}</b>{now(bands[i])}'
+        f'<span class="vmean">{esc(bands[i]["mean"])}</span></li>'
+        for i in idx)
+    return (f'<div class="verdict"><p class="vh">📌 이번 결과 해석 {when}</p>'
+            f'<ul>{lis}</ul></div>')
+
+
+def guide_numbers(cfg: dict, rel: dict, cons: dict, guide: dict | None = None) -> dict:
     """guide id → 그 지표의 실제 숫자 블록.
 
     밴드만 있고 숫자가 없으면 "근원 3.5% 이상이면…" 을 읽고도 **지금 얼마인지**를
@@ -374,6 +459,9 @@ def guide_numbers(cfg: dict, rel: dict, cons: dict) -> dict:
     항목 이름을 같이 적는다. 없는 값은 줄을 통째로 빼고 '–' 로 채우지 않는다.
     """
     out: dict[str, list[str]] = {}
+    inds = (guide or {}).get("indicators") or {}
+    hits = {ind: idx for pairs in card_hits(cfg, rel, guide or {}).values()
+            for ind, idx in pairs}
     for e in cfg.get("calendar", []):
         gid = e.get("guide")
         if not gid:
@@ -400,21 +488,30 @@ def guide_numbers(cfg: dict, rel: dict, cons: dict) -> dict:
         label = (f'<p class="numname">{esc(e["name"])}</p>'
                  if len([x for x in cfg.get("calendar", []) if x.get("guide") == gid]) > 1
                  else "")
+        # 숫자(vals)가 있는 발표만 해석을 붙인다 — 옛 수집분엔 vals 가 없어 판정 근거가 없다
+        judged = (verdict(inds[gid], hits[e["id"]], r.get("period", ""), e, r.get("vals"))
+                  if e["id"] in hits and gid in inds else "")
         out.setdefault(gid, []).append(
             f'{label}<table class="nums">{rows}</table>'
-            + legend((r.get("text") or "") + (c.get("text") or "")))
+            + legend((r.get("text") or "") + (c.get("text") or "")) + judged)
     return out
 
 
-def indicator_cards(guide: dict, nums: dict | None = None) -> str:
+def indicator_cards(guide: dict, nums: dict | None = None,
+                    hits: dict | None = None) -> str:
+    """hits 는 card_hits() — 걸린 밴드 줄에 '◀ 지금' 표시를 단다."""
     nums = nums or {}
+    hits = hits or {}
     cards = []
     for gid, g in (guide.get("indicators") or {}).items():
+        now = {i for _, idx in hits.get(gid, []) for i in idx}
         bands = "".join(
-            f'<li class="band {TONE.get(b.get("tone"), ("", "•"))[0]}">'
+            f'<li class="band {TONE.get(b.get("tone"), ("", "•"))[0]}'
+            f'{" hit" if i in now else ""}">'
             f'<span class="bmark">{TONE.get(b.get("tone"), ("", "•"))[1]}</span>'
-            f'<b>{esc(b["band"])}</b><span>{esc(b["mean"])}</span></li>'
-            for b in g.get("read", []))
+            f'<b>{esc(b["band"])}</b><span>{esc(b["mean"])}'
+            f'{"<em class=now>◀ 지금</em>" if i in now else ""}</span></li>'
+            for i, b in enumerate(g.get("read", [])))
         links = " · ".join(
             f'<a href="{esc(u)}" target="_blank" rel="noopener">{esc(t)}</a>'
             for t, u in g.get("links", []))
@@ -622,6 +719,19 @@ table.nums td.trend{{font-weight:400;font-family:Georgia,serif}}
 .band{{display:grid;grid-template-columns:18px 170px 1fr;gap:6px;align-items:start;
 padding:4px 0;border-top:1px dashed var(--line);font-size:12.5px}}
 .band .bmark{{text-align:center}}
+.band.hit{{background:color-mix(in srgb,var(--accent) 10%,transparent);border-radius:6px}}
+.band em.now{{font-style:normal;font-weight:700;color:var(--accent);margin-left:6px;white-space:nowrap}}
+/* 발표 결과 해석 — 걸린 밴드의 뜻을 카드 맨 위에 */
+.verdict{{border:1px solid var(--line);border-left:3px solid var(--accent);border-radius:8px;
+padding:7px 10px;margin:0 0 10px;background:var(--card)}}
+.verdict .vh{{margin:0 0 4px;font-weight:700;font-size:13px}}
+.verdict .vh .w{{color:var(--muted);font-weight:400;font-size:11.5px;margin-left:4px}}
+.verdict ul{{list-style:none;margin:0;padding:0}}
+.verdict li{{font-size:12.5px;line-height:1.6;padding:3px 0 3px 20px;position:relative}}
+.verdict li .bmark{{position:absolute;left:0;width:16px;text-align:center}}
+.verdict .vnow{{color:var(--muted);font-size:11.5px;margin-left:4px;white-space:nowrap}}
+.verdict .vmean{{display:block}}
+.verdict .vnone{{margin:0;font-size:12px;color:var(--muted)}}
 .mkt,.kr{{font-size:12.5px;margin:8px 0 0}}
 .links{{margin:8px 0 0;font-size:12px}}
 a{{color:inherit}} .yt{{font-size:12px}}
@@ -649,7 +759,8 @@ a{{color:inherit}} .yt{{font-size:12px}}
 <details class="sec" id="s-read" open>
 <summary><h2>🧭 지표 해석 — 얼마면 무슨 뜻인가</h2></summary>
 <p class="note">제목을 누르면 펼쳐집니다. 밴드는 <b>대략의 기준</b>이지 매매 신호가 아닙니다.</p>
-{indicator_cards(guide, guide_numbers(cfg, data.get("releases") or {}, rl.load_consensus()))}
+{indicator_cards(guide, guide_numbers(cfg, data.get("releases") or {}, rl.load_consensus(), guide),
+                 card_hits(cfg, data.get("releases") or {}, guide))}
 </details>
 
 <details class="sec" id="s-basic" open>

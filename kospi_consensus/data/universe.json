@@ -34,8 +34,8 @@
   ],
   "status": "유지"
  },
- "009150": {
-  "name": "삼성전기",
+ "207940": {
+  "name": "삼성바이오로직스",
   "market": "코스피",
   "groups": [
    "KOSPI200",
@@ -43,8 +43,8 @@
   ],
   "status": "유지"
  },
- "207940": {
-  "name": "삼성바이오로직스",
+ "009150": {
+  "name": "삼성전기",
   "market": "코스피",
   "groups": [
    "KOSPI200",
@@ -69,6 +69,15 @@
   ],
   "status": null
  },
+ "068270": {
+  "name": "셀트리온",
+  "market": "코스피",
+  "groups": [
+   "KOSPI200",
+   "커버리지"
+  ],
+  "status": "유지"
+ },
  "032830": {
   "name": "삼성생명",
   "market": "코스피",
@@ -86,24 +95,6 @@
   ],
   "status": "유지"
  },
- "068270": {
-  "name": "셀트리온",
-  "market": "코스피",
-  "groups": [
-   "KOSPI200",
-   "커버리지"
-  ],
-  "status": "유지"
- },
- "000270": {
-  "name": "기아",
-  "market": "코스피",
-  "groups": [
-   "KOSPI200",
-   "커버리지"
-  ],
-  "status": "유지"
- },
  "055550": {
   "name": "신한지주",
   "market": "코스피",
@@ -112,8 +103,8 @@
   ],
   "status": null
  },
- "012450": {
-  "name": "한화에어로스페이스",
+ "000270": {
+  "name": "기아",
   "market": "코스피",
   "groups": [
    "KOSPI200",
@@ -130,13 +121,14 @@
   ],
   "status": "유지"
  },
- "034020": {
-  "name": "두산에너빌리티",
+ "012450": {
+  "name": "한화에어로스페이스",
   "market": "코스피",
   "groups": [
-   "KOSPI200"
+   "KOSPI200",
+   "커버리지"
   ],
-  "status": null
+  "status": "유지"
  },
  "034730": {
   "name": "SK",
@@ -145,15 +137,6 @@
    "KOSPI200"
   ],
   "status": null
- },
- "329180": {
-  "name": "HD현대중공업",
-  "market": "코스피",
-  "groups": [
-   "KOSPI200",
-   "커버리지"
-  ],
-  "status": "유지"
  },
  "086790": {
   "name": "하나금융지주",
@@ -172,14 +155,6 @@
   ],
   "status": "유지"
  },
- "000810": {
-  "name": "삼성화재",
-  "market": "코스피",
-  "groups": [
-   "KOSPI200"
-  ],
-  "status": null
- },
  "035420": {
   "name": "NAVER",
   "market": "코스피",
@@ -189,8 +164,93 @@
   ],
   "status": "유지"
  },
+ "034020": {
+  "name": "두산에너빌리티",
+  "market": "코스피",
+  "groups": [
+   "KOSPI200"
+  ],
+  "status": null
+ },
+ "000810": {
+  "name": "삼성화재",
+  "market": "코스피",
+  "groups": [
+   "KOSPI200"
+  ],
+  "status": null
+ },
+ "329180": {
+  "name": "HD현대중공업",
+  "market": "코스피",
+  "groups": [
+   "KOSPI200",
+   "커버리지"
+  ],
+  "status": "유지"
+ },
+ "316140": {
+  "name": "우리금융지주",
+  "market": "코스피",
+  "groups": [
+   "KOSPI200"
+  ],
+  "status": null
+ },
  "066570": {
   "name": "LG전자",
+  "market": "코스피",
+  "groups": [
+   "KOSPI200",
+   "커버리지"
+  ],
+  "status": "유지"
+ },
+ "138040": {
+  "name": "메리츠금융지주",
+  "market": "코스피",
+  "groups": [
+   "KOSPI200"
+  ],
+  "status": null
+ },
+ "005490": {
+  "name": "POSCO홀딩스",
+  "market": "코스피",
+  "groups": [
+   "KOSPI200",
+   "커버리지"
+  ],
+  "status": "유지"
+ },
+ "010130": {
+  "name": "고려아연",
+  "market": "코스피",
+  "groups": [
+   "KOSPI200",
+   "커버리지"
+  ],
+  "status": "유지"
+ },
+ "011200": {
+  "name": "HMM",
+  "market": "코스피",
+  "groups": [
+   "KOSPI200",
+   "커버리지"
+  ],
+  "status": "유지"
+ },
+ "015760": {
+  "name": "한국전력",
+  "market": "코스피",
+  "groups": [
+   "KOSPI200"
+  ],
+  "status": null
+ },
+ "033780": {
+  "name": "KT&G",
   "market": "코스피",
   "groups": [
    "KOSPI200",
@@ -215,67 +275,8 @@
   ],
   "status": "유지"
  },
- "316140": {
-  "name": "우리금융지주",
-  "market": "코스피",
-  "groups": [
-   "KOSPI200"
-  ],
-  "status": null
- },
- "005490": {
-  "name": "POSCO홀딩스",
-  "market": "코스피",
-  "groups": [
-   "KOSPI200",
-   "커버리지"
-  ],
-  "status": "유지"
- },
- "138040": {
-  "name": "메리츠금융지주",
-  "market": "코스피",
-  "groups": [
-   "KOSPI200"
-  ],
-  "status": null
- },
- "011200": {
-  "name": "HMM",
-  "market": "코스피",
-  "groups": [
-   "KOSPI200",
-   "커버리지"
-  ],
-  "status": "유지"
- },
- "033780": {
-  "name": "KT&G",
-  "market": "코스피",
-  "groups": [
-   "KOSPI200",
-   "커버리지"
-  ],
-  "status": "유지"
- },
- "015760": {
-  "name": "한국전력",
-  "market": "코스피",
-  "groups": [
-   "KOSPI200"
-  ],
-  "status": null
- },
- "042700": {
-  "name": "한미반도체",
-  "market": "코스피",
-  "groups": [
-   "KOSPI200"
-  ],
-  "status": null
- },
- "010130": {
-  "name": "고려아연",
+ "018260": {
+  "name": "삼성에스디에스",
   "market": "코스피",
   "groups": [
    "KOSPI200",
@@ -292,6 +293,39 @@
   ],
   "status": "유지"
  },
+ "017670": {
+  "name": "SK텔레콤",
+  "market": "코스피",
+  "groups": [
+   "KOSPI200",
+   "커버리지"
+  ],
+  "status": "유지"
+ },
+ "051910": {
+  "name": "LG화학",
+  "market": "코스피",
+  "groups": [
+   "KOSPI200"
+  ],
+  "status": null
+ },
+ "042700": {
+  "name": "한미반도체",
+  "market": "코스피",
+  "groups": [
+   "KOSPI200"
+  ],
+  "status": null
+ },
+ "024110": {
+  "name": "기업은행",
+  "market": "코스피",
+  "groups": [
+   "KOSPI200"
+  ],
+  "status": null
+ },
  "298040": {
   "name": "효성중공업",
   "market": "코스피",
@@ -301,8 +335,17 @@
   ],
   "status": "유지"
  },
- "267260": {
-  "name": "HD현대일렉트릭",
+ "035720": {
+  "name": "카카오",
+  "market": "코스피",
+  "groups": [
+   "KOSPI200",
+   "커버리지"
+  ],
+  "status": "유지"
+ },
+ "086280": {
+  "name": "현대글로비스",
   "market": "코스피",
   "groups": [
    "KOSPI200",
@@ -319,50 +362,25 @@
   ],
   "status": "유지"
  },
- "018260": {
-  "name": "삼성에스디에스",
-  "market": "코스피",
-  "groups": [
-   "KOSPI200",
-   "커버리지"
-  ],
-  "status": "유지"
- },
- "051910": {
-  "name": "LG화학",
+ "180640": {
+  "name": "한진칼",
   "market": "코스피",
   "groups": [
    "KOSPI200"
   ],
   "status": null
  },
- "017670": {
-  "name": "SK텔레콤",
+ "003670": {
+  "name": "포스코퓨처엠",
   "market": "코스피",
   "groups": [
    "KOSPI200",
    "커버리지"
   ],
   "status": "유지"
- },
- "024110": {
-  "name": "기업은행",
-  "market": "코스피",
-  "groups": [
-   "KOSPI200"
-  ],
-  "status": null
  },
  "003550": {
   "name": "LG",
-  "market": "코스피",
-  "groups": [
-   "KOSPI200"
-  ],
-  "status": null
- },
- "010950": {
-  "name": "S-Oil",
   "market": "코스피",
   "groups": [
    "KOSPI200"
@@ -378,8 +396,8 @@
   ],
   "status": "유지"
  },
- "003670": {
-  "name": "포스코퓨처엠",
+ "030200": {
+  "name": "KT",
   "market": "코스피",
   "groups": [
    "KOSPI200",
@@ -387,16 +405,25 @@
   ],
   "status": "유지"
  },
- "000150": {
-  "name": "두산",
+ "267260": {
+  "name": "HD현대일렉트릭",
+  "market": "코스피",
+  "groups": [
+   "KOSPI200",
+   "커버리지"
+  ],
+  "status": "유지"
+ },
+ "010950": {
+  "name": "S-Oil",
   "market": "코스피",
   "groups": [
    "KOSPI200"
   ],
   "status": null
  },
- "035720": {
-  "name": "카카오",
+ "028050": {
+  "name": "삼성E&A",
   "market": "코스피",
   "groups": [
    "KOSPI200",
@@ -412,24 +439,6 @@
   ],
   "status": null
  },
- "086280": {
-  "name": "현대글로비스",
-  "market": "코스피",
-  "groups": [
-   "KOSPI200",
-   "커버리지"
-  ],
-  "status": "유지"
- },
- "272210": {
-  "name": "한화시스템",
-  "market": "코스피",
-  "groups": [
-   "KOSPI200",
-   "커버리지"
-  ],
-  "status": "유지"
- },
  "005830": {
   "name": "DB손해보험",
   "market": "코스피",
@@ -438,8 +447,8 @@
   ],
   "status": null
  },
- "030200": {
-  "name": "KT",
+ "003490": {
+  "name": "대한항공",
   "market": "코스피",
   "groups": [
    "KOSPI200",
@@ -447,52 +456,8 @@
   ],
   "status": "유지"
  },
- "028050": {
-  "name": "삼성E&A",
-  "market": "코스피",
-  "groups": [
-   "KOSPI200",
-   "커버리지"
-  ],
-  "status": "유지"
- },
- "267250": {
-  "name": "HD현대",
-  "market": "코스피",
-  "groups": [
-   "KOSPI200"
-  ],
-  "status": null
- },
- "278470": {
-  "name": "에이피알",
-  "market": "코스피",
-  "groups": [
-   "KOSPI200",
-   "커버리지"
-  ],
-  "status": "유지"
- },
- "079550": {
-  "name": "LIG디펜스앤에어로스페이스",
-  "market": "코스피",
-  "groups": [
-   "KOSPI200",
-   "커버리지"
-  ],
-  "status": "유지"
- },
- "000720": {
-  "name": "현대건설",
-  "market": "코스피",
-  "groups": [
-   "KOSPI200",
-   "커버리지"
-  ],
-  "status": "유지"
- },
- "047810": {
-  "name": "한국항공우주",
+ "259960": {
+  "name": "크래프톤",
   "market": "코스피",
   "groups": [
    "KOSPI200",
@@ -509,8 +474,8 @@
   ],
   "status": "유지"
  },
- "003490": {
-  "name": "대한항공",
+ "047810": {
+  "name": "한국항공우주",
   "market": "코스피",
   "groups": [
    "KOSPI200",
@@ -518,8 +483,59 @@
   ],
   "status": "유지"
  },
+ "267250": {
+  "name": "HD현대",
+  "market": "코스피",
+  "groups": [
+   "KOSPI200"
+  ],
+  "status": null
+ },
+ "272210": {
+  "name": "한화시스템",
+  "market": "코스피",
+  "groups": [
+   "KOSPI200",
+   "커버리지"
+  ],
+  "status": "유지"
+ },
+ "278470": {
+  "name": "에이피알",
+  "market": "코스피",
+  "groups": [
+   "KOSPI200",
+   "커버리지"
+  ],
+  "status": "유지"
+ },
+ "000150": {
+  "name": "두산",
+  "market": "코스피",
+  "groups": [
+   "KOSPI200"
+  ],
+  "status": null
+ },
  "003230": {
   "name": "삼양식품",
+  "market": "코스피",
+  "groups": [
+   "KOSPI200",
+   "커버리지"
+  ],
+  "status": "유지"
+ },
+ "0126Z0": {
+  "name": "삼성에피스홀딩스",
+  "market": "코스피",
+  "groups": [
+   "KOSPI200"
+  ],
+  "status": null
+ },
+ "000720": {
+  "name": "현대건설",
   "market": "코스피",
   "groups": [
    "KOSPI200",
@@ -536,6 +552,14 @@
   ],
   "status": "유지"
  },
+ "005940": {
+  "name": "NH투자증권",
+  "market": "코스피",
+  "groups": [
+   "KOSPI200"
+  ],
+  "status": null
+ },
  "064350": {
   "name": "현대로템",
   "market": "코스피",
@@ -545,17 +569,16 @@
   ],
   "status": "유지"
  },
- "011070": {
-  "name": "LG이노텍",
+ "064400": {
+  "name": "LG씨엔에스",
   "market": "코스피",
   "groups": [
-   "KOSPI200",
-   "커버리지"
+   "KOSPI200"
   ],
-  "status": "유지"
+  "status": null
  },
- "443060": {
-  "name": "HD현대마린솔루션",
+ "090430": {
+  "name": "아모레퍼시픽",
   "market": "코스피",
   "groups": [
    "KOSPI200",
@@ -571,55 +594,6 @@
   ],
   "status": null
  },
- "005940": {
-  "name": "NH투자증권",
-  "market": "코스피",
-  "groups": [
-   "KOSPI200"
-  ],
-  "status": null
- },
- "259960": {
-  "name": "크래프톤",
-  "market": "코스피",
-  "groups": [
-   "KOSPI200",
-   "커버리지"
-  ],
-  "status": "유지"
- },
- "0126Z0": {
-  "name": "삼성에피스홀딩스",
-  "market": "코스피",
-  "groups": [
-   "KOSPI200"
-  ],
-  "status": null
- },
- "071050": {
-  "name": "한국금융지주",
-  "market": "코스피",
-  "groups": [
-   "KOSPI200"
-  ],
-  "status": null
- },
- "180640": {
-  "name": "한진칼",
-  "market": "코스피",
-  "groups": [
-   "KOSPI200"
-  ],
-  "status": null
- },
- "078930": {
-  "name": "GS",
-  "market": "코스피",
-  "groups": [
-   "KOSPI200"
-  ],
-  "status": null
- },
  "161390": {
   "name": "한국타이어앤테크놀로지",
   "market": "코스피",
@@ -629,23 +603,13 @@
   ],
   "status": "유지"
  },
- "352820": {
-  "name": "하이브",
+ "078930": {
+  "name": "GS",
   "market": "코스피",
   "groups": [
-   "KOSPI200",
-   "커버리지"
+   "KOSPI200"
   ],
-  "status": "유지"
- },
- "090430": {
-  "name": "아모레퍼시픽",
-  "market": "코스피",
-  "groups": [
-   "KOSPI200",
-   "커버리지"
-  ],
-  "status": "유지"
+  "status": null
  },
  "021240": {
   "name": "코웨이",
@@ -655,58 +619,8 @@
   ],
   "status": null
  },
- "064400": {
-  "name": "LG씨엔에스",
-  "market": "코스피",
-  "groups": [
-   "KOSPI200"
-  ],
-  "status": null
- },
- "016360": {
-  "name": "삼성증권",
-  "market": "코스피",
-  "groups": [
-   "KOSPI200"
-  ],
-  "status": null
- },
- "006260": {
-  "name": "LS",
-  "market": "코스피",
-  "groups": [
-   "KOSPI200"
-  ],
-  "status": null
- },
- "009830": {
-  "name": "한화솔루션",
-  "market": "코스피",
-  "groups": [
-   "KOSPI200"
-  ],
-  "status": null
- },
- "007660": {
-  "name": "이수페타시스",
-  "market": "코스피",
-  "groups": [
-   "KOSPI200",
-   "커버리지"
-  ],
-  "status": "유지"
- },
- "000100": {
-  "name": "유한양행",
-  "market": "코스피",
-  "groups": [
-   "KOSPI200",
-   "커버리지"
-  ],
-  "status": "유지"
- },
- "032640": {
-  "name": "LG유플러스",
+ "443060": {
+  "name": "HD현대마린솔루션",
   "market": "코스피",
   "groups": [
    "KOSPI200",
@@ -723,8 +637,8 @@
   ],
   "status": "유지"
  },
- "047040": {
-  "name": "대우건설",
+ "032640": {
+  "name": "LG유플러스",
   "market": "코스피",
   "groups": [
    "KOSPI200",
@@ -732,48 +646,42 @@
   ],
   "status": "유지"
  },
- "039490": {
-  "name": "키움증권",
+ "071050": {
+  "name": "한국금융지주",
   "market": "코스피",
   "groups": [
    "KOSPI200"
   ],
   "status": null
  },
- "062040": {
-  "name": "산일전기",
+ "079550": {
+  "name": "LIG디펜스앤에어로스페이스",
+  "market": "코스피",
+  "groups": [
+   "KOSPI200",
+   "커버리지"
+  ],
+  "status": "유지"
+ },
+ "016360": {
+  "name": "삼성증권",
   "market": "코스피",
   "groups": [
    "KOSPI200"
   ],
   "status": null
  },
- "000880": {
-  "name": "한화",
+ "011070": {
+  "name": "LG이노텍",
   "market": "코스피",
   "groups": [
-   "KOSPI200"
+   "KOSPI200",
+   "커버리지"
   ],
-  "status": null
+  "status": "유지"
  },
- "029780": {
-  "name": "삼성카드",
-  "market": "코스피",
-  "groups": [
-   "KOSPI200"
-  ],
-  "status": null
- },
- "175330": {
-  "name": "JB금융지주",
-  "market": "코스피",
-  "groups": [
-   "KOSPI200"
-  ],
-  "status": null
- },
- "241560": {
-  "name": "두산밥캣",
+ "352820": {
+  "name": "하이브",
   "market": "코스피",
   "groups": [
    "KOSPI200",
@@ -790,16 +698,66 @@
   ],
   "status": "유지"
  },
- "377300": {
-  "name": "카카오페이",
+ "000100": {
+  "name": "유한양행",
+  "market": "코스피",
+  "groups": [
+   "KOSPI200",
+   "커버리지"
+  ],
+  "status": "유지"
+ },
+ "009830": {
+  "name": "한화솔루션",
   "market": "코스피",
   "groups": [
    "KOSPI200"
   ],
   "status": null
  },
- "036570": {
-  "name": "NC",
+ "006260": {
+  "name": "LS",
+  "market": "코스피",
+  "groups": [
+   "KOSPI200"
+  ],
+  "status": null
+ },
+ "241560": {
+  "name": "두산밥캣",
+  "market": "코스피",
+  "groups": [
+   "KOSPI200",
+   "커버리지"
+  ],
+  "status": "유지"
+ },
+ "175330": {
+  "name": "JB금융지주",
+  "market": "코스피",
+  "groups": [
+   "KOSPI200"
+  ],
+  "status": null
+ },
+ "029780": {
+  "name": "삼성카드",
+  "market": "코스피",
+  "groups": [
+   "KOSPI200"
+  ],
+  "status": null
+ },
+ "039490": {
+  "name": "키움증권",
+  "market": "코스피",
+  "groups": [
+   "KOSPI200"
+  ],
+  "status": null
+ },
+ "007660": {
+  "name": "이수페타시스",
   "market": "코스피",
   "groups": [
    "KOSPI200",
@@ -816,6 +774,48 @@
   ],
   "status": "유지"
  },
+ "036570": {
+  "name": "NC",
+  "market": "코스피",
+  "groups": [
+   "KOSPI200",
+   "커버리지"
+  ],
+  "status": "유지"
+ },
+ "377300": {
+  "name": "카카오페이",
+  "market": "코스피",
+  "groups": [
+   "KOSPI200"
+  ],
+  "status": null
+ },
+ "047040": {
+  "name": "대우건설",
+  "market": "코스피",
+  "groups": [
+   "KOSPI200",
+   "커버리지"
+  ],
+  "status": "유지"
+ },
+ "000880": {
+  "name": "한화",
+  "market": "코스피",
+  "groups": [
+   "KOSPI200"
+  ],
+  "status": null
+ },
+ "008930": {
+  "name": "한미사이언스",
+  "market": "코스피",
+  "groups": [
+   "KOSPI200"
+  ],
+  "status": null
+ },
  "267270": {
   "name": "HD건설기계",
   "market": "코스피",
@@ -825,14 +825,6 @@
   ],
   "status": "유지"
  },
- "000990": {
-  "name": "DB하이텍",
-  "market": "코스피",
-  "groups": [
-   "KOSPI200"
-  ],
-  "status": null
- },
  "138930": {
   "name": "BNK금융지주",
   "market": "코스피",
@@ -841,66 +833,8 @@
   ],
   "status": null
  },
- "001440": {
-  "name": "대한전선",
-  "market": "코스피",
-  "groups": [
-   "KOSPI200"
-  ],
-  "status": null
- },
- "011790": {
-  "name": "SKC",
-  "market": "코스피",
-  "groups": [
-   "KOSPI200"
-  ],
-  "status": null
- },
- "051900": {
-  "name": "LG생활건강",
-  "market": "코스피",
-  "groups": [
-   "KOSPI200"
-  ],
-  "status": null
- },
- "018880": {
-  "name": "한온시스템",
-  "market": "코스피",
-  "groups": [
-   "KOSPI200",
-   "커버리지"
-  ],
-  "status": "유지"
- },
  "012750": {
   "name": "에스원",
-  "market": "코스피",
-  "groups": [
-   "KOSPI200"
-  ],
-  "status": null
- },
- "454910": {
-  "name": "두산로보틱스",
-  "market": "코스피",
-  "groups": [
-   "KOSPI200",
-   "커버리지"
-  ],
-  "status": "유지"
- },
- "010060": {
-  "name": "OCI홀딩스",
-  "market": "코스피",
-  "groups": [
-   "KOSPI200"
-  ],
-  "status": null
- },
- "001450": {
-  "name": "현대해상",
   "market": "코스피",
   "groups": [
    "KOSPI200"
@@ -916,6 +850,30 @@
   ],
   "status": "유지"
  },
+ "010060": {
+  "name": "OCI홀딩스",
+  "market": "코스피",
+  "groups": [
+   "KOSPI200"
+  ],
+  "status": null
+ },
+ "000990": {
+  "name": "DB하이텍",
+  "market": "코스피",
+  "groups": [
+   "KOSPI200"
+  ],
+  "status": null
+ },
+ "001450": {
+  "name": "현대해상",
+  "market": "코스피",
+  "groups": [
+   "KOSPI200"
+  ],
+  "status": null
+ },
  "034220": {
   "name": "LG디스플레이",
   "market": "코스피",
@@ -924,22 +882,29 @@
   ],
   "status": null
  },
- "052690": {
-  "name": "한전기술",
+ "051900": {
+  "name": "LG생활건강",
   "market": "코스피",
   "groups": [
    "KOSPI200"
   ],
   "status": null
  },
- "066970": {
-  "name": "엘앤에프",
+ "062040": {
+  "name": "산일전기",
   "market": "코스피",
   "groups": [
-   "KOSPI200",
-   "커버리지"
+   "KOSPI200"
   ],
-  "status": "유지"
+  "status": null
+ },
+ "036460": {
+  "name": "한국가스공사",
+  "market": "코스피",
+  "groups": [
+   "KOSPI200"
+  ],
+  "status": null
  },
  "088350": {
   "name": "한화생명",
@@ -957,25 +922,8 @@
   ],
   "status": null
  },
- "036460": {
-  "name": "한국가스공사",
-  "market": "코스피",
-  "groups": [
-   "KOSPI200"
-  ],
-  "status": null
- },
- "028670": {
-  "name": "팬오션",
-  "market": "코스피",
-  "groups": [
-   "KOSPI200",
-   "커버리지"
-  ],
-  "status": "유지"
- },
- "002380": {
-  "name": "KCC",
+ "001440": {
+  "name": "대한전선",
   "market": "코스피",
   "groups": [
    "KOSPI200"
@@ -990,8 +938,50 @@
   ],
   "status": null
  },
- "192820": {
-  "name": "코스맥스",
+ "302440": {
+  "name": "SK바이오사이언스",
+  "market": "코스피",
+  "groups": [
+   "KOSPI200",
+   "커버리지"
+  ],
+  "status": "유지"
+ },
+ "454910": {
+  "name": "두산로보틱스",
+  "market": "코스피",
+  "groups": [
+   "KOSPI200",
+   "커버리지"
+  ],
+  "status": "유지"
+ },
+ "011790": {
+  "name": "SKC",
+  "market": "코스피",
+  "groups": [
+   "KOSPI200"
+  ],
+  "status": null
+ },
+ "002380": {
+  "name": "KCC",
+  "market": "코스피",
+  "groups": [
+   "KOSPI200"
+  ],
+  "status": null
+ },
+ "022100": {
+  "name": "포스코DX",
+  "market": "코스피",
+  "groups": [
+   "KOSPI200"
+  ],
+  "status": null
+ },
+ "018880": {
+  "name": "한온시스템",
   "market": "코스피",
   "groups": [
    "KOSPI200",
@@ -1008,22 +998,22 @@
   ],
   "status": "유지"
  },
- "022100": {
-  "name": "포스코DX",
-  "market": "코스피",
-  "groups": [
-   "KOSPI200"
-  ],
-  "status": null
- },
- "161890": {
-  "name": "한국콜마",
+ "066970": {
+  "name": "엘앤에프",
   "market": "코스피",
   "groups": [
    "KOSPI200",
    "커버리지"
   ],
   "status": "유지"
+ },
+ "026960": {
+  "name": "동서",
+  "market": "코스피",
+  "groups": [
+   "KOSPI200"
+  ],
+  "status": null
  },
  "251270": {
   "name": "넷마블",
@@ -1034,32 +1024,16 @@
   ],
   "status": "유지"
  },
- "008930": {
-  "name": "한미사이언스",
+ "052690": {
+  "name": "한전기술",
   "market": "코스피",
   "groups": [
    "KOSPI200"
   ],
   "status": null
  },
- "026960": {
-  "name": "동서",
-  "market": "코스피",
-  "groups": [
-   "KOSPI200"
-  ],
-  "status": null
- },
- "011780": {
-  "name": "금호석유화학",
-  "market": "코스피",
-  "groups": [
-   "KOSPI200"
-  ],
-  "status": null
- },
- "082740": {
-  "name": "한화엔진",
+ "192820": {
+  "name": "코스맥스",
   "market": "코스피",
   "groups": [
    "KOSPI200",
@@ -1076,8 +1050,8 @@
   ],
   "status": "유지"
  },
- "302440": {
-  "name": "SK바이오사이언스",
+ "028670": {
+  "name": "팬오션",
   "market": "코스피",
   "groups": [
    "KOSPI200",
@@ -1093,13 +1067,14 @@
   ],
   "status": null
  },
- "139130": {
-  "name": "iM금융지주",
+ "161890": {
+  "name": "한국콜마",
   "market": "코스피",
   "groups": [
-   "KOSPI200"
+   "KOSPI200",
+   "커버리지"
   ],
-  "status": null
+  "status": "유지"
  },
  "004370": {
   "name": "농심",
@@ -1118,8 +1093,56 @@
   ],
   "status": null
  },
+ "282330": {
+  "name": "BGF리테일",
+  "market": "코스피",
+  "groups": [
+   "KOSPI200"
+  ],
+  "status": null
+ },
+ "139130": {
+  "name": "iM금융지주",
+  "market": "코스피",
+  "groups": [
+   "KOSPI200"
+  ],
+  "status": null
+ },
+ "011780": {
+  "name": "금호석유화학",
+  "market": "코스피",
+  "groups": [
+   "KOSPI200"
+  ],
+  "status": null
+ },
+ "023530": {
+  "name": "롯데쇼핑",
+  "market": "코스피",
+  "groups": [
+   "KOSPI200"
+  ],
+  "status": null
+ },
  "004170": {
   "name": "신세계",
+  "market": "코스피",
+  "groups": [
+   "KOSPI200"
+  ],
+  "status": null
+ },
+ "009970": {
+  "name": "영원무역홀딩스",
+  "market": "코스피",
+  "groups": [
+   "KOSPI200"
+  ],
+  "status": null
+ },
+ "004990": {
+  "name": "롯데지주",
   "market": "코스피",
   "groups": [
    "KOSPI200"
@@ -1134,8 +1157,66 @@
   ],
   "status": null
  },
- "023530": {
-  "name": "롯데쇼핑",
+ "005850": {
+  "name": "에스엘",
+  "market": "코스피",
+  "groups": [
+   "KOSPI200",
+   "커버리지"
+  ],
+  "status": "유지"
+ },
+ "082740": {
+  "name": "한화엔진",
+  "market": "코스피",
+  "groups": [
+   "KOSPI200",
+   "커버리지"
+  ],
+  "status": "유지"
+ },
+ "112610": {
+  "name": "씨에스윈드",
+  "market": "코스피",
+  "groups": [
+   "KOSPI200"
+  ],
+  "status": null
+ },
+ "000240": {
+  "name": "한국앤컴퍼니",
+  "market": "코스피",
+  "groups": [
+   "KOSPI200"
+  ],
+  "status": null
+ },
+ "002790": {
+  "name": "아모레퍼시픽홀딩스",
+  "market": "코스피",
+  "groups": [
+   "KOSPI200"
+  ],
+  "status": null
+ },
+ "081660": {
+  "name": "미스토홀딩스",
+  "market": "코스피",
+  "groups": [
+   "KOSPI200"
+  ],
+  "status": null
+ },
+ "030000": {
+  "name": "제일기획",
+  "market": "코스피",
+  "groups": [
+   "KOSPI200"
+  ],
+  "status": null
+ },
+ "007070": {
+  "name": "GS리테일",
   "market": "코스피",
   "groups": [
    "KOSPI200"
@@ -1151,72 +1232,6 @@
   ],
   "status": "유지"
  },
- "005850": {
-  "name": "에스엘",
-  "market": "코스피",
-  "groups": [
-   "KOSPI200",
-   "커버리지"
-  ],
-  "status": "유지"
- },
- "014680": {
-  "name": "한솔케미칼",
-  "market": "코스피",
-  "groups": [
-   "KOSPI200",
-   "커버리지"
-  ],
-  "status": "유지"
- },
- "282330": {
-  "name": "BGF리테일",
-  "market": "코스피",
-  "groups": [
-   "KOSPI200"
-  ],
-  "status": null
- },
- "030000": {
-  "name": "제일기획",
-  "market": "코스피",
-  "groups": [
-   "KOSPI200"
-  ],
-  "status": null
- },
- "000240": {
-  "name": "한국앤컴퍼니",
-  "market": "코스피",
-  "groups": [
-   "KOSPI200"
-  ],
-  "status": null
- },
- "004990": {
-  "name": "롯데지주",
-  "market": "코스피",
-  "groups": [
-   "KOSPI200"
-  ],
-  "status": null
- },
- "457190": {
-  "name": "이수스페셜티케미컬",
-  "market": "코스피",
-  "groups": [
-   "KOSPI200"
-  ],
-  "status": null
- },
- "450080": {
-  "name": "에코프로머티",
-  "market": "코스피",
-  "groups": [
-   "KOSPI200"
-  ],
-  "status": null
- },
  "009420": {
   "name": "한올바이오파마",
   "market": "코스피",
@@ -1226,8 +1241,8 @@
   ],
   "status": "유지"
  },
- "009970": {
-  "name": "영원무역홀딩스",
+ "139480": {
+  "name": "이마트",
   "market": "코스피",
   "groups": [
    "KOSPI200"
@@ -1242,16 +1257,17 @@
   ],
   "status": null
  },
- "081660": {
-  "name": "미스토홀딩스",
+ "014680": {
+  "name": "한솔케미칼",
   "market": "코스피",
   "groups": [
-   "KOSPI200"
+   "KOSPI200",
+   "커버리지"
   ],
-  "status": null
+  "status": "유지"
  },
- "139480": {
-  "name": "이마트",
+ "051600": {
+  "name": "한전KPS",
   "market": "코스피",
   "groups": [
    "KOSPI200"
@@ -1267,58 +1283,16 @@
   ],
   "status": "유지"
  },
- "002790": {
-  "name": "아모레퍼시픽홀딩스",
-  "market": "코스피",
-  "groups": [
-   "KOSPI200"
-  ],
-  "status": null
- },
- "051600": {
-  "name": "한전KPS",
-  "market": "코스피",
-  "groups": [
-   "KOSPI200"
-  ],
-  "status": null
- },
- "112610": {
-  "name": "씨에스윈드",
-  "market": "코스피",
-  "groups": [
-   "KOSPI200"
-  ],
-  "status": null
- },
- "007070": {
-  "name": "GS리테일",
-  "market": "코스피",
-  "groups": [
-   "KOSPI200"
-  ],
-  "status": null
- },
- "204320": {
-  "name": "HL만도",
-  "market": "코스피",
-  "groups": [
-   "KOSPI200",
-   "커버리지"
-  ],
-  "status": "유지"
- },
- "103140": {
-  "name": "풍산",
-  "market": "코스피",
-  "groups": [
-   "KOSPI200",
-   "커버리지"
-  ],
-  "status": "유지"
- },
  "069960": {
   "name": "현대백화점",
+  "market": "코스피",
+  "groups": [
+   "KOSPI200"
+  ],
+  "status": null
+ },
+ "450080": {
+  "name": "에코프로머티",
   "market": "코스피",
   "groups": [
    "KOSPI200"
@@ -1361,16 +1335,34 @@
   ],
   "status": "유지"
  },
- "008770": {
-  "name": "호텔신라",
+ "204320": {
+  "name": "HL만도",
+  "market": "코스피",
+  "groups": [
+   "KOSPI200",
+   "커버리지"
+  ],
+  "status": "유지"
+ },
+ "001800": {
+  "name": "오리온홀딩스",
   "market": "코스피",
   "groups": [
    "KOSPI200"
   ],
   "status": null
  },
- "001800": {
-  "name": "오리온홀딩스",
+ "103140": {
+  "name": "풍산",
+  "market": "코스피",
+  "groups": [
+   "KOSPI200",
+   "커버리지"
+  ],
+  "status": "유지"
+ },
+ "008770": {
+  "name": "호텔신라",
   "market": "코스피",
   "groups": [
    "KOSPI200"
@@ -1386,8 +1378,8 @@
   ],
   "status": "유지"
  },
- "361610": {
-  "name": "SK아이이테크놀로지",
+ "298020": {
+  "name": "효성티앤씨",
   "market": "코스피",
   "groups": [
    "KOSPI200"
@@ -1396,22 +1388,6 @@
  },
  "007310": {
   "name": "오뚜기",
-  "market": "코스피",
-  "groups": [
-   "KOSPI200"
-  ],
-  "status": null
- },
- "120110": {
-  "name": "코오롱인더",
-  "market": "코스피",
-  "groups": [
-   "KOSPI200"
-  ],
-  "status": null
- },
- "300720": {
-  "name": "한일시멘트",
   "market": "코스피",
   "groups": [
    "KOSPI200"
@@ -1436,23 +1412,13 @@
   ],
   "status": "유지"
  },
- "001430": {
-  "name": "세아베스틸지주",
+ "300720": {
+  "name": "한일시멘트",
   "market": "코스피",
   "groups": [
-   "KOSPI200",
-   "커버리지"
+   "KOSPI200"
   ],
-  "status": "유지"
- },
- "280360": {
-  "name": "롯데웰푸드",
-  "market": "코스피",
-  "groups": [
-   "KOSPI200",
-   "커버리지"
-  ],
-  "status": "유지"
+  "status": null
  },
  "192080": {
   "name": "더블유게임즈",
@@ -1463,14 +1429,6 @@
   ],
   "status": "유지"
  },
- "093370": {
-  "name": "후성",
-  "market": "코스피",
-  "groups": [
-   "KOSPI200"
-  ],
-  "status": null
- },
  "000080": {
   "name": "하이트진로",
   "market": "코스피",
@@ -1479,8 +1437,51 @@
   ],
   "status": null
  },
- "298020": {
-  "name": "효성티앤씨",
+ "120110": {
+  "name": "코오롱인더",
+  "market": "코스피",
+  "groups": [
+   "KOSPI200"
+  ],
+  "status": null
+ },
+ "280360": {
+  "name": "롯데웰푸드",
+  "market": "코스피",
+  "groups": [
+   "KOSPI200",
+   "커버리지"
+  ],
+  "status": "유지"
+ },
+ "005300": {
+  "name": "롯데칠성",
+  "market": "코스피",
+  "groups": [
+   "KOSPI200",
+   "커버리지"
+  ],
+  "status": "유지"
+ },
+ "001430": {
+  "name": "세아베스틸지주",
+  "market": "코스피",
+  "groups": [
+   "KOSPI200",
+   "커버리지"
+  ],
+  "status": "유지"
+ },
+ "361610": {
+  "name": "SK아이이테크놀로지",
+  "market": "코스피",
+  "groups": [
+   "KOSPI200"
+  ],
+  "status": null
+ },
+ "000210": {
+  "name": "DL",
   "market": "코스피",
   "groups": [
    "KOSPI200"
@@ -1495,8 +1496,42 @@
   ],
   "status": null
  },
+ "009240": {
+  "name": "한샘",
+  "market": "코스피",
+  "groups": [
+   "KOSPI200"
+  ],
+  "status": null
+ },
+ "003090": {
+  "name": "대웅",
+  "market": "코스피",
+  "groups": [
+   "KOSPI200",
+   "커버리지"
+  ],
+  "status": "유지"
+ },
+ "034230": {
+  "name": "파라다이스",
+  "market": "코스피",
+  "groups": [
+   "KOSPI200",
+   "커버리지"
+  ],
+  "status": "유지"
+ },
  "004000": {
   "name": "롯데정밀화학",
+  "market": "코스피",
+  "groups": [
+   "KOSPI200"
+  ],
+  "status": null
+ },
+ "093370": {
+  "name": "후성",
   "market": "코스피",
   "groups": [
    "KOSPI200"
@@ -1512,49 +1547,6 @@
   ],
   "status": "유지"
  },
- "009240": {
-  "name": "한샘",
-  "market": "코스피",
-  "groups": [
-   "KOSPI200"
-  ],
-  "status": null
- },
- "034230": {
-  "name": "파라다이스",
-  "market": "코스피",
-  "groups": [
-   "KOSPI200",
-   "커버리지"
-  ],
-  "status": "유지"
- },
- "000210": {
-  "name": "DL",
-  "market": "코스피",
-  "groups": [
-   "KOSPI200"
-  ],
-  "status": null
- },
- "005300": {
-  "name": "롯데칠성",
-  "market": "코스피",
-  "groups": [
-   "KOSPI200",
-   "커버리지"
-  ],
-  "status": "유지"
- },
- "003090": {
-  "name": "대웅",
-  "market": "코스피",
-  "groups": [
-   "KOSPI200",
-   "커버리지"
-  ],
-  "status": "유지"
- },
  "071320": {
   "name": "지역난방공사",
   "market": "코스피",
@@ -1562,15 +1554,6 @@
    "KOSPI200"
   ],
   "status": null
- },
- "017960": {
-  "name": "한국카본",
-  "market": "코스피",
-  "groups": [
-   "KOSPI200",
-   "커버리지"
-  ],
-  "status": "유지"
  },
  "137310": {
   "name": "에스디바이오센서",
@@ -1589,16 +1572,25 @@
   ],
   "status": null
  },
- "0220W0": {
-  "name": "한화머시너리앤서비스홀딩스",
+ "017960": {
+  "name": "한국카본",
+  "market": "코스피",
+  "groups": [
+   "KOSPI200",
+   "커버리지"
+  ],
+  "status": "유지"
+ },
+ "298050": {
+  "name": "HS효성첨단소재",
   "market": "코스피",
   "groups": [
    "KOSPI200"
   ],
   "status": null
  },
- "298050": {
-  "name": "HS효성첨단소재",
+ "0220W0": {
+  "name": "한화머시너리앤서비스홀딩스",
   "market": "코스피",
   "groups": [
    "KOSPI200"
@@ -1613,8 +1605,8 @@
   ],
   "status": null
  },
- "014820": {
-  "name": "동원시스템즈",
+ "002840": {
+  "name": "미원상사",
   "market": "코스피",
   "groups": [
    "KOSPI200"
@@ -1629,16 +1621,8 @@
   ],
   "status": null
  },
- "002840": {
-  "name": "미원상사",
-  "market": "코스피",
-  "groups": [
-   "KOSPI200"
-  ],
-  "status": null
- },
- "000670": {
-  "name": "영풍",
+ "014820": {
+  "name": "동원시스템즈",
   "market": "코스피",
   "groups": [
    "KOSPI200"
@@ -1653,16 +1637,24 @@
   ],
   "status": null
  },
- "456040": {
-  "name": "OCI",
+ "006650": {
+  "name": "대한유화",
   "market": "코스피",
   "groups": [
    "KOSPI200"
   ],
   "status": null
  },
- "006650": {
-  "name": "대한유화",
+ "000670": {
+  "name": "영풍",
+  "market": "코스피",
+  "groups": [
+   "KOSPI200"
+  ],
+  "status": null
+ },
+ "456040": {
+  "name": "OCI",
   "market": "코스피",
   "groups": [
    "KOSPI200"
@@ -1752,6 +1744,22 @@
   ],
   "status": null
  },
+ "000250": {
+  "name": "삼천당제약",
+  "market": "코스닥",
+  "groups": [
+   "KOSDAQ50"
+  ],
+  "status": null
+ },
+ "222800": {
+  "name": "심텍",
+  "market": "코스닥",
+  "groups": [
+   "KOSDAQ50"
+  ],
+  "status": null
+ },
  "039030": {
   "name": "이오테크닉스",
   "market": "코스닥",
@@ -1768,48 +1776,8 @@
   ],
   "status": null
  },
- "000250": {
-  "name": "삼천당제약",
-  "market": "코스닥",
-  "groups": [
-   "KOSDAQ50"
-  ],
-  "status": null
- },
  "240810": {
   "name": "원익IPS",
-  "market": "코스닥",
-  "groups": [
-   "KOSDAQ50"
-  ],
-  "status": null
- },
- "222800": {
-  "name": "심텍",
-  "market": "코스닥",
-  "groups": [
-   "KOSDAQ50"
-  ],
-  "status": null
- },
- "403870": {
-  "name": "HPSP",
-  "market": "코스닥",
-  "groups": [
-   "KOSDAQ50"
-  ],
-  "status": null
- },
- "031980": {
-  "name": "피에스케이홀딩스",
-  "market": "코스닥",
-  "groups": [
-   "KOSDAQ50"
-  ],
-  "status": null
- },
- "319660": {
-  "name": "피에스케이",
   "market": "코스닥",
   "groups": [
    "KOSDAQ50"
@@ -1825,6 +1793,14 @@
   ],
   "status": "유지"
  },
+ "403870": {
+  "name": "HPSP",
+  "market": "코스닥",
+  "groups": [
+   "KOSDAQ50"
+  ],
+  "status": null
+ },
  "095340": {
   "name": "ISC",
   "market": "코스닥",
@@ -1833,42 +1809,8 @@
   ],
   "status": null
  },
- "131290": {
-  "name": "티에스이",
-  "market": "코스닥",
-  "groups": [
-   "KOSDAQ50"
-  ],
-  "status": null
- },
- "298380": {
-  "name": "에이비엘바이오",
-  "market": "코스닥",
-  "groups": [
-   "KOSDAQ50",
-   "커버리지"
-  ],
-  "status": "유지"
- },
- "141080": {
-  "name": "리가켐바이오",
-  "market": "코스닥",
-  "groups": [
-   "KOSDAQ50",
-   "커버리지"
-  ],
-  "status": "유지"
- },
- "310210": {
-  "name": "보로노이",
-  "market": "코스닥",
-  "groups": [
-   "KOSDAQ50"
-  ],
-  "status": null
- },
- "084370": {
-  "name": "유진테크",
+ "031980": {
+  "name": "피에스케이홀딩스",
   "market": "코스닥",
   "groups": [
    "KOSDAQ50"
@@ -1884,49 +1826,8 @@
   ],
   "status": "유지"
  },
- "087010": {
-  "name": "펩트론",
-  "market": "코스닥",
-  "groups": [
-   "KOSDAQ50"
-  ],
-  "status": null
- },
- "067310": {
-  "name": "하나마이크론",
-  "market": "코스닥",
-  "groups": [
-   "KOSDAQ50"
-  ],
-  "status": null
- },
- "440110": {
-  "name": "파두",
-  "market": "코스닥",
-  "groups": [
-   "KOSDAQ50"
-  ],
-  "status": null
- },
- "064760": {
-  "name": "티씨케이",
-  "market": "코스닥",
-  "groups": [
-   "KOSDAQ50"
-  ],
-  "status": null
- },
- "226950": {
-  "name": "올릭스",
-  "market": "코스닥",
-  "groups": [
-   "KOSDAQ50",
-   "커버리지"
-  ],
-  "status": "유지"
- },
- "357780": {
-  "name": "솔브레인",
+ "319660": {
+  "name": "피에스케이",
   "market": "코스닥",
   "groups": [
    "KOSDAQ50"
@@ -1942,147 +1843,16 @@
   ],
   "status": "유지"
  },
- "080220": {
-  "name": "제주반도체",
+ "087010": {
+  "name": "펩트론",
   "market": "코스닥",
   "groups": [
    "KOSDAQ50"
   ],
   "status": null
  },
- "263750": {
-  "name": "펄어비스",
-  "market": "코스닥",
-  "groups": [
-   "KOSDAQ50"
-  ],
-  "status": null
- },
- "010170": {
-  "name": "대한광통신",
-  "market": "코스닥",
-  "groups": [
-   "KOSDAQ50"
-  ],
-  "status": null
- },
- "095610": {
-  "name": "테스",
-  "market": "코스닥",
-  "groups": [
-   "KOSDAQ50"
-  ],
-  "status": null
- },
- "178320": {
-  "name": "서진시스템",
-  "market": "코스닥",
-  "groups": [
-   "KOSDAQ50"
-  ],
-  "status": null
- },
- "043260": {
-  "name": "성호전자",
-  "market": "코스닥",
-  "groups": [
-   "KOSDAQ50"
-  ],
-  "status": null
- },
- "257720": {
-  "name": "실리콘투",
-  "market": "코스닥",
-  "groups": [
-   "KOSDAQ50"
-  ],
-  "status": null
- },
- "005290": {
-  "name": "동진쎄미켐",
-  "market": "코스닥",
-  "groups": [
-   "KOSDAQ50"
-  ],
-  "status": null
- },
- "098460": {
-  "name": "고영",
-  "market": "코스닥",
-  "groups": [
-   "KOSDAQ50"
-  ],
-  "status": null
- },
- "131970": {
-  "name": "두산테스나",
-  "market": "코스닥",
-  "groups": [
-   "KOSDAQ50"
-  ],
-  "status": null
- },
- "319400": {
-  "name": "현대무벡스",
-  "market": "코스닥",
-  "groups": [
-   "KOSDAQ50"
-  ],
-  "status": null
- },
- "214370": {
-  "name": "케어젠",
-  "market": "코스닥",
-  "groups": [
-   "KOSDAQ50"
-  ],
-  "status": null
- },
- "041510": {
-  "name": "에스엠",
-  "market": "코스닥",
-  "groups": [
-   "KOSDAQ50",
-   "커버리지"
-  ],
-  "status": "유지"
- },
- "347850": {
-  "name": "디앤디파마텍",
-  "market": "코스닥",
-  "groups": [
-   "KOSDAQ50"
-  ],
-  "status": null
- },
- "237690": {
-  "name": "에스티팜",
-  "market": "코스닥",
-  "groups": [
-   "KOSDAQ50",
-   "커버리지"
-  ],
-  "status": "유지"
- },
- "214150": {
-  "name": "클래시스",
-  "market": "코스닥",
-  "groups": [
-   "KOSDAQ50",
-   "커버리지"
-  ],
-  "status": "유지"
- },
- "140410": {
-  "name": "메지온",
-  "market": "코스닥",
-  "groups": [
-   "KOSDAQ50"
-  ],
-  "status": null
- },
- "058610": {
-  "name": "에스피지",
+ "141080": {
+  "name": "리가켐바이오",
   "market": "코스닥",
   "groups": [
    "KOSDAQ50",
@@ -2098,8 +1868,74 @@
   ],
   "status": null
  },
- "140860": {
-  "name": "파크시스템스",
+ "140410": {
+  "name": "메지온",
+  "market": "코스닥",
+  "groups": [
+   "KOSDAQ50"
+  ],
+  "status": null
+ },
+ "263750": {
+  "name": "펄어비스",
+  "market": "코스닥",
+  "groups": [
+   "KOSDAQ50"
+  ],
+  "status": null
+ },
+ "298380": {
+  "name": "에이비엘바이오",
+  "market": "코스닥",
+  "groups": [
+   "KOSDAQ50",
+   "커버리지"
+  ],
+  "status": "유지"
+ },
+ "357780": {
+  "name": "솔브레인",
+  "market": "코스닥",
+  "groups": [
+   "KOSDAQ50"
+  ],
+  "status": null
+ },
+ "131290": {
+  "name": "티에스이",
+  "market": "코스닥",
+  "groups": [
+   "KOSDAQ50"
+  ],
+  "status": null
+ },
+ "080220": {
+  "name": "제주반도체",
+  "market": "코스닥",
+  "groups": [
+   "KOSDAQ50"
+  ],
+  "status": null
+ },
+ "310210": {
+  "name": "보로노이",
+  "market": "코스닥",
+  "groups": [
+   "KOSDAQ50"
+  ],
+  "status": null
+ },
+ "041510": {
+  "name": "에스엠",
+  "market": "코스닥",
+  "groups": [
+   "KOSDAQ50",
+   "커버리지"
+  ],
+  "status": "유지"
+ },
+ "178320": {
+  "name": "서진시스템",
   "market": "코스닥",
   "groups": [
    "KOSDAQ50"
@@ -2108,6 +1944,163 @@
  },
  "068760": {
   "name": "셀트리온제약",
+  "market": "코스닥",
+  "groups": [
+   "KOSDAQ50"
+  ],
+  "status": null
+ },
+ "347850": {
+  "name": "디앤디파마텍",
+  "market": "코스닥",
+  "groups": [
+   "KOSDAQ50"
+  ],
+  "status": null
+ },
+ "226950": {
+  "name": "올릭스",
+  "market": "코스닥",
+  "groups": [
+   "KOSDAQ50",
+   "커버리지"
+  ],
+  "status": "유지"
+ },
+ "010170": {
+  "name": "대한광통신",
+  "market": "코스닥",
+  "groups": [
+   "KOSDAQ50"
+  ],
+  "status": null
+ },
+ "064760": {
+  "name": "티씨케이",
+  "market": "코스닥",
+  "groups": [
+   "KOSDAQ50"
+  ],
+  "status": null
+ },
+ "257720": {
+  "name": "실리콘투",
+  "market": "코스닥",
+  "groups": [
+   "KOSDAQ50"
+  ],
+  "status": null
+ },
+ "084370": {
+  "name": "유진테크",
+  "market": "코스닥",
+  "groups": [
+   "KOSDAQ50"
+  ],
+  "status": null
+ },
+ "067310": {
+  "name": "하나마이크론",
+  "market": "코스닥",
+  "groups": [
+   "KOSDAQ50"
+  ],
+  "status": null
+ },
+ "214150": {
+  "name": "클래시스",
+  "market": "코스닥",
+  "groups": [
+   "KOSDAQ50",
+   "커버리지"
+  ],
+  "status": "유지"
+ },
+ "319400": {
+  "name": "현대무벡스",
+  "market": "코스닥",
+  "groups": [
+   "KOSDAQ50"
+  ],
+  "status": null
+ },
+ "440110": {
+  "name": "파두",
+  "market": "코스닥",
+  "groups": [
+   "KOSDAQ50"
+  ],
+  "status": null
+ },
+ "005290": {
+  "name": "동진쎄미켐",
+  "market": "코스닥",
+  "groups": [
+   "KOSDAQ50"
+  ],
+  "status": null
+ },
+ "095610": {
+  "name": "테스",
+  "market": "코스닥",
+  "groups": [
+   "KOSDAQ50"
+  ],
+  "status": null
+ },
+ "058610": {
+  "name": "에스피지",
+  "market": "코스닥",
+  "groups": [
+   "KOSDAQ50",
+   "커버리지"
+  ],
+  "status": "유지"
+ },
+ "237690": {
+  "name": "에스티팜",
+  "market": "코스닥",
+  "groups": [
+   "KOSDAQ50",
+   "커버리지"
+  ],
+  "status": "유지"
+ },
+ "214370": {
+  "name": "케어젠",
+  "market": "코스닥",
+  "groups": [
+   "KOSDAQ50"
+  ],
+  "status": null
+ },
+ "035900": {
+  "name": "JYP Ent.",
+  "market": "코스닥",
+  "groups": [
+   "KOSDAQ50",
+   "커버리지"
+  ],
+  "status": "유지"
+ },
+ "043260": {
+  "name": "성호전자",
+  "market": "코스닥",
+  "groups": [
+   "KOSDAQ50"
+  ],
+  "status": null
+ },
+ "098460": {
+  "name": "고영",
+  "market": "코스닥",
+  "groups": [
+   "KOSDAQ50"
+  ],
+  "status": null
+ },
+ "007390": {
+  "name": "네이처셀",
   "market": "코스닥",
   "groups": [
    "KOSDAQ50"
@@ -2549,14 +2542,6 @@
  "000640": {
   "name": "동아쏘시오홀딩스",
   "market": "코스피",
-  "groups": [
-   "커버리지"
-  ],
-  "status": "유지"
- },
- "035900": {
-  "name": "JYP Ent.",
-  "market": "코스닥",
   "groups": [
    "커버리지"
   ],

@@ -180,17 +180,23 @@ def summarize(obs: list[tuple[dt.date, float]], spec: dict) -> dict:
     last_d, last_v = obs[-1]
     parts: list[str] = []
     recent: list[str] = []
+    # 해석 카드가 밴드를 고를 숫자. **화면에 찍힌 자릿수로 반올림해 둔다** — 반올림 전
+    # 값으로 고르면 "2.5% 미만" 밴드가 화면엔 2.5% 로 보이는 숫자에 붙을 수 있다.
+    vals: dict[str, float] = {}
 
     if kind == "level":
-        parts.append(f"{last_v:,.{spec.get('digits', 1)}f}{unit}")
+        digits = spec.get("digits", 1)
+        parts.append(f"{last_v:,.{digits}f}{unit}")
+        vals["level"] = round(last_v, digits)
         for d, v in obs[-3:]:
-            recent.append(f"{v:,.{spec.get('digits', 1)}f}")
+            recent.append(f"{v:,.{digits}f}")
 
     elif kind == "diff":
         scale = float(spec.get("scale", 1))
         prev = obs[-2][1] if len(obs) >= 2 else None
         if prev is not None:
             parts.append(f"{(last_v - prev) / scale:+,.1f}{unit}")
+            vals["diff"] = round((last_v - prev) / scale, 1)
         for i in range(max(0, len(obs) - 3), len(obs)):
             if i == 0:
                 continue
@@ -203,8 +209,10 @@ def summarize(obs: list[tuple[dt.date, float]], spec: dict) -> dict:
         # 무엇을 재는지는 안 말한다** — 숫자만 보고 "지난달 값"으로 읽기 쉽다.
         if kind in ("yoy", "yoy_mom") and yoy is not None:
             parts.append(f"YoY {yoy:+.1f}%")
+            vals["yoy"] = round(yoy, 1)
         if kind in ("mom", "yoy_mom") and mom is not None:
             parts.append(f"{'QoQ' if freq == 'q' else 'MoM'} {mom:+.1f}%")
+            vals["mom"] = round(mom, 1)          # 분기 계열이면 QoQ 지만 키는 하나로 둔다
         for i in range(max(1, len(obs) - 3), len(obs)):
             r = (_pct(obs[i][1], _pick_back(obs[:i + 1], 12)) if kind == "yoy"
                  else _pct(obs[i][1], obs[i - 1][1]))
@@ -217,9 +225,23 @@ def summarize(obs: list[tuple[dt.date, float]], spec: dict) -> dict:
     return {"period": _period_label(last_d, freq),
             "period_iso": last_d.isoformat(),
             "text": " · ".join(parts) or "–",
+            "vals": vals,
             "recent": recent,
             "series": spec.get("series", ""),
             "unit_note": spec.get("unit_note", "")}
+
+
+def merge_vals(got: dict, sub: dict, also: dict) -> None:
+    """보조 계열의 숫자를 `<key>_<이름>` 으로 주 계열에 붙인다(코어 → core_yoy).
+
+    config 의 also 에 `key:` 가 없으면 **붙이지 않는다** — 라벨(한글)로 키를 지어내면
+    guide.yml 밴드의 `metric:` 과 어긋나도 아무 에러 없이 판정만 조용히 빠진다.
+    """
+    key = also.get("key")
+    if not key:
+        return
+    got.setdefault("vals", {}).update(
+        {f"{key}_{k}": v for k, v in (sub.get("vals") or {}).items()})
 
 
 # ── 수집 ───────────────────────────────────────────────────────────────────
@@ -294,6 +316,7 @@ def fetch(entries: list[dict], fred_key: str = "") -> dict:
                 if sub["text"] != "–":          # '코어 –' 는 붙이지 않는다
                     label = also.get("label", "")
                     got["text"] += f' · {label}{" " if label else ""}{sub["text"]}'
+                    merge_vals(got, sub, also)
         out[ind_id] = got
         print(f"  OK  {ind_id:<14} {got['period']} {got['text']}")
     return out

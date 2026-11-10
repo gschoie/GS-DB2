@@ -1,0 +1,681 @@
+{
+ "date": "2026-11-10",
+ "meta": {
+  "window": "11-09 06:00~11-10 06:00 KST",
+  "engine": "Gemini(gemini-2.5-flash)",
+  "generated_at": "2026-11-10T06:35+09:00"
+ },
+ "stats": {
+  "channels": 102,
+  "messages": 2101,
+  "groups": 1945
+ },
+ "one_liner": "엔비디아 젠슨 황 스캔들로 AI 섹터 불확실성 증대, 유가 급락으로 글로벌 증시 상승폭 확대, 국내 기판 및 바이오 섹터는 긍정적 신호 속 시장 전반의 신중론 확산.",
+ "themes": [
+  {
+   "name": "NVIDIA - 젠슨 황 스캔들 및 AI 섹터 불확실성",
+   "narrative": "NVIDIA CEO 젠슨 황의 간첩 의혹 및 혼외 관계 스캔들이 확산되며 엔비디아의 신용 프로필 악화 및 AI 산업 전반의 불확실성을 키우고 있다. 미중 관계 악화 가능성도 제기되어 시장의 경계심이 높아지고 있다.",
+   "status": "new",
+   "strength": 5,
+   "keywords": [
+    "젠슨",
+    "target",
+    "손실 발생할"
+   ],
+   "evidence": [
+    {
+     "channel": "서화백의 AI놀이🚀",
+     "quote": "젠슨 황·앨리스 황 스캔들 (간첩 의혹) 발생, Google의 AI칩 경쟁 심화 선언, Culper Research '중국 문제' 보고서 발표, 공매도 증가 및 주가 급락 (-5.01%)"
+    },
+    {
+     "channel": "[삼성 이영진] 글로벌 AI/SW",
+     "quote": "젠슨 황, 혼외 관계 인정 및 사과. 국가안보 관련 독립 조사 협조 입장 표명"
+    },
+    {
+     "channel": "Macro Trader",
+     "quote": "황 CEO의 권위가 도전받는 상황에서 엔비디아의 딜메이커들이 보다 보수적인 자세로 돌아서 고객에 대한 벤더 파이낸싱에서 한발 물러나는 것은 자연스러운 일이다. 이런 금융 지원은 이미 엔비디아의 신용 프로필을 악화시켰다."
+    }
+   ]
+  },
+  {
+   "name": "글로벌 매크로 - 이란발 유가 급락 및 증시 상승",
+   "narrative": "이란이 호르무즈 해협 통행료 요구를 철회하며 유가가 급락했고, 이는 글로벌 증시의 상승폭 확대로 이어졌다. 중동 지정학적 리스크 완화 기대감이 시장에 긍정적으로 작용하고 있다.",
+   "status": "new",
+   "strength": 4,
+   "keywords": [
+    "이란",
+    "종전"
+   ],
+   "evidence": [
+    {
+     "channel": "하나 중국/신흥국 전략 김경환",
+     "quote": ">>이란, 호르무즈 해협 통행료 요구 철회한 듯…유가 급락, 글로벌 증시 상승폭 확대 •WTI 원유는 장중 3.0% 하락한 88.1달러/배럴, 브렌트유는 3.0% 하락한 95.06달러/배럴을 기록 •미 다우 선물은 1% 이상, S&P500 선물은 0.7%, 나스닥100 선물은 0.5% 상승중."
+    }
+   ]
+  },
+  {
+   "name": "반도체 기판 - FC-BGA 및 SoCAMM 성장 기대",
+   "narrative": "대덕전자와 심텍 등 국내 기판 업체들이 FC-BGA 및 SoCAMM 등 고부가 제품을 중심으로 새로운 기판 사이클에 대한 자신감을 보이고 있다. 대규모 증설과 고객사 확대 가능성이 투자자들의 주요 관심사로 부각되고 있다.",
+   "status": "new",
+   "strength": 3,
+   "keywords": [
+    "문의",
+    "데이터 기반"
+   ],
+   "evidence": [
+    {
+     "channel": "여의도스토리 Ver2.0-习近平是个狗东西",
+     "quote": "📮[메리츠증권 전기전자/IT부품 양승수] 대덕전자(353200) NDR 후기: 주가와 반대로 높아진 자신감 - ... FC-BGA 라지바디 시장 진입 현황 및 고객사 확대 가능성"
+    },
+    {
+     "channel": "여의도스토리 Ver2.0-习近平是个狗东西",
+     "quote": "📮[메리츠증권 전기전자/IT부품 양승수] 심텍(222800) NDR 후기: 새로운 기판 사이클의 주인공으로 (ft. LTA, SoCAMM, 비메모리) - ... SoCAMM향 매출 현황 및 향후 성장 전망"
+    }
+   ]
+  },
+  {
+   "name": "제약/바이오 - 신약 개발 성과 및 AI 접목 가속화",
+   "narrative": "한올바이오파마의 류마티스관절염 신약 임상 2상 성공 소식과 함께 AI 기술을 활용한 신약 개발에 대한 자본 집약 및 산업 전망이 긍정적으로 제시되고 있다. 플랫폼 기술 이전과 FDA 승인 기대감이 높아지고 있다.",
+   "status": "new",
+   "strength": 3,
+   "keywords": [
+    "문의",
+    "데이터 기반"
+   ],
+   "evidence": [
+    {
+     "channel": "다올 의료기기/화장품 박종현",
+     "quote": "한올바이오파마 입니다. 아이메로프루바트 (IMVT-1402)의 난치성 류마티스관절염 (D2T RA) 임상 Period 2 탑라인 결과 공유드립니다. ... 통계적 유의성을 달성해 주평가지표를 충족했습니다"
+    },
+    {
+     "channel": "텐렙",
+     "quote": "[제약/바이오] AIx바이오-자본의 집약, 밸류체인을 이해하자 DS투자증권 제약/바이오 김민정 Analyst"
+    },
+    {
+     "channel": "텐렙",
+     "quote": "[2027년 제약바이오 산업 전망] ... 플랫폼 L/O와 함께 FDA 승인과 Best-in-class가 기대되는 신약 성과가 더해지는 해입니다."
+    }
+   ]
+  },
+  {
+   "name": "신재생에너지/건설 - 정책 수혜 및 데이터센터 투자",
+   "narrative": "미국 민주당의 양원 장악으로 풍력 규제에 대한 의회 견제력이 강화되며 씨에스윈드 등 풍력 관련 기업들의 중장기 프로젝트 발주 가시성이 높아지고 있다. 국내에서는 중간선거 이후 데이터센터 관련 투자심리가 환기되며 건설업종에 대한 긍정적 전망이 나오고 있다.",
+   "status": "new",
+   "strength": 3,
+   "keywords": [
+    "문의",
+    "target"
+   ],
+   "evidence": [
+    {
+     "channel": "신한 리서치",
+     "quote": "# 씨에스윈드; 푸른 파도에 올라타라 [신한 신재생/운송 최민기] ▶️ 신한생각: 판은 깔렸다 - 민주당의 양원 장악으로 미국 행정부의 풍력 규제에 대한 의회 견제력 강화"
+    },
+    {
+     "channel": "[한투증권 강경태] 조선/기계(기자재)",
+     "quote": "[한투증권 황현정] 건설 ... 최근 중간선거로 국내 데이터센터 관련 투심이 환기되고 있는 만큼 Top-pick으로 GS건설을 제시드립니다."
+    }
+   ]
+  },
+  {
+   "name": "시장 전반 - 기술적 분석 기반의 신중한 접근",
+   "narrative": "시장에서는 기술적 분석 지표들을 통해 개별 종목의 상승 및 하락 가능성을 면밀히 분석하며 신중한 접근을 강조하는 분위기다. 긍정적인 신호와 함께 조정 및 하락 가능성도 동시에 언급되며 투자에 대한 주의가 요구되고 있다.",
+   "status": "new",
+   "strength": 2,
+   "keywords": [
+    "나타나며 이는",
+    "음수",
+    "음수 나타나며",
+    "히스토그램 음수",
+    "오실레이터 음수",
+    "안정세",
+    "히스토그램",
+    "신고 돌파",
+    "신중하게",
+    "시그널프",
+    "주식상승확률",
+    "emoneyai",
+    "누적 균형",
+    "책임은투자자",
+    "제공 href",
+    "볼린저 밴드",
+    "eMoney 생성형",
+    "따른 책임은투자자"
+   ],
+   "evidence": [
+    {
+     "channel": "키움증권 해외선물 톡톡",
+     "quote": "<b>종목 분석 결과</b> 현재 주가는 저항선에 위치하고 있으며, 지지선은 아래에 존재합니다. 기술적 지표들은 상승세를 나타내고 있으나, 저항선에서의 반응이 중요합니다. 거래량은 감소세를 보이고 있어 주의가 필요합니다. 전반적으로 긍정적인 신호가 있으나, 조정 가능성도 염두에 두어야 합니다."
+    },
+    {
+     "channel": "키움증권 해외선물 톡톡",
+     "quote": "<b>종목 분석 결과</b> 현재 주가는 약세를 보이고 있으며, 추가적인 하락 가능성이 존재합니다. 시장의 전반적인 분위기는 부정적이며, 상승 전환을 위해서는 강력한 매수세가 필요합니다. 신중한 접근이 요구됩니다."
+    }
+   ]
+  }
+ ],
+ "community_mood": {
+  "score": -40,
+  "summary": "개인 투자자들은 엔비디아 젠슨 황 CEO의 스캔들로 인한 불확실성과 시장 하락 가능성에 대해 높은 불안감을 표출하고 있다. 유가 급락 소식에도 불구하고 전반적으로 신중하고 회피적인 정서가 지배적이다.",
+  "hot_stocks": [
+   {
+    "name": "엔비디아",
+    "score": -60,
+    "reason": "CEO 젠슨 황의 간첩 및 혼외 관계 스캔들로 인한 기업 불확실성에 대한 우려가 크다."
+   },
+   {
+    "name": "SOXL",
+    "score": -30,
+    "reason": "단기 급등 이후 과매수 상태에 대한 경계심이 나타나며 추가 상승 여력에 대한 우려가 있다."
+   }
+  ]
+ },
+ "signals": {
+  "spikes": [
+   {
+    "term": "나타나며 이는",
+    "count": 32,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "젠슨",
+    "count": 83,
+    "burst": 14.982589848278645,
+    "base_daily": 3.6,
+    "new": false
+   },
+   {
+    "term": "음수",
+    "count": 30,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "음수 나타나며",
+    "count": 30,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "히스토그램 음수",
+    "count": 30,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "오실레이터 음수",
+    "count": 30,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "문의",
+    "count": 194,
+    "burst": 5.002792479459651,
+    "base_daily": 25.4,
+    "new": false
+   },
+   {
+    "term": "히스토그램",
+    "count": 190,
+    "burst": 5.09962751167305,
+    "base_daily": 24.4,
+    "new": false
+   },
+   {
+    "term": "target",
+    "count": 193,
+    "burst": 5.005044353524748,
+    "base_daily": 25.3,
+    "new": false
+   },
+   {
+    "term": "손실 발생할",
+    "count": 193,
+    "burst": 5.005044353524748,
+    "base_daily": 25.3,
+    "new": false
+   },
+   {
+    "term": "MACD 히스토그램",
+    "count": 189,
+    "burst": 5.102539785448816,
+    "base_daily": 24.3,
+    "new": false
+   },
+   {
+    "term": "안정세",
+    "count": 29,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "데이터 기반",
+    "count": 193,
+    "burst": 4.9492778426219655,
+    "base_daily": 25.6,
+    "new": false
+   },
+   {
+    "term": "활용하여",
+    "count": 192,
+    "burst": 4.951217299259036,
+    "base_daily": 25.4,
+    "new": false
+   },
+   {
+    "term": "신고 돌파",
+    "count": 193,
+    "burst": 4.921858020779184,
+    "base_daily": 25.7,
+    "new": false
+   },
+   {
+    "term": "신중하게",
+    "count": 193,
+    "burst": 4.921858020779184,
+    "base_daily": 25.7,
+    "new": false
+   },
+   {
+    "term": "시그널프",
+    "count": 191,
+    "burst": 4.953178608928636,
+    "base_daily": 25.3,
+    "new": false
+   },
+   {
+    "term": "주식상승확률",
+    "count": 191,
+    "burst": 4.953178608928636,
+    "base_daily": 25.3,
+    "new": false
+   },
+   {
+    "term": "emoneyai",
+    "count": 191,
+    "burst": 4.953178608928636,
+    "base_daily": 25.3,
+    "new": false
+   },
+   {
+    "term": "누적 균형",
+    "count": 191,
+    "burst": 4.953178608928636,
+    "base_daily": 25.3,
+    "new": false
+   },
+   {
+    "term": "책임은투자자",
+    "count": 191,
+    "burst": 4.953178608928636,
+    "base_daily": 25.3,
+    "new": false
+   },
+   {
+    "term": "제공 href",
+    "count": 191,
+    "burst": 4.953178608928636,
+    "base_daily": 25.3,
+    "new": false
+   },
+   {
+    "term": "볼린저 밴드",
+    "count": 191,
+    "burst": 4.953178608928636,
+    "base_daily": 25.3,
+    "new": false
+   },
+   {
+    "term": "eMoney 생성형",
+    "count": 191,
+    "burst": 4.953178608928636,
+    "base_daily": 25.3,
+    "new": false
+   },
+   {
+    "term": "따른 책임은투자자",
+    "count": 191,
+    "burst": 4.953178608928636,
+    "base_daily": 25.3,
+    "new": false
+   }
+  ],
+  "top_posts": [
+   {
+    "channels": 4,
+    "channel": "키움증권 전략/시황 한지영",
+    "head": "[11/9, Kiwoom Weekly, 키움 전략 한지영] \"역대급 속도의 급락장 속 대응 방안\" ------ <Weekly Three Points> a. 금요일 미국 증시는 10월 고용 호조, MS(-1.0%)의 오라클(+0.8%) 구형 AI 클라우드 임차 계약 종료에도, 마이크론(+5.1%), AMD(+11.0%) 등…",
+    "url": "https://t.me/hedgecat0301/2993",
+    "time_kst": "11-09 07:46"
+   },
+   {
+    "channels": 4,
+    "channel": "하나 중국/신흥국 전략 김경환",
+    "head": ">>이란, 호르무즈 해협 통행료 요구 철회한 듯…유가 급락, 글로벌 증시 상승폭 확대 •WTI 원유는 장중 3.0% 하락한 88.1달러/배럴, 브렌트유는 3.0% 하락한 95.06달러/배럴을 기록 •미 다우 선물은 1% 이상, S&P500 선물은 0.7%, 나스닥100 선물은 0.5% 상승중. •유럽 증시도 상승폭을 확대…",
+    "url": "https://t.me/HANAchina/71834",
+    "time_kst": "11-09 20:35"
+   },
+   {
+    "channels": 4,
+    "channel": "한투증권 미국/중국전략 정정영",
+    "head": "소프트뱅크, 미국 내 네오클라우드 사업 재검토. 다른 지역으로 전환할 가능성 据报道，软银可能重新考虑其在美国的NeoCloud（新云）业务，并转向其他地区。 https://wallstreetcn.com/livenews/3196774?ivk=1#from=android",
+    "url": "https://t.me/G2strategy/34321",
+    "time_kst": "11-09 16:56"
+   },
+   {
+    "channels": 3,
+    "channel": "여의도스토리 Ver2.0-习近平是个狗东西",
+    "head": "📮[메리츠증권 전기전자/IT부품 양승수] 대덕전자(353200) NDR 후기: 주가와 반대로 높아진 자신감 - 당사가 11월 3~5일 진행한 대덕전자 NDR에서 투자자들의 주요 관심사는 1) 대규모 증설에 따른 LTA 체결 및 선수금 확보 규모, 2) FC-BGA 라지바디 시장 진입 현황 및 고객사 확대 가능성, 3) 패…",
+    "url": "https://t.me/YeouidoStory2/119478",
+    "time_kst": "11-09 08:29"
+   },
+   {
+    "channels": 3,
+    "channel": "여의도스토리 Ver2.0-习近平是个狗东西",
+    "head": "📮[메리츠증권 전기전자/IT부품 양승수] 심텍(222800) NDR 후기: 새로운 기판 사이클의 주인공으로 (ft. LTA, SoCAMM, 비메모리) - 당사가 4~5일 진행한 심텍 NDR에서 투자자들의 주요 관심사는 ① 추가적인 ASP 상승 가능성과 LTA 체결 여부, ② SoCAMM향 매출 현황 및 향후 성장 전망,…",
+    "url": "https://t.me/YeouidoStory2/119477",
+    "time_kst": "11-09 08:29"
+   },
+   {
+    "channels": 3,
+    "channel": "다올 의료기기/화장품 박종현",
+    "head": "안녕하세요? 한올바이오파마 입니다. 아이메로프루바트 (IMVT-1402)의 난치성 류마티스관절염 (D2T RA) 임상 Period 2 탑라인 결과 공유드립니다. 아이메로프루바트 600mg 투여군은 28주차 ACR20 반응률 92.5%를 기록하며 위약군 (75.6%) 대비 통계적 유의성을 달성해 주평가지표를 충족했습니다 (…",
+    "url": "https://t.me/alexppark/5099",
+    "time_kst": "11-09 21:15"
+   },
+   {
+    "channels": 3,
+    "channel": "[한투증권 강경태] 조선/기계(기자재)",
+    "head": "[한투증권 황현정] 건설 안녕하세요 한투증권 황현정입니다. 건설업종에 대해 비중확대 의견으로 커버리지를 개시합니다. 주택사업의 체질 개선을 빠르게 실적으로 연결하면서 비주택 사업도 가시화할 수 있는 기업을 선호합니다. 최근 중간선거로 국내 데이터센터 관련 투심이 환기되고 있는 만큼 Top-pick으로 GS건설을 제시드립니…",
+    "url": "https://t.me/enc210406/4627",
+    "time_kst": "11-09 09:52"
+   },
+   {
+    "channels": 3,
+    "channel": "텐렙",
+    "head": "[제약/바이오] AIx바이오-자본의 집약, 밸류체인을 이해하자 DS투자증권 제약/바이오 김민정 Analyst 1. 2026년 AI 헬스케어에 자본이 집약되기 시작한다 - AI 빅테크 기업(ex. Google, Bytedance) 신약개발 전문 자회사 설립, 그 외 Anthropic, Baidu 등도 AI 신약개발에 적극…",
+    "url": "https://t.me/Ten_level/94036",
+    "time_kst": "11-09 07:43"
+   },
+   {
+    "channels": 3,
+    "channel": "메리츠증권 리서치",
+    "head": "📮[메리츠증권 모빌리티 김준성] 안녕하세요 메리츠증권 김준성입니다. 한국타이어 업데이트 드리겠습니다. (URL: https://han.gl/h4CKy) ▶ 전기차 타이어 1등 ▶ 3Q26 영업이익, 전기차 믹스 개선 통해 컨센서스 +9% 상회 - 매출 5.47조원 (+1% YoY), 영업이익 5,988억원 (+2% YoY…",
+    "url": "https://t.me/meritz_research/45069",
+    "time_kst": "11-09 07:47"
+   },
+   {
+    "channels": 3,
+    "channel": "다올투자증권 리서치센터",
+    "head": "[다올투자증권 조선/기계/방산 최광식] 11/9(월) 데일리뉴스 🛳 조선 [TradeWinds] Dutch shortsea operator A2B orders second pair of container ships StealthGas directors let shareholders decide $255m LPG carri…",
+    "url": "https://t.me/daolresearch/15460",
+    "time_kst": "11-09 08:59"
+   },
+   {
+    "channels": 3,
+    "channel": "신한 리서치",
+    "head": "# 씨에스윈드; 푸른 파도에 올라타라 [신한 신재생/운송 최민기] ▶️ 신한생각: 판은 깔렸다 - 민주당의 양원 장악으로 미국 행정부의 풍력 규제에 대한 의회 견제력 강화, 인허가 보호를 위한 협상 여지도 확대 - 이미 확보한 2027년 미국 생산 물량에 더해 중장기 프로젝트의 투자 결정과 발주 가시성 제고 기대 ▶️ 3…",
+    "url": "https://t.me/shinhanresearch/53524",
+    "time_kst": "11-09 07:49"
+   },
+   {
+    "channels": 3,
+    "channel": "허재환 유진증권 전략",
+    "head": "[Web발신] 안녕하십니까 유진투자증권 허재환입니다 =No Kings= * 이번 미국 민주당 승리의 1등 공신이자, 승자는 'No Kings'라는 구호로 모인 반트럼프 시위대라고 합니다. * 반면 2024년 바이든 정부의 반독점과 AI 안전 행정 명령을 계기로 트럼프를 공개적으로 지지했던 Tech와 AI 기업들은 이번 선…",
+    "url": "https://t.me/huhjae/4607",
+    "time_kst": "11-09 07:51"
+   },
+   {
+    "channels": 3,
+    "channel": "[DAOL퀀트 김경훈] 탑다운 전략",
+    "head": "[DAOL퀀트 김경훈] Active Quant의 定石 - 11/9 \"진정되지 않는 숏 밭\" 3Q26분기 7번째 업데이트 (11.9 ~ 11.13) ■ 시총 TOP3 실적 현황 * 삼성전자: 4Q26 125조원 vs 컨센 129조원으로 시장 컨센서스를 여전히 밑도는 수준 * SK하이닉스: 4Q26 110조원 vs 컨센 10…",
+    "url": "https://t.me/toptownquant/13891",
+    "time_kst": "11-09 10:05"
+   },
+   {
+    "channels": 3,
+    "channel": "텐렙",
+    "head": "[2027년 제약바이오 산업 전망] 안녕하세요, 신한투자증권 엄민용 연구위원입니다, 지난주 금요일에 발간된 신한 제약바이오 산업 전망 자료 코멘트 전달드립니다. 내년은 지금까지 섹터를 주도했던 플랫폼 L/O와 함께 FDA 승인과 Best-in-class가 기대되는 신약 성과가 더해지는 해입니다. 플랫폼 기업들의 L/O와…",
+    "url": "https://t.me/Ten_level/94046",
+    "time_kst": "11-09 07:55"
+   },
+   {
+    "channels": 3,
+    "channel": "가치투자클럽",
+    "head": "📌 PS일렉트로닉스(시가총액: 2,619억) #A332570 📁 분기보고서 (2026.09) 2026.11.09 09:08:25 (현재가 : 5,750원, -0.52%) 잠정실적 : N 매출액 : 997억(예상치 : -) 영업익 : 131억(예상치 : -) 순이익 : 9억(예상치 : -) **최근 실적 추이** (기간/…",
+    "url": "https://t.me/corevalue/47581",
+    "time_kst": "11-09 09:36"
+   }
+  ]
+ },
+ "community_dc": {
+  "source": "DC인사이드",
+  "galleries": [
+   {
+    "id": "krstock",
+    "name": "국내주식갤러리",
+    "posts": 1473,
+    "capped": true,
+    "burst": 0.6,
+    "base_daily": 2422.6
+   },
+   {
+    "id": "stockus",
+    "name": "해외주식갤러리",
+    "posts": 5838,
+    "capped": true,
+    "burst": 0.7,
+    "base_daily": 8830.7
+   }
+  ],
+  "posts_sampled": 520,
+  "keywords": [
+   {
+    "term": "뭐임",
+    "count": 7,
+    "burst": 96.7,
+    "new": true
+   },
+   {
+    "term": "숏충이들",
+    "count": 7,
+    "burst": 96.7,
+    "new": true
+   },
+   {
+    "term": "엔비",
+    "count": 7,
+    "burst": 96.7,
+    "new": true
+   },
+   {
+    "term": "나선",
+    "count": 6,
+    "burst": 82.8,
+    "new": true
+   },
+   {
+    "term": "존슨황",
+    "count": 6,
+    "burst": 82.8,
+    "new": true
+   },
+   {
+    "term": "갑자기",
+    "count": 5,
+    "burst": 69.0,
+    "new": true
+   },
+   {
+    "term": "구글",
+    "count": 5,
+    "burst": 69.0,
+    "new": true
+   },
+   {
+    "term": "종전",
+    "count": 11,
+    "burst": 10.1,
+    "new": false
+   },
+   {
+    "term": "이란",
+    "count": 9,
+    "burst": 9.6,
+    "new": false
+   },
+   {
+    "term": "엔비디아",
+    "count": 13,
+    "burst": 7.8,
+    "new": false
+   },
+   {
+    "term": "미장",
+    "count": 8,
+    "burst": 10.0,
+    "new": false
+   },
+   {
+    "term": "이유",
+    "count": 8,
+    "burst": 8.5,
+    "new": false
+   },
+   {
+    "term": "지금",
+    "count": 12,
+    "burst": 6.6,
+    "new": false
+   },
+   {
+    "term": "젠슨황",
+    "count": 9,
+    "burst": 7.3,
+    "new": false
+   },
+   {
+    "term": "SK하이닉스",
+    "count": 11,
+    "burst": 6.1,
+    "new": false
+   }
+  ],
+  "top_recommended": [
+   {
+    "gallery": "해외주식갤러리",
+    "title": "왜 저런 여자 만나냐고 하는 애들은 이해 못하는거",
+    "views": 12188,
+    "recommend": 348,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=18311236&exception_mode=recommend&page=2",
+    "time_kst": "11-09 14:45"
+   },
+   {
+    "gallery": "해외주식갤러리",
+    "title": "확실히 평소 이미지가 중요하네",
+    "views": 14192,
+    "recommend": 299,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=18317270&exception_mode=recommend&page=1",
+    "time_kst": "11-09 21:42"
+   },
+   {
+    "gallery": "해외주식갤러리",
+    "title": "지금 엔비디아 ㄹㅇ 좆된점....jpg",
+    "views": 14065,
+    "recommend": 283,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=18309611&exception_mode=recommend&page=2",
+    "time_kst": "11-09 12:24"
+   },
+   {
+    "gallery": "해외주식갤러리",
+    "title": "이새끼가 진짜 선구안 하나는 좆됨..jpg",
+    "views": 14312,
+    "recommend": 252,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=18312501&exception_mode=recommend&page=1",
+    "time_kst": "11-09 16:06"
+   },
+   {
+    "gallery": "해외주식갤러리",
+    "title": "??? : 첩 만들어 보니까 좋지?",
+    "views": 12651,
+    "recommend": 236,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=18308072&exception_mode=recommend&page=2",
+    "time_kst": "11-09 10:24"
+   }
+  ],
+  "top_viewed": [
+   {
+    "gallery": "해외주식갤러리",
+    "title": "종전나면 진짜 대운지임",
+    "views": 1797,
+    "recommend": 16,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=18322048&page=8",
+    "time_kst": "11-10 04:56"
+   },
+   {
+    "gallery": "해외주식갤러리",
+    "title": "쏙쓸 일주일 상승 최대폭이 25프로라 이제 사면안됨",
+    "views": 1639,
+    "recommend": 15,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=18322155&page=6",
+    "time_kst": "11-10 05:19"
+   },
+   {
+    "gallery": "해외주식갤러리",
+    "title": "첩질이 문제가아니라 간첩한테 좆질한게 문제라니까",
+    "views": 1356,
+    "recommend": 21,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=18322147&page=6",
+    "time_kst": "11-10 05:16"
+   },
+   {
+    "gallery": "국내주식갤러리",
+    "title": "오후에 코스피 얼마 돼있을 거 같음?",
+    "views": 590,
+    "recommend": 0,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3868839&page=5",
+    "time_kst": "11-10 04:00"
+   },
+   {
+    "gallery": "국내주식갤러리",
+    "title": "안녕히계세오...",
+    "views": 577,
+    "recommend": 1,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3868852&page=5",
+    "time_kst": "11-10 04:25"
+   },
+   {
+    "gallery": "국내주식갤러리",
+    "title": "미장 다말아올렸네 ㅅㅂㅋㅋㅋ",
+    "views": 540,
+    "recommend": 0,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3868832&page=5",
+    "time_kst": "11-10 03:51"
+   },
+   {
+    "gallery": "국내주식갤러리",
+    "title": "야선 저렇게 개만이올랐는데 내일 떨어질수도있음?",
+    "views": 445,
+    "recommend": 0,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3868752&page=6",
+    "time_kst": "11-10 02:29"
+   },
+   {
+    "gallery": "국내주식갤러리",
+    "title": "내일 장시작하지마 바로 다 빼나?????",
+    "views": 439,
+    "recommend": 0,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3868720&page=7",
+    "time_kst": "11-10 02:06"
+   }
+  ]
+ }
+}

@@ -120,11 +120,6 @@ if not rl.CONSENSUS.exists():
 else:
     eq(isinstance(rl.load_consensus(), dict), True, "컨센서스 파일 파싱")
 
-print()
-if FAIL:
-    raise SystemExit(f"{len(FAIL)}개 실패\n" + "\n".join(FAIL))
-print("직전치 변환 테스트 전부 통과")
-
 # ── BLS 응답 파싱 ───────────────────────────────────────────────────────────
 print("\n[BLS 기간 표기]")
 eq(rl._bls_date("2026", "M08"), dt.date(2026, 8, 1), "M08 → 8월")
@@ -139,7 +134,7 @@ ENTRIES = [
     {"id": "us_payrolls", "name": "미국 고용보고서",
      "release": {"series": "CES0000000001", "kind": "diff", "scale": 10, "unit": "만명",
                  "also": {"series": "LNS14000000", "kind": "level", "unit": "%",
-                          "digits": 1, "label": "실업률"}}},
+                          "digits": 1, "label": "실업률", "key": "unemp"}}},
     {"id": "us_cpi", "name": "미국 CPI",
      "release": {"series": "CUSR0000SA0", "kind": "yoy_mom"}},
     {"id": "us_pce", "name": "미국 PCE",
@@ -156,6 +151,9 @@ got = rl.fetch(ENTRIES)                      # FRED 키 없음
 eq(sorted(got), ["us_cpi", "us_payrolls"], "키 없으면 FRED 계열은 빠진다")
 eq(got["us_payrolls"]["text"], "+2.9만명 · 실업률 4.2%", "also 가 한 줄에 붙는다")
 eq(got["us_cpi"]["text"], "YoY +2.4% · MoM +0.2%", "주 계열만")
+eq(got["us_payrolls"]["vals"], {"diff": 2.9, "unemp_level": 4.2},
+   "vals — also.key 로 보조 계열 숫자가 붙는다(해석 밴드 판정용)")
+eq(got["us_cpi"]["vals"], {"yoy": 2.4, "mom": 0.2}, "vals — 화면 자릿수로 반올림")
 
 # BLS 호출이 통째로 실패해도 터지지 않는다(그 지표만 빠진다)
 def boom(series, **kw):
@@ -191,3 +189,24 @@ STALE_ENTRY = [{"id": "kr_cpi", "name": "한국 CPI",
                 "release": {"series": "KORCPIALLMINMEI", "kind": "yoy_mom"}}]
 rl.bls_observations = lambda series, **kw: {"KORCPIALLMINMEI": dead}
 eq(rl.fetch(STALE_ENTRY), {}, "멈춘 계열은 직전치로 내보내지 않는다")
+
+print("\n[vals — 해석 밴드가 고를 숫자]")
+# 화면에 찍힌 숫자와 판정 숫자가 같아야 한다: 2.46 은 화면에 2.5% 로 보이므로 2.5 로 판정
+s = rl.summarize(monthly([100.0, 102.46]), {"series": "X", "kind": "mom"})
+eq(s["vals"], {"mom": 2.5}, "반올림 후 값으로 판정")
+eq(rl.summarize(quarterly([2.2, 3.44]), {"series": "G", "kind": "level", "freq": "q"})["vals"],
+   {"level": 3.4}, "level")
+# 변화율을 못 구하면 숫자도 없다 — '–' 원칙 그대로(지어낸 값으로 밴드를 고르지 않는다)
+eq(rl.summarize(monthly([100.0]), {"series": "X", "kind": "yoy_mom"})["vals"], {},
+   "관측 1개 → vals 비어 있음")
+# key 가 없는 also 는 붙이지 않는다(한글 라벨로 키를 지어내지 않는다)
+got_ = {"vals": {"yoy": 1.0}}
+rl.merge_vals(got_, {"vals": {"yoy": 2.0}}, {"label": "코어"})
+eq(got_["vals"], {"yoy": 1.0}, "key 없는 also → 합치지 않음")
+rl.merge_vals(got_, {"vals": {"yoy": 2.0}}, {"label": "코어", "key": "core"})
+eq(got_["vals"], {"yoy": 1.0, "core_yoy": 2.0}, "key 있으면 core_yoy")
+
+print()
+if FAIL:
+    raise SystemExit(f"{len(FAIL)}개 실패\n" + "\n".join(FAIL))
+print("직전치 변환 테스트 전부 통과")

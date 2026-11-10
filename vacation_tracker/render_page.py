@@ -213,6 +213,8 @@ def _row(entry: dict, today: str) -> str:
     msg_date = str(entry.get("msg_date") or "")[:16].replace("T", " ")
     if entry.get("engine") == "manual":
         origin = f"{msg_date} · ✍️ 직접 기입"
+    elif entry.get("engine") == "plan":
+        origin = f"{msg_date} · 📷 연차계획서"
     else:
         origin = f"{msg_date} · “{html.escape(str(entry.get('text') or '')[:140])}”"
     uid = html.escape(str(entry.get("uid") or ""), quote=True)
@@ -238,7 +240,7 @@ def _chip_html(entry: dict) -> str:
     attr = lambda v: html.escape(str(v or ""), quote=True)
     engine = entry.get("engine")
     when = str(entry.get("msg_date") or "")[:16].replace("T", " ")
-    source = "✍️ 직접 기입" if engine == "manual" else "텔레그램 보고"
+    source = {"manual": "✍️ 직접 기입", "plan": "📷 연차계획서"}.get(engine, "텔레그램 보고")
     return (f'<span class="chip{" trip" if _is_trip(entry.get("kind")) else ""}"'
             f' data-name="{attr(entry.get("name"))}" data-span="{attr(_span(entry))}"'
             f' data-kind="{attr(entry.get("kind"))}" data-note="{attr(entry.get("note"))}"'
@@ -324,14 +326,51 @@ def _calendar_section(dated: list[dict], today_d: date) -> str:
     return nav + '<div id="cal-strip">' + "".join(parts) + "</div>"
 
 
+def _name_options() -> str:
+    return "".join(f"<option>{html.escape(n)}</option>"
+                   for n in sorted({n for n in friend_names() if n}))
+
+
+def _plan_form() -> str:
+    """연차계획서 이미지 등록 섹션 — 페이지 맨 위에 둔다(11/5 사용자 요청).
+
+    스크립트(submitPlan·붙여넣기 리스너)는 _add_form 쪽에 있다 — onclick 은 클릭
+    시점에 풀리고 리스너 등록 때 이 DOM 은 이미 위에 있으므로 순서 무관.
+    """
+    return f"""
+<details class="sec" id="plan-sec">
+<summary>📷 연차계획서 등록 (이미지 붙여넣기)</summary>
+<p class="form-hint">인사시스템 미사용연차 사용계획 화면을 캡쳐해 붙여넣으면
+날짜·종류(종일/오전/오후)를 읽어 달력에 넣습니다. <b>같은 사람 계획서를 다시 올리면
+오늘 이후 일정이 통째로 교체</b>되고(바뀐 계획 반영 — 지난 일정은 캡쳐에서 잘려도
+지우지 않음), 텔레그램으로 잡힌 일정과 같은 달력에 합쳐집니다.
+이미지는 추출에만 쓰고 저장하지 않습니다.</p>
+<div class="addform">
+  <select id="plan-name" style="width:140px">
+    <option value="" selected>이름 자동 인식</option>
+    {_name_options()}
+  </select>
+  <input id="plan-file" type="file" accept="image/*" multiple style="flex:1;min-width:160px">
+  <button id="plan-btn" onclick="submitPlan()" disabled>분석·등록</button>
+</div>
+<div id="plan-paste" tabindex="0" style="border:2px dashed #c3cedb;border-radius:10px;
+  padding:14px;margin:8px 0;color:#7c8794;font-size:13px;cursor:pointer;text-align:center">
+  여기를 클릭한 뒤 캡쳐를 붙여넣기(Ctrl+V)하거나, 위에서 이미지 파일을 선택하세요.
+  표가 길면 스크롤을 나눠 찍어 <b>여러 장(최대 4장)</b>을 이어서 붙여넣으세요 — 한 번에 합쳐 등록됩니다.</div>
+<div id="plan-preview" style="display:none;margin:6px 0"></div>
+<p id="plan-status"></p>
+<div id="plan-rows"></div>
+</details>
+"""
+
+
 def _add_form(stamp: str) -> str:
     """직접 기입 폼. GAS 프록시(vacation 라우트)로 workflow_dispatch를 쏜다.
 
     stamp는 이 페이지의 갱신 시각 — 제출 뒤 배포본의 갱신 시각이 달라지면
     자동 새로고침한다. 그 사이 화면에는 점선(pending) 스타일로 즉시 그려 둔다.
     """
-    name_options = "".join(f"<option>{html.escape(n)}</option>"
-                           for n in sorted({n for n in friend_names() if n}))
+    name_options = _name_options()
     kind_options = "".join(f"<option>{k}</option>" for k in KIND_OPTIONS)
     head = f"""
 <h2>✍️ 직접 기입</h2>
@@ -660,6 +699,84 @@ document.addEventListener('dblclick',ev=>{
   }
   document.querySelector('.addform').scrollIntoView({behavior:'smooth',block:'center'});
 });
+
+// ── 연차계획서 이미지 등록 ────────────────────────────────────────────────
+// 긴 표는 스크롤로 나눠 찍으니 여러 장(최대 4)을 모아 한 제출로 보낸다(11/5).
+let planImgs=[];  // dataURL[]
+function planSet(dataUrl){
+  if(planImgs.length>=4){$id('plan-status').textContent='⚠ 캡쳐는 최대 4장까지입니다';return}
+  planImgs.push(dataUrl);
+  const box=$id('plan-preview');box.style.display='block';
+  box.innerHTML=planImgs.map(u=>'<img src="'+u+'" style="max-width:150px;max-height:150px;'
+    +'border:1px solid #dfe5ec;border-radius:8px;margin-right:6px">').join('')
+    +'<button type="button" onclick="planClear()" style="vertical-align:top">비우기</button>';
+  $id('plan-btn').disabled=false;
+  $id('plan-status').textContent='이미지 '+planImgs.length
+    +'장 준비됨 — 더 붙여넣거나, 이름을 확인하고 [분석·등록]을 누르세요';
+}
+function planClear(){
+  planImgs=[];
+  const box=$id('plan-preview');box.innerHTML='';box.style.display='none';
+  $id('plan-btn').disabled=true;$id('plan-status').textContent='';
+}
+function planLoad(file){
+  if(!file||!file.type||file.type.indexOf('image/')!==0)return;
+  const reader=new FileReader();
+  reader.onload=()=>{
+    // 캡쳐 사진은 수 MB — 긴 변 1600px로 줄여 전송·추출을 가볍게.
+    const im=new Image();
+    im.onload=()=>{
+      const scale=Math.min(1,1600/Math.max(im.width,im.height));
+      if(scale>=1){planSet(reader.result);return}
+      const c=document.createElement('canvas');
+      c.width=Math.round(im.width*scale);c.height=Math.round(im.height*scale);
+      c.getContext('2d').drawImage(im,0,0,c.width,c.height);
+      planSet(c.toDataURL('image/jpeg',0.88));
+    };
+    im.src=reader.result;
+  };
+  reader.readAsDataURL(file);
+}
+const planPaste=$id('plan-paste');
+if(planPaste){
+  planPaste.addEventListener('click',()=>planPaste.focus());
+  document.addEventListener('paste',ev=>{
+    const sec=$id('plan-sec');if(!sec||!sec.open)return;
+    const items=(ev.clipboardData||{}).items||[];
+    let got=false;
+    for(const it of items){
+      if(it.type&&it.type.indexOf('image/')===0){planLoad(it.getAsFile());got=true}
+    }
+    if(got)ev.preventDefault();
+  });
+  $id('plan-file').addEventListener('change',ev=>{for(const f of ev.target.files)planLoad(f)});
+}
+async function submitPlan(){
+  if(!planImgs.length)return;
+  const btn=$id('plan-btn'),status=$id('plan-status');
+  btn.disabled=true;status.textContent='🔎 이미지 '+planImgs.length+'장에서 날짜를 읽는 중… (10~30초)';
+  try{
+    // image(단수)는 옛 GAS 호환 — 재붙여넣기 전의 배포본은 images[]를 모른다.
+    // 여러 장일 땐 일부러 안 보낸다: 첫 장만 처리되면 빠진 날짜가 조용히 지워진다.
+    const payload={action:'vacplan',images:planImgs,name:$id('plan-name').value||''};
+    if(planImgs.length===1)payload.image=planImgs[0];
+    const r=await fetch(EP,{method:'POST',body:JSON.stringify(payload)});
+    const d=await r.json();
+    if(!d||d.ok===false){
+      let msg=(d&&d.error)||'GAS 프록시 확인 필요';
+      if(planImgs.length>1&&/이미지\(dataURL\)/.test(msg))
+        msg+=' — GAS가 옛 버전입니다. 여러 장 등록은 dispatch_proxy.gs 재붙여넣기(배포 관리→새 버전) 후 가능해요. 그때까진 한 장씩 올려주세요.';
+      status.textContent='⚠ 실패: '+msg;
+      btn.disabled=false;return;
+    }
+    const rows=(d.rows||[]).map(x=>'<tr><td>'+escText(x.date)+'</td><td>'+escText(x.kind)+'</td></tr>').join('');
+    $id('plan-rows').innerHTML='<table><thead><tr><th>휴가일자</th><th>종류</th></tr></thead><tbody>'
+      +rows+'</tbody></table>';
+    status.textContent='✅ '+(d.name||'')+' — '+(d.rows||[]).length
+      +'개 날짜 등록 요청됨. 서버 반영 후 자동 새로고침됩니다 (재등록 = 오늘 이후 일정 교체, 과거는 보존)';
+    watchDeploy();
+  }catch(e){status.textContent='실패: '+e.message;btn.disabled=false}
+}
 </script>"""
     return head + script
 
@@ -700,6 +817,7 @@ def build_page(store: dict) -> Path:
 갱신 {stamp} KST · 총 {len(entries)}건
 <button id="run-btn" class="run-btn" onclick="runScan()">🔄 지금 수집</button>
 <span id="run-status"></span></p>
+{_plan_form()}
 <details class="sec">
 <summary>다가오는 휴가/출장 ({len(upcoming)}건)</summary>
 {table(upcoming, "tbl-upcoming")}

@@ -195,6 +195,89 @@ class TestGuideNumbers(unittest.TestCase):
         self.assertIn('id="g-us_cpi"', br.indicator_cards(guide))
 
 
+class TestVerdict(unittest.TestCase):
+    """발표 결과 → 해석 밴드 자동 선택(11/4 요청 '결과와 간단한 해석')."""
+    GUIDE = {"indicators": {
+        "us_cpi": {"name": "CPI", "read": [
+            {"band": "근원 YoY 3.5% 이상", "tone": "hot", "mean": "뜨겁다", "metric": "core_yoy", "ge": 3.5},
+            {"band": "근원 YoY 2.5~3.5%", "tone": "warm", "mean": "둔화 중", "metric": "core_yoy", "ge": 2.5, "lt": 3.5},
+            {"band": "근원 YoY 2.5% 미만", "tone": "cool", "mean": "목표 근접", "metric": "core_yoy", "lt": 2.5},
+            {"band": "근원 MoM 0.4% 이상", "tone": "hot", "mean": "연율 5%"}]},   # 숫자 없음
+        "us_gdp": {"name": "GDP", "read": [
+            {"band": "미국 연율 3% 이상", "tone": "warm", "mean": "강한 성장", "metric": "level", "ge": 3, "ids": ["us_gdp"]}]},
+        "fomc": {"name": "FOMC", "read": [{"band": "동결 + 매파", "tone": "hot", "mean": "더 오래"}]},
+    }}
+    CFG = {"calendar": [
+        {"id": "us_cpi", "name": "CPI", "guide": "us_cpi"},
+        {"id": "us_gdp", "name": "미국 GDP", "guide": "us_gdp"},
+        {"id": "kr_gdp", "name": "한국 GDP", "guide": "us_gdp"},
+        {"id": "fomc", "name": "FOMC", "guide": "fomc"},
+    ]}
+    REL = {"us_cpi": {"text": "YoY +3.7% · 코어 YoY +2.6%", "period": "2026년 9월분",
+                      "vals": {"yoy": 3.7, "core_yoy": 2.6}},
+           "us_gdp": {"text": "3.4%", "period": "2026년 3분기", "vals": {"level": 3.4}},
+           "kr_gdp": {"text": "3.4%", "period": "2026년 2분기", "vals": {"level": 3.4}},
+           "fomc": {"text": "4.00%", "period": "2026-10-31", "vals": {"level": 4.0}}}
+
+    def cards(self):
+        return br.guide_numbers(self.CFG, self.REL, {}, self.GUIDE)
+
+    def test_picks_the_band_the_number_falls_in(self):
+        card = "".join(self.cards()["us_cpi"])
+        self.assertIn("이번 결과 해석", card)
+        self.assertIn("근원 YoY 2.5~3.5%", card)
+        self.assertIn("둔화 중", card)
+        self.assertNotIn("목표 근접", card)
+        self.assertIn("2026년 9월분", card)
+
+    def test_boundary_ge_inclusive_lt_exclusive(self):
+        b = self.GUIDE["indicators"]["us_cpi"]["read"]
+        self.assertTrue(br.band_hit(b[1], {"core_yoy": 2.5}, "us_cpi"))
+        self.assertFalse(br.band_hit(b[1], {"core_yoy": 3.5}, "us_cpi"))
+        self.assertTrue(br.band_hit(b[0], {"core_yoy": 3.5}, "us_cpi"))
+
+    def test_band_without_metric_is_never_picked(self):
+        # 근원 MoM 은 모으지 않는다 — '지금 여기'로 찍으면 틀린 해석이 사실처럼 보인다
+        b = self.GUIDE["indicators"]["us_cpi"]["read"][3]
+        self.assertFalse(br.band_hit(b, {"core_yoy": 9.9, "mom": 9.9}, "us_cpi"))
+
+    def test_missing_value_picks_nothing(self):
+        b = self.GUIDE["indicators"]["us_cpi"]["read"][0]
+        self.assertFalse(br.band_hit(b, {"yoy": 5.0}, "us_cpi"))
+
+    def test_ids_limit_shared_card(self):
+        # GDP 카드는 한국 GDP 도 쓰지만 밴드는 '미국 연율' 기준
+        hits = dict(br.card_hits(self.CFG, self.REL, self.GUIDE)["us_gdp"])
+        self.assertEqual(hits["us_gdp"], [0])
+        self.assertEqual(hits["kr_gdp"], [])
+
+    def test_qualitative_indicator_says_why(self):
+        card = "".join(self.cards()["fomc"])
+        self.assertIn("숫자 하나로 고를 수 있는 밴드가 없습니다", card)
+
+    def test_old_payload_without_vals_gets_no_verdict(self):
+        rel = {"us_cpi": {"text": "YoY +3.7%", "period": "2026년 9월분"}}
+        card = "".join(br.guide_numbers(self.CFG, rel, {}, self.GUIDE)["us_cpi"])
+        self.assertNotIn("이번 결과 해석", card)
+
+    def test_shows_the_number_that_picked_the_band(self):
+        # '2.8% 이상' 만으로는 지금 몇인지 다시 표를 올려다봐야 한다
+        spec = {"kind": "yoy_mom", "also": {"kind": "yoy", "label": "코어", "key": "core"}}
+        self.assertEqual(br.metric_text("core_yoy", 3.1, spec), "코어 YoY +3.1%")
+        self.assertEqual(br.metric_text("mom", 0.5, spec), "MoM +0.5%")
+        self.assertEqual(br.metric_text("mom", 0.5, {"freq": "q"}), "QoQ +0.5%")
+        self.assertEqual(br.metric_text("diff", 2.9, {"unit": "만명"}), "+2.9만명")
+        self.assertEqual(br.metric_text("level", 3.4, {"unit": "%", "digits": 1}), "3.4%")
+        cfg = {"calendar": [{"id": "us_cpi", "name": "CPI", "guide": "us_cpi", "release": spec}]}
+        card = "".join(br.guide_numbers(cfg, self.REL, {}, self.GUIDE)["us_cpi"])
+        self.assertIn("지금 코어 YoY +2.6%", card)
+
+    def test_card_marks_hit_band(self):
+        html = br.indicator_cards(self.GUIDE, {}, br.card_hits(self.CFG, self.REL, self.GUIDE))
+        self.assertEqual(html.count("◀ 지금"), 2)            # CPI 1줄 + 미국 GDP 1줄
+        self.assertIn('band  hit"', html)                     # warm 톤(클래스 없음) + hit
+
+
 class TestRichText(unittest.TestCase):
     """guide.yml 의 **굵게** 가 화면에 별표로 찍히던 것."""
 

@@ -8,7 +8,7 @@
 provisional 플래그를 남기고 화면·텔레가 그대로 적는다.
 """
 from __future__ import annotations
-import os, sys, csv, json, time, argparse
+import os, re, sys, csv, json, time, argparse
 import requests
 from datetime import datetime, timezone, timedelta
 
@@ -32,6 +32,7 @@ DATA = os.path.join(HERE, "data")
 HIST = os.path.join(DATA, "history")
 LATEST = os.path.join(DATA, "latest.json")
 SHARES = os.path.join(DATA, "etf_shares.json")
+SERIES = os.path.join(DATA, "series.json")   # 종목별 1년 차트 — history 에는 안 복사(스냅샷마다 부풀지 않게)
 CHANGES = os.path.join(ROOT, "etf_holdings", "changes.json")
 
 NAVER_ETF = "https://m.stock.naver.com/api/stock/{code}/etfAnalysis"
@@ -140,7 +141,86 @@ def collect_stock(u, today, live=True):
     tech["spark"] = metrics.spark_points(ohlc, today, px.get("price") if live else None)
     flow = metrics.flow_summary(inv, today, px.get("mcap"))
     flow["today_src"] = f"estimate {est_note}" if est_note else "daily"
-    return {**u, "px": px, "tech": tech, "flow": flow}
+    series = metrics.build_series(ohlc, inv, px.get("listed"), today)
+    return {**u, "px": px, "tech": tech, "flow": flow, "series": series}
+
+
+CHART_UNIVERSE = "chart_universe.csv"   # 위클리 차트 전용 종목(표·텔레 없음) — 11/7 조선기자재
+
+
+def _name_match(a, b):
+    a, b = re.sub(r"\s", "", a or ""), re.sub(r"\s", "", b or "")
+    return bool(a and b) and (a in b or b in a)
+
+
+def collect_chart_only(today):
+    """chart_universe.csv 종목의 1년 시계열만 모은다(위클리 차트용 — 등락률·수급 표·텔레에는 안 실린다).
+    코드가 틀려 엉뚱한 종목이 오면 조용히 섞이지 않게 **한투가 돌려준 종목명이 CSV 이름과 맞아야** 담고,
+    아니면 오류 목록에만 남긴다(ETF 수집과 같은 원칙). 오류는 chart_errors 로 따로 — 본 수집의
+    성공률·텔레그램 생략 판정(오류 1건이면 미발송)에 섞이지 않는다."""
+    out, errors = {}, []
+    for u in load_csv(CHART_UNIVERSE):
+        code = u["code"]
+        try:
+            px = kis.fetch_price(code)
+            time.sleep(0.12)
+            ohlc = kis.fetch_ohlc(code)
+            time.sleep(0.12)
+            # 종목명은 일봉 응답(output1)에서 — 주식용 inquire-price 엔 이름이 없다(11/7 실측 14종목 전부 '').
+            got = ohlc.attrs.get("name") or px.get("name") or ""
+            if not _name_match(got, u["name"]):
+                errors.append(f"{code} {u['name']}: 이름 불일치 — 한투 종목명 {got!r}(코드 확인)")
+                continue
+            inv = kis.fetch_investor(code)
+            time.sleep(0.12)
+            try:
+                inv = kis.merge_investor(inv, kis.naver_trend_frame(naver_investor_history(code, f"{int(today[:4]) - 1}1231")))
+            except Exception as ex:
+                print(f"  {u['name']} 네이버 수급 이력 실패(한투 30행만 사용): {type(ex).__name__}: {ex}")
+            ser = metrics.build_series(ohlc, inv, px.get("listed"), today)
+            if not ser:
+                errors.append(f"{code} {u['name']}: 시계열 부족(상장 초기이거나 수급 이력 없음)")
+                continue
+            ser["name"] = u["name"]
+            out[code] = ser
+        except Exception as ex:
+            errors.append(f"{code} {u['name']}: {type(ex).__name__}: {ex}")
+    return out, errors
+
+
+def charts_only(today):
+    """'🔄 차트만 지금 수집'(11/7): ④ 위클리용 차트에 쓰는 종목(WEEKLY_GROUPS 의 유니버스 종목 + chart_universe.csv)
+    의 1년 시계열만 다시 모아 series.json 을 갱신한다. 등락률·수급 표(latest.json)·히스토리·ETF·텔레그램은
+    건드리지 않는다 — 전체 수집(21종목+ETF 7, 2~3분)보다 가볍고 휴장일에도 돈다(차트는 직전 거래일까지 그리면 된다).
+    이번에 못 만든 종목은 직전 값을 유지(본 수집과 같은 원칙)."""
+    from build_report import WEEKLY_GROUPS   # 순환 아님: build_report 는 metrics 만 import
+    want = {c for g in WEEKLY_GROUPS for c in g["codes"]}
+    series_map, errors = {}, []
+    for u in load_csv("universe.csv"):
+        if u["code"] not in want:
+            continue
+        try:
+            row = collect_stock(u, today, live=False)
+            if row.get("series"):
+                series_map[u["code"]] = row["series"]
+        except Exception as ex:
+            errors.append(f"{u['code']} {u['name']}: {type(ex).__name__}: {ex}")
+    chart_series, chart_errors = collect_chart_only(today)
+    series_map.update({c: v for c, v in chart_series.items() if c in want})
+    errors += chart_errors
+    if not series_map:
+        print("차트 시계열을 하나도 못 만들었다 — series.json 을 손대지 않고 실패로 끝낸다")
+        for e in errors:
+            print("  !", e)
+        return 2
+    old = load_json(SERIES, {})
+    old.update(series_map)
+    with open(SERIES, "w", encoding="utf-8") as f:
+        json.dump(old, f, ensure_ascii=False, separators=(",", ":"))
+    print(f"차트 시계열 갱신: {len(series_map)}/{len(want)}종목 · 오류 {len(errors)}")
+    for e in errors:
+        print("  !", e)
+    return 0
 
 
 def collect_etfs(etf_rows):
@@ -308,7 +388,11 @@ def main(argv=None):
     ap.add_argument("--probe-etf", action="store_true", help="ETF 상장주수 소스 탐색 — 응답 키만 찍고 끝(저장 없음)")
     ap.add_argument("--probe-flow", action="store_true", help="종목별 수급 이력 길이 탐색(KIS 행수·네이버 trend) — 저장 없음")
     ap.add_argument("--probe-estimate", action="store_true", help="종목별 외인기관 추정가집계 원본 응답 출력 — 저장 없음")
+    ap.add_argument("--charts-only", action="store_true",
+                    help="④ 위클리용 차트 시계열(series.json)만 갱신 — 표·텔레·latest.json 은 손대지 않음, 휴장일 무관")
     a = ap.parse_args(argv)
+    if a.charts_only:
+        return charts_only(datetime.now(KST).date().isoformat())
 
     now = datetime.now(KST)
     today = now.date().isoformat()
@@ -336,12 +420,18 @@ def main(argv=None):
             errors.append(f"{u['code']} {u['name']}: {type(ex).__name__}: {ex}")
             print(f"  {u['name']} 실패: {ex}")
 
+    series_map = {r["code"]: r.pop("series", None) for r in rows}
     if not enough(len(rows), len(uni)):
         print(f"수집 부족 — {len(rows)}/{len(uni)}종목(기준 {MIN_OK_RATIO:.0%}). 저장·발송하지 않고 실패로 끝낸다.")
         for e in errors:
             print("  " + e)
         return 2
 
+    chart_series, chart_errors = ({}, []) if a.limit else collect_chart_only(today)
+    series_map.update(chart_series)
+    print(f"차트 전용 종목 {len(chart_series)}개 · 오류 {len(chart_errors)}")
+    for e in chart_errors:
+        print("  !", e)
     etfs, etf_err = collect_etfs(load_csv("etf_universe.csv"))
     errors += etf_err
     backfill_frgn(rows, load_json(LATEST, {}))   # LATEST 를 덮어쓰기 전에 읽어야 한다
@@ -363,7 +453,7 @@ def main(argv=None):
         "universe": len(uni), "rows": rows,
         "etfs": per_etf, "etf_weights_source": "naver_top10",
         "active": active, "active_date": changes.get("date", ""),
-        "errors": errors,
+        "errors": errors, "chart_errors": chart_errors,
         "note": "규칙 기반 상태값이며 검증 전. 패시브는 섹터 ETF 7개 Top10 비중 기준 하한값. 장중 숫자는 잠정치.",
     }
     os.makedirs(HIST, exist_ok=True)
@@ -371,6 +461,12 @@ def main(argv=None):
         json.dump(payload, f, ensure_ascii=False, indent=1)
     with open(os.path.join(HIST, f"{today}_{slot.replace(':', '')}.json"), "w", encoding="utf-8") as f:
         json.dump(payload, f, ensure_ascii=False)
+    series_map = {c: v for c, v in series_map.items() if v}
+    if series_map:   # 이번에 못 만든 종목은 직전 값을 유지(차트가 갑자기 사라지지 않게)
+        old = load_json(SERIES, {})
+        old.update(series_map)
+        with open(SERIES, "w", encoding="utf-8") as f:
+            json.dump(old, f, ensure_ascii=False, separators=(",", ":"))
     with open(SHARES, "w", encoding="utf-8") as f:
         json.dump(store, f, ensure_ascii=False, indent=1)
     # 30일 지난 히스토리 정리
