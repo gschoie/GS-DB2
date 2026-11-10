@@ -69,6 +69,10 @@ TARGET_COMPANIES = [
     {"industry": "건설기계", "sub": "완성장비", "region": "미국", "name": "CNH Industrial", "ticker": "CNH"},
     {"industry": "건설기계", "sub": "완성장비", "region": "일본", "name": "Komatsu", "ticker": "6301.T"},
     {"industry": "건설기계", "sub": "완성장비", "region": "일본", "name": "Hitachi CM", "ticker": "6305.T"},
+    # Kubota 는 농기계가 주력이지만 미니 굴착기 글로벌 1위라 두산밥캣 콤팩트 장비의 직접 피어.
+    # Kobelco 건설기계는 고베제철(5406.T) 100% 자회사라 별도 상장이 없어 넣을 수 없다.
+    {"industry": "건설기계", "sub": "완성장비", "region": "일본", "name": "Kubota", "ticker": "6326.T"},
+    {"industry": "건설기계", "sub": "완성장비", "region": "일본", "name": "Takeuchi", "ticker": "6432.T"},
     {"industry": "건설기계", "sub": "완성장비", "region": "스웨덴", "name": "Volvo", "ticker": "VOLV-B.ST"},
     {"industry": "건설기계", "sub": "완성장비", "region": "중국", "name": "삼일중공업(SANY)", "ticker": "600031.SS"},
     {"industry": "건설기계", "sub": "완성장비", "region": "중국", "name": "서공기계(XCMG)", "ticker": "000425.SZ"},

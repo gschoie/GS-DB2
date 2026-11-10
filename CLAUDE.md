@@ -1353,6 +1353,10 @@
       하나로 끝(환율 미수집 폴백의 KRW 경로는 제거). 참고: 야후 컨센 출처는 S&P Global
       Market Intelligence(EPS·매출 추정/애널리스트 추천·목표가, 야후 공식 데이터 제공자
       문서 SLN2310 — 옛 Refinitiv/톰슨로이터 I/B/E/S 에서 교체됨).
+    - **건기 일본 피어 보강** (11/10): 사용자 지적 "kubota kobelco takeuchi 빠져있다" —
+      Kubota(6326.T)·Takeuchi(6432.T) 완성장비 일본에 추가(53종목). Kubota 는 농기계 주력이나
+      미니 굴착기 1위라 두산밥캣 콤팩트 피어. **Kobelco 건설기계는 고베제철 100% 자회사라
+      비상장 — 넣을 수 없다**(이마바리·JMU 와 같은 사유, companies.py 주석).
     - 화면·엑셀은 valuation.yml 이 다시 돌아야 반영(빌드 산출물 커밋 구조).
 
 50. **화면 공유용 주소 — 새 창 링크를 gs-research-desk.github.io 로** (10/19): 사람들 앞에서 화면을
