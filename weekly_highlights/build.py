@@ -386,6 +386,9 @@ def build(demo=False, out_dir=OUT_DIR):
         json.dump({"dates": dates, "latest": asof.isoformat()}, f, ensure_ascii=False)
     for s in payload["sources"]:
         log(f"  {s['title']}: {len(s['picks'])}건 꼽힘 / {s['scanned']} 훑음")
+        for pk in s["picks"]:   # 러너 로그에서 바로 보게(아티팩트를 못 받는 환경에서 임계 조정용)
+            why = " / ".join(f"{r.get('name', '')} {r['text']}".strip() for r in pk["reasons"][:4])
+            log(f"     · {pk['title']} [{pk['score']}] {why}")
     log(f"✅ {os.path.join(out_dir, name)} ({len(txt) // 1024}KB)")
     return payload
 
