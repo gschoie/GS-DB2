@@ -1701,4 +1701,18 @@
     46개 종목의 연간·다음분기가 채워진다. 컨테이너 Playwright 는 WiseReport 가 502 를 돌려줘 E2E 불가(curl 은 됨) —
     검증은 러너 run 결과로. 참고: 분기 fwd 는 10/15 부터라 그 전 공백은 소급되지 않는다.
 
+61. **주보 › 📐 ER (Earnings Revision) 신설** (11/10~11): 블룸버그 ER 차트를 무료 데이터로. 수집은 별도 리포
+    ecos-fx-rates `consensus/er_snapshot.py` — 야후 애널리스트 추정(30·7일 EPS 상향/하향 건수·애널 수·컨센 EPS
+    현재/7·30·60·90일 전)을 **그날 값만 주므로 매일 쌓는다**(`output/earnings_revision/er_history.csv`, 11/10 시작,
+    과거 소급 불가). ER = (상향−하향)/애널 수×100. 57종목: 조선(커버리지 9 + Yangzijiang·CSSC·Seatrium)·방산(한국 5 +
+    미국 체계 7 + 유럽 체계 8)·건기(두산밥캣·HD건설기계 + 해외 12, Kobelco = Kobe Steel). 화면 `static/er_report.html?s=조선|방산|건설기계`
+    (raw CSV 런타임 fetch, 사이드바 주보 맨 아래 `📐 ER › 조선/방산/건설기계`).
+    - **정시 발사 = Claude 예약** `trig_012TP2cZcMjXxqnykGyn9AxJ`(평일 17:12 KST) → ecos-fx-rates 가 붙은 전용 세션
+      `session_015Pd8bjcVg89M261LkD3259`(sonnet, 발사 1회 ≈ $0.1)이 `gh workflow run earnings-revision.yml`. 첫날 17:10 크론이
+      아예 안 와서(11/11 — 같은 날 피어그룹 크론도 8시간 지연) 옮겼다. 크론 평일 17:20 은 안전망(같은 날 재실행은 그날 값 덮어쓰기라 무해).
+    - 한계: 야후 커버 증권사가 블룸버그보다 적다(CSSC·HD현대마린엔진 1명, 두산밥캣 2명 등 — 화면 ⚠적음). 한국 종목은
+      FnGuide 증권사별 추정으로 따로 계산하는 게 다음 후보.
+    - 참고: 주보 4종 예약 `trig_01VEqTcdRitLg6oWSSxQc8uQ` 의 ecos-fx-rates dispatch 2건은 그 세션에 ecos 리포가 없어
+      403 → 피어그룹·컨센서스는 크론 안전망에만 기대는 중(11/10 피어그룹 크론 00:46 KST 도착).
+
 이후 작업은 git log와 이 파일을 갱신하며 이어간다.
