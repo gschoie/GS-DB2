@@ -1722,3 +1722,27 @@
       수급 그림(charts_only)은 그대로 유효.
 
 이후 작업은 git log와 이 파일을 갱신하며 이어간다.
+
+62. **주보 › ✨ 이번주.튀는차트 신설** (11/11): 사용자 "매주 토요일 새벽(미국장 끝나는 시간) 주보 5종에서 특별하게
+    튀는/변화된 차트를 꼽아서 — 의미 있는 변화가 있을 때만, 갯수 제한 없이". `weekly_highlights/` +
+    사이드바 📰 주보 맨 위 `✨ 이번주.튀는차트`(뷰 wkhl, `static/weekly_highlights_report.html`).
+    - **판정은 전부 규칙**(`rules.py`, 임계값 `TH` 한 곳) — 생성형이 '의미 있다'를 고르지 않는다. 표본이 모자라면 그
+      규칙은 침묵(30번 교훈). 이유마다 score(|값|/임계)를 둬 큰 것부터. 주가: 1주 등락 ±8%(묶음 지수 ±6%) 또는 직전
+      52주 비중복 주간수익률 대비 z ±2(둘 다 걸리면 한 줄) · 52주 신고가/신저가 · INDEX 그림은 선두 교체. 수급(coverage_flow
+      series.json): 외인/기관 1주 순매수가 시총의 0.5% 이상·직전 주 대비 z ±2·1년 최대·1년 누적 부호 전환(50억 미만 무시).
+      컨센: 영업이익 컨센 1주 ±5% · 1개월 ±15% · 흑자/적자 전환. ER(FY1·FY2만): |ER30| ≥ 60 · EPS 1M ±8% · 3M ±15% ·
+      한 주 40pp, 애널 3명 이상. **11/11 실측으로 조정** — 컨센 3%/10%·EPS 5% 는 실적시즌에 16사 중 10사가 걸렸고,
+      보잉 0Q 는 EPS 가 0 근처라 변화율이 −5,526% 로 터져 정렬을 독차지 → 부호 전환은 '전환'으로 따로, score 상한 8.
+    - **종목 정의는 두 곳에 두지 않는다**: `catalog.py` 가 ecos-fx-rates(public) 생성기 모듈(weekly_peer_price_image ·
+      weekly_*_index_image)을 그대로 import 해 섹션·그림 구성을 읽고(그 모듈들이 맨 위에서 matplotlib 를 import 하므로
+      없으면 가짜 모듈을 꽂아 종목 정의만 읽는다), 수급 묶음은 coverage_flow.build_report.WEEKLY_GROUPS, 컨센 16사는
+      ecos consensus 스크립트의 COMPANIES 리터럴(ast). 컨센·ER CSV 도 그 체크아웃(`_ecos/`, gitignore)에서 읽는다.
+      생성기의 그림 구성(chart1~4)을 바꾸면 `catalog.index_charts` 도 같이.
+    - **그림은 원본 PNG 를 빌리지 않고 같은 데이터로 페이지가 직접 그린다**(SVG) — 갤러리 PNG 는 토 16:40 갱신이라
+      새벽에 보면 목요일 미국 종가 그림 + 금요일 숫자가 섞인다. 각 카드에 '원본 그림 ↗' 링크만.
+      산출물 `static/weekly_highlights/<기준일>.json` + latest.json + index.json(기준일 고르기), 페이지가 런타임 fetch.
+    - 시각: 정시 = Claude 예약 작업(토 07:12 KST, 커버리지 수급 전용 세션에 묶음 — `gh workflow run weekly-highlights.yml`),
+      크론 토 08:40 KST 는 안전망. 같은 날 두 번 돌아도 같은 파일 덮어쓰기(멱등)라 guard 없음. 미국 겨울시간엔 마감이
+      06:00 KST 라 07:12 면 야후 일봉이 나와 있다(여름 05:00).
+    - 검증: 컨테이너는 야후 불가 → `build.py --demo`(시세만 가짜, 컨센·ER·수급은 실제)로 Playwright 렌더 확인, 러너
+      실검증은 브랜치 임시 push 트리거로 1회(DART 49번 방식). 테스트 23개.
