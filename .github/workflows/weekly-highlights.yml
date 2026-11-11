@@ -12,8 +12,6 @@ name: 주보 튀는 차트
 # 컨센서스·ER CSV 도 그 체크아웃에서 읽는다 → 러너가 그 리포를 _ecos/ 에 clone 한다.
 on:
   workflow_dispatch:
-  push:
-    branches: [claude/sweet-bell-c7ao5b]   # 임시 — 러너 실검증용, 머지 전 제거
   schedule:
     - cron: "40 23 * * 5"   # 금 23:40 UTC = 토 08:40 KST (안전망)
 

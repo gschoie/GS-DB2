@@ -173,7 +173,7 @@ def index_picks(charts, prices, caps, calendar_t="^KS11"):
             scanned += 1
             lo, _ = _line_values(long, ln, caps)
             r_line, m = rules.price_flags((lo if lo is not None else s).tolist(), is_index=ln["kind"] == "index")
-            label = ln["name"] + (f" ({len(cols)})" if ln["kind"] == "index" and len(ln["items"]) > 1 else "")
+            label = ln["name"] + (f" ({len(cols)})" if ln["kind"] == "index" and len(ln["items"]) > 1 and "(" not in ln["name"] else "")
             lines.append({"name": label, "kind": ln["kind"], "flag": bool(r_line),
                           "v": [round(float(x), 2) for x in s.tolist()], "r1w": _r(m["r1w"]), "z1w": _r(m["z1w"], 2)})
             reasons += [{"name": label, **x} for x in r_line]
