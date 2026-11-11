@@ -1741,7 +1741,8 @@
     - **그림은 원본 PNG 를 빌리지 않고 같은 데이터로 페이지가 직접 그린다**(SVG) — 갤러리 PNG 는 토 16:40 갱신이라
       새벽에 보면 목요일 미국 종가 그림 + 금요일 숫자가 섞인다. 각 카드에 '원본 그림 ↗' 링크만.
       산출물 `static/weekly_highlights/<기준일>.json` + latest.json + index.json(기준일 고르기), 페이지가 런타임 fetch.
-    - 시각: 정시 = Claude 예약 작업(토 07:12 KST, 커버리지 수급 전용 세션에 묶음 — `gh workflow run weekly-highlights.yml`),
+    - 시각: 정시 = Claude 예약 작업 `trig_01HUmKMvyY9o2ccHdc3Px9At`(토 07:12 KST, 커버리지 수급 전용 세션
+      `session_01BBSTxgbzr2p9BsTdDR6dxj` 에 묶음 — `gh workflow run weekly-highlights.yml --ref main`),
       크론 토 08:40 KST 는 안전망. 같은 날 두 번 돌아도 같은 파일 덮어쓰기(멱등)라 guard 없음. 미국 겨울시간엔 마감이
       06:00 KST 라 07:12 면 야후 일봉이 나와 있다(여름 05:00).
     - 검증: 컨테이너는 야후 불가 → `build.py --demo`(시세만 가짜, 컨센·ER·수급은 실제)로 Playwright 렌더 확인, 러너
