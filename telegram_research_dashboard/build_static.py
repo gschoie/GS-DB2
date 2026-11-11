@@ -258,6 +258,13 @@ def build() -> Path:
     invest_hub = ROOT / "static" / "invest.html"
     if invest_hub.exists():
         shutil.copy2(invest_hub, OUTPUT.parent / "invest.html")
+    # 이번주 튀는 차트(주보 › ✨) — weekly-highlights.yml 이 굽는 JSON 을 런타임으로 읽는 페이지 + 그 JSON 폴더. 같은 등급.
+    wkhl_page = ROOT / "static" / "weekly_highlights_report.html"
+    if wkhl_page.exists():
+        shutil.copy2(wkhl_page, OUTPUT.parent / "weekly_highlights_report.html")
+    wkhl_dir = ROOT / "static" / "weekly_highlights"
+    if wkhl_dir.exists():
+        shutil.copytree(wkhl_dir, OUTPUT.parent / "weekly_highlights", dirs_exist_ok=True)
     # 피어그룹 주가흐름표 갤러리 — ecos-fx-rates 의 PNG/SVG 를 모아 보고 내려받는 페이지. 같은 등급.
     peer_price = ROOT / "static" / "peer_price.html"
     if peer_price.exists():

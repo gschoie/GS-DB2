@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<!--
+  ✨ 이번주 튀는 차트 — 주보 5종(피어그룹 주가변동표 · 주가 INDEX 비교 · 수급 그림 · 컨센서스 · ER)에서
+  규칙(weekly_highlights/rules.py)으로 고른 '의미 있는 변화'만 모아 보여준다. 매주 토요일 새벽(미국장 마감 뒤)
+  weekly-highlights.yml 이 weekly_highlights/<기준일>.json 을 굽고, 이 페이지는 그 JSON 을 런타임으로 읽어 그린다.
+  그림은 원본 PNG 를 빌리지 않고 같은 데이터로 여기서 직접 그린다(갤러리 PNG 는 토 16:40 갱신이라 시점이 어긋난다).
+  색: 한국 증시 관례 — 상승·매수 빨강, 하락·매도 파랑. 수급 선 색은 coverage_flow 와 같다(시총 검정·기관 갈색·외인 파랑).
+-->
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>이번주 튀는 차트 — GS Research Desk</title>
+<style>
+:root{--bg:#fff;--fg:#1c2430;--muted:#6b7684;--line:#e5e8ec;--card:#f7f8fa;--btn:#1f2937;--grid:#eceef1;--zero:#9aa3ae;
+  --up:#e34948;--dn:#2a78d6;--mid:#f0efec;--warn:#b45309;--acc:#a68a64;--mc:#111;--inn:#9a7b55;--fr:#2a78cc}
+@media(prefers-color-scheme:dark){:root{--bg:#14181f;--fg:#e6e9ee;--muted:#8b93a1;--line:#2a313c;--card:#1b212b;--btn:#e6e9ee;--grid:#232a34;--zero:#5b6472;
+  --up:#e66767;--dn:#3987e5;--mid:#383835;--warn:#f59e0b;--acc:#c9ad85;--mc:#e6e9ee;--inn:#c9a97a;--fr:#5c9ae8}}
+*{box-sizing:border-box}
+body{margin:0;padding:18px 16px 48px;background:var(--bg);color:var(--fg);font:14px/1.6 -apple-system,"Malgun Gothic","Apple SD Gothic Neo",sans-serif}
+.wrap{max-width:1180px;margin:0 auto}
+h1{font-size:19px;margin:0 0 2px}
+.sub{color:var(--muted);font-size:12.5px;margin:0 0 10px}
+.note{font-size:12px;color:var(--muted);margin:0 0 14px;line-height:1.7}
+.note a{color:inherit}
+.bar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:0 0 14px}
+select{font:600 12.5px inherit;padding:5px 8px;border-radius:7px;border:1px solid var(--line);background:var(--bg);color:var(--fg)}
+.badge{font:600 11px inherit;padding:2px 7px;border-radius:9px;background:var(--mid);color:var(--muted)}
+.badge.demo{background:#fde68a;color:#7c2d12}
+.summary{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:8px;margin:0 0 18px}
+.summary a{display:block;text-decoration:none;color:inherit;border:1px solid var(--line);border-radius:8px;padding:8px 10px;background:var(--card)}
+.summary b{font-size:20px;display:block;line-height:1.2}
+.summary b.zero{color:var(--muted)}
+.summary small{color:var(--muted);font-size:11.5px}
+h2{font-size:16px;margin:26px 0 4px;padding-top:8px;border-top:2px solid var(--acc)}
+h2 small{color:var(--muted);font-weight:400;font-size:12px;margin-left:8px}
+.rule{font-size:11.5px;color:var(--muted);margin:0 0 10px}
+.empty{padding:10px 12px;border:1px dashed var(--line);border-radius:8px;color:var(--muted);font-size:12.5px;margin:0 0 10px}
+.pick{border:1px solid var(--line);border-radius:8px;margin:0 0 14px;background:var(--card);overflow:hidden}
+.pick .hd{display:flex;flex-wrap:wrap;gap:6px 10px;align-items:center;padding:9px 12px;border-bottom:1px solid var(--line);font-weight:700;font-size:14px}
+.pick .hd .sc{font:600 11px inherit;color:var(--muted);background:var(--bg);border:1px solid var(--line);border-radius:9px;padding:1px 7px}
+.pick .hd a{margin-left:auto;font-size:12px;font-weight:500;color:var(--muted)}
+.why{margin:0;padding:8px 12px 2px;list-style:none;font-size:12.5px}
+.why li{margin:0 0 3px}
+.why b{font-weight:700}
+.why .up{color:var(--up)} .why .dn{color:var(--dn)}
+.body{padding:8px 12px 12px}
+.tw{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:12.5px;font-variant-numeric:tabular-nums}
+th,td{padding:4px 7px;border-bottom:1px solid var(--line);white-space:nowrap;text-align:right}
+th{font-weight:600;color:var(--muted);background:var(--bg)}
+th:first-child,td:first-child,th.l,td.l{text-align:left}
+td.up{color:var(--up)} td.dn{color:var(--dn)}
+tr.flag td:first-child{font-weight:700}
+tr.dim td{color:var(--muted)}
+svg.spark{width:96px;height:22px;display:block;overflow:visible}
+svg.chart{display:block;width:100%;height:230px;overflow:visible}
+.legend{display:flex;flex-wrap:wrap;gap:4px 12px;font-size:12px;margin:6px 0 0}
+.legend i{display:inline-block;width:14px;height:3px;vertical-align:middle;margin-right:5px;border-radius:2px}
+.legend .f{font-weight:700}
+.legend .m{color:var(--muted)}
+.cap{font-size:11.5px;color:var(--muted);margin:4px 0 0}
+details.more summary{cursor:pointer;font-size:12px;color:var(--muted);margin:8px 0 4px}
+.items{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,480px),1fr));gap:10px}
+.item{background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:8px 10px}
+.item h4{margin:0 0 4px;font-size:13.5px}
+.item .why{padding:0 0 4px}
+.erbar{position:relative;display:inline-block;width:110px;height:11px;background:var(--mid);border-radius:2px;vertical-align:middle;margin-right:6px}
+.erbar i{position:absolute;top:0;bottom:0;border-radius:2px}
+.erbar:after{content:"";position:absolute;left:50%;top:-2px;bottom:-2px;width:1px;background:var(--zero)}
+.lo{color:var(--warn);font-size:11px}
+.msg{padding:14px;color:var(--warn);font-size:13px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>✨ 이번주 튀는 차트 <span class="badge" id="asof"></span> <span class="badge demo" id="demo" hidden>데모 데이터</span></h1>
+  <p class="sub" id="sub">주보 5종에서 규칙으로 고른 '의미 있는 변화'만. 없는 주는 없다고 적는다.</p>
+  <div class="bar">
+    <label>기준일 <select id="dates"></select></label>
+    <span class="badge" id="asofd"></span>
+  </div>
+  <div class="summary" id="summary"></div>
+  <div id="out"></div>
+  <p class="note" id="foot"></p>
+</div>
+<script>
+(function(){
+  const $=(s,r=document)=>r.querySelector(s);
+  const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+  const fmtP=(v,d=1)=>v==null?"–":(v*100>=0?"+":"")+(v*100).toFixed(d)+"%";
+  const cls=v=>v==null?"":v>0?"up":v<0?"dn":"";
+  const fmtN=v=>v==null?"–":Math.round(v).toLocaleString();
+  const fdate=s=>s&&s.length===6?`${s.slice(2,4)}/${s.slice(4,6)}`:(s||"").slice(5).replace("-","/");
+  const PAL=["#1F5FBF","#A68A64","#2CA02C","#D62728","#8C6BB1","#FF9F1C","#17BECF","#BCBD22","#E377C2","#7F7F7F","#111111"];
+  const qs=new URLSearchParams(location.search);
+  const want=qs.get("d");
+  const base="weekly_highlights/";
+
+  function reasonText(r){
+    const up=/\+\d|신고가|흑자|\(−\)→\(\+\)/.test(r.text)&&!/-\d/.test(r.text.split("—")[0]);
+    const dn=/-\d|신저가|적자|\(\+\)→\(−\)/.test(r.text.split("—")[0]);
+    return `<li>${r.name?`<b>${esc(r.name)}</b> `:""}<span class="${dn?"dn":up?"up":""}">${esc(r.text)}</span></li>`;
+  }
+  const why=(rs,n=8)=>`<ul class="why">${rs.slice(0,n).map(reasonText).join("")}${rs.length>n?`<li class="cap">… 외 ${rs.length-n}건</li>`:""}</ul>`;
+
+  // ─── 그림 ───
+  function spark(vals){
+    if(!vals||vals.length<2)return "";
+    const W=96,H=22,mn=Math.min(...vals),mx=Math.max(...vals),sp=(mx-mn)||1;
+    const pts=vals.map((v,i)=>`${(i/(vals.length-1)*W).toFixed(1)},${(H-2-(v-mn)/sp*(H-4)).toFixed(1)}`).join(" ");
+    const col=vals[vals.length-1]>=vals[0]?"var(--up)":"var(--dn)";
+    return `<svg class="spark" viewBox="0 0 ${W} ${H}"><polyline fill="none" stroke="${col}" stroke-width="1.4" points="${pts}"/></svg>`;
+  }
+  function lineChart(dates,lines,opt={}){
+    // lines: [{name,v:[],flag,color}] — 같은 x(dates) 위에 여러 선. 왼쪽 축 하나.
+    const W=720,H=230,pl=44,pr=14,pt=10,pb=26;
+    const all=lines.flatMap(l=>l.v).filter(v=>v!=null);
+    if(!all.length)return "";
+    let mn=Math.min(...all),mx=Math.max(...all);if(mn===mx){mn-=1;mx+=1}
+    const pad=(mx-mn)*0.06;mn-=pad;mx+=pad;
+    const n=dates.length,x=i=>pl+(n<=1?0:i*(W-pl-pr)/(n-1)),y=v=>pt+(mx-v)/(mx-mn)*(H-pt-pb);
+    const ticks=5,g=[];for(let k=0;k<=ticks;k++){const v=mn+(mx-mn)*k/ticks;g.push(`<line x1="${pl}" x2="${W-pr}" y1="${y(v).toFixed(1)}" y2="${y(v).toFixed(1)}" stroke="var(--grid)"/><text x="${pl-5}" y="${(y(v)+4).toFixed(1)}" text-anchor="end" font-size="10.5" fill="var(--muted)">${opt.fmt?opt.fmt(v):v.toFixed(0)}</text>`)}
+    if(opt.zero!==false&&mn<opt.zeroAt&&mx>opt.zeroAt)g.push(`<line x1="${pl}" x2="${W-pr}" y1="${y(opt.zeroAt)}" y2="${y(opt.zeroAt)}" stroke="var(--zero)" stroke-dasharray="3 3"/>`);
+    const xl=[0,Math.floor((n-1)/2),n-1].filter((v,i,a)=>a.indexOf(v)===i).map(i=>`<text x="${x(i).toFixed(1)}" y="${H-8}" text-anchor="${i===0?"start":i===n-1?"end":"middle"}" font-size="10.5" fill="var(--muted)">${esc(fdate(dates[i]))}</text>`);
+    const paths=lines.map((l,i)=>{const col=l.color||PAL[i%PAL.length];const pts=l.v.map((v,j)=>v==null?null:`${x(j).toFixed(1)},${y(v).toFixed(1)}`).filter(Boolean).join(" ");
+      return `<polyline fill="none" stroke="${col}" stroke-width="${l.flag?2.8:1.3}" opacity="${l.flag||!lines.some(z=>z.flag)?1:0.55}" points="${pts}"/>`}).join("");
+    const legend=lines.map((l,i)=>`<span class="${l.flag?"f":""}"><i style="background:${l.color||PAL[i%PAL.length]}"></i>${esc(l.name)}${l.tail?` <span class="m">${esc(l.tail)}</span>`:""}</span>`).join("");
+    return `<svg class="chart" viewBox="0 0 ${W} ${H}">${g.join("")}${paths}${xl.join("")}</svg><div class="legend">${legend}</div>`;
+  }
+  function flowChart(c){
+    // 시총(좌, 검정) + 외인/기관 1년 누적 순매수(우, 파랑/갈색) — coverage_flow ④ 와 같은 구성
+    const W=720,H=200,pl=52,pr=52,pt=10,pb=24,n=c.d.length;
+    const x=i=>pl+i*(W-pl-pr)/(n-1);
+    const mcs=c.mc.filter(v=>v!=null);let m0=Math.min(...mcs),m1=Math.max(...mcs);if(m0===m1)m1=m0+1;const mp=(m1-m0)*.06;m0-=mp;m1+=mp;
+    const fl=c.fr.concat(c.in).filter(v=>v!=null);let f0=Math.min(0,...fl),f1=Math.max(0,...fl);if(f0===f1)f1=f0+1;const fp=(f1-f0)*.06;f0-=fp;f1+=fp;
+    const yl=v=>pt+(m1-v)/(m1-m0)*(H-pt-pb),yr=v=>pt+(f1-v)/(f1-f0)*(H-pt-pb);
+    const line=(arr,yf,col,w)=>`<polyline fill="none" stroke="${col}" stroke-width="${w}" points="${arr.map((v,i)=>v==null?null:`${x(i).toFixed(1)},${yf(v).toFixed(1)}`).filter(Boolean).join(" ")}"/>`;
+    const g=[];for(let k=0;k<=4;k++){const v=m0+(m1-m0)*k/4,f=f0+(f1-f0)*k/4;g.push(`<line x1="${pl}" x2="${W-pr}" y1="${yl(v).toFixed(1)}" y2="${yl(v).toFixed(1)}" stroke="var(--grid)"/><text x="${pl-5}" y="${(yl(v)+4).toFixed(1)}" text-anchor="end" font-size="10" fill="var(--muted)">${(v/10).toFixed(0)}</text><text x="${W-pr+5}" y="${(yr(f)+4).toFixed(1)}" font-size="10" fill="var(--muted)">${f.toFixed(0)}</text>`)}
+    g.push(`<line x1="${pl}" x2="${W-pr}" y1="${yr(0)}" y2="${yr(0)}" stroke="var(--zero)"/>`);
+    const xl=[0,Math.floor((n-1)/2),n-1].map(i=>`<text x="${x(i).toFixed(1)}" y="${H-7}" text-anchor="${i===0?"start":i===n-1?"end":"middle"}" font-size="10" fill="var(--muted)">${fdate(c.d[i])}</text>`);
+    // 이번 주(마지막 5거래일) 음영
+    const sh=n>6?`<rect x="${x(n-6).toFixed(1)}" y="${pt}" width="${(x(n-1)-x(n-6)).toFixed(1)}" height="${H-pt-pb}" fill="var(--acc)" opacity=".10"/>`:"";
+    return `<svg class="chart" style="height:200px" viewBox="0 0 ${W} ${H}">${sh}${g.join("")}${line(c.mc,yl,"var(--mc)",1.6)}${line(c.in,yr,"var(--inn)",1.8)}${line(c.fr,yr,"var(--fr)",1.8)}${xl.join("")}</svg>
+      <div class="legend"><span><i style="background:var(--mc)"></i>시가총액(십억원, 좌)</span><span><i style="background:var(--inn)"></i>기관 누적 순매수(억원, 우)</span><span><i style="background:var(--fr)"></i>외인 누적 순매수(억원, 우)</span><span class="m">음영 = 이번 주</span></div>`;
+  }
+
+  // ─── 소스별 카드 ───
+  function rowsTable(rows,all){
+    const list=all?rows:rows.filter(r=>r.flag);
+    return `<div class="tw"><table><thead><tr><th class="l">종목</th><th class="l">그룹</th><th>1W</th><th>1M</th><th>3M</th><th>YTD</th><th>1Y</th><th>3개월</th><th>기준</th></tr></thead><tbody>${
+      list.map(r=>`<tr class="${r.flag?"flag":"dim"}"><td>${esc(r.name)}</td><td class="l">${esc(r.group)}</td>${["1W","1M","3M","YTD","1Y"].map(k=>`<td class="${cls(r.r[k])}">${fmtP(r.r[k])}</td>`).join("")}<td>${spark(r.spark)}</td><td>${esc(r.last)}</td></tr>`).join("")}</tbody></table></div>`;
+  }
+  function pickPeer(p){
+    return `${why(p.reasons)}<div class="body">${rowsTable(p.chart.rows,false)}
+      <details class="more"><summary>섹션 전체 ${p.chart.rows.length}행 보기</summary>${rowsTable(p.chart.rows,true)}</details></div>`;
+  }
+  function pickIndex(p){
+    const lines=p.chart.lines.map((l,i)=>({...l,color:PAL[i%PAL.length],tail:l.r1w==null?"":`1W ${fmtP(l.r1w)}`}));
+    return `${why(p.reasons)}<div class="body">${lineChart(p.chart.dates,lines,{zeroAt:100,fmt:v=>v.toFixed(0)})}<p class="cap">${esc(p.chart.note)} · 굵은 선 = 규칙에 걸린 선</p></div>`;
+  }
+  function pickFlow(p){
+    return `<div class="body"><div class="items">${p.items.map(it=>`<div class="item"><h4>${esc(it.name)} <span class="badge">${esc(it.code)}</span></h4>${why(it.reasons,4)}${flowChart(it.chart)}</div>`).join("")}</div></div>`;
+  }
+  function pickCons(p){
+    // 기간(4Q26E·1Q27E / 2026E·2027E)마다 스냅샷 날짜가 같지 않을 수 있어 선마다 자기 날짜축 → 공통 날짜 합집합에 올린다
+    const dates=[...new Set(p.chart.lines.flatMap(l=>l.d))].sort();
+    const q=p.chart.lines.filter(l=>l.kind==="quarter"),a=p.chart.lines.filter(l=>l.kind==="annual");
+    const draw=(ls,title)=>{if(!ls.length)return "";const lines=ls.map((l,i)=>{const m=Object.fromEntries(l.d.map((d,j)=>[d,l.v[j]]));let last=null;const v=dates.map(d=>{if(m[d]!=null)last=m[d];return last});
+        const v0=l.v[0],v1=l.v[l.v.length-1];return {name:l.name,flag:l.flag,color:PAL[i%PAL.length],v,tail:`${fmtN(v1)}억 (${dates.length>1&&v0?fmtP(v1/v0-1):"–"})`}});
+      return `<div><div class="cap" style="margin:0 0 2px;font-weight:600">${title}</div>${lineChart(dates,lines,{zero:false,fmt:v=>fmtN(v)})}</div>`};
+    return `${why(p.reasons)}<div class="body" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:12px">${draw(q,"분기 영업이익 컨센(억원)")}${draw(a,"연간 영업이익 컨센(억원)")}</div><p class="cap" style="padding:0 12px 10px">${esc(p.chart.note)} · 괄호 = 그림 구간 처음 대비</p>`;
+  }
+  function erBar(v){if(v==null)return "–";const w=Math.min(100,Math.abs(v))/2,left=v>=0?50:50-w;return `<span class="erbar"><i style="left:${left}%;width:${w}%;background:var(${v>=0?"--up":"--dn"})"></i></span>${v>=0?"+":""}${v.toFixed(0)}`}
+  function pickEr(p){
+    return `<div class="body"><div class="tw"><table><thead><tr><th class="l">종목</th><th class="l">기간</th><th>애널</th><th>ER 30일</th><th>↑/↓ 30일</th><th>EPS 1M</th><th>EPS 3M</th><th class="l">왜</th></tr></thead><tbody>${
+      p.chart.rows.map(r=>`<tr class="flag"><td>${esc(r.name)} <span class="badge">${esc(r.region)}</span></td><td class="l">${esc(r.period)}</td><td>${r.n==null?"–":r.n}${r.n!=null&&r.n<5?' <span class="lo">⚠적음</span>':""}</td><td>${erBar(r.er30)}</td><td>${r.up30==null?"–":`${r.up30}/${r.down30}`}</td><td class="${cls(r.eps1m)}">${r.flip?"전환":fmtP(r.eps1m)}</td><td class="${cls(r.eps3m)}">${r.flip?"전환":fmtP(r.eps3m)}</td><td class="l" style="white-space:normal;min-width:220px">${r.reasons.map(x=>esc(x.text)).join(" · ")}</td></tr>`).join("")}</tbody></table></div>
+      <p class="cap">ER = (상향 − 하향) ÷ 애널리스트 수 × 100 · ${esc(p.chart.date)} 기준 · 애널 5명 미만은 1건에도 크게 튄다</p></div>`;
+  }
+  const RENDER={peer:pickPeer,index:pickIndex,flow:pickFlow,cons:pickCons,er:pickEr};
+
+  function render(p){
+    $("#asof").textContent=`기준 ${p.asof} (주간 ${p.week.start.slice(5).replace("-","/")}~${p.week.end.slice(5).replace("-","/")})`;
+    $("#demo").hidden=!p.demo;
+    const ad=p.asof_detail||{};
+    $("#asofd").textContent=`시세 ${ad.prices||"–"} · 수급 ${ad.flow||"–"} · 컨센 ${ad.cons||"–"} · ER ${ad.er||"–"}`;
+    const total=p.sources.reduce((s,x)=>s+x.picks.length,0);
+    $("#sub").textContent=total?`이번 주 ${total}건 꼽힘 — 숫자가 임계를 넘은 것만, 큰 것부터. 없는 소스는 '없음'으로 둔다.`:"이번 주는 다섯 소스 모두 임계를 넘은 변화가 없다.";
+    $("#summary").innerHTML=p.sources.map(s=>`<a href="#src-${s.key}"><b class="${s.picks.length?"":"zero"}">${s.picks.length}</b>${esc(s.title)}<br><small>${s.scanned}개 훑음</small></a>`).join("");
+    $("#out").innerHTML=p.sources.map(s=>`<h2 id="src-${s.key}">${esc(s.title)}<small>${s.picks.length}건 / ${s.scanned} 훑음 · <a href="${esc(s.link)}" target="_blank" rel="noopener">원본 페이지 ↗</a></small></h2><p class="rule">규칙: ${esc(s.rule)}</p>${
+      s.picks.length?s.picks.map(pk=>`<section class="pick"><div class="hd">${esc(pk.title)}<span class="sc">score ${pk.score}</span><a href="${esc(pk.link)}" target="_blank" rel="noopener">원본 그림 ↗</a></div>${RENDER[s.key](pk)}</section>`).join(""):`<div class="empty">이번 주 의미 있는 변화 없음 (${s.scanned}개 훑음)</div>`}`).join("");
+    const th=p.thresholds||{};
+    $("#foot").innerHTML=`판정은 전부 규칙(weekly_highlights/rules.py). 임계: 1주 등락 ±${(th.ret_1w*100).toFixed(0)}%(묶음 지수 ±${(th.ret_1w_index*100).toFixed(0)}%) · z ±${th.z_1w} · 수급 시총대비 ${(th.flow_mcap*100).toFixed(1)}% · 컨센 1주 ±${(th.cons_1w*100).toFixed(0)}% / 1개월 ±${(th.cons_1m*100).toFixed(0)}% · |ER30| ≥ ${th.er30} · EPS 1M ±${(th.eps_1m*100).toFixed(0)}%. 생성 ${esc(p.generated_at)} UTC.
+      원본 그림(갤러리 PNG)은 토요일 16:40 KST 에 갱신되므로 새벽에 보면 하루 전 그림일 수 있다 — 이 페이지의 숫자·그림은 같은 시점의 데이터로 직접 그린 것.`;
+  }
+  function fail(m){$("#out").innerHTML=`<p class="msg">${esc(m)}</p>`}
+
+  fetch(base+"index.json?t="+Date.now(),{cache:"no-store"}).then(r=>r.ok?r.json():{dates:[]}).catch(()=>({dates:[]})).then(ix=>{
+    const sel=$("#dates");const dates=ix.dates||[];
+    sel.innerHTML=dates.map(d=>`<option value="${d}">${d}</option>`).join("")||`<option value="">(최신)</option>`;
+    const pick=want&&dates.includes(want)?want:(dates[0]||"");
+    if(pick)sel.value=pick;
+    sel.onchange=()=>{const u=new URL(location.href);u.searchParams.set("d",sel.value);location.href=u.toString()};
+    const file=pick?pick+".json":"latest.json";
+    return fetch(base+file+"?t="+Date.now(),{cache:"no-store"}).then(r=>{if(!r.ok)throw new Error("HTTP "+r.status);return r.json()}).then(render);
+  }).catch(e=>fail("아직 산출물이 없다 — 첫 토요일 실행 뒤에 채워진다. ("+e.message+")"));
+})();
+</script>
+</body>
+</html>
