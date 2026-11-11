@@ -1707,12 +1707,18 @@
     과거 소급 불가). ER = (상향−하향)/애널 수×100. 57종목: 조선(커버리지 9 + Yangzijiang·CSSC·Seatrium)·방산(한국 5 +
     미국 체계 7 + 유럽 체계 8)·건기(두산밥캣·HD건설기계 + 해외 12, Kobelco = Kobe Steel). 화면 `static/er_report.html?s=조선|방산|건설기계`
     (raw CSV 런타임 fetch, 사이드바 주보 맨 아래 `📐 ER › 조선/방산/건설기계`).
-    - **정시 발사 = Claude 예약** `trig_012TP2cZcMjXxqnykGyn9AxJ`(평일 17:12 KST) → ecos-fx-rates 가 붙은 전용 세션
-      `session_015Pd8bjcVg89M261LkD3259`(sonnet, 발사 1회 ≈ $0.1)이 `gh workflow run earnings-revision.yml`. 첫날 17:10 크론이
-      아예 안 와서(11/11 — 같은 날 피어그룹 크론도 8시간 지연) 옮겼다. 크론 평일 17:20 은 안전망(같은 날 재실행은 그날 값 덮어쓰기라 무해).
+    - **정시 발사 = Claude 예약** `trig_01P6GJWVbrRxjdAxnTCQBB5n`(평일 16:44 KST) → ecos-fx-rates 가 붙은 전용 세션
+      `session_015Pd8bjcVg89M261LkD3259`(sonnet, 발사 1회 ≈ $0.1)이 **ER·피어그룹(peergroup-price)·컨센서스(consensus-chart)
+      3개를 한 번에** dispatch. 첫날 17:10 크론이 아예 안 와서(11/11 — 같은 날 피어그룹 크론도 8시간 지연) 옮겼다. 각 리포 크론
+      (ER 평일 17:20 · 피어그룹 16:40 · 컨센서스 16:50)은 안전망 — 같은 날 재실행은 덮어쓰기라 무해. 17:12 ER 단독 예약
+      `trig_012TP2cZcMjXxqnykGyn9AxJ` 는 비활성(통합으로 대체). **예약 프롬프트는 그 예약이 묶인 세션에서만 고칠 수 있다**
+      (다른 세션에서 update_trigger 는 거부 — 시각·활성만 변경 가능).
+    - **묶인 세션은 발사 기록이 쌓일수록 비싸진다**: 커버리지 수급 세션은 11/11 기준 1회 $1.5~1.9(컨텍스트 40만+ 토큰,
+      누적 ~$29). 무거워지면 새 세션을 만들어 예약을 새로 묶을 것.
     - 한계: 야후 커버 증권사가 블룸버그보다 적다(CSSC·HD현대마린엔진 1명, 두산밥캣 2명 등 — 화면 ⚠적음). 한국 종목은
       FnGuide 증권사별 추정으로 따로 계산하는 게 다음 후보.
-    - 참고: 주보 4종 예약 `trig_01VEqTcdRitLg6oWSSxQc8uQ` 의 ecos-fx-rates dispatch 2건은 그 세션에 ecos 리포가 없어
-      403 → 피어그룹·컨센서스는 크론 안전망에만 기대는 중(11/10 피어그룹 크론 00:46 KST 도착).
+    - 주보 4종 예약 `trig_01VEqTcdRitLg6oWSSxQc8uQ`(16:42, 커버리지 수급 세션)의 ecos dispatch 2건은 그 세션에 ecos 리포가
+      없어 매번 '범위 밖'으로 건너뛴다(11/10 피어그룹 크론 00:46 KST 도착) → 위 16:44 예약이 대신 맡는다. 그 예약의
+      수급 그림(charts_only)은 그대로 유효.
 
 이후 작업은 git log와 이 파일을 갱신하며 이어간다.
