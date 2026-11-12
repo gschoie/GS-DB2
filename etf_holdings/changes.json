@@ -1,15 +1,66 @@
 {
   "date": "2026-11-12",
   "prev_date": "2026-11-11",
-  "generated_at": "2026-11-12 09:20",
+  "generated_at": "2026-11-12 10:20",
   "base_date": "",
   "prev_base_date": "",
   "market_date": "2026-11-12",
   "prev_market_date": "2026-11-11",
-  "fetched_at": "2026-11-12 09:20",
+  "fetched_at": "2026-11-12 10:20",
   "prev_fetched_at": "2026-11-11 10:20",
   "first_run": false,
   "etfs": [
+    {
+      "code": "476850",
+      "label": "KoAct 배당성장액티브",
+      "group": "KoAct",
+      "flow_factor": 1.0,
+      "new": [
+        {
+          "key": "383310",
+          "name": "에코프로에이치엔",
+          "code": "383310",
+          "weight": 2.04,
+          "shares": 715.0
+        }
+      ],
+      "gone": [
+        {
+          "key": "005380",
+          "name": "현대차",
+          "code": "005380",
+          "weight_prev": 1.43,
+          "shares_prev": 43.0
+        }
+      ],
+      "moves": [
+        {
+          "key": "281820",
+          "name": "케이씨텍",
+          "code": "281820",
+          "shares_now": 425.0,
+          "shares_prev": 316.0,
+          "active_share_pct": 34.5,
+          "active_weight_pp": 0.85,
+          "weight_now": 3.65,
+          "weight_prev": 2.39,
+          "headline": false
+        },
+        {
+          "key": "009150",
+          "name": "삼성전기",
+          "code": "009150",
+          "shares_now": 19.0,
+          "shares_prev": 14.0,
+          "active_share_pct": 35.7,
+          "active_weight_pp": 0.49,
+          "weight_now": 2.05,
+          "weight_prev": 1.49,
+          "headline": false
+        }
+      ],
+      "has_weight": true
+    },
     {
       "code": "410870",
       "label": "TIME K컬처액티브",
@@ -95,10 +146,10 @@
     "share_pct_min": 30.0
   },
   "summary": {
-    "etfs_changed": 3,
-    "new_total": 3,
-    "gone_total": 3,
-    "moves_total": 0,
+    "etfs_changed": 4,
+    "new_total": 4,
+    "gone_total": 4,
+    "moves_total": 2,
     "universe": 20
   }
 }
