@@ -1,0 +1,671 @@
+{
+ "date": "2026-11-14",
+ "meta": {
+  "window": "11-13 06:00~11-14 06:00 KST",
+  "engine": "Gemini(gemini-2.5-flash)",
+  "generated_at": "2026-11-14T06:35+09:00"
+ },
+ "stats": {
+  "channels": 98,
+  "messages": 2232,
+  "groups": 2108
+ },
+ "one_liner": "엔비디아 젠슨 황 CEO 사임발 AI 시장 불확실성 증대와 한국전력 등 주요 기업 실적 부진 속, 정부의 자본시장 활성화 정책 논의가 시장의 관심을 모았다.",
+ "themes": [
+  {
+   "name": "엔비디아 — 젠슨 황 CEO 사임발 악재 및 AI 시장 불확실성",
+   "narrative": "엔비디아 젠슨 황 CEO의 갑작스러운 사임 소식이 미국 법무부 조사 및 대중국 수출 통제 강화 논란과 겹치며 AI 반도체 시장 전반에 대한 불확실성을 증폭시켰다. 이는 엔비디아 주가 급락으로 이어졌으나, 일부 경쟁사 주가는 상승하는 등 차별화된 반응을 보였다.",
+   "status": "new",
+   "strength": 5,
+   "keywords": [
+    "사임",
+    "젠슨 사임",
+    "CEO 사임",
+    "황은",
+    "법무부",
+    "맡고"
+   ],
+   "evidence": [
+    {
+     "channel": "키움증권 전략/시황 한지영",
+     "quote": "1) 엔비디아(-4.3%) 젠슨황 CEO의 사임 소식, 2) 네비우스(-16.8%)의 실적 부진, 3) 이란과 합의가 불필요하다는 트럼프 발언 이후 상승한 WTI 유가, 4) 일부 연준 위원들의 추가 인상 발언에 따른 미 10년물 금리 5.1%대 재진입 등이 약세 요인이었습다."
+    },
+    {
+     "channel": "하나 중국/신흥국 전략 김경환",
+     "quote": ">>젠슨 황 전격 사임, 배후에 의문 증폭… 백악관이 암묵적으로 개입했나? 향후 복귀 가능성은? (중국언론)"
+    },
+    {
+     "channel": "메리츠증권 리서치",
+     "quote": "엔비디아 CEO 교체는 미국의 대중국 AI 반도체 수출통제 정책과 엔비디아의 사업 확대 전략 사이에 누적됐던 갈등이 안보 의혹이 계기가 되어 지배구조 위기로 확대된 사건으로 판단"
+    }
+   ]
+  },
+  {
+   "name": "자본시장 — 대통령 주재 정책 간담회 개최",
+   "narrative": "이재명 대통령이 자본시장 정책 간담회를 주재하며 의무공개매수 제도 도입, 코스닥 세그먼트 분리 등 자본시장 활성화 및 저평가 해소 방안을 논의했다. 이는 시장에 긍정적인 기대감을 조성했으나, 단기 시장 안정 대책에 대한 구체적인 실행 계획 부재로 기대 충족에는 제한적이라는 평가도 있다.",
+   "status": "new",
+   "strength": 4,
+   "keywords": [
+    "자본시장"
+   ],
+   "evidence": [
+    {
+     "channel": "김현석(자본주의 바이어스 있는 채널입니다)",
+     "quote": "속보: 이재명 대통령이 오늘 서울 여의도 한국거래소에서 '자본시장 정책 간담회'를 주재하며 의무공개매수 제도 도입과 코스닥 세그먼트 분리를 논의한다."
+    },
+    {
+     "channel": "서화백의 AI놀이🚀",
+     "quote": "💡 요약 대통령의 자본시장 활성화 및 저평가 해소 의지 표명으로 시장에 긍정적 기대감 조성."
+    },
+    {
+     "channel": "대신 전략. 돌직구",
+     "quote": "금일 진행된 자본시장 정책 간담회에서는 증시안정펀드, 주주환원 강화, 코스닥 구조개편, 장기 투자자금 확충 방안 등을 논의. 다만 증시안정펀드의 즉각적인 가동이나 구체적인 실행 계획이 제시되지 않으면서 단기 시장안정 대책에 대한 기대를 충족시키기에는 제한적"
+    }
+   ]
+  },
+  {
+   "name": "기업 실적 — 한국전력, 한화생명 등 주요 기업 실적 부진",
+   "narrative": "한국전력은 중동 전쟁에 따른 연료비 및 구입전력비 증가로 인한 어닝 쇼크로 주가가 급락했으며, 한화생명은 투자손익 변동성으로 아쉬운 실적을 기록했다. 이와 함께 여러 기업에서 적자 지속 또는 적자 전환 소식이 이어지며 시장의 실적 우려가 부각되었다.",
+   "status": "ongoing",
+   "strength": 4,
+   "keywords": [
+    "적자지속",
+    "적자전환 DART",
+    "적자지속 개별",
+    "한국전력",
+    "연료비",
+    "한화생명",
+    "투자손익"
+   ],
+   "evidence": [
+    {
+     "channel": "대신 전략. 돌직구",
+     "quote": "유틸리티 업종에서 한국전력(-10.4%)은 실적 쇼크로 급락했고, 한국가스공사(-2.1%), 지역난방공사(-0.9%) 등도 하락"
+    },
+    {
+     "channel": "epic AI - 투자 어시스턴트",
+     "quote": "실적 부진 배경으로 중동 전쟁에 따른 연료비·구입전력비 증가와 전력판매수익 감소가 제시됐으며, 9월 말 연결 부채는 209조6,000억원, 1~9월 이자 지출은 약 3조2,000억원으로 보고됐고, 주가는 9.79% 하락한 27,650원에 마감했습니다."
+    },
+    {
+     "channel": "메리츠증권 리서치",
+     "quote": "한화생명 (BUY / 5,700원 – 하향): 아쉬운 투자손익 변동성"
+    },
+    {
+     "channel": "씽크풀-주식투자속보(구 AI라씨로)",
+     "quote": "[실적속보]프레스티지바이오로직스, 올해 3Q 매출액 40.3억(+245%) 영업이익 -43.9억(적자지속) (개별)"
+    }
+   ]
+  },
+  {
+   "name": "개별 기업 — 메모리 프로브카드, SOFC, 엔진 사업 등 성장 기대",
+   "narrative": "메모리향 프로브카드 기업인 Micronics Japan의 고성장, SOFC 장비의 압도적인 수익성을 보인 코세스, 수주잔고를 바탕으로 실적 성장이 기대되는 지엔씨에너지, 그리고 엔진 사업 확대를 계획하는 HD현대중공업 등 특정 산업 및 기업에서 견조한 실적과 성장 기대감이 나타났다.",
+   "status": "ongoing",
+   "strength": 3,
+   "keywords": [
+    "판관비",
+    "평가이익",
+    "순자산"
+   ],
+   "evidence": [
+    {
+     "channel": "여의도스토리 Ver2.0-习近平是个狗东西",
+     "quote": "[메리츠증권 전기전자/IT부품 양승수] Micronics Japan Co. Ltd(6871.JP): 메모리향 높은 비중, 디스카운트에서 프리미엄으로 ▶️ CY3Q26 Review: 메모리향 프로브카드 고성장 지속"
+    },
+    {
+     "channel": "텐렙",
+     "quote": "[SK증권 미래산업/미드스몰캡] Analyst 허선재/02-3773-8197 ▶️코세스(089890/KQ) / 매수(유지) / TP 7.3만원 (상향, Upside 113.1%) ★SOFC 수익성 확인, 27E OP 1,000억원 전망"
+    },
+    {
+     "channel": "텐렙",
+     "quote": "[NH/스몰캡(목진원)] [지엔씨에너지] ★수주잔고 7,264억원, 실적은 어차피 따라온다"
+    },
+    {
+     "channel": "GS의 조선/기계/방산 「바담」",
+     "quote": "⚙️ ‘파죽지세’ HD현대 엔진사업… 2030년 매출 10조 찍나 출처: 파이낸셜뉴스 링크: https://www.fnnews.com/news/202611121823524543 HD현대중공업, 8,336억원 투자해 힘센엔진 생산능력 2025년 3GW → 2030년 7.2GW 확대 계획 엔진 수주잔고 87.8억달러(YTD…"
+    }
+   ]
+  },
+  {
+   "name": "기업 가치 — 순자산가치(NAV) 및 PBR 재평가 논의",
+   "narrative": "코스피 주가순자산비율(PBR) 상승 진단과 함께, 순자산가치(NAV) 대비 할인율을 적용한 목표주가 산정 등 기업의 순자산가치에 대한 시장의 관심이 높아지고 있다. 이는 기업의 내재가치와 관련된 평가 지표들이 활발히 논의되고 있음을 시사한다.",
+   "status": "ongoing",
+   "strength": 3,
+   "keywords": [
+    "NAV",
+    "순자산",
+    "순자산가치",
+    "순자산가치 NAV",
+    "주당 순자산가치",
+    "평가이익",
+    "공정가치"
+   ],
+   "evidence": [
+    {
+     "channel": "김현석(자본주의 바이어스 있는 채널입니다)",
+     "quote": "발제에 나서는 자본시장연구원은 코스피 주가순자산비율(PBR)이 지난달 기준 1.74로 과거보다 올랐다고 진단한다."
+    },
+    {
+     "channel": "epic AI - 투자 어시스턴트",
+     "quote": "목표주가 산정에는 기존과 동일한 순자산가치(NAV) 대비 할인율 40%를 적용했으며, 현재 NAV 대비 할인율은 51.2%로 제시했습니다."
+    },
+    {
+     "channel": "키움증권 해외선물 톡톡",
+     "quote": "3분기 운용 결과 순자산 3억9064만달러 증가…보유 솔라나 1130만개로 늘어 미국 자산운용사 비트와이즈의 솔라나 현물 상장지수펀드(ETF)인 비트와이즈 솔라나 스테이킹 ETF(AMEX:BSOL)의 순자산이 올해 3분기 말 13 억 달러를 넘어섰다."
+    }
+   ]
+  }
+ ],
+ "community_mood": {
+  "score": -50,
+  "summary": "엔비디아 젠슨 황 CEO 사임 소식과 미국 증시 하락에 대한 불안감과 좌절감이 팽배하며, 일부 투자자들은 큰 손실을 겪고 인생 초기화를 언급하는 등 공포 심리가 확산되고 있다.",
+  "hot_stocks": []
+ },
+ "signals": {
+  "spikes": [
+   {
+    "term": "사임",
+    "count": 99,
+    "burst": 15.28292220113852,
+    "base_daily": 3.9,
+    "new": false
+   },
+   {
+    "term": "젠슨 사임",
+    "count": 32,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "NAV",
+    "count": 30,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "적자지속",
+    "count": 105,
+    "burst": 9.190760773880553,
+    "base_daily": 6.9,
+    "new": false
+   },
+   {
+    "term": "적자전환 DART",
+    "count": 26,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "평가이익",
+    "count": 25,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "법무부",
+    "count": 22,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "맡고",
+    "count": 22,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "순자산",
+    "count": 22,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "자본시장",
+    "count": 22,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "적자지속 개별",
+    "count": 22,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "황은",
+    "count": 21,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "순자산가치",
+    "count": 20,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "스폰서",
+    "count": 20,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "공정가치",
+    "count": 19,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "판관비",
+    "count": 19,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "순자산가치 NAV",
+    "count": 19,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "주당 순자산가치",
+    "count": 19,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "한국전력",
+    "count": 42,
+    "burst": 20.976559883915616,
+    "base_daily": 1.1,
+    "new": false
+   },
+   {
+    "term": "한화생명",
+    "count": 18,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "적자전환 구분",
+    "count": 18,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "CEO 사임",
+    "count": 47,
+    "burst": 15.962163187855788,
+    "base_daily": 1.7,
+    "new": false
+   },
+   {
+    "term": "투자손익",
+    "count": 17,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "PI",
+    "count": 17,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "연료비",
+    "count": 17,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   }
+  ],
+  "top_posts": [
+   {
+    "channels": 4,
+    "channel": "키움증권 전략/시황 한지영",
+    "head": "[11/13, 장 시작 전 생각: 수급 변화들, 키움 한지영] - 다우 -0.4%, S&P500 -0.4%, 나스닥 -0.4% - 엔비디아 -4.3%, 마이크론 -1.6%, AMD +5.9% - WTI 88.6달러, 미 10년물 금리 5.13%, 30년물 금리 5.46% 1. 미국 증시는 여러 악재에 노출됐음에도, 하방경…",
+    "url": "https://t.me/hedgecat0301/2999",
+    "time_kst": "11-13 07:47"
+   },
+   {
+    "channels": 4,
+    "channel": "여의도스토리 Ver2.0-习近平是个狗东西",
+    "head": "[메리츠증권 전기전자/IT부품 양승수] Micronics Japan Co. Ltd(6871.JP): 메모리향 높은 비중, 디스카운트에서 프리미엄으로 ▶️ CY3Q26 Review: 메모리향 프로브카드 고성장 지속 - CY3Q26 매출액은 328억엔(+89.4% YoY), 영업이익은 114억엔(+206.6% YoY)을 기록…",
+    "url": "https://t.me/YeouidoStory2/119744",
+    "time_kst": "11-13 08:15"
+   },
+   {
+    "channels": 4,
+    "channel": "텐렙",
+    "head": "[NH/백준기] 스몰캡 - 지엔씨에너지 [NH/스몰캡(목진원)] [지엔씨에너지] ★수주잔고 7,264억원, 실적은 어차피 따라온다 ■3Q26 Review: 매출은 최대, 이익은 일회성·시차 요인에 발목 3분기 연결 실적은 매출액 836억원(+20.2% y-y, +25.7% q-q), 영업이익 75억원(-41.2% y-y,…",
+    "url": "https://t.me/Ten_level/94301",
+    "time_kst": "11-13 07:56"
+   },
+   {
+    "channels": 3,
+    "channel": "메리츠증권 리서치",
+    "head": "📮 [메리츠 투자전략 황수욱] 2026.11.13 엔비디아 CEO 교체 코멘트 (자료) https://tinyurl.com/27mwjwkn 엔비디아 CEO 교체는 미국의 대중국 AI 반도체 수출통제 정책과 엔비디아의 사업 확대 전략 사이에 누적됐던 갈등이 안보 의혹이 계기가 되어 지배구조 위기로 확대된 사건으로 판단 20…",
+    "url": "https://t.me/meritz_research/45155",
+    "time_kst": "11-13 08:48"
+   },
+   {
+    "channels": 3,
+    "channel": "텐렙",
+    "head": "[SK증권 미래산업/미드스몰캡] Analyst 허선재/02-3773-8197 ▶️코세스(089890/KQ) / 매수(유지) / TP 7.3만원 (상향, Upside 113.1%) ★SOFC 수익성 확인, 27E OP 1,000억원 전망 [3Q26 Review: SOFC 장비 OPM 40% 이상, 압도적 수익성] - 3Q2…",
+    "url": "https://t.me/Ten_level/94302",
+    "time_kst": "11-13 07:58"
+   },
+   {
+    "channels": 3,
+    "channel": "메리츠증권 리서치",
+    "head": "📮[메리츠증권 이차전지/석유화학 노우호] 2026.11.13 (금) [2027 Outlook 18] 이차전지/정유·석유화학: Blame Game 자료 URL: https://han.gl/cCEbO [이차전지_Resilience] -2026년 ESS로 반전을 모색한 국내 배터리 업계, 2027년 미국•EU 생산거점별 정책…",
+    "url": "https://t.me/meritz_research/45153",
+    "time_kst": "11-13 08:03"
+   },
+   {
+    "channels": 3,
+    "channel": "다올투자증권 리서치센터",
+    "head": "[다올투자증권 조선/기계/방산 최광식] 11/13(금) 데일리뉴스 🛳 조선 [TradeWinds] Seapeak forges $489m sale-and-leaseback deal for newbuilding duo at South Korean yard UK sanctions $900m LNG carrier quartet…",
+    "url": "https://t.me/daolresearch/15504",
+    "time_kst": "11-13 08:27"
+   },
+   {
+    "channels": 3,
+    "channel": "김현석(자본주의 바이어스 있는 채널입니다)",
+    "head": "어제 뭐 엄벌한다느니 하더니. 대통령이 참석해서 하는 행사면 기사나오는 것만으로도 부양책 맞네. ———————- 속보: 이재명 대통령이 오늘 서울 여의도 한국거래소에서 '자본시장 정책 간담회'를 주재하며 의무공개매수 제도 도입과 코스닥 세그먼트 분리를 논의한다. 정부는 글로벌 AI·반도체 산업의 불확실성, 글로벌 기준금리…",
+    "url": "https://t.me/kimu_nim/48832",
+    "time_kst": "11-13 09:43"
+   },
+   {
+    "channels": 3,
+    "channel": "재야의 고수들",
+    "head": "안녕하세요. '체리형부'의 동생입니다. 경황이 없어 이제야 무거운 소식을 전하게 되어 죄송합니다. 지난 11월 6일 금요일, 저희 형님께서 하늘나라로 긴 여행을 떠나셨습니다. 형님께서는 떠나시기 직전까지도 이곳에 계신 분들을 많이 생각하셨습니다. 마지막까지 본인을 믿고 함께해 주신 분들께 '정말 감사했다'는 말을 꼭 전해…",
+    "url": "https://t.me/gaoshoukorea/65728",
+    "time_kst": "11-13 15:28"
+   },
+   {
+    "channels": 3,
+    "channel": "텐렙",
+    "head": "2026.11.13 12:41:28 기업명: 원익QnC(시가총액: 6,927억) A074600 보고서명: 연결재무제표기준영업(잠정)실적(공정공시) 매출액 : 2,837억(예상치 : 2,798억+/ 1%) 영업익 : 444억(예상치 : 333억/ +33%) 순이익 : 161억(예상치 : 115억+/ 40%) **최근 실적…",
+    "url": "https://t.me/Ten_level/94330",
+    "time_kst": "11-13 12:46"
+   },
+   {
+    "channels": 3,
+    "channel": "하나 중국/신흥국 전략 김경환",
+    "head": ">>젠슨 황 전격 사임, 배후에 의문 증폭… 백악관이 암묵적으로 개입했나? 향후 복귀 가능성은? (중국언론) •젠슨 황은 지난 일요일 이사회가 강력하게 지지한 지 불과 며칠 만인 수요일 밤 사임했음. 수요일 밤 엔비디아 이사회 회의를 다룬 여러 기사에는 평소 엔비디아를 담당하지 않는 워싱턴 기자들이 참여해 ‘백악관의 압박…",
+    "url": "https://t.me/HANAchina/72073",
+    "time_kst": "11-13 14:40"
+   },
+   {
+    "channels": 3,
+    "channel": "GS의 조선/기계/방산 「바담」",
+    "head": "⚙️ ‘파죽지세’ HD현대 엔진사업… 2030년 매출 10조 찍나 출처: 파이낸셜뉴스 링크: https://www.fnnews.com/news/202611121823524543 HD현대중공업, 8,336억원 투자해 힘센엔진 생산능력 2025년 3GW → 2030년 7.2GW 확대 계획 엔진 수주잔고 87.8억달러(YTD…",
+    "url": "https://t.me/c/1405984327/8539",
+    "time_kst": "11-13 07:40"
+   },
+   {
+    "channels": 2,
+    "channel": "[ IT는 SK ]",
+    "head": "[SK증권 반도체 한동희, 손 건/해외주식 박제민] Nebius Group FY3Q26 컨퍼런스콜 ▶️ 주요 코멘트 3Q26 Revenue $981M — +571% YoY: Group Revenue $980.8M(+571% YoY, +68% QoQ), Nebius AI Cloud Revenue $973.8M(+643% Y…",
+    "url": "https://t.me/skitteam/4995",
+    "time_kst": "11-13 06:14"
+   },
+   {
+    "channels": 2,
+    "channel": "서화백의 그림놀이 🚀",
+    "head": "📝 텔레그램 심층 분석 Report (23시 05분) 기준 🌡️ 센티먼트 관망 (+20) 💡 요약 AI 산업의 강력한 성장 기대감과 예상치를 하회한 PPI 발표로 인한 단기적 안도감 속에, 연준의 매파적 발언 지속과 NVIDIA CEO를 둘러싼 불확실성 증대로 관망세가 짙어지고 있습니다. 🗣️ Top 키워드: AI(75)…",
+    "url": "https://t.me/easobi/17228",
+    "time_kst": "11-13 23:05"
+   },
+   {
+    "channels": 2,
+    "channel": "키움증권 미국주식 톡톡",
+    "head": "[키움 미국전략/주식 김승혁] 🌏US Daily (11/13) (11/12 종가기준) -주요 지수 수익률 S&P500 7,592.40 / -0.35% NASDAQ 종합 25,366.09 / -0.39% 다우산업 52,297.09 / -0.36% 러셀2000 2,799.06 / -1.66% 필라델피아 반도체 10,506.6…",
+    "url": "https://t.me/kwusa/61760",
+    "time_kst": "11-13 07:54"
+   }
+  ]
+ },
+ "community_dc": {
+  "source": "DC인사이드",
+  "galleries": [
+   {
+    "id": "krstock",
+    "name": "국내주식갤러리",
+    "posts": 1309,
+    "capped": true,
+    "burst": 1.4,
+    "base_daily": 940.4
+   },
+   {
+    "id": "stockus",
+    "name": "해외주식갤러리",
+    "posts": 4559,
+    "capped": true,
+    "burst": 1.7,
+    "base_daily": 2638.7
+   }
+  ],
+  "posts_sampled": 525,
+  "keywords": [
+   {
+    "term": "앤트로픽",
+    "count": 9,
+    "burst": 99.0,
+    "new": true
+   },
+   {
+    "term": "시발",
+    "count": 8,
+    "burst": 99.0,
+    "new": true
+   },
+   {
+    "term": "황말올",
+    "count": 7,
+    "burst": 92.2,
+    "new": true
+   },
+   {
+    "term": "코인",
+    "count": 7,
+    "burst": 92.2,
+    "new": true
+   },
+   {
+    "term": "한국",
+    "count": 7,
+    "burst": 92.2,
+    "new": true
+   },
+   {
+    "term": "같음",
+    "count": 5,
+    "burst": 65.9,
+    "new": true
+   },
+   {
+    "term": "미민당",
+    "count": 5,
+    "burst": 65.9,
+    "new": true
+   },
+   {
+    "term": "존나",
+    "count": 8,
+    "burst": 7.0,
+    "new": false
+   },
+   {
+    "term": "국장",
+    "count": 6,
+    "burst": 7.2,
+    "new": false
+   },
+   {
+    "term": "씨발",
+    "count": 6,
+    "burst": 7.2,
+    "new": false
+   },
+   {
+    "term": "속슬",
+    "count": 20,
+    "burst": 3.0,
+    "new": false
+   },
+   {
+    "term": "엔트로픽",
+    "count": 5,
+    "burst": 6.0,
+    "new": false
+   },
+   {
+    "term": "요즘",
+    "count": 7,
+    "burst": 4.4,
+    "new": false
+   },
+   {
+    "term": "지금",
+    "count": 12,
+    "burst": 3.1,
+    "new": false
+   },
+   {
+    "term": "SK하이닉스",
+    "count": 7,
+    "burst": 4.0,
+    "new": false
+   }
+  ],
+  "top_recommended": [
+   {
+    "gallery": "해외주식갤러리",
+    "title": "주식 << 사실 제일 정정당당한 수익이었음",
+    "views": 10425,
+    "recommend": 279,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=18374029&exception_mode=recommend&page=2",
+    "time_kst": "11-13 12:02"
+   },
+   {
+    "gallery": "해외주식갤러리",
+    "title": "젠슨황은 존나황당할듯",
+    "views": 15960,
+    "recommend": 259,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=18372978&exception_mode=recommend&page=2",
+    "time_kst": "11-13 09:51"
+   },
+   {
+    "gallery": "해외주식갤러리",
+    "title": "존슨황 사태.. 짱구 극장판.. 명언ㄹㅇ..jpg",
+    "views": 10731,
+    "recommend": 202,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=18373844&exception_mode=recommend&page=2",
+    "time_kst": "11-13 11:40"
+   },
+   {
+    "gallery": "해외주식갤러리",
+    "title": "차기 엔비디아 대표",
+    "views": 14454,
+    "recommend": 200,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=18372077&exception_mode=recommend&page=2",
+    "time_kst": "11-13 07:58"
+   },
+   {
+    "gallery": "해외주식갤러리",
+    "title": "젠슨황 경영모토가 \"내 회사에 해고는 없다\"였다는데",
+    "views": 10977,
+    "recommend": 176,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=18374844&exception_mode=recommend&page=2",
+    "time_kst": "11-13 13:06"
+   }
+  ],
+  "top_viewed": [
+   {
+    "gallery": "국내주식갤러리",
+    "title": "야선 양전했네 미친 ㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋ",
+    "views": 1592,
+    "recommend": 15,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3897605&page=4",
+    "time_kst": "11-14 01:42"
+   },
+   {
+    "gallery": "해외주식갤러리",
+    "title": "그록 셀프디스...jpg",
+    "views": 775,
+    "recommend": 9,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=18385489&page=9",
+    "time_kst": "11-14 04:52"
+   },
+   {
+    "gallery": "국내주식갤러리",
+    "title": "나선, 야선 근황.jpg",
+    "views": 566,
+    "recommend": 2,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3897611&page=4",
+    "time_kst": "11-14 01:46"
+   },
+   {
+    "gallery": "국내주식갤러리",
+    "title": "왜 미국지수 나락간거?",
+    "views": 501,
+    "recommend": 0,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3897744&page=2",
+    "time_kst": "11-14 04:44"
+   },
+   {
+    "gallery": "국내주식갤러리",
+    "title": "39살 미혼인데 1억 8천 날아가고 인생 초기화네...",
+    "views": 482,
+    "recommend": 2,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3897650&page=4",
+    "time_kst": "11-14 02:17"
+   },
+   {
+    "gallery": "국내주식갤러리",
+    "title": "업소갈때 가장 설렐때...jpg",
+    "views": 432,
+    "recommend": 0,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3897696&page=3",
+    "time_kst": "11-14 03:19"
+   },
+   {
+    "gallery": "국내주식갤러리",
+    "title": "친구샛기 미친놈인거 같음",
+    "views": 408,
+    "recommend": 0,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3897740&page=2",
+    "time_kst": "11-14 04:30"
+   },
+   {
+    "gallery": "국내주식갤러리",
+    "title": "30만원으로 1억까지 가능?",
+    "views": 397,
+    "recommend": 0,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3897664&page=3",
+    "time_kst": "11-14 02:26"
+   }
+  ]
+ }
+}
