@@ -1,347 +1,312 @@
 {
- "date": "2026-11-12",
+ "date": "2026-11-13",
  "meta": {
-  "window": "11-11 06:00~11-12 06:00 KST",
+  "window": "11-12 06:00~11-13 06:00 KST",
   "engine": "Gemini(gemini-2.5-flash)",
-  "generated_at": "2026-11-12T06:45+09:00"
+  "generated_at": "2026-11-13T06:35+09:00"
  },
  "stats": {
-  "channels": 94,
-  "messages": 1708,
-  "groups": 1595
+  "channels": 102,
+  "messages": 2035,
+  "groups": 1830
  },
- "one_liner": "미국 CPI 상회와 연준 매파 발언으로 시장 금리 인상 우려가 커진 가운데, AI 관련 기업들의 IPO와 실적 호조가 지속되며 반도체 및 AI 인프라 섹터에 대한 관심이 집중되고 있다.",
+ "one_liner": "엔비디아 젠슨 황 CEO 거취 논란이 AI 반도체 시장 전반의 불확실성을 키우는 가운데, 주요 기업 실적과 시장 수급 불안이 투자 심리를 위축시켰다.",
  "themes": [
   {
-   "name": "거시경제 - 美 CPI 상회 및 연준 매파 발언",
-   "narrative": "미국의 10월 소비자물가지수(CPI)가 예상치를 웃돌고, 연준 월러 이사가 12월 50bp 금리 인상 가능성을 언급하며 시장의 금리 인상 우려가 재부각되었다. 이는 전반적인 투자 심리를 위축시키는 요인으로 작용하고 있다.",
+   "name": "엔비디아 CEO 거취 논란 및 AI 반도체 시장 불확실성",
+   "narrative": "엔비디아 젠슨 황 CEO의 불륜 및 중국 관련 의혹이 확산되며 이사회 해임 준비 및 임시 CEO 선임 가능성이 제기되어 AI 반도체 시장 전반의 불확실성과 공포감을 키우고 있다. 베어드 등 일부 증권사는 엔비디아 투자의견을 하향 조정했다.",
    "status": "new",
-   "strength": 4,
+   "strength": 5,
    "keywords": [
-    "월러 이사",
-    "CPI 전월"
+    "해임",
+    "임시",
+    "해임 준비",
+    "이르면",
+    "임시 CEO",
+    "거취",
+    "젠슨 엔비디아",
+    "CEO 해임",
+    "이사회 젠슨",
+    "크레스",
+    "콜레트 크레스",
+    "젠슨 해임"
+   ],
+   "evidence": [
+    {
+     "channel": "텐렙",
+     "quote": "엔비디아, 젠슨황 해임 준비"
+    },
+    {
+     "channel": "서화백의 그림놀이 🚀",
+     "quote": "💡 요약 엔비디아 젠슨 황 CEO를 둘러싼 스캔들 및 해임 가능성으로 AI 반도체 시장 전반의 불확실성이 커지며 공포감을 조성하고 있습니다."
+    },
+    {
+     "channel": "사제콩이_서상영",
+     "quote": "문제는 젠슨 황 CEO의 거취가 불분명해지면서 엔비디아의 공격적인 AI 투자 전략과 제품 개발, 주요 고객사와의 협력 관계에 차질이 발생할 수 있다는 부담."
+    }
+   ]
+  },
+  {
+   "name": "미국 반도체 수출 통제 확대 우려",
+   "narrative": "미국 상무부가 기존 반도체 수출 통제 규정을 싱가포르, 말레이시아 등 7개국으로 확대하는 방안을 마무리하고 있다는 보도가 나오면서 글로벌 반도체 공급망 및 관련 기업에 대한 불확실성이 커지고 있다.",
+   "status": "new",
+   "strength": 3,
+   "keywords": [
+    "이르면"
+   ],
+   "evidence": [
+    {
+     "channel": "한투증권 미국/중국전략 정정영",
+     "quote": "~ 11일(현지 시각) 미국 정보기술(IT) 전문매체 디인포메이션은 복수의 소식통을 인용해 미 상무부 산업안보국(BIS)이 기존 반도체 수출 통제 규정을 확대하는 방안을 마무리하고 있다고 보도했다. 추가 규제 대상은 싱가포르, 말레이시아, 태국, 인도네시아, 브라질,, 노르웨이, 남아프리카공화국 등 7개국이다."
+    }
+   ]
+  },
+  {
+   "name": "주요 기업 실적 발표 및 개별 이슈",
+   "narrative": "코세스, 엘티씨, HMM 등 일부 기업은 예상치를 상회하는 호실적을 발표했으나, NAVER와 달바글로벌은 예상치를 하회하는 실적을 기록하며 개별 기업의 실적에 따라 주가 희비가 엇갈렸다. HLB는 간암 신약 재심사 우려와 신공장 증설 소식이 함께 전해졌다.",
+   "status": "ongoing",
+   "strength": 3,
+   "keywords": [
+    "컨센대비 당기순이익",
+    "QoQ 컨센대비",
+    "달바글로벌",
+    "HLB",
+    "테스"
+   ],
+   "evidence": [
+    {
+     "channel": "텐렙",
+     "quote": "📌 코세스(시가총액: 5,083억) ... 매출액 : 622억(예상치 : 610억, +1.9%) 영업익 : 243억(예상치 : 185억, +31.2%)"
+    },
+    {
+     "channel": "AWAKE - 실시간 주식 공시 정리채널",
+     "quote": "기업명: NAVER ... 매출액 : 34,724억(예상치 : 34,767억/ 0%) 영업익 : 4,513억(예상치 : 4,885억/ -8%)"
+    },
+    {
+     "channel": "허혜민의 제약/바이오 소식통",
+     "quote": "▶ HLB, 간암 신약 재심사 우려에 “클래스2, 허가 가능성과 무관” (-0.33%)"
+    }
+   ]
+  },
+  {
+   "name": "시장 전반의 수급 불안 및 투자 심리 위축",
+   "narrative": "옵션 만기일 영향과 엔비디아발 악재가 겹치며 국내 증시의 수급 부담이 상존하고 있으며, 개인 투자자들의 예탁금이 급감하는 등 전반적인 투자 심리가 위축된 모습을 보였다.",
+   "status": "ongoing",
+   "strength": 3,
+   "keywords": [
+    "만기일"
    ],
    "evidence": [
     {
      "channel": "키움증권 전략/시황 한지영",
-     "quote": "미국의 10월 CPI는 전월비(MoM) 기준으로 헤드라인(0.4% vs 컨센 0.3%), 근원(0.3% vs 컨센 0.2%) 모두 예상보다 높았습니다."
+     "quote": "오늘 국내 증시는 2거래일간 급등에 따른 일부 차익실현 물량 및 옵션 만기일 여파로 수급 부담이 상존하는 가운데,"
     },
     {
-     "channel": "여의도스토리 Ver2.0-习近平是个狗东西",
-     "quote": "- 월러 연준 이사가 근원 CPI 0.3% 이상이면 12월 50bp 인상 검토가 필요하다고 밝혀 빅스텝 논쟁 부각"
-    },
-    {
-     "channel": "[다올 매크로/투자전략] 조병현/박영찬/정현하/홍록은",
-     "quote": "-미국증시, 10월 CPI가 예상치 상회한 가운데 월러 연준 이사가 12월 빅스텝의 가능성을 언급하자 투자심리 위축, 3대 지수 하락 마감"
-    }
-   ]
-  },
-  {
-   "name": "AI/반도체 - IPO 흥행 및 인프라 투자 확대",
-   "narrative": "AI 인프라 기업 CoreWeave의 견조한 실적 발표와 Anthropic의 IPO 공모 물량에 대한 수배 초과 청약 소식이 전해지며 AI 섹터에 대한 강한 시장의 기대감을 보여주고 있다. 이는 반도체 후공정 및 관련 설비 수요 확대로 이어지며 산업 전반의 성장을 견인할 것으로 전망된다.",
-   "status": "new",
-   "strength": 5,
-   "keywords": [
-    "CoreWeave",
-    "Anthropic IPO",
-    "공모가",
-    "배정",
-    "후공정",
-    "재계약",
-    "높아지"
-   ],
-   "evidence": [
-    {
-     "channel": "서화백의 AI놀이🚀",
-     "quote": "다만, CoreWeave와 OpenAI 같은 AI 관련 기업들의 견조한 실적 발표는 긍정적인 신호…"
-    },
-    {
-     "channel": "[삼성 이영진] 글로벌 AI/SW",
-     "quote": "앤스로픽 IPO, 공모 물량 대비 수배 초과 청약 : 앤스로픽 IPO에 공모 가능 주식 수의 수배에 달하는 투자 주문이 접수된 것으로 알려짐."
-    },
-    {
-     "channel": "하나증권 리서치",
-     "quote": "또한 반도체 고객사의 신규 팹 투자와 HBM 후공정 유틸리티 설비 수요 확대를 근거로 2027년 매출액은 전년 대비 51% 증가한 4988억원, 영업이익은 205% 증가한 435억원으로 전망했습니다."
-    }
-   ]
-  },
-  {
-   "name": "개별 기업 실적 및 이슈 - 희비 엇갈린 발표",
-   "narrative": "대한조선, 코스맥스, JYP Ent.는 시장 예상치를 상회하는 양호한 실적을 발표하며 긍정적인 반응을 얻었다. 반면 이마트, 시프트업, 실리콘투는 부진한 실적을 기록했으며, 현대엔지니어링은 영업정지 소식으로 부정적인 영향을 받았다. NHN은 AI 데이터센터 확장에 대한 기대감으로 목표가 상향이 있었으나, 신세계는 백화점 모멘텀 회복 필요성으로 하향 리포트가 나왔다.",
-   "status": "new",
-   "strength": 4,
-   "keywords": [
-    "이마트",
-    "시프트업",
-    "JYP",
-    "대한조선",
-    "코스맥스",
-    "현대건설",
-    "롯데웰푸드",
-    "실리콘투",
-    "한올바이오파마",
-    "상향 NHN",
-    "하향 신세계"
-   ],
-   "evidence": [
-    {
-     "channel": "AWAKE - 실시간 주식 공시 정리채널",
-     "quote": "기업명: 대한조선(시가총액: 1조 3,617억) A439260 보고서명: 연결재무제표기준영업(잠정)실적(공정공시) 매출액 : 3,277억(예상치 : 3,053억+/ 7%) 영업익 : 827억(예상치 : 810억/ +2%)"
-    },
-    {
-     "channel": "AWAKE - 실시간 주식 공시 정리채널",
-     "quote": "기업명: 이마트(시가총액: 1조 8,859억) A139480 보고서명: 연결재무제표기준영업(잠정)실적(공정공시) 매출액 : 74,919억(예상치 : 75,799억/ -1%) 영업익 : 461억(예상치 : 1,590억/ -71%)"
-    },
-    {
-     "channel": "여의도스토리 Ver2.0-习近平是个狗东西",
-     "quote": "NHN, AI 데이터센터 확장에 성장 기대…증권가 목표가 줄상향"
-    },
-    {
-     "channel": "허혜민의 제약/바이오 소식통",
-     "quote": "★ [키움 허혜민] ★ 한올바이오파마 (009420), 서프라이즈한 RA 임상 결과"
-    }
-   ]
-  },
-  {
-   "name": "미래 성장 동력 - 신규 투자 및 중장기 전망",
-   "narrative": "게임 산업은 2027년 PUBG 10주년 이벤트와 다수의 신작 라인업에 대한 기대감이 형성되고 있다. IT 섹터 전반에 걸쳐 2027년 연간 전망이 긍정적으로 제시되었으며, 특히 반도체 소부장 기업인 주성엔지니어링의 강세와 티에프이의 신공장 준공 및 실적 기여 기대감이 부각되었다. 삼양식품은 베트남 신공장 투자를 통해 생산 능력 확대를 추진하고 있다.",
-   "status": "new",
-   "strength": 3,
-   "keywords": [
-    "주년",
-    "연간전망",
-    "신공장",
-    "주성엔지니어링"
-   ],
-   "evidence": [
-    {
-     "channel": "다올투자증권 리서치센터",
-     "quote": "2027년에는 PUBG 10주년 이벤트와 예정 신작 7개(Fig 8)가 있기 때문에 기대감을 끌어올리는 것이 주가 상승 견인에 중요"
-    },
-    {
-     "channel": "[신한 리서치본부] IT(반도체/전기전자/디스플레이)",
-     "quote": "[2027 IT 연간전망] 디스플레이/IT소부장: Upgrade!"
-    },
-    {
-     "channel": "YM리서치",
-     "quote": "[삼양식품, 베트남 신공장 투자 관련 코멘트_유안타 손현정] -베트남 신공장 건설에 2,186억원 투자 결정. 2029년 1월 준공 목표."
-    },
-    {
-     "channel": "epic AI - 투자 어시스턴트",
-     "quote": "시가총액 상위주에서는 주성엔지니어링(+17.14%), 심텍(+14.07%), 에코프로비엠(+11.39%), 에코프로(+10.03%)…"
-    }
-   ]
-  },
-  {
-   "name": "IPO 시장 - 신규 상장 종목의 변동성",
-   "narrative": "약국 플랫폼 바로팜이 상장 첫날 공모가 대비 10%대 하락 출발하며 신규 상장 종목에 대한 시장의 높은 변동성과 신중한 접근이 필요함을 보여주었다.",
-   "status": "new",
-   "strength": 2,
-   "keywords": [
-    "바로팜",
-    "공모가"
-   ],
-   "evidence": [
-    {
-     "channel": "여의도스토리 Ver2.0-习近平是个狗东西",
-     "quote": "[특징주] 바로팜, 상장 첫날 공모가 대비 10%대 하락 출발"
-    },
-    {
-     "channel": "신한 리서치",
-     "quote": ":약국 플랫폼 바로팜(-21.8%) 상장"
+     "channel": "이상헌 부장 iM 지주/ESG/중소형주",
+     "quote": "* 물탈 돈도 없어요” 급락장에 개미 실탄 5조 증발…반등장에도 매도 행렬 -12일 금융투자협회에 따르면 지난 10일 기준 투자자예탁금은 85조2209억원으로 집계됐다."
     }
    ]
   }
  ],
  "community_mood": {
-  "score": 30,
-  "summary": "개인 투자자들은 AI 및 반도체 섹터, 특히 레버리지/인버스 ETF에 대한 높은 투기적 관심을 보이고 있다. 엔비디아 관련 호재와 스캔들, 메모리 반도체 업황에 대한 엇갈린 전망 속에서 시장의 변동성과 특정 종목에 대한 기대감 및 불안감이 공존하는 양상이다.",
+  "score": -50,
+  "summary": "엔비디아 젠슨 황 CEO의 스캔들 소식에 대한 관심이 매우 높으며, 전반적으로 국내외 시장의 불확실성에 대한 불안감과 회피 심리가 강하게 나타나고 있다. 일부는 삼성전자 승리나 호재를 기대하기도 한다.",
   "hot_stocks": [
    {
-    "name": "NVIDIA",
-    "score": 0,
-    "reason": "\"엔비디아 씹호재\"에 대한 기대감과 \"젠슨황 스캔들\"에 대한 우려가 공존하며 높은 관심을 받고 있다."
+    "name": "엔비디아",
+    "score": -70,
+    "reason": "젠슨 황 CEO의 거취 논란과 불륜 스캔들로 인한 주가 급락 우려에 주목."
    },
    {
-    "name": "삼닉 (Samsung Electronics/SK Hynix)",
-    "score": 0,
-    "reason": "\"야선 거의 상한가\"에 대한 기대와 \"메모리주 좆됬다\"는 우려가 엇갈리며 주목받고 있다."
+    "name": "삼성전자",
+    "score": 40,
+    "reason": "엔비디아의 불확실성 속에서 반사이익을 얻을 수 있다는 기대감."
+   },
+   {
+    "name": "네이버",
+    "score": -30,
+    "reason": "실적 부진으로 인한 주가 하락 우려에 주목."
+   },
+   {
+    "name": "하이닉스",
+    "score": -40,
+    "reason": "엔비디아발 반도체 시장 불확실성에 대한 우려."
    }
   ]
  },
  "signals": {
   "spikes": [
    {
-    "term": "교보증권",
+    "term": "해임",
+    "count": 54,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "임시",
     "count": 30,
     "burst": 99.0,
     "base_daily": 0.0,
     "new": true
    },
    {
-    "term": "이마트",
+    "term": "해임 준비",
+    "count": 26,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "이르면",
+    "count": 24,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "임시 CEO",
+    "count": 24,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "거취",
     "count": 22,
     "burst": 99.0,
     "base_daily": 0.0,
     "new": true
    },
    {
-    "term": "상향 NHN",
+    "term": "젠슨 엔비디아",
+    "count": 22,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "상기 콘텐츠",
+    "count": 22,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "자유롭게",
+    "count": 22,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "자유롭게 복사",
+    "count": 22,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "수정 없이",
+    "count": 22,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "없이 자유롭게",
+    "count": 22,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "콘텐츠 수정",
+    "count": 22,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "복사 배포",
+    "count": 22,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "CEO 해임",
+    "count": 20,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "이사회 젠슨",
+    "count": 19,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "크레스",
+    "count": 19,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "달바글로벌",
     "count": 18,
     "burst": 99.0,
     "base_daily": 0.0,
     "new": true
    },
    {
-    "term": "시프트업",
-    "count": 18,
-    "burst": 99.0,
-    "base_daily": 0.0,
-    "new": true
-   },
-   {
-    "term": "주년",
+    "term": "컨센대비 당기순이익",
     "count": 17,
     "burst": 99.0,
     "base_daily": 0.0,
     "new": true
    },
    {
-    "term": "바로팜",
+    "term": "QoQ 컨센대비",
     "count": 17,
     "burst": 99.0,
     "base_daily": 0.0,
     "new": true
    },
    {
-    "term": "JYP",
+    "term": "HLB",
     "count": 16,
     "burst": 99.0,
     "base_daily": 0.0,
     "new": true
    },
    {
-    "term": "월러 이사",
+    "term": "테스",
+    "count": 16,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "젠슨 해임",
     "count": 15,
     "burst": 99.0,
     "base_daily": 0.0,
     "new": true
    },
    {
-    "term": "대한조선",
+    "term": "만기일",
     "count": 15,
     "burst": 99.0,
     "base_daily": 0.0,
     "new": true
    },
    {
-    "term": "연간전망",
+    "term": "콜레트 크레스",
     "count": 15,
-    "burst": 99.0,
-    "base_daily": 0.0,
-    "new": true
-   },
-   {
-    "term": "CPI 전월",
-    "count": 14,
-    "burst": 99.0,
-    "base_daily": 0.0,
-    "new": true
-   },
-   {
-    "term": "공모가",
-    "count": 14,
-    "burst": 99.0,
-    "base_daily": 0.0,
-    "new": true
-   },
-   {
-    "term": "NC",
-    "count": 14,
-    "burst": 99.0,
-    "base_daily": 0.0,
-    "new": true
-   },
-   {
-    "term": "호텔",
-    "count": 14,
-    "burst": 99.0,
-    "base_daily": 0.0,
-    "new": true
-   },
-   {
-    "term": "후공정",
-    "count": 14,
-    "burst": 99.0,
-    "base_daily": 0.0,
-    "new": true
-   },
-   {
-    "term": "CoreWeave",
-    "count": 28,
-    "burst": 24.46607185917531,
-    "base_daily": 0.9,
-    "new": false
-   },
-   {
-    "term": "Anthropic IPO",
-    "count": 13,
-    "burst": 99.0,
-    "base_daily": 0.0,
-    "new": true
-   },
-   {
-    "term": "배정",
-    "count": 13,
-    "burst": 99.0,
-    "base_daily": 0.0,
-    "new": true
-   },
-   {
-    "term": "부각될",
-    "count": 13,
-    "burst": 99.0,
-    "base_daily": 0.0,
-    "new": true
-   },
-   {
-    "term": "하향 신세계",
-    "count": 13,
-    "burst": 99.0,
-    "base_daily": 0.0,
-    "new": true
-   },
-   {
-    "term": "면세점",
-    "count": 13,
-    "burst": 99.0,
-    "base_daily": 0.0,
-    "new": true
-   },
-   {
-    "term": "신공장",
-    "count": 13,
-    "burst": 99.0,
-    "base_daily": 0.0,
-    "new": true
-   },
-   {
-    "term": "주성엔지니어링",
-    "count": 13,
-    "burst": 99.0,
-    "base_daily": 0.0,
-    "new": true
-   },
-   {
-    "term": "재계약",
-    "count": 13,
-    "burst": 99.0,
-    "base_daily": 0.0,
-    "new": true
-   },
-   {
-    "term": "높아지",
-    "count": 13,
     "burst": 99.0,
     "base_daily": 0.0,
     "new": true
@@ -349,109 +314,109 @@
   ],
   "top_posts": [
    {
+    "channels": 5,
+    "channel": "텐렙",
+    "head": "📌 코세스(시가총액: 5,083억) #A089890 📁 분기보고서 (2026.09) 2026.11.12 09:44:08 (현재가 : 31,650원, -0.63%) 잠정실적 : N 매출액 : 622억(예상치 : 610억, +1.9%) 영업익 : 243억(예상치 : 185억, +31.2%) 순이익 : 150억(예상치 : 14…",
+    "url": "https://t.me/Ten_level/94230",
+    "time_kst": "11-12 09:44"
+   },
+   {
     "channels": 4,
-    "channel": "AWAKE - 실시간 주식 공시 정리채널",
-    "head": "2026.11.11 13:24:54 기업명: 대한조선(시가총액: 1조 3,617억) A439260 보고서명: 연결재무제표기준영업(잠정)실적(공정공시) 매출액 : 3,277억(예상치 : 3,053억+/ 7%) 영업익 : 827억(예상치 : 810억/ +2%) 순이익 : 369억(예상치 : 610억/ -40%) **최근 실적…",
-    "url": "https://t.me/darthacking/156921",
-    "time_kst": "11-11 13:24"
+    "channel": "미국 주식 인사이더 🇺🇸 (US Stocks Insider)",
+    "head": "💡💡💡💡💡💡 뉴욕타임즈에 따르면 미국 정보당국이 중국 스파이로 판단한 중국계 여성과의 불륜 관계로 조사를 받고 있는 엔비디아 CEO 젠슨 황이 자신에게 직접 보고하는 엔비디아 임원과도 혼외 관계를 맺었다고 전직 직원 5명이 증언. 해당 임원은 엔비디아 헬스케어 부문 부사장 킴벌리 파월로 확인. 엔비디아 행동강령은 개인적…",
+    "url": "https://t.me/insidertracking/69067",
+    "time_kst": "11-12 07:06"
+   },
+   {
+    "channels": 4,
+    "channel": "메리츠증권 리서치",
+    "head": "📮[MERITZ Strategy Daily 전략공감2.0] 2026.11.12(목) [채권전략 윤여삼] 2027 Outlook #2 (해설판): 이번에도 다르지 않다 - AI 투자가 이끄는 높은 성장성 vs 막대한 부채 부담은 고금리 장기화까지 가세. 부채의 규모와 금리 부담으로 막대한 금융비용을 컨트롤할 수 있을지 여부…",
+    "url": "https://t.me/meritz_research/45136",
+    "time_kst": "11-12 08:09"
    },
    {
     "channels": 4,
     "channel": "AWAKE - 실시간 주식 공시 정리채널",
-    "head": "2026.11.11 14:58:53 기업명: 코스맥스(시가총액: 2조 6,217억) A192820 보고서명: 연결재무제표기준영업(잠정)실적(공정공시) 매출액 : 8,758억(예상치 : 8,203억+/ 7%) 영업익 : 833억(예상치 : 779억/ +7%) 순이익 : 426억(예상치 : 399억+/ 7%) **최근 실적…",
-    "url": "https://t.me/darthacking/156946",
-    "time_kst": "11-11 14:58"
+    "head": "2026.11.12 08:05:35 기업명: NAVER(시가총액: 29조 5,582억) A035420 보고서명: 연결재무제표기준영업(잠정)실적(공정공시) 매출액 : 34,724억(예상치 : 34,767억/ 0%) 영업익 : 4,513억(예상치 : 4,885억/ -8%) 순이익 : 3,995억(예상치 : 4,807억/ -1…",
+    "url": "https://t.me/darthacking/157041",
+    "time_kst": "11-12 08:05"
    },
    {
-    "channels": 3,
-    "channel": "키움증권 전략/시황 한지영",
-    "head": "[11/11, 장 시작 전 생각: 그냥 스텝 vs 빅스텝, 키움 한지영] - 다우 -0.3%, S&P500 -0.4%, 나스닥 -0.7% - 엔비디아 -5.5%, 마이크론 -1.1%, 코어위브 -0.5%(시간외 변동성 극심) - 미 10년물 금리 4.99%, 30년물 금리 5.35%, WTI 86.4달러 1. 미국 증시는…",
-    "url": "https://t.me/hedgecat0301/2995",
-    "time_kst": "11-11 07:43"
+    "channels": 4,
+    "channel": "AWAKE - 실시간 주식 공시 정리채널",
+    "head": "2026.11.12 10:18:10 기업명: 달바글로벌(시가총액: 1조 7,929억) A483650 보고서명: 연결재무제표기준영업(잠정)실적(공정공시) 매출액 : 1,556억(예상치 : 1,716억/ -9%) 영업익 : 334억(예상치 : 327억/ +2%) 순이익 : 148억(예상치 : 259억/ -43%) **최근 실…",
+    "url": "https://t.me/darthacking/157076",
+    "time_kst": "11-12 10:18"
+   },
+   {
+    "channels": 4,
+    "channel": "AWAKE - 실시간 주식 공시 정리채널",
+    "head": "2026.11.12 16:08:37 기업명: 엘티씨(시가총액: 3,481억) A170920 보고서명: 분기보고서 (2026.09) 잠정실적 : N 매출액 : 1,143억(예상치 : 1,214억, -5.9%) 영업익 : 294억(예상치 : 200억, +47.2%) 순이익 : 227억(예상치 : -) **최근 실적 추이**…",
+    "url": "https://t.me/darthacking/157230",
+    "time_kst": "11-12 16:08"
    },
    {
     "channels": 3,
     "channel": "다올투자증권 리서치센터",
-    "head": "[다올투자증권 조선/기계/방산 최광식] 11/11(수) 데일리뉴스 🛳 조선 [TradeWinds] Hanwha Shipping moves to fix its first LNG newbuildings to energy major Safe Bulkers ‘not in a hurry’ to order new ships to r…",
-    "url": "https://t.me/daolresearch/15479",
-    "time_kst": "11-11 08:34"
+    "head": "[다올투자증권 조선/기계/방산 최광식] 11/12(목) 데일리뉴스 🛳 조선 [TradeWinds] Yangzijiang emerges as mystery partner in Torm tanker push Flex LNG ready to ride out ‘choppier’ 2027 as spot ship numbers ri…",
+    "url": "https://t.me/daolresearch/15493",
+    "time_kst": "11-12 08:30"
    },
    {
     "channels": 3,
-    "channel": "하나증권 리서치",
-    "head": "[하나증권 IT 김민경] 티에프이 (425420.KQ/매수): SoCAMM and beyond 자료: https://cutt.ly/nyPeVbT6 ■ 3Q26 Review: SoCAMM 공급 확대로 가파른 실적 개선 2026년 3분기 매출 542억원(YoY +99%, QoQ +61%), 영업이익 150억원(YoY +211…",
-    "url": "https://t.me/HanaResearch/20933",
-    "time_kst": "11-11 17:50"
+    "channel": "메리츠증권 리서치",
+    "head": "📮 [메리츠증권 철강/금속 장재혁] 안녕하세요, 메리츠증권 장재혁입니다. 2027년 철강/금속 연간전망 자료 업데이트 드립니다. 업황은 여전히 쉽지 않지만, 무관심 속에 기회가 있다고 생각합니다. ▶️ 구리: 2027년 한 차례 추가 상승 기대 구리 가격은 2025년 3분기 이후 분기 평균 700~800$/t씩 올랐습니다…",
+    "url": "https://t.me/meritz_research/45137",
+    "time_kst": "11-12 08:29"
+   },
+   {
+    "channels": 3,
+    "channel": "키움증권 리서치센터",
+    "head": "★ 삼양식품(003230): 해외 제2공장 증설로 매출 6조원 돌파 가능 [키움 음식료/유통 박상준] 1) 베트남에 해외 제2공장 증설 발표 - 삼양식품은 해외 제2공장을 베트남 박닌성 투언타잉에 설립하고 29년 1월부터 가동 예정 - 생산능력은 현재 28.6억식 -> 27년 1월 39.6억식(중국 공장 가동) -> 29…",
+    "url": "https://t.me/KiwoomResearch/24591",
+    "time_kst": "11-12 07:38"
+   },
+   {
+    "channels": 3,
+    "channel": "유진투자증권 산업분석실 테크/인프라팀",
+    "head": "[유진투자증권 반도체 손인준] 이미 많은 것이 반영된 주가 ■ 2018년 다운사이클을 대입한 가격 시나리오 - 메모리 쇼티지 장기화에 따른 업황 강세가 지속될 것으로 전망 - 다만 실현 가능성은 매우 낮지만, 2018년의 가격 흐름이 2027년부터 재현되는 상황을 가정 - DRAM과 NAND의 가격이 약 60% 하락한 뒤…",
+    "url": "https://t.me/eugene2team/7428",
+    "time_kst": "11-12 08:48"
+   },
+   {
+    "channels": 3,
+    "channel": "이상헌 부장 iM 지주/ESG/중소형주",
+    "head": "* 물탈 돈도 없어요” 급락장에 개미 실탄 5조 증발…반등장에도 매도 행렬 -12일 금융투자협회에 따르면 지난 10일 기준 투자자예탁금은 85조2209억원으로 집계됐다. 직전 거래일인 9일보다 3조332억원(3.44%) 감소한 규모다. 지난 6일 90조3342억원이었던 예탁금은 9일 88조2540억원으로 줄어든 데 이어…",
+    "url": "https://t.me/INSIGHTVALUELEE/11263",
+    "time_kst": "11-12 14:36"
+   },
+   {
+    "channels": 3,
+    "channel": "재야의 고수들",
+    "head": "애플의 사례로 본 엔비디아 매수 기회 by 댄 나일스 ✍️팩트 및 요약 댄 나일스는 베테랑 투자자로 AI 버블론에 대해 신중한 입장을 취했는데 최근 엔비디아 매수했다고 밝힘 https://www.youtube.com/watch?v=LJasjYHfu8E&t=2s 1. 댄 나일스는 10월 초 중간선거를 앞두고 데이터센터에 대…",
+    "url": "https://t.me/gaoshoukorea/65696",
+    "time_kst": "11-12 08:23"
+   },
+   {
+    "channels": 3,
+    "channel": "신한 리서치",
+    "head": "[신한투자증권 혁신성장 최승환, 이병화] 예스티(122640.KQ) - 실적 호조에 수주 기대감까지 ▶️ 신한생각: 3분기 실적 호조 이후에는 HPA 수주 본격화 기대 - 3Q26 매출액 438억원(+134.1% YoY), 영업이익 110억원(+891.4% YoY)으로 당사 추정치 상회 - 본업 호조 감안해 높아진 눈높이…",
+    "url": "https://t.me/shinhanresearch/53616",
+    "time_kst": "11-12 07:47"
+   },
+   {
+    "channels": 3,
+    "channel": "다올투자증권 리서치센터",
+    "head": "[대한조선(439260)/BUY(유지)/TP 66,000원(하향)/다올투자증권 조선/기계/방산 최광식 ☎️2184-2308] ★ 대한조선(439260) : 시클리컬의 Valuation! 돌파구는? ▶ Issue: 3Q26 리뷰. 2027년 MIX 변화를 바라보며 적정주가 하향. 주주환원 강화 ▶ Pitch: > PER이…",
+    "url": "https://t.me/daolresearch/15487",
+    "time_kst": "11-12 07:31"
    },
    {
     "channels": 3,
     "channel": "텐렙",
-    "head": "🚨 긴급 속보: 텍사스 주민들의 거센 반발 72시간 만에…지나 이노호사, 일론 머스크에게 결국 사과 지나 이노호사(Gina Hinojosa) 텍사스주지사 당선인이 사흘간 거세진 압박 끝에 억만장자 기업가 일론 머스크에게 공개적으로 사과했습니다. 앞서 머스크의 사업과 관련해 내놓은 발언과 비판이 논란을 일으킨 데 따른 것입…",
-    "url": "https://t.me/Ten_level/94189",
-    "time_kst": "11-11 16:03"
-   },
-   {
-    "channels": 3,
-    "channel": "YM리서치",
-    "head": "[삼양식품, 베트남 신공장 투자 관련 코멘트_유안타 손현정] -베트남 신공장 건설에 2,186억원 투자 결정. 2029년 1월 준공 목표. 초기 1개 생산라인을 설치하되, 향후 총 8개 라인까지 확장 가능한 공장을 선제적으로 건설 -생산CAPA 전망 2026년 25억식 → 2027년 38억식 → 2029년 39억식 → 중…",
-    "url": "https://t.me/ym_research/6533",
-    "time_kst": "11-11 17:05"
-   },
-   {
-    "channels": 3,
-    "channel": "허혜민의 제약/바이오 소식통",
-    "head": "★ [키움 허혜민] ★ 한올바이오파마 (009420), 서프라이즈한 RA 임상 결과 [키움 제약/바이오 / 허혜민] ◆ 애널리스트 코멘트 투자의견 BUY, 목표가 8만원 유지 Immunovant의 IMVT-1402의 난치성 류마티스관절염 2b상 성공 발표에 당일(11/9) +15% 상승, 시가총액 $968mn 증가. 동사…",
-    "url": "https://t.me/huhpharm/12004",
-    "time_kst": "11-11 07:48"
-   },
-   {
-    "channels": 3,
-    "channel": "AWAKE - 실시간 주식 공시 정리채널",
-    "head": "2026.11.11 15:19:27 기업명: 현대건설(시가총액: 9조 3,762억) A000720 보고서명: 영업정지(종속회사의주요경영사항) 종속회사 : 현대엔지니어링 정지분야 : 종속회사인 현대엔지니어링(주)의 토목건축공사업 정지금액 : 55,410억 매출대비 : 17.8% 정지일자 : 2027-01-01 정지내용 :…",
-    "url": "https://t.me/darthacking/156949",
-    "time_kst": "11-11 15:19"
-   },
-   {
-    "channels": 3,
-    "channel": "AWAKE - 실시간 주식 공시 정리채널",
-    "head": "2026.11.11 13:10:58 기업명: 이마트(시가총액: 1조 8,859억) A139480 보고서명: 연결재무제표기준영업(잠정)실적(공정공시) 매출액 : 74,919억(예상치 : 75,799억/ -1%) 영업익 : 461억(예상치 : 1,590억/ -71%) 순이익 : -11억(예상치 : 518억/ -102%) **…",
-    "url": "https://t.me/darthacking/156919",
-    "time_kst": "11-11 13:11"
-   },
-   {
-    "channels": 3,
-    "channel": "AWAKE - 실시간 주식 공시 정리채널",
-    "head": "2026.11.11 10:29:31 기업명: 롯데웰푸드(시가총액: 1조 907억) A280360 보고서명: 연결재무제표기준영업(잠정)실적(공정공시) 매출액 : 11,739억(예상치 : 12,119억/ -3%) 영업익 : 899억(예상치 : 875억/ +3%) 순이익 : 508억(예상치 : 551억/ -8%) **최근 실적…",
-    "url": "https://t.me/darthacking/156905",
-    "time_kst": "11-11 10:29"
-   },
-   {
-    "channels": 3,
-    "channel": "AWAKE - 실시간 주식 공시 정리채널",
-    "head": "2026.11.11 15:52:21 기업명: JYP Ent.(시가총액: 1조 3,751억) A035900 보고서명: 연결재무제표기준영업(잠정)실적(공정공시) 매출액 : 2,675억(예상치 : 2,334억+/ 15%) 영업익 : 480억(예상치 : 421억/ +14%) 순이익 : 245억(예상치 : 309억/ -21%) *…",
-    "url": "https://t.me/darthacking/156975",
-    "time_kst": "11-11 15:52"
-   },
-   {
-    "channels": 3,
-    "channel": "AWAKE - 실시간 주식 공시 정리채널",
-    "head": "2026.11.11 16:18:38 기업명: 실리콘투(시가총액: 1조 7,574억) A257720 보고서명: 연결재무제표기준영업(잠정)실적(공정공시) 매출액 : 4,244억(예상치 : 4,274억/ -1%) 영업익 : 696억(예상치 : 821억/ -15%) 순이익 : 88억(예상치 : 603억/ -85%) **최근 실적…",
-    "url": "https://t.me/darthacking/156998",
-    "time_kst": "11-11 16:18"
-   },
-   {
-    "channels": 3,
-    "channel": "[삼성 이영진] 글로벌 AI/SW",
-    "head": "앤스로픽 IPO, 공모 물량 대비 수배 초과 청약 : 앤스로픽 IPO에 공모 가능 주식 수의 수배에 달하는 투자 주문이 접수된 것으로 알려짐. 대규모 투자를 희망하는 기관투자자들의 앵커급 주문(Anchor-size orders)이 강한 수요 견인 : 앤스로픽은 IPO와 동시 진행되는 사모 발행을 포함해 최대 $90.4B…",
-    "url": "https://t.me/Samsung_Global_AI_SW/5024",
-    "time_kst": "11-11 22:40"
-   },
-   {
-    "channels": 3,
-    "channel": "요약하는 고잉",
-    "head": "암기 필요 코스닥은 1월에 매우 강하다! 코스닥은 1월에 매우 강하다! 코스닥은 1월에 매우 강하다! 지수 좀 정상화되면 CES 준비해야죠",
-    "url": "https://t.me/one_going/4491",
-    "time_kst": "11-11 12:00"
+    "head": "📌 HMM(시가총액: 19조 3,364억) #A011200 📁 분기보고서 (2026.09) 2026.11.12 15:00:41 (현재가 : 20,600원, +3.0%) 잠정실적 : N 매출액 : 41,271억(예상치 : 37,737억, +9.4%) 영업익 : 13,946억(예상치 : 7,879억, +77.0%) 순이익 :…",
+    "url": "https://t.me/Ten_level/94260",
+    "time_kst": "11-12 15:01"
    }
   ]
  },
@@ -461,219 +426,219 @@
    {
     "id": "krstock",
     "name": "국내주식갤러리",
-    "posts": 468,
+    "posts": 537,
     "capped": true,
-    "burst": 0.2,
-    "base_daily": 2112.9
+    "burst": 0.3,
+    "base_daily": 1951.3
    },
    {
     "id": "stockus",
     "name": "해외주식갤러리",
-    "posts": 6114,
+    "posts": 430,
     "capped": true,
-    "burst": 0.9,
-    "base_daily": 6758.4
+    "burst": 0.1,
+    "base_daily": 6074.4
    }
   ],
-  "posts_sampled": 536,
+  "posts_sampled": 476,
   "keywords": [
    {
-    "term": "빗각",
-    "count": 43,
+    "term": "암드",
+    "count": 9,
     "burst": 99.0,
     "new": true
    },
    {
-    "term": "속스",
-    "count": 10,
-    "burst": 99.0,
-    "new": true
-   },
-   {
-    "term": "빗각기준",
-    "count": 10,
-    "burst": 99.0,
-    "new": true
-   },
-   {
-    "term": "Ai",
+    "term": "존나",
     "count": 7,
-    "burst": 92.0,
+    "burst": 99.0,
     "new": true
    },
    {
-    "term": "가짜상승",
+    "term": "국장",
+    "count": 5,
+    "burst": 73.4,
+    "new": true
+   },
+   {
+    "term": "엔트로픽",
+    "count": 5,
+    "burst": 73.4,
+    "new": true
+   },
+   {
+    "term": "사임",
+    "count": 5,
+    "burst": 73.4,
+    "new": true
+   },
+   {
+    "term": "회사",
+    "count": 5,
+    "burst": 73.4,
+    "new": true
+   },
+   {
+    "term": "일론",
+    "count": 5,
+    "burst": 73.4,
+    "new": true
+   },
+   {
+    "term": "엔비",
+    "count": 27,
+    "burst": 6.7,
+    "new": false
+   },
+   {
+    "term": "보면",
+    "count": 7,
+    "burst": 9.3,
+    "new": false
+   },
+   {
+    "term": "구글",
     "count": 6,
-    "burst": 78.9,
-    "new": true
-   },
-   {
-    "term": "속쓸",
-    "count": 6,
-    "burst": 78.9,
-    "new": true
-   },
-   {
-    "term": "아니라",
-    "count": 5,
-    "burst": 65.7,
-    "new": true
-   },
-   {
-    "term": "사람",
-    "count": 5,
-    "burst": 65.7,
-    "new": true
-   },
-   {
-    "term": "뭔데",
-    "count": 5,
-    "burst": 65.7,
-    "new": true
-   },
-   {
-    "term": "속슬",
-    "count": 43,
     "burst": 8.0,
     "new": false
    },
    {
-    "term": "야선",
-    "count": 15,
+    "term": "나선",
+    "count": 6,
     "burst": 6.8,
     "new": false
    },
    {
-    "term": "내가",
-    "count": 7,
-    "burst": 8.4,
-    "new": false
-   },
-   {
-    "term": "미장",
-    "count": 12,
-    "burst": 5.8,
-    "new": false
-   },
-   {
-    "term": "ai",
-    "count": 10,
-    "burst": 6.3,
-    "new": false
-   },
-   {
-    "term": "삼성전자",
+    "term": "반도체",
     "count": 8,
-    "burst": 6.2,
+    "burst": 5.1,
+    "new": false
+   },
+   {
+    "term": "엔비디아",
+    "count": 19,
+    "burst": 2.7,
+    "new": false
+   },
+   {
+    "term": "내가",
+    "count": 8,
+    "burst": 4.7,
+    "new": false
+   },
+   {
+    "term": "존슨황",
+    "count": 5,
+    "burst": 5.6,
     "new": false
    }
   ],
   "top_recommended": [
    {
     "gallery": "해외주식갤러리",
-    "title": "미주갤 주딱에게 주딱의 자격이 있는걸까요?",
-    "views": 7583,
+    "title": "젠슨황, 뭔가 행복하지 않았지?",
+    "views": 16597,
+    "recommend": 329,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=18358774&exception_mode=recommend&page=1",
+    "time_kst": "11-12 16:58"
+   },
+   {
+    "gallery": "해외주식갤러리",
+    "title": "세무사 논란 존나 웃긴게",
+    "views": 10797,
+    "recommend": 273,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=18358251&exception_mode=recommend&page=2",
+    "time_kst": "11-12 16:10"
+   },
+   {
+    "gallery": "해외주식갤러리",
+    "title": "2026년 올해 시험에서 일어난일 ㄷㄷ",
+    "views": 12627,
     "recommend": 232,
-    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=18341359&exception_mode=recommend&page=1",
-    "time_kst": "11-11 16:45"
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=18360108&exception_mode=recommend&page=1",
+    "time_kst": "11-12 18:46"
    },
    {
     "gallery": "해외주식갤러리",
-    "title": "엔비디아 씹호재떳다ㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋ",
-    "views": 12958,
-    "recommend": 211,
-    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=18338233&exception_mode=recommend&page=1",
-    "time_kst": "11-11 11:17"
+    "title": "회계사, 세무사, 변호사 는 끝났다니까ㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋ",
+    "views": 12622,
+    "recommend": 214,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=18358400&exception_mode=recommend&page=2",
+    "time_kst": "11-12 16:25"
    },
    {
     "gallery": "해외주식갤러리",
-    "title": "아 이거 짤 개웃기네 ㅋㅋㅋㅋ",
-    "views": 10725,
-    "recommend": 163,
-    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=18344149&exception_mode=recommend&page=1",
-    "time_kst": "11-11 21:08"
-   },
-   {
-    "gallery": "해외주식갤러리",
-    "title": "와 애플도 미인계 중국간첩에서 자유롭지 않네",
-    "views": 12231,
-    "recommend": 160,
-    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=18337214&exception_mode=recommend&page=1",
-    "time_kst": "11-11 09:36"
-   },
-   {
-    "gallery": "해외주식갤러리",
-    "title": "젠슨황, 러시아 스파이와 식사 장면 포착",
-    "views": 8685,
-    "recommend": 155,
-    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=18340674&exception_mode=recommend&page=1",
-    "time_kst": "11-11 15:33"
+    "title": "세무사 만점자 입장표명",
+    "views": 16930,
+    "recommend": 209,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=18360384&exception_mode=recommend&page=1",
+    "time_kst": "11-12 19:11"
    }
   ],
   "top_viewed": [
    {
     "gallery": "국내주식갤러리",
-    "title": "이거 보고 가라 빚투 현재상황",
-    "views": 611,
-    "recommend": 5,
-    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3883786&page=4",
-    "time_kst": "11-12 03:12"
-   },
-   {
-    "gallery": "국내주식갤러리",
-    "title": "메모리주 좆됬다 ㄷㄷ 2년안에 과잉공급올것 ㄷㄷ",
-    "views": 588,
+    "title": "젠슨 황, 불륜녀 한명 더 있었다",
+    "views": 725,
     "recommend": 0,
-    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3883866&page=2",
-    "time_kst": "11-12 04:38"
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3891838&page=2",
+    "time_kst": "11-13 04:31"
    },
    {
     "gallery": "국내주식갤러리",
-    "title": "와 시발 ㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋ",
-    "views": 560,
+    "title": "최태원 와이프 미모 근황 ☺️",
+    "views": 656,
     "recommend": 1,
-    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3883908&page=2",
-    "time_kst": "11-12 05:50"
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3891675&page=5",
+    "time_kst": "11-13 01:32"
    },
    {
     "gallery": "국내주식갤러리",
-    "title": "그분이 또 옳았네? ㅋㅋㅋㅋㅋㅋ",
-    "views": 543,
-    "recommend": 5,
-    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3883847&page=3",
-    "time_kst": "11-12 04:20"
+    "title": "시발 호재 떴네 ㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋ",
+    "views": 571,
+    "recommend": 0,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3891702&page=4",
+    "time_kst": "11-13 01:44"
    },
    {
     "gallery": "국내주식갤러리",
-    "title": "야선 거의 상한가인데 오늘 삼닉 상치나?",
+    "title": "주식 못해먹겠다 그냥",
+    "views": 562,
+    "recommend": 0,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3891725&page=4",
+    "time_kst": "11-13 02:02"
+   },
+   {
+    "gallery": "국내주식갤러리",
+    "title": "결국엔 삼성전자가 승리하는 그림이네",
+    "views": 535,
+    "recommend": 0,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3891722&page=4",
+    "time_kst": "11-13 01:54"
+   },
+   {
+    "gallery": "국내주식갤러리",
+    "title": "네이버 내일 4주석예약",
     "views": 529,
-    "recommend": 0,
-    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3883902&page=2",
-    "time_kst": "11-12 05:40"
+    "recommend": 1,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3891709&page=4",
+    "time_kst": "11-13 01:46"
    },
    {
     "gallery": "국내주식갤러리",
-    "title": "야선 누른다는데 전혀아님",
-    "views": 529,
-    "recommend": 0,
-    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3883803&page=4",
-    "time_kst": "11-12 03:25"
+    "title": "현재 장 요약",
+    "views": 511,
+    "recommend": 1,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3891852&page=2",
+    "time_kst": "11-13 05:01"
    },
    {
     "gallery": "국내주식갤러리",
-    "title": "토스 종토방 올타임 레전드",
-    "views": 451,
-    "recommend": 2,
-    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3883734&page=5",
-    "time_kst": "11-12 02:25"
-   },
-   {
-    "gallery": "국내주식갤러리",
-    "title": "젠슨황 이제 어떻게됨?",
-    "views": 449,
+    "title": "하이닉스 주주는 망한거지?",
+    "views": 479,
     "recommend": 0,
-    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3883873&page=2",
-    "time_kst": "11-12 04:49"
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3891778&page=3",
+    "time_kst": "11-13 03:05"
    }
   ]
  }

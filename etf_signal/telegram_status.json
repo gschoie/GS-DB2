@@ -1,8 +1,59 @@
 {
-  "when_utc": "2026-11-11 22:08:11Z",
+  "when_utc": "2026-11-12 22:09:06Z",
   "ok": true,
-  "note": "no_alert_skip",
+  "note": "alert_sent",
   "chat_id_tail": "5171",
   "token_set": true,
-  "response": null
+  "response": {
+    "ok": true,
+    "result": {
+      "message_id": 826,
+      "from": {
+        "id": 8875725998,
+        "is_bot": true,
+        "first_name": "GB Investing Signal",
+        "username": "gs_invest_signal_bot"
+      },
+      "chat": {
+        "id": 279385171,
+        "first_name": "광식",
+        "last_name": "최",
+        "username": "gschoie",
+        "type": "private"
+      },
+      "date": 1794521346,
+      "text": "📡 ETF/섹터 신호 · 2026-11-12 (전일 확정)\n\n◆ RSI 매수(30 이하) 1개\n   1주 단기 반등용 — 백테스트 D+5 승률 66%(초과 +0.92%p), D+20엔 효과 소멸\n\n🟩 KODEX 보험 · 금융\n   RSI 31.8→26.1 · 30 이하 진입(과매도)\n   RSI 26.1 · ADX 17.3 · %K 18.6/21.6 · 수급 중립\n   [C] 변동성 수축 후 확장\n\n전체 신호판 › 대시보드\n🎴 GS Research Desk · ETF/섹터 신호",
+      "entities": [
+        {
+          "offset": 0,
+          "length": 12,
+          "type": "bold"
+        },
+        {
+          "offset": 51,
+          "length": 1,
+          "type": "bold"
+        },
+        {
+          "offset": 57,
+          "length": 52,
+          "type": "italic"
+        },
+        {
+          "offset": 114,
+          "length": 8,
+          "type": "bold"
+        },
+        {
+          "offset": 236,
+          "length": 4,
+          "type": "text_link",
+          "url": "https://gs-research-desk.github.io/etf_signal_report.html"
+        }
+      ],
+      "link_preview_options": {
+        "is_disabled": true
+      }
+    }
+  }
 }
