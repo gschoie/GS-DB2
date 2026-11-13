@@ -1,15 +1,55 @@
 {
   "date": "2026-11-13",
   "prev_date": "2026-11-12",
-  "generated_at": "2026-11-13 09:20",
+  "generated_at": "2026-11-13 10:20",
   "base_date": "",
   "prev_base_date": "",
   "market_date": "2026-11-13",
   "prev_market_date": "2026-11-12",
-  "fetched_at": "2026-11-13 09:20",
+  "fetched_at": "2026-11-13 10:20",
   "prev_fetched_at": "2026-11-12 10:20",
   "first_run": false,
   "etfs": [
+    {
+      "code": "426030",
+      "label": "TIME 미국나스닥100액티브",
+      "group": "TIME(구 TIMEFOLIO)",
+      "flow_factor": 1.0,
+      "new": [
+        {
+          "key": "IONQ INC",
+          "name": "IONQ INC",
+          "code": "",
+          "weight": 0.0,
+          "shares": 155.0
+        },
+        {
+          "key": "QUANTINUUM INC-A",
+          "name": "QUANTINUUM INC-A",
+          "code": "",
+          "weight": 0.0,
+          "shares": 137.0
+        }
+      ],
+      "gone": [
+        {
+          "key": "PALANTIR TECHNOLOGIES INC-A",
+          "name": "PALANTIR TECHNOLOGIES INC-A",
+          "code": "",
+          "weight_prev": 0.0,
+          "shares_prev": 105.0
+        },
+        {
+          "key": "ALPHABET INC-CL A",
+          "name": "ALPHABET INC-CL A",
+          "code": "",
+          "weight_prev": 0.0,
+          "shares_prev": 106.0
+        }
+      ],
+      "moves": [],
+      "has_weight": false
+    },
     {
       "code": "456600",
       "label": "TIME 글로벌AI인공지능액티브",
@@ -17,18 +57,18 @@
       "flow_factor": 1.0005,
       "new": [
         {
-          "key": "QUANTINUUM INC-A",
-          "name": "QUANTINUUM INC-A",
-          "code": "",
-          "weight": 0.0,
-          "shares": 203.0
-        },
-        {
           "key": "IONQ INC",
           "name": "IONQ INC",
           "code": "",
           "weight": 0.0,
           "shares": 230.0
+        },
+        {
+          "key": "QUANTINUUM INC-A",
+          "name": "QUANTINUUM INC-A",
+          "code": "",
+          "weight": 0.0,
+          "shares": 203.0
         }
       ],
       "gone": [
@@ -208,9 +248,9 @@
     "share_pct_min": 30.0
   },
   "summary": {
-    "etfs_changed": 5,
-    "new_total": 5,
-    "gone_total": 5,
+    "etfs_changed": 6,
+    "new_total": 7,
+    "gone_total": 7,
     "moves_total": 5,
     "universe": 20
   }
