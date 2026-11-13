@@ -49,9 +49,22 @@ tr.grp td{background:var(--bg);color:var(--muted);font-weight:700;text-align:lef
 .sm{background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:6px 8px 4px;position:relative}
 .sm .t{display:flex;justify-content:space-between;font-size:12.5px;font-weight:600}
 .sm .t span{color:var(--muted);font-weight:400;font-size:11.5px}
-.sm svg{display:block;width:100%;height:110px;overflow:visible}
+.sm svg{display:block;width:100%;height:130px;overflow:visible}
 .tip{position:fixed;pointer-events:none;background:var(--btn);color:var(--bg);font-size:11.5px;padding:4px 8px;border-radius:5px;display:none;z-index:9;white-space:nowrap}
 .msg{padding:14px;color:var(--warn);font-size:13px}
+.led{display:flex;gap:6px;overflow-x:auto;padding:10px 12px}
+.led .c{flex:0 0 auto;min-width:74px;border:1px solid var(--line);border-radius:7px;background:var(--bg);padding:5px 8px;text-align:center;line-height:1.35}
+.led .c b{display:block;font-size:13.5px}
+.led .c i{font-style:normal;display:block;font-size:11px;color:var(--muted)}
+.led .c em{font-style:normal;display:block;font-size:12px;font-weight:700;color:#15803d}
+.led .c.part em{color:var(--warn)}
+.led .c.miss{border-style:dashed;border-color:var(--up);background:transparent}
+.led .c.miss em{color:var(--up)}
+.led .c.we{opacity:.7}
+.led .c.last{border:2px solid var(--fg)}
+.stat{padding:0 12px 10px;font-size:13px;font-weight:600}
+.dlt{font-size:11.5px;font-weight:600}
+.dlt.u{color:var(--up)}.dlt.d{color:var(--dn)}.dlt.z{color:var(--muted)}
 </style>
 </head>
 <body>
@@ -60,7 +73,7 @@ tr.grp td{background:var(--bg);color:var(--muted);font-weight:700;text-align:lef
   <p class="sub" id="sub"></p>
   <p class="note">
     <b>ER</b> = (기간 내 EPS 추정 상향 건수 − 하향 건수) ÷ 애널리스트 수 × 100 (−100 ~ +100). <b>EPS 1M·3M</b> = 컨센서스 EPS 의 30·90일 전 대비 변화율.
-    자료: Yahoo Finance — 매일 17:10 KST 적재(2026-11-10 시작), 블룸버그보다 커버 증권사가 적어 <span class="lo">애널리스트 5명 미만</span>은 1~2건에도 크게 튄다.
+    자료: Yahoo Finance — 평일 16:44 KST 적재(2026-11-10 시작), 블룸버그보다 커버 증권사가 적어 <span class="lo">애널리스트 5명 미만</span>은 1~2건에도 크게 튄다.
     갱신: <a href="https://github.com/gschoie/ecos-fx-rates/actions/workflows/earnings-revision.yml" target="_blank" rel="noopener">ecos-fx-rates Actions › Earnings Revision 적재 › Run workflow</a>
   </p>
   <div class="bar">
@@ -114,7 +127,7 @@ tr.grp td{background:var(--bg);color:var(--muted);font-weight:700;text-align:lef
 
   function spark(series){
     // series: [{d,er}] 날짜순. y = −100~+100 고정(종목 간 비교), x = 날짜 순번
-    const Wd=240,H=110,pt=6,pb=16,pl=26,pr=6,n=series.length;
+    const Wd=240,H=130,pt=8,pb=18,pl=26,pr=8,n=series.length;
     const x=i=>pl+(n<=1?(Wd-pl-pr)/2:i*(Wd-pl-pr)/(n-1)),y=v=>pt+(100-v)/200*(H-pt-pb);
     let g=`<line x1="${pl}" x2="${Wd-pr}" y1="${y(0)}" y2="${y(0)}" stroke="var(--zero)" stroke-width="1"/>`;
     [100,50,-50,-100].forEach(v=>g+=`<line x1="${pl}" x2="${Wd-pr}" y1="${y(v)}" y2="${y(v)}" stroke="var(--grid)" stroke-width="1"/>`);
@@ -122,11 +135,50 @@ tr.grp td{background:var(--bg);color:var(--muted);font-weight:700;text-align:lef
     const pts=series.map((s,i)=>s.er==null?null:[x(i),y(s.er)]);
     let d="",pen=false;pts.forEach(p=>{if(!p){pen=false;return}d+=(pen?"L":"M")+p[0].toFixed(1)+" "+p[1].toFixed(1);pen=true});
     if(d)g+=`<path d="${d}" fill="none" stroke="var(--fg)" stroke-width="2" stroke-linejoin="round"/>`;
-    const last=[...series].reverse().find(s=>s.er!=null);
-    if(last){const i=series.lastIndexOf(last);g+=`<circle cx="${x(i)}" cy="${y(last.er)}" r="4" fill="var(${last.er>0?"--up":last.er<0?"--dn":"--zero"})" stroke="var(--bg)" stroke-width="2"/>`}
-    if(n){g+=`<text x="${pl}" y="${H-3}" font-size="9" fill="var(--muted)">${series[0].d.slice(5)}</text>`;
-      if(n>1)g+=`<text x="${Wd-pr}" y="${H-3}" font-size="9" fill="var(--muted)" text-anchor="end">${series[n-1].d.slice(5)}</text>`}
+    // 날마다 점 하나 = 그날 적재됨(빈 날은 점·선이 끊김), 마지막 점만 크게 색칠
+    const col=v=>`var(${v>0?"--up":v<0?"--dn":"--zero"})`,li=series.map(s=>s.er!=null).lastIndexOf(true);
+    series.forEach((s,i)=>{if(s.er==null)return;
+      g+=i===li?`<circle cx="${x(i)}" cy="${y(s.er)}" r="4.5" fill="${col(s.er)}" stroke="var(--bg)" stroke-width="2"/>`
+               :`<circle cx="${x(i)}" cy="${y(s.er)}" r="2.6" fill="var(--fg)"/>`});
+    // 날짜 눈금: 8개 이하면 전부, 많으면 간격을 두고(처음·끝은 항상)
+    const step=n<=8?1:Math.ceil(n/6);
+    series.forEach((s,i)=>{if(i%step&&i!==n-1)return;if(i!==n-1&&n-1-i<step&&i)return;
+      const a=n===1?"middle":i===0?"start":i===n-1?"end":"middle";
+      g+=`<text x="${x(i)}" y="${H-4}" font-size="9.5" fill="var(--muted)" text-anchor="${a}">${+s.d.slice(5,7)}/${+s.d.slice(8)}</text>`});
     return `<svg viewBox="0 0 ${Wd} ${H}" preserveAspectRatio="none" data-s='${esc(JSON.stringify(series))}' data-g="${pl},${Wd-pr}">${g}<rect x="0" y="0" width="${Wd}" height="${H}" fill="transparent"/></svg>`;
+  }
+
+  // ── 적재 현황: 날짜마다 몇 종목이 들어왔나 + 빠진 평일 ──
+  const kst=()=>new Date(new Date().toLocaleString("en-US",{timeZone:"Asia/Seoul"}));
+  const ymd=d=>d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
+  const WK="일월화수목금토";
+  function ledger(dates){
+    const secRows=ROWS.filter(r=>r.sector===S);
+    const expAll=new Set(ROWS.map(r=>r.ticker)).size, expSec=new Set(secRows.map(r=>r.ticker)).size;
+    const cnt=(rs,d)=>new Set(rs.filter(r=>r.date===d).map(r=>r.ticker)).size;
+    // 평일인데 빠진 날: 첫 적재일 ~ '받았어야 할 마지막 날'(평일 17:30 이후면 오늘, 아니면 직전 평일)
+    const now=kst(),have=new Set(dates),cells=[];
+    let due=new Date(now);if(!(now.getDay()%6&&now.getHours()*60+now.getMinutes()>=17*60+30))due.setDate(due.getDate()-1);
+    while(!(due.getDay()%6))due.setDate(due.getDate()-1);
+    const end=ymd(due)>dates[dates.length-1]?ymd(due):dates[dates.length-1];
+    for(let d=new Date(dates[0]+"T00:00:00");ymd(d)<=end;d.setDate(d.getDate()+1)){
+      const k=ymd(d),we=!(d.getDay()%6);
+      if(have.has(k))cells.push({k,we,a:cnt(ROWS,k),s:cnt(secRows,k)});
+      else if(!we)cells.push({k,we,miss:true});
+    }
+    const missing=cells.filter(c=>c.miss).length,lastC=cells.filter(c=>!c.miss).pop();
+    const okToday=have.has(ymd(due));
+    const stat=missing?`⚠️ 빠진 평일 ${missing}일 — 아래 빨간 점선 칸(그날 값은 소급 불가)`
+      :okToday?`✅ ${+ymd(due).slice(5,7)}/${+ymd(due).slice(8)}(${WK[due.getDay()]})까지 하루도 빠짐없이 적재됨`
+      :`⏳ 오늘 분은 16:44 이후 적재`;
+    const show=cells.slice(-20);
+    let h=`<div class="card"><div class="hd">📅 적재 현황<small>칸마다 그날 들어온 종목 수 · 위 = 전체 ${expAll}종목 · 아래 = ${S} ${expSec}종목${cells.length>20?" · 최근 20칸":""}</small></div><div class="led">`;
+    show.forEach(c=>{const md=`${+c.k.slice(5,7)}/${+c.k.slice(8)}`,w=WK[new Date(c.k+"T00:00:00").getDay()];
+      if(c.miss){h+=`<div class="c miss"><b>${md}</b><i>${w}</i><em>누락</em></div>`;return}
+      const full=c.a>=expAll;
+      h+=`<div class="c${full?"":" part"}${c.we?" we":""}${c===lastC?" last":""}" title="${c.k} · 전체 ${c.a}/${expAll} · ${S} ${c.s}/${expSec}${c.we?" · 주말에 늦게 돈 실행(직전 평일 값과 거의 같음)":""}">
+        <b>${md}</b><i>${w}${c.we?" · 주말":""}</i><em>${full?"✓ ":""}${c.a}/${expAll}</em><i>${S} ${c.s}/${expSec}</i></div>`});
+    return h+`</div><div class="stat">${stat}</div></div>`;
   }
 
   function render(){
@@ -137,28 +189,33 @@ tr.grp td{background:var(--bg);color:var(--muted);font-weight:700;text-align:lef
     if(!rows.length){$("out").innerHTML=`<div class="msg">${S} 데이터가 아직 없습니다.</div>`;$("sub").textContent="";return}
     const dates=[...new Set(ROWS.map(r=>r.date))].sort(),last=dates[dates.length-1];
     $("sub").textContent=`기준일 ${last} · 적재 ${dates.length}일 (${dates[0]}~) · ${P==="0y"?"FY1(올해 회계연도)":"FY2(내년)"} · ER ${W}일`;
+    const prev=dates.length>1?dates[dates.length-2]:null;
     const erk="er"+W,upk="up"+W,dnk="down"+W;
     // 종목 순서 = CSV 첫 등장 순, 지역별로 묶는다
     const order=[];rows.forEach(r=>{if(!order.includes(r.ticker))order.push(r.ticker)});
     const latest=Object.fromEntries(rows.filter(r=>r.date===last).map(r=>[r.ticker,r]));
     const any=Object.fromEntries(rows.map(r=>[r.ticker,r]));
+    const prevRows=prev?Object.fromEntries(rows.filter(r=>r.date===prev).map(r=>[r.ticker,r])):{};
+    const prevOf=t=>prevRows[t]?num(prevRows[t][erk]):null;
+    const delta=(a,b)=>{if(a==null||b==null)return '<span class="dlt z">–</span>';const d=Math.round(a-b);
+      return d===0?'<span class="dlt z">0</span>':`<span class="dlt ${d>0?"u":"d"}">${d>0?"▲":"▼"}${Math.abs(d)}</span>`};
     // 지역 그룹 순서: 한국 → 한국 조기 → 그 외
     const regions=[];order.forEach(t=>{const g=any[t].region;if(!regions.includes(g))regions.push(g)});
     const rk=g=>g==="한국"?0:g.startsWith("한국")?1:2;regions.sort((a,b)=>rk(a)-rk(b));   // 안정 정렬 → 해외는 첫 등장 순
     let tb=`<div class="card"><div class="hd">최신 스냅샷<small>${last} · 막대 = ER(−100 ~ +100), 빨강 상향 · 파랑 하향</small></div><div class="tw"><table>
-      <thead><tr><th>종목</th><th></th><th>애널리스트</th><th>상향</th><th>하향</th><th>ER ${W}일</th><th>EPS 1M</th><th>EPS 3M</th><th>통화</th></tr></thead><tbody>`;
+      <thead><tr><th>종목</th><th></th><th>애널리스트</th><th>상향</th><th>하향</th><th>ER ${W}일</th><th title="직전 적재일 대비 ER 변화">${prev?`vs ${+prev.slice(5,7)}/${+prev.slice(8)}`:"전일 대비"}</th><th>EPS 1M</th><th>EPS 3M</th><th>통화</th></tr></thead><tbody>`;
     regions.forEach(g=>{
-      tb+=`<tr class="grp"><td colspan="9">${esc(g)}</td></tr>`;
+      tb+=`<tr class="grp"><td colspan="10">${esc(g)}</td></tr>`;
       order.filter(t=>any[t].region===g).forEach(t=>{const r=latest[t];
-        if(!r){tb+=`<tr><td>${esc(any[t].name)}</td><td></td><td colspan="7" style="text-align:left;color:var(--muted)">오늘 수집 실패(최근값 아래 차트 참고)</td></tr>`;return}
+        if(!r){tb+=`<tr><td>${esc(any[t].name)}</td><td></td><td colspan="8" style="text-align:left;color:var(--muted)">오늘 수집 실패(최근값 아래 차트 참고)</td></tr>`;return}
         const n=num(r.n_analysts);
         tb+=`<tr><td title="${esc(r.ticker)}">${esc(r.name)}</td><td style="color:var(--muted);font-size:11px">${esc(r.ticker)}</td>
           <td>${n==null?"–":n}${n!=null&&n<5?' <span class="lo">⚠적음</span>':""}</td>
-          <td>${num(r[upk])??"–"}</td><td>${num(r[dnk])??"–"}</td><td>${erBar(num(r[erk]))}</td>
+          <td>${num(r[upk])??"–"}</td><td>${num(r[dnk])??"–"}</td><td>${erBar(num(r[erk]))}</td><td>${delta(num(r[erk]),prevOf(t))}</td>
           <td>${fmtPct(num(r.eps_chg_1m))}</td><td>${fmtPct(num(r.eps_chg_3m))}</td><td style="color:var(--muted)">${esc(r.currency)}</td></tr>`});
     });
     tb+=`</tbody></table></div></div>`;
-    let sm=`<div class="card"><div class="hd">ER ${W}일 추이<small>종목별 같은 축(−100 ~ +100) · 점 = 최신값 · 마우스를 올리면 날짜별 값</small></div><div class="grid">`;
+    let sm=`<div class="card"><div class="hd">ER ${W}일 추이<small>종목별 같은 축(−100 ~ +100) · 작은 점 = 그날 적재값, 큰 점 = 최신 · 마우스를 올리면 날짜별 값</small></div><div class="grid">`;
     regions.forEach(g=>order.filter(t=>any[t].region===g).forEach(t=>{
       const byD=Object.fromEntries(rows.filter(r=>r.ticker===t).map(r=>[r.date,r]));
       const ser=dates.filter(d=>d>=Object.keys(byD).sort()[0]).map(d=>({d,er:byD[d]?num(byD[d][erk]):null,n:byD[d]?num(byD[d].n_analysts):null}));
@@ -166,7 +223,7 @@ tr.grp td{background:var(--bg);color:var(--muted);font-weight:700;text-align:lef
       sm+=`<div class="sm"><div class="t">${esc(any[t].name)}<span>${esc(g)} · ${lv==null?"–":fmtEr(lv)}</span></div>${spark(ser)}</div>`;
     }));
     sm+=`</div>${dates.length<5?'<div class="note" style="padding:0 12px 6px">적재 초기라 점이 몇 개뿐입니다 — 매일 하나씩 쌓여 선이 됩니다.</div>':""}</div>`;
-    $("out").innerHTML=tb+sm;
+    $("out").innerHTML=ledger(dates)+tb+sm;
   }
 
   // 작은 차트 hover: 가장 가까운 날짜의 값
