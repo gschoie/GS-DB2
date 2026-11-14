@@ -773,16 +773,21 @@ function tableShot(){
   clone.style.cssText='overflow:visible;width:'+w+'px;height:'+h+'px;border-radius:0';
   const css=Array.from(document.querySelectorAll('style')).map(s=>s.textContent).join('\\n');
   const light=':root{--bg:#f6f7f9;--card:#fff;--ink:#1a1d21;--muted:#6b7280;--line:#e5e7eb;'+
-              '--accent:#185fa5;--est:#fff6e5;--grp:#eef2f7;--sum:#efe8dc;--bad:#d03b3b}';
+              '--accent:#185fa5;--est:#fff6e5;--grp:#eef2f7;--sum:#efe8dc;--bad:#d03b3b}'+
+    /* SVG 안엔 body 가 없어 body{font-family} 가 안 먹고 기본 세리프로 대체 → 글자 폭이
+       달라져 실측 폭(scrollWidth)보다 넓게 그려진 오른쪽 끝이 잘렸다(11/14 사용자 실측).
+       루트 div 에 같은 글꼴·행간을 강제해 화면과 같은 치수로 그린다. */
+    'div{font-family:-apple-system,"Segoe UI","Malgun Gothic",sans-serif;line-height:1.45}';
+  const PAD=24;   // 글꼴 힌팅·서브픽셀 반올림용 안전 여백(배경색이라 티 안 남)
   const esc=t=>t.replace(/&/g,'&amp;').replace(/</g,'&lt;');   // XML 파싱이 조용히 깨지지 않게
-  const svg='<svg xmlns="http://www.w3.org/2000/svg" width="'+w+'" height="'+h+'">'+
+  const svg='<svg xmlns="http://www.w3.org/2000/svg" width="'+(w+PAD)+'" height="'+(h+PAD)+'">'+
     '<foreignObject width="100%" height="100%"><div xmlns="http://www.w3.org/1999/xhtml">'+
     '<style>'+esc(css)+'\\n'+light+'</style>'+new XMLSerializer().serializeToString(clone)+
     '</div></foreignObject></svg>';
   return new Promise((resolve,reject)=>{
     const img=new Image();
     img.onload=()=>{ try{
-      const c=document.createElement('canvas'); c.width=w*SHOT_SCALE; c.height=h*SHOT_SCALE;
+      const c=document.createElement('canvas'); c.width=(w+PAD)*SHOT_SCALE; c.height=(h+PAD)*SHOT_SCALE;
       const x=c.getContext('2d'); x.fillStyle='#f6f7f9'; x.fillRect(0,0,c.width,c.height);
       x.drawImage(img,0,0,c.width,c.height);
       c.toBlob(b=>b ? b.arrayBuffer().then(buf=>resolve(new Blob([pngDpi(buf,96*SHOT_SCALE)],{type:'image/png'}))).catch(reject)
