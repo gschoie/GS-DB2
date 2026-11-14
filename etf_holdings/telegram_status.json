@@ -1,5 +1,5 @@
 {
-  "when_utc": "2026-11-10 01:20:36Z",
+  "when_utc": "2026-11-13 01:20:35Z",
   "ok": true,
   "note": "change_sent",
   "chat_id_tail": "5171",
@@ -7,7 +7,7 @@
   "response": {
     "ok": true,
     "result": {
-      "message_id": 807,
+      "message_id": 829,
       "from": {
         "id": 8875725998,
         "is_bot": true,
@@ -21,8 +21,8 @@
         "username": "gschoie",
         "type": "private"
       },
-      "date": 1794273636,
-      "text": "🧩 액티브 ETF 구성 변화 · 감지 2026-11-10 10:20 (직전 거래일 매매)\n\n변화 ETF 6개 · 진입 9·이탈 9·실매매 0\n\n🟢 KoAct 배당성장액티브 · KoAct\n   ⊕ 진입: 기업은행, 기아, 셀트리온\n   ⊖ 이탈: 한화시스템, 에코프로에이치엔, 한화에어로스페이스\n🟢 TIME 미국나스닥100액티브 · TIME(구 TIMEFOLIO)\n   ⊕ 진입: XCEL ENERGY INC, NEXTERA ENERGY INC\n   ⊖ 이탈: BLOOM ENERGY CORP- A, MICROSOFT CORP\n🟢 TIME Korea플러스배당액티브 · TIME(구 TIMEFOLIO)\n   ⊕ 진입: 삼성생명\n   ⊖ 이탈: 한국금융지주\n🟢 TIME K바이오액티브 · TIME(구 TIMEFOLIO)\n   ⊕ 진입: 한올바이오파마\n   ⊖ 이탈: 리브스메드\n🟢 KoAct 코스닥액티브 · KoAct\n   ⊕ 진입: 동진쎄미켐\n   ⊖ 이탈: 알테오젠\n🟢 TIGER 배당커버드콜액티브 · TIGER\n   ⊕ 진입: 삼성바이오로직스\n   ⊖ 이탈: 한화에어로스페이스\n\n전체 상세 › 대시보드\n🎴 GS Research Desk · 액티브 ETF 트래커",
+      "date": 1794532834,
+      "text": "🧩 액티브 ETF 구성 변화 · 감지 2026-11-13 10:20 (직전 거래일 매매)\n\n변화 ETF 6개 · 진입 7·이탈 7·실매매 5\n\n🟢 TIME 미국나스닥100액티브 · TIME(구 TIMEFOLIO)\n   ⊕ 진입: IONQ INC, QUANTINUUM INC-A\n   ⊖ 이탈: PALANTIR TECHNOLOGIES INC-A, ALPHABET INC-CL A\n🟢 TIME 글로벌AI인공지능액티브 · TIME(구 TIMEFOLIO)\n   ⊕ 진입: IONQ INC, QUANTINUUM INC-A\n   ⊖ 이탈: AMAZON.COM INC, SERVICENOW INC\n🟢 TIME 코스닥액티브 · TIME(구 TIMEFOLIO)\n   ⊕ 진입: 티에프이\n   ⊖ 이탈: 에스피지\n   ▲ 인텍플러스 계약수 +41% · 비중 +1.4%p\n   ▽ 알테오젠 계약수 −29% · 비중 −1.5%p\n🟢 TIGER 코리아테크액티브 · TIGER\n   ⊕ 진입: 심텍\n   ⊖ 이탈: 테스\n   ▽ SK스퀘어 계약수 −36% · 비중 −3.0%p\n🟢 KoAct 배당성장액티브 · KoAct\n   ⊕ 진입: 셀트리온\n   ⊖ 이탈: 기아\n🟢 KoAct 글로벌AI&로봇액티브 · KoAct\n   ▲ 에스피지 계약수 +532%\n   ▲ 로보티즈 계약수 +114%\n\n전체 상세 › 대시보드\n🎴 GS Research Desk · 액티브 ETF 트래커",
       "entities": [
         {
           "offset": 0,
@@ -41,36 +41,41 @@
         },
         {
           "offset": 84,
-          "length": 13,
-          "type": "bold"
-        },
-        {
-          "offset": 169,
           "length": 16,
           "type": "bold"
         },
         {
-          "offset": 300,
-          "length": 18,
+          "offset": 216,
+          "length": 17,
           "type": "bold"
         },
         {
-          "offset": 372,
-          "length": 12,
+          "offset": 299,
+          "length": 10,
+          "type": "url"
+        },
+        {
+          "offset": 333,
+          "length": 11,
           "type": "bold"
         },
         {
-          "offset": 440,
-          "length": 12,
+          "offset": 459,
+          "length": 14,
           "type": "bold"
         },
         {
-          "offset": 493,
-          "length": 15,
+          "offset": 541,
+          "length": 13,
           "type": "bold"
         },
         {
-          "offset": 563,
+          "offset": 592,
+          "length": 17,
+          "type": "bold"
+        },
+        {
+          "offset": 667,
           "length": 4,
           "type": "text_link",
           "url": "https://gs-research-desk.github.io/etf_holdings_report.html"

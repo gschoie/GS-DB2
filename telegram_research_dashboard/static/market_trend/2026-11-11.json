@@ -1,0 +1,684 @@
+{
+ "date": "2026-11-11",
+ "meta": {
+  "window": "11-10 06:00~11-11 06:00 KST",
+  "engine": "Gemini(gemini-2.5-flash)",
+  "generated_at": "2026-11-11T06:35+09:00"
+ },
+ "stats": {
+  "channels": 99,
+  "messages": 1689,
+  "groups": 1509
+ },
+ "one_liner": "미국 인플레이션 우려 지속 속 AI 인프라 및 원전 섹터 주목, 바이오 신약 모멘텀 부각",
+ "themes": [
+  {
+   "name": "미국 인플레이션 및 통화정책",
+   "narrative": "월러 연준 이사의 매파적 발언과 예상치를 상회한 미국 CPI 발표로 12월 추가 금리 인상 가능성이 제기되며 시장의 인플레이션 우려가 지속되고 있습니다. 다만, 유가 진정 및 기술주 강세에 따른 전반적인 위험선호 회복 신호도 감지됩니다.",
+   "status": "ongoing",
+   "strength": 5,
+   "keywords": [
+    "월러",
+    "근원",
+    "근원 CPI",
+    "CPI",
+    "bp 인상",
+    "위험선호"
+   ],
+   "evidence": [
+    {
+     "channel": "서화백의 그림놀이🚀",
+     "quote": "📝 월러 연준 이사 \"12월 금리인상 지지\"…CPI 따라 50bp 인상도 고..."
+    },
+    {
+     "channel": "미국 주식 인사이더 🇺🇸 (US Stocks Insider)",
+     "quote": "• 미국 10월 물가가 예상보다 강한 흐름을 보이며 연준의 추가 긴축 가능성이 확대."
+    },
+    {
+     "channel": "신한 리서치",
+     "quote": "KOSPI는 4.1% 상승한 5,225.1p. 유가 진정과 위험선호 회복 등에 반도체 저가 매수 속 매수 사이드카"
+    }
+   ]
+  },
+  {
+   "name": "AI 인프라 및 반도체 경쟁 심화",
+   "narrative": "NHN이 GPU 사업 호조로 높은 이익 성장을 기록하며 AI 인프라 수요를 입증했습니다. 구글은 엔비디아와의 경쟁 강화를 위해 신형 TPU 제품군을 공개하며 자체 AI 반도체 생태계 확대를 추진하고 있으며, 시장에서는 AI 투자 지속성에 대한 강력한 확신이 유지되고 있습니다.",
+   "status": "ongoing",
+   "strength": 5,
+   "keywords": [
+    "NHN",
+    "데이터센터",
+    "AI",
+    "TPU",
+    "반도체",
+    "크래프톤"
+   ],
+   "evidence": [
+    {
+     "channel": "신한 리서치",
+     "quote": ":NHN(+29.9%, GPU 사업 호조에 이익 +113% YoY)·한전KPS(-8.0%, 이익 -75%) 등 실적 따른 차별화"
+    },
+    {
+     "channel": "[신한 리서치본부] IT(반도체/전기전자/디스플레이)",
+     "quote": "▶️ 구글, 신형 TPU 8tx에 커스텀 AMD EPYC CPU 호스트 탑재…TPU 8i Max는 칩 2개 단일 패키지로 초고밀도 성능 구현 (WCCFTECH)"
+    },
+    {
+     "channel": "메리츠증권 리서치",
+     "quote": "[2027년 연간전망 시리즈 13] 전기전자/IT부품 : AI 투자 우려를 넘어, Conviction"
+    }
+   ]
+  },
+  {
+   "name": "원전 및 전력 인프라 투자 지속",
+   "narrative": "한전KPS와 한전기술 등 원전 관련 기업들이 계획예방정비 장기화로 인한 단기 실적 부진을 겪고 있으나, 체코 원전 사업 본격화 및 신한울 3·4호기 설계 진행 등 중장기 원자력 부문 성장에 대한 기대감은 유효합니다. 데이터센터 증가에 따른 전력 공급 병목 현상도 부각되며 전력 인프라의 중요성이 강조되고 있습니다.",
+   "status": "ongoing",
+   "strength": 4,
+   "keywords": [
+    "한전",
+    "한전 KPS",
+    "KPS",
+    "한전기술",
+    "정비",
+    "호기"
+   ],
+   "evidence": [
+    {
+     "channel": "유진투자증권 산업분석실 테크/인프라팀",
+     "quote": "<한전KPS 3Q26 Review - 완료를 못해서 생기는 문제>"
+    },
+    {
+     "channel": "유진투자증권 산업분석실 테크/인프라팀",
+     "quote": "- 체코 두코바니 사업 본격화와 신한울 3·4호기 설계 진행, 가동원전 O&M 수요가 동반 증가하며 원자력 부문 누계 비중이 68%(전년동기 62%)까지 확대"
+    },
+    {
+     "channel": "미국 주식 인사이더 🇺🇸 (US Stocks Insider)",
+     "quote": "전력 수요가 넘친다는 이야기는 진부합니다. 텍사스를 필두로 한 데이터센터 건설 중단 우려 등 요 근래 시장이 관심을 가졌던건 넘치는 수요를 실제 공급으로 연결시키지 못하는 인허가와 같은 정성적인 병목이었던것 같습니다."
+    }
+   ]
+  },
+  {
+   "name": "바이오 신약 개발 모멘텀",
+   "narrative": "한올바이오파마는 난치성 류마티스관절염 임상에서 유효성을 확인하며 신약 개발 기대감을 높였습니다. 알테오젠은 2대 주주의 주식 추가 매수로 주가 하락에 대한 우려를 완화했으며, 디앤디파마텍의 MASH 치료제 임상 2상 결과가 학회에서 'Best of The Liver Meeting' 초록으로 선정되며 주목받고 있습니다.",
+   "status": "new",
+   "strength": 4,
+   "keywords": [
+    "한올바이오파마",
+    "난치성",
+    "알테오젠",
+    "디앤디파마텍"
+   ],
+   "evidence": [
+    {
+     "channel": "텐렙",
+     "quote": "『한올바이오파마 (009420,KS) - 난치성 류마티스 최초 성공, GD로 이어진다』"
+    },
+    {
+     "channel": "텐렙",
+     "quote": "#알테오젠 최근 주가 하락은 과도하다 판단되어 알테오젠 2대주주인 형인우외 특수관계인 1인은 알테오젠 주식을 추가 매수 하였습니다."
+    },
+    {
+     "channel": "텐렙",
+     "quote": "당사가 개발 중인 MASH 치료제 자보페그두타이드 임상 2상 결과가 미국간학회(AASLD) 연례 학술 대회 'The Liver Meeting 2026'에서 'Best of The Liver Meeting' 초록으로 선정되어 이와 관련한 보도자료 공유 드립니다."
+    }
+   ]
+  },
+  {
+   "name": "항공주 유가 하락 수혜",
+   "narrative": "미국과 이란 간 분쟁 완화 기대감에 국제유가가 급락하면서 유류비 부담이 줄어들 것이라는 전망이 나왔습니다. 이에 진에어, 한진칼, 아시아나항공, 대한항공 등 항공주들이 동반 상승하며 시장의 관심을 받았습니다.",
+   "status": "new",
+   "strength": 3,
+   "keywords": [
+    "대한항공"
+   ],
+   "evidence": [
+    {
+     "channel": "epic AI - 투자 어시스턴트",
+     "quote": "상승률 1위는 항공(+11.88%)으로, 미국과 이란 간 분쟁 완화 기대에 국제유가가 급락해 유류비 부담이 줄 것이라는 전망이 반영되며 진에어(+29.92%), 한진칼(+15.18%), 아시아나항공(+11.68%), 대한항공(+11.51%)이 크게 올랐습니다."
+    }
+   ]
+  },
+  {
+   "name": "화장품 용기 산업 성장",
+   "narrative": "화장품 용기 전문 기업 펌텍코리아에 대해 다올투자증권에서 목표주가를 상향하며 긍정적인 전망을 내놓았습니다. 이는 국내 인디 브랜드의 성장과 해외 시장 확장에 힘입은 것으로 풀이됩니다.",
+   "status": "new",
+   "strength": 2,
+   "keywords": [
+    "펌텍코리아"
+   ],
+   "evidence": [
+    {
+     "channel": "다올투자증권 리서치센터",
+     "quote": "[펌텍코리아(251970)/ BUY(유지)/ TP 10만원(상향)/ 다올 화장품 박종현]"
+    },
+    {
+     "channel": "다올투자증권 리서치센터",
+     "quote": "[펌프] 매출액 927억원(YoY +24%, QoQ +5%), 영업이익 185억원, OPM 19.9%(YoY +4.5%p). GPM 25.5%(YoY +4.3%p)로 판가 인상 반영과 고정비 레버리지가 맞물림. 국내 인디 601억원(YoY +32%)이 성장 견인, 해외(YoY +16%)와 Big2(YoY +4%)도 동반…"
+    }
+   ]
+  }
+ ],
+ "community_mood": {
+  "score": -20,
+  "summary": "개미 투자자들은 엔비디아와 같은 주요 기술주에 대한 관심이 높지만, 최근 주가 하락에 대한 경계심과 메모리 반도체 섹터에 대한 우려가 혼재되어 있습니다. 시장 전반의 불확실성에 대한 불안감도 엿보입니다.",
+  "hot_stocks": [
+   {
+    "name": "엔비디아",
+    "score": -10,
+    "reason": "최근 주가 폭락에 대한 경계심과 함께, 일부 투자자들은 매수 기회를 엿보는 등 관심이 높습니다."
+   },
+   {
+    "name": "삼성전자/SK하이닉스",
+    "score": -30,
+    "reason": "메모리 반도체 섹터에 대한 우려와 함께 많은 투자자들이 물려있다는 인식이 강하게 나타나고 있습니다."
+   }
+  ]
+ },
+ "signals": {
+  "spikes": [
+   {
+    "term": "펌텍코리아",
+    "count": 29,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "한전",
+    "count": 27,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "한전 KPS",
+    "count": 25,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "KPS",
+    "count": 25,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "한전기술",
+    "count": 24,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "NHN",
+    "count": 40,
+    "burst": 28.35379877597162,
+    "base_daily": 1.1,
+    "new": false
+   },
+   {
+    "term": "월러",
+    "count": 21,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "신세계",
+    "count": 21,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "상상인증권",
+    "count": 19,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "한올바이오파마",
+    "count": 19,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "근원",
+    "count": 28,
+    "burst": 37.49002282600693,
+    "base_daily": 0.6,
+    "new": false
+   },
+   {
+    "term": "TPU",
+    "count": 17,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "정비",
+    "count": 17,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "KT",
+    "count": 17,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "위험선호",
+    "count": 16,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "근원 CPI",
+    "count": 16,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "크래프톤",
+    "count": 16,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "bp 인상",
+    "count": 16,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "CPI",
+    "count": 67,
+    "burst": 8.323447630368987,
+    "base_daily": 6.9,
+    "new": false
+   },
+   {
+    "term": "대한항공",
+    "count": 37,
+    "burst": 17.83453943008615,
+    "base_daily": 1.7,
+    "new": false
+   },
+   {
+    "term": "상기",
+    "count": 15,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "호기",
+    "count": 15,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "한화투자증권 목표주",
+    "count": 15,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "효율",
+    "count": 14,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   },
+   {
+    "term": "난치성",
+    "count": 14,
+    "burst": 99.0,
+    "base_daily": 0.0,
+    "new": true
+   }
+  ],
+  "top_posts": [
+   {
+    "channels": 5,
+    "channel": "미국 주식 인사이더 🇺🇸 (US Stocks Insider)",
+    "head": "안녕하세요 DS 투자증권 에너지/AI인프라 담당 허준서 연구원입니다. 전력 수요가 넘친다는 이야기는 진부합니다. 텍사스를 필두로 한 데이터센터 건설 중단 우려 등 요 근래 시장이 관심을 가졌던건 넘치는 수요를 실제 공급으로 연결시키지 못하는 인허가와 같은 정성적인 병목이었던것 같습니다. '전력 공급을 완성하는 조건'에 대…",
+    "url": "https://t.me/insidertracking/68825",
+    "time_kst": "11-10 07:07"
+   },
+   {
+    "channels": 5,
+    "channel": "AWAKE - 실시간 주식 공시 정리채널",
+    "head": "2026.11.10 08:23:09 기업명: NHN(시가총액: 1조 9,268억) A181710 보고서명: 연결재무제표기준영업(잠정)실적(공정공시) 매출액 : 7,583억(예상치 : 7,638억/ -1%) 영업익 : 588억(예상치 : 538억/ +9%) 순이익 : 292억(예상치 : 395억/ -26%) **최근 실적…",
+    "url": "https://t.me/darthacking/156762",
+    "time_kst": "11-10 08:23"
+   },
+   {
+    "channels": 4,
+    "channel": "텐렙",
+    "head": "『한올바이오파마 (009420,KS) - 난치성 류마티스 최초 성공, GD로 이어진다』 기업분석부 엄민용, 윤석현 ☎️ 02-3772-1546 ▶️ 신한생각: p값 확보 어려웠던 디자인으로 RA 최초 성공, 이제 좋은일만 이뮤노반트도 통계적 유의성 확보가 어려운 디자인임을 언급한 만큼 양사 모두 기대감 낮아 5월 20일…",
+    "url": "https://t.me/Ten_level/94111",
+    "time_kst": "11-10 07:58"
+   },
+   {
+    "channels": 4,
+    "channel": "텐렙",
+    "head": "#알테오젠 최근 주가 하락은 과도하다 판단되어 알테오젠 2대주주인 형인우외 특수관계인 1인은 알테오젠 주식을 추가 매수 하였습니다. 주가 회복에 조금이나마 도움이 되길 희망합니다. 형인우 2026.11.09 매수 12,000주 167,978원 2026.11.10 매수 10,000주 174,431원 염혜윤(특수관계인) 20…",
+    "url": "https://t.me/Ten_level/94116",
+    "time_kst": "11-10 08:56"
+   },
+   {
+    "channels": 3,
+    "channel": "텐렙",
+    "head": "안녕하세요 디앤디파마텍입니다. 당사가 개발 중인 MASH 치료제 자보페그두타이드 임상 2상 결과가 미국간학회(AASLD) 연례 학술 대회 'The Liver Meeting 2026'에서 'Best of The Liver Meeting' 초록으로 선정되어 이와 관련한 보도자료 공유 드립니다. 디앤디파마텍 MASH 치료제 ‘…",
+    "url": "https://t.me/Ten_level/94128",
+    "time_kst": "11-10 11:38"
+   },
+   {
+    "channels": 3,
+    "channel": "메리츠증권 리서치",
+    "head": "📮[메리츠증권 전기전자/IT부품 양승수] [2027년 연간전망 시리즈 13] 전기전자/IT부품 : AI 투자 우려를 넘어, Conviction 안녕하세요 메리츠증권 전기전자/IT부품 담당 양승수 연구원입니다. 올해 전기전자 연간전망을 발간했습니다 이번 전망에서는 AI 투자 지속성에 대한 시장의 우려와 달리, 여전히 강력한…",
+    "url": "https://t.me/meritz_research/45091",
+    "time_kst": "11-10 08:05"
+   },
+   {
+    "channels": 3,
+    "channel": "키움증권 전략/시황 한지영",
+    "head": "[11/10, 장 시작 전 생각: 약속의 2시 징크스, 키움 한지영] - 다우 +2.2%, S&P500 +2.4%, 나스닥 +2.7% - 엔비디아 -4.3%, AMD +13.3%, 마이크론 +6.3% - WTI 86.3달러, 미 10년물 금리 4.88%, 30년물 금리 5.27% 1. 미국 증시는 급등세로 마감했네요. ﻿…",
+    "url": "https://t.me/hedgecat0301/2994",
+    "time_kst": "11-10 07:37"
+   },
+   {
+    "channels": 3,
+    "channel": "여의도스토리 Ver2.0-习近平是个狗东西",
+    "head": "반도체: 투자자 핵심 Q&A 3선 [대신증권 반도체/류형근] ■ 확대 해석은 지양하자 - 주가가 부진하면, Bad News에 대한 확대 해석이 잇따르기 마련입니다. 최근에 제기된 Risk도 같은 맥락이라 생각합니다. - 하반기 메모리반도체 주가 조정을 이끌었던 3중고 (Macro, 금융, 정치)는 점진적으로 해소될 것으로…",
+    "url": "https://t.me/YeouidoStory2/119525",
+    "time_kst": "11-10 07:53"
+   },
+   {
+    "channels": 3,
+    "channel": "다올투자증권 리서치센터",
+    "head": "[다올투자증권 조선/기계/방산 최광식] 11/10(화) 데일리뉴스 🛳 조선 [TradeWinds] Thenamaris linked to first LNG newbuildings in eight years Cosco strikes for 24 tankers in VLCC newbuilding spree Teekay Tank…",
+    "url": "https://t.me/daolresearch/15472",
+    "time_kst": "11-10 08:49"
+   },
+   {
+    "channels": 3,
+    "channel": "텐렙",
+    "head": "『알테오젠 (196170,KQ) - 약가인하는 조삼모사』 기업분석부 엄민용, 윤석현 ☎️ 02-3772-1546 ▶️ 신한생각: 히알루로니다제 SC 약가인하는 머크 주가를 흔들지 못했다 11월 5일 IRA 2029년 약가협상 최종규칙에서 SC 제형도 협상 대상에 포함됐으나 키트루다SC 영향은 미미할 것으로 판단. 작년 5…",
+    "url": "https://t.me/Ten_level/94110",
+    "time_kst": "11-10 07:58"
+   },
+   {
+    "channels": 3,
+    "channel": "이지스스트레티지 리서치",
+    "head": "[iM증권 정원석] 이차전지(Overweight) / 미국 중간선거 블루웨이브, 오히려 기회가 될 수 있다 • 중간선거 이후 민주당의 데이터센터 개발 규제 강화로 투자 지연 우려가 있으나, 정책 핵심은 전력·용수·환경 부담의 주민 전가 방지임. 계통 접속 대기 중 자체 전력을 조달하는 BTM 발전(가스발전+태양광+ESS)…",
+    "url": "https://t.me/jeilstock/47175",
+    "time_kst": "11-10 09:29"
+   },
+   {
+    "channels": 3,
+    "channel": "AWAKE - 실시간 주식 공시 정리채널",
+    "head": "2026.11.10 09:09:15 기업명: CJ제일제당(시가총액: 2조 6,796억) A097950 보고서명: 연결재무제표기준영업(잠정)실적(공정공시) 매출액 : 73,952억(예상치 : 73,503억+/ 1%) 영업익 : 3,090억(예상치 : 3,171억/ -3%) 순이익 : 192억(예상치 : 1,286억/ -85…",
+    "url": "https://t.me/darthacking/156765",
+    "time_kst": "11-10 09:09"
+   },
+   {
+    "channels": 3,
+    "channel": "AWAKE - 실시간 주식 공시 정리채널",
+    "head": "2026.11.10 11:16:00 기업명: 메디톡스(시가총액: 4,693억) A086900 보고서명: 연결재무제표기준영업(잠정)실적(공정공시) 매출액 : 593억(예상치 : 685억/ -13%) 영업익 : 155억(예상치 : 82억/ +89%) 순이익 : 116억(예상치 : 36억+/ 222%) **최근 실적 추이**…",
+    "url": "https://t.me/darthacking/156788",
+    "time_kst": "11-10 11:16"
+   },
+   {
+    "channels": 3,
+    "channel": "AWAKE - 실시간 주식 공시 정리채널",
+    "head": "2026.11.10 13:13:38 기업명: 케이씨텍(시가총액: 1조 1,919억) A281820 보고서명: 단일판매ㆍ공급계약체결 계약상대 : SK하이닉스 계약내용 : ( 기타 판매ㆍ공급계약 ) 반도체 제조 장비 공급지역 : 대한민국 계약금액 : 211억 계약시작 : 2026-11-09 계약종료 : 2027-04-01 계…",
+    "url": "https://t.me/darthacking/156797",
+    "time_kst": "11-10 13:13"
+   },
+   {
+    "channels": 3,
+    "channel": "이그전 (이은택의 그림 전략)",
+    "head": "[이그전] 유가 하락이 만든 반등은 유지 가능한가? 안녕하세요. KB증권 자산배분 이은택입니다. 1) 수많은 증시 하락 요인 중 가장 핵심은 ‘자본조달 문제’이고 자금 조달 문제의 근원에는 ‘인플레 우려’가 핵심입니다. 2) 따라서 탑다운 측면에선 ‘인플레’가 향후 시장의 반등과 붕괴를 만들 중요한 카드로 여기고 있습니다…",
+    "url": "https://t.me/egzion/6466",
+    "time_kst": "11-10 10:57"
+   }
+  ]
+ },
+ "community_dc": {
+  "source": "DC인사이드",
+  "galleries": [
+   {
+    "id": "krstock",
+    "name": "국내주식갤러리",
+    "posts": 524,
+    "capped": true,
+    "burst": 0.2,
+    "base_daily": 2209.0
+   },
+   {
+    "id": "stockus",
+    "name": "해외주식갤러리",
+    "posts": 526,
+    "capped": true,
+    "burst": 0.1,
+    "base_daily": 7549.7
+   }
+  ],
+  "posts_sampled": 497,
+  "keywords": [
+   {
+    "term": "코어위브",
+    "count": 10,
+    "burst": 99.0,
+    "new": true
+   },
+   {
+    "term": "아님",
+    "count": 8,
+    "burst": 99.0,
+    "new": true
+   },
+   {
+    "term": "테슬라",
+    "count": 6,
+    "burst": 86.0,
+    "new": true
+   },
+   {
+    "term": "마누라",
+    "count": 5,
+    "burst": 71.6,
+    "new": true
+   },
+   {
+    "term": "애플",
+    "count": 5,
+    "burst": 71.6,
+    "new": true
+   },
+   {
+    "term": "황사장",
+    "count": 5,
+    "burst": 71.6,
+    "new": true
+   },
+   {
+    "term": "양전",
+    "count": 5,
+    "burst": 71.6,
+    "new": true
+   },
+   {
+    "term": "엔비",
+    "count": 22,
+    "burst": 21.0,
+    "new": false
+   },
+   {
+    "term": "엔비디아",
+    "count": 27,
+    "burst": 7.9,
+    "new": false
+   },
+   {
+    "term": "젠슨황",
+    "count": 14,
+    "burst": 5.7,
+    "new": false
+   },
+   {
+    "term": "버크셔",
+    "count": 6,
+    "burst": 6.6,
+    "new": false
+   },
+   {
+    "term": "지금",
+    "count": 13,
+    "burst": 3.8,
+    "new": false
+   },
+   {
+    "term": "중국",
+    "count": 5,
+    "burst": 6.5,
+    "new": false
+   },
+   {
+    "term": "AI",
+    "count": 5,
+    "burst": 5.5,
+    "new": false
+   },
+   {
+    "term": "씨발",
+    "count": 5,
+    "burst": 5.5,
+    "new": false
+   }
+  ],
+  "top_recommended": [
+   {
+    "gallery": "해외주식갤러리",
+    "title": "ceo되면 중국이 여자 보낸다고?",
+    "views": 10066,
+    "recommend": 286,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=18326451&exception_mode=recommend&page=1",
+    "time_kst": "11-10 16:37"
+   },
+   {
+    "gallery": "해외주식갤러리",
+    "title": "이건희 \"마누라만 빼고 다 바꿔라\"",
+    "views": 10848,
+    "recommend": 227,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=18326858&exception_mode=recommend&page=1",
+    "time_kst": "11-10 17:36"
+   },
+   {
+    "gallery": "해외주식갤러리",
+    "title": "???: CEO가 게이이면 중국식 미인계가 안 통한다",
+    "views": 9914,
+    "recommend": 194,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=18326006&exception_mode=recommend&page=1",
+    "time_kst": "11-10 15:13"
+   },
+   {
+    "gallery": "해외주식갤러리",
+    "title": "보지로 2행시 하겠습니다.",
+    "views": 8359,
+    "recommend": 177,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=18328720&exception_mode=recommend&page=1",
+    "time_kst": "11-10 21:00"
+   },
+   {
+    "gallery": "해외주식갤러리",
+    "title": "고수는 지금 오히려 젠슨황을 노린다",
+    "views": 9317,
+    "recommend": 166,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=18322818&exception_mode=recommend&page=2",
+    "time_kst": "11-10 07:55"
+   }
+  ],
+  "top_viewed": [
+   {
+    "gallery": "국내주식갤러리",
+    "title": "폭락했다고 사지마셈 엔비는 특히",
+    "views": 523,
+    "recommend": 1,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3876360&page=6",
+    "time_kst": "11-11 02:20"
+   },
+   {
+    "gallery": "국내주식갤러리",
+    "title": "삼닉 가장 많이 물린 매물대",
+    "views": 509,
+    "recommend": 0,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3876523&page=3",
+    "time_kst": "11-11 04:28"
+   },
+   {
+    "gallery": "국내주식갤러리",
+    "title": "정신들 나갔네 ㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋ",
+    "views": 467,
+    "recommend": 0,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3876522&page=3",
+    "time_kst": "11-11 04:27"
+   },
+   {
+    "gallery": "국내주식갤러리",
+    "title": "야선 왜 좆창이 난것이죵?",
+    "views": 423,
+    "recommend": 0,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3876484&page=3",
+    "time_kst": "11-11 03:29"
+   },
+   {
+    "gallery": "국내주식갤러리",
+    "title": "메모리는 아무래도",
+    "views": 421,
+    "recommend": 0,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3876540&page=2",
+    "time_kst": "11-11 04:51"
+   },
+   {
+    "gallery": "국내주식갤러리",
+    "title": "속보) 루비오, 이란 재공격 불필요",
+    "views": 419,
+    "recommend": 1,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3876486&page=3",
+    "time_kst": "11-11 03:30"
+   },
+   {
+    "gallery": "국내주식갤러리",
+    "title": "엔비디아 주주평균",
+    "views": 415,
+    "recommend": 6,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=krstock&no=3876445&page=4",
+    "time_kst": "11-11 03:00"
+   },
+   {
+    "gallery": "해외주식갤러리",
+    "title": "불륜녀가 갑자기 사라진 이유",
+    "views": 399,
+    "recommend": 15,
+    "url": "https://gall.dcinside.com/mgallery/board/view/?id=stockus&no=18335914&page=7",
+    "time_kst": "11-11 05:21"
+   }
+  ]
+ }
+}
