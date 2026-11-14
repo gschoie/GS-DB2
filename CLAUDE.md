@@ -1798,5 +1798,15 @@
     PNG Last-Modified 변화로 보고 자동 새로고침(첫 확인 90초, 30초 간격, 15분 상한 — 수집이 16종목×4기간×2소스라 4~6분).
     **GAS 재붙여넣기 + '배포 관리 → 새 버전' 필요** — 그 전엔 버튼이 '거절 … GAS 프록시 확인' 으로 돌아온다(그 문구에
     이유를 적어 뒀다). 자동은 ecos 크론 16:50 KST + 예약 작업 16:42 그대로.
+63. **주보 그림 메뉴 글꼴 = 나눔스퀘어OTF Light + 🌐 매크로 최상위 승격** (11/14): 사용자 "최근 만든 메뉴들
+    (주가변동표·주가.INDEX·수급.그림·컨센서스·ER) 그림을 피어그룹.Valuation 처럼 나눔스퀘어OTF Light로".
+    - **HTML 쪽**(이 리포): peer_price·ship_index·consensus_chart·er_report 본문과 coverage_flow ④ 위클리 SVG(`FONT`)·
+      ④ 섹션에 valuation 과 같은 이름 변형 스택 + "NanumSquare Light" — **설치된 PC 만** 그 글꼴, 없으면 맑은고딕.
+      수급.그림 PNG/복사도 브라우저가 SVG 를 그리므로 같은 규칙. 반영은 coverage-flow 가 다시 돌아야(charts_only 로 충분).
+    - **matplotlib 그림**(ecos-fx-rates PR #34): 주가변동표·INDEX 3종(`weekly_peer_price_image.setup_font` 공유)·컨센서스는
+      러너에 `fonts-nanum-extra`(NanumSquareL.ttf — 기본 fonts-nanum 엔 Light 가 없다)를 깔아 **그림에 박는다**(보는 PC 무관).
+      family "NanumSquare" + weight **300(숫자 — "light" 는 findfont 경고 폭주)**, fontweight=bold 제목은 같은 가족 Bold.
+      글자폭은 나눔고딕 대비 90~102%라 표 칸 넘침 없음(`--demo` 렌더 확인). PE·PB 밴드는 요청 범위 밖이라 그대로.
+    - 사이드바: 투자 › 🌐 매크로 서브메뉴를 **투자와 같은 레벨의 그룹**으로 올려 투자 바로 밑에.
 
 이후 작업은 git log와 이 파일을 갱신하며 이어간다.
