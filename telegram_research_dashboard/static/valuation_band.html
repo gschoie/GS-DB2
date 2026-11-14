@@ -1,11 +1,12 @@
 <!DOCTYPE html>
 <!--
   PE·PB 밴드 — ecos-fx-rates 리포의 Actions('PER·PBR 밴드 차트', valuation-band.yml)가 굽는 종목별
-  PNG/SVG(위 PER 밴드, 아래 PBR 밴드+ROE 음영)를 대시보드 안에서 보고 그림마다 복사·다운로드.
-  파일은 그 리포 output/valuation_band/ 에 있고 raw.githubusercontent(CORS *) 로 읽는다.
-  종목 목록은 하드코딩하지 않는다 — 같은 폴더의 band_inputs.csv(차트에 실제로 쓴 연도별 값·출처)를 읽어
-  섹터·종목·통화·배수를 뽑는다(파일명 = <섹터>_<종목명에서 공백 제거>). 종목이 바뀌어도 이 페이지는 안 고친다.
-  consensus_chart.html · peer_price.html 과 같은 틀. 만드는 법·데이터 원천은 ecos-fx-rates docs/valuation_band_MANUAL.md.
+  PNG/SVG 를 대시보드 안에서 보고 그림마다 복사·다운로드. PER 밴드와 PBR 밴드(+ROE 음영)는 따로 된 그림이라
+  하나씩 복사한다(<섹터>_<종목>_PER / _PBR). 파일은 그 리포 output/valuation_band/ 에 있고 raw.githubusercontent 로 읽는다.
+  종목 목록·종가 기준일·연도별 값과 출처는 같은 폴더의 band_inputs.csv 에서 읽는다(하드코딩 없음).
+  ✏️ 내 모델: 올해~올해+4 EPS·BPS·ROE 를 엑셀에서 복사해 붙여넣고 저장 → GAS dispatch_proxy(valmodel) →
+  ecos valuation-model.yml 이 data/valuation/my_model/<티커>.csv 로 저장하고 밴드를 다시 그린다(약 5분).
+  값 우선순위: 내 모델(이 화면) → 업로드 엑셀 모델 → 컨센서스. 만드는 법은 ecos docs/valuation_band_MANUAL.md.
 -->
 <html lang="ko">
 <head>
@@ -13,13 +14,15 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>PE·PB 밴드 — GS Research Desk</title>
 <style>
-:root{--bg:#fff;--fg:#1c2430;--muted:#6b7684;--line:#e5e8ec;--card:#f7f8fa;--btn:#1f2937;--ok:#15803d}
-@media(prefers-color-scheme:dark){:root{--bg:#14181f;--fg:#e6e9ee;--muted:#8b93a1;--line:#2a313c;--card:#1b212b;--btn:#e6e9ee;--ok:#4ade80}}
+:root{--bg:#fff;--fg:#1c2430;--muted:#6b7684;--line:#e5e8ec;--card:#f7f8fa;--btn:#1f2937;--ok:#15803d;--gold:#8a6a36;--goldbg:#fbf6ec;--goldln:#d9c39b;--mine:#1d4ed8;--minebg:#eff4ff}
+@media(prefers-color-scheme:dark){:root{--bg:#14181f;--fg:#e6e9ee;--muted:#8b93a1;--line:#2a313c;--card:#1b212b;--btn:#e6e9ee;--ok:#4ade80;--gold:#e2c58f;--goldbg:#2a2418;--goldln:#6b5a3a;--mine:#93b4ff;--minebg:#1a2540}}
 *{box-sizing:border-box}
 body{margin:0;padding:18px 16px 48px;background:var(--bg);color:var(--fg);font:14px/1.6 -apple-system,"Malgun Gothic","Apple SD Gothic Neo",sans-serif}
 .wrap{max-width:1380px;margin:0 auto}
 h1{font-size:19px;margin:0 0 2px}
 .sub{color:var(--muted);font-size:12.5px;margin:0 0 10px}
+.asof{display:inline-flex;flex-wrap:wrap;gap:6px 14px;align-items:center;margin:0 0 12px;padding:8px 14px;border:1.5px solid var(--goldln);border-radius:10px;background:var(--goldbg);color:var(--gold);font-weight:700;font-size:14.5px}
+.asof small{font-weight:500;font-size:12px;opacity:.85}
 .note{font-size:12px;color:var(--muted);margin:0 0 14px;line-height:1.7}
 .note a{color:inherit}
 .seg{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 10px}
@@ -27,60 +30,126 @@ h1{font-size:19px;margin:0 0 2px}
 .seg button.on{background:var(--btn);color:var(--bg);border-color:var(--btn)}
 .jump{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 16px}
 .jump a{font-size:12px;padding:3px 9px;border:1px solid var(--line);border-radius:999px;color:var(--fg);text-decoration:none;background:var(--card)}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:14px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(380px,1fr));gap:14px}
 .card{border:1px solid var(--line);border-radius:8px;background:var(--card);overflow:hidden;scroll-margin-top:10px}
-.card .hd{display:flex;flex-wrap:wrap;gap:6px;align-items:center;padding:8px 10px;border-bottom:1px solid var(--line)}
-.card .hd h2{font-size:13.5px;margin:0 auto 0 0}
-.card .hd small{color:var(--muted);font-size:11px;margin-left:6px;font-weight:400}
+.card .hd{display:flex;flex-wrap:wrap;gap:6px 8px;align-items:center;padding:8px 10px;border-bottom:1px solid var(--line)}
+.card .hd h2{font-size:14px;margin:0}
+.card .hd small{color:var(--muted);font-size:11px;font-weight:400}
+.px{margin-left:auto;font-size:12px;font-weight:700;color:var(--gold);background:var(--goldbg);border:1px solid var(--goldln);border-radius:6px;padding:2px 8px;white-space:nowrap}
 button.b,a.btn{font:600 12px inherit;padding:4px 9px;border-radius:6px;border:1px solid var(--line);background:var(--bg);color:var(--fg);cursor:pointer;text-decoration:none}
 button.b.p{background:var(--btn);color:var(--bg);border-color:var(--btn)}
+button.b.m{color:var(--mine);border-color:var(--mine);background:var(--minebg)}
 button:disabled{opacity:.5;cursor:wait}
-.card .im{background:#fff;padding:4px}
-.card img{display:block;width:100%;height:auto}
-.card .meta{font-size:11px;color:var(--muted);padding:5px 10px 0;line-height:1.6}
+.part{border-top:1px solid var(--line)}
+.part:first-of-type{border-top:0}
+.part .bar{display:flex;gap:6px;align-items:center;padding:6px 10px 4px}
+.part .bar b{font-size:12.5px;margin-right:auto}
+.part .im{background:#fff;padding:4px}
+.part img{display:block;width:100%;height:auto}
+.meta{font-size:11px;color:var(--muted);padding:6px 10px 2px;line-height:1.7;border-top:1px solid var(--line)}
+.meta .tag{display:inline-block;padding:0 6px;border-radius:4px;border:1px solid var(--line);margin-right:4px;font-size:10.5px}
+.meta .tag.my{color:var(--mine);border-color:var(--mine);background:var(--minebg);font-weight:700}
 .msg{font-size:12px;padding:0 10px 6px;min-height:0}
 .msg.err{color:#b45309}.msg.ok{color:var(--ok)}
 .empty{padding:28px 12px;color:var(--muted);font-size:13px}
-#stamp{color:var(--muted);font-size:12px}
+/* 내 모델 입력 */
+dialog{border:1px solid var(--line);border-radius:10px;padding:0;background:var(--bg);color:var(--fg);width:min(760px,96vw)}
+dialog::backdrop{background:rgba(0,0,0,.45)}
+.dlg{padding:16px 18px}
+.dlg h3{margin:0 0 4px;font-size:16px}
+.dlg p{margin:0 0 10px;font-size:12.5px;color:var(--muted);line-height:1.7}
+.dlg table{border-collapse:collapse;width:100%;margin:0 0 6px}
+.dlg th,.dlg td{border:1px solid var(--line);padding:0;text-align:center;font-size:12.5px}
+.dlg th{background:var(--card);padding:5px 6px;font-weight:600}
+.dlg td input{width:100%;border:0;background:transparent;color:var(--fg);font:13px inherit;padding:7px 6px;text-align:right;outline:0}
+.dlg td input:focus{background:var(--minebg)}
+.dlg td input::placeholder{color:var(--muted);opacity:.75}
+.dlg td.src{font-size:10.5px;color:var(--muted);padding:2px 4px;border-top:0}
+.dlg .row{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:12px}
+.dlg .row .sp{margin-left:auto}
+.dlg .st{font-size:12.5px;min-height:20px;margin-top:8px}
+.dlg .st.err{color:#b45309}.dlg .st.ok{color:var(--ok)}
 </style>
 </head>
 <body>
 <div class="wrap">
   <h1>📉 PE·PB 밴드</h1>
-  <p class="sub">조선·방산·건설기계 커버리지 + 글로벌 피어 — 위 PER 밴드, 아래 PBR 밴드(회색 음영 = ROE). 한국은 원화(천원), 해외는 USD. <span id="stamp"></span></p>
-  <p class="note"><b>📋 복사</b> 후 보고서(워드·PPT)에 바로 <b>Ctrl+V</b>. 확대해도 선명하게 넣으려면 <b>SVG</b>.
-    밴드 선 = 그해 EPS(BPS) × 배수 — 과거는 실적, 올해 이후는 추정(한국: DataGuide 업로드 값 · 해외: Bloomberg 업로드 또는 Yahoo 컨센서스).
+  <p class="sub">조선·방산·건설기계 커버리지 + 글로벌 피어 — PER 밴드 · PBR 밴드(회색 음영 = ROE). 한국은 원화(천원), 해외는 USD.</p>
+  <div class="asof" id="asof">종가 기준일 확인 중…</div>
+  <p class="note"><b>📋 복사</b>는 PER · PBR 그림 따로 — 보고서(워드·PPT)에 바로 <b>Ctrl+V</b>. 확대해도 선명하게 넣으려면 <b>SVG</b>.
+    밴드 선 = 그해 EPS(BPS) × 배수 — 과거는 실적, 올해 이후는 추정: <b>✏️ 내 모델</b>(이 화면에서 입력) → 업로드한 엑셀 모델 → 컨센서스 순으로 쓴다.
     Yahoo 만 있는 종목은 2022년부터 내년(FY2)까지만 그려진다.
-    갱신은 평일 17:30 자동 또는 <a href="https://github.com/gschoie/ecos-fx-rates/actions/workflows/valuation-band.yml" target="_blank" rel="noopener">ecos-fx-rates Actions › PER·PBR 밴드 차트 › Run workflow</a>
+    갱신은 평일 장 마감 후 자동 또는 <a href="https://github.com/gschoie/ecos-fx-rates/actions/workflows/valuation-band.yml" target="_blank" rel="noopener">ecos-fx-rates Actions › PER·PBR 밴드 차트 › Run workflow</a>
     · 차트에 쓴 값·출처는 <a id="csvlink" href="#" target="_blank" rel="noopener">band_inputs.csv</a>.</p>
   <div class="seg" id="seg"></div>
   <div class="jump" id="jump"></div>
   <div class="grid" id="cards"><div class="empty">불러오는 중…</div></div>
 </div>
+
+<dialog id="dlg"><div class="dlg">
+  <h3 id="d-title">내 모델</h3>
+  <p id="d-desc"></p>
+  <table><thead><tr id="d-head"></tr></thead><tbody id="d-body"></tbody></table>
+  <p style="margin:6px 0 0">엑셀에서 범위를 복사해 아무 칸에나 <b>Ctrl+V</b> — 가로(연도가 열)·세로(연도가 행) 모두 되고, 'EPS'·'2026E' 같은 머리글이 섞여 있어도 걸러낸다.
+    흐린 숫자는 지금 차트에 쓰이는 값(입력 아님). 비워 둔 칸은 엑셀 모델·컨센서스를 그대로 쓴다.</p>
+  <div class="st" id="d-st"></div>
+  <div class="row">
+    <button class="b p" id="d-save">💾 저장하고 다시 그리기</button>
+    <button class="b" id="d-clear" title="이 종목의 내 모델을 지우고 엑셀 모델·컨센서스로 돌아간다">🗑 내 모델 지우기</button>
+    <button class="b" id="d-empty">칸 비우기</button>
+    <button class="b sp" id="d-close">닫기</button>
+  </div>
+</div></dialog>
+
 <script>
 (function(){
   const RAW="https://raw.githubusercontent.com/gschoie/ecos-fx-rates/main/output/valuation_band/";
+  const EP="https://script.google.com/macros/s/AKfycbx3RjIjtlO2Z6fIYo2T3LhJrFg9Wp2hS7dMS3Is52-JVF1hizoCWewbQ1uM_v5sdhR2jw/exec";  // app.js DISPATCH_ENDPOINT 와 같은 GAS
   const bust="?t="+Math.floor(Date.now()/600000);   // 10분 단위 캐시 버스트
   const url=(f,ext)=>RAW+encodeURIComponent(f)+"."+ext+bust;
   const canCopy=!!(navigator.clipboard&&window.ClipboardItem);
   const $=id=>document.getElementById(id);
   const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
   const ICON={"조선":"🚢","방산":"🛡️","건설기계":"🏗️"};
+  const ITEMS=["EPS","BPS","ROE"];
+  const THIS_YEAR=+new Date().toLocaleDateString("sv-SE",{timeZone:"Asia/Seoul"}).slice(0,4);
+  const YEARS=[0,1,2,3,4].map(i=>THIS_YEAR+i);
+  const WD=["일","월","화","수","목","금","토"];
+  const dlabel=d=>{const t=new Date(d+"T00:00:00");return d+"("+WD[t.getDay()]+")"};
+  const SRCNAME=(s,ccy)=>!s?"":s.startsWith("my")?"내 모델":s==="upload:band"||s==="upload:model"?"엑셀 모델":s==="upload:consensus"?"컨센서스":s==="yahoo:consensus"?"컨센서스(Yahoo)":s.startsWith("upload")||s.startsWith("yahoo")?"실적":"계산";
   $("csvlink").href=RAW+"band_inputs.csv";
-  let items=[],cur=new URLSearchParams(location.search).get("s")||"";
+  let items=[],cur=new URLSearchParams(location.search).get("s")||"",csvStamp="";
 
-  // 따옴표 없는 단순 CSV(생성기가 쉼표 든 값을 쓰지 않는다) — 종목별 첫 행에서 메타, 연도 범위·출처는 모아서
+  // 따옴표 없는 단순 CSV(생성기가 쉼표 든 값을 쓰지 않는다)
   function parse(text){
     const rows=text.replace(/^﻿/,"").trim().split(/\r?\n/).map(l=>l.split(","));
-    const h=rows.shift(),ix=k=>h.indexOf(k),by=new Map();
+    const h=rows.shift(),ix=k=>h.indexOf(k),g=(r,k)=>ix(k)<0?"":(r[ix(k)]||""),by=new Map();
     rows.forEach(r=>{
-      const tk=r[ix("ticker")];if(!tk)return;
+      const tk=g(r,"ticker");if(!tk)return;
       let o=by.get(tk);
-      if(!o){o={sector:r[ix("sector")],name:r[ix("name")],ticker:tk,ccy:r[ix("ccy")],per:r[ix("per_mults")],pbr:r[ix("pbr_mults")],fy:[],src:new Set()};by.set(tk,o)}
-      if(r[ix("EPS")]!==""){o.fy.push(+r[ix("fy")]);const s=(r[ix("EPS_src")]||"").split(":")[0];if(s)o.src.add(s)}
+      if(!o){o={sector:g(r,"sector"),name:g(r,"name"),ticker:tk,ccy:g(r,"ccy"),per:g(r,"per_mults"),pbr:g(r,"pbr_mults"),
+        pxDate:g(r,"px_date"),pxLast:g(r,"px_last"),end:+g(r,"chart_end")||0,fy:[],y:{}};by.set(tk,o)}
+      const fy=+g(r,"fy");if(g(r,"EPS")!=="")o.fy.push(fy);
+      o.y[fy]={};ITEMS.forEach(k=>o.y[fy][k]={v:g(r,k),s:g(r,k+"_src")});
     });
-    return [...by.values()].map(o=>({...o,file:o.sector+"_"+o.name.replace(/[ \/]/g,m=>m===" "?"":"_"),
-      src:[...o.src].map(s=>s==="upload"?(o.ccy==="KRW"?"DataGuide":"Bloomberg"):s==="yahoo"?"Yahoo":s).join("·")}));
+    return [...by.values()].map(o=>({...o,file:o.sector+"_"+o.name.replace(/[ \/]/g,m=>m===" "?"":"_")}));
+  }
+  const fmtV=(v,k,ccy)=>v===""||v==null||isNaN(+v)?"":k==="ROE"?(+v).toFixed(1):ccy==="KRW"?Math.round(+v).toLocaleString("en-US"):(+v).toFixed(2);
+  const pxText=x=>!x.pxDate?"":"종가 "+x.pxDate.slice(5).replace("-","/")+" · "+(x.ccy==="KRW"?Math.round(+x.pxLast).toLocaleString("en-US")+"원":"$"+(+x.pxLast).toLocaleString("en-US",{maximumFractionDigits:2}));
+  // 추정 구간(올해~차트 끝)의 EPS 출처를 연도 범위로 묶어 보여준다
+  function estTags(x){
+    const end=x.end||Math.max(...x.fy),out=[];let run=null;
+    for(let y=THIS_YEAR;y<=end;y++){const s=SRCNAME((x.y[y]||{}).EPS&&x.y[y].EPS.s,x.ccy);if(!s)continue;
+      if(run&&run.s===s)run.b=y;else{run={s,a:y,b:y};out.push(run)}}
+    return out.map(r=>`<span class="tag${r.s==="내 모델"?" my":""}">${String(r.a).slice(2)}${r.b>r.a?"~"+String(r.b).slice(2):""}E ${esc(r.s)}</span>`).join("");
+  }
+  function part(x,kind,label){
+    const f=x.file+"_"+kind,dn="band_"+x.ticker.replace(/[^A-Za-z0-9]/g,"_")+"_"+kind;
+    return `<div class="part"><div class="bar"><b>${label}</b>
+        ${canCopy?`<button class="b p" data-f="${esc(f)}" data-act="copy">📋 복사</button>`:""}
+        <button class="b" data-f="${esc(f)}" data-dn="${dn}" data-act="dl" data-ext="png">PNG</button><button class="b" data-f="${esc(f)}" data-dn="${dn}" data-act="dl" data-ext="svg">SVG</button>
+        <a class="btn" href="${url(f,"png")}" target="_blank" rel="noopener">새 창</a></div>
+      <div class="im"><img src="${url(f,"png")}" alt="${esc(x.name)} ${kind} 밴드" loading="lazy"></div><div class="msg"></div></div>`;
   }
   function render(){
     const secs=[...new Set(items.map(x=>x.sector))];
@@ -89,28 +158,34 @@ button:disabled{opacity:.5;cursor:wait}
     const list=items.filter(x=>x.sector===cur);
     $("jump").innerHTML=list.map((x,i)=>`<a href="#c${i}">${esc(x.name)}</a>`).join("");
     $("cards").innerHTML=list.map((x,i)=>`<section class="card" id="c${i}">
-      <div class="hd"><h2>${esc(x.name)}<small>${esc(x.ticker)} · ${x.ccy==="KRW"?"원화":"USD"}</small></h2>
-        ${canCopy?`<button class="b p" data-f="${esc(x.file)}" data-act="copy">📋 복사</button>`:""}
-        <button class="b" data-f="${esc(x.file)}" data-dn="band_${esc(x.ticker.replace(/[^A-Za-z0-9]/g,"_"))}" data-act="dl" data-ext="png">PNG</button><button class="b" data-f="${esc(x.file)}" data-dn="band_${esc(x.ticker.replace(/[^A-Za-z0-9]/g,"_"))}" data-act="dl" data-ext="svg">SVG</button>
-        <a class="btn" href="${url(x.file,"png")}" target="_blank" rel="noopener">새 창</a></div>
-      <div class="im"><img src="${url(x.file,"png")}" alt="${esc(x.name)} PER·PBR 밴드" loading="lazy"></div>
-      <div class="meta">FY${Math.min(...x.fy)}~${Math.max(...x.fy)} · 자료 ${esc(x.src||"—")} · PER ${esc(x.per.split(" ").join("·"))}x · PBR ${esc(x.pbr.split(" ").join("·"))}x</div>
-      <div class="msg"></div></section>`).join("")||`<div class="empty">이 섹터에 그림이 없습니다.</div>`;
-    $("cards").querySelectorAll("img").forEach(im=>im.onerror=function(){const m=im.closest(".card").querySelector(".msg");m.className="msg err";
+      <div class="hd"><h2>${esc(x.name)}</h2><small>${esc(x.ticker)} · ${x.ccy==="KRW"?"원화":"USD"}</small>
+        <span class="px">${esc(pxText(x))}</span>
+        <button class="b m" data-model="${esc(x.ticker)}" title="올해~${THIS_YEAR+4} EPS·BPS·ROE 를 직접 넣는다(엑셀에서 붙여넣기)">✏️ 내 모델</button></div>
+      ${part(x,"PER","PER 밴드")}${part(x,"PBR","PBR 밴드 · ROE")}
+      <div class="meta">${estTags(x)||"추정 구간 없음"}<br>FY${Math.min(...x.fy)}~${x.end||Math.max(...x.fy)} · PER ${esc(x.per.split(" ").join("·"))}x · PBR ${esc(x.pbr.split(" ").join("·"))}x</div>
+      </section>`).join("")||`<div class="empty">이 섹터에 그림이 없습니다.</div>`;
+    $("cards").querySelectorAll("img").forEach(im=>im.onerror=function(){const m=im.closest(".part").querySelector(".msg");m.className="msg err";
       m.textContent="그림을 불러오지 못했습니다 — Actions 가 이 종목을 아직 못 그렸거나 파일명이 바뀌었을 수 있습니다."});
+  }
+  function renderAsof(){
+    const d=c=>{const s=[...new Set(items.filter(x=>x.ccy===c&&x.pxDate).map(x=>x.pxDate))].sort();return s.length?(s.length>1?dlabel(s[0])+" ~ "+dlabel(s[s.length-1]):dlabel(s[0])):""};
+    const k=d("KRW"),u=d("USD");
+    $("asof").innerHTML=(k||u)?`📅 종가 기준 — ${k?"한국 "+k:""}${k&&u?" · ":""}${u?"해외 "+u:""}${csvStamp?` <small>(그림 갱신 ${esc(csvStamp)})</small>`:""}`
+      :"종가 기준일 정보 없음 — 밴드 워크플로가 한 번 더 돌면 표시됩니다";
   }
   $("seg").addEventListener("click",e=>{const b=e.target.closest("button[data-s]");if(!b)return;cur=b.dataset.s;render()});
 
   const ymd=()=>new Date().toLocaleDateString("sv-SE",{timeZone:"Asia/Seoul"}).replace(/-/g,"");
   async function getBlob(f,ext){const r=await fetch(url(f,ext),{cache:"no-store"});if(!r.ok)throw new Error("HTTP "+r.status);return r.blob()}
   document.addEventListener("click",async e=>{
+    const mb=e.target.closest("button[data-model]");if(mb){openModel(mb.dataset.model);return}
     const b=e.target.closest("button[data-f]");if(!b)return;
-    const f=b.dataset.f,m=b.closest(".card").querySelector(".msg");b.disabled=true;m.className="msg";m.textContent="";
+    const f=b.dataset.f,m=b.closest(".part").querySelector(".msg");b.disabled=true;m.className="msg";m.textContent="";
     try{
       if(b.dataset.act==="copy"){
         // 클립보드에는 image/png 만 표준 — Promise 를 그대로 넘겨야 사파리도 사용자 제스처로 인정한다
         await navigator.clipboard.write([new ClipboardItem({"image/png":getBlob(f,"png").then(x=>new Blob([x],{type:"image/png"}))})]);
-        m.className="msg ok";m.textContent="✓ 복사됨 — 워드·PPT·카톡에 Ctrl+V";
+        m.className="msg ok";m.textContent="✓ 복사됨 — 워드·PPT·카톡에 Ctrl+V";setTimeout(()=>{if(m.className==="msg ok")m.textContent=""},4000);
       }else{
         const ext=b.dataset.ext,blob=await getBlob(f,ext),a=document.createElement("a");
         a.href=URL.createObjectURL(blob);a.download=(b.dataset.dn||f)+"_"+ymd()+"."+ext;   // 한글 파일명은 일부 브라우저가 'download' 로 바꿔 저장
@@ -121,12 +196,109 @@ button:disabled{opacity:.5;cursor:wait}
     finally{b.disabled=false}
   });
 
+  // ───────── 내 모델 입력 ─────────
+  const dlg=$("dlg");let mTk="";
+  const cell=(k,y)=>dlg.querySelector(`input[data-k="${k}"][data-y="${y}"]`);
+  const st=(t,c)=>{$("d-st").className="st"+(c?" "+c:"");$("d-st").textContent=t||""};
+  function openModel(tk){
+    const x=items.find(i=>i.ticker===tk);if(!x)return;mTk=tk;
+    $("d-title").textContent="✏️ 내 모델 — "+x.name+" ("+tk+")";
+    $("d-desc").innerHTML=`${THIS_YEAR}~${THIS_YEAR+4}년 추정치. 단위: EPS·BPS = <b>${x.ccy==="KRW"?"원":"USD"}</b>, ROE = <b>%</b>. `+
+      `저장하면 이 값이 엑셀 모델·컨센서스보다 먼저 쓰이고, 약 5분 뒤 그림이 바뀐다(차트는 ${x.end||THIS_YEAR+2}년까지 그린다).`;
+    $("d-head").innerHTML="<th></th>"+YEARS.map(y=>`<th>${y}E</th>`).join("");
+    $("d-body").innerHTML=ITEMS.map(k=>`<tr><th>${k}${k==="ROE"?" (%)":""}</th>`+YEARS.map(y=>{
+        const c=(x.y[y]||{})[k]||{v:"",s:""},mine=c.s.startsWith("my");
+        return `<td><input inputmode="decimal" data-k="${k}" data-y="${y}" value="${mine?esc(fmtV(c.v,k,x.ccy)):""}" placeholder="${esc(fmtV(c.v,k,x.ccy))}"></td>`}).join("")+`</tr>`+
+      `<tr><td class="src"></td>`+YEARS.map(y=>{const c=(x.y[y]||{})[k]||{s:""};return `<td class="src">${esc(SRCNAME(c.s,x.ccy))||"–"}</td>`}).join("")+`</tr>`).join("");
+    st("");$("d-save").disabled=false;$("d-clear").disabled=false;
+    dlg.showModal();cell("EPS",YEARS[0]).focus();
+  }
+  // 엑셀 숫자 → Number. "1,234" "(1,234)" "25.3%" "−12" "12.5x" 를 받는다. 숫자가 아니면 null
+  function num(s){
+    s=String(s).trim();if(!s)return null;
+    let neg=/^\(.*\)$/.test(s);s=s.replace(/[(),\s%원$₩x배]/g,"").replace(/[−–—]/g,"-");
+    if(!/^-?\d*\.?\d+(e-?\d+)?$/i.test(s))return null;
+    const v=parseFloat(s);return isNaN(v)?null:(neg?-v:v);
+  }
+  // 연도 머리글: 2026 · 2026E · 26E · FY26 · 2026년 (맨숫자 두 자리는 값일 수 있어 연도로 안 본다)
+  const YRE=/^(FY\s*)?(20\d\d|\d\d)\s*([EFAP년]|\(E\))?$/i;
+  const yearOf=s=>{const m=String(s).trim().match(YRE);if(!m||!(m[1]||m[3]||m[2].length===4))return null;
+    const y=m[2].length===4?+m[2]:2000+ +m[2];return y>=2015&&y<=2040?y:null};
+  const isYear=s=>yearOf(s)!==null;
+  const itemOf=s=>{s=String(s).toUpperCase();return /EPS|주당순이익/.test(s)?"EPS":/BPS|BVPS|주당순자산/.test(s)?"BPS":/ROE|자기자본이익/.test(s)?"ROE":null};
+  // 붙여넣은 표 → [{k,y,v}]. 머리글(연도 행·항목 열)이 있으면 그걸 따르고, 없으면 (startK,startY) 칸부터 채운다
+  function readBlock(text,startK,startY){
+    let rows=text.replace(/\r/g,"").split("\n").filter(r=>r.trim()!=="").map(r=>r.split("\t"));
+    if(!rows.length)return[];
+    const w=Math.max(...rows.map(r=>r.length));rows=rows.map(r=>r.concat(Array(w-r.length).fill("")));
+    // 세로 표(연도가 행)면 가로로 돌린다: 첫 열에 연도가 2개 이상 / 첫 행에 항목명이 2개 이상 / 머리글 없이 4행 이상·3열 이하
+    const vertical=rows.filter(r=>isYear(r[0])).length>=2||rows[0].filter(c=>itemOf(c)).length>=2
+      ||(rows.length>3&&w<=3&&!rows.some(r=>r.some(c=>itemOf(c)||isYear(c))));
+    if(vertical)rows=rows[0].map((_,c)=>rows.map(r=>r[c]));
+    let years=null;
+    const yi=rows.findIndex(r=>r.filter(isYear).length>=2);
+    if(yi>=0){years=rows[yi].map(yearOf);rows.splice(yi,1)}
+    const out=[];let ki=ITEMS.indexOf(startK);
+    rows.forEach(r=>{
+      const lab=r.map(itemOf).find(Boolean)||null;
+      let k;if(lab){k=lab;ki=ITEMS.indexOf(lab)+1}else{k=ITEMS[ki];ki++}
+      if(!k)return;
+      let col=0;
+      r.forEach((c,i)=>{
+        if(itemOf(c))return;const v=num(c);if(v===null)return;
+        let y;if(years){y=years[i];if(y==null)return}else{y=(lab?YEARS[0]:startY)+col}
+        col++;if(YEARS.includes(y))out.push({k,y,v})});
+    });
+    return out;
+  }
+  dlg.addEventListener("paste",e=>{
+    const t=(e.clipboardData||window.clipboardData).getData("text");
+    if(!/[\t\n]/.test(t.trim()))return;                 // 한 칸짜리는 평소대로
+    e.preventDefault();
+    const a=document.activeElement,k0=a&&a.dataset.k||"EPS",y0=a&&+a.dataset.y||YEARS[0];
+    let vals=readBlock(t,k0,y0);
+    if(!vals.length){st("붙여넣은 내용에서 숫자를 찾지 못했습니다.","err");return}
+    // ROE 가 0.253 같은 비율로 들어오면 % 로 바꾼다
+    const roe=vals.filter(v=>v.k==="ROE");let conv=false;
+    if(roe.length&&roe.every(v=>Math.abs(v.v)<=1.5)&&roe.some(v=>v.v!==Math.round(v.v))){roe.forEach(v=>v.v=+(v.v*100).toFixed(2));conv=true}
+    const x=items.find(i=>i.ticker===mTk);
+    vals.forEach(v=>{const c=cell(v.k,v.y);if(c)c.value=fmtV(v.v,v.k,x.ccy)});
+    st(`${vals.length}칸 채움`+(conv?" · ROE 는 비율로 보여 ×100 해서 % 로 넣었습니다":"")+" — 확인하고 저장하세요.","ok");
+  });
+  $("d-close").onclick=()=>dlg.close();
+  $("d-empty").onclick=()=>{dlg.querySelectorAll("input").forEach(i=>i.value="");st("")};
+  async function send(model,doneMsg){
+    $("d-save").disabled=$("d-clear").disabled=true;st("요청 중…");
+    try{
+      const r=await fetch(EP,{method:"POST",body:JSON.stringify({workflow:"valmodel",ticker:mTk,model})});let d=null;try{d=await r.json()}catch{}
+      if(d&&d.ok===false){st(`⚠ 거절 ${d.code||"?"} — ${d.error||"GAS 프록시 확인"}`+(String(d.error||"").includes("unknown workflow")?" (GAS dispatch_proxy 에 valmodel 키를 붙여넣고 '새 버전' 배포 필요)":""),"err");$("d-save").disabled=$("d-clear").disabled=false;return}
+    }catch(x){st("실패: "+x.message,"err");$("d-save").disabled=$("d-clear").disabled=false;return}
+    const before=csvStamp,t0=Date.now();
+    const tick=async()=>{
+      let lm="";try{const r=await fetch(RAW+"band_inputs.csv?x="+Date.now(),{method:"HEAD",cache:"no-store"});lm=r.headers.get("last-modified")||""}catch{}
+      const now=lm?new Date(lm).toLocaleString("ko-KR",{timeZone:"Asia/Seoul"}):"";
+      if(now&&now!==before){st("✓ 반영됨 — 새로고침합니다","ok");setTimeout(()=>location.reload(),1200);return}
+      if(Date.now()-t0>15*60000){st("15분 안에 새 그림이 안 보입니다 — ecos-fx-rates Actions 를 확인하세요. 이 창은 닫아도 됩니다.","err");return}
+      st(`✅ ${doneMsg} — 다시 그리는 중 ${Math.round((Date.now()-t0)/60000)}분 경과 (보통 5분 안팎, 이 창은 닫아도 됩니다)`,"ok");setTimeout(tick,30000)};
+    tick();
+  }
+  $("d-save").onclick=()=>{
+    const parts=[];let bad=null;
+    dlg.querySelectorAll("input").forEach(i=>{if(i.value.trim()==="")return;const v=num(i.value);
+      if(v===null){bad=i;return}parts.push(`${i.dataset.y},${i.dataset.k},${v}`)});
+    if(bad){bad.focus();st("숫자가 아닌 칸이 있습니다: "+bad.value,"err");return}
+    if(!parts.length){st("넣은 값이 없습니다 — 지우려면 '내 모델 지우기'.","err");return}
+    send(parts.join(";"),"저장 요청됨");
+  };
+  $("d-clear").onclick=()=>{if(confirm("이 종목의 내 모델을 지우고 엑셀 모델·컨센서스로 돌아갈까요?"))send("CLEAR","삭제 요청됨")};
+
   fetch(RAW+"band_inputs.csv"+bust,{cache:"no-store"}).then(r=>{
     if(!r.ok)throw new Error("HTTP "+r.status);
     const lm=r.headers.get("last-modified");
-    if(lm)$("stamp").textContent="파일 갱신: "+new Date(lm).toLocaleString("ko-KR",{timeZone:"Asia/Seoul"});
-    return r.text()}).then(t=>{items=parse(t);render()})
-    .catch(x=>{$("cards").innerHTML=`<div class="empty">종목 목록(band_inputs.csv)을 불러오지 못했습니다(${esc(x.message)}) — ecos-fx-rates 의 밴드 워크플로가 main 에 아직 반영되지 않았을 수 있습니다.</div>`});
+    if(lm)csvStamp=new Date(lm).toLocaleString("ko-KR",{timeZone:"Asia/Seoul"});
+    return r.text()}).then(t=>{items=parse(t);renderAsof();render()})
+    .catch(x=>{$("asof").textContent="종가 기준일을 읽지 못했습니다";$("cards").innerHTML=`<div class="empty">종목 목록(band_inputs.csv)을 불러오지 못했습니다(${esc(x.message)}) — ecos-fx-rates 의 밴드 워크플로가 main 에 아직 반영되지 않았을 수 있습니다.</div>`});
+  window.__band={readBlock,num};   // 붙여넣기 해석 검산용
 })();
 </script>
 </body>

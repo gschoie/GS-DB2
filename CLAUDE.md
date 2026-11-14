@@ -1764,5 +1764,19 @@
     - **주의**: ecos-fx-rates 는 공개 리포라 DataGuide·Bloomberg 값과 자체 추정치(☞추정입력)가 공개돼 있다(사용자 지시로
       푸시). 비공개로 돌리면 이 페이지·ER·컨센 추이·피어그룹 갤러리의 raw 읽기가 모두 끊긴다 — 그때는 그림을 이 리포로
       복사해 오는 단계가 필요. 상세는 ecos `docs/valuation_band_MANUAL.md`.
+    - **11/14 추가 — 종가 기준일 · PER/PBR 따로 복사 · ✏️ 내 모델 입력** (ecos PR #32): 사용자 "종가가 언제 건지 눈에 띄게",
+      "복사는 PBR·PER 따로", "모델 바꾸면 2026~2030 EPS·BPS·ROE 를 넣을 수 있게(엑셀 복붙), 안 넣으면 컨센서스".
+      - 그림이 종목당 두 장(`<섹터>_<종목>_PER` / `_PBR`)이 됐고 그림 안 왼쪽 위에 `종가 YYYY-MM-DD 값` 딱지 + 마지막 점.
+        화면 맨 위 `📅 종가 기준 — 한국 …(요일) · 해외 …`, 카드마다 `종가 MM/DD · 값`. 기준일은 `band_inputs.csv` 의
+        `px_date`·`px_last` 열.
+      - **✏️ 내 모델**: 카드 버튼 → 표(EPS·BPS·ROE × 올해~올해+4)에 엑셀 범위를 Ctrl+V(가로·세로·머리글 섞여도 해석,
+        ROE 가 0.25 꼴이면 ×100) → 💾 저장 → GAS `valmodel` → ecos `valuation-model.yml` 이
+        `data/valuation/my_model/<티커>.csv` 저장 후 `valuation-band.yml` 발사(약 5분, 화면이 폴링해 새로고침).
+        우선순위 **내 모델 → 업로드 엑셀 모델 → 컨센서스**. 비운 칸은 다음 순위 값, `🗑 내 모델 지우기` = 파일 삭제.
+        카드 아래 꼬리표가 추정 구간 출처를 보여준다(`26~28E 내 모델` 등).
+      - **GAS 재붙여넣기 필요**(WF `valmodel` + buildInputs + ticker 검사; '배포 관리 → 새 버전', 새 배포 금지). 그 전에는
+        저장 시 'unknown workflow key' 안내가 뜬다.
+      - 내 모델 워크플로에는 concurrency 를 걸지 않았다(대기 run 취소로 입력 유실 방지) — 종목별 파일이라 연달아 넣어도 충돌 없음.
+        입력은 env 로만 넘기고 `set_model.py` 가 정규식으로 검증(티커는 COMPANIES 안, fy 올해~+4, 숫자만).
 
 이후 작업은 git log와 이 파일을 갱신하며 이어간다.
