@@ -184,13 +184,10 @@ def combo_chart(rows, color, line_unit, bar_label="현물 순매수", line_label
             f'<svg viewBox="0 0 {width} {height}" role="img">{"".join(g)}</svg>')
 
 
-def group_ret_block(today, is_latest):
-    """ETF 그룹 평균 당일 등락률 랭킹 — ETF 신호판의 '그룹 평균 WoW' 그림과 같은 형식.
-    색상도 신호판과 동일(상승 초록·하락 붉은색)하게 맞춘다. 데이터: scrape.group_returns()."""
-    gr = today.get("group_1d")
-    if not gr or not gr.get("groups"):
-        return ""
-    groups = gr["groups"]
+PERIOD_LABELS = [("1d", "DoD"), ("1w", "WoW"), ("1m", "MoM"), ("3m", "QoQ"), ("1y", "YoY")]
+
+
+def _gbars(groups, key, hidden):
     gmax = max(abs(v) for _, v, _ in groups) or 1
     items = []
     for g, v, n in groups:
@@ -203,10 +200,51 @@ def group_ret_block(today, is_latest):
             f'<li><span class="gn">{g}</span>'
             f'<span class="dbar"><i class="{bar}" style="{side};width:{w:.1f}%"></i></span>'
             f'<span class="gv {vcls}">{sign}{abs(v):.1f}%</span><small>{n}종목</small></li>')
+    hid = " hidden" if hidden else ""
+    return f'<ul class="gbars" data-p="{key}"{hid}>{"".join(items)}</ul>'
+
+
+def group_ret_block(today, is_latest):
+    """ETF 그룹 평균 등락률 랭킹 — ETF 신호판의 '그룹 평균 WoW' 그림과 같은 형식.
+    기본은 DoD(네이버 실시간), 옆 버튼으로 WoW·MoM·QoQ·YoY(현재가 ÷ 7·30·90·365일 전 종가).
+    색상은 신호판과 동일. 데이터: scrape.group_returns(). 옛 기록(periods 없음)은 DoD만."""
+    gr = today.get("group_1d")
+    if not gr or not gr.get("groups"):
+        return ""
+    periods = gr.get("periods") or {"1d": gr["groups"]}
+    bases = gr.get("bases") or {}
+    avail = [(k, lab) for k, lab in PERIOD_LABELS if periods.get(k)]
+    lists = "".join(_gbars(periods[k], k, i > 0) for i, (k, _) in enumerate(avail))
+    btns = ""
+    if len(avail) > 1:
+        def tip(k):
+            if k == "1d":
+                return "전일 종가 대비(네이버 실시간 등락률)"
+            b = bases.get(k, "")
+            extra = " · 1년 전 종가는 직전 확정일 기준으로 되짚어 최대 하루 어긋남" if k == "1y" else ""
+            return f"{b[5:].replace('-', '/')} 이전 마지막 종가 대비{extra}" if b else ""
+        btns = '<span class="gper">' + "".join(
+            f'<button type="button" data-p="{k}" title="{tip(k)}"'
+            f'{" class=on" if i == 0 else ""}>{lab}</button>'
+            for i, (k, lab) in enumerate(avail)) + "</span>"
+    n = len(periods[avail[0][0]])
     title = "📊 오늘의 수익률" if is_latest else "📊 당일 수익률"
-    return (f'<h2>{title} <span class="na" style="font-weight:400;font-size:12px">'
-            f'— ETF 그룹 평균 등락률({len(groups)}개 그룹) · {gr["time"]} 기준 · 센 섹터부터</span></h2>'
-            f'<div class="card"><ul class="gbars">{"".join(items)}</ul></div>')
+    note = ""
+    if len(avail) > 1:
+        note = ('<p class="na gnote" style="font-size:11.5px;margin:2px 0 0">'
+                'WoW·MoM·QoQ·YoY = 현재가 ÷ 7·30·90·365일 전(달력일) 이전 마지막 종가 − 1 '
+                '(ETF 신호판과 같은 정의, 종가 이력은 ETF 신호판 수집분). 그룹 안 단순평균.</p>')
+    js = ""
+    if len(avail) > 1:
+        js = ("<script>document.querySelectorAll('.gper').forEach(function(b){"
+              "var c=b.closest('h2').nextElementSibling;"
+              "b.addEventListener('click',function(e){var t=e.target.closest('button');if(!t)return;"
+              "b.querySelectorAll('button').forEach(function(x){x.classList.toggle('on',x===t)});"
+              "c.querySelectorAll('ul.gbars').forEach(function(u){u.hidden=u.dataset.p!==t.dataset.p});"
+              "});});</script>")
+    return (f'<h2>{title} {btns}<span class="na" style="font-weight:400;font-size:12px">'
+            f'— ETF 그룹 평균 등락률({n}개 그룹) · {gr["time"]} 기준 · 센 섹터부터</span></h2>'
+            f'<div class="card">{lists}{note}</div>{js}')
 
 
 def stock_flow_block(today, is_latest):
@@ -669,6 +707,9 @@ border-radius:8px;padding:8px 10px;display:flex;flex-direction:column}}
 .gbars{{list-style:none;margin:6px 0 8px;padding:0}}
 .gbars li{{display:grid;grid-template-columns:120px 1fr 58px 44px;align-items:center;
 gap:10px;padding:2.5px 0;font-size:13px}}
+.gper{{display:inline-flex;gap:3px;margin:0 6px;vertical-align:middle}}
+.gper button{{font:inherit;font-size:11.5px;font-weight:600;padding:2px 8px;border:1px solid var(--line,#ccc);border-radius:12px;background:transparent;color:inherit;cursor:pointer}}
+.gper button.on{{background:var(--fg,#222);color:var(--bg,#fff);border-color:var(--fg,#222)}}
 .gbars .gn{{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}}
 .gbars .gv{{text-align:right;font-variant-numeric:tabular-nums}}
 .gbars small{{color:var(--muted);text-align:right;font-size:11.5px}}

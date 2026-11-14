@@ -208,26 +208,127 @@ def daily_confirmed(bizdate, pages=3, want=None):
 UNIVERSE_CSV = HERE.parent / "etf_signal" / "etf_universe.csv"
 
 
+ETF_HIST_DIR = HERE.parent / "etf_signal" / "history"
+# 기간 버튼(DoD 외) — etf_signal._ret 과 같은 '달력일' 정의: 오늘에서 N일 거슬러 올라간
+# 날짜 이전의 마지막 종가가 기준. 거래일 개수로 세면 휴장일 때문에 종목마다 어긋난다.
+PERIODS = [("1w", 7), ("1m", 30), ("3m", 90), ("1y", 365)]
+
+
+def _num(x):
+    try:
+        return float(str(x).replace(",", ""))
+    except (TypeError, ValueError):
+        return None
+
+
+def load_close_history(hist_dir=ETF_HIST_DIR):
+    """etf_signal/history/<asof>.json 에서 ETF별 확정 종가 이력 + 최신 파일의 1년 수익률.
+    반환: ({code: [(date, close), …] 오름차순}, {code: (asof, close, ret_1y)})
+    history 는 7/7 부터라 1년 전 종가는 없다 → YoY 기준가는 최신 파일의 ret_1y 로 되짚는다."""
+    closes, latest = {}, {}
+    for f in sorted(Path(hist_dir).glob("*.json")):
+        try:
+            d = dt.date.fromisoformat(f.stem)
+            sigs = json.loads(f.read_text(encoding="utf-8")).get("signals") or []
+        except Exception:
+            continue
+        for s in sigs:
+            code, c = str(s.get("code") or "").strip(), _num(s.get("close"))
+            if not code or not c or c <= 0:
+                continue
+            asof = s.get("asof") or f.stem
+            try:
+                ad = dt.date.fromisoformat(asof)
+            except ValueError:
+                ad = d
+            closes.setdefault(code, []).append((ad, c))
+            latest[code] = (ad, c, s.get("ret_1y"))
+    for code in closes:   # 같은 asof 가 두 파일에 있으면 뒤 것만
+        closes[code] = sorted(dict(closes[code]).items())
+    return closes, latest
+
+
+BASE_MAX_GAP = 10   # 기준 종가가 기준일보다 이만큼(달력일) 넘게 옛것이면 버린다
+
+
+def base_close(series, target):
+    """target 날짜 이전(포함) 마지막 종가. 그만큼 이력이 없으면 None(모름 — 0 아님).
+    history 가 빠진 날(etf_signal 실패)이 길면 WoW 가 몇 달 전 종가로 계산되는 걸 막는다."""
+    prior = [(d, c) for d, c in series if d <= target]
+    if not prior or (target - prior[-1][0]).days > BASE_MAX_GAP:
+        return None
+    return prior[-1][1]
+
+
+def period_returns(live, closes, latest, today):
+    """live: [(group, code, 현재가, DoD%)] → {기간: {그룹: [등락률…]}}, 기간별 기준일.
+    1w·1m·3m 은 history 종가, 1y 는 최신 확정 종가 ÷ (1+ret_1y) 로 되짚은 1년 전 종가
+    (그 기준일은 최신 asof−365 라 오늘 기준과 최대 하루 어긋난다 — 화면 각주)."""
+    out = {"1d": {}}
+    bases = {}
+    for k, _ in PERIODS:
+        out[k] = {}
+    for grp, code, px, dod in live:
+        if dod is not None:
+            out["1d"].setdefault(grp, []).append(dod)
+        if not px or px <= 0:
+            continue
+        ser = closes.get(code) or []
+        for k, days in PERIODS:
+            if k == "1y":
+                lt = latest.get(code)
+                if not lt or lt[2] is None:
+                    continue
+                r1y = _num(lt[2])
+                if r1y is None or r1y <= -100:
+                    continue
+                base = lt[1] / (1 + r1y / 100)
+                bases.setdefault(k, (lt[0] - dt.timedelta(days=365)).isoformat())
+            else:
+                tgt = today - dt.timedelta(days=days)
+                base = base_close(ser, tgt)
+                bases.setdefault(k, tgt.isoformat())
+            if base and base > 0:
+                out[k].setdefault(grp, []).append((px / base - 1) * 100)
+    res = {}
+    for k, by in out.items():
+        rows = sorted(((g, round(sum(v) / len(v), 2), len(v)) for g, v in by.items() if v),
+                      key=lambda x: -x[1])
+        if rows:
+            res[k] = [list(t) for t in rows]
+    return res, bases
+
+
 def group_returns():
     """etf_signal 유니버스 ETF들의 현재가 등락률을 그룹 평균으로 묶는다.
-    ETF 신호판의 '그룹 평균 WoW' 그림을 수급 화면에서는 당일 등락률로 보여주기 위한 것.
-    반환: {"time": "HH:MM", "groups": [[그룹, 평균%, 종목수], …]} (평균 내림차순) 또는 None"""
+    DoD 는 네이버 실시간 등락률, WoW·MoM·QoQ·YoY 는 현재가 ÷ 기준 종가(etf_signal history).
+    반환: {"time": "HH:MM", "groups": [...DoD], "periods": {"1d"|"1w"|"1m"|"3m"|"1y": [[그룹, 평균%, 종목수], …]},
+           "bases": {기간: 기준일}} 또는 None"""
     rows = list(csv.DictReader(UNIVERSE_CSV.open(encoding="utf-8-sig")))
-    by_grp, fail = {}, 0
+    live, fail = [], 0
     for r in rows:
         if (r.get("active") or "").strip() != "1":
             continue
+        code = r["code"].strip()
         try:
-            j = get(f"https://m.stock.naver.com/api/stock/{r['code'].strip()}/basic").json()
-            by_grp.setdefault(r["group"].strip(), []).append(float(j["fluctuationsRatio"]))
+            j = get(f"https://m.stock.naver.com/api/stock/{code}/basic").json()
+            live.append((r["group"].strip(), code, _num(j.get("closePrice")),
+                         _num(j.get("fluctuationsRatio"))))
         except Exception:
             fail += 1
-    if not by_grp:
+    if not live:
         return None
-    groups = sorted(((g, round(sum(v) / len(v), 2), len(v)) for g, v in by_grp.items()),
-                    key=lambda x: -x[1])
-    print(f"ETF 그룹 등락률: {len(groups)}그룹 수집 · 실패 {fail}종목")
-    return {"time": now_kst().strftime("%H:%M"), "groups": [list(t) for t in groups]}
+    try:
+        closes, latest = load_close_history()
+    except Exception as e:
+        print(f"  · ETF 종가 이력 읽기 실패(DoD만): {e}")
+        closes, latest = {}, {}
+    periods, bases = period_returns(live, closes, latest, now_kst().date())
+    if not periods.get("1d"):
+        return None
+    print(f"ETF 그룹 등락률: {len(periods['1d'])}그룹 · 기간 {list(periods)} · 실패 {fail}종목")
+    return {"time": now_kst().strftime("%H:%M"), "groups": periods["1d"],
+            "periods": periods, "bases": bases}
 
 
 KIS_BASE = "https://openapi.koreainvestment.com:9443"
@@ -556,7 +657,7 @@ def main():
     try:
         gr = group_returns()
         if gr:
-            day["group_1d"] = gr
+            day["group_1d"] = gr   # 키 이름은 옛 기록과 호환(periods 가 있으면 기간 버튼)
     except Exception as e:
         print(f"⚠️ ETF 그룹 등락률 수집 실패(섹션 비표시): {e}")
 
