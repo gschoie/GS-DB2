@@ -265,6 +265,9 @@ def build() -> Path:
     cns_chart = ROOT / "static" / "consensus_chart.html"   # 커버리지 컨센서스 추이 갤러리(같은 틀)
     if cns_chart.exists():
         shutil.copy2(cns_chart, OUTPUT.parent / "consensus_chart.html")
+    val_band = ROOT / "static" / "valuation_band.html"   # PE·PB 밴드 갤러리(업무자동화 › 피어그룹.Valuation 밑) — ecos-fx-rates 그림. 같은 틀
+    if val_band.exists():
+        shutil.copy2(val_band, OUTPUT.parent / "valuation_band.html")
     er_page = ROOT / "static" / "er_report.html"   # Earnings Revision(주보 › ER) — ecos-fx-rates CSV 를 읽는 페이지. 같은 등급
     if er_page.exists():
         shutil.copy2(er_page, OUTPUT.parent / "er_report.html")

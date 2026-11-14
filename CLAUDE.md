@@ -1733,4 +1733,21 @@
       없어 매번 '범위 밖'으로 건너뛴다(11/10 피어그룹 크론 00:46 KST 도착) → 위 16:44 예약이 대신 맡는다. 그 예약의
       수급 그림(charts_only)은 그대로 유효.
 
+62. **업무자동화 › 📉 PE·PB 밴드 신설** (11/12~14, ecos-fx-rates PR #28~#30): 사용자가 쓰던 DataGuide·Bloomberg 밴드
+    엑셀(LIG D&A PER Band / PBR Band Chart)을 자동화. 계산·그림은 **ecos-fx-rates** 가 한다(ER·컨센 추이와 같은 분업).
+    - 화면: 사이드바 `🦿 업무자동화 > 📊 피어그룹.Valuation` 바로 밑 `📉 PE·PB 밴드`(view `valband`,
+      `static/valuation_band.html`, build_static 복사). ER 과 같은 46종목(조선 12·방산 20·건기 14), 섹터 탭 + 종목 카드
+      (위 PER 밴드 · 아래 PBR 밴드 + ROE 음영), 그림마다 📋 복사·PNG/SVG. 한국 원화(천원)·해외 USD.
+    - 종목 목록은 하드코딩하지 않는다 — ecos `output/valuation_band/band_inputs.csv`(차트에 실제 쓴 연도별 값·출처·배수)를
+      raw 로 읽어 만든다. 그림 파일명 = `<섹터>_<종목명 공백 제거>.png/.svg`.
+    - 데이터: 업로드 엑셀(ecos `data/valuation/raw/`, `DG_*`·`BB_*_YYYYMMDD.xlsx`) → 연간 EPS·BPS·ROE + 엑셀 배수 +
+      한국 수정주가, 없는 종목·연도는 Yahoo(해외 방산 15·해외 조선 3·Kobelco·Volvo 는 2022~FY2 만). 갱신은 ecos
+      `valuation-band.yml` — 평일 17:30 KST 크론 + 수동 + raw 푸시 시. **16:44 ecos 정시 예약(trig_01P6GJ…)에는 아직 없다**
+      — 그 예약이 묶인 세션에서만 프롬프트를 고칠 수 있다(`gh workflow run valuation-band.yml` 을 4번째로 추가).
+    - **교훈**: 다종목 엑셀의 `☞추정입력+컨센GET` 시트는 종목 열 순서가 `GET` 시트와 다르다. 첫 배포본이 GET 머리글로
+      읽어 20종목 추정치가 옆 종목 값으로 들어갔다(#30 수정). 검산은 기업별 밴드 시트 12월 값(`band`)과 `model` 일치.
+    - **주의**: ecos-fx-rates 는 공개 리포라 DataGuide·Bloomberg 값과 자체 추정치(☞추정입력)가 공개돼 있다(사용자 지시로
+      푸시). 비공개로 돌리면 이 페이지·ER·컨센 추이·피어그룹 갤러리의 raw 읽기가 모두 끊긴다 — 그때는 그림을 이 리포로
+      복사해 오는 단계가 필요. 상세는 ecos `docs/valuation_band_MANUAL.md`.
+
 이후 작업은 git log와 이 파일을 갱신하며 이어간다.
