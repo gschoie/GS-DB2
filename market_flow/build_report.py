@@ -184,13 +184,22 @@ def combo_chart(rows, color, line_unit, bar_label="현물 순매수", line_label
             f'<svg viewBox="0 0 {width} {height}" role="img">{"".join(g)}</svg>')
 
 
-def group_ret_block(today, is_latest):
-    """ETF 그룹 평균 당일 등락률 랭킹 — ETF 신호판의 '그룹 평균 WoW' 그림과 같은 형식.
-    색상도 신호판과 동일(상승 초록·하락 붉은색)하게 맞춘다. 데이터: scrape.group_returns()."""
-    gr = today.get("group_1d")
-    if not gr or not gr.get("groups"):
-        return ""
-    groups = gr["groups"]
+PERIOD_LABELS = [("1d", "오늘의 수익률"), ("1w", "주간 수익률"), ("1m", "월간 수익률"),
+                 ("3m", "분기 수익률"), ("1y", "연간 수익률")]
+PERIOD_DESC = {"1d": "DoD", "1w": "WoW · 7일", "1m": "MoM · 30일", "3m": "QoQ · 90일", "1y": "YoY · 365일"}
+
+
+def _history_periods(dkey):
+    """periods 없이 수집된 날 → etf_signal history 의 그날 종가로 기간 등락률 보충(실패하면 None)."""
+    try:
+        import scrape
+        return scrape.periods_from_history(dkey)
+    except Exception as e:
+        print(f"  · {dkey} 기간 수익률 보충 실패(DoD만): {e}")
+        return None
+
+
+def _gbars(groups, key, hidden):
     gmax = max(abs(v) for _, v, _ in groups) or 1
     items = []
     for g, v, n in groups:
@@ -203,10 +212,51 @@ def group_ret_block(today, is_latest):
             f'<li><span class="gn">{g}</span>'
             f'<span class="dbar"><i class="{bar}" style="{side};width:{w:.1f}%"></i></span>'
             f'<span class="gv {vcls}">{sign}{abs(v):.1f}%</span><small>{n}종목</small></li>')
-    title = "📊 오늘의 수익률" if is_latest else "📊 당일 수익률"
-    return (f'<h2>{title} <span class="na" style="font-weight:400;font-size:12px">'
-            f'— ETF 그룹 평균 등락률({len(groups)}개 그룹) · {gr["time"]} 기준 · 센 섹터부터</span></h2>'
-            f'<div class="card"><ul class="gbars">{"".join(items)}</ul></div>')
+    hid = " hidden" if hidden else ""
+    return f'<ul class="gbars" data-p="{key}"{hid}>{"".join(items)}</ul>'
+
+
+def group_ret_block(today, is_latest, dkey=None):
+    """ETF 그룹 평균 등락률 랭킹 — ETF 신호판의 '그룹 평균 WoW' 그림과 같은 형식.
+    제목이 곧 선택 버튼: 오늘의(DoD)·주간(WoW)·월간(MoM)·분기(QoQ)·연간(YoY) 수익률.
+    DoD 는 네이버 실시간, 나머지는 현재가 ÷ 7·30·90·365일 전 이전 마지막 종가.
+    기간 버튼 이전에 수집된 날은 빌드 때 etf_signal history 의 그날 종가로 보충한다.
+    전환은 페이지 공통 스크립트(이벤트 위임) — 날짜 본문이 innerHTML 로 바뀌어 인라인 script 는 안 돈다."""
+    gr = today.get("group_1d")
+    if not gr or not gr.get("groups"):
+        return ""
+    periods = dict(gr.get("periods") or {"1d": gr["groups"]})
+    bases = dict(gr.get("bases") or {})
+    filled = False
+    if len(periods) == 1 and dkey:
+        hp = _history_periods(dkey)
+        if hp:
+            periods.update(hp[0]); bases.update(hp[1]); filled = True
+    avail = [(k, lab) for k, lab in PERIOD_LABELS if periods.get(k)]
+    lists = "".join(_gbars(periods[k], k, i > 0) for i, (k, _) in enumerate(avail))
+    first = "오늘의 수익률" if is_latest else "당일 수익률"
+    n = len(periods[avail[0][0]])
+    sub = (f'<span class="na" style="font-weight:400;font-size:12px">'
+           f'— ETF 그룹 평균 등락률({n}개 그룹) · {gr["time"]} 기준 · 센 섹터부터</span>')
+    if len(avail) == 1:
+        return f'<h2>📊 {first} {sub}</h2><div class="card">{lists}</div>'
+
+    def tip(k):
+        if k == "1d":
+            return "DoD — 전일 종가 대비(네이버 실시간 등락률)"
+        b = bases.get(k, "")
+        base = f"{b[2:4]}/{b[5:7]}/{b[8:]} 이전 마지막 종가 대비" if b else ""
+        return f"{PERIOD_DESC[k]} — {base}"
+    btns = '<span class="gper">' + "".join(
+        f'<button type="button" data-p="{k}" title="{tip(k)}"{" class=on" if i == 0 else ""}>'
+        f'{first if k == "1d" else lab}</button>'
+        for i, (k, lab) in enumerate(avail)) + "</span>"
+    now = "그날 종가" if filled else "현재가"
+    note = ('<p class="na gnote" style="font-size:11.5px;margin:2px 0 0">'
+            f'주간·월간·분기·연간 = {now} ÷ 7·30·90·365일 전(달력일) 이전 마지막 종가 − 1 '
+            '(ETF 신호판과 같은 정의 · 종가 이력은 ETF 신호판 수집분) · 그룹 안 단순평균 · '
+            '버튼에 마우스를 올리면 기준일.</p>')
+    return f'<h2>📊 {btns} {sub}</h2><div class="card">{lists}{note}</div>'
 
 
 def stock_flow_block(today, is_latest):
@@ -582,7 +632,7 @@ def render_day(hist, all_dates, i):
 <h2>{sig_title}</h2>
 <div class="card"><ul class="signals">{sig_html}</ul></div>
 
-{group_ret_block(today, is_latest)}
+{group_ret_block(today, is_latest, dkey)}
 
 {stock_flow_block(today, is_latest)}
 
@@ -669,6 +719,9 @@ border-radius:8px;padding:8px 10px;display:flex;flex-direction:column}}
 .gbars{{list-style:none;margin:6px 0 8px;padding:0}}
 .gbars li{{display:grid;grid-template-columns:120px 1fr 58px 44px;align-items:center;
 gap:10px;padding:2.5px 0;font-size:13px}}
+.gper{{display:inline-flex;gap:3px;margin:0 6px;vertical-align:middle}}
+.gper button{{font:inherit;font-size:11.5px;font-weight:600;padding:2px 8px;border:1px solid var(--line,#ccc);border-radius:12px;background:transparent;color:inherit;cursor:pointer}}
+.gper button.on{{background:var(--fg,#222);color:var(--bg,#fff);border-color:var(--fg,#222)}}
 .gbars .gn{{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}}
 .gbars .gv{{text-align:right;font-variant-numeric:tabular-nums}}
 .gbars small{{color:var(--muted);text-align:right;font-size:11.5px}}
@@ -742,7 +795,22 @@ function show(i) {{
   sel.value = DATES[idx];
   prev.disabled = idx === 0;
   next.disabled = idx === DATES.length - 1;
+  setPer(GPER);
 }}
+// 오늘의/주간/월간/분기/연간 수익률 — 날짜를 넘겨도 고른 기간 유지
+var GPER = "1d";
+function setPer(p) {{
+  var box = document.querySelector("#day .gper");
+  if (!box) return;
+  if (!box.querySelector('button[data-p="' + p + '"]')) p = "1d";
+  GPER = p;
+  box.querySelectorAll("button").forEach(function (x) {{ x.classList.toggle("on", x.dataset.p === p); }});
+  document.querySelectorAll("#day ul.gbars").forEach(function (u) {{ u.hidden = u.dataset.p !== p; }});
+}}
+document.addEventListener("click", function (e) {{
+  var t = e.target.closest && e.target.closest(".gper button");
+  if (t) setPer(t.dataset.p);
+}});
 prev.addEventListener("click", function () {{ show(idx - 1); }});
 next.addEventListener("click", function () {{ show(idx + 1); }});
 sel.addEventListener("change", function () {{ show(DATES.indexOf(sel.value)); }});

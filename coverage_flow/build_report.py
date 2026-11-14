@@ -409,7 +409,7 @@ WEEKLY_DPI = 384
 WEEKLY_JS = r"""
 <script>
 (function(){
-  const W=__W__,H=__H__,SC=__SC__,FONT='"Malgun Gothic","Apple SD Gothic Neo","Noto Sans KR",sans-serif';
+  const W=__W__,H=__H__,SC=__SC__,FONT='"나눔스퀘어OTF Light","NanumSquareOTF Light","NanumSquare OTF Light","나눔스퀘어 Light","NanumSquare Light","나눔스퀘어OTF","NanumSquareOTF","NanumSquare","Malgun Gothic","Apple SD Gothic Neo","Noto Sans KR",sans-serif';
   const C={mc:"#111111",inn:"#9a7b55",fr:"#2a78cc",zero:"#b5b5b5",ax:"#333",title:"#2f6db5"};
   function nice(lo,hi,k){const sp=(hi-lo)||1,st=Math.pow(10,Math.floor(Math.log10(sp/k))),m=sp/k/st,s=(m<1.5?1:m<3?2:m<7?5:10)*st;
     const a=Math.floor(lo/s)*s,b=Math.ceil(hi/s)*s,t=[];for(let v=a;v<=b+s/2;v+=s)t.push(Math.round(v));return {t,a,b}}
@@ -668,7 +668,7 @@ table.flow{{font-size:12px}}table.flow td,table.flow th{{padding:6px 5px}}th.c{{
 .wk-bar{{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:4px 0 10px}}
 .errs{{margin:16px 0;font-size:12px;color:#b45309}}.errs ul{{margin:6px 0 0 18px}}
 .wrap{{overflow-x:auto}}
-.wk-grid{{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}}@media(max-width:900px){{.wk-grid{{grid-template-columns:1fr}}}}.wk-cell{{border:1px solid var(--line);padding:6px;position:relative}}.wk-svg svg{{width:100%;height:auto;display:block}}.wk-one,.wk-all{{font:11px Inter;padding:2px 8px;border:1px solid #d1d5db;background:#fff;border-radius:3px;cursor:pointer;color:#374151}}.wk-one{{position:absolute;right:8px;bottom:8px}}.wk-copy{{position:absolute;right:74px;bottom:8px;font:11px Inter;padding:2px 8px;border:1px solid #d1d5db;background:#fff;border-radius:3px;cursor:pointer;color:#374151}}.wk-big{{grid-column:span 2;grid-row:span 2}}@media(max-width:900px){{.wk-big{{grid-column:auto;grid-row:auto}}}}.wk-all{{margin-left:8px;vertical-align:middle}}
+#weekly{{font-family:"나눔스퀘어OTF Light","NanumSquareOTF Light","NanumSquare OTF Light","나눔스퀘어 Light","NanumSquare Light","나눔스퀘어OTF","NanumSquareOTF","NanumSquare",Inter,"Malgun Gothic",sans-serif}}#weekly h3,#weekly h2,#weekly button,#weekly small{{font-family:inherit}}.wk-grid{{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}}@media(max-width:900px){{.wk-grid{{grid-template-columns:1fr}}}}.wk-cell{{border:1px solid var(--line);padding:6px;position:relative}}.wk-svg svg{{width:100%;height:auto;display:block}}.wk-one,.wk-all{{font:11px Inter;padding:2px 8px;border:1px solid #d1d5db;background:#fff;border-radius:3px;cursor:pointer;color:#374151}}.wk-one{{position:absolute;right:8px;bottom:8px}}.wk-copy{{position:absolute;right:74px;bottom:8px;font:11px Inter;padding:2px 8px;border:1px solid #d1d5db;background:#fff;border-radius:3px;cursor:pointer;color:#374151}}.wk-big{{grid-column:span 2;grid-row:span 2}}@media(max-width:900px){{.wk-big{{grid-column:auto;grid-row:auto}}}}.wk-all{{margin-left:8px;vertical-align:middle}}
 tr.clk{{cursor:pointer}}tr.clk:hover td{{background:#f8fafc}}.car{{color:#9ca3af;font-size:11px}}
 tr.chart td{{padding:10px 8px 16px;background:#fcfcfd}}.chbox{{max-width:760px}}.chbox .hd{{display:flex;gap:14px;flex-wrap:wrap;align-items:baseline;font-size:12px;margin-bottom:4px}}
 .chbox .hd b{{font-size:13px}}.lg{{display:inline-flex;align-items:center;gap:5px;color:var(--muted)}}.lg i{{display:inline-block;width:14px;height:3px;border-radius:2px}}
