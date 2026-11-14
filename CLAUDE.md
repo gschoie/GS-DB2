@@ -1582,6 +1582,11 @@
       글 보강)가 묶여 `gh workflow run hanwha-tone.yml --ref main -f ai_max=150` 을 쏜다. 크론 안전망은 그대로
       (텔레가 없어 중복 run 은 무해). fire_trigger 수동 발사는 세션 묶기를 무시하므로 검증은 정시 결과로.
 
+    - **운영 중단** (11/14, 사용자 "대시보드에서 빼고 매일 아침 수집도 중단"): 사이드바 `🔥 리서치톤` 메뉴·섹션 제거,
+      `hanwha-tone.yml` 의 schedule 3개 삭제(workflow_dispatch 만 남김), deploy-pages workflow_run 목록·build_static 복사에서 제외,
+      예약 작업 2개(`trig_01UJtFdMbttR2dr6mxnLtJzr`·`trig_01U2VuTAA8jYi7TM1T6nY2QW`) enabled=false. `hanwha_research_tone/`
+      모듈·`data/`·`static/hanwha_tone*` 파일은 삭제하지 않고 남겨 두었다(되살릴 때 위 네 곳만 복원).
+
 54. **매매제한 컴플 체크 — GEMS → 대시보드 내장 도구** (11/2): 사이드바 `👥 DAOL.관리 > ⏳ 컴플(24H 매매제한).쳌`
     이 제미나이 Gem·ChatGPT 프로젝트 두 창을 열던 것을 `static/compliance/index.html`(새 창)로 교체.
     매매제한 지시(자료 A)·파워베이스 캡처(자료 B)·혼합 이미지를 Ctrl+V/드래그/사진 선택으로 올리면

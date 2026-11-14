@@ -316,12 +316,6 @@ def build() -> Path:
     if covflow_dir.is_dir():
         shutil.copytree(covflow_dir, OUTPUT.parent / "coverage_flow", dirs_exist_ok=True)
     # DART 생산능력·가동률: 페이지(dashboard/index.html) + 정규화 JSON(런타임 fetch)
-    hanwha_page = ROOT / "static" / "hanwha_tone_report.html"   # 불꽃 리서치 톤(한화투자증권) — 런타임 fetch 페이지
-    if hanwha_page.exists():
-        shutil.copy2(hanwha_page, OUTPUT.parent / "hanwha_tone_report.html")
-    hanwha_data = ROOT / "static" / "hanwha_tone"
-    if hanwha_data.exists():
-        shutil.copytree(hanwha_data, OUTPUT.parent / "hanwha_tone", dirs_exist_ok=True)
     dartcap_page = ROOT.parent / "dart_capacity" / "dashboard" / "index.html"
     if dartcap_page.exists():
         shutil.copy2(dartcap_page, OUTPUT.parent / "dart_capacity_report.html")
