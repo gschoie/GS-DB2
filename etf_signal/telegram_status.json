@@ -1,8 +1,64 @@
 {
-  "when_utc": "2026-11-10 22:09:01Z",
+  "when_utc": "2026-11-13 22:09:02Z",
   "ok": true,
-  "note": "no_alert_skip",
+  "note": "alert_sent",
   "chat_id_tail": "5171",
   "token_set": true,
-  "response": null
+  "response": {
+    "ok": true,
+    "result": {
+      "message_id": 834,
+      "from": {
+        "id": 8875725998,
+        "is_bot": true,
+        "first_name": "GB Investing Signal",
+        "username": "gs_invest_signal_bot"
+      },
+      "chat": {
+        "id": 279385171,
+        "first_name": "광식",
+        "last_name": "최",
+        "username": "gschoie",
+        "type": "private"
+      },
+      "date": 1794607742,
+      "text": "📡 ETF/섹터 신호 · 2026-11-13 (전일 확정)\n\n★ 매수 신호(골든크로스) 1개\n\n🟢 KODEX 은행 · 금융\n   ＋DI가 −DI 상향돌파·추세전환\n   RSI 54.1 · ADX 24.5 · %K 75.0/64.0 · 수급 중립\n   [B] 상대강도 상위 18% · ADX 상승추세\n\n⚡ 추세 강도 1개 (강력 1)\n\n⚡ TIGER 일본니케이225 · 해외지수\n   ADX 25 상향돌파 · 하락추세 강화(강력)\n   RSI 38.9 · ADX 25.1 · %K 38.5/37.5 · 수급 중립\n   [A] 거래대금 2.23배 · ADX 하락추세 · 외인·기관 연속 순매도 4일\n\n전체 신호판 › 대시보드\n🎴 GS Research Desk · ETF/섹터 신호",
+      "entities": [
+        {
+          "offset": 0,
+          "length": 12,
+          "type": "bold"
+        },
+        {
+          "offset": 50,
+          "length": 1,
+          "type": "bold"
+        },
+        {
+          "offset": 57,
+          "length": 8,
+          "type": "bold"
+        },
+        {
+          "offset": 178,
+          "length": 1,
+          "type": "bold"
+        },
+        {
+          "offset": 191,
+          "length": 14,
+          "type": "bold"
+        },
+        {
+          "offset": 345,
+          "length": 4,
+          "type": "text_link",
+          "url": "https://gs-research-desk.github.io/etf_signal_report.html"
+        }
+      ],
+      "link_preview_options": {
+        "is_disabled": true
+      }
+    }
+  }
 }

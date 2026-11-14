@@ -402,6 +402,7 @@ position:static;min-width:0}
   <a class="btn" href="valuation_full.xlsx" download>📥 엑셀 다운로드</a>
   <button class="btn" id="run" type="button">▶ 수집 실행</button>
   <button class="btn ghost" id="csv" type="button">⤓ 현재 화면 CSV</button>
+  <button class="btn ghost" id="shot" type="button">📋 표 복사</button>
   <input type="search" id="q" placeholder="기업명 · 티커 검색">
 </div>
 <div class="bar">
@@ -746,6 +747,74 @@ document.getElementById('csv').addEventListener('click', ()=>{
   a.href = url; a.download = `피어그룹밸류에이션_${DATA.updated_at.slice(0,10)}.csv`;
   document.body.appendChild(a); a.click(); a.remove();
   setTimeout(()=>URL.revokeObjectURL(url), 1000);
+});
+
+/* 📋 표 복사 — 지금 화면의 표(선택한 지표·축·검색·임시조회·펼친 상세 패널 그대로)를
+   PNG 로 클립보드에. 렌더는 SVG foreignObject(외부 리소스 0 → 캔버스 오염 없음),
+   색은 라이트 팔레트로 고정(다크 모드에서 복사해도 보고서용 밝은 표). 캔버스는 2배(선명).
+   pHYs 192dpi 는 **다운로드 폴백 파일에만 남는다** — 크로미움이 클립보드 이미지를
+   재인코딩하며 pHYs 를 벗겨낸다(실측, 1,753KB→1,587KB) → 붙여넣으면 96dpi 로 커지는데
+   워드·PPT 가 페이지 폭에 맞춰 줄이므로 감수(선명도가 우선).
+   클립보드엔 blob Promise 를 그대로 넘긴다(사파리 제스처 인정). 실패하면 PNG 다운로드. */
+const SHOT_SCALE = 2;
+const CRC32 = (()=>{const t=new Uint32Array(256);for(let n=0;n<256;n++){let c=n;for(let k=0;k<8;k++)c=c&1?0xEDB88320^(c>>>1):c>>>1;t[n]=c}
+  return b=>{let c=0xFFFFFFFF;for(let i=0;i<b.length;i++)c=t[(c^b[i])&255]^(c>>>8);return (c^0xFFFFFFFF)>>>0}})();
+function pngDpi(buf, dpi){               // IHDR 뒤에 pHYs(픽셀/미터) 청크를 끼워 넣는다
+  const src=new Uint8Array(buf), ppm=Math.round(dpi/0.0254), ch=new Uint8Array(21), dv=new DataView(ch.buffer);
+  dv.setUint32(0,9); ch.set([0x70,0x48,0x59,0x73],4); dv.setUint32(8,ppm); dv.setUint32(12,ppm);
+  ch[16]=1; dv.setUint32(17,CRC32(ch.subarray(4,17)));
+  const at=33, out=new Uint8Array(src.length+21);
+  out.set(src.subarray(0,at)); out.set(ch,at); out.set(src.subarray(at),at+21); return out;
+}
+function tableShot(){
+  const wrapEl=document.querySelector('.tablewrap'), tbl=wrapEl.querySelector('table');
+  const w=Math.ceil(tbl.scrollWidth)+2, h=Math.ceil(tbl.scrollHeight)+2;   // 스크롤로 가린 열까지 전부
+  const clone=wrapEl.cloneNode(true);
+  clone.style.cssText='overflow:visible;width:'+w+'px;height:'+h+'px;border-radius:0';
+  const css=Array.from(document.querySelectorAll('style')).map(s=>s.textContent).join('\\n');
+  const light=':root{--bg:#f6f7f9;--card:#fff;--ink:#1a1d21;--muted:#6b7280;--line:#e5e7eb;'+
+              '--accent:#185fa5;--est:#fff6e5;--grp:#eef2f7;--sum:#efe8dc;--bad:#d03b3b}'+
+    /* SVG 안엔 body 가 없어 body{font-family} 가 안 먹고 기본 세리프로 대체 → 글자 폭이
+       달라져 실측 폭(scrollWidth)보다 넓게 그려진 오른쪽 끝이 잘렸다(11/14 사용자 실측).
+       루트 div 에 같은 글꼴·행간을 강제해 화면과 같은 치수로 그린다. */
+    'div{font-family:-apple-system,"Segoe UI","Malgun Gothic",sans-serif;line-height:1.45}';
+  const PAD=24;   // 글꼴 힌팅·서브픽셀 반올림용 안전 여백(배경색이라 티 안 남)
+  const esc=t=>t.replace(/&/g,'&amp;').replace(/</g,'&lt;');   // XML 파싱이 조용히 깨지지 않게
+  const svg='<svg xmlns="http://www.w3.org/2000/svg" width="'+(w+PAD)+'" height="'+(h+PAD)+'">'+
+    '<foreignObject width="100%" height="100%"><div xmlns="http://www.w3.org/1999/xhtml">'+
+    '<style>'+esc(css)+'\\n'+light+'</style>'+new XMLSerializer().serializeToString(clone)+
+    '</div></foreignObject></svg>';
+  return new Promise((resolve,reject)=>{
+    const img=new Image();
+    img.onload=()=>{ try{
+      const c=document.createElement('canvas'); c.width=(w+PAD)*SHOT_SCALE; c.height=(h+PAD)*SHOT_SCALE;
+      const x=c.getContext('2d'); x.fillStyle='#f6f7f9'; x.fillRect(0,0,c.width,c.height);
+      x.drawImage(img,0,0,c.width,c.height);
+      c.toBlob(b=>b ? b.arrayBuffer().then(buf=>resolve(new Blob([pngDpi(buf,96*SHOT_SCALE)],{type:'image/png'}))).catch(reject)
+                    : reject(new Error('PNG 변환 실패')), 'image/png');
+    }catch(e){reject(e)} };
+    img.onerror=()=>reject(new Error('표 렌더 실패'));
+    // blob URL 은 크로미움이 foreignObject SVG 를 캔버스 오염으로 봐서 toBlob 이 죽는다(실측) — data URL 로.
+    img.src='data:image/svg+xml;charset=utf-8,'+encodeURIComponent(svg);
+  });
+}
+function shotDownload(blob){
+  const a=document.createElement('a'); a.href=URL.createObjectURL(blob);
+  a.download='피어그룹밸류에이션_'+DATA.updated_at.slice(0,10)+'.png';
+  document.body.appendChild(a); a.click(); a.remove();
+}
+document.getElementById('shot').addEventListener('click', ()=>{
+  const btn=document.getElementById('shot'), st=document.getElementById('status');
+  btn.disabled=true; st.textContent='표 이미지를 만드는 중…';
+  const shot=tableShot();
+  const done=msg=>{btn.disabled=false; st.textContent=msg};
+  const fallback=e=>shot.then(b=>{shotDownload(b); done('클립보드 복사가 막혀 PNG 파일로 내려받았습니다.')})
+                       .catch(()=>done('표 복사 실패: '+((e&&e.message)||e)));
+  if(window.ClipboardItem && navigator.clipboard && navigator.clipboard.write){
+    navigator.clipboard.write([new ClipboardItem({'image/png': shot})])
+      .then(()=>done('📋 표 이미지가 클립보드에 복사됐습니다 — Ctrl+V 로 붙여넣으세요.'))
+      .catch(fallback);
+  }else fallback(new Error('클립보드 미지원'));
 });
 
 render();

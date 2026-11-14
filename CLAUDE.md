@@ -1364,6 +1364,24 @@
       사용자 지적 2탄 "싱가포르 seatrium 이 없다" — **Seatrium(5E2.SI)** 조선사 싱가포르로
       추가(54종목). 옛 셈코프마린+케펠 O&M(2023 합병), 2024-05 20:1 병합으로 SGX 코드
       S51 → 5E2(야후도 5E2.SI — 옛 S51.SI 페이지는 병합 전 가격으로 멈춰 있다).
+    - **📋 표 복사 버튼** (11/14): 사용자 요청 "현재 선택된 상태로 아래 표가 이미지로 복사".
+      상단 바에 버튼 — 지금 DOM 의 표(지표 칩·검색·임시조회·펼친 상세 그대로)를 SVG
+      foreignObject 로 떠서 캔버스 2배 PNG → ClipboardItem(blob Promise — 사파리 제스처).
+      외부 라이브러리 0, 색은 라이트 팔레트 고정. **blob URL SVG 는 크로미움이 캔버스
+      오염으로 봐 toBlob 이 죽는다(실측) — data URL 로**. **클립보드는 pHYs 를 벗겨낸다**
+      (크로미움 재인코딩 실측) — 다운로드 폴백 파일에만 192dpi 잔존, 붙여넣기가 커지는 건
+      워드·PPT 의 폭 맞춤에 맡김. Playwright 로 전체/PER만/상세 펼침/검색 4개 상태의
+      클립보드 PNG 폭·높이 변화 실검증.
+      **오른쪽 끝 짤림 수정**(11/14 사용자 실측): SVG 안엔 body 가 없어 `body{font-family}`
+      가 안 먹고 기본 세리프로 대체 → 글자 폭이 달라져 실측 폭(scrollWidth)보다 넓게
+      그려진 끝이 잘렸다. 루트 div 에 같은 글꼴·행간 강제 + 안전 여백 24px.
+      산업 칩(조선/방산/건설기계)을 누른 상태로 복사하면 그 산업만 복사된다(칩은 원래 있던 것).
+    - **방산 유럽 보강 + '항공' 블록 신설** (11/14): 사용자 "방산 종목이 너무 열악하다" —
+      방산 유럽에 Thales(HO.PA)·Safran(SAF.PA)·Dassault Aviation(AM.PA) 추가(프랑스 3곳
+      → 프랑스 지역 중앙값도 선다), 새 산업 블록 **항공**(방산·건설기계 사이) = Boeing·
+      Honeywell·Airbus·Rolls-Royce(RR.L — GBp 보정은 기존 8번 장치). 61종목.
+      기체부품(봄바르디어·엠브라에르)은 요청대로 제외. 산업 칩·유럽 중앙값은 데이터
+      파생이라 코드 변경 0 — 항공 칩이 저절로 생긴다.
     - 화면·엑셀은 valuation.yml 이 다시 돌아야 반영(빌드 산출물 커밋 구조).
 
 50. **화면 공유용 주소 — 새 창 링크를 gs-research-desk.github.io 로** (10/19): 사람들 앞에서 화면을
@@ -1564,6 +1582,11 @@
       글 보강)가 묶여 `gh workflow run hanwha-tone.yml --ref main -f ai_max=150` 을 쏜다. 크론 안전망은 그대로
       (텔레가 없어 중복 run 은 무해). fire_trigger 수동 발사는 세션 묶기를 무시하므로 검증은 정시 결과로.
 
+    - **운영 중단** (11/14, 사용자 "대시보드에서 빼고 매일 아침 수집도 중단"): 사이드바 `🔥 리서치톤` 메뉴·섹션 제거,
+      `hanwha-tone.yml` 의 schedule 3개 삭제(workflow_dispatch 만 남김), deploy-pages workflow_run 목록·build_static 복사에서 제외,
+      예약 작업 2개(`trig_01UJtFdMbttR2dr6mxnLtJzr`·`trig_01U2VuTAA8jYi7TM1T6nY2QW`) enabled=false. `hanwha_research_tone/`
+      모듈·`data/`·`static/hanwha_tone*` 파일은 삭제하지 않고 남겨 두었다(되살릴 때 위 네 곳만 복원).
+
 54. **매매제한 컴플 체크 — GEMS → 대시보드 내장 도구** (11/2): 사이드바 `👥 DAOL.관리 > ⏳ 컴플(24H 매매제한).쳌`
     이 제미나이 Gem·ChatGPT 프로젝트 두 창을 열던 것을 `static/compliance/index.html`(새 창)로 교체.
     매매제한 지시(자료 A)·파워베이스 캡처(자료 B)·혼합 이미지를 Ctrl+V/드래그/사진 선택으로 올리면
@@ -1704,7 +1727,7 @@
 61. **주보 › 📐 ER (Earnings Revision) 신설** (11/10~11): 블룸버그 ER 차트를 무료 데이터로. 수집은 별도 리포
     ecos-fx-rates `consensus/er_snapshot.py` — 야후 애널리스트 추정(30·7일 EPS 상향/하향 건수·애널 수·컨센 EPS
     현재/7·30·60·90일 전)을 **그날 값만 주므로 매일 쌓는다**(`output/earnings_revision/er_history.csv`, 11/10 시작,
-    과거 소급 불가). ER = (상향−하향)/애널 수×100. 57종목: 조선(커버리지 9 + Yangzijiang·CSSC·Seatrium)·방산(한국 5 +
+    과거 소급 불가). ER = (상향−하향)/애널 수×100. 46종목: 조선(커버리지 9 + Yangzijiang·CSSC·Seatrium)·방산(한국 5 +
     미국 체계 7 + 유럽 체계 8)·건기(두산밥캣·HD건설기계 + 해외 12, Kobelco = Kobe Steel). 화면 `static/er_report.html?s=조선|방산|건설기계`
     (raw CSV 런타임 fetch, 사이드바 주보 맨 아래 `📐 ER › 조선/방산/건설기계`).
     - **정시 발사 = Claude 예약** `trig_01P6GJWVbrRxjdAxnTCQBB5n`(평일 16:44 KST) → ecos-fx-rates 가 붙은 전용 세션
@@ -1715,10 +1738,45 @@
       (다른 세션에서 update_trigger 는 거부 — 시각·활성만 변경 가능).
     - **묶인 세션은 발사 기록이 쌓일수록 비싸진다**: 커버리지 수급 세션은 11/11 기준 1회 $1.5~1.9(컨텍스트 40만+ 토큰,
       누적 ~$29). 무거워지면 새 세션을 만들어 예약을 새로 묶을 것.
+    - **적재 날짜 = 속한 평일** (11/14): KST 06시 이전 실행은 전날 것으로, 주말은 적재 안 함(dispatch `force` 로만).
+      17:20 안전망 크론이 새벽 01:30 에 도착해 토요일 칸(11/14)이 생겼던 것 — 그 칸은 11/13 으로 바꿔 끼웠다.
+      화면 맨 위 **📅 적재 현황**(날짜 칸마다 n/46 종목, 빠진 평일은 빨간 점선 '누락'), 표에 직전 적재일 대비 ER 변화,
+      추이 차트는 날마다 점 + 날짜 눈금. 종목 수는 57이 아니라 **46**(조선 12·방산 20·건기 14).
     - 한계: 야후 커버 증권사가 블룸버그보다 적다(CSSC·HD현대마린엔진 1명, 두산밥캣 2명 등 — 화면 ⚠적음). 한국 종목은
       FnGuide 증권사별 추정으로 따로 계산하는 게 다음 후보.
     - 주보 4종 예약 `trig_01VEqTcdRitLg6oWSSxQc8uQ`(16:42, 커버리지 수급 세션)의 ecos dispatch 2건은 그 세션에 ecos 리포가
       없어 매번 '범위 밖'으로 건너뛴다(11/10 피어그룹 크론 00:46 KST 도착) → 위 16:44 예약이 대신 맡는다. 그 예약의
       수급 그림(charts_only)은 그대로 유효.
+
+62. **업무자동화 › 📉 PE·PB 밴드 신설** (11/12~14, ecos-fx-rates PR #28~#30): 사용자가 쓰던 DataGuide·Bloomberg 밴드
+    엑셀(LIG D&A PER Band / PBR Band Chart)을 자동화. 계산·그림은 **ecos-fx-rates** 가 한다(ER·컨센 추이와 같은 분업).
+    - 화면: 사이드바 `🦿 업무자동화 > 📊 피어그룹.Valuation` 바로 밑 `📉 PE·PB 밴드`(view `valband`,
+      `static/valuation_band.html`, build_static 복사). ER 과 같은 46종목(조선 12·방산 20·건기 14), 섹터 탭 + 종목 카드
+      (위 PER 밴드 · 아래 PBR 밴드 + ROE 음영), 그림마다 📋 복사·PNG/SVG. 한국 원화(천원)·해외 USD.
+    - 종목 목록은 하드코딩하지 않는다 — ecos `output/valuation_band/band_inputs.csv`(차트에 실제 쓴 연도별 값·출처·배수)를
+      raw 로 읽어 만든다. 그림 파일명 = `<섹터>_<종목명 공백 제거>.png/.svg`.
+    - 데이터: 업로드 엑셀(ecos `data/valuation/raw/`, `DG_*`·`BB_*_YYYYMMDD.xlsx`) → 연간 EPS·BPS·ROE + 엑셀 배수 +
+      한국 수정주가, 없는 종목·연도는 Yahoo(해외 방산 15·해외 조선 3·Kobelco·Volvo 는 2022~FY2 만). 갱신은 ecos
+      `valuation-band.yml` — 평일 17:30 KST 크론 + 수동 + raw 푸시 시. **16:44 ecos 정시 예약(trig_01P6GJ…)에는 아직 없다**
+      — 그 예약이 묶인 세션에서만 프롬프트를 고칠 수 있다(`gh workflow run valuation-band.yml` 을 4번째로 추가).
+    - **교훈**: 다종목 엑셀의 `☞추정입력+컨센GET` 시트는 종목 열 순서가 `GET` 시트와 다르다. 첫 배포본이 GET 머리글로
+      읽어 20종목 추정치가 옆 종목 값으로 들어갔다(#30 수정). 검산은 기업별 밴드 시트 12월 값(`band`)과 `model` 일치.
+    - **주의**: ecos-fx-rates 는 공개 리포라 DataGuide·Bloomberg 값과 자체 추정치(☞추정입력)가 공개돼 있다(사용자 지시로
+      푸시). 비공개로 돌리면 이 페이지·ER·컨센 추이·피어그룹 갤러리의 raw 읽기가 모두 끊긴다 — 그때는 그림을 이 리포로
+      복사해 오는 단계가 필요. 상세는 ecos `docs/valuation_band_MANUAL.md`.
+    - **11/14 추가 — 종가 기준일 · PER/PBR 따로 복사 · ✏️ 내 모델 입력** (ecos PR #32): 사용자 "종가가 언제 건지 눈에 띄게",
+      "복사는 PBR·PER 따로", "모델 바꾸면 2026~2030 EPS·BPS·ROE 를 넣을 수 있게(엑셀 복붙), 안 넣으면 컨센서스".
+      - 그림이 종목당 두 장(`<섹터>_<종목>_PER` / `_PBR`)이 됐고 그림 안 왼쪽 위에 `종가 YYYY-MM-DD 값` 딱지 + 마지막 점.
+        화면 맨 위 `📅 종가 기준 — 한국 …(요일) · 해외 …`, 카드마다 `종가 MM/DD · 값`. 기준일은 `band_inputs.csv` 의
+        `px_date`·`px_last` 열.
+      - **✏️ 내 모델**: 카드 버튼 → 표(EPS·BPS·ROE × 올해~올해+4)에 엑셀 범위를 Ctrl+V(가로·세로·머리글 섞여도 해석,
+        ROE 가 0.25 꼴이면 ×100) → 💾 저장 → GAS `valmodel` → ecos `valuation-model.yml` 이
+        `data/valuation/my_model/<티커>.csv` 저장 후 `valuation-band.yml` 발사(약 5분, 화면이 폴링해 새로고침).
+        우선순위 **내 모델 → 업로드 엑셀 모델 → 컨센서스**. 비운 칸은 다음 순위 값, `🗑 내 모델 지우기` = 파일 삭제.
+        카드 아래 꼬리표가 추정 구간 출처를 보여준다(`26~28E 내 모델` 등).
+      - **GAS 재붙여넣기 필요**(WF `valmodel` + buildInputs + ticker 검사; '배포 관리 → 새 버전', 새 배포 금지). 그 전에는
+        저장 시 'unknown workflow key' 안내가 뜬다.
+      - 내 모델 워크플로에는 concurrency 를 걸지 않았다(대기 run 취소로 입력 유실 방지) — 종목별 파일이라 연달아 넣어도 충돌 없음.
+        입력은 env 로만 넘기고 `set_model.py` 가 정규식으로 검증(티커는 COMPANIES 안, fy 올해~+4, 숫자만).
 
 이후 작업은 git log와 이 파일을 갱신하며 이어간다.

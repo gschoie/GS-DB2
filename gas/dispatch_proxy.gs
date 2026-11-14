@@ -53,6 +53,8 @@ const WF = {
   // (app.js 의 FRESH 표와 1:1. 완료 시점은 아래 latestRun 상태 조회로 잡는다)
   fx:        { repo: 'gschoie/ecos-fx-rates', file: 'fx-ecos.yml' },        // ECOS 환율 엑셀
   peer:      { repo: 'gschoie/ecos-fx-rates', file: 'peergroup-price.yml' },// 피어그룹 주가 엑셀
+  // PE·PB 밴드 › ✏️ 내 모델: 올해~올해+4 EPS·BPS·ROE 저장 후 밴드 재생성 (ticker·model 입력 필요)
+  valmodel:  { repo: 'gschoie/ecos-fx-rates', file: 'valuation-model.yml' },
 };
 
 // 워크플로별 추가 입력. 선언한 required 입력을 빠짐없이 채워야 422가 안 난다.
@@ -83,6 +85,8 @@ function buildInputs(key, body) {
   // 커버리지 수급: 화면 '🔄 차트만 지금 수집'(④ 위클리용 차트 옆)은 charts_only 만 넘긴다 — 표·텔레 그대로,
   // 시계열(series.json)만 갱신. 상단 '🔄 지금 수집'(전체)은 입력 없음.
   if (key === 'covflow') return body.charts_only ? { charts_only: 'true' } : {};
+  // 밴드 내 모델: model = "fy,item,value;…" (EPS|BPS|ROE) 또는 "CLEAR". 검증은 ecos valuation/set_model.py.
+  if (key === 'valmodel') return { ticker: String(body.ticker || ''), model: String(body.model || '') };
   return {};
 }
 
@@ -114,6 +118,9 @@ function doPost(e) {
     }
     if (key === 'vacation' && body.mode !== 'run' && !body.entry) {
       return json({ ok: false, code: 400, wf: wf, error: 'entry가 비어 있습니다' });
+    }
+    if (key === 'valmodel' && !/^[A-Za-z0-9.\-]{1,15}$/.test(String(body.ticker || ''))) {
+      return json({ ok: false, code: 400, wf: wf, error: 'ticker가 비었거나 형식이 다릅니다' });
     }
     if ((key === 'gptbrief' || key === 'congpt') && !body.content) {
       return json({ ok: false, code: 400, wf: wf, error: 'content가 비어 있습니다' });

@@ -1,91 +1,183 @@
 {
-  "date": "2026-11-11",
-  "prev_date": "2026-11-10",
-  "generated_at": "2026-11-11 10:20",
+  "date": "2026-11-13",
+  "prev_date": "2026-11-12",
+  "generated_at": "2026-11-13 10:20",
   "base_date": "",
   "prev_base_date": "",
-  "market_date": "2026-11-11",
-  "prev_market_date": "2026-11-10",
-  "fetched_at": "2026-11-11 10:20",
-  "prev_fetched_at": "2026-11-10 10:20",
+  "market_date": "2026-11-13",
+  "prev_market_date": "2026-11-12",
+  "fetched_at": "2026-11-13 10:20",
+  "prev_fetched_at": "2026-11-12 10:20",
   "first_run": false,
   "etfs": [
     {
-      "code": "410870",
-      "label": "TIME K컬처액티브",
+      "code": "426030",
+      "label": "TIME 미국나스닥100액티브",
       "group": "TIME(구 TIMEFOLIO)",
       "flow_factor": 1.0,
       "new": [
         {
-          "key": "003230",
-          "name": "삼양식품",
-          "code": "003230",
-          "weight": 6.72,
-          "shares": 46.0
-        }
-      ],
-      "gone": [
-        {
-          "key": "122870",
-          "name": "와이지엔터테인먼트",
-          "code": "122870",
-          "weight_prev": 4.88,
-          "shares_prev": 983.0
-        }
-      ],
-      "moves": [],
-      "has_weight": true
-    },
-    {
-      "code": "456600",
-      "label": "TIME 글로벌AI인공지능액티브",
-      "group": "TIME(구 TIMEFOLIO)",
-      "flow_factor": 1.0041,
-      "new": [
-        {
-          "key": "AMAZON.COM INC",
-          "name": "AMAZON.COM INC",
+          "key": "IONQ INC",
+          "name": "IONQ INC",
           "code": "",
           "weight": 0.0,
-          "shares": 146.0
+          "shares": 155.0
+        },
+        {
+          "key": "QUANTINUUM INC-A",
+          "name": "QUANTINUUM INC-A",
+          "code": "",
+          "weight": 0.0,
+          "shares": 137.0
         }
       ],
       "gone": [
         {
-          "key": "BAKER HUGHES CO",
-          "name": "BAKER HUGHES CO",
+          "key": "PALANTIR TECHNOLOGIES INC-A",
+          "name": "PALANTIR TECHNOLOGIES INC-A",
           "code": "",
           "weight_prev": 0.0,
-          "shares_prev": 139.0
+          "shares_prev": 105.0
+        },
+        {
+          "key": "ALPHABET INC-CL A",
+          "name": "ALPHABET INC-CL A",
+          "code": "",
+          "weight_prev": 0.0,
+          "shares_prev": 106.0
         }
       ],
       "moves": [],
       "has_weight": false
     },
     {
-      "code": "0163Y0",
-      "label": "KoAct 코스닥액티브",
-      "group": "KoAct",
-      "flow_factor": 1.0,
+      "code": "456600",
+      "label": "TIME 글로벌AI인공지능액티브",
+      "group": "TIME(구 TIMEFOLIO)",
+      "flow_factor": 1.0005,
       "new": [
         {
-          "key": "218410",
-          "name": "RFHIC",
-          "code": "218410",
-          "weight": 1.95,
-          "shares": 142.0
+          "key": "IONQ INC",
+          "name": "IONQ INC",
+          "code": "",
+          "weight": 0.0,
+          "shares": 230.0
+        },
+        {
+          "key": "QUANTINUUM INC-A",
+          "name": "QUANTINUUM INC-A",
+          "code": "",
+          "weight": 0.0,
+          "shares": 203.0
         }
       ],
       "gone": [
         {
-          "key": "006730",
-          "name": "서부T&D",
-          "code": "006730",
-          "weight_prev": 1.97,
-          "shares_prev": 673.0
+          "key": "AMAZON.COM INC",
+          "name": "AMAZON.COM INC",
+          "code": "",
+          "weight_prev": 0.0,
+          "shares_prev": 146.0
+        },
+        {
+          "key": "SERVICENOW INC",
+          "name": "SERVICENOW INC",
+          "code": "",
+          "weight_prev": 0.0,
+          "shares_prev": 149.0
         }
       ],
       "moves": [],
+      "has_weight": false
+    },
+    {
+      "code": "0162Y0",
+      "label": "TIME 코스닥액티브",
+      "group": "TIME(구 TIMEFOLIO)",
+      "flow_factor": 1.0,
+      "new": [
+        {
+          "key": "425420",
+          "name": "티에프이",
+          "code": "425420",
+          "weight": 2.98,
+          "shares": 99.0
+        }
+      ],
+      "gone": [
+        {
+          "key": "058610",
+          "name": "에스피지",
+          "code": "058610",
+          "weight_prev": 3.3,
+          "shares_prev": 120.0
+        }
+      ],
+      "moves": [
+        {
+          "key": "064290",
+          "name": "인텍플러스",
+          "code": "064290",
+          "shares_now": 280.0,
+          "shares_prev": 199.0,
+          "active_share_pct": 40.7,
+          "active_weight_pp": 1.41,
+          "weight_now": 4.78,
+          "weight_prev": 3.37,
+          "headline": false
+        },
+        {
+          "key": "196170",
+          "name": "알테오젠",
+          "code": "196170",
+          "shares_now": 60.0,
+          "shares_prev": 84.0,
+          "active_share_pct": -28.6,
+          "active_weight_pp": -1.48,
+          "weight_now": 3.8,
+          "weight_prev": 5.41,
+          "headline": false
+        }
+      ],
+      "has_weight": true
+    },
+    {
+      "code": "471780",
+      "label": "TIGER 코리아테크액티브",
+      "group": "TIGER",
+      "flow_factor": 1.0,
+      "new": [
+        {
+          "key": "222800",
+          "name": "심텍",
+          "code": "222800",
+          "weight": 3.16,
+          "shares": 71.0
+        }
+      ],
+      "gone": [
+        {
+          "key": "095610",
+          "name": "테스",
+          "code": "095610",
+          "weight_prev": 3.08,
+          "shares_prev": 92.0
+        }
+      ],
+      "moves": [
+        {
+          "key": "402340",
+          "name": "SK스퀘어",
+          "code": "402340",
+          "shares_now": 20.0,
+          "shares_prev": 31.0,
+          "active_share_pct": -35.5,
+          "active_weight_pp": -2.97,
+          "weight_now": 5.68,
+          "weight_prev": 8.78,
+          "headline": false
+        }
+      ],
       "has_weight": true
     },
     {
@@ -95,66 +187,52 @@
       "flow_factor": 1.0,
       "new": [
         {
-          "key": "005380",
-          "name": "현대차",
-          "code": "005380",
-          "weight": 1.43,
-          "shares": 43.0
-        }
-      ],
-      "gone": [
-        {
           "key": "068270",
           "name": "셀트리온",
           "code": "068270",
-          "weight_prev": 1.49,
-          "shares_prev": 56.0
-        }
-      ],
-      "moves": [],
-      "has_weight": true
-    },
-    {
-      "code": "472150",
-      "label": "TIGER 배당커버드콜액티브",
-      "group": "TIGER",
-      "flow_factor": 1.0,
-      "new": [
-        {
-          "key": "010120",
-          "name": "LS ELECTRIC",
-          "code": "010120",
-          "weight": 1.07,
-          "shares": 13.0
+          "weight": 1.38,
+          "shares": 56.0
         }
       ],
       "gone": [
         {
-          "key": "207940",
-          "name": "삼성바이오로직스",
-          "code": "207940",
-          "weight_prev": 1.07,
-          "shares_prev": 1.0
+          "key": "000270",
+          "name": "기아",
+          "code": "000270",
+          "weight_prev": 1.38,
+          "shares_prev": 125.0
         }
       ],
       "moves": [],
       "has_weight": true
     },
     {
-      "code": "426020",
-      "label": "TIME 미국S&P500액티브",
-      "group": "TIME(구 TIMEFOLIO)",
+      "code": "471040",
+      "label": "KoAct 글로벌AI&로봇액티브",
+      "group": "KoAct",
       "flow_factor": 1.0,
       "new": [],
       "gone": [],
       "moves": [
         {
-          "key": "AMERICAN AIRLINES GROUP INC",
-          "name": "AMERICAN AIRLINES GROUP INC",
-          "code": "",
-          "shares_now": 211.0,
-          "shares_prev": 114.0,
-          "active_share_pct": 85.1,
+          "key": "058610",
+          "name": "에스피지",
+          "code": "058610",
+          "shares_now": 259.0,
+          "shares_prev": 41.0,
+          "active_share_pct": 531.7,
+          "active_weight_pp": null,
+          "weight_now": 0.0,
+          "weight_prev": 0.0,
+          "headline": false
+        },
+        {
+          "key": "108490",
+          "name": "로보티즈",
+          "code": "108490",
+          "shares_now": 45.0,
+          "shares_prev": 21.0,
+          "active_share_pct": 114.3,
           "active_weight_pp": null,
           "weight_now": 0.0,
           "weight_prev": 0.0,
@@ -171,9 +249,9 @@
   },
   "summary": {
     "etfs_changed": 6,
-    "new_total": 5,
-    "gone_total": 5,
-    "moves_total": 1,
+    "new_total": 7,
+    "gone_total": 7,
+    "moves_total": 5,
     "universe": 20
   }
 }
