@@ -1640,6 +1640,10 @@
     그림마다 **📋 복사**(ClipboardItem image/png — 클립보드는 PNG 만 표준, blob Promise 를 그대로 넘겨야 사파리도
     제스처로 인정) · ⬇ PNG/SVG/CSV. 생성기는 SVG 도 함께 굽는다(`svg.fonttype=path` — 한글 폰트 없는 PC 에서도
     모양 유지). build_static 복사 한 줄, 공유 등급.
+    **범례 Δ1M + 최고~최저 띠** (11/14 저녁, ecos PR #35·#36): 변화율에 `Δ1M` 접두(1개월 전 컨센 대비 — 라벨이
+    길어져 범례 선·라벨·값 열 x 를 0.15/0.27/0.66 으로 재배치). 사용자 "당시(매주) 최고-최저로" → FnGuide `VAL_MIN/MAX`·
+    네이버 `min_max` 가 **이미 주던 값**이라 추가 요청 0 — 첫 기간(4Q26/2026E)만 옅은 파랑 띠(사용자 선택 ①, 두 기간
+    띠는 겹쳐 안 읽힘), CSV 에 `op_min`·`op_max` 열. 한 줄 수정에도 그림 재생성(두 소스 수집)이 ~4분 걸린다.
 
 56. **애널리스트 집계(animsam09) 따라 만들기 — 뼈대** (11/7): 사용자 "이거 따라서 일단 뼈대를 만들자"
     (https://analyst-calendar.animsam09.workers.dev/ — Cloudflare Worker, 비번 가림막). 세션 네트워크에
