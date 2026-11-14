@@ -1780,7 +1780,8 @@
         화면 맨 위 `📅 종가 기준 — 한국 …(요일) · 해외 …`, 카드마다 `종가 MM/DD · 값`. 기준일은 `band_inputs.csv` 의
         `px_date`·`px_last` 열.
       - **그림 안 종가 딱지는 뺐다**(같은 날, 사용자 "그림 위에 들어가는 건 싫다 — 보고서에 복붙할 거라서, 그림 살짝 위에"):
-        그림에는 마지막 점만, 종가 줄(`종가 2026-11-13(금)  237,500원`)은 화면에서 PER·PBR 그림 바로 위에 따로.
+        그림에는 마지막 점만. 화면의 종가 표시는 맨 위 띠 + 카드 머리 딱지(`종가 11/13 · 237,500원`) 두 곳 —
+        그림 바로 위에 한 줄 더 넣었다가 카드 머리 딱지와 겹쳐 뺐다(사용자 "위에도 있고 밑에도 있네, 밑에 거 없애줘").
       - **✏️ 내 모델**: 카드 버튼 → 표(EPS·BPS·ROE × 올해~올해+4)에 엑셀 범위를 Ctrl+V(가로·세로·머리글 섞여도 해석,
         ROE 가 0.25 꼴이면 ×100) → 💾 저장 → GAS `valmodel` → ecos `valuation-model.yml` 이
         `data/valuation/my_model/<티커>.csv` 저장 후 `valuation-band.yml` 발사(약 5분, 화면이 폴링해 새로고침).
@@ -1791,6 +1792,12 @@
       - 내 모델 워크플로에는 concurrency 를 걸지 않았다(대기 run 취소로 입력 유실 방지) — 종목별 파일이라 연달아 넣어도 충돌 없음.
         입력은 env 로만 넘기고 `set_model.py` 가 정규식으로 검증(티커는 COMPANIES 안, fy 올해~+4, 숫자만).
 
+61. **컨센서스 갤러리 '🔄 지금 갱신' 버튼** (11/14): 사용자 "Actions 가서 Run workflow 누르라는 안내가 뜬다 — 버튼 누르면
+    자동 갱신되게". `static/consensus_chart.html` 에 peer_price.html 과 같은 버튼: GAS dispatch_proxy 에 **`cnschart` 라우트
+    신설**(ecos-fx-rates `consensus-chart.yml`, 기존 `consensus` 키는 KOSPI200 트래커라 이름을 달리함) → 끝났는지는 raw
+    PNG Last-Modified 변화로 보고 자동 새로고침(첫 확인 90초, 30초 간격, 15분 상한 — 수집이 16종목×4기간×2소스라 4~6분).
+    **GAS 재붙여넣기 + '배포 관리 → 새 버전' 필요** — 그 전엔 버튼이 '거절 … GAS 프록시 확인' 으로 돌아온다(그 문구에
+    이유를 적어 뒀다). 자동은 ecos 크론 16:50 KST + 예약 작업 16:42 그대로.
 63. **주보 그림 메뉴 글꼴 = 나눔스퀘어OTF Light + 🌐 매크로 최상위 승격** (11/14): 사용자 "최근 만든 메뉴들
     (주가변동표·주가.INDEX·수급.그림·컨센서스·ER) 그림을 피어그룹.Valuation 처럼 나눔스퀘어OTF Light로".
     - **HTML 쪽**(이 리포): peer_price·ship_index·consensus_chart·er_report 본문과 coverage_flow ④ 위클리 SVG(`FONT`)·

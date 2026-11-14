@@ -53,6 +53,7 @@ const WF = {
   // (app.js 의 FRESH 표와 1:1. 완료 시점은 아래 latestRun 상태 조회로 잡는다)
   fx:        { repo: 'gschoie/ecos-fx-rates', file: 'fx-ecos.yml' },        // ECOS 환율 엑셀
   peer:      { repo: 'gschoie/ecos-fx-rates', file: 'peergroup-price.yml' },// 피어그룹 주가 엑셀
+  cnschart:  { repo: 'gschoie/ecos-fx-rates', file: 'consensus-chart.yml' },// 주보 컨센서스 추이 그림(FnGuide·네이버 → PNG/SVG)
   // PE·PB 밴드 › ✏️ 내 모델: 올해~올해+4 EPS·BPS·ROE 저장 후 밴드 재생성 (ticker·model 입력 필요)
   valmodel:  { repo: 'gschoie/ecos-fx-rates', file: 'valuation-model.yml' },
 };

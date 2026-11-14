@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <!--
   PE·PB 밴드 — ecos-fx-rates 리포의 Actions('PER·PBR 밴드 차트', valuation-band.yml)가 굽는 종목별
-  PNG/SVG 를 대시보드 안에서 보고 그림마다 복사·다운로드. 종가 기준일·값은 그림 안이 아니라 그림 바로 위에 적는다
-  (보고서에 그대로 붙이는 그림이라 — 11/14 사용자). PER 밴드와 PBR 밴드(+ROE 음영)는 따로 된 그림이라
+  PNG/SVG 를 대시보드 안에서 보고 그림마다 복사·다운로드. 종가 기준일·값은 그림 안에 넣지 않고(보고서에 그대로 붙이는 그림)
+  맨 위 띠와 카드 머리 딱지에만 적는다 — 그림 위에 한 번 더 적던 줄은 중복이라 뺐다(11/14 사용자). PER 밴드와 PBR 밴드(+ROE 음영)는 따로 된 그림이라
   하나씩 복사한다(<섹터>_<종목>_PER / _PBR). 파일은 그 리포 output/valuation_band/ 에 있고 raw.githubusercontent 로 읽는다.
   종목 목록·종가 기준일·연도별 값과 출처는 같은 폴더의 band_inputs.csv 에서 읽는다(하드코딩 없음).
   ✏️ 내 모델: 올해~올해+4 EPS·BPS·ROE 를 엑셀에서 복사해 붙여넣고 저장 → GAS dispatch_proxy(valmodel) →
@@ -45,8 +45,6 @@ button:disabled{opacity:.5;cursor:wait}
 .part:first-of-type{border-top:0}
 .part .bar{display:flex;gap:6px;align-items:center;padding:6px 10px 4px}
 .part .bar b{font-size:12.5px;margin-right:auto}
-.part .pxline{margin:0 10px 5px;padding:3px 10px;display:inline-block;font-size:13px;font-weight:700;color:var(--gold);background:var(--goldbg);border:1px solid var(--goldln);border-radius:6px}
-.part .pxline:empty{display:none}
 .part .im{background:#fff;padding:4px}
 .part img{display:block;width:100%;height:auto}
 .meta{font-size:11px;color:var(--muted);padding:6px 10px 2px;line-height:1.7;border-top:1px solid var(--line)}
@@ -139,8 +137,6 @@ dialog::backdrop{background:rgba(0,0,0,.45)}
   }
   const fmtV=(v,k,ccy)=>v===""||v==null||isNaN(+v)?"":k==="ROE"?(+v).toFixed(1):ccy==="KRW"?Math.round(+v).toLocaleString("en-US"):(+v).toFixed(2);
   const pxText=x=>!x.pxDate?"":"종가 "+x.pxDate.slice(5).replace("-","/")+" · "+(x.ccy==="KRW"?Math.round(+x.pxLast).toLocaleString("en-US")+"원":"$"+(+x.pxLast).toLocaleString("en-US",{maximumFractionDigits:2}));
-  // 그림 바로 위에 적는 종가 줄 — 그림 안에는 넣지 않는다(보고서에 그대로 붙이는 그림이라)
-  const pxLong=x=>!x.pxDate?"":"종가 "+dlabel(x.pxDate)+"  "+(x.ccy==="KRW"?Math.round(+x.pxLast).toLocaleString("en-US")+"원":"$"+(+x.pxLast).toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:2}));
   // 추정 구간(올해~차트 끝)의 EPS 출처를 연도 범위로 묶어 보여준다
   function estTags(x){
     const end=x.end||Math.max(...x.fy),out=[];let run=null;
@@ -154,7 +150,6 @@ dialog::backdrop{background:rgba(0,0,0,.45)}
         ${canCopy?`<button class="b p" data-f="${esc(f)}" data-act="copy">📋 복사</button>`:""}
         <button class="b" data-f="${esc(f)}" data-dn="${dn}" data-act="dl" data-ext="png">PNG</button><button class="b" data-f="${esc(f)}" data-dn="${dn}" data-act="dl" data-ext="svg">SVG</button>
         <a class="btn" href="${url(f,"png")}" target="_blank" rel="noopener">새 창</a></div>
-      <div class="pxline">${esc(pxLong(x))}</div>
       <div class="im"><img src="${url(f,"png")}" alt="${esc(x.name)} ${kind} 밴드" loading="lazy"></div><div class="msg"></div></div>`;
   }
   function render(){
