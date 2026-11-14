@@ -3,8 +3,8 @@ name: 불꽃 리서치 톤 (한화투자증권)
 # 한화투자증권 리서치 게시판(기업/산업·투자전략) 수집 → 상세 본문 → Gemini 톤 분석(증분) → 톤 보드 빌드.
 # 데이터는 hanwha_research_tone/data/ 에 커밋백(다올 리서치톤과 같은 방식 — 캐시 계보 꼬임 방지),
 # 화면 데이터는 telegram_research_dashboard/static/hanwha_tone/ 에 같이 커밋돼 deploy-pages(workflow_run)가 배포한다.
-# 목표: 매일 아침 8시(KST) 전 반영. 무료 러너 크론은 몇 시간씩 밀리므로(CLAUDE.md 17번) 07:10·07:35 두 번 잡고
-# 뒤 run 은 새 글이 없으면 수 분 안에 끝난다. 저녁 run 은 AI 백필 몫(2025년부터 ~2,500건은 무료 쿼터로 며칠 걸린다).
+# 2026-11-14 운영 중단(사용자 요청): 크론·아침 예약 작업을 모두 끄고 대시보드 메뉴에서도 뺐다. 수동 dispatch 만 남겨
+# 되살릴 때 쓴다(모듈·데이터·페이지 파일은 그대로). 되살리려면 schedule 복원 + 사이드바 🔥 리서치톤 + deploy-pages workflow_run 목록.
 on:
   workflow_dispatch:
     inputs:
@@ -18,10 +18,6 @@ on:
       ai_max:
         description: "이번 run 의 AI 분석 상한(건)"
         default: "150"
-  schedule:
-    - cron: "10 22 * * *"   # 07:10 KST
-    - cron: "35 22 * * *"   # 07:35 KST (지연 안전망)
-    - cron: "0 13 * * *"    # 22:00 KST — AI 백필
 
 permissions:
   contents: write

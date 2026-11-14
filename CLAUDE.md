@@ -1582,6 +1582,11 @@
       글 보강)가 묶여 `gh workflow run hanwha-tone.yml --ref main -f ai_max=150` 을 쏜다. 크론 안전망은 그대로
       (텔레가 없어 중복 run 은 무해). fire_trigger 수동 발사는 세션 묶기를 무시하므로 검증은 정시 결과로.
 
+    - **운영 중단** (11/14, 사용자 "대시보드에서 빼고 매일 아침 수집도 중단"): 사이드바 `🔥 리서치톤` 메뉴·섹션 제거,
+      `hanwha-tone.yml` 의 schedule 3개 삭제(workflow_dispatch 만 남김), deploy-pages workflow_run 목록·build_static 복사에서 제외,
+      예약 작업 2개(`trig_01UJtFdMbttR2dr6mxnLtJzr`·`trig_01U2VuTAA8jYi7TM1T6nY2QW`) enabled=false. `hanwha_research_tone/`
+      모듈·`data/`·`static/hanwha_tone*` 파일은 삭제하지 않고 남겨 두었다(되살릴 때 위 네 곳만 복원).
+
 54. **매매제한 컴플 체크 — GEMS → 대시보드 내장 도구** (11/2): 사이드바 `👥 DAOL.관리 > ⏳ 컴플(24H 매매제한).쳌`
     이 제미나이 Gem·ChatGPT 프로젝트 두 창을 열던 것을 `static/compliance/index.html`(새 창)로 교체.
     매매제한 지시(자료 A)·파워베이스 캡처(자료 B)·혼합 이미지를 Ctrl+V/드래그/사진 선택으로 올리면
@@ -1742,5 +1747,38 @@
     - 주보 4종 예약 `trig_01VEqTcdRitLg6oWSSxQc8uQ`(16:42, 커버리지 수급 세션)의 ecos dispatch 2건은 그 세션에 ecos 리포가
       없어 매번 '범위 밖'으로 건너뛴다(11/10 피어그룹 크론 00:46 KST 도착) → 위 16:44 예약이 대신 맡는다. 그 예약의
       수급 그림(charts_only)은 그대로 유효.
+
+62. **업무자동화 › 📉 PE·PB 밴드 신설** (11/12~14, ecos-fx-rates PR #28~#30): 사용자가 쓰던 DataGuide·Bloomberg 밴드
+    엑셀(LIG D&A PER Band / PBR Band Chart)을 자동화. 계산·그림은 **ecos-fx-rates** 가 한다(ER·컨센 추이와 같은 분업).
+    - 화면: 사이드바 `🦿 업무자동화 > 📊 피어그룹.Valuation` 바로 밑 `📉 PE·PB 밴드`(view `valband`,
+      `static/valuation_band.html`, build_static 복사). ER 과 같은 46종목(조선 12·방산 20·건기 14), 섹터 탭 + 종목 카드
+      (위 PER 밴드 · 아래 PBR 밴드 + ROE 음영), 그림마다 📋 복사·PNG/SVG. 한국 원화(천원)·해외 USD.
+    - 종목 목록은 하드코딩하지 않는다 — ecos `output/valuation_band/band_inputs.csv`(차트에 실제 쓴 연도별 값·출처·배수)를
+      raw 로 읽어 만든다. 그림 파일명 = `<섹터>_<종목명 공백 제거>.png/.svg`.
+    - 데이터: 업로드 엑셀(ecos `data/valuation/raw/`, `DG_*`·`BB_*_YYYYMMDD.xlsx`) → 연간 EPS·BPS·ROE + 엑셀 배수 +
+      한국 수정주가, 없는 종목·연도는 Yahoo(해외 방산 15·해외 조선 3·Kobelco·Volvo 는 2022~FY2 만). 갱신은 ecos
+      `valuation-band.yml` — 평일 17:30 KST 크론 + 수동 + raw 푸시 시. **16:44 ecos 정시 예약(trig_01P6GJ…)에는 아직 없다**
+      — 그 예약이 묶인 세션에서만 프롬프트를 고칠 수 있다(`gh workflow run valuation-band.yml` 을 4번째로 추가).
+    - **교훈**: 다종목 엑셀의 `☞추정입력+컨센GET` 시트는 종목 열 순서가 `GET` 시트와 다르다. 첫 배포본이 GET 머리글로
+      읽어 20종목 추정치가 옆 종목 값으로 들어갔다(#30 수정). 검산은 기업별 밴드 시트 12월 값(`band`)과 `model` 일치.
+    - **주의**: ecos-fx-rates 는 공개 리포라 DataGuide·Bloomberg 값과 자체 추정치(☞추정입력)가 공개돼 있다(사용자 지시로
+      푸시). 비공개로 돌리면 이 페이지·ER·컨센 추이·피어그룹 갤러리의 raw 읽기가 모두 끊긴다 — 그때는 그림을 이 리포로
+      복사해 오는 단계가 필요. 상세는 ecos `docs/valuation_band_MANUAL.md`.
+    - **11/14 추가 — 종가 기준일 · PER/PBR 따로 복사 · ✏️ 내 모델 입력** (ecos PR #32): 사용자 "종가가 언제 건지 눈에 띄게",
+      "복사는 PBR·PER 따로", "모델 바꾸면 2026~2030 EPS·BPS·ROE 를 넣을 수 있게(엑셀 복붙), 안 넣으면 컨센서스".
+      - 그림이 종목당 두 장(`<섹터>_<종목>_PER` / `_PBR`)이 됐고 그림 안 왼쪽 위에 `종가 YYYY-MM-DD 값` 딱지 + 마지막 점.
+        화면 맨 위 `📅 종가 기준 — 한국 …(요일) · 해외 …`, 카드마다 `종가 MM/DD · 값`. 기준일은 `band_inputs.csv` 의
+        `px_date`·`px_last` 열.
+      - **그림 안 종가 딱지는 뺐다**(같은 날, 사용자 "그림 위에 들어가는 건 싫다 — 보고서에 복붙할 거라서, 그림 살짝 위에"):
+        그림에는 마지막 점만, 종가 줄(`종가 2026-11-13(금)  237,500원`)은 화면에서 PER·PBR 그림 바로 위에 따로.
+      - **✏️ 내 모델**: 카드 버튼 → 표(EPS·BPS·ROE × 올해~올해+4)에 엑셀 범위를 Ctrl+V(가로·세로·머리글 섞여도 해석,
+        ROE 가 0.25 꼴이면 ×100) → 💾 저장 → GAS `valmodel` → ecos `valuation-model.yml` 이
+        `data/valuation/my_model/<티커>.csv` 저장 후 `valuation-band.yml` 발사(약 5분, 화면이 폴링해 새로고침).
+        우선순위 **내 모델 → 업로드 엑셀 모델 → 컨센서스**. 비운 칸은 다음 순위 값, `🗑 내 모델 지우기` = 파일 삭제.
+        카드 아래 꼬리표가 추정 구간 출처를 보여준다(`26~28E 내 모델` 등).
+      - **GAS 재붙여넣기 필요**(WF `valmodel` + buildInputs + ticker 검사; '배포 관리 → 새 버전', 새 배포 금지). 그 전에는
+        저장 시 'unknown workflow key' 안내가 뜬다.
+      - 내 모델 워크플로에는 concurrency 를 걸지 않았다(대기 run 취소로 입력 유실 방지) — 종목별 파일이라 연달아 넣어도 충돌 없음.
+        입력은 env 로만 넘기고 `set_model.py` 가 정규식으로 검증(티커는 COMPANIES 안, fy 올해~+4, 숫자만).
 
 이후 작업은 git log와 이 파일을 갱신하며 이어간다.
