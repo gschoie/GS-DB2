@@ -1656,6 +1656,9 @@
       목록·드랍 경고 목록·인뎁스 달력)은 점선 상자에 원본 구성을 적어 뒀다. 다음 단계 후보: GAS 가 구글
       캘린더 ICS 를 읽어 data.json 을 굽기(youtube_digest 와 같은 workflow_dispatch 경로), 인뎁스 달력은
       vacation_tracker/indepth.py 의 state 재사용.
+    - **대시보드에서 제외** (11/14, 사용자 "이거도 대시보드에서 빼죠"): 사이드바 `활동관리🔥` 링크 삭제 + build_static 의
+      copytree 제거(배포본에서 사라짐 — 공유 주소 `…/analyst_calendar/index.html` 도 404). 소스
+      `static/analyst_calendar/`·`analyst_calendar/README.md` 는 남겼다(되살릴 땐 그 두 곳만 복원).
 
 57. **피어그룹 주가흐름표 — 방산·건설기계판 신설** (11/8): 사용자 "방산, 건설기계도 조선처럼". 생성기는
     ecos-fx-rates `peergroup/weekly_peer_price_image.py` 에 `--universe ship|defense|construction`
