@@ -1791,4 +1791,11 @@
       - 내 모델 워크플로에는 concurrency 를 걸지 않았다(대기 run 취소로 입력 유실 방지) — 종목별 파일이라 연달아 넣어도 충돌 없음.
         입력은 env 로만 넘기고 `set_model.py` 가 정규식으로 검증(티커는 COMPANIES 안, fy 올해~+4, 숫자만).
 
+61. **컨센서스 갤러리 '🔄 지금 갱신' 버튼** (11/14): 사용자 "Actions 가서 Run workflow 누르라는 안내가 뜬다 — 버튼 누르면
+    자동 갱신되게". `static/consensus_chart.html` 에 peer_price.html 과 같은 버튼: GAS dispatch_proxy 에 **`cnschart` 라우트
+    신설**(ecos-fx-rates `consensus-chart.yml`, 기존 `consensus` 키는 KOSPI200 트래커라 이름을 달리함) → 끝났는지는 raw
+    PNG Last-Modified 변화로 보고 자동 새로고침(첫 확인 90초, 30초 간격, 15분 상한 — 수집이 16종목×4기간×2소스라 4~6분).
+    **GAS 재붙여넣기 + '배포 관리 → 새 버전' 필요** — 그 전엔 버튼이 '거절 … GAS 프록시 확인' 으로 돌아온다(그 문구에
+    이유를 적어 뒀다). 자동은 ecos 크론 16:50 KST + 예약 작업 16:42 그대로.
+
 이후 작업은 git log와 이 파일을 갱신하며 이어간다.

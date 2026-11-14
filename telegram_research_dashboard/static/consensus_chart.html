@@ -42,8 +42,8 @@ button:disabled{opacity:.5;cursor:wait}
   <h1>📊 커버리지 영업이익 컨센서스 추이</h1>
   <p class="sub">조선·조기 9 · 방산 5 · 건기 2 — 최근 6개월 컨센서스(평균) 추이, 범례 숫자는 최신 컨센(억원)·%는 1개월 전 대비. <span id="stamp"></span></p>
   <p class="note"><b>📋 복사</b> 후 위클리(워드·PPT)에 바로 <b>Ctrl+V</b>. 확대해도 선명하게 넣으려면 <b>SVG</b> 를 내려받아 <b>삽입 → 그림 → 이 디바이스</b>.
-    갱신은 <a href="https://github.com/gschoie/ecos-fx-rates/actions/workflows/consensus-chart.yml" target="_blank" rel="noopener">ecos-fx-rates Actions › 커버리지 컨센서스 추이 이미지 › Run workflow</a>
-    → 약 5분 뒤 이 페이지 새로고침. 자료: FnGuide · 네이버증권(WiseReport).</p>
+    매일 16:50 KST 자동 갱신 + 아래 <b>🔄 지금 갱신</b>(FnGuide·네이버 수집 → 그림 2장, 약 5분 뒤 자동 새로고침). 자료: FnGuide · 네이버증권(WiseReport).</p>
+<div class="bar" style="display:flex;gap:10px;align-items:center;margin:0 0 14px"><button class="p" id="refresh">🔄 지금 갱신</button><span id="rstatus" class="note" style="margin:0"></span></div>
   <div class="jump" id="jump"></div>
   <div id="cards"></div>
 </div>
@@ -90,6 +90,23 @@ button:disabled{opacity:.5;cursor:wait}
     }catch(x){m.className="msg err";m.textContent=(b.dataset.act==="copy"?"복사 실패: ":"다운로드 실패: ")+x.message+" — '새 창' 에서 우클릭으로 복사·저장하세요."}
     finally{b.disabled=false}
   });
+  // 🔄 지금 갱신 — GAS dispatch_proxy(cnschart) → ecos-fx-rates consensus-chart.yml. 끝났는지는 raw PNG 의
+  // Last-Modified 가 바뀌는지로 보고 자동 새로고침(peer_price.html 과 같은 방식). 수집 16종목×4기간×2소스 ≈ 4~6분.
+  const EP="https://script.google.com/macros/s/AKfycbx3RjIjtlO2Z6fIYo2T3LhJrFg9Wp2hS7dMS3Is52-JVF1hizoCWewbQ1uM_v5sdhR2jw/exec";  // app.js DISPATCH_ENDPOINT 와 같은 GAS
+  const lastMod=async()=>{try{const r=await fetch(RAW+encodeURIComponent(FILES[0][2])+".png?x="+Date.now(),{method:"HEAD",cache:"no-store"});return r.headers.get("last-modified")||""}catch{return ""}};
+  document.getElementById("refresh").onclick=async function(){
+    const b=this,st=document.getElementById("rstatus");b.disabled=true;st.textContent="요청 중…";
+    const before=await lastMod();
+    try{const r=await fetch(EP,{method:"POST",body:JSON.stringify({workflow:"cnschart"})});let d=null;try{d=await r.json()}catch{}
+      if(d&&d.ok===false){st.textContent=`⚠ 거절 ${d.code||"?"} — ${d.error||"GAS 프록시 확인(cnschart 라우트는 GAS 재붙여넣기 필요)"}`;b.disabled=false;return}
+    }catch(x){st.textContent="실패: "+x.message;b.disabled=false;return}
+    const t0=Date.now();
+    const tick=async()=>{const m=Math.round((Date.now()-t0)/60000);const now=await lastMod();
+      if(now&&now!==before){st.textContent="갱신됨 — 새로고침";location.reload();return}
+      if(Date.now()-t0>15*60000){st.textContent="15분 안에 새 파일이 안 보입니다 — ecos-fx-rates Actions 를 확인하세요";b.disabled=false;return}
+      st.textContent=`✅ 요청됨 — 수집·커밋 대기 중 ${m}분 경과`;setTimeout(tick,30000)};
+    setTimeout(tick,90000);
+  };
   // 파일 갱신 시각(raw 의 Last-Modified) — 못 읽으면 조용히 생략
   fetch(url(FILES[0][2],"png"),{method:"HEAD",cache:"no-store"}).then(r=>{const lm=r.headers.get("last-modified");
     if(lm)document.getElementById("stamp").textContent="파일 갱신: "+new Date(lm).toLocaleString("ko-KR",{timeZone:"Asia/Seoul"})}).catch(()=>{});
