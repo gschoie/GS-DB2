@@ -32,10 +32,11 @@ TARGET_COMPANIES = [
     {"industry": "조선", "sub": "조선사", "region": "일본", "name": "IHI", "ticker": "7013.T"},
     {"industry": "조선", "sub": "조선사", "region": "일본", "name": "미쓰이E&S", "ticker": "7003.T"},
     {"industry": "조선", "sub": "조선사", "region": "일본", "name": "나이카이조선", "ticker": "7018.T"},
-    {"industry": "조선", "sub": "조선사", "region": "이탈리아", "name": "Fincantieri", "ticker": "FCT.MI"},
+    # 이탈리아·미국·호주는 나라별 1곳씩이라 '서방' 한 지역으로 묶는다(11/14 사용자 요청).
+    {"industry": "조선", "sub": "조선사", "region": "서방", "name": "Fincantieri", "ticker": "FCT.MI"},
     # HII는 아래 방산(해외)에도 있다 — 조선 피어 중앙값에도 들어가도록 양쪽에 둔다.
-    {"industry": "조선", "sub": "조선사", "region": "미국", "name": "Huntington Ingalls", "ticker": "HII"},
-    {"industry": "조선", "sub": "조선사", "region": "호주", "name": "Austal", "ticker": "ASB.AX"},
+    {"industry": "조선", "sub": "조선사", "region": "서방", "name": "Huntington Ingalls", "ticker": "HII"},
+    {"industry": "조선", "sub": "조선사", "region": "서방", "name": "Austal", "ticker": "ASB.AX"},
 
     # ── 조선 엔진/기자재 ──────────────────────────────────────
     {"industry": "조선", "sub": "엔진/기자재", "region": "한국", "name": "HD현대마린솔루션", "ticker": "443060.KS"},
@@ -57,13 +58,15 @@ TARGET_COMPANIES = [
     {"industry": "방산", "sub": "체계", "region": "미국", "name": "General Dynamics", "ticker": "GD"},
     {"industry": "방산", "sub": "체계", "region": "미국", "name": "RTX", "ticker": "RTX"},
     {"industry": "방산", "sub": "조선/방산", "region": "미국", "name": "Huntington Ingalls", "ticker": "HII"},
-    {"industry": "방산", "sub": "체계", "region": "독일", "name": "Rheinmetall", "ticker": "RHM.DE"},
-    {"industry": "방산", "sub": "체계", "region": "영국", "name": "BAE Systems", "ticker": "BA.L"},
-    {"industry": "방산", "sub": "체계", "region": "프랑스", "name": "Thales", "ticker": "HO.PA"},
-    {"industry": "방산", "sub": "체계", "region": "프랑스", "name": "Safran", "ticker": "SAF.PA"},
-    {"industry": "방산", "sub": "항공", "region": "프랑스", "name": "Dassault Aviation", "ticker": "AM.PA"},
-    {"industry": "방산", "sub": "항공", "region": "이탈리아", "name": "Leonardo", "ticker": "LDO.MI"},
-    {"industry": "방산", "sub": "항공", "region": "스웨덴", "name": "Saab AB", "ticker": "SAAB-B.ST"},
+    # 독일·영국·프랑스·이탈리아·스웨덴은 '유럽' 한 지역으로 묶는다(11/14 사용자 요청) —
+    # 지역 중앙값 행이 자연히 서고, build_static 의 유럽 합산(EUROPE_REGIONS)은 여기엔 더 이상 안 걸린다.
+    {"industry": "방산", "sub": "체계", "region": "유럽", "name": "Rheinmetall", "ticker": "RHM.DE"},
+    {"industry": "방산", "sub": "체계", "region": "유럽", "name": "BAE Systems", "ticker": "BA.L"},
+    {"industry": "방산", "sub": "체계", "region": "유럽", "name": "Thales", "ticker": "HO.PA"},
+    {"industry": "방산", "sub": "체계", "region": "유럽", "name": "Safran", "ticker": "SAF.PA"},
+    {"industry": "방산", "sub": "항공", "region": "유럽", "name": "Dassault Aviation", "ticker": "AM.PA"},
+    {"industry": "방산", "sub": "항공", "region": "유럽", "name": "Leonardo", "ticker": "LDO.MI"},
+    {"industry": "방산", "sub": "항공", "region": "유럽", "name": "Saab AB", "ticker": "SAAB-B.ST"},
 
     # ── 항공 (민수 비중 큰 대형 — 방산과 분리된 별도 블록, 11/14 사용자 요청.
     #    기체부품(봄바르디어·엠브라에르)은 요청대로 제외) ──────────
@@ -79,14 +82,15 @@ TARGET_COMPANIES = [
     {"industry": "건설기계", "sub": "완성장비", "region": "한국", "name": "대동", "ticker": "000490.KS"},
     {"industry": "건설기계", "sub": "완성장비", "region": "미국", "name": "Caterpillar", "ticker": "CAT"},
     {"industry": "건설기계", "sub": "완성장비", "region": "미국", "name": "Deere", "ticker": "DE"},
-    {"industry": "건설기계", "sub": "완성장비", "region": "미국", "name": "CNH Industrial", "ticker": "CNH"},
+    # CNH 는 뉴욕 상장이지만 피아트 계열(본사 영국) — 사용자 요청(11/14)으로 Volvo 와 함께 '유럽' 묶음.
+    {"industry": "건설기계", "sub": "완성장비", "region": "유럽", "name": "CNH Industrial", "ticker": "CNH"},
+    {"industry": "건설기계", "sub": "완성장비", "region": "유럽", "name": "Volvo", "ticker": "VOLV-B.ST"},
     {"industry": "건설기계", "sub": "완성장비", "region": "일본", "name": "Komatsu", "ticker": "6301.T"},
     {"industry": "건설기계", "sub": "완성장비", "region": "일본", "name": "Hitachi CM", "ticker": "6305.T"},
     # Kubota 는 농기계가 주력이지만 미니 굴착기 글로벌 1위라 두산밥캣 콤팩트 장비의 직접 피어.
     # Kobelco 건설기계는 고베제철(5406.T) 100% 자회사라 별도 상장이 없어 넣을 수 없다.
     {"industry": "건설기계", "sub": "완성장비", "region": "일본", "name": "Kubota", "ticker": "6326.T"},
     {"industry": "건설기계", "sub": "완성장비", "region": "일본", "name": "Takeuchi", "ticker": "6432.T"},
-    {"industry": "건설기계", "sub": "완성장비", "region": "스웨덴", "name": "Volvo", "ticker": "VOLV-B.ST"},
     {"industry": "건설기계", "sub": "완성장비", "region": "중국", "name": "삼일중공업(SANY)", "ticker": "600031.SS"},
     {"industry": "건설기계", "sub": "완성장비", "region": "중국", "name": "서공기계(XCMG)", "ticker": "000425.SZ"},
 
