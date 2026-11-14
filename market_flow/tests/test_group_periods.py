@@ -71,12 +71,29 @@ class TestRender(unittest.TestCase):
                           "1y": [["조선", 40.0, 1]]},
               "bases": {"1w": "2026-11-07", "1y": "2025-11-13"}}
         h = br.group_ret_block({"group_1d": gr}, True)
-        for lab in ("DoD", "WoW", "YoY"):
+        for lab in ("오늘의 수익률", "주간 수익률", "연간 수익률"):
             self.assertIn(f">{lab}</button>", h)
-        self.assertNotIn(">MoM<", h)                      # 데이터 없는 기간은 버튼도 없음
+        self.assertNotIn(">월간 수익률<", h)               # 데이터 없는 기간은 버튼도 없음
+        self.assertNotIn("<script", h)                     # innerHTML 로 들어가 인라인 script 는 안 돈다
         self.assertIn('data-p="1d">', h)
         self.assertIn('data-p="1w" hidden', h)
-        self.assertIn("11/07 이전 마지막 종가", h)
+        self.assertIn("26/11/07 이전 마지막 종가", h)
+
+
+class TestHistoryBackfill(unittest.TestCase):
+    """기간 버튼 이전에 수집된 날 — 그날 종가로 보충."""
+    def test_periods_from_history(self):
+        with tempfile.TemporaryDirectory() as t:
+            _write(t, "2026-11-06", [("A", 95, None)])
+            _write(t, "2026-11-13", [("A", 100, 25.0)])
+            uni = Path(t, "u.csv")
+            uni.write_text("group,name,code,active,note\n조선,X,A,1,\n방산,Y,Z,1,\n", encoding="utf-8")
+            per, bases = scrape.periods_from_history("2026-11-13", t, uni)
+            self.assertNotIn("1d", per)                       # DoD 는 수집값 그대로
+            self.assertEqual(per["1w"], [["조선", round((100 / 95 - 1) * 100, 2), 1]])
+            self.assertEqual(per["1y"], [["조선", 25.0, 1]])
+            self.assertEqual(bases["1y"], "2025-11-13")
+            self.assertIsNone(scrape.periods_from_history("2026-11-12", t, uni))   # 그날 파일 없음
 
 
 if __name__ == "__main__":

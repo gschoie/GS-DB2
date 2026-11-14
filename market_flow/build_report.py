@@ -184,7 +184,19 @@ def combo_chart(rows, color, line_unit, bar_label="현물 순매수", line_label
             f'<svg viewBox="0 0 {width} {height}" role="img">{"".join(g)}</svg>')
 
 
-PERIOD_LABELS = [("1d", "DoD"), ("1w", "WoW"), ("1m", "MoM"), ("3m", "QoQ"), ("1y", "YoY")]
+PERIOD_LABELS = [("1d", "오늘의 수익률"), ("1w", "주간 수익률"), ("1m", "월간 수익률"),
+                 ("3m", "분기 수익률"), ("1y", "연간 수익률")]
+PERIOD_DESC = {"1d": "DoD", "1w": "WoW · 7일", "1m": "MoM · 30일", "3m": "QoQ · 90일", "1y": "YoY · 365일"}
+
+
+def _history_periods(dkey):
+    """periods 없이 수집된 날 → etf_signal history 의 그날 종가로 기간 등락률 보충(실패하면 None)."""
+    try:
+        import scrape
+        return scrape.periods_from_history(dkey)
+    except Exception as e:
+        print(f"  · {dkey} 기간 수익률 보충 실패(DoD만): {e}")
+        return None
 
 
 def _gbars(groups, key, hidden):
@@ -204,47 +216,47 @@ def _gbars(groups, key, hidden):
     return f'<ul class="gbars" data-p="{key}"{hid}>{"".join(items)}</ul>'
 
 
-def group_ret_block(today, is_latest):
+def group_ret_block(today, is_latest, dkey=None):
     """ETF 그룹 평균 등락률 랭킹 — ETF 신호판의 '그룹 평균 WoW' 그림과 같은 형식.
-    기본은 DoD(네이버 실시간), 옆 버튼으로 WoW·MoM·QoQ·YoY(현재가 ÷ 7·30·90·365일 전 종가).
-    색상은 신호판과 동일. 데이터: scrape.group_returns(). 옛 기록(periods 없음)은 DoD만."""
+    제목이 곧 선택 버튼: 오늘의(DoD)·주간(WoW)·월간(MoM)·분기(QoQ)·연간(YoY) 수익률.
+    DoD 는 네이버 실시간, 나머지는 현재가 ÷ 7·30·90·365일 전 이전 마지막 종가.
+    기간 버튼 이전에 수집된 날은 빌드 때 etf_signal history 의 그날 종가로 보충한다.
+    전환은 페이지 공통 스크립트(이벤트 위임) — 날짜 본문이 innerHTML 로 바뀌어 인라인 script 는 안 돈다."""
     gr = today.get("group_1d")
     if not gr or not gr.get("groups"):
         return ""
-    periods = gr.get("periods") or {"1d": gr["groups"]}
-    bases = gr.get("bases") or {}
+    periods = dict(gr.get("periods") or {"1d": gr["groups"]})
+    bases = dict(gr.get("bases") or {})
+    filled = False
+    if len(periods) == 1 and dkey:
+        hp = _history_periods(dkey)
+        if hp:
+            periods.update(hp[0]); bases.update(hp[1]); filled = True
     avail = [(k, lab) for k, lab in PERIOD_LABELS if periods.get(k)]
     lists = "".join(_gbars(periods[k], k, i > 0) for i, (k, _) in enumerate(avail))
-    btns = ""
-    if len(avail) > 1:
-        def tip(k):
-            if k == "1d":
-                return "전일 종가 대비(네이버 실시간 등락률)"
-            b = bases.get(k, "")
-            extra = " · 1년 전 종가는 직전 확정일 기준으로 되짚어 최대 하루 어긋남" if k == "1y" else ""
-            return f"{b[5:].replace('-', '/')} 이전 마지막 종가 대비{extra}" if b else ""
-        btns = '<span class="gper">' + "".join(
-            f'<button type="button" data-p="{k}" title="{tip(k)}"'
-            f'{" class=on" if i == 0 else ""}>{lab}</button>'
-            for i, (k, lab) in enumerate(avail)) + "</span>"
+    first = "오늘의 수익률" if is_latest else "당일 수익률"
     n = len(periods[avail[0][0]])
-    title = "📊 오늘의 수익률" if is_latest else "📊 당일 수익률"
-    note = ""
-    if len(avail) > 1:
-        note = ('<p class="na gnote" style="font-size:11.5px;margin:2px 0 0">'
-                'WoW·MoM·QoQ·YoY = 현재가 ÷ 7·30·90·365일 전(달력일) 이전 마지막 종가 − 1 '
-                '(ETF 신호판과 같은 정의, 종가 이력은 ETF 신호판 수집분). 그룹 안 단순평균.</p>')
-    js = ""
-    if len(avail) > 1:
-        js = ("<script>document.querySelectorAll('.gper').forEach(function(b){"
-              "var c=b.closest('h2').nextElementSibling;"
-              "b.addEventListener('click',function(e){var t=e.target.closest('button');if(!t)return;"
-              "b.querySelectorAll('button').forEach(function(x){x.classList.toggle('on',x===t)});"
-              "c.querySelectorAll('ul.gbars').forEach(function(u){u.hidden=u.dataset.p!==t.dataset.p});"
-              "});});</script>")
-    return (f'<h2>{title} {btns}<span class="na" style="font-weight:400;font-size:12px">'
-            f'— ETF 그룹 평균 등락률({n}개 그룹) · {gr["time"]} 기준 · 센 섹터부터</span></h2>'
-            f'<div class="card">{lists}{note}</div>{js}')
+    sub = (f'<span class="na" style="font-weight:400;font-size:12px">'
+           f'— ETF 그룹 평균 등락률({n}개 그룹) · {gr["time"]} 기준 · 센 섹터부터</span>')
+    if len(avail) == 1:
+        return f'<h2>📊 {first} {sub}</h2><div class="card">{lists}</div>'
+
+    def tip(k):
+        if k == "1d":
+            return "DoD — 전일 종가 대비(네이버 실시간 등락률)"
+        b = bases.get(k, "")
+        base = f"{b[2:4]}/{b[5:7]}/{b[8:]} 이전 마지막 종가 대비" if b else ""
+        return f"{PERIOD_DESC[k]} — {base}"
+    btns = '<span class="gper">' + "".join(
+        f'<button type="button" data-p="{k}" title="{tip(k)}"{" class=on" if i == 0 else ""}>'
+        f'{first if k == "1d" else lab}</button>'
+        for i, (k, lab) in enumerate(avail)) + "</span>"
+    now = "그날 종가" if filled else "현재가"
+    note = ('<p class="na gnote" style="font-size:11.5px;margin:2px 0 0">'
+            f'주간·월간·분기·연간 = {now} ÷ 7·30·90·365일 전(달력일) 이전 마지막 종가 − 1 '
+            '(ETF 신호판과 같은 정의 · 종가 이력은 ETF 신호판 수집분) · 그룹 안 단순평균 · '
+            '버튼에 마우스를 올리면 기준일.</p>')
+    return f'<h2>📊 {btns} {sub}</h2><div class="card">{lists}{note}</div>'
 
 
 def stock_flow_block(today, is_latest):
@@ -620,7 +632,7 @@ def render_day(hist, all_dates, i):
 <h2>{sig_title}</h2>
 <div class="card"><ul class="signals">{sig_html}</ul></div>
 
-{group_ret_block(today, is_latest)}
+{group_ret_block(today, is_latest, dkey)}
 
 {stock_flow_block(today, is_latest)}
 
@@ -783,7 +795,22 @@ function show(i) {{
   sel.value = DATES[idx];
   prev.disabled = idx === 0;
   next.disabled = idx === DATES.length - 1;
+  setPer(GPER);
 }}
+// 오늘의/주간/월간/분기/연간 수익률 — 날짜를 넘겨도 고른 기간 유지
+var GPER = "1d";
+function setPer(p) {{
+  var box = document.querySelector("#day .gper");
+  if (!box) return;
+  if (!box.querySelector('button[data-p="' + p + '"]')) p = "1d";
+  GPER = p;
+  box.querySelectorAll("button").forEach(function (x) {{ x.classList.toggle("on", x.dataset.p === p); }});
+  document.querySelectorAll("#day ul.gbars").forEach(function (u) {{ u.hidden = u.dataset.p !== p; }});
+}}
+document.addEventListener("click", function (e) {{
+  var t = e.target.closest && e.target.closest(".gper button");
+  if (t) setPer(t.dataset.p);
+}});
 prev.addEventListener("click", function () {{ show(idx - 1); }});
 next.addEventListener("click", function () {{ show(idx + 1); }});
 sel.addEventListener("change", function () {{ show(DATES.indexOf(sel.value)); }});
