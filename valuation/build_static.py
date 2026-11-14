@@ -43,7 +43,7 @@ METRICS = [
 EUROPE_REGIONS = ["독일", "영국", "이탈리아", "스웨덴", "프랑스", "노르웨이", "스페인", "핀란드"]
 
 NAVY = "1F4E79"
-EST_FILL = "FFF6E5"
+EST_FILL = "DEEAEC"   # 컨센(E) 음영 — RGB(222,234,236), 11/14 사용자 지정(옛 노란색 FFF6E5)
 GROUP_FILL = "EDF1F6"
 SUMMARY_FILL = "E8E0D2"
 
@@ -318,9 +318,9 @@ HTML_TEMPLATE = """<!doctype html>
 <title>피어그룹 Valuation</title>
 <style>
 :root{--bg:#f6f7f9;--card:#fff;--ink:#1a1d21;--muted:#6b7280;--line:#e5e7eb;
---accent:#185fa5;--est:#fff6e5;--grp:#eef2f7;--sum:#efe8dc;--bad:#d03b3b}
+--accent:#185fa5;--est:#deeaec;--grp:#eef2f7;--sum:#efe8dc;--bad:#d03b3b}
 @media(prefers-color-scheme:dark){:root{--bg:#141516;--card:#1d1e1f;--ink:#f2f2f0;
---muted:#9a9a92;--line:#2f3032;--est:#2a2418;--grp:#232629;--sum:#2c2822}}
+--muted:#9a9a92;--line:#2f3032;--est:#1f2a2c;--grp:#232629;--sum:#2c2822}}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);
 font-family:-apple-system,"Segoe UI","Malgun Gothic",sans-serif;line-height:1.45}
 .wrap{max-width:1600px;margin:0 auto;padding:20px 16px 60px}
@@ -342,11 +342,14 @@ font-size:12px;color:var(--muted);cursor:pointer;font-family:inherit}
 .chips .gap{width:10px}
 #status{font-size:12.5px;color:var(--muted);min-height:18px;margin-bottom:8px}
 .tablewrap{background:var(--card);border:1px solid var(--line);border-radius:10px;overflow:auto}
-table{border-collapse:separate;border-spacing:0;font-size:12.5px;white-space:nowrap}
+table{border-collapse:separate;border-spacing:0;font-size:12.5px;white-space:nowrap;
+font-family:"나눔스퀘어OTF Light","NanumSquareOTF Light","NanumSquare OTF Light","나눔스퀘어OTF",
+"NanumSquareOTF","NanumSquare",-apple-system,"Segoe UI","Malgun Gothic",sans-serif}
 th,td{padding:5px 8px;text-align:right;border-bottom:1px solid var(--line)}
 thead th{background:var(--card);position:sticky;top:0;z-index:2;font-weight:600;
 font-size:11.5px;color:var(--muted)}
 thead tr:first-child th{top:0}thead tr:last-child th{top:26px}
+thead th[colspan]{text-align:center}   /* PER·EV/EBITDA… 지표 그룹 머리글 가운데 (11/14) */
 th.name,td.name{text-align:left;position:sticky;left:0;background:var(--card);z-index:1;
 min-width:190px}
 thead th.name{z-index:3}
@@ -773,7 +776,7 @@ function tableShot(){
   clone.style.cssText='overflow:visible;width:'+w+'px;height:'+h+'px;border-radius:0';
   const css=Array.from(document.querySelectorAll('style')).map(s=>s.textContent).join('\\n');
   const light=':root{--bg:#f6f7f9;--card:#fff;--ink:#1a1d21;--muted:#6b7280;--line:#e5e7eb;'+
-              '--accent:#185fa5;--est:#fff6e5;--grp:#eef2f7;--sum:#efe8dc;--bad:#d03b3b}'+
+              '--accent:#185fa5;--est:#deeaec;--grp:#eef2f7;--sum:#efe8dc;--bad:#d03b3b}'+
     /* SVG 안엔 body 가 없어 body{font-family} 가 안 먹고 기본 세리프로 대체 → 글자 폭이
        달라져 실측 폭(scrollWidth)보다 넓게 그려진 오른쪽 끝이 잘렸다(11/14 사용자 실측).
        루트 div 에 같은 글꼴·행간을 강제해 화면과 같은 치수로 그린다. */
