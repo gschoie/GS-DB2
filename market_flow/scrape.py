@@ -299,6 +299,34 @@ def period_returns(live, closes, latest, today):
     return res, bases
 
 
+def periods_from_history(day, hist_dir=ETF_HIST_DIR, universe_csv=None):
+    """그날(day) 확정 종가 기준으로 기간 등락률을 다시 계산 — 기간 버튼 이전에 수집된 날
+    (group_1d 에 periods 가 없는 기록)을 화면 빌드 때 채우는 용도. 네트워크 없음.
+    '현재가' 자리에 etf_signal history/<day>.json 의 그날 종가, YoY 는 그 파일의 ret_1y.
+    그날 파일이 없으면 None(그날은 DoD 만)."""
+    f = Path(hist_dir) / f"{day}.json"
+    if not f.exists():
+        return None
+    sigs = json.loads(f.read_text(encoding="utf-8")).get("signals") or []
+    grp = {}
+    for r in csv.DictReader(Path(universe_csv or UNIVERSE_CSV).open(encoding="utf-8-sig")):
+        if (r.get("active") or "").strip() == "1":
+            grp[r["code"].strip()] = r["group"].strip()
+    d = dt.date.fromisoformat(day)
+    live, latest = [], {}
+    for s_ in sigs:
+        code, c = str(s_.get("code") or "").strip(), _num(s_.get("close"))
+        if code in grp and c and c > 0 and (s_.get("asof") or day) == day:
+            live.append((grp[code], code, c, None))
+            latest[code] = (d, c, s_.get("ret_1y"))
+    if not live:
+        return None
+    closes, _ = load_close_history(hist_dir)
+    periods, bases = period_returns(live, closes, latest, d)
+    periods.pop("1d", None)          # DoD 는 그날 수집한 네이버 값을 그대로 쓴다
+    return (periods, bases) if periods else None
+
+
 def group_returns():
     """etf_signal 유니버스 ETF들의 현재가 등락률을 그룹 평균으로 묶는다.
     DoD 는 네이버 실시간 등락률, WoW·MoM·QoQ·YoY 는 현재가 ÷ 기준 종가(etf_signal history).
