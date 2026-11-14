@@ -59,8 +59,19 @@ TARGET_COMPANIES = [
     {"industry": "방산", "sub": "조선/방산", "region": "미국", "name": "Huntington Ingalls", "ticker": "HII"},
     {"industry": "방산", "sub": "체계", "region": "독일", "name": "Rheinmetall", "ticker": "RHM.DE"},
     {"industry": "방산", "sub": "체계", "region": "영국", "name": "BAE Systems", "ticker": "BA.L"},
+    {"industry": "방산", "sub": "체계", "region": "프랑스", "name": "Thales", "ticker": "HO.PA"},
+    {"industry": "방산", "sub": "체계", "region": "프랑스", "name": "Safran", "ticker": "SAF.PA"},
+    {"industry": "방산", "sub": "항공", "region": "프랑스", "name": "Dassault Aviation", "ticker": "AM.PA"},
     {"industry": "방산", "sub": "항공", "region": "이탈리아", "name": "Leonardo", "ticker": "LDO.MI"},
     {"industry": "방산", "sub": "항공", "region": "스웨덴", "name": "Saab AB", "ticker": "SAAB-B.ST"},
+
+    # ── 항공 (민수 비중 큰 대형 — 방산과 분리된 별도 블록, 11/14 사용자 요청.
+    #    기체부품(봄바르디어·엠브라에르)은 요청대로 제외) ──────────
+    {"industry": "항공", "sub": "항공", "region": "미국", "name": "Boeing", "ticker": "BA"},
+    {"industry": "항공", "sub": "항공", "region": "미국", "name": "Honeywell", "ticker": "HON"},
+    {"industry": "항공", "sub": "항공", "region": "프랑스", "name": "Airbus", "ticker": "AIR.PA"},
+    # 롤스로이스는 야후 주가가 GBp(펜스) — 재무통화 GBP 와의 100배 차는 fetch 가 보정한다(8번 교훈).
+    {"industry": "항공", "sub": "항공", "region": "영국", "name": "Rolls-Royce", "ticker": "RR.L"},
 
     # ── 건설기계 (완성장비) ───────────────────────────────────
     {"industry": "건설기계", "sub": "완성장비", "region": "한국", "name": "HD건설기계", "ticker": "267270.KS"},
